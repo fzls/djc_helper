@@ -61,10 +61,13 @@ class Network:
 
         jsonRes = {}
         for kv in jsonpStr.split(","):
-            k, v = kv.strip().split(":")
-            if v[0] == "'":
-                v = v[1:-1]  # 去除前后的''
-            jsonRes[k] = unquote(v)
+            try:
+                k, v = kv.strip().split(":")
+                if v[0] == "'":
+                    v = v[1:-1]  # 去除前后的''
+                jsonRes[k] = unquote(v)
+            except:
+                pass
 
         return jsonRes
 

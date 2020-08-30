@@ -15,7 +15,7 @@
 1. 安装python3环境，并安装依赖
     > 在当前目录输入下列内容<p>
     > pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-2. 获取uin和登录票据skey并填写到config.py中
+2. 获取uin和登录票据skey并填写到config.toml中
     1. 第一种方式（推荐）：直接运行工具，根据提示进行相关操作来获取skey并配置
     3. 第二种方式（操作比较复杂）：基于fiddler监听打开登陆后打开道聚城app各个页面的请求来获取uin和skey
         1. 电脑安装fiddler经典版，并开启https的监听功能，开放端口。手机链接同一个网络，并设置电脑的对应端口为代理服务器
@@ -24,7 +24,7 @@
         3. 在fiddler中随意找一个向djcapp.game.qq.com发起的请求记录
             1. 选中后，在右侧两个tab分别点选Inspector、Raw按钮
             2. 在文本框末尾应可看到形如下列的内容uin=o123456789; skey=@a1b2c3d4e
-            3. 将uin/skey的值分别填写到config.py中对应变量的值中即可
+            3. 将uin/skey的值分别填写到config.toml中对应变量的值中即可
 3. 获取dnf和指尖江湖的绑定角色信息
     1. 确保已在道聚城中绑定dnf和指尖江湖的角色信息，若对应游戏未创建账号，建议先去下载游戏客户端创建一个角色
     2. 运行djc_helper.py，使其调用末尾的那段代码
@@ -39,16 +39,16 @@
     # 3.2.0 获取指尖江湖角色列表 [{'roleid': '指尖江湖角色ID', 'rolename': '指尖江湖玩家名'}]
     # 4.2.x 获取dnf角色列表 [{'roleid': DNF角色ID, 'rolename': 'DNF角色名', 'forceid': 0, 'level': 100}]
     ```
-    3. 从结果中可获知相应角色信息，将角色id和角色名其填入到config.py对应变量即可
+    3. 从结果中可获知相应角色信息，将角色id和角色名其填入到config.toml对应变量即可
     4. 目前默认dnf是浙江一区=11，指尖江湖是安卓手Q一区=20001，如果不是上述区服，可以从reference_data下的dnf_server_list.js和jx3_server_list.js中查询服务器的id
     5. 目前手游任务暂时只支持指尖江湖，后续版本将加入王者荣耀、天天酷跑等热门游戏
-5. 万事ok，运行main.py，芜湖起飞
+5. 万事ok，运行main.py或者直接双击运行道聚城助手.exe，芜湖起飞
     > python main.py
 
 # 开机自动运行
 1. 使用windows的任务计划程序来实现启动时或者每天凌晨定期运行改脚本，具体流程自行百度
 2. 添加快捷方式放到windows的启动目录，具体方式参看后文
-3. 其他自动运行的方式可以自行百度：如何特定时机/时间运行一个python脚本
+3. 其他自动运行的方式可以自行百度：如何特定时机/时间运行一个python脚本/exe
 
 ## 参考方案
 现提供本人在用的windows下的一个方案
@@ -60,7 +60,8 @@
 CHCP 65001
 
 echo 启动自动化助手
-python main.py
+# python main.py
+道聚城助手.exe
 
 PAUSE
 

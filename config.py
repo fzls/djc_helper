@@ -32,6 +32,10 @@ class ExchangeRoleInfoConfig(ConfigInterface):
 
 class MobileGameRoleInfoConfig(ConfigInterface):
     def __init__(self):
+        # 手游名称，目前支持下面几种
+        # none： 无，则不启用完成礼包达人任务
+        # jx3：  剑网3：指尖江湖
+        self.game_name = "jx3"
         self.area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
         self.platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
         self.partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
@@ -42,6 +46,9 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         super().auto_update_config(raw_config)
 
         self.rolename = quote(self.rolename)
+
+    def enabled(self):
+        return self.game_name != "none"
 
 
 class Config(ConfigInterface):

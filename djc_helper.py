@@ -153,20 +153,23 @@ class DjcHelper:
         self.get("3.1 模拟点开活动中心", self.task_report, task_type="activity_center")
 
         # 完成《礼包达人》
-        giftInfos = [
-            Jx3GiftInfo("签到1天礼包", "401579"),
-            Jx3GiftInfo("签到2天礼包", "401580"),
-            Jx3GiftInfo("签到3天礼包", "401581"),
-            Jx3GiftInfo("签到4天礼包", "401582"),
-            Jx3GiftInfo("签到5天礼包", "401583"),
-            Jx3GiftInfo("签到6天礼包", "401584"),
-            Jx3GiftInfo("签到7天礼包", "401586"),
-        ]
-        dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
-        giftInfo = giftInfos[dayIndex]
         cfg = self.cfg.mobile_game_role_info
-        self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
-                 sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
+        if cfg.enabled():
+            giftInfos = [
+                Jx3GiftInfo("签到1天礼包", "401579"),
+                Jx3GiftInfo("签到2天礼包", "401580"),
+                Jx3GiftInfo("签到3天礼包", "401581"),
+                Jx3GiftInfo("签到4天礼包", "401582"),
+                Jx3GiftInfo("签到5天礼包", "401583"),
+                Jx3GiftInfo("签到6天礼包", "401584"),
+                Jx3GiftInfo("签到7天礼包", "401586"),
+            ]
+            dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
+            giftInfo = giftInfos[dayIndex]
+            self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
+                     sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
+        else:
+            logger.info("未启用自动完成《礼包达人》任务功能")
 
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
@@ -236,6 +239,9 @@ class DjcHelper:
     def query_jx3_rolelist(self):
         ctx = "获取指尖江湖角色列表"
         cfg = self.cfg.mobile_game_role_info
+        if not cfg.enabled():
+            logger.info("未启用自动完成《礼包达人》任务功能")
+            return
         jx3RoleListJsonRes = self.get(ctx, self.get_jx3_role_list, area=cfg.area, platid=cfg.platid, partition=cfg.partition, is_jsonp=True, print_res=False)
         jx3RoleList = json_parser.parse_jx3_role_list(jx3RoleListJsonRes)
         logger.info("{}\t{}".format(ctx, jx3RoleList))

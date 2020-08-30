@@ -69,6 +69,10 @@ class DjcHelper:
         if os.path.isfile(first_run_flag_file):
             return
 
+        # 仅在window系统下检查
+        if platform.system() != "Windows":
+            return
+
         # 若不存在该文件，则说明是首次运行，提示相关信息
         tips = """# 『重要』与个人隐私有关的skey相关说明
 1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
@@ -78,11 +82,10 @@ class DjcHelper:
         """
         logger.info("首次运行，弹出使用须知")
 
-        if platform.system() == "Windows":
-            import win32api
-            import win32con
+        import win32api
+        import win32con
 
-            win32api.MessageBox(0, tips, "使用须知", win32con.MB_ICONWARNING)
+        win32api.MessageBox(0, tips, "使用须知", win32con.MB_ICONWARNING)
 
         # 创建该文件，从而避免再次弹出错误
         with open(first_run_flag_file, "w", encoding="utf-8") as f:

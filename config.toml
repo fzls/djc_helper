@@ -8,6 +8,8 @@ log_level = "info"
 
 # 是否检查更新
 check_update_on_start = true
+readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
 # 腾讯系网页登录通用账号凭据与token
 [account_info]

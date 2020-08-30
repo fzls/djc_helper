@@ -69,6 +69,8 @@ class Config(ConfigInterface):
         self.log_level = "info"
         # 是否检查更新
         self.check_update_on_start = True
+        self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+        self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 兑换dnf道具所需的dnf区服和角色信息

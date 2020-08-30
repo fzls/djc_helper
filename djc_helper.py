@@ -7,9 +7,9 @@ from network import *
 
 # 道聚城自动化助手
 class DjcHelper:
-    def __init__(self, config_path="config.toml"):
+    def __init__(self, config_path="config.toml", local_config_path="config.toml.local"):
         # 读取配置信息
-        load_config(config_path)
+        load_config(config_path, local_config_path)
         self.cfg = config()
 
         # 初始化网络相关设置

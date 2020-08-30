@@ -51,8 +51,31 @@ class DjcHelper:
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/dnf_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
     # --------------------------------------------各种操作--------------------------------------------
-
     def run(self):
+        run_mode_dict = {
+            "pre_run": self.pre_run,
+            "normal": self.normal_run,
+        }
+        run_mode_dict[self.cfg.run_mode]()
+
+    # 预处理阶段
+    def pre_run(self):
+        logger.info("预处理阶段，请按照提示进行相关操作")
+
+        # 指引获取uin/skey/角色信息等
+        self.check_skey_expired()
+
+        logger.info("uin/skey已经填写完成，请确保已正确填写dnf的区服和手游的区服信息后再进行后续流程")
+
+        # 如果已经填写uin/skey后，则查询角色相关信息
+        self.query_all_extra_info()
+
+        logger.info("将上述两行中dnf的想要兑换道具的角色的id和名字复制到config.toml对应位置，并将指尖江湖的角色的id和名字复制到config.toml对应配置")
+        logger.info("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将run_mode配置的值修改为normal，之后再运行就会进行正常流程了")
+        logger.info("如果想要自动运行，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开README.MD来查看相关指引")
+
+    # 正式运行阶段
+    def normal_run(self):
         # 检查skey是否过期
         self.check_skey_expired()
 
@@ -86,7 +109,9 @@ class DjcHelper:
                              "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
                              "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）"
                              "       {js_code}"
-                             "3. 将uin/skey的值分别填写到config.py中对应变量的值中即可\n"
+                             "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
+                             "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
+                             "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
                              "\n"
                              "具体信息为：ret={ret} msg={msg}"
                          ).format(js_code=js_code, ret=query_data['ret'], msg=query_data['msg']))

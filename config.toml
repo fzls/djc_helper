@@ -1,3 +1,8 @@
+# 运行模式
+# pre_run:      指引获取uin、skey，以及如何获取角色信息
+# normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
+run_mode = "pre_run"
+
 # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
 log_level = "info"
 
@@ -17,8 +22,8 @@ rolename = "DNF角色名"
 
 # 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
 [mobile_game_role_info]
-area = 2  # QQ
-platid = 1  # 安卓
-partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js
+area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
+platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
+partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
 roleid = "指尖江湖角色ID"
 rolename ="指尖江湖玩家名"

@@ -42,6 +42,7 @@
     3. 从结果中可获知相应角色信息，将角色id和角色名其填入到config.toml对应变量即可
     4. 目前默认dnf是浙江一区=11，指尖江湖是安卓手Q一区=20001，如果不是上述区服，可以从reference_data下的dnf_server_list.js和jx3_server_list.js中查询服务器的id
     5. 目前手游任务暂时只支持指尖江湖，后续版本将加入王者荣耀、天天酷跑等热门游戏
+4. 将config.toml中run_mode调整为正常运行模式normal（可使用网盘中附带的vscode或notepad++来编辑）
 5. 万事ok，运行main.py或者直接双击运行道聚城助手.exe，芜湖起飞
     > python main.py
 

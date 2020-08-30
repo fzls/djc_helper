@@ -63,6 +63,9 @@ class DjcHelper:
         }
         run_mode_dict[self.cfg.run_mode]()
 
+        # 暂停一下，方便看结果
+        os.system("PAUSE")
+
     def show_tip_on_first_run(self):
         first_run_flag_file = ".firstrun"
         import os

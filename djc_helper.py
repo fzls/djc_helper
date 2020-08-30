@@ -1,6 +1,3 @@
-import datetime
-import sys
-
 import pyperclip
 
 import json_parser
@@ -10,7 +7,14 @@ from network import *
 
 # 道聚城自动化助手
 class DjcHelper:
-    def __init__(self):
+    def __init__(self, config_path="config.toml"):
+        # 读取配置信息
+        load_config(config_path)
+        self.cfg = config()
+
+        # 初始化网络相关设置
+        self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey)
+
         # 余额
         self.balance = "https://djcapp.game.qq.com/cgi-bin/daoju/djcapp/v5/solo/jfcloud_flow.cgi?&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&&method=balance&page=0&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         self.money_flow = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.bean.water&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&page=1&starttime={starttime}&endtime={endtime}&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -135,7 +139,9 @@ class DjcHelper:
         ]
         dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
         giftInfo = giftInfos[dayIndex]
-        self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId, sPartition=jx3_partition, roleCode=jx3_roleid, sRoleName=jx3_rolename)
+        cfg = self.cfg.mobile_game_role_info
+        self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
+                 sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
 
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
@@ -181,7 +187,8 @@ class DjcHelper:
         self.exchange_item("4.2.2 兑换疲劳药", "755")
 
     def exchange_item(self, ctx, iGoodsSeqId):
-        return self.get(ctx, self.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=rolename, lRoleId=lRoleId, iZone=iZone)
+        cfg = self.cfg.exchange_role_info
+        return self.get(ctx, self.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=cfg.rolename, lRoleId=cfg.lRoleId, iZone=cfg.iZone)
 
     def query_all_extra_info(self):
         # 获取玩家的dnf角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
@@ -197,13 +204,14 @@ class DjcHelper:
 
     def query_dnf_rolelist(self):
         ctx = "获取dnf角色列表"
-        roleListJsonRes = self.get(ctx, self.get_dnf_role_list, area=iZone, is_jsonp=True, print_res=False)
+        roleListJsonRes = self.get(ctx, self.get_dnf_role_list, area=self.cfg.exchange_role_info.iZone, is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
         logger.info("{}\t{}".format(ctx, roleLists))
 
     def query_jx3_rolelist(self):
         ctx = "获取指尖江湖角色列表"
-        jx3RoleListJsonRes = self.get(ctx, self.get_jx3_role_list, area=jx3_area, platid=jx3_platid, partition=jx3_partition, is_jsonp=True, print_res=False)
+        cfg = self.cfg.mobile_game_role_info
+        jx3RoleListJsonRes = self.get(ctx, self.get_jx3_role_list, area=cfg.area, platid=cfg.platid, partition=cfg.partition, is_jsonp=True, print_res=False)
         jx3RoleList = json_parser.parse_jx3_role_list(jx3RoleListJsonRes)
         logger.info("{}\t{}".format(ctx, jx3RoleList))
 
@@ -215,20 +223,20 @@ class DjcHelper:
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
-        return get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
+        return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
 
     def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, **params):
-        return post(ctx, self.format(url, **params), data, pretty, print_res, is_jsonp)
+        return self.network.post(ctx, self.format(url, **params), data, pretty, print_res, is_jsonp)
 
     def format(self, url, **params):
         endTime = datetime.datetime.now()
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
         default_params = {
             "appVersion": appVersion,
-            "p_tk": g_tk,
-            "g_tk": g_tk,
-            "sDeviceID": sDeviceID,
-            "sDjcSign": sDjcSign,
+            "p_tk": self.cfg.g_tk,
+            "g_tk": self.cfg.g_tk,
+            "sDeviceID": self.cfg.sDeviceID,
+            "sDjcSign": self.cfg.sDjcSign,
             "callback": jsonp_callback_flag,
             "month": self.get_month(),
             "starttime": self.getMoneyFlowTime(startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, startTime.second),

@@ -1,8 +1,8 @@
+import datetime
 import logging
 import multiprocessing
 import pathlib
 import sys
-from datetime import datetime
 
 ###########################################################
 #                         logging                         #
@@ -21,7 +21,7 @@ except PermissionError as err:
 
 process_name = multiprocessing.current_process().name
 if "MainProcess" in process_name:
-    time_str = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
     fileHandler = logging.FileHandler("{0}/{1}_{2}_{3}.log".format(log_directory, logger.name, process_name, time_str), encoding="utf-8")
     fileHandler.setFormatter(logFormatter)
     fileHandler.setLevel(logging.DEBUG)

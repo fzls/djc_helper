@@ -1,0 +1,24 @@
+# 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
+log_level = "info"
+
+# 是否检查更新
+check_update_on_start = true
+
+# 腾讯系网页登录通用账号凭据与token
+[account_info]
+uin = "o123456789"
+skey = "@a1b2c3d4e"
+
+# 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
+[exchange_role_info]
+iZone = "11"  # 浙江一区，其他区服id可查阅reference_data/dnf_server_list.js
+lRoleId = "DNF角色ID"
+rolename = "DNF角色名"
+
+# 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
+[mobile_game_role_info]
+area = 2  # QQ
+platid = 1  # 安卓
+partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js
+roleid = "指尖江湖角色ID"
+rolename ="指尖江湖玩家名"

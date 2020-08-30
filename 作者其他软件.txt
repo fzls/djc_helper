@@ -1,0 +1,17 @@
+1. dnf魔改计算器
+源码：
+    https://github.com/fzls/dnf_calc
+二进制：
+    链接: https://www.lanzoux.com/s/dnf-calc 提取码: fzls
+    链接: https://www.lanzoux.com/b01begisj 提取码: fzls
+简介：
+    本计算器基于dawnclass所写(https://github.com/dawnclass/DF_Calculator) 、韩械汉化并加入国服特色的一键史诗搭配计算器，在其上进行了一些性能优化、扩展功能、易用性改动及bugfix。
+
+2. 道聚城自动化助手
+源码：
+    https://github.com/fzls/djc_helper
+二进制：
+    链接: https://www.lanzoux.com/s/djc-helper 提取码: fzls
+    链接: https://www.lanzoux.com/b01bor45i 提取码: fzls
+简介：
+    本脚本可用于自动化道聚城的查询、签到、领奖与兑换流程，从而不必再每日手动点开app去进行（签到-领取签到奖励-完成每日任务-领取任务奖励-领取金银箱子-兑换调整箱和疲劳药）的琐碎流程，解放双手和心智。

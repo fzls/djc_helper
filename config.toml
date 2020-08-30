@@ -33,3 +33,16 @@ platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.
 partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
 roleid = "指尖江湖角色ID"
 rolename ="指尖江湖玩家名"
+
+# 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
+[[exchange_items]]
+# 兑换两次调整箱
+iGoodsId = "753"
+sGoodsName = "装备品级调整箱（5个）"
+count = 2
+
+[[exchange_items]]
+# 兑换一次疲劳药
+iGoodsId = "755"
+sGoodsName = "魔界抗疲劳秘药（10点）"
+count = 1

@@ -244,11 +244,9 @@ class DjcHelper:
         return False
 
     def exchange_items(self):
-        # 兑换《装备品级调整箱（5个）》两次
-        for i in range(2):
-            self.exchange_item("4.2.1 兑换调整箱", "753")
-        # 兑换《魔界抗疲劳秘药（10点）》一次
-        self.exchange_item("4.2.2 兑换疲劳药", "755")
+        for ei in self.cfg.exchange_items:
+            for i in range(ei.count):
+                self.exchange_item("4.2 兑换 {}".format(ei.sGoodsName), ei.iGoodsId)
 
     def exchange_item(self, ctx, iGoodsSeqId):
         cfg = self.cfg.exchange_role_info

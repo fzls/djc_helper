@@ -1,6 +1,7 @@
 import os
 import uuid
 from urllib.parse import quote
+from typing import List
 
 import toml
 
@@ -51,6 +52,13 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         return self.game_name != "none"
 
 
+class ExchangeItemConfig(ConfigInterface):
+    def __init__(self):
+        self.iGoodsId = "753"
+        self.sGoodsName = "装备品级调整箱（5个）"
+        self.count = 2
+
+
 class Config(ConfigInterface):
     log_level_map = {
         "debug": logging.DEBUG,
@@ -77,9 +85,19 @@ class Config(ConfigInterface):
         self.exchange_role_info = ExchangeRoleInfoConfig()
         # 完成《礼包达人》任务所需的剑网3:指尖江湖手游的区服和角色信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
+        # 兑换道具信息
+        self.exchange_items = []  # type: List[ExchangeItemConfig]
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)
+
+        if 'exchange_items' in raw_config:
+            self.exchange_items = []
+            for cfg in raw_config["exchange_items"]:
+                ei = ExchangeItemConfig()
+                ei.auto_update_config(cfg)
+                self.exchange_items.append(ei)
+
         self.on_config_update(raw_config)
 
     def on_config_update(self, raw_config: dict):

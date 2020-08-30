@@ -1,3 +1,5 @@
+import platform
+
 import pyperclip
 
 import json_parser
@@ -52,11 +54,39 @@ class DjcHelper:
 
     # --------------------------------------------各种操作--------------------------------------------
     def run(self):
+        # 检查是否是首次运行，若是首次，则弹框提示相关风险
+        self.show_tip_on_first_run()
+
         run_mode_dict = {
             "pre_run": self.pre_run,
             "normal": self.normal_run,
         }
         run_mode_dict[self.cfg.run_mode]()
+
+    def show_tip_on_first_run(self):
+        first_run_flag_file = ".firstrun"
+        import os
+        if os.path.isfile(first_run_flag_file):
+            return
+
+        # 若不存在该文件，则说明是首次运行，提示相关信息
+        tips = """# 『重要』与个人隐私有关的skey相关说明
+1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
+2. skey有过期时间，目前根据测试来看应该是一天。目前暂未实现自动登录或者skey的自动保活（不知道有没有这个东西），过期时需要自己更新
+3. 本脚本仅使用skey进行必要操作，用以实现自动化查询、签到、领奖和兑换等逻辑，不会上传到与此无关的网站，请自行阅读源码进行审阅
+4. 如果感觉有风险，请及时停止使用本软件，避免后续问题
+        """
+        logger.info("首次运行，弹出使用须知")
+
+        if platform.system() == "Windows":
+            import win32api
+            import win32con
+
+            win32api.MessageBox(0, tips, "使用须知", win32con.MB_ICONWARNING)
+
+        # 创建该文件，从而避免再次弹出错误
+        with open(first_run_flag_file, "w", encoding="utf-8") as f:
+            f.write("ok")
 
     # 预处理阶段
     def pre_run(self):

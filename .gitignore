@@ -9,5 +9,6 @@ start.bat
 *.lnk
 
 .sDeviceID.txt
+.firstrun
 
 config.toml.local

@@ -1,3 +1,5 @@
 requests
 pycryptodome
 pyperclip
+pypiwin32
+toml

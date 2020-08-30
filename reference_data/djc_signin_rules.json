@@ -1,0 +1,49 @@
+{
+  "ret": 0,
+  "msg": "ok",
+  "serverTime": 1598209833,
+  "data": [
+    {
+      "iFlowId": 322021,
+      "iDays": "3",
+      "iAmount": "5",
+      "iRuleId": 329336,
+      "iCanUse": 0
+    },
+    {
+      "iFlowId": 322036,
+      "iDays": "7",
+      "iAmount": "15",
+      "iRuleId": 329360,
+      "iCanUse": 0
+    },
+    {
+      "iFlowId": 322037,
+      "iDays": "10",
+      "iAmount": "20",
+      "iRuleId": 329361,
+      "iCanUse": 0
+    },
+    {
+      "iFlowId": 322038,
+      "iDays": "15",
+      "iAmount": "25",
+      "iRuleId": 329362,
+      "iCanUse": 0
+    },
+    {
+      "iFlowId": 322039,
+      "iDays": "20",
+      "iAmount": "30",
+      "iRuleId": 329363,
+      "iCanUse": 0
+    },
+    {
+      "iFlowId": 322040,
+      "iDays": "25",
+      "iAmount": "50",
+      "iRuleId": 329364,
+      "iCanUse": 1
+    }
+  ]
+}

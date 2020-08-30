@@ -1,0 +1,8 @@
+.idea/
+__pycache__/
+logs/
+test/
+test.py
+start.bat
+*.lnk
+.sDeviceID.txt

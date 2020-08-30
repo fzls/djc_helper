@@ -1,0 +1,1 @@
+appVersion = 106

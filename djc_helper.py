@@ -2,6 +2,7 @@ import platform
 
 import pyperclip
 
+from update import check_update_on_start
 import json_parser
 from dao import *
 from network import *
@@ -16,6 +17,9 @@ class DjcHelper:
 
         # 初始化网络相关设置
         self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey)
+
+        # 检查是否需要更新
+        check_update_on_start()
 
         # 余额
         self.balance = "https://djcapp.game.qq.com/cgi-bin/daoju/djcapp/v5/solo/jfcloud_flow.cgi?&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&&method=balance&page=0&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"

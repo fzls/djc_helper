@@ -155,8 +155,17 @@ class DjcHelper:
                              "\n"
                              "具体信息为：ret={ret} msg={msg}"
                          ).format(js_code=js_code, ret=query_data['ret'], msg=query_data['msg']))
+            # 复制js代码到剪贴板，方便复制
             pyperclip.copy(js_code)
+            # 打开活动界面
             os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
+            # 打开配置界面
+            cfgFile = "./config.toml"
+            localCfgFile = "./config.toml.local"
+            if os.path.isfile(localCfgFile):
+                cfgFile = localCfgFile
+            os.system("start {}".format(cfgFile))
+            # 提示
             input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
             sys.exit(-1)
 

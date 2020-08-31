@@ -12,6 +12,17 @@ from sign import getACSRFTokenForAMS, getDjcSignParams
 
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
 
+class LoginTimeoutsConfig(ConfigInterface):
+    def __init__(self):
+        # 加载页面，以登录按钮出现为完成标志
+        self.load_page = 10
+        # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
+        self.load_login_iframe = 3
+        # 登录，从登录界面显示为开始，以用户完成登录为结束标志
+        self.login = 60
+        # 等待登录完成，以活动结束的按钮弹出来标志
+        self.login_finished = 60
+
 
 class AccountInfoConfig(ConfigInterface):
     def __init__(self):
@@ -83,6 +94,8 @@ class Config(ConfigInterface):
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
+        # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
+        self.login_timeouts = LoginTimeoutsConfig()
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
         # 是否检查更新

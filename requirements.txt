@@ -3,3 +3,4 @@ pycryptodome
 pyperclip
 pypiwin32
 toml
+selenium

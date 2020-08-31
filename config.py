@@ -15,8 +15,13 @@ encoding_error_str = "Found invalid character in key name: '#'. Try quoting the 
 
 class AccountInfoConfig(ConfigInterface):
     def __init__(self):
+        # 手动登录需要设置的信息
         self.uin = "o123456789"
         self.skey = "@a1b2c3d4e"
+
+        # 自动登录需要设置的信息
+        self.account = "123456789"
+        self.password = "使用账号密码自动登录有风险_请审慎决定"
 
 
 class ExchangeRoleInfoConfig(ConfigInterface):
@@ -73,6 +78,11 @@ class Config(ConfigInterface):
         # pre_run:      指引获取uin、skey，以及如何获取角色信息
         # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
         self.run_mode = "pre_run"
+        # 登录模式
+        # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
+        # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
+        # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
+        self.login_mode = "by_hand"
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
         # 是否检查更新
@@ -106,6 +116,12 @@ class Config(ConfigInterface):
         self.sDeviceID = self.getSDeviceID()
         self.aes_key = "84e6c6dc0f9p4a56"
         self.rsa_public_key_file = "public_key.der"
+
+        self.updateUinSkey(self.account_info.uin, self.account_info.skey)
+
+    def updateUinSkey(self, uin, skey):
+        self.account_info.uin = uin
+        self.account_info.skey = skey
 
         self.g_tk = str(getACSRFTokenForAMS(self.account_info.skey))
         self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, self.account_info.uin[1:], self.sDeviceID, appVersion)

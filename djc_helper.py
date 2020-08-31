@@ -2,10 +2,10 @@ import platform
 
 import pyperclip
 
-from update import check_update_on_start
 import json_parser
 from dao import *
 from network import *
+from update import check_update_on_start
 
 
 # 道聚城自动化助手

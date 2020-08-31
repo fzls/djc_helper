@@ -10,5 +10,7 @@ start.bat
 
 .sDeviceID.txt
 .firstrun
+.firstrun_auto_login_mode
+.saved_skey
 
 config.toml.local

@@ -5,18 +5,27 @@ import pyperclip
 import json_parser
 from dao import *
 from network import *
+from qq_login import QQLogin
 from update import check_update_on_start
 
 
 # 道聚城自动化助手
 class DjcHelper:
+    first_run_flag_file = ".firstrun"
+    first_run_auto_login_mode_flag_file = ".firstrun_auto_login_mode"
+
+    local_saved_skey_file = ".saved_skey"
+
     def __init__(self, config_path="config.toml", local_config_path="config.toml.local"):
         # 读取配置信息
         load_config(config_path, local_config_path)
         self.cfg = config()
 
+        # 配置加载后，尝试读取本地缓存的skey
+        self.local_load_uin_skey()
+
         # 初始化网络相关设置
-        self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey)
+        self.init_network()
 
         # 检查是否需要更新
         check_update_on_start()
@@ -56,10 +65,13 @@ class DjcHelper:
         # 获取所有可兑换的道具的列表
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/dnf_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
+    def init_network(self):
+        self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey)
+
     # --------------------------------------------各种操作--------------------------------------------
     def run(self):
         # 检查是否是首次运行，若是首次，则弹框提示相关风险
-        self.show_tip_on_first_run()
+        self.show_tip_on_first_run_any()
 
         run_mode_dict = {
             "pre_run": self.pre_run,
@@ -70,10 +82,38 @@ class DjcHelper:
         # 暂停一下，方便看结果
         os.system("PAUSE")
 
-    def show_tip_on_first_run(self):
-        first_run_flag_file = ".firstrun"
-        import os
-        if os.path.isfile(first_run_flag_file):
+    def show_tip_on_first_run_any(self):
+        filename = self.first_run_flag_file
+        title = "使用须知"
+        tips = """# 『重要』与个人隐私有关的skey相关说明
+        1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
+        2. skey有过期时间，目前根据测试来看应该是一天。目前暂未实现自动登录或者skey的自动保活（不知道有没有这个东西），过期时需要自己更新
+        3. 本脚本仅使用skey进行必要操作，用以实现自动化查询、签到、领奖和兑换等逻辑，不会上传到与此无关的网站，请自行阅读源码进行审阅
+        4. 如果感觉有风险，请及时停止使用本软件，避免后续问题
+                """
+        loginfo = "首次运行，弹出使用须知"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
+
+    def show_tip_on_first_run_auto_login_mode(self):
+        filename = self.first_run_auto_login_mode_flag_file
+        title = "自动登录须知"
+        tips = """自动登录需要在本地配置文件明文保存账号和密码，利弊如下，请仔细权衡后再决定是否适用
+        弊：
+            1. 需要填写账号和密码，有潜在泄漏风险
+            2. 需要明文保存到本地，可能被他人窥伺
+            3. 设计账号密码，总之很危险<_<
+        利：
+            1. 无需手动操作，一劳永逸
+            
+        若觉得有任何不妥，强烈建议改回其他需要手动操作的登录模式
+                """
+        loginfo = "首次运行自动登录模式，弹出利弊分析"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
+
+    def show_tip_on_first_run(self, filename, title, tips, loginfo, show_count=1):
+        if os.path.isfile(filename):
             return
 
         # 仅在window系统下检查
@@ -81,21 +121,19 @@ class DjcHelper:
             return
 
         # 若不存在该文件，则说明是首次运行，提示相关信息
-        tips = """# 『重要』与个人隐私有关的skey相关说明
-1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
-2. skey有过期时间，目前根据测试来看应该是一天。目前暂未实现自动登录或者skey的自动保活（不知道有没有这个东西），过期时需要自己更新
-3. 本脚本仅使用skey进行必要操作，用以实现自动化查询、签到、领奖和兑换等逻辑，不会上传到与此无关的网站，请自行阅读源码进行审阅
-4. 如果感觉有风险，请及时停止使用本软件，避免后续问题
-        """
-        logger.info("首次运行，弹出使用须知")
+        logger.info(loginfo)
 
         import win32api
         import win32con
 
-        win32api.MessageBox(0, tips, "使用须知", win32con.MB_ICONWARNING)
+        for i in range(show_count):
+            _title = title
+            if show_count != 1:
+                _title = "第{}/{}次提示 {}".format(i + 1, show_count, title)
+            win32api.MessageBox(0, tips, _title, win32con.MB_ICONWARNING)
 
         # 创建该文件，从而避免再次弹出错误
-        with open(first_run_flag_file, "w", encoding="utf-8") as f:
+        with open(filename, "w", encoding="utf-8") as f:
             f.write("ok")
 
     # 预处理阶段
@@ -139,39 +177,103 @@ class DjcHelper:
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
-        if str(query_data['ret']) != "0":
-            js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
-            fallback_js_code = """document.cookie.split(/; */);"""
-            logger.error((
-                             "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
-                             "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
-                             "   1.1 指点击（亲爱的玩家，请【登录】）中的登录按钮，并完成后续登录操作\n"
-                             "2. 点击F12，将默认打开DevTools（开发者工具界面）的Console界面\n"
-                             "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
-                             "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）\n"
-                             "       {js_code}\n"
-                             "-- 如果上述代码执行报错，可能是因为浏览器不支持，这时候可以复制下面的代码进行上述操作\n"
-                             "  执行后，应该会显示一个可点开的内容，戳一下会显示各个cookie的内容，然后手动在里面查找uin和skey即可\n"
-                             "       {fallback_js_code}\n"
-                             "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
-                             "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
-                             "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
-                             "\n"
-                             "具体信息为：ret={ret} msg={msg}"
-                         ).format(js_code=js_code, fallback_js_code=fallback_js_code, ret=query_data['ret'], msg=query_data['msg']))
-            # 打开配置界面
-            cfgFile = "./config.toml"
-            localCfgFile = "./config.toml.local"
-            if os.path.isfile(localCfgFile):
-                cfgFile = localCfgFile
-            os.system("start {}".format(cfgFile))
-            # 复制js代码到剪贴板，方便复制
-            pyperclip.copy(js_code)
-            # 打开活动界面
-            os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
-            # 提示
-            input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
-            sys.exit(-1)
+        if str(query_data['ret']) == "0":
+            # skey尚未过期
+            return
+
+        # 更新skey
+        self.update_skey(query_data)
+
+    def update_skey(self, query_data):
+        login_mode_dict = {
+            "by_hand": self.update_skey_by_hand,
+            "qr_login": self.update_skey_qr_login,
+            "auto_login": self.update_skey_auto_login,
+        }
+        login_mode_dict[self.cfg.login_mode](query_data)
+
+    def update_skey_by_hand(self, query_data):
+        js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
+        fallback_js_code = """document.cookie.split(/; */);"""
+        logger.error((
+                         "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
+                         "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
+                         "   1.1 指点击（亲爱的玩家，请【登录】）中的登录按钮，并完成后续登录操作\n"
+                         "2. 点击F12，将默认打开DevTools（开发者工具界面）的Console界面\n"
+                         "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
+                         "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）\n"
+                         "       {js_code}\n"
+                         "-- 如果上述代码执行报错，可能是因为浏览器不支持，这时候可以复制下面的代码进行上述操作\n"
+                         "  执行后，应该会显示一个可点开的内容，戳一下会显示各个cookie的内容，然后手动在里面查找uin和skey即可\n"
+                         "       {fallback_js_code}\n"
+                         "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
+                         "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
+                         "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
+                         "\n"
+                         "具体信息为：ret={ret} msg={msg}"
+                     ).format(js_code=js_code, fallback_js_code=fallback_js_code, ret=query_data['ret'], msg=query_data['msg']))
+        # 打开配置界面
+        cfgFile = "./config.toml"
+        localCfgFile = "./config.toml.local"
+        if os.path.isfile(localCfgFile):
+            cfgFile = localCfgFile
+        os.system("start {}".format(cfgFile))
+        # 复制js代码到剪贴板，方便复制
+        pyperclip.copy(js_code)
+        # 打开活动界面
+        os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
+        # 提示
+        input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
+        sys.exit(-1)
+
+    def update_skey_qr_login(self, query_data):
+        qqLogin = QQLogin()
+        loginResult = qqLogin.qr_login()
+        self.save_uin_skey(loginResult.uin, loginResult.skey)
+
+    def update_skey_auto_login(self, query_data):
+        self.show_tip_on_first_run_auto_login_mode()
+
+        qqLogin = QQLogin()
+        ai = self.cfg.account_info
+        loginResult = qqLogin.login(ai.account, ai.password)
+        self.save_uin_skey(loginResult.uin, loginResult.skey)
+
+    def save_uin_skey(self, uin, skey):
+        self.memory_save_uin_skey(uin, skey)
+
+        self.local_save_uin_skey(uin, skey)
+
+    def local_save_uin_skey(self, uin, skey):
+        # 本地缓存
+        with open(self.local_saved_skey_file, "w", encoding="utf-8") as sf:
+            loginResult = {
+                "uin": str(uin),
+                "skey": str(skey),
+            }
+            json.dump(loginResult, sf)
+            logger.debug("本地保存skey信息，具体内容如下：{}".format(loginResult))
+
+    def local_load_uin_skey(self):
+        # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
+        if self.cfg.login_mode not in ["qr_login", "auto_login"]:
+            return
+
+        # 若未有缓存文件，则跳过
+        if not os.path.isfile(self.local_saved_skey_file):
+            return
+
+        with open(self.local_saved_skey_file, "r", encoding="utf-8") as f:
+            loginResult = json.load(f)
+            self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
+            logger.debug("读取本地缓存的skey信息，具体内容如下：{}".format(loginResult))
+
+    def memory_save_uin_skey(self, uin, skey):
+        # 保存到内存中
+        self.cfg.updateUinSkey(uin, skey)
+
+        # uin, skey更新后重新初始化网络相关
+        self.init_network()
 
     def query_balance(self, ctx, print_res=True):
         return self.get(ctx, self.balance, print_res=print_res)

@@ -3,6 +3,13 @@
 # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
 run_mode = "pre_run"
 
+# 登录模式
+# by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
+# qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
+# auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
+# re: 二维码登录暂未实现，稍后实现
+login_mode = "by_hand"
+
 # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
 log_level = "info"
 
@@ -13,8 +20,13 @@ changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
 # 腾讯系网页登录通用账号凭据与token
 [account_info]
+# 手动登录需要设置的信息
 uin = "o123456789"
 skey = "@a1b2c3d4e"
+
+# 自动登录需要设置的信息
+account = "123456789"
+password = "使用账号密码自动登录有风险_请审慎决定"
 
 # 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
 [exchange_role_info]

@@ -3,6 +3,16 @@ from abc import ABCMeta
 from Crypto.Cipher import AES
 
 
+class Object:
+    def __init__(self, fromDict=None):
+        if fromDict is None:
+            fromDict = {}
+        self.__dict__ = fromDict
+
+    def __str__(self):
+        return str(self.__dict__)
+
+
 class AESCipher:
     BLOCK_SIZE = 16  # Bytes
 

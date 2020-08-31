@@ -141,6 +141,7 @@ class DjcHelper:
         query_data = self.query_balance("判断skey是否过期", print_res=False)
         if str(query_data['ret']) != "0":
             js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
+            fallback_js_code = """document.cookie.split(/; */);"""
             logger.error((
                              "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
                              "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
@@ -149,22 +150,25 @@ class DjcHelper:
                              "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
                              "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）\n"
                              "       {js_code}\n"
+                             "-- 如果上述代码执行报错，可能是因为浏览器不支持，这时候可以复制下面的代码进行上述操作\n"
+                             "  执行后，应该会显示一个可点开的内容，戳一下会显示各个cookie的内容，然后手动在里面查找uin和skey即可\n"
+                             "       {fallback_js_code}\n"
                              "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
                              "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
                              "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
                              "\n"
                              "具体信息为：ret={ret} msg={msg}"
-                         ).format(js_code=js_code, ret=query_data['ret'], msg=query_data['msg']))
-            # 复制js代码到剪贴板，方便复制
-            pyperclip.copy(js_code)
-            # 打开活动界面
-            os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
+                         ).format(js_code=js_code, fallback_js_code=fallback_js_code, ret=query_data['ret'], msg=query_data['msg']))
             # 打开配置界面
             cfgFile = "./config.toml"
             localCfgFile = "./config.toml.local"
             if os.path.isfile(localCfgFile):
                 cfgFile = localCfgFile
             os.system("start {}".format(cfgFile))
+            # 复制js代码到剪贴板，方便复制
+            pyperclip.copy(js_code)
+            # 打开活动界面
+            os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
             # 提示
             input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
             sys.exit(-1)

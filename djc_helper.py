@@ -227,14 +227,14 @@ class DjcHelper:
         sys.exit(-1)
 
     def update_skey_qr_login(self, query_data):
-        qqLogin = QQLogin()
+        qqLogin = QQLogin(self.cfg.login_timeouts)
         loginResult = qqLogin.qr_login()
         self.save_uin_skey(loginResult.uin, loginResult.skey)
 
     def update_skey_auto_login(self, query_data):
         self.show_tip_on_first_run_auto_login_mode()
 
-        qqLogin = QQLogin()
+        qqLogin = QQLogin(self.cfg.login_timeouts)
         ai = self.cfg.account_info
         loginResult = qqLogin.login(ai.account, ai.password)
         self.save_uin_skey(loginResult.uin, loginResult.skey)

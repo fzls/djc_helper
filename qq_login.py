@@ -5,6 +5,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
+from config import LoginTimeoutsConfig
 from data_struct import Object
 
 
@@ -16,11 +17,12 @@ class LoginResult(Object):
 
 
 class QQLogin():
-    def __init__(self):
+    def __init__(self, loginTimeoutsCfg):
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
         self.driver = webdriver.Chrome(desired_capabilities=caps)
+        self.loginTimeoutsCfg = loginTimeoutsCfg  # type: LoginTimeoutsConfig
 
     def login(self, account, password):
         """
@@ -59,12 +61,12 @@ class QQLogin():
         # 浏览器设为最大
         self.driver.set_window_size(1936, 1056)
         # 等待登录按钮出来，确保加载完成
-        WebDriverWait(self.driver, timeout=10).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+        WebDriverWait(self.driver, self.loginTimeoutsCfg.load_page).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
         # 点击登录按钮
         self.driver.find_element(By.ID, "dologin").click()
         # 等待iframe显示出来
         try:
-            WebDriverWait(self.driver, timeout=3).until(
+            WebDriverWait(self.driver, self.loginTimeoutsCfg.load_login_iframe).until(
                 expected_conditions.visibility_of_element_located((By.XPATH, '//*[@id="switcher_plogin"]'))
             )
         except:
@@ -76,12 +78,12 @@ class QQLogin():
         if login_action_fn is not None:
             login_action_fn()
 
-        # 等待扫码完成（也就是登录框消失）
-        WebDriverWait(self.driver, 60).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+        # 等待登录完成（也就是登录框消失）
+        WebDriverWait(self.driver, self.loginTimeoutsCfg.login).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
         # 回到主iframe
         self.driver.switch_to.default_content()
         # 等待活动已结束的弹窗出来，说明已经登录完成了
-        WebDriverWait(self.driver, 60).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
+        WebDriverWait(self.driver, self.loginTimeoutsCfg.login_finished).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
 
         # 从cookie中获取uin和skey
         loginResult = LoginResult(self.get_cookie("uin"), self.get_cookie("skey"))
@@ -97,7 +99,7 @@ class QQLogin():
 
 
 if __name__ == '__main__':
-    ql = QQLogin()
+    ql = QQLogin(LoginTimeoutsConfig())
     # lr = ql.login("1234567", "xxxxxxxxxx")
     lr = ql.qr_login()
     print(lr)

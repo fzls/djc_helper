@@ -15,9 +15,9 @@ encoding_error_str = "Found invalid character in key name: '#'. Try quoting the 
 class LoginTimeoutsConfig(ConfigInterface):
     def __init__(self):
         # 加载页面，以登录按钮出现为完成标志
-        self.load_page = 10
+        self.load_page = 60
         # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
-        self.load_login_iframe = 3
+        self.load_login_iframe = 5
         # 登录，从登录界面显示为开始，以用户完成登录为结束标志
         self.login = 60
         # 等待登录完成，以活动结束的按钮弹出来标志

@@ -12,9 +12,9 @@ login_mode = "qr_login"
 # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
 [login_timeouts]
 # 加载页面，以登录按钮出现为完成标志
-load_page = 10
+load_page = 60
 # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
-load_login_iframe = 3
+load_login_iframe = 5
 # 登录，从登录界面显示为开始，以用户完成登录为结束标志
 login = 60
 # 等待登录完成，以活动结束的按钮弹出来标志

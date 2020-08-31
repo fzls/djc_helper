@@ -4,7 +4,7 @@ from dao import DnfRoleInfo, Jx3RoleInfo
 
 
 def parse_role_list(jsonRes):
-    role_reg = r"\d+ \w+ \d+ \d+"
+    role_reg = r"\d+ [^ ]+ \d+ \d+"
     rolemap = {}
 
     for item in jsonRes["data"].split("|"):
@@ -17,7 +17,7 @@ def parse_role_list(jsonRes):
 
 
 def parse_jx3_role_list(jsonRes):
-    jx3_role_reg = r"\d+ \w+"
+    jx3_role_reg = r"\d+ [^ ]+"
     rolemap = {}
 
     for item in jsonRes["data"].split("|"):

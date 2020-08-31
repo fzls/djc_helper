@@ -29,13 +29,37 @@ class QQLogin():
         :param password: 密码
         :rtype: LoginResult
         """
+
+        def login_with_account_and_password():
+            # 选择密码登录
+            self.driver.find_element(By.ID, "switcher_plogin").click()
+            # 输入账号
+            self.driver.find_element(By.ID, "u").send_keys(account)
+            # 输入密码
+            self.driver.find_element(By.ID, "p").send_keys(password)
+            # 发送登录请求
+            self.driver.find_element(By.ID, "login_button").click()
+
+        return self._login(login_with_account_and_password)
+
+    def qr_login(self):
+        """
+        二维码登录，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+        return self._login()
+
+    def _login(self, login_action_fn=None):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
         # 打开活动界面
         self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
-        WebDriverWait(self.driver, timeout=10).until(
-            expected_conditions.visibility_of_element_located((By.ID, "dologin"))
-        )
         # 浏览器设为最大
         self.driver.set_window_size(1936, 1056)
+        # 等待登录按钮出来，确保加载完成
+        WebDriverWait(self.driver, timeout=10).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
         # 点击登录按钮
         self.driver.find_element(By.ID, "dologin").click()
         # 等待iframe显示出来
@@ -47,48 +71,11 @@ class QQLogin():
             pass
         # 切换登录iframe
         self.driver.switch_to.frame(0)
-        # 选择密码登录
-        self.driver.find_element(By.ID, "switcher_plogin").click()
-        # 输入账号
-        self.driver.find_element(By.ID, "u").send_keys(account)
-        # 输入密码
-        self.driver.find_element(By.ID, "p").send_keys(password)
-        # 发送登录请求
-        self.driver.find_element(By.ID, "login_button").click()
-        # 等待登录完成（也就是登录框消失）
-        WebDriverWait(self.driver, 60).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
-        # 回到主iframe
-        self.driver.switch_to.default_content()
-        # 等待活动已结束的弹窗出来，说明已经登录完成了
-        WebDriverWait(self.driver, 60).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
 
-        # 从cookie中获取uin和skey
-        loginResult = LoginResult(self.get_cookie("uin"), self.get_cookie("skey"))
+        # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
+        if login_action_fn is not None:
+            login_action_fn()
 
-        # 退出网页
-        self.driver.quit()
-
-        return loginResult
-
-    def qr_login(self):
-        """
-        二维码登录，并返回登陆后的cookie中包含的uin、skey数据
-        :rtype: LoginResult
-        """
-        # 打开活动界面
-        self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
-        # 浏览器设为最大
-        self.driver.set_window_size(1936, 1056)
-        # 点击登录按钮
-        self.driver.find_element(By.ID, "dologin").click()
-        try:
-            WebDriverWait(self.driver, timeout=3).until(
-                expected_conditions.visibility_of_element_located((By.XPATH, '//*[@id="switcher_plogin"]'))
-            )
-        except:
-            pass
-        # 切换登录iframe
-        self.driver.switch_to.frame(0)
         # 等待扫码完成（也就是登录框消失）
         WebDriverWait(self.driver, 60).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
         # 回到主iframe
@@ -99,7 +86,8 @@ class QQLogin():
         # 从cookie中获取uin和skey
         loginResult = LoginResult(self.get_cookie("uin"), self.get_cookie("skey"))
 
-        # 退出网页
+        # 最小化网页
+        self.driver.minimize_window()
         self.driver.quit()
 
         return loginResult

@@ -333,4 +333,5 @@ class DjcHelper:
 if __name__ == '__main__':
     djcHelper = DjcHelper()
     # djcHelper.run()
+    djcHelper.check_skey_expired()
     djcHelper.query_all_extra_info()

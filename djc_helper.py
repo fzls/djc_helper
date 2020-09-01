@@ -400,8 +400,12 @@ class DjcHelper:
         lines.append("")
         lines.append("+"*40)
         lines.append(ctx)
-        for idx, role in enumerate(roleLists):
-            lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        if len(roleLists) != 0:
+            for idx, role in enumerate(roleLists):
+                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        else:
+            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(self.cfg.exchange_role_info.iZone))
+            lines.append("\t区服id可查阅reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
         lines.append("+"*40)
         logger.info("\n".join(lines))
 
@@ -417,8 +421,12 @@ class DjcHelper:
         lines.append("")
         lines.append("+"*40)
         lines.append(ctx)
-        for idx, role in enumerate(jx3RoleList):
-            lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        if len(jx3RoleList) != 0:
+            for idx, role in enumerate(jx3RoleList):
+                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        else:
+            lines.append("\t未查到指尖江湖 平台={} 渠道={} 区服={}上的角色信息，请确认这三个信息已填写正确或者在对应区服已创建角色".format(cfg.platid, cfg.area, cfg.partition))
+            lines.append("\t上述id的列表可查阅reference_data/jx3_server_list.js，详情参见config.toml的对应注释")
         lines.append("+"*40)
         logger.info("\n".join(lines))
 

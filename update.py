@@ -68,8 +68,9 @@ def get_update_info() -> UpdateInfo:
     update_info = UpdateInfo()
 
     # 获取github本项目的readme页面内容和changelog页面内容
-    changelog_html_text = requests.get(config().changelog_page).text
-    readme_html_text = requests.get(config().readme_page).text
+    timeout = 3 # 由于国内网络不太好，加个超时
+    changelog_html_text = requests.get(config().changelog_page, timeout=timeout).text
+    readme_html_text = requests.get(config().readme_page, timeout=timeout).text
 
     # 从更新日志中提取所有版本信息
     versions = re.findall("(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_html_text)

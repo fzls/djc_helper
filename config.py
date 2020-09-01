@@ -19,7 +19,7 @@ class LoginTimeoutsConfig(ConfigInterface):
         # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
         self.load_login_iframe = 5
         # 登录，从登录界面显示为开始，以用户完成登录为结束标志
-        self.login = 60
+        self.login = 600
         # 等待登录完成，以活动结束的按钮弹出来标志
         self.login_finished = 60
 

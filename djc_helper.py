@@ -79,12 +79,12 @@ class DjcHelper:
         # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了
         logger.info((
             "\n"
-            "+++++++++++++++++++++++++++++++++++\n"
+            "++++++++++++++++++++++++++++++++++++++++\n"
             "操作已经成功完成\n"
             "现在准备访问github仓库相关页面来检查是否有新版本\n"
             "由于国内网络问题，访问可能会比较慢，请不要立即关闭，可以选择最小化或切换到其他窗口0-0\n"
             "若有新版本会自动弹窗提示~\n"
-            "+++++++++++++++++++++++++++++++++++\n"
+            "++++++++++++++++++++++++++++++++++++++++\n"
         ))
         check_update_on_start()
 
@@ -396,7 +396,14 @@ class DjcHelper:
         ctx = "获取dnf角色列表"
         roleListJsonRes = self.get(ctx, self.get_dnf_role_list, area=self.cfg.exchange_role_info.iZone, is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
-        logger.info("{}\t{}".format(ctx, roleLists))
+        lines = []
+        lines.append("")
+        lines.append("+"*40)
+        lines.append(ctx)
+        for idx, role in enumerate(roleLists):
+            lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        lines.append("+"*40)
+        logger.info("\n".join(lines))
 
     def query_jx3_rolelist(self):
         ctx = "获取指尖江湖角色列表"
@@ -406,7 +413,14 @@ class DjcHelper:
             return
         jx3RoleListJsonRes = self.get(ctx, self.get_jx3_role_list, area=cfg.area, platid=cfg.platid, partition=cfg.partition, is_jsonp=True, print_res=False)
         jx3RoleList = json_parser.parse_jx3_role_list(jx3RoleListJsonRes)
-        logger.info("{}\t{}".format(ctx, jx3RoleList))
+        lines = []
+        lines.append("")
+        lines.append("+"*40)
+        lines.append(ctx)
+        for idx, role in enumerate(jx3RoleList):
+            lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+        lines.append("+"*40)
+        logger.info("\n".join(lines))
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.show_exchange_item_list)

@@ -94,6 +94,8 @@ class Config(ConfigInterface):
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
+        # 是否强制使用打包附带的便携版chrome
+        self.force_use_portable_chrome = False
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login_timeouts = LoginTimeoutsConfig()
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"

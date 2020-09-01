@@ -113,6 +113,8 @@ class QQLogin():
         # 切换登录iframe
         self.driver.switch_to.frame(0)
 
+        logger.info("请在{}s内完成登录操作".format(self.loginTimeoutsCfg.login))
+
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         if login_action_fn is not None:
             login_action_fn()

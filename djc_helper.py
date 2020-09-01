@@ -27,9 +27,6 @@ class DjcHelper:
         # 初始化网络相关设置
         self.init_network()
 
-        # 检查是否需要更新
-        check_update_on_start()
-
         # 余额
         self.balance = "https://djcapp.game.qq.com/cgi-bin/daoju/djcapp/v5/solo/jfcloud_flow.cgi?&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&&method=balance&page=0&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         self.money_flow = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.bean.water&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&page=1&starttime={starttime}&endtime={endtime}&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -78,6 +75,9 @@ class DjcHelper:
             "normal": self.normal_run,
         }
         run_mode_dict[self.cfg.run_mode]()
+
+        # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了
+        check_update_on_start()
 
         # 暂停一下，方便看结果
         os.system("PAUSE")

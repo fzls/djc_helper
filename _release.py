@@ -86,7 +86,7 @@ subprocess.call(['git', 'push', 'origin', 'master', '--tags'])
 
 # ---------------结束
 print('+' * 40)
-print("\t发布完成，请将压缩包合适命名后上传至蓝奏云")
+print("发布完成，请将压缩包合适命名后上传至蓝奏云")
 print('+' * 40)
 
 os.system("PAUSE")

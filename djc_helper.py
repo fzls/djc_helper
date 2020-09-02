@@ -6,7 +6,6 @@ import json_parser
 from dao import *
 from network import *
 from qq_login import QQLogin
-from update import check_update_on_start
 
 
 # 道聚城自动化助手
@@ -14,12 +13,10 @@ class DjcHelper:
     first_run_flag_file = ".firstrun"
     first_run_auto_login_mode_flag_file = ".firstrun_auto_login_mode"
 
-    local_saved_skey_file = ".saved_skey"
+    local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
 
-    def __init__(self, config_path="config.toml", local_config_path="config.toml.local"):
-        # 读取配置信息
-        load_config(config_path, local_config_path)
-        self.cfg = config()
+    def __init__(self, account_config):
+        self.cfg = account_config  # type: AccountConfig
 
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
@@ -75,21 +72,6 @@ class DjcHelper:
             "normal": self.normal_run,
         }
         run_mode_dict[self.cfg.run_mode]()
-
-        # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了
-        logger.info((
-            "\n"
-            "++++++++++++++++++++++++++++++++++++++++\n"
-            "操作已经成功完成\n"
-            "现在准备访问github仓库相关页面来检查是否有新版本\n"
-            "由于国内网络问题，访问可能会比较慢，请不要立即关闭，可以选择最小化或切换到其他窗口0-0\n"
-            "若有新版本会自动弹窗提示~\n"
-            "++++++++++++++++++++++++++++++++++++++++\n"
-        ))
-        check_update_on_start()
-
-        # 暂停一下，方便看结果
-        os.system("PAUSE")
 
     def show_tip_on_first_run_any(self):
         filename = self.first_run_flag_file
@@ -157,9 +139,11 @@ class DjcHelper:
         # 如果已经填写uin/skey后，则查询角色相关信息
         self.query_all_extra_info()
 
-        logger.info("将上述两行中dnf的想要兑换道具的角色的id和名字复制到config.toml对应位置，并将指尖江湖的角色的id和名字复制到config.toml对应配置")
-        logger.info("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将run_mode配置的值修改为normal，之后再运行就会进行正常流程了")
+        logger.info("将上述两行中dnf的想要兑换道具的角色的id和名字复制到config.toml本账号({})的对应位置，并将指尖江湖的角色的id和名字复制到config.toml对应配置".format(self.cfg.name))
+        logger.info("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将本账号({})的run_mode配置的值修改为normal，之后再运行就会进行正常流程了".format(self.cfg.name))
         logger.info("如果想要自动运行，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开README.MD来查看相关指引")
+
+        os.system("PAUSE")
 
     # 正式运行阶段
     def normal_run(self):
@@ -255,7 +239,7 @@ class DjcHelper:
 
     def local_save_uin_skey(self, uin, skey):
         # 本地缓存
-        with open(self.local_saved_skey_file, "w", encoding="utf-8") as sf:
+        with open(self.get_local_saved_skey_file(), "w", encoding="utf-8") as sf:
             loginResult = {
                 "uin": str(uin),
                 "skey": str(skey),
@@ -269,13 +253,16 @@ class DjcHelper:
             return
 
         # 若未有缓存文件，则跳过
-        if not os.path.isfile(self.local_saved_skey_file):
+        if not os.path.isfile(self.get_local_saved_skey_file()):
             return
 
-        with open(self.local_saved_skey_file, "r", encoding="utf-8") as f:
+        with open(self.get_local_saved_skey_file(), "r", encoding="utf-8") as f:
             loginResult = json.load(f)
             self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
             logger.debug("读取本地缓存的skey信息，具体内容如下：{}".format(loginResult))
+
+    def get_local_saved_skey_file(self):
+        return self.local_saved_skey_file.format(self.cfg.name)
 
     def memory_save_uin_skey(self, uin, skey):
         # 保存到内存中
@@ -393,24 +380,24 @@ class DjcHelper:
         # self.query_jx3_gifts()
 
     def query_dnf_rolelist(self):
-        ctx = "获取dnf角色列表"
+        ctx = "获取账号({})的dnf角色列表".format(self.cfg.name)
         roleListJsonRes = self.get(ctx, self.get_dnf_role_list, area=self.cfg.exchange_role_info.iZone, is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
         lines = []
         lines.append("")
-        lines.append("+"*40)
+        lines.append("+" * 40)
         lines.append(ctx)
         if len(roleLists) != 0:
             for idx, role in enumerate(roleLists):
-                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
             lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(self.cfg.exchange_role_info.iZone))
             lines.append("\t区服id可查阅reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
-        lines.append("+"*40)
+        lines.append("+" * 40)
         logger.info("\n".join(lines))
 
     def query_jx3_rolelist(self):
-        ctx = "获取指尖江湖角色列表"
+        ctx = "获取账号({})的指尖江湖角色列表".format(self.cfg.name)
         cfg = self.cfg.mobile_game_role_info
         if not cfg.enabled():
             logger.info("未启用自动完成《礼包达人》任务功能")
@@ -419,15 +406,15 @@ class DjcHelper:
         jx3RoleList = json_parser.parse_jx3_role_list(jx3RoleListJsonRes)
         lines = []
         lines.append("")
-        lines.append("+"*40)
+        lines.append("+" * 40)
         lines.append(ctx)
         if len(jx3RoleList) != 0:
             for idx, role in enumerate(jx3RoleList):
-                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx+1, role.roleid, role.rolename))
+                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
             lines.append("\t未查到指尖江湖 平台={} 渠道={} 区服={}上的角色信息，请确认这三个信息已填写正确或者在对应区服已创建角色".format(cfg.platid, cfg.area, cfg.partition))
             lines.append("\t上述id的列表可查阅reference_data/jx3_server_list.js，详情参见config.toml的对应注释")
-        lines.append("+"*40)
+        lines.append("+" * 40)
         logger.info("\n".join(lines))
 
     def query_dnf_gifts(self):
@@ -468,7 +455,14 @@ class DjcHelper:
 
 
 if __name__ == '__main__':
-    djcHelper = DjcHelper()
-    # djcHelper.run()
-    djcHelper.check_skey_expired()
-    djcHelper.query_all_extra_info()
+    # 读取配置信息
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    for idx, account_config in enumerate(cfg.account_configs):
+        logger.info("开始处理第{}个账户[{}]", idx, account_config.name)
+
+        djcHelper = DjcHelper(account_config)
+        # djcHelper.run()
+        djcHelper.check_skey_expired()
+        djcHelper.query_all_extra_info()

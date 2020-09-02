@@ -8,10 +8,10 @@ test.py
 start.bat
 *.lnk
 
-.sDeviceID.txt
 .firstrun
 .firstrun_auto_login_mode
-.saved_skey
+
+cached/
 
 config.toml.local
 

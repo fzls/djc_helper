@@ -28,7 +28,7 @@ path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 # ---------------复制文件到目标目录
 os.chdir(dir_src)
 
-# re:需要复制的文件与目录
+# 需要复制的文件与目录
 files_to_copy = []
 reg_wantted_file = r'.*\.(py|toml|md|bat|txt|png|ico|docx|html)$'
 for file in os.listdir('.'):
@@ -79,15 +79,14 @@ os.chdir(dir_src)
 print("开始推送到github")
 # 先尝试移除该tag，并同步到github，避免后面加标签失败
 subprocess.call(['git', 'tag', '-d', version])
-subprocess.call(['git', 'push', 'origin', 'master', '--tags'])
+subprocess.call(['git', 'push', 'origin', 'master', ':refs/tags/{version}'.format(version=version)])
 # 然后添加新tab，并同步到github
-subprocess.call(['git', 'tag', '-a', version, '-m', 'release {}'.format(version)])
+subprocess.call(['git', 'tag', '-a', version, '-m', 'release {version}'.format(version=version)])
 subprocess.call(['git', 'push', 'origin', 'master', '--tags'])
-
 
 # ---------------结束
-print('+'*40)
+print('+' * 40)
 print("\t发布完成，请将压缩包合适命名后上传至蓝奏云")
-print('+'*40)
+print('+' * 40)
 
 os.system("PAUSE")

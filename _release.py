@@ -22,7 +22,7 @@ print("开始发布版本 {}".format(version))
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
 release_dir_name = "道聚城自动化助手_{version}_by风之凌殇".format(version=version)
-release_without_chrome_dir_name = "道聚城自动化助手_若系统自带chrome85_{version}_by风之凌殇".format(version=version)
+release_without_chrome_dir_name = "道聚城自动化助手_{version}_若系统自带chrome85_by风之凌殇".format(version=version)
 dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
 path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 

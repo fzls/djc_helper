@@ -2,6 +2,8 @@
 import os
 import subprocess
 
+import win32api
+import win32con
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -46,6 +48,19 @@ class QQLogin():
 
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome85
+            # 先判定是否是下载的无附带浏览器的小包
+            if not os.path.isfile(self.chrome_binary_7z):
+                msg = (
+                    "当前电脑未发现合适版本chrome85版本，且当前目录无便携版chrome的压缩包，因此猜测你下载的是未附带浏览器的小包\n"
+                    "请采取下列措施之一\n"
+                    "\t1. 去蓝奏云网盘下载chrome85离线安装包.exe，并安装，从而系统有合适版本的chrome浏览器\n"
+                    "\t2. 去蓝奏云网盘下载完整版的本工具压缩包，也就是大概是95MB的最新的压缩包\n"
+                    "\n"
+                    "请进行上述操作后再尝试~\n"
+                )
+                win32api.MessageBox(0, msg, "出错啦", win32con.MB_ICONERROR)
+                exit(-1)
+
             # 先判断便携版chrome是否已解压
             if not os.path.isdir(self.chrome_binary_directory):
                 logger.info("自动解压便携版chrome到当前目录")

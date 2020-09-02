@@ -22,6 +22,7 @@ print("开始发布版本 {}".format(version))
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
 release_dir_name = "道聚城自动化助手_{version}_by风之凌殇".format(version=version)
+release_without_chrome_dir_name = "道聚城自动化助手_若系统自带chrome85_{version}_by风之凌殇".format(version=version)
 dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
 path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 
@@ -72,6 +73,16 @@ os.chdir(dir_all_release)
 print("开始压缩打包")
 release_7z_name = '{}.7z'.format(release_dir_name)
 subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
+
+# 另打一份不包括便携版chrome的包
+shutil.copytree(release_dir_name, release_without_chrome_dir_name)
+shutil.rmtree(os.path.join(release_without_chrome_dir_name, "bandizip_portable"))
+os.remove(os.path.join(release_without_chrome_dir_name, "chrome_portable_85.0.4183.59.7z"))
+
+release_without_chrome_7z_name = '{}.7z'.format(release_without_chrome_dir_name)
+subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_without_chrome_7z_name, release_without_chrome_dir_name])
+
+shutil.rmtree(release_without_chrome_dir_name)
 
 # ---------------推送版本到github
 # 打包完成后git添加标签

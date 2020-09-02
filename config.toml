@@ -1,3 +1,11 @@
+# ---------------------------第1个账号相关配置开始-----------------------------
+[[account_configs]]
+# 是否启用该账号
+enable = true
+
+# 账号名称，仅用于区分不同账号
+name = "默认账号"
+
 # 运行模式
 # pre_run:      指引获取uin、skey，以及如何获取角色信息
 # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
@@ -21,7 +29,7 @@ readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
 changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
 # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
-[login_timeouts]
+[account_configs.login_timeouts]
 # 加载页面，以登录按钮出现为完成标志
 load_page = 60
 # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
@@ -32,7 +40,7 @@ login = 600
 login_finished = 60
 
 # 腾讯系网页登录通用账号凭据与token
-[account_info]
+[account_configs.account_info]
 # 手动登录需要设置的信息
 uin = "o123456789"
 skey = "@a1b2c3d4e"
@@ -42,13 +50,13 @@ account = "123456789"
 password = "使用账号密码自动登录有风险_请审慎决定"
 
 # 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
-[exchange_role_info]
+[account_configs.exchange_role_info]
 iZone = "11"  # 浙江一区，其他区服id可查阅reference_data/dnf_server_list.js
 lRoleId = "DNF角色ID"
 rolename = "DNF角色名"
 
 # 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
-[mobile_game_role_info]
+[account_configs.mobile_game_role_info]
 # 手游名称，目前支持下面几种，后续有空可能会添加其他手游
 # none： 无，则不启用完成礼包达人任务
 # jx3：  剑网3：指尖江湖
@@ -60,14 +68,104 @@ roleid = "指尖江湖角色ID"
 rolename ="指尖江湖玩家名"
 
 # 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
-[[exchange_items]]
+[[account_configs.exchange_items]]
 # 兑换两次调整箱
 iGoodsId = "753"
 sGoodsName = "装备品级调整箱（5个）"
 count = 2
 
-[[exchange_items]]
+[[account_configs.exchange_items]]
 # 兑换一次疲劳药
 iGoodsId = "755"
 sGoodsName = "魔界抗疲劳秘药（10点）"
 count = 1
+
+# ---------------------------第1个账号相关配置结束-----------------------------
+
+
+## 取消下面的注释，即可得到第二个账户的配置，与第1个账户的配置一致。如果要添加更多账户，则再额外复制一份从（相关配置开始）到（相关配置结尾）内的内容到文件末尾
+## 多账号的具体配置方式，可以查看使用文档
+## ---------------------------第2个账号相关配置开始-----------------------------
+#[[account_configs]]
+## 是否启用该账号
+#enable = true
+#
+## 账号名称，仅用于区分不同账号
+#name = "大号"
+#
+## 运行模式
+## pre_run:      指引获取uin、skey，以及如何获取角色信息
+## normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
+#run_mode = "pre_run"
+#
+## 登录模式
+## by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
+## qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
+## auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
+#login_mode = "qr_login"
+#
+## 是否强制使用打包附带的便携版chrome
+#force_use_portable_chrome = false
+#
+## 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
+#log_level = "info"
+#
+## 是否检查更新
+#check_update_on_start = true
+#readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+#changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+#
+## 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
+#[account_configs.login_timeouts]
+## 加载页面，以登录按钮出现为完成标志
+#load_page = 60
+## 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
+#load_login_iframe = 5
+## 登录，从登录界面显示为开始，以用户完成登录为结束标志
+#login = 600
+## 等待登录完成，以活动结束的按钮弹出来标志
+#login_finished = 60
+#
+## 腾讯系网页登录通用账号凭据与token
+#[account_configs.account_info]
+## 手动登录需要设置的信息
+#uin = "o123456789"
+#skey = "@a1b2c3d4e"
+#
+## 自动登录需要设置的信息
+#account = "123456789"
+#password = "使用账号密码自动登录有风险_请审慎决定"
+#
+## 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
+#[account_configs.exchange_role_info]
+#iZone = "11"  # 浙江一区，其他区服id可查阅reference_data/dnf_server_list.js
+#lRoleId = "DNF角色ID"
+#rolename = "DNF角色名"
+#
+## 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
+#[account_configs.mobile_game_role_info]
+## 手游名称，目前支持下面几种，后续有空可能会添加其他手游
+## none： 无，则不启用完成礼包达人任务
+## jx3：  剑网3：指尖江湖
+#game_name = "jx3"
+#area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
+#platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
+#partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
+#roleid = "指尖江湖角色ID"
+#rolename ="指尖江湖玩家名"
+#
+## 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
+#[[account_configs.exchange_items]]
+## 兑换两次调整箱
+#iGoodsId = "753"
+#sGoodsName = "装备品级调整箱（5个）"
+#count = 2
+#
+#[[account_configs.exchange_items]]
+## 兑换一次疲劳药
+#iGoodsId = "755"
+#sGoodsName = "魔界抗疲劳秘药（10点）"
+#count = 1
+#
+## ---------------------------第2个账号相关配置结束-----------------------------
+

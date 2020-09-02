@@ -1,7 +1,6 @@
-import os
 import uuid
-from urllib.parse import quote
 from typing import List
+from urllib.parse import quote
 
 import toml
 
@@ -11,6 +10,7 @@ from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
 
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
+
 
 class LoginTimeoutsConfig(ConfigInterface):
     def __init__(self):
@@ -75,7 +75,7 @@ class ExchangeItemConfig(ConfigInterface):
         self.count = 2
 
 
-class Config(ConfigInterface):
+class AccountConfig(ConfigInterface):
     log_level_map = {
         "debug": logging.DEBUG,
         "info": logging.INFO,
@@ -85,6 +85,10 @@ class Config(ConfigInterface):
     }
 
     def __init__(self):
+        # 是否启用该账号
+        self.enable = True
+        # 账号名称，仅用于区分不同账号
+        self.name = "默认账号"
         # 运行模式
         # pre_run:      指引获取uin、skey，以及如何获取角色信息
         # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
@@ -142,7 +146,7 @@ class Config(ConfigInterface):
         self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, self.account_info.uin[1:], self.sDeviceID, appVersion)
 
     def getSDeviceID(self):
-        sDeviceIdFileName = ".sDeviceID.txt"
+        sDeviceIdFileName = os.path.join(cached_dir, ".sDeviceID.{}.txt".format(self.name))
 
         if os.path.isfile(sDeviceIdFileName):
             with open(sDeviceIdFileName, "r", encoding="utf-8") as file:
@@ -158,6 +162,22 @@ class Config(ConfigInterface):
             file.write(sDeviceID)
 
         return sDeviceID
+
+
+class Config(ConfigInterface):
+    def __init__(self):
+        # 兑换道具信息
+        self.account_configs = []  # type: List[AccountConfig]
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'account_configs' in raw_config:
+            self.account_configs = []
+            for cfg in raw_config["account_configs"]:
+                ei = AccountConfig()
+                ei.auto_update_config(cfg)
+                self.account_configs.append(ei)
 
 
 g_config = Config()

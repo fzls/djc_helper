@@ -8,20 +8,19 @@ import requests
 import win32api
 import win32con
 
-from config import config
 from dao import UpdateInfo
 from log import logger
 from version import now_version
 
 
 # 启动时检查是否有更新
-def check_update_on_start():
+def check_update_on_start(config):
     try:
-        if not config().check_update_on_start:
+        if not config.check_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
             return
 
-        ui = get_update_info()
+        ui = get_update_info(config)
         if need_update(now_version, ui.latest_version):
             logger.info("当前版本为{}，已有最新版本{}，更新内容为{}".format(now_version, ui.latest_version, ui.update_message))
 
@@ -64,13 +63,13 @@ def check_update_on_start():
 
 
 # 获取最新版本号与下载网盘地址
-def get_update_info() -> UpdateInfo:
+def get_update_info(config) -> UpdateInfo:
     update_info = UpdateInfo()
 
     # 获取github本项目的readme页面内容和changelog页面内容
-    timeout = 3 # 由于国内网络不太好，加个超时
-    changelog_html_text = requests.get(config().changelog_page, timeout=timeout).text
-    readme_html_text = requests.get(config().readme_page, timeout=timeout).text
+    timeout = 3  # 由于国内网络不太好，加个超时
+    changelog_html_text = requests.get(config.changelog_page, timeout=timeout).text
+    readme_html_text = requests.get(config.readme_page, timeout=timeout).text
 
     # 从更新日志中提取所有版本信息
     versions = re.findall("(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_html_text)
@@ -125,7 +124,8 @@ def is_shared_content_blocked(share_netdisk_addr: str) -> bool:
 
 
 if __name__ == '__main__':
-    from config import load_config
+    from config import load_config, config
 
     load_config()
-    check_update_on_start()
+    cfg = config()
+    check_update_on_start(cfg.account_configs[0])

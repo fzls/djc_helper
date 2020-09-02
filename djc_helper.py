@@ -10,8 +10,9 @@ from qq_login import QQLogin
 
 # 道聚城自动化助手
 class DjcHelper:
-    first_run_flag_file = ".firstrun"
-    first_run_auto_login_mode_flag_file = ".firstrun_auto_login_mode"
+    first_run_flag_file = os.path.join(first_run_dir, "init")
+    first_run_auto_login_mode_flag_file = os.path.join(first_run_dir, "auto_login_mode")
+    first_run_multi_accounts_version_flag_file = os.path.join(first_run_dir, "multi_accounts_version")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
 
@@ -64,14 +65,17 @@ class DjcHelper:
 
     # --------------------------------------------各种操作--------------------------------------------
     def run(self):
-        # 检查是否是首次运行，若是首次，则弹框提示相关风险
-        self.show_tip_on_first_run_any()
+        self.check_first_run()
 
         run_mode_dict = {
             "pre_run": self.pre_run,
             "normal": self.normal_run,
         }
         run_mode_dict[self.cfg.run_mode]()
+
+    def check_first_run(self):
+        self.show_tip_on_first_run_any()
+        self.show_tip_on_first_run_multi_accounts_version()
 
     def show_tip_on_first_run_any(self):
         filename = self.first_run_flag_file
@@ -102,6 +106,15 @@ class DjcHelper:
         loginfo = "首次运行自动登录模式，弹出利弊分析"
 
         self.show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
+
+    def show_tip_on_first_run_multi_accounts_version(self):
+        filename = self.first_run_multi_accounts_version_flag_file
+        title = "多账号版本指引"
+        tips = """当前版本实现了多账号功能，与旧版本配置文件不兼容，请查看使用文档，阅读详细使用流程
+                """
+        loginfo = "首次运行多账号版本，弹出指引"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
 
     def show_tip_on_first_run(self, filename, title, tips, loginfo, show_count=1):
         if os.path.isfile(filename):

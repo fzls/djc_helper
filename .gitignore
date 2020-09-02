@@ -8,10 +8,8 @@ test.py
 start.bat
 *.lnk
 
-.firstrun
-.firstrun_auto_login_mode
-
-cached/
+.first_run/
+.cached/
 
 config.toml.local
 

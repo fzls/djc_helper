@@ -4,8 +4,11 @@ from config import load_config, config
 from djc_helper import DjcHelper
 from log import logger
 from update import check_update_on_start
+from version import *
 
 if __name__ == '__main__':
+    logger.info("开始运行道聚城自动化操作小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()

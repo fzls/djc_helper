@@ -27,6 +27,11 @@ release_without_chrome_dir_name = "道聚城自动化助手_{version}_若系统�
 dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
 path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 
+# ---------------构建
+# 调用构建脚本
+os.chdir(dir_src)
+subprocess.call(["python", "_build.py"])
+
 # ---------------复制文件到目标目录
 os.chdir(dir_src)
 
@@ -38,6 +43,7 @@ for file in os.listdir('.'):
         continue
     files_to_copy.append(file)
 files_to_copy.extend([
+    "道聚城助手.exe",
     "bandizip_portable",
     "reference_data",
     "chrome_portable_85.0.4183.59.7z",
@@ -63,11 +69,6 @@ for filename in files_to_copy:
     else:
         logger.info("拷贝文件 {}".format(filename))
         shutil.copyfile(source, destination)
-
-# ---------------构建
-# 调用构建脚本
-os.chdir(dir_current_release)
-subprocess.call(["python", "_build.py"])
 
 # 压缩打包
 os.chdir(dir_all_release)

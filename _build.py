@@ -5,25 +5,27 @@ import subprocess
 
 from log import logger
 
+venv_path = ".venv"
+exe_name = '道聚城助手.exe'
+icon = '道聚城.ico'
+
+# 初始化相关路径变量
+pyscript_path = os.path.join(venv_path, "Scripts")
+py_path = os.path.join(pyscript_path, "python")
+pip_path = os.path.join(pyscript_path, "pip")
+pyinstaller_path = os.path.join(pyscript_path, "pyinstaller")
+
 logger.info("尝试初始化venv环境")
 subprocess.call([
     "python",
     "-m",
     "venv",
-    ".venv",
+    venv_path,
 ])
 
-pyscript_path = os.path.join(".venv", "Scripts")
-py_path = os.path.join(pyscript_path, "python")
-pip_path = os.path.join(pyscript_path, "pip")
-pyinstaller_path = os.path.join(pyscript_path, "pyinstaller")
-logger.info("使用.venv环境进行编译")
-
-exe_name = '道聚城助手.exe'
-icon = '道聚城.ico'
+logger.info("将使用.venv环境进行编译")
 
 logger.info("尝试更新pip")
-# python -m pip install --upgrade pip
 subprocess.call([
     py_path,
     "-m",
@@ -34,17 +36,23 @@ subprocess.call([
 ])
 
 logger.info("尝试安装依赖库和pyinstaller")
-
-cmd_install_requiremnts = [
+subprocess.call([
     pip_path,
     "install",
     "-i",
     "https://pypi.doubanio.com/simple",
     "-r",
     "requirements.txt",
+    "wheel",
     "pyinstaller",
-]
-subprocess.call(cmd_install_requiremnts)
+])
+
+logger.info("安装pywin32_postinstall")
+subprocess.call([
+    py_path,
+    os.path.join(pyscript_path, "pywin32_postinstall.py"),
+    "-install",
+])
 
 logger.info("开始编译 {}".format(exe_name))
 
@@ -53,15 +61,6 @@ cmd_build = [
     '--icon', icon,
     '--name', exe_name,
     '-F',
-    '--exclude-module', 'PySide2',
-    '--exclude-module', 'tkinter',
-    '--exclude-module', 'numpy',
-    '--exclude-module', 'PyQt5',
-    '--exclude-module', 'PyQt5.QtCore',
-    '--exclude-module', 'PyQt5.QtGui',
-    '--exclude-module', 'PyQt5.QtWidgets',
-    '--exclude-module', 'distutils',
-    '--exclude-module', 'lib2to3',
     'main.py',
 ]
 

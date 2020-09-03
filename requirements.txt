@@ -1,7 +1,7 @@
 requests
 pycryptodome
 pyperclip
-pypiwin32
+pywin32
 toml
 selenium
 colorlog

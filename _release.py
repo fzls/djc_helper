@@ -3,6 +3,7 @@ import re
 import shutil
 import subprocess
 from datetime import datetime
+
 from log import logger
 
 # ---------------准备工作
@@ -99,7 +100,7 @@ subprocess.call(['git', 'push', 'origin', 'master', '--tags'])
 
 # ---------------结束
 logger.info('+' * 40)
-logger.info("发布完成，请将压缩包合适命名后上传至蓝奏云")
+logger.info("发布完成，共用时{}，请将压缩包合适命名后上传至蓝奏云".format(datetime.now() - run_start_time))
 logger.info('+' * 40)
 
 os.system("PAUSE")

@@ -1,6 +1,8 @@
 import platform
 
 import pyperclip
+import win32api
+import win32con
 
 import json_parser
 from dao import *
@@ -126,9 +128,6 @@ class DjcHelper:
 
         # 若不存在该文件，则说明是首次运行，提示相关信息
         logger.info(loginfo)
-
-        import win32api
-        import win32con
 
         for i in range(show_count):
             _title = title
@@ -331,8 +330,14 @@ class DjcHelper:
             ]
             dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
             giftInfo = giftInfos[dayIndex]
-            self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
-                     sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
+            res = self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
+                           sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
+            # {"ret": -1, "msg": "目前访问人数过多！请稍后再试！谢谢！", ....}
+            # 似乎未绑定的时候会提示这个
+            notBindTip = "目前访问人数过多！请稍后再试！谢谢！"
+            if notBindTip in res["msg"]:
+                msg = "领取签到奖励失败，怀疑是未在道聚城绑定指尖江湖角色，请前往道聚城的指尖江湖界面进行绑定，需要与配置表中填写的保持一致"
+                win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
         else:
             logger.info("未启用自动完成《礼包达人》任务功能")
 

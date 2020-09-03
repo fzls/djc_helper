@@ -51,7 +51,14 @@ class Network:
         else:
             data = res.json()
         if print_res:
-            logger.info("{}\t{}".format(ctx, self.pretty_json(data, pretty)))
+            success = True
+            if "ret" in data:
+                success = int(data["ret"]) == 0
+
+            logFunc = logger.info
+            if not success:
+                logFunc = logger.error
+            logFunc("{}\t{}".format(ctx, self.pretty_json(data, pretty)))
         return data
 
     def jsonp2json(self, jsonpStr):

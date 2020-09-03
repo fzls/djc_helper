@@ -487,5 +487,5 @@ if __name__ == '__main__':
         djcHelper.query_all_extra_info()
 
         if account_config._debug_stop_after_this:
-            logger.warn("调试开关打开，不再处理后续账户")
+            logger.warning("调试开关打开，不再处理后续账户")
             break

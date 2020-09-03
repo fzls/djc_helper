@@ -2,6 +2,7 @@
 __pycache__/
 logs/
 debug.log
+.venv
 
 test/
 test.py

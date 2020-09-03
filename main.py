@@ -17,6 +17,14 @@ if __name__ == '__main__':
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
+    logger.info("将操作下列账号")
+    logger.info("序号\t账号名\t\t启用状态")
+    for _idx, account_config in enumerate(cfg.account_configs):
+        idx = _idx + 1
+        status = "启用" if account_config.enable else "未启用"
+        logger.info("{}\t{}\t{}".format(idx, account_config.name, status))
+    logger.info("")
+
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.enable:

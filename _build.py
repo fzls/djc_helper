@@ -6,9 +6,22 @@ import subprocess
 exe_name = '道聚城助手.exe'
 icon = '道聚城.ico'
 
+print("尝试安装依赖库和pyinstaller")
+
+cmd_install_requiremnts = [
+    "pip",
+    "install",
+    "-i",
+    "https://pypi.doubanio.com/simple",
+    "-r",
+    "requirements.txt",
+    "pyinstaller"
+]
+subprocess.call(cmd_install_requiremnts)
+
 print("开始编译 {}".format(exe_name))
 
-cmd = [
+cmd_build = [
     'pyinstaller',
     '--icon', icon,
     '--name', exe_name,
@@ -25,7 +38,7 @@ cmd = [
     'main.py',
 ]
 
-subprocess.call(cmd)
+subprocess.call(cmd_build)
 
 print("编译结束，进行善后操作")
 # 复制二进制

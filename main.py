@@ -37,7 +37,7 @@ if __name__ == '__main__':
         djcHelper.run()
 
         if account_config._debug_stop_after_this:
-            logger.warn("调试开关打开，不再处理后续账户")
+            logger.warning("调试开关打开，不再处理后续账户")
             break
 
     # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了

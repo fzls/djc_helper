@@ -87,6 +87,8 @@ class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
         self.enable = True
+        # 测试用开关，处理完本项直接结束
+        self._debug_stop_after_this = False
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号"
         # 运行模式

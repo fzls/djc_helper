@@ -51,7 +51,7 @@ class DjcHelper:
         # 心悦相关接口的入口
         self.xinyue_iActivityId = "166962"
         self.xinyue = "https://act.game.qq.com/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType=tgclub&iActivityId={xinyue_iActivityId}&sServiceDepartment=xinyue&isXhrPost=true"
-        self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel=1&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
+        self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel=1&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
 
         # 任务列表
         self.usertask = "https://djcapp.game.qq.com/daoju/v3/api/we/usertaskv2/Usertask.php?iAppId=1001&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&_app_id=1001&output_format=json&_output_fmt=json&appid=1001&optype=get_usertask_list&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -478,14 +478,11 @@ class DjcHelper:
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
         # 根据配置信息，进行相应的心悦操作
-        for op in self.cfg.xinyue_operations:
-            pass
-
         eiCfg = self.common_cfg.exchange_items
         for op in self.cfg.xinyue_operations:
             for i in range(op.count):
                 for try_index in range(eiCfg.max_retry_count):
-                    res = self.xinyue_op("6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count), op.iFlowId)
+                    res = self.xinyue_op("6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count), op.iFlowId, package_id=op.package_id)
                     # if int(res.get('ret', '0')) == -9905:
                     #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
                     #     time.sleep(eiCfg.retry_wait_time)
@@ -501,16 +498,16 @@ class DjcHelper:
         logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）".format(self.cfg.name, delta, old_info.score, new_info.score))
 
     def query_xinyue_info(self, ctx, print_res=True):
-        data = self.xinyue_op(ctx, "512411", print_res)
+        data = self.xinyue_op(ctx, "512411", print_res=print_res)
         r = data["modRet"]
         score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"],
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
-    def xinyue_op(self, ctx, iFlowId, print_res=True):
-        return self.post(ctx, djcHelper.xinyue, djcHelper.xinyue_flow_data(iFlowId), sMiloTag=self.make_s_milo_tag(iFlowId))
+    def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True):
+        return self.post(ctx, djcHelper.xinyue, djcHelper.xinyue_flow_data(iFlowId, package_id), sMiloTag=self.make_s_milo_tag(iFlowId))
 
-    def xinyue_flow_data(self, iFlowId):
-        return self.format(self.xinyue_raw_data, iFlowId=iFlowId)
+    def xinyue_flow_data(self, iFlowId, package_id=""):
+        return self.format(self.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id)
 
     def make_s_milo_tag(self, iFlowId):
         iActivityId, id = self.xinyue_iActivityId, self.cfg.account_info.uin

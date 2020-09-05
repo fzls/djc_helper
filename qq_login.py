@@ -85,6 +85,8 @@ class QQLogin():
         :param password: 密码
         :rtype: LoginResult
         """
+        logger.info("即将开始自动登录，无需任何手动操作，等待其完成即可")
+        logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
         def login_with_account_and_password():
             # 选择密码登录
@@ -103,6 +105,7 @@ class QQLogin():
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
+        logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
         return self._login()
 
     def _login(self, login_action_fn=None):

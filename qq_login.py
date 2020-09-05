@@ -143,8 +143,8 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
 
-            logger.info("浏览器设为最大")
-            self.driver.maximize_window()
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
@@ -176,8 +176,8 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://xinyue.qq.com/act/a20181101rights/index.html")
 
-            logger.info("浏览器设为最大")
-            self.driver.maximize_window()
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
 
             logger.info("等待#loginframe加载完毕并切换")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))

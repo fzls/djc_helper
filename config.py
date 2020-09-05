@@ -190,6 +190,28 @@ class Config(ConfigInterface):
                 ei.auto_update_config(cfg)
                 self.account_configs.append(ei)
 
+        if not self.check():
+            logger.error("配置有误，请根据提示信息修改")
+            exit(-1)
+
+    def check(self) -> bool:
+        name2index = {}
+        for _idx, account in enumerate(self.account_configs):
+            idx = _idx + 1
+
+            # 检查是否填写名称
+            if len(account.name) == 0:
+                logger.error("第{}个账号未设置名称，请确保已填写对应账号配置的name".format(idx))
+                return False
+
+            # 检查名称是否重复
+            if account.name in name2index:
+                logger.error("第{}个账号的名称 {} 与第{}个账号的名称重复，请调整为不同的名字".format(idx, account.name, name2index[account.name]))
+                return False
+            name2index[account.name] = idx
+
+        return True
+
 
 g_config = Config()
 

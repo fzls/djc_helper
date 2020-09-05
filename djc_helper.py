@@ -1,4 +1,6 @@
 import platform
+import random
+import string
 import time
 
 import pyperclip
@@ -9,6 +11,7 @@ import json_parser
 from dao import *
 from network import *
 from qq_login import QQLogin
+from sign import getMillSecondsUnix
 
 
 # 道聚城自动化助手
@@ -40,9 +43,15 @@ class DjcHelper:
 
         # 每日签到的奖励规则
         self.sign_reward_rule = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.reward.sign.rule&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&output_format=json&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+
         # 签到相关接口的入口
         self.sign = "https://comm.ams.game.qq.com/ams/ame/amesvr?ameVersion=0.3&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sServiceType=dj&iActivityId=11117&sServiceDepartment=djc&set_info=newterminals&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&&appSource=android&ch=10003&osVersion=Android-28&sVersionName=v4.1.6.0"
         self.sign_raw_data = "appVersion={appVersion}&g_tk={g_tk}&iFlowId={iFlowId}&month={month}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&sign_version=1.0&ch=10003&iActivityId=11117&osVersion=Android-28&sVersionName=v4.1.6.0&sServiceDepartment=djc&sServiceType=dj&appSource=android"
+
+        # 心悦相关接口的入口
+        self.xinyue_iActivityId = "166962"
+        self.xinyue = "https://act.game.qq.com/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType=tgclub&iActivityId={xinyue_iActivityId}&sServiceDepartment=xinyue&isXhrPost=true"
+        self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel=1&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
 
         # 任务列表
         self.usertask = "https://djcapp.game.qq.com/daoju/v3/api/we/usertaskv2/Usertask.php?iAppId=1001&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&_app_id=1001&output_format=json&_output_fmt=json&appid=1001&optype=get_usertask_list&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -185,6 +194,9 @@ class DjcHelper:
 
         delta = new_allin - old_allin
         logger.info("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）".format(self.cfg.name, delta, old_allin, new_allin))
+
+        # 执行心悦相关操作
+        self.xinyue_operations()
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
@@ -457,6 +469,62 @@ class DjcHelper:
     def query_jx3_gifts(self):
         self.get("查询指尖江湖礼包信息", self.query_jx3_gift_bags)
 
+    def xinyue_operations(self):
+        """
+        根据配置进行心悦相关操作
+        具体活动信息可以查阅reference_data/心悦活动备注.txt
+        """
+        # 查询成就点信息
+        old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
+
+        # 根据配置信息，进行相应的心悦操作
+        for op in self.cfg.xinyue_operations:
+            pass
+
+        eiCfg = self.common_cfg.exchange_items
+        for op in self.cfg.xinyue_operations:
+            for i in range(op.count):
+                for try_index in range(eiCfg.max_retry_count):
+                    res = self.xinyue_op("6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count), op.iFlowId)
+                    # if int(res.get('ret', '0')) == -9905:
+                    #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
+                    #     time.sleep(eiCfg.retry_wait_time)
+                    #     continue
+
+                    logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, eiCfg.request_wait_time))
+                    time.sleep(eiCfg.request_wait_time)
+                    break
+
+        # 再次查询成就点信息，展示本次操作得到的数目
+        new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
+        delta = new_info.score - old_info.score
+        logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）".format(self.cfg.name, delta, old_info.score, new_info.score))
+
+    def query_xinyue_info(self, ctx, print_res=True):
+        data = self.xinyue_op(ctx, "512411", print_res)
+        r = data["modRet"]
+        score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"],
+        return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
+
+    def xinyue_op(self, ctx, iFlowId, print_res=True):
+        return self.post(ctx, djcHelper.xinyue, djcHelper.xinyue_flow_data(iFlowId), sMiloTag=self.make_s_milo_tag(iFlowId))
+
+    def xinyue_flow_data(self, iFlowId):
+        return self.format(self.xinyue_raw_data, iFlowId=iFlowId)
+
+    def make_s_milo_tag(self, iFlowId):
+        iActivityId, id = self.xinyue_iActivityId, self.cfg.account_info.uin
+        return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(
+            iActivityId=iActivityId,
+            iFlowId=iFlowId,
+            id=id,
+            millseconds=getMillSecondsUnix(),
+            rand6=self.rand6()
+        )
+
+    def rand6(self):
+        return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -477,6 +545,10 @@ class DjcHelper:
             "month": self.get_month(),
             "starttime": self.getMoneyFlowTime(startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, startTime.second),
             "endtime": self.getMoneyFlowTime(endTime.year, endTime.month, endTime.day, endTime.hour, endTime.minute, endTime.second),
+            "xinyue_iActivityId": self.xinyue_iActivityId,
+            "sSDID": self.cfg.sDeviceID.replace('-', ''),
+            "uuid": self.cfg.sDeviceID,
+            "millseconds": getMillSecondsUnix(),
         }
         return url.format(**{**default_params, **params})
 

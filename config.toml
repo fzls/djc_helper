@@ -97,6 +97,120 @@ iGoodsId = "755"
 sGoodsName = "魔界抗疲劳秘药（10点）"
 count = 1
 
+# 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt
+# ++++++++++周期礼包++++++++++++
+[[account_configs.xinyue_operations]]
+# 尝试领取每周礼包（心悦会员）
+iFlowId = "513573"
+sFlowName = "Y600周礼包"
+count = 1
+
+[[account_configs.xinyue_operations]]
+# 尝试领取每周礼包（特邀会员）
+iFlowId = "513581"
+sFlowName = "Y600周礼包_特邀会员"
+count = 1
+
+[[account_configs.xinyue_operations]]
+# 尝试领取每月礼包（心悦会员）
+iFlowId = "673269"
+sFlowName = "月礼包_20200610后使用"
+count = 1
+
+[[account_configs.xinyue_operations]]
+# 尝试领取每月礼包（特邀会员）
+iFlowId = "673270"
+sFlowName = "月礼包_特邀会员_20200610后使用"
+count = 1
+
+[[account_configs.xinyue_operations]]
+# 尝试领取每月累计宝箱（月领取周期礼包达到5个可领取）
+iFlowId = "513585"
+sFlowName = "累计宝箱"
+count = 1
+
+# ++++++++++每日任务++++++++++++
+# 下列是各个类别的每日任务中最高的一档，可根据自己的游戏习惯决定使用哪一个，默认尝试完成三次在线40分钟的任务
+# 建议设置为在每天比较迟的时间自动运行，这样可以尽可能确保运行的时候任务的条件已达成
+[[account_configs.xinyue_operations]]
+iFlowId = "512398"
+sFlowName = "游戏内在线时长40（成就点=3）"
+count = 3
+
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512400"
+#sFlowName = "游戏内消耗疲劳值120（成就点=3）"
+#count = 3
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512402"
+#sFlowName = "游戏内PK3次（成就点=3）"
+#count = 3
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512393"
+#sFlowName = "邮箱无未读邮件（成就点=2）"
+#count = 3
+
+# ++++++++++其他++++++++++++
+[[account_configs.xinyue_operations]]
+iFlowId = "512490"
+sFlowName = "领取每周免做卡"
+count = 1
+
+# ++++++++++兑换道具++++++++++++
+# 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512475"
+#sFlowName = "抗疲劳秘药50点（95lv以上，1天1次）（1个）(需50点)(日限3)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512474"
+#sFlowName = "时间引导石礼包 (10个)(需10点)(日限5)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512473"
+#sFlowName = "复活币礼袋兑换(需8点)(日限10)"
+#count = 1
+
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702214"
+#sFlowName = "装备品级调整箱(需8点)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702216"
+#sFlowName = "超级远古精灵秘药（持续30分钟）(需10点)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702217"
+#sFlowName = "神秘契约礼袋（适用1日）(需20点)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702218"
+#sFlowName = "装备提升礼盒(需10点)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702220"
+#sFlowName = "华丽徽章随机礼盒(需20点)"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512469"
+#package_id = "702222"
+#sFlowName = "升级券(Lv90-94)(需50点)(月限1)"
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 
@@ -162,5 +276,119 @@ count = 1
 #sGoodsName = "魔界抗疲劳秘药（10点）"
 #count = 1
 #
+## 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt
+## ++++++++++周期礼包++++++++++++
+#[[account_configs.xinyue_operations]]
+## 尝试领取每周礼包（心悦会员）
+#iFlowId = "513573"
+#sFlowName = "Y600周礼包"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+## 尝试领取每周礼包（特邀会员）
+#iFlowId = "513581"
+#sFlowName = "Y600周礼包_特邀会员"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+## 尝试领取每月礼包（心悦会员）
+#iFlowId = "673269"
+#sFlowName = "月礼包_20200610后使用"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+## 尝试领取每月礼包（特邀会员）
+#iFlowId = "673270"
+#sFlowName = "月礼包_特邀会员_20200610后使用"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
+## 尝试领取每月累计宝箱（月领取周期礼包达到5个可领取）
+#iFlowId = "513585"
+#sFlowName = "累计宝箱"
+#count = 1
+#
+## ++++++++++每日任务++++++++++++
+## 下列是各个类别的每日任务中最高的一档，可根据自己的游戏习惯决定使用哪一个，默认尝试完成三次在线40分钟的任务
+## 建议设置为在每天比较迟的时间自动运行，这样可以尽可能确保运行的时候任务的条件已达成
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512398"
+#sFlowName = "游戏内在线时长40（成就点=3）"
+#count = 3
+#
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512400"
+##sFlowName = "游戏内消耗疲劳值120（成就点=3）"
+##count = 3
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512402"
+##sFlowName = "游戏内PK3次（成就点=3）"
+##count = 3
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512393"
+##sFlowName = "邮箱无未读邮件（成就点=2）"
+##count = 3
+#
+## ++++++++++其他++++++++++++
+#[[account_configs.xinyue_operations]]
+#iFlowId = "512490"
+#sFlowName = "领取每周免做卡"
+#count = 1
+#
+## ++++++++++兑换道具++++++++++++
+## 下面是可供兑换的道具，默认不开启，可根据需要自动兑换
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512475"
+##sFlowName = "抗疲劳秘药50点（95lv以上，1天1次）（1个）(需50点)(日限3)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512474"
+##sFlowName = "时间引导石礼包 (10个)(需10点)(日限5)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512473"
+##sFlowName = "复活币礼袋兑换(需8点)(日限10)"
+##count = 1
+#
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702214"
+##sFlowName = "装备品级调整箱(需8点)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702216"
+##sFlowName = "超级远古精灵秘药（持续30分钟）(需10点)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702217"
+##sFlowName = "神秘契约礼袋（适用1日）(需20点)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702218"
+##sFlowName = "装备提升礼盒(需10点)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702220"
+##sFlowName = "华丽徽章随机礼盒(需20点)"
+##count = 1
+##
+##[[account_configs.xinyue_operations]]
+##iFlowId = "512469"
+##package_id = "702222"
+##sFlowName = "升级券(Lv90-94)(需50点)(月限1)"
+##count = 1
+##
 ## ---------------------------第2个账号相关配置结束-----------------------------
 

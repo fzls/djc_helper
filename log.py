@@ -63,3 +63,4 @@ if __name__ == '__main__':
     logger.warning("warn")
     logger.error("error")
     logger.critical("critical")
+    logger.exception("exception", exc_info=Exception("测试Exception"))

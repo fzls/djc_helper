@@ -474,6 +474,10 @@ class DjcHelper:
         根据配置进行心悦相关操作
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
+        if len(self.cfg.xinyue_operations) == 0:
+            logger.warning("未设置心悦相关操作信息，将跳过")
+            return
+
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 

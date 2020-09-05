@@ -1,3 +1,27 @@
+# 所有账号共用的配置
+[common]
+# 是否强制使用打包附带的便携版chrome
+force_use_portable_chrome = false
+
+# 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
+log_level = "info"
+
+# 是否检查更新
+check_update_on_start = true
+readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+
+# 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
+[common.login_timeouts]
+# 加载页面，以登录按钮出现为完成标志
+load_page = 60
+# 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
+load_login_iframe = 8
+# 登录，从登录界面显示为开始，以用户完成登录为结束标志
+login = 600
+# 等待登录完成，以活动结束的按钮弹出来标志
+login_finished = 60
+
 # ---------------------------第1个账号相关配置开始-----------------------------
 [[account_configs]]
 # 是否启用该账号
@@ -16,28 +40,6 @@ run_mode = "pre_run"
 # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
 # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 login_mode = "qr_login"
-
-# 是否强制使用打包附带的便携版chrome
-force_use_portable_chrome = false
-
-# 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
-log_level = "info"
-
-# 是否检查更新
-check_update_on_start = true
-readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
-changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
-
-# 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
-[account_configs.login_timeouts]
-# 加载页面，以登录按钮出现为完成标志
-load_page = 60
-# 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
-load_login_iframe = 8
-# 登录，从登录界面显示为开始，以用户完成登录为结束标志
-login = 600
-# 等待登录完成，以活动结束的按钮弹出来标志
-login_finished = 60
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
@@ -103,28 +105,6 @@ count = 1
 ## qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
 ## auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 #login_mode = "qr_login"
-#
-## 是否强制使用打包附带的便携版chrome
-#force_use_portable_chrome = false
-#
-## 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
-#log_level = "info"
-#
-## 是否检查更新
-#check_update_on_start = true
-#readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
-#changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
-#
-## 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
-#[account_configs.login_timeouts]
-## 加载页面，以登录按钮出现为完成标志
-#load_page = 60
-## 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
-#load_login_iframe = 8
-## 登录，从登录界面显示为开始，以用户完成登录为结束标志
-#login = 600
-## 等待登录完成，以活动结束的按钮弹出来标志
-#login_finished = 60
 #
 ## 腾讯系网页登录通用账号凭据与token
 #[account_configs.account_info]

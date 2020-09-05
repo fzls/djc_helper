@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
         logger.info("------------开始处理第{}个账户({})------------\n".format(idx, account_config.name))
 
-        djcHelper = DjcHelper(account_config)
+        djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()
 
         if account_config._debug_stop_after_this:
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     ))
 
     # 全部账号操作完成后，检查更新
-    check_update_on_start(cfg.account_configs[0])
+    check_update_on_start(cfg.common)
 
     # 暂停一下，方便看结果
     os.system("PAUSE")

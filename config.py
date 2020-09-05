@@ -134,6 +134,8 @@ class AccountConfig(ConfigInterface):
 
 class LoginTimeoutsConfig(ConfigInterface):
     def __init__(self):
+        # 打开网页后等待时长
+        self.open_url_wait_time = 3
         # 加载页面，以登录按钮出现为完成标志
         self.load_page = 60
         # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志

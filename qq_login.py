@@ -6,7 +6,6 @@ import time
 import win32api
 import win32con
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException, ElementNotInteractableException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -129,7 +128,7 @@ class QQLogin():
                     login_fn = self._login_xinyue_real
 
                 return login_fn(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
-            except (NoSuchFrameException, NoSuchWindowException, ElementNotInteractableException) as e:
+            except Exception as e:
                 logger.exception("第{}/{}次尝试登录出错，等待{}秒后重试".format(idx, self.cfg.login.max_retry_count, self.cfg.login.retry_wait_time), exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
 

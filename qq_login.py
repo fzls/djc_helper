@@ -120,14 +120,19 @@ class QQLogin():
         """
         logger.info("打开活动界面")
         self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
+
         logger.info("浏览器设为最大")
         self.driver.set_window_size(1936, 1056)
+
         logger.info("等待{}秒，确保必要页面元素加载完毕...".format(self.cfg.login_timeouts.open_url_wait_time))
         time.sleep(self.cfg.login_timeouts.open_url_wait_time)
+
         logger.info("等待登录按钮出来，确保加载完成")
         WebDriverWait(self.driver, self.cfg.login_timeouts.load_page).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+
         logger.info("点击登录按钮")
         self.driver.find_element(By.ID, "dologin").click()
+
         logger.info("等待iframe显示出来")
         try:
             WebDriverWait(self.driver, self.cfg.login_timeouts.load_login_iframe).until(
@@ -135,6 +140,7 @@ class QQLogin():
             )
         except:
             pass
+
         logger.info("切换登录iframe")
         self.driver.switch_to.frame(0)
 
@@ -148,8 +154,10 @@ class QQLogin():
 
         logger.info("等待登录完成（也就是登录框消失）")
         WebDriverWait(self.driver, self.cfg.login_timeouts.login).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+
         logger.info("回到主iframe")
         self.driver.switch_to.default_content()
+        
         logger.info("等待活动已结束的弹窗出来，说明已经登录完成了")
         WebDriverWait(self.driver, self.cfg.login_timeouts.login_finished).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
 

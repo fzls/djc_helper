@@ -5,6 +5,7 @@ import time
 import win32api
 import win32con
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException, ElementNotInteractableException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -114,6 +115,15 @@ class QQLogin():
         return self._login("扫码登录")
 
     def _login(self, login_type, login_action_fn=None, need_human_operate=True):
+        for idx in range(self.cfg.login.max_retry_count):
+            idx += 1
+            try:
+                return self._login_real(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
+            except (NoSuchFrameException, NoSuchWindowException, ElementNotInteractableException) as e:
+                logger.exception("第{}/{}次尝试登录出错，等待{}秒后重试".format(idx, self.cfg.login.max_retry_count, self.cfg.login.retry_wait_time), exc_info=e)
+                time.sleep(self.cfg.login.retry_wait_time)
+
+    def _login_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -158,7 +168,7 @@ class QQLogin():
         logger.info("回到主iframe")
         self.driver.switch_to.default_content()
 
-        logger.info("等待活动已结束的弹窗出来，说明已经登录完成了")
+        logger.info("请等待活动已结束的弹窗出来，则说明已经登录完成了...")
         WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
 
         logger.info("登录完成")
@@ -182,6 +192,6 @@ if __name__ == '__main__':
     cfg = config()
 
     ql = QQLogin(cfg.common)
-    # lr = ql.login("1234567", "xxxxxxxxxx")
-    lr = ql.qr_login()
+    lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password)
+    # lr = ql.qr_login()
     print(lr)

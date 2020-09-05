@@ -23,8 +23,8 @@ logger.info("开始发布版本 {}".format(version))
 # 先声明一些需要用到的目录的地址
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
-release_dir_name = "道聚城自动化助手_{version}_by风之凌殇".format(version=version)
-release_without_chrome_dir_name = "道聚城自动化助手_{version}_若系统自带chrome85_by风之凌殇".format(version=version)
+release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=version)
+release_without_chrome_dir_name = "DNF蚊子腿小助手_{version}_若系统自带chrome85_by风之凌殇".format(version=version)
 dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
 path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 
@@ -44,7 +44,7 @@ for file in os.listdir('.'):
         continue
     files_to_copy.append(file)
 files_to_copy.extend([
-    "道聚城助手.exe",
+    "DNF蚊子腿小助手.exe",
     "bandizip_portable",
     "reference_data",
     "chrome_portable_85.0.4183.59.7z",

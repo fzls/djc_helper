@@ -1,4 +1,4 @@
-# 道聚城自动签到领奖助手
+# DNF蚊子腿小助手
 本脚本可用于自动化道聚城的查询、签到、领奖与兑换流程，从而不必再每日手动点开app去进行（签到-领取签到奖励-完成每日任务-领取任务奖励-领取金银箱子-兑换调整箱和疲劳药）的琐碎流程，解放双手和心智。
 
 # 唯一发布地址
@@ -52,7 +52,7 @@
     4. 目前默认dnf是浙江一区=11，指尖江湖是安卓手Q一区=20001，如果不是上述区服，可以从reference_data下的dnf_server_list.js和jx3_server_list.js中查询服务器的id
     5. 目前手游任务暂时只支持指尖江湖，后续版本将加入王者荣耀、天天酷跑等热门游戏
 4. 将config.toml中run_mode调整为正常运行模式normal（可使用网盘中附带的vscode或notepad++来编辑）
-5. 万事ok，运行main.py或者直接双击运行道聚城助手.exe，芜湖起飞
+5. 万事ok，运行main.py或者直接双击运行DNF蚊子腿小助手.exe，芜湖起飞
     > python main.py
 
 # 开机自动运行
@@ -69,9 +69,9 @@
 :: 修改console默认encoding为utf8，避免中文乱码
 CHCP 65001
 
-echo 启动自动化助手
+echo 启动DNF蚊子腿小助手
 # python main.py
-道聚城助手.exe
+DNF蚊子腿小助手.exe
 
 PAUSE
 

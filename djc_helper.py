@@ -14,7 +14,7 @@ from qq_login import QQLogin
 from sign import getMillSecondsUnix
 
 
-# 道聚城自动化助手
+# DNF蚊子腿小助手
 class DjcHelper:
     first_run_flag_file = os.path.join(first_run_dir, "init")
     first_run_auto_login_mode_flag_file = os.path.join(first_run_dir, "auto_login_mode")

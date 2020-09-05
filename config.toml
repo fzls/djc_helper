@@ -13,6 +13,8 @@ changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
 # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
 [common.login_timeouts]
+# 打开网页后等待时长
+open_url_wait_time = 3
 # 加载页面，以登录按钮出现为完成标志
 load_page = 60
 # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志

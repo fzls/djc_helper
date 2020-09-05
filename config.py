@@ -158,6 +158,8 @@ class CommonConfig(ConfigInterface):
     def __init__(self):
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
+        # 是否展示chrome的debug日志，如DevTools listening，Bluetooth等
+        self._debug_show_chrome_logs = False
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
         # 是否检查更新

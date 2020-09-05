@@ -1,4 +1,12 @@
-class DnfRoleInfo:
+from urllib.parse import unquote_plus
+
+
+class DaoObject:
+    def __repr__(self):
+        return str(self.__dict__)
+
+
+class DnfRoleInfo(DaoObject):
     def __init__(self, roleid, rolename, forceid, level):
         self.roleid = int(roleid)
         self.rolename = str(rolename)
@@ -10,7 +18,7 @@ class DnfRoleInfo:
         return str(self.__dict__)
 
 
-class Jx3RoleInfo:
+class Jx3RoleInfo(DaoObject):
     def __init__(self, roleid, rolename):
         self.roleid = roleid
         self.rolename = rolename
@@ -19,13 +27,13 @@ class Jx3RoleInfo:
         return str(self.__dict__)
 
 
-class Jx3GiftInfo:
+class Jx3GiftInfo(DaoObject):
     def __init__(self, sTask, iRuleId):
         self.sTask = sTask
         self.iRuleId = iRuleId
 
 
-class UpdateInfo:
+class UpdateInfo(DaoObject):
     def __init__(self):
         self.latest_version = ""
         self.netdisk_link = ""
@@ -34,3 +42,23 @@ class UpdateInfo:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+class XinYueInfo(DaoObject):
+    def __init__(self, score, ysb, xytype, specialMember, username, usericon):
+        # 成就点
+        self.score = int(score)
+        # 勇士币
+        self.ysb = int(ysb)
+        # 1-4=游戏家G1-4，5-7=心悦VIP1-3
+        xytype = int(xytype)
+        if xytype < 5:
+            self.xytype = "游戏家G{}".format(xytype)
+        else:
+            self.xytype = "心悦VIP{}".format(xytype - 4)
+        # 特邀会员
+        self.is_special_member = int(specialMember) == 1
+        # 用户名
+        self.username = unquote_plus(username)
+        # 用户头像
+        self.usericon_url = usericon

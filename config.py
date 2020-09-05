@@ -63,6 +63,13 @@ class ExchangeItemConfig(ConfigInterface):
         self.count = 2
 
 
+class XinYueOperationConfig(ConfigInterface):
+    def __init__(self):
+        self.iFlowId = "512411"
+        self.sFlowName = "输出我的任务积分"
+        self.count = 1
+
+
 class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
@@ -86,6 +93,8 @@ class AccountConfig(ConfigInterface):
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
         # 兑换道具信息
         self.exchange_items = []  # type: List[ExchangeItemConfig]
+        # 心悦相关操作信息
+        self.xinyue_operations = []  # type: List[XinYueOperationConfig]
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)
@@ -96,6 +105,13 @@ class AccountConfig(ConfigInterface):
                 ei = ExchangeItemConfig()
                 ei.auto_update_config(cfg)
                 self.exchange_items.append(ei)
+
+        if 'xinyue_operations' in raw_config:
+            self.xinyue_operations = []
+            for cfg in raw_config["xinyue_operations"]:
+                ei = XinYueOperationConfig()
+                ei.auto_update_config(cfg)
+                self.xinyue_operations.append(ei)
 
         self.on_config_update(raw_config)
 

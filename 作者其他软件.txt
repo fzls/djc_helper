@@ -7,7 +7,7 @@
 简介：
     本计算器基于dawnclass所写(https://github.com/dawnclass/DF_Calculator) 、韩械汉化并加入国服特色的一键史诗搭配计算器，在其上进行了一些性能优化、扩展功能、易用性改动及bugfix。
 
-2. 道聚城自动化助手
+2. DNF蚊子腿小助手
 源码：
     https://github.com/fzls/djc_helper
 二进制：

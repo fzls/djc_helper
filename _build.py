@@ -6,8 +6,8 @@ import subprocess
 from log import logger
 
 venv_path = ".venv"
-exe_name = '道聚城助手.exe'
-icon = '道聚城.ico'
+exe_name = 'DNF蚊子腿小助手.exe'
+icon = 'DNF蚊子腿小助手.ico'
 
 # 初始化相关路径变量
 pyscript_path = os.path.join(venv_path, "Scripts")
@@ -72,7 +72,7 @@ shutil.copyfile(os.path.join("dist", exe_name), exe_name)
 # 删除临时文件
 for directory in ["build", "dist", "__pycache__"]:
     shutil.rmtree(directory, ignore_errors=True)
-for file in ["道聚城助手.exe.spec"]:
+for file in ["DNF蚊子腿小助手.exe.spec"]:
     os.remove(file)
 
 logger.info("done")

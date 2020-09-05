@@ -1,4 +1,5 @@
 import platform
+import time
 
 import pyperclip
 import win32api
@@ -379,9 +380,19 @@ class DjcHelper:
         return False
 
     def exchange_items(self):
+        eiCfg = self.common_cfg.exchange_items
         for ei in self.cfg.exchange_items:
             for i in range(ei.count):
-                self.exchange_item("4.2 兑换 {}".format(ei.sGoodsName), ei.iGoodsId)
+                for try_index in range(eiCfg.max_retry_count):
+                    res = self.exchange_item("4.2 兑换 {}".format(ei.sGoodsName), ei.iGoodsId)
+                    if int(res.get('ret', '0')) == -9905:
+                        logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(ei.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
+                        time.sleep(eiCfg.retry_wait_time)
+                        continue
+
+                    logger.debug("领取 {} ok，等待{}s，避免请求过快报错".format(ei.sGoodsName, eiCfg.request_wait_time))
+                    time.sleep(eiCfg.request_wait_time)
+                    break
 
     def exchange_item(self, ctx, iGoodsSeqId):
         cfg = self.cfg.exchange_role_info
@@ -487,6 +498,7 @@ if __name__ == '__main__':
         # djcHelper.run()
         djcHelper.check_skey_expired()
         djcHelper.query_all_extra_info()
+        # djcHelper.exchange_items()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

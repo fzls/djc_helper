@@ -124,18 +124,18 @@ class QQLogin():
         logger.info("浏览器设为最大")
         self.driver.set_window_size(1936, 1056)
 
-        logger.info("等待{}秒，确保必要页面元素加载完毕...".format(self.cfg.login_timeouts.open_url_wait_time))
-        time.sleep(self.cfg.login_timeouts.open_url_wait_time)
+        logger.info("等待{}秒，确保必要页面元素加载完毕...".format(self.cfg.login.open_url_wait_time))
+        time.sleep(self.cfg.login.open_url_wait_time)
 
         logger.info("等待登录按钮出来，确保加载完成")
-        WebDriverWait(self.driver, self.cfg.login_timeouts.load_page).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+        WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
 
         logger.info("点击登录按钮")
         self.driver.find_element(By.ID, "dologin").click()
 
         logger.info("等待iframe显示出来")
         try:
-            WebDriverWait(self.driver, self.cfg.login_timeouts.load_login_iframe).until(
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
                 expected_conditions.visibility_of_element_located((By.XPATH, '//*[@id="switcher_plogin"]'))
             )
         except:
@@ -145,7 +145,7 @@ class QQLogin():
         self.driver.switch_to.frame(0)
 
         if need_human_operate:
-            logger.info("请在{}s内完成{}操作".format(self.cfg.login_timeouts.login, login_type))
+            logger.info("请在{}s内完成{}操作".format(self.cfg.login.login_timeout, login_type))
 
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info("开始{}流程".format(login_type))
@@ -153,13 +153,13 @@ class QQLogin():
             login_action_fn()
 
         logger.info("等待登录完成（也就是登录框消失）")
-        WebDriverWait(self.driver, self.cfg.login_timeouts.login).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+        WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
 
         logger.info("回到主iframe")
         self.driver.switch_to.default_content()
-        
+
         logger.info("等待活动已结束的弹窗出来，说明已经登录完成了")
-        WebDriverWait(self.driver, self.cfg.login_timeouts.login_finished).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
+        WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "showAlertContent")))
 
         logger.info("登录完成")
 

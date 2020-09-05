@@ -36,7 +36,7 @@ if __name__ == '__main__':
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()
 
-        if account_config._debug_stop_after_this:
+        if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
             break
 

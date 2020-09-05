@@ -79,8 +79,6 @@ class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
         self.enable = True
-        # 测试用开关，处理完本项直接结束
-        self._debug_stop_after_this = False
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号"
         # 运行模式
@@ -156,6 +154,8 @@ class CommonConfig(ConfigInterface):
     }
 
     def __init__(self):
+        # 测试用开关，将仅运行首个账号配置
+        self._debug_run_first_only = False
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
         # 是否展示chrome的debug日志，如DevTools listening，Bluetooth等

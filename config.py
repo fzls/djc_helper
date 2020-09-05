@@ -76,14 +76,6 @@ class ExchangeItemConfig(ConfigInterface):
 
 
 class AccountConfig(ConfigInterface):
-    log_level_map = {
-        "debug": logging.DEBUG,
-        "info": logging.INFO,
-        "warning": logging.WARNING,
-        "error": logging.ERROR,
-        "critical": logging.CRITICAL,
-    }
-
     def __init__(self):
         # 是否启用该账号
         self.enable = True
@@ -100,16 +92,6 @@ class AccountConfig(ConfigInterface):
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
-        # 是否强制使用打包附带的便携版chrome
-        self.force_use_portable_chrome = False
-        # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
-        self.login_timeouts = LoginTimeoutsConfig()
-        # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
-        self.log_level = "info"
-        # 是否检查更新
-        self.check_update_on_start = True
-        self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
-        self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 兑换dnf道具所需的dnf区服和角色信息
@@ -132,8 +114,6 @@ class AccountConfig(ConfigInterface):
         self.on_config_update(raw_config)
 
     def on_config_update(self, raw_config: dict):
-        consoleHandler.setLevel(self.log_level_map[self.log_level])
-
         self.sDeviceID = self.getSDeviceID()
         self.aes_key = "84e6c6dc0f9p4a56"
         self.rsa_public_key_file = "public_key.der"
@@ -166,8 +146,37 @@ class AccountConfig(ConfigInterface):
         return sDeviceID
 
 
+class CommonConfig(ConfigInterface):
+    log_level_map = {
+        "debug": logging.DEBUG,
+        "info": logging.INFO,
+        "warning": logging.WARNING,
+        "error": logging.ERROR,
+        "critical": logging.CRITICAL,
+    }
+
+    def __init__(self):
+        # 是否强制使用打包附带的便携版chrome
+        self.force_use_portable_chrome = False
+        # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
+        self.log_level = "info"
+        # 是否检查更新
+        self.check_update_on_start = True
+        self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+        self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+        # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
+        self.login_timeouts = LoginTimeoutsConfig()
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        consoleHandler.setLevel(self.log_level_map[self.log_level])
+
+
 class Config(ConfigInterface):
     def __init__(self):
+        # 所有账号共用的配置
+        self.common = CommonConfig()
         # 兑换道具信息
         self.account_configs = []  # type: List[AccountConfig]
 
@@ -207,7 +216,7 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
     try:
         raw_config = toml.load(local_config_path)
         g_config.auto_update_config(raw_config)
-    except:
+    except Exception as e:
         pass
 
 

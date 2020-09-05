@@ -128,4 +128,4 @@ if __name__ == '__main__':
 
     load_config()
     cfg = config()
-    check_update_on_start(cfg.account_configs[0])
+    check_update_on_start(cfg.common)

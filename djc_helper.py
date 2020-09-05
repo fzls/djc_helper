@@ -18,8 +18,9 @@ class DjcHelper:
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
 
-    def __init__(self, account_config):
+    def __init__(self, account_config, common_config):
         self.cfg = account_config  # type: AccountConfig
+        self.common_cfg = common_config  # type: CommonConfig
 
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
@@ -233,14 +234,14 @@ class DjcHelper:
         sys.exit(-1)
 
     def update_skey_qr_login(self, query_data):
-        qqLogin = QQLogin(self.cfg.login_timeouts, self.cfg.force_use_portable_chrome)
+        qqLogin = QQLogin(self.common_cfg.login_timeouts, self.common_cfg.force_use_portable_chrome)
         loginResult = qqLogin.qr_login()
         self.save_uin_skey(loginResult.uin, loginResult.skey)
 
     def update_skey_auto_login(self, query_data):
         self.show_tip_on_first_run_auto_login_mode()
 
-        qqLogin = QQLogin(self.cfg.login_timeouts, self.cfg.force_use_portable_chrome)
+        qqLogin = QQLogin(self.common_cfg.login_timeouts, self.common_cfg.force_use_portable_chrome)
         ai = self.cfg.account_info
         loginResult = qqLogin.login(ai.account, ai.password)
         self.save_uin_skey(loginResult.uin, loginResult.skey)
@@ -481,7 +482,7 @@ if __name__ == '__main__':
     for idx, account_config in enumerate(cfg.account_configs):
         logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
-        djcHelper = DjcHelper(account_config)
+        djcHelper = DjcHelper(account_config, cfg.common)
         # djcHelper.run()
         djcHelper.check_skey_expired()
         djcHelper.query_all_extra_info()

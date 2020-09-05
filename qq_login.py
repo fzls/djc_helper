@@ -19,10 +19,13 @@ from log import logger
 
 
 class LoginResult(Object):
-    def __init__(self, uin="", skey=""):
+    def __init__(self, uin="", skey="", openid=""):
         super().__init__()
+        # 使用炎炎夏日活动界面得到
         self.uin = uin
         self.skey = skey
+        # 使用心悦活动界面得到
+        self.openid = openid
 
 
 class QQLogin():
@@ -85,7 +88,9 @@ class QQLogin():
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path, desired_capabilities=caps, options=options)
             logger.info("使用便携版chrome")
 
-    def login(self, account, password):
+        self.cookies = self.driver.get_cookies()
+
+    def login(self, account, password, is_xinyue=False):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
@@ -105,21 +110,25 @@ class QQLogin():
             # 发送登录请求
             self.driver.find_element(By.ID, "login_button").click()
 
-        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False)
+        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, is_xinyue=is_xinyue)
 
-    def qr_login(self):
+    def qr_login(self, is_xinyue=False):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        return self._login("扫码登录")
+        return self._login("扫码登录", is_xinyue=is_xinyue)
 
-    def _login(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login(self, login_type, login_action_fn=None, need_human_operate=True, is_xinyue=False):
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
             try:
-                return self._login_real(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
+                login_fn = self._login_real
+                if is_xinyue:
+                    login_fn = self._login_xinyue_real
+
+                return login_fn(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
             except (NoSuchFrameException, NoSuchWindowException, ElementNotInteractableException) as e:
                 logger.exception("第{}/{}次尝试登录出错，等待{}秒后重试".format(idx, self.cfg.login.max_retry_count, self.cfg.login.retry_wait_time), exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
@@ -129,25 +138,87 @@ class QQLogin():
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
-        logger.info("打开活动界面")
-        self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
 
-        logger.info("浏览器设为最大")
-        self.driver.set_window_size(1936, 1056)
+        def switch_to_login_frame_fn():
+            logger.info("打开活动界面")
+            self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
 
-        logger.info("等待登录按钮#dologin出来，确保加载完成")
-        WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+            logger.info("浏览器设为最大")
+            self.driver.set_window_size(1936, 1056)
 
-        logger.info("点击登录按钮")
-        self.driver.find_element(By.ID, "dologin").click()
+            logger.info("等待登录按钮#dologin出来，确保加载完成")
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
 
-        logger.info("等待#loginIframe显示出来并切换")
-        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "loginIframe")))
-        loginIframe = self.driver.find_element_by_id("loginIframe")
-        self.driver.switch_to.frame(loginIframe)
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.ID, "dologin").click()
 
-        logger.info("确保#loginIframe#switcher_plogin已可见")
-        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin")))
+            logger.info("等待#loginIframe显示出来并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "loginIframe")))
+            loginIframe = self.driver.find_element_by_id("loginIframe")
+            self.driver.switch_to.frame(loginIframe)
+
+        def assert_login_finished_fn():
+            logger.info("请等待#logined的div可见，则说明已经登录完成了...")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+
+        # 从cookie中获取uin和skey
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"))
+
+    def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            logger.info("打开活动界面")
+            self.driver.get("https://xinyue.qq.com/act/a20181101rights/index.html")
+
+            logger.info("浏览器设为最大")
+            self.driver.set_window_size(1936, 1056)
+
+            logger.info("等待#loginframe加载完毕并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))
+            login_frame = self.driver.find_element_by_class_name("loginframe")
+            self.driver.switch_to.frame(login_frame)
+
+            logger.info("等待#loginframe#ptlogin_iframe加载完毕并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
+            ptlogin_iframe = self.driver.find_element_by_id("ptlogin_iframe")
+            self.driver.switch_to.frame(ptlogin_iframe)
+
+        def assert_login_finished_fn():
+            logger.info("请等待#btn_wxqclogin可见，则说明已经登录完成了...")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin")))
+
+            logger.info("等待1s，确认获取openid的请求完成")
+            time.sleep(1)
+
+            # 确保openid已设置
+            for t in range(3):
+                t += 1
+                if self.driver.get_cookie('openid') is None:
+                    logger.info("第{}/3未在心悦的cookie中找到openid，等一秒再试".format(t))
+                    time.sleep(1)
+                    continue
+                break
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+
+        # 从cookie中获取openid
+        return LoginResult(openid=self.get_cookie("openid"))
+
+    def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None, need_human_operate=True):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+        switch_to_login_frame_fn()
+
+        logger.info("等待#loginframe#ptlogin_iframe#switcher_plogin加载完毕")
+        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
 
         if need_human_operate:
             logger.info("请在{}s内完成{}操作".format(self.cfg.login.login_timeout, login_type))
@@ -163,22 +234,23 @@ class QQLogin():
         logger.info("回到主iframe")
         self.driver.switch_to.default_content()
 
-        logger.info("请等待#logined的div可见，则说明已经登录完成了...")
-        WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
+        assert_login_finished_fn()
 
         logger.info("登录完成")
 
-        # 从cookie中获取uin和skey
-        loginResult = LoginResult(self.get_cookie("uin"), self.get_cookie("skey"))
+        self.cookies = self.driver.get_cookies()
 
         # 最小化网页
         self.driver.minimize_window()
         threading.Thread(target=self.driver.quit, daemon=True).start()
 
-        return loginResult
+        return
 
     def get_cookie(self, name):
-        return self.driver.get_cookie(name)['value']
+        for cookie in self.cookies:
+            if cookie['name'] == name:
+                return cookie['value']
+        return ''
 
 
 if __name__ == '__main__':
@@ -187,6 +259,7 @@ if __name__ == '__main__':
     cfg = config()
 
     ql = QQLogin(cfg.common)
-    lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password)
+    is_xinyue = False
+    lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password, is_xinyue)
     # lr = ql.qr_login()
     print(lr)

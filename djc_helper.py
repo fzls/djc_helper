@@ -504,7 +504,7 @@ class DjcHelper:
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
     def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True):
-        return self.post(ctx, djcHelper.xinyue, djcHelper.xinyue_flow_data(iFlowId, package_id), sMiloTag=self.make_s_milo_tag(iFlowId))
+        return self.post(ctx, self.xinyue, self.xinyue_flow_data(iFlowId, package_id), sMiloTag=self.make_s_milo_tag(iFlowId))
 
     def xinyue_flow_data(self, iFlowId, package_id=""):
         return self.format(self.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id)

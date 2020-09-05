@@ -260,6 +260,6 @@ if __name__ == '__main__':
 
     ql = QQLogin(cfg.common)
     is_xinyue = False
-    lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password, is_xinyue)
-    # lr = ql.qr_login()
+    # lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password, is_xinyue)
+    lr = ql.qr_login()
     print(lr)

@@ -8,6 +8,9 @@
 链接: https://www.lanzoux.com/b01bor45i 提取码: fzls
 链接: https://www.lanzoux.com/s/djc-helper 提取码: fzls
 
+# 视频教程
+https://space.bilibili.com/1851177
+
 # 『重要』与个人隐私有关的skey相关说明
 1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
 2. skey有过期时间，目前根据测试来看应该是一天。目前已实现手动登录、扫码登录（默认）、自动登录。

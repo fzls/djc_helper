@@ -571,6 +571,7 @@ if __name__ == '__main__':
         djcHelper.check_skey_expired()
         djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
+        # djcHelper.xinyue_operations()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

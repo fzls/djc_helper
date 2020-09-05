@@ -12,18 +12,6 @@ from sign import getACSRFTokenForAMS, getDjcSignParams
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
 
 
-class LoginTimeoutsConfig(ConfigInterface):
-    def __init__(self):
-        # 加载页面，以登录按钮出现为完成标志
-        self.load_page = 60
-        # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
-        self.load_login_iframe = 5
-        # 登录，从登录界面显示为开始，以用户完成登录为结束标志
-        self.login = 600
-        # 等待登录完成，以活动结束的按钮弹出来标志
-        self.login_finished = 60
-
-
 class AccountInfoConfig(ConfigInterface):
     def __init__(self):
         # 手动登录需要设置的信息
@@ -144,6 +132,28 @@ class AccountConfig(ConfigInterface):
         return sDeviceID
 
 
+class LoginTimeoutsConfig(ConfigInterface):
+    def __init__(self):
+        # 加载页面，以登录按钮出现为完成标志
+        self.load_page = 60
+        # 点击登录按钮后，加载登录iframe，以其显示出来为完成标志
+        self.load_login_iframe = 5
+        # 登录，从登录界面显示为开始，以用户完成登录为结束标志
+        self.login = 600
+        # 等待登录完成，以活动结束的按钮弹出来标志
+        self.login_finished = 60
+
+
+class ExchangeItemsCommonConfig(ConfigInterface):
+    def __init__(self):
+        # 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
+        self.request_wait_time = 1
+        # 当提示【"msg": "系统繁忙，请稍候再试。", "ret": "-9905"】时的最大重试次数
+        self.max_retry_count = 3
+        # 上述情况下的重试间隔时间（秒）
+        self.retry_wait_time = 1
+
+
 class CommonConfig(ConfigInterface):
     log_level_map = {
         "debug": logging.DEBUG,
@@ -168,6 +178,8 @@ class CommonConfig(ConfigInterface):
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login_timeouts = LoginTimeoutsConfig()
+        # 兑换道具时的一些行为配置
+        self.exchange_items = ExchangeItemsCommonConfig()
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

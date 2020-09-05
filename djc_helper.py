@@ -480,6 +480,7 @@ if __name__ == '__main__':
     cfg = config()
 
     for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
         logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)

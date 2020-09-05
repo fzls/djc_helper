@@ -25,8 +25,8 @@ if __name__ == '__main__':
         logger.info("{}\t{}\t{}".format(idx, account_config.name, status))
     logger.info("")
 
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
+    for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
         if not account_config.enable:
             logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
             continue

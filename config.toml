@@ -13,6 +13,10 @@ changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
 # 登录的一些参数配置
 [common.login]
+# 重试次数
+max_retry_count = 3
+# 重试间隔时间（秒）
+retry_wait_time = 1
 # 打开网页后等待时长
 open_url_wait_time = 3
 # 加载页面的超时时间，以登录按钮出现为完成标志

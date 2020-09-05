@@ -166,7 +166,7 @@ class DjcHelper:
         self.check_skey_expired()
 
         # ------------------------------初始工作------------------------------
-        self.query_balance("1. 操作前：查询余额")
+        old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
         # self.query_money_flow("1.1 操作前：查一遍流水")
 
         # ------------------------------核心逻辑------------------------------
@@ -180,8 +180,11 @@ class DjcHelper:
         self.take_task_awards_and_exchange_items()
 
         # ------------------------------清理工作------------------------------
-        self.query_balance("5. 操作全部完成后：查询余额")
+        new_allin = int(self.query_balance("5. 操作全部完成后：查询余额")["data"]['allin'])
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
+
+        delta = new_allin - old_allin
+        logger.info("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）".format(self.cfg.name, delta, old_allin, new_allin))
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)

@@ -507,7 +507,7 @@ class DjcHelper:
             op = XinYueOperationConfig()
             op.iFlowId, op.sFlowName = gift
             op.count = 1
-            xinyue_operations.insert(0, op)
+            xinyue_operations.append(op)
 
         # 加上其他的配置
         xinyue_operations.extend(self.cfg.xinyue_operations)

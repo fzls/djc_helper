@@ -742,6 +742,7 @@ if __name__ == '__main__':
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
         djcHelper.xinyue_operations()
+        # djcHelper.xinyue_op("双倍积分卡", "512490")
         # djcHelper.try_join_fixed_xinyue_team()
 
         if cfg.common._debug_run_first_only:

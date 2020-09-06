@@ -1,5 +1,5 @@
 import json
-from urllib.parse import unquote
+from urllib.parse import unquote_plus
 
 import requests
 
@@ -72,14 +72,19 @@ class Network:
                 k, v = kv.strip().split(":")
                 if v[0] == "'":
                     v = v[1:-1]  # 去除前后的''
-                jsonRes[k] = unquote(v)
+                jsonRes[k] = unquote_plus(v)
             except:
                 pass
 
         return jsonRes
 
-    def pretty_json(self, data, pretty=False):
+    def pretty_json(self, data, pretty=False, need_unquote=True):
         if self.PRETTY_JSON or pretty:
-            return json.dumps(data, ensure_ascii=False, indent=2)
+            jsonStr = json.dumps(data, ensure_ascii=False, indent=2)
         else:
-            return json.dumps(data, ensure_ascii=False)
+            jsonStr = json.dumps(data, ensure_ascii=False)
+
+        if need_unquote:
+            jsonStr = unquote_plus(jsonStr)
+
+        return jsonStr

@@ -499,6 +499,9 @@ class DjcHelper:
                 # 673269	月礼包_20200610后使用
                 week_month_gifts = [("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")]
 
+        # 513585	累计宝箱
+        week_month_gifts.append(("513585", "累计宝箱"))
+
         xinyue_operations = []
         for gift in week_month_gifts:
             op = XinYueOperationConfig()

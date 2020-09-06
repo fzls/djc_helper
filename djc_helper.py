@@ -22,6 +22,8 @@ class DjcHelper:
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
 
+    local_saved_teamid_file = os.path.join(db_dir, ".teamid.{}.json")
+
     def __init__(self, account_config, common_config):
         self.cfg = account_config  # type: AccountConfig
         self.common_cfg = common_config  # type: CommonConfig
@@ -51,7 +53,7 @@ class DjcHelper:
         # 心悦相关接口的入口
         self.xinyue_iActivityId = "166962"
         self.xinyue = "https://act.game.qq.com/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType=tgclub&iActivityId={xinyue_iActivityId}&sServiceDepartment=xinyue&isXhrPost=true"
-        self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
+        self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
 
         # 任务列表
         self.usertask = "https://djcapp.game.qq.com/daoju/v3/api/we/usertaskv2/Usertask.php?iAppId=1001&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&_app_id=1001&output_format=json&_output_fmt=json&appid=1001&optype=get_usertask_list&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -478,6 +480,12 @@ class DjcHelper:
             logger.warning("未设置心悦相关操作信息，将跳过")
             return
 
+        # 尝试加入固定心悦队伍
+        try:
+            self.try_join_fixed_xinyue_team()
+        except Exception as e:
+            logger.exception("加入固定心悦队伍出现异常", exc_info=e)
+
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
@@ -532,6 +540,117 @@ class DjcHelper:
         delta = new_info.score - old_info.score
         logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）\n".format(self.cfg.name, delta, old_info.score, new_info.score))
 
+    def try_join_fixed_xinyue_team(self):
+        # 检查是否有固定队伍
+        qq_number = self.cfg.account_info.uin[1:]
+        fixed_team = None
+        for team in self.common_cfg.fixed_teams:
+            if not team.enable:
+                continue
+            if qq_number not in team.members:
+                continue
+            if not team.check():
+                logger.warning("本地调试日志：固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
+                continue
+
+            fixed_team = team
+            break
+
+        if fixed_team is None:
+            logger.warning("未找到固定队伍信息，跳过队伍相关流程")
+            return
+
+        logger.info("当前账号的固定队信息为{}".format(fixed_team))
+
+        teaminfo = self.query_xinyue_teaminfo()
+        if teaminfo.id != "":
+            logger.info("目前已有队伍={}".format(teaminfo))
+            # 本地保存一下
+            self.save_teamid(fixed_team.id, teaminfo.id)
+            return
+
+        logger.info("尝试从本地查找当前固定队对应的远程队伍ID")
+        remote_teamid = self.load_teamid(fixed_team.id)
+        if remote_teamid != "":
+            # 尝试加入远程队伍
+            logger.info("尝试加入远程队伍id={}".format(remote_teamid))
+            teaminfo = self.query_xinyue_teaminfo_by_id(remote_teamid)
+            # 如果队伍仍有效则加入
+            if teaminfo.id == remote_teamid:
+                teaminfo = self.join_xinyue_team(remote_teamid)
+                logger.info("成功加入远程队伍，队伍信息为{}".format(teaminfo))
+                return
+
+        # 尝试创建小队并保存到本地
+        teaminfo = self.create_xinyue_team()
+        self.save_teamid(fixed_team.id, teaminfo.id)
+        logger.info("创建小队并保存到本地成功，队伍信息={}".format(teaminfo))
+
+    def query_xinyue_teaminfo(self):
+        data = self.xinyue_op("查询我的心悦队伍信息", "513818")
+        jdata = data["modRet"]["jData"]
+
+        return self.parse_teaminfo(jdata)
+
+    def query_xinyue_teaminfo_by_id(self, remote_teamid):
+        # 513919	传入小队ID查询队伍信息
+        data = self.xinyue_op("查询特定id的心悦队伍信息", "513919", teamid=remote_teamid)
+        jdata = data["modRet"]["jData"]
+        teaminfo = self.parse_teaminfo(jdata)
+        return teaminfo
+
+    def join_xinyue_team(self, remote_teamid):
+        # 513803	加入小队
+        data = self.xinyue_op("尝试加入小队", "513803", teamid=remote_teamid)
+        jdata = data["modRet"]["jData"]
+        teaminfo = self.parse_teaminfo(jdata)
+        return teaminfo
+
+    def create_xinyue_team(self):
+        # 513512	创建小队
+        data = self.xinyue_op("尝试创建小队", "513512")
+        jdata = data["modRet"]["jData"]
+        teaminfo = self.parse_teaminfo(jdata)
+        return teaminfo
+
+    def parse_teaminfo(self, jdata):
+        teamInfo = XinYueTeamInfo()
+        teamInfo.result = jdata["result"]
+        if teamInfo.result == 0:
+            teamInfo.score = jdata["score"]
+            teamid = jdata["teamid"]
+            if type(teamid) == str:
+                teamInfo.id = teamid
+            else:
+                for id in jdata["teamid"]:
+                    teamInfo.id = id
+            for member_json_str in jdata["teaminfo"]:
+                member_json = json.loads(member_json_str)
+                member = XinYueTeamMember(member_json["sqq"], unquote_plus(member_json["nickname"]), member_json["score"])
+                teamInfo.members.append(member)
+        return teamInfo
+
+    def save_teamid(self, fixed_teamid, remote_teamid):
+        fname = self.local_saved_teamid_file.format(fixed_teamid)
+        with open(fname, "w", encoding="utf-8") as sf:
+            teamidInfo = {
+                "fixed_teamid": fixed_teamid,
+                "remote_teamid": remote_teamid,
+            }
+            json.dump(teamidInfo, sf)
+            logger.debug("本地保存固定队信息，具体内容如下：{}".format(teamidInfo))
+
+    def load_teamid(self, fixed_teamid):
+        fname = self.local_saved_teamid_file.format(fixed_teamid)
+
+        if not os.path.isfile(fname):
+            return ""
+
+        with open(fname, "r", encoding="utf-8") as f:
+            teamidInfo = json.load(f)
+            logger.debug("读取本地缓存的固定队信息，具体内容如下：{}".format(teamidInfo))
+            return teamidInfo["remote_teamid"]
+
     def query_xinyue_whitelist(self, ctx, print_res=True):
         data = self.xinyue_op(ctx, "673280", print_res=print_res)
         r = data["modRet"]
@@ -544,14 +663,14 @@ class DjcHelper:
         score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"],
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
-    def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1):
-        return self.post(ctx, self.xinyue, self.xinyue_flow_data(iFlowId, package_id, lqlevel), sMiloTag=self.make_s_milo_tag(iFlowId))
+    def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
+        return self.post(ctx, self.xinyue, self.xinyue_flow_data(iFlowId, package_id, lqlevel, teamid), sMiloTag=self.make_s_milo_tag(iFlowId))
 
-    def xinyue_flow_data(self, iFlowId, package_id="", lqlevel=1):
+    def xinyue_flow_data(self, iFlowId, package_id="", lqlevel=1, teamid=""):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
-        return self.format(self.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel)
+        return self.format(self.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
     def make_s_milo_tag(self, iFlowId):
         iActivityId, id = self.xinyue_iActivityId, self.cfg.account_info.uin
@@ -616,6 +735,7 @@ if __name__ == '__main__':
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
         djcHelper.xinyue_operations()
+        # djcHelper.try_join_fixed_xinyue_team()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

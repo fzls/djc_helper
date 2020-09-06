@@ -12,6 +12,7 @@ start.bat
 
 .first_run/
 .cached/
+.db/
 
 config.toml.local
 

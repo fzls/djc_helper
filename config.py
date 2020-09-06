@@ -1,4 +1,5 @@
 import uuid
+import re
 from typing import List
 from urllib.parse import quote
 
@@ -66,7 +67,7 @@ class ExchangeItemConfig(ConfigInterface):
 class XinYueOperationConfig(ConfigInterface):
     def __init__(self):
         self.iFlowId = "512411"
-        self.package_id = "" # 仅礼包兑换需要这个参数，如兑换【勇者宝库】的【装备提升礼盒】的package_id为702218
+        self.package_id = ""  # 仅礼包兑换需要这个参数，如兑换【勇者宝库】的【装备提升礼盒】的package_id为702218
         self.sFlowName = "输出我的任务积分"
         self.count = 1
 
@@ -177,6 +178,28 @@ class ExchangeItemsCommonConfig(ConfigInterface):
         self.retry_wait_time = 1
 
 
+class FixedTeamConfig(ConfigInterface):
+    reg_qq = r'\d+'
+
+    def __init__(self):
+        # 是否启用该固定队
+        self.enable = False
+        # 固定队伍id，仅用于本地区分用
+        self.id = "1"
+        # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
+        self.members = ["qq123", "qq456", "qq789"]
+
+    def check(self)->bool:
+        if len(self.members) != 3:
+            return False
+
+        for qq in self.members:
+            if re.fullmatch(self.reg_qq, qq) is None:
+                return False
+
+        return True
+
+
 class CommonConfig(ConfigInterface):
     log_level_map = {
         "debug": logging.DEBUG,
@@ -203,9 +226,18 @@ class CommonConfig(ConfigInterface):
         self.login = LoginConfig()
         # 兑换道具时的一些行为配置
         self.exchange_items = ExchangeItemsCommonConfig()
+        # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
+        self.fixed_teams = []  # type: List[FixedTeamConfig]
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)
+
+        if 'fixed_teams' in raw_config:
+            self.fixed_teams = []
+            for cfg in raw_config["fixed_teams"]:
+                ei = FixedTeamConfig()
+                ei.auto_update_config(cfg)
+                self.fixed_teams.append(ei)
 
         consoleHandler.setLevel(self.log_level_map[self.log_level])
 

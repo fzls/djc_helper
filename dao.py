@@ -1,3 +1,4 @@
+from typing import List
 from urllib.parse import unquote_plus
 
 
@@ -63,3 +64,18 @@ class XinYueInfo(DaoObject):
         self.username = unquote_plus(username)
         # 用户头像
         self.usericon_url = usericon
+
+
+class XinYueTeamInfo(DaoObject):
+    def __init__(self):
+        self.result = 0
+        self.id = ""
+        self.score = 0
+        self.members = []  # type: List[XinYueTeamMember]
+
+
+class XinYueTeamMember(DaoObject):
+    def __init__(self, qq, nickname, score):
+        self.qq = qq
+        self.nickname = nickname
+        self.score = score

@@ -480,12 +480,6 @@ class DjcHelper:
             logger.warning("未设置心悦相关操作信息，将跳过")
             return
 
-        # 尝试加入固定心悦队伍
-        try:
-            self.try_join_fixed_xinyue_team()
-        except Exception as e:
-            logger.exception("加入固定心悦队伍出现异常", exc_info=e)
-
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
@@ -541,6 +535,12 @@ class DjcHelper:
         logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）\n".format(self.cfg.name, delta, old_info.score, new_info.score))
 
     def try_join_fixed_xinyue_team(self):
+        try:
+            self._try_join_fixed_xinyue_team()
+        except Exception as e:
+            logger.exception("加入固定心悦队伍出现异常", exc_info=e)
+
+    def _try_join_fixed_xinyue_team(self):
         # 检查是否有固定队伍
         qq_number = self.cfg.account_info.uin[1:]
         fixed_team = None
@@ -550,17 +550,17 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning("本地调试日志：固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
+                logger.warning("本地调试日志：本地固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
                 continue
 
             fixed_team = team
             break
 
         if fixed_team is None:
-            logger.warning("未找到固定队伍信息，跳过队伍相关流程")
+            logger.warning("未找到本地固定队伍信息，跳过队伍相关流程")
             return
 
-        logger.info("当前账号的固定队信息为{}".format(fixed_team))
+        logger.info("当前账号的本地固定队信息为{}".format(fixed_team))
 
         teaminfo = self.query_xinyue_teaminfo()
         if teaminfo.id != "":

@@ -17,6 +17,7 @@ if __name__ == '__main__':
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
+    # 展示状态状况
     logger.info("将操作下列账号")
     logger.info("序号\t账号名\t\t启用状态")
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -25,6 +26,21 @@ if __name__ == '__main__':
         logger.info("{}\t{}\t{}".format(idx, account_config.name, status))
     logger.info("")
 
+    # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
+    for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
+        if not account_config.enable or account_config.run_mode == "pre_run":
+            # 未启用的账户或者预运行阶段的账户不走该流程
+            continue
+
+        logger.info("------------尝试为第{}个账户({})加入心悦固定队------------\n".format(idx, account_config.name))
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        # 尝试加入固定心悦队伍
+        djcHelper.try_join_fixed_xinyue_team()
+
+    # 正式进行流程
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
         if not account_config.enable:

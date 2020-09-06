@@ -193,7 +193,7 @@ class DjcHelper:
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
 
         delta = new_allin - old_allin
-        logger.info("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）".format(self.cfg.name, delta, old_allin, new_allin))
+        logger.info("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin))
 
         # 执行心悦相关操作
         self.xinyue_operations()
@@ -530,7 +530,7 @@ class DjcHelper:
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
         delta = new_info.score - old_info.score
-        logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）".format(self.cfg.name, delta, old_info.score, new_info.score))
+        logger.info("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）\n".format(self.cfg.name, delta, old_info.score, new_info.score))
 
     def query_xinyue_whitelist(self, ctx, print_res=True):
         data = self.xinyue_op(ctx, "673280", print_res=print_res)

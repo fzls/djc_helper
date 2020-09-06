@@ -578,10 +578,11 @@ class DjcHelper:
             # 如果队伍仍有效则加入
             if teaminfo.id == remote_teamid:
                 teaminfo = self.join_xinyue_team(remote_teamid)
-                logger.info("成功加入远程队伍，队伍信息为{}".format(teaminfo))
-                return
-            else:
-                logger.info("远程队伍={}已失效，应该是新的一周自动解散了，将重新创建队伍".format(remote_teamid))
+                if teaminfo is not None:
+                    logger.info("成功加入远程队伍，队伍信息为{}".format(teaminfo))
+                    return
+
+            logger.info("远程队伍={}已失效，应该是新的一周自动解散了，将重新创建队伍".format(remote_teamid))
 
         # 尝试创建小队并保存到本地
         teaminfo = self.create_xinyue_team()
@@ -604,6 +605,10 @@ class DjcHelper:
     def join_xinyue_team(self, remote_teamid):
         # 513803	加入小队
         data = self.xinyue_op("尝试加入小队", "513803", teamid=remote_teamid)
+        if int(data["flowRet"]["iRet"]) == 700:
+            # 小队已经解散
+            return None
+
         jdata = data["modRet"]["jData"]
         teaminfo = self.parse_teaminfo(jdata)
         return teaminfo

@@ -542,7 +542,7 @@ class DjcHelper:
 
     def _try_join_fixed_xinyue_team(self):
         # 检查是否有固定队伍
-        qq_number = self.cfg.account_info.uin[1:]
+        qq_number = uin2qq(self.cfg.account_info.uin)
         fixed_team = None
         for team in self.common_cfg.fixed_teams:
             if not team.enable:

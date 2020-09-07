@@ -1,5 +1,5 @@
-import uuid
 import re
+import uuid
 from typing import List
 from urllib.parse import quote
 
@@ -9,6 +9,7 @@ from const import *
 from data_struct import ConfigInterface
 from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
+from util import *
 
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
 
@@ -129,7 +130,7 @@ class AccountConfig(ConfigInterface):
         self.account_info.skey = skey
 
         self.g_tk = str(getACSRFTokenForAMS(self.account_info.skey))
-        self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, self.account_info.uin[1:], self.sDeviceID, appVersion)
+        self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, uin2qq(self.account_info.uin), self.sDeviceID, appVersion)
 
     def getSDeviceID(self):
         sDeviceIdFileName = os.path.join(cached_dir, ".sDeviceID.{}.txt".format(self.name))
@@ -189,7 +190,7 @@ class FixedTeamConfig(ConfigInterface):
         # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
         self.members = ["qq123", "qq456", "qq789"]
 
-    def check(self)->bool:
+    def check(self) -> bool:
         if len(self.members) != 3:
             return False
 

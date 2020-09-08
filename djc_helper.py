@@ -516,10 +516,17 @@ class DjcHelper:
 
         # 进行相应的心悦操作
         eiCfg = self.common_cfg.exchange_items
+        current_hour = datetime.datetime.now().hour
+        required_hour = self.common_cfg.xinyue.submit_task_after
         for op in xinyue_operations:
             for i in range(op.count):
+                ctx = "6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count)
+                if current_hour < required_hour:
+                    logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(current_hour, required_hour, ctx))
+                    continue
+
                 for try_index in range(eiCfg.max_retry_count):
-                    res = self.xinyue_op("6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count), op.iFlowId, package_id=op.package_id, lqlevel=old_info.xytype)
+                    res = self.xinyue_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=old_info.xytype)
                     # if int(res.get('ret', '0')) == -9905:
                     #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
                     #     time.sleep(eiCfg.retry_wait_time)

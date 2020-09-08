@@ -481,8 +481,8 @@ class DjcHelper:
             return
 
         # 查询道具信息
-        itemInfo = self.query_xinyue_items("6.0 操作前查询各种道具信息")
-        logger.info("查询到的心悦道具信息为：{}".format(itemInfo))
+        old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
+        logger.info("查询到的心悦道具信息为：{}".format(old_itemInfo))
 
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
@@ -540,6 +540,10 @@ class DjcHelper:
                     logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, eiCfg.request_wait_time))
                     time.sleep(eiCfg.request_wait_time)
                     break
+
+        # 查询道具信息
+        new_itemInfo = self.query_xinyue_items("6.3.0 操作完成后查询各种道具信息")
+        logger.info("查询到的心悦道具信息为：{}".format(new_itemInfo))
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")

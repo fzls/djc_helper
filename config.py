@@ -194,7 +194,7 @@ class FixedTeamConfig(ConfigInterface):
         # 固定队伍id，仅用于本地区分用
         self.id = "1"
         # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
-        self.members = ["qq123", "qq456", "qq789"]
+        self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
 
     def check(self) -> bool:
         if len(self.members) != 3:

@@ -67,7 +67,7 @@ class DjcHelper:
         # 获取剑网三指尖江湖角色列表（用于获取领取手游奖励的角色信息）
         self.get_jx3_role_list = "https://comm.aci.game.qq.com/main?sCloudApiName=ams.gameattr.role&appVersion={appVersion}&area={area}&platid={platid}&partition={partition}&callback={callback}&p_tk={p_tk}&sDeviceID={sDeviceID}&&game=jx3&sAMSAcctype=pt&sAMSTargetAppId=wxdd8ef1519da76755&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 一键领取指尖江湖的日常礼包，从而完成礼包任务
-        self.recieve_jx3_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&appVersion={appVersion}&iruleId={iruleId}&sPartition={sPartition}&roleCode={roleCode}&sRoleName={sRoleName}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&appid=1001&output_format=json&optype=receive_usertask_game&bizcode=jx3&systemID=1&channelID=2&channelKey=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+        self.recieve_jx3_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&appVersion={appVersion}&iruleId={iruleId}&sPartition={sPartition}&roleCode={roleCode}&sRoleName={sRoleName}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&appid=1001&output_format=json&optype=receive_usertask_game&bizcode=jx3&systemID={systemID}&channelID=2&channelKey=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 查询指尖江湖的礼包列表，用于获取礼包的id信息
         self.query_jx3_gift_bags = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.list&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&output_format=json&optype=get_user_package_list&appid=1001&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&bizcode=jx3&showType=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 兑换道具--requestConvertCoupon
@@ -350,7 +350,7 @@ class DjcHelper:
             dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
             giftInfo = giftInfos[dayIndex]
             res = self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
-                           sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
+                           systemID=cfg.platid, sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
             # {"ret": -1, "msg": "目前访问人数过多！请稍后再试！谢谢！", ....}
             # 似乎未绑定的时候会提示这个
             notBindTip = "目前访问人数过多！请稍后再试！谢谢！"

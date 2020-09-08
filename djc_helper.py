@@ -480,6 +480,10 @@ class DjcHelper:
             logger.warning("未设置心悦相关操作信息，将跳过")
             return
 
+        # 查询道具信息
+        itemInfo = self.query_xinyue_items("6.0 操作前查询各种道具信息")
+        logger.info("查询到的心悦道具信息为：{}".format(itemInfo))
+
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
@@ -672,10 +676,16 @@ class DjcHelper:
         user_is_white = int(r["sOutValue1"]) != 0
         return user_is_white
 
+    def query_xinyue_items(self, ctx):
+        data = self.xinyue_op(ctx, "512407")
+        r = data["modRet"]
+        total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh = r["sOutValue1"], r["sOutValue5"], r["sOutValue3"], r["sOutValue4"], r["sOutValue6"], r["sOutValue7"]
+        return XinYueItemInfo(total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh)
+
     def query_xinyue_info(self, ctx, print_res=True):
         data = self.xinyue_op(ctx, "512411", print_res=print_res)
         r = data["modRet"]
-        score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"],
+        score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"]
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
     def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
@@ -750,7 +760,6 @@ if __name__ == '__main__':
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
         djcHelper.xinyue_operations()
-        # djcHelper.xinyue_op("双倍积分卡", "512490")
         # djcHelper.try_join_fixed_xinyue_team()
 
         if cfg.common._debug_run_first_only:

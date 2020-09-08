@@ -66,6 +66,31 @@ class XinYueInfo(DaoObject):
         self.usericon_url = usericon
 
 
+class XinYueItemInfo(DaoObject):
+    def __init__(self, total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh):
+        # 免做卡
+        self.免做卡 = int(total_obtain_free_do) - int(used_free_do)
+        # 双倍卡
+        self.双倍卡 = int(total_obtain_two_score) - int(used_two_score)
+        # 免做卡
+        self.刷新卡 = int(total_obtain_refresh) - int(used_refresh)
+
+        # 总计获得的双倍卡
+        self.total_obtain_two_score = total_obtain_two_score
+        # 已使用的双倍卡
+        self.used_two_score = used_two_score
+
+        # 总计获得的免做卡
+        self.total_obtain_free_do = total_obtain_free_do
+        # 已使用的免做卡
+        self.used_free_do = used_free_do
+
+        # 总计获得的刷新卡
+        self.total_obtain_refresh = total_obtain_refresh
+        # 已使用的刷新卡
+        self.used_refresh = used_refresh
+
+
 class XinYueTeamInfo(DaoObject):
     def __init__(self):
         self.result = 0

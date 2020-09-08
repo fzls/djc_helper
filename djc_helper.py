@@ -516,13 +516,14 @@ class DjcHelper:
 
         # 进行相应的心悦操作
         eiCfg = self.common_cfg.exchange_items
-        current_hour = datetime.datetime.now().hour
+        now = datetime.datetime.now()
+        current_hour = now.hour
         required_hour = self.common_cfg.xinyue.submit_task_after
         for op in xinyue_operations:
             for i in range(op.count):
                 ctx = "6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count)
                 if current_hour < required_hour:
-                    logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(current_hour, required_hour, ctx))
+                    logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(now, required_hour, ctx))
                     continue
 
                 for try_index in range(eiCfg.max_retry_count):

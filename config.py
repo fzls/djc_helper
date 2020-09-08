@@ -179,6 +179,12 @@ class ExchangeItemsCommonConfig(ConfigInterface):
         self.retry_wait_time = 1
 
 
+class XinYueConfig(ConfigInterface):
+    def __init__(self):
+        # 在每日几点后才尝试提交心悦的成就点任务，避免在没有上游戏时执行心悦成就点任务，导致高成就点的任务没法完成，只能完成低成就点的
+        self.submit_task_after = 0
+
+
 class FixedTeamConfig(ConfigInterface):
     reg_qq = r'\d+'
 
@@ -227,6 +233,8 @@ class CommonConfig(ConfigInterface):
         self.login = LoginConfig()
         # 兑换道具时的一些行为配置
         self.exchange_items = ExchangeItemsCommonConfig()
+        # 心悦相关配置
+        self.xinyue = XinYueConfig()
         # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
         self.fixed_teams = []  # type: List[FixedTeamConfig]
 

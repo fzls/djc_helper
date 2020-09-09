@@ -8,6 +8,7 @@ from version import *
 
 if __name__ == '__main__':
     logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+    logger.info("如果觉得好使的话，可以扫描二维码【如果愿意请我喝杯奶茶，会很开心呢● ●.png】打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

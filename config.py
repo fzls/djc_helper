@@ -170,7 +170,7 @@ class LoginConfig(ConfigInterface):
         self.login_finished_timeout = 60
 
 
-class ExchangeItemsCommonConfig(ConfigInterface):
+class RetryConfig(ConfigInterface):
     def __init__(self):
         # 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
         self.request_wait_time = 1
@@ -236,8 +236,8 @@ class CommonConfig(ConfigInterface):
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
-        # 兑换道具时的一些行为配置
-        self.exchange_items = ExchangeItemsCommonConfig()
+        # 各种操作的通用重试配置
+        self.retry = RetryConfig()
         # 心悦相关配置
         self.xinyue = XinYueConfig()
         # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。

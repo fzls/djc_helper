@@ -1,7 +1,6 @@
 import platform
 import random
 import string
-import time
 
 import pyperclip
 import win32api
@@ -417,18 +416,18 @@ class DjcHelper:
         return False
 
     def exchange_items(self):
-        eiCfg = self.common_cfg.exchange_items
+        retryCfg = self.common_cfg.retry
         for ei in self.cfg.exchange_items:
             for i in range(ei.count):
-                for try_index in range(eiCfg.max_retry_count):
+                for try_index in range(retryCfg.max_retry_count):
                     res = self.exchange_item("4.2 兑换 {}".format(ei.sGoodsName), ei.iGoodsId)
                     if int(res.get('ret', '0')) == -9905:
-                        logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(ei.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
-                        time.sleep(eiCfg.retry_wait_time)
+                        logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(ei.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
+                        time.sleep(retryCfg.retry_wait_time)
                         continue
 
-                    logger.debug("领取 {} ok，等待{}s，避免请求过快报错".format(ei.sGoodsName, eiCfg.request_wait_time))
-                    time.sleep(eiCfg.request_wait_time)
+                    logger.debug("领取 {} ok，等待{}s，避免请求过快报错".format(ei.sGoodsName, retryCfg.request_wait_time))
+                    time.sleep(retryCfg.request_wait_time)
                     break
 
     def exchange_item(self, ctx, iGoodsSeqId):
@@ -549,7 +548,7 @@ class DjcHelper:
         xinyue_operations.extend(self.cfg.xinyue_operations)
 
         # 进行相应的心悦操作
-        eiCfg = self.common_cfg.exchange_items
+        retryCfg = self.common_cfg.retry
         now = datetime.datetime.now()
         current_hour = now.hour
         required_hour = self.common_cfg.xinyue.submit_task_after
@@ -560,15 +559,15 @@ class DjcHelper:
                     logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(now, required_hour, ctx))
                     continue
 
-                for try_index in range(eiCfg.max_retry_count):
+                for try_index in range(retryCfg.max_retry_count):
                     res = self.xinyue_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=old_info.xytype)
                     # if int(res.get('ret', '0')) == -9905:
-                    #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), eiCfg.retry_wait_time, try_index + 1, eiCfg.max_retry_count))
-                    #     time.sleep(eiCfg.retry_wait_time)
+                    #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
+                    #     time.sleep(retryCfg.retry_wait_time)
                     #     continue
 
-                    logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, eiCfg.request_wait_time))
-                    time.sleep(eiCfg.request_wait_time)
+                    logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, retryCfg.request_wait_time))
+                    time.sleep(retryCfg.request_wait_time)
                     break
 
         # 查询道具信息

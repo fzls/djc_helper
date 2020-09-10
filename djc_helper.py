@@ -18,7 +18,7 @@ from sign import getMillSecondsUnix
 class DjcHelper:
     first_run_flag_file = os.path.join(first_run_dir, "init")
     first_run_auto_login_mode_flag_file = os.path.join(first_run_dir, "auto_login_mode")
-    first_run_multi_accounts_version_flag_file = os.path.join(first_run_dir, "multi_accounts_version")
+    first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
 
@@ -93,8 +93,8 @@ class DjcHelper:
         run_mode_dict[self.cfg.run_mode]()
 
     def check_first_run(self):
+        self.show_tip_on_first_run_promot()
         self.show_tip_on_first_run_any()
-        self.show_tip_on_first_run_multi_accounts_version()
 
     def show_tip_on_first_run_any(self):
         filename = self.first_run_flag_file
@@ -126,12 +126,13 @@ class DjcHelper:
 
         self.show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
 
-    def show_tip_on_first_run_multi_accounts_version(self):
-        filename = self.first_run_multi_accounts_version_flag_file
-        title = "多账号版本指引"
-        tips = """当前版本实现了多账号功能，与旧版本配置文件不兼容，请查看使用文档，阅读详细使用流程
+    def show_tip_on_first_run_promot(self):
+        filename = self.first_run_promot_flag_file
+        title = "宣传"
+        tips = """-。-如果觉得好用的话，可否帮忙宣传一下哈~ 
+        或者扫描二维码打赏一下也是极好的0.0
                 """
-        loginfo = "首次运行多账号版本，弹出指引"
+        loginfo = "首次运行弹出宣传弹窗"
 
         self.show_tip_on_first_run(filename, title, tips, loginfo)
 

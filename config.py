@@ -224,6 +224,8 @@ class CommonConfig(ConfigInterface):
         self.force_use_portable_chrome = False
         # 是否展示chrome的debug日志，如DevTools listening，Bluetooth等
         self._debug_show_chrome_logs = False
+        # 自动登录模式是否不显示浏览器界面
+        self.run_in_headless_mode = False
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
         # 是否检查更新

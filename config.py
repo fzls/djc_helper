@@ -42,6 +42,7 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         # 手游名称，目前支持下面几种
         # none： 无，则不启用完成礼包达人任务
         # jx3：  剑网3：指尖江湖
+        # cjm:   和平精英(无需填partition)
         self.game_name = "jx3"
         self.area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
         self.platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v

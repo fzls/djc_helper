@@ -70,6 +70,10 @@ class DjcHelper:
         self.recieve_jx3_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&appVersion={appVersion}&iruleId={iruleId}&sPartition={sPartition}&roleCode={roleCode}&sRoleName={sRoleName}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&appid=1001&output_format=json&optype=receive_usertask_game&bizcode=jx3&systemID={systemID}&channelID=2&channelKey=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 查询指尖江湖的礼包列表，用于获取礼包的id信息
         self.query_jx3_gift_bags = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.list&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&output_format=json&optype=get_user_package_list&appid=1001&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&bizcode=jx3&showType=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+        # 获取和平精英角色列表（用于获取领取手游奖励的角色信息）
+        self.get_cjm_role_list = "https://comm.aci.game.qq.com/main?sCloudApiName=ams.gameattr.role&appVersion={appVersion}&area={area}&platid={platid}&callback={callback}&p_tk={p_tk}&sDeviceID={sDeviceID}&&game=cjm&sAMSAcctype=pt&sAMSTargetAppId=wxc4c0253df149f02d&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+        # 一键领取和平精英日常礼包
+        self.recieve_cjm_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&&weexVersion=0.9.4&platform=android&deviceModel=meizu%2016Xs&appid=1001&output_format=json&optype=receive_usertask_game&iruleId={iruleId}&bizcode=cjm&roleCode={roleCode}&systemID={systemID}&channelID=2&sRoleName={sRoleName}&sPartition={sPartition}&channelKey=qq&sDeviceID={sDeviceID}&appVersion=106&p_tk={p_tk}&osVersion=Android-29&ch=10001&sVersionName=v4.1.6.0&appSource=android&sDjcSign={sDjcSign}"
         # 兑换道具--requestConvertCoupon
         self.exchangeItems = "https://apps.game.qq.com/cgi-bin/daoju/v3/hs/i_buy.cgi?&weexVersion=0.9.4&appVersion={appVersion}&iGoodsSeqId={iGoodsSeqId}&iZone={iZone}&lRoleId={lRoleId}&rolename={rolename}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&platform=android&deviceModel=MIX%202&&&_output_fmt=1&_plug_id=9800&_from=app&iActionId=2594&iActionType=26&_biz_code=dnf&biz=dnf&appid=1003&_app_id=1003&_cs=2&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 获取所有可兑换的道具的列表
@@ -338,24 +342,39 @@ class DjcHelper:
         # 完成《礼包达人》
         cfg = self.cfg.mobile_game_role_info
         if cfg.enabled():
-            giftInfos = [
-                Jx3GiftInfo("签到1天礼包", "401579"),
-                Jx3GiftInfo("签到2天礼包", "401580"),
-                Jx3GiftInfo("签到3天礼包", "401581"),
-                Jx3GiftInfo("签到4天礼包", "401582"),
-                Jx3GiftInfo("签到5天礼包", "401583"),
-                Jx3GiftInfo("签到6天礼包", "401584"),
-                Jx3GiftInfo("签到7天礼包", "401586"),
-            ]
+            if cfg.game_name == 'jx3':
+                url = self.recieve_jx3_gift
+                game_name = "指尖江湖"
+                giftInfos = [
+                    Jx3GiftInfo("签到1天礼包", "401579"),
+                    Jx3GiftInfo("签到2天礼包", "401580"),
+                    Jx3GiftInfo("签到3天礼包", "401581"),
+                    Jx3GiftInfo("签到4天礼包", "401582"),
+                    Jx3GiftInfo("签到5天礼包", "401583"),
+                    Jx3GiftInfo("签到6天礼包", "401584"),
+                    Jx3GiftInfo("签到7天礼包", "401586"),
+                ]
+            elif cfg.game_name == 'cjm':
+                url = self.recieve_cjm_gift
+                game_name = "和平精英"
+                giftInfos = [
+                    Jx3GiftInfo("签到1天礼包", "401235"),
+                    Jx3GiftInfo("签到2天礼包", "401236"),
+                    Jx3GiftInfo("签到3天礼包", "401237"),
+                    Jx3GiftInfo("签到4天礼包", "401238"),
+                    Jx3GiftInfo("签到5天礼包", "401239"),
+                    Jx3GiftInfo("签到6天礼包", "401240"),
+                    Jx3GiftInfo("签到7天礼包", "401241"),
+                ]
             dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
             giftInfo = giftInfos[dayIndex]
-            res = self.get("3.2 一键领取指尖江湖日常礼包-{}".format(giftInfo.sTask), self.recieve_jx3_gift, iruleId=giftInfo.iRuleId,
+            res = self.get("3.2 一键领取{}日常礼包-{}".format(game_name, giftInfo.sTask), url, iruleId=giftInfo.iRuleId,
                            systemID=cfg.platid, sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
             # {"ret": -1, "msg": "目前访问人数过多！请稍后再试！谢谢！", ....}
             # 似乎未绑定的时候会提示这个
             notBindTip = "目前访问人数过多！请稍后再试！谢谢！"
             if notBindTip in res["msg"]:
-                msg = "领取签到奖励失败，怀疑是未在道聚城绑定指尖江湖角色，请前往道聚城的指尖江湖界面进行绑定，需要与配置表中填写的保持一致"
+                msg = "领取签到奖励失败，怀疑是未在道聚城绑定{game_name}角色，请前往道聚城的{game_name}界面进行绑定，需要与配置表中填写的保持一致".format(game_name=game_name)
                 win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
         else:
             logger.info("未启用自动完成《礼包达人》任务功能")
@@ -418,8 +437,8 @@ class DjcHelper:
     def query_all_extra_info(self):
         # 获取玩家的dnf角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
         self.query_dnf_rolelist()
-        # 获取玩家的指尖江湖角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
-        self.query_jx3_rolelist()
+        # 获取玩家的手游角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
+        self.query_mobile_game_rolelist()
 
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
@@ -444,23 +463,33 @@ class DjcHelper:
         lines.append("+" * 40)
         logger.info("\n".join(lines))
 
-    def query_jx3_rolelist(self):
-        ctx = "获取账号({})的指尖江湖角色列表".format(self.cfg.name)
+    def query_mobile_game_rolelist(self):
         cfg = self.cfg.mobile_game_role_info
+        if cfg.game_name == 'jx3':
+            game_name = "指尖江湖"
+            url = self.get_jx3_role_list
+        elif cfg.game_name == 'cjm':
+            game_name = "和平精英"
+            url = self.get_cjm_role_list
+        else:
+            game_name = "未配置手游"
+            url = ""
+        ctx = "获取账号({})的{}角色列表".format(self.cfg.name, game_name)
         if not cfg.enabled():
             logger.info("未启用自动完成《礼包达人》任务功能")
             return
-        jx3RoleListJsonRes = self.get(ctx, self.get_jx3_role_list, area=cfg.area, platid=cfg.platid, partition=cfg.partition, is_jsonp=True, print_res=False)
-        jx3RoleList = json_parser.parse_jx3_role_list(jx3RoleListJsonRes)
+
+        roleListJsonRes = self.get(ctx, url, area=cfg.area, platid=cfg.platid, partition=cfg.partition, is_jsonp=True, print_res=False)
+        roleList = json_parser.parse_jx3_role_list(roleListJsonRes)
         lines = []
         lines.append("")
         lines.append("+" * 40)
         lines.append(ctx)
-        if len(jx3RoleList) != 0:
-            for idx, role in enumerate(jx3RoleList):
+        if len(roleList) != 0:
+            for idx, role in enumerate(roleList):
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
-            lines.append("\t未查到指尖江湖 平台={} 渠道={} 区服={}上的角色信息，请确认这三个信息已填写正确或者在对应区服已创建角色".format(cfg.platid, cfg.area, cfg.partition))
+            lines.append("\t未查到{} 平台={} 渠道={} 区服={}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色".format(game_name, cfg.platid, cfg.area, cfg.partition))
             lines.append("\t上述id的列表可查阅reference_data/jx3_server_list.js，详情参见config.toml的对应注释")
         lines.append("+" * 40)
         logger.info("\n".join(lines))

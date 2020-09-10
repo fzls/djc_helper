@@ -1,4 +1,5 @@
 import json
+import time
 from urllib.parse import unquote_plus
 
 import requests
@@ -10,8 +11,9 @@ jsonp_callback_flag = "jsonp_callback"
 
 
 class Network:
-    def __init__(self, sDeviceID, uin, skey):
+    def __init__(self, sDeviceID, uin, skey, common_cfg):
         self.PRETTY_JSON = False
+        self.common_cfg = common_cfg  # type: CommonConfig
 
         self.base_headers = {
             "User-Agent": "TencentDaojucheng=v4.1.6.0&appSource=android&appVersion={appVersion}&ch=10003&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName=v4.1.6.0".format(
@@ -36,12 +38,30 @@ class Network:
         }}
 
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False):
-        res = requests.get(url, headers=self.get_headers)
+        def request_fn():
+            return requests.get(url, headers=self.get_headers, timeout=self.common_cfg.http_timeout)
+
+        res = self.try_request(request_fn)
         return self._common(ctx, res, pretty, print_res, is_jsonp)
 
     def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False):
-        res = requests.post(url, data=data, headers=self.post_headers)
+        def request_fn():
+            return requests.post(url, data=data, headers=self.post_headers, timeout=self.common_cfg.http_timeout)
+
+        res = self.try_request(request_fn)
         return self._common(ctx, res, pretty, print_res, is_jsonp)
+
+    def try_request(self, request_fn):
+        retryCfg = self.common_cfg.exchange_items
+        for i in range(retryCfg.max_retry_count):
+            try:
+                return request_fn()
+            except requests.exceptions.Timeout as exc:
+                logger.exception("{}/{}: request timeout, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
+                if i + 1 != retryCfg.max_retry_count:
+                    time.sleep(retryCfg.retry_wait_time)
+
+        logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
 
     def _common(self, ctx, res, pretty=False, print_res=True, is_jsonp=False):
         res.encoding = 'utf-8'

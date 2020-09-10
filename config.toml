@@ -3,6 +3,9 @@
 # 是否强制使用打包附带的便携版chrome
 force_use_portable_chrome = false
 
+# 自动登录模式是否不显示浏览器界面
+run_in_headless_mode = false
+
 # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
 log_level = "info"
 

@@ -46,6 +46,9 @@ class QQLogin():
         options = Options()
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        if self.cfg.run_in_headless_mode:
+            logger.warning("已配置使用headless模式运行chrome")
+            options.headless = True
 
         inited = False
 

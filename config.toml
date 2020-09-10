@@ -34,8 +34,8 @@ login_timeout = 600
 # 等待登录完成的超时时间，以活动结束的按钮弹出来标志
 login_finished_timeout = 60
 
-# 兑换道具时的一些行为配置
-[common.exchange_items]
+# 各种操作的通用重试配置
+[common.retry]
 # 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
 request_wait_time = 1
 # 当提示【"msg": "系统繁忙，请稍候再试。", "ret": "-9905"】时的最大重试次数

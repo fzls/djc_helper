@@ -52,7 +52,7 @@ class Network:
         return self._common(ctx, res, pretty, print_res, is_jsonp)
 
     def try_request(self, request_fn):
-        retryCfg = self.common_cfg.exchange_items
+        retryCfg = self.common_cfg.retry
         for i in range(retryCfg.max_retry_count):
             try:
                 return request_fn()

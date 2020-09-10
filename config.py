@@ -222,6 +222,8 @@ class CommonConfig(ConfigInterface):
         self._debug_run_first_only = False
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
+        # http(s)请求超时时间(秒)
+        self.http_timeout = 10
         # 是否展示chrome的debug日志，如DevTools listening，Bluetooth等
         self._debug_show_chrome_logs = False
         # 自动登录模式是否不显示浏览器界面

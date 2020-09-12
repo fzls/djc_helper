@@ -85,6 +85,9 @@ run_mode = "pre_run"
 # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 login_mode = "qr_login"
 
+# 是否领取每月黑钻等级礼包
+get_heizuan_gift = true
+
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
 # 手动登录需要设置的信息
@@ -391,6 +394,9 @@ count = 1
 ## qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
 ## auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 #login_mode = "qr_login"
+#
+## 是否领取每月黑钻等级礼包
+#get_heizuan_gift = true
 #
 ## 腾讯系网页登录通用账号凭据与token
 #[account_configs.account_info]

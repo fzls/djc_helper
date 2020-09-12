@@ -48,6 +48,7 @@ if __name__ == '__main__':
             logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
             continue
 
+        logger.info("")
         logger.info("------------开始处理第{}个账户({})------------\n".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)

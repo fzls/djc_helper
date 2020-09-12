@@ -89,6 +89,8 @@ class AccountConfig(ConfigInterface):
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
+        # 是否领取每月黑钻等级礼包
+        self.get_heizuan_gift = True
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 兑换dnf道具所需的dnf区服和角色信息

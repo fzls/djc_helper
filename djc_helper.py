@@ -1,6 +1,7 @@
 import platform
 import random
 import string
+import webbrowser
 
 import pyperclip
 import win32api
@@ -53,6 +54,9 @@ class DjcHelper:
         self.xinyue_iActivityId = "166962"
         self.xinyue = "https://act.game.qq.com/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType=tgclub&iActivityId={xinyue_iActivityId}&sServiceDepartment=xinyue&isXhrPost=true"
         self.xinyue_raw_data = "iActivityId={xinyue_iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&e_code=0&g_code=0&eas_url=http%3A%2F%2Fxinyue.qq.com%2Fact%2Fa20181101rights%2F&xhr=1&sServiceDepartment=xinyue&sServiceType=tgclub"
+
+        # 每月黑钻等级礼包
+        self.heizuan_gift = "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
 
         # 任务列表
         self.usertask = "https://djcapp.game.qq.com/daoju/v3/api/we/usertaskv2/Usertask.php?iAppId=1001&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&_app_id=1001&output_format=json&_output_fmt=json&appid=1001&optype=get_usertask_list&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -203,6 +207,9 @@ class DjcHelper:
 
         # 执行心悦相关操作
         self.xinyue_operations()
+
+        # 黑钻礼包
+        self.get_heizuan_gift()
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
@@ -743,6 +750,19 @@ class DjcHelper:
     def rand6(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
 
+    def get_heizuan_gift(self):
+        if not self.cfg.get_heizuan_gift:
+            logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
+            return
+
+        res = self.get("领取每月黑钻等级礼包", self.heizuan_gift)
+        # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
+        if res["iRet"] == -50014:
+            msg = "领取每月黑钻等级礼包失败，请先前往黑钻页面绑定角色信息"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            webbrowser.open("https://dnf.qq.com/act/blackDiamond/gift.shtml")
+        return res
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -767,6 +787,7 @@ class DjcHelper:
             "sSDID": self.cfg.sDeviceID.replace('-', ''),
             "uuid": self.cfg.sDeviceID,
             "millseconds": getMillSecondsUnix(),
+            "rand": random.random(),
         }
         return url.format(**{**default_params, **params})
 
@@ -792,8 +813,9 @@ if __name__ == '__main__':
         djcHelper.check_skey_expired()
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
-        djcHelper.xinyue_operations()
+        # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
+        djcHelper.get_heizuan_gift()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

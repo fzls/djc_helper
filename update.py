@@ -46,7 +46,7 @@ def check_update_on_start(config):
                 else:
                     # 如果分享的网盘链接被系统屏蔽了，写日志并弹窗提示
                     logger.warning("网盘链接={}又被系统干掉了=-=".format(ui.netdisk_link))
-                    webbrowser.open("https://github.com/fzls/dnf_calc/releases")
+                    webbrowser.open("https://github.com/fzls/djc_helper/releases")
                     message = (
                         "分享的网盘地址好像又被系统给抽掉了呢=。=先暂时使用github的release页面下载吧0-0\n"
                         "请稍作等待~ 风之凌殇看到这个报错后会尽快更新网盘链接的呢\n"

@@ -758,7 +758,7 @@ class DjcHelper:
         res = self.get("领取每月黑钻等级礼包", self.heizuan_gift)
         # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
         if res["iRet"] == -50014:
-            msg = "领取每月黑钻等级礼包失败，请先前往黑钻页面绑定角色信息"
+            msg = "领取每月黑钻等级礼包失败，请先前往黑钻页面绑定角色信息\n若无需该功能，可前往配置文件自行关闭该功能"
             win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
             webbrowser.open("https://dnf.qq.com/act/blackDiamond/gift.shtml")
         return res

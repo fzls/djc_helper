@@ -58,6 +58,9 @@ class DjcHelper:
         # 每月黑钻等级礼包
         self.heizuan_gift = "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
 
+        # 信用星级礼包
+        self.credit_gift = "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=13c48b"
+
         # 腾讯游戏信用
         self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"
 
@@ -770,6 +773,7 @@ class DjcHelper:
         return res
 
     def get_credit_xinyue_gift(self):
+        self.get("每月信用星级礼包", self.credit_gift)
         self.get("腾讯游戏信用-高信用即享礼包", self.credit_xinyue_gift, gift_group=1)
         self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.credit_xinyue_gift, gift_group=2)
 

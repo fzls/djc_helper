@@ -193,7 +193,7 @@ class WegameApi:
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
         # 调试用
-        print(json.dumps(res.json(), ensure_ascii=False))
+        print(api_name, json.dumps(res.json(), ensure_ascii=False))
 
         return res
 

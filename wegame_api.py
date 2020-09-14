@@ -4,6 +4,7 @@ import os
 import requests
 
 from config import config, load_config
+from log import logger
 from qq_login import QQLogin
 from util import uin2qq
 
@@ -20,17 +21,17 @@ class WegameApi:
             api.set_uin_skey(cached["uin"], cached["skey"])
             api.set_tgp_info(cached["tgp_id"], cached["tgp_ticket"])
             if self.is_token_still_valid():
-                print("use cached")
+                logger.info("use cached")
                 return
             else:
-                print("token invalided, try get new")
+                logger.warning("token invalided, try get new")
 
         ql = QQLogin(common_cfg)
         lr = ql.login(account, password)
-        print(lr)
+        logger.info(lr)
         api.login(lr.uin, lr.skey)
         self.save_token(account)
-        print("new login, token saved")
+        logger.info("new login, token saved")
 
     def load_token(self, account):
         if not os.path.isdir(self.cached_dir):
@@ -55,7 +56,7 @@ class WegameApi:
             }, f, ensure_ascii=False)
 
     def is_token_still_valid(self):
-        res = self.get_player_role_list()
+        res = self.get_player_role_list(print_res=False)
         return res["data"]["result"] == 0
 
     def get_token_file(self, account):
@@ -85,8 +86,8 @@ class WegameApi:
         tgp_id, tgp_ticket = int(res.cookies.get('tgp_id')), res.cookies.get('tgp_ticket')
         self.set_tgp_info(tgp_id, tgp_ticket)
 
-        print(tgp_id)
-        print(tgp_ticket)
+        logger.info(tgp_id)
+        logger.info(tgp_ticket)
 
     def set_uin_skey(self, skey, uin):
         self.uin = uin
@@ -112,11 +113,11 @@ class WegameApi:
             "User-Agent": "okhttp/3.11.0",
         }
 
-    def get_player_role_list(self):
+    def get_player_role_list(self, print_res=True):
         """
         获取玩家所有区服的的角色列表
         """
-        return self._post("get_player_role_list", need_role_info=False).json()
+        return self._post("get_player_role_list", need_role_info=False, print_res=print_res).json()
 
     def set_role_info(self, area_id, role_name):
         """
@@ -179,7 +180,7 @@ class WegameApi:
 
     def _post(self, api_name, json_data=None, need_role_info=True, print_res=True):
         if need_role_info and len(self.role_name) == 0:
-            print("调用除查询角色列表外任意接口前请先调用set_role_info设置角色信息，若不知道角色信息，可以调用get_player_role_list获取角色信息")
+            logger.warning("调用除查询角色列表外任意接口前请先调用set_role_info设置角色信息，若不知道角色信息，可以调用get_player_role_list获取角色信息")
             exit(-1)
 
         base_json_data = {
@@ -194,7 +195,7 @@ class WegameApi:
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
         if print_res:
-            print(api_name, json.dumps(res.json(), ensure_ascii=False))
+            logger.info("{} {}\n".format(api_name, json.dumps(res.json(), ensure_ascii=False)))
 
         return res
 
@@ -209,7 +210,7 @@ if __name__ == '__main__':
 
     res = api.get_player_role_list()
     for role in res['data']['role_list']:
-        print(role['area_id'], role['role_name'])
+        logger.info("区服={:3d}\t角色名={}".format(role['area_id'], role['role_name']))
     default_role = res['data']['role_list'][0]
     area_id, role_name = default_role['area_id'], default_role['role_name']
     api.set_role_info(area_id, role_name)
@@ -221,3 +222,5 @@ if __name__ == '__main__':
     api.get_player_role_detail()
     api.get_player_role_info()
     api.get_player_recent_dungeon_list()
+
+    os.system("PAUSE")

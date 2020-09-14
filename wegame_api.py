@@ -210,7 +210,8 @@ if __name__ == '__main__':
     for role in res['data']['role_list']:
         print(role['area_id'], role['role_name'])
     default_role = res['data']['role_list'][0]
-    api.set_role_info(default_role['area_id'], default_role['role_name'])
+    area_id, role_name = default_role['area_id'], default_role['role_name']
+    api.set_role_info(area_id, role_name)
     api.get_capacity_detail_info()
     api.get_player_fight_statistic_info()
     api.get_equip_description_image(100390332)

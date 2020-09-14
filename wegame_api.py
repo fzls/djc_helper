@@ -113,44 +113,64 @@ class WegameApi:
         }
 
     def get_player_role_list(self):
-        # 获取玩家所有区服的的角色列表
+        """
+        获取玩家所有区服的的角色列表
+        """
         return self._post("get_player_role_list", need_role_info=False).json()
 
     def set_role_info(self, area_id, role_name):
-        # 调用下列接口前需要先调用该接口设置角色信息
+        """
+        调用下列接口前需要先调用该接口设置角色信息
+        """
         self.area_id = int(area_id)
         self.role_name = str(role_name)
 
     def get_capacity_detail_info(self):
-        # 获取指定服务器的指定角色的战力信息
+        """
+        获取指定服务器的指定角色的战力信息
+        """
         return self._post("get_capacity_detail_info").json()
 
     def get_player_fight_statistic_info(self):
-        # 获取指定服务器的指定角色的面板一览
+        """
+        获取指定服务器的指定角色的面板一览
+        """
         return self._post("get_player_fight_statistic_info").json()
 
     def get_equip_description_image(self, equip_id):
-        # 获取指定装备的描述图片
+        """
+        获取指定装备的描述图片
+        """
         return "https://bb.img.qq.com/bbcdn/dnf/equips/equimg/{equip_id}.png".format(equip_id=equip_id)
 
     def get_equip_icon(self, equip_id):
-        # 获取指定装备的图标
+        """
+        获取指定装备的图标
+        """
         return "http://cdn.tgp.qq.com/DNF_picture/equip_icon/{equip_id}.png".format(equip_id=equip_id)
 
     def get_player_equipment_list(self):
-        # 获取指定服务器的指定角色的面板一览
+        """
+        获取指定服务器的指定角色的面板一览
+        """
         return self._post("get_player_equipment_list").json()
 
     def get_player_role_detail(self):
-        # 获取指定服务器的指定角色的详细面板数据
+        """
+        获取指定服务器的指定角色的详细面板数据
+        """
         return self._post("get_player_role_detail").json()
 
     def get_player_role_info(self):
-        # 获取指定服务器的指定角色的角色信息
+        """
+        获取指定服务器的指定角色的角色信息
+        """
         return self._post("get_player_role_info").json()
 
     def get_player_recent_dungeon_list(self, career):
-        # 获取指定服务器的指定角色的最近副本伤害信息，职业ID可从get_player_role_info接口中获取
+        """
+        获取指定服务器的指定角色的最近副本伤害信息，职业ID可从get_player_role_info接口中获取
+        """
         return self._post("get_player_recent_dungeon_list", json_data={
             "start_index": 0,
             "career": career,

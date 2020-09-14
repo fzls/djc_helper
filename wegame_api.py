@@ -161,22 +161,23 @@ class WegameApi:
         """
         return self._post("get_player_role_detail").json()
 
-    def get_player_role_info(self):
+    def get_player_role_info(self, print_res=True):
         """
         获取指定服务器的指定角色的角色信息
         """
-        return self._post("get_player_role_info").json()
+        return self._post("get_player_role_info", print_res=print_res).json()
 
-    def get_player_recent_dungeon_list(self, career):
+    def get_player_recent_dungeon_list(self):
         """
-        获取指定服务器的指定角色的最近副本伤害信息，职业ID可从get_player_role_info接口中获取
+        获取指定服务器的指定角色的最近副本伤害信息
         """
+        role_info = api.get_player_role_info(print_res=False)
         return self._post("get_player_recent_dungeon_list", json_data={
             "start_index": 0,
-            "career": career,
+            "career": role_info["data"]["role_info"]["career"],
         }).json()
 
-    def _post(self, api_name, json_data=None, need_role_info=True):
+    def _post(self, api_name, json_data=None, need_role_info=True, print_res=True):
         if need_role_info and len(self.role_name) == 0:
             print("调用除查询角色列表外任意接口前请先调用set_role_info设置角色信息，若不知道角色信息，可以调用get_player_role_list获取角色信息")
             exit(-1)
@@ -192,8 +193,8 @@ class WegameApi:
             json_data = {}
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
-        # 调试用
-        print(api_name, json.dumps(res.json(), ensure_ascii=False))
+        if print_res:
+            print(api_name, json.dumps(res.json(), ensure_ascii=False))
 
         return res
 
@@ -218,5 +219,5 @@ if __name__ == '__main__':
     api.get_equip_icon(100390332)
     api.get_player_equipment_list()
     api.get_player_role_detail()
-    role_info = api.get_player_role_info()
-    api.get_player_recent_dungeon_list(role_info["data"]["role_info"]["career"])
+    api.get_player_role_info()
+    api.get_player_recent_dungeon_list()

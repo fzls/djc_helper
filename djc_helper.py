@@ -58,6 +58,9 @@ class DjcHelper:
         # 每月黑钻等级礼包
         self.heizuan_gift = "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
 
+        # 腾讯游戏信用
+        self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"
+
         # 任务列表
         self.usertask = "https://djcapp.game.qq.com/daoju/v3/api/we/usertaskv2/Usertask.php?iAppId=1001&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&_app_id=1001&output_format=json&_output_fmt=json&appid=1001&optype=get_usertask_list&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 领取任务奖励
@@ -210,6 +213,9 @@ class DjcHelper:
 
         # 黑钻礼包
         self.get_heizuan_gift()
+
+        # 腾讯游戏信用相关礼包
+        self.get_credit_xinyue_gift()
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
@@ -763,6 +769,10 @@ class DjcHelper:
             webbrowser.open("https://dnf.qq.com/act/blackDiamond/gift.shtml")
         return res
 
+    def get_credit_xinyue_gift(self):
+        self.get("腾讯游戏信用-高信用即享礼包", self.credit_xinyue_gift, gift_group=1)
+        self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.credit_xinyue_gift, gift_group=2)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -815,7 +825,8 @@ if __name__ == '__main__':
         # djcHelper.exchange_items()
         # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
-        djcHelper.get_heizuan_gift()
+        # djcHelper.get_heizuan_gift()
+        djcHelper.get_credit_xinyue_gift()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

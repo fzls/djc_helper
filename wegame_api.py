@@ -1,12 +1,65 @@
+import json
+import os
+
 import requests
-from qq_login import QQLogin
+
 from config import config, load_config
+from qq_login import QQLogin
 from util import uin2qq
 
 
 class WegameApi:
     login_url = "https://www.wegame.com.cn/api/middle/clientapi/auth/login_by_qq"
     common_url_prefix = "https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_dnf_battle_record/"
+    cached_dir = ".cached"
+    cached_file = ".token.{}.json"
+
+    def auto_login_with_password(self, common_cfg, account, password):
+        cached = self.load_token(account)
+        if cached is not None:
+            api.set_uin_skey(cached["uin"], cached["skey"])
+            api.set_tgp_info(cached["tgp_id"], cached["tgp_ticket"])
+            if self.is_token_still_valid():
+                print("use cached")
+                return
+            else:
+                print("token invalided, try get new")
+
+        ql = QQLogin(common_cfg)
+        lr = ql.login(account, password)
+        print(lr)
+        api.login(lr.uin, lr.skey)
+        self.save_token(account)
+        print("new login, token saved")
+
+    def load_token(self, account):
+        if not os.path.isdir(self.cached_dir):
+            return None
+
+        if not os.path.isfile(self.get_token_file(account)):
+            return None
+
+        with open(self.get_token_file(account), "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def save_token(self, account):
+        if not os.path.isdir(self.cached_dir):
+            os.mkdir(self.cached_dir)
+
+        with open(self.get_token_file(account), "w", encoding="utf-8") as f:
+            json.dump({
+                "uin": self.uin,
+                "skey": self.skey,
+                "tgp_id": self.tgp_id,
+                "tgp_ticket": self.tgp_ticket,
+            }, f, ensure_ascii=False)
+
+    def is_token_still_valid(self):
+        res = self.get_player_role_list()
+        return res["data"]["result"] == 0
+
+    def get_token_file(self, account):
+        return os.path.join(self.cached_dir, self.cached_file.format(account))
 
     def login(self, uin, skey):
         self.set_uin_skey(skey, uin)
@@ -31,6 +84,7 @@ class WegameApi:
         res = requests.post(self.login_url, json=data, headers=headers)
         tgp_id, tgp_ticket = int(res.cookies.get('tgp_id')), res.cookies.get('tgp_ticket')
         self.set_tgp_info(tgp_id, tgp_ticket)
+
         print(tgp_id)
         print(tgp_ticket)
 
@@ -98,7 +152,7 @@ class WegameApi:
     def get_player_recent_dungeon_list(self, career):
         # 获取指定服务器的指定角色的最近副本伤害信息，职业ID可从get_player_role_info接口中获取
         return self._post("get_player_recent_dungeon_list", json_data={
-            "start_index":0,
+            "start_index": 0,
             "career": career,
         }).json()
 
@@ -119,7 +173,6 @@ class WegameApi:
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
         # 调试用
-        import json
         print(json.dumps(res.json(), ensure_ascii=False))
 
         return res
@@ -131,16 +184,13 @@ if __name__ == '__main__':
     # # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
+    api.auto_login_with_password(cfg.common, cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password)
 
-    ql = QQLogin(cfg.common)
-    lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password)
-
-    print(lr)
-    api.login(lr.uin, lr.skey)
     res = api.get_player_role_list()
     for role in res['data']['role_list']:
         print(role['area_id'], role['role_name'])
-    api.set_role_info(res['data']['role_list'][0]['area_id'], res['data']['role_list'][0]['role_name'])
+    default_role = res['data']['role_list'][0]
+    api.set_role_info(default_role['area_id'], default_role['role_name'])
     api.get_capacity_detail_info()
     api.get_player_fight_statistic_info()
     api.get_equip_description_image(100390332)

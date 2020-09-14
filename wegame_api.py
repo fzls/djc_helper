@@ -218,5 +218,5 @@ if __name__ == '__main__':
     api.get_equip_icon(100390332)
     api.get_player_equipment_list()
     api.get_player_role_detail()
-    api.get_player_role_info()
-    api.get_player_recent_dungeon_list(3)
+    role_info = api.get_player_role_info()
+    api.get_player_recent_dungeon_list(role_info["data"]["role_info"]["career"])

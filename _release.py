@@ -5,9 +5,11 @@ import subprocess
 from datetime import datetime
 
 from log import logger
+from version import now_version
 
 # ---------------准备工作
-version = input("请输入版本号：")
+prompt = "如需直接使用默认版本号：{} 请直接按回车\n或手动输入版本号后按回车：".format(now_version)
+version = input(prompt) or now_version
 
 version_reg = r"\d+\.\d+\.\d+"
 

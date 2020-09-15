@@ -262,7 +262,7 @@ class DjcHelper:
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        os.system("start {}".format(cfgFile))
+        os.system("notepad.exe {}".format(cfgFile))
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面

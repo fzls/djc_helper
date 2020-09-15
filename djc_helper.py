@@ -174,15 +174,16 @@ class DjcHelper:
 
         logger.info("uin/skey已经填写完成，请确保已正确填写dnf的区服和手游的区服信息后再进行后续流程")
 
+        os.popen("notepad.exe config.toml")
+
         # 如果已经填写uin/skey后，则查询角色相关信息
         self.query_all_extra_info()
 
         logger.info("将上述两行中dnf的想要兑换道具的角色的id和名字复制到config.toml本账号({})的对应位置，并将指尖江湖的角色的id和名字复制到config.toml对应配置".format(self.cfg.name))
         logger.info("同时请手动登录一次道聚城，在dnf和指尖江湖的活动中心绑定上述为角色。步骤：进入任意活动后，点击任意奖励领取按钮，在弹出来的绑定界面中绑定为上述角色即可")
-        logger.info("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将本账号({})的run_mode配置的值修改为normal，之后再运行就会进行正常流程了".format(self.cfg.name))
+        logger.warning("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将本账号({})的run_mode配置的值修改为normal，之后再运行就会进行正常流程了".format(self.cfg.name))
         logger.info("如果想要自动运行，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开README.MD来查看相关指引")
 
-        os.popen("notepad.exe config.toml")
         os.system("PAUSE")
 
     # 正式运行阶段

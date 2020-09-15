@@ -1,6 +1,6 @@
 import re
 
-from dao import DnfRoleInfo, Jx3RoleInfo
+from dao import DnfRoleInfo, MobileGameRoleInfo
 
 
 def parse_role_list(jsonRes):
@@ -16,8 +16,8 @@ def parse_role_list(jsonRes):
     return list(rolemap.values())
 
 
-def parse_jx3_role_list(jsonRes):
-    jx3_role_reg = r"\d+ [^ ]+"
+def parse_mobile_game_role_list(jsonRes):
+    jx3_role_reg = r"\w+ [^ ]+"
     rolemap = {}
 
     for item in jsonRes["data"].split("|"):
@@ -26,6 +26,6 @@ def parse_jx3_role_list(jsonRes):
             if len(item) == 2:
                 roleid, rolename = item
                 if roleid not in rolemap:
-                    rolemap[roleid] = Jx3RoleInfo(roleid, rolename)
+                    rolemap[roleid] = MobileGameRoleInfo(roleid, rolename)
 
     return list(rolemap.values())

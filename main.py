@@ -70,7 +70,8 @@ if __name__ == '__main__':
             break
     if normal_run:
         logger.warning("如果感觉本工具对你有所帮助，欢迎扫码打赏支持一下哈~")
-        os.popen("支持一下.png")
+        if cfg.common.show_support_pic:
+            os.popen("支持一下.png")
 
     # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了
     logger.info((

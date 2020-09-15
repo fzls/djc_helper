@@ -41,6 +41,10 @@ if __name__ == '__main__':
         # 尝试加入固定心悦队伍
         djcHelper.try_join_fixed_xinyue_team()
 
+        if cfg.common._debug_run_first_only:
+            logger.warning("调试开关打开，不再处理后续账户")
+            break
+
     # 正式进行流程
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1

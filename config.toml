@@ -17,6 +17,9 @@ check_update_on_start = true
 readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
 changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
+# 正式模式运行成功时是否弹出打赏图片
+show_support_pic = true
+
 # 登录的一些参数配置
 [common.login]
 # 重试次数

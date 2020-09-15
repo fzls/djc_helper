@@ -236,6 +236,8 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_start = True
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+        # 正式模式运行成功时是否弹出打赏图片
+        self.show_support_pic = True
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
         # 各种操作的通用重试配置

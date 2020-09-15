@@ -40,7 +40,7 @@ os.chdir(dir_src)
 
 # 需要复制的文件与目录
 files_to_copy = []
-reg_wantted_file = r'.*\.(toml|md|bat|txt|png|ico|docx|html)$'
+reg_wantted_file = r'.*\.(toml|md|bat|txt|png|ico|docx|url)$'
 for file in os.listdir('.'):
     if not re.search(reg_wantted_file, file, flags=re.IGNORECASE):
         continue

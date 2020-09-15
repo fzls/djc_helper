@@ -1,6 +1,7 @@
 import platform
 import random
 import string
+import subprocess
 import webbrowser
 
 import pyperclip
@@ -180,6 +181,8 @@ class DjcHelper:
         logger.info("同时请手动登录一次道聚城，在dnf和指尖江湖的活动中心绑定上述为角色。步骤：进入任意活动后，点击任意奖励领取按钮，在弹出来的绑定界面中绑定为上述角色即可")
         logger.info("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将本账号({})的run_mode配置的值修改为normal，之后再运行就会进行正常流程了".format(self.cfg.name))
         logger.info("如果想要自动运行，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开README.MD来查看相关指引")
+
+        subprocess.call(["notepad.exe", "config.toml"])
 
         os.system("PAUSE")
 
@@ -449,7 +452,8 @@ class DjcHelper:
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
             lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(self.cfg.exchange_role_info.iZone))
-            lines.append("\t区服id可查阅reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
+            lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
+            subprocess.call(["notepad.exe", "reference_data/dnf_server_list.js"])
         lines.append("+" * 40)
         logger.info("\n".join(lines))
 
@@ -472,9 +476,18 @@ class DjcHelper:
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
             lines.append("\t未查到{} 平台={} 渠道={} 区服={}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色".format(cfg.game_name, cfg.platid, cfg.area, cfg.partition))
-            lines.append("\t上述id的列表可查阅reference_data/jx3_server_list.js，详情参见config.toml的对应注释")
+            lines.append("\t上述id的列表可查阅稍后自动打开的server_list_{bizcode}.js，详情参见config.toml的对应注释".format(bizcode=game_info.bizCode))
+            self.open_mobile_game_server_list()
         lines.append("+" * 40)
         logger.info("\n".join(lines))
+
+    def open_mobile_game_server_list(self):
+        game_info = self.get_mobile_game_info()
+        res = requests.get(self.query_game_server_list.format(bizcode=game_info.bizCode))
+        server_list_file = ".cached/server_list_{bizcode}.js".format(bizcode=game_info.bizCode)
+        with open(server_list_file, 'w', encoding='utf-8') as f:
+            f.write(res.text)
+        subprocess.call(["notepad.exe", server_list_file])
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.show_exchange_item_list)

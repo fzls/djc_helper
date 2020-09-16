@@ -631,6 +631,8 @@ class DjcHelper:
         teaminfo = self.query_xinyue_teaminfo(print_res=False)
         if teaminfo.id != "":
             logger.warning("账号 {} 当前队伍进度为 {}/20".format(self.cfg.name, teaminfo.score))
+        else:
+            logger.warning("账号 {} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能".format(self.cfg.name))
 
         logger.info("\n")
 

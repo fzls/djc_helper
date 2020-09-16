@@ -38,22 +38,10 @@ class DjcHelper:
         # 相关链接
         self.urls = Urls()
 
+    # --------------------------------------------一些辅助函数--------------------------------------------
+
     def init_network(self):
         self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey, self.common_cfg)
-
-    # --------------------------------------------各种操作--------------------------------------------
-    def run(self):
-        self.check_first_run()
-
-        run_mode_dict = {
-            "pre_run": self.pre_run,
-            "normal": self.normal_run,
-        }
-        run_mode_dict[self.cfg.run_mode]()
-
-    def check_first_run(self):
-        self.show_tip_on_first_run_promot()
-        self.show_tip_on_first_run_any()
 
     def show_tip_on_first_run_any(self):
         filename = self.first_run_flag_file
@@ -115,82 +103,6 @@ class DjcHelper:
         # 创建该文件，从而避免再次弹出错误
         with open(filename, "w", encoding="utf-8") as f:
             f.write("ok")
-
-    # 预处理阶段
-    def pre_run(self):
-        logger.info("预处理阶段，请按照提示进行相关操作")
-
-        # 指引获取uin/skey/角色信息等
-        self.check_skey_expired()
-
-        logger.info("uin/skey已经填写完成，请确保已正确填写手游的名称信息，并已在道聚城app中绑定dnf和该手游的角色信息后再进行后续流程")
-
-        # 尝试获取绑定的角色信息
-        self.get_bind_role_list()
-
-        # 打印dnf和手游的绑定角色信息
-        logger.info("已获取道聚城目前绑定的角色信息如下")
-        games = []
-        if "dnf" in self.bizcode_2_bind_role_map:
-            games.append("dnf")
-        if self.cfg.mobile_game_role_info.enabled():
-            games.append(self.get_mobile_game_info().bizCode)
-
-        for bizcode in games:
-            roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
-            logger.info("{game}: ({server}-{name}-{id})".format(
-                game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
-            ))
-
-        # 最后提示
-        logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
-        logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
-
-        os.popen("notepad.exe config.toml")
-
-        os.system("PAUSE")
-
-    # 正式运行阶段
-    def normal_run(self):
-        # 检查skey是否过期
-        self.check_skey_expired()
-
-        # 获取dnf和手游的绑定信息
-        self.get_bind_role_list()
-
-        # 执行道聚城相关操作
-        self.djc_operations()
-
-        # 执行心悦相关操作
-        self.xinyue_operations()
-
-        # 黑钻礼包
-        self.get_heizuan_gift()
-
-        # 腾讯游戏信用相关礼包
-        self.get_credit_xinyue_gift()
-
-    def djc_operations(self):
-        # ------------------------------初始工作------------------------------
-        old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
-        # self.query_money_flow("1.1 操作前：查一遍流水")
-
-        # ------------------------------核心逻辑------------------------------
-        # 自动签到
-        self.sign_in_and_take_awards()
-
-        # 完成任务
-        self.complete_tasks()
-
-        # 领取奖励并兑换道具
-        self.take_task_awards_and_exchange_items()
-
-        # ------------------------------清理工作------------------------------
-        new_allin = int(self.query_balance("5. 操作全部完成后：查询余额")["data"]['allin'])
-        # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
-
-        delta = new_allin - old_allin
-        logger.warning("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin))
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
@@ -295,11 +207,7 @@ class DjcHelper:
         # uin, skey更新后重新初始化网络相关
         self.init_network()
 
-    def query_balance(self, ctx, print_res=True):
-        return self.get(ctx, self.urls.balance, print_res=print_res)
-
-    def query_money_flow(self, ctx):
-        return self.get(ctx, self.urls.money_flow)
+    # --------------------------------------------获取角色信息和游戏信息--------------------------------------------
 
     def get_bind_role_list(self):
         # 查询全部绑定角色信息
@@ -321,6 +229,105 @@ class DjcHelper:
                 logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定".format(get_game_info_by_bizcode(bizcode).bizName))
                 os.system("PAUSE")
                 exit(-1)
+
+    def get_mobile_game_info(self):
+        return get_game_info(self.cfg.mobile_game_role_info.game_name)
+
+    # --------------------------------------------各种操作--------------------------------------------
+    def run(self):
+        self.check_first_run()
+
+        run_mode_dict = {
+            "pre_run": self.pre_run,
+            "normal": self.normal_run,
+        }
+        run_mode_dict[self.cfg.run_mode]()
+
+    def check_first_run(self):
+        self.show_tip_on_first_run_promot()
+        self.show_tip_on_first_run_any()
+
+    # 预处理阶段
+    def pre_run(self):
+        logger.info("预处理阶段，请按照提示进行相关操作")
+
+        # 指引获取uin/skey/角色信息等
+        self.check_skey_expired()
+
+        logger.info("uin/skey已经填写完成，请确保已正确填写手游的名称信息，并已在道聚城app中绑定dnf和该手游的角色信息后再进行后续流程")
+
+        # 尝试获取绑定的角色信息
+        self.get_bind_role_list()
+
+        # 打印dnf和手游的绑定角色信息
+        logger.info("已获取道聚城目前绑定的角色信息如下")
+        games = []
+        if "dnf" in self.bizcode_2_bind_role_map:
+            games.append("dnf")
+        if self.cfg.mobile_game_role_info.enabled():
+            games.append(self.get_mobile_game_info().bizCode)
+
+        for bizcode in games:
+            roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
+            logger.info("{game}: ({server}-{name}-{id})".format(
+                game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
+            ))
+
+        # 最后提示
+        logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
+        logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
+
+        os.popen("notepad.exe config.toml")
+
+        os.system("PAUSE")
+
+    # 正式运行阶段
+    def normal_run(self):
+        # 检查skey是否过期
+        self.check_skey_expired()
+
+        # 获取dnf和手游的绑定信息
+        self.get_bind_role_list()
+
+        # 执行道聚城相关操作
+        self.djc_operations()
+
+        # 执行心悦相关操作
+        self.xinyue_operations()
+
+        # 黑钻礼包
+        self.get_heizuan_gift()
+
+        # 腾讯游戏信用相关礼包
+        self.get_credit_xinyue_gift()
+
+    def djc_operations(self):
+        # ------------------------------初始工作------------------------------
+        old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
+        # self.query_money_flow("1.1 操作前：查一遍流水")
+
+        # ------------------------------核心逻辑------------------------------
+        # 自动签到
+        self.sign_in_and_take_awards()
+
+        # 完成任务
+        self.complete_tasks()
+
+        # 领取奖励并兑换道具
+        self.take_task_awards_and_exchange_items()
+
+        # ------------------------------清理工作------------------------------
+        new_allin = int(self.query_balance("5. 操作全部完成后：查询余额")["data"]['allin'])
+        # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
+
+        delta = new_allin - old_allin
+        logger.warning("账号 {} 本次道聚城操作共获得 {} 个豆子（ {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin))
+
+    def query_balance(self, ctx, print_res=True):
+        return self.get(ctx, self.urls.balance, print_res=print_res)
+
+    def query_money_flow(self, ctx):
+        return self.get(ctx, self.urls.money_flow)
 
     def sign_in_and_take_awards(self):
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
@@ -513,9 +520,6 @@ class DjcHelper:
         for gift in sign_in_gifts:
             gifts.append(MobileGameGiftInfo(gift["sTask"], gift["iruleId"]))
         return gifts
-
-    def get_mobile_game_info(self):
-        return get_game_info(self.cfg.mobile_game_role_info.game_name)
 
     def xinyue_operations(self):
         """

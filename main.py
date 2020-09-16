@@ -1,4 +1,5 @@
 import os
+import threading
 
 import util
 from config import load_config, config
@@ -81,7 +82,8 @@ def check_update(cfg):
 
 
 if __name__ == '__main__':
-    util.maximize_console()
+    # 最大化窗口
+    threading.Thread(target=util.maximize_console, daemon=True).start()
 
     logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.info("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

@@ -53,6 +53,7 @@ files_to_copy.extend([
     "chromedriver_85.0.4183.87.exe",
     "public_key.der",
     "使用文档",
+    "npp_portable",
 ])
 files_to_copy = sorted(files_to_copy)
 

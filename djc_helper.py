@@ -146,7 +146,7 @@ class DjcHelper:
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        os.system("notepad.exe {}".format(cfgFile))
+        os.system("npp_portable/notepad++.exe {}".format(cfgFile))
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面
@@ -277,7 +277,7 @@ class DjcHelper:
         logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
         logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
 
-        os.popen("notepad.exe config.toml")
+        os.popen("npp_portable/notepad++.exe config.toml")
 
         os.system("PAUSE")
 
@@ -467,7 +467,7 @@ class DjcHelper:
             lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(roleinfo.serviceID))
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
             lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-            os.popen("notepad.exe reference_data/dnf_server_list.js")
+            os.popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
         lines.append("+" * 40)
         logger.info("\n".join(lines))
 
@@ -507,7 +507,7 @@ class DjcHelper:
         server_list_file = "reference_data/server_list_{bizName}.js".format(bizName=game_info.bizName)
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
-        os.popen("notepad.exe {}".format(server_list_file))
+        os.popen("npp_portable/notepad++.exe {}".format(server_list_file))
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.urls.show_exchange_item_list)
@@ -850,6 +850,6 @@ if __name__ == '__main__':
         # djcHelper.complete_tasks()
         djcHelper.get_bind_role_list()
 
-        if cfg.common._debug_run_first_only:
+        if cfg.common._debug_run_first_only or True:
             logger.warning("调试开关打开，不再处理后续账户")
             break

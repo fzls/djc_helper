@@ -27,11 +27,14 @@ class AccountInfoConfig(ConfigInterface):
 
 class MobileGameRoleInfoConfig(ConfigInterface):
     def __init__(self):
-        # 手游名称: 无/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
-        self.game_name = "剑网3:指尖江湖"
+        # 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
+        self.game_name = "任意手游"
 
     def enabled(self):
         return self.game_name not in ["无", "none"]
+
+    def use_any_binded_mobile_game(self):
+        return self.game_name not in ["任意手游"]
 
 
 class ExchangeItemConfig(ConfigInterface):

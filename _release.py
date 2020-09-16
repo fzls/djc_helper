@@ -5,7 +5,11 @@ import subprocess
 from datetime import datetime
 
 from log import logger
+from util import maximize_console
 from version import now_version
+
+# 最大化窗口
+maximize_console()
 
 # ---------------准备工作
 prompt = "如需直接使用默认版本号：{} 请直接按回车\n或手动输入版本号后按回车：".format(now_version)

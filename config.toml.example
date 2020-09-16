@@ -1,7 +1,51 @@
-# 本配置文件仅展示普通用户需要的一些配置，完整列表请查看config.toml.example，有需求可自行将对应配置项添加到本配置文件中
-
 # 所有账号共用的配置
 [common]
+# 是否强制使用打包附带的便携版chrome
+force_use_portable_chrome = false
+
+# 自动登录模式是否不显示浏览器界面
+run_in_headless_mode = false
+
+# http(s)请求超时时间(秒)
+http_timeout = 10
+
+# 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
+log_level = "info"
+
+# 是否检查更新
+check_update_on_start = true
+readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+
+# 正式模式运行成功时是否弹出打赏图片
+show_support_pic = true
+
+# 登录的一些参数配置
+[common.login]
+# 重试次数
+max_retry_count = 3
+# 重试间隔时间（秒）
+retry_wait_time = 1
+# 打开网页后等待时长
+open_url_wait_time = 3
+# 加载页面的超时时间，以登录按钮出现为完成标志
+load_page_timeout = 60
+# 点击登录按钮后的超时时间，加载登录iframe，以其显示出来为完成标志
+load_login_iframe_timeout = 5
+# 登录的超时时间，从登录界面显示为开始，以用户完成登录为结束标志
+login_timeout = 600
+# 等待登录完成的超时时间，以活动结束的按钮弹出来标志
+login_finished_timeout = 60
+
+# 各种操作的通用重试配置
+[common.retry]
+# 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
+request_wait_time = 1
+# 当提示【"msg": "系统繁忙，请稍候再试。", "ret": "-9905"】时的最大重试次数
+max_retry_count = 3
+# 上述情况下的重试间隔时间（秒）
+retry_wait_time = 1
+
 # 心悦相关配置
 [common.xinyue]
 # 在每日几点后才尝试提交心悦的成就点任务，避免在没有上游戏时执行心悦成就点任务，导致高成就点的任务没法完成，只能完成低成就点的

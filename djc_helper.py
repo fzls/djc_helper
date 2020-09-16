@@ -146,7 +146,7 @@ class DjcHelper:
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        os.system("npp_portable/notepad++.exe {}".format(cfgFile))
+        os.system("npp_portable/notepad++.exe -n53 {}".format(cfgFile))
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面
@@ -226,7 +226,8 @@ class DjcHelper:
             # 检查道聚城是否已绑定手游角色信息，若未绑定则警告并停止运行
             bizcode = self.get_mobile_game_info().bizCode
             if bizcode not in self.bizcode_2_bind_role_map:
-                logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定".format(get_game_info_by_bizcode(bizcode).bizName))
+                logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
+                os.popen("npp_portable/notepad++.exe -n63 config.toml")
                 os.system("PAUSE")
                 exit(-1)
 
@@ -277,7 +278,7 @@ class DjcHelper:
         logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
         logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
 
-        os.popen("npp_portable/notepad++.exe config.toml")
+        os.popen("npp_portable/notepad++.exe -n39 config.toml")
 
         os.system("PAUSE")
 

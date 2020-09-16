@@ -158,12 +158,24 @@ class DjcHelper:
         # 获取dnf和手游的绑定信息
         self.get_bind_role_list()
 
+        # 执行道聚城相关操作
+        self.djc_operations()
+
+        # 执行心悦相关操作
+        self.xinyue_operations()
+
+        # 黑钻礼包
+        self.get_heizuan_gift()
+
+        # 腾讯游戏信用相关礼包
+        self.get_credit_xinyue_gift()
+
+    def djc_operations(self):
         # ------------------------------初始工作------------------------------
         old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
         # self.query_money_flow("1.1 操作前：查一遍流水")
 
         # ------------------------------核心逻辑------------------------------
-
         # 自动签到
         self.sign_in_and_take_awards()
 
@@ -179,15 +191,6 @@ class DjcHelper:
 
         delta = new_allin - old_allin
         logger.warning("账号 {} 本次操作共获得 {} 个豆子（ {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin))
-
-        # 执行心悦相关操作
-        self.xinyue_operations()
-
-        # 黑钻礼包
-        self.get_heizuan_gift()
-
-        # 腾讯游戏信用相关礼包
-        self.get_credit_xinyue_gift()
 
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)

@@ -344,18 +344,17 @@ class DjcHelper:
             role_info.auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
-        # 确保dnf和选择的手游的角色已绑定信息
-        need_bind_list = ["dnf"]
+        # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
+
         if self.cfg.mobile_game_role_info.enabled():
-            need_bind_list.append(self.get_mobile_game_info().bizCode)
-        ok = True
-        for bizcode in need_bind_list:
+            # 检查道聚城是否已绑定手游角色信息，若未绑定则警告并停止运行
+            bizcode = self.get_mobile_game_info().bizCode
             if bizcode not in self.bizcode_2_bind_role_map:
                 logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定".format(get_game_info_by_bizcode(bizcode).bizName))
-                ok = False
-        if not ok:
-            os.system("PAUSE")
-            exit(-1)
+                os.system("PAUSE")
+                exit(-1)
 
     def sign_in_and_take_awards(self):
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
@@ -435,6 +434,15 @@ class DjcHelper:
         return False
 
     def exchange_items(self):
+        if len(self.cfg.exchange_items) == 0:
+            logger.warning("未配置dnf的兑换道具，跳过该流程")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
+            return
+
         retryCfg = self.common_cfg.retry
         for ei in self.cfg.exchange_items:
             for i in range(ei.count):

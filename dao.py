@@ -24,6 +24,9 @@ class GameRoleInfo(ConfigInterface):
         self.sRoleInfo = RoleInfo()
         self.dtUpdateTime = "2020-08-23 06:38:04"
 
+    def is_mobile_game(self):
+        return self.sRoleInfo.type == "1"
+
 
 class RoleInfo(ConfigInterface):
     def __init__(self):

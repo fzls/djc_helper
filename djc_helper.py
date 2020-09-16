@@ -301,6 +301,7 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
+    # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         # ------------------------------初始工作------------------------------
         old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
@@ -435,15 +436,21 @@ class DjcHelper:
         return self.get(ctx, self.urls.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=roleinfo.roleName, lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
 
     def query_all_extra_info(self):
-        # 获取玩家的dnf角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
+        """
+        已废弃，不再需要手动查询该信息
+        """
+        # 获取玩家的dnf角色列表
         self.query_dnf_rolelist()
-        # 获取玩家的手游角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
+        # 获取玩家的手游角色列表
         self.query_mobile_game_rolelist()
 
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
 
     def query_dnf_rolelist(self):
+        """
+        已废弃，不再需要手动查询该信息
+        """
         ctx = "获取账号({})的dnf角色列表".format(self.cfg.name)
         game_info = get_game_info("地下城与勇士")
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
@@ -521,6 +528,7 @@ class DjcHelper:
             gifts.append(MobileGameGiftInfo(gift["sTask"], gift["iruleId"]))
         return gifts
 
+    # --------------------------------------------心悦dnf游戏特权--------------------------------------------
     def xinyue_operations(self):
         """
         根据配置进行心悦相关操作
@@ -751,19 +759,7 @@ class DjcHelper:
             lqlevel = 1
         return self.format(self.urls.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
-    def make_s_milo_tag(self, iFlowId):
-        iActivityId, id = self.urls.xinyue_iActivityId, self.cfg.account_info.uin
-        return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(
-            iActivityId=iActivityId,
-            iFlowId=iFlowId,
-            id=id,
-            millseconds=getMillSecondsUnix(),
-            rand6=self.rand6()
-        )
-
-    def rand6(self):
-        return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
-
+    # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
         if not self.cfg.get_heizuan_gift:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
@@ -777,6 +773,7 @@ class DjcHelper:
             webbrowser.open("https://dnf.qq.com/act/blackDiamond/gift.shtml")
         return res
 
+    # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
         self.get("每月信用星级礼包", self.urls.credit_gift)
         self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
@@ -816,6 +813,19 @@ class DjcHelper:
 
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
         return "{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}".format(year, month, day, hour, minute, second)
+
+    def make_s_milo_tag(self, iFlowId):
+        iActivityId, id = self.urls.xinyue_iActivityId, self.cfg.account_info.uin
+        return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(
+            iActivityId=iActivityId,
+            iFlowId=iFlowId,
+            id=id,
+            millseconds=getMillSecondsUnix(),
+            rand6=self.rand6()
+        )
+
+    def rand6(self):
+        return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
 
 
 if __name__ == '__main__':

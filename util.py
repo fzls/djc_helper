@@ -1,3 +1,5 @@
+import threading
+
 import win32con
 import win32gui
 
@@ -7,6 +9,9 @@ def uin2qq(uin):
 
 
 def maximize_console():
+    threading.Thread(target=maximize_console_sync, daemon=True).start()
+
+def maximize_console_sync():
     hwnd = win32gui.GetForegroundWindow()
     win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 

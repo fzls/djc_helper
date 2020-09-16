@@ -20,7 +20,7 @@ with open("reference_data/djc_biz_list.json", "r", encoding="utf-8") as f:
 def get_game_info(name):
     if name not in name_2_game_info_map:
         win32api.MessageBox(0, "未找到游戏【{}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字".format(name), "游戏名不正确", win32con.MB_ICONWARNING)
-        subprocess.call(["notepad.exe", "reference_data/djc_biz_list.json"])
+        subprocess.call(["npp_portable/notepad++.exe", "reference_data/djc_biz_list.json"])
         exit(-1)
 
     return name_2_game_info_map[name]

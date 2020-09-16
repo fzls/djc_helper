@@ -1,16 +1,14 @@
 import platform
 import random
 import string
-import subprocess
 import webbrowser
 
 import pyperclip
 import win32api
-import win32con
 
 import json_parser
 from dao import *
-from game_info import get_game_info
+from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
 from qq_login import QQLogin
 from sign import getMillSecondsUnix
@@ -73,6 +71,9 @@ class DjcHelper:
         # 上报任务完成
         self.task_report = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.task.report&appVersion={appVersion}&task_type={task_type}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
+        # 查询道聚城绑定的各游戏角色列表，dnf的角色信息和选定手游的角色信息将从这里获取
+        self.query_bind_role_list = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.role.bind_list&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&type=1&output_format=json&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+
         # 具体游戏参数可查阅djc_biz_list.json
         self.query_game_server_list = "https://gameact.qq.com/comm-htdocs/js/game_area/utf8verson/{bizcode}_server_select_utf8.js"
         # 查询手游礼包礼包，不同手游传入不同bizcode
@@ -80,7 +81,7 @@ class DjcHelper:
         # 查询手游角色列表，不同手游传入不同game(gameCode), sAMSTargetAppId(wxAppid)
         self.get_game_role_list = "https://comm.aci.game.qq.com/main?sCloudApiName=ams.gameattr.role&game={game}&sAMSTargetAppId={sAMSTargetAppId}&appVersion={appVersion}&area={area}&platid={platid}&partition={partition}&callback={callback}&p_tk={p_tk}&sDeviceID={sDeviceID}&&sAMSAcctype=pt&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
         # 一键领取手游礼包，不同手游传入不同bizcode
-        self.recieve_game_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&bizcode={bizcode}&appVersion={appVersion}&iruleId={iruleId}&sPartition={sPartition}&roleCode={roleCode}&sRoleName={sRoleName}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&appid=1001&output_format=json&optype=receive_usertask_game&systemID={systemID}&channelID=1&channelKey=qq&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
+        self.recieve_game_gift = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.package.receive&bizcode={bizcode}&appVersion={appVersion}&iruleId={iruleId}&sPartition={sPartition}&roleCode={roleCode}&sRoleName={sRoleName}&channelID={channelID}&channelKey={channelKey}&systemID={systemID}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&appid=1001&output_format=json&optype=receive_usertask_game&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
         # 兑换道具--requestConvertCoupon
         self.exchangeItems = "https://apps.game.qq.com/cgi-bin/daoju/v3/hs/i_buy.cgi?&weexVersion=0.9.4&appVersion={appVersion}&iGoodsSeqId={iGoodsSeqId}&iZone={iZone}&lRoleId={lRoleId}&rolename={rolename}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&platform=android&deviceModel=MIX%202&&&_output_fmt=1&_plug_id=9800&_from=app&iActionId=2594&iActionType=26&_biz_code=dnf&biz=dnf&appid=1003&_app_id=1003&_cs=2&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
@@ -191,11 +192,15 @@ class DjcHelper:
         # 检查skey是否过期
         self.check_skey_expired()
 
+        # 获取dnf和手游的绑定信息
+        self.get_bind_role_list()
+
         # ------------------------------初始工作------------------------------
         old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
         # self.query_money_flow("1.1 操作前：查一遍流水")
 
         # ------------------------------核心逻辑------------------------------
+
         # 自动签到
         self.sign_in_and_take_awards()
 
@@ -330,6 +335,28 @@ class DjcHelper:
     def query_money_flow(self, ctx):
         return self.get(ctx, self.money_flow)
 
+    def get_bind_role_list(self):
+        # 查询全部绑定角色信息
+        res = self.get("获取道聚城各游戏的绑定角色列表", self.query_bind_role_list, print_res=False)
+        self.bizcode_2_bind_role_map = {}
+        for roleinfo_dict in res["data"]:
+            role_info = GameRoleInfo()
+            role_info.auto_update_config(roleinfo_dict)
+            self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
+
+        # 确保dnf和选择的手游的角色已绑定信息
+        need_bind_list = ["dnf"]
+        if self.cfg.mobile_game_role_info.enabled():
+            need_bind_list.append(self.get_mobile_game_info().bizCode)
+        ok = True
+        for bizcode in need_bind_list:
+            if bizcode not in self.bizcode_2_bind_role_map:
+                logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定".format(get_game_info_by_bizcode(bizcode).bizName))
+                ok = False
+        if not ok:
+            os.system("PAUSE")
+            exit(-1)
+
     def sign_in_and_take_awards(self):
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
         self.get("2.1.1 发送imsdk登录事件", self.imsdk_login)
@@ -360,17 +387,14 @@ class DjcHelper:
         cfg = self.cfg.mobile_game_role_info
         if cfg.enabled():
             game_info = self.get_mobile_game_info()
+            role_info = self.bizcode_2_bind_role_map[game_info.bizCode].sRoleInfo
             giftInfos = self.get_mobile_game_gifts()
             dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
             giftInfo = giftInfos[dayIndex]
-            res = self.get("3.2 一键领取{}日常礼包-{}".format(cfg.game_name, giftInfo.sTask), self.recieve_game_gift, bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
-                           systemID=cfg.platid, sPartition=cfg.partition, roleCode=cfg.roleid, sRoleName=cfg.rolename)
-            # {"ret": -1, "msg": "目前访问人数过多！请稍后再试！谢谢！", ....}
-            # 似乎未绑定的时候会提示这个
-            notBindTip = "目前访问人数过多！请稍后再试！谢谢！"
-            if notBindTip in res["msg"]:
-                msg = "领取签到奖励失败，怀疑是未在道聚城绑定{game_name}角色，请前往道聚城的{game_name}界面进行绑定，需要与配置表中填写的保持一致".format(game_name=cfg.game_name)
-                win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            self.get("3.2 一键领取{}日常礼包-{}".format(cfg.game_name, giftInfo.sTask), self.recieve_game_gift,
+                     bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
+                     systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
+                     roleCode=role_info.roleCode, sRoleName=role_info.roleName)
         else:
             logger.info("未启用自动完成《礼包达人》任务功能")
 
@@ -426,8 +450,8 @@ class DjcHelper:
                     break
 
     def exchange_item(self, ctx, iGoodsSeqId):
-        cfg = self.cfg.exchange_role_info
-        return self.get(ctx, self.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=cfg.rolename, lRoleId=cfg.lRoleId, iZone=cfg.iZone)
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        return self.get(ctx, self.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=roleinfo.roleName, lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
 
     def query_all_extra_info(self):
         # 获取玩家的dnf角色列表，note:当不知道角色的roleid和rolename的时候，可以取消注释进行查询
@@ -441,7 +465,8 @@ class DjcHelper:
     def query_dnf_rolelist(self):
         ctx = "获取账号({})的dnf角色列表".format(self.cfg.name)
         game_info = get_game_info("地下城与勇士")
-        roleListJsonRes = self.get(ctx, self.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=self.cfg.exchange_role_info.iZone, platid="", partition="", is_jsonp=True, print_res=False)
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleListJsonRes = self.get(ctx, self.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=roleinfo.serviceID, platid="", partition="", is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
         lines = []
         lines.append("")
@@ -451,7 +476,7 @@ class DjcHelper:
             for idx, role in enumerate(roleLists):
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
-            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(self.cfg.exchange_role_info.iZone))
+            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(roleinfo.serviceID))
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
             lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             os.popen("notepad.exe reference_data/dnf_server_list.js")
@@ -459,6 +484,9 @@ class DjcHelper:
         logger.info("\n".join(lines))
 
     def query_mobile_game_rolelist(self):
+        """
+        已废弃，不再需要手动查询该信息
+        """
         cfg = self.cfg.mobile_game_role_info
         game_info = self.get_mobile_game_info()
         ctx = "获取账号({})的{}角色列表".format(self.cfg.name, cfg.game_name)
@@ -829,9 +857,10 @@ if __name__ == '__main__':
         # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
         # djcHelper.get_heizuan_gift()
-        djcHelper.get_credit_xinyue_gift()
+        # djcHelper.get_credit_xinyue_gift()
         # djcHelper.query_mobile_game_rolelist()
         # djcHelper.complete_tasks()
+        djcHelper.get_bind_role_list()
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

@@ -1,6 +1,8 @@
 from typing import List
 from urllib.parse import unquote_plus
 
+from data_struct import ConfigInterface
+
 
 class DaoObject:
     def __repr__(self):
@@ -13,6 +15,35 @@ class GameInfo(DaoObject):
         self.bizCode = data["bizCode"]
         self.gameCode = data["gameCode"]
         self.wxAppid = data["wxAppid"]
+
+
+class GameRoleInfo(ConfigInterface):
+    def __init__(self):
+        self.sBizCode = "jx3"
+        self.sOpenId = ""
+        self.sRoleInfo = RoleInfo()
+        self.dtUpdateTime = "2020-08-23 06:38:04"
+
+
+class RoleInfo(ConfigInterface):
+    def __init__(self):
+        self.accountId = "2814890506666666666"
+        self.areaID = "20001"
+        self.areaName = "梦江南"
+        self.bizCode = "jx3"
+        self.channelID = "2"
+        self.channelKey = "qq"
+        self.channelName = "手Q"
+        self.ext_param = ""
+        self.gameName = "剑网3:指尖江湖"
+        self.isHasService = "0"
+        self.roleCode = "2814890506666666666"
+        self.roleName = "风之凌殇"
+        self.serviceID = "20001"
+        self.serviceName = "梦江南"
+        self.systemID = "1"
+        self.systemKey = "android"
+        self.type = "1"
 
 
 class DnfRoleInfo(DaoObject):

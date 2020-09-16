@@ -1,8 +1,8 @@
 import platform
 import random
 import string
-import webbrowser
 import subprocess
+import webbrowser
 
 import pyperclip
 import win32api
@@ -372,6 +372,9 @@ class DjcHelper:
             game_info = self.get_mobile_game_info()
             role_info = self.bizcode_2_bind_role_map[game_info.bizCode].sRoleInfo
             giftInfos = self.get_mobile_game_gifts()
+            if len(giftInfos) == 0:
+                logger.warning("未找到手游【{}】的有效七日签到配置，请换个手游，比如王者荣耀".format(game_info.bizName))
+                return
             dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
             giftInfo = giftInfos[dayIndex]
             self.get("3.2 一键领取{}日常礼包-{}".format(cfg.game_name, giftInfo.sTask), self.urls.recieve_game_gift,

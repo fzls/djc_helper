@@ -78,7 +78,7 @@ enable = true
 name = "默认账号"
 
 # 运行模式
-# pre_run:      指引获取uin、skey，以及如何获取角色信息
+# pre_run:      指引获取uin、skey，以及指引前往道聚城绑定对应角色信息
 # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
 run_mode = "pre_run"
 
@@ -101,28 +101,10 @@ skey = "@a1b2c3d4e"
 account = "123456789"
 password = "使用账号密码自动登录有风险_请审慎决定"
 
-# 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
-[account_configs.exchange_role_info]
-iZone = "11"  # 浙江一区，其他区服id可查阅reference_data/dnf_server_list.js
-lRoleId = "DNF角色ID"
-rolename = "DNF角色名"
-
-# 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
+# 完成《礼包达人》任务所需的手游的名称信息
 [account_configs.mobile_game_role_info]
-# 手游名称，目前支持下面几种，后续有空可能会添加其他手游
-# 无
-# 剑网3:指尖江湖
-# 和平精英
-# 王者荣耀
-# QQ飞车手游
-# 天天酷跑
-# 其他任意游戏，可参考djc_biz_list.json获取完整列表
+# 手游名称: 无/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
 game_name = "剑网3:指尖江湖"
-area = 2  # QQ（仅限zjjh，不同游戏可能定义不同），其他渠道的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v
-platid = 1  # 安卓（仅限zjjh，不同游戏可能定义不同），其他平台的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v
-partition = 20001  # 手Q1区（仅限zjjh，不同游戏定义不同），其他区服的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_DATA中对应服务器的v
-roleid = "手游角色ID"
-rolename ="手游玩家名"
 
 # 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
 [[account_configs.exchange_items]]
@@ -392,7 +374,7 @@ count = 1
 #name = "大号"
 #
 ## 运行模式
-## pre_run:      指引获取uin、skey，以及如何获取角色信息
+## pre_run:      指引获取uin、skey，以及指引前往道聚城绑定对应角色信息
 ## normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
 #run_mode = "pre_run"
 #
@@ -415,28 +397,10 @@ count = 1
 #account = "123456789"
 #password = "使用账号密码自动登录有风险_请审慎决定"
 #
-## 兑换道具所需的区服和角色信息，目前限定为dnf，之后可能支持更多
-#[account_configs.exchange_role_info]
-#iZone = "11"  # 浙江一区，其他区服id可查阅reference_data/dnf_server_list.js
-#lRoleId = "DNF角色ID"
-#rolename = "DNF角色名"
-#
-## 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
+## 完成《礼包达人》任务所需的手游的名称信息
 #[account_configs.mobile_game_role_info]
-## 手游名称，目前支持下面几种，后续有空可能会添加其他手游
-## 无
-## 剑网3:指尖江湖
-## 和平精英
-## 王者荣耀
-## QQ飞车手游
-## 天天酷跑
-## 其他任意游戏，可参考djc_biz_list.json获取完整列表
+## 手游名称: 无/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
 #game_name = "剑网3:指尖江湖"
-#area = 2  # QQ（仅限zjjh，不同游戏可能定义不同），其他渠道的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v
-#platid = 1  # 安卓（仅限zjjh，不同游戏可能定义不同），其他平台的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v
-#partition = 20001  # 手Q1区（仅限zjjh，不同游戏定义不同），其他区服的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_DATA中对应服务器的v
-#roleid = "手游角色ID"
-#rolename ="手游玩家名"
 #
 ## 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
 #[[account_configs.exchange_items]]

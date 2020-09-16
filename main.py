@@ -83,6 +83,7 @@ def check_update(cfg):
 
 if __name__ == '__main__':
     # 最大化窗口
+    logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     util.maximize_console()
 
     logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))

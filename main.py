@@ -7,21 +7,8 @@ from log import logger
 from update import check_update_on_start
 from version import *
 
-if __name__ == '__main__':
-    util.maximize_console()
 
-    logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
-    logger.info("如果觉得好使的话，可以帮忙宣传下或者扫描二维码【如果愿意请我喝杯奶茶，会很开心呢● ●.png】打赏哦~")
-
-    # 读取配置信息
-    load_config("config.toml", "config.toml.local")
-    cfg = config()
-
-    if len(cfg.account_configs) == 0:
-        logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
-        exit(-1)
-
-    # 展示状态状况
+def show_accounts_status(cfg):
     logger.info("将操作下列账号")
     logger.info("序号\t账号名\t\t启用状态")
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -30,7 +17,8 @@ if __name__ == '__main__':
         logger.info("{}\t{}\t{}".format(idx, account_config.name, status))
     logger.info("")
 
-    # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
+
+def try_join_xinyue_team(cfg):
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
         if not account_config.enable or account_config.run_mode == "pre_run":
@@ -48,7 +36,8 @@ if __name__ == '__main__':
             logger.warning("调试开关打开，不再处理后续账户")
             break
 
-    # 正式进行流程
+
+def run(cfg):
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
         if not account_config.enable:
@@ -65,7 +54,8 @@ if __name__ == '__main__':
             logger.warning("调试开关打开，不再处理后续账户")
             break
 
-    # 每次正式模式运行成功时弹出打赏图片
+
+def show_support_pic(cfg):
     normal_run = False
     for account_config in cfg.account_configs:
         if account_config.run_mode == "normal":
@@ -76,7 +66,8 @@ if __name__ == '__main__':
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")
 
-    # 检查是否需要更新，放到末尾，避免在启动时因网络不能访问github而卡住-。-这个时机就算卡住也没啥大问题了
+
+def check_update(cfg):
     logger.info((
         "\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
@@ -86,9 +77,37 @@ if __name__ == '__main__':
         "若有新版本会自动弹窗提示~\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
     ))
+    check_update_on_start(cfg.common)
+
+
+if __name__ == '__main__':
+    util.maximize_console()
+
+    logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+    logger.info("如果觉得好使的话，可以帮忙宣传下或者扫描二维码【支持一下.png】打赏哦~")
+
+    # 读取配置信息
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    if len(cfg.account_configs) == 0:
+        logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
+        exit(-1)
+
+    # 展示状态状况
+    show_accounts_status(cfg)
+
+    # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
+    try_join_xinyue_team(cfg)
+
+    # 正式进行流程
+    run(cfg)
+
+    # 每次正式模式运行成功时弹出打赏图片
+    show_support_pic(cfg)
 
     # 全部账号操作完成后，检查更新
-    check_update_on_start(cfg.common)
+    check_update(cfg)
 
     # 暂停一下，方便看结果
     os.system("PAUSE")

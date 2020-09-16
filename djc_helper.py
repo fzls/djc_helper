@@ -123,17 +123,30 @@ class DjcHelper:
         # 指引获取uin/skey/角色信息等
         self.check_skey_expired()
 
-        logger.info("uin/skey已经填写完成，请确保已正确填写dnf的区服和手游的区服信息后再进行后续流程")
+        logger.info("uin/skey已经填写完成，请确保已正确填写手游的名称信息，并已在道聚城app中绑定dnf和该手游的角色信息后再进行后续流程")
+
+        # 尝试获取绑定的角色信息
+        self.get_bind_role_list()
+
+        # 打印dnf和手游的绑定角色信息
+        logger.info("已获取道聚城目前绑定的角色信息如下")
+        games = []
+        if "dnf" in self.bizcode_2_bind_role_map:
+            games.append("dnf")
+        if self.cfg.mobile_game_role_info.enabled():
+            games.append(self.get_mobile_game_info().bizCode)
+
+        for bizcode in games:
+            roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
+            logger.info("{game}: ({server}-{name}-{id})".format(
+                game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
+            ))
+
+        # 最后提示
+        logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
+        logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
 
         os.popen("notepad.exe config.toml")
-
-        # 如果已经填写uin/skey后，则查询角色相关信息
-        self.query_all_extra_info()
-
-        logger.info("将上述两行中dnf的想要兑换道具的角色的id和名字复制到config.toml本账号({})的对应位置，并将指尖江湖的角色的id和名字复制到config.toml对应配置".format(self.cfg.name))
-        logger.info("同时请手动登录一次道聚城，在dnf和指尖江湖的活动中心绑定上述为角色。步骤：进入任意活动后，点击任意奖励领取按钮，在弹出来的绑定界面中绑定为上述角色即可")
-        logger.warning("上述操作均完成后，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开config.toml，将本账号({})的run_mode配置的值修改为normal，之后再运行就会进行正常流程了".format(self.cfg.name))
-        logger.info("如果想要自动运行，请使用文本编辑器（如vscode或notepad++，可从网盘下载）打开README.MD来查看相关指引")
 
         os.system("PAUSE")
 

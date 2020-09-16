@@ -62,7 +62,7 @@ def show_support_pic(cfg):
             normal_run = True
             break
     if normal_run:
-        logger.warning("如果感觉本工具对你有所帮助，欢迎扫码打赏支持一下哈~")
+        logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")
 
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     util.maximize_console()
 
     logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
-    logger.info("如果觉得好使的话，可以帮忙宣传下或者扫描二维码【支持一下.png】打赏哦~")
+    logger.info("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

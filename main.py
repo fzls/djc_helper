@@ -1,5 +1,6 @@
 import os
 
+import util
 from config import load_config, config
 from djc_helper import DjcHelper
 from log import logger
@@ -7,6 +8,8 @@ from update import check_update_on_start
 from version import *
 
 if __name__ == '__main__':
+    util.maximize_console()
+
     logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.info("如果觉得好使的话，可以帮忙宣传下或者扫描二维码【如果愿意请我喝杯奶茶，会很开心呢● ●.png】打赏哦~")
 

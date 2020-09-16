@@ -453,6 +453,7 @@ class DjcHelper:
         else:
             lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(self.cfg.exchange_role_info.iZone))
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
+            lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             os.popen("notepad.exe reference_data/dnf_server_list.js")
         lines.append("+" * 40)
         logger.info("\n".join(lines))
@@ -476,7 +477,10 @@ class DjcHelper:
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
             lines.append("\t未查到{} 平台={} 渠道={} 区服={}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色".format(cfg.game_name, cfg.platid, cfg.area, cfg.partition))
-            lines.append("\t上述id的列表可查阅稍后自动打开的server_list_{bizcode}.js，详情参见config.toml的对应注释".format(bizcode=game_info.bizCode))
+            lines.append("\t上述id的列表可查阅稍后自动打开的server_list_{bizName}.js，详情参见config.toml的对应注释".format(bizName=game_info.bizName))
+            lines.append("\t渠道(area)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v".format(bizName=game_info.bizName))
+            lines.append("\t平台(platid)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v".format(bizName=game_info.bizName))
+            lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_DATA中对应区服的v".format(bizName=game_info.bizName))
             self.open_mobile_game_server_list()
         lines.append("+" * 40)
         logger.info("\n".join(lines))
@@ -484,7 +488,7 @@ class DjcHelper:
     def open_mobile_game_server_list(self):
         game_info = self.get_mobile_game_info()
         res = requests.get(self.query_game_server_list.format(bizcode=game_info.bizCode))
-        server_list_file = ".cached/server_list_{bizcode}.js".format(bizcode=game_info.bizCode)
+        server_list_file = "reference_data/server_list_{bizName}.js".format(bizName=game_info.bizName)
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
         os.popen("notepad.exe {}".format(server_list_file))

@@ -40,7 +40,7 @@ class ExchangeRoleInfoConfig(ConfigInterface):
 class MobileGameRoleInfoConfig(ConfigInterface):
     def __init__(self):
         # 手游名称，目前支持下面几种
-        # 无： 不启用完成礼包达人任务
+        # 无
         # 剑网3:指尖江湖
         # 和平精英
         # 王者荣耀
@@ -48,9 +48,9 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         # 天天酷跑
         # 其他任意游戏，可参考djc_biz_list.json获取完整列表
         self.game_name = "剑网3:指尖江湖"
-        self.area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
-        self.platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
-        self.partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
+        self.area = 2  # QQ（仅限zjjh，不同游戏可能定义不同），其他渠道的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v
+        self.platid = 1  # 安卓（仅限zjjh，不同游戏可能定义不同），其他平台的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v
+        self.partition = 20001  # 手Q1区（仅限zjjh，不同游戏定义不同），其他区服的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_DATA中对应服务器的v
         self.roleid = "指尖江湖角色ID"
         self.rolename = "指尖江湖玩家名"
 

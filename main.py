@@ -86,8 +86,8 @@ if __name__ == '__main__':
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     util.maximize_console()
 
-    logger.info("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
-    logger.info("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
+    logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+    logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

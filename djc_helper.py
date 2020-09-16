@@ -232,6 +232,12 @@ class DjcHelper:
                 subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
                 os.system("PAUSE")
                 exit(-1)
+            role_info = self.bizcode_2_bind_role_map[bizcode]
+            if not role_info.is_mobile_game():
+                logger.warning("【{}】是端游，不是手游。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
+                subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
+                os.system("PAUSE")
+                exit(-1)
 
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个

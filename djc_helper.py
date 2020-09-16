@@ -2,6 +2,7 @@ import platform
 import random
 import string
 import webbrowser
+import subprocess
 
 import pyperclip
 import win32api
@@ -146,7 +147,7 @@ class DjcHelper:
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        os.system("npp_portable/notepad++.exe -n53 {}".format(cfgFile))
+        subprocess.Popen("npp_portable/notepad++.exe -n53 {}".format(cfgFile))
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面
@@ -227,7 +228,7 @@ class DjcHelper:
             bizcode = self.get_mobile_game_info().bizCode
             if bizcode not in self.bizcode_2_bind_role_map:
                 logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
-                os.popen("npp_portable/notepad++.exe -n63 config.toml")
+                subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
                 os.system("PAUSE")
                 exit(-1)
 
@@ -278,7 +279,7 @@ class DjcHelper:
         logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
         logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
 
-        os.popen("npp_portable/notepad++.exe -n39 config.toml")
+        subprocess.Popen("npp_portable/notepad++.exe -n39 config.toml")
 
         os.system("PAUSE")
 
@@ -468,7 +469,7 @@ class DjcHelper:
             lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(roleinfo.serviceID))
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
             lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-            os.popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
+            subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
         lines.append("+" * 40)
         logger.info("\n".join(lines))
 
@@ -508,7 +509,7 @@ class DjcHelper:
         server_list_file = "reference_data/server_list_{bizName}.js".format(bizName=game_info.bizName)
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
-        os.popen("npp_portable/notepad++.exe {}".format(server_list_file))
+        subprocess.Popen("npp_portable/notepad++.exe {}".format(server_list_file))
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.urls.show_exchange_item_list)

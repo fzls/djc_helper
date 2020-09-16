@@ -34,7 +34,7 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         return self.game_name not in ["无", "none"]
 
     def use_any_binded_mobile_game(self):
-        return self.game_name not in ["任意手游"]
+        return self.game_name in ["任意手游"]
 
 
 class ExchangeItemConfig(ConfigInterface):

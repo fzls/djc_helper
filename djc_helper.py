@@ -625,7 +625,14 @@ class DjcHelper:
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
         delta = new_info.score - old_info.score
-        logger.warning("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）\n".format(self.cfg.name, delta, old_info.score, new_info.score))
+        logger.warning("账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）".format(self.cfg.name, delta, old_info.score, new_info.score))
+
+        # 查询下心悦组队进度
+        teaminfo = self.query_xinyue_teaminfo(print_res=False)
+        if teaminfo.id != "":
+            logger.warning("账号 {} 当前队伍进度为 {}/20".format(self.cfg.name, teaminfo.score))
+
+        logger.info("\n")
 
     def try_join_fixed_xinyue_team(self):
         try:
@@ -682,8 +689,8 @@ class DjcHelper:
         self.save_teamid(fixed_team.id, teaminfo.id)
         logger.info("创建小队并保存到本地成功，队伍信息={}".format(teaminfo))
 
-    def query_xinyue_teaminfo(self):
-        data = self.xinyue_op("查询我的心悦队伍信息", "513818")
+    def query_xinyue_teaminfo(self, print_res=True):
+        data = self.xinyue_op("查询我的心悦队伍信息", "513818", print_res=print_res)
         jdata = data["modRet"]["jData"]
 
         return self.parse_teaminfo(jdata)
@@ -770,7 +777,7 @@ class DjcHelper:
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
     def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
-        return self.post(ctx, self.urls.xinyue, self.xinyue_flow_data(iFlowId, package_id, lqlevel, teamid), sMiloTag=self.make_s_milo_tag(iFlowId))
+        return self.post(ctx, self.urls.xinyue, self.xinyue_flow_data(iFlowId, package_id, lqlevel, teamid), sMiloTag=self.make_s_milo_tag(iFlowId), print_res=print_res)
 
     def xinyue_flow_data(self, iFlowId, package_id="", lqlevel=1, teamid=""):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123

@@ -110,7 +110,7 @@ rolename = "DNF角色名"
 # 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
 [account_configs.mobile_game_role_info]
 # 手游名称，目前支持下面几种，后续有空可能会添加其他手游
-# 无： 不启用完成礼包达人任务
+# 无
 # 剑网3:指尖江湖
 # 和平精英
 # 王者荣耀
@@ -118,9 +118,9 @@ rolename = "DNF角色名"
 # 天天酷跑
 # 其他任意游戏，可参考djc_biz_list.json获取完整列表
 game_name = "剑网3:指尖江湖"
-area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
-platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
-partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
+area = 2  # QQ（仅限zjjh，不同游戏可能定义不同），其他渠道的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v
+platid = 1  # 安卓（仅限zjjh，不同游戏可能定义不同），其他平台的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v
+partition = 20001  # 手Q1区（仅限zjjh，不同游戏定义不同），其他区服的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_DATA中对应服务器的v
 roleid = "手游角色ID"
 rolename ="手游玩家名"
 
@@ -424,7 +424,7 @@ count = 1
 ## 完成《礼包达人》任务所需的手游的区服和角色信息，目前限定为剑网3:指尖江湖，之后可能支持更多
 #[account_configs.mobile_game_role_info]
 ## 手游名称，目前支持下面几种，后续有空可能会添加其他手游
-## 无： 不启用完成礼包达人任务
+## 无
 ## 剑网3:指尖江湖
 ## 和平精英
 ## 王者荣耀
@@ -432,9 +432,9 @@ count = 1
 ## 天天酷跑
 ## 其他任意游戏，可参考djc_biz_list.json获取完整列表
 #game_name = "剑网3:指尖江湖"
-#area = 2  # QQ，其他渠道的id可查阅reference_data/jx3_server_list.js的 STD_CHANNEL_DATA中对应渠道的v
-#platid = 1  # 安卓，其他系统的id可查阅reference_data/jx3_server_list.js的 STD_SYSTEM_DATA中对应系统的v
-#partition = 20001  # 手Q1区，其他区服的id可查阅reference_data/jx3_server_list.js的 STD_DATA中对应服务器的v
+#area = 2  # QQ（仅限zjjh，不同游戏可能定义不同），其他渠道的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v
+#platid = 1  # 安卓（仅限zjjh，不同游戏可能定义不同），其他平台的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v
+#partition = 20001  # 手Q1区（仅限zjjh，不同游戏定义不同），其他区服的id可运行程序在自动打开的reference_data/server_list_{游戏名称}.js或手动打开这个文件， 查看 STD_DATA中对应服务器的v
 #roleid = "手游角色ID"
 #rolename ="手游玩家名"
 #

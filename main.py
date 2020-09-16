@@ -25,6 +25,7 @@ def try_join_xinyue_team(cfg):
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
+        logger.info("")
         logger.info("------------尝试为第{}个账户({})加入心悦固定队------------\n".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)

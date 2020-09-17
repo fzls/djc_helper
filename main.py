@@ -8,8 +8,8 @@ from update import check_update_on_start
 from version import *
 
 
-def show_accounts_status(cfg):
-    logger.info("将操作下列账号")
+def show_accounts_status(cfg, ctx):
+    logger.warning(ctx)
     head_fmt = "{:^2} {:^10} {:^6} {:^4} {:^4} {:^2} {:^4}"
     row_fmt = "{:^4} {:^9} {:^8} {:^8} {:^12} {:^6} {:^8}"
     logger.info(head_fmt.format("序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"))
@@ -114,14 +114,15 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    # 展示状态状况
-    show_accounts_status(cfg)
+    show_accounts_status(cfg, "启动时展示账号概览")
 
     # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
     try_join_xinyue_team(cfg)
 
     # 正式进行流程
     run(cfg)
+
+    show_accounts_status(cfg, "运行完毕展示账号概览")
 
     # 每次正式模式运行成功时弹出打赏图片
     show_support_pic(cfg)

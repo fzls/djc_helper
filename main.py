@@ -81,7 +81,7 @@ def check_update(cfg):
     check_update_on_start(cfg.common)
 
 
-if __name__ == '__main__':
+def main():
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     util.maximize_console()
@@ -112,5 +112,12 @@ if __name__ == '__main__':
     # 全部账号操作完成后，检查更新
     check_update(cfg)
 
-    # 暂停一下，方便看结果
-    os.system("PAUSE")
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+        logger.exception("运行过程中出现未捕获的异常，请加群553925117反馈或自行解决", exc_info=e)
+    finally:
+        # 暂停一下，方便看结果
+        os.system("PAUSE")

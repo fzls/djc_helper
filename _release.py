@@ -50,6 +50,7 @@ for file in os.listdir('.'):
         continue
     files_to_copy.append(file)
 files_to_copy.extend([
+    "config.toml.example",
     "DNF蚊子腿小助手.exe",
     "bandizip_portable",
     "reference_data",

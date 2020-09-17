@@ -320,7 +320,8 @@ class DjcHelper:
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         # ------------------------------初始工作------------------------------
-        old_allin = int(self.query_balance("1. 操作前：查询余额")["data"]['allin'])
+        old_info = self.query_balance("1. 操作前：查询余额")["data"]
+        old_allin, old_balance = int(old_info['allin']), int(old_info['balance'])
         # self.query_money_flow("1.1 操作前：查一遍流水")
 
         # ------------------------------核心逻辑------------------------------
@@ -334,11 +335,12 @@ class DjcHelper:
         self.take_task_awards_and_exchange_items()
 
         # ------------------------------清理工作------------------------------
-        new_allin = int(self.query_balance("5. 操作全部完成后：查询余额")["data"]['allin'])
+        new_info = self.query_balance("5. 操作全部完成后：查询余额")["data"]
+        new_allin, new_balance = int(new_info['allin']), int(new_info['balance'])
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
 
         delta = new_allin - old_allin
-        logger.warning("账号 {} 本次道聚城操作共获得 {} 个豆子（ {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin))
+        logger.warning("账号 {} 本次道聚城操作共获得 {} 个豆子（历史总获取： {} -> {}  余额： {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin, old_balance, new_balance))
 
     def query_balance(self, ctx, print_res=True):
         return self.get(ctx, self.urls.balance, print_res=print_res)

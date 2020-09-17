@@ -10,11 +10,28 @@ from version import *
 
 def show_accounts_status(cfg):
     logger.info("将操作下列账号")
-    logger.info("序号\t账号名\t\t启用状态")
+    head_fmt = "{:^2} {:^10} {:^6} {:^4} {:^4} {:^2} {:^4}"
+    row_fmt = "{:^4} {:^9} {:^8} {:^8} {:^12} {:^6} {:^8}"
+    logger.info(head_fmt.format("序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+
         status = "启用" if account_config.enable else "未启用"
-        logger.info("{}\t{}\t{}".format(idx, account_config.name, status))
+
+        djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
+        djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
+
+        xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
+        teaminfo = djcHelper.query_xinyue_teaminfo(print_res=False)
+        team_score = "无队伍"
+        if teaminfo.id != "":
+            team_score = "{}/20".format(teaminfo.score)
+
+        logger.info(row_fmt.format(
+            str(idx), account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score))
     logger.info("")
 
 

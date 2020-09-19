@@ -15,7 +15,7 @@ def check_all_skey(cfg):
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
-        logger.info("------------检查第{}个账户({})的skey是否过期------------\n".format(idx, account_config.name))
+        logger.info("------------检查第{}个账户({})的skey是否过期------------".format(idx, account_config.name))
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
     logger.info("")

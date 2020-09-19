@@ -8,6 +8,18 @@ from update import check_update_on_start
 from version import *
 
 
+def check_all_skey(cfg):
+    for _idx, account_config in enumerate(cfg.account_configs):
+        idx = _idx + 1
+        if not account_config.enable or account_config.run_mode == "pre_run":
+            # 未启用的账户或者预运行阶段的账户不走该流程
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+    logger.info("")
+
+
 def show_accounts_status(cfg, ctx):
     logger.warning(ctx)
     head_fmt = "{:^2} {:^10} {:^6} {:^4} {:^4} {:^2} {:^4}"
@@ -15,6 +27,9 @@ def show_accounts_status(cfg, ctx):
     logger.info(head_fmt.format("序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
+        if not account_config.enable or account_config.run_mode == "pre_run":
+            # 未启用的账户或者预运行阶段的账户不走该流程
+            continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
@@ -147,6 +162,8 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
+
+    check_all_skey(cfg)
 
     show_accounts_status(cfg, "启动时展示账号概览")
 

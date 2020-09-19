@@ -113,6 +113,8 @@ class DjcHelper:
             return
 
         # 更新skey
+        logger.info("")
+        logger.warning("账号({})的skey已过期，即将尝试更新skey".format(self.cfg.name))
         self.update_skey(query_data)
 
     def update_skey(self, query_data):

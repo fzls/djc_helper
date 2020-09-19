@@ -1,7 +1,7 @@
 import os
 
 import util
-from config import load_config, config
+from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from log import logger
 from update import check_update_on_start
@@ -67,6 +67,40 @@ def run(cfg):
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()
+
+        if cfg.common._debug_run_first_only:
+            logger.warning("调试开关打开，不再处理后续账户")
+            break
+
+    # re: 把遍历账号的逻辑抽象为foreach_member函数
+    # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
+    for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
+        if not account_config.enable:
+            logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
+            continue
+
+        logger.info("")
+        logger.info("------------开始尝试为第{}个账户({})领取心悦组队奖励------------\n".format(idx, account_config.name))
+
+        if len(account_config.xinyue_operations) == 0:
+            logger.warning("未设置心悦相关操作信息，将跳过")
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        xinyue_info = djcHelper.query_xinyue_info("获取心悦信息", print_res=False)
+
+        op_cfgs = [("513818", "查询小队信息"), ("514385", "领取组队奖励")]
+
+        xinyue_operations = []
+        for opcfg in op_cfgs:
+            op = XinYueOperationConfig()
+            op.iFlowId, op.sFlowName = opcfg
+            op.count = 1
+            xinyue_operations.append(op)
+
+        for op in xinyue_operations:
+            djcHelper.do_xinyue_op(xinyue_info.xytype, op)
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

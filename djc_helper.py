@@ -598,27 +598,8 @@ class DjcHelper:
         xinyue_operations.extend(self.cfg.xinyue_operations)
 
         # 进行相应的心悦操作
-        retryCfg = self.common_cfg.retry
-        now = datetime.datetime.now()
-        current_hour = now.hour
-        required_hour = self.common_cfg.xinyue.submit_task_after
         for op in xinyue_operations:
-            for i in range(op.count):
-                ctx = "6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count)
-                if current_hour < required_hour:
-                    logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(now, required_hour, ctx))
-                    continue
-
-                for try_index in range(retryCfg.max_retry_count):
-                    res = self.xinyue_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=old_info.xytype)
-                    # if int(res.get('ret', '0')) == -9905:
-                    #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
-                    #     time.sleep(retryCfg.retry_wait_time)
-                    #     continue
-
-                    logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, retryCfg.request_wait_time))
-                    time.sleep(retryCfg.request_wait_time)
-                    break
+            self.do_xinyue_op(old_info.xytype, op)
 
         # 查询道具信息
         new_itemInfo = self.query_xinyue_items("6.3.0 操作完成后查询各种道具信息")
@@ -637,6 +618,32 @@ class DjcHelper:
             logger.warning("账号 {} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能".format(self.cfg.name))
 
         logger.info("\n")
+
+    def do_xinyue_op(self, xytype, op):
+        """
+        执行具体的心悦操作
+        :type op: XinYueOperationConfig
+        """
+        retryCfg = self.common_cfg.retry
+        now = datetime.datetime.now()
+        current_hour = now.hour
+        required_hour = self.common_cfg.xinyue.submit_task_after
+        for i in range(op.count):
+            ctx = "6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count)
+            if current_hour < required_hour:
+                logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(now, required_hour, ctx))
+                continue
+
+            for try_index in range(retryCfg.max_retry_count):
+                res = self.xinyue_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
+                # if int(res.get('ret', '0')) == -9905:
+                #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
+                #     time.sleep(retryCfg.retry_wait_time)
+                #     continue
+
+                logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, retryCfg.request_wait_time))
+                time.sleep(retryCfg.request_wait_time)
+                break
 
     def try_join_fixed_xinyue_team(self):
         try:

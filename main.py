@@ -87,7 +87,6 @@ def run(cfg):
             logger.warning("调试开关打开，不再处理后续账户")
             break
 
-    # re: 把遍历账号的逻辑抽象为foreach_member函数
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1

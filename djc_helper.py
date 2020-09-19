@@ -342,7 +342,7 @@ class DjcHelper:
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
 
         delta = new_allin - old_allin
-        logger.warning("账号 {} 本次道聚城操作共获得 {} 个豆子（历史总获取： {} -> {}  余额： {} -> {} ）\n".format(self.cfg.name, delta, old_allin, new_allin, old_balance, new_balance))
+        logger.warning("账号 {} 本次道聚城操作共获得 {} 个豆子（历史总获取： {} -> {}  余额： {} -> {} ）".format(self.cfg.name, delta, old_allin, new_allin, old_balance, new_balance))
 
     def query_balance(self, ctx, print_res=True):
         return self.get(ctx, self.urls.balance, print_res=print_res)
@@ -618,8 +618,6 @@ class DjcHelper:
             logger.warning("账号 {} 当前队伍进度为 {}/20".format(self.cfg.name, teaminfo.score))
         else:
             logger.warning("账号 {} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能".format(self.cfg.name))
-
-        logger.info("\n")
 
     def do_xinyue_op(self, xytype, op):
         """

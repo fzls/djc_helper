@@ -297,16 +297,6 @@ count = 1
 #sFlowName = "创建小队"
 #count = 1
 
-[[account_configs.xinyue_operations]]
-iFlowId = "513818"
-sFlowName = "查询小队信息"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "514385"
-sFlowName = "领取组队奖励"
-count = 1
-
 # ++++++++++兑换道具++++++++++++
 # 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换
 #[[account_configs.xinyue_operations]]
@@ -592,16 +582,6 @@ count = 1
 ##iFlowId = "513512"
 ##sFlowName = "创建小队"
 ##count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513818"
-#sFlowName = "查询小队信息"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "514385"
-#sFlowName = "领取组队奖励"
-#count = 1
 #
 ## ++++++++++兑换道具++++++++++++
 ## 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换

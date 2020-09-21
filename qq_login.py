@@ -79,7 +79,7 @@ class QQLogin():
             # 先判断便携版chrome是否已解压
             if not os.path.isdir(self.chrome_binary_directory):
                 logger.info("自动解压便携版chrome到当前目录")
-                subprocess.call('{} x -target:auto {}'.format(self.bandizip_executable_path, self.chrome_binary_7z))
+                subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z])
 
             # 然后使用本地的chrome来初始化driver对象
             options.binary_location = self.chrome_binary_location

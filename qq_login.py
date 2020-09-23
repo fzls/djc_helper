@@ -110,7 +110,8 @@ class QQLogin():
             # 输入密码
             self.driver.find_element(By.ID, "p").send_keys(password)
             # 发送登录请求
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.element_to_be_clickable((By.ID, "login_button")))
+            logger.info("等待一秒，确保登录键可以点击")
+            time.sleep(1)
             self.driver.find_element(By.ID, "login_button").click()
 
         return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, is_xinyue=is_xinyue)

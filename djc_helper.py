@@ -8,6 +8,7 @@ import pyperclip
 import win32api
 
 import json_parser
+from ark_lottery import ArkLottery
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -321,6 +322,9 @@ class DjcHelper:
 
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
+
+        # QQ空间抽卡
+        self.ark_lottery()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -845,6 +849,22 @@ class DjcHelper:
         except Exception as e:
             logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
+    # --------------------------------------------QQ空间抽卡--------------------------------------------
+    def ark_lottery(self):
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
+            return
+
+        # https://act.qzone.qq.com/vip/2019/xcardv3?_wv=4&zz=4&verifyid=qqvipdnf9&gameId=10014&zz=4&toOpenid=&serverName=%E4%B8%8A%E6%B5%B7%E4%B8%80%E5%8C%BA&toUin=286058381&cGameId=1006&serverId=3&gameName=DNF&areaName=%E4%B8%8A%E6%B5%B7&nickname=%E3%80%80+++_%E6%9D%B0%21%3F&roleLevel=100&accType=wx&gameId=10014&roleId=76707780&uniqueRoleId=3002361072&openid=&userId=561625054&token=TAqTECD6&isMainRole=1&subGameId=10014&areaId=23&verifyid=qqvipdnf9&roleJob=%E6%9E%81%E8%AF%A3%C2%B7%E5%89%91%E5%BD%B1&roleName=%E6%9C%AB%E6%B4%9B%E3%81%AE&_wv=4&plg_auth=1&from=arklottery
+        # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
+        ql = QQLogin(self.common_cfg)
+        lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        al = ArkLottery(lr, roleinfo)
+        al.ark_lottery()
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -897,23 +917,23 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    for idx, account_config in enumerate(cfg.account_configs):
-        idx += 1
-        logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
+    idx = 2
+    account_config = cfg.account_configs[idx]
 
-        djcHelper = DjcHelper(account_config, cfg.common)
-        # djcHelper.run()
-        djcHelper.check_skey_expired()
-        # djcHelper.query_all_extra_info()
-        # djcHelper.exchange_items()
-        # djcHelper.xinyue_operations()
-        # djcHelper.try_join_fixed_xinyue_team()
-        # djcHelper.get_heizuan_gift()
-        # djcHelper.get_credit_xinyue_gift()
-        # djcHelper.query_mobile_game_rolelist()
-        # djcHelper.complete_tasks()
-        djcHelper.get_bind_role_list()
+    idx += 1
+    logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
-        if cfg.common._debug_run_first_only or True:
-            logger.warning("调试开关打开，不再处理后续账户")
-            break
+    djcHelper = DjcHelper(account_config, cfg.common)
+    # djcHelper.run()
+    djcHelper.check_skey_expired()
+    # djcHelper.query_all_extra_info()
+    # djcHelper.exchange_items()
+    # djcHelper.xinyue_operations()
+    # djcHelper.try_join_fixed_xinyue_team()
+    # djcHelper.get_heizuan_gift()
+    # djcHelper.get_credit_xinyue_gift()
+    # djcHelper.query_mobile_game_rolelist()
+    # djcHelper.complete_tasks()
+    djcHelper.get_bind_role_list()
+    # djcHelper.xinyue_guoqing()
+    djcHelper.ark_lottery()

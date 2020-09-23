@@ -810,9 +810,22 @@ class DjcHelper:
     # 心悦国庆活动
     def xinyue_guoqing(self):
         # https://xinyue.qq.com/act/a20200910dnf/index.html
+        if not self.cfg.get_xinyue_guoqing:
+            logger.warning("未启用领取心悦国庆活动功能，将跳过")
+            return
+
         actId = self.urls.xinyue_iActivityId_guoqing
+
+        # 验证是否回流顺带检查是否未绑定大区
         self.xinyue_op("验证幸运用户", actId, "700301")
-        self.xinyue_op("幸运勇士", actId, "700288")
+        res = self.xinyue_op("幸运勇士", actId, "700288")
+        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-0924025126-AZmFbj-329456-700288", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
+        if int(res["ret"]) == 99998:
+            webbrowser.open("https://xinyue.qq.com/act/a20200910dnf/index.html")
+            msg = "未绑定角色，请前往心悦国庆活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
         self.xinyue_op("特邀充值礼包", actId, "700433")
         self.xinyue_op("V1充值礼包", actId, "700452")
         self.xinyue_op("V2充值礼包", actId, "700454")

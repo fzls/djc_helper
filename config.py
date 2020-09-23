@@ -19,6 +19,8 @@ class AccountInfoConfig(ConfigInterface):
         # 手动登录需要设置的信息
         self.uin = "o123456789"
         self.skey = "@a1b2c3d4e"
+        # QQ空间业务群的p_skey，目前用于抽卡活动
+        self.qzone_p_skey = "6DqEe0eE2KLV6oYFGx2iYZ9b3UtQuwNitJiPGQ52b*w_"
 
         # 自动登录需要设置的信息
         self.account = "123456789"

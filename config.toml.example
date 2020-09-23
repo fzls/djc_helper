@@ -99,6 +99,8 @@ get_xinyue_guoqing = true
 # 手动登录需要设置的信息
 uin = "o123456789"
 skey = "@a1b2c3d4e"
+# QQ空间业务群的p_skey，目前用于抽卡活动
+qzone_p_skey = "666666eE2KLV6oYFGx2iYZ9b3UtQuwNitJiPGQ52b*w_"
 
 # 自动登录需要设置的信息
 account = "123456789"
@@ -414,6 +416,8 @@ lottery_using_cards_count = 0
 ## 手动登录需要设置的信息
 #uin = "o123456789"
 #skey = "@a1b2c3d4e"
+## QQ空间业务群的p_skey，目前用于抽卡活动
+#qzone_p_skey = "666666eE2KLV6oYFGx2iYZ9b3UtQuwNitJiPGQ52b*w_"
 #
 ## 自动登录需要设置的信息
 #account = "123456789"

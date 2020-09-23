@@ -12,7 +12,6 @@ jsonp_callback_flag = "jsonp_callback"
 
 class Network:
     def __init__(self, sDeviceID, uin, skey, common_cfg):
-        self.PRETTY_JSON = False
         self.common_cfg = common_cfg  # type: CommonConfig
 
         self.base_headers = {
@@ -42,14 +41,14 @@ class Network:
             return requests.get(url, headers=self.get_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
-        return self._common(ctx, res, pretty, print_res, is_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp)
 
     def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False):
         def request_fn():
             return requests.post(url, data=data, headers=self.post_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
-        return self._common(ctx, res, pretty, print_res, is_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp)
 
     def try_request(self, request_fn):
         retryCfg = self.common_cfg.retry
@@ -63,48 +62,50 @@ class Network:
 
         logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
 
-    def _common(self, ctx, res, pretty=False, print_res=True, is_jsonp=False):
-        res.encoding = 'utf-8'
+def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
+    res.encoding = 'utf-8'
 
-        if is_jsonp:
-            data = self.jsonp2json(res.text)
-        else:
-            data = res.json()
-        if print_res:
-            success = True
-            if "ret" in data:
-                success = int(data["ret"]) == 0
+    if is_jsonp:
+        data = jsonp2json(res.text)
+    else:
+        data = res.json()
+    if print_res:
+        success = True
+        if "ret" in data:
+            success = int(data["ret"]) == 0
+        elif "code" in data:
+            success = int(data["code"]) == 0
 
-            logFunc = logger.info
-            if not success:
-                logFunc = logger.error
-            logFunc("{}\t{}".format(ctx, self.pretty_json(data, pretty)))
-        return data
+        logFunc = logger.info
+        if not success:
+            logFunc = logger.error
+        logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+    return data
 
-    def jsonp2json(self, jsonpStr):
-        left_idx = jsonpStr.index("{")
-        right_idx = jsonpStr.index("}")
-        jsonpStr = jsonpStr[left_idx + 1:right_idx]
+def jsonp2json(jsonpStr):
+    left_idx = jsonpStr.index("{")
+    right_idx = jsonpStr.index("}")
+    jsonpStr = jsonpStr[left_idx + 1:right_idx]
 
-        jsonRes = {}
-        for kv in jsonpStr.split(","):
-            try:
-                k, v = kv.strip().split(":")
-                if v[0] == "'":
-                    v = v[1:-1]  # 去除前后的''
-                jsonRes[k] = unquote_plus(v)
-            except:
-                pass
+    jsonRes = {}
+    for kv in jsonpStr.split(","):
+        try:
+            k, v = kv.strip().split(":")
+            if v[0] == "'":
+                v = v[1:-1]  # 去除前后的''
+            jsonRes[k] = unquote_plus(v)
+        except:
+            pass
 
-        return jsonRes
+    return jsonRes
 
-    def pretty_json(self, data, pretty=False, need_unquote=True):
-        if self.PRETTY_JSON or pretty:
-            jsonStr = json.dumps(data, ensure_ascii=False, indent=2)
-        else:
-            jsonStr = json.dumps(data, ensure_ascii=False)
+def pretty_json(data, pretty=False, need_unquote=True):
+    if pretty:
+        jsonStr = json.dumps(data, ensure_ascii=False, indent=2)
+    else:
+        jsonStr = json.dumps(data, ensure_ascii=False)
 
-        if need_unquote:
-            jsonStr = unquote_plus(jsonStr)
+    if need_unquote:
+        jsonStr = unquote_plus(jsonStr)
 
-        return jsonStr
+    return jsonStr

@@ -44,8 +44,8 @@ class Urls:
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/dnf_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
         # 心悦相关接口的入口
-        self.xinyue_iActivityId_battle_ground = "166962" # DNF地下城与勇士心悦特权专区
-        self.xinyue_iActivityId_guoqing = "329456" # 心悦国庆活动
+        self.xinyue_iActivityId_battle_ground = "166962"  # DNF地下城与勇士心悦特权专区
+        self.xinyue_iActivityId_guoqing = "329456"  # 心悦国庆活动
         # 需要手动额外传入参数：sMiloTag
         self.xinyue = "https://act.game.qq.com/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType=tgclub&iActivityId={iActivityId}&sServiceDepartment=xinyue&isXhrPost=true"
         # 需要手动额外传入参数：iFlowId/package_id/lqlevel/teamid
@@ -59,3 +59,8 @@ class Urls:
 
         # 腾讯游戏信用，需要手动额外传入参数：gift_group
         self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"
+
+        # 抽卡相关
+        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9"
+        self.ark_lottery = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"
+        self.ark_lottery_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}"

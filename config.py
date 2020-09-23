@@ -95,6 +95,8 @@ class AccountConfig(ConfigInterface):
         self.login_mode = "by_hand"
         # 是否领取每月黑钻等级礼包
         self.get_heizuan_gift = True
+        # 是否领取心悦国庆活动
+        self.get_xinyue_guoqing = True
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 完成《礼包达人》任务所需的手游的名称信息

@@ -47,6 +47,9 @@ login_mode = "qr_login"
 # 是否领取每月黑钻等级礼包
 get_heizuan_gift = true
 
+# 是否领取心悦国庆活动
+get_xinyue_guoqing = true
+
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
 # 手动登录需要设置的信息
@@ -360,6 +363,9 @@ lottery_using_cards_count = 0
 #
 ## 是否领取每月黑钻等级礼包
 #get_heizuan_gift = true
+#
+## 是否领取心悦国庆活动
+#get_xinyue_guoqing = true
 #
 ## 腾讯系网页登录通用账号凭据与token
 #[account_configs.account_info]

@@ -1,7 +1,6 @@
 import re
 import uuid
 from typing import List
-from urllib.parse import quote
 
 import toml
 
@@ -54,6 +53,31 @@ class XinYueOperationConfig(ConfigInterface):
         self.count = 1
 
 
+class ArkLotteryAwardConfig(ConfigInterface):
+    def __init__(self):
+        self.name = "勇士归来礼包"
+        self.ruleid = 25947
+        self.count = 1
+
+
+class ArkLotteryConfig(ConfigInterface):
+    def __init__(self):
+        # 尝试使用卡牌抽奖的次数
+        self.lottery_using_cards_count = 0
+        # 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
+        self.take_awards = []  # type: List[ArkLotteryAwardConfig]
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'take_awards' in raw_config:
+            self.take_awards = []
+            for cfg in raw_config["take_awards"]:
+                ei = ArkLotteryAwardConfig()
+                ei.auto_update_config(cfg)
+                self.take_awards.append(ei)
+
+
 class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
@@ -79,6 +103,8 @@ class AccountConfig(ConfigInterface):
         self.exchange_items = []  # type: List[ExchangeItemConfig]
         # 心悦相关操作信息
         self.xinyue_operations = []  # type: List[XinYueOperationConfig]
+        # 抽卡相关配置
+        self.ark_lottery = ArkLotteryConfig()
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

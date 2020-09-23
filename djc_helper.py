@@ -862,7 +862,7 @@ class DjcHelper:
         lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
-        al = ArkLottery(lr, roleinfo)
+        al = ArkLottery(self.cfg, lr, roleinfo)
         al.ark_lottery()
 
     # --------------------------------------------辅助函数--------------------------------------------

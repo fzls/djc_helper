@@ -16,13 +16,13 @@ from config import *
 from data_struct import Object
 from log import logger
 
-
-class LoginResult(Object):
-    def __init__(self, uin="", skey="", openid=""):
+class LoginResult(ConfigInterface):
+    def __init__(self, uin="", skey="", openid="", p_skey=""):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
         self.skey = skey
+        self.p_skey = p_skey
         # 使用心悦活动界面得到
         self.openid = openid
 
@@ -92,7 +92,7 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
-    def login(self, account, password, is_xinyue=False):
+    def login(self, account, password, is_xinyue=False, is_qzone=False):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
@@ -114,23 +114,25 @@ class QQLogin():
             time.sleep(1)
             self.driver.find_element(By.ID, "login_button").click()
 
-        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, is_xinyue=is_xinyue)
+        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, is_xinyue=is_xinyue, is_qzone=is_qzone)
 
-    def qr_login(self, is_xinyue=False):
+    def qr_login(self, is_xinyue=False, is_qzone=False):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        return self._login("扫码登录", is_xinyue=is_xinyue)
+        return self._login("扫码登录", is_xinyue=is_xinyue, is_qzone=is_qzone)
 
-    def _login(self, login_type, login_action_fn=None, need_human_operate=True, is_xinyue=False):
+    def _login(self, login_type, login_action_fn=None, need_human_operate=True, is_xinyue=False, is_qzone=False):
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
             try:
                 login_fn = self._login_real
                 if is_xinyue:
                     login_fn = self._login_xinyue_real
+                elif is_qzone:
+                    login_fn = self._login_qzone
 
                 return login_fn(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
             except Exception as e:
@@ -168,7 +170,40 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"))
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
+
+    def _login_qzone(self, login_type, login_action_fn=None, need_human_operate=True):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            logger.info("打开活动界面")
+            self.driver.get("https://act.qzone.qq.com/")
+
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
+
+            logger.info("等待登录按钮#dologin出来，确保加载完成")
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.LINK_TEXT, "[登录]")))
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.LINK_TEXT, "[登录]").click()
+
+            logger.info("等待#loginIframe显示出来并切换")
+            time.sleep(1)
+            self.driver.switch_to.frame(0)
+
+        def assert_login_finished_fn():
+            logger.info("请等待【欢迎你，】的文字可见，则说明已经登录完成了...")
+            self.driver.get("https://act.qzone.qq.com/")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".tit_text"), "欢迎你，"))
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+
+        # 从cookie中获取uin和skey
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
 
     def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -256,6 +291,10 @@ class QQLogin():
                 return cookie['value']
         return ''
 
+    def print_cookie(self):
+        for cookie in self.cookies:
+            print("{:20s} {:20s} {}".format(cookie['domain'], cookie['name'], cookie['value']))
+
 
 if __name__ == '__main__':
     # 读取配置信息
@@ -264,6 +303,9 @@ if __name__ == '__main__':
 
     ql = QQLogin(cfg.common)
     is_xinyue = False
-    # lr = ql.login(cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password, is_xinyue)
-    lr = ql.qr_login()
+    is_qzone = True
+    acc = cfg.account_configs[5].account_info
+    lr = ql.login(acc.account, acc.password, is_xinyue, is_qzone)
+    # lr = ql.qr_login()
     print(lr)
+    ql.print_cookie()

@@ -838,9 +838,12 @@ class DjcHelper:
     # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
         self.get("每月信用星级礼包", self.urls.credit_gift)
-        # https://gamecredit.qq.com/static/web/index.html#/gift-pack
-        self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
-        self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
+        try:
+            # https://gamecredit.qq.com/static/web/index.html#/gift-pack
+            self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
+            self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
+        except Exception as e:
+            logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):

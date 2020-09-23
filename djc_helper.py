@@ -311,7 +311,10 @@ class DjcHelper:
         self.djc_operations()
 
         # 执行心悦相关操作
+        # DNF地下城与勇士心悦特权专区
         self.xinyue_operations()
+        # 心悦国庆活动
+        self.xinyue_guoqing()
 
         # 黑钻礼包
         self.get_heizuan_gift()
@@ -554,6 +557,7 @@ class DjcHelper:
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
     def xinyue_operations(self):
         """
+        https://xinyue.qq.com/act/a20181101rights/index.html
         根据配置进行心悦相关操作
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
@@ -635,7 +639,7 @@ class DjcHelper:
                 continue
 
             for try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
+                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
                 # if int(res.get('ret', '0')) == -9905:
                 #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
                 #     time.sleep(retryCfg.retry_wait_time)
@@ -701,21 +705,21 @@ class DjcHelper:
         logger.info("创建小队并保存到本地成功，队伍信息={}".format(teaminfo))
 
     def query_xinyue_teaminfo(self, print_res=True):
-        data = self.xinyue_op("查询我的心悦队伍信息", "513818", print_res=print_res)
+        data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "513818", print_res=print_res)
         jdata = data["modRet"]["jData"]
 
         return self.parse_teaminfo(jdata)
 
     def query_xinyue_teaminfo_by_id(self, remote_teamid):
         # 513919	传入小队ID查询队伍信息
-        data = self.xinyue_op("查询特定id的心悦队伍信息", "513919", teamid=remote_teamid)
+        data = self.xinyue_battle_ground_op("查询特定id的心悦队伍信息", "513919", teamid=remote_teamid)
         jdata = data["modRet"]["jData"]
         teaminfo = self.parse_teaminfo(jdata)
         return teaminfo
 
     def join_xinyue_team(self, remote_teamid):
         # 513803	加入小队
-        data = self.xinyue_op("尝试加入小队", "513803", teamid=remote_teamid)
+        data = self.xinyue_battle_ground_op("尝试加入小队", "513803", teamid=remote_teamid)
         if int(data["flowRet"]["iRet"]) == 700:
             # 小队已经解散
             return None
@@ -726,7 +730,7 @@ class DjcHelper:
 
     def create_xinyue_team(self):
         # 513512	创建小队
-        data = self.xinyue_op("尝试创建小队", "513512")
+        data = self.xinyue_battle_ground_op("尝试创建小队", "513512")
         jdata = data["modRet"]["jData"]
         teaminfo = self.parse_teaminfo(jdata)
         return teaminfo
@@ -770,34 +774,55 @@ class DjcHelper:
             return teamidInfo["remote_teamid"]
 
     def query_xinyue_whitelist(self, ctx, print_res=True):
-        data = self.xinyue_op(ctx, "673280", print_res=print_res)
+        data = self.xinyue_battle_ground_op(ctx, "673280", print_res=print_res)
         r = data["modRet"]
         user_is_white = int(r["sOutValue1"]) != 0
         return user_is_white
 
     def query_xinyue_items(self, ctx):
-        data = self.xinyue_op(ctx, "512407")
+        data = self.xinyue_battle_ground_op(ctx, "512407")
         r = data["modRet"]
         total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh = r["sOutValue1"], r["sOutValue5"], r["sOutValue3"], r["sOutValue4"], r["sOutValue6"], r["sOutValue7"]
         return XinYueItemInfo(total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh)
 
     def query_xinyue_info(self, ctx, print_res=True):
-        data = self.xinyue_op(ctx, "512411", print_res=print_res)
+        data = self.xinyue_battle_ground_op(ctx, "512411", print_res=print_res)
         r = data["modRet"]
         score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"]
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
-    def xinyue_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
-        return self.post(ctx, self.urls.xinyue, self.xinyue_flow_data(iFlowId, package_id, lqlevel, teamid), sMiloTag=self.make_s_milo_tag(iFlowId), print_res=print_res)
+    def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
+        return self.xinyue_op(ctx, self.urls.xinyue_iActivityId_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
 
-    def xinyue_flow_data(self, iFlowId, package_id="", lqlevel=1, teamid=""):
+    def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
+        return self.post(ctx, self.urls.xinyue, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid), iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId), print_res=print_res)
+
+    def xinyue_flow_data(self, iActivityId, iFlowId, package_id="", lqlevel=1, teamid=""):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
-        return self.format(self.urls.xinyue_raw_data, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
+        return self.format(self.urls.xinyue_raw_data, iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
+
+    # 心悦国庆活动
+    def xinyue_guoqing(self):
+        # https://xinyue.qq.com/act/a20200910dnf/index.html
+        actId = self.urls.xinyue_iActivityId_guoqing
+        self.xinyue_op("验证幸运用户", actId, "700301")
+        self.xinyue_op("幸运勇士", actId, "700288")
+        self.xinyue_op("特邀充值礼包", actId, "700433")
+        self.xinyue_op("V1充值礼包", actId, "700452")
+        self.xinyue_op("V2充值礼包", actId, "700454")
+        self.xinyue_op("V3充值礼包", actId, "700455")
+        self.xinyue_op("特邀升级礼", actId, "700456")
+        self.xinyue_op("心悦会员礼", actId, "700457")
+        self.xinyue_op("每日在线30分钟", actId, "700458")
+        self.xinyue_op("国庆七日签到", actId, "700462")
+        self.xinyue_op("惊喜礼包", actId, "700511")
+        self.xinyue_op("App礼包", actId, "701088")
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
+        # https://dnf.qq.com/act/blackDiamond/gift.shtml
         if not self.cfg.get_heizuan_gift:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
@@ -813,6 +838,7 @@ class DjcHelper:
     # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
         self.get("每月信用星级礼包", self.urls.credit_gift)
+        # https://gamecredit.qq.com/static/web/index.html#/gift-pack
         self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
         self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
 
@@ -836,7 +862,6 @@ class DjcHelper:
             "month": self.get_month(),
             "starttime": self.getMoneyFlowTime(startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, startTime.second),
             "endtime": self.getMoneyFlowTime(endTime.year, endTime.month, endTime.day, endTime.hour, endTime.minute, endTime.second),
-            "xinyue_iActivityId": self.urls.xinyue_iActivityId,
             "sSDID": self.cfg.sDeviceID.replace('-', ''),
             "uuid": self.cfg.sDeviceID,
             "millseconds": getMillSecondsUnix(),
@@ -851,12 +876,11 @@ class DjcHelper:
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
         return "{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}".format(year, month, day, hour, minute, second)
 
-    def make_s_milo_tag(self, iFlowId):
-        iActivityId, id = self.urls.xinyue_iActivityId, self.cfg.account_info.uin
+    def make_s_milo_tag(self, iActivityId, iFlowId):
         return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(
             iActivityId=iActivityId,
             iFlowId=iFlowId,
-            id=id,
+            id=self.cfg.account_info.uin,
             millseconds=getMillSecondsUnix(),
             rand6=self.rand6()
         )

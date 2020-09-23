@@ -3,6 +3,7 @@ import re
 
 import requests
 
+from config import AccountConfig
 from dao import RoleInfo
 from log import logger
 from network import process_result
@@ -13,11 +14,13 @@ from util import uin2qq
 
 
 class ArkLottery:
-    def __init__(self, lr, roleinfo):
+    def __init__(self, cfg, lr, roleinfo):
         """
+        :type cfg: AccountConfig
         :type lr: LoginResult
         :type roleinfo: RoleInfo
         """
+        self.cfg = cfg
         self.lr = lr
         self.roleinfo = roleinfo
 
@@ -45,18 +48,20 @@ class ArkLottery:
             self.do_ark_lottery("fcg_qzact_lottery", "抽卡-第{}次".format(idx + 1), "25940")
 
         # # 领取集卡奖励
-        self.do_ark_lottery("fcg_receive_reward", "勇士归来礼包", 25947, gameid="dnf")
-        self.do_ark_lottery("fcg_receive_reward", "超低门槛", 25948, gameid="dnf")
-        self.do_ark_lottery("fcg_receive_reward", "人人可玩", 25966, gameid="dnf")
-        self.do_ark_lottery("fcg_receive_reward", "幸运礼包", 25939, gameid="dnf")
+        for award in self.cfg.ark_lottery.take_awards:
+            for idx in range(award.count):
+                self.do_ark_lottery("fcg_receive_reward", award.name, award.ruleid, gameid="dnf")
+        else:
+            logger.warning("未设置领取集卡礼包奖励，也许是小号，请记得定期手动登录小号来给大号赠送缺失的卡")
 
         # 使用卡片抽奖-25949 # note: 为啥没传卡片id- -也许是因为还没正式开启？之后再试试
-        # self.do_ark_lottery("fcg_prize_lottery", "消耗卡片抽奖", "25949", gameid="dnf")
+        # for idx in range(self.cfg.ark_lottery.lottery_using_cards_count):
+        #     self.do_ark_lottery("fcg_prize_lottery", "消耗卡片抽奖", "25949", gameid="dnf")
 
         # undone: 暂时未处理：
         #  分享-发送消息
         #  赠送给他人
-        
+
         #  undone: 可能会做的：
         #   根据大号缺的卡片内容，赠送给大号
 

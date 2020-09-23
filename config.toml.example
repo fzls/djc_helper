@@ -350,6 +350,32 @@ count = 1
 #sFlowName = "升级券(Lv90-94)(需50点)(月限1)"
 #count = 1
 
+# 抽卡相关配置
+[account_configs.ark_lottery]
+# 尝试使用卡牌抽奖的次数
+lottery_using_cards_count = 0
+
+## 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
+#[[account_configs.ark_lottery.take_awards]]
+#name = "勇士归来礼包"
+#ruleid = 25947
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "超低门槛"
+#ruleid = 25948
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "人人可玩"
+#ruleid = 25966
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包"
+#ruleid = 25939
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 
@@ -635,6 +661,32 @@ count = 1
 ##package_id = "702222"
 ##sFlowName = "升级券(Lv90-94)(需50点)(月限1)"
 ##count = 1
+#
+## 抽卡相关配置
+#[account_configs.ark_lottery]
+## 尝试使用卡牌抽奖的次数
+#lottery_using_cards_count = 0
+#
+## 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
+#[[account_configs.ark_lottery.take_awards]]
+#name = "勇士归来礼包"
+#ruleid = 25947
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "超低门槛"
+#ruleid = 25948
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "人人可玩"
+#ruleid = 25966
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包"
+#ruleid = 25939
+#count = 1
 ##
 ## ---------------------------第2个账号相关配置结束-----------------------------
 

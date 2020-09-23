@@ -826,11 +826,25 @@ class DjcHelper:
             win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
             exit(-1)
 
-        self.xinyue_op("特邀充值礼包", actId, "700433")
-        self.xinyue_op("V1充值礼包", actId, "700452")
-        self.xinyue_op("V2充值礼包", actId, "700454")
-        self.xinyue_op("V3充值礼包", actId, "700455")
-        self.xinyue_op("特邀升级礼", actId, "700456")
+        # 查询成就点信息
+        xinyue_info = self.query_xinyue_info("查询心悦信息", print_res=False)
+
+        # 1-4=游戏家G1-4，5-7=心悦VIP1-3
+        if xinyue_info.xytype < 5:
+            # 特邀
+            self.xinyue_op("特邀充值礼包", actId, "700433")
+        else:
+            # 心悦
+            if xinyue_info.xytype == 5:
+                self.xinyue_op("V1充值礼包", actId, "700452")
+            elif xinyue_info.xytype == 6:
+                self.xinyue_op("V2充值礼包", actId, "700454")
+            else:
+                self.xinyue_op("V3充值礼包", actId, "700455")
+
+            self.xinyue_op("特邀升级礼", actId, "700456")
+
+        # 心悦特邀都可以领取的奖励
         self.xinyue_op("心悦会员礼", actId, "700457")
         self.xinyue_op("每日在线30分钟", actId, "700458")
         self.xinyue_op("国庆七日签到", actId, "700462")

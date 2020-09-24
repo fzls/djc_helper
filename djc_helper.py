@@ -314,7 +314,7 @@ class DjcHelper:
         # 执行心悦相关操作
         # DNF地下城与勇士心悦特权专区
         self.xinyue_operations()
-        # 心悦国庆活动
+        # 心悦国庆活动【DNF金秋送福心悦有礼】
         self.xinyue_guoqing()
 
         # 黑钻礼包

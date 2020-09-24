@@ -796,7 +796,7 @@ class DjcHelper:
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
-        return self.xinyue_op(ctx, self.urls.xinyue_iActivityId_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
+        return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
         return self.post(ctx, self.urls.amesvr, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid),
@@ -855,7 +855,7 @@ class DjcHelper:
         self.xinyue_guoqing_op("App礼包", "701088")
 
     def xinyue_guoqing_op(self, ctx, iFlowId, print_res=True):
-        return self.xinyue_op(ctx, self.urls.xinyue_iActivityId_guoqing, iFlowId, print_res=print_res)
+        return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_guoqing, iFlowId, print_res=print_res)
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):

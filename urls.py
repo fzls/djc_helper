@@ -43,9 +43,9 @@ class Urls:
         # 获取所有可兑换的道具的列表
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/dnf_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
-        # 心悦相关接口的入口
-        self.xinyue_iActivityId_battle_ground = "166962"  # DNF地下城与勇士心悦特权专区
-        self.xinyue_iActivityId_guoqing = "329456"  # 心悦国庆活动
+        # amesvr通用活动
+        self.iActivityId_xinyue_battle_ground = "166962"  # DNF地下城与勇士心悦特权专区
+        self.iActivityId_xinyue_guoqing = "329456"  # 心悦国庆活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

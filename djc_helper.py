@@ -470,26 +470,22 @@ class DjcHelper:
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         return self.get(ctx, self.urls.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=roleinfo.roleName, lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
 
-    def query_all_extra_info(self):
+    def query_all_extra_info(self, dnfServerId):
         """
         已废弃，不再需要手动查询该信息
         """
         # 获取玩家的dnf角色列表
-        self.query_dnf_rolelist()
+        self.query_dnf_rolelist(dnfServerId)
         # 获取玩家的手游角色列表
         self.query_mobile_game_rolelist()
 
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
 
-    def query_dnf_rolelist(self):
-        """
-        已废弃，不再需要手动查询该信息
-        """
+    def query_dnf_rolelist(self, dnfServerId):
         ctx = "获取账号({})的dnf角色列表".format(self.cfg.name)
         game_info = get_game_info("地下城与勇士")
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=roleinfo.serviceID, platid="", partition="", is_jsonp=True, print_res=False)
+        roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
         lines = []
         lines.append("")
@@ -499,7 +495,7 @@ class DjcHelper:
             for idx, role in enumerate(roleLists):
                 lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
         else:
-            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(roleinfo.serviceID))
+            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(dnfServerId))
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
             lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
@@ -914,9 +910,7 @@ class DjcHelper:
             # 自动登录
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
 
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-
-        al = ArkLottery(self.cfg, lr, roleinfo)
+        al = ArkLottery(self, lr)
         al.ark_lottery()
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------

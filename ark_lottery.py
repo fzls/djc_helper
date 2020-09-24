@@ -3,7 +3,6 @@ import re
 
 import requests
 
-from config import AccountConfig
 from dao import RoleInfo
 from log import logger
 from network import process_result
@@ -14,14 +13,18 @@ from util import uin2qq
 
 
 class ArkLottery:
-    def __init__(self, cfg, lr, roleinfo):
+    def __init__(self, djc_helper, lr):
         """
-        :type cfg: AccountConfig
+        :type djc_helper: DjcHelper
         :type lr: LoginResult
         :type roleinfo: RoleInfo
         """
-        self.cfg = cfg
+        roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        self.djc_helper = djc_helper
         self.lr = lr
+
+        self.cfg = djc_helper.cfg
         self.roleinfo = roleinfo
 
         self.g_tk = getACSRFTokenForAMS(lr.p_skey)
@@ -39,7 +42,22 @@ class ArkLottery:
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", 25938)
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 25969, query="0", act_name="act_dnf_xinyun3")
+
+        # 幸运勇士
+        server_id, roleid = "", ""
+        if self.cfg.ark_lottery.lucky_dnf_server_id == "":
+            logger.warning("未配置抽卡的幸运勇士的区服和角色信息，将使用道聚城绑定的角色信息")
+        else:
+            if self.cfg.ark_lottery.lucky_dnf_role_id == "":
+                logger.warning("配置了抽卡幸运勇士的区服ID为{}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表".format(self.cfg.ark_lottery.lucky_dnf_server_id))
+                self.djc_helper.query_dnf_rolelist(self.cfg.ark_lottery.lucky_dnf_server_id)
+            else:
+                logger.info("使用配置的区服和角色信息来进行幸运勇士加次数")
+                cfg = self.cfg.ark_lottery
+                server_id, roleid = cfg.lucky_dnf_server_id, cfg.lucky_dnf_role_id
+
+        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 25969, query="0", act_name="act_dnf_xinyun3",
+                            area=server_id, partition=server_id, roleid=roleid)
 
         # 抽卡
         count = self.remaining_lottery_times()
@@ -48,9 +66,10 @@ class ArkLottery:
             self.do_ark_lottery("fcg_qzact_lottery", "抽卡-第{}次".format(idx + 1), "25940")
 
         # # 领取集卡奖励
-        for award in self.cfg.ark_lottery.take_awards:
-            for idx in range(award.count):
-                self.do_ark_lottery("fcg_receive_reward", award.name, award.ruleid, gameid="dnf")
+        if len(self.cfg.ark_lottery.take_awards) != 0:
+            for award in self.cfg.ark_lottery.take_awards:
+                for idx in range(award.count):
+                    self.do_ark_lottery("fcg_receive_reward", award.name, award.ruleid, gameid="dnf")
         else:
             logger.warning("未设置领取集卡礼包奖励，也许是小号，请记得定期手动登录小号来给大号赠送缺失的卡")
 
@@ -76,7 +95,7 @@ class ArkLottery:
 
         return count
 
-    def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", pretty=False, print_res=True):
+    def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
         url = self.urls.ark_lottery.format(
             api=api,
             g_tk=self.g_tk,
@@ -85,9 +104,9 @@ class ArkLottery:
         raw_data = self.urls.ark_lottery_raw_data.format(
             actid=3886,
             ruleid=ruleid,
-            area=self.roleinfo.serviceID,
-            partition=self.roleinfo.serviceID,
-            roleid=self.roleinfo.roleCode,
+            area=area or self.roleinfo.serviceID,
+            partition=partition or self.roleinfo.serviceID,
+            roleid=roleid or self.roleinfo.roleCode,
             query=query,
             act_name=act_name,
             gameid=gameid,

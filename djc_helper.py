@@ -17,6 +17,7 @@ from network import *
 from qq_login import QQLogin
 from sign import getMillSecondsUnix
 from urls import Urls
+from util import show_head_line
 
 
 # DNF蚊子腿小助手
@@ -333,6 +334,8 @@ class DjcHelper:
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
+        show_head_line("开始道聚城相关操作")
+
         # ------------------------------初始工作------------------------------
         old_info = self.query_balance("1. 操作前：查询余额")["data"]
         old_allin, old_balance = int(old_info['allin']), int(old_info['balance'])
@@ -566,6 +569,8 @@ class DjcHelper:
         根据配置进行心悦相关操作
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
+        show_head_line("DNF地下城与勇士心悦特权专区")
+
         if len(self.cfg.xinyue_operations) == 0:
             logger.warning("未设置心悦相关操作信息，将跳过")
             return
@@ -816,6 +821,8 @@ class DjcHelper:
     # 心悦国庆活动【DNF金秋送福心悦有礼】
     def xinyue_guoqing(self):
         # https://xinyue.qq.com/act/a20200910dnf/index.html
+        show_head_line("心悦国庆活动【DNF金秋送福心悦有礼】")
+
         if not self.cfg.function_switches.get_xinyue_guoqing:
             logger.warning("未启用领取心悦国庆活动功能，将跳过")
             return
@@ -866,6 +873,8 @@ class DjcHelper:
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
+        show_head_line("黑钻礼包")
+
         if not self.cfg.function_switches.get_heizuan_gift:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
@@ -880,6 +889,8 @@ class DjcHelper:
 
     # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
+        show_head_line("腾讯游戏信用相关礼包")
+
         self.get("每月信用星级礼包", self.urls.credit_gift)
         try:
             # https://gamecredit.qq.com/static/web/index.html#/gift-pack
@@ -890,6 +901,9 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间抽卡--------------------------------------------
     def ark_lottery(self):
+        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9
+        show_head_line("QQ空间抽卡")
+
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")

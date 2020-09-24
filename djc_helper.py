@@ -799,13 +799,18 @@ class DjcHelper:
         return self.xinyue_op(ctx, self.urls.xinyue_iActivityId_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
-        return self.post(ctx, self.urls.xinyue, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid), iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId), print_res=print_res)
+        return self.post(ctx, self.urls.amesvr, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid),
+                         sServiceDepartment="xinyue", sServiceType="xinyue",
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
 
     def xinyue_flow_data(self, iActivityId, iFlowId, package_id="", lqlevel=1, teamid=""):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
-        return self.format(self.urls.xinyue_raw_data, iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="xinyue", sServiceType="xinyue",
+                           iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
     # 心悦国庆活动
     def xinyue_guoqing(self):

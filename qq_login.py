@@ -33,10 +33,11 @@ class QQLogin():
     chrome_binary_location = os.path.realpath("./chrome_portable_85.0.4183.59/chrome.exe")
 
     def __init__(self, common_config):
-        logger.info("正在初始化chrome driver，用以进行登录相关操作")
-
         self.cfg = common_config  # type: CommonConfig
+        self.driver = None
 
+    def prepare_chrome(self, login_type):
+        logger.info("正在初始化chrome driver，用以进行【{}】相关操作".format(login_type))
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
@@ -90,6 +91,12 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
+    def destroy_chrome(self):
+        if self.driver is not None:
+            # 最小化网页
+            self.driver.minimize_window()
+            threading.Thread(target=self.driver.quit, daemon=True).start()
+
     def login(self, account, password, is_xinyue=False, is_qzone=False):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
@@ -134,10 +141,14 @@ class QQLogin():
                     login_fn = self._login_qzone
                     login_type += "-QQ空间业务（如抽卡等需要用到）"
 
+                self.prepare_chrome(login_type)
+
                 return login_fn(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
             except Exception as e:
                 logger.exception("第{}/{}次尝试登录出错，等待{}秒后重试".format(idx, self.cfg.login.max_retry_count, self.cfg.login.retry_wait_time), exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
+            finally:
+                self.destroy_chrome()
 
     def _login_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -278,10 +289,6 @@ class QQLogin():
         logger.info("登录完成")
 
         self.cookies = self.driver.get_cookies()
-
-        # 最小化网页
-        self.driver.minimize_window()
-        threading.Thread(target=self.driver.quit, daemon=True).start()
 
         return
 

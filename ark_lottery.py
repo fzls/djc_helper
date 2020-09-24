@@ -39,7 +39,7 @@ class ArkLottery:
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", 25938)
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 25969, query="1", act_name="act_dnf_xinyun3")
+        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 25969, query="0", act_name="act_dnf_xinyun3")
 
         # 抽卡
         count = self.remaining_lottery_times()

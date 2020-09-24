@@ -890,11 +890,6 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间抽卡--------------------------------------------
     def ark_lottery(self):
-        # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
-            logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
-            return
-
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")

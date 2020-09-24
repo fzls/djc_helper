@@ -888,10 +888,21 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
             return
 
+        # 仅支持扫码登录和自动登录
+        if self.cfg.login_mode not in ["qr_login", "auto_login"]:
+            logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
+            return
+
         # https://act.qzone.qq.com/vip/2019/xcardv3?_wv=4&zz=4&verifyid=qqvipdnf9&gameId=10014&zz=4&toOpenid=&serverName=%E4%B8%8A%E6%B5%B7%E4%B8%80%E5%8C%BA&toUin=286058381&cGameId=1006&serverId=3&gameName=DNF&areaName=%E4%B8%8A%E6%B5%B7&nickname=%E3%80%80+++_%E6%9D%B0%21%3F&roleLevel=100&accType=wx&gameId=10014&roleId=76707780&uniqueRoleId=3002361072&openid=&userId=561625054&token=TAqTECD6&isMainRole=1&subGameId=10014&areaId=23&verifyid=qqvipdnf9&roleJob=%E6%9E%81%E8%AF%A3%C2%B7%E5%89%91%E5%BD%B1&roleName=%E6%9C%AB%E6%B4%9B%E3%81%AE&_wv=4&plg_auth=1&from=arklottery
         # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
         ql = QQLogin(self.common_cfg)
-        lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+        if self.cfg.login_mode == "qr_login":
+            # 扫码登录
+            lr = ql.qr_login(is_qzone=True)
+        else:
+            # 自动登录
+            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
         al = ArkLottery(self.cfg, lr, roleinfo)

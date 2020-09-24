@@ -1,6 +1,6 @@
 import os
 
-import util
+from util import maximize_console, show_head_line
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from log import logger
@@ -16,21 +16,6 @@ def has_any_account_in_normal_run(cfg):
 
         return True
     return False
-
-
-def show_head_line(msg):
-    char = "+"
-    line_length = 80
-    msg_len = sum([1 if ord(c) < 128 else 2 for c in msg])
-    mid_side_length = (line_length - msg_len) // 2
-
-    # 按照下列格式打印
-    # +++++++++++
-    # +  test   +
-    # +++++++++++
-    logger.warning(char * line_length)
-    logger.warning(char + " " * (mid_side_length - 1) + msg + " " * (mid_side_length - 1) + char)
-    logger.warning(char * line_length)
 
 
 def check_all_skey(cfg):
@@ -189,7 +174,7 @@ def check_update(cfg):
 def main():
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-    util.maximize_console()
+    maximize_console()
 
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

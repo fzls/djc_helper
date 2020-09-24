@@ -819,7 +819,7 @@ class DjcHelper:
     # 心悦国庆活动【DNF金秋送福心悦有礼】
     def xinyue_guoqing(self):
         # https://xinyue.qq.com/act/a20200910dnf/index.html
-        if not self.cfg.get_xinyue_guoqing:
+        if not self.cfg.function_switches.get_xinyue_guoqing:
             logger.warning("未启用领取心悦国庆活动功能，将跳过")
             return
 
@@ -869,7 +869,7 @@ class DjcHelper:
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
-        if not self.cfg.get_heizuan_gift:
+        if not self.cfg.function_switches.get_heizuan_gift:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
 
@@ -921,7 +921,7 @@ class DjcHelper:
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
         # https://dnf.qq.com/lbact/a20200922wegame/index.html
-        if not self.cfg.get_wegame_guoqing:
+        if not self.cfg.function_switches.get_wegame_guoqing:
             logger.warning("未启用领取wegame国庆活动功能，将跳过")
             return
 

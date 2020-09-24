@@ -77,6 +77,15 @@ class ArkLotteryConfig(ConfigInterface):
                 ei.auto_update_config(cfg)
                 self.take_awards.append(ei)
 
+class FunctionSwitchesConfig(ConfigInterface):
+    def __init__(self):
+        # 是否领取每月黑钻等级礼包
+        self.get_heizuan_gift = True
+        # 是否领取心悦国庆活动
+        self.get_xinyue_guoqing = True
+        # 是否领取wegame国庆活动
+        self.get_wegame_guoqing = True
+
 
 class AccountConfig(ConfigInterface):
     def __init__(self):
@@ -93,12 +102,8 @@ class AccountConfig(ConfigInterface):
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
-        # 是否领取每月黑钻等级礼包
-        self.get_heizuan_gift = True
-        # 是否领取心悦国庆活动
-        self.get_xinyue_guoqing = True
-        # 是否领取wegame国庆活动
-        self.get_wegame_guoqing = True
+        # 各功能开关
+        self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 完成《礼包达人》任务所需的手游的名称信息

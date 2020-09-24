@@ -88,11 +88,14 @@ run_mode = "pre_run"
 # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 login_mode = "qr_login"
 
+# 各功能开关
+[account_configs.function_switches]
 # 是否领取每月黑钻等级礼包
 get_heizuan_gift = true
-
 # 是否领取心悦国庆活动
 get_xinyue_guoqing = true
+# 是否领取wegame国庆活动
+get_wegame_guoqing = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
@@ -405,11 +408,14 @@ lottery_using_cards_count = 0
 ## auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 #login_mode = "qr_login"
 #
+## 各功能开关
+#[account_configs.function_switches]
 ## 是否领取每月黑钻等级礼包
 #get_heizuan_gift = true
-#
 ## 是否领取心悦国庆活动
 #get_xinyue_guoqing = true
+## 是否领取wegame国庆活动
+#get_wegame_guoqing = true
 #
 ## 腾讯系网页登录通用账号凭据与token
 #[account_configs.account_info]

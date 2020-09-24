@@ -819,11 +819,9 @@ class DjcHelper:
             logger.warning("未启用领取心悦国庆活动功能，将跳过")
             return
 
-        actId = self.urls.xinyue_iActivityId_guoqing
-
         # 验证是否回流顺带检查是否未绑定大区
-        self.xinyue_op("验证幸运用户", actId, "700301")
-        res = self.xinyue_op("幸运勇士", actId, "700288")
+        self.xinyue_guoqing_op("验证幸运用户", "700301")
+        res = self.xinyue_guoqing_op("幸运勇士", "700288")
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-0924025126-AZmFbj-329456-700288", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
             webbrowser.open("https://xinyue.qq.com/act/a20200910dnf/index.html")
@@ -837,24 +835,27 @@ class DjcHelper:
         # 1-4=游戏家G1-4，5-7=心悦VIP1-3
         if xinyue_info.xytype < 5:
             # 特邀
-            self.xinyue_op("特邀充值礼包", actId, "700433")
+            self.xinyue_guoqing_op("特邀充值礼包", "700433")
         else:
             # 心悦
             if xinyue_info.xytype == 5:
-                self.xinyue_op("V1充值礼包", actId, "700452")
+                self.xinyue_guoqing_op("V1充值礼包", "700452")
             elif xinyue_info.xytype == 6:
-                self.xinyue_op("V2充值礼包", actId, "700454")
+                self.xinyue_guoqing_op("V2充值礼包", "700454")
             else:
-                self.xinyue_op("V3充值礼包", actId, "700455")
+                self.xinyue_guoqing_op("V3充值礼包", "700455")
 
-            self.xinyue_op("特邀升级礼", actId, "700456")
+            self.xinyue_guoqing_op("特邀升级礼", "700456")
 
         # 心悦特邀都可以领取的奖励
-        self.xinyue_op("心悦会员礼", actId, "700457")
-        self.xinyue_op("每日在线30分钟", actId, "700458")
-        self.xinyue_op("国庆七日签到", actId, "700462")
-        self.xinyue_op("惊喜礼包", actId, "700511")
-        self.xinyue_op("App礼包", actId, "701088")
+        self.xinyue_guoqing_op("心悦会员礼", "700457")
+        self.xinyue_guoqing_op("每日在线30分钟", "700458")
+        self.xinyue_guoqing_op("国庆七日签到", "700462")
+        self.xinyue_guoqing_op("惊喜礼包", "700511")
+        self.xinyue_guoqing_op("App礼包", "701088")
+
+    def xinyue_guoqing_op(self, ctx, iFlowId, print_res=True):
+        return self.xinyue_op(ctx, self.urls.xinyue_iActivityId_guoqing, iFlowId, print_res=print_res)
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):

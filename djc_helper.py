@@ -3,6 +3,7 @@ import random
 import string
 import subprocess
 import webbrowser
+from urllib.parse import quote_plus
 
 import pyperclip
 import win32api
@@ -325,6 +326,9 @@ class DjcHelper:
 
         # QQ空间抽卡
         self.ark_lottery()
+
+        # wegame国庆活动【秋风送爽关怀常伴】
+        self.wegame_guoqing()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -800,7 +804,7 @@ class DjcHelper:
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
         return self.post(ctx, self.urls.amesvr, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid),
-                         sServiceDepartment="xinyue", sServiceType="xinyue",
+                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="xinyue",
                          iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
                          print_res=print_res)
 
@@ -809,7 +813,7 @@ class DjcHelper:
         if lqlevel < 5:
             lqlevel = 1
         return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="xinyue", sServiceType="xinyue",
+                           sServiceDepartment="xinyue", sServiceType="xinyue", eas_url=quote_plus("http://xinyue.qq.com/act/a20181101rights/"),
                            iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
     # 心悦国庆活动【DNF金秋送福心悦有礼】
@@ -914,6 +918,68 @@ class DjcHelper:
         al = ArkLottery(self.cfg, lr, roleinfo)
         al.ark_lottery()
 
+    # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
+    def wegame_guoqing(self):
+        # https://dnf.qq.com/lbact/a20200922wegame/index.html
+        if not self.cfg.get_wegame_guoqing:
+            logger.warning("未启用领取wegame国庆活动功能，将跳过")
+            return
+
+        self.check_wegame_guoqing()
+
+        # 一次性奖励
+        self.wegame_op("金秋有礼抽奖", "703512")
+
+        # 阿拉德智慧星-答题
+        self.wegame_op("答题左上", "703514")
+        self.wegame_op("答题左下", "703515")
+        self.wegame_op("答题右上", "703516")
+        self.wegame_op("答题右下", "703517")
+
+        # 阿拉德智慧星-兑换奖励
+        # self.wegame_op("强化器-4分", "703518")
+        # self.wegame_op("增幅器-4分", "703520")
+        # self.wegame_op("锻造炉-4分", "703521")
+        # self.wegame_op("装备品级调整箱-4分", "703522")
+        # self.wegame_op("魂灭结晶（50个）-4分", "703523")
+        # self.wegame_op("疲劳药-8分", "703524")
+        # self.wegame_op("时间引导石（100个）-12分", "703525")
+        # self.wegame_op("高级装扮兑换券-16分", "703526")
+
+        # 签到抽大奖
+        self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
+        self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
+        self.wegame_op("抽奖", "703957")
+
+        # 在线得好礼
+        self.wegame_op("累计在线30分钟签到", "703529")
+        self.wegame_op("签到3天礼包", "703530")
+        self.wegame_op("签到5天礼包", "703531")
+        self.wegame_op("签到7天礼包", "703532")
+        self.wegame_op("签到10天礼包", "703533")
+        self.wegame_op("签到15天礼包", "703534")
+
+    def check_wegame_guoqing(self):
+        res = self.wegame_op("金秋有礼抽奖", "703512", print_res=False)
+        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
+        if int(res["ret"]) == 99998:
+            webbrowser.open("https://dnf.qq.com/lbact/a20200922wegame/index.html")
+            msg = "未绑定角色，请前往wegame国庆活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def wegame_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_wegame_guoqing
+        return self.post(ctx, self.urls.amesvr, self.wegame_flow_data(iActivityId, iFlowId),
+                         amesvr_host="x6m5.ams.game.qq.com", sServiceDepartment="group_3", sServiceType="dnf",
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
+
+    def wegame_flow_data(self, iActivityId, iFlowId):
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="group_3", sServiceType="dnf", eas_url=quote_plus("http://dnf.qq.com/lbact/a20200922wegame/"),
+                           iActivityId=iActivityId, iFlowId=iFlowId)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -938,6 +1004,9 @@ class DjcHelper:
             "uuid": self.cfg.sDeviceID,
             "millseconds": getMillSecondsUnix(),
             "rand": random.random(),
+            "package_id": "",
+            "lqlevel": "",
+            "teamid": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -975,6 +1044,7 @@ if __name__ == '__main__':
     djcHelper = DjcHelper(account_config, cfg.common)
     # djcHelper.run()
     djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list()
     # djcHelper.query_all_extra_info()
     # djcHelper.exchange_items()
     # djcHelper.xinyue_operations()
@@ -983,6 +1053,6 @@ if __name__ == '__main__':
     # djcHelper.get_credit_xinyue_gift()
     # djcHelper.query_mobile_game_rolelist()
     # djcHelper.complete_tasks()
-    djcHelper.get_bind_role_list()
     # djcHelper.xinyue_guoqing()
-    djcHelper.ark_lottery()
+    # djcHelper.ark_lottery()
+    djcHelper.wegame_guoqing()

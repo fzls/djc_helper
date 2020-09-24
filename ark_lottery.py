@@ -19,10 +19,12 @@ class ArkLottery:
         :type lr: LoginResult
         :type roleinfo: RoleInfo
         """
-        # 即使没绑定dnf角色，也留个默认值，方便领取分享奖励
-        roleinfo = RoleInfo()
+        # 即使没绑定dnf角色，也放行，方便领取分享奖励
+        roleinfo = None
         if 'dnf' in djc_helper.bizcode_2_bind_role_map:
             roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        else:
+            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
         self.djc_helper = djc_helper
         self.lr = lr
@@ -104,12 +106,17 @@ class ArkLottery:
             g_tk=self.g_tk,
             rand=random.random(),
         )
+        if self.roleinfo is not None:
+            area = area or self.roleinfo.serviceID
+            partition = partition or self.roleinfo.serviceID
+            roleid = roleid or self.roleinfo.roleCode
+
         raw_data = self.urls.ark_lottery_raw_data.format(
             actid=3886,
             ruleid=ruleid,
-            area=area or self.roleinfo.serviceID,
-            partition=partition or self.roleinfo.serviceID,
-            roleid=roleid or self.roleinfo.roleCode,
+            area=area,
+            partition=partition,
+            roleid=roleid,
             query=query,
             act_name=act_name,
             gameid=gameid,

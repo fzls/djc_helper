@@ -97,6 +97,8 @@ class AccountConfig(ConfigInterface):
         self.get_heizuan_gift = True
         # 是否领取心悦国庆活动
         self.get_xinyue_guoqing = True
+        # 是否领取wegame国庆活动
+        self.get_wegame_guoqing = True
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 完成《礼包达人》任务所需的手游的名称信息

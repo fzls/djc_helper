@@ -19,7 +19,10 @@ class ArkLottery:
         :type lr: LoginResult
         :type roleinfo: RoleInfo
         """
-        roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        # 即使没绑定dnf角色，也留个默认值，方便领取分享奖励
+        roleinfo = RoleInfo()
+        if 'dnf' in djc_helper.bizcode_2_bind_role_map:
+            roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
         self.djc_helper = djc_helper
         self.lr = lr

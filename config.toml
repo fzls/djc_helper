@@ -344,6 +344,47 @@ lottery_using_cards_count = 0
 #ruleid = 25939
 #count = 1
 
+# wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703514"
+#sGoodsName = "强化器-4分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703520"
+#sGoodsName = "增幅器-4分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703521"
+#sGoodsName = "锻造炉-4分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703522"
+#sGoodsName = "装备品级调整箱-4分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703523"
+#sGoodsName = "魂灭结晶（50个）-4分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703524"
+#sGoodsName = "疲劳药-8分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703525"
+#sGoodsName = "时间引导石（100个）-12分"
+#count = 1
+#
+#[[account_configs.wegame_guoqing_exchange_items]]
+#iFlowId = "703526"
+#sGoodsName = "高级装扮兑换券-16分"
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 
@@ -667,6 +708,47 @@ lottery_using_cards_count = 0
 #name = "幸运礼包"
 #ruleid = 25939
 #count = 1
+##
+## wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703514"
+##sGoodsName = "强化器-4分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703520"
+##sGoodsName = "增幅器-4分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703521"
+##sGoodsName = "锻造炉-4分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703522"
+##sGoodsName = "装备品级调整箱-4分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703523"
+##sGoodsName = "魂灭结晶（50个）-4分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703524"
+##sGoodsName = "疲劳药-8分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703525"
+##sGoodsName = "时间引导石（100个）-12分"
+##count = 1
+##
+##[[account_configs.wegame_guoqing_exchange_items]]
+##iFlowId = "703526"
+##sGoodsName = "高级装扮兑换券-16分"
+##count = 1
 ##
 ## ---------------------------第2个账号相关配置结束-----------------------------
 

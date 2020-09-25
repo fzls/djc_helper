@@ -951,14 +951,7 @@ class DjcHelper:
         self.wegame_op("答题右下", "703517")
 
         # 阿拉德智慧星-兑换奖励
-        # self.wegame_op("强化器-4分", "703518")
-        # self.wegame_op("增幅器-4分", "703520")
-        # self.wegame_op("锻造炉-4分", "703521")
-        # self.wegame_op("装备品级调整箱-4分", "703522")
-        # self.wegame_op("魂灭结晶（50个）-4分", "703523")
-        # self.wegame_op("疲劳药-8分", "703524")
-        # self.wegame_op("时间引导石（100个）-12分", "703525")
-        # self.wegame_op("高级装扮兑换券-16分", "703526")
+        self.wegame_exchange_items()
 
         # 签到抽大奖
         self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
@@ -972,6 +965,16 @@ class DjcHelper:
         self.wegame_op("签到7天礼包", "703532")
         self.wegame_op("签到10天礼包", "703533")
         self.wegame_op("签到15天礼包", "703534")
+
+    def wegame_exchange_items(self):
+        for ei in self.cfg.wegame_guoqing_exchange_items:
+            for i in range(ei.count):
+                # 700-幸运星数目不足，600-已经达到最大兑换次数
+                res = self.wegame_op("兑换 {}".format(ei.sGoodsName), ei.iFlowId)
+                if res["ret"] == "700":
+                    # 默认先兑换完前面的所有道具的最大上限，才会尝试兑换后面的道具
+                    logger.warning("兑换第{}个【{}】的时候幸运星剩余数量不足，将停止兑换流程，从而确保排在前面的兑换道具达到最大兑换次数后才尝试后面的道具".format(i + 1, ei.sGoodsName))
+                    return
 
     def check_wegame_guoqing(self):
         res = self.wegame_op("金秋有礼抽奖", "703512", print_res=False)

@@ -1146,11 +1146,11 @@ class DjcHelper:
                            weekday=weekday)
 
     # --------------------------------------------辅助函数--------------------------------------------
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
-        return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, extra_cookies="", **params):
+        return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, extra_cookies)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, **params):
-        return self.network.post(ctx, self.format(url, **params), data, pretty, print_res, is_jsonp)
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, extra_cookies="", **params):
+        return self.network.post(ctx, self.format(url, **params), data, pretty, print_res, is_jsonp, extra_cookies)
 
     def format(self, url, **params):
         endTime = datetime.datetime.now()

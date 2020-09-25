@@ -3,6 +3,7 @@ import os
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
+from log import color
 from update import check_update_on_start
 from util import *
 from version import *
@@ -82,13 +83,27 @@ def show_lottery_status(cfg):
         prize_counts = al.get_prize_counts()
 
         cols = [idx, account_config.name]
-        cols.extend([card_counts[order_map[card_index]] for card_index in card_indexes])
+        for card_index in card_indexes:
+            card_count = card_counts[order_map[card_index]]
+            # 特殊处理色彩
+            if card_count == 0:
+                if idx == 1:
+                    card_count = color("fg_bold_cyan") + padLeftRight(card_count, 3) + color("INFO")
+                else:
+                    card_count = ""
+            else:
+                if idx == 1:
+                    pass
+                else:
+                    card_count = color("bold_black") + padLeftRight(card_count, 3) + color("INFO")
+            cols.append(card_count)
         cols.extend([prize_counts[order_map[prize_index]] for prize_index in prize_indexes])
 
         logger.info(tableify(cols, colSizes))
 
     logger.info("")
-    logger.info("抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
+    logger.warning("抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
+    logger.info("")
 
 
 def show_accounts_status(cfg, ctx):

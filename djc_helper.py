@@ -218,7 +218,7 @@ class DjcHelper:
 
     # --------------------------------------------获取角色信息和游戏信息--------------------------------------------
 
-    def get_bind_role_list(self):
+    def get_bind_role_list(self, print_warning=True):
         # 查询全部绑定角色信息
         res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False)
         self.bizcode_2_bind_role_map = {}
@@ -228,19 +228,19 @@ class DjcHelper:
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
         # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if "dnf" not in self.bizcode_2_bind_role_map and print_warning:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
 
         if self.cfg.mobile_game_role_info.enabled():
             # 检查道聚城是否已绑定手游角色信息，若未绑定则警告并停止运行
             bizcode = self.get_mobile_game_info().bizCode
-            if bizcode not in self.bizcode_2_bind_role_map:
+            if bizcode not in self.bizcode_2_bind_role_map and print_warning:
                 logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
                 subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
                 os.system("PAUSE")
                 exit(-1)
             role_info = self.bizcode_2_bind_role_map[bizcode]
-            if not role_info.is_mobile_game():
+            if not role_info.is_mobile_game() and print_warning:
                 logger.warning("【{}】是端游，不是手游。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
                 subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
                 os.system("PAUSE")

@@ -10,7 +10,7 @@ import colorlog
 #                         logging                         #
 ###########################################################
 fileFmtStr = "%(asctime)s [%(name)s] %(funcName)s:%(lineno)d %(levelname)-5.5s: %(message)s"
-consoleFmtStr = "{}%(asctime)s {}[%(name)s] {}%(funcName)s:%(lineno)d {}%(levelname)-5.5s: %(message)s".format(
+consoleFmtStr = "{}%(asctime)s {}[%(name)s] {}%(funcName)s:%(lineno)-3d {}%(levelname)-5.5s: %(message)s".format(
     "%(purple)s",
     "%(purple)s",
     "%(purple)s",

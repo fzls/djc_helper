@@ -87,6 +87,8 @@ def show_lottery_status(cfg):
 
         logger.info(tableify(cols, colSizes))
 
+    logger.info("抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
+
 
 def show_accounts_status(cfg, ctx):
     if has_any_account_in_normal_run(cfg):

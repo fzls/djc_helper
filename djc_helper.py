@@ -248,11 +248,19 @@ class DjcHelper:
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个
         if self.cfg.mobile_game_role_info.use_any_binded_mobile_game():
+            found_binded_game = False
             for bizcode, bind_role_info in self.bizcode_2_bind_role_map.items():
                 if bind_role_info.is_mobile_game():
                     self.cfg.mobile_game_role_info.game_name = bind_role_info.sRoleInfo.gameName
+                    found_binded_game = True
                     logger.warning("当前游戏名称配置为任意手游，将从道聚城已绑定的手游中随便选一个，挑选为：{}".format(self.cfg.mobile_game_role_info.game_name))
                     break
+
+            if not found_binded_game:
+                logger.warning("当前游戏名称配置为【任意手游】，但未在道聚城找到任何绑定的手游，请前往道聚城绑定任意一个手游，如王者荣耀")
+                os.system("PAUSE")
+                exit(-1)
+
         return get_game_info(self.cfg.mobile_game_role_info.game_name)
 
     # --------------------------------------------各种操作--------------------------------------------

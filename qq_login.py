@@ -15,7 +15,7 @@ from log import logger
 
 
 class LoginResult(ConfigInterface):
-    def __init__(self, uin="", skey="", openid="", p_skey=""):
+    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid=""):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
@@ -23,6 +23,8 @@ class LoginResult(ConfigInterface):
         self.p_skey = p_skey
         # 使用心悦活动界面得到
         self.openid = openid
+        # 使用腾讯视频相关页面得到
+        self.vuserid = vuserid
 
 
 class QQLogin():
@@ -181,7 +183,7 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_qzone(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -214,7 +216,7 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -290,7 +292,21 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
+        # 额外获取腾讯视频的vqq_vuserid
+        logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
+        self.driver.get("https://film.qq.com/film/p/topic/dnf922/index.html")
+        time.sleep(1)
+        self.add_cookies(self.driver.get_cookies())
+
         return
+
+    def add_cookies(self, cookies):
+        to_add = []
+        for cookie in cookies:
+            if self.get_cookie(cookie['name']) == "":
+                to_add.append(cookie)
+
+        self.cookies.extend(to_add)
 
     def get_cookie(self, name):
         for cookie in self.cookies:

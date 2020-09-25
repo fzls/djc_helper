@@ -37,17 +37,44 @@ if "MainProcess" in process_name:
     fileHandler.setLevel(logging.DEBUG)
     logger.addHandler(fileHandler)
 
+# hack: 将底层的color暴露出来
+COLORS = [
+    'black',
+    'red',
+    'green',
+    'yellow',
+    'blue',
+    'purple',
+    'cyan',
+    'white'
+]
+
+PREFIXES = [
+    # Foreground without prefix
+    '', 'bold_', 'thin_',
+    # Foreground with fg_ prefix
+    'fg_', 'fg_bold_', 'fg_thin_',
+    # Background with bg_ prefix - bold/light works differently
+    'bg_', 'bg_bold_',
+]
+
+color_names = {}
+for prefix_name in PREFIXES:
+    for name in COLORS:
+        color_name = prefix_name + name
+        color_names[color_name] = color_name
+
 consoleLogFormatter = colorlog.ColoredFormatter(
     consoleFmtStr,
     datefmt=None,
     reset=True,
-    log_colors={
+    log_colors={**color_names, **{
         'DEBUG': 'cyan',
         'INFO': 'green',
         'WARNING': 'yellow',
         'ERROR': 'red',
         'CRITICAL': 'red',
-    },
+    }},
     secondary_log_colors={},
     style='%'
 )
@@ -55,6 +82,11 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(consoleLogFormatter)
 consoleHandler.setLevel(logging.INFO)
 logger.addHandler(consoleHandler)
+
+
+def color(color_name):
+    return consoleLogFormatter.color(consoleLogFormatter.log_colors, color_name)
+
 
 if __name__ == '__main__':
     consoleHandler.setLevel(logging.DEBUG)
@@ -64,3 +96,6 @@ if __name__ == '__main__':
     logger.error("error")
     logger.critical("critical")
     logger.exception("exception", exc_info=Exception("测试Exception"))
+
+    for name in color_names:
+        print(color(name), name)

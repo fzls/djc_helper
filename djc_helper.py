@@ -1023,7 +1023,10 @@ class DjcHelper:
         # 签到抽大奖
         self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
         self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
-        self.wegame_op("抽奖", "703957")
+        lottery_times = self.get_wegame_lottery_times()
+        logger.info("即将进行抽奖，当前剩余抽奖资格为{}".format(lottery_times))
+        for i in range(lottery_times):
+            self.wegame_op("抽奖", "703957")
 
         # 在线得好礼
         self.wegame_op("累计在线30分钟签到", "703529")
@@ -1032,6 +1035,15 @@ class DjcHelper:
         self.wegame_op("签到7天礼包", "703532")
         self.wegame_op("签到10天礼包", "703533")
         self.wegame_op("签到15天礼包", "703534")
+
+
+    def get_wegame_lottery_times(self):
+        res = self.wegame_op("查询剩余抽奖次数", "703542")
+        # "sOutValue1": "239:16:4|240:8:1",
+        val = res["modRet"]["sOutValue1"]
+        star_count, lottery_times = [int(jifen.split(':')[-1]) for jifen in val.split('|')]
+        return lottery_times
+
 
     def wegame_exchange_items(self):
         for ei in self.cfg.wegame_guoqing_exchange_items:

@@ -933,6 +933,8 @@ class DjcHelper:
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
         # https://dnf.qq.com/lbact/a20200922wegame/index.html
+        show_head_line("wegame国庆活动【秋风送爽关怀常伴】")
+
         if not self.cfg.function_switches.get_wegame_guoqing:
             logger.warning("未启用领取wegame国庆活动功能，将跳过")
             return

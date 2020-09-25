@@ -4,7 +4,7 @@ import threading
 import win32con
 import win32gui
 
-from log import logger
+from log import logger, color
 
 
 def uin2qq(uin):
@@ -49,7 +49,7 @@ def show_head_line(msg):
     # +  test   +
     # +++++++++++
     logger.warning(char * line_length)
-    logger.warning(char + padLeftRight(msg, line_length - 2) + char)
+    logger.warning(char + color("fg_bold_yellow") + padLeftRight(msg, line_length - 2) + color("WARNING") + char)
     logger.warning(char * line_length)
 
 

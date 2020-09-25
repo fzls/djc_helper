@@ -21,16 +21,17 @@ class ArkLottery:
         """
         # 即使没绑定dnf角色，也放行，方便领取分享奖励
         roleinfo = None
-        if 'dnf' in djc_helper.bizcode_2_bind_role_map:
-            roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        else:
-            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
+        try:
+            if 'dnf' in djc_helper.bizcode_2_bind_role_map:
+                roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        except:
+            pass
+        self.roleinfo = roleinfo
 
         self.djc_helper = djc_helper
         self.lr = lr
 
         self.cfg = djc_helper.cfg
-        self.roleinfo = roleinfo
 
         self.g_tk = getACSRFTokenForAMS(lr.p_skey)
         self.urls = Urls()
@@ -43,6 +44,9 @@ class ArkLottery:
         }
 
     def ark_lottery(self):
+        if self.roleinfo is None:
+            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
+
         # 增加次数
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")

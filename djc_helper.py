@@ -913,10 +913,18 @@ class DjcHelper:
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9
         show_head_line("QQ空间抽卡")
 
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+
+        al = ArkLottery(self, lr)
+        al.ark_lottery()
+
+    def fetch_pskey(self):
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
-            return
+            return None
 
         cached_pskey = self.load_uin_pskey()
         need_update = self.is_pskey_expired(cached_pskey)
@@ -935,11 +943,9 @@ class DjcHelper:
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey)
         else:
-            logger.warning("使用缓存的pskey进行抽卡操作")
             lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
 
-        al = ArkLottery(self, lr)
-        al.ark_lottery()
+        return lr
 
     def is_pskey_expired(self, cached_pskey):
         if cached_pskey is None:

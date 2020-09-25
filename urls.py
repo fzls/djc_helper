@@ -47,6 +47,7 @@ class Urls:
         self.iActivityId_xinyue_battle_ground = "166962"  # DNF地下城与勇士心悦特权专区
         self.iActivityId_xinyue_guoqing = "329456"  # 心悦国庆活动【DNF金秋送福心悦有礼】
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
+        self.iActivityId_dnf_922 = "331393"  # DNF-922渠道活动合集
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

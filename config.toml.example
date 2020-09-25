@@ -96,6 +96,8 @@ get_heizuan_gift = true
 get_xinyue_guoqing = true
 # 是否领取wegame国庆活动
 get_wegame_guoqing = true
+# 是否领取阿拉德集合站活动
+get_dnf_922 = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

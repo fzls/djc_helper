@@ -14,6 +14,12 @@ class Network:
     def __init__(self, sDeviceID, uin, skey, common_cfg):
         self.common_cfg = common_cfg  # type: CommonConfig
 
+        self.base_cookies = "djc_appSource=android; djc_appVersion={djc_appVersion}; acctype=; uin={uin}; skey={skey};".format(
+            djc_appVersion=appVersion,
+            uin=uin,
+            skey=skey,
+        )
+
         self.base_headers = {
             "User-Agent": "TencentDaojucheng=v4.1.6.0&appSource=android&appVersion={appVersion}&ch=10003&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName=v4.1.6.0".format(
                 appVersion=appVersion,
@@ -23,29 +29,28 @@ class Network:
             "Referer": "https://daoju.qq.com/index.shtml",
             "Connection": "Keep-Alive",
             "Accept-Encoding": "gzip",
-            "Cookie": "djc_appSource=android; djc_appVersion={djc_appVersion}; acctype=; uin={uin}; skey={skey}".format(
-                djc_appVersion=appVersion,
-                uin=uin,
-                skey=skey,
-            ),
+            "Cookie": self.base_cookies,
         }
 
-        self.get_headers = {**self.base_headers}
-
-        self.post_headers = {**self.base_headers, **{
-            "Content-Type": "application/x-www-form-urlencoded",
-        }}
-
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, extra_cookies=""):
         def request_fn():
-            return requests.get(url, headers=self.get_headers, timeout=self.common_cfg.http_timeout)
+            cookies = self.base_cookies + extra_cookies
+            get_headers = {**self.base_headers, **{
+                "Cookie": cookies,
+            }}
+            return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
         return process_result(ctx, res, pretty, print_res, is_jsonp)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False):
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, extra_cookies=""):
         def request_fn():
-            return requests.post(url, data=data, headers=self.post_headers, timeout=self.common_cfg.http_timeout)
+            cookies = self.base_cookies + extra_cookies
+            post_headers = {**self.base_headers, **{
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cookie": cookies,
+            }}
+            return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
         return process_result(ctx, res, pretty, print_res, is_jsonp)
@@ -61,6 +66,7 @@ class Network:
                     time.sleep(retryCfg.retry_wait_time)
 
         logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
+
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
     res.encoding = 'utf-8'
@@ -82,6 +88,7 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
         logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
     return data
 
+
 def jsonp2json(jsonpStr):
     left_idx = jsonpStr.index("{")
     right_idx = jsonpStr.index("}")
@@ -98,6 +105,7 @@ def jsonp2json(jsonpStr):
             pass
 
     return jsonRes
+
 
 def pretty_json(data, pretty=False, need_unquote=True):
     if pretty:

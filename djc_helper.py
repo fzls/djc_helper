@@ -1101,7 +1101,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 2
+    idx = 0
     account_config = cfg.account_configs[idx]
 
     idx += 1

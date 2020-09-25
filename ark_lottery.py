@@ -116,17 +116,29 @@ class ArkLottery:
 
         count_map = self.lottery_data["actCount"]["rule"]
         for group_name, group_info in self.lottery_data["zzconfig"]["cardGroups"].items():
-            # print(group_name, group_info)
             for cardinfo in group_info["cardList"]:
-                # print(cardinfo)
-                lotterySwitchId = str(cardinfo["lotterySwitchId"])
-                count_info = count_map[lotterySwitchId]["count"][0]
-                # print(count_info)
-                name, left = count_info["name"], count_info["left"]
-                # print(name, left)
-                card_counts[name] = left
+                ruleid = cardinfo["lotterySwitchId"]
+                count_id = cardinfo["id"]
+                for count_info in count_map[str(ruleid)]["count"]:
+                    if count_info["countid"] == count_id:
+                        name, left = cardinfo["name"], count_info["left"]
+                        card_counts[name] = left
 
         return card_counts
+
+    def get_prize_counts(self):
+        prize_counts = {}
+
+        count_map = self.lottery_data["actCount"]["rule"]
+        for group_name, group_info in self.lottery_data["zzconfig"]["prizeGroups"].items():
+            ruleid = group_info["rule"]
+            count_id = group_info["qual"]
+            for count_info in count_map[str(ruleid)]["count"]:
+                if count_info["countid"] == count_id:
+                    name, left = group_info["title"], count_info["left"]
+                    prize_counts[name] = left
+
+        return prize_counts
 
     def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
         url = self.urls.ark_lottery.format(

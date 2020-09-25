@@ -1,5 +1,5 @@
+import json
 import random
-import re
 
 import requests
 
@@ -47,6 +47,9 @@ class ArkLottery:
         if self.roleinfo is None:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
+        # 拉取抽奖数据
+        self.fetch_lottery_data()
+
         # 增加次数
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")
@@ -93,16 +96,37 @@ class ArkLottery:
         #  undone: 可能会做的：
         #   根据大号缺的卡片内容，赠送给大号
 
-    def remaining_lottery_times(self):
+    def fetch_lottery_data(self):
         res = requests.post(self.urls.ark_lottery_page, headers=self.headers)
-        reg = "剩余抽卡次数：<span class=\"count\">(\d+)</span>"
+        page_html = res.text
 
-        count = 0
-        match = re.search(reg, res.text)
-        if match is not None:
-            count = int(match.group(1))
+        data_prefix = "window.syncData = "
+        data_suffix = ";\n</script>"
 
-        return count
+        prefix_idx = page_html.index(data_prefix) + len(data_prefix)
+        suffix_idx = page_html.index(data_suffix, prefix_idx)
+
+        self.lottery_data = json.loads(page_html[prefix_idx:suffix_idx])
+
+    def remaining_lottery_times(self):
+        return self.lottery_data["actCount"]["rule"]["25940"]["count"][0]['left']
+
+    def get_card_counts(self):
+        card_counts = {}
+
+        count_map = self.lottery_data["actCount"]["rule"]
+        for group_name, group_info in self.lottery_data["zzconfig"]["cardGroups"].items():
+            # print(group_name, group_info)
+            for cardinfo in group_info["cardList"]:
+                # print(cardinfo)
+                lotterySwitchId = str(cardinfo["lotterySwitchId"])
+                count_info = count_map[lotterySwitchId]["count"][0]
+                # print(count_info)
+                name, left = count_info["name"], count_info["left"]
+                # print(name, left)
+                card_counts[name] = left
+
+        return card_counts
 
     def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
         url = self.urls.ark_lottery.format(

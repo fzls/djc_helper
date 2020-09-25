@@ -3,7 +3,6 @@ import os
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
-from log import color
 from update import check_update_on_start
 from util import *
 from version import *
@@ -102,7 +101,7 @@ def show_lottery_status(cfg):
         logger.info(tableify(cols, colSizes))
 
     logger.info("")
-    logger.warning("抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
+    logger.warning(color("fg_bold_green") + "抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
     logger.info("")
 
 
@@ -252,7 +251,7 @@ def main():
     maximize_console()
 
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
-    logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
+    logger.warning(color("fg_bold_green") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

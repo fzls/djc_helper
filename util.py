@@ -1,3 +1,4 @@
+import datetime
 import threading
 
 import win32con
@@ -18,8 +19,10 @@ def maximize_console_sync():
     hwnd = win32gui.GetForegroundWindow()
     win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 
+
 def printed_width(msg):
     return sum([1 if ord(c) < 128 else 2 for c in msg])
+
 
 def padLeftRight(msg, target_size, pad_char=" "):
     msg = str(msg)
@@ -48,6 +51,12 @@ def show_head_line(msg):
     logger.warning(char * line_length)
     logger.warning(char + padLeftRight(msg, line_length - 2) + char)
     logger.warning(char * line_length)
+
+
+def get_this_week_monday():
+    now = datetime.datetime.now()
+    monday = now - datetime.timedelta(days=now.weekday())
+    return monday.strftime("%Y%m%d")
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ from network import *
 from qq_login import QQLogin, LoginResult
 from sign import getMillSecondsUnix
 from urls import Urls
-from util import show_head_line
+from util import show_head_line, get_this_week_monday
 
 
 # DNF蚊子腿小助手
@@ -343,6 +343,9 @@ class DjcHelper:
 
         # 阿拉德集合站活动合集
         self.dnf_922()
+
+        # 2020DNF闪光杯返场赛
+        self.dnf_shanguang()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -1094,6 +1097,51 @@ class DjcHelper:
                            sServiceDepartment="group_3", sServiceType="dnf", eas_url=quote_plus("http://dnf.qq.com/lbact/a20200922hdjh/"),
                            iActivityId=iActivityId, iFlowId=iFlowId)
 
+    # --------------------------------------------2020DNF闪光杯返场赛--------------------------------------------
+    def dnf_shanguang(self):
+        # https://xinyue.qq.com/act/a20200907sgbpc/index.html
+        show_head_line("2020DNF闪光杯返场赛")
+
+        if not self.cfg.function_switches.get_dnf_shanguang:
+            logger.warning("未启用领取2020DNF闪光杯返场赛活动合集功能，将跳过")
+            return
+
+        self.check_dnf_shanguang()
+
+        # self.dnf_shanguang_op("报名礼", "698607")
+        # self.dnf_shanguang_op("app专属礼", "698910")
+        logger.warning("不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
+        
+        self.dnf_shanguang_op("周周闪光好礼", "698913")
+
+        self.dnf_shanguang_op("每日登录游戏", "699136")
+        self.dnf_shanguang_op("每日登录app", "699137")
+        self.dnf_shanguang_op("闪光夺宝", "698915")
+        # self.dnf_shanguang_op("网吧用户", "699140")
+
+    def check_dnf_shanguang(self):
+        res = self.dnf_shanguang_op("报名礼", "698607", print_res=False)
+        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
+        if int(res["ret"]) == 99998:
+            webbrowser.open("https://xinyue.qq.com/act/a20200907sgbpc/index.html")
+            msg = "未绑定角色，请前往2020DNF闪光杯返场赛活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_shanguang
+        return self.post(ctx, self.urls.amesvr, self.dnf_shanguang_flow_data(iActivityId, iFlowId),
+                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="tgclub",
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
+
+    def dnf_shanguang_flow_data(self, iActivityId, iFlowId):
+        weekday = get_this_week_monday()
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20200907sgbpc/"),
+                           iActivityId=iActivityId, iFlowId=iFlowId,
+                           weekday=weekday)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp)
@@ -1121,6 +1169,7 @@ class DjcHelper:
             "package_id": "",
             "lqlevel": "",
             "teamid": "",
+            "weekday": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -1149,7 +1198,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 3
+    idx = 0
     account_config = cfg.account_configs[idx]
 
     idx += 1
@@ -1170,4 +1219,5 @@ if __name__ == '__main__':
     # djcHelper.xinyue_guoqing()
     # djcHelper.ark_lottery()
     # djcHelper.wegame_guoqing()
-    djcHelper.dnf_922()
+    # djcHelper.dnf_922()
+    djcHelper.dnf_shanguang()

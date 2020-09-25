@@ -18,9 +18,13 @@ def has_any_account_in_normal_run(cfg):
     return False
 
 
+def _show_head_line(msg):
+    show_head_line(msg, color("fg_bold_yellow"))
+
+
 def check_all_skey_and_pskey(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("启动时检查各账号skey和pskey是否过期")
+        _show_head_line("启动时检查各账号skey和pskey是否过期")
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
@@ -36,7 +40,7 @@ def check_all_skey_and_pskey(cfg):
 
 def show_lottery_status(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息")
+        _show_head_line("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息")
 
     order_map = {
         "1-1": "多人配合新挑战", "1-2": "丰富机制闯难关", "1-3": "新剧情视听盛宴", "1-4": "单人成团战不停",
@@ -107,7 +111,7 @@ def show_lottery_status(cfg):
 
 def show_accounts_status(cfg, ctx):
     if has_any_account_in_normal_run(cfg):
-        show_head_line(ctx)
+        _show_head_line(ctx)
 
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
     colSizes = [4, 12, 8, 8, 12, 6, 8]
@@ -135,12 +139,12 @@ def show_accounts_status(cfg, ctx):
 
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
 
-        logger.info(tableify(cols, colSizes))
+        logger.info(color("fg_bold_green") + tableify(cols, colSizes))
 
 
 def try_join_xinyue_team(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("尝试加入心悦固定队")
+        _show_head_line("尝试加入心悦固定队")
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
@@ -149,7 +153,7 @@ def try_join_xinyue_team(cfg):
             continue
 
         logger.info("")
-        logger.warning("------------尝试第{}个账户({})------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_yellow") + "------------尝试第{}个账户({})------------".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
@@ -163,7 +167,7 @@ def try_join_xinyue_team(cfg):
 
 def run(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("开始核心逻辑")
+        _show_head_line("开始核心逻辑")
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
@@ -172,7 +176,7 @@ def run(cfg):
             continue
 
         logger.info("")
-        logger.warning("------------开始处理第{}个账户({})------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_yellow") + "------------开始处理第{}个账户({})------------".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()
@@ -184,7 +188,7 @@ def run(cfg):
 
 def try_take_xinyue_team_award(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("尝试领取心悦组队奖励")
+        _show_head_line("尝试领取心悦组队奖励")
 
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):
@@ -194,7 +198,7 @@ def try_take_xinyue_team_award(cfg):
             continue
 
         logger.info("")
-        logger.warning("------------开始尝试为第{}个账户({})领取心悦组队奖励------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_green") + "------------开始尝试为第{}个账户({})领取心悦组队奖励------------".format(idx, account_config.name))
 
         if len(account_config.xinyue_operations) == 0:
             logger.warning("未设置心悦相关操作信息，将跳过")
@@ -227,6 +231,7 @@ def show_support_pic(cfg):
             normal_run = True
             break
     if normal_run:
+        logger.info("")
         logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")

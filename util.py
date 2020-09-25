@@ -2,6 +2,7 @@ import threading
 
 import win32con
 import win32gui
+
 from log import logger
 
 
@@ -18,20 +19,35 @@ def maximize_console_sync():
     win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 
 
+def padLeftRight(msg, target_size, pad_char=" "):
+    msg = str(msg)
+    msg_len = sum([1 if ord(c) < 128 else 2 for c in msg])
+    pad_left_len, pad_right_len = 0, 0
+    if msg_len < target_size:
+        total = target_size - msg_len
+        pad_left_len = total // 2
+        pad_right_len = total - pad_left_len
+
+    return pad_char * pad_left_len + msg + pad_char * pad_right_len
+
+
+def tableify(cols, colSizes, delimiter=' '):
+    return delimiter.join([padLeftRight(col, colSizes[idx]) for idx, col in enumerate(cols)])
+
+
 def show_head_line(msg):
     char = "+"
     line_length = 80
     msg_len = sum([1 if ord(c) < 128 else 2 for c in msg])
-    mid_side_length = (line_length - msg_len) // 2
 
     # 按照下列格式打印
     # +++++++++++
     # +  test   +
     # +++++++++++
     logger.warning(char * line_length)
-    logger.warning(char + " " * (mid_side_length - 1) + msg + " " * (mid_side_length - 1) + char)
+    logger.warning(char + padLeftRight(msg, line_length - 2) + char)
     logger.warning(char * line_length)
 
 
 if __name__ == '__main__':
-    print(uin2qq("o0563251763"))
+    print(padLeftRight("msg", 20, "+"))

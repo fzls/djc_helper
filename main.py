@@ -18,9 +18,9 @@ def has_any_account_in_normal_run(cfg):
     return False
 
 
-def check_all_skey(cfg):
+def check_all_skey_and_pskey(cfg):
     if has_any_account_in_normal_run(cfg):
-        show_head_line("启动时检查各账号skey是否过期")
+        show_head_line("启动时检查各账号skey和pskey是否过期")
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
@@ -187,7 +187,7 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    check_all_skey(cfg)
+    check_all_skey_and_pskey(cfg)
 
     show_accounts_status(cfg, "启动时展示账号概览")
 

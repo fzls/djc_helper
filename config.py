@@ -95,6 +95,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_xinyue_guoqing = True
         # 是否领取wegame国庆活动
         self.get_wegame_guoqing = True
+        # 是否领取阿拉德集合站活动
+        self.get_dnf_922 = True
 
 
 class AccountConfig(ConfigInterface):

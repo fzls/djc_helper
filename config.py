@@ -97,6 +97,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_wegame_guoqing = True
         # 是否领取阿拉德集合站活动
         self.get_dnf_922 = True
+        # 是否领取2020DNF闪光杯返场赛活动
+        self.get_dnf_shanguang = True
 
 
 class AccountConfig(ConfigInterface):

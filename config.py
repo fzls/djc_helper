@@ -53,6 +53,13 @@ class XinYueOperationConfig(ConfigInterface):
         self.count = 1
 
 
+class WegameGuoqingExchangeItemConfig(ConfigInterface):
+    def __init__(self):
+        self.iFlowId = "703514"
+        self.sGoodsName = "强化器-4分"
+        self.count = 1
+
+
 class ArkLotteryAwardConfig(ConfigInterface):
     def __init__(self):
         self.name = "勇士归来礼包"
@@ -117,6 +124,8 @@ class AccountConfig(ConfigInterface):
         self.xinyue_operations = []  # type: List[XinYueOperationConfig]
         # 抽卡相关配置
         self.ark_lottery = ArkLotteryConfig()
+        # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
+        self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)
@@ -134,6 +143,13 @@ class AccountConfig(ConfigInterface):
                 ei = XinYueOperationConfig()
                 ei.auto_update_config(cfg)
                 self.xinyue_operations.append(ei)
+
+        if 'wegame_guoqing_exchange_items' in raw_config:
+            self.wegame_guoqing_exchange_items = []
+            for cfg in raw_config["wegame_guoqing_exchange_items"]:
+                ei = WegameGuoqingExchangeItemConfig()
+                ei.auto_update_config(cfg)
+                self.wegame_guoqing_exchange_items.append(ei)
 
         self.on_config_update(raw_config)
 

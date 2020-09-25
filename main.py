@@ -31,6 +31,7 @@ def check_all_skey_and_pskey(cfg):
         logger.warning("------------检查第{}个账户({})------------".format(idx, account_config.name))
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
+        djcHelper.fetch_pskey()
 
 
 def show_accounts_status(cfg, ctx):

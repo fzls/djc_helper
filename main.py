@@ -1,10 +1,10 @@
 import os
 
-from util import maximize_console, show_head_line
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from log import logger
 from update import check_update_on_start
+from util import maximize_console, show_head_line, tableify
 from version import *
 
 
@@ -37,9 +37,10 @@ def show_accounts_status(cfg, ctx):
     if has_any_account_in_normal_run(cfg):
         show_head_line(ctx)
 
-    head_fmt = "{:^2} {:^10} {:^6} {:^4} {:^4} {:^2} {:^4}"
-    row_fmt = "{:^4} {:^9} {:^8} {:^8} {:^12} {:^6} {:^8}"
-    logger.info(head_fmt.format("序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"))
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
+    colSizes = [4, 12, 8, 8, 12, 6, 8]
+
+    logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.enable or account_config.run_mode == "pre_run":
@@ -60,8 +61,9 @@ def show_accounts_status(cfg, ctx):
         if teaminfo.id != "":
             team_score = "{}/20".format(teaminfo.score)
 
-        logger.info(row_fmt.format(
-            str(idx), account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score))
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
+
+        logger.info(tableify(cols, colSizes))
 
 
 def try_join_xinyue_team(cfg):

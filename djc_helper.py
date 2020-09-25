@@ -308,7 +308,7 @@ class DjcHelper:
             ))
 
         # 最后提示
-        logger.warning("当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
+        logger.warning(color("fg_bold_yellow") + "当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
         logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
 
         subprocess.Popen("npp_portable/notepad++.exe -n39 config.toml")

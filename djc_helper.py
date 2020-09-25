@@ -350,6 +350,9 @@ class DjcHelper:
         # 2020DNF闪光杯返场赛
         self.dnf_shanguang()
 
+        # qq视频活动
+        self.qq_video()
+
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")
@@ -1114,7 +1117,7 @@ class DjcHelper:
         # self.dnf_shanguang_op("报名礼", "698607")
         # self.dnf_shanguang_op("app专属礼", "698910")
         logger.warning("不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
-        
+
         self.dnf_shanguang_op("周周闪光好礼", "698913")
 
         self.dnf_shanguang_op("每日登录游戏", "699136")
@@ -1144,6 +1147,41 @@ class DjcHelper:
                            sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20200907sgbpc/"),
                            iActivityId=iActivityId, iFlowId=iFlowId,
                            weekday=weekday)
+
+    # --------------------------------------------qq视频活动--------------------------------------------
+    def qq_video(self):
+        # https://film.qq.com/film/p/topic/dnf922/index.html
+        show_head_line("qq视频活动")
+
+        if not self.cfg.function_switches.get_qq_video:
+            logger.warning("未启用领取qq视频活动功能，将跳过")
+            return
+
+        self.check_qq_video()
+
+        self.qq_video_op("幸运勇士礼包", "125888")
+        self.qq_video_op("勇士见面礼-礼包", "125890")
+        self.qq_video_op("勇士见面礼-令牌", "125911")
+
+        self.qq_video_op("在线30分钟", "125905")
+        self.qq_video_op("累积3天", "125906")
+        self.qq_video_op("累积7天", "125908")
+        self.qq_video_op("累积15天", "125907")
+
+    def check_qq_video(self):
+        res = self.qq_video_op("幸运勇士礼包", "125888", print_res=False)
+        # {"frame_resp": {"msg": "", "ret": -102, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}, "act_id": 108810, "data": {"button_txt": "关闭", "cdkey": "", "custom_list": [], "end_timestamp": -1, "ext_url": "", "give_type": 0, "is_mask_cdkey": 0, "is_pop_jump": 0, "item_share_desc": "", "item_share_title": "", "item_share_url": "", "item_sponsor_title": "", "item_sponsor_url": "", "item_tips": "", "jump_url": "", "jump_url_web": "", "lottery_item_id": "", "lottery_level": 0, "lottery_name": "", "lottery_num": 0, "lottery_result": 0, "lottery_txt": "不识别的登录态", "lottery_url": "", "lottery_url_ext": "", "lottery_url_ext1": "", "lottery_url_ext2": "", "msg_title": "告诉我怎么寄给你", "need_bind": 0, "next_type": 2, "pop_jump_btn_title": "", "pop_jump_url": "", "prize_give_info": {"prize_give_status": 0}, "property_detail_code": 0, "property_detail_msg": "", "property_type": 0, "share_txt": "", "share_url": "", "source": 0, "sys_code": -1002, "url_lottery": "", "user_info": {"addr": "", "name": "", "tel": "", "uin": ""}}, "module_id": 125888, "msg": "", "ret": -102, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}
+        if int(res["data"]["sys_code"]) == -1002:
+            webbrowser.open("https://film.qq.com/film/p/topic/dnf922/index.html")
+            msg = "未绑定角色，请打开dnf助手->活动->前往【征战新团本，共享好时光】活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def qq_video_op(self, ctx, module_id, print_res=True):
+        extra_cookies = " vuserid={vuserid};".format(
+            vuserid=self.vuserid,
+        )
+        return self.get(ctx, self.urls.qq_video, act_id="108810", module_id=module_id, print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, extra_cookies="", **params):
@@ -1223,4 +1261,5 @@ if __name__ == '__main__':
     # djcHelper.ark_lottery()
     # djcHelper.wegame_guoqing()
     # djcHelper.dnf_922()
-    djcHelper.dnf_shanguang()
+    # djcHelper.dnf_shanguang()
+    djcHelper.qq_video()

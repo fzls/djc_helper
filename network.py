@@ -82,6 +82,10 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
         elif "code" in data:
             success = int(data["code"]) == 0
 
+        # 特殊处理qq视频
+        if "data" in data and "sys_code" in data["data"]:
+            success = int(data["data"]["sys_code"]) == 0
+
         logFunc = logger.info
         if not success:
             logFunc = logger.error

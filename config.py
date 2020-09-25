@@ -97,6 +97,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_922 = True
         # 是否领取2020DNF闪光杯返场赛活动
         self.get_dnf_shanguang = True
+        # 是否领取qq视频活动
+        self.get_qq_video = True
 
 
 class AccountConfig(ConfigInterface):

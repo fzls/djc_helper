@@ -373,7 +373,7 @@ lucky_dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值
 # 尝试使用卡牌抽奖的次数
 lottery_using_cards_count = 0
 
-## 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
+# 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=[依次执行 25963、25962、25939、25964、25965]
 #[[account_configs.ark_lottery.take_awards]]
 #name = "勇士归来礼包"
 #ruleid = 25947
@@ -390,8 +390,28 @@ lottery_using_cards_count = 0
 #count = 1
 #
 #[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包"
+#name = "幸运礼包-至尊礼包中间资格1"
+#ruleid = 25963
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包-至尊礼包中间资格2"
+#ruleid = 25962
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包-至尊礼包限制"
 #ruleid = 25939
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包-兑换至尊失败回滚后6张卡"
+#ruleid = 25964
+#count = 1
+#
+#[[account_configs.ark_lottery.take_awards]]
+#name = "幸运礼包-兑换至尊失败回滚前6张卡"
+#ruleid = 25965
 #count = 1
 
 # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json

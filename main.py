@@ -1,5 +1,6 @@
 import os
 
+from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from log import logger
@@ -32,6 +33,48 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.fetch_pskey()
+
+
+def show_lottery_status(cfg):
+    if has_any_account_in_normal_run(cfg):
+        show_head_line("运行完毕展示各账号抽卡卡片信息")
+
+    order_map = {
+        "1-1": "卡片-多人配合新挑战", "1-2": "卡片-丰富机制闯难关", "1-3": "卡片-新剧情视听盛宴", "1-4": "卡片-单人成团战不停",
+        "2-1": "卡片-回归奖励大升级", "2-2": "卡片-秒升Lv96刷深渊", "2-3": "卡片-灿烂自选回归领", "2-4": "卡片-告别酱油变大佬",
+        "3-1": "卡片-单人爽刷新玩法", "3-2": "卡片-独立成团打副本", "3-3": "卡片-海量福利金秋享", "3-4": "卡片-超强奖励等你拿",
+    }
+    heads = ["序号", "账号名"]
+    colSizes = [4, 12]
+    card_indexes = ["1-1", "1-2", "1-3", "1-4", "2-1", "2-2", "2-3", "2-4", "3-1", "3-2", "3-3", "3-4"]
+    card_width = 3
+    heads.extend(card_indexes)
+    colSizes.extend([card_width for i in card_indexes])
+
+    logger.info(tableify(heads, colSizes))
+    for _idx, account_config in enumerate(cfg.account_configs):
+        idx = _idx + 1
+        if not account_config.enable or account_config.run_mode == "pre_run":
+            # 未启用的账户或者预运行阶段的账户不走该流程
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list(print_warning=False)
+
+        lr = djcHelper.fetch_pskey()
+        if lr is None:
+            continue
+
+        al = ArkLottery(djcHelper, lr)
+        al.fetch_lottery_data()
+
+        card_counts = al.get_card_counts()
+
+        cols = [idx, account_config.name]
+        cols.extend([card_counts[order_map[card_index]] for card_index in card_indexes])
+
+        logger.info(tableify(cols, colSizes))
 
 
 def show_accounts_status(cfg, ctx):
@@ -202,6 +245,8 @@ def main():
 
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg)
+
+    show_lottery_status(cfg)
 
     show_accounts_status(cfg, "运行完毕展示账号概览")
 

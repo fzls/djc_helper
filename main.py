@@ -87,6 +87,7 @@ def show_lottery_status(cfg):
 
         logger.info(tableify(cols, colSizes))
 
+    logger.info("")
     logger.info("抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
 
 

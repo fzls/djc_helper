@@ -14,7 +14,7 @@ from ark_lottery import ArkLottery
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from qq_login import QQLogin
+from qq_login import QQLogin, LoginResult
 from sign import getMillSecondsUnix
 from urls import Urls
 from util import show_head_line
@@ -27,6 +27,7 @@ class DjcHelper:
     first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
+    local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
 
     local_saved_teamid_file = os.path.join(db_dir, ".teamid.{}.json")
 
@@ -917,18 +918,66 @@ class DjcHelper:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
             return
 
-        # https://act.qzone.qq.com/vip/2019/xcardv3?_wv=4&zz=4&verifyid=qqvipdnf9&gameId=10014&zz=4&toOpenid=&serverName=%E4%B8%8A%E6%B5%B7%E4%B8%80%E5%8C%BA&toUin=286058381&cGameId=1006&serverId=3&gameName=DNF&areaName=%E4%B8%8A%E6%B5%B7&nickname=%E3%80%80+++_%E6%9D%B0%21%3F&roleLevel=100&accType=wx&gameId=10014&roleId=76707780&uniqueRoleId=3002361072&openid=&userId=561625054&token=TAqTECD6&isMainRole=1&subGameId=10014&areaId=23&verifyid=qqvipdnf9&roleJob=%E6%9E%81%E8%AF%A3%C2%B7%E5%89%91%E5%BD%B1&roleName=%E6%9C%AB%E6%B4%9B%E3%81%AE&_wv=4&plg_auth=1&from=arklottery
-        # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
-        ql = QQLogin(self.common_cfg)
-        if self.cfg.login_mode == "qr_login":
-            # 扫码登录
-            lr = ql.qr_login(is_qzone=True)
+        cached_pskey = self.load_uin_pskey()
+        need_update = self.is_pskey_expired(cached_pskey)
+
+        if need_update:
+            # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
+            logger.warning("pskey需要更新，将尝试重新登录QQ空间获取并保存到本地")
+            # 重新获取
+            ql = QQLogin(self.common_cfg)
+            if self.cfg.login_mode == "qr_login":
+                # 扫码登录
+                lr = ql.qr_login(is_qzone=True)
+            else:
+                # 自动登录
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+            # 保存
+            self.save_uin_pskey(lr.uin, lr.p_skey)
         else:
-            # 自动登录
-            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+            logger.warning("使用缓存的pskey进行抽卡操作")
+            lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
 
         al = ArkLottery(self, lr)
         al.ark_lottery()
+
+    def is_pskey_expired(self, cached_pskey):
+        if cached_pskey is None:
+            return True
+
+        lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
+        al = ArkLottery(self, lr)
+
+        # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
+        res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
+        return res['code'] == -3000 and res['subcode'] == -4001
+
+    def save_uin_pskey(self, uin, pskey):
+        # 本地缓存
+        with open(self.get_local_saved_pskey_file(), "w", encoding="utf-8") as sf:
+            loginResult = {
+                "p_uin": str(uin),
+                "p_skey": str(pskey),
+            }
+            json.dump(loginResult, sf)
+            logger.debug("本地保存pskey信息，具体内容如下：{}".format(loginResult))
+
+    def load_uin_pskey(self):
+        # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
+        if self.cfg.login_mode not in ["qr_login", "auto_login"]:
+            return
+
+        # 若未有缓存文件，则跳过
+        if not os.path.isfile(self.get_local_saved_pskey_file()):
+            return
+
+        with open(self.get_local_saved_pskey_file(), "r", encoding="utf-8") as f:
+            loginResult = json.load(f)
+            logger.debug("读取本地缓存的pskey信息，具体内容如下：{}".format(loginResult))
+            return loginResult
+
+    def get_local_saved_pskey_file(self):
+        return self.local_saved_pskey_file.format(self.cfg.name)
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):

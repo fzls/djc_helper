@@ -167,7 +167,7 @@ class DjcHelper:
     def update_skey_qr_login(self, query_data):
         qqLogin = QQLogin(self.common_cfg)
         loginResult = qqLogin.qr_login()
-        self.save_uin_skey(loginResult.uin, loginResult.skey)
+        self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def update_skey_auto_login(self, query_data):
         self.show_tip_on_first_run_auto_login_mode()
@@ -175,19 +175,21 @@ class DjcHelper:
         qqLogin = QQLogin(self.common_cfg)
         ai = self.cfg.account_info
         loginResult = qqLogin.login(ai.account, ai.password)
-        self.save_uin_skey(loginResult.uin, loginResult.skey)
+        self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
-    def save_uin_skey(self, uin, skey):
+    def save_uin_skey(self, uin, skey, vuserid):
         self.memory_save_uin_skey(uin, skey)
 
-        self.local_save_uin_skey(uin, skey)
+        self.local_save_uin_skey(uin, skey, vuserid)
 
-    def local_save_uin_skey(self, uin, skey):
+    def local_save_uin_skey(self, uin, skey, vuserid):
         # 本地缓存
+        self.vuserid = vuserid
         with open(self.get_local_saved_skey_file(), "w", encoding="utf-8") as sf:
             loginResult = {
                 "uin": str(uin),
                 "skey": str(skey),
+                "vuserid": str(vuserid),
             }
             json.dump(loginResult, sf)
             logger.debug("本地保存skey信息，具体内容如下：{}".format(loginResult))
@@ -204,6 +206,7 @@ class DjcHelper:
         with open(self.get_local_saved_skey_file(), "r", encoding="utf-8") as f:
             loginResult = json.load(f)
             self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
+            self.vuserid = loginResult.get("vuserid", "")
             logger.debug("读取本地缓存的skey信息，具体内容如下：{}".format(loginResult))
 
     def get_local_saved_skey_file(self):

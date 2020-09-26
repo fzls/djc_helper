@@ -10,7 +10,7 @@ from version import *
 
 def has_any_account_in_normal_run(cfg):
     for _idx, account_config in enumerate(cfg.account_configs):
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
@@ -28,7 +28,7 @@ def check_all_skey_and_pskey(cfg):
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
@@ -67,7 +67,7 @@ def show_lottery_status(cfg):
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
@@ -119,7 +119,7 @@ def show_accounts_status(cfg, ctx):
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
@@ -148,7 +148,7 @@ def try_join_xinyue_team(cfg):
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
@@ -192,7 +192,7 @@ def try_take_xinyue_team_award(cfg):
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable or account_config.run_mode == "pre_run":
+        if not account_config.enable_and_normal_run():
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 

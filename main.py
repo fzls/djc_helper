@@ -192,8 +192,8 @@ def try_take_xinyue_team_award(cfg):
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable:
-            logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
+        if not account_config.enable or account_config.run_mode == "pre_run":
+            # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
         logger.info("")

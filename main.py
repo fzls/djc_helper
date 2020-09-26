@@ -175,7 +175,7 @@ def run(cfg):
             logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
             continue
 
-        _show_head_line("------------开始处理第{}个账户({})------------".format(idx, account_config.name))
+        _show_head_line("开始处理第{}个账户({})".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()

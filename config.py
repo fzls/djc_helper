@@ -157,6 +157,9 @@ class AccountConfig(ConfigInterface):
 
         self.on_config_update(raw_config)
 
+    def enable_and_normal_run(self):
+        return self.enable and self.run_mode == "normal"
+
     def on_config_update(self, raw_config: dict):
         self.sDeviceID = self.getSDeviceID()
         self.aes_key = "84e6c6dc0f9p4a56"

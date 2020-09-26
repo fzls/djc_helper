@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
 from config import *
-from log import logger
+from log import logger, color
 
 
 class LoginResult(ConfigInterface):
@@ -39,7 +39,7 @@ class QQLogin():
         self.driver = None
 
     def prepare_chrome(self, login_type):
-        logger.info("正在初始化chrome driver，用以进行【{}】相关操作".format(login_type))
+        logger.info(color("fg_bold_cyan") + "正在初始化chrome driver，用以进行【{}】相关操作".format(login_type))
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load

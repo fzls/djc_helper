@@ -1273,10 +1273,9 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 0
-    account_config = cfg.account_configs[idx]
+    idx = 1 # 从1开始，第i个
+    account_config = cfg.account_configs[idx-1]
 
-    idx += 1
     logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
     djcHelper = DjcHelper(account_config, cfg.common)

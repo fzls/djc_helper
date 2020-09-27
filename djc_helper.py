@@ -1032,6 +1032,8 @@ class DjcHelper:
 
         # 在线得好礼
         self.wegame_op("累计在线30分钟签到", "703529")
+        check_days = self.get_wegame_checkin_days()
+        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(check_days))
         self.wegame_op("签到3天礼包", "703530")
         self.wegame_op("签到5天礼包", "703531")
         self.wegame_op("签到7天礼包", "703532")
@@ -1044,6 +1046,10 @@ class DjcHelper:
         val = res["modRet"]["sOutValue1"]
         star_count, lottery_times = [int(jifen.split(':')[-1]) for jifen in val.split('|')]
         return star_count, lottery_times
+
+    def get_wegame_checkin_days(self):
+        res = self.wegame_op("查询签到信息", "703539")
+        return res["modRet"]["total"]
 
     def wegame_exchange_items(self):
         for ei in self.cfg.wegame_guoqing_exchange_items:

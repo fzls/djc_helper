@@ -47,9 +47,6 @@ class ArkLottery:
         if self.roleinfo is None:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
-        # 拉取抽奖数据
-        self.fetch_lottery_data()
-
         # 增加次数
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")
@@ -109,9 +106,13 @@ class ArkLottery:
         self.lottery_data = json.loads(page_html[prefix_idx:suffix_idx])
 
     def remaining_lottery_times(self):
+        self.fetch_lottery_data()
+
         return self.lottery_data["actCount"]["rule"]["25940"]["count"][0]['left']
 
     def get_card_counts(self):
+        self.fetch_lottery_data()
+
         card_counts = {}
 
         count_map = self.lottery_data["actCount"]["rule"]
@@ -127,6 +128,8 @@ class ArkLottery:
         return card_counts
 
     def get_prize_counts(self):
+        self.fetch_lottery_data()
+
         prize_counts = {}
 
         count_map = self.lottery_data["actCount"]["rule"]

@@ -80,7 +80,6 @@ def show_lottery_status(cfg):
             continue
 
         al = ArkLottery(djcHelper, lr)
-        al.fetch_lottery_data()
 
         card_counts = al.get_card_counts()
         prize_counts = al.get_prize_counts()

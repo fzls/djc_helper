@@ -1096,9 +1096,15 @@ class DjcHelper:
         self.dnf_922_op("勇士礼包", "703172")
 
         self.dnf_922_op("30分签到礼包", "703173")
+        check_days = self.get_dnf_922_checkin_days()
+        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(check_days))
         self.dnf_922_op("3日礼包", "703168")
         self.dnf_922_op("7日礼包", "703174")
         self.dnf_922_op("15日礼包", "703175")
+
+    def get_dnf_922_checkin_days(self):
+        res = self.dnf_922_op("查询签到信息", "703177")
+        return res["modRet"]["total"]
 
     def check_dnf_922(self):
         res = self.dnf_922_op("30分签到礼包", "703173", print_res=False)

@@ -916,6 +916,8 @@ class DjcHelper:
         try:
             # https://gamecredit.qq.com/static/web/index.html#/gift-pack
             self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
+            # 等待一会
+            time.sleep(self.common_cfg.retry.request_wait_time)
             self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
         except Exception as e:
             logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)

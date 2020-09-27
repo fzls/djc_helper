@@ -23,8 +23,9 @@ def _show_head_line(msg):
 
 
 def check_all_skey_and_pskey(cfg):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line("启动时检查各账号skey和pskey是否过期")
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("启动时检查各账号skey和pskey是否过期")
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
@@ -39,8 +40,9 @@ def check_all_skey_and_pskey(cfg):
 
 
 def show_lottery_status(cfg):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息")
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息")
 
     order_map = {
         "1-1": "多人配合新挑战", "1-2": "丰富机制闯难关", "1-3": "新剧情视听盛宴", "1-4": "单人成团战不停",
@@ -117,8 +119,9 @@ def show_lottery_status(cfg):
 
 
 def show_accounts_status(cfg, ctx):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line(ctx)
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line(ctx)
 
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
     colSizes = [4, 12, 8, 8, 12, 6, 8]
@@ -150,8 +153,9 @@ def show_accounts_status(cfg, ctx):
 
 
 def try_join_xinyue_team(cfg):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line("尝试加入心悦固定队")
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("尝试加入心悦固定队")
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
@@ -173,8 +177,7 @@ def try_join_xinyue_team(cfg):
 
 
 def run(cfg):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line("开始核心逻辑")
+    _show_head_line("开始核心逻辑")
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
@@ -193,8 +196,9 @@ def run(cfg):
 
 
 def try_take_xinyue_team_award(cfg):
-    if has_any_account_in_normal_run(cfg):
-        _show_head_line("尝试领取心悦组队奖励")
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("尝试领取心悦组队奖励")
 
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):

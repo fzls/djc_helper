@@ -1018,13 +1018,15 @@ class DjcHelper:
         self.wegame_op("答题右下", "703517")
 
         # 阿拉德智慧星-兑换奖励
+        star_count, _ = self.get_wegame_star_count_lottery_times()
+        logger.info(color("fg_bold_cyan") + "即将进行兑换道具，当前剩余智慧星为{}".format(star_count))
         self.wegame_exchange_items()
 
         # 签到抽大奖
         self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
         self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
-        lottery_times = self.get_wegame_lottery_times()
-        logger.info("即将进行抽奖，当前剩余抽奖资格为{}".format(lottery_times))
+        _, lottery_times = self.get_wegame_star_count_lottery_times()
+        logger.info(color("fg_bold_cyan") + "即将进行抽奖，当前剩余抽奖资格为{}".format(lottery_times))
         for i in range(lottery_times):
             self.wegame_op("抽奖", "703957")
 
@@ -1036,14 +1038,12 @@ class DjcHelper:
         self.wegame_op("签到10天礼包", "703533")
         self.wegame_op("签到15天礼包", "703534")
 
-
-    def get_wegame_lottery_times(self):
-        res = self.wegame_op("查询剩余抽奖次数", "703542")
+    def get_wegame_star_count_lottery_times(self):
+        res = self.wegame_op("查询剩余抽奖次数", "703542", print_res=False)
         # "sOutValue1": "239:16:4|240:8:1",
         val = res["modRet"]["sOutValue1"]
         star_count, lottery_times = [int(jifen.split(':')[-1]) for jifen in val.split('|')]
-        return lottery_times
-
+        return star_count, lottery_times
 
     def wegame_exchange_items(self):
         for ei in self.cfg.wegame_guoqing_exchange_items:

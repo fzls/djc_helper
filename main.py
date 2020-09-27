@@ -90,14 +90,22 @@ def show_lottery_status(cfg):
             # 特殊处理色彩
             if card_count == 0:
                 if idx == 1:
+                    # 突出显示大号没有的卡片
                     card_count = color("fg_bold_cyan") + padLeftRight(card_count, 3) + color("INFO")
                 else:
+                    # 小号没有的卡片直接不显示，避免信息干扰
                     card_count = ""
             else:
                 if idx == 1:
-                    pass
+                    if card_count == 1:
+                        # 大号只有一张的卡片也特殊处理
+                        card_count = color("fg_bold_blue") + padLeftRight(card_count, 3) + color("INFO")
+                    else:
+                        # 大号其余卡片亮绿色
+                        card_count = color("fg_bold_green") + padLeftRight(card_count, 3) + color("INFO")
                 else:
-                    card_count = color("bold_black") + padLeftRight(card_count, 3) + color("INFO")
+                    # 小号拥有的卡片淡化处理，方便辨识
+                    card_count = color("fg_bold_black") + padLeftRight(card_count, 3) + color("INFO")
             cols.append(card_count)
         cols.extend([prize_counts[order_map[prize_index]] for prize_index in prize_indexes])
 

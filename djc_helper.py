@@ -1146,8 +1146,16 @@ class DjcHelper:
 
         self.dnf_shanguang_op("每日登录游戏", "699136")
         self.dnf_shanguang_op("每日登录app", "699137")
-        self.dnf_shanguang_op("闪光夺宝", "698915")
-        # self.dnf_shanguang_op("网吧用户", "699140")
+        # self.dnf_shanguang_op("每日网吧登录", "699140")
+
+        lottery_times = self.get_dnf_shanguang_lottery_times()
+        logger.info(color("fg_bold_cyan") + "当前剩余闪光夺宝次数为 {} ".format(lottery_times))
+        for i in range(lottery_times):
+            self.dnf_shanguang_op("闪光夺宝", "698915")
+
+    def get_dnf_shanguang_lottery_times(self):
+        res = self.dnf_shanguang_op("闪光夺宝次数", "699142")
+        return int(res["modRet"]["sOutValue3"])
 
     def check_dnf_shanguang(self):
         res = self.dnf_shanguang_op("报名礼", "698607", print_res=False)

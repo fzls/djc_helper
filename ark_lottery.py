@@ -78,7 +78,11 @@ class ArkLottery:
         if len(self.cfg.ark_lottery.take_awards) != 0:
             for award in self.cfg.ark_lottery.take_awards:
                 for idx in range(award.count):
-                    self.do_ark_lottery("fcg_receive_reward", award.name, award.ruleid, gameid="dnf")
+                    api = "fcg_receive_reward"
+                    if int(award.ruleid) == 25939:
+                        # 至尊礼包的接口与其他奖励接口不一样
+                        api = "fcg_prize_lottery"
+                    self.do_ark_lottery(api, award.name, award.ruleid, gameid="dnf")
         else:
             logger.warning("未设置领取集卡礼包奖励，也许是小号，请记得定期手动登录小号来给大号赠送缺失的卡")
 

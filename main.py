@@ -297,7 +297,7 @@ def main():
     show_support_pic(cfg)
 
     # undone: 临时代码，10.04号后删除
-    logger.warning("9.28到10.4期间记得去https://dnf.qq.com/cp/a20190312welfare/领取一次【[活动]时间引导石(100个)*1】。功能太小了，懒得适配<_<")
+    logger.warning(color("fg_bold_yellow") + "9.28到10.4期间记得去https://dnf.qq.com/cp/a20190312welfare/领取一次【[活动]时间引导石(100个)*1】。功能太小了，懒得适配<_<")
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)

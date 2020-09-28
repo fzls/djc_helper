@@ -206,11 +206,12 @@ if __name__ == '__main__':
     # # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
-    api.auto_login_with_password(cfg.common, cfg.account_configs[0].account_info.account, cfg.account_configs[0].account_info.password)
+    acc = cfg.account_configs[0].account_info
+    api.auto_login_with_password(cfg.common, acc.account, acc.password)
 
     res = api.get_player_role_list()
-    for role in res['data']['role_list']:
-        logger.info("区服={:3d}\t角色名={}".format(role['area_id'], role['role_name']))
+    for idx, role in enumerate(res['data']['role_list']):
+        logger.info("{:3s} 区服={:3d}\t角色名={}".format(str(idx), role['area_id'], role['role_name']))
     default_role = res['data']['role_list'][0]
     area_id, role_name = default_role['area_id'], default_role['role_name']
     api.set_role_info(area_id, role_name)

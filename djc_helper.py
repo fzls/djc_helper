@@ -1278,6 +1278,7 @@ class DjcHelper:
     def dnf_hillock(self):
         # 临时只给自己用，暂时没做完
         if uin2qq(self.cfg.account_info.uin) not in ["1054073896"]:
+            logger.warning("半成品希洛克攻坚战目前暂不对他人开放，知道如何运行源码的可自行研究，通过抓包dnf助手的请求来获取nickName/userId/token并填写")
             return
 
         # https://mwegame.qq.com/act/dnf/hillockbattlePC/index.html

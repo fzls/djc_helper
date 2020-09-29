@@ -104,6 +104,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_shanguang = True
         # 是否领取qq视频活动
         self.get_qq_video = True
+        # 是否领取9月希洛克攻坚战活动
+        self.get_dnf_hillock = True
 
 
 class AccountConfig(ConfigInterface):

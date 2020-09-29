@@ -1193,6 +1193,12 @@ class DjcHelper:
         logger.warning("不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
         self.dnf_shanguang_op("周周闪光好礼", "698913")
+        for i in range(6):
+            res = self.dnf_shanguang_op("周周开大奖", "698914")
+            # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "iCondNotMetId": "1326109", "sMsg": "开奖次数已用完", "sCondNotMetTips": "开奖次数已用完"}}
+            if res["flowRet"]["iCondNotMetId"] == "1326109":
+                break
+            time.sleep(5)
 
         self.dnf_shanguang_op("每日登录游戏", "699136")
         self.dnf_shanguang_op("每日登录app", "699137")

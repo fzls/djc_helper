@@ -1274,6 +1274,77 @@ class DjcHelper:
         )
         return self.get(ctx, self.urls.qq_video, act_id="108810", module_id=module_id, print_res=print_res, extra_cookies=extra_cookies)
 
+    # --------------------------------------------9月希洛克攻坚战活动--------------------------------------------
+    def dnf_hillock(self):
+        # 临时只给自己用，暂时没做完
+        if uin2qq(self.cfg.account_info.uin) not in ["1054073896"]:
+            return
+
+        # https://mwegame.qq.com/act/dnf/hillockbattlePC/index.html
+        show_head_line("9月希洛克攻坚战")
+
+        if not self.cfg.function_switches.get_dnf_hillock:
+            logger.warning("未启用领取9月希洛克攻坚战活动合集功能，将跳过")
+            return
+
+        checkin_days = self.query_dnf_hillock_info()
+        logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
+
+        self.dnf_hillock_op("第一天", "700742")
+        self.dnf_hillock_op("第二天", "700787")
+        self.dnf_hillock_op("第三天", "700788")
+        self.dnf_hillock_op("第四天", "700789")
+        self.dnf_hillock_op("第五天", "700790")
+        self.dnf_hillock_op("第六天", "700791")
+        self.dnf_hillock_op("第七天", "700792")
+
+        self.dnf_hillock_op("隐藏1", "700862")
+        self.dnf_hillock_op("隐藏2", "700897")
+        #
+        self.dnf_hillock_op("累积 7天&&百分比75%", "700902")
+        self.dnf_hillock_op("累积14天&&百分比50%", "701061")
+        self.dnf_hillock_op("累积21天&&百分比25%", "701062")
+        self.dnf_hillock_op("累积28天&&百分比 0%", "701063")
+
+        self.dnf_hillock_op("国庆登录送抽奖", "702452")
+        self.dnf_hillock_op("国庆抽奖", "701098")
+
+    def query_dnf_hillock_info(self):
+        res = self.dnf_hillock_op("查询", "699416")
+        sOutValue1, sOutValue2 = res["modRet"]["sOutValue1"], res["modRet"]["sOutValue2"]
+
+        _, checkin_days = sOutValue1.split(';')
+        can_checkin_7, can_checkin_14, can_checkin_21, can_checkin_28 = sOutValue2.split(';')
+
+        return checkin_days
+
+    def dnf_hillock_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_hillock
+        res = self.post(ctx, self.urls.amesvr, self.dnf_hillock_flow_data(iActivityId, iFlowId),
+                         amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
+
+        # 1331152: 登录态失效,请重新登录!
+        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["iCondNotMetId"] == "1331152":
+            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，请在virtualXposed中手动登录dnf助手，在其中打开任意网页，使用fiddler来监听请求，找到请求中的token，进行更新")
+
+        return res
+
+    def dnf_hillock_flow_data(self, iActivityId, iFlowId):
+        # sArea/serverId/sRoleId/sRoleName/uin/skey/nickName/userId/token
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("http://mwegame.qq.com/act/dnf/hillockbattle2020/index1/"),
+                           iActivityId=iActivityId, iFlowId=iFlowId,
+                           sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
+                           sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                           uin=qq, skey=self.cfg.account_info.skey,
+                           # re: 获取dnf助手token,目前看来可能需要解包来得知如何登录获取这个token，不然只能手动抓请求了-。-
+                           nickName=quote_plus("风之凌殇"), userId="504051073", token="Pab7kEzG",
+                           )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, extra_cookies)
@@ -1302,6 +1373,15 @@ class DjcHelper:
             "lqlevel": "",
             "teamid": "",
             "weekDay": "",
+            "sArea": "",
+            "serverId": "",
+            "nickName": "",
+            "sRoleId": "",
+            "sRoleName": "",
+            "uin": "",
+            "skey": "",
+            "userId": "",
+            "token": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -1353,4 +1433,5 @@ if __name__ == '__main__':
     # djcHelper.dnf_922()
     # djcHelper.dnf_shanguang()
     # djcHelper.qq_video()
-    djcHelper.djc_operations()
+    # djcHelper.djc_operations()
+    djcHelper.dnf_hillock()

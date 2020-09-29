@@ -58,12 +58,14 @@ class Urls:
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_922 = "331393"  # DNF-922渠道活动合集
         self.iActivityId_dnf_shanguang = "328404"  # 2020DNF闪光杯返场赛
+        self.iActivityId_dnf_hillock = "328949" # 9月希洛克攻坚战活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
         self.amesvr = "https://{amesvr_host}/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType={sServiceType}&iActivityId={iActivityId}&sServiceDepartment={sServiceDepartment}&isXhrPost=true"
-        # 需要手动额外传入参数：iFlowId/package_id/lqlevel/teamid, sServiceDepartment, sServiceType
-        self.amesvr_raw_data = "iActivityId={iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&weekDay={weekDay}&e_code=0&g_code=0&eas_url={eas_url}&xhr=1&sServiceDepartment={sServiceDepartment}&sServiceType={sServiceType}"
+        # &sArea={sArea}&sRoleId={sRoleId}&uin={uin}&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&skey={skey}&nickName={nickName}
+        # 需要手动额外传入参数：iFlowId/package_id/lqlevel/teamid, sServiceDepartment/sServiceType, sArea/serverId/nickName/sRoleId/sRoleName/uin/skey/userId/token
+        self.amesvr_raw_data = "iActivityId={iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&weekDay={weekDay}&e_code=0&g_code=0&eas_url={eas_url}&xhr=1&sServiceDepartment={sServiceDepartment}&sServiceType={sServiceType}&sArea={sArea}&sRoleId={sRoleId}&uin={uin}&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&skey={skey}&nickName={nickName}"
 
         # 每月黑钻等级礼包
         self.heizuan_gift = "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"

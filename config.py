@@ -74,8 +74,11 @@ class ArkLotteryConfig(ConfigInterface):
         self.lottery_using_cards_count = 0
         # 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
         self.take_awards = []  # type: List[ArkLotteryAwardConfig]
+
         # 是否展示在概览界面
         self.show_status = True
+        # 卡牌数目使用特定的颜色
+        self.show_color = ""
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

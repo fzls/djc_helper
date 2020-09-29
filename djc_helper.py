@@ -1195,8 +1195,9 @@ class DjcHelper:
         self.dnf_shanguang_op("周周闪光好礼", "698913")
         for i in range(6):
             res = self.dnf_shanguang_op("周周开大奖", "698914")
-            # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "iCondNotMetId": "1326109", "sMsg": "开奖次数已用完", "sCondNotMetTips": "开奖次数已用完"}}
-            if res["flowRet"]["iCondNotMetId"] == "1326109":
+            # 1326109: 开奖次数已用完
+            # 1326106: 很遗憾，你没有获得本次开奖机会
+            if res["flowRet"]["iCondNotMetId"] in ["1326109", "1326106"]:
                 break
             time.sleep(5)
 

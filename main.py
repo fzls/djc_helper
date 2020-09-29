@@ -301,11 +301,19 @@ def main():
     # 每次正式模式运行成功时弹出打赏图片
     show_support_pic(cfg)
 
-    # undone: 临时代码，10.04号后删除
-    logger.warning(color("fg_bold_yellow") + "9.28到10.4期间记得去https://dnf.qq.com/cp/a20190312welfare/领取一次【[活动]时间引导石(100个)*1】。功能太小了，懒得适配<_<")
+    # 临时代码
+    temp_code()
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)
+
+
+def temp_code():
+    # re: 10.04号后删除
+    logger.warning(color("fg_bold_yellow") + "9.28到10.4期间记得去https://dnf.qq.com/cp/a20190312welfare/领取一次【[活动]时间引导石(100个)*1】。功能太小了，懒得适配<_<")
+
+    # re: 闪光杯活动结束后删除
+    logger.warning(color("fg_bold_yellow") + "记得每日手动登陆下心悦app，不然闪光杯抽奖会少一次。研究了下，心悦app使用jce协议并加了各种校验和加密，且客户端经过加壳，比较难搞，最终决定手动操作了<_<，有兴趣了解可以参考 https://juejin.im/post/6844903583524225031")
 
 
 if __name__ == '__main__':

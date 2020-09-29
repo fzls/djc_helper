@@ -1231,11 +1231,11 @@ class DjcHelper:
                          print_res=print_res)
 
     def dnf_shanguang_flow_data(self, iActivityId, iFlowId):
-        weekday = get_this_week_monday()
+        weekDay = get_this_week_monday()
         return self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20200907sgbpc/"),
                            iActivityId=iActivityId, iFlowId=iFlowId,
-                           weekday=weekday)
+                           weekDay=weekDay)
 
     # --------------------------------------------qq视频活动--------------------------------------------
     def qq_video(self):

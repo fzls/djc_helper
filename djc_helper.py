@@ -1301,7 +1301,7 @@ class DjcHelper:
             "package_id": "",
             "lqlevel": "",
             "teamid": "",
-            "weekday": "",
+            "weekDay": "",
         }
         return url.format(**{**default_params, **params})
 

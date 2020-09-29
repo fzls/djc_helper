@@ -28,6 +28,7 @@ class DjcHelper:
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
+    local_saved_guanjia_openid_file = os.path.join(cached_dir, ".saved_guanjia_openid.{}.json")
 
     local_saved_teamid_file = os.path.join(db_dir, ".teamid.{}.json")
 
@@ -1359,6 +1360,111 @@ class DjcHelper:
                            nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
                            )
 
+    # --------------------------------------------管家蚊子腿--------------------------------------------
+    def guanjia(self):
+        # https://guanjia.qq.com/act/cop/202010dnf/
+        show_head_line("管家蚊子腿")
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        lr = self.fetch_guanjia_openid()
+        if lr is None:
+            return
+        self.guanjia_lr = lr
+        # 等一会，避免报错
+        time.sleep(self.common_cfg.retry.request_wait_time)
+
+        self.guanjia_op("下载礼包", "comjoin_1059", giftId="7094")
+        self.guanjia_op("连续签到两天礼包", "comjoin_1059", giftId="7095")
+
+        self.guanjia_op("回归勇士礼包", "comjoin_1059", giftId="7096")
+        self.guanjia_op("每日游戏在线30分钟", "comjoin_1059", giftId="7099")
+        self.guanjia_op("管家个人中心签到", "comjoin_1059", giftId="7098")
+
+        for i in range(10):
+            res = self.guanjia_op("抽奖", "lottjoin_1058")
+            # {"code": 4101, "msg": "积分不够", "result": []}
+            if res["code"] == 4101:
+                break
+            time.sleep(self.common_cfg.retry.request_wait_time)
+
+    def is_guanjia_openid_expired(self, cached_guanjia_openid):
+        if cached_guanjia_openid is None:
+            return True
+
+        lr = LoginResult(qc_openid=cached_guanjia_openid["qc_openid"], qc_k=cached_guanjia_openid["qc_k"])
+        self.guanjia_lr = lr
+
+        # {"code": 7005, "msg": "获取accToken失败", "result": []}
+        # {"code": 29, "msg": "请求包参数错误", "result": []}
+        res = self.guanjia_op("管家个人中心签到", "comjoin_1059", giftId="7098", print_res=False)
+        return res["code"] in [7005, 29]
+
+    def guanjia_op(self, ctx, api, giftId="", print_res=True):
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        extra_cookies = "__qc__openid={openid}; __qc__k={access_key};".format(
+            openid=self.guanjia_lr.qc_openid,
+            access_key=self.guanjia_lr.qc_k
+        )
+        return self.get(ctx, self.urls.guanjia, api=api, giftId=giftId, area_id=roleinfo.serviceID, charac_no=roleinfo.roleCode, charac_name=quote_plus(roleinfo.roleName),
+                        extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
+
+    def fetch_guanjia_openid(self):
+        # 仅支持扫码登录和自动登录
+        if self.cfg.login_mode not in ["qr_login", "auto_login"]:
+            logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
+            return None
+
+        cached_guanjia_openid = self.load_guanjia_openid()
+        need_update = self.is_guanjia_openid_expired(cached_guanjia_openid)
+
+        if need_update:
+            logger.warning("管家openid需要更新，将尝试重新登录电脑管家网页获取并保存到本地")
+            # 重新获取
+            ql = QQLogin(self.common_cfg)
+            if self.cfg.login_mode == "qr_login":
+                # 扫码登录
+                lr = ql.qr_login(login_mode=ql.login_mode_guanjia)
+            else:
+                # 自动登录
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia)
+            # 保存
+            self.save_guanjia_openid(lr.qc_openid, lr.qc_k)
+        else:
+            lr = LoginResult(qc_openid=cached_guanjia_openid["qc_openid"], qc_k=cached_guanjia_openid["qc_k"])
+
+        return lr
+
+    def save_guanjia_openid(self, qc_openid, qc_k):
+        # 本地缓存
+        with open(self.get_local_saved_guanjia_openid_file(), "w", encoding="utf-8") as sf:
+            loginResult = {
+                "qc_openid": str(qc_openid),
+                "qc_k": str(qc_k),
+            }
+            json.dump(loginResult, sf)
+            logger.debug("本地保存管家openid信息，具体内容如下：{}".format(loginResult))
+
+    def load_guanjia_openid(self):
+        # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
+        if self.cfg.login_mode not in ["qr_login", "auto_login"]:
+            return
+
+        # 若未有缓存文件，则跳过
+        if not os.path.isfile(self.get_local_saved_guanjia_openid_file()):
+            return
+
+        with open(self.get_local_saved_guanjia_openid_file(), "r", encoding="utf-8") as f:
+            loginResult = json.load(f)
+            logger.debug("读取本地缓存的管家openid信息，具体内容如下：{}".format(loginResult))
+            return loginResult
+
+    def get_local_saved_guanjia_openid_file(self):
+        return self.local_saved_guanjia_openid_file.format(self.cfg.name)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, extra_cookies)
@@ -1448,4 +1554,5 @@ if __name__ == '__main__':
     # djcHelper.dnf_shanguang()
     # djcHelper.qq_video()
     # djcHelper.djc_operations()
-    djcHelper.dnf_hillock()
+    # djcHelper.dnf_hillock()
+    djcHelper.guanjia()

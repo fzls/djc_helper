@@ -83,3 +83,6 @@ class Urls:
 
         # qq视频活动
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type=21&option=100&ptag=&otype=xjson&_ts={millseconds}"
+
+        # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
+        self.guanjia = url = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"

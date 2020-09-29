@@ -1286,6 +1286,11 @@ class DjcHelper:
             logger.warning("未启用领取9月希洛克攻坚战活动合集功能，将跳过")
             return
 
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
         checkin_days = self.query_dnf_hillock_info()
         logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
 

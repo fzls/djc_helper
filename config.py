@@ -90,6 +90,21 @@ class ArkLotteryConfig(ConfigInterface):
                 ei.auto_update_config(cfg)
                 self.take_awards.append(ei)
 
+
+class DnfHelperInfoConfig(ConfigInterface):
+    def __init__(self):
+        # nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073
+        # 社区ID
+        self.userId = ""
+        # 昵称
+        self.nickName = ""
+        # 登录票据，目前需手动更新。
+        # 流程：
+        #   1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】。
+        #   2. 在我的电脑聊天框中的链接中找到请求中的token（形如&token=tW7AbaM7，则token为tW7AbaM7），将其进行更新到配置文件中
+        self.token = ""
+
+
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
         # 是否领取每月黑钻等级礼包
@@ -137,6 +152,8 @@ class AccountConfig(ConfigInterface):
         self.ark_lottery = ArkLotteryConfig()
         # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
         self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
+        # dnf助手信息
+        self.dnf_helper_info = DnfHelperInfoConfig()
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

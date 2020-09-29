@@ -1294,6 +1294,11 @@ class DjcHelper:
         checkin_days = self.query_dnf_hillock_info()
         logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
 
+        if self.cfg.dnf_helper_info.token == "":
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行希洛克攻坚战相关活动，请按照下列流程进行配置")
+            self.show_dnf_helper_info_guide()
+            return
+
         self.dnf_hillock_op("第一天", "700742")
         self.dnf_hillock_op("第二天", "700787")
         self.dnf_hillock_op("第三天", "700788")
@@ -1325,28 +1330,33 @@ class DjcHelper:
     def dnf_hillock_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_hillock
         res = self.post(ctx, self.urls.amesvr, self.dnf_hillock_flow_data(iActivityId, iFlowId),
-                         amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
+                        amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
+                        iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                        print_res=print_res)
 
         # 1331152: 登录态失效,请重新登录!
-        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["iCondNotMetId"] == "1331152":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前仅支持源码模式手动更新dnf_hillock_flow_data中相关参数，请在virtualXposed中手动登录dnf助手，在其中打开任意网页，使用fiddler来监听请求，找到请求中的nickName/userId/token，进行更新")
+        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录!":
+            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
+            self.show_dnf_helper_info_guide()
 
         return res
 
+    def show_dnf_helper_info_guide(self):
+        logger.warning(color("fg_bold_yellow") + "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】")
+        logger.warning(color("fg_bold_yellow") + "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&token=tW7AbaM7，则token为tW7AbaM7），将其进行更新到配置文件中【dnf助手信息】配置中")
+        logger.warning(color("fg_bold_yellow") + "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073")
+
     def dnf_hillock_flow_data(self, iActivityId, iFlowId):
-        # sArea/serverId/sRoleId/sRoleName/uin/skey/nickName/userId/token
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
         return self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("http://mwegame.qq.com/act/dnf/hillockbattle2020/index1/"),
                            iActivityId=iActivityId, iFlowId=iFlowId,
                            sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
                            sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                            uin=qq, skey=self.cfg.account_info.skey,
-                           # re: 获取dnf助手token,目前看来可能需要解包来得知如何登录获取这个token，不然只能手动抓请求了-。-
-                           nickName=quote_plus("风之凌殇"), userId="504051073", token="Pab7kEzG",
+                           nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
                            )
 
     # --------------------------------------------辅助函数--------------------------------------------

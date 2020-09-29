@@ -32,7 +32,7 @@ class Network:
             "Cookie": self.base_cookies,
         }
 
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, extra_cookies=""):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies=""):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
@@ -41,9 +41,9 @@ class Network:
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
-        return process_result(ctx, res, pretty, print_res, is_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, extra_cookies=""):
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies=""):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             post_headers = {**self.base_headers, **{
@@ -53,7 +53,7 @@ class Network:
             return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
         res = self.try_request(request_fn)
-        return process_result(ctx, res, pretty, print_res, is_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
     def try_request(self, request_fn):
         retryCfg = self.common_cfg.retry
@@ -68,11 +68,11 @@ class Network:
         logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
 
 
-def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
+def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False):
     res.encoding = 'utf-8'
 
     if is_jsonp:
-        data = jsonp2json(res.text)
+        data = jsonp2json(res.text, is_normal_jsonp)
     else:
         data = res.json()
     if print_res:
@@ -93,7 +93,14 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False):
     return data
 
 
-def jsonp2json(jsonpStr):
+def jsonp2json(jsonpStr, is_normal_jsonp=True):
+    if is_normal_jsonp:
+        left_idx = jsonpStr.index("(")
+        right_idx = jsonpStr.index(")")
+        jsonpStr = jsonpStr[left_idx + 1:right_idx]
+        return json.loads(jsonpStr)
+
+    # dnf返回的jsonp比较诡异，需要特殊处理
     left_idx = jsonpStr.index("{")
     right_idx = jsonpStr.index("}")
     jsonpStr = jsonpStr[left_idx + 1:right_idx]

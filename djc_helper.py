@@ -1365,11 +1365,6 @@ class DjcHelper:
         # https://guanjia.qq.com/act/cop/202010dnf/
         show_head_line("管家蚊子腿")
 
-        # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
         lr = self.fetch_guanjia_openid()
         if lr is None:
             return
@@ -1413,6 +1408,11 @@ class DjcHelper:
                         extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
 
     def fetch_guanjia_openid(self):
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+        
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")

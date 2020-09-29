@@ -1001,10 +1001,10 @@ class DjcHelper:
             ql = QQLogin(self.common_cfg)
             if self.cfg.login_mode == "qr_login":
                 # 扫码登录
-                lr = ql.qr_login(is_qzone=True)
+                lr = ql.qr_login(login_mode=ql.login_mode_qzone)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, is_qzone=True)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone)
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey)
         else:

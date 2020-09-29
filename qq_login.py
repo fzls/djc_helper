@@ -28,6 +28,10 @@ class LoginResult(ConfigInterface):
 
 
 class QQLogin():
+    login_mode_normal = "normal"
+    login_mode_xinyue = "xinyue"
+    login_mode_qzone = "qzone"
+
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
     chrome_driver_executable_path = os.path.realpath("./chromedriver_85.0.4183.87.exe")
     chrome_binary_7z = os.path.realpath("./chrome_portable_85.0.4183.59.7z")
@@ -99,7 +103,7 @@ class QQLogin():
             self.driver.minimize_window()
             threading.Thread(target=self.driver.quit, daemon=True).start()
 
-    def login(self, account, password, is_xinyue=False, is_qzone=False):
+    def login(self, account, password, login_mode="normal"):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
@@ -121,25 +125,25 @@ class QQLogin():
             time.sleep(1)
             self.driver.find_element(By.ID, "login_button").click()
 
-        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, is_xinyue=is_xinyue, is_qzone=is_qzone)
+        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, login_mode=login_mode)
 
-    def qr_login(self, is_xinyue=False, is_qzone=False):
+    def qr_login(self, login_mode="normal"):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        return self._login("扫码登录", is_xinyue=is_xinyue, is_qzone=is_qzone)
+        return self._login("扫码登录", login_mode=login_mode)
 
-    def _login(self, login_type, login_action_fn=None, need_human_operate=True, is_xinyue=False, is_qzone=False):
+    def _login(self, login_type, login_action_fn=None, need_human_operate=True, login_mode="normal"):
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
             try:
                 login_fn = self._login_real
-                if is_xinyue:
+                if login_mode == self.login_mode_xinyue:
                     login_fn = self._login_xinyue_real
                     login_type += "-心悦"
-                elif is_qzone:
+                elif login_mode == self.login_mode_qzone:
                     login_fn = self._login_qzone
                     login_type += "-QQ空间业务（如抽卡等需要用到）"
 
@@ -183,7 +187,8 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
+                           p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_qzone(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -216,7 +221,8 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
+        return LoginResult(p_skey=self.get_cookie("p_skey"),
+                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -325,10 +331,10 @@ if __name__ == '__main__':
     cfg = config()
 
     ql = QQLogin(cfg.common)
-    is_xinyue = False
-    is_qzone = True
-    acc = cfg.account_configs[5].account_info
-    lr = ql.login(acc.account, acc.password, is_xinyue, is_qzone)
+    account = cfg.account_configs[0]
+    acc = account.account_info
+    logger.warning("测试账号 {} 的登录情况".format(account.name))
+    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_qzone)
     # lr = ql.qr_login()
-    print(lr)
     ql.print_cookie()
+    print(lr)

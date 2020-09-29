@@ -1193,6 +1193,7 @@ class DjcHelper:
         logger.warning("不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
         self.dnf_shanguang_op("周周闪光好礼", "698913")
+
         for i in range(6):
             res = self.dnf_shanguang_op("周周开大奖", "698914")
             # 1326109: 开奖次数已用完

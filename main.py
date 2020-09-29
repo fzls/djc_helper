@@ -73,6 +73,9 @@ def show_lottery_status(cfg):
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
+        if not account_config.ark_lottery.show_status:
+            continue
+
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)

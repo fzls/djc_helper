@@ -412,23 +412,69 @@ class DjcHelper:
         # 完成《绝不错亿》
         self.get("3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center")
 
-        # 完成《礼包达人》
-        cfg = self.cfg.mobile_game_role_info
-        if cfg.enabled():
-            game_info = self.get_mobile_game_info()
-            role_info = self.bizcode_2_bind_role_map[game_info.bizCode].sRoleInfo
-            giftInfos = self.get_mobile_game_gifts()
-            if len(giftInfos) == 0:
-                logger.warning("未找到手游【{}】的有效七日签到配置，请换个手游，比如王者荣耀".format(game_info.bizName))
-                return
-            dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
-            giftInfo = giftInfos[dayIndex]
-            self.get("3.2 一键领取{}日常礼包-{}".format(cfg.game_name, giftInfo.sTask), self.urls.recieve_game_gift,
-                     bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
-                     systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
-                     roleCode=role_info.roleCode, sRoleName=role_info.roleName)
+        if self.cfg.mobile_game_role_info.enabled():
+            # 完成《礼包达人》
+            self.take_mobile_game_gift()
+
+            # 完成《有理想》
+            self.make_wish()
         else:
-            logger.info("未启用自动完成《礼包达人》任务功能")
+            logger.info("未启用自动完成《礼包达人》和《有理想》任务功能")
+
+    def take_mobile_game_gift(self):
+        game_info = self.get_mobile_game_info()
+        role_info = self.bizcode_2_bind_role_map[game_info.bizCode].sRoleInfo
+
+        giftInfos = self.get_mobile_game_gifts()
+        if len(giftInfos) == 0:
+            logger.warning("未找到手游【{}】的有效七日签到配置，请换个手游，比如王者荣耀".format(game_info.bizName))
+            return
+
+        dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
+        giftInfo = giftInfos[dayIndex]
+
+        self.get("3.2 一键领取{}日常礼包-{}".format(role_info.gameName, giftInfo.sTask), self.urls.recieve_game_gift,
+                 bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
+                 systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
+                 roleCode=role_info.roleCode, sRoleName=role_info.roleName)
+
+    def make_wish(self):
+        bizCode = self.get_mobile_game_info().bizCode
+        roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo
+
+        # 查询许愿道具信息
+        query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)
+        if len(query_wish_item_list_res["data"]) == 0:
+            logger.warning("游戏【{}】暂不支持许愿".format(roleModel.gameName))
+            return
+
+        propModel = GoodsInfo()
+        propModel.auto_update_config(query_wish_item_list_res["data"]["goods"][0])
+
+        # 查询许愿列表
+        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=uin2qq(self.cfg.account_info.uin))
+
+        # 删除已经许愿的列表，确保许愿成功
+        for wish_info in wish_list_res["data"]["list"]:
+            ctx = "3.3.2 删除已有许愿-{}-{}".format(wish_info["bizName"], wish_info["sGoodsName"])
+            self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"])
+
+        # 许愿
+        wish_res = self.get("3.3 完成许愿任务", self.urls.make_wish,
+                            iActionId=propModel.type,
+                            iGoodsId=propModel.valiDate[0].code,
+                            sBizCode=roleModel.bizCode,
+                            partition=roleModel.areaID,
+                            iZoneId=roleModel.channelID,
+                            platid=roleModel.systemID,
+                            sZoneDesc=quote_plus(roleModel.serviceName),
+                            sRoleId=roleModel.roleCode,
+                            sRoleName=quote_plus(roleModel.roleName),
+                            sGetterDream=quote_plus("不要888！不要488！9.98带回家"))
+        # 检查是否不支持许愿
+        # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
+        if wish_res["ret"] == "-8735":
+            logger.warning("游戏【{}】暂未开放许愿，请换个道聚城许愿界面中支持的游戏来进行许愿哦，比如王者荣耀~".format(roleModel.gameName))
 
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
@@ -436,10 +482,12 @@ class DjcHelper:
         self.take_task_award("4.1.1", "100066", "礼包达人")
         # 领取《绝不错亿》
         self.take_task_award("4.1.2", "100040", "绝不错亿")
+        # 领取《有理想》
+        self.take_task_award("4.1.3", "302124", "有理想")
         # 领取《活跃度银宝箱》
-        self.take_task_award("4.1.3", "100001", "活跃度银宝箱")
+        self.take_task_award("4.1.4", "100001", "活跃度银宝箱")
         # 领取《活跃度金宝箱》
-        self.take_task_award("4.1.4", "100002", "活跃度金宝箱")
+        self.take_task_award("4.1.5", "100002", "活跃度金宝箱")
 
         # 兑换所需道具
         self.exchange_items()
@@ -1273,8 +1321,8 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 1 # 从1开始，第i个
-    account_config = cfg.account_configs[idx-1]
+    idx = 1  # 从1开始，第i个
+    account_config = cfg.account_configs[idx - 1]
 
     logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
@@ -1295,4 +1343,5 @@ if __name__ == '__main__':
     # djcHelper.wegame_guoqing()
     # djcHelper.dnf_922()
     # djcHelper.dnf_shanguang()
-    djcHelper.qq_video()
+    # djcHelper.qq_video()
+    djcHelper.djc_operations()

@@ -125,7 +125,7 @@ class AccountConfig(ConfigInterface):
         self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
-        # 完成《礼包达人》任务所需的手游的名称信息
+        # 完成《礼包达人》和《有理想》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
         # 兑换道具信息
         self.exchange_items = []  # type: List[ExchangeItemConfig]

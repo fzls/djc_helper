@@ -15,22 +15,27 @@ from log import logger, color
 
 
 class LoginResult(ConfigInterface):
-    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid=""):
+    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k=""):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
         self.skey = skey
+        # 登录QQ空间得到
         self.p_skey = p_skey
         # 使用心悦活动界面得到
         self.openid = openid
         # 使用腾讯视频相关页面得到
         self.vuserid = vuserid
+        # 登录电脑管家页面得到
+        self.qc_openid = qc_openid
+        self.qc_k = qc_k
 
 
 class QQLogin():
     login_mode_normal = "normal"
     login_mode_xinyue = "xinyue"
     login_mode_qzone = "qzone"
+    login_mode_guanjia = "guanjia"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
     chrome_driver_executable_path = os.path.realpath("./chromedriver_85.0.4183.87.exe")
@@ -146,6 +151,9 @@ class QQLogin():
                 elif login_mode == self.login_mode_qzone:
                     login_fn = self._login_qzone
                     login_type += "-QQ空间业务（如抽卡等需要用到）"
+                elif login_mode == self.login_mode_guanjia:
+                    login_fn = self._login_guanjia
+                    login_type += "-电脑管家（如电脑管家蚊子腿需要用到）"
 
                 self.prepare_chrome(login_type)
 
@@ -223,6 +231,45 @@ class QQLogin():
         # 从cookie中获取uin和skey
         return LoginResult(p_skey=self.get_cookie("p_skey"),
                            uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"))
+
+    def _login_guanjia(self, login_type, login_action_fn=None, need_human_operate=True):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            logger.info("打开活动界面")
+            self.driver.get("https://guanjia.qq.com/act/cop/202010dnf/")
+
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
+
+            logger.info("等待登录按钮#dologin出来，确保加载完成")
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.ID, "dologin").click()
+
+            logger.info("等待#login_ifr显示出来并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "login_ifr")))
+            loginIframe = self.driver.find_element_by_id("login_ifr")
+            self.driver.switch_to.frame(loginIframe)
+
+            logger.info("等待#login_ifr#ptlogin_iframe加载完毕并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
+            ptlogin_iframe = self.driver.find_element_by_id("ptlogin_iframe")
+            self.driver.switch_to.frame(ptlogin_iframe)
+
+        def assert_login_finished_fn():
+            logger.info("请等待#logined的div可见，则说明已经登录完成了...")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+
+        # 从cookie中获取uin和skey
+        return LoginResult(qc_openid=self.get_cookie("__qc__openid"), qc_k=self.get_cookie("__qc__k"),
+                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
@@ -334,7 +381,7 @@ if __name__ == '__main__':
     account = cfg.account_configs[0]
     acc = account.account_info
     logger.warning("测试账号 {} 的登录情况".format(account.name))
-    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_qzone)
+    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_guanjia)
     # lr = ql.qr_login()
     ql.print_cookie()
     print(lr)

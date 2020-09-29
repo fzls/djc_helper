@@ -110,7 +110,9 @@ def show_lottery_status(cfg):
                         card_count = color("fg_bold_green") + padLeftRight(card_count, 3) + color("INFO")
                 else:
                     # 小号拥有的卡片淡化处理，方便辨识
-                    card_count = color("fg_bold_black") + padLeftRight(card_count, 3) + color("INFO")
+                    show_color = account_config.ark_lottery.show_color or "fg_bold_black"
+                    card_count = color(show_color) + padLeftRight(card_count, 3) + color("INFO")
+
             cols.append(card_count)
         cols.extend([prize_counts[order_map[prize_index]] for prize_index in prize_indexes])
 

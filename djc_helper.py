@@ -1276,11 +1276,6 @@ class DjcHelper:
 
     # --------------------------------------------9月希洛克攻坚战活动--------------------------------------------
     def dnf_hillock(self):
-        # 临时只给自己用，暂时没做完
-        if uin2qq(self.cfg.account_info.uin) not in ["1054073896"]:
-            logger.warning("半成品希洛克攻坚战目前暂不对他人开放，知道如何运行源码的可自行研究，通过抓包dnf助手的请求来获取nickName/userId/token并填写")
-            return
-
         # https://mwegame.qq.com/act/dnf/hillockbattlePC/index.html
         show_head_line("9月希洛克攻坚战")
 
@@ -1328,7 +1323,7 @@ class DjcHelper:
 
         # 1331152: 登录态失效,请重新登录!
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["iCondNotMetId"] == "1331152":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，请在virtualXposed中手动登录dnf助手，在其中打开任意网页，使用fiddler来监听请求，找到请求中的token，进行更新")
+            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前仅支持源码模式手动更新dnf_hillock_flow_data中相关参数，请在virtualXposed中手动登录dnf助手，在其中打开任意网页，使用fiddler来监听请求，找到请求中的nickName/userId/token，进行更新")
 
         return res
 

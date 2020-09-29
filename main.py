@@ -25,7 +25,7 @@ def _show_head_line(msg):
 def check_all_skey_and_pskey(cfg):
     if not has_any_account_in_normal_run(cfg):
         return
-    _show_head_line("启动时检查各账号skey和pskey是否过期")
+    _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
@@ -37,6 +37,7 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.fetch_pskey()
+        djcHelper.fetch_guanjia_openid()
 
 
 def show_lottery_status(cfg):

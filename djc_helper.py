@@ -353,6 +353,9 @@ class DjcHelper:
         # qq视频活动
         self.qq_video()
 
+        # 9月希洛克攻坚战
+        self.dnf_hillock()
+
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")

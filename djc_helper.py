@@ -1202,6 +1202,7 @@ class DjcHelper:
         logger.info(color("fg_bold_cyan") + "当前剩余闪光夺宝次数为 {} ".format(lottery_times))
         for i in range(lottery_times):
             self.dnf_shanguang_op("闪光夺宝", "698915")
+            time.sleep(self.common_cfg.retry.request_wait_time)
 
     def get_dnf_shanguang_lottery_times(self):
         res = self.dnf_shanguang_op("闪光夺宝次数", "699142")

@@ -453,7 +453,14 @@ class DjcHelper:
             bizCode = get_game_info(self.cfg.make_wish_game_info.game_name).bizCode
         else:
             bizCode = self.get_mobile_game_info().bizCode
+        if bizCode != "yxzj":
+            logger.warning(color("fg_bold_cyan") + "许愿功能只支持王者荣耀，且推荐使用安卓版本道聚城进行绑定")
+            return
+
         roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo
+        if '安卓' not in roleModel.channelKey:
+            logger.warning(color("fg_bold_cyan") + "ios端不能许愿手游，建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀")
+            return
 
         # 查询许愿道具信息
         query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)

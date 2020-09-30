@@ -1365,6 +1365,10 @@ class DjcHelper:
         # https://guanjia.qq.com/act/cop/202010dnf/
         show_head_line("管家蚊子腿")
 
+        if not self.cfg.function_switches.get_guanjia:
+            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            return
+
         lr = self.fetch_guanjia_openid()
         if lr is None:
             return

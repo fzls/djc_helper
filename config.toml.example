@@ -20,6 +20,9 @@ changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 # 正式模式运行成功时是否弹出打赏图片
 show_support_pic = true
 
+# 自动赠送卡片的目标QQ，该QQ必须要配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送最需要的卡片给这个账号，若不配置则不启用。
+auto_send_card_target_qq = ""
+
 # 登录的一些参数配置
 [common.login]
 # 重试次数

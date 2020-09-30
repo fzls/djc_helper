@@ -46,7 +46,7 @@ def auto_send_cards(cfg):
         return
     _show_head_line("运行完毕自动赠送卡片")
 
-    target_qq = "1054073896"
+    target_qq = cfg.common.auto_send_card_target_qq
     if target_qq == "":
         logger.warning("未定义自动赠送卡片的对象，将跳过本阶段")
         return

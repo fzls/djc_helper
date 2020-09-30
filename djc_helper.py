@@ -1538,6 +1538,14 @@ class DjcHelper:
             "skey": "",
             "userId": "",
             "token": "",
+            "iActionId": "",
+            "iGoodsId": "",
+            "sBizCode": "",
+            "partition": "",
+            "iZoneId": "",
+            "platid": "",
+            "sZoneDesc": "",
+            "sGetterDream": "",
         }
         return url.format(**{**default_params, **params})
 

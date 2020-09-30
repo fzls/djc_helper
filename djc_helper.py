@@ -357,6 +357,9 @@ class DjcHelper:
         # 9月希洛克攻坚战
         self.dnf_hillock()
 
+        # 管家蚊子腿
+        self.guanjia()
+
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")

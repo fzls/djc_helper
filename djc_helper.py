@@ -1234,7 +1234,7 @@ class DjcHelper:
             res = self.dnf_shanguang_op("周周开大奖", "698914")
             # 1326109: 开奖次数已用完
             # 1326106: 很遗憾，你没有获得本次开奖机会
-            if res["flowRet"]["iCondNotMetId"] in ["1326109", "1326106"]:
+            if res["flowRet"].get("iCondNotMetId", "0") in ["1326109", "1326106"]:
                 break
             time.sleep(5)
 

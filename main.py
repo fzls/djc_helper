@@ -41,10 +41,92 @@ def check_all_skey_and_pskey(cfg):
         djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
-def show_lottery_status(cfg):
+def auto_send_cards(cfg):
     if not has_any_account_in_normal_run(cfg):
         return
-    _show_head_line("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息")
+    _show_head_line("运行完毕自动赠送卡片")
+
+    target_qq = "1054073896"
+    if target_qq == "":
+        logger.warning("未定义自动赠送卡片的对象，将跳过本阶段")
+        return
+
+    # 统计各账号卡片数目
+    logger.info("拉取各账号的卡片数据中，请耐心等待...")
+    qq_to_card_name_to_counts = {}
+    qq_to_djcHelper = {}
+    for _idx, account_config in enumerate(cfg.account_configs):
+        idx = _idx + 1
+        if not account_config.enable_and_normal_run():
+            # 未启用的账户或者预运行阶段的账户不走该流程
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list(print_warning=False)
+
+        lr = djcHelper.fetch_pskey()
+        if lr is None:
+            continue
+
+        qq = uin2qq(lr.uin)
+        al = ArkLottery(djcHelper, lr)
+
+        qq_to_card_name_to_counts[qq] = al.get_card_counts()
+        qq_to_djcHelper[qq] = djcHelper
+
+        logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
+
+    # 赠送卡片
+    if target_qq in qq_to_djcHelper:
+        left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
+        logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
+        # 最多赠送目标账号今日仍可接收的卡片数
+        for i in range(left_times):
+            send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper)
+
+
+def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper):
+    card_name_to_id = {
+        "多人配合新挑战": "116193", "丰富机制闯难关": "116192", "新剧情视听盛宴": "116191", "单人成团战不停": "116190",
+        "回归奖励大升级": "116189", "秒升Lv96刷深渊": "116188", "灿烂自选回归领": "116187", "告别酱油变大佬": "116186",
+        "单人爽刷新玩法": "116185", "独立成团打副本": "116184", "海量福利金秋享": "116183", "超强奖励等你拿": "116182",
+    }
+    card_name_to_index = {
+        "多人配合新挑战": "1-1", "丰富机制闯难关": "1-2", "新剧情视听盛宴": "1-3", "单人成团战不停": "1-4",
+        "回归奖励大升级": "2-1", "秒升Lv96刷深渊": "2-2", "灿烂自选回归领": "2-3", "告别酱油变大佬": "2-4",
+        "单人爽刷新玩法": "3-1", "独立成团打副本": "3-2", "海量福利金秋享": "3-3", "超强奖励等你拿": "3-4",
+    }
+    # 当前卡牌的卡牌按照卡牌数升序排列
+    target_card_infos = []
+    for card_name, card_count in qq_to_card_name_to_counts[target_qq].items():
+        target_card_infos.append((card_name, card_count))
+    target_card_infos.sort(key=lambda card: card[1])
+
+    # 升序遍历
+    for card_name, card_count in target_card_infos:
+        # 找到任意一个拥有卡片的其他账号，让他送给目标账户
+        for qq, card_name_to_count in qq_to_card_name_to_counts.items():
+            if qq == target_qq:
+                continue
+            # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
+            if card_name_to_count[card_name] > 0:
+                qq_to_djcHelper[qq].send_card(card_name_to_id[card_name], target_qq)
+                card_name_to_count[card_name] -= 1
+                qq_to_card_name_to_counts[target_qq][card_name] += 1
+
+                logger.warning(color("fg_bold_cyan") + "账号 {} 赠送一张 {}({}) 给 {}".format(
+                    qq_to_djcHelper[qq].cfg.name,
+                    card_name_to_index[card_name], card_name,
+                    qq_to_djcHelper[target_qq].cfg.name
+                ))
+                return
+
+
+def show_lottery_status(ctx, cfg):
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line(ctx)
 
     order_map = {
         "1-1": "多人配合新挑战", "1-2": "丰富机制闯难关", "1-3": "新剧情视听盛宴", "1-4": "单人成团战不停",
@@ -119,10 +201,6 @@ def show_lottery_status(cfg):
         cols.extend([prize_counts[order_map[prize_index]] for prize_index in prize_indexes])
 
         logger.info(tableify(cols, colSizes))
-
-    logger.info("")
-    logger.warning(color("fg_bold_green") + "抽卡信息如上，可参照上述信息来确定小号赠送啥卡片给大号")
-    logger.info("")
 
 
 def show_accounts_status(cfg, ctx):
@@ -296,7 +374,9 @@ def main():
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg)
 
-    show_lottery_status(cfg)
+    show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
+    auto_send_cards(cfg)
+    show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
 
     show_accounts_status(cfg, "运行完毕展示账号概览")
 

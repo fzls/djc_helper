@@ -61,5 +61,10 @@ def get_this_week_monday():
     return monday.strftime("%Y%m%d")
 
 
+def get_today():
+    now = datetime.datetime.now()
+    return now.strftime("%Y%m%d")
+
+
 if __name__ == '__main__':
-    print(padLeftRight("msg", 20, "+"))
+    print(get_today())

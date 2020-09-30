@@ -36,7 +36,7 @@ def check_all_skey_and_pskey(cfg):
         logger.warning("------------检查第{}个账户({})------------".format(idx, account_config.name))
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list()
+        djcHelper.get_bind_role_list(print_warning=False)
         djcHelper.fetch_pskey()
         djcHelper.fetch_guanjia_openid()
 

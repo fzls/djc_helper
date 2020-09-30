@@ -419,11 +419,14 @@ class DjcHelper:
         if self.cfg.mobile_game_role_info.enabled():
             # 完成《礼包达人》
             self.take_mobile_game_gift()
+        else:
+            logger.info("未启用自动完成《礼包达人》任务功能")
 
+        if self.cfg.make_wish_game_info.enabled():
             # 完成《有理想》
             self.make_wish()
         else:
-            logger.info("未启用自动完成《礼包达人》和《有理想》任务功能")
+            logger.info("未启用自动完成《有理想》任务功能")
 
     def take_mobile_game_gift(self):
         game_info = self.get_mobile_game_info()
@@ -443,13 +446,16 @@ class DjcHelper:
                  roleCode=role_info.roleCode, sRoleName=role_info.roleName)
 
     def make_wish(self):
-        bizCode = self.get_mobile_game_info().bizCode
+        if self.cfg.make_wish_game_info.game_name != "":
+            bizCode = get_game_info(self.cfg.make_wish_game_info.game_name).bizCode
+        else:
+            bizCode = self.get_mobile_game_info().bizCode
         roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo
 
         # 查询许愿道具信息
         query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)
         if "data" not in query_wish_item_list_res or len(query_wish_item_list_res["data"]) == 0:
-            logger.warning("在{}上游戏【{}】暂不支持许愿，如果是ios的话建议自己改代码<_<, query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
+            logger.warning("在{}上游戏【{}】暂不支持许愿，query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
             return
 
         propModel = GoodsInfo()
@@ -464,17 +470,40 @@ class DjcHelper:
             self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"])
 
         # 许愿
-        wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish,
-                            iActionId=propModel.type,
-                            iGoodsId=propModel.valiDate[0].code,
-                            sBizCode=roleModel.bizCode,
-                            partition=roleModel.areaID,
-                            iZoneId=roleModel.channelID,
-                            platid=roleModel.systemID,
-                            sZoneDesc=quote_plus(roleModel.serviceName),
-                            sRoleId=roleModel.roleCode,
-                            sRoleName=quote_plus(roleModel.roleName),
-                            sGetterDream=quote_plus("不要888！不要488！9.98带回家"))
+        param = {
+            "iActionId": propModel.type,
+            "iGoodsId": propModel.valiDate[0].code,
+            "sBizCode": roleModel.bizCode,
+        }
+        if roleModel.type == "0":
+            # 端游
+            if roleModel.serviceID != "":
+                param["iZoneId"] = roleModel.serviceID
+            else:
+                param["iZoneId"] = roleModel.areaID
+            param['sZoneDesc'] = quote_plus(roleModel.serviceName)
+        else:
+            # 手游
+            if roleModel.serviceID != "" and roleModel.serviceID != "0":
+                param['partition'] = roleModel.serviceID
+            elif roleModel.areaID != "" and roleModel.areaID != "0":
+                param['partition'] = roleModel.areaID
+            param['iZoneId'] = roleModel.channelID
+            if int(roleModel.systemID) < 0:
+                param['platid'] = 0
+            else:
+                param['platid'] = roleModel.systemID
+            param['sZoneDesc'] = quote_plus(roleModel.serviceName)
+
+        if roleModel.bizCode == 'lol' and roleModel.accountId != "":
+            param['sRoleId'] = roleModel.accountId
+        else:
+            param['sRoleId'] = roleModel.roleCode
+
+        param['sRoleName'] = quote_plus(roleModel.roleName)
+        param['sGetterDream'] = quote_plus("不要888！不要488！9.98带回家")
+
+        wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish, **param)
         # 检查是否不支持许愿
         # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
         if wish_res["ret"] == "-8735":
@@ -1559,4 +1588,5 @@ if __name__ == '__main__':
     # djcHelper.qq_video()
     # djcHelper.djc_operations()
     # djcHelper.dnf_hillock()
-    djcHelper.guanjia()
+    # djcHelper.guanjia()
+    djcHelper.make_wish()

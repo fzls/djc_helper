@@ -36,6 +36,15 @@ class MobileGameRoleInfoConfig(ConfigInterface):
         return self.game_name in ["任意手游"]
 
 
+class MakeWishGameInfoConfig(ConfigInterface):
+    def __init__(self):
+        # 游戏名称: 无/王者荣耀/和平精英/英雄联盟/其他任意支持许愿的游戏，若不填则与礼包达人任务一样，可参考djc_biz_list.json获取完整列表
+        self.game_name = ""
+
+    def enabled(self):
+        return self.game_name not in ["无", "none"]
+
+
 class ExchangeItemConfig(ConfigInterface):
     def __init__(self):
         self.iGoodsId = "753"
@@ -144,8 +153,10 @@ class AccountConfig(ConfigInterface):
         self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
-        # 完成《礼包达人》和《有理想》任务所需的手游的名称信息
+        # 完成《礼包达人》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
+        # 完成《有理想》任务所需的游戏的名称信息
+        self.make_wish_game_info = MakeWishGameInfoConfig()
         # 兑换道具信息
         self.exchange_items = []  # type: List[ExchangeItemConfig]
         # 心悦相关操作信息

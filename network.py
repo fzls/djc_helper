@@ -75,21 +75,27 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         data = jsonp2json(res.text, is_normal_jsonp)
     else:
         data = res.json()
+
+    success = True
+    if "ret" in data:
+        success = int(data["ret"]) == 0
+    elif "code" in data:
+        success = int(data["code"]) == 0
+
+    # 特殊处理qq视频
+    if "data" in data and "sys_code" in data["data"]:
+        success = int(data["data"]["sys_code"]) == 0
+
     if print_res:
-        success = True
-        if "ret" in data:
-            success = int(data["ret"]) == 0
-        elif "code" in data:
-            success = int(data["code"]) == 0
-
-        # 特殊处理qq视频
-        if "data" in data and "sys_code" in data["data"]:
-            success = int(data["data"]["sys_code"]) == 0
-
         logFunc = logger.info
         if not success:
             logFunc = logger.error
-        logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+    else:
+        # 不打印的时候改为使用debug级别，而不是连文件也不输出，这样方便排查问题
+        logFunc = logger.debug
+
+    logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+
     return data
 
 

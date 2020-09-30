@@ -425,7 +425,7 @@ class DjcHelper:
         else:
             logger.info("未启用自动完成《礼包达人》任务功能")
 
-        if self.cfg.make_wish_game_info.enabled():
+        if self.cfg.function_switches.make_wish:
             # 完成《有理想》
             self.make_wish()
         else:
@@ -449,12 +449,9 @@ class DjcHelper:
                  roleCode=role_info.roleCode, sRoleName=role_info.roleName)
 
     def make_wish(self):
-        if self.cfg.make_wish_game_info.game_name != "":
-            bizCode = get_game_info(self.cfg.make_wish_game_info.game_name).bizCode
-        else:
-            bizCode = self.get_mobile_game_info().bizCode
-        if bizCode != "yxzj":
-            logger.warning(color("fg_bold_cyan") + "许愿功能只支持王者荣耀，且推荐使用安卓版本道聚城进行绑定")
+        bizCode = "yxzj"
+        if bizCode not in self.bizcode_2_bind_role_map:
+            logger.warning(color("fg_bold_cyan") + "未在道聚城绑定王者荣耀，将跳过许愿功能。建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀")
             return
 
         roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo

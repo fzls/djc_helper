@@ -90,13 +90,6 @@ class ArkLottery:
         # for idx in range(self.cfg.ark_lottery.lottery_using_cards_count):
         #     self.do_ark_lottery("fcg_prize_lottery", "消耗卡片抽奖", "25949", gameid="dnf")
 
-        # undone: 暂时未处理：
-        #  分享-发送消息
-        #  赠送给他人
-
-        #  undone: 可能会做的：
-        #   根据大号缺的卡片内容，赠送给大号
-
     def fetch_lottery_data(self):
         res = requests.post(self.urls.ark_lottery_page, headers=self.headers)
         page_html = res.text

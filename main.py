@@ -249,7 +249,7 @@ def show_support_pic(cfg):
             break
     if normal_run:
         logger.info("")
-        logger.warning("如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
+        logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")
 
@@ -273,7 +273,7 @@ def main():
     maximize_console()
 
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
-    logger.warning(color("fg_bold_green") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
+    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

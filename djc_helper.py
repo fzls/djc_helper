@@ -1233,7 +1233,7 @@ class DjcHelper:
 
         # self.dnf_shanguang_op("报名礼", "698607")
         # self.dnf_shanguang_op("app专属礼", "698910")
-        logger.warning("不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
+        logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
         self.dnf_shanguang_op("周周闪光好礼", "698913")
 

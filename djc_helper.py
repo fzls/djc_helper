@@ -448,7 +448,7 @@ class DjcHelper:
 
         # 查询许愿道具信息
         query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)
-        if len("data" not in query_wish_item_list_res or query_wish_item_list_res["data"]) == 0:
+        if len(query_wish_item_list_res["data"]) == 0:
             logger.warning("游戏【{}】暂不支持许愿".format(roleModel.gameName))
             return
 
@@ -1412,7 +1412,7 @@ class DjcHelper:
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
-        
+
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")

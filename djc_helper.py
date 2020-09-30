@@ -455,8 +455,8 @@ class DjcHelper:
             return
 
         roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo
-        if '安卓' not in roleModel.channelKey:
-            logger.warning(color("fg_bold_cyan") + "ios端不能许愿手游，建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀")
+        if '苹果' in roleModel.channelKey:
+            logger.warning(color("fg_bold_cyan") + "ios端不能许愿手游，建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀。roleModel={}".format(roleModel))
             return
 
         # 查询许愿道具信息

@@ -58,7 +58,7 @@ class Urls:
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_922 = "331393"  # DNF-922渠道活动合集
         self.iActivityId_dnf_shanguang = "328404"  # 2020DNF闪光杯返场赛
-        self.iActivityId_dnf_hillock = "328949" # 9月希洛克攻坚战活动
+        self.iActivityId_dnf_hillock = "328949"  # 9月希洛克攻坚战活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

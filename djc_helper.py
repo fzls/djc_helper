@@ -1450,15 +1450,15 @@ class DjcHelper:
         return self.get(ctx, self.urls.guanjia, api=api, giftId=giftId, area_id=roleinfo.serviceID, charac_no=roleinfo.roleCode, charac_name=quote_plus(roleinfo.roleName),
                         extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
 
-    def fetch_guanjia_openid(self):
+    def fetch_guanjia_openid(self, print_warning=True):
         # 检查是否已在道聚城绑定
         if "dnf" not in self.bizcode_2_bind_role_map:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            if print_warning: logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
-            logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
+            if print_warning: logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
             return None
 
         cached_guanjia_openid = self.load_guanjia_openid()

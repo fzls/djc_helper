@@ -449,7 +449,7 @@ class DjcHelper:
         # 查询许愿道具信息
         query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)
         if "data" not in query_wish_item_list_res or len(query_wish_item_list_res["data"]) == 0:
-            logger.warning("在{}上游戏【{}】暂不支持许愿, query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
+            logger.warning("在{}上游戏【{}】暂不支持许愿，如果是ios的话建议自己改代码<_<, query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
             return
 
         propModel = GoodsInfo()

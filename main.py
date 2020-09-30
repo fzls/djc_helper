@@ -304,13 +304,17 @@ def main():
     show_support_pic(cfg)
 
     # 临时代码
-    temp_code()
+    temp_code(cfg)
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)
 
 
-def temp_code():
+def temp_code(cfg):
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("一些临时tips")
+
     # re: 10.04号后删除
     logger.warning(color("fg_bold_yellow") + "9.28到10.4期间记得去https://dnf.qq.com/cp/a20190312welfare/领取一次【[活动]时间引导石(100个)*1】。功能太小了，懒得适配<_<")
 

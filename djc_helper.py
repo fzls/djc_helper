@@ -1087,6 +1087,19 @@ class DjcHelper:
     def get_local_saved_pskey_file(self):
         return self.local_saved_pskey_file.format(self.cfg.name)
 
+    def ark_lottery_query_left_times(self, to_qq):
+        ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
+        res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, print_res=False)
+        if res['13320']['ret'] != 0:
+            return 0
+        return res['13320']['data']['uPoint']
+
+    def send_card(self, cardId, to_qq):
+        from_qq = uin2qq(self.cfg.account_info.uin)
+
+        ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
+        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
+
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
         # https://dnf.qq.com/lbact/a20200922wegame/index.html

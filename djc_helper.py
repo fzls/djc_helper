@@ -923,12 +923,9 @@ class DjcHelper:
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
-        date = get_today()
         return self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment="xinyue", sServiceType="xinyue", eas_url=quote_plus("http://xinyue.qq.com/act/a20181101rights/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid,
-                           date=date,
-                           )
+                           iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
     # 心悦国庆活动【DNF金秋送福心悦有礼】
     def xinyue_guoqing(self):
@@ -1532,6 +1529,7 @@ class DjcHelper:
     def format(self, url, **params):
         endTime = datetime.datetime.now()
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
+        date = get_today()
         default_params = {
             "appVersion": appVersion,
             "p_tk": self.cfg.g_tk,
@@ -1550,6 +1548,7 @@ class DjcHelper:
             "weekDay": "",
             "sArea": "", "serverId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
             "iActionId": "", "iGoodsId": "", "sBizCode": "", "partition": "", "iZoneId": "", "platid": "", "sZoneDesc": "", "sGetterDream": "",
+            "date": date,
         }
         return url.format(**{**default_params, **params})
 

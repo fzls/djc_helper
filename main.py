@@ -38,7 +38,7 @@ def check_all_skey_and_pskey(cfg):
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)
         djcHelper.fetch_pskey()
-        djcHelper.fetch_guanjia_openid()
+        djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
 def show_lottery_status(cfg):

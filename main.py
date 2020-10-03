@@ -33,7 +33,7 @@ def check_all_skey_and_pskey(cfg):
             # 未启用的账户或者预运行阶段的账户不走该流程
             continue
 
-        logger.warning("------------检查第{}个账户({})------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_yellow") + "------------检查第{}个账户({})------------".format(idx, account_config.name))
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)

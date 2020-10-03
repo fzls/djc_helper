@@ -1323,10 +1323,18 @@ class DjcHelper:
             exit(-1)
 
     def qq_video_op(self, ctx, module_id, print_res=True):
+        res = self._qq_video_op(ctx, "21", "100", module_id, print_res)
+        self._qq_video_op(ctx, "71", "111", "125909", print_res)
+        self._qq_video_op(ctx, "21", "104", module_id, print_res)
+
+        return res
+
+    def _qq_video_op(self, ctx, type, option, module_id, print_res=True):
         extra_cookies = " vuserid={vuserid};".format(
             vuserid=self.vuserid,
         )
-        return self.get(ctx, self.urls.qq_video, act_id="108810", module_id=module_id, print_res=print_res, extra_cookies=extra_cookies)
+        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id="108810", module_id=module_id,
+                        print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------9月希洛克攻坚战活动--------------------------------------------
     def dnf_hillock(self):

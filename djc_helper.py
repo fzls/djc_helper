@@ -1327,6 +1327,10 @@ class DjcHelper:
         self._qq_video_op(ctx, "71", "111", "125909", print_res)
         self._qq_video_op(ctx, "21", "104", module_id, print_res)
 
+        if int(res["data"]["sys_code"]) == -1010:
+            msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"
+            win32api.MessageBox(0, msg, "Bug", win32con.MB_ICONWARNING)
+
         return res
 
     def _qq_video_op(self, ctx, type, option, module_id, print_res=True):

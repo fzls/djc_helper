@@ -3,8 +3,9 @@ import random
 
 import requests
 
+from config import AccountConfig
 from dao import RoleInfo
-from log import logger
+from log import logger, color
 from network import process_result
 from qq_login import LoginResult
 from sign import getACSRFTokenForAMS
@@ -31,7 +32,7 @@ class ArkLottery:
         self.djc_helper = djc_helper
         self.lr = lr
 
-        self.cfg = djc_helper.cfg
+        self.cfg = djc_helper.cfg  # type: AccountConfig
 
         self.g_tk = getACSRFTokenForAMS(lr.p_skey)
         self.urls = Urls()
@@ -86,9 +87,32 @@ class ArkLottery:
         else:
             logger.warning("未设置领取集卡礼包奖励，也许是小号，请记得定期手动登录小号来给大号赠送缺失的卡")
 
-        # 使用卡片抽奖-25949 # note: 为啥没传卡片id- -也许是因为还没正式开启？之后再试试
-        # for idx in range(self.cfg.ark_lottery.lottery_using_cards_count):
-        #     self.do_ark_lottery("fcg_prize_lottery", "消耗卡片抽奖", "25949", gameid="dnf")
+        # 消耗卡片来抽奖
+        if self.cfg.ark_lottery.cost_all_cards_and_do_lottery:
+            card_counts = self.get_card_counts()
+            for name, count in card_counts.items():
+                self.lottery_using_cards(name, count)
+        else:
+            logger.warning(color("fg_bold_cyan") + "尚未开启消耗所有卡片来抽奖功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片")
+
+    def lottery_using_cards(self, card_name, count=1):
+        if count <= 0:
+            return
+
+        logger.info("尝试消耗{}张卡片【{}】来进行抽奖".format(count, card_name))
+
+        card_name_to_ruleid = {
+            "多人配合新挑战": "25961", "丰富机制闯难关": "25960", "新剧情视听盛宴": "25959", "单人成团战不停": "25958",
+            "回归奖励大升级": "25957", "秒升Lv96刷深渊": "25956", "灿烂自选回归领": "25955", "告别酱油变大佬": "25954",
+            "单人爽刷新玩法": "25953", "独立成团打副本": "25952", "海量福利金秋享": "25951", "超强奖励等你拿": "25950",
+        }
+        ruleid = card_name_to_ruleid[card_name]
+        for idx in range(count):
+            # 消耗卡片获得抽奖资格
+            self.do_ark_lottery("fcg_qzact_present", "增加抽奖次数-消耗卡片({})".format(card_name), ruleid)
+
+            # 抽奖
+            self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "25949", gameid="dnf")
 
     def fetch_lottery_data(self):
         res = requests.post(self.urls.ark_lottery_page, headers=self.headers)

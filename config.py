@@ -70,8 +70,8 @@ class ArkLotteryConfig(ConfigInterface):
         # 用于完成幸运勇士的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
         self.lucky_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js
         self.lucky_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
-        # 尝试使用卡牌抽奖的次数
-        self.lottery_using_cards_count = 0
+        # 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
+        self.cost_all_cards_and_do_lottery = False
         # 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
         self.take_awards = []  # type: List[ArkLotteryAwardConfig]
 

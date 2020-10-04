@@ -276,6 +276,8 @@ class DjcHelper:
             "pre_run": self.pre_run,
             "normal": self.normal_run,
         }
+        if self.cfg.run_mode not in run_mode_dict:
+            logger.warning(color("fg_bold_yellow") + "运行模式拼写错误，目前支持的配置为{}，实际配置的为{}".format(list(run_mode_dict.keys()), self.cfg.run_mode))
         run_mode_dict[self.cfg.run_mode]()
 
     def check_first_run(self):

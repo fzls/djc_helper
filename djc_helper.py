@@ -1324,8 +1324,8 @@ class DjcHelper:
 
     def qq_video_op(self, ctx, module_id, print_res=True):
         res = self._qq_video_op(ctx, "21", "100", module_id, print_res)
-        self._qq_video_op(ctx, "71", "111", "125909", print_res)
-        self._qq_video_op(ctx, "21", "104", module_id, print_res)
+        self._qq_video_op(ctx, "71", "111", "125909", False)
+        self._qq_video_op(ctx, "21", "104", module_id, False)
 
         if int(res["data"]["sys_code"]) == -1010 and res["data"]["lottery_txt"] == "系统错误":
             msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"

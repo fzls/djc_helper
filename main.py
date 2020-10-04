@@ -105,8 +105,8 @@ def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper
 
     # 升序遍历
     for card_name, card_count in target_card_infos:
-        # 找到任意一个拥有卡片的其他账号，让他送给目标账户
-        for qq, card_name_to_count in qq_to_card_name_to_counts.items():
+        # 找到任意一个拥有卡片的其他账号，让他送给目标账户。默认越靠前的号越重要，因此从后面的号开始查
+        for qq, card_name_to_count in reverse_map(qq_to_card_name_to_counts):
             if qq == target_qq:
                 continue
             # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
@@ -121,6 +121,11 @@ def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper
                     qq_to_djcHelper[target_qq].cfg.name
                 ))
                 return
+
+def reverse_map(map):
+    kvs = list(map.items())
+    kvs.reverse()
+    return kvs
 
 
 def show_lottery_status(ctx, cfg, need_show_tips=False):

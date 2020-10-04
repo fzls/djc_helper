@@ -335,8 +335,8 @@ count = 1
 lucky_dnf_server_id = "" # 区服id可查阅reference_data/dnf_server_list.js
 lucky_dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
 
-# 尝试使用卡牌抽奖的次数
-lottery_using_cards_count = 0
+# 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
+cost_all_cards_and_do_lottery = false
 
 # 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=[依次执行 25963、25962、25939、25964、25965]
 #[[account_configs.ark_lottery.take_awards]]

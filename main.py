@@ -3,7 +3,7 @@ import os
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
-from ga import track_event
+from ga import track_event, track_page
 from update import check_update_on_start
 from util import *
 from version import *
@@ -52,7 +52,7 @@ def auto_send_cards(cfg):
         logger.warning("未定义自动赠送卡片的对象，将跳过本阶段")
         return
 
-    track_event("main", "auto_send_cards")
+    track_page("/misc/auto_send_cards")
 
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
@@ -363,7 +363,7 @@ def show_support_pic(cfg):
         logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")
-            track_event("main", "show_support")
+            track_page("show_support")
 
 
 def check_update(cfg):
@@ -381,7 +381,7 @@ def check_update(cfg):
 
 def main():
     track_event("main", "start")
-    track_event("version", "{} {}".format(now_version, ver_time))
+    track_event("version", "ver{} {}".format(now_version, ver_time))
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

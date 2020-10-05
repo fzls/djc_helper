@@ -1,6 +1,7 @@
 # Google Analytics 上报脚本
 import platform
 import uuid
+from version import now_version
 
 import requests
 
@@ -16,6 +17,7 @@ def track_event(category, action, label=None, value=0):
             'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
             'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
             'ua': 'requests',
+            'av': now_version,
 
             't': 'event',  # Event hit type.
             'ec': category,  # Event category.
@@ -39,6 +41,7 @@ def track_page(page):
             'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
             'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
             'ua': 'requests',
+            'av': now_version,
 
             't': 'pageview',  # Event hit type.
             'dh': "app.djc-helper",  # Document hostname.

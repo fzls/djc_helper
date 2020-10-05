@@ -3,6 +3,7 @@ import os
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
+from ga import track_event
 from update import check_update_on_start
 from util import *
 from version import *
@@ -50,6 +51,8 @@ def auto_send_cards(cfg):
     if target_qq == "":
         logger.warning("未定义自动赠送卡片的对象，将跳过本阶段")
         return
+
+    track_event("main", "auto_send_cards")
 
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
@@ -121,6 +124,7 @@ def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper
                     qq_to_djcHelper[target_qq].cfg.name
                 ))
                 return
+
 
 def reverse_map(map):
     kvs = list(map.items())
@@ -359,6 +363,7 @@ def show_support_pic(cfg):
         logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
         if cfg.common.show_support_pic:
             os.popen("支持一下.png")
+            track_event("main", "show_support")
 
 
 def check_update(cfg):
@@ -375,6 +380,8 @@ def check_update(cfg):
 
 
 def main():
+    track_event("main", "start")
+
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     maximize_console()
@@ -389,6 +396,8 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
+
+    track_event("main", "run", "account_count", len(cfg.account_configs))
 
     check_all_skey_and_pskey(cfg)
 
@@ -414,6 +423,8 @@ def main():
 
     # 临时代码
     temp_code(cfg)
+
+    track_event("main", "finish")
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)

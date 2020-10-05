@@ -12,7 +12,7 @@ import win32api
 import json_parser
 from ark_lottery import ArkLottery
 from dao import *
-from ga import track_event
+from ga import track_event, track_page
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
 from qq_login import QQLogin, LoginResult
@@ -689,7 +689,7 @@ class DjcHelper:
             logger.warning("未设置心悦相关操作信息，将跳过")
             return
 
-        track_event("activity", "xinyue")
+        track_page("/activity/xinyue")
 
         # 查询道具信息
         old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
@@ -801,7 +801,7 @@ class DjcHelper:
             logger.warning("未找到本地固定队伍信息，跳过队伍相关流程")
             return
 
-        track_event("activity", "xinyue_team")
+        track_page("/activity/xinyue_team")
         logger.info("当前账号的本地固定队信息为{}".format(fixed_team))
 
         teaminfo = self.query_xinyue_teaminfo()
@@ -944,7 +944,7 @@ class DjcHelper:
             logger.warning("未启用领取心悦国庆活动功能，将跳过")
             return
 
-        track_event("activity", "xinyue_guoqing")
+        track_page("/activity/xinyue_guoqing")
         self.check_xinyue_guoqing()
 
         # 验证是否回流顺带检查是否未绑定大区
@@ -997,7 +997,7 @@ class DjcHelper:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
 
-        track_event("activity", "get_heizuan_gift")
+        track_page("/activity/get_heizuan_gift")
 
         res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
         # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
@@ -1120,7 +1120,7 @@ class DjcHelper:
             logger.warning("未启用领取wegame国庆活动功能，将跳过")
             return
 
-        track_event("activity", "wegame_guoqing")
+        track_page("/activity/wegame_guoqing")
 
         self.check_wegame_guoqing()
 
@@ -1207,7 +1207,7 @@ class DjcHelper:
             logger.warning("未启用领取阿拉德集合站活动合集功能，将跳过")
             return
 
-        track_event("activity", "dnf_922")
+        track_page("/activity/dnf_922")
 
         self.check_dnf_922()
 
@@ -1254,7 +1254,7 @@ class DjcHelper:
             logger.warning("未启用领取2020DNF闪光杯返场赛活动合集功能，将跳过")
             return
 
-        track_event("activity", "dnf_shanguang")
+        track_page("/activity/dnf_shanguang")
 
         self.check_dnf_shanguang()
 
@@ -1319,7 +1319,7 @@ class DjcHelper:
             logger.warning("未启用领取qq视频活动功能，将跳过")
             return
 
-        track_event("activity", "qq_video")
+        track_page("/activity/qq_video")
 
         self.check_qq_video()
 
@@ -1368,7 +1368,7 @@ class DjcHelper:
             logger.warning("未启用领取9月希洛克攻坚战活动合集功能，将跳过")
             return
 
-        track_event("activity", "dnf_hillock")
+        track_page("/activity/dnf_hillock")
 
         # 检查是否已在道聚城绑定
         if "dnf" not in self.bizcode_2_bind_role_map:
@@ -1452,7 +1452,7 @@ class DjcHelper:
             logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
             return
 
-        track_event("activity", "guanjia")
+        track_page("/activity/guanjia")
 
         lr = self.fetch_guanjia_openid()
         if lr is None:

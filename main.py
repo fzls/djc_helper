@@ -397,7 +397,7 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    track_event("main", "run", "account_count", len(cfg.account_configs))
+    track_event("account_count", str(len(cfg.account_configs)))
 
     check_all_skey_and_pskey(cfg)
 

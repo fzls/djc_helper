@@ -36,7 +36,6 @@ def track_event(category, action, label=None, value=0):
 def track_page(page):
     try:
         page = quote_plus(page)
-        title = page.split('/')[-1]
         data = {
             'v': '1',  # API Version.
             'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
@@ -47,7 +46,7 @@ def track_page(page):
             't': 'pageview',  # Event hit type.
             'dh': "app.djc-helper",  # Document hostname.
             'dp': page,  # Page.
-            'dt': title,  # Title.
+            'dt': "",  # Title.
         }
 
         requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)

@@ -381,6 +381,7 @@ def check_update(cfg):
 
 def main():
     track_event("main", "start")
+    track_event("version", "{} {}".format(now_version, ver_time))
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

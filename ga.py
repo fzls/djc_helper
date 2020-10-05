@@ -1,11 +1,12 @@
 # Google Analytics 上报脚本
 import platform
 import uuid
-from version import now_version
+from urllib.parse import quote_plus
 
 import requests
 
 from log import logger
+from version import now_version
 
 GA_TRACKING_ID = "UA-179595405-1"
 
@@ -34,7 +35,7 @@ def track_event(category, action, label=None, value=0):
 
 def track_page(page):
     try:
-        page = page
+        page = quote_plus(page)
         title = page.split('/')[-1]
         data = {
             'v': '1',  # API Version.

@@ -4,6 +4,7 @@ import time
 
 import win32api
 from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -45,7 +46,7 @@ class QQLogin():
 
     def __init__(self, common_config):
         self.cfg = common_config  # type: CommonConfig
-        self.driver = None
+        self.driver = None # type: WebDriver
 
     def prepare_chrome(self, login_type):
         logger.info(color("fg_bold_cyan") + "正在初始化chrome driver，用以进行【{}】相关操作".format(login_type))
@@ -144,6 +145,7 @@ class QQLogin():
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
             try:
+                self.login_mode = login_mode
                 login_fn = self._login_real
                 if login_mode == self.login_mode_xinyue:
                     login_fn = self._login_xinyue_real
@@ -345,11 +347,16 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
-        # 额外获取腾讯视频的vqq_vuserid
-        logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
-        self.driver.get("https://film.qq.com/film/p/topic/dnf922/index.html")
-        time.sleep(1)
-        self.add_cookies(self.driver.get_cookies())
+        if self.login_mode == self.login_mode_normal:
+            # 普通登录额外获取腾讯视频的vqq_vuserid
+            logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
+            self.driver.get("https://film.qq.com/film/p/topic/dnf922/index.html")
+            for i in range(5):
+                vuserid = self.driver.get_cookie('vuserid')
+                if vuserid is not None:
+                    break
+                time.sleep(1)
+            self.add_cookies(self.driver.get_cookies())
 
         return
 

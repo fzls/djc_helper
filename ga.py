@@ -44,7 +44,7 @@ def track_page(page):
             'av': now_version,
 
             't': 'pageview',  # Event hit type.
-            'dh': "app.djc-helper",  # Document hostname.
+            'dh': "djc-helper.com",  # Document hostname.
             'dp': page,  # Page.
             'dt': "",  # Title.
         }

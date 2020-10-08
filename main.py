@@ -88,6 +88,13 @@ def auto_send_cards(cfg):
         for i in range(left_times):
             send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper)
 
+        # 赠送卡片完毕后尝试抽奖
+        djcHelper = qq_to_djcHelper[target_qq]
+        lr = djcHelper.fetch_pskey()
+        if lr is not None:
+            al = ArkLottery(djcHelper, lr)
+            al.try_lottery_using_cards(print_warning=False)
+
 
 def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper):
     card_name_to_id = {

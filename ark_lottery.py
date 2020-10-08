@@ -118,7 +118,7 @@ class ArkLottery:
             self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "25949", gameid="dnf")
 
     def fetch_lottery_data(self):
-        res = requests.post(self.urls.ark_lottery_page, headers=self.headers)
+        res = requests.post(self.urls.ark_lottery_page, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
         page_html = res.text
 
         data_prefix = "window.syncData = "
@@ -190,5 +190,5 @@ class ArkLottery:
             uin=uin2qq(self.lr.uin),
         )
 
-        res = requests.post(url, raw_data, headers=self.headers)
+        res = requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
         return process_result(ctx, res, pretty, print_res)

@@ -1338,8 +1338,7 @@ class DjcHelper:
         if int(res["data"]["sys_code"]) == -904 and res["data"]["lottery_txt"] == "您当前还未绑定游戏帐号，请先绑定哦~":
             webbrowser.open("https://film.qq.com/film/p/topic/dnf922/index.html")
             msg = "未绑定角色，请打开dnf助手->活动->前往【征战新团本，共享好时光】活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            logger.warning(color("fg_bold_cyan") + msg)
 
     def qq_video_op(self, ctx, module_id, print_res=True):
         res = self._qq_video_op(ctx, "21", "100", module_id, print_res)

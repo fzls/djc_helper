@@ -29,8 +29,7 @@ def track_event(category, action, label=None, value=0):
 
         requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
     except Exception as exc:
-        msg = "track_event failed, category={}, action={}, label={}, value={}".format(category, action, label, value)
-        logger.exception(msg, exc_info=exc)
+        logger.debug("track_event failed, category={}, action={}, label={}, value={} exc_info={}".format(category, action, label, value, exc))
 
 
 def track_page(page):
@@ -51,8 +50,7 @@ def track_page(page):
 
         requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
     except Exception as exc:
-        msg = "track_page failed, page={}".format(page)
-        logger.exception(msg, exc_info=exc)
+        logger.debug("track_page failed, page={} exc_info={}".format(page, exc))
 
 
 def get_cid():

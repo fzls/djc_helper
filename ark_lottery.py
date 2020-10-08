@@ -88,12 +88,15 @@ class ArkLottery:
             logger.warning("未设置领取集卡礼包奖励，也许是小号，请记得定期手动登录小号来给大号赠送缺失的卡")
 
         # 消耗卡片来抽奖
+        self.try_lottery_using_cards()
+
+    def try_lottery_using_cards(self, print_warning=True):
         if self.cfg.ark_lottery.cost_all_cards_and_do_lottery:
             card_counts = self.get_card_counts()
             for name, count in card_counts.items():
                 self.lottery_using_cards(name, count)
         else:
-            logger.warning(color("fg_bold_cyan") + "尚未开启消耗所有卡片来抽奖功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片")
+            if print_warning: logger.warning(color("fg_bold_cyan") + "尚未开启消耗所有卡片来抽奖功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片")
 
     def lottery_using_cards(self, card_name, count=1):
         if count <= 0:

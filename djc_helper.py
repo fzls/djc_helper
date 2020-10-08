@@ -1346,7 +1346,7 @@ class DjcHelper:
 
         if int(res["data"]["sys_code"]) == -1010 and res["data"]["lottery_txt"] == "系统错误":
             msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"
-            win32api.MessageBox(0, msg, "Bug", win32con.MB_ICONWARNING)
+            logger.warning(color("fg_bold_yellow") + msg)
 
         return res
 

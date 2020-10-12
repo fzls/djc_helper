@@ -449,9 +449,6 @@ def temp_code(cfg):
     # re: 闪光杯活动结束后删除
     logger.warning(color("fg_bold_yellow") + "记得每日手动登陆下心悦app，不然闪光杯抽奖会少一次。研究了下，心悦app使用jce协议并加了各种校验和加密，且客户端经过加壳，比较难搞，最终决定手动操作了<_<，有兴趣了解可以参考 https://juejin.im/post/6844903583524225031")
 
-    # re: 腾讯视频活动结束或者解决这个问题后删除
-    logger.warning(color("fg_bold_yellow") + "试了下QQ视频的不知道为啥不能领了，之前都可以的-。-如果想领的就自己手动领吧，折腾了好几天了都没搞定-。-")
-
 
 if __name__ == '__main__':
     try:

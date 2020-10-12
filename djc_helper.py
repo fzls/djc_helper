@@ -1359,9 +1359,12 @@ class DjcHelper:
         return res
 
     def _qq_video_op(self, ctx, type, option, module_id, print_res=True):
-        extra_cookies = " vuserid={vuserid};".format(
-            vuserid=self.vuserid,
-        )
+        extra_cookies = "; ".join([
+            "",
+            "appid=3000501",
+            "main_login=qq",
+            "vuserid={vuserid}".format(vuserid=self.vuserid),
+        ])
         return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id="108810", module_id=module_id,
                         print_res=print_res, extra_cookies=extra_cookies)
 

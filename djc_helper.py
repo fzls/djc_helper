@@ -783,19 +783,7 @@ class DjcHelper:
 
     def _try_join_fixed_xinyue_team(self):
         # 检查是否有固定队伍
-        qq_number = uin2qq(self.cfg.account_info.uin)
-        fixed_team = None
-        for team in self.common_cfg.fixed_teams:
-            if not team.enable:
-                continue
-            if qq_number not in team.members:
-                continue
-            if not team.check():
-                logger.warning("本地调试日志：本地固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
-                continue
-
-            fixed_team = team
-            break
+        fixed_team = self.get_fixed_team()
 
         if fixed_team is None:
             logger.warning("未找到本地固定队伍信息，跳过队伍相关流程")
@@ -830,6 +818,26 @@ class DjcHelper:
         teaminfo = self.create_xinyue_team()
         self.save_teamid(fixed_team.id, teaminfo.id)
         logger.info("创建小队并保存到本地成功，队伍信息={}".format(teaminfo))
+
+    def get_fixed_team(self):
+        """
+        :rtype: FixedTeamConfig|None
+        """
+        qq_number = uin2qq(self.cfg.account_info.uin)
+        fixed_team = None
+        for team in self.common_cfg.fixed_teams:
+            if not team.enable:
+                continue
+            if qq_number not in team.members:
+                continue
+            if not team.check():
+                logger.warning("本地调试日志：本地固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
+                continue
+
+            fixed_team = team
+            break
+
+        return fixed_team
 
     def query_xinyue_teaminfo(self, print_res=True):
         data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "513818", print_res=print_res)

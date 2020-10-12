@@ -271,6 +271,9 @@ def show_accounts_status(cfg, ctx):
         team_score = "无队伍"
         if teaminfo.id != "":
             team_score = "{}/20".format(teaminfo.score)
+            fixed_team = djcHelper.get_fixed_team()
+            if fixed_team is not None:
+                team_score += " [{}]".format(fixed_team.id)
 
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
 

@@ -40,7 +40,7 @@ class Network:
             }}
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
-        res = self.try_request(request_fn)
+        res = try_request(request_fn, self.common_cfg.retry)
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
     def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies=""):
@@ -52,20 +52,23 @@ class Network:
             }}
             return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
-        res = self.try_request(request_fn)
+        res = try_request(request_fn, self.common_cfg.retry)
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
-    def try_request(self, request_fn):
-        retryCfg = self.common_cfg.retry
-        for i in range(retryCfg.max_retry_count):
-            try:
-                return request_fn()
-            except requests.exceptions.Timeout as exc:
-                logger.exception("{}/{}: request timeout, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
-                if i + 1 != retryCfg.max_retry_count:
-                    time.sleep(retryCfg.retry_wait_time)
 
-        logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
+def try_request(request_fn, retryCfg):
+    """
+    :type retryCfg: RetryConfig
+    """
+    for i in range(retryCfg.max_retry_count):
+        try:
+            return request_fn()
+        except requests.exceptions.Timeout as exc:
+            logger.exception("{}/{}: request timeout, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
+            if i + 1 != retryCfg.max_retry_count:
+                time.sleep(retryCfg.retry_wait_time)
+
+    logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
 
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False):

@@ -47,9 +47,9 @@ def auto_send_cards(cfg):
         return
     _show_head_line("运行完毕自动赠送卡片")
 
-    target_qq = cfg.common.auto_send_card_target_qq
-    if target_qq == "":
-        logger.warning("未定义自动赠送卡片的对象，将跳过本阶段")
+    target_qqs = cfg.common.auto_send_card_target_qqs
+    if len(target_qqs) == 0:
+        logger.warning("未定义自动赠送卡片的对象QQ数组，将跳过本阶段")
         return
 
     track_page("/misc/auto_send_cards")
@@ -83,19 +83,20 @@ def auto_send_cards(cfg):
         logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
 
     # 赠送卡片
-    if target_qq in qq_to_djcHelper:
-        left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
-        logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
-        # 最多赠送目标账号今日仍可接收的卡片数
-        for i in range(left_times):
-            send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
+    for target_qq in target_qqs:
+        if target_qq in qq_to_djcHelper:
+            left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
+            logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
+            # 最多赠送目标账号今日仍可接收的卡片数
+            for i in range(left_times):
+                send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
 
-        # 赠送卡片完毕后尝试抽奖
-        djcHelper = qq_to_djcHelper[target_qq]
-        lr = djcHelper.fetch_pskey()
-        if lr is not None:
-            al = ArkLottery(djcHelper, lr)
-            al.try_lottery_using_cards(print_warning=False)
+            # 赠送卡片完毕后尝试抽奖
+            djcHelper = qq_to_djcHelper[target_qq]
+            lr = djcHelper.fetch_pskey()
+            if lr is not None:
+                al = ArkLottery(djcHelper, lr)
+                al.try_lottery_using_cards(print_warning=False)
 
 
 def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):

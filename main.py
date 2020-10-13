@@ -57,6 +57,7 @@ def auto_send_cards(cfg):
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
     qq_to_card_name_to_counts = {}
+    qq_to_prize_counts = {}
     qq_to_djcHelper = {}
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
@@ -76,6 +77,7 @@ def auto_send_cards(cfg):
         al = ArkLottery(djcHelper, lr)
 
         qq_to_card_name_to_counts[qq] = al.get_card_counts()
+        qq_to_prize_counts[qq] = al.get_prize_counts()
         qq_to_djcHelper[qq] = djcHelper
 
         logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
@@ -86,7 +88,7 @@ def auto_send_cards(cfg):
         logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
         # 最多赠送目标账号今日仍可接收的卡片数
         for i in range(left_times):
-            send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper)
+            send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
 
         # 赠送卡片完毕后尝试抽奖
         djcHelper = qq_to_djcHelper[target_qq]
@@ -96,7 +98,7 @@ def auto_send_cards(cfg):
             al.try_lottery_using_cards(print_warning=False)
 
 
-def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper):
+def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):
     card_name_to_id = {
         "多人配合新挑战": "116193", "丰富机制闯难关": "116192", "新剧情视听盛宴": "116191", "单人成团战不停": "116190",
         "回归奖励大升级": "116189", "秒升Lv96刷深渊": "116188", "灿烂自选回归领": "116187", "告别酱油变大佬": "116186",
@@ -107,11 +109,30 @@ def send_most_wantted_card(target_qq, qq_to_card_name_to_counts, qq_to_djcHelper
         "回归奖励大升级": "2-1", "秒升Lv96刷深渊": "2-2", "灿烂自选回归领": "2-3", "告别酱油变大佬": "2-4",
         "单人爽刷新玩法": "3-1", "独立成团打副本": "3-2", "海量福利金秋享": "3-3", "超强奖励等你拿": "3-4",
     }
-    # 当前卡牌的卡牌按照卡牌数升序排列
+    # 检查目标账号是否有可剩余的兑换奖励次数
+    has_any_left_gift = False
+    for name, count in qq_to_prize_counts[target_qq].items():
+        if count > 0:
+            has_any_left_gift = True
+
     target_card_infos = []
-    for card_name, card_count in qq_to_card_name_to_counts[target_qq].items():
-        target_card_infos.append((card_name, card_count))
-    target_card_infos.sort(key=lambda card: card[1])
+    if has_any_left_gift:
+        logger.debug("仍有可兑换奖励，将赠送目标QQ最需要的卡片")
+        # 当前账号的卡牌按照卡牌数升序排列
+        for card_name, card_count in qq_to_card_name_to_counts[target_qq].items():
+            target_card_infos.append((card_name, card_count))
+        target_card_infos.sort(key=lambda card: card[1])
+    else:
+        logger.debug("所有奖励都已兑换，将赠送目标QQ其他QQ最富余的卡片")
+        # 统计其余账号的各卡牌总数
+        merged_card_name_to_count = {}
+        for qq, card_name_to_count in qq_to_card_name_to_counts.items():
+            for card_name, card_count in card_name_to_count.items():
+                merged_card_name_to_count[card_name] = merged_card_name_to_count.get(card_name, 0) + card_count
+        # 降序排列
+        for card_name, card_count in merged_card_name_to_count.items():
+            target_card_infos.append((card_name, card_count))
+        target_card_infos.sort(key=lambda card: -card[1])
 
     # 升序遍历
     for card_name, card_count in target_card_infos:

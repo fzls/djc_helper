@@ -6,7 +6,7 @@ import requests
 from config import AccountConfig
 from dao import RoleInfo
 from log import logger, color
-from network import process_result
+from network import process_result, try_request
 from qq_login import LoginResult
 from sign import getACSRFTokenForAMS
 from urls import Urls
@@ -118,7 +118,8 @@ class ArkLottery:
             self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "25949", gameid="dnf")
 
     def fetch_lottery_data(self):
-        res = requests.post(self.urls.ark_lottery_page, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        request_fn = lambda: requests.post(self.urls.ark_lottery_page, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
         page_html = res.text
 
         data_prefix = "window.syncData = "
@@ -190,5 +191,6 @@ class ArkLottery:
             uin=uin2qq(self.lr.uin),
         )
 
-        res = requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        request_fn = lambda: requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
         return process_result(ctx, res, pretty, print_res)

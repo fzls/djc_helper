@@ -380,14 +380,15 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         raw_config = toml.load(config_path)
         g_config.auto_update_config(raw_config)
     except UnicodeDecodeError as error:
-        logger.error("{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
+        logger.error(color("fg_bold_yellow") + "{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
         sys.exit(0)
     except Exception as error:
         if encoding_error_str in str(error):
-            logger.error("{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
+            logger.error(color("fg_bold_yellow") + "{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
             sys.exit(0)
 
-        logger.error("读取{}文件出错，是否直接在压缩包中打开了？\n具体出错为：{}".format(config_path, error))
+        logger.error(color("fg_bold_red") + "读取{}文件出错，是否直接在压缩包中打开了或者toml语法有问题？\n具体出错为：{}\n".format(config_path, error) +
+                     color("fg_bold_yellow") + "若未完整解压，请先解压。否则请根据上面的英文报错信息，自行百度学习toml的基本语法，然后处理对应行的语法错误（看不懂的话自行用百度翻译或有道翻译）")
         sys.exit(-1)
 
     # 然后尝试读取本地文件（不受版本管理系统控制）

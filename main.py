@@ -1,4 +1,5 @@
 import os
+from sys import exit
 
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
@@ -11,8 +12,8 @@ from version import *
 
 def has_any_account_in_normal_run(cfg):
     for _idx, account_config in enumerate(cfg.account_configs):
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         return True
@@ -23,6 +24,43 @@ def _show_head_line(msg):
     show_head_line(msg, color("fg_bold_yellow"))
 
 
+def check_djc_role_binding():
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    if not has_any_account_in_normal_run(cfg):
+        logger.warning("未发现任何有效的账户配置，请检查配置文件")
+        os.system("PAUSE")
+        exit(-1)
+
+    _show_head_line("启动时检查各账号是否在道聚城绑定了dnf账号和任意手游账号")
+
+    while True:
+        all_binded = True
+
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            logger.warning(color("fg_bold_yellow") + "------------检查第{}个账户({})------------".format(idx, account_config.name))
+            djcHelper = DjcHelper(account_config, cfg.common)
+            if not djcHelper.check_djc_role_binding():
+                all_binded = False
+
+        if all_binded:
+            break
+        else:
+            logger.warning(color("fg_bold_yellow") + "请前往道聚城将上述提示的未绑定dnf或任意手游的账号进行绑定，具体操作流程可以参考使用文档或者教学视频。")
+            logger.warning(color("fg_bold_cyan") + "操作完成后点击任意键即可再次进行检查流程...")
+            os.system("PAUSE")
+
+            # 这时候重新读取一遍用户修改过后的配置文件（比如把手游设为了 无 ）
+            load_config("config.toml", "config.toml.local")
+            cfg = config()
+
+
 def check_all_skey_and_pskey(cfg):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -30,8 +68,8 @@ def check_all_skey_and_pskey(cfg):
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         logger.warning(color("fg_bold_yellow") + "------------检查第{}个账户({})------------".format(idx, account_config.name))
@@ -61,8 +99,8 @@ def auto_send_cards(cfg):
     qq_to_djcHelper = {}
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -193,8 +231,8 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         if not account_config.ark_lottery.show_status:
@@ -276,8 +314,8 @@ def show_accounts_status(cfg, ctx):
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -309,8 +347,8 @@ def try_join_xinyue_team(cfg):
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         logger.info("")
@@ -353,8 +391,8 @@ def try_take_xinyue_team_award(cfg):
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable_and_normal_run():
-            # 未启用的账户或者预运行阶段的账户不走该流程
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
             continue
 
         logger.info("")
@@ -385,17 +423,11 @@ def try_take_xinyue_team_award(cfg):
 
 
 def show_support_pic(cfg):
-    normal_run = False
-    for account_config in cfg.account_configs:
-        if account_config.run_mode == "normal":
-            normal_run = True
-            break
-    if normal_run:
-        logger.info("")
-        logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
-        if cfg.common.show_support_pic:
-            os.popen("支持一下.png")
-            track_page("show_support")
+    logger.info("")
+    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
+    if cfg.common.show_support_pic:
+        os.popen("支持一下.png")
+        track_page("show_support")
 
 
 def check_update(cfg):
@@ -421,6 +453,8 @@ def main():
 
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
+
+    check_djc_role_binding()
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

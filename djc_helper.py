@@ -233,25 +233,6 @@ class DjcHelper:
             role_info.auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
-        # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
-        if "dnf" not in self.bizcode_2_bind_role_map:
-            if print_warning: logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
-
-        if self.cfg.mobile_game_role_info.enabled():
-            # 检查道聚城是否已绑定手游角色信息，若未绑定则警告并停止运行
-            bizcode = self.get_mobile_game_info().bizCode
-            if bizcode not in self.bizcode_2_bind_role_map:
-                if print_warning: logger.warning("未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
-                subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
-                os.system("PAUSE")
-                exit(-1)
-            role_info = self.bizcode_2_bind_role_map[bizcode]
-            if not role_info.is_mobile_game():
-                if print_warning: logger.warning("【{}】是端游，不是手游。若想绑定其他手游则调整配置中的手游名称，若不启用则将手游名称调整为无".format(get_game_info_by_bizcode(bizcode).bizName))
-                subprocess.Popen("npp_portable/notepad++.exe -n63 config.toml")
-                os.system("PAUSE")
-                exit(-1)
-
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个
         if self.cfg.mobile_game_role_info.use_any_binded_mobile_game():
@@ -264,62 +245,77 @@ class DjcHelper:
                     break
 
             if not found_binded_game:
-                logger.warning("当前游戏名称配置为【任意手游】，但未在道聚城找到任何绑定的手游，请前往道聚城绑定任意一个手游，如王者荣耀")
-                os.system("PAUSE")
-                exit(-1)
+                return None
 
         return get_game_info(self.cfg.mobile_game_role_info.game_name)
 
     # --------------------------------------------各种操作--------------------------------------------
     def run(self):
-        self.check_first_run()
-
-        run_mode_dict = {
-            "pre_run": self.pre_run,
-            "normal": self.normal_run,
-        }
-        track_event("run_mode", self.cfg.run_mode)
-        if self.cfg.run_mode not in run_mode_dict:
-            logger.warning(color("fg_bold_yellow") + "运行模式拼写错误，目前支持的配置为{}，实际配置的为{}".format(list(run_mode_dict.keys()), self.cfg.run_mode))
-        run_mode_dict[self.cfg.run_mode]()
+        self.normal_run()
 
     def check_first_run(self):
         self.show_tip_on_first_run_promot()
         self.show_tip_on_first_run_any()
 
     # 预处理阶段
-    def pre_run(self):
-        logger.info("预处理阶段，请按照提示进行相关操作")
+    def check_djc_role_binding(self) -> bool:
+        self.check_first_run()
 
         # 指引获取uin/skey/角色信息等
         self.check_skey_expired()
 
-        logger.info("uin/skey已经填写完成，请确保已正确填写手游的名称信息，并已在道聚城app中绑定dnf和该手游的角色信息后再进行后续流程")
-
         # 尝试获取绑定的角色信息
         self.get_bind_role_list()
 
-        # 打印dnf和手游的绑定角色信息
-        logger.info("已获取道聚城目前绑定的角色信息如下")
-        games = []
-        if "dnf" in self.bizcode_2_bind_role_map:
-            games.append("dnf")
-        if self.cfg.mobile_game_role_info.enabled():
-            games.append(self.get_mobile_game_info().bizCode)
+        # 检查绑定信息
+        binded = True
+        # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
+        if not self.cfg.cannot_band_dnf and "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
+            binded = False
 
-        for bizcode in games:
-            roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
-            logger.info("{game}: ({server}-{name}-{id})".format(
-                game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
-            ))
+        if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
+            binded = False
 
-        # 最后提示
-        logger.warning(color("fg_bold_yellow") + "当前账号的基础配置已完成，请在自动打开的config.toml中将本账号({})的run_mode配置的值修改为normal并保存后，再次运行即可".format(self.cfg.name))
-        logger.warning("更多信息，请查看README.md/CHANGELOG.md以及使用文档目录中相关文档")
+        if binded:
+            # 打印dnf和手游的绑定角色信息
+            logger.info("已获取道聚城目前绑定的角色信息如下")
+            games = []
+            if "dnf" in self.bizcode_2_bind_role_map:
+                games.append("dnf")
+            if self.cfg.mobile_game_role_info.enabled():
+                games.append(self.get_mobile_game_info().bizCode)
 
-        subprocess.Popen("npp_portable/notepad++.exe -n39 config.toml")
+            for bizcode in games:
+                roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
+                logger.info("{game}: ({server}-{name}-{id})".format(
+                    game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
+                ))
 
-        os.system("PAUSE")
+        return binded
+
+    def check_mobile_game_bind(self):
+        # 检查配置的手游是否有效
+        gameinfo = self.get_mobile_game_info()
+        if gameinfo is None:
+            logger.warning(color("fg_bold_yellow") + "当前游戏名称配置为【任意手游】，但未在道聚城找到任何绑定的手游，请前往道聚城绑定任意一个手游，如王者荣耀")
+            return False
+
+        # 检查道聚城是否已绑定该手游的角色，若未绑定则警告并停止运行
+        bizcode = gameinfo.bizCode
+        if bizcode not in self.bizcode_2_bind_role_map:
+            logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。".format(get_game_info_by_bizcode(bizcode).bizName))
+            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
+            return False
+
+        # 检查这个游戏是否是手游
+        role_info = self.bizcode_2_bind_role_map[bizcode]
+        if not role_info.is_mobile_game():
+            logger.warning(color("fg_bold_yellow") + "【{}】是端游，不是手游。".format(get_game_info_by_bizcode(bizcode).bizName))
+            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
+            return False
+
+        return True
 
     # 正式运行阶段
     def normal_run(self):
@@ -1647,4 +1643,4 @@ if __name__ == '__main__':
     # djcHelper.djc_operations()
     # djcHelper.dnf_hillock()
     # djcHelper.guanjia()
-    djcHelper.make_wish()
+    djcHelper.dnf_shanguang()

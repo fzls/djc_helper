@@ -133,15 +133,13 @@ class AccountConfig(ConfigInterface):
         self.enable = True
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号"
-        # 运行模式
-        # pre_run:      指引获取uin、skey，以及如何获取角色信息
-        # normal:       走正常流程，执行签到、完成任务、领奖、兑换等流程
-        self.run_mode = "pre_run"
         # 登录模式
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
+        # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
+        self.cannot_band_dnf = False
         # 各功能开关
         self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
@@ -185,8 +183,8 @@ class AccountConfig(ConfigInterface):
 
         self.on_config_update(raw_config)
 
-    def enable_and_normal_run(self):
-        return self.enable and self.run_mode == "normal"
+    def is_enabled(self):
+        return self.enable
 
     def on_config_update(self, raw_config: dict):
         self.sDeviceID = self.getSDeviceID()

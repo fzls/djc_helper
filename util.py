@@ -23,22 +23,20 @@ def maximize_console_sync():
     parents = get_parents(current_pid)
 
     # 找到所有窗口中在该当前进程到进程树的顶端之间路径的窗口
-    candidates = set()
+    candidates_index_to_hwnd = {}
 
     def max_current_console(hwnd, argument):
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
         if pid in parents:
             # 记录下他们在进程树路径的下标
-            argument.add(parents.index(pid))
+            argument[parents.index(pid)] = hwnd
 
     # 遍历所有窗口
-    win32gui.EnumWindows(max_current_console, candidates)
+    win32gui.EnumWindows(max_current_console, candidates_index_to_hwnd)
 
     # 排序，从而找到最接近的那个，就是我们所需的当前窗口
-    print(candidates)
-    print(parents)
-    candidates = sorted(list(candidates))
-    current_hwnd = parents[candidates[0]]
+    indexes = sorted(list(candidates_index_to_hwnd.keys()))
+    current_hwnd = candidates_index_to_hwnd[indexes[0]]
     win32gui.ShowWindow(current_hwnd, win32con.SW_MAXIMIZE)
 
 

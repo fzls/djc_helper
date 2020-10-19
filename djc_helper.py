@@ -976,9 +976,9 @@ class DjcHelper:
         # 心悦特邀都可以领取的奖励
         self.xinyue_guoqing_op("心悦会员礼", "700457")
         self.xinyue_guoqing_op("每日在线30分钟", "700458")
-        self.xinyue_guoqing_op("国庆七日签到", "700462")
+        # self.xinyue_guoqing_op("国庆七日签到", "700462")
         self.xinyue_guoqing_op("惊喜礼包", "700511")
-        self.xinyue_guoqing_op("App礼包", "701088")
+        # self.xinyue_guoqing_op("App礼包", "701088")
 
     def check_xinyue_guoqing(self):
         res = self.xinyue_guoqing_op("幸运勇士", "700288", print_res=False)
@@ -1404,8 +1404,8 @@ class DjcHelper:
         self.dnf_hillock_op("累积21天&&百分比25%", "701062")
         self.dnf_hillock_op("累积28天&&百分比 0%", "701063")
 
-        self.dnf_hillock_op("国庆登录送抽奖", "702452")
-        self.dnf_hillock_op("国庆抽奖", "701098")
+        # self.dnf_hillock_op("国庆登录送抽奖", "702452")
+        # self.dnf_hillock_op("国庆抽奖", "701098")
 
     def query_dnf_hillock_info(self):
         res = self.dnf_hillock_op("查询", "699416")

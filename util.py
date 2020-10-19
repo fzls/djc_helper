@@ -1,8 +1,11 @@
 import datetime
+import os
 import threading
 
+import psutil
 import win32con
 import win32gui
+import win32process
 
 from log import logger, color
 
@@ -16,8 +19,43 @@ def maximize_console():
 
 
 def maximize_console_sync():
-    hwnd = win32gui.GetForegroundWindow()
-    win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
+    current_pid = os.getpid()
+    parents = get_parents(current_pid)
+
+    # 找到所有窗口中在该当前进程到进程树的顶端之间路径的窗口
+    candidates = set()
+
+    def max_current_console(hwnd, argument):
+        _, pid = win32process.GetWindowThreadProcessId(hwnd)
+        if pid in parents:
+            # 记录下他们在进程树路径的下标
+            argument.add(parents.index(pid))
+
+    # 遍历所有窗口
+    win32gui.EnumWindows(max_current_console, candidates)
+
+    # 排序，从而找到最接近的那个，就是我们所需的当前窗口
+    print(candidates)
+    print(parents)
+    candidates = sorted(list(candidates))
+    current_hwnd = parents[candidates[0]]
+    win32gui.ShowWindow(current_hwnd, win32con.SW_MAXIMIZE)
+
+
+def get_parents(child):
+    parents = [child]
+
+    try:
+        current = child
+        while True:
+            parent = psutil.Process(current).ppid()
+            parents.append(parent)
+            current = parent
+    except psutil.NoSuchProcess:
+        # 遍历到进程树最顶层仍未找到parent，说明不是父子关系
+        pass
+
+    return parents
 
 
 def printed_width(msg):
@@ -67,4 +105,7 @@ def get_today():
 
 
 if __name__ == '__main__':
-    print(get_today())
+    # print(get_parents(os.getpid()))
+    maximize_console_sync()
+    # print(check_parent(os.getpid(), 146676))
+    # win32gui.ShowWindow(current_hwnd, win32con.SW_MAXIMIZE)

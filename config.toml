@@ -42,6 +42,9 @@ name = "默认账号"
 # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
 login_mode = "qr_login"
 
+# 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
+cannot_band_dnf = false
+
 # 各功能开关
 [account_configs.function_switches]
 # 是否领取每月黑钻等级礼包

@@ -52,6 +52,7 @@ for file in os.listdir('.'):
 files_to_copy.extend([
     "config.toml.example",
     "DNF蚊子腿小助手.exe",
+    "DNF蚊子腿小助手配置工具.bat",
     "bandizip_portable",
     "reference_data",
     "chrome_portable_85.0.4183.59.7z",

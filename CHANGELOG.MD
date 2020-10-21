@@ -7,7 +7,7 @@
 6. 修正部分提示语，表述更加准确
 7. 调整ga的捕获异常，扩大范围
 8. 移除一些过期的活动
-9. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用文档/使用文档.docx和教程视频(ps:更新版本后直接复制config.toml到新版本目录即可，新增配置如需调整可自行从config.toml.example文件中复制过来)
+9. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频(ps:更新版本后直接复制config.toml到新版本目录即可，新增配置如需调整可自行从config.toml.example文件中复制过来)
 
 
 # v4.1.2 2020.10.19

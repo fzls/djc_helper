@@ -96,13 +96,13 @@ class DjcHelper:
 
     def show_tip_on_first_run_document(self):
         filename = self.first_run_document_flag_file
-        title = "引导教程"
+        title = "引导查看相关教程"
         tips = """
         如果使用过程中有任何疑惑，或者相关功能想要调整，都请先好好看看使用教程目录中的文字教程和视频教程后再来提问~
                 """
         loginfo = "首次运行弹出提示查看教程"
 
-        self.show_tip_on_first_run(filename, title, tips, loginfo)
+        self.show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
 
     def show_tip_on_first_run_use_old_config(self):
         filename = self.first_run_use_old_config_flag_file

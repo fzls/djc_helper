@@ -26,6 +26,8 @@ class DjcHelper:
     first_run_flag_file = os.path.join(first_run_dir, "init")
     first_run_auto_login_mode_flag_file = os.path.join(first_run_dir, "auto_login_mode")
     first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
+    first_run_document_flag_file = os.path.join(first_run_dir, "document")
+    first_run_use_old_config_flag_file = os.path.join(first_run_dir, "use_old_config")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
@@ -89,6 +91,28 @@ class DjcHelper:
         或者扫描二维码打赏一下也是极好的φ(>ω<*) 
                 """
         loginfo = "首次运行弹出宣传弹窗"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
+
+    def show_tip_on_first_run_document(self):
+        filename = self.first_run_document_flag_file
+        title = "引导教程"
+        tips = """
+        如果使用过程中有任何疑惑，或者相关功能想要调整，都请先好好看看使用教程目录中的文字教程和视频教程后再来提问~
+                """
+        loginfo = "首次运行弹出提示查看教程"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
+
+    def show_tip_on_first_run_use_old_config(self):
+        filename = self.first_run_use_old_config_flag_file
+        title = "继承配置"
+        tips = """
+        如果是从旧版本升级过来的，则不需要再完整走一遍配置流程，直接将旧版本目录中的config.toml文件复制过来，替换新版本的这个文件就行。
+        新版本可能新增一些配置，可查看更新日志或者自行对比新旧版本配置文件。如果未配置，则会使用设定的默认配置。
+        更多信息可查看使用教程/使用文档.docx中背景知识章节中关于继承存档的描述
+                """
+        loginfo = "首次运行弹出提示继承以前配置"
 
         self.show_tip_on_first_run(filename, title, tips, loginfo)
 
@@ -256,6 +280,8 @@ class DjcHelper:
     def check_first_run(self):
         self.show_tip_on_first_run_promot()
         self.show_tip_on_first_run_any()
+        self.show_tip_on_first_run_document()
+        self.show_tip_on_first_run_use_old_config()
 
     # 预处理阶段
     def check_djc_role_binding(self) -> bool:

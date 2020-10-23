@@ -89,12 +89,14 @@ game_name = "任意手游"
 # 兑换两次调整箱
 iGoodsId = "753"
 sGoodsName = "装备品级调整箱（5个）"
+# 表示领取几次这个奖励
 count = 2
 
 [[account_configs.exchange_items]]
 # 兑换一次疲劳药
 iGoodsId = "755"
 sGoodsName = "魔界抗疲劳秘药（10点）"
+# 表示领取几次这个奖励，千万不要再来群里问怎么设置不兑换疲劳药
 count = 1
 
 # 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt

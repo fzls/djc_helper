@@ -331,8 +331,6 @@ class DjcHelper:
         # 执行心悦相关操作
         # DNF地下城与勇士心悦特权专区
         self.xinyue_operations()
-        # 心悦国庆活动【DNF金秋送福心悦有礼】
-        self.xinyue_guoqing()
 
         # 黑钻礼包
         self.get_heizuan_gift()
@@ -349,14 +347,19 @@ class DjcHelper:
         # 阿拉德集合站活动合集
         self.dnf_922()
 
+        # 9月希洛克攻坚战
+        self.dnf_hillock()
+
+    # -- 已过期的一些活动
+    def expired_activities(self):
+        # 心悦国庆活动【DNF金秋送福心悦有礼】
+        self.xinyue_guoqing()
+
         # 2020DNF闪光杯返场赛
         self.dnf_shanguang()
 
         # qq视频活动
         self.qq_video()
-
-        # 9月希洛克攻坚战
-        self.dnf_hillock()
 
         # 管家蚊子腿
         self.guanjia()

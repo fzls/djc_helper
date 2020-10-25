@@ -34,7 +34,6 @@ def show_usage():
 
 
 if __name__ == '__main__':
-    show_usage()
-
     maximize_console()
+    show_usage()
     os.system("PAUSE")

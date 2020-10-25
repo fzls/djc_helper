@@ -14,7 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from config import *
 from log import logger, color
-from update import get_update_info
+from update import get_netdisk_addr
 
 
 class LoginResult(ConfigInterface):
@@ -76,16 +76,15 @@ class QQLogin():
 
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome85
-            # 先判定是否是下载的无附带浏览器的小包
+            # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
             if not os.path.isfile(self.chrome_binary_7z):
                 msg = (
                     "当前电脑未发现合适版本chrome85版本，且当前目录无便携版chrome的压缩包({zip_name})\n"
                     "请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录，然后重新打开程序~\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z))
                 win32api.MessageBox(0, msg, "出错啦", win32con.MB_ICONERROR)
-
-                ui = get_update_info(config)
-                webbrowser.open(ui.netdisk_link)
+                webbrowser.open(get_netdisk_addr(self.cfg))
+                os.system("PAUSE")
                 exit(-1)
 
             # 先判断便携版chrome是否已解压

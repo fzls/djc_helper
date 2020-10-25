@@ -122,6 +122,12 @@ def is_shared_content_blocked(share_netdisk_addr: str) -> bool:
     # 切换蓝奏云，暂时应该不会被屏蔽了- -
     return False
 
+def get_netdisk_addr(config):
+    try:
+        ui = get_update_info(config)
+        return ui.netdisk_link
+    except:
+        return "https://fzls.lanzous.com/s/djc-helper"
 
 if __name__ == '__main__':
     from config import load_config, config

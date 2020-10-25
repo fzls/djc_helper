@@ -1,11 +1,10 @@
-import os
 from sys import exit
 
 from ark_lottery import ArkLottery
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
-from ga import track_event, track_page
 from update import check_update_on_start
+from usage_count import increase_counter, get_count, get_uuid
 from util import *
 from version import *
 
@@ -91,7 +90,7 @@ def auto_send_cards(cfg):
         logger.warning("未定义自动赠送卡片的对象QQ数组，将跳过本阶段")
         return
 
-    track_page("/misc/auto_send_cards")
+    increase_counter("/misc/auto_send_cards")
 
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
@@ -428,7 +427,7 @@ def show_support_pic(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
     if cfg.common.show_support_pic:
         os.popen("支持一下.png")
-        track_page("show_support")
+        increase_counter("show_support")
 
 
 def check_update(cfg):
@@ -445,8 +444,12 @@ def check_update(cfg):
 
 
 def main():
-    track_event("main", "start")
-    track_event("version", "ver{} {}".format(now_version, ver_time))
+    global_usage_counter_name = "global_count"
+    user_usage_counter_name = "user_count/{}".format(get_uuid())
+
+    increase_counter(global_usage_counter_name)
+    increase_counter("version/ver{} {}".format(now_version, ver_time))
+    increase_counter(user_usage_counter_name)
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
@@ -465,7 +468,7 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    track_event("account_count", str(len(cfg.account_configs)))
+    increase_counter("account_count/{}".format(len(cfg.account_configs)))
 
     check_all_skey_and_pskey(cfg)
 
@@ -492,7 +495,16 @@ def main():
     # 临时代码
     temp_code(cfg)
 
-    track_event("main", "finish")
+    increase_counter("complete_count")
+
+    user_all_usage, user_today_usage = get_count(user_usage_counter_name, 'all'), get_count(user_usage_counter_name, get_today())
+    global_all_usage, global_today_usage = get_count(global_usage_counter_name, 'all'), get_count(global_usage_counter_name, get_today())
+    logger.warning((
+        "从2020-10-26至今，"
+        "你已累积使用小助手{}次，今日共使用{}次；"
+        "所有用户已累积使用小助手{}次，今日共使用{}次。"
+    ).format(user_all_usage, user_today_usage, global_all_usage, global_today_usage)
+    )
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)

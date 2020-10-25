@@ -53,6 +53,7 @@ def check_djc_role_binding():
             break
         else:
             logger.warning(color("fg_bold_yellow") + "请前往道聚城将上述提示的未绑定dnf或任意手游的账号进行绑定，具体操作流程可以参考使用文档或者教学视频。")
+            logger.warning(color("fg_bold_yellow") + "如果本账号不需要道聚城相关操作，可以打开配置表，将该账号的cannot_band_dnf设为true，game_name设为无，即可跳过道聚城相关操作")
             logger.warning(color("fg_bold_cyan") + "操作完成后点击任意键即可再次进行检查流程...")
             os.system("PAUSE")
 

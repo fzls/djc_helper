@@ -22,8 +22,8 @@ def show_usage():
     colSizes = [20, 8, 8, 8, 8, 8]
     rows = [
         ["本机使用次数", *[get_count(my_usage_counter_name, period) for period in periods]],
-        ["当前版本使用次数", *[get_count(this_version_global_usage_counter_name, period) for period in periods]],
-        ["所有用户使用次数", *[get_count(global_usage_counter_name, period) for period in periods]],
+        ["当前版本总计使用数", *[get_count(this_version_global_usage_counter_name, period) for period in periods]],
+        ["所有版本总计使用数", *[get_count(global_usage_counter_name, period) for period in periods]],
         ["当前版本活跃用户数", *[get_record_count_name_start_with(this_version_user_usage_prefix, period) for period in periods]],
         ["所有版本活跃用户数", *[get_record_count_name_start_with(user_usage_counter_name_prefix, period) for period in periods]],
     ]

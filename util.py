@@ -97,13 +97,24 @@ def get_this_week_monday():
     return monday.strftime("%Y%m%d")
 
 
+def get_now():
+    return datetime.datetime.now()
+
+
 def get_today():
-    now = datetime.datetime.now()
-    return now.strftime("%Y%m%d")
+    return get_now().strftime("%Y%m%d")
+
+def get_week():
+    return get_now().strftime("%Y-week-%W")
+
+
+def get_month():
+    return get_now().strftime("%Y%m")
+
+
+def get_year():
+    return get_now().strftime("%Y")
 
 
 if __name__ == '__main__':
-    # print(get_parents(os.getpid()))
-    maximize_console_sync()
-    # print(check_parent(os.getpid(), 146676))
-    # win32gui.ShowWindow(current_hwnd, win32con.SW_MAXIMIZE)
+    print(get_week())

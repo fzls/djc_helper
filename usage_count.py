@@ -1,8 +1,8 @@
 # 使用次数统计脚本
 
+import platform
 import threading
 import uuid
-import platform
 
 import leancloud
 import leancloud.object_
@@ -48,6 +48,17 @@ def get_count(name, time_period):
         return 0
 
 
+def get_record_count_name_start_with(name_start_with, time_period):
+    try:
+        CounterClass = leancloud.Object.extend("CounterClass")
+        query = CounterClass.query
+        query.startswith('name', name_start_with)
+        query.equal_to('time_period', time_period)
+        return query.count()
+    except:
+        return 0
+
+
 def get_counter(name, time_period):
     """
     获取指定计数器在指定时间段的计数实例
@@ -72,6 +83,7 @@ def get_counter(name, time_period):
 
 def leancloud_api(api):
     return "{}/1.1/{}".format(LEAN_CLOUD_SERVER_ADDR, api)
+
 
 def get_uuid():
     return "{}-{}".format(platform.node(), uuid.getnode())

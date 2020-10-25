@@ -499,12 +499,10 @@ def main():
 
     user_all_usage, user_today_usage = get_count(user_usage_counter_name, 'all'), get_count(user_usage_counter_name, get_today())
     global_all_usage, global_today_usage = get_count(global_usage_counter_name, 'all'), get_count(global_usage_counter_name, get_today())
-    logger.warning((
-        "从2020-10-26至今，"
-        "你已累积使用小助手{}次，今日共使用{}次；"
-        "所有用户已累积使用小助手{}次，今日共使用{}次。"
-    ).format(user_all_usage, user_today_usage, global_all_usage, global_today_usage)
-    )
+    logger.warning(("从2020-10-26至今，"
+                    "你已累积使用小助手{}次，今日共使用{}次；"
+                    "所有用户已累积使用小助手{}次，今日共使用{}次。"
+                    ).format(user_all_usage, user_today_usage, global_all_usage, global_today_usage))
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)

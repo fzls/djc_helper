@@ -30,7 +30,6 @@ logger.info("开始发布版本 {}".format(version))
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
 release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=version)
-release_without_chrome_dir_name = "DNF蚊子腿小助手_{version}_若系统自带chrome85_by风之凌殇".format(version=version)
 dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
 path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 
@@ -55,7 +54,6 @@ files_to_copy.extend([
     "DNF蚊子腿小助手配置工具.bat",
     "bandizip_portable",
     "reference_data",
-    "chrome_portable_85.0.4183.59.7z",
     "chromedriver_85.0.4183.87.exe",
     "public_key.der",
     "使用教程",
@@ -86,16 +84,6 @@ os.chdir(dir_all_release)
 logger.info("开始压缩打包")
 release_7z_name = '{}.7z'.format(release_dir_name)
 subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
-
-# 另打一份不包括便携版chrome的包
-shutil.copytree(release_dir_name, release_without_chrome_dir_name)
-shutil.rmtree(os.path.join(release_without_chrome_dir_name, "bandizip_portable"))
-os.remove(os.path.join(release_without_chrome_dir_name, "chrome_portable_85.0.4183.59.7z"))
-
-release_without_chrome_7z_name = '{}.7z'.format(release_without_chrome_dir_name)
-subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_without_chrome_7z_name, release_without_chrome_dir_name])
-
-shutil.rmtree(release_without_chrome_dir_name)
 
 # ---------------推送版本到github
 # 打包完成后git添加标签

@@ -81,6 +81,7 @@ class QQLogin():
                 msg = (
                     "当前电脑未发现合适版本chrome85版本，且当前目录无便携版chrome的压缩包({zip_name})\n"
                     "请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录，然后重新打开程序~\n"
+                    "如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z))
                 win32api.MessageBox(0, msg, "出错啦", win32con.MB_ICONERROR)
                 webbrowser.open(get_netdisk_addr(self.cfg))

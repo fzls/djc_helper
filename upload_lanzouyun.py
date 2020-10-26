@@ -21,7 +21,7 @@ class Uploader:
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
     def upload_to_lanzouyun(self, filepath, target_folder):
-        logger.info("开始上传 {} 到 {}".format(os.path.basename(filepath), target_folder.name))
+        logger.warning("开始上传 {} 到 {}".format(os.path.basename(filepath), target_folder.name))
 
         def on_uploaded(fid, is_file):
             if not is_file:

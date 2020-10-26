@@ -1,6 +1,6 @@
 import json
-from collections import namedtuple
 import os
+from collections import namedtuple
 
 from lanzou.api import LanZouCloud
 

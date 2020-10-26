@@ -497,7 +497,8 @@ def main():
     increase_counter("complete_count")
 
     # 显示小助手的使用概览
-    show_usage()
+    if cfg.common._show_usage:
+        show_usage()
 
     # 全部账号操作完成后，检查更新
     check_update(cfg)

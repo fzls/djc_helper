@@ -13,10 +13,6 @@ this_version_my_usage_counter_name = "{}/{}".format(this_version_user_usage_pref
 def show_usage():
     show_head_line("从2020-10-26至今小助手使用情况概览", color("fg_bold_yellow"))
 
-    user_all_usage, user_today_usage = get_count(my_usage_counter_name, 'all'), get_count(my_usage_counter_name, get_today())
-    global_all_usage, global_today_usage = get_count(global_usage_counter_name, 'all'), get_count(global_usage_counter_name, get_today())
-    all_user, today_user = get_record_count_name_start_with(user_usage_counter_name_prefix, 'all'), get_record_count_name_start_with(user_usage_counter_name_prefix, get_today())
-
     heads = ["计数对象", "累积", "今日", "本周", "本月", "本年"]
     periods = ['all', util.get_today(), util.get_week(), util.get_month(), util.get_year()]
     colSizes = [20, 8, 8, 8, 8, 8]

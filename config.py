@@ -287,6 +287,8 @@ class CommonConfig(ConfigInterface):
     def __init__(self):
         # 测试用开关，将仅运行首个账号配置
         self._debug_run_first_only = False
+        # 是否展示小助手的累积使用情况
+        self._show_usage = False
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
         # http(s)请求超时时间(秒)

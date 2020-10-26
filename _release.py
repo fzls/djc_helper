@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import shutil
@@ -5,6 +6,7 @@ import subprocess
 from datetime import datetime
 
 from log import logger
+from upload_lanzouyun import Uploader
 from util import maximize_console
 from version import now_version
 
@@ -84,6 +86,18 @@ os.chdir(dir_all_release)
 logger.info("开始压缩打包")
 release_7z_name = '{}.7z'.format(release_dir_name)
 subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
+
+# ---------------上传到蓝奏云
+logger.info("开始上传到蓝奏云")
+with open("upload_cookie.json") as fp:
+    cookie = json.load(fp)
+uploader = Uploader(cookie)
+if uploader.login_ok:
+    logger.info("蓝奏云登录成功，开始上传压缩包")
+    uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper)
+    uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc)
+else:
+    logger.error("蓝奏云登录失败")
 
 # ---------------推送版本到github
 # 打包完成后git添加标签

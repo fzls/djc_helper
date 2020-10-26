@@ -7,3 +7,4 @@ selenium
 colorlog
 psutil
 leancloud
+lanzou-api

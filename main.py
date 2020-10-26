@@ -91,8 +91,6 @@ def auto_send_cards(cfg):
         logger.warning("未定义自动赠送卡片的对象QQ数组，将跳过本阶段")
         return
 
-    increase_counter("/misc/auto_send_cards")
-
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
     qq_to_card_name_to_counts = {}
@@ -428,7 +426,6 @@ def show_support_pic(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
     if cfg.common.show_support_pic:
         os.popen("支持一下.png")
-        increase_counter("show_support")
 
 
 def check_update(cfg):
@@ -467,8 +464,6 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    increase_counter("account_count/{}".format(len(cfg.account_configs)))
-
     check_all_skey_and_pskey(cfg)
 
     show_accounts_status(cfg, "启动时展示账号概览")
@@ -493,8 +488,6 @@ def main():
 
     # 临时代码
     temp_code(cfg)
-
-    increase_counter("complete_count")
 
     # 显示小助手的使用概览
     if cfg.common._show_usage:

@@ -31,12 +31,13 @@ def increase_counter_sync(name):
         logger.debug("increase_counter {} failedexc_info={}".format(name, exc))
 
 
+time_periods = ["all", util.get_today()]
+time_periods_desc = ["累积", "今日"]
+
 def get_counters(name):
     """
     获取此计数器的若干个实例，如总计数，本日计数，本月计数，本年计数
     """
-    time_periods = ["all", util.get_today(), util.get_week(), util.get_month(), util.get_year()]
-
     res = [get_counter(name, time_period) for time_period in time_periods]
     return res
 

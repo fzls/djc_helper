@@ -13,15 +13,14 @@ this_version_my_usage_counter_name = "{}/{}".format(this_version_user_usage_pref
 def show_usage():
     show_head_line("从2020-10-26至今小助手使用情况概览", color("fg_bold_yellow"))
 
-    heads = ["计数对象", "累积", "今日", "本周", "本月", "本年"]
-    periods = ['all', util.get_today(), util.get_week(), util.get_month(), util.get_year()]
-    colSizes = [20, 8, 8, 8, 8, 8]
+    heads = ["计数对象", *time_periods_desc]
+    colSizes = [20, *[8 for _ in time_periods_desc]]
     rows = [
-        ["本机使用次数", *[get_count(my_usage_counter_name, period) for period in periods]],
-        ["当前版本总计使用数", *[get_count(this_version_global_usage_counter_name, period) for period in periods]],
-        ["所有版本总计使用数", *[get_count(global_usage_counter_name, period) for period in periods]],
-        ["当前版本活跃用户数", *[get_record_count_name_start_with(this_version_user_usage_prefix, period) for period in periods]],
-        ["所有版本活跃用户数", *[get_record_count_name_start_with(user_usage_counter_name_prefix, period) for period in periods]],
+        ["本机使用次数", *[get_count(my_usage_counter_name, period) for period in time_periods]],
+        ["当前版本总计使用数", *[get_count(this_version_global_usage_counter_name, period) for period in time_periods]],
+        ["所有版本总计使用数", *[get_count(global_usage_counter_name, period) for period in time_periods]],
+        ["当前版本活跃用户数", *[get_record_count_name_start_with(this_version_user_usage_prefix, period) for period in time_periods]],
+        ["所有版本活跃用户数", *[get_record_count_name_start_with(user_usage_counter_name_prefix, period) for period in time_periods]],
     ]
 
     logger.info(tableify(heads, colSizes))

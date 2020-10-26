@@ -89,8 +89,10 @@ subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z
 
 # ---------------上传到蓝奏云
 logger.info("开始上传到蓝奏云")
+os.chdir(dir_src)
 with open("upload_cookie.json") as fp:
     cookie = json.load(fp)
+os.chdir(dir_all_release)
 uploader = Uploader(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")

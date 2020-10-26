@@ -1,24 +1,23 @@
 import json
+from collections import namedtuple
 
 from lanzou.api import LanZouCloud
 
 from log import logger
 
+Folder = namedtuple('Folder', ['name', 'id'])
+
 
 class Uploader:
-    _folder_id_dnf_calc = "1810329"
-    _folder_id_djc_helper = "2290618"
-    _folder_id_history_files = "2303716"
+    folder_dnf_calc = Folder("魔改计算器", "1810329")
+    folder_djc_helper = Folder("蚊子腿小助手", "2290618")
+    folder_history_files = Folder("历史版本", "2303716")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
 
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
-        if self.login_ok:
-            self.folder_dnf_calc = self.lzy.get_folder_info_by_id(self._folder_id_dnf_calc).folder
-            self.folder_djc_helper = self.lzy.get_folder_info_by_id(self._folder_id_djc_helper).folder
-            self.folder_history_files = self.lzy.get_folder_info_by_id(self._folder_id_history_files).folder
 
     def upload_to_lanzouyun(self, filepath, target_folder):
         def on_uploaded(fid, is_file):
@@ -30,7 +29,7 @@ class Uploader:
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
                 if file.name.startswith(self.history_version_prefix):
-                    self.lzy.move_file(file.id, self._folder_id_history_files)
+                    self.lzy.move_file(file.id, self.folder_history_files.id)
                     logger.info("将{}移动到目录({})".format(file.name, self.folder_history_files.name))
 
             logger.info("将文件移到目录({})中".format(target_folder.name))

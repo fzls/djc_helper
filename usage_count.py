@@ -44,7 +44,8 @@ def get_counters(name):
 def get_count(name, time_period):
     try:
         return get_counter(name, time_period).get('count', 0)
-    except:
+    except Exception as e:
+        logger.debug("get_count failed name={}, time_period={} e={}".format(name, time_period, e))
         return 0
 
 
@@ -55,7 +56,8 @@ def get_record_count_name_start_with(name_start_with, time_period):
         query.startswith('name', name_start_with)
         query.equal_to('time_period', time_period)
         return query.count()
-    except:
+    except Exception as e:
+        logger.debug("get_record_count_name_start_with failed name_start_with={}, time_period={} e={}".format(name_start_with, time_period, e))
         return 0
 
 

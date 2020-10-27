@@ -442,10 +442,14 @@ def check_update(cfg):
 
 
 def main():
-    increase_counter(global_usage_counter_name)
-    increase_counter(my_usage_counter_name)
-    increase_counter(this_version_global_usage_counter_name)
-    increase_counter(this_version_my_usage_counter_name)
+    if is_daily_first_run():
+        # 整体使用次数
+        increase_counter(this_version_global_usage_counter_name)
+        increase_counter(global_usage_counter_name)
+
+        # 当前用户使用次数
+        increase_counter(this_version_my_usage_counter_name)
+        increase_counter(my_usage_counter_name)
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

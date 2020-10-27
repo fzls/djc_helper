@@ -1,5 +1,3 @@
-import datetime
-import os
 import threading
 
 import psutil
@@ -7,6 +5,7 @@ import win32con
 import win32gui
 import win32process
 
+from db import *
 from log import logger, color
 
 
@@ -104,6 +103,7 @@ def get_now():
 def get_today():
     return get_now().strftime("%Y%m%d")
 
+
 def get_week():
     return get_now().strftime("%Y-week-%W")
 
@@ -112,9 +112,21 @@ def get_month():
     return get_now().strftime("%Y%m")
 
 
+def is_daily_first_run():
+    db = load_db()
+
+    today = get_today()
+    last_run_at = db.get('last_run_at', "")
+
+    db['last_run_at'] = today
+
+    save_db(db)
+    return last_run_at != today
+
+
 def get_year():
     return get_now().strftime("%Y")
 
 
 if __name__ == '__main__':
-    print(get_week())
+    print(is_daily_first_run())

@@ -443,6 +443,7 @@ def check_update(cfg):
 
 def main():
     if is_daily_first_run():
+        logger.info("今日首次运行，尝试上报使用统计~")
         # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）
         # 整体使用次数
         increase_counter(this_version_global_usage_counter_name)
@@ -451,6 +452,8 @@ def main():
         # 当前用户使用次数
         increase_counter(this_version_my_usage_counter_name)
         increase_counter(my_usage_counter_name)
+    else:
+        logger.info("今日已运行过，不再尝试上报使用统计")
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

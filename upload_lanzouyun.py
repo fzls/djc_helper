@@ -1,6 +1,7 @@
 import json
 import os
 from collections import namedtuple
+from datetime import datetime
 
 from lanzou.api import LanZouCloud
 
@@ -22,6 +23,7 @@ class Uploader:
 
     def upload_to_lanzouyun(self, filepath, target_folder):
         logger.warning("开始上传 {} 到 {}".format(os.path.basename(filepath), target_folder.name))
+        run_start_time = datetime.now()
 
         def on_uploaded(fid, is_file):
             if not is_file:
@@ -43,6 +45,8 @@ class Uploader:
         if retCode != LanZouCloud.SUCCESS:
             logger.error("上传失败，retCode={}".format(retCode))
             return False
+
+        logger.info("上传当前文件总计耗时{}".format(datetime.now() - run_start_time))
 
         return True
 

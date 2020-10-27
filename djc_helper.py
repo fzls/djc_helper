@@ -1140,6 +1140,14 @@ class DjcHelper:
         ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
         self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
 
+    def send_card_by_name(self, card_name, to_qq):
+        card_name_to_id = {
+            "多人配合新挑战": "116193", "丰富机制闯难关": "116192", "新剧情视听盛宴": "116191", "单人成团战不停": "116190",
+            "回归奖励大升级": "116189", "秒升Lv96刷深渊": "116188", "灿烂自选回归领": "116187", "告别酱油变大佬": "116186",
+            "单人爽刷新玩法": "116185", "独立成团打副本": "116184", "海量福利金秋享": "116183", "超强奖励等你拿": "116182",
+        }
+        self.send_card(card_name_to_id[card_name], target_qq)
+
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
         # https://dnf.qq.com/lbact/a20200922wegame/index.html
@@ -1656,4 +1664,5 @@ if __name__ == '__main__':
     # djcHelper.djc_operations()
     # djcHelper.dnf_hillock()
     # djcHelper.guanjia()
-    djcHelper.dnf_shanguang()
+    # djcHelper.dnf_shanguang()
+    djcHelper.send_card_by_name("独立成团打副本", "1054073896")

@@ -91,6 +91,12 @@ cannot_band_dnf = false
 
 # 各功能开关
 [account_configs.function_switches]
+# 是否领取道聚城
+get_djc = true
+# 是否领取心悦特权专区
+get_xinyue = true
+# 是否领取腾讯游戏信用相关礼包
+get_credit_xinyue_gift = true
 # 是否领取每月黑钻等级礼包
 get_heizuan_gift = true
 # 是否领取心悦国庆活动

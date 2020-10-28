@@ -297,13 +297,14 @@ class DjcHelper:
 
         # 检查绑定信息
         binded = True
-        # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
-        if not self.cfg.cannot_band_dnf and "dnf" not in self.bizcode_2_bind_role_map:
-            logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
-            binded = False
+        if self.cfg.function_switches.get_djc:
+            # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
+            if not self.cfg.cannot_band_dnf and "dnf" not in self.bizcode_2_bind_role_map:
+                logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
+                binded = False
 
-        if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
-            binded = False
+            if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
+                binded = False
 
         if binded:
             # 打印dnf和手游的绑定角色信息
@@ -395,6 +396,10 @@ class DjcHelper:
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")
+
+        if not self.cfg.function_switches.get_djc:
+            logger.warning("未启用领取道聚城功能，将跳过")
+            return
 
         # ------------------------------初始工作------------------------------
         old_info = self.query_balance("1. 操作前：查询余额")["data"]
@@ -711,6 +716,10 @@ class DjcHelper:
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
+
+        if not self.cfg.function_switches.get_xinyue:
+            logger.warning("未启用领取心悦特权专区功能，将跳过")
+            return
 
         if len(self.cfg.xinyue_operations) == 0:
             logger.warning("未设置心悦相关操作信息，将跳过")
@@ -1039,6 +1048,10 @@ class DjcHelper:
     # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
         show_head_line("腾讯游戏信用相关礼包")
+
+        if not self.cfg.function_switches.get_credit_xinyue_gift:
+            logger.warning("未启用领取腾讯游戏信用相关礼包功能，将跳过")
+            return
 
         self.get("每月信用星级礼包", self.urls.credit_gift)
         try:

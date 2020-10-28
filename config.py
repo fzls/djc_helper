@@ -107,6 +107,12 @@ class DnfHelperInfoConfig(ConfigInterface):
 
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
+        # 是否领取道聚城
+        self.get_djc = True
+        # 是否领取心悦特权专区
+        self.get_xinyue = True
+        # 是否领取腾讯游戏信用相关礼包
+        self.get_credit_xinyue_gift = True
         # 是否领取每月黑钻等级礼包
         self.get_heizuan_gift = True
         # 是否领取心悦国庆活动

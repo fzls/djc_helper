@@ -1055,6 +1055,10 @@ class DjcHelper:
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9
         show_head_line("QQ空间抽卡")
 
+        if not self.cfg.function_switches.get_ark_lottery:
+            logger.warning("未启用领取QQ空间抽卡功能，将跳过")
+            return
+
         lr = self.fetch_pskey()
         if lr is None:
             return

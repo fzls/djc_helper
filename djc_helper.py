@@ -1067,6 +1067,11 @@ class DjcHelper:
         al.ark_lottery()
 
     def fetch_pskey(self):
+        # 如果未启用抽卡功能，则不需要这个
+        if not self.cfg.function_switches.get_ark_lottery:
+            logger.warning("未启用领取QQ空间抽卡功能，将跳过")
+            return
+
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")

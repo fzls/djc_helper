@@ -109,6 +109,8 @@ get_dnf_hillock = true
 get_guanjia = true
 # 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
 make_wish = true
+# 是否启用集卡功能
+get_ark_lottery = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

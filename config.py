@@ -125,6 +125,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_guanjia = True
         # 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
         self.make_wish = True
+        # 是否启用集卡功能
+        self.get_ark_lottery = True
 
 
 class AccountConfig(ConfigInterface):

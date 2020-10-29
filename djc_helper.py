@@ -376,9 +376,6 @@ class DjcHelper:
         # 阿拉德集合站活动合集
         self.dnf_922()
 
-        # 9月希洛克攻坚战
-        self.dnf_hillock()
-
     # -- 已过期的一些活动
     def expired_activities(self):
         # 心悦国庆活动【DNF金秋送福心悦有礼】
@@ -392,6 +389,9 @@ class DjcHelper:
 
         # 管家蚊子腿
         self.guanjia()
+
+        # 9月希洛克攻坚战
+        self.dnf_hillock()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

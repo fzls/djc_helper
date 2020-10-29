@@ -6,6 +6,7 @@ import subprocess
 from log import logger
 
 venv_path = ".venv"
+src_name = "main.py"
 exe_name = 'DNF蚊子腿小助手.exe'
 icon = 'DNF蚊子腿小助手.ico'
 
@@ -61,7 +62,7 @@ cmd_build = [
     '--icon', icon,
     '--name', exe_name,
     '-F',
-    'main.py',
+    src_name,
 ]
 
 subprocess.call(cmd_build)
@@ -72,7 +73,7 @@ shutil.copyfile(os.path.join("dist", exe_name), exe_name)
 # 删除临时文件
 for directory in ["build", "dist", "__pycache__"]:
     shutil.rmtree(directory, ignore_errors=True)
-for file in ["DNF蚊子腿小助手.exe.spec"]:
+for file in ["{}.spec".format(exe_name)]:
     os.remove(file)
 
 logger.info("done")

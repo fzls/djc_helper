@@ -46,7 +46,7 @@ class Uploader:
             logger.error("上传失败，retCode={}".format(retCode))
             return False
 
-        logger.info("上传当前文件总计耗时{}".format(datetime.now() - run_start_time))
+        logger.warning("上传当前文件总计耗时{}".format(datetime.now() - run_start_time))
 
         return True
 

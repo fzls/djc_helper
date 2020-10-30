@@ -102,6 +102,9 @@ class DnfHelperInfoConfig(ConfigInterface):
         # 流程：
         #   1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】。
         #   2. 在我的电脑聊天框中的链接中找到请求中的token（形如&token=tW7AbaM7，则token为tW7AbaM7），将其进行更新到配置文件中
+        #
+        # ps: 如果有多个账号需要领取这个，请不要在手机上依次登入登出执行上述步骤来获取token，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了
+        #       有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开
         self.token = ""
 
 
@@ -125,8 +128,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_shanguang = True
         # 是否领取qq视频活动
         self.get_qq_video = True
-        # 是否领取9月希洛克攻坚战活动
-        self.get_dnf_hillock = True
+        # 是否领取10月女法师三觉活动
+        self.get_dnf_female_mage_awaken = True
         # 是否领取管家蚊子腿活动
         self.get_guanjia = True
         # 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用

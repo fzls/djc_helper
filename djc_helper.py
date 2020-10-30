@@ -392,8 +392,8 @@ class DjcHelper:
         # 管家蚊子腿
         self.guanjia()
 
-        # 9月希洛克攻坚战
-        self.dnf_hillock()
+        # 10月女法师三觉
+        self.dnf_female_mage_awaken()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -1413,13 +1413,13 @@ class DjcHelper:
         return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id="108810", module_id=module_id,
                         print_res=print_res, extra_cookies=extra_cookies)
 
-    # --------------------------------------------9月希洛克攻坚战活动--------------------------------------------
-    def dnf_hillock(self):
-        # https://mwegame.qq.com/act/dnf/hillockbattlePC/index.html
-        show_head_line("9月希洛克攻坚战")
+    # --------------------------------------------10月女法师三觉活动--------------------------------------------
+    def dnf_female_mage_awaken(self):
+        # https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006
+        show_head_line("10月女法师三觉")
 
-        if not self.cfg.function_switches.get_dnf_hillock:
-            logger.warning("未启用领取9月希洛克攻坚战活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_female_mage_awaken:
+            logger.warning("未启用领取10月女法师三觉活动合集功能，将跳过")
             return
 
         # 检查是否已在道聚城绑定
@@ -1427,51 +1427,50 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        checkin_days = self.query_dnf_hillock_info()
-        logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
+        # fixme: 这个之后签到几天后再看看各个outvalue到底是啥含义
+        logger.warning("这个之后签到几天后再看看各个outvalue到底是啥含义")
+        # checkin_days = self.query_dnf_female_mage_awaken_info()
+        # logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行希洛克攻坚战相关活动，请按照下列流程进行配置")
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置")
             self.show_dnf_helper_info_guide()
             return
 
-        self.dnf_hillock_op("第一天", "700742")
-        self.dnf_hillock_op("第二天", "700787")
-        self.dnf_hillock_op("第三天", "700788")
-        self.dnf_hillock_op("第四天", "700789")
-        self.dnf_hillock_op("第五天", "700790")
-        self.dnf_hillock_op("第六天", "700791")
-        self.dnf_hillock_op("第七天", "700792")
+        self.dnf_female_mage_awaken_op("时间的引导石 * 10", "712951")
+        self.dnf_female_mage_awaken_op("魂灭结晶礼盒 (200个)", "712970")
+        self.dnf_female_mage_awaken_op("神秘契约礼盒 (1天)", "712971")
+        self.dnf_female_mage_awaken_op("抗疲劳秘药 (10点)", "712972")
+        self.dnf_female_mage_awaken_op("装备品级调整箱礼盒 (1个)", "712973")
+        self.dnf_female_mage_awaken_op("复活币礼盒 (1个)", "712974")
+        self.dnf_female_mage_awaken_op("神秘的符文原石", "712975")
+        self.dnf_female_mage_awaken_op("成长胶囊 (50百分比) (Lv50~99)", "712977")
+        self.dnf_female_mage_awaken_op("黑钻(3天)", "712978")
+        self.dnf_female_mage_awaken_op("本职业稀有护石神秘礼盒", "712981")
 
-        self.dnf_hillock_op("隐藏1", "700862")
-        self.dnf_hillock_op("隐藏2", "700897")
+        self.dnf_female_mage_awaken_op("每周签到3/5/7次时获得娃娃机抽奖次数", "713370")
+        self.dnf_female_mage_awaken_op("娃娃机抽奖", "712623")
+
+        self.dnf_female_mage_awaken_op("回归礼包", "710474")
+
+    def query_dnf_female_mage_awaken_info(self):
+        res = self.dnf_female_mage_awaken_op("查询", "712497")
+        sOutValue1, sOutValue2, sOutValue3 = res["modRet"]["sOutValue1"], res["modRet"]["sOutValue2"], res["modRet"]["sOutValue3"]
+
+        # _, checkin_days = sOutValue1.split(';')
+        # can_checkin_7, can_checkin_14, can_checkin_21, can_checkin_28 = sOutValue2.split(';')
         #
-        self.dnf_hillock_op("累积 7天&&百分比75%", "700902")
-        self.dnf_hillock_op("累积14天&&百分比50%", "701061")
-        self.dnf_hillock_op("累积21天&&百分比25%", "701062")
-        self.dnf_hillock_op("累积28天&&百分比 0%", "701063")
+        # return checkin_days
 
-        # self.dnf_hillock_op("国庆登录送抽奖", "702452")
-        # self.dnf_hillock_op("国庆抽奖", "701098")
-
-    def query_dnf_hillock_info(self):
-        res = self.dnf_hillock_op("查询", "699416")
-        sOutValue1, sOutValue2 = res["modRet"]["sOutValue1"], res["modRet"]["sOutValue2"]
-
-        _, checkin_days = sOutValue1.split(';')
-        can_checkin_7, can_checkin_14, can_checkin_21, can_checkin_28 = sOutValue2.split(';')
-
-        return checkin_days
-
-    def dnf_hillock_op(self, ctx, iFlowId, print_res=True):
-        iActivityId = self.urls.iActivityId_dnf_hillock
-        res = self.post(ctx, self.urls.amesvr, self.dnf_hillock_flow_data(iActivityId, iFlowId),
+    def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
+        res = self.post(ctx, self.urls.amesvr, self.dnf_female_mage_awaken_flow_data(iActivityId, iFlowId),
                         amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
                         print_res=print_res)
 
-        # 1331152: 登录态失效,请重新登录!
-        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录!":
+        # 1000017016: 登录态失效,请重新登录
+        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
             logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
             self.show_dnf_helper_info_guide()
 
@@ -1481,13 +1480,16 @@ class DjcHelper:
         logger.warning(color("fg_bold_yellow") + "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】")
         logger.warning(color("fg_bold_yellow") + "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&token=tW7AbaM7，则token为tW7AbaM7），将其进行更新到配置文件中【dnf助手信息】配置中")
         logger.warning(color("fg_bold_yellow") + "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073")
+        logger.warning(color("fg_bold_yellow") + "_")
+        logger.warning(color("fg_bold_yellow") + "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了")
+        logger.warning(color("fg_bold_yellow") + "有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开")
 
-    def dnf_hillock_flow_data(self, iActivityId, iFlowId):
+    def dnf_female_mage_awaken_flow_data(self, iActivityId, iFlowId):
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         qq = uin2qq(self.cfg.account_info.uin)
         dnf_helper_info = self.cfg.dnf_helper_info
         return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("http://mwegame.qq.com/act/dnf/hillockbattle2020/index1/"),
+                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("http://mwegame.qq.com/act/dnf/mageawaken/index1/"),
                            iActivityId=iActivityId, iFlowId=iFlowId,
                            sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
                            sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
@@ -1608,7 +1610,7 @@ class DjcHelper:
     def wx_checkin(self):
         # fixme: 开发完成后移除这个
         if not self.cfg.test_mode:
-            return 
+            return
 
         show_head_line("微信签到--临时版本，仅本地使用")
 
@@ -1710,8 +1712,9 @@ if __name__ == '__main__':
     # djcHelper.dnf_shanguang()
     # djcHelper.qq_video()
     # djcHelper.djc_operations()
-    # djcHelper.dnf_hillock()
+    # djcHelper.dnf_female_mage_awaken()
     # djcHelper.guanjia()
     # djcHelper.dnf_shanguang()
     # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
-    djcHelper.wx_checkin()
+    # djcHelper.wx_checkin()
+    djcHelper.dnf_female_mage_awaken()

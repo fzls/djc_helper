@@ -375,6 +375,9 @@ class DjcHelper:
         # 阿拉德集合站活动合集
         self.dnf_922()
 
+        # 10月女法师三觉
+        self.dnf_female_mage_awaken()
+
         # 微信签到
         self.wx_checkin()
 
@@ -391,9 +394,6 @@ class DjcHelper:
 
         # 管家蚊子腿
         self.guanjia()
-
-        # 10月女法师三觉
-        self.dnf_female_mage_awaken()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

@@ -1203,7 +1203,10 @@ class DjcHelper:
         _, lottery_times = self.get_wegame_star_count_lottery_times()
         logger.info(color("fg_bold_cyan") + "即将进行抽奖，当前剩余抽奖资格为{}".format(lottery_times))
         for i in range(lottery_times):
-            self.wegame_op("抽奖", "703957")
+            res = self.wegame_op("抽奖", "703957")
+            if res.get('ret', "0") == "600":
+                # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
+                break
 
         # 在线得好礼
         self.wegame_op("累计在线30分钟签到", "703529")

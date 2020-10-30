@@ -17,7 +17,6 @@ from network import *
 from qq_login import QQLogin, LoginResult
 from sign import getMillSecondsUnix
 from urls import Urls
-from usage_count import increase_counter
 from util import show_head_line, get_this_week_monday
 
 
@@ -375,6 +374,9 @@ class DjcHelper:
 
         # 阿拉德集合站活动合集
         self.dnf_922()
+
+        # 微信签到
+        self.wx_checkin()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -1602,6 +1604,26 @@ class DjcHelper:
     def get_local_saved_guanjia_openid_file(self):
         return self.local_saved_guanjia_openid_file.format(self.cfg.name)
 
+    # --------------------------------------------微信签到--------------------------------------------
+    def wx_checkin(self):
+        # fixme: 开发完成后移除这个
+        if not self.cfg.test_mode:
+            return 
+
+        show_head_line("微信签到--临时版本，仅本地使用")
+
+        # if not self.cfg.function_switches.wx_checkin:
+        #     logger.warning("未启用微信签到功能，将跳过")
+        #     return
+
+        self.post("微信签到", 'https://gw.gzh.qq.com/awp-signin/register?id=260', {},
+                  extra_cookies=self.make_cookie({
+                      "fsza_sk_s_q_at_101482157": "1599657594",
+                      "fsza_sk_t_q_at_101482157": "01EHSGBKRZ9ECXXWPF589HFY2M",
+                      "fsza_sk_t_at_wxa817069bb040f860": "84db8359ff1faf4b2a4afe499d62aaf8415f6933ace0b3975fe256a8def52231",
+                      "fsza_sk_s_at_wxa817069bb040f860": "1604028769",
+                  }))
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, extra_cookies)
@@ -1654,6 +1676,9 @@ class DjcHelper:
     def rand6(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
 
+    def make_cookie(self, map: dict):
+        return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
+
 
 if __name__ == '__main__':
     # 读取配置信息
@@ -1669,6 +1694,7 @@ if __name__ == '__main__':
     # djcHelper.run()
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list()
+
     # djcHelper.query_all_extra_info()
     # djcHelper.exchange_items()
     # djcHelper.xinyue_operations()
@@ -1687,4 +1713,5 @@ if __name__ == '__main__':
     # djcHelper.dnf_hillock()
     # djcHelper.guanjia()
     # djcHelper.dnf_shanguang()
-    djcHelper.send_card_by_name("独立成团打副本", "1054073896")
+    # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
+    djcHelper.wx_checkin()

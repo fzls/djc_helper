@@ -416,6 +416,9 @@ def try_take_xinyue_team_award(cfg):
         for op in xinyue_operations:
             djcHelper.do_xinyue_op(xinyue_info.xytype, op)
 
+        # 临时代码
+        djcHelper.wx_checkin()
+
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
             break

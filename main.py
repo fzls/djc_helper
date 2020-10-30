@@ -524,7 +524,7 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        msg = "ver {} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决".format(now_version)
+        msg = "ver {} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决。如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~ 链接：https://fzls.lanzous.com/s/djc-helper".format(now_version)
         logger.exception(msg, exc_info=e)
     finally:
         # 暂停一下，方便看结果

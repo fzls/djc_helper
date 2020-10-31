@@ -1432,7 +1432,7 @@ class DjcHelper:
 
         # fixme: 这个之后签到几天后再看看各个outvalue到底是啥含义
         logger.warning("这个之后签到几天后再看看各个outvalue到底是啥含义")
-        # checkin_days = self.query_dnf_female_mage_awaken_info()
+        checkin_days = self.query_dnf_female_mage_awaken_info()
         # logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
 
         if self.cfg.dnf_helper_info.token == "":

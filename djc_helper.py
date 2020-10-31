@@ -1625,16 +1625,12 @@ class DjcHelper:
         #   QQ的登录态(前两个)似乎非常稳定，似乎只需要处理后面那俩，根据今天的测试，早上十一点半获取的token，下午三点再次运行的时候已经提示：微信身份态过期（缓存找不到）
         wx_login_cookies = self.make_cookie({
             # ----------QQ登录态----------
-            # 登录态
+            # 登录态（这个似乎可以长期不用改动）
             "fsza_sk_t_q_at_101482157": "01EHSGBKRZ9ECXXWPF589HFY2M",
-            # 获取时间戳 - 2020/9/9 21:19:54
-            "fsza_sk_s_q_at_101482157": "1599657594",
 
             # ----------WX登录态----------
-            # 登录态
-            "fsza_sk_t_at_wxa817069bb040f860": "eff5810ba71bd24d59d97e56186b77bb6683f06761ab3a638012bc867cd7e15f",
-            # 获取时间戳 - 2020/10/30 11:32:49
-            "fsza_sk_s_at_wxa817069bb040f860": "1604028769",
+            # 登录态 undone: 这个两小时就会过期，需要搞定这个~
+            "fsza_sk_t_at_wxa817069bb040f860": "5840d4fd0603367b6ac9737a346f0987fa8bc622f996f0f78095ff6887536d13",
         })
 
         self.post("微信签到", 'https://gw.gzh.qq.com/awp-signin/register?id=260', {}, extra_cookies=wx_login_cookies)

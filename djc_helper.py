@@ -378,6 +378,9 @@ class DjcHelper:
         # 10月女法师三觉
         self.dnf_female_mage_awaken()
 
+        # qq视频活动
+        self.qq_video()
+
         # 微信签到
         self.wx_checkin()
 
@@ -388,9 +391,6 @@ class DjcHelper:
 
         # 2020DNF闪光杯返场赛
         self.dnf_shanguang()
-
-        # qq视频活动
-        self.qq_video()
 
         # 管家蚊子腿
         self.guanjia()
@@ -1729,4 +1729,4 @@ if __name__ == '__main__':
     # djcHelper.dnf_shanguang()
     # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
     # djcHelper.wx_checkin()
-    djcHelper.dnf_female_mage_awaken()
+    djcHelper.qq_video()

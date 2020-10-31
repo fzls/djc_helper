@@ -77,7 +77,7 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)
-        djcHelper.fetch_pskey()
+        # djcHelper.fetch_pskey()
         # djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
@@ -488,9 +488,9 @@ def main():
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg)
 
-    show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
-    auto_send_cards(cfg)
-    show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
+    # show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+    # auto_send_cards(cfg)
+    # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
 
     show_accounts_status(cfg, "运行完毕展示账号概览")
 

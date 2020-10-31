@@ -366,15 +366,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # QQ空间抽卡
-        self.ark_lottery()
-
-        # wegame国庆活动【秋风送爽关怀常伴】
-        self.wegame_guoqing()
-
-        # 阿拉德集合站活动合集
-        self.dnf_922()
-
         # 10月女法师三觉
         self.dnf_female_mage_awaken()
 
@@ -388,6 +379,15 @@ class DjcHelper:
     def expired_activities(self):
         # 心悦国庆活动【DNF金秋送福心悦有礼】
         self.xinyue_guoqing()
+
+        # wegame国庆活动【秋风送爽关怀常伴】
+        self.wegame_guoqing()
+
+        # 阿拉德集合站活动合集
+        self.dnf_922()
+
+        # QQ空间抽卡
+        self.ark_lottery()
 
         # 2020DNF闪光杯返场赛
         self.dnf_shanguang()
@@ -1623,20 +1623,23 @@ class DjcHelper:
 
         # re: 继续研究如何获取微信稳定的登陆态，也就是下面这四个东西（顺带新请求看看这个东西会变不） @2020-10-30 11:03:36 By Chen Ji
         #   QQ的登录态(前两个)似乎非常稳定，似乎只需要处理后面那俩，根据今天的测试，早上十一点半获取的token，下午三点再次运行的时候已经提示：微信身份态过期（缓存找不到）
-        self.post("微信签到", 'https://gw.gzh.qq.com/awp-signin/register?id=260', {},
-                  extra_cookies=self.make_cookie({
-                      # ----------QQ登录态----------
-                      # 获取时间戳 - 2020/9/9 21:19:54
-                      "fsza_sk_s_q_at_101482157": "1599657594",
-                      # 登录态
-                      "fsza_sk_t_q_at_101482157": "01EHSGBKRZ9ECXXWPF589HFY2M",
+        wx_login_cookies = self.make_cookie({
+            # ----------QQ登录态----------
+            # 登录态
+            "fsza_sk_t_q_at_101482157": "01EHSGBKRZ9ECXXWPF589HFY2M",
+            # 获取时间戳 - 2020/9/9 21:19:54
+            "fsza_sk_s_q_at_101482157": "1599657594",
 
-                      # ----------WX登录态----------
-                      # 获取时间戳 - 2020/10/30 11:32:49
-                      "fsza_sk_s_at_wxa817069bb040f860": "1604028769",
-                      # 登录态
-                      "fsza_sk_t_at_wxa817069bb040f860": "84db8359ff1faf4b2a4afe499d62aaf8415f6933ace0b3975fe256a8def52231",
-                  }))
+            # ----------WX登录态----------
+            # 登录态
+            "fsza_sk_t_at_wxa817069bb040f860": "eff5810ba71bd24d59d97e56186b77bb6683f06761ab3a638012bc867cd7e15f",
+            # 获取时间戳 - 2020/10/30 11:32:49
+            "fsza_sk_s_at_wxa817069bb040f860": "1604028769",
+        })
+
+        self.post("微信签到", 'https://gw.gzh.qq.com/awp-signin/register?id=260', {}, extra_cookies=wx_login_cookies)
+
+        self.get("微信签到信息", 'https://gw.gzh.qq.com/awp-signin/check?id=260', extra_cookies=wx_login_cookies)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies="", **params):
@@ -1728,5 +1731,5 @@ if __name__ == '__main__':
     # djcHelper.guanjia()
     # djcHelper.dnf_shanguang()
     # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
-    # djcHelper.wx_checkin()
-    djcHelper.qq_video()
+    djcHelper.wx_checkin()
+    # djcHelper.qq_video()

@@ -1,15 +1,15 @@
 import json
 import os
 import re
-import shutil
 import subprocess
 from datetime import datetime
 
+from _build import build
+from _package import package
 from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console
 from version import now_version
-from _package import package
 
 # 最大化窗口
 maximize_console()
@@ -38,7 +38,7 @@ release_7z_name = '{}.7z'.format(release_dir_name)
 # ---------------构建
 # 调用构建脚本
 os.chdir(dir_src)
-subprocess.call(["python", "_build.py"])
+build()
 
 # ---------------打包
 os.chdir(dir_src)

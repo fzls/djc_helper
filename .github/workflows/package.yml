@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name Install Color log
+      - name: Install Color log
         run: |
           # for visiablity, build and package use log.py, which need colorlog
           pip install colorlog

@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
           python _build.py
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0

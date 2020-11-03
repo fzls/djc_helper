@@ -59,7 +59,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     dir_github_action_artifact = "_github_action_artifact"
     shutil.rmtree(dir_github_action_artifact, ignore_errors=True)
     os.mkdir(dir_github_action_artifact)
-    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'DNF蚊子腿小助手.7z'))
+    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
 
 
 def main():

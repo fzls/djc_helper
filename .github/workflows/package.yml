@@ -1,0 +1,23 @@
+name: Package Exe On Create New Tag
+
+on: [ create ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Build
+        run: |
+          python _build.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: "DNF蚊子腿小助手.exe"
+          path: ./DNF蚊子腿小助手.exe

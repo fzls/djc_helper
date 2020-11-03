@@ -1,6 +1,6 @@
 name: Package Exe On Create New Tag
 
-on: [ create ]
+on: [ create, workflow_dispatch ]
 
 jobs:
   build:

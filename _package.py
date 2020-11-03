@@ -65,7 +65,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
 def main():
     dir_src = os.path.realpath('.')
     dir_all_release = os.path.realpath(os.path.join("releases"))
-    release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=now_version)
+    release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version='v' + now_version)
     release_7z_name = '{}.7z'.format(release_dir_name)
 
     package(dir_src, dir_all_release, release_dir_name, release_7z_name)

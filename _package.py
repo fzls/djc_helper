@@ -5,7 +5,7 @@ import shutil
 import subprocess
 
 from log import logger
-
+from version import now_version
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     # 需要复制的文件与目录
@@ -55,16 +55,12 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
 
 
 def main():
-    import argparse
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('dir_src', help='src path')
-    parser.add_argument('dir_all_release', help='release root path')
-    parser.add_argument('release_dir_name', help='release current version directory name')
-    parser.add_argument('release_7z_name', help='release current version 7z name')
+    dir_src = os.path.realpath('.')
+    dir_all_release = os.path.realpath(os.path.join("releases"))
+    release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=now_version)
+    release_7z_name = '{}.7z'.format(release_dir_name)
 
-    args = parser.parse_args()
-
-    package(args.dir_src, args.dir_all_release, args.release_dir_name, args.release_7z_name)
+    package(dir_src, dir_all_release, release_dir_name, release_7z_name)
 
 
 if __name__ == '__main__':

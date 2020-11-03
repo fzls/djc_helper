@@ -7,6 +7,7 @@ import subprocess
 from log import logger
 from version import now_version
 
+
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     # 需要复制的文件与目录
     files_to_copy = []
@@ -52,6 +53,13 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     logger.info("开始压缩打包")
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
+
+    # 额外备份一份最新的供github action 使用
+    logger.info("保存一份供github action使用")
+    dir_github_action_artifact = "_github_action_artifact"
+    shutil.rmtree(dir_github_action_artifact, ignore_errors=True)
+    os.mkdir(dir_github_action_artifact)
+    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'DNF蚊子腿小助手.7z'))
 
 
 def main():

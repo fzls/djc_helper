@@ -15,7 +15,7 @@ jobs:
           python-version: '3.8'
       - name: Install Requirements
         run: |
-          _install_requirements.bat
+          ./_install_requirements.bat
       - name: Build
         run: |
           python _build.py

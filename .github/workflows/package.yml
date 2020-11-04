@@ -19,11 +19,6 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install Color log
-        run: |
-          # for visiablity, build and package use log.py, which need colorlog
-          pip install colorlog
-
       - name: Get pip cache dir
         id: pip-cache
         run: |
@@ -36,6 +31,11 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Install Color log
+        run: |
+          # for visiablity, build and package use log.py, which need colorlog
+          pip install colorlog
 
       - name: Install Requirements & Build
         run: |

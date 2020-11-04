@@ -28,7 +28,7 @@ def build():
 
     logger.info("将使用.venv环境进行编译")
 
-    logger.info("尝试更新pip")
+    logger.info("尝试更新pip setuptools wheel")
     subprocess.call([
         py_path,
         "-m",
@@ -36,6 +36,8 @@ def build():
         "install",
         "--upgrade",
         "pip",
+        "setuptools",
+        "wheel",
     ])
 
     logger.info("尝试安装依赖库和pyinstaller")

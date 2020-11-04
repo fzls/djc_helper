@@ -13,20 +13,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+
       - name: Install Color log
         run: |
           # for visiablity, build and package use log.py, which need colorlog
           pip install colorlog
+
       - name: Install Requirements & Build
         run: |
           python _build.py
+
       - name: Package
         run: |
           python _package.py
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,6 +42,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -47,6 +53,7 @@ jobs:
           asset_path: ./releases/_github_action_artifact/djc_helper.7z
           asset_name: djc_helper.7z
           asset_content_type: application/7z
+
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:

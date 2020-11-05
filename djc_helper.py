@@ -1727,5 +1727,6 @@ if __name__ == '__main__':
     # djcHelper.guanjia()
     # djcHelper.dnf_shanguang()
     # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
-    djcHelper.wx_checkin()
+    # djcHelper.wx_checkin()
     # djcHelper.qq_video()
+    djcHelper.dnf_female_mage_awaken()

@@ -427,7 +427,7 @@ def try_take_xinyue_team_award(cfg):
 def show_support_pic(cfg):
     logger.info("")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
-    if cfg.common.show_support_pic:
+    if cfg.common.show_support_pic or is_weekly_first_run():
         os.popen("支持一下.png")
 
 

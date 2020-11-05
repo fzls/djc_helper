@@ -116,12 +116,26 @@ def is_daily_first_run():
     db = load_db()
 
     today = get_today()
-    last_run_at = db.get('last_run_at', "")
+    daily_run_key = 'last_run_at'
+    last_run_at = db.get(daily_run_key, "")
 
-    db['last_run_at'] = today
+    db[daily_run_key] = today
 
     save_db(db)
     return last_run_at != today
+
+
+def is_weekly_first_run():
+    db = load_db()
+
+    week = get_week()
+    weekly_run_key = 'last_run_at_week'
+    last_run_at_week = db.get(weekly_run_key, "")
+
+    db[weekly_run_key] = week
+
+    save_db(db)
+    return last_run_at_week != week
 
 
 def get_year():

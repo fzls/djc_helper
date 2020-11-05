@@ -104,6 +104,10 @@ def get_today():
     return get_now().strftime("%Y%m%d")
 
 
+def get_last_n_days(n):
+    return [(get_now() - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n+1)]
+
+
 def get_week():
     return get_now().strftime("%Y-week-%W")
 
@@ -143,4 +147,4 @@ def get_year():
 
 
 if __name__ == '__main__':
-    print(is_daily_first_run())
+    print(get_last_n_days(7))

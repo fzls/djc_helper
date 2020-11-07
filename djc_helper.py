@@ -1486,6 +1486,22 @@ class DjcHelper:
         logger.warning(color("fg_bold_yellow") + "_")
         logger.warning(color("fg_bold_yellow") + "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了")
         logger.warning(color("fg_bold_yellow") + "有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开")
+        logger.warning(color("fg_bold_green") + (
+            "\n"
+            "如果上面这个活动在助手里找不到了，可以试试看其他的活动\n"
+            "如果所有活动的转发链接里都找不到token，那么只能手动抓包，从请求的cookie或post data中获取token信息了，具体可以百度 安卓 https 抓包\n"
+            "下面给出几种推荐的方案\n"
+            "1. 安卓下使用HttpCanary来实现对dnf抓包，可参考\n"
+            "    1.1 https://httpcanary.com/zh-hans/\n"
+            "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考\n"
+            "    2.1 https://www.jianshu.com/p/a818a0d0aa9f\n"
+            "    2.2 https://testerhome.com/articles/18609\n"
+            "    2.3 https://juejin.im/post/6844903602209685517\n"
+            "    2.4 https://blog.csdn.net/hebbely/article/details/79248077\n"
+            "    2.5 https://juejin.im/post/6844903831579394055\n"
+            "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功\n"
+        ))
+
 
     def dnf_female_mage_awaken_flow_data(self, iActivityId, iFlowId):
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo

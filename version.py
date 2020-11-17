@@ -1,3 +1,3 @@
-now_version = "4.2.4"
-ver_time = '2020-11-7'
+now_version = "4.2.5"
+ver_time = '2020-11-17'
 author = '风之凌殇'

@@ -372,14 +372,11 @@ class DjcHelper:
         # qq视频活动
         self.qq_video()
 
-        # 微信签到
-        self.wx_checkin()
+        # DNF进击吧赛利亚
+        self.xinyue_sailiyam()
 
     # -- 已过期的一些活动
     def expired_activities(self):
-        # 心悦国庆活动【DNF金秋送福心悦有礼】
-        self.xinyue_guoqing()
-
         # wegame国庆活动【秋风送爽关怀常伴】
         self.wegame_guoqing()
 
@@ -394,6 +391,9 @@ class DjcHelper:
 
         # 管家蚊子腿
         self.guanjia()
+
+        # 微信签到
+        self.wx_checkin()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -978,57 +978,82 @@ class DjcHelper:
                            sServiceDepartment="xinyue", sServiceType="xinyue", eas_url=quote_plus("http://xinyue.qq.com/act/a20181101rights/"),
                            iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
 
-    # 心悦国庆活动【DNF金秋送福心悦有礼】
-    def xinyue_guoqing(self):
-        # https://xinyue.qq.com/act/a20200910dnf/index.html
-        show_head_line("心悦国庆活动【DNF金秋送福心悦有礼】")
+    # DNF进击吧赛利亚
+    def xinyue_sailiyam(self):
+        # https://xinyue.qq.com/act/a20201023sailiya/index.html
+        show_head_line("DNF进击吧赛利亚")
 
-        if not self.cfg.function_switches.get_xinyue_guoqing:
-            logger.warning("未启用领取心悦国庆活动功能，将跳过")
+        if not self.cfg.function_switches.get_xinyue_sailiyam:
+            logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
             return
 
-        self.check_xinyue_guoqing()
+        for dzid in self.common_cfg.sailiyam_visit_target_qqs:
+            if dzid == uin2qq(self.cfg.account_info.uin):
+                continue
+            self.xinyue_sailiyam_op("拜访好友", "714307", dzid=dzid)
 
-        # 验证是否回流顺带检查是否未绑定大区
-        self.xinyue_guoqing_op("验证幸运用户", "700301")
-        self.xinyue_guoqing_op("幸运勇士", "700288")
+        self.check_xinyue_sailiyam()
+        self.show_xinyue_sailiyam_kouling()
 
-        # 查询成就点信息
-        xinyue_info = self.query_xinyue_info("查询心悦信息", print_res=False)
+        self.xinyue_sailiyam_op("领取蛋糕", "714230")
+        self.xinyue_sailiyam_op("投喂蛋糕", "714251")
 
-        # 1-4=游戏家G1-4，5-7=心悦VIP1-3
-        if xinyue_info.xytype < 5:
-            # 特邀
-            self.xinyue_guoqing_op("特邀充值礼包", "700433")
-        else:
-            # 心悦
-            if xinyue_info.xytype == 5:
-                self.xinyue_guoqing_op("V1充值礼包", "700452")
-            elif xinyue_info.xytype == 6:
-                self.xinyue_guoqing_op("V2充值礼包", "700454")
-            else:
-                self.xinyue_guoqing_op("V3充值礼包", "700455")
+        # ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工
+        self.show_xinyue_sailiyam_work_log()
+        self.xinyue_sailiyam_op("领取工资", "714229", iPackageId=self.get_xinyue_sailiyam_package_id())
+        self.xinyue_sailiyam_op("全勤奖", "715724")
 
-            self.xinyue_guoqing_op("特邀升级礼", "700456")
+    def get_xinyue_sailiyam_package_id(self):
+        res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
+        try:
+            return res["modRet"]["jData"]["iPackageId"]
+        except:
+            return ""
 
-        # 心悦特邀都可以领取的奖励
-        self.xinyue_guoqing_op("心悦会员礼", "700457")
-        self.xinyue_guoqing_op("每日在线30分钟", "700458")
-        # self.xinyue_guoqing_op("国庆七日签到", "700462")
-        self.xinyue_guoqing_op("惊喜礼包", "700511")
-        # self.xinyue_guoqing_op("App礼包", "701088")
 
-    def check_xinyue_guoqing(self):
-        res = self.xinyue_guoqing_op("幸运勇士", "700288", print_res=False)
-        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-0924025126-AZmFbj-329456-700288", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
+    def show_xinyue_sailiyam_work_log(self):
+        res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
+        try:
+            logContents = {
+                '2168440': '遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；',
+                '2168439': '愉快的一天又开始了，是不是该来一杯咖啡？',
+                '2168442': '给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；',
+                '2168441': '工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；'
+            }
+            logs = res["modRet"]["jData"]["loglist"]["list"]
+            if len(logs) != 0:
+                logger.info("赛利亚打工日志如下")
+                for log in logs:
+                    logger.info("{}月{}日：{}".format(log[0][:2], log[0][2:], logContents[log[2]]))
+        except:
+            pass
+
+    def show_xinyue_sailiyam_kouling(self):
+        res = self.xinyue_sailiyam_op("输出项", "714618")
+        if 'modRet' in res:
+            logger.info("分享口令为： {}".format(res["modRet"]["sOutValue2"]))
+
+    def check_xinyue_sailiyam(self):
+        res = self.xinyue_sailiyam_op("领取蛋糕", "714230", print_res=True)
+        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-1118215502-6NOW8h-339263-714230", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            webbrowser.open("https://xinyue.qq.com/act/a20200910dnf/index.html")
-            msg = "未绑定角色，请前往心悦国庆活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            webbrowser.open("https://xinyue.qq.com/act/a20201023sailiya/index.html")
+            msg = "未绑定角色，请前往DNF进击吧赛利亚活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
             win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
             exit(-1)
 
-    def xinyue_guoqing_op(self, ctx, iFlowId, print_res=True):
-        return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_guoqing, iFlowId, print_res=print_res)
+    def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True):
+        iActivityId = self.urls.iActivityId_xinyue_sailiyam
+        return self.post(ctx, self.urls.amesvr, self.xinyue_sailiyam_flow_data(iActivityId, iFlowId, dzid, iPackageId),
+                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="tgclub",
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
+
+    def xinyue_sailiyam_flow_data(self, iActivityId, iFlowId, dzid="", iPackageId=""):
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20201023sailiyam/"),
+                           iActivityId=iActivityId, iFlowId=iFlowId,
+                           dzid=dzid, page=1, iPackageId=iPackageId)
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
@@ -1683,6 +1708,9 @@ class DjcHelper:
             "sArea": "", "serverId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
             "iActionId": "", "iGoodsId": "", "sBizCode": "", "partition": "", "iZoneId": "", "platid": "", "sZoneDesc": "", "sGetterDream": "",
             "date": date,
+            "dzid": "",
+            "page": "",
+            "iPackageId": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -1745,4 +1773,5 @@ if __name__ == '__main__':
     # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
     # djcHelper.wx_checkin()
     # djcHelper.qq_video()
-    djcHelper.dnf_female_mage_awaken()
+    # djcHelper.dnf_female_mage_awaken()
+    djcHelper.xinyue_sailiyam()

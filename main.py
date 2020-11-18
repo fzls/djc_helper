@@ -416,12 +416,31 @@ def try_take_xinyue_team_award(cfg):
         for op in xinyue_operations:
             djcHelper.do_xinyue_op(xinyue_info.xytype, op)
 
-        # 临时代码
-        djcHelper.wx_checkin()
-
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
             break
+
+
+def try_xinyue_sailiyam_start_work(cfg):
+    if not has_any_account_in_normal_run(cfg):
+        return
+    _show_head_line("尝试派赛利亚出去打工")
+
+    for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
+            continue
+
+        logger.info("")
+        logger.warning(color("fg_bold_green") + "------------开始尝试派第{}个账户({})的赛利亚出去打工------------".format(idx, account_config.name))
+
+        if not account_config.function_switches.get_xinyue_sailiyam:
+            logger.warning("未设置赛利亚活动，将跳过")
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.xinyue_sailiyam_op("出去打工", "714255")
 
 
 def show_support_pic(cfg):
@@ -488,6 +507,9 @@ def main():
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg)
 
+    # 尝试派赛利亚出去打工
+    try_xinyue_sailiyam_start_work(cfg)
+
     # show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
     # auto_send_cards(cfg)
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
@@ -519,6 +541,8 @@ def temp_code(cfg):
         "具体操作可参考网盘中[一个微信自动签到的方案.txt]以及参考脚本[wx_dnf_checkin.7z](解析后得到脚本内容)。"
         "这个方案，本人已测试一周，目前看来效果还不错，每天设置凌晨0点和一点各运行一次，目前没有出现断签情况~"
     ))
+
+    logger.warning(color("fg_bold_cyan") + ("DNF进击吧赛利亚活动推荐每天运行两次，间隔超过五小时，同时确保第一次运行时已在线30分钟，这样就可以第一次放出去打工，第二次完成打工领取奖励"))
 
 
 if __name__ == '__main__':

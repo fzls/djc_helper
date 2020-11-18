@@ -999,6 +999,7 @@ class DjcHelper:
 
         self.check_xinyue_sailiyam()
         self.show_xinyue_sailiyam_kouling()
+        self.xinyue_sailiyam_op("清空工作天数", "715579")
 
         sleep_to_avoid_ban()
         self.xinyue_sailiyam_op("领取蛋糕", "714230")

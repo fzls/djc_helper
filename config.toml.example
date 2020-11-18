@@ -23,6 +23,10 @@ show_support_pic = true
 # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送最需要的卡片给这些账号，若不配置则不启用。
 auto_send_card_target_qqs = []
 
+# 赛利亚活动拜访目标QQ列表
+# 示例：["第一个账号的QQ号", "第二个账号的QQ号", "第三个账号的QQ号", "第n个账号的QQ号"]
+sailiyam_visit_target_qqs = []
+
 # 登录的一些参数配置
 [common.login]
 # 重试次数
@@ -99,8 +103,8 @@ get_xinyue = true
 get_credit_xinyue_gift = true
 # 是否领取每月黑钻等级礼包
 get_heizuan_gift = true
-# 是否领取心悦国庆活动
-get_xinyue_guoqing = true
+# 是否领取DNF进击吧赛利亚活动
+get_xinyue_sailiyam = true
 # 是否领取wegame国庆活动
 get_wegame_guoqing = true
 # 是否领取阿拉德集合站活动

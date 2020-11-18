@@ -118,8 +118,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_credit_xinyue_gift = True
         # 是否领取每月黑钻等级礼包
         self.get_heizuan_gift = True
-        # 是否领取心悦国庆活动
-        self.get_xinyue_guoqing = True
+        # 是否领取DNF进击吧赛利亚活动
+        self.get_xinyue_sailiyam = True
         # 是否领取wegame国庆活动
         self.get_wegame_guoqing = True
         # 是否领取阿拉德集合站活动
@@ -328,6 +328,8 @@ class CommonConfig(ConfigInterface):
         self.xinyue = XinYueConfig()
         # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
         self.fixed_teams = []  # type: List[FixedTeamConfig]
+        # 赛利亚活动拜访目标QQ列表
+        self.sailiyam_visit_target_qqs = []
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

@@ -983,18 +983,24 @@ class DjcHelper:
         # https://xinyue.qq.com/act/a20201023sailiya/index.html
         show_head_line("DNF进击吧赛利亚")
 
-        if not self.cfg.function_switches.get_xinyue_sailiyam:
-            logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
-            return
+        def sleep_to_avoid_ban():
+            logger.info("等待五秒，防止提示操作太快")
+            time.sleep(5)
 
         for dzid in self.common_cfg.sailiyam_visit_target_qqs:
             if dzid == uin2qq(self.cfg.account_info.uin):
                 continue
-            self.xinyue_sailiyam_op("拜访好友", "714307", dzid=dzid)
+            self.xinyue_sailiyam_op("拜访好友-{}".format(dzid), "714307", dzid=dzid)
+            sleep_to_avoid_ban()
+
+        if not self.cfg.function_switches.get_xinyue_sailiyam:
+            logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
+            return
 
         self.check_xinyue_sailiyam()
         self.show_xinyue_sailiyam_kouling()
 
+        sleep_to_avoid_ban()
         self.xinyue_sailiyam_op("领取蛋糕", "714230")
         self.xinyue_sailiyam_op("投喂蛋糕", "714251")
 

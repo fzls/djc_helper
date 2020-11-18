@@ -53,6 +53,7 @@ class Network:
             return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
         res = try_request(request_fn, self.common_cfg.retry)
+        logger.debug("{}".format(data))
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
 

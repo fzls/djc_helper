@@ -1,4 +1,5 @@
 import threading
+import time
 
 import psutil
 import win32con
@@ -100,12 +101,16 @@ def get_now():
     return datetime.datetime.now()
 
 
+def get_now_unix():
+    return int(time.time())
+
+
 def get_today():
     return get_now().strftime("%Y%m%d")
 
 
 def get_last_n_days(n):
-    return [(get_now() - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n+1)]
+    return [(get_now() - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
 def get_week():
@@ -147,4 +152,4 @@ def get_year():
 
 
 if __name__ == '__main__':
-    print(get_last_n_days(7))
+    print(get_now_unix())

@@ -231,3 +231,17 @@ class SailiyamWorkInfo(ConfigInterface):
         self.iPackageId = "2168441"
         self.status = 0
         self.nowtime = 0
+
+
+class AmesvrCommonModRet(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "SUC"
+        self.sOutValue1 = ""
+        self.sOutValue2 = ""
+        self.sOutValue3 = ""
+        self.sOutValue4 = ""
+        self.sOutValue5 = ""
+        self.sOutValue6 = ""
+        self.sOutValue7 = ""
+        self.sOutValue8 = ""

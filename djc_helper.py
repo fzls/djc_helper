@@ -1042,6 +1042,22 @@ class DjcHelper:
         except:
             return ""
 
+    def get_xinyue_sailiyam_status(self):
+        res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
+        try:
+            modRet = AmesvrCommonModRet()
+            modRet.auto_update_config(res["modRet"])
+            lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
+            dangao = modRet.sOutValue2
+            xinqingzhi = modRet.sOutValue3
+            qiandaodate = modRet.sOutValue4
+            return "领取蛋糕：{}, 投喂蛋糕: {}, 已拜访次数: {}/5, 剩余蛋糕: {}, 心情值: {}/100, 已连续签到: {}次".format(
+                lingqudangao == "1", touwei == "1", baifang, dangao, xinqingzhi, qiandaodate
+            )
+        except:
+            return ""
+
+
     def show_xinyue_sailiyam_work_log(self):
         res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
         try:

@@ -442,6 +442,7 @@ def try_xinyue_sailiyam_start_work(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.xinyue_sailiyam_op("出去打工", "714255")
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_workinfo())
+        logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 
 
 def show_support_pic(cfg):

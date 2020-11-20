@@ -1013,10 +1013,34 @@ class DjcHelper:
     def get_xinyue_sailiyam_package_id(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
         try:
-            return res["modRet"]["jData"]["iPackageId"]
+            return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
         except:
             return ""
 
+    def get_xinyue_sailiyam_workinfo(self):
+        res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
+        try:
+            workinfo = SailiyamWorkInfo()
+            workinfo.auto_update_config(res["modRet"]["jData"]["roleinfor"])
+
+            work_message = ""
+
+            if workinfo.status == 2:
+                nowtime = get_now_unix()
+                fromtimestamp = datetime.datetime.fromtimestamp
+                if workinfo.endTime > nowtime:
+                    lefttime = int(workinfo.endTime - nowtime)
+                    work_message += "赛利亚打工倒计时：{:2d}:{:2d}:{:2d}".format(lefttime // 3600, lefttime % 3600 // 60, lefttime % 60)
+                else:
+                    work_message += "赛利亚已经完成今天的工作了"
+
+                work_message += "。开始时间为{}，结束时间为{}，奖励最终领取时间为{}".format(fromtimestamp(workinfo.startTime), fromtimestamp(workinfo.endTime), fromtimestamp(workinfo.endLQtime))
+            else:
+                work_message += "赛利亚尚未出门工作"
+
+            return work_message
+        except:
+            return ""
 
     def show_xinyue_sailiyam_work_log(self):
         res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
@@ -1533,7 +1557,6 @@ class DjcHelper:
             "    2.5 https://juejin.im/post/6844903831579394055\n"
             "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功\n"
         ))
-
 
     def dnf_female_mage_awaken_flow_data(self, iActivityId, iFlowId):
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo

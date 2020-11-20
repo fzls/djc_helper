@@ -110,7 +110,7 @@ class GoodsValiDateInfo(ConfigInterface):
         self.left = "0"
         self.bought = "0"
         self.todayBought = 0
-        self.award = {"list"  : []}
+        self.award = {"list": []}
         self.isFunc = 0
         self.beanCut = 0
         self.maxBeanCutPrice = 0
@@ -221,3 +221,13 @@ class XinYueTeamMember(DaoObject):
         self.qq = qq
         self.nickname = nickname
         self.score = score
+
+
+class SailiyamWorkInfo(ConfigInterface):
+    def __init__(self):
+        self.startTime = 0
+        self.endTime = 0
+        self.endLQtime = 0
+        self.iPackageId = "2168441"
+        self.status = 0
+        self.nowtime = 0

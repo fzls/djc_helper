@@ -1030,7 +1030,7 @@ class DjcHelper:
                 fromtimestamp = datetime.datetime.fromtimestamp
                 if workinfo.endTime > nowtime:
                     lefttime = int(workinfo.endTime - nowtime)
-                    work_message += "赛利亚打工倒计时：{:2d}:{:2d}:{:2d}".format(lefttime // 3600, lefttime % 3600 // 60, lefttime % 60)
+                    work_message += "赛利亚打工倒计时：{:02d}:{:02d}:{:02d}".format(lefttime // 3600, lefttime % 3600 // 60, lefttime % 60)
                 else:
                     work_message += "赛利亚已经完成今天的工作了"
 

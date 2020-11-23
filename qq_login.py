@@ -41,10 +41,10 @@ class QQLogin():
     login_mode_guanjia = "guanjia"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
-    chrome_driver_executable_path = os.path.realpath("./chromedriver_85.0.4183.87.exe")
-    chrome_binary_7z = os.path.realpath("./chrome_portable_85.0.4183.59.7z")
-    chrome_binary_directory = os.path.realpath("./chrome_portable_85.0.4183.59")
-    chrome_binary_location = os.path.realpath("./chrome_portable_85.0.4183.59/chrome.exe")
+    chrome_driver_executable_path = os.path.realpath("./chromedriver_87.exe")
+    chrome_binary_7z = os.path.realpath("./chrome_portable_87.7z")
+    chrome_binary_directory = os.path.realpath("./chrome_portable_87")
+    chrome_binary_location = os.path.realpath("./chrome_portable_87/chrome.exe")
 
     def __init__(self, common_config):
         self.cfg = common_config  # type: CommonConfig
@@ -67,7 +67,7 @@ class QQLogin():
 
         try:
             if not self.cfg.force_use_portable_chrome:
-                # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome85
+                # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path, desired_capabilities=caps, options=options)
                 logger.info("使用自带chrome")
                 inited = True
@@ -75,11 +75,11 @@ class QQLogin():
             pass
 
         if not inited:
-            # 如果找不到，则尝试使用打包的便携版chrome85
+            # 如果找不到，则尝试使用打包的便携版chrome
             # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
             if not os.path.isfile(self.chrome_binary_7z):
                 msg = (
-                    "当前电脑未发现合适版本chrome85版本，且当前目录无便携版chrome的压缩包({zip_name})\n"
+                    "当前电脑未发现合适版本chrome版本，且当前目录无便携版chrome的压缩包({zip_name})\n"
                     "请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
                     "如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z))

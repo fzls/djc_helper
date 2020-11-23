@@ -22,7 +22,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
         "DNF蚊子腿小助手配置工具.bat",
         "bandizip_portable",
         "reference_data",
-        "chromedriver_85.0.4183.87.exe",
+        "chromedriver_87.exe",
         "public_key.der",
         "使用教程",
         "npp_portable",

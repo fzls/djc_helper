@@ -2,7 +2,7 @@
 1. chrome driver和便携版升级为87版本
 2. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
 
-# v4.3.1.1 2020.11.23
+# v4.3.2 2020.11.23
 # chrome
 1. chrome driver和便携版升级为87版本
 

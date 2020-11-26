@@ -366,9 +366,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # 10月女法师三觉
-        self.dnf_female_mage_awaken()
-
         # qq视频活动
         self.qq_video()
 
@@ -394,6 +391,9 @@ class DjcHelper:
 
         # 微信签到
         self.wx_checkin()
+
+        # 10月女法师三觉
+        self.dnf_female_mage_awaken()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

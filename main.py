@@ -435,12 +435,9 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.info("")
         logger.warning(color("fg_bold_green") + "------------开始尝试派第{}个账户({})的赛利亚出去打工------------".format(idx, account_config.name))
 
-        if not account_config.function_switches.get_xinyue_sailiyam:
-            logger.warning("未设置赛利亚活动，将跳过")
-            continue
-
         djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.xinyue_sailiyam_op("出去打工", "714255")
+        if account_config.function_switches.get_xinyue_sailiyam:
+            djcHelper.xinyue_sailiyam_op("出去打工", "714255")
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_workinfo())
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 

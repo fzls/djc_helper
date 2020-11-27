@@ -366,9 +366,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # qq视频活动
-        self.qq_video()
-
         # DNF进击吧赛利亚
         self.xinyue_sailiyam()
 
@@ -394,6 +391,9 @@ class DjcHelper:
 
         # 10月女法师三觉
         self.dnf_female_mage_awaken()
+
+        # qq视频活动
+        self.qq_video()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

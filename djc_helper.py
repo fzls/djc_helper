@@ -1635,7 +1635,11 @@ class DjcHelper:
         res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
 
         user_info = RankUserInfo()
-        user_info.auto_update_config(res["data"])
+        try:
+            user_info.auto_update_config(res["data"])
+        except Exception as e:
+            # {"res": 201, "msg": "重新登录后重试", "data": []}
+            logger.debug("dnf_rank_get_user_info exception={}".format(e))
         return user_info
 
     def dnf_rank_receive_diamond(self, gift_name, gift_id):

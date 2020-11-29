@@ -91,3 +91,11 @@ class Urls:
 
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
         self.guanjia = url = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
+
+        # 助手排行榜活动
+        # 查询，额外参数：uin(qq)、userId/token
+        self.rank_user_info = "https://mwegame.qq.com/dnf/kolTopV2/ajax/getUserInfo?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014"
+        # 打榜，额外参数：uin(qq)、userId/token、id/score
+        self.rank_send_score = "https://mwegame.qq.com/dnf/kolTopV2/ajax/sendScore?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&id={id}&type=single1&score={score}"
+        # 领取黑钻，额外参数：uin(qq)、userId/token，gift_id[7020, 7021, 7022]
+        self.rank_receive_diamond = "https://mwegame.qq.com/ams/send/handle?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&gift_id={gift_id}"

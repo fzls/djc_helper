@@ -1627,8 +1627,9 @@ class DjcHelper:
 
     def dnf_rank_send_score(self):
         id = 7  # 大硕
+        name = "疯奶丶大硕"
         total_score = int(self.dnf_rank_get_user_info().score)
-        ctx = "给{}打榜{}鲜花".format(id, total_score)
+        ctx = "给{}({})打榜{}鲜花".format(id, name, total_score)
         return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
 
     def dnf_rank_get_user_info(self, print_res=False):

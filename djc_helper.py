@@ -1060,7 +1060,6 @@ class DjcHelper:
         except:
             return ""
 
-
     def show_xinyue_sailiyam_work_log(self):
         res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
         try:
@@ -1610,7 +1609,7 @@ class DjcHelper:
             return
 
         # note: 获取鲜花（使用autojs去操作）
-        logger.info("获取鲜花请使用auto.js等自动化工具来模拟打开助手去执行对应操作")
+        logger.warning("获取鲜花请使用auto.js等自动化工具来模拟打开助手去执行对应操作")
 
         # 赠送鲜花
         self.dnf_rank_send_score()
@@ -1627,8 +1626,10 @@ class DjcHelper:
         self.dnf_rank_get_user_info(print_res=True)
 
     def dnf_rank_send_score(self):
+        id = 7  # 大硕
         total_score = int(self.dnf_rank_get_user_info().score)
-        return self.dnf_rank_op("打榜", self.urls.rank_send_score, id=7, score=total_score)
+        ctx = "给{}打榜{}鲜花".format(id, total_score)
+        return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
 
     def dnf_rank_get_user_info(self, print_res=False):
         res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)

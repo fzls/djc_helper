@@ -136,6 +136,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.make_wish = True
         # 是否启用集卡功能
         self.get_ark_lottery = True
+        # 是否领取DNF助手排行榜活动
+        self.get_dnf_rank = True
 
 
 class AccountConfig(ConfigInterface):

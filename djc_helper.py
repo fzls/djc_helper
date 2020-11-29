@@ -369,6 +369,9 @@ class DjcHelper:
         # DNF进击吧赛利亚
         self.xinyue_sailiyam()
 
+        # dnf助手排行榜
+        self.dnf_rank()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1587,6 +1590,61 @@ class DjcHelper:
                            nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
                            )
 
+    # --------------------------------------------dnf助手排行榜活动--------------------------------------------
+    def dnf_rank(self):
+        # https://mwegame.qq.com/dnf/rankv2/index.html
+        show_head_line("dnf助手排行榜")
+
+        if not self.cfg.function_switches.get_dnf_rank:
+            logger.warning("未启用领取dnf助手排行榜活动合集功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置")
+            self.show_dnf_helper_info_guide()
+            return
+
+        # note: 获取鲜花（使用autojs去操作）
+        logger.info("获取鲜花请使用auto.js等自动化工具来模拟打开助手去执行对应操作")
+
+        # 赠送鲜花
+        self.dnf_rank_send_score()
+
+        # 领取黑钻
+        if self.dnf_rank_get_user_info().canGift == 0:
+            logger.warning("12月15日开放黑钻奖励领取~")
+        else:
+            self.dnf_rank_receive_diamond("3天", "7020")
+            self.dnf_rank_receive_diamond("7天", "7021")
+            self.dnf_rank_receive_diamond("15天", "7022")
+
+        # 结束时打印下最新状态
+        self.dnf_rank_get_user_info(print_res=True)
+
+    def dnf_rank_send_score(self):
+        total_score = int(self.dnf_rank_get_user_info().score)
+        return self.dnf_rank_op("打榜", self.urls.rank_send_score, id=7, score=total_score)
+
+    def dnf_rank_get_user_info(self, print_res=False):
+        res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
+
+        user_info = RankUserInfo()
+        user_info.auto_update_config(res["data"])
+        return user_info
+
+    def dnf_rank_receive_diamond(self, gift_name, gift_id):
+        return self.dnf_rank_op('领取黑钻-{}'.format(gift_name), self.urls.rank_receive_diamond, gift_id=gift_id)
+
+    def dnf_rank_op(self, ctx, url, **params):
+        qq = uin2qq(self.cfg.account_info.uin)
+        info = self.cfg.dnf_helper_info
+        return self.get(ctx, url, uin=qq, userId=info.userId, token=info.token, **params)
+
     # --------------------------------------------管家蚊子腿--------------------------------------------
     def guanjia(self):
         # https://guanjia.qq.com/act/cop/202010dnf/
@@ -1820,4 +1878,5 @@ if __name__ == '__main__':
     # djcHelper.wx_checkin()
     # djcHelper.qq_video()
     # djcHelper.dnf_female_mage_awaken()
-    djcHelper.xinyue_sailiyam()
+    # djcHelper.xinyue_sailiyam()
+    djcHelper.dnf_rank()

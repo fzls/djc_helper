@@ -245,3 +245,11 @@ class AmesvrCommonModRet(ConfigInterface):
         self.sOutValue6 = ""
         self.sOutValue7 = ""
         self.sOutValue8 = ""
+
+
+class RankUserInfo(ConfigInterface):
+    def __init__(self):
+        self.score = "10"
+        self.sendScore = 0
+        self.giftStatus = {}
+        self.canGift = 0

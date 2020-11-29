@@ -482,7 +482,7 @@ class DjcHelper:
         dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
         giftInfo = giftInfos[dayIndex]
 
-        self.get("3.2 一键领取{}日常礼包-{}".format(role_info.gameName, giftInfo.sTask), self.urls.recieve_game_gift,
+        self.get("3.2 一键领取{}日常礼包-{}".format(role_info.gameName, giftInfo.sTask), self.urls.receive_game_gift,
                  bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
                  systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
                  roleCode=role_info.roleCode, sRoleName=role_info.roleName)

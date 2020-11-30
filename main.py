@@ -545,7 +545,8 @@ def temp_code(cfg):
 
     logger.warning(color("fg_bold_yellow") + (
         "dnf助手的排行榜活动的获取鲜花因为是通过助手app和dnf游戏内特定埋点来触发的，且在助手内触发这些操作需要使用jce和对应加密压缩处理，目前无法通过小助手来完成"
-        "若想自动获取鲜花，推荐使用auto.js来实现，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。"
+        "若想自动获取鲜花，推荐使用auto.js来实现，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。\n"
+        "抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH"
     ))
 
 

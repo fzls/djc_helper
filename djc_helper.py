@@ -1565,7 +1565,7 @@ class DjcHelper:
             "如果上面这个活动在助手里找不到了，可以试试看其他的活动\n"
             "如果所有活动的转发链接里都找不到token，那么只能手动抓包，从请求的cookie或post data中获取token信息了，具体可以百度 安卓 https 抓包\n"
             "下面给出几种推荐的方案\n"
-            "1. 安卓下使用HttpCanary来实现对dnf抓包，可参考\n"
+            "1. 安卓下使用HttpCanary来实现对dnf助手抓包（开启http canary抓包后，打开助手，点击任意一个活动页面，然后去链接或cookie中查找token），可参考\n"
             "    1.1 https://httpcanary.com/zh-hans/\n"
             "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考\n"
             "    2.1 https://www.jianshu.com/p/a818a0d0aa9f\n"

@@ -1567,6 +1567,7 @@ class DjcHelper:
             "下面给出几种推荐的方案\n"
             "1. 安卓下使用HttpCanary来实现对dnf助手抓包（开启http canary抓包后，打开助手，点击任意一个活动页面，然后去链接或cookie中查找token），可参考\n"
             "    1.1 https://httpcanary.com/zh-hans/\n"
+            "    1.2 抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH\n"
             "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考\n"
             "    2.1 https://www.jianshu.com/p/a818a0d0aa9f\n"
             "    2.2 https://testerhome.com/articles/18609\n"

@@ -1630,6 +1630,10 @@ class DjcHelper:
         name = "疯奶丶大硕"
         total_score = int(self.dnf_rank_get_user_info().score)
         ctx = "给{}({})打榜{}鲜花".format(id, name, total_score)
+        if total_score <= 0:
+            logger.info("{} 没有多余的鲜花，暂时不能进行打榜~".format(ctx))
+            return
+
         return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
 
     def dnf_rank_get_user_info(self, print_res=False):

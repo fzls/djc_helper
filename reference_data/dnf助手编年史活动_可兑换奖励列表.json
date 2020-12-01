@@ -1,0 +1,75 @@
+{
+  "code": 200,
+  "exp": 58,
+  "gifts": [
+    {
+      "sIdentifyId": "",
+      "sName": "一次性材质转换器",
+      "iCard": "20",
+      "iNum": "5",
+      "iLevel": "1",
+      "sLbcode": "ex_0001",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201130165705.png?version=5705",
+      "isLock": 0,
+      "usedNum": 1
+    },
+    {
+      "sIdentifyId": "",
+      "sName": "智慧的引导通行证*1",
+      "iCard": "20",
+      "iNum": "5",
+      "iLevel": "1",
+      "sLbcode": "ex_0002",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201127095711.png?version=5711",
+      "isLock": 0,
+      "usedNum": 0
+    },
+    {
+      "sIdentifyId": "",
+      "sName": "装备提升礼盒*1",
+      "iCard": "40",
+      "iNum": "3",
+      "iLevel": "1",
+      "sLbcode": "ex_0003",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201127095826.png?version=5826",
+      "isLock": 0,
+      "usedNum": 0
+    },
+    {
+      "sIdentifyId": "",
+      "sName": "华丽的徽章自选礼盒*1",
+      "iCard": "50",
+      "iNum": "3",
+      "iLevel": "1",
+      "sLbcode": "ex_0004",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201127095913.jpg?version=5913",
+      "isLock": 0,
+      "usedNum": 0
+    },
+    {
+      "sIdentifyId": "",
+      "sName": "本职业神器护石随机礼盒*1",
+      "iCard": "100",
+      "iNum": "1",
+      "iLevel": "1",
+      "sLbcode": "ex_0005",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201127100003.png?version=0003",
+      "isLock": 0,
+      "usedNum": 0
+    },
+    {
+      "sIdentifyId": "",
+      "sName": "+10装备强化券*1",
+      "iCard": "150",
+      "iNum": "1",
+      "iLevel": "1",
+      "sLbcode": "ex_0006",
+      "sPic1": "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201130173734.png?version=3735",
+      "isLock": 0,
+      "usedNum": 0
+    }
+  ],
+  "hasPartner": true,
+  "level": 5,
+  "msg": "success"
+}

@@ -375,6 +375,9 @@ class DjcHelper:
         # 阿拉德勇士征集令
         self.dnf_warriors_call()
 
+        # dnf助手编年史活动
+        self.dnf_helper_chronicle()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1677,6 +1680,180 @@ class DjcHelper:
         info = self.cfg.dnf_helper_info
         return self.get(ctx, url, uin=qq, userId=info.userId, token=info.token, **params)
 
+    # --------------------------------------------dnf助手编年史活动--------------------------------------------
+    def dnf_helper_chronicle(self):
+        # dnf助手左侧栏
+        show_head_line("dnf助手编年史")
+
+        if not self.cfg.function_switches.get_dnf_helper_chronicle:
+            logger.warning("未启用领取dnf助手编年史活动合集功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        # 为了不与其他函数名称冲突，切让函数名称短一些，写到函数内部~
+        url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
+        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
+        dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        area = roleinfo.serviceID
+        partition = roleinfo.serviceID
+        roleid = roleinfo.roleCode
+
+        common_params = {
+            "userId": dnf_helper_info.userId,
+            "sPartition": partition,
+            "sRoleId": roleid,
+            "print_res": False,
+        }
+
+        # ------ 查询各种信息 ------
+        def exchange_list():
+            res = self.get("可兑换道具列表", url_wang, api="list/exchange", **common_params)
+            _res = DnfHelperChronicleExchangeList()
+            _res.auto_update_config(res)
+            return _res
+
+        def basic_award_list():
+            res = self.get("基础奖励与搭档奖励", url_wang, api="list/basic", **common_params)
+            _res = DnfHelperChronicleBasicAwardList()
+            _res.auto_update_config(res)
+            return _res
+
+        def lottery_list():
+            res = self.get("碎片抽奖奖励", url_wang, api="lottery/receive", **common_params)
+            _res = DnfHelperChronicleLotteryList()
+            _res.auto_update_config(res)
+            return _res
+
+        def getUserActivityTopInfo():
+            res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
+            _res = DnfHelperChronicleUserActivityTopInfo()
+            _res.auto_update_config(res.get("data", {}))
+            return _res
+
+        def getUserTaskList():
+            res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
+            _res = DnfHelperChronicleUserTaskList()
+            _res.auto_update_config(res.get("data", {}))
+            return _res
+
+        # ------ 领取各种奖励 ------
+        def doActionIncrExp(actionName, actionId):
+            res = self.post("领取任务经验", url_mwegame, "", api="doActionIncrExp", actionId=actionId, **common_params)
+            logger.info("领取{}-{}，获取经验为{}".format(actionName, actionId, res.get("data", 0)))
+
+        def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
+            if selfGift:
+                mold = 1  # 自己
+                side = "自己"
+            else:
+                mold = 2  # 队友
+                side = "队友"
+            res = self.get("领取基础奖励", url_wang, api="send/basic", **common_params,
+                           isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
+            logger.info("领取{}的第{}个基础奖励: {}".format(side, awardInfo.sName, res.get("giftName", "出错啦")))
+
+        def exchange_award(giftInfo: DnfHelperChronicleExchangeGiftInfo):
+            res = self.get("兑换奖励", url_wang, api="send/exchange", **common_params,
+                           exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)
+            logger.info("兑换奖励: {}".format(res.get("giftName", "出错啦")))
+
+        def lottery():
+            res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
+            gift = res.get("giftName", "出错啦")
+            beforeMoney = res.get("money", 0)
+            afterMoney = res.get("value", 0)
+            logger.info("抽奖结果为: {}，年史诗片：{}->{}".format(gift, beforeMoney, afterMoney))
+
+        # ------ 实际逻辑 ------
+
+        # 做任务
+        logger.warning("dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-")
+
+        # 领取任务奖励的经验
+        taskInfo = getUserTaskList()
+        if taskInfo.hasPartner:
+            logger.info("搭档为{}".format(taskInfo.pUserId))
+        else:
+            logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+        for task in taskInfo.taskList:
+            ctx = "{}-自己".format(task.name)
+            if task.mStatus == 2:
+                doActionIncrExp(ctx, task.mActionId)
+            elif task.mStatus == 1:
+                logger.info("{}已经领取过了".format(ctx))
+            elif task.mStatus == 0:
+                logger.warning("{}尚未完成，无法领取哦~".format(ctx))
+
+            if taskInfo.hasPartner:
+                ctx = "{}-队友".format(task.name)
+                if task.pStatus == 2:
+                    doActionIncrExp(ctx, task.pActionId)
+                elif task.pStatus == 1:
+                    logger.info("{}已经领取过了".format(ctx))
+                elif task.pStatus == 0:
+                    logger.warning("{}尚未完成，无法领取哦~".format(ctx))
+
+        # 领取基础奖励
+        basicAwardList = basic_award_list()
+        listOfBasicList = [(True, basicAwardList.basic1List)]
+        if basicAwardList.hasPartner:
+            listOfBasicList.append((False, basicAwardList.basic2List))
+        hasTakenAnyBasicAward = False
+        for selfGift, basicList in listOfBasicList:
+            for award in basicList:
+                if award.isLock == 0 and award.isUsed == 0:
+                    # 已解锁，且未领取，则尝试领取
+                    take_basic_award(award, selfGift)
+                    hasTakenAnyBasicAward = True
+        if not hasTakenAnyBasicAward:
+            logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+
+        # 根据配置兑换奖励
+        exchangeList = exchange_list()
+        exchangeGiftMap = {}
+        for gift in exchangeList.gifts:
+            exchangeGiftMap[gift.sLbcode] = gift
+
+        if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
+            all_exchanged = True
+            for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
+                if ei.sLbcode not in exchangeGiftMap:
+                    logger.error("未找到兑换项{}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
+                    continue
+
+                gift = exchangeGiftMap[ei.sLbcode]
+                if gift.usedNum >= int(gift.iNum):
+                    logger.warning("{}已经达到兑换上限{}次, 将跳过".format(gift.sName, gift.iNum))
+                    continue
+
+                userInfo = getUserActivityTopInfo()
+                if userInfo.point < int(gift.iCard):
+                    all_exchanged = False
+                    logger.warning("目前年史碎片数目为{}，不够兑换{}所需的{}个，将跳过后续优先级较低的兑换奖励".format(userInfo.point, gift.sName, gift.iCard))
+                    break
+
+                for i in range(ei.count):
+                    exchange_award(gift)
+
+            if all_exchanged:
+                logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
+        else:
+            logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
+
+        if self.cfg.dnf_helper_info.chronicle_lottery:
+            userInfo = getUserActivityTopInfo()
+            totalLotteryTimes = userInfo.point // 10
+            logger.info("当前共有{}年史诗片，将进行{}次抽奖".format(userInfo.point, totalLotteryTimes))
+            for i in range(totalLotteryTimes):
+                lottery()
+        else:
+            logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+
     # --------------------------------------------管家蚊子腿--------------------------------------------
     def guanjia(self):
         # https://guanjia.qq.com/act/cop/202010dnf/
@@ -1847,6 +2024,7 @@ class DjcHelper:
             "dzid": "",
             "page": "",
             "iPackageId": "",
+            "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -1912,4 +2090,5 @@ if __name__ == '__main__':
     # djcHelper.dnf_female_mage_awaken()
     # djcHelper.xinyue_sailiyam()
     # djcHelper.dnf_rank()
-    djcHelper.dnf_warriors_call()
+    # djcHelper.dnf_warriors_call()
+    djcHelper.dnf_helper_chronicle()

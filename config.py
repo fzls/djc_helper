@@ -43,6 +43,13 @@ class ExchangeItemConfig(ConfigInterface):
         self.count = 2
 
 
+class DnfHelperChronicleExchangeItemConfig(ConfigInterface):
+    def __init__(self):
+        self.sLbcode = "ex_0003"
+        self.sName = "装备提升礼盒*1"
+        self.count = 3
+
+
 class XinYueOperationConfig(ConfigInterface):
     def __init__(self):
         self.iFlowId = "512411"
@@ -107,6 +114,21 @@ class DnfHelperInfoConfig(ConfigInterface):
         #       有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开
         self.token = ""
 
+        # dnf助手编年史是否开启抽奖
+        self.chronicle_lottery = False
+        # dnf助手编年史兑换道具信息，其他奖励信息可查阅reference_data/dnf助手编年史活动_可兑换奖励列表.json
+        self.chronicle_exchange_items = []  # type: List[DnfHelperChronicleExchangeItemConfig]
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'chronicle_exchange_items' in raw_config:
+            self.chronicle_exchange_items = []
+            for cfg in raw_config["chronicle_exchange_items"]:
+                ei = DnfHelperChronicleExchangeItemConfig()
+                ei.auto_update_config(cfg)
+                self.chronicle_exchange_items.append(ei)
+
 
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
@@ -140,6 +162,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_rank = True
         # 是否启用阿拉德勇士征集令活动
         self.get_dnf_warriors_call = True
+        # 是否领取dnf助手编年史活动
+        self.get_dnf_helper_chronicle = True
 
 
 class AccountConfig(ConfigInterface):

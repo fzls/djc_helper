@@ -381,3 +381,150 @@ class QzoneActivityResponse(ConfigInterface):
         self.notice = 0
         self.time = 1606839612
         self.tips = "6871-284"
+
+
+class DnfHelperChronicleExchangeList(ConfigInterface):
+    def __init__(self):
+        self.code = 200
+        self.exp = 0
+        self.gifts = []  # type: List[DnfHelperChronicleExchangeGiftInfo]
+        self.hasPartner = False
+        self.level = 1
+        self.msg = "success"
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'gifts' in raw_config:
+            self.gifts = []
+            for cfg in raw_config["gifts"]:
+                ei = DnfHelperChronicleExchangeGiftInfo()
+                ei.auto_update_config(cfg)
+                self.gifts.append(ei)
+
+
+class DnfHelperChronicleExchangeGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.sIdentifyId = ""
+        self.sName = "一次性材质转换器"
+        self.iCard = "20"
+        self.iNum = "5"
+        self.iLevel = "1"
+        self.sLbcode = "ex_0001"
+        self.sPic1 = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201130165705.png?version=5705"
+        self.isLock = 0
+        self.usedNum = 0
+
+
+class DnfHelperChronicleBasicAwardList(ConfigInterface):
+    def __init__(self):
+        self.basic1List = []  # type: List[DnfHelperChronicleBasicAwardInfo]
+        self.basic2List = []  # type: List[DnfHelperChronicleBasicAwardInfo]
+        self.code = 200
+        self.hasPartner = False
+        self.msg = "success"
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'basic1List' in raw_config:
+            self.basic1List = []
+            for cfg in raw_config["basic1List"]:
+                ei = DnfHelperChronicleBasicAwardInfo()
+                ei.auto_update_config(cfg)
+                self.basic1List.append(ei)
+
+        if 'basic2List' in raw_config:
+            self.basic2List = []
+            for cfg in raw_config["basic2List"]:
+                ei = DnfHelperChronicleBasicAwardInfo()
+                ei.auto_update_config(cfg)
+                self.basic2List.append(ei)
+
+
+class DnfHelperChronicleBasicAwardInfo(ConfigInterface):
+    def __init__(self):
+        self.sIdentifyId = ""
+        self.giftName = "时间的引导石10个礼盒"
+        self.giftNum = 1
+        self.isLock = 1
+        self.isUsed = 0
+        self.sPic = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233175fbfbcad13bc7.png"
+        self.sName = "1"
+        self.iLbSel1 = 1
+        self.sLbCode = "basic_0001"
+
+
+class DnfHelperChronicleLotteryList(ConfigInterface):
+    def __init__(self):
+        self.code = 200
+        self.gifts = []  # type: List[DnfHelperChronicleLotteryGiftInfo]
+        self.msg = "success"
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'gifts' in raw_config:
+            self.gifts = []
+            for cfg in raw_config["gifts"]:
+                ei = DnfHelperChronicleLotteryGiftInfo()
+                ei.auto_update_config(cfg)
+                self.gifts.append(ei)
+
+
+class DnfHelperChronicleLotteryGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.sIdentifyId = ""
+        self.sName = "+8 装备增幅券*1"
+        self.fChance = "0.001"
+        self.iCard = "10"
+        self.sLbCode = "lottery_0007"
+        self.sLbPic = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelottery/sLbPic/icons/20201127103006.png?version=3007"
+        self.iRank = "1"
+        self.iAction = "1"
+
+
+class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
+    def __init__(self):
+        self.des = "十二月 · 卡恩"
+        self.bImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scoretheme/sPic2/icons/20201130165539.png?version=5540"
+        self.startTime = "2021-01-01 02:00:00"
+        self.point = 0
+        self.level = 1
+        self.levelName = "初级"
+        self.levelIcon = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelevelname/sPic1/icons/20201111145754.png?version=5754"
+        self.totalExp = 0
+        self.currentExp = 0
+        self.levelExp = 5
+        self.giftImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233235fbfbcb30af65.png"
+
+
+class DnfHelperChronicleUserTaskList(ConfigInterface):
+    def __init__(self):
+        self.pUserId = ""
+        self.mIcon = "http://q.qlogo.cn/qqapp/1104466820/0E82A1DBAE746043CF3AEF95EC39FC2B/100"
+        self.pIcon = ""
+        self.hasPartner = False
+        self.taskList = []  # type: List[DnfHelperChronicleUserTaskInfo]
+
+    def auto_update_config(self, raw_config: dict):
+        super().auto_update_config(raw_config)
+
+        if 'taskList' in raw_config:
+            self.taskList = []
+            for cfg in raw_config["taskList"]:
+                ei = DnfHelperChronicleUserTaskInfo()
+                ei.auto_update_config(cfg)
+                self.taskList.append(ei)
+
+
+class DnfHelperChronicleUserTaskInfo(ConfigInterface):
+    def __init__(self):
+        self.mActionId = "001"
+        self.name = "DNF助手签到"
+        self.mExp = 11
+        self.mStatus = 0
+        self.jumpUrl = ""
+        self.pActionId = "013"
+        self.pExp = 5
+        self.pStatus = 0

@@ -253,3 +253,131 @@ class RankUserInfo(ConfigInterface):
         self.sendScore = 0
         self.giftStatus = {}
         self.canGift = 0
+
+
+class DnfWarriorsCallInfo(ConfigInterface):
+    def __init__(self):
+        self.page = "index"
+        self.userInfo = DnfWarriorsCallUserInfo()
+        self.zz = DnfWarriorsCallZZ()
+        self.boss = DnfWarriorsCallBoss()
+        self.isQQ = False
+        self.isIOS = False
+        self.isMobile = False
+
+
+class DnfWarriorsCallUserInfo(ConfigInterface):
+    def __init__(self):
+        self.nick = "小号一号"
+        self.avatar = "//qlogo3.store.qq.com/qzone/3036079506/3036079506/100"
+        self.deluxe = 0
+        self.level = 0
+        self.now = 1606814238
+        self.star_level = 0
+        self.star_vip = 0
+        self.uin = 3036079506
+        self.vip = 0
+        self.year = 0
+
+
+class DnfWarriorsCallZZ(ConfigInterface):
+    def __init__(self):
+        self.title = "QQ会员阿拉德勇士征集令"
+        self.desc = "阿拉德勇士征集令，瓜分大额Q币、现金大奖！"
+        self.shareImage = "https://sola.gtimg.cn/aoi/sola/20200527195101_54WJymQ7wi.jpg"
+        self.arkImage = ""
+        self.time = "第一期时间：2020年11月30日——12月26日"
+        self.tvImage = "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20201201115645_06f20b.jpg"
+        self.tvUrl = "https://dnf.qq.com/cp/a20201125dnf/index.html"
+        self.txVideoId = "u3206474sp4"
+        self.QRCode = "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20201130213733_7bfd35.png"
+        self.h5 = {}
+        self.zZConfigerUpdateTime = 1606805575
+        self.actid = 4117
+        self.noRuleQuals = []
+        self.gameid = "dnf"
+        self.report = "act4071"
+        self.aid = "act4071"
+        self.gameActName = "dnf_huoyue_30s_saishi"
+        self.actbossZige = DnfWarriorsCallZZBossZige()
+        self.actbossRule = DnfWarriorsCallZZBossRule()
+
+
+class DnfWarriorsCallZZBossZige(ConfigInterface):
+    def __init__(self):
+        self.registerPackage = 117926
+        self.buyVip = 117928
+        self.buyVipPrize = 117929
+        self.lottery = 117925
+        self.pfPrize1 = 117950
+        self.pfPrize2 = 117951
+        self.pfPrize3 = 117952
+        self.pfPrize4 = 117953
+        self.jsPrize1 = 117938
+        self.jsPrize2 = 117939
+        self.jsPrize3 = 117940
+        self.online = 118003
+        self.wangba = 118001
+        self.box1 = 117957
+        self.box2 = 117958
+        self.box3 = 117970
+        self.box4 = 117971
+        self.box5 = 117972
+        self.share1 = 118066
+        self.share2 = 117927
+        self.onlyOneBox = 118067
+        self.score = 117942
+
+
+class DnfWarriorsCallZZBossRule(ConfigInterface):
+    def __init__(self):
+        self.registerPackage = 28172
+        self.iosPay = "28158"
+        self.h5Pay = "28157_35300de17aee936b7593b1dcadedc52a4117"
+        self.buyVipPrize = 28174
+        self.lottery = 28208
+        self.pfPrize1 = 28258
+        self.pfPrize2 = 28260
+        self.pfPrize3 = 28259
+        self.pfPrize4 = 28262
+        self.jsPrize1 = 28177
+        self.jsPrize2 = 28178
+        self.jsPrize3 = 28179
+        self.wangba = 28207
+        self.getBox1 = 28167
+        self.getBox2 = 28168
+        self.getBox3 = 28169
+        self.getBox4 = 28170
+        self.getBox5 = 28171
+        self.box1 = 28182
+        self.box2 = 28180
+        self.box3 = 28183
+        self.box4 = 28184
+        self.box5 = 28185
+        self.share = 28156
+        self.share1 = 28156
+        self.share2 = 28173
+
+
+class DnfWarriorsCallBoss(ConfigInterface):
+    def __init__(self):
+        self.left = {
+            "117925": 0,
+            "117926": 0,
+            "undefined": 0
+        }
+        self.used = {
+            "117925": 0,
+            "117926": 1,
+            "undefined": 0
+        }
+
+
+class QzoneActivityResponse(ConfigInterface):
+    def __init__(self):
+        self.code = -10000
+        self.subcode = -1
+        self.message = "不符合领取条件"
+        self.notice = 0
+        self.time = 1606839612
+        self.tips = "6871-284"

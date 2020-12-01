@@ -123,6 +123,8 @@ make_wish = true
 get_ark_lottery = true
 # 是否领取DNF助手排行榜活动
 get_dnf_rank = true
+# 是否启用阿拉德勇士征集令活动
+get_dnf_warriors_call = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

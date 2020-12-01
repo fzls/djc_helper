@@ -10,11 +10,11 @@ import pyperclip
 import win32api
 
 import json_parser
-from ark_lottery import ArkLottery
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
 from qq_login import QQLogin, LoginResult
+from qzone_activity import QzoneActivity
 from sign import getMillSecondsUnix
 from urls import Urls
 from util import show_head_line, get_this_week_monday
@@ -371,6 +371,9 @@ class DjcHelper:
 
         # dnf助手排行榜
         self.dnf_rank()
+
+        # 阿拉德勇士征集令
+        self.dnf_warriors_call()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -1152,13 +1155,13 @@ class DjcHelper:
         if lr is None:
             return
 
-        al = ArkLottery(self, lr)
-        al.ark_lottery()
+        qa = QzoneActivity(self, lr)
+        qa.ark_lottery()
 
     def fetch_pskey(self):
-        # 如果未启用抽卡功能，则不需要这个
-        if not self.cfg.function_switches.get_ark_lottery:
-            logger.warning("未启用领取QQ空间抽卡功能，将跳过")
+        # 如果未启用qq空间相关的功能，则不需要这个
+        if not self.cfg.function_switches.get_ark_lottery and not self.cfg.function_switches.get_dnf_warriors_call:
+            logger.warning("未启用领取QQ空间相关的功能，将跳过")
             return
 
         # 仅支持扫码登录和自动登录
@@ -1192,10 +1195,12 @@ class DjcHelper:
             return True
 
         lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
-        al = ArkLottery(self, lr)
+        qa = QzoneActivity(self, lr)
 
         # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
-        res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
+        # 由于活动过期的判定会优先于pskey判定，需要需要保证下面调用的是最新的活动~
+        qa.fetch_dnf_warriors_call_data()
+        res = qa.do_dnf_warriors_call("fcg_receive_reward", "测试pskey是否过期", qa.zz().actbossRule.buyVipPrize, gameid=qa.zz().gameid, print_res=False)
         return res['code'] == -3000 and res['subcode'] == -4001
 
     def save_uin_pskey(self, uin, pskey):
@@ -1245,6 +1250,22 @@ class DjcHelper:
             "单人爽刷新玩法": "116185", "独立成团打副本": "116184", "海量福利金秋享": "116183", "超强奖励等你拿": "116182",
         }
         self.send_card(card_name_to_id[card_name], to_qq)
+
+    # --------------------------------------------阿拉德勇士征集令--------------------------------------------
+    def dnf_warriors_call(self):
+        # https://act.qzone.qq.com/vip/2020/dnf1126
+        show_head_line("阿拉德勇士征集令")
+
+        if not self.cfg.function_switches.get_dnf_warriors_call:
+            logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
+            return
+
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+
+        qa = QzoneActivity(self, lr)
+        qa.dnf_warriors_call()
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
@@ -1890,4 +1911,5 @@ if __name__ == '__main__':
     # djcHelper.qq_video()
     # djcHelper.dnf_female_mage_awaken()
     # djcHelper.xinyue_sailiyam()
-    djcHelper.dnf_rank()
+    # djcHelper.dnf_rank()
+    djcHelper.dnf_warriors_call()

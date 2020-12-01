@@ -76,15 +76,19 @@ class Urls:
         # 腾讯游戏信用，需要手动额外传入参数：gift_group
         self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"
 
+        # --QQ空间相关活动--
+        self.qzone_activity = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"
+        self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}"
+
         # 抽卡相关
         self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9"
-        self.ark_lottery = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"
-        self.ark_lottery_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}"
         # 查询次数信息：参数：to_qq
         self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"dnf-ark9"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq
         self.ark_lottery_send_card = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13333":{{"cardId":{cardId},"fromUin":{from_qq},"toUin":{to_qq},"actName":"dnf-ark9"}}}}&t={rand}&g_tk={g_tk}'
 
+        # 阿拉德勇士征集令
+        self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"
 
         # qq视频活动
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}"

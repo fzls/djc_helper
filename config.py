@@ -138,6 +138,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_ark_lottery = True
         # 是否领取DNF助手排行榜活动
         self.get_dnf_rank = True
+        # 是否启用阿拉德勇士征集令活动
+        self.get_dnf_warriors_call = True
 
 
 class AccountConfig(ConfigInterface):

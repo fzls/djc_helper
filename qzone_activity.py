@@ -1,10 +1,11 @@
 import json
 import random
+import datetime
 
 import requests
 
 from config import AccountConfig
-from dao import RoleInfo
+from dao import RoleInfo, DnfWarriorsCallInfo
 from log import logger, color
 from network import process_result, try_request
 from qq_login import LoginResult
@@ -13,7 +14,7 @@ from urls import Urls
 from util import uin2qq
 
 
-class ArkLottery:
+class QzoneActivity:
     def __init__(self, djc_helper, lr):
         """
         :type djc_helper: DjcHelper
@@ -43,6 +44,8 @@ class ArkLottery:
             "Cookie": "p_uin={p_uin}; p_skey={pskey}; ".format(p_uin=self.lr.uin, pskey=self.lr.p_skey),
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         }
+
+    # ----------------- 集卡活动 ----------------------
 
     def ark_lottery(self):
         if self.roleinfo is None:
@@ -118,17 +121,7 @@ class ArkLottery:
             self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "25949", gameid="dnf")
 
     def fetch_lottery_data(self):
-        request_fn = lambda: requests.post(self.urls.ark_lottery_page, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
-        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
-        page_html = res.text
-
-        data_prefix = "window.syncData = "
-        data_suffix = ";\n</script>"
-
-        prefix_idx = page_html.index(data_prefix) + len(data_prefix)
-        suffix_idx = page_html.index(data_suffix, prefix_idx)
-
-        self.lottery_data = json.loads(page_html[prefix_idx:suffix_idx])
+        self.lottery_data = self.fetch_data(self.urls.ark_lottery_page)
 
     def remaining_lottery_times(self):
         self.fetch_lottery_data()
@@ -169,7 +162,108 @@ class ArkLottery:
         return prize_counts
 
     def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
-        url = self.urls.ark_lottery.format(
+        # 活动id为self.lottery_data["zzconfig"]["actid"]=3886
+        return self.do_qzone_activity(3886, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
+
+    # ----------------- 阿拉德勇士征集令 ----------------------
+
+    def dnf_warriors_call(self):
+        # 预取相关数据
+        self.fetch_dnf_warriors_call_data()
+
+        zz = self.zz()
+
+        # 抽象一些方法
+        def gamePullFlow(ctx):
+            return self.do_dnf_warriors_call("v2/fcg_yvip_game_pull_flow", ctx, "", query="0", gameid=zz.gameid, act_name=zz.gameActName)
+
+        def lottery(ctx):
+            return self.do_dnf_warriors_call("fcg_prize_lottery", ctx, zz.actbossRule.lottery, gameid=zz.gameid)
+
+        def getPresent(ctx, ruleid):
+            return self.do_dnf_warriors_call("fcg_qzact_present", ctx, ruleid)
+
+        def getPrize(ctx, ruleid):
+            return self.do_dnf_warriors_call("fcg_receive_reward", ctx, ruleid, gameid=zz.gameid)
+
+        # 实际业务逻辑
+        rule = zz.actbossRule
+
+        getPresent("分享成功领取奖励", rule.share1)
+
+        getPrize("报名礼包", rule.registerPackage)
+
+        getPrize("购买vip奖励", rule.buyVipPrize)
+
+        remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(zz.actbossZige.lottery, 0)
+        logger.info("剩余抽奖次数为{}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)".format(remaining_lottery_times))
+        for i in range(remaining_lottery_times):
+            lottery("抽奖-第{}次".format(i+1))
+
+        logger.info("只处理大家都能领到的普发奖励，像周赛决赛之类的奖励请自行领取")
+        getPrize("1. 智慧的引导礼包", rule.pfPrize1)
+        getPrize("2. 单人希洛克通关礼包", rule.pfPrize2)
+
+        logger.info("绑定跨区请自行完成")
+        gamePullFlow("1.每日游戏在线30分钟（3分）")
+        getPrize("2.特权网吧登陆游戏（1分）", rule.wangba)
+
+        if datetime.datetime.now() >= datetime.datetime.strptime('2020-12-26', "%Y-%m-%d"):
+            level = self.dnf_warriors_call_get_level()
+            if level > 0:
+                getPrize("领取宝箱", zz.actbossRule.__getattribute__("getBox{}".format(level)))
+                getPrize("开宝箱", zz.actbossRule.__getattribute__("box{}".format(level)))
+        else:
+            logger.info("12月26日开始领取宝箱和开宝箱")
+        logger.info("冠军大区奖励请自行领取")
+
+    def dnf_warriors_call_get_level(self):
+        score = self.dnf_warriors_call_data.boss.left.get(str(self.zz().actbossZige.score), 0)
+
+        if score >= 61:
+            level = 5
+        elif score >= 45:
+            level = 4
+        elif score >= 31:
+            level = 3
+        elif score >= 21:
+            level = 2
+        elif score >= 1:
+            level = 1
+        else:
+            level = 0
+
+        return level
+
+    def zz(self):
+        return self.dnf_warriors_call_data.zz
+
+    def fetch_dnf_warriors_call_data(self):
+        self.dnf_warriors_call_raw_data = self.fetch_data(self.urls.dnf_warriors_call_page)
+        self.dnf_warriors_call_data = DnfWarriorsCallInfo()
+        self.dnf_warriors_call_data.auto_update_config(self.dnf_warriors_call_raw_data)
+
+    def do_dnf_warriors_call(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
+        # 活动id为self.dnf_warriors_call_data.zz.actid=4117
+        return self.do_qzone_activity(self.zz().actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
+
+    # ----------------- QQ空间活动通用逻辑 ----------------------
+
+    def fetch_data(self, activity_page_url):
+        request_fn = lambda: requests.post(activity_page_url, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
+        page_html = res.text
+
+        data_prefix = "window.syncData = "
+        data_suffix = ";\n</script>"
+
+        prefix_idx = page_html.index(data_prefix) + len(data_prefix)
+        suffix_idx = page_html.index(data_suffix, prefix_idx)
+
+        return json.loads(page_html[prefix_idx:suffix_idx])
+
+    def do_qzone_activity(self, actid, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
+        url = self.urls.qzone_activity.format(
             api=api,
             g_tk=self.g_tk,
             rand=random.random(),
@@ -179,8 +273,8 @@ class ArkLottery:
             partition = partition or self.roleinfo.serviceID
             roleid = roleid or self.roleinfo.roleCode
 
-        raw_data = self.urls.ark_lottery_raw_data.format(
-            actid=3886,
+        raw_data = self.urls.qzone_activity_raw_data.format(
+            actid=actid,
             ruleid=ruleid,
             area=area,
             partition=partition,
@@ -193,4 +287,5 @@ class ArkLottery:
 
         request_fn = lambda: requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
         res = try_request(request_fn, self.djc_helper.common_cfg.retry)
+        logger.debug("{}".format(raw_data))
         return process_result(ctx, res, pretty, print_res)

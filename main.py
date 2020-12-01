@@ -1,6 +1,6 @@
 from sys import exit
 
-from ark_lottery import ArkLottery
+from qzone_activity import QzoneActivity
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from show_usage import *
@@ -77,7 +77,7 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)
-        # djcHelper.fetch_pskey()
+        djcHelper.fetch_pskey()
         # djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
@@ -111,10 +111,10 @@ def auto_send_cards(cfg):
             continue
 
         qq = uin2qq(lr.uin)
-        al = ArkLottery(djcHelper, lr)
+        qa = QzoneActivity(djcHelper, lr)
 
-        qq_to_card_name_to_counts[qq] = al.get_card_counts()
-        qq_to_prize_counts[qq] = al.get_prize_counts()
+        qq_to_card_name_to_counts[qq] = qa.get_card_counts()
+        qq_to_prize_counts[qq] = qa.get_prize_counts()
         qq_to_djcHelper[qq] = djcHelper
 
         logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
@@ -132,8 +132,8 @@ def auto_send_cards(cfg):
             djcHelper = qq_to_djcHelper[target_qq]
             lr = djcHelper.fetch_pskey()
             if lr is not None:
-                al = ArkLottery(djcHelper, lr)
-                al.try_lottery_using_cards(print_warning=False)
+                qa = QzoneActivity(djcHelper, lr)
+                qa.try_lottery_using_cards(print_warning=False)
 
 
 def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):
@@ -245,10 +245,10 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         if lr is None:
             continue
 
-        al = ArkLottery(djcHelper, lr)
+        qa = QzoneActivity(djcHelper, lr)
 
-        card_counts = al.get_card_counts()
-        prize_counts = al.get_prize_counts()
+        card_counts = qa.get_card_counts()
+        prize_counts = qa.get_prize_counts()
 
         cols = [idx, account_config.name]
         has_any_card = False

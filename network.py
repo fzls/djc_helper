@@ -1,5 +1,3 @@
-import json
-import time
 from urllib.parse import unquote_plus
 
 import requests
@@ -87,7 +85,7 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         success = int(data["code"]) == 0
 
     # 特殊处理qq视频
-    if "data" in data and "sys_code" in data["data"]:
+    if "data" in data and type(data["data"]) is dict and "sys_code" in data["data"]:
         success = int(data["data"]["sys_code"]) == 0
 
     if print_res:

@@ -1,8 +1,18 @@
 # 更新公告
-1. 完善使用http canary获取token的步骤说明，并增加演示视频链接指引
-2. 没有鲜花时不实际进行操作
-3. 可使用autojs自动完成助手获取鲜花流程，可参考https://github.com/fzls/autojs
-4. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
+1. 新增阿拉德勇士征集令活动
+2. 新增dnf助手编年史活动
+3. 调整临时提示的格式
+4. 推荐使用使用autojs来自动获取助手排行榜所需鲜花和完成dnf助手编年史的助手相关任务
+5. 上面这个操作可参考https://github.com/fzls/autojs以及https://www.bilibili.com/video/BV1az4y1k7bH/
+6. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
+
+# v4.4.3 2020.12.2
+# 活动维护
+1. 新增阿拉德勇士征集令活动
+2. 新增dnf助手编年史活动
+
+# 其他
+1. 调整临时提示的格式
 
 # v4.4.2 2020.11.30
 # 助手token

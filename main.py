@@ -1,8 +1,8 @@
 from sys import exit
 
-from qzone_activity import QzoneActivity
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
+from qzone_activity import QzoneActivity
 from show_usage import *
 from update import check_update_on_start
 from usage_count import *
@@ -534,20 +534,25 @@ def temp_code(cfg):
         return
     _show_head_line("一些临时tips")
 
-    logger.warning(color("fg_bold_yellow") + (
-        "微信的DNF签到目前由于技术问题，无法稳定获取微信登录态，故而无法加入小助手。"
-        "若想自动签到，推荐使用auto.js来实现签到功能，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。"
-        "具体操作可参考网盘中[一个微信自动签到的方案.txt]以及参考脚本[wx_dnf_checkin.7z](解析后得到脚本内容)。"
-        "这个方案，本人已测试一周，目前看来效果还不错，每天设置凌晨0点和一点各运行一次，目前没有出现断签情况~"
-    ))
+    tips = [
+        (
+            "微信的DNF签到目前由于技术问题，无法稳定获取微信登录态，故而无法加入小助手。"
+            "若想自动签到，推荐使用auto.js来实现签到功能，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。"
+            "具体操作可参考网盘中[一个微信自动签到的方案.txt]以及参考脚本[wx_dnf_checkin.7z](解析后得到脚本内容)。"
+            "这个方案，本人已测试一周，目前看来效果还不错，每天设置凌晨0点和一点各运行一次，目前没有出现断签情况~"
+        ),
+        (
+            "DNF进击吧赛利亚活动推荐每天运行两次，间隔超过五小时，同时确保第一次运行时已在线30分钟，这样就可以第一次放出去打工，第二次完成打工领取奖励"
+        ),
+        (
+            "dnf助手的排行榜活动的获取鲜花因为是通过助手app和dnf游戏内特定埋点来触发的，且在助手内触发这些操作需要使用jce和对应加密压缩处理，目前无法通过小助手来完成"
+            "若想自动获取鲜花，推荐使用auto.js来实现，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。\n"
+            "抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH"
+        ),
+    ]
 
-    logger.warning(color("fg_bold_yellow") + ("DNF进击吧赛利亚活动推荐每天运行两次，间隔超过五小时，同时确保第一次运行时已在线30分钟，这样就可以第一次放出去打工，第二次完成打工领取奖励"))
-
-    logger.warning(color("fg_bold_yellow") + (
-        "dnf助手的排行榜活动的获取鲜花因为是通过助手app和dnf游戏内特定埋点来触发的，且在助手内触发这些操作需要使用jce和对应加密压缩处理，目前无法通过小助手来完成"
-        "若想自动获取鲜花，推荐使用auto.js来实现，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。\n"
-        "抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH"
-    ))
+    for idx, tip in enumerate(tips):
+        logger.warning(color("fg_bold_yellow") + "{}. {}\n ".format(idx + 1, tip))
 
 
 if __name__ == '__main__':

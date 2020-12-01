@@ -1,10 +1,11 @@
 # 更新公告
-1. 新增阿拉德勇士征集令活动
-2. 新增dnf助手编年史活动
-3. 调整临时提示的格式
-4. 推荐使用使用autojs来自动获取助手排行榜所需鲜花和完成dnf助手编年史的助手相关任务
-5. 上面这个操作可参考https://github.com/fzls/autojs以及https://www.bilibili.com/video/BV1az4y1k7bH/
-6. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
+1. 0-0 如果觉得好用的话，希望大家帮忙宣传下，比如分享给自己的小伙伴，自己的公会群啥的~
+2. 新增阿拉德勇士征集令活动
+3. 新增dnf助手编年史活动
+4. 调整临时提示的格式
+5. 推荐使用使用autojs来自动获取助手排行榜所需鲜花和完成dnf助手编年史的助手相关任务
+6. 上面这个操作可参考https://github.com/fzls/autojs以及https://www.bilibili.com/video/BV1az4y1k7bH/
+7. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
 
 # v4.4.3 2020.12.2
 # 活动维护

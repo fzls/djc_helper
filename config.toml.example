@@ -494,6 +494,49 @@ nickName = ""
 #       有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开
 token = ""
 
+# dnf助手编年史是否开启抽奖
+chronicle_lottery = false
+
+# dnf助手编年史兑换道具信息，其他奖励信息可查阅reference_data/dnf助手编年史活动_可兑换奖励列表.json
+# sLbcode, sName为上述参考配置中的原样字段，count表示每次运行时要尝试领取几次
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+## 兑换1次一次性材质转换器
+#sLbcode = "ex_0001"
+#sName = "一次性材质转换器"
+## 表示领取几次这个奖励
+#count = 1
+#
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+## 兑换2次智慧的引导通行证
+#sLbcode = "ex_0002"
+#sName = "智慧的引导通行证*1"
+## 表示领取几次这个奖励
+#count = 2
+#
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+#sLbcode = "ex_0003"
+#sName = "装备提升礼盒*1"
+## 表示领取几次这个奖励
+#count = 3
+#
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+#sLbcode = "ex_0004"
+#sName = "华丽的徽章自选礼盒*1"
+## 表示领取几次这个奖励
+#count = 1
+#
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+#sLbcode = "ex_0005"
+#sName = "本职业神器护石随机礼盒*1"
+## 表示领取几次这个奖励
+#count = 1
+#
+#[[account_configs.dnf_helper_info.chronicle_exchange_items]]
+#sLbcode = "ex_0006"
+#sName = "+10装备强化券*1"
+## 表示领取几次这个奖励
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 

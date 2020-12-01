@@ -1617,7 +1617,7 @@ class DjcHelper:
 
         # 领取黑钻
         if self.dnf_rank_get_user_info().canGift == 0:
-            logger.warning("12月15日开放黑钻奖励领取~")
+            logger.warning("12月5日开放黑钻奖励领取~")
         else:
             self.dnf_rank_receive_diamond("3天", "7020")
             self.dnf_rank_receive_diamond("7天", "7021")

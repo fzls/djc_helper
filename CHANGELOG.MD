@@ -8,7 +8,7 @@
 7. 上面这个操作可参考https://github.com/fzls/autojs以及https://www.bilibili.com/video/BV1az4y1k7bH/
 8. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
 
-# v4.4.3 2020.12.2
+# v4.4.4 2020.12.2
 # bugfix
 1. 修复在未配置助手的userId的时候也会触发dnf助手编年史相关逻辑的问题
 

@@ -1686,13 +1686,19 @@ class DjcHelper:
         show_head_line("dnf助手编年史")
 
         if not self.cfg.function_switches.get_dnf_helper_chronicle:
-            logger.warning("未启用领取dnf助手编年史活动合集功能，将跳过")
+            logger.warning("未启用领取dnf助手编年史活动功能，将跳过")
             return
 
         # 检查是否已在道聚城绑定
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
+
+        if self.cfg.dnf_helper_info.userId == "":
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手的userId（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置")
+            self.show_dnf_helper_info_guide()
+            return
+
 
         # 为了不与其他函数名称冲突，切让函数名称短一些，写到函数内部~
         url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
@@ -2056,7 +2062,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 1  # 从1开始，第i个
+    idx = 3  # 从1开始，第i个
     account_config = cfg.account_configs[idx - 1]
 
     logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))

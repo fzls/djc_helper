@@ -1699,7 +1699,6 @@ class DjcHelper:
             self.show_dnf_helper_info_guide()
             return
 
-
         # 为了不与其他函数名称冲突，切让函数名称短一些，写到函数内部~
         url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
@@ -1748,9 +1747,24 @@ class DjcHelper:
             return _res
 
         # ------ 领取各种奖励 ------
+
+        def takeTaskAward(suffix, taskName, actionId, status, exp):
+            actionName = "[{}-{}]".format(taskName, suffix)
+
+            if status in [0, 2]:
+                # 0-未完成，2-已完成未领取，但是助手签到任务在未完成的时候可以直接领取，所以这俩一起处理，在内部根据回包进行区分
+                doActionIncrExp(actionName, actionId, exp)
+            else:
+                # 1 表示已经领取过
+                logger.info("{}已经领取过了".format(actionName))
+
         def doActionIncrExp(actionName, actionId, exp):
             res = self.post("领取任务经验", url_mwegame, "", api="doActionIncrExp", actionId=actionId, **common_params)
-            logger.info("领取{}-{}，获取经验为{}".format(actionName, actionId, exp))
+            data = res.get("data", 0)
+            if data != 0:
+                logger.info("领取{}-{}，获取经验为{}，回包data={}".format(actionName, actionId, exp, data))
+            else:
+                logger.warning("{}尚未完成，无法领取哦~".format(actionName))
 
         def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
@@ -1787,22 +1801,9 @@ class DjcHelper:
         else:
             logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
         for task in taskInfo.taskList:
-            ctx = "{}-自己".format(task.name)
-            if task.mStatus == 2:
-                doActionIncrExp(ctx, task.mActionId, task.mExp)
-            elif task.mStatus == 1:
-                logger.info("{}已经领取过了".format(ctx))
-            elif task.mStatus == 0:
-                logger.warning("{}尚未完成，无法领取哦~".format(ctx))
-
+            takeTaskAward("自己", task.name, task.mActionId, task.mStatus, task.mExp)
             if taskInfo.hasPartner:
-                ctx = "{}-队友".format(task.name)
-                if task.pStatus == 2:
-                    doActionIncrExp(ctx, task.pActionId, task.pExp)
-                elif task.pStatus == 1:
-                    logger.info("{}已经领取过了".format(ctx))
-                elif task.pStatus == 0:
-                    logger.warning("{}尚未完成，无法领取哦~".format(ctx))
+                takeTaskAward("队友", task.name, task.pActionId, task.pStatus, task.pExp)
 
         # 领取基础奖励
         basicAwardList = basic_award_list()

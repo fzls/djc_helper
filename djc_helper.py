@@ -378,6 +378,9 @@ class DjcHelper:
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
 
+        # hello语音网页礼包兑换
+        self.hello_voice()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1970,6 +1973,55 @@ class DjcHelper:
     def get_local_saved_guanjia_openid_file(self):
         return self.local_saved_guanjia_openid_file.format(self.cfg.name)
 
+    # --------------------------------------------hello语音奖励兑换--------------------------------------------
+    def hello_voice(self):
+        # re: 添加开关以及等hello_id配置，之后再移除这个
+        if not self.cfg.test_mode:
+            return
+
+        def getDayDui(type, packid, ctx):
+            return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)
+
+        def getActDui(packid, ctx):
+            return self.do_hello_voice(ctx, "lotteryTicket", packid=packid)
+
+        try:
+            # ------实际逻辑-----------
+
+            self.do_hello_voice("领取新人礼包", "lotteryGift")
+
+            # 每天兑换1次
+            getDayDui( 1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
+            getDayDui( 1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
+
+            # 每周兑换1次
+            getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
+            getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
+            getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
+            getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
+
+            # 每月兑换1次
+            getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
+            getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
+            getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
+            getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
+
+            # 活动奖励兑换
+            getActDui(1, "黑钻3天兑换券")
+            getActDui(2, "黑钻7天兑换券")
+            getActDui(3, "时间引导石（10个）兑换券")
+            getActDui(4, "升级券*1（lv95-99）兑换券")
+            getActDui(5, "智慧的引导通行证*1兑换券")
+            getActDui(6, "装备提升礼盒*1兑换券")
+
+        except Exception as e:
+            logger.error("hello_voice exception={}".format(e))
+
+    def do_hello_voice(self, ctx, api, type="", packid=""):
+        # re: 改为可配置
+        hello_id = "70482430"
+        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=hello_id, type=type, packid=packid)
+
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):
         # fixme: 开发完成后移除这个
@@ -2098,4 +2150,5 @@ if __name__ == '__main__':
     # djcHelper.xinyue_sailiyam()
     # djcHelper.dnf_rank()
     # djcHelper.dnf_warriors_call()
-    djcHelper.dnf_helper_chronicle()
+    # djcHelper.dnf_helper_chronicle()
+    djcHelper.hello_voice()

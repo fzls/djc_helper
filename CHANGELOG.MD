@@ -3,7 +3,7 @@
 2. 修复编年史打印的获取经验不对的问题
 3. 调整助手编年史的任务奖励领取逻辑，解决签到任务无法自动领取的问题
 4. 推荐使用使用autojs来自动获取助手排行榜所需鲜花和完成dnf助手编年史的助手相关任务
-5. 上面这个操作可参考https://github.com/fzls/autojs以及https://www.bilibili.com/video/BV1az4y1k7bH/
+5. 上面这个操作可参考https://github.com/fzls/autojs 以及 https://www.bilibili.com/video/BV1az4y1k7bH/
 6. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
 
 

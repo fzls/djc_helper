@@ -1748,9 +1748,9 @@ class DjcHelper:
             return _res
 
         # ------ 领取各种奖励 ------
-        def doActionIncrExp(actionName, actionId):
+        def doActionIncrExp(actionName, actionId, exp):
             res = self.post("领取任务经验", url_mwegame, "", api="doActionIncrExp", actionId=actionId, **common_params)
-            logger.info("领取{}-{}，获取经验为{}".format(actionName, actionId, res.get("data", 0)))
+            logger.info("领取{}-{}，获取经验为{}".format(actionName, actionId, exp))
 
         def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
@@ -1789,7 +1789,7 @@ class DjcHelper:
         for task in taskInfo.taskList:
             ctx = "{}-自己".format(task.name)
             if task.mStatus == 2:
-                doActionIncrExp(ctx, task.mActionId)
+                doActionIncrExp(ctx, task.mActionId, task.mExp)
             elif task.mStatus == 1:
                 logger.info("{}已经领取过了".format(ctx))
             elif task.mStatus == 0:
@@ -1798,7 +1798,7 @@ class DjcHelper:
             if taskInfo.hasPartner:
                 ctx = "{}-队友".format(task.name)
                 if task.pStatus == 2:
-                    doActionIncrExp(ctx, task.pActionId)
+                    doActionIncrExp(ctx, task.pActionId, task.pExp)
                 elif task.pStatus == 1:
                     logger.info("{}已经领取过了".format(ctx))
                 elif task.pStatus == 0:

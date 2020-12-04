@@ -528,3 +528,12 @@ class DnfHelperChronicleUserTaskInfo(ConfigInterface):
         self.pActionId = "013"
         self.pExp = 5
         self.pStatus = 0
+
+
+class HelloVoiceDnfRoleInfo(ConfigInterface):
+    def __init__(self):
+        self.area = "11"
+        self.areaName = "浙江一区"
+        self.roleId = "71672841"
+        self.roleName = "风之凌殇呀"
+        self.qq = "1054073896"

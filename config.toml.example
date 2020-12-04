@@ -541,6 +541,12 @@ chronicle_lottery = false
 ## 表示领取几次这个奖励
 #count = 1
 
+# hello语音相关信息
+[account_configs.hello_voice]
+# hello语音的用户ID
+# 获取方式：打开hello语音，点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
+hello_id = ""
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 

@@ -1982,6 +1982,9 @@ class DjcHelper:
             logger.warning("未启用hello语音奖励兑换功能，将跳过")
             return
 
+        if self.cfg.hello_voice.hello_id == "":
+            logger.warning("未配置hello_id，若需要该功能，请前往配置文件查看说明并添加该配置")
+            return 
 
         def getDayDui(type, packid, ctx):
             return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)

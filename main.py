@@ -1,4 +1,7 @@
+import webbrowser
 from sys import exit
+
+import win32api
 
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
@@ -463,6 +466,20 @@ def check_update(cfg):
 
 
 def main():
+    # 临时加一个请求帮忙弄下红包活动的逻辑
+    if is_first_run("a20201110packet"):
+        message = (
+            "今天看到有个【DPL大狂欢 邀请好友拆红包】，类似于拼多多，需要找其他人在自己的邀请页面中登录并绑定角色，进度足够就可以获得一个红包了\n"
+            "大家可不可以帮我点一下哇0-0  点开链接后登录然后绑定角色就OK啦，提前谢谢大家啦0-0 就当是一直免费维护和更新这个小工具的小报酬啦^_^\n"
+            "ps: 点确定就会弹出我的邀请页面啦，点否就再也不会弹出这个窗口啦\n"
+        )
+        res = win32api.MessageBox(0, message, "请求各位帮忙助力一下~", win32con.MB_OKCANCEL)
+        if res == win32con.IDOK:
+            webbrowser.open("https://dnf.qq.com/cp/a20201110packet/index.html?inviter=1054073896&&gameId=1006")
+            win32api.MessageBox(0, "在网页里登录并绑定就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
+        else:
+            win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
+
     if is_daily_first_run():
         logger.info("今日首次运行，尝试上报使用统计~")
         # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）

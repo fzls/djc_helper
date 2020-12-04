@@ -84,6 +84,8 @@ get_dnf_rank = true
 get_dnf_warriors_call = true
 # 是否领取dnf助手编年史活动
 get_dnf_helper_chronicle = true
+# 是否启用hello语音奖励兑换功能
+get_hello_voice = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

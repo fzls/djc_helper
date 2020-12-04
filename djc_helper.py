@@ -1991,8 +1991,8 @@ class DjcHelper:
             self.do_hello_voice("领取新人礼包", "lotteryGift")
 
             # 每天兑换1次
-            getDayDui( 1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-            getDayDui( 1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
+            getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
+            getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
 
             # 每周兑换1次
             getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")

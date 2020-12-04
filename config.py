@@ -130,6 +130,13 @@ class DnfHelperInfoConfig(ConfigInterface):
                 self.chronicle_exchange_items.append(ei)
 
 
+class HelloVoiceInfoConfig(ConfigInterface):
+    def __init__(self):
+        # hello语音的用户ID
+        # 获取方式：打开hello语音，点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
+        self.hello_id = ""
+
+
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
         # 是否领取道聚城
@@ -199,6 +206,8 @@ class AccountConfig(ConfigInterface):
         self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
         # dnf助手信息
         self.dnf_helper_info = DnfHelperInfoConfig()
+        # hello语音相关信息
+        self.hello_voice = HelloVoiceInfoConfig()
 
     def auto_update_config(self, raw_config: dict):
         super().auto_update_config(raw_config)

@@ -2025,9 +2025,7 @@ class DjcHelper:
             logger.error("hello_voice exception={}".format(e))
 
     def do_hello_voice(self, ctx, api, type="", packid=""):
-        # re: 改为可配置
-        hello_id = "70482430"
-        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=hello_id, type=type, packid=packid)
+        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid)
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):

@@ -5,6 +5,7 @@
 4. 推荐使用使用autojs来自动完成助手俩活动中的任务、微信签到、hello语音活动等目前小助手无法直接支持的流程
 5. 具体操作可参考[脚本源码](https://github.com/fzls/autojs) 以及 [演示视频](https://www.bilibili.com/video/BV1az4y1k7bH/)
 6. 其他改动及上述功能具体用法，详见README.MD和CHANGELOG.MD以及使用教程/使用文档.docx和教程视频
+7. 大家帮忙点下这个红包活动哇，多谢啦0-0 https://dnf.qq.com/cp/a20201110packet/index.html?inviter=1054073896&&gameId=1006
 
 
 # v4.4.6 2020.12.4

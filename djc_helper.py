@@ -1986,6 +1986,9 @@ class DjcHelper:
             logger.warning("未配置hello_id，若需要该功能，请前往配置文件查看说明并添加该配置")
             return
 
+        if not self.check_hello_voice_bind_role():
+            return
+
         # ------封装函数-----------
 
         def getDayDui(type, packid, ctx):
@@ -2025,6 +2028,19 @@ class DjcHelper:
 
         except Exception as e:
             logger.error("hello_voice exception={}".format(e))
+
+    def check_hello_voice_bind_role(self):
+        data = self.do_hello_voice("检查账号绑定信息", "getRole")
+        if data["iRet"] == -1011:
+            # 未选择大区
+            logger.warning(color("fg_bold_yellow") + "未绑定角色，请前往hello语音，点击左下方【首页】->左上角【游戏】->左上方【福利中心】->【DNF活动奖励&hello贝兑换】->在打开的网页中进行角色绑定")
+            return False
+        else:
+            # 已选择大区
+            roleInfo = HelloVoiceDnfRoleInfo()
+            roleInfo.auto_update_config(data["jData"])
+            logger.info("绑定角色信息: {}".format(roleInfo))
+            return True
 
     def do_hello_voice(self, ctx, api, type="", packid=""):
         return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid)

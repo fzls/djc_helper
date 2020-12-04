@@ -164,6 +164,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_warriors_call = True
         # 是否领取dnf助手编年史活动
         self.get_dnf_helper_chronicle = True
+        # 是否启用hello语音奖励兑换功能
+        self.get_hello_voice = True
 
 
 class AccountConfig(ConfigInterface):

@@ -1975,9 +1975,16 @@ class DjcHelper:
 
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
     def hello_voice(self):
-        # re: 添加开关以及等hello_id配置，之后再移除这个
         if not self.cfg.test_mode:
             return
+
+        # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
+        show_head_line("hello语音奖励兑换")
+
+        if not self.cfg.function_switches.get_guanjia:
+            logger.warning("未启用hello语音奖励兑换功能，将跳过")
+            return
+
 
         def getDayDui(type, packid, ctx):
             return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)

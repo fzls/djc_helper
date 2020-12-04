@@ -147,6 +147,21 @@ def is_weekly_first_run():
     return last_run_at_week != week
 
 
+def is_first_run(key):
+    db = load_db()
+
+    cfr = 'custom_first_run'
+    if cfr not in db:
+        db[cfr] = {}
+
+    hasRun = db[cfr].get(key, False)
+
+    db[cfr][key] = True
+
+    save_db(db)
+    return not hasRun
+
+
 def get_year():
     return get_now().strftime("%Y")
 

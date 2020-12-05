@@ -420,6 +420,17 @@ class Config(ConfigInterface):
                 return False
             name2index[account.name] = idx
 
+            # 检查dnf助手的userId是否误填为了昵称
+            dhi = account.dnf_helper_info
+            if dhi.userId != "":
+                try:
+                    int(dhi.userId)
+                except ValueError:
+                    logger.error("第{}个账号配置的dnf助手信息的社区ID(userId)=[{}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{}]的值填反了？id应该类似[504051073]，而昵称则形如[风之凌殇]".format(
+                        idx, dhi.userId, dhi.nickName
+                    ))
+                    return False
+
         return True
 
 

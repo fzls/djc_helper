@@ -3,7 +3,6 @@ import random
 import string
 import subprocess
 import webbrowser
-from sys import exit
 from urllib.parse import quote_plus
 
 import pyperclip

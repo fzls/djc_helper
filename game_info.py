@@ -1,5 +1,6 @@
 import json
 import subprocess
+from sys import exit
 
 import win32api
 import win32con
@@ -25,8 +26,10 @@ def get_game_info(name):
 
     return name_2_game_info_map[name]
 
+
 def get_game_info_by_bizcode(bizcode):
     return code_2_game_info_map[bizcode]
+
 
 if __name__ == '__main__':
     print(get_game_info("剑网3:指尖江湖"))

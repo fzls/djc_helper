@@ -2,7 +2,7 @@ import datetime
 import logging
 import multiprocessing
 import pathlib
-import sys
+from sys import exit
 
 import colorlog
 
@@ -26,7 +26,7 @@ try:
     pathlib.Path(log_directory).mkdir(parents=True, exist_ok=True)
 except PermissionError as err:
     print("创建日志目录logs失败，请确认是否限制了基础的运行权限")
-    sys.exit(-1)
+    exit(-1)
 
 process_name = multiprocessing.current_process().name
 if "MainProcess" in process_name:

@@ -62,8 +62,8 @@ def try_request(request_fn, retryCfg):
     for i in range(retryCfg.max_retry_count):
         try:
             return request_fn()
-        except requests.exceptions.Timeout as exc:
-            logger.exception("{}/{}: request timeout, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
+        except Exception as exc:
+            logger.exception("{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 

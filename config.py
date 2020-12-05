@@ -411,12 +411,12 @@ class Config(ConfigInterface):
 
             # 检查是否填写名称
             if len(account.name) == 0:
-                logger.error("第{}个账号未设置名称，请确保已填写对应账号配置的name".format(idx))
+                logger.error(color("fg_bold_red") + "第{}个账号未设置名称，请确保已填写对应账号配置的name".format(idx))
                 return False
 
             # 检查名称是否重复
             if account.name in name2index:
-                logger.error("第{}个账号的名称 {} 与第{}个账号的名称重复，请调整为不同的名字".format(idx, account.name, name2index[account.name]))
+                logger.error(color("fg_bold_red") + "第{}个账号的名称 {} 与第{}个账号的名称重复，请调整为不同的名字".format(idx, account.name, name2index[account.name]))
                 return False
             name2index[account.name] = idx
 
@@ -426,7 +426,7 @@ class Config(ConfigInterface):
                 try:
                     int(dhi.userId)
                 except ValueError:
-                    logger.error("第{}个账号配置的dnf助手信息的社区ID(userId)=[{}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{}]的值填反了？id应该类似[504051073]，而昵称则形如[风之凌殇]".format(
+                    logger.error(color("fg_bold_red") + "第{}个账号配置的dnf助手信息的社区ID(userId)=[{}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{}]的值填反了？id应该类似[504051073]，而昵称则形如[风之凌殇]".format(
                         idx, dhi.userId, dhi.nickName
                     ))
                     return False

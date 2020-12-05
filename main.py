@@ -475,7 +475,7 @@ def main():
         )
         res = win32api.MessageBox(0, message, "请求各位帮忙助力一下~", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
-            webbrowser.open("https://dnf.qq.com/cp/a20201110packet/index.html?inviter=3036079506&&gameId=1006")
+            webbrowser.open("https://dnf.qq.com/cp/a20201110packet/index.html?inviter=1470237902&&gameId=1006")
             win32api.MessageBox(0, "在网页里登录并绑定就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)

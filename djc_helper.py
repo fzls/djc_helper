@@ -1286,6 +1286,11 @@ class DjcHelper:
             logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
             return
 
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
         lr = self.fetch_pskey()
         if lr is None:
             return

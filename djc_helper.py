@@ -1884,6 +1884,11 @@ class DjcHelper:
         else:
             logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
 
+        userInfo = getUserActivityTopInfo()
+        logger.warning(color("fg_bold_yellow") + "账号 {} 当前编年史等级为LV{}({}) 本级经验：{}/{} 当前总获取经验为{} 剩余年史碎片为{}".format(
+            self.cfg.name, userInfo.level, userInfo.levelName, userInfo.currentExp, userInfo.levelExp, userInfo.totalExp, userInfo.point,
+        ))
+
     # --------------------------------------------管家蚊子腿--------------------------------------------
     def guanjia(self):
         # https://guanjia.qq.com/act/cop/202010dnf/
@@ -2193,5 +2198,5 @@ if __name__ == '__main__':
     # djcHelper.xinyue_sailiyam()
     # djcHelper.dnf_rank()
     # djcHelper.dnf_warriors_call()
-    # djcHelper.dnf_helper_chronicle()
-    djcHelper.hello_voice()
+    djcHelper.dnf_helper_chronicle()
+    # djcHelper.hello_voice()

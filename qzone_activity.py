@@ -195,7 +195,7 @@ class QzoneActivity:
 
         getPrize("购买vip奖励", rule.buyVipPrize)
 
-        remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(zz.actbossZige.lottery, 0)
+        remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(str(zz.actbossZige.lottery), 0)
         logger.info("剩余抽奖次数为{}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)".format(remaining_lottery_times))
         for i in range(remaining_lottery_times):
             lottery("抽奖-第{}次".format(i+1))

@@ -36,6 +36,9 @@ class Urls:
         # 查询道聚城绑定的各游戏角色列表，dnf的角色信息和选定手游的角色信息将从这里获取
         self.query_bind_role_list = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.role.bind_list&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&type=1&output_format=json&osVersion=Android-28&ch=10003&sVersionName=v4.1.6.0&appSource=android"
 
+        # 绑定道聚城游戏（仅用作偶尔不能通过app绑定的时候根据这个来绑定）
+        self.bind_role = "https://djcapp.game.qq.com/daoju/djcapp/v5/rolebind/BindRole.php?p_tk={p_tk}&type=2&biz=dnf&output_format=jsonp&_={millseconds}&role_info={role_info}"
+
         # 查询服务器列表，需要手动额外传入参数：bizcode。具体游戏参数可查阅djc_biz_list.json
         self.query_game_server_list = "https://gameact.qq.com/comm-htdocs/js/game_area/utf8verson/{bizcode}_server_select_utf8.js"
         self.query_game_server_list_for_web = "https://gameact.qq.com/comm-htdocs/js/game_area/{bizcode}_server_select.js"

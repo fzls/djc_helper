@@ -2022,15 +2022,15 @@ class DjcHelper:
 
             self.do_hello_voice("领取新人礼包", "lotteryGift")
 
-            # 每天兑换1次
-            getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-            getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
+            # # 每天兑换1次
+            # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
+            # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
 
-            # 每周兑换1次
-            getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
-            getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
-            getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
-            getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
+            # # 每周兑换1次
+            # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
+            # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
+            # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
+            # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
 
             # 每月兑换1次
             getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")

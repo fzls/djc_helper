@@ -721,6 +721,27 @@ class DjcHelper:
             gifts.append(MobileGameGiftInfo(gift["sTask"], gift["iruleId"]))
         return gifts
 
+    def bind_dnf_role(self, areaID="30", areaName="浙江", serviceID="11", serviceName="浙江一区", roleCode="22370088", roleName="∠木星新、"):
+        roleInfo = {
+            "areaID": areaID,
+            "areaName": areaName,
+            "bizCode": "dnf",
+            "channelID": "",
+            "channelKey": "",
+            "channelName": "",
+            "gameName": "地下城与勇士",
+            "isHasService": 1,
+            "roleCode": roleCode,
+            "roleName": roleName,
+            "serviceID": serviceID,
+            "serviceName": serviceName,
+            "systemID": "",
+            "systemKey": "",
+            "type": "0"
+        }
+
+        self.get("绑定账号-{}-{}".format(serviceName, roleName), self.urls.bind_role, role_info=json.dumps(roleInfo, ensure_ascii=False), is_jsonp=True)
+
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
     def xinyue_operations(self):
         """

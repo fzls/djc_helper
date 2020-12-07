@@ -357,6 +357,9 @@ class QQLogin():
                     break
                 time.sleep(1)
             self.add_cookies(self.driver.get_cookies())
+        elif self.login_mode == self.login_mode_qzone:
+            logger.info("QQ空间登录类型额外访问一下征集令活动界面（似乎抽奖次数要这样刷新？）")
+            self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
 
         return
 

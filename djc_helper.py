@@ -2213,5 +2213,5 @@ if __name__ == '__main__':
     # djcHelper.xinyue_sailiyam()
     # djcHelper.dnf_rank()
     # djcHelper.dnf_warriors_call()
-    djcHelper.dnf_helper_chronicle()
-    # djcHelper.hello_voice()
+    # djcHelper.dnf_helper_chronicle()
+    djcHelper.hello_voice()

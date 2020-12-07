@@ -62,6 +62,7 @@ class Urls:
         self.iActivityId_dnf_922 = "331393"  # DNF-922渠道活动合集
         self.iActivityId_dnf_shanguang = "328404"  # 2020DNF闪光杯返场赛
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
+        self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

@@ -997,18 +997,13 @@ class DjcHelper:
         return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
-        return self.post(ctx, self.urls.amesvr, self.xinyue_flow_data(iActivityId, iFlowId, package_id, lqlevel, teamid),
-                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="xinyue",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
-
-    def xinyue_flow_data(self, iActivityId, iFlowId, package_id="", lqlevel=1, teamid=""):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="xinyue", sServiceType="xinyue", eas_url=quote_plus("http://xinyue.qq.com/act/a20181101rights/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId, package_id=package_id, lqlevel=lqlevel, teamid=teamid)
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "xinyue", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20181101rights/",
+                                   package_id=package_id, lqlevel=lqlevel, teamid=teamid,
+                                   )
 
     # DNF进击吧赛利亚
     def xinyue_sailiyam(self):
@@ -1122,16 +1117,10 @@ class DjcHelper:
 
     def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True):
         iActivityId = self.urls.iActivityId_xinyue_sailiyam
-        return self.post(ctx, self.urls.amesvr, self.xinyue_sailiyam_flow_data(iActivityId, iFlowId, dzid, iPackageId),
-                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="tgclub",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
 
-    def xinyue_sailiyam_flow_data(self, iActivityId, iFlowId, dzid="", iPackageId=""):
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20201023sailiyam/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId,
-                           dzid=dzid, page=1, iPackageId=iPackageId)
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20201023sailiyam/",
+                                   dzid=dzid, page=1, iPackageId=iPackageId,
+                                   )
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
@@ -1376,15 +1365,8 @@ class DjcHelper:
 
     def wegame_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_wegame_guoqing
-        return self.post(ctx, self.urls.amesvr, self.wegame_flow_data(iActivityId, iFlowId),
-                         amesvr_host="x6m5.ams.game.qq.com", sServiceDepartment="group_3", sServiceType="dnf",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
 
-    def wegame_flow_data(self, iActivityId, iFlowId):
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="group_3", sServiceType="dnf", eas_url=quote_plus("http://dnf.qq.com/lbact/a20200922wegame/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId)
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922wegame/")
 
     # --------------------------------------------阿拉德集合站活动合集--------------------------------------------
     def dnf_922(self):
@@ -1421,15 +1403,7 @@ class DjcHelper:
 
     def dnf_922_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_922
-        return self.post(ctx, self.urls.amesvr, self.dnf_922_flow_data(iActivityId, iFlowId),
-                         amesvr_host="x6m5.ams.game.qq.com", sServiceDepartment="group_3", sServiceType="dnf",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
-
-    def dnf_922_flow_data(self, iActivityId, iFlowId):
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="group_3", sServiceType="dnf", eas_url=quote_plus("http://dnf.qq.com/lbact/a20200922hdjh/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId)
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922hdjh/")
 
     # --------------------------------------------2020DNF闪光杯返场赛--------------------------------------------
     def dnf_shanguang(self):
@@ -1482,17 +1456,12 @@ class DjcHelper:
 
     def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
-        return self.post(ctx, self.urls.amesvr, self.dnf_shanguang_flow_data(iActivityId, iFlowId),
-                         amesvr_host="act.game.qq.com", sServiceDepartment="xinyue", sServiceType="tgclub",
-                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
 
-    def dnf_shanguang_flow_data(self, iActivityId, iFlowId):
         weekDay = get_this_week_monday()
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="xinyue", sServiceType="tgclub", eas_url=quote_plus("http://xinyue.qq.com/act/a20200907sgbpc/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId,
-                           weekDay=weekDay)
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20200907sgbpc/",
+                                   weekDay=weekDay,
+                                   )
 
     # --------------------------------------------qq视频活动--------------------------------------------
     def qq_video(self):
@@ -1593,10 +1562,17 @@ class DjcHelper:
 
     def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
-        res = self.post(ctx, self.urls.amesvr, self.dnf_female_mage_awaken_flow_data(iActivityId, iFlowId),
-                        amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
-                        iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                        print_res=print_res)
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "http://mwegame.qq.com/act/dnf/mageawaken/index1/",
+                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  uin=qq, skey=self.cfg.account_info.skey,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                  )
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
@@ -1628,19 +1604,6 @@ class DjcHelper:
             "    2.5 https://juejin.im/post/6844903831579394055\n"
             "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功\n"
         ))
-
-    def dnf_female_mage_awaken_flow_data(self, iActivityId, iFlowId):
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        qq = uin2qq(self.cfg.account_info.uin)
-        dnf_helper_info = self.cfg.dnf_helper_info
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("http://mwegame.qq.com/act/dnf/mageawaken/index1/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId,
-                           sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
-                           sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
-                           uin=qq, skey=self.cfg.account_info.skey,
-                           nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
-                           )
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):
@@ -1707,26 +1670,21 @@ class DjcHelper:
 
     def dnf_rank_receive_diamond_amesvr(self, ctx):
         try:
-            iActivityId = "347456"  # DNF-2020年KOL榜单建设送黑钻
+            iActivityId = self.urls.iActivityId_dnf_rank
             iFlowId = "723192"
-            res = self.post(ctx, self.urls.amesvr, self.dnf_rank_flow_data(iActivityId, iFlowId),
-                            amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
-                            iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId))
+
+            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            qq = uin2qq(self.cfg.account_info.uin)
+            dnf_helper_info = self.cfg.dnf_helper_info
+
+            res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
+                                      sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
+                                      sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                      uin=qq, skey=self.cfg.account_info.skey,
+                                      nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                      )
         except Exception as e:
             logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
-
-    def dnf_rank_flow_data(self, iActivityId, iFlowId):
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        qq = uin2qq(self.cfg.account_info.uin)
-        dnf_helper_info = self.cfg.dnf_helper_info
-        return self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("https://mwegame.qq.com/dnf/rankv2/index.html/"),
-                           iActivityId=iActivityId, iFlowId=iFlowId,
-                           sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
-                           sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
-                           uin=qq, skey=self.cfg.account_info.skey,
-                           nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
-                           )
 
     def dnf_rank_op(self, ctx, url, **params):
         qq = uin2qq(self.cfg.account_info.uin)
@@ -2181,6 +2139,16 @@ class DjcHelper:
 
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
         return "{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}".format(year, month, day, hour, minute, second)
+
+    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, **data_extra_params):
+        data = self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),
+                           iActivityId=iActivityId, iFlowId=iFlowId, **data_extra_params)
+
+        return self.post(ctx, self.urls.amesvr, data,
+                         amesvr_host=amesvr_host, sServiceDepartment=sServiceDepartment, sServiceType=sServiceType,
+                         iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
+                         print_res=print_res)
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(

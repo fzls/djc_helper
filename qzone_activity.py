@@ -207,6 +207,8 @@ class QzoneActivity:
         logger.info("绑定跨区请自行完成")
         gamePullFlow("1.每日游戏在线30分钟（3分）")
         getPrize("2.特权网吧登陆游戏（1分）", rule.wangba)
+        # 刷新一下积分数据
+        self.fetch_dnf_warriors_call_data()
         logger.info("当前助力积分为{}".format(self.dnf_warriors_call_get_score()))
 
         if datetime.datetime.now() >= datetime.datetime.strptime('2020-12-26', "%Y-%m-%d"):

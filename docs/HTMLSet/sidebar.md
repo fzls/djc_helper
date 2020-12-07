@@ -1,0 +1,8 @@
+- **入门**
+- [程序简介](./README.md)
+- [使用教程](https://github.com/fzls/djc_helper/tree/master/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
+- [B站教程](https://space.bilibili.com/1851177)
+- [更新日志](./CHANGELOG.md)
+- **链接**
+- [蓝奏云下载链接](https://fzls.lanzous.com/s/djc-helper)
+- [github下载链接](https://github.com/fzls/djc_helper/releases/latest)

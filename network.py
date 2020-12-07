@@ -78,15 +78,7 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
     else:
         data = res.json()
 
-    success = True
-    if "ret" in data:
-        success = int(data["ret"]) == 0
-    elif "code" in data:
-        success = int(data["code"]) == 0
-
-    # 特殊处理qq视频
-    if "data" in data and type(data["data"]) is dict and "sys_code" in data["data"]:
-        success = int(data["data"]["sys_code"]) == 0
+    success = is_request_ok(data)
 
     if print_res:
         logFunc = logger.info
@@ -99,6 +91,28 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
     logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
 
     return data
+
+
+def is_request_ok(data):
+    success = True
+    try:
+        returnCodeKeys = [
+            "ret",
+            "code",
+            "iRet",
+        ]
+        for key in returnCodeKeys:
+            if key in data:
+                success = int(data[key]) == 0
+                break
+
+        # 特殊处理qq视频
+        if "data" in data and type(data["data"]) is dict and "sys_code" in data["data"]:
+            success = int(data["data"]["sys_code"]) == 0
+    except Exception as e:
+        logger.error("is_request_ok parse failed data={}, exception=\n{}".format(data, e))
+
+    return success
 
 
 def jsonp2json(jsonpStr, is_normal_jsonp=True):

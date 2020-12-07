@@ -465,7 +465,7 @@ def check_update(cfg):
     check_update_on_start(cfg.common)
 
 
-def main():
+def show_ask_message_box_only_once():
     # 临时加一个请求帮忙弄下红包活动的逻辑
     if is_first_run("a20201110packet"):
         message = (
@@ -480,6 +480,8 @@ def main():
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
 
+
+def main():
     if is_daily_first_run():
         logger.info("今日首次运行，尝试上报使用统计~")
         # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）

@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import shutil
 import subprocess
 from datetime import datetime
 from sys import exit
@@ -44,6 +45,13 @@ build()
 # ---------------打包
 os.chdir(dir_src)
 package(dir_src, dir_all_release, release_dir_name, release_7z_name)
+
+# ---------------复制特定文件到docs目录，用于生成github pages
+os.chdir(dir_src)
+shutil.copyfile("README.MD", "docs/README.md")
+shutil.copyfile("CHANGELOG.MD", "docs/CHANGELOG.md")
+subprocess.call(['git', 'add', '--', './docs'])
+subprocess.call(['git', 'commit', '-m', '"update github pages"', '--', './docs'])
 
 # ---------------上传到蓝奏云
 logger.info("开始上传到蓝奏云")

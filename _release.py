@@ -47,6 +47,7 @@ os.chdir(dir_src)
 package(dir_src, dir_all_release, release_dir_name, release_7z_name)
 
 # ---------------复制特定文件到docs目录，用于生成github pages
+# logger.info("复制特定文件到docs目录，用于生成github pages")
 os.chdir(dir_src)
 shutil.copyfile("README.MD", "docs/README.md")
 shutil.copyfile("CHANGELOG.MD", "docs/CHANGELOG.md")

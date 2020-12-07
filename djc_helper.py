@@ -2070,7 +2070,7 @@ class DjcHelper:
             logger.error("hello_voice exception={}".format(e))
 
     def check_hello_voice_bind_role(self):
-        data = self.do_hello_voice("检查账号绑定信息", "getRole")
+        data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
         if data["iRet"] == -1011:
             # 未选择大区
             logger.warning(color("fg_bold_yellow") + "未绑定角色，请前往hello语音，点击左下方【首页】->左上角【游戏】->左上方【福利中心】->【DNF活动奖励&hello贝兑换】->在打开的网页中进行角色绑定")
@@ -2082,8 +2082,8 @@ class DjcHelper:
             logger.info("绑定角色信息: {}".format(roleInfo))
             return True
 
-    def do_hello_voice(self, ctx, api, type="", packid=""):
-        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid)
+    def do_hello_voice(self, ctx, api, type="", packid="", print_res=True):
+        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid, print_res=print_res)
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):

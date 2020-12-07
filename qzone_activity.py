@@ -200,16 +200,16 @@ class QzoneActivity:
         for i in range(remaining_lottery_times):
             lottery("抽奖-第{}次".format(i+1))
 
-        logger.info("只处理大家都能领到的普发奖励，像周赛决赛之类的奖励请自行领取")
+        logger.warning("只处理大家都能领到的普发奖励，像周赛决赛之类的奖励请自行领取")
         getPrize("1. 智慧的引导礼包", rule.pfPrize1)
         getPrize("2. 单人希洛克通关礼包", rule.pfPrize2)
 
-        logger.info("绑定跨区请自行完成")
+        logger.warning("绑定跨区请自行完成")
         gamePullFlow("1.每日游戏在线30分钟（3分）")
         getPrize("2.特权网吧登陆游戏（1分）", rule.wangba)
         # 刷新一下积分数据
         self.fetch_dnf_warriors_call_data()
-        logger.info("当前助力积分为{}".format(self.dnf_warriors_call_get_score()))
+        logger.info(color("fg_bold_cyan") + "当前助力积分为{}".format(self.dnf_warriors_call_get_score()))
 
         if datetime.datetime.now() >= datetime.datetime.strptime('2020-12-26', "%Y-%m-%d"):
             level = self.dnf_warriors_call_get_level()
@@ -217,8 +217,8 @@ class QzoneActivity:
                 getPrize("领取宝箱", zz.actbossRule.__getattribute__("getBox{}".format(level)))
                 getPrize("开宝箱", zz.actbossRule.__getattribute__("box{}".format(level)))
         else:
-            logger.info("12月26日开始领取宝箱和开宝箱")
-        logger.info("冠军大区奖励请自行领取")
+            logger.warning("12月26日开始领取宝箱和开宝箱")
+        logger.warning("冠军大区奖励请自行领取")
 
     def dnf_warriors_call_get_level(self):
         score = self.dnf_warriors_call_get_score()

@@ -2025,7 +2025,17 @@ class DjcHelper:
             return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)
 
         def getActDui(packid, ctx):
-            return self.do_hello_voice(ctx, "lotteryTicket", packid=packid)
+            while True:
+                res = self.do_hello_voice(ctx, "lotteryTicket", packid=packid)
+                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻3天”！", "jData": {"afterStatus": 0, "helloTicketCount": 4, "packid": null, "packname": "黑钻3天"}, "sSerial": "ULINK-DNF-1207140536-6PNeKs-228919-394635"}
+                if res["iRet"] == 0 and res["jData"]["afterStatus"] == 0:
+                    # 仍有剩余兑换次数，继续兑换
+                    continue
+
+                # 无兑换次数或本次兑换结束后无剩余次数
+                # {"iRet": -1014, "sMsg": "兑换券不足", "jData": [], "sSerial": "ULINK-DNF-1207140538-vs2JQk-228919-378934"}
+                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻7天”！", "jData": {"afterStatus": -1, "helloTicketCount": 0, "packid": null, "packname": "黑钻7天"}, "sSerial": "ULINK-DNF-1207140537-5gDMvR-228919-718017"}
+                break
 
         try:
             # ------实际逻辑-----------

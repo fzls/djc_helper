@@ -482,7 +482,7 @@ def show_ask_message_box_only_once():
 
 
 def main():
-    show_ask_message_box_only_once()
+    # show_ask_message_box_only_once()
 
     if is_daily_first_run():
         logger.info("今日首次运行，尝试上报使用统计~")

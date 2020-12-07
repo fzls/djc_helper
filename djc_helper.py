@@ -1107,7 +1107,7 @@ class DjcHelper:
             pass
 
     def show_xinyue_sailiyam_kouling(self):
-        res = self.xinyue_sailiyam_op("输出项", "714618")
+        res = self.xinyue_sailiyam_op("输出项", "714618", print_res=False)
         if 'modRet' in res:
             logger.info("分享口令为： {}".format(res["modRet"]["sOutValue2"]))
 

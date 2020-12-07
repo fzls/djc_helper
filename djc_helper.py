@@ -1674,6 +1674,8 @@ class DjcHelper:
             self.dnf_rank_receive_diamond("3天", "7020")
             self.dnf_rank_receive_diamond("7天", "7021")
             self.dnf_rank_receive_diamond("15天", "7022")
+            # 新的黑钻改为使用amesvr去发送，且阉割为只有一个奖励了
+            self.dnf_rank_receive_diamond_amesvr("7天黑钻")
 
         # 结束时打印下最新状态
         self.dnf_rank_get_user_info(print_res=True)
@@ -1702,6 +1704,29 @@ class DjcHelper:
 
     def dnf_rank_receive_diamond(self, gift_name, gift_id):
         return self.dnf_rank_op('领取黑钻-{}'.format(gift_name), self.urls.rank_receive_diamond, gift_id=gift_id)
+
+    def dnf_rank_receive_diamond_amesvr(self, ctx):
+        try:
+            iActivityId = "347456"  # DNF-2020年KOL榜单建设送黑钻
+            iFlowId = "723192"
+            res = self.post(ctx, self.urls.amesvr, self.dnf_rank_flow_data(iActivityId, iFlowId),
+                            amesvr_host="comm.ams.game.qq.com", sServiceDepartment="group_k", sServiceType="bb",
+                            iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId))
+        except Exception as e:
+            logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
+
+    def dnf_rank_flow_data(self, iActivityId, iFlowId):
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
+        return self.format(self.urls.amesvr_raw_data,
+                           sServiceDepartment="group_k", sServiceType="bb", eas_url=quote_plus("https://mwegame.qq.com/dnf/rankv2/index.html/"),
+                           iActivityId=iActivityId, iFlowId=iFlowId,
+                           sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
+                           sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                           uin=qq, skey=self.cfg.account_info.skey,
+                           nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                           )
 
     def dnf_rank_op(self, ctx, url, **params):
         qq = uin2qq(self.cfg.account_info.uin)
@@ -2140,7 +2165,7 @@ class DjcHelper:
             "rand": random.random(),
             "package_id": "", "lqlevel": "", "teamid": "",
             "weekDay": "",
-            "sArea": "", "serverId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
+            "sArea": "", "serverId": "", "areaId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
             "iActionId": "", "iGoodsId": "", "sBizCode": "", "partition": "", "iZoneId": "", "platid": "", "sZoneDesc": "", "sGetterDream": "",
             "date": date,
             "dzid": "",

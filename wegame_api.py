@@ -18,7 +18,7 @@ class WegameApi:
     def auto_login_with_password(self, common_cfg, account, password):
         cached = self.load_token(account)
         if cached is not None:
-            api.set_uin_skey(cached["uin"], cached["skey"])
+            api.set_uin_skey(cached["uin"], cached["skey"], cached["p_skey"])
             api.set_tgp_info(cached["tgp_id"], cached["tgp_ticket"])
             if self.is_token_still_valid():
                 logger.info("use cached")
@@ -27,9 +27,9 @@ class WegameApi:
                 logger.warning("token invalided, try get new")
 
         ql = QQLogin(common_cfg)
-        lr = ql.login(account, password)
+        lr = ql.login(account, password, login_mode=ql.login_mode_wegame)
         logger.info(lr)
-        api.login(lr.uin, lr.skey)
+        api.login(lr.uin, lr.skey, lr.p_skey)
         self.save_token(account)
         logger.info("new login, token saved")
 
@@ -51,6 +51,7 @@ class WegameApi:
             json.dump({
                 "uin": self.uin,
                 "skey": self.skey,
+                "p_skey": self.p_skey,
                 "tgp_id": self.tgp_id,
                 "tgp_ticket": self.tgp_ticket,
             }, f, ensure_ascii=False)
@@ -62,14 +63,20 @@ class WegameApi:
     def get_token_file(self, account):
         return os.path.join(self.cached_dir, self.cached_file.format(account))
 
-    def login(self, uin, skey):
-        self.set_uin_skey(skey, uin)
+    def login(self, uin, skey, p_skey):
+        self.set_uin_skey(skey, uin, p_skey)
 
         data = {
             "login_info": {
-                "qq_info_type": 3,
+                "qq_info_type": 6,
                 "uin": uin2qq(self.uin),
-                "sig": self.skey,
+                "sig": self.p_skey,
+                "qqinfo_ext": [
+                    {
+                        "qq_info_type": 3,
+                        "sig": self.skey,
+                    }
+                ]
             },
             "config_params": {
                 "lang_type": 0
@@ -89,9 +96,10 @@ class WegameApi:
         logger.info(tgp_id)
         logger.info(tgp_ticket)
 
-    def set_uin_skey(self, skey, uin):
+    def set_uin_skey(self, skey, uin, p_skey):
         self.uin = uin
         self.skey = skey
+        self.p_skey = p_skey
 
     def set_tgp_info(self, tgp_id, tgp_ticket):
         self.tgp_id = tgp_id

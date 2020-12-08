@@ -282,7 +282,7 @@ class LoginConfig(ConfigInterface):
         # 加载页面的超时时间，以登录按钮出现为完成标志
         self.load_page_timeout = 60
         # 点击登录按钮后的超时时间，加载登录iframe，以其显示出来为完成标志
-        self.load_login_iframe_timeout = 5
+        self.load_login_iframe_timeout = 8
         # 登录的超时时间，从登录界面显示为开始，以用户完成登录为结束标志
         self.login_timeout = 600
         # 等待登录完成的超时时间，以活动结束的按钮弹出来标志

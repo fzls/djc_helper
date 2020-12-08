@@ -69,7 +69,26 @@
 <script src="https://unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
 <script src="https://unpkg.com/prismjs/components/prism-core.min.js"></script>
 <script src="https://unpkg.com/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- 不蒜子计数初始值纠正 -->
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var int = setInterval(fixCount, 100);
+
+        function fixCount() {
+            if ($("#busuanzi_value_site_pv").html() != "") {
+                clearInterval(int);
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) - 557);
+            }
+            if ($("#busuanzi_value_site_uv").html() != "") {
+                clearInterval(int);
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) - 212);
+            }
+            console.log("test")
+        }
+    });
+</script>
 </body>
 
 </html>

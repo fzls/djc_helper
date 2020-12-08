@@ -153,7 +153,7 @@ class QQLogin():
                     login_type += "-心悦"
                 elif login_mode == self.login_mode_qzone:
                     login_fn = self._login_qzone
-                    login_type += "-QQ空间业务（如抽卡等需要用到）"
+                    login_type += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录）"
                 elif login_mode == self.login_mode_guanjia:
                     login_fn = self._login_guanjia
                     login_type += "-电脑管家（如电脑管家蚊子腿需要用到）"

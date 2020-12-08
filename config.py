@@ -100,7 +100,7 @@ class ArkLotteryConfig(ConfigInterface):
 
 class DnfHelperInfoConfig(ConfigInterface):
     def __init__(self):
-        # nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073
+        # userId/nickName的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则社区ID即为userId，昵称即为nickname，如我的这俩值为504051073、风之凌殇
         # 社区ID
         self.userId = ""
         # 昵称

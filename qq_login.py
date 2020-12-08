@@ -38,6 +38,7 @@ class QQLogin():
     login_mode_xinyue = "xinyue"
     login_mode_qzone = "qzone"
     login_mode_guanjia = "guanjia"
+    login_mode_wegame = "wegame"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
     chrome_driver_executable_path = os.path.realpath("./chromedriver_87.exe")
@@ -156,6 +157,9 @@ class QQLogin():
                 elif login_mode == self.login_mode_guanjia:
                     login_fn = self._login_guanjia
                     login_type += "-电脑管家（如电脑管家蚊子腿需要用到）"
+                elif login_mode == self.login_mode_wegame:
+                    login_fn = self._login_wegame
+                    login_type += "-wegame（获取wegame相关api需要用到）"
 
                 self.prepare_chrome(login_type)
 
@@ -272,6 +276,41 @@ class QQLogin():
         # 从cookie中获取uin和skey
         return LoginResult(qc_openid=self.get_cookie("__qc__openid"), qc_k=self.get_cookie("__qc__k"),
                            uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
+
+    def _login_wegame(self, login_type, login_action_fn=None, need_human_operate=True):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            logger.info("打开活动界面")
+            self.driver.get("https://www.wegame.com.cn/")
+
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
+
+            logger.info("等待登录按钮#dologin出来，确保加载完成")
+            time.sleep(self.cfg.login.open_url_wait_time)
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".widget-header-login-btn")))
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.CSS_SELECTOR, ".widget-header-login-btn").click()
+
+            logger.info("等待#loginIframe显示出来并切换")
+            time.sleep(self.cfg.login.load_login_iframe_timeout)
+            self.driver.switch_to.frame(self.driver.find_element_by_css_selector("div.widget-login-item.widget-login-item--qq > iframe"))
+
+
+        def assert_login_finished_fn():
+            logger.info("请等待【登录头像】可见，则说明已经登录完成了...")
+            # self.driver.get("https://www.wegame.com.cn/")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".widget-header-login-info")))
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+
+        # 从cookie中获取uin和skey
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
 
     def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """

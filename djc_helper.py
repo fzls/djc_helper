@@ -1705,11 +1705,6 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        if self.cfg.dnf_helper_info.userId == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手的userId（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
-            return
-
         # 为了不与其他函数名称冲突，切让函数名称短一些，写到函数内部~
         url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
@@ -1751,8 +1746,11 @@ class DjcHelper:
             _res.auto_update_config(res.get("data", {}))
             return _res
 
+        def _getUserTaskList():
+            return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
+
         def getUserTaskList():
-            res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
+            res = _getUserTaskList()
             _res = DnfHelperChronicleUserTaskList()
             _res.auto_update_config(res.get("data", {}))
             return _res
@@ -1801,6 +1799,12 @@ class DjcHelper:
             logger.info("抽奖结果为: {}，年史诗片：{}->{}".format(gift, beforeMoney, afterMoney))
 
         # ------ 实际逻辑 ------
+
+        # 检查一下userid是否真实存在
+        if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
+            logger.warning(color("fg_bold_yellow") + "dnf助手的userId未配置或配置有误，当前值为[{}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置".format(self.cfg.dnf_helper_info.userId))
+            self.show_dnf_helper_info_guide()
+            return
 
         # 做任务
         logger.warning("dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-")

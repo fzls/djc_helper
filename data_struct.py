@@ -2,6 +2,8 @@ from abc import ABCMeta
 
 from Crypto.Cipher import AES
 
+from log import logger
+
 
 class Object:
     def __init__(self, fromDict=None):
@@ -44,6 +46,10 @@ class AESCipher:
 # 如果配置的值是list/set/tuple，则需要实现ConfigInterface，同时重写auto_update_config，在调用过基类的该函数后，再自行处理这三类结果
 class ConfigInterface(metaclass=ABCMeta):
     def auto_update_config(self, raw_config: dict):
+        if type(raw_config) is not dict:
+            logger.warning("raw_config={} is not dict".format(raw_config))
+            return
+        
         for key, val in raw_config.items():
             if hasattr(self, key):
                 attr = getattr(self, key)

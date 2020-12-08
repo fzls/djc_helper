@@ -1,13 +1,13 @@
 import json
 import os
 import re
-import shutil
-import subprocess
 from datetime import datetime
 from sys import exit
 
 from _build import build
 from _package import package
+from _push_github import push_github
+from _update_docs import update_docs
 from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console
@@ -49,10 +49,7 @@ package(dir_src, dir_all_release, release_dir_name, release_7z_name)
 # ---------------复制特定文件到docs目录，用于生成github pages
 # logger.info("复制特定文件到docs目录，用于生成github pages")
 os.chdir(dir_src)
-shutil.copyfile("README.MD", "docs/README.md")
-shutil.copyfile("CHANGELOG.MD", "docs/CHANGELOG.md")
-subprocess.call(['git', 'add', '--', './docs'])
-subprocess.call(['git', 'commit', '-m', '"update github pages"', '--', './docs'])
+update_docs()
 
 # ---------------上传到蓝奏云
 logger.info("开始上传到蓝奏云")
@@ -72,12 +69,7 @@ else:
 # 打包完成后git添加标签
 os.chdir(dir_src)
 logger.info("开始推送到github")
-# 先尝试移除该tag，并同步到github，避免后面加标签失败
-subprocess.call(['git', 'tag', '-d', version])
-subprocess.call(['git', 'push', 'origin', 'master', ':refs/tags/{version}'.format(version=version)])
-# 然后添加新tab，并同步到github
-subprocess.call(['git', 'tag', '-a', version, '-m', 'release {version}'.format(version=version)])
-subprocess.call(['git', 'push', 'origin', 'master', '--tags'])
+push_github(version)
 
 # ---------------结束
 logger.info('+' * 40)

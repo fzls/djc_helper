@@ -7,10 +7,10 @@
 - python编写，纯命令行工具
 - 由风之凌殇独立实现
 - 仅支持PC端使用
+- <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+- <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>次</span>
 
 [软件介绍](#main)
 [相关源码](https://github.com/fzls/djc_helper)
 [下载链接](https://fzls.lanzous.com/s/djc-helper)
 
-<span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-<span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>次</span>

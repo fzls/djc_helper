@@ -17,6 +17,9 @@ def main():
     version = 'v' + now_version
     push_github(version)
 
+    import os
+    os.system("PAUSE")
+
 
 if __name__ == '__main__':
     main()

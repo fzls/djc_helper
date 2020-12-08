@@ -13,6 +13,9 @@ def update_docs():
 def main():
     update_docs()
 
+    import os
+    os.system("PAUSE")
+
 
 if __name__ == '__main__':
     main()

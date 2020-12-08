@@ -49,7 +49,7 @@ class ConfigInterface(metaclass=ABCMeta):
         if type(raw_config) is not dict:
             logger.warning("raw_config={} is not dict".format(raw_config))
             return
-        
+
         for key, val in raw_config.items():
             if hasattr(self, key):
                 attr = getattr(self, key)

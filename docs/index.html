@@ -75,15 +75,21 @@
 <script>
     $(document).ready(function () {
         var int = setInterval(fixCount, 100);
+        var pvFixed = false;
+        var uvFixed = false;
 
         function fixCount() {
-            if ($("#busuanzi_value_page_pv").html() != "") {
-                clearInterval(int);
+            if (!pvFixed && $("#busuanzi_value_page_pv").html() != "") {
+                pvFixed = true;
                 $("#busuanzi_value_page_pv").html(parseInt($("#busuanzi_value_page_pv").html()) - 32);
             }
-            if ($("#busuanzi_value_site_uv").html() != "") {
-                clearInterval(int);
+            if (!uvFixed && $("#busuanzi_value_site_uv").html() != "") {
+                uvFixed = true;
                 $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) - 219);
+            }
+
+            if (pvFixed && uvFixed) {
+                clearInterval(int);
             }
         }
     });

@@ -77,9 +77,9 @@
         var int = setInterval(fixCount, 100);
 
         function fixCount() {
-            if ($("#busuanzi_value_site_pv").html() != "") {
+            if ($("#busuanzi_value_page_pv").html() != "") {
                 clearInterval(int);
-                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) - 557);
+                $("#busuanzi_value_page_pv").html(parseInt($("#busuanzi_value_page_pv").html()) - 557);
             }
             if ($("#busuanzi_value_site_uv").html() != "") {
                 clearInterval(int);

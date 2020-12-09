@@ -7,7 +7,7 @@
 - python编写，纯命令行工具
 - 由风之凌殇独立实现
 - 仅支持PC端使用
-- <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+- <span id="busuanzi_container_page_pv">总访问量<span id="busuanzi_value_page_pv"></span>次</span>
 - <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>次</span>
 
 [软件介绍](#main)

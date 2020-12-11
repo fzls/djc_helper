@@ -368,9 +368,6 @@ class DjcHelper:
         # DNF进击吧赛利亚
         self.xinyue_sailiyam()
 
-        # dnf助手排行榜
-        self.dnf_rank()
-
         # 阿拉德勇士征集令
         self.dnf_warriors_call()
 
@@ -405,6 +402,9 @@ class DjcHelper:
 
         # qq视频活动
         self.qq_video()
+
+        # dnf助手排行榜
+        self.dnf_rank()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

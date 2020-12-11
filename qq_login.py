@@ -397,8 +397,14 @@ class QQLogin():
                 time.sleep(1)
             self.add_cookies(self.driver.get_cookies())
         elif self.login_mode == self.login_mode_qzone:
-            logger.info("QQ空间登录类型额外访问一下征集令活动界面（似乎抽奖次数要这样刷新？）")
+            logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")
+            logger.info("第一次访问，并停留5秒")
             self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
+            time.sleep(5)
+            logger.info("第二次访问，并停留5秒")
+            self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
+            time.sleep(5)
+            logger.info("OK，理论上次数应该刷新了")
 
         return
 

@@ -173,6 +173,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_helper_chronicle = True
         # 是否启用hello语音奖励兑换功能
         self.get_hello_voice = True
+        # 是否领取2020DNF嘉年华页面主页面签到活动
+        self.get_dnf_carnival = True
 
 
 class AccountConfig(ConfigInterface):

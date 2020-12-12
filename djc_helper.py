@@ -377,6 +377,9 @@ class DjcHelper:
         # hello语音网页礼包兑换
         self.hello_voice()
 
+        # 2020DNF嘉年华页面主页面签到
+        self.DnfCarnival()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -2100,6 +2103,35 @@ class DjcHelper:
 
         self.get("微信签到信息", 'https://gw.gzh.qq.com/awp-signin/check?id=260', extra_cookies=wx_login_cookies)
 
+    # --------------------------------------------2020DNF嘉年华页面主页面签到--------------------------------------------
+    def DnfCarnival(self):
+        # https://dnf.qq.com/cp/a20201203carnival/index.html
+        show_head_line("2020DNF嘉年华页面主页面签到")
+
+        if not self.cfg.function_switches.get_dnf_carnival:
+            logger.warning("未启用领取2020DNF嘉年华页面主页面签到活动合集功能，将跳过")
+            return
+
+        self.check_dnf_carnival()
+
+        self.dnf_carnival_op("12.11-12.14 阶段一签到", "721945")
+        self.dnf_carnival_op("12.15-12.18 阶段二签到", "722198")
+        self.dnf_carnival_op("12.19-12.26 阶段三与全勤", "722199")
+
+    def check_dnf_carnival(self):
+        res = self.dnf_carnival_op("查询是否绑定", "722055", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            webbrowser.open("https://dnf.qq.com/cp/a20201203carnival/index.html")
+            msg = "未绑定角色，请前往2020DNF嘉年华页面主页面签到活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_carnival_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_carnival
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, extra_cookies)
@@ -2175,40 +2207,46 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    idx = 1  # 从1开始，第i个
-    account_config = cfg.account_configs[idx - 1]
+    RunAll = False
+    indexes = [1]
+    if RunAll:
+        indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
-    logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
+    for idx in indexes:  # 从1开始，第i个
+        account_config = cfg.account_configs[idx - 1]
 
-    djcHelper = DjcHelper(account_config, cfg.common)
-    # djcHelper.run()
-    djcHelper.check_skey_expired()
-    djcHelper.get_bind_role_list()
+        logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
 
-    # djcHelper.query_all_extra_info()
-    # djcHelper.exchange_items()
-    # djcHelper.xinyue_operations()
-    # djcHelper.try_join_fixed_xinyue_team()
-    # djcHelper.get_heizuan_gift()
-    # djcHelper.get_credit_xinyue_gift()
-    # djcHelper.query_mobile_game_rolelist()
-    # djcHelper.complete_tasks()
-    # djcHelper.xinyue_guoqing()
-    # djcHelper.ark_lottery()
-    # djcHelper.wegame_guoqing()
-    # djcHelper.dnf_922()
-    # djcHelper.dnf_shanguang()
-    # djcHelper.qq_video()
-    # djcHelper.djc_operations()
-    # djcHelper.dnf_female_mage_awaken()
-    # djcHelper.guanjia()
-    # djcHelper.dnf_shanguang()
-    # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
-    # djcHelper.wx_checkin()
-    # djcHelper.qq_video()
-    # djcHelper.dnf_female_mage_awaken()
-    # djcHelper.xinyue_sailiyam()
-    # djcHelper.dnf_rank()
-    # djcHelper.dnf_warriors_call()
-    # djcHelper.dnf_helper_chronicle()
-    djcHelper.hello_voice()
+        djcHelper = DjcHelper(account_config, cfg.common)
+        # djcHelper.run()
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
+
+        # djcHelper.query_all_extra_info()
+        # djcHelper.exchange_items()
+        # djcHelper.xinyue_operations()
+        # djcHelper.try_join_fixed_xinyue_team()
+        # djcHelper.get_heizuan_gift()
+        # djcHelper.get_credit_xinyue_gift()
+        # djcHelper.query_mobile_game_rolelist()
+        # djcHelper.complete_tasks()
+        # djcHelper.xinyue_guoqing()
+        # djcHelper.ark_lottery()
+        # djcHelper.wegame_guoqing()
+        # djcHelper.dnf_922()
+        # djcHelper.dnf_shanguang()
+        # djcHelper.qq_video()
+        # djcHelper.djc_operations()
+        # djcHelper.dnf_female_mage_awaken()
+        # djcHelper.guanjia()
+        # djcHelper.dnf_shanguang()
+        # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
+        # djcHelper.wx_checkin()
+        # djcHelper.qq_video()
+        # djcHelper.dnf_female_mage_awaken()
+        # djcHelper.xinyue_sailiyam()
+        # djcHelper.dnf_rank()
+        # djcHelper.dnf_warriors_call()
+        # djcHelper.dnf_helper_chronicle()
+        # djcHelper.hello_voice()
+        djcHelper.DnfCarnival()

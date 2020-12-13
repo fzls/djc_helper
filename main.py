@@ -436,10 +436,16 @@ def try_xinyue_sailiyam_start_work(cfg):
             continue
 
         logger.info("")
-        logger.warning(color("fg_bold_green") + "------------开始尝试派第{}个账户({})的赛利亚出去打工------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_green") + "------------开始处理第{}个账户({})的赛利亚的打工和领工资~------------".format(idx, account_config.name))
 
         djcHelper = DjcHelper(account_config, cfg.common)
         if account_config.function_switches.get_xinyue_sailiyam:
+            # 先尝试领工资
+            djcHelper.show_xinyue_sailiyam_work_log()
+            djcHelper.xinyue_sailiyam_op("领取工资", "714229", iPackageId=djcHelper.get_xinyue_sailiyam_package_id())
+            djcHelper.xinyue_sailiyam_op("全勤奖", "715724")
+
+            # 然后派出去打工
             djcHelper.xinyue_sailiyam_op("出去打工", "714255")
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_workinfo())
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())

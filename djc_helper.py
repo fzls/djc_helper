@@ -1035,10 +1035,7 @@ class DjcHelper:
         self.xinyue_sailiyam_op("领取蛋糕", "714230")
         self.xinyue_sailiyam_op("投喂蛋糕", "714251")
 
-        # ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工
-        self.show_xinyue_sailiyam_work_log()
-        self.xinyue_sailiyam_op("领取工资", "714229", iPackageId=self.get_xinyue_sailiyam_package_id())
-        self.xinyue_sailiyam_op("全勤奖", "715724")
+        logger.info("ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工")
 
     def get_xinyue_sailiyam_package_id(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)

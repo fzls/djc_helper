@@ -129,7 +129,7 @@ def auto_send_cards(cfg):
             logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
             # 最多赠送目标账号今日仍可接收的卡片数
             for i in range(left_times):
-                send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
+                send_card(target_qqs, target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
 
             # 赠送卡片完毕后尝试抽奖
             djcHelper = qq_to_djcHelper[target_qq]
@@ -139,7 +139,7 @@ def auto_send_cards(cfg):
                 qa.try_lottery_using_cards(print_warning=False)
 
 
-def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):
+def send_card(target_qqs, target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):
     card_name_to_id = {
         "巅峰大佬刷竞速": "118409", "主播趣味来打团": "118408", "BOSS机制全摸透": "118407", "萌新翻身把歌唱": "118406",
         "四人竞速希洛克": "118405", "普通困难任你选": "118404", "哪种都能领奖励": "118403", "点击报名薅大礼": "118402",
@@ -179,7 +179,7 @@ def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_dj
     for card_name, card_count in target_card_infos:
         # 找到任意一个拥有卡片的其他账号，让他送给目标账户。默认越靠前的号越重要，因此从后面的号开始查
         for qq, card_name_to_count in reverse_map(qq_to_card_name_to_counts):
-            if qq == target_qq:
+            if qq in target_qqs:
                 continue
             # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
             if card_name_to_count[card_name] > 0:

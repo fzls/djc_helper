@@ -129,7 +129,7 @@ def auto_send_cards(cfg):
             logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
             # 最多赠送目标账号今日仍可接收的卡片数
             for i in range(left_times):
-                send_card(target_qqs, target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper)
+                send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)
 
             # 赠送卡片完毕后尝试抽奖
             djcHelper = qq_to_djcHelper[target_qq]
@@ -139,7 +139,7 @@ def auto_send_cards(cfg):
                 qa.try_lottery_using_cards(print_warning=False)
 
 
-def send_card(target_qqs, target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper):
+def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs):
     card_name_to_id = {
         "巅峰大佬刷竞速": "118409", "主播趣味来打团": "118408", "BOSS机制全摸透": "118407", "萌新翻身把歌唱": "118406",
         "四人竞速希洛克": "118405", "普通困难任你选": "118404", "哪种都能领奖励": "118403", "点击报名薅大礼": "118402",

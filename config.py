@@ -79,7 +79,7 @@ class ArkLotteryConfig(ConfigInterface):
         self.lucky_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         # 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
         self.cost_all_cards_and_do_lottery = False
-        # 尝试领取礼包的次数：勇士归来礼包=25947，超低门槛=25948，人人可玩=25966，幸运礼包=25939
+        # 尝试领取礼包的次数：全民竞速礼包=28592，即刷即得礼包=28593，直播福利礼包=28594，幸运礼包=28583
         self.take_awards = []  # type: List[ArkLotteryAwardConfig]
 
         # 是否展示在概览界面

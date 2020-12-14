@@ -52,9 +52,10 @@ class QzoneActivity:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
         # 增加次数
-        self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970)
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 25968, query="0", act_name="act_dnf_ark9")
-        self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", 25938)
+        self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 28615)
+        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", 28613, query="0", act_name="act_dnf_ark10")
+        self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", 28596)
+        self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日观看直播", 28616)
 
         # 幸运勇士
         server_id, roleid = "", ""
@@ -69,21 +70,21 @@ class QzoneActivity:
                 cfg = self.cfg.ark_lottery
                 server_id, roleid = cfg.lucky_dnf_server_id, cfg.lucky_dnf_role_id
 
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 25969, query="0", act_name="act_dnf_xinyun3",
+        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", 28614, query="0", act_name="act_dnf_xinyun4",
                             area=server_id, partition=server_id, roleid=roleid)
 
         # 抽卡
         count = self.remaining_lottery_times()
         logger.info("上述操作完毕后，最新抽卡次数为{}，将全部用来抽卡".format(count))
         for idx in range(count):
-            self.do_ark_lottery("fcg_qzact_lottery", "抽卡-第{}次".format(idx + 1), "25940")
+            self.do_ark_lottery("fcg_qzact_lottery", "抽卡-第{}次".format(idx + 1), "28585")
 
         # # 领取集卡奖励
         if len(self.cfg.ark_lottery.take_awards) != 0:
             for award in self.cfg.ark_lottery.take_awards:
                 for idx in range(award.count):
                     api = "fcg_receive_reward"
-                    if int(award.ruleid) == 25939:
+                    if int(award.ruleid) == 28583:
                         # 至尊礼包的接口与其他奖励接口不一样
                         api = "fcg_prize_lottery"
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid="dnf")
@@ -108,9 +109,9 @@ class QzoneActivity:
         logger.info("尝试消耗{}张卡片【{}】来进行抽奖".format(count, card_name))
 
         card_name_to_ruleid = {
-            "多人配合新挑战": "25961", "丰富机制闯难关": "25960", "新剧情视听盛宴": "25959", "单人成团战不停": "25958",
-            "回归奖励大升级": "25957", "秒升Lv96刷深渊": "25956", "灿烂自选回归领": "25955", "告别酱油变大佬": "25954",
-            "单人爽刷新玩法": "25953", "独立成团打副本": "25952", "海量福利金秋享": "25951", "超强奖励等你拿": "25950",
+            "巅峰大佬刷竞速": "28608", "主播趣味来打团": "28607", "BOSS机制全摸透": "28606", "萌新翻身把歌唱": "28605",
+            "四人竞速希洛克": "28604", "普通困难任你选": "28603", "哪种都能领奖励": "28602", "点击报名薅大礼": "28601",
+            "打团就可赢好礼": "28600", "报名即可领豪礼": "28599", "直播Q币抽不停": "28598", "决赛红包等着你": "28597",
         }
         ruleid = card_name_to_ruleid[card_name]
         for idx in range(count):
@@ -118,7 +119,7 @@ class QzoneActivity:
             self.do_ark_lottery("fcg_qzact_present", "增加抽奖次数-消耗卡片({})".format(card_name), ruleid)
 
             # 抽奖
-            self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "25949", gameid="dnf")
+            self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", "28584", gameid="dnf")
 
     def fetch_lottery_data(self):
         self.lottery_data = self.fetch_data(self.urls.ark_lottery_page)
@@ -126,7 +127,7 @@ class QzoneActivity:
     def remaining_lottery_times(self):
         self.fetch_lottery_data()
 
-        return self.lottery_data["actCount"]["rule"]["25940"]["count"][0]['left']
+        return self.lottery_data["actCount"]["rule"]["28585"]["count"][0]['left']
 
     def get_card_counts(self):
         self.fetch_lottery_data()
@@ -162,8 +163,8 @@ class QzoneActivity:
         return prize_counts
 
     def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
-        # 活动id为self.lottery_data["zzconfig"]["actid"]=3886
-        return self.do_qzone_activity(3886, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
+        # 活动id为self.lottery_data["zzconfig"]["actid"]=4166
+        return self.do_qzone_activity(4166, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
 
     # ----------------- 阿拉德勇士征集令 ----------------------
 

@@ -89,11 +89,11 @@ class Urls:
         self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}"
 
         # 抽卡相关
-        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9"
+        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10"
         # 查询次数信息：参数：to_qq
-        self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"dnf-ark9"}}}}&t={rand}&g_tk={g_tk}'
+        self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"dnf-ark10"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq
-        self.ark_lottery_send_card = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13333":{{"cardId":{cardId},"fromUin":{from_qq},"toUin":{to_qq},"actName":"dnf-ark9"}}}}&t={rand}&g_tk={g_tk}'
+        self.ark_lottery_send_card = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13333":{{"cardId":{cardId},"fromUin":{from_qq},"toUin":{to_qq},"actName":"dnf-ark10"}}}}&t={rand}&g_tk={g_tk}'
 
         # 阿拉德勇士征集令
         self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"

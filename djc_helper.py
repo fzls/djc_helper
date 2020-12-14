@@ -380,6 +380,9 @@ class DjcHelper:
         # 2020DNF嘉年华页面主页面签到
         self.DnfCarnival()
 
+        # QQ空间抽卡
+        self.ark_lottery()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -387,9 +390,6 @@ class DjcHelper:
 
         # 阿拉德集合站活动合集
         self.dnf_922()
-
-        # QQ空间抽卡
-        self.ark_lottery()
 
         # 2020DNF闪光杯返场赛
         self.dnf_shanguang()
@@ -1159,7 +1159,7 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间抽卡--------------------------------------------
     def ark_lottery(self):
-        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=4&verifyid=qqvipdnf9
+        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10
         show_head_line("QQ空间抽卡")
 
         if not self.cfg.function_switches.get_ark_lottery:
@@ -1172,6 +1172,27 @@ class DjcHelper:
 
         qa = QzoneActivity(self, lr)
         qa.ark_lottery()
+
+    def ark_lottery_query_left_times(self, to_qq):
+        ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
+        res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, print_res=False)
+        if res['13320']['ret'] != 0:
+            return 0
+        return res['13320']['data']['uPoint']
+
+    def send_card(self, cardId, to_qq):
+        from_qq = uin2qq(self.cfg.account_info.uin)
+
+        ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
+        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
+
+    def send_card_by_name(self, card_name, to_qq):
+        card_name_to_id = {
+            "巅峰大佬刷竞速": "118409", "主播趣味来打团": "118408", "BOSS机制全摸透": "118407", "萌新翻身把歌唱": "118406",
+            "四人竞速希洛克": "118405", "普通困难任你选": "118404", "哪种都能领奖励": "118403", "点击报名薅大礼": "118402",
+            "打团就可赢好礼": "118401", "报名即可领豪礼": "118400", "直播Q币抽不停": "118399", "决赛红包等着你": "118398",
+        }
+        self.send_card(card_name_to_id[card_name], to_qq)
 
     def fetch_pskey(self):
         # 如果未启用qq空间相关的功能，则不需要这个
@@ -1244,27 +1265,6 @@ class DjcHelper:
 
     def get_local_saved_pskey_file(self):
         return self.local_saved_pskey_file.format(self.cfg.name)
-
-    def ark_lottery_query_left_times(self, to_qq):
-        ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
-        res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, print_res=False)
-        if res['13320']['ret'] != 0:
-            return 0
-        return res['13320']['data']['uPoint']
-
-    def send_card(self, cardId, to_qq):
-        from_qq = uin2qq(self.cfg.account_info.uin)
-
-        ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
-        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
-
-    def send_card_by_name(self, card_name, to_qq):
-        card_name_to_id = {
-            "多人配合新挑战": "116193", "丰富机制闯难关": "116192", "新剧情视听盛宴": "116191", "单人成团战不停": "116190",
-            "回归奖励大升级": "116189", "秒升Lv96刷深渊": "116188", "灿烂自选回归领": "116187", "告别酱油变大佬": "116186",
-            "单人爽刷新玩法": "116185", "独立成团打副本": "116184", "海量福利金秋享": "116183", "超强奖励等你拿": "116182",
-        }
-        self.send_card(card_name_to_id[card_name], to_qq)
 
     # --------------------------------------------阿拉德勇士征集令--------------------------------------------
     def dnf_warriors_call(self):

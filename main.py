@@ -124,10 +124,12 @@ def auto_send_cards(cfg):
         logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
 
     # 赠送卡片
-    for target_qq in target_qqs:
+    for idx, target_qq in enumerate(target_qqs):
         if target_qq in qq_to_djcHelper:
             left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
-            logger.warning(color("fg_bold_green") + "账号 {}({}) 今日仍可被赠送 {} 次卡片".format(qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times))
+            logger.warning(color("fg_bold_green") + "第{}/{}个赠送目标账号 {}({}) 今日仍可被赠送 {} 次卡片".format(
+                idx+1, len(target_qqs), qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times
+            ))
             # 最多赠送目标账号今日仍可接收的卡片数
             for i in range(left_times):
                 send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)

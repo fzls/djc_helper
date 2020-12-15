@@ -55,6 +55,7 @@ class ArkLotteryCard(ConfigInterface):
         self.id = 118409
         self.prizeId = 44460
         self.lotterySwitchId = 28608
+        self.index = "1-1"
 
 
 class ArkLotteryPrizeGroups(ConfigInterface):

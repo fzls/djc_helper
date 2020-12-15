@@ -6,6 +6,7 @@ import win32api
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
+from setting import *
 from show_usage import *
 from update import check_update_on_start
 from usage_count import *
@@ -140,16 +141,7 @@ def auto_send_cards(cfg):
 
 
 def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs):
-    card_name_to_id = {
-        "巅峰大佬刷竞速": "118409", "主播趣味来打团": "118408", "BOSS机制全摸透": "118407", "萌新翻身把歌唱": "118406",
-        "四人竞速希洛克": "118405", "普通困难任你选": "118404", "哪种都能领奖励": "118403", "点击报名薅大礼": "118402",
-        "打团就可赢好礼": "118401", "报名即可领豪礼": "118400", "直播Q币抽不停": "118399", "决赛红包等着你": "118398",
-    }
-    card_name_to_index = {
-        "巅峰大佬刷竞速": "1-1", "主播趣味来打团": "1-2", "BOSS机制全摸透": "1-3", "萌新翻身把歌唱": "1-4",
-        "四人竞速希洛克": "2-1", "普通困难任你选": "2-2", "哪种都能领奖励": "2-3", "点击报名薅大礼": "2-4",
-        "打团就可赢好礼": "3-1", "报名即可领豪礼": "3-2", "直播Q币抽不停": "3-3", "决赛红包等着你": "3-4",
-    }
+    card_info_map = parse_card_group_info_map(qq_to_djcHelper[target_qq].zzconfig)
     # 检查目标账号是否有可剩余的兑换奖励次数
     has_any_left_gift = False
     for name, count in qq_to_prize_counts[target_qq].items():
@@ -183,13 +175,13 @@ def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_dj
                 continue
             # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
             if card_name_to_count[card_name] > 0:
-                qq_to_djcHelper[qq].send_card(card_name_to_id[card_name], target_qq)
+                qq_to_djcHelper[qq].send_card(card_info_map[card_name].id, target_qq)
                 card_name_to_count[card_name] -= 1
                 qq_to_card_name_to_counts[target_qq][card_name] += 1
 
                 logger.warning(color("fg_bold_cyan") + "账号 {} 赠送一张 {}({}) 给 {}".format(
                     qq_to_djcHelper[qq].cfg.name,
-                    card_name_to_index[card_name], card_name,
+                    card_info_map[card_name].index, card_name,
                     qq_to_djcHelper[target_qq].cfg.name
                 ))
                 return
@@ -206,15 +198,29 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         return
     _show_head_line(ctx)
 
-    order_map = {
-        "1-1": "巅峰大佬刷竞速", "1-2": "主播趣味来打团", "1-3": "BOSS机制全摸透", "1-4": "萌新翻身把歌唱",
-        "2-1": "四人竞速希洛克", "2-2": "普通困难任你选", "2-3": "哪种都能领奖励", "2-4": "点击报名薅大礼",
-        "3-1": "打团就可赢好礼", "3-2": "报名即可领豪礼", "3-3": "直播Q币抽不停", "3-4": "决赛红包等着你",
-        "全民竞速": "全民竞速礼包",
-        "即刷即得": "即刷即得礼包",
-        "直播福利": "直播福利礼包",
-        "幸运礼包": "幸运礼包",
-    }
+    lottery_zzconfig = zzconfig()
+    card_info_map = parse_card_group_info_map(lottery_zzconfig)
+    order_map = {}
+    # 卡片编码 => 名称
+    for name, card_info in card_info_map.items():
+        order_map[card_info.index] = name
+
+    # 奖励展示名称 => 实际名称
+    groups = [
+        lottery_zzconfig.prizeGroups.group1,
+        lottery_zzconfig.prizeGroups.group2,
+        lottery_zzconfig.prizeGroups.group3,
+        lottery_zzconfig.prizeGroups.group4,
+    ]
+    prizeDisplayTitles = []
+    for group in groups:
+        displayTitle = group.title
+        if len(displayTitle) > 4 and "礼包" in displayTitle:
+            # 将 全民竞速礼包 这种名称替换为 全民竞速
+            displayTitle = displayTitle.replace("礼包", "")
+
+        order_map[displayTitle] = group.title
+        prizeDisplayTitles.append(displayTitle)
 
     heads = ["序号", "账号名"]
     colSizes = [4, 12]
@@ -224,7 +230,7 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
     heads.extend(card_indexes)
     colSizes.extend([card_width for i in card_indexes])
 
-    prize_indexes = ["全民竞速", "即刷即得", "直播福利", "幸运礼包"]
+    prize_indexes = [*prizeDisplayTitles]
     heads.extend(prize_indexes)
     colSizes.extend([printed_width(name) for name in prize_indexes])
 

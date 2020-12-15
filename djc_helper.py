@@ -14,6 +14,7 @@ from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
 from qq_login import QQLogin, LoginResult
 from qzone_activity import QzoneActivity
+from setting import *
 from sign import getMillSecondsUnix
 from urls import Urls
 from util import show_head_line, get_this_week_monday
@@ -36,6 +37,8 @@ class DjcHelper:
     def __init__(self, account_config, common_config):
         self.cfg = account_config  # type: AccountConfig
         self.common_cfg = common_config  # type: CommonConfig
+
+        self.zzconfig = zzconfig()
 
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
@@ -1156,7 +1159,7 @@ class DjcHelper:
     # --------------------------------------------QQ空间抽卡--------------------------------------------
     def ark_lottery(self):
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10
-        show_head_line("QQ空间抽卡")
+        show_head_line("QQ空间抽卡 - {}_{}".format(self.zzconfig.actid, self.zzconfig.actName))
 
         if not self.cfg.function_switches.get_ark_lottery:
             logger.warning("未启用领取QQ空间抽卡功能，将跳过")
@@ -1171,7 +1174,7 @@ class DjcHelper:
 
     def ark_lottery_query_left_times(self, to_qq):
         ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
-        res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, print_res=False)
+        res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, actName=self.zzconfig.actName, print_res=False)
         # # {"13320":{"data":{"uAccuPoint":4,"uPoint":3},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934735801}
         if res['13320']['ret'] != 0:
             return 0
@@ -1181,16 +1184,12 @@ class DjcHelper:
         from_qq = uin2qq(self.cfg.account_info.uin)
 
         ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
-        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
+        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, actName=self.zzconfig.actName, print_res=False)
         # # {"13333":{"data":{},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934736057}
 
     def send_card_by_name(self, card_name, to_qq):
-        card_name_to_id = {
-            "巅峰大佬刷竞速": "118409", "主播趣味来打团": "118408", "BOSS机制全摸透": "118407", "萌新翻身把歌唱": "118406",
-            "四人竞速希洛克": "118405", "普通困难任你选": "118404", "哪种都能领奖励": "118403", "点击报名薅大礼": "118402",
-            "打团就可赢好礼": "118401", "报名即可领豪礼": "118400", "直播Q币抽不停": "118399", "决赛红包等着你": "118398",
-        }
-        self.send_card(card_name_to_id[card_name], to_qq)
+        card_info_map = parse_card_group_info_map(self.zzconfig)
+        self.send_card(card_info_map[card_name].id, to_qq)
 
     def fetch_pskey(self):
         # 如果未启用qq空间相关的功能，则不需要这个

@@ -425,46 +425,8 @@ lucky_dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值
 # 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
 cost_all_cards_and_do_lottery = false
 
-# 尝试领取礼包的次数：全民竞速礼包=28592，即刷即得礼包=28593，直播福利礼包=28594，幸运礼包=[依次执行 28610、28609、28583、28611、28612]
-#[[account_configs.ark_lottery.take_awards]]
-#name = "全民竞速礼包"
-#ruleid = 28592
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "即刷即得礼包"
-#ruleid = 28593
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "直播福利礼包"
-#ruleid = 28594
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包-至尊礼包中间资格1"
-#ruleid = 28610
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包-至尊礼包中间资格2"
-#ruleid = 28609
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包-至尊礼包限制"
-#ruleid = 28583
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包-兑换至尊失败回滚后6张卡"
-#ruleid = 28611
-#count = 1
-#
-#[[account_configs.ark_lottery.take_awards]]
-#name = "幸运礼包-兑换至尊失败回滚前6张卡"
-#ruleid = 28612
-#count = 1
+# 是否领取礼包（建议仅大号开启这个功能）
+need_take_awards = false
 
 # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
 #[[account_configs.wegame_guoqing_exchange_items]]

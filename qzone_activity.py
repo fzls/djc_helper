@@ -1,6 +1,6 @@
+import datetime
 import json
 import random
-import datetime
 
 import requests
 
@@ -199,7 +199,7 @@ class QzoneActivity:
         remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(str(zz.actbossZige.lottery), 0)
         logger.info("剩余抽奖次数为{}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)".format(remaining_lottery_times))
         for i in range(remaining_lottery_times):
-            lottery("抽奖-第{}次".format(i+1))
+            lottery("抽奖-第{}次".format(i + 1))
 
         logger.warning("只处理大家都能领到的普发奖励，像周赛决赛之类的奖励请自行领取")
         getPrize("1. 智慧的引导礼包", rule.pfPrize1)
@@ -247,8 +247,7 @@ class QzoneActivity:
 
     def fetch_dnf_warriors_call_data(self):
         self.dnf_warriors_call_raw_data = self.fetch_data(self.urls.dnf_warriors_call_page)
-        self.dnf_warriors_call_data = DnfWarriorsCallInfo()
-        self.dnf_warriors_call_data.auto_update_config(self.dnf_warriors_call_raw_data)
+        self.dnf_warriors_call_data = DnfWarriorsCallInfo().auto_update_config(self.dnf_warriors_call_raw_data)
 
     def do_dnf_warriors_call(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
         # 活动id为self.dnf_warriors_call_data.zz.actid=4117

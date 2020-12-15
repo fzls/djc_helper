@@ -1176,6 +1176,7 @@ class DjcHelper:
     def ark_lottery_query_left_times(self, to_qq):
         ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
         res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, print_res=False)
+        # # {"13320":{"data":{"uAccuPoint":4,"uPoint":3},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934735801}
         if res['13320']['ret'] != 0:
             return 0
         return res['13320']['data']['uPoint']
@@ -1185,6 +1186,7 @@ class DjcHelper:
 
         ctx = "{} 赠送卡片 {} 给 {}".format(from_qq, cardId, to_qq)
         self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, print_res=False)
+        # # {"13333":{"data":{},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934736057}
 
     def send_card_by_name(self, card_name, to_qq):
         card_name_to_id = {

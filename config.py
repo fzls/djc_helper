@@ -139,8 +139,11 @@ class HelloVoiceInfoConfig(ConfigInterface):
 
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
+        # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
         # 是否领取道聚城
         self.get_djc = True
+        # 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
+        self.make_wish = True
         # 是否领取心悦特权专区
         self.get_xinyue = True
         # 是否领取腾讯游戏信用相关礼包
@@ -159,22 +162,24 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_qq_video = True
         # 是否领取10月女法师三觉活动
         self.get_dnf_female_mage_awaken = True
-        # 是否领取管家蚊子腿活动
-        self.get_guanjia = True
-        # 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
-        self.make_wish = True
-        # 是否启用集卡功能
-        self.get_ark_lottery = True
-        # 是否领取DNF助手排行榜活动
+        # 是否领取DNF助手排行榜活动，额外需要助手userId和token
         self.get_dnf_rank = True
-        # 是否启用阿拉德勇士征集令活动
-        self.get_dnf_warriors_call = True
-        # 是否领取dnf助手编年史活动
+        # 是否领取dnf助手编年史活动，额外需要助手userId
         self.get_dnf_helper_chronicle = True
-        # 是否启用hello语音奖励兑换功能
+        # 是否启用hello语音奖励兑换功能，额外需要hello语音的用户ID
         self.get_hello_voice = True
         # 是否领取2020DNF嘉年华页面主页面签到活动
         self.get_dnf_carnival = True
+
+        # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
+        # 是否启用集卡功能
+        self.get_ark_lottery = True
+        # 是否启用阿拉德勇士征集令活动
+        self.get_dnf_warriors_call = True
+
+        # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
+        # 是否领取管家蚊子腿活动
+        self.get_guanjia = True
 
 
 class AccountConfig(ConfigInterface):

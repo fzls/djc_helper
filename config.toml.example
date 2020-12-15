@@ -113,8 +113,11 @@ cannot_band_dnf = false
 
 # 各功能开关
 [account_configs.function_switches]
+# ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
 # 是否领取道聚城
 get_djc = true
+# 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
+make_wish = true
 # 是否领取心悦特权专区
 get_xinyue = true
 # 是否领取腾讯游戏信用相关礼包
@@ -133,22 +136,24 @@ get_dnf_shanguang = true
 get_qq_video = true
 # 是否领取10月女法师三觉活动
 get_dnf_female_mage_awaken = true
-# 是否领取管家蚊子腿活动
-get_guanjia = true
-# 是否启用许愿功能，用于完成《有理想》。目前仅限安卓版本道聚城上绑定王者荣耀时可使用
-make_wish = true
-# 是否启用集卡功能
-get_ark_lottery = true
-# 是否领取DNF助手排行榜活动
+# 是否领取DNF助手排行榜活动，额外需要助手userId和token
 get_dnf_rank = true
-# 是否启用阿拉德勇士征集令活动
-get_dnf_warriors_call = true
-# 是否领取dnf助手编年史活动
+# 是否领取dnf助手编年史活动，额外需要助手userId
 get_dnf_helper_chronicle = true
-# 是否启用hello语音奖励兑换功能
+# 是否启用hello语音奖励兑换功能，额外需要hello语音的用户ID
 get_hello_voice = true
 # 是否领取2020DNF嘉年华页面主页面签到活动
 get_dnf_carnival = true
+
+# ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
+# 是否启用集卡功能
+get_ark_lottery = true
+# 是否启用阿拉德勇士征集令活动
+get_dnf_warriors_call = true
+
+# ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
+# 是否领取管家蚊子腿活动
+get_guanjia = true
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

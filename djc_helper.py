@@ -253,8 +253,7 @@ class DjcHelper:
         res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False)
         self.bizcode_2_bind_role_map = {}
         for roleinfo_dict in res["data"]:
-            role_info = GameRoleInfo()
-            role_info.auto_update_config(roleinfo_dict)
+            role_info = GameRoleInfo().auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
     def get_mobile_game_info(self):
@@ -518,8 +517,7 @@ class DjcHelper:
             logger.warning("在{}上游戏【{}】暂不支持许愿，query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
             return
 
-        propModel = GoodsInfo()
-        propModel.auto_update_config(query_wish_item_list_res["data"]["goods"][0])
+        propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
 
         # 查询许愿列表
         wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=uin2qq(self.cfg.account_info.uin))
@@ -1047,8 +1045,7 @@ class DjcHelper:
     def get_xinyue_sailiyam_workinfo(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
         try:
-            workinfo = SailiyamWorkInfo()
-            workinfo.auto_update_config(res["modRet"]["jData"]["roleinfor"])
+            workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
 
             work_message = ""
 
@@ -1072,8 +1069,7 @@ class DjcHelper:
     def get_xinyue_sailiyam_status(self):
         res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
         try:
-            modRet = AmesvrCommonModRet()
-            modRet.auto_update_config(res["modRet"])
+            modRet = AmesvrCommonModRet().auto_update_config(res["modRet"])
             lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
             dangao = modRet.sOutValue2
             xinqingzhi = modRet.sOutValue3
@@ -1726,36 +1722,26 @@ class DjcHelper:
         # ------ 查询各种信息 ------
         def exchange_list():
             res = self.get("可兑换道具列表", url_wang, api="list/exchange", **common_params)
-            _res = DnfHelperChronicleExchangeList()
-            _res.auto_update_config(res)
-            return _res
+            return DnfHelperChronicleExchangeList().auto_update_config(res)
 
         def basic_award_list():
             res = self.get("基础奖励与搭档奖励", url_wang, api="list/basic", **common_params)
-            _res = DnfHelperChronicleBasicAwardList()
-            _res.auto_update_config(res)
-            return _res
+            return DnfHelperChronicleBasicAwardList().auto_update_config(res)
 
         def lottery_list():
             res = self.get("碎片抽奖奖励", url_wang, api="lottery/receive", **common_params)
-            _res = DnfHelperChronicleLotteryList()
-            _res.auto_update_config(res)
-            return _res
+            return DnfHelperChronicleLotteryList().auto_update_config(res)
 
         def getUserActivityTopInfo():
             res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
-            _res = DnfHelperChronicleUserActivityTopInfo()
-            _res.auto_update_config(res.get("data", {}))
-            return _res
+            return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
         def _getUserTaskList():
             return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
 
         def getUserTaskList():
             res = _getUserTaskList()
-            _res = DnfHelperChronicleUserTaskList()
-            _res.auto_update_config(res.get("data", {}))
-            return _res
+            return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
         # ------ 领取各种奖励 ------
 
@@ -2066,8 +2052,7 @@ class DjcHelper:
             return False
         else:
             # 已选择大区
-            roleInfo = HelloVoiceDnfRoleInfo()
-            roleInfo.auto_update_config(data["jData"])
+            roleInfo = HelloVoiceDnfRoleInfo().auto_update_config(data["jData"])
             logger.info("绑定角色信息: {}".format(roleInfo))
             return True
 

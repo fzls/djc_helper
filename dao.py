@@ -71,15 +71,10 @@ class GoodsInfo(ConfigInterface):
         self.isCombinPkg = 0
         self.IsOwn = 0
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'valiDate' in raw_config:
-            self.valiDate = []
-            for cfg in raw_config["valiDate"]:
-                ei = GoodsValiDateInfo()
-                ei.auto_update_config(cfg)
-                self.valiDate.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('valiDate', GoodsValiDateInfo),
+        ]
 
 
 class GoodsValiDateInfo(ConfigInterface):
@@ -392,15 +387,10 @@ class DnfHelperChronicleExchangeList(ConfigInterface):
         self.level = 1
         self.msg = "success"
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'gifts' in raw_config:
-            self.gifts = []
-            for cfg in raw_config["gifts"]:
-                ei = DnfHelperChronicleExchangeGiftInfo()
-                ei.auto_update_config(cfg)
-                self.gifts.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('gifts', DnfHelperChronicleExchangeGiftInfo),
+        ]
 
 
 class DnfHelperChronicleExchangeGiftInfo(ConfigInterface):
@@ -424,22 +414,11 @@ class DnfHelperChronicleBasicAwardList(ConfigInterface):
         self.hasPartner = False
         self.msg = "success"
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'basic1List' in raw_config:
-            self.basic1List = []
-            for cfg in raw_config["basic1List"]:
-                ei = DnfHelperChronicleBasicAwardInfo()
-                ei.auto_update_config(cfg)
-                self.basic1List.append(ei)
-
-        if 'basic2List' in raw_config:
-            self.basic2List = []
-            for cfg in raw_config["basic2List"]:
-                ei = DnfHelperChronicleBasicAwardInfo()
-                ei.auto_update_config(cfg)
-                self.basic2List.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('basic1List', DnfHelperChronicleBasicAwardInfo),
+            ('basic2List', DnfHelperChronicleBasicAwardInfo),
+        ]
 
 
 class DnfHelperChronicleBasicAwardInfo(ConfigInterface):
@@ -461,15 +440,10 @@ class DnfHelperChronicleLotteryList(ConfigInterface):
         self.gifts = []  # type: List[DnfHelperChronicleLotteryGiftInfo]
         self.msg = "success"
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'gifts' in raw_config:
-            self.gifts = []
-            for cfg in raw_config["gifts"]:
-                ei = DnfHelperChronicleLotteryGiftInfo()
-                ei.auto_update_config(cfg)
-                self.gifts.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('gifts', DnfHelperChronicleLotteryGiftInfo),
+        ]
 
 
 class DnfHelperChronicleLotteryGiftInfo(ConfigInterface):
@@ -507,15 +481,10 @@ class DnfHelperChronicleUserTaskList(ConfigInterface):
         self.hasPartner = False
         self.taskList = []  # type: List[DnfHelperChronicleUserTaskInfo]
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'taskList' in raw_config:
-            self.taskList = []
-            for cfg in raw_config["taskList"]:
-                ei = DnfHelperChronicleUserTaskInfo()
-                ei.auto_update_config(cfg)
-                self.taskList.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('taskList', DnfHelperChronicleUserTaskInfo),
+        ]
 
 
 class DnfHelperChronicleUserTaskInfo(ConfigInterface):

@@ -48,16 +48,37 @@ class ConfigInterface(metaclass=ABCMeta):
     def auto_update_config(self, raw_config: dict):
         if type(raw_config) is not dict:
             logger.warning("raw_config={} is not dict".format(raw_config))
-            return
+        else:
+            for key, val in raw_config.items():
+                if hasattr(self, key):
+                    attr = getattr(self, key)
+                    if isinstance(attr, ConfigInterface):
+                        config_field = attr  # type: ConfigInterface
+                        config_field.auto_update_config(val)
+                    else:
+                        setattr(self, key, val)
 
-        for key, val in raw_config.items():
-            if hasattr(self, key):
-                attr = getattr(self, key)
-                if isinstance(attr, ConfigInterface):
-                    config_field = attr  # type: ConfigInterface
-                    config_field.auto_update_config(val)
-                else:
-                    setattr(self, key, val)
+        # 尝试填充一些数组元素
+        self.fill_array_fields(raw_config, self.fields_to_fill())
+
+        # re: 以后有需求的时候再增加处理dict、set、tuple等
+
+        # 调用可能存在的回调
+        self.on_config_update(raw_config)
+
+        # 最终返回自己，方便链式调用
+        return self
+
+    def fill_array_fields(self, raw_config: dict, fields_to_fill):
+        for field_name, field_type in fields_to_fill:
+            if field_name in raw_config:
+                setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
+
+    def fields_to_fill(self):
+        return []
+
+    def on_config_update(self, raw_config: dict):
+        return
 
     def get_str_for(self, v):
         res = v

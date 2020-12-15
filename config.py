@@ -87,15 +87,10 @@ class ArkLotteryConfig(ConfigInterface):
         # 卡牌数目使用特定的颜色
         self.show_color = ""
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'take_awards' in raw_config:
-            self.take_awards = []
-            for cfg in raw_config["take_awards"]:
-                ei = ArkLotteryAwardConfig()
-                ei.auto_update_config(cfg)
-                self.take_awards.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('take_awards', ArkLotteryAwardConfig),
+        ]
 
 
 class DnfHelperInfoConfig(ConfigInterface):
@@ -119,15 +114,10 @@ class DnfHelperInfoConfig(ConfigInterface):
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅reference_data/dnf助手编年史活动_可兑换奖励列表.json
         self.chronicle_exchange_items = []  # type: List[DnfHelperChronicleExchangeItemConfig]
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'chronicle_exchange_items' in raw_config:
-            self.chronicle_exchange_items = []
-            for cfg in raw_config["chronicle_exchange_items"]:
-                ei = DnfHelperChronicleExchangeItemConfig()
-                ei.auto_update_config(cfg)
-                self.chronicle_exchange_items.append(ei)
+    def fields_to_fill(self):
+        return [
+            ('chronicle_exchange_items', DnfHelperChronicleExchangeItemConfig),
+        ]
 
 
 class HelloVoiceInfoConfig(ConfigInterface):
@@ -216,31 +206,12 @@ class AccountConfig(ConfigInterface):
         # hello语音相关信息
         self.hello_voice = HelloVoiceInfoConfig()
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
-
-        if 'exchange_items' in raw_config:
-            self.exchange_items = []
-            for cfg in raw_config["exchange_items"]:
-                ei = ExchangeItemConfig()
-                ei.auto_update_config(cfg)
-                self.exchange_items.append(ei)
-
-        if 'xinyue_operations' in raw_config:
-            self.xinyue_operations = []
-            for cfg in raw_config["xinyue_operations"]:
-                ei = XinYueOperationConfig()
-                ei.auto_update_config(cfg)
-                self.xinyue_operations.append(ei)
-
-        if 'wegame_guoqing_exchange_items' in raw_config:
-            self.wegame_guoqing_exchange_items = []
-            for cfg in raw_config["wegame_guoqing_exchange_items"]:
-                ei = WegameGuoqingExchangeItemConfig()
-                ei.auto_update_config(cfg)
-                self.wegame_guoqing_exchange_items.append(ei)
-
-        self.on_config_update(raw_config)
+    def fields_to_fill(self):
+        return [
+            ('exchange_items', ExchangeItemConfig),
+            ('xinyue_operations', XinYueOperationConfig),
+            ('wegame_guoqing_exchange_items', WegameGuoqingExchangeItemConfig),
+        ]
 
     def is_enabled(self):
         return self.enable
@@ -378,16 +349,12 @@ class CommonConfig(ConfigInterface):
         # 赛利亚活动拜访目标QQ列表
         self.sailiyam_visit_target_qqs = []
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
+    def fields_to_fill(self):
+        return [
+            ('fixed_teams', FixedTeamConfig),
+        ]
 
-        if 'fixed_teams' in raw_config:
-            self.fixed_teams = []
-            for cfg in raw_config["fixed_teams"]:
-                ei = FixedTeamConfig()
-                ei.auto_update_config(cfg)
-                self.fixed_teams.append(ei)
-
+    def on_config_update(self, raw_config: dict):
         consoleHandler.setLevel(self.log_level_map[self.log_level])
 
 
@@ -398,16 +365,12 @@ class Config(ConfigInterface):
         # 兑换道具信息
         self.account_configs = []  # type: List[AccountConfig]
 
-    def auto_update_config(self, raw_config: dict):
-        super().auto_update_config(raw_config)
+    def fields_to_fill(self):
+        return [
+            ('account_configs', AccountConfig),
+        ]
 
-        if 'account_configs' in raw_config:
-            self.account_configs = []
-            for cfg in raw_config["account_configs"]:
-                ei = AccountConfig()
-                ei.auto_update_config(cfg)
-                self.account_configs.append(ei)
-
+    def on_config_update(self, raw_config: dict):
         if not self.check():
             logger.error("配置有误，请根据提示信息修改")
             exit(-1)

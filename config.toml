@@ -14,7 +14,13 @@
 auto_send_card_target_qqs = []
 
 # 赛利亚活动拜访目标QQ列表
-# 示例：["第一个账号的QQ号", "第二个账号的QQ号", "第三个账号的QQ号", "第n个账号的QQ号"]
+# 依次拜访给一到三个QQ的示例如下，更多拜访目标则类推
+#   想要其他账号拜访1个QQ 123456
+#   sailiyam_visit_target_qqs = ["123456"]
+#   想要其他账号拜访2个QQ 123456和654321
+#   sailiyam_visit_target_qqs = ["123456", "654321"]
+#   想要其他账号拜访3个QQ 123456和654321和111111
+#   sailiyam_visit_target_qqs = ["123456", "654321", "111111"]
 sailiyam_visit_target_qqs = []
 
 # 心悦相关配置

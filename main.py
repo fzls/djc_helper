@@ -579,7 +579,9 @@ def temp_code(cfg):
 
 if __name__ == '__main__':
     try:
+        run_start_time = datetime.datetime.now()
         main()
+        logger.warning(color("fg_bold_yellow") + "运行完成，共用时{}".format(datetime.datetime.now() - run_start_time))
     except Exception as e:
         msg = "ver {} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决。".format(now_version)
         logger.exception(color("fg_bold_red") + msg, exc_info=e)

@@ -7,7 +7,7 @@ from sys import exit
 from _build import build
 from _package import package
 from _push_github import push_github
-from _update_docs import update_docs
+from _commit_new_version import commit_new_version
 from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console
@@ -46,10 +46,10 @@ build()
 os.chdir(dir_src)
 package(dir_src, dir_all_release, release_dir_name, release_7z_name)
 
-# ---------------复制特定文件到docs目录，用于生成github pages
-# logger.info("复制特定文件到docs目录，用于生成github pages")
+# ---------------标记新版本
+logger.info("提交版本和版本变更说明，并同步到docs目录，用于生成github pages")
 os.chdir(dir_src)
-update_docs()
+commit_new_version()
 
 # ---------------上传到蓝奏云
 logger.info("开始上传到蓝奏云")

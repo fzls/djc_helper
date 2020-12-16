@@ -128,7 +128,7 @@ def auto_send_cards(cfg):
         if target_qq in qq_to_djcHelper:
             left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
             logger.warning(color("fg_bold_green") + "第{}/{}个赠送目标账号 {}({}) 今日仍可被赠送 {} 次卡片".format(
-                idx+1, len(target_qqs), qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times
+                idx + 1, len(target_qqs), qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times
             ))
             # 最多赠送目标账号今日仍可接收的卡片数
             for i in range(left_times):

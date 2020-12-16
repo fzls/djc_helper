@@ -111,7 +111,12 @@ login_mode = "qr_login"
 # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
 cannot_band_dnf = false
 
-# 各功能开关
+# 各功能开关，true表示开启，false表示关闭
+# 示例如下：
+# 开启领取道聚城
+#   get_djc = true
+# 关闭领取道聚城
+#   get_djc = false
 [account_configs.function_switches]
 # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
 # 是否领取道聚城

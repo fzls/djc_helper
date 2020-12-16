@@ -306,6 +306,11 @@ class FixedTeamConfig(ConfigInterface):
         # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
         self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
 
+    def on_config_update(self, raw_config: dict):
+        # 由于经常会有人填写成数字，如[123, 456]，导致后面从各个dict中取值时出错（dict中都默认QQ为str类型，若传入int类型，会取不到对应的值）
+        # 所以这里做下兼容，强制转换为str
+        self.members = [str(qq) for qq in self.members]
+
     def check(self) -> bool:
         if len(self.members) != 3:
             return False
@@ -351,7 +356,7 @@ class CommonConfig(ConfigInterface):
         self.show_support_pic = True
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
-        self.auto_send_card_target_qqs = []
+        self.auto_send_card_target_qqs = []  # type: List[str]
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
         # 各种操作的通用重试配置
@@ -361,7 +366,7 @@ class CommonConfig(ConfigInterface):
         # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
         self.fixed_teams = []  # type: List[FixedTeamConfig]
         # 赛利亚活动拜访目标QQ列表
-        self.sailiyam_visit_target_qqs = []
+        self.sailiyam_visit_target_qqs = []  # type: List[str]
 
     def fields_to_fill(self):
         return [
@@ -370,6 +375,11 @@ class CommonConfig(ConfigInterface):
 
     def on_config_update(self, raw_config: dict):
         consoleHandler.setLevel(self.log_level_map[self.log_level])
+
+        # 由于经常会有人填写成数字的列表，如[123, 456]，导致后面从各个dict中取值时出错（dict中都默认QQ为str类型，若传入int类型，会取不到对应的值）
+        # 所以这里做下兼容，强制转换为str
+        self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
+        self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
 
 
 class Config(ConfigInterface):

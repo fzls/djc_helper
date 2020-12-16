@@ -331,7 +331,7 @@ def show_accounts_status(cfg, ctx):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
 
-        status = "启用" if account_config.enable else "未启用"
+        status = "启用" if account_config.is_enabled() else "未启用"
 
         djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
         djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
@@ -379,7 +379,7 @@ def run(cfg):
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
-        if not account_config.enable:
+        if not account_config.is_enabled():
             logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
             continue
 

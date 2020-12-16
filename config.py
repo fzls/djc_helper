@@ -182,6 +182,8 @@ class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
         self.enable = True
+        # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
+        self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号"
         # 测试模式，若开启，则一些实验性功能将会启用
@@ -220,6 +222,10 @@ class AccountConfig(ConfigInterface):
         ]
 
     def is_enabled(self):
+        if self.in_safe_mode and not config().common.enable_in_safe_mode_accounts:
+            # 若账号处于安全模式，且当前不启用处于安全模式的账号，则视为未启用当前账号
+            return False
+
         return self.enable
 
     def on_config_update(self, raw_config: dict):
@@ -323,6 +329,8 @@ class CommonConfig(ConfigInterface):
     def __init__(self):
         # 测试用开关，将仅运行首个账号配置
         self._debug_run_first_only = False
+        # 是否启用处于安全模式的账号
+        self.enable_in_safe_mode_accounts = False
         # 是否展示小助手的累积使用情况
         self._show_usage = False
         # 是否强制使用打包附带的便携版chrome

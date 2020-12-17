@@ -506,3 +506,10 @@ class HelloVoiceDnfRoleInfo(ConfigInterface):
         self.roleId = "71672841"
         self.roleName = "风之凌殇呀"
         self.qq = "1054073896"
+
+
+class XinyueFinancingInfo(ConfigInterface):
+    def __init__(self):
+        self.name = "体验版周卡"
+        self.buy = False
+        self.totalIncome = 0

@@ -34,6 +34,8 @@ def build():
         "-m",
         "pip",
         "install",
+        "-i",
+        "https://pypi.doubanio.com/simple",
         "--upgrade",
         "pip",
         "setuptools",

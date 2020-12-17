@@ -2359,6 +2359,10 @@ if __name__ == '__main__':
 
         show_head_line("开始处理第{}个账户[{}]".format(idx, account_config.name), color("fg_bold_yellow"))
 
+        if not account_config.is_enabled():
+            logger.warning("账号被禁用，将跳过")
+            continue
+
         djcHelper = DjcHelper(account_config, cfg.common)
         # djcHelper.run()
         djcHelper.check_skey_expired()

@@ -2357,7 +2357,7 @@ if __name__ == '__main__':
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
-        logger.info("开始处理第{}个账户[{}]".format(idx, account_config.name))
+        show_head_line("开始处理第{}个账户[{}]".format(idx, account_config.name), color("fg_bold_yellow"))
 
         djcHelper = DjcHelper(account_config, cfg.common)
         # djcHelper.run()

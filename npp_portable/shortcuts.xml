@@ -1,5 +1,7 @@
 <NotepadPlus>
-    <InternalCommands />
+    <InternalCommands>
+        <Shortcut id="42022" Ctrl="yes" Alt="no" Shift="no" Key="191" />
+    </InternalCommands>
     <Macros>
         <Macro name="Trim Trailing Space and Save" Ctrl="no" Alt="yes" Shift="yes" Key="83">
             <Action type="2" message="0" wParam="42024" lParam="0" sParam="" />
@@ -23,5 +25,7 @@
         <Command name="Open file in another instance" Ctrl="no" Alt="yes" Shift="no" Key="117">$(NPP_FULL_FILE_PATH) $(CURRENT_WORD) -nosession -multiInst</Command>
     </UserDefinedCommands>
     <PluginCommands />
-    <ScintillaKeys />
+    <ScintillaKeys>
+        <ScintKey ScintID="2390" menuCmdID="0" Ctrl="no" Alt="no" Shift="no" Key="0" />
+    </ScintillaKeys>
 </NotepadPlus>

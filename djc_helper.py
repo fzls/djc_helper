@@ -385,6 +385,9 @@ class DjcHelper:
         # QQ空间抽卡
         self.ark_lottery()
 
+        # 心悦app理财礼卡
+        self.xinyue_financing()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -2128,6 +2131,148 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
 
+    # --------------------------------------------心悦app理财礼卡--------------------------------------------
+    def xinyue_financing(self):
+        # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
+        show_head_line("心悦app理财礼卡")
+
+        if not self.cfg.function_switches.get_xinyue_financing:
+            logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
+            return
+
+        selectedCards = self.cfg.xinyue_financing_card_names
+        if len(selectedCards) == 0:
+            logger.warning("未配置心悦app理财礼卡活动选择的理财卡类型(xinyue_financing_card_names)，将跳过")
+            return
+
+        logger.info(color("fg_bold_green") + "当前配置的理财卡列表为: {}".format(selectedCards))
+
+        type2name = {
+            "type1": "体验版周卡",
+            "type2": "升级版周卡",
+            "type3": "体验版月卡",
+            "type4": "升级版月卡",
+        }
+
+        # ------------- 封装函数 ----------------
+        def query_gpoints():
+            res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
+            return int(res.sOutValue2)
+
+        def query_card_taken_map():
+            res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
+            statusList = res.sOutValue3.split('|')
+
+            cardTakenMap = {}
+            for i in range(1, 4 + 1):
+                name = type2name["type{}".format(i)]
+                if int(statusList[i]) > 0:
+                    taken = True
+                else:
+                    taken = False
+
+                cardTakenMap[name] = taken
+
+            return cardTakenMap
+
+        def show_financing_info():
+            info_map = get_financing_info_map()
+
+            heads = ["理财卡名称", "当前状态", "累计收益"]
+            colSizes = [10, 8, 8]
+            logger.info(tableify(heads, colSizes))
+            for name, info in info_map.items():
+                if name not in selectedCards:
+                    # 跳过未选择的卡
+                    continue
+
+                if info.buy:
+                    status = "已购买"
+                else:
+                    status = "未购买"
+
+                logger.info(color("fg_bold_cyan") + tableify([name, status, info.totalIncome], colSizes))
+
+        def get_financing_info_map():
+            resJson = self.xinyue_financing_op("查询各理财卡信息", "409714", print_res=False)["modRet"]["jData"]["arr"]
+            financingInfoMap = json.loads(resJson)  # type: dict
+
+            info_map = {}
+            for typ, financingInfo in financingInfoMap.items():
+                info = XinyueFinancingInfo()
+
+                info.name = type2name[typ]
+                if financingInfo["status"] == 0:
+                    info.buy = False
+                else:
+                    info.buy = True
+                info.totalIncome = financingInfo["totalIncome"]
+
+                info_map[info.name] = info
+
+            return info_map
+
+        # ------------- 正式逻辑 ----------------
+        try:
+            pass
+            gPoints = query_gpoints()
+            startPoints = gPoints
+            logger.info("当前G分为{}".format(startPoints))
+
+            # 活动规则
+            # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
+            # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
+            # ps：推荐购买体验版月卡和升级版月卡
+            financingCardsToBuyAndMap = {
+                ## 名称   购买价格   购买FlowId    领取FlowId
+                "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
+                "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
+                "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
+                "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
+            }
+
+            cardInfoMap = get_financing_info_map()
+            cardTakenMap = query_card_taken_map()
+            for cardName in selectedCards:
+                if cardName not in financingCardsToBuyAndMap:
+                    logger.warning("没有找到名为【{}】的理财卡，请确认是否配置错误".format(cardName))
+                    continue
+
+                buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
+                cardInfo = cardInfoMap[cardName]
+                taken = cardTakenMap[cardName]
+                # 如果尚未购买（或过期），则购买
+                if not cardInfo.buy:
+                    if gPoints >= buyPrice:
+                        self.xinyue_financing_op("购买{}".format(cardName), buyFlowId)
+                        gPoints -= buyPrice
+                    else:
+                        logger.warning("积分不够，将跳过购买~，购买{}需要{}G分，当前仅有{}G分".format(cardName, buyPrice, gPoints))
+                        continue
+
+                # 此处以确保购买，尝试领取
+                if taken:
+                    logger.warning("今日已经领取过{}了，本次将跳过".format(cardName))
+                else:
+                    self.xinyue_financing_op("领取{}".format(cardName), takeFlowId)
+
+            newGPoints = query_gpoints()
+            delta = newGPoints - startPoints
+            logger.warning(color("fg_bold_yellow") + "账号 {} 本次心悦理财礼卡操作共获得 {} G分（ {} -> {} ）".format(self.cfg.name, delta, startPoints, newGPoints))
+
+            show_financing_info()
+        except Exception as e:
+            logger.error("处理心悦app理财礼卡出错了", exc_info=e)
+
+    def xinyue_financing_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_xinyue_financing
+
+        plat = 3 # app
+        extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x27"')
+
+        return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
+                                   plat=plat, extraStr=extraStr)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, extra_cookies)
@@ -2162,6 +2307,7 @@ class DjcHelper:
             "page": "",
             "iPackageId": "",
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
+            "plat": "", "extraStr": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -2245,4 +2391,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.hello_voice()
         # djcHelper.DnfCarnival()
-        djcHelper.ark_lottery()
+        # djcHelper.ark_lottery()
+        djcHelper.xinyue_financing()

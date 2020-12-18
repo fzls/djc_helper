@@ -2132,6 +2132,10 @@ class DjcHelper:
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
+        if not self.common_cfg.test_mode:
+            # undone: 心悦app理财礼卡活动似乎还有一些问题，先本地运行一段时间再放出去
+            return
+
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
 

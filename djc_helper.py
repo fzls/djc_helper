@@ -299,7 +299,7 @@ class DjcHelper:
         binded = True
         if self.cfg.function_switches.get_djc:
             # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
-            if not self.cfg.cannot_band_dnf and "dnf" not in self.bizcode_2_bind_role_map:
+            if not self.cfg.cannot_bind_dnf and "dnf" not in self.bizcode_2_bind_role_map:
                 logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
                 binded = False
 

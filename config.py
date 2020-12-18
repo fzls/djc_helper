@@ -200,7 +200,7 @@ class AccountConfig(ConfigInterface):
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = "by_hand"
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
-        self.cannot_band_dnf = False
+        self.cannot_bind_dnf = False
         # 心悦app理财礼卡活动选择的理财卡类型。最多选两个~。可选项分别为：体验版周卡、升级版周卡、体验版月卡、升级版月卡。推荐最后俩月卡，收益最高
         # 示例：xinyue_financing_card_names = ["升级版月卡", "体验版月卡"]
         self.xinyue_financing_card_names = []

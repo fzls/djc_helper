@@ -67,11 +67,6 @@ login_mode = "qr_login"
 # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
 cannot_bind_dnf = false
 
-# 心悦app理财礼卡活动选择的理财卡类型。最多生效两个~。可选项分别为：体验版周卡、升级版周卡、体验版月卡、升级版月卡。推荐最后俩月卡，收益最高
-# 示例：xinyue_financing_card_names = ["升级版月卡", "体验版月卡"]
-# 如果G分不够多，也可以尝试填写["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]，这样会依次尝试各个方案，确保能用当前能购买的最高等级礼卡来做活动
-xinyue_financing_card_names = []
-
 # 各功能开关，true表示开启，false表示关闭
 # 示例如下：
 # 开启领取道聚城
@@ -110,8 +105,6 @@ get_dnf_helper_chronicle = true
 get_hello_voice = true
 # 是否领取2020DNF嘉年华页面主页面签到活动
 get_dnf_carnival = true
-# 是否领取心悦app理财礼卡
-get_xinyue_financing = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

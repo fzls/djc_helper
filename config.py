@@ -192,8 +192,6 @@ class AccountConfig(ConfigInterface):
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号_不同账号请取不同名字"
-        # 测试模式，若开启，则一些实验性功能将会启用
-        self.test_mode = False
         # 登录模式
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
@@ -342,6 +340,8 @@ class CommonConfig(ConfigInterface):
     }
 
     def __init__(self):
+        # 测试模式，若开启，则一些实验性功能将会启用
+        self.test_mode = False
         # 测试用开关，将仅运行首个账号配置
         self._debug_run_first_only = False
         # 是否启用处于安全模式的账号

@@ -2183,9 +2183,9 @@ class DjcHelper:
         def show_financing_info():
             info_map = get_financing_info_map()
 
-            heads = ["理财卡名称", "当前状态", "累计收益"]
-            colSizes = [10, 8, 8]
-            logger.info(tableify(heads, colSizes))
+            heads = ["理财卡名称", "当前状态", "累计收益", "剩余天数", "结束日期"]
+            colSizes = [10, 8, 8, 8, 10]
+            logger.info(color("bold_green") + tableify(heads, colSizes))
             for name, info in info_map.items():
                 if name not in selectedCards:
                     # 跳过未选择的卡
@@ -2196,11 +2196,11 @@ class DjcHelper:
                 else:
                     status = "未购买"
 
-                logger.info(color("fg_bold_cyan") + tableify([name, status, info.totalIncome], colSizes))
+                logger.info(color("fg_bold_cyan") + tableify([name, status, info.totalIncome, info.leftTime, info.endTime], colSizes))
 
         def get_financing_info_map():
-            resJson = self.xinyue_financing_op("查询各理财卡信息", "409714", print_res=False)["modRet"]["jData"]["arr"]
-            financingInfoMap = json.loads(resJson)  # type: dict
+            financingInfoMap = json.loads(self.xinyue_financing_op("查询各理财卡信息", "409714", print_res=False)["modRet"]["jData"]["arr"])  # type: dict
+            financingTimeInfoMap = json.loads(self.xinyue_financing_op("查询理财礼卡天数信息", "409396", print_res=False)["modRet"]["jData"]["arr"])  # type: dict
 
             info_map = {}
             for typ, financingInfo in financingInfoMap.items():
@@ -2212,6 +2212,11 @@ class DjcHelper:
                 else:
                     info.buy = True
                 info.totalIncome = financingInfo["totalIncome"]
+
+                if typ in financingTimeInfoMap["alltype"]:
+                    info.leftTime = financingTimeInfoMap["alltype"][typ]["leftime"]
+                if typ in financingTimeInfoMap["opened"]:
+                    info.endTime = financingTimeInfoMap["opened"][typ]["endtime"]
 
                 info_map[info.name] = info
 
@@ -2263,7 +2268,9 @@ class DjcHelper:
 
             newGPoints = query_gpoints()
             delta = newGPoints - startPoints
+            logger.warning("")
             logger.warning(color("fg_bold_yellow") + "账号 {} 本次心悦理财礼卡操作共获得 {} G分（ {} -> {} ）".format(self.cfg.name, delta, startPoints, newGPoints))
+            logger.warning("")
 
             show_financing_info()
         except Exception as e:

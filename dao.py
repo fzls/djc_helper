@@ -513,3 +513,5 @@ class XinyueFinancingInfo(ConfigInterface):
         self.name = "体验版周卡"
         self.buy = False
         self.totalIncome = 0
+        self.leftTime = 0
+        self.endTime = ""

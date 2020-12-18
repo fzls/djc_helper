@@ -191,7 +191,7 @@ class AccountConfig(ConfigInterface):
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
-        self.name = "默认账号"
+        self.name = "默认账号_不同账号请取不同名字"
         # 测试模式，若开启，则一些实验性功能将会启用
         self.test_mode = False
         # 登录模式

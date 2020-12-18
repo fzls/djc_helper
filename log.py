@@ -73,8 +73,8 @@ consoleLogFormatter = colorlog.ColoredFormatter(
         'DEBUG': 'cyan',
         'INFO': 'green',
         'WARNING': 'yellow',
-        'ERROR': 'red',
-        'CRITICAL': 'red',
+        'ERROR': 'fg_bold_red',
+        'CRITICAL': 'fg_bold_red',
     }},
     secondary_log_colors={},
     style='%'

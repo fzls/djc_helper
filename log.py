@@ -9,11 +9,13 @@ import colorlog
 ###########################################################
 #                         logging                         #
 ###########################################################
+asciiReset = colorlog.escape_codes['reset']
+
 fileFmtStr = "%(asctime)s [%(name)s] %(funcName)s:%(lineno)d %(levelname)-5.5s: %(message)s"
-consoleFmtStr = "{}%(asctime)s {}%(funcName)s:%(lineno)-3d {}%(levelname)-5.5s: %(message)s".format(
-    "%(purple)s",
-    "%(purple)s",
-    "%(log_color)s",
+consoleFmtStr = "{}%(asctime)s{} {}%(funcName)s:%(lineno)-3d{} {}%(levelname)-5.5s: %(message)s{}".format(
+    "%(bold_purple)s", asciiReset,
+    "%(purple)s", asciiReset,
+    "%(log_color)s", asciiReset,
 )
 
 logger = logging.getLogger()

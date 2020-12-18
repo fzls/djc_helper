@@ -201,8 +201,9 @@ class AccountConfig(ConfigInterface):
         self.login_mode = "by_hand"
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
         self.cannot_bind_dnf = False
-        # 心悦app理财礼卡活动选择的理财卡类型。最多选两个~。可选项分别为：体验版周卡、升级版周卡、体验版月卡、升级版月卡。推荐最后俩月卡，收益最高
+        # 心悦app理财礼卡活动选择的理财卡类型。最多生效两个~。可选项分别为：体验版周卡、升级版周卡、体验版月卡、升级版月卡。推荐最后俩月卡，收益最高
         # 示例：xinyue_financing_card_names = ["升级版月卡", "体验版月卡"]
+        # 如果G分不够多，也可以尝试填写["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]，这样会依次尝试各个方案，确保能用当前能购买的最高等级礼卡来做活动
         self.xinyue_financing_card_names = []
         # 各功能开关
         self.function_switches = FunctionSwitchesConfig()

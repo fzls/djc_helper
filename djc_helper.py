@@ -2076,9 +2076,8 @@ class DjcHelper:
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):
-        # fixme: 开发完成后移除这个
-        if not self.cfg.test_mode:
-            return
+        # 目前通过autojs实现
+        return
 
         show_head_line("微信签到--临时版本，仅本地使用")
 

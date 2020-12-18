@@ -99,12 +99,17 @@ class QzoneActivity:
         self.try_lottery_using_cards()
 
     def try_lottery_using_cards(self, print_warning=True):
-        if self.cfg.ark_lottery.cost_all_cards_and_do_lottery:
+        if self.enable_cost_all_cards_and_do_lottery():
+            if print_warning: logger.warning(color("fg_bold_cyan") + "已开启抽卡活动({})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能".format(self.zzconfig.actid))
             card_counts = self.get_card_counts()
             for name, count in card_counts.items():
                 self.lottery_using_cards(name, count)
         else:
-            if print_warning: logger.warning(color("fg_bold_cyan") + "尚未开启消耗所有卡片来抽奖功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片")
+            if print_warning: logger.warning(color("fg_bold_cyan") + "尚未开启抽卡活动({})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。".format(self.zzconfig.actid))
+
+    def enable_cost_all_cards_and_do_lottery(self):
+        return self.cfg.ark_lottery.act_id_to_cost_all_cards_and_do_lottery.get(self.zzconfig.actid, False)
+
 
     def lottery_using_cards(self, card_name, count=1):
         if count <= 0:

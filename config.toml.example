@@ -652,11 +652,22 @@ count = 1
 lucky_dnf_server_id = "" # 区服id可查阅reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
 lucky_dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
 
-# 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
-cost_all_cards_and_do_lottery = false
-
 # 是否领取礼包（建议仅大号开启这个功能）
 need_take_awards = false
+
+# 活动ID => 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
+# 如果不知道活动ID的话，可以不填，这样工具运行到本账号集卡时，会提示形如下列格式的信息。其中跟在【抽卡活动】字样后面括号里的数字就是当前集卡活动的ID
+#   尚未开启抽卡活动(4166)消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。
+# 示例：
+# 开启4166集卡的该功能：
+#   4166 = true
+# 关闭4166集卡的该功能：
+#   4166 = false
+[account_configs.ark_lottery.act_id_to_cost_all_cards_and_do_lottery]
+# 2020.09.22 征战希洛克集卡抽战灵天舞套！
+3886 = false
+# 2020.12.14 阿拉德勇士征集令
+4166 = false
 
 # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
 #[[account_configs.wegame_guoqing_exchange_items]]

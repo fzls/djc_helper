@@ -81,7 +81,7 @@ class ArkLotteryAwardConfig(ConfigInterface):
 class ArkLotteryConfig(ConfigInterface):
     def __init__(self):
         # 用于完成幸运勇士的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
-        self.lucky_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js
+        self.lucky_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
         self.lucky_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         # 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
         self.cost_all_cards_and_do_lottery = False

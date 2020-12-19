@@ -2473,6 +2473,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_warriors_call()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.hello_voice()
-        # djcHelper.DnfCarnival()
+        # djcHelper.dnf_carnival()
         # djcHelper.ark_lottery()
         djcHelper.xinyue_financing()

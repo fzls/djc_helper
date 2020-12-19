@@ -380,7 +380,7 @@ class DjcHelper:
         self.hello_voice()
 
         # 2020DNF嘉年华页面主页面签到
-        self.DnfCarnival()
+        self.dnf_carnival()
 
         # QQ空间抽卡
         self.ark_lottery()
@@ -2102,7 +2102,7 @@ class DjcHelper:
         self.get("微信签到信息", 'https://gw.gzh.qq.com/awp-signin/check?id=260', extra_cookies=wx_login_cookies)
 
     # --------------------------------------------2020DNF嘉年华页面主页面签到--------------------------------------------
-    def DnfCarnival(self):
+    def dnf_carnival(self):
         # https://dnf.qq.com/cp/a20201203carnival/index.html
         show_head_line("2020DNF嘉年华页面主页面签到")
 

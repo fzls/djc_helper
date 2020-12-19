@@ -268,7 +268,7 @@ class QzoneActivity:
         def check_fn(response: requests.Response):
             return data_prefix not in response.text
 
-        res = try_request(request_fn, self.djc_helper.common_cfg.retry, check_fn=check_fn)
+        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
         page_html = res.text
 
         prefix_idx = page_html.index(data_prefix) + len(data_prefix)

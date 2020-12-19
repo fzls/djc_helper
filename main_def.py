@@ -520,6 +520,8 @@ def temp_code(cfg):
 
 
 def _test_main():
+    need_check_bind_and_skey = True
+
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     maximize_console()
@@ -527,7 +529,8 @@ def _test_main():
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
-    check_djc_role_binding()
+    if need_check_bind_and_skey:
+        check_djc_role_binding()
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
@@ -537,7 +540,8 @@ def _test_main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    check_all_skey_and_pskey(cfg)
+    if need_check_bind_and_skey:
+        check_all_skey_and_pskey(cfg)
 
     # note: 用于本地测试main的相关逻辑
     # show_accounts_status(cfg, "启动时展示账号概览")

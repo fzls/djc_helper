@@ -170,6 +170,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_hello_voice = True
         # 是否领取2020DNF嘉年华页面主页面签到活动
         self.get_dnf_carnival = True
+        # 是否领取2020DNF嘉年华直播活动
+        self.get_dnf_carnival_live = True
         # 是否领取心悦app理财礼卡
         self.get_xinyue_financing = True
 

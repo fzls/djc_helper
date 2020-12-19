@@ -110,7 +110,6 @@ class QzoneActivity:
     def enable_cost_all_cards_and_do_lottery(self):
         return self.cfg.ark_lottery.act_id_to_cost_all_cards_and_do_lottery.get(self.zzconfig.actid, False)
 
-
     def lottery_using_cards(self, card_name, count=1):
         if count <= 0:
             return
@@ -260,12 +259,17 @@ class QzoneActivity:
     # ----------------- QQ空间活动通用逻辑 ----------------------
 
     def fetch_data(self, activity_page_url):
-        request_fn = lambda: requests.post(activity_page_url, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
-        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
-        page_html = res.text
-
         data_prefix = "window.syncData = "
         data_suffix = ";\n</script>"
+
+        def request_fn():
+            return requests.post(activity_page_url, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+
+        def check_fn(response: requests.Response):
+            return data_prefix not in response.text
+
+        res = try_request(request_fn, self.djc_helper.common_cfg.retry, check_fn=check_fn)
+        page_html = res.text
 
         prefix_idx = page_html.index(data_prefix) + len(data_prefix)
         suffix_idx = page_html.index(data_suffix, prefix_idx)

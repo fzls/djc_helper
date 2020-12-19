@@ -1,3 +1,4 @@
+import traceback
 from urllib.parse import unquote_plus
 
 import requests
@@ -71,6 +72,7 @@ def try_request(request_fn, retryCfg, check_fn=None):
             return response
         except Exception as exc:
             logger.exception("{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
+            logger.error("current call stack=\n{}".format(color("bold_black") + ''.join(traceback.format_stack())))
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 

@@ -2346,7 +2346,7 @@ class DjcHelper:
     def xinyue_financing_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_xinyue_financing
 
-        plat = 3 # app
+        plat = 3  # app
         extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x27"')
 
         return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",

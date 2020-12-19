@@ -55,13 +55,20 @@ class Network:
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
 
 
-def try_request(request_fn, retryCfg):
+def try_request(request_fn, retryCfg, check_fn=None):
     """
+    :param check_fn: func(requests.Response) -> bool
     :type retryCfg: RetryConfig
     """
     for i in range(retryCfg.max_retry_count):
         try:
-            return request_fn()
+            response = request_fn()  # type: requests.Response
+
+            if check_fn is not None:
+                if not check_fn(response):
+                    raise Exception("check failed")
+
+            return response
         except Exception as exc:
             logger.exception("{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
             if i + 1 != retryCfg.max_retry_count:

@@ -40,7 +40,7 @@ class ExchangeItemConfig(ConfigInterface):
     def __init__(self):
         self.iGoodsId = "753"
         self.sGoodsName = "装备品级调整箱（5个）"
-        self.count = 2
+        self.count = 0
 
 
 class DnfHelperChronicleExchangeItemConfig(ConfigInterface):

@@ -199,6 +199,10 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         return
     _show_head_line(ctx)
 
+    end_time = "2020-12-31"
+    remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d") - datetime.datetime.now()
+    logger.info(color("bold_yellow") + "本次集卡活动的结束时间为{}，剩余时间为{}".format(end_time, remaining_time))
+
     lottery_zzconfig = zzconfig()
     card_info_map = parse_card_group_info_map(lottery_zzconfig)
     order_map = {}

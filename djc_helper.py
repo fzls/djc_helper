@@ -2130,6 +2130,73 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
 
+    # --------------------------------------------2020DNF嘉年华直播--------------------------------------------
+    def dnf_carnival_live(self):
+        if not self.common_cfg.test_mode:
+            # 仅限测试模式运行
+            return
+
+        # https://dnf.qq.com/cp/a20201203carnival/index.html
+        show_head_line("2020DNF嘉年华直播")
+
+        if not self.cfg.function_switches.get_dnf_carnival_live:
+            logger.warning("未启用领取2020DNF嘉年华直播活动合集功能，将跳过")
+            return
+
+        self.check_dnf_carnival_live()
+
+        def query_watch_time():
+            res = self.dnf_carnival_live_op("查询观看时间", "722482", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return int(info.sOutValue3)
+
+        def watch_remaining_time():
+            current_watch_time = query_watch_time()
+            remaining_time = 15 * 8 - current_watch_time
+            logger.info("当前已观看{}分钟，仍需观看{}分钟".format(current_watch_time, remaining_time))
+            for i in range(remaining_time):
+                res = self.dnf_carnival_live_op("{}. 记录完成一分钟观看".format(i + 1), "722476")
+                if res["ret"] != "0":
+                    logger.warning("出错了，停止记录观看，最新观看时间为{}分钟".format(query_watch_time()))
+                    break
+
+        def query_used_lottery_times():
+            res = self.dnf_carnival_live_op("查询获奖次数", "725567", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return int(info.sOutValue1)
+
+        def lottery_remaining_times():
+            total_lottery_times = query_watch_time() // 15
+            used_lottery_times = query_used_lottery_times()
+            remaining_lottery_times = total_lottery_times - used_lottery_times
+            logger.info("抽奖次数信息：总计={} 已使用={} 剩余={}".format(total_lottery_times, used_lottery_times, remaining_lottery_times))
+            if remaining_lottery_times == 0:
+                logger.warning("没有剩余次数，将不进行抽奖")
+                return
+
+            for i in range(remaining_lottery_times):
+                res = self.dnf_carnival_live_op("{}. 抽奖".format(i + 1), "722473")
+                if res["ret"] != "0":
+                    logger.warning("出错了，停止抽奖，剩余抽奖次数为{}".format(remaining_lottery_times - i))
+                    break
+
+        watch_remaining_time()
+        lottery_remaining_times()
+
+    def check_dnf_carnival_live(self):
+        res = self.dnf_carnival_live_op("查询是否绑定", "722472", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            webbrowser.open("https://dnf.qq.com/cp/a20201203carnival/index.html")
+            msg = "未绑定角色，请前往2020DNF嘉年华直播活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_carnival_live
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
+
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
         if not self.common_cfg.test_mode:

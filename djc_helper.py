@@ -2218,7 +2218,7 @@ class DjcHelper:
                 logger.warning("已经兑换过【{}】，不再尝试兑换".format(sContent))
                 return
 
-            self.dnf_welfare_op("兑换口令-{}".format(sContent), "558229", sContent=sContent)
+            self.dnf_welfare_op("兑换口令-{}".format(sContent), "558229", sContent=quote_plus(quote_plus(quote_plus(sContent))))
 
             # 本地标记已经兑换过
             def callback(account_db):

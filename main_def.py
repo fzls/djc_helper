@@ -590,15 +590,4 @@ def _test_main():
 
 
 if __name__ == '__main__':
-    try:
-        run_start_time = datetime.datetime.now()
-        _test_main()
-        logger.warning(color("fg_bold_yellow") + "运行完成，共用时{}".format(datetime.datetime.now() - run_start_time))
-    except Exception as e:
-        msg = "ver {} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决。".format(now_version)
-        logger.exception(color("fg_bold_red") + msg, exc_info=e)
-        logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
-        logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
-    finally:
-        # 暂停一下，方便看结果
-        os.system("PAUSE")
+    _test_main()

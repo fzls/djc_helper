@@ -388,6 +388,9 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
+        # DNF福利中心兑换
+        self.dnf_welfare()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】

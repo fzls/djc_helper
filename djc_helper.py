@@ -2214,7 +2214,7 @@ class DjcHelper:
 
             # 检查是否已经兑换过
             account_db = load_db_for(self.cfg.name)
-            if key in account_db and account_db[key][sContent]:
+            if key in account_db and account_db[key].get(sContent, False):
                 logger.warning("已经兑换过【{}】，不再尝试兑换".format(sContent))
                 return
 

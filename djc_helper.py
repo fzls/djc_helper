@@ -2422,6 +2422,40 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
 
+def watch_live():
+    # 读取配置信息
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    RunAll = True
+    indexes = [1]
+    if RunAll:
+        indexes = [i + 1 for i in range(len(cfg.account_configs))]
+
+    totalTime = 2* 60 + 5 # 为了保险起见，多执行5分钟
+    logger.info("totalTime={}".format(totalTime))
+
+    for t in range(totalTime):
+        timeStart = datetime.datetime.now()
+        logger.info(color("bold_yellow") + "开始执行第{}分钟的流程".format(t+1))
+        for idx in indexes:  # 从1开始，第i个
+            account_config = cfg.account_configs[idx - 1]
+            if not account_config.is_enabled() or account_config.cannot_bind_dnf:
+                logger.warning("账号被禁用或无法绑定DNF，将跳过")
+                continue
+
+            djcHelper = DjcHelper(account_config, cfg.common)
+            djcHelper.check_skey_expired()
+
+            djcHelper.dnf_carnival_live()
+
+
+        totalUsed = (datetime.datetime.now() - timeStart).total_seconds()
+        if totalUsed < 60:
+            waitTime = 60.1 - totalUsed
+            logger.info(color("bold_cyan") + "本轮累积用时{}秒，将休息{}秒".format(totalUsed, waitTime))
+            time.sleep(waitTime)
+
 
 if __name__ == '__main__':
     # 读取配置信息

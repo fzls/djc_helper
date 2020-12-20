@@ -458,6 +458,10 @@ def try_xinyue_sailiyam_start_work(cfg):
 
             # 然后派出去打工
             djcHelper.xinyue_sailiyam_op("出去打工", "714255")
+
+            logger.info("等待一会，避免请求过快")
+            time.sleep(3)
+
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_workinfo())
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 

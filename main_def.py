@@ -5,6 +5,7 @@ import win32api
 
 from config import load_config, config, XinYueOperationConfig
 from djc_helper import DjcHelper
+from log import asciiReset
 from qzone_activity import QzoneActivity
 from setting import *
 from update import check_update_on_start
@@ -227,8 +228,13 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         order_map[displayTitle] = group.title
         prizeDisplayTitles.append(displayTitle)
 
-    heads = ["序号", "账号名"]
-    colSizes = [4, 12]
+    heads = []
+    colSizes = []
+
+    baseHeads = ["序号", "账号名"]
+    baseColSizes = [4, 12]
+    heads.extend(baseHeads)
+    colSizes.extend(baseColSizes)
 
     card_indexes = ["1-1", "1-2", "1-3", "1-4", "2-1", "2-2", "2-3", "2-4", "3-1", "3-2", "3-3", "3-4"]
     card_width = 3
@@ -242,6 +248,7 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
     accounts_that_should_enable_cost_card_to_lottery = []
 
     logger.info(tableify(heads, colSizes))
+    summaryCols = [1, "总计", *[0 for card in card_indexes], *[count_with_color(0, "bold_green", show_width=printed_width(prize_index)) for prize_index in prize_indexes]]
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.is_enabled():
@@ -264,36 +271,19 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         card_counts = qa.get_card_counts()
         prize_counts = qa.get_prize_counts()
 
+        summaryCols[0] += 1
+
         cols = [idx, account_config.name]
         has_any_card = False
         has_any_left_gift = False
         # 处理各个卡片数目
-        for card_index in card_indexes:
+        for card_position, card_index in enumerate(card_indexes):
             card_count = card_counts[order_map[card_index]]
 
-            show_count = card_count
-            # 特殊处理色彩
-            if card_count == 0:
-                if idx == 1:
-                    # 突出显示大号没有的卡片
-                    show_count = color("fg_bold_cyan") + padLeftRight(card_count, 3) + color("INFO")
-                else:
-                    # 小号没有的卡片直接不显示，避免信息干扰
-                    show_count = ""
-            else:
-                if idx == 1:
-                    if card_count == 1:
-                        # 大号只有一张的卡片也特殊处理
-                        show_count = color("fg_bold_blue") + padLeftRight(card_count, 3) + color("INFO")
-                    else:
-                        # 大号其余卡片亮绿色
-                        show_count = color("fg_bold_green") + padLeftRight(card_count, 3) + color("INFO")
-                else:
-                    # 小号拥有的卡片淡化处理，方便辨识
-                    show_color = account_config.ark_lottery.show_color or "fg_bold_black"
-                    show_count = color(show_color) + padLeftRight(card_count, 3) + color("INFO")
+            cols.append(colored_count(idx, card_count, account_config.ark_lottery.show_color))
 
-            cols.append(show_count)
+            # 更新统计信息
+            summaryCols[len(baseHeads) + card_position] += card_count
 
             if card_count > 0:
                 has_any_card = True
@@ -301,7 +291,7 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         # 处理各个奖励剩余领取次数
         for prize_index in prize_indexes:
             prize_count = prize_counts[order_map[prize_index]]
-            cols.append(prize_count)
+            cols.append(count_with_color(prize_count, "bold_green", show_width=printed_width(prize_index)))
 
             if prize_count > 0:
                 has_any_left_gift = True
@@ -311,9 +301,44 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         if has_any_card and not has_any_left_gift:
             accounts_that_should_enable_cost_card_to_lottery.append(account_config.name)
 
+    for cardIdx in range(len(card_indexes)):
+        idx = len(baseHeads) + cardIdx
+        summaryCols[idx] = colored_count(len(cfg.account_configs), summaryCols[idx], cfg.common.ark_lottery_summary_show_color or "fg_thin_cyan")
+
+    logger.info(tableify(summaryCols, colSizes))
+
     if need_show_tips and len(accounts_that_should_enable_cost_card_to_lottery) > 0:
         msg = "账户({})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能".format(', '.join(accounts_that_should_enable_cost_card_to_lottery))
         logger.warning(color("fg_bold_yellow") + msg)
+
+
+def colored_count(accountIdx, card_count, show_color=""):
+    # 特殊处理色彩
+    if card_count == 0:
+        if accountIdx == 1:
+            # 突出显示大号没有的卡片
+            show_count = count_with_color(card_count, "fg_bold_cyan")
+        else:
+            # 小号没有的卡片直接不显示，避免信息干扰
+            show_count = ""
+    else:
+        if accountIdx == 1:
+            if card_count == 1:
+                # 大号只有一张的卡片也特殊处理
+                show_count = count_with_color(card_count, "fg_bold_blue")
+            else:
+                # 大号其余卡片亮绿色
+                show_count = count_with_color(card_count, "fg_bold_green")
+        else:
+            # 小号拥有的卡片淡化处理，方便辨识
+            show_color = show_color or "fg_bold_black"
+            show_count = count_with_color(card_count, show_color)
+
+    return show_count
+
+
+def count_with_color(card_count, show_color, show_width=3):
+    return color(show_color) + padLeftRight(card_count, show_width) + asciiReset + color("INFO")
 
 
 def show_accounts_status(cfg, ctx):

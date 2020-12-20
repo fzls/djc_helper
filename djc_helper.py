@@ -2232,6 +2232,8 @@ class DjcHelper:
         sContents = [
             "DNF1224",
             "你好啊勇士",
+            "2021欧气满满",
+            "321fight",
         ]
         for sContent in sContents:
             exchange_package(sContent)

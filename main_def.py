@@ -551,9 +551,9 @@ def temp_code(cfg):
 def _test_main():
     need_check_bind_and_skey = True
 
-    # 最大化窗口
-    logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-    maximize_console()
+    # # 最大化窗口
+    # logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
+    # maximize_console()
 
     logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

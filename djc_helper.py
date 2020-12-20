@@ -1069,7 +1069,8 @@ class DjcHelper:
                 work_message += "赛利亚尚未出门工作"
 
             return work_message
-        except:
+        except Exception as e:
+            logger.error("获取打工信息出错了", exc_info=e)
             return ""
 
     def get_xinyue_sailiyam_status(self):

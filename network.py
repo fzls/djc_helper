@@ -31,7 +31,7 @@ class Network:
             "Cookie": self.base_cookies,
         }
 
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies=""):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies=""):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
@@ -40,9 +40,9 @@ class Network:
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
         res = try_request(request_fn, self.common_cfg.retry)
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, extra_cookies=""):
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies=""):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             post_headers = {**self.base_headers, **{
@@ -53,7 +53,7 @@ class Network:
 
         res = try_request(request_fn, self.common_cfg.retry)
         logger.debug("{}".format(data))
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
 
 def try_request(request_fn, retryCfg, check_fn=None):
@@ -79,11 +79,11 @@ def try_request(request_fn, retryCfg, check_fn=None):
     logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
 
 
-def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False):
+def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
     res.encoding = 'utf-8'
 
     if is_jsonp:
-        data = jsonp2json(res.text, is_normal_jsonp)
+        data = jsonp2json(res.text, is_normal_jsonp, need_unquote)
     else:
         data = res.json()
 
@@ -125,7 +125,7 @@ def is_request_ok(data):
     return success
 
 
-def jsonp2json(jsonpStr, is_normal_jsonp=True):
+def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True):
     if is_normal_jsonp:
         left_idx = jsonpStr.index("(")
         right_idx = jsonpStr.index(")")
@@ -143,7 +143,10 @@ def jsonp2json(jsonpStr, is_normal_jsonp=True):
             k, v = kv.strip().split(":")
             if v[0] == "'":
                 v = v[1:-1]  # 去除前后的''
-            jsonRes[k] = unquote_plus(v)
+            if need_unquote:
+                jsonRes[k] = unquote_plus(v)
+            else:
+                jsonRes[k] = v
         except:
             pass
 

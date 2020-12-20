@@ -2552,6 +2552,18 @@ if __name__ == '__main__':
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
+        show_head_line("预先获取第{}个账户[{}]的skey".format(idx, account_config.name), color("fg_bold_yellow"))
+
+        if not account_config.is_enabled():
+            logger.warning("账号被禁用，将跳过")
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+
+    for idx in indexes:  # 从1开始，第i个
+        account_config = cfg.account_configs[idx - 1]
+
         show_head_line("开始处理第{}个账户[{}]".format(idx, account_config.name), color("fg_bold_yellow"))
 
         if not account_config.is_enabled():

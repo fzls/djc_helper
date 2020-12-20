@@ -2232,6 +2232,20 @@ class DjcHelper:
             exchange_package(sContent)
 
 
+        # 登陆游戏领福利
+        self.dnf_welfare_login_gifts_op("第一个 2020.12.20 - 2020.12.23 登录游戏", "724929")
+        self.dnf_welfare_login_gifts_op("第二个 2020.12.24 - 2020.12.26 登录游戏", "724930")
+        self.dnf_welfare_login_gifts_op("第三个 2020.12.28 - 2021.01.03 登录游戏", "724936")
+
+        # 分享礼包
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "724940")
+
+    def get_dnf_welfare_userinfo(self):
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        res = self.get("查询角色信息", self.urls.get_game_role_list, game="dnf", area=roleinfo.serviceID, sAMSTargetAppId="", platid="", partition="", print_res=False, is_jsonp=True, need_unquote=False)
+        return AmesvrQueryRole().auto_update_config(res)
+
     def check_dnf_welfare(self):
         res = self.dnf_welfare_op("查询是否绑定", "558227", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
@@ -2244,8 +2258,21 @@ class DjcHelper:
     def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_welfare
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
                                    sContent=sContent)
+
+    def dnf_welfare_login_gifts_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        checkInfo = self.get_dnf_welfare_userinfo()
+
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
+                                   sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                                   md5str=checkInfo.md5str, ams_checkparam=checkparam,checkparam=checkparam)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
@@ -2437,7 +2464,7 @@ class DjcHelper:
             "iPackageId": "",
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
             "plat": "", "extraStr": "",
-            "sContent":"",
+            "sContent":"", "sPartition": "", "sAreaName":"", "md5str":"", "ams_checkparam":"","checkparam":"",
         }
         return url.format(**{**default_params, **params})
 

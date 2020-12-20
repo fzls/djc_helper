@@ -2235,7 +2235,6 @@ class DjcHelper:
         for sContent in sContents:
             exchange_package(sContent)
 
-
         # 登陆游戏领福利
         self.dnf_welfare_login_gifts_op("第一个 2020.12.20 - 2020.12.23 登录游戏", "724929")
         self.dnf_welfare_login_gifts_op("第二个 2020.12.24 - 2020.12.26 登录游戏", "724930")
@@ -2276,7 +2275,7 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
                                    sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                                    sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-                                   md5str=checkInfo.md5str, ams_checkparam=checkparam,checkparam=checkparam)
+                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
@@ -2468,7 +2467,7 @@ class DjcHelper:
             "iPackageId": "",
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
             "plat": "", "extraStr": "",
-            "sContent":"", "sPartition": "", "sAreaName":"", "md5str":"", "ams_checkparam":"","checkparam":"",
+            "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -2504,6 +2503,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
 
+
 def watch_live():
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
@@ -2514,12 +2514,12 @@ def watch_live():
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
-    totalTime = 2* 60 + 5 # 为了保险起见，多执行5分钟
+    totalTime = 2 * 60 + 5  # 为了保险起见，多执行5分钟
     logger.info("totalTime={}".format(totalTime))
 
     for t in range(totalTime):
         timeStart = datetime.datetime.now()
-        logger.info(color("bold_yellow") + "开始执行第{}分钟的流程".format(t+1))
+        logger.info(color("bold_yellow") + "开始执行第{}分钟的流程".format(t + 1))
         for idx in indexes:  # 从1开始，第i个
             account_config = cfg.account_configs[idx - 1]
             if not account_config.is_enabled() or account_config.cannot_bind_dnf:
@@ -2530,7 +2530,6 @@ def watch_live():
             djcHelper.check_skey_expired()
 
             djcHelper.dnf_carnival_live()
-
 
         totalUsed = (datetime.datetime.now() - timeStart).total_seconds()
         if totalUsed < 60:

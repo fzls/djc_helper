@@ -105,6 +105,8 @@ get_dnf_helper_chronicle = true
 get_hello_voice = true
 # 是否领取2020DNF嘉年华页面主页面签到活动
 get_dnf_carnival = true
+# 是否领取DNF福利中心兑换
+get_dnf_welfare = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

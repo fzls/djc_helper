@@ -2194,6 +2194,59 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
 
+    # --------------------------------------------DNF福利中心兑换--------------------------------------------
+    def dnf_welfare(self):
+        # http://dnf.qq.com/cp/a20190312welfare/index.htm
+        show_head_line("DNF福利中心兑换")
+
+        if not self.cfg.function_switches.get_dnf_welfare:
+            logger.warning("未启用领取DNF福利中心兑换活动功能，将跳过")
+            return
+
+        self.check_dnf_welfare()
+
+        def exchange_package(sContent):
+            key = "dnf_welfare_exchange_package"
+
+            # 检查是否已经兑换过
+            account_db = load_db_for(self.cfg.name)
+            if key in account_db and account_db[key][sContent]:
+                logger.warning("已经兑换过【{}】，不再尝试兑换".format(sContent))
+                return
+
+            self.dnf_welfare_op("兑换口令-{}".format(sContent), "558229", sContent=sContent)
+
+            # 本地标记已经兑换过
+            def callback(account_db):
+                if key not in account_db:
+                    account_db[key] = {}
+
+                account_db[key][sContent] = True
+
+            update_db_for(self.cfg.name, callback)
+
+        sContents = [
+            "DNF1224",
+        ]
+        for sContent in sContents:
+            exchange_package(sContent)
+
+
+    def check_dnf_welfare(self):
+        res = self.dnf_welfare_op("查询是否绑定", "558227", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            webbrowser.open("http://dnf.qq.com/cp/a20190312welfare/index.htm")
+            msg = "未绑定角色，请前往DNF福利中心兑换活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_welfare
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+                                   sContent=sContent)
+
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
         if not self.common_cfg.test_mode:
@@ -2384,6 +2437,7 @@ class DjcHelper:
             "iPackageId": "",
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
             "plat": "", "extraStr": "",
+            "sContent":"",
         }
         return url.format(**{**default_params, **params})
 
@@ -2506,5 +2560,6 @@ if __name__ == '__main__':
         # djcHelper.hello_voice()
         # djcHelper.dnf_carnival()
         # djcHelper.ark_lottery()
-        djcHelper.xinyue_financing()
+        # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
+        djcHelper.dnf_welfare()

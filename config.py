@@ -172,6 +172,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_carnival = True
         # 是否领取2020DNF嘉年华直播活动
         self.get_dnf_carnival_live = True
+        # 是否DNF共创投票
+        self.get_dnf_dianzan = True
         # 是否领取DNF福利中心兑换
         self.get_dnf_welfare = True
         # 是否领取心悦app理财礼卡

@@ -4,6 +4,7 @@ import string
 import subprocess
 import webbrowser
 from urllib.parse import quote_plus
+import math
 
 import pyperclip
 import win32api
@@ -390,6 +391,9 @@ class DjcHelper:
 
         # DNF福利中心兑换
         self.dnf_welfare()
+
+        # DNF共创投票
+        self.dnf_dianzan()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -2280,6 +2284,136 @@ class DjcHelper:
                                    sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                                    md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam)
 
+    # --------------------------------------------DNF共创投票--------------------------------------------
+    def dnf_dianzan(self):
+        # https://dnf.qq.com/cp/a20201126version/index.shtml
+        show_head_line("DNF共创投票")
+
+        if not self.cfg.function_switches.get_dnf_dianzan:
+            logger.warning("未启用领取DNF共创投票活动功能，将跳过")
+            return
+
+        self.check_dnf_dianzan()
+
+        db_key = "dnf_dianzan"
+        pagesize = 10
+
+        # 投票
+        def today_dianzan():
+            account_db = load_db_for(self.cfg.name)
+            today = get_today()
+
+            if db_key not in account_db:
+                account_db[db_key] = {}
+            if today not in account_db[db_key]:
+                account_db[db_key][today] = 0
+            if "usedContentIds" not in account_db[db_key]:
+                account_db[db_key]["usedContentIds"] = []
+
+            dianzanSuccessCount = account_db[db_key][today]
+            if dianzanSuccessCount >= 20:
+                logger.info("今日之前的运行中，已经完成20次点赞了，本次将不执行")
+                return
+
+            for contentId in get_dianzan_contents_with_cache():
+                # 不论投票是否成功，都标记为使用过的内容
+                account_db[db_key]["usedContentIds"].append(contentId)
+                if dianzan(dianzanSuccessCount + 1, contentId):
+                    dianzanSuccessCount += 1
+                    if dianzanSuccessCount >= 20:
+                        logger.info("今日已经累计点赞20个，将停止点赞")
+                        break
+
+            account_db[db_key][today] = dianzanSuccessCount
+
+            save_db_for(self.cfg.name, account_db)
+
+        def get_dianzan_contents_with_cache():
+            db = load_db()
+            account_db = load_db_for(self.cfg.name)
+            if db_key in db:
+                contentIds = db[db_key]["contentIds"]
+                usedContentIds = []
+                if db_key in account_db:
+                    usedContentIds = account_db[db_key].get("usedContentIds", [])
+
+                validContentIds = []
+                for contentId in contentIds:
+                    if contentId not in usedContentIds:
+                        validContentIds.append(contentId)
+
+                if len(validContentIds) >= 20:
+                    # 本地仍有不少于20个内容可供点赞，直接使用本地内容
+                    return validContentIds
+
+            return get_dianzan_contents()
+
+        def get_dianzan_contents():
+            contentIds = []
+
+            for iCategory2 in range(1, 8+1):
+                newContentIds, total = getWorksData(iCategory2, 1)
+                contentIds.extend(newContentIds)
+
+                # 获取剩余页面
+                totalPage = math.ceil(total / 10)
+                for page in range(2, totalPage):
+                    newContentIds, _ = getWorksData(iCategory2, page)
+                    contentIds.extend(newContentIds)
+
+            logger.info("获取所有内容ID共计{}个，将保存到本地，具体如下：{}".format(len(contentIds), contentIds))
+
+            def _update_db(db):
+                if db_key not in db:
+                    db[db_key] = {}
+
+                db[db_key]["contentIds"] = contentIds
+
+            update_db(_update_db)
+
+            return contentIds
+
+        def getWorksData(iCategory2, page):
+            ctx = "查询点赞内容-{}-{}".format(iCategory2, page)
+            res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=pagesize, print_res=False, is_jsonp=True, is_normal_jsonp=True)
+            return [v["iContentId"] for v in res["jData"]["data"]], int(res["jData"]["total"])
+
+        def dianzan(idx, iContentId)-> bool:
+            res = self.get("今日第{}次投票，目标为{}".format(idx, iContentId), self.urls.dianzan, iContentId=iContentId, is_jsonp=True, is_normal_jsonp=True)
+            return int(res["iRet"]) == 0
+
+        # 进行今天剩余的点赞操作
+        today_dianzan()
+
+        # 查询点赞信息
+        self.query_dnf_dianzan()
+
+        # 领取点赞奖励
+        self.dnf_dianzan_op("累计 10票", "725276")
+        self.dnf_dianzan_op("累计 25票", "725340")
+        self.dnf_dianzan_op("累计100票", "725341")
+        self.dnf_dianzan_op("累计200票", "725342")
+
+    def query_dnf_dianzan(self):
+        res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
+        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+        logger.warning(color("fg_bold_yellow") + "DNF共创投票活动当前已投票{}次，奖励领取状态为{}".format(info.sOutValue1, info.sOutValue2))
+
+    def check_dnf_dianzan(self):
+        res = self.dnf_dianzan_op("查询是否绑定", "725330", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            webbrowser.open("https://dnf.qq.com/cp/a20201126version/index.shtml")
+            msg = "未绑定角色，请前往DNF共创投票活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_dianzan
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201126version/")
+
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
         if not self.common_cfg.test_mode:
@@ -2607,4 +2741,5 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.dnf_dianzan()

@@ -17,19 +17,37 @@ def save_db(db):
         json.dump(db, fp, ensure_ascii=False, indent=4)
 
 
+def update_db(callback):
+    db = load_db()
+
+    callback(db)
+
+    save_db(db)
+
+    return db
+
+
 def load_db_for(accountName):
     db = load_db()
 
-    account = get_account_from_db(accountName, db)
+    accountDb = get_account_from_db(accountName, db)
 
-    return account
+    return accountDb
+
+
+def save_db_for(accountName, accountDb):
+    db = load_db()
+
+    set_account_to_db(accountName, db, accountDb)
+
+    save_db(db)
 
 
 def update_db_for(accountName, callback):
     db = load_db()
 
-    account = get_account_from_db(accountName, db)
-    callback(account)
+    accountDb = get_account_from_db(accountName, db)
+    callback(accountDb)
 
     save_db(db)
 
@@ -44,6 +62,14 @@ def get_account_from_db(accountName, db):
         accounts[accountName] = {}
     account = accounts[accountName]
     return account
+
+
+def set_account_to_db(accountName, db, accountDb):
+    if "accounts" not in db:
+        db["accounts"] = {}
+    accounts = db["accounts"]
+
+    accounts[accountName] = accountDb
 
 
 localdb_file = os.path.join(db_dir, 'db.json')

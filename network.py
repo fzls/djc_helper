@@ -128,13 +128,13 @@ def is_request_ok(data):
 def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True):
     if is_normal_jsonp:
         left_idx = jsonpStr.index("(")
-        right_idx = jsonpStr.index(")")
+        right_idx = jsonpStr.rindex(")")
         jsonpStr = jsonpStr[left_idx + 1:right_idx]
         return json.loads(jsonpStr)
 
     # dnf返回的jsonp比较诡异，需要特殊处理
     left_idx = jsonpStr.index("{")
-    right_idx = jsonpStr.index("}")
+    right_idx = jsonpStr.rindex("}")
     jsonpStr = jsonpStr[left_idx + 1:right_idx]
 
     jsonRes = {}

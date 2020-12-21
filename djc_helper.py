@@ -2331,22 +2331,31 @@ class DjcHelper:
         def get_dianzan_contents_with_cache():
             db = load_db()
             account_db = load_db_for(self.cfg.name)
-            if db_key in db:
-                contentIds = db[db_key]["contentIds"]
-                usedContentIds = []
-                if db_key in account_db:
-                    usedContentIds = account_db[db_key].get("usedContentIds", [])
 
+            usedContentIds = []
+            if db_key in account_db:
+                usedContentIds = account_db[db_key].get("usedContentIds", [])
+
+            def filter_used_contents(contentIds):
                 validContentIds = []
                 for contentId in contentIds:
                     if contentId not in usedContentIds:
                         validContentIds.append(contentId)
 
+                logger.info(validContentIds)
+
+                return validContentIds
+
+            if db_key in db:
+                contentIds = db[db_key]["contentIds"]
+
+                validContentIds = filter_used_contents(contentIds)
+
                 if len(validContentIds) >= 20:
                     # 本地仍有不少于20个内容可供点赞，直接使用本地内容
                     return validContentIds
 
-            return get_dianzan_contents()
+            return filter_used_contents(get_dianzan_contents())
 
         def get_dianzan_contents():
             contentIds = []

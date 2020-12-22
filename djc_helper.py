@@ -2358,6 +2358,7 @@ class DjcHelper:
             return filter_used_contents(get_dianzan_contents())
 
         def get_dianzan_contents():
+            logger.info("本地无点赞目标，或缓存的点赞目标均已点赞过，需要重新拉取，请稍后~")
             contentIds = []
 
             for iCategory2 in range(1, 8+1):
@@ -2384,7 +2385,7 @@ class DjcHelper:
 
         def getWorksData(iCategory2, page):
             ctx = "查询点赞内容-{}-{}".format(iCategory2, page)
-            res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=pagesize, print_res=False, is_jsonp=True, is_normal_jsonp=True)
+            res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=pagesize, is_jsonp=True, is_normal_jsonp=True)
             return [v["iContentId"] for v in res["jData"]["data"]], int(res["jData"]["total"])
 
         def dianzan(idx, iContentId)-> bool:

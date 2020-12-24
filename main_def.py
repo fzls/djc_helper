@@ -548,6 +548,9 @@ def temp_code(cfg):
         ),
     ]
 
+    if is_first_run("史诗之路"):
+        webbrowser.open("https://dnf.qq.com/cp/a20201214epic/index.html")
+
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + "{}. {}\n ".format(idx + 1, tip))
 

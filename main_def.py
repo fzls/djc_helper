@@ -8,6 +8,7 @@ from djc_helper import DjcHelper
 from log import asciiReset
 from qzone_activity import QzoneActivity
 from setting import *
+from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start
 from util import *
 from version import *
@@ -549,6 +550,30 @@ def temp_code(cfg):
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + "{}. {}\n ".format(idx + 1, tip))
+
+
+def show_qiafan_message_box_on_every_big_version(version):
+    # 当添加了多个活动的版本发布时，弹出一条恰饭信息
+    if is_first_run("qiafan_{}".format(version)):
+        activities = ["dnf漂流瓶", "马杰洛的规划", "dnf助手双旦"]
+        usedDays = get_count(my_usage_counter_name, "all")
+        message = (
+            "Hello，本次新接入了下列活动，欢迎大家使用。\n"
+            "{activities}"
+            "\n "
+            "您已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
+            "如果愿意，可选择扫码支持哈~\n"
+            "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
+        ).format(
+            activities="".join(["    {}. {}\n".format(idx + 1, name) for idx, name in enumerate(activities)]),
+            used_days=usedDays,
+        )
+        res = win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OKCANCEL)
+        if res == win32con.IDOK:
+            win32api.MessageBox(0, "٩(๑>◡<๑)۶ ", "致谢", win32con.MB_ICONINFORMATION)
+            os.popen("支持一下.png")
+        else:
+            win32api.MessageBox(0, "(｡•́︿•̀｡)", "TAT", win32con.MB_ICONINFORMATION)
 
 
 def _test_main():

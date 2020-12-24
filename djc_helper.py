@@ -2704,10 +2704,10 @@ class DjcHelper:
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
 
     def guide_to_bind_account(self, activity_name, activity_url):
-        webbrowser.open(activity_url)
-        msg = "当前账号【{}】未在活动页面绑定角色，请前往{}活动页面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能".format(self.cfg.name, activity_name)
+        msg = "当前账号【{}】未在活动页面绑定角色，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能".format(self.cfg.name, activity_name)
         logger.warning(color("bold_cyan") + msg)
         win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
+        webbrowser.open(activity_url)
         exit(-1)
 
 

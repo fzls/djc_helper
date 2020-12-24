@@ -2621,9 +2621,17 @@ class DjcHelper:
     def check_dnf_drift(self):
         res = self.dnf_drift_op("查询是否绑定", "725357", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        typ = random.choice([1, 2])
+        activity_url = "https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ)
         if len(res["modRet"]["jData"]) == 0:
-            typ = random.choice([1, 2])
-            self.guide_to_bind_account("dnf漂流瓶", "https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ))
+            self.guide_to_bind_account("dnf漂流瓶", activity_url)
+
+        if is_first_run("check_dnf_drift"):
+            msg = "求帮忙做一下邀请任务0-0  只用在点击确定按钮后弹出的活动页面中点【确认接受邀请】就行啦（这条消息只会出现一次）"
+            logger.warning(color("bold_cyan") + msg)
+            win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
+            webbrowser.open(activity_url)
+
 
     def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_drift

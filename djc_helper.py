@@ -395,6 +395,9 @@ class DjcHelper:
         # DNF共创投票
         self.dnf_dianzan()
 
+        # dnf漂流瓶
+        self.dnf_drift()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】

@@ -402,6 +402,9 @@ class DjcHelper:
         # DNF马杰洛的规划第二期
         self.majieluo()
 
+        # dnf助手双旦活动
+        self.dnf_helper_christmas()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1706,6 +1709,63 @@ class DjcHelper:
         info = self.cfg.dnf_helper_info
         return self.get(ctx, url, uin=qq, userId=info.userId, token=info.token, **params)
 
+    # --------------------------------------------dnf助手双旦活动--------------------------------------------
+    def dnf_helper_christmas(self):
+        # https://mwegame.qq.com/act/dnf/christmas/index.html?subGameId=10014&gameId=10014&&gameId=1006
+        show_head_line("dnf助手双旦")
+
+        if not self.cfg.function_switches.get_dnf_helper_christmas:
+            logger.warning("未启用领取dnf助手双旦活动合集功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手双旦相关活动，请按照下列流程进行配置")
+            self.show_dnf_helper_info_guide()
+            return
+
+        self.dnf_helper_christmas_op("每日签到", "726989")
+
+        self.dnf_helper_christmas_op("圣诞节 12/25", "727621")
+        self.dnf_helper_christmas_op("元旦节 1/1", "727622")
+
+        self.dnf_helper_christmas_op("累计1次", "727623")
+        self.dnf_helper_christmas_op("累计3次", "727624")
+        self.dnf_helper_christmas_op("累计5次", "727625")
+        self.dnf_helper_christmas_op("累计7次", "727626")
+        self.dnf_helper_christmas_op("累计11次", "727627")
+        self.dnf_helper_christmas_op("累计14次", "727628")
+        self.dnf_helper_christmas_op("累计18次", "727629")
+        self.dnf_helper_christmas_op("累计21次", "727630")
+
+        self.dnf_helper_christmas_op("抽奖", "727631")
+        logger.info(color("bold_cyan") + "请自行前往助手活动页面填写身份信息，否则领取到实物奖励会无法发放（虽然应该没几个人会中实物奖<_<）")
+
+    def dnf_helper_christmas_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_helper_christmas
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/christmas/index.html",
+                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  uin=qq, skey=self.cfg.account_info.skey,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                  )
+
+        # 1000017016: 登录态失效,请重新登录
+        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
+            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
+            self.show_dnf_helper_info_guide()
+
+        return res
+
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏
@@ -2919,4 +2979,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_dianzan()
         # djcHelper.dnf_drift()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
+        djcHelper.dnf_helper_christmas()

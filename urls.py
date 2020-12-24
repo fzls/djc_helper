@@ -74,6 +74,7 @@ class Urls:
         self.iActivityId_xinyue_financing = "126962" # 心悦app理财礼卡
         self.iActivityId_dnf_drift = "348890" # dnf漂流瓶
         self.iActivityId_majieluo = "350347" # DNF马杰洛的规划第二期
+        self.iActivityId_dnf_helper_christmas = "350252" # dnf助手双旦活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

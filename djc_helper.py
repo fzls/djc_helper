@@ -2573,13 +2573,13 @@ class DjcHelper:
 
                 queryRes = self.dnf_drift_op("拉取接受的{}好友列表".format(typStr), "725358", page=str(page), type=type)
                 if queryRes["modRet"]["jData"]["iTotal"] == 0:
-                    logger.info("没有更多接收邀请的好友了，停止领取积分")
+                    logger.warning("没有更多接收邀请的好友了，停止领取积分")
                     return
 
                 for friend_info in queryRes["modRet"]["jData"]["jData"]:
                     takeRes = self.dnf_drift_op("邀请人领取{}邀请{}的积分".format(typStr, friend_info["iUin"]), take_points_flowid, acceptId=friend_info["id"], moduleId=moduleId)
                     if int(takeRes["ret"]) != 0:
-                        logger.info("似乎已达到今日上限，停止领取")
+                        logger.warning("似乎已达到今日上限，停止领取")
                         return
 
                 page += 5

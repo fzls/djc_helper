@@ -178,6 +178,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_welfare = True
         # 是否领取心悦app理财礼卡
         self.get_xinyue_financing = True
+        # 是否领取dnf漂流瓶
+        self.get_dnf_drift = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

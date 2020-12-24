@@ -1,3 +1,4 @@
+import calendar
 import math
 import platform
 import random
@@ -397,6 +398,9 @@ class DjcHelper:
 
         # dnf漂流瓶
         self.dnf_drift()
+
+        # DNF马杰洛的规划第二期
+        self.majieluo()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -2635,12 +2639,98 @@ class DjcHelper:
             win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
 
-
     def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_drift
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201211driftm/",
                                    page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId)
+
+    # --------------------------------------------DNF马杰洛的规划第二期--------------------------------------------
+    def majieluo(self):
+        # https://dnf.qq.com/cp/a20201224welfare/index.html
+        show_head_line("DNF马杰洛的规划第二期")
+
+        if not self.cfg.function_switches.get_majieluo:
+            logger.warning("未启用领取DNF马杰洛的规划第二期活动功能，将跳过")
+            return
+
+        self.check_majieluo()
+
+        def query_stone_count():
+            res = self.majieluo_op("查询当前时间引导石数量", "727334", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return int(info.sOutValue1)
+
+        def take_share_award():
+            queryRes = self.majieluo_op("【分享】查询已接受分享邀请的好友列表", "727340")
+            if queryRes["modRet"]["jData"]["iTotal"] == 0:
+                logger.warning("没有接收分享的好友，无法领取奖励")
+                return
+
+            for raw_friend_info in queryRes["modRet"]["jData"]["jData"]:
+                friend_info = MajieluoShareInfo().auto_update_config(raw_friend_info)
+                if friend_info.iShareLottery == '0':
+                    self.majieluo_op("【分享】好友扫码，分享者+9", "727276", invitee=friend_info.iInvitee)
+                if friend_info.iLostLottery == '0':
+                    self.majieluo_op("【分享】好友为流失玩家，分享者额外+10", "727281", invitee=friend_info.iInvitee)
+                if friend_info.iAssistLottery == '0':
+                    self.majieluo_op("【分享】好友为流失玩家且登录游戏（即助力好友），额外再+10", "727285", invitee=friend_info.iInvitee)
+
+        # 01 马杰洛的见面礼
+        self.majieluo_op("领取见面礼", "727212")
+
+        # 02 马杰洛的幸运骰子
+        self.majieluo_op("【每日签到】摇一摇", "727213")
+        self.majieluo_op("【每日签到】点数乘2倍", "727217")
+
+        # 03 黑钻送好友
+        # note: 这个必须要分享给好友才行，不整了
+        # self.majieluo_op("【赠礼】查询已邀请的好友列表信息", "727308")
+        # self.majieluo_op("【赠礼】领取引导石+9", "727290", receiver="1054073896")
+
+        # 04 分享得好礼（看看逻辑，可能不做）
+        take_share_award()
+
+        # 05 分享得好礼
+        # 提取石头并领取提取奖励
+        stoneCount = query_stone_count()
+        logger.warning(color("bold_yellow") + "当前共有{}个引导石".format(stoneCount))
+
+        now = datetime.datetime.now()
+        thisMonthLastDay = calendar.monthrange(now.year, now.month)[1]
+
+        takeStone = False
+        if stoneCount >= 1000:
+            # 达到1000个
+            self.majieluo_op("提取时间引导石", "727229", giftNum="10")
+            takeStone = True
+        elif now.day == thisMonthLastDay or str(now.date()) == "2021-01-21":
+            # 今天是本月最后一天（因为新的一个月会清零）或者是活动最后一天
+            self.majieluo_op("提取时间引导石", "727229", giftNum=str(stoneCount // 100))
+            takeStone = True
+        else:
+            logger.info("当前未到最后领取期限（本月末或活动结束时），且石头数目不足1000，故不尝试提取")
+
+        if takeStone:
+            self.majieluo_op("【提取福利】提取数量大于1000", "727246")
+            self.majieluo_op("【提取福利】提取数量大于600小于1000", "727240")
+            self.majieluo_op("【提取福利】提取数量<=600", "727232")
+
+    def check_majieluo(self):
+        res = self.majieluo_op("查询是否绑定", "727124", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            urls = [
+                # 二维码分享
+                "https://dnf.qq.com/cp/a20201224welfarem/index.html?inviter=1054073896&pt=1",
+            ]
+            self.guide_to_bind_account("DNF马杰洛的规划第二期", random.choice(urls))
+
+    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", print_res=True):
+        iActivityId = self.urls.iActivityId_majieluo
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201224welfare/",
+                                   invitee=invitee, giftNum=giftNum)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
@@ -2679,6 +2769,7 @@ class DjcHelper:
             "plat": "", "extraStr": "",
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
             "type": "", "moduleId": "", "giftId": "", "acceptId": "",
+            "invitee": "", "giftNum": "",
         }
 
         urlRendered = url.format(**{**default_params, **params})
@@ -2827,4 +2918,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_carnival_live()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_dianzan()
-        djcHelper.dnf_drift()
+        # djcHelper.dnf_drift()
+        djcHelper.majieluo()

@@ -550,3 +550,12 @@ class XinyueFinancingInfo(ConfigInterface):
         self.totalIncome = 0
         self.leftTime = 0
         self.endTime = ""
+
+class MajieluoShareInfo(ConfigInterface):
+    def __init__(self):
+        self.iInvitee = "386596804"
+        self.iShareLottery = "0"
+        self.iLostLottery = "0"
+        self.iAssistLottery = "0"
+
+

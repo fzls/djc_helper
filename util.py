@@ -166,5 +166,31 @@ def get_year():
     return get_now().strftime("%Y")
 
 
+def filter_unused_params(urlRendered):
+    path = ""
+    if urlRendered.startswith("http"):
+        if '?' not in urlRendered:
+            return urlRendered
+
+        idx = urlRendered.index('?')
+        path, urlRendered = urlRendered[:idx], urlRendered[idx+1:]
+
+    parts = urlRendered.split('&')
+
+    validParts = []
+    for part in parts:
+        if part == "":
+            continue
+        k, v = part.split('=')
+        if v != "":
+            validParts.append(part)
+
+    newUrl = '&'.join(validParts)
+    if path != "":
+        newUrl = path + "?" + newUrl
+
+    return newUrl
+
+
 if __name__ == '__main__':
     print(get_now_unix())

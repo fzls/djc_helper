@@ -2680,7 +2680,10 @@ class DjcHelper:
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
             "type": "", "moduleId": "", "giftId": "", "acceptId": "",
         }
-        return url.format(**{**default_params, **params})
+
+        urlRendered = url.format(**{**default_params, **params})
+
+        return filter_unused_params(urlRendered)
 
     def get_month(self):
         now = datetime.datetime.now()

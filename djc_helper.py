@@ -2579,6 +2579,86 @@ class DjcHelper:
         return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
                                    plat=plat, extraStr=extraStr)
 
+    # --------------------------------------------dnf漂流瓶--------------------------------------------
+    def dnf_drift(self):
+        # https://dnf.qq.com/cp/a20201211driftm/index.html
+        show_head_line("dnf漂流瓶")
+
+        if not self.cfg.function_switches.get_dnf_drift:
+            logger.warning("未启用领取dnf漂流瓶活动功能，将跳过")
+            return
+
+        self.check_dnf_drift()
+
+        def take_friend_awards(typStr, type, moduleId, take_points_flowid):
+            page = 1
+            while True:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+
+                queryRes = self.dnf_drift_op("拉取接受的{}好友列表".format(typStr), "725358", page=str(page), type=type)
+                if queryRes["modRet"]["jData"]["iTotal"] == 0:
+                    logger.info("没有更多接收邀请的好友了，停止领取积分")
+                    return
+
+                for friend_info in queryRes["modRet"]["jData"]["jData"]:
+                    takeRes = self.dnf_drift_op("邀请人领取{}邀请{}的积分".format(typStr, friend_info["iUin"]), take_points_flowid, acceptId=friend_info["id"], moduleId=moduleId)
+                    if int(takeRes["ret"]) != 0:
+                        logger.info("似乎已达到今日上限，停止领取")
+                        return
+
+                page += 5
+
+        # 01 这一切都是命运的选择
+        # 礼包海
+        self.dnf_drift_op("捞一个", "725715")
+        # 丢礼包
+        take_friend_awards("普通", "1", "4", "726267")
+
+        # 02 承认吧，这是友情的羁绊
+        # 那些年错过的他
+        take_friend_awards("流失", "2", "6", "726269")
+        # 礼包领取站
+        self.dnf_drift_op("流失用户领取礼包", "727230")
+
+        # 03 来吧，吾之宝藏
+        # 积分夺宝
+        totalPoints = self.query_dnf_drift_points()
+        totalLotteryTimes = totalPoints // 4
+        logger.info("当前积分为{}，总计可进行{}次抽奖".format(totalPoints, totalLotteryTimes))
+        for i in range(totalLotteryTimes):
+            self.dnf_drift_op("开始夺宝 - 第{}次".format(i + 1), "726379")
+
+        # 04 在线好礼站
+        self.dnf_drift_op("在线30min", "725675", moduleId="2")
+        self.dnf_drift_op("累计3天礼包", "725699", moduleId="0", giftId="1437440")
+        self.dnf_drift_op("累计7天礼包", "725699", moduleId="0", giftId="1437441")
+        self.dnf_drift_op("累计15天礼包", "725699", moduleId="0", giftId="1437442")
+
+        # 分享
+        self.dnf_drift_op("分享领取礼包", "726345")
+
+    def query_dnf_drift_points(self):
+        res = self.dnf_drift_op("查询基础信息", "726353")
+        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        return int(info.sOutValue2) - int(info.sOutValue1) * 4
+
+    def check_dnf_drift(self):
+        res = self.dnf_drift_op("查询是否绑定", "725357", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            typ = random.choice([1, 2])
+            webbrowser.open("https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ))
+            msg = "未绑定角色，请前往dnf漂流瓶活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
+            exit(-1)
+
+    def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_drift
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201211driftm/",
+                                   page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -2615,6 +2695,7 @@ class DjcHelper:
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
             "plat": "", "extraStr": "",
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
+            "type": "", "moduleId": "", "giftId": "", "acceptId": "",
         }
         return url.format(**{**default_params, **params})
 
@@ -2752,4 +2833,5 @@ if __name__ == '__main__':
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_dianzan()
+        # djcHelper.dnf_dianzan()
+        djcHelper.dnf_drift()

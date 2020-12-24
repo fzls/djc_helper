@@ -111,6 +111,8 @@ get_dnf_dianzan = true
 get_dnf_welfare = true
 # 是否领取dnf漂流瓶
 get_dnf_drift = true
+# 是否领取DNF马杰洛的规划第二期
+get_majieluo = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

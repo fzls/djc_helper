@@ -1120,10 +1120,7 @@ class DjcHelper:
         res = self.xinyue_sailiyam_op("领取蛋糕", "714230", print_res=True)
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-1118215502-6NOW8h-339263-714230", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            webbrowser.open("https://xinyue.qq.com/act/a20201023sailiya/index.html")
-            msg = "未绑定角色，请前往DNF进击吧赛利亚活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("DNF进击吧赛利亚", "https://xinyue.qq.com/act/a20201023sailiya/index.html")
 
     def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True):
         iActivityId = self.urls.iActivityId_xinyue_sailiyam
@@ -1144,9 +1141,8 @@ class DjcHelper:
         res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
         # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
         if res["iRet"] == -50014:
-            msg = "领取每月黑钻等级礼包失败，请先前往黑钻页面绑定角色信息\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            webbrowser.open("https://dnf.qq.com/act/blackDiamond/gift.shtml")
+            self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml")
+
         return res
 
     # --------------------------------------------信用礼包--------------------------------------------
@@ -1379,10 +1375,7 @@ class DjcHelper:
         res = self.wegame_op("金秋有礼抽奖", "703512", print_res=False)
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            webbrowser.open("https://dnf.qq.com/lbact/a20200922wegame/index.html")
-            msg = "未绑定角色，请前往wegame国庆活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("wegame国庆", "https://dnf.qq.com/lbact/a20200922wegame/index.html")
 
     def wegame_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_wegame_guoqing
@@ -1417,10 +1410,7 @@ class DjcHelper:
         res = self.dnf_922_op("30分签到礼包", "703173", print_res=False)
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            webbrowser.open("https://dnf.qq.com/lbact/a20200922hdjh/index.html")
-            msg = "未绑定角色，请前往阿拉德集合站活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("阿拉德集合站", "https://dnf.qq.com/lbact/a20200922hdjh/index.html")
 
     def dnf_922_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_922
@@ -1470,10 +1460,7 @@ class DjcHelper:
         res = self.dnf_shanguang_op("报名礼", "698607", print_res=False)
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            webbrowser.open("https://xinyue.qq.com/act/a20200907sgbpc/index.html")
-            msg = "未绑定角色，请前往2020DNF闪光杯返场赛活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("2020DNF闪光杯返场赛", "https://xinyue.qq.com/act/a20200907sgbpc/index.html")
 
     def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
@@ -2128,10 +2115,7 @@ class DjcHelper:
         res = self.dnf_carnival_op("查询是否绑定", "722055", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         if len(res["modRet"]["jData"]) == 0:
-            webbrowser.open("https://dnf.qq.com/cp/a20201203carnival/index.html")
-            msg = "未绑定角色，请前往2020DNF嘉年华页面主页面签到活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("2020DNF嘉年华页面主页面签到", "https://dnf.qq.com/cp/a20201203carnival/index.html")
 
     def dnf_carnival_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_carnival
@@ -2192,10 +2176,7 @@ class DjcHelper:
         res = self.dnf_carnival_live_op("查询是否绑定", "722472", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         if len(res["modRet"]["jData"]) == 0:
-            webbrowser.open("https://dnf.qq.com/cp/a20201203carnival/index.html")
-            msg = "未绑定角色，请前往2020DNF嘉年华直播活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("2020DNF嘉年华直播", "https://dnf.qq.com/cp/a20201203carnival/index.html")
 
     def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_carnival_live
@@ -2260,10 +2241,7 @@ class DjcHelper:
         res = self.dnf_welfare_op("查询是否绑定", "558227", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         if len(res["modRet"]["jData"]) == 0:
-            webbrowser.open("http://dnf.qq.com/cp/a20190312welfare/index.htm")
-            msg = "未绑定角色，请前往DNF福利中心兑换活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm")
 
     def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_welfare
@@ -2414,10 +2392,7 @@ class DjcHelper:
         res = self.dnf_dianzan_op("查询是否绑定", "725330", print_res=False)
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         if len(res["modRet"]["jData"]) == 0:
-            webbrowser.open("https://dnf.qq.com/cp/a20201126version/index.shtml")
-            msg = "未绑定角色，请前往DNF共创投票活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("DNF共创投票", "https://dnf.qq.com/cp/a20201126version/index.shtml")
 
     def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_dianzan
@@ -2648,10 +2623,7 @@ class DjcHelper:
         # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         if len(res["modRet"]["jData"]) == 0:
             typ = random.choice([1, 2])
-            webbrowser.open("https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ))
-            msg = "未绑定角色，请前往dnf漂流瓶活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
-            win32api.MessageBox(0, msg, "提示", win32con.MB_ICONWARNING)
-            exit(-1)
+            self.guide_to_bind_account("dnf漂流瓶", "https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ))
 
     def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_drift
@@ -2730,6 +2702,13 @@ class DjcHelper:
 
     def make_cookie(self, map: dict):
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
+
+    def guide_to_bind_account(self, activity_name, activity_url):
+        webbrowser.open(activity_url)
+        msg = "当前账号【{}】未在活动页面绑定角色，请前往{}活动页面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能".format(self.cfg.name, activity_name)
+        logger.warning(color("bold_cyan") + msg)
+        win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
+        exit(-1)
 
 
 def watch_live():

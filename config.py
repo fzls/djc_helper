@@ -182,6 +182,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_drift = True
         # 是否领取DNF马杰洛的规划第二期
         self.get_majieluo = True
+        # 是否领取dnf助手双旦活动
+        self.get_dnf_helper_christmas = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

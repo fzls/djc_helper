@@ -63,7 +63,7 @@ class Urls:
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_922 = "331393"  # DNF-922渠道活动合集
-        self.iActivityId_dnf_shanguang = "328404"  # 2020DNF闪光杯返场赛
+        self.iActivityId_dnf_shanguang = "348607"  # DNF闪光杯第三期
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc

@@ -138,7 +138,7 @@ get_xinyue_sailiyam = true
 get_wegame_guoqing = true
 # 是否领取阿拉德集合站活动
 get_dnf_922 = true
-# 是否领取2020DNF闪光杯返场赛活动
+# 是否领取DNF闪光杯第三期活动
 get_dnf_shanguang = true
 # 是否领取qq视频活动
 get_qq_video = true

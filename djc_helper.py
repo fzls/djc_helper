@@ -413,7 +413,7 @@ class DjcHelper:
         # 阿拉德集合站活动合集
         self.dnf_922()
 
-        # 2020DNF闪光杯返场赛
+        # DNF闪光杯第三期
         self.dnf_shanguang()
 
         # 管家蚊子腿
@@ -1426,25 +1426,25 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_922
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922hdjh/")
 
-    # --------------------------------------------2020DNF闪光杯返场赛--------------------------------------------
+    # --------------------------------------------DNF闪光杯第三期--------------------------------------------
     def dnf_shanguang(self):
-        # https://xinyue.qq.com/act/a20200907sgbpc/index.html
-        show_head_line("2020DNF闪光杯返场赛")
+        # http://xinyue.qq.com/act/a20201221sgbpc/index.html
+        show_head_line("DNF闪光杯第三期")
 
         if not self.cfg.function_switches.get_dnf_shanguang:
-            logger.warning("未启用领取2020DNF闪光杯返场赛活动合集功能，将跳过")
+            logger.warning("未启用领取DNF闪光杯第三期活动合集功能，将跳过")
             return
 
         self.check_dnf_shanguang()
 
-        # self.dnf_shanguang_op("报名礼", "698607")
-        # self.dnf_shanguang_op("app专属礼", "698910")
+        # self.dnf_shanguang_op("报名礼", "724862")
+        # self.dnf_shanguang_op("app专属礼", "724877")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
-        self.dnf_shanguang_op("周周闪光好礼", "698913")
+        self.dnf_shanguang_op("周周闪光好礼", "724878")
 
         for i in range(6):
-            res = self.dnf_shanguang_op("周周开大奖", "698914")
+            res = self.dnf_shanguang_op("周周开大奖", "724879")
             # 1326109: 开奖次数已用完
             # 1326106: 很遗憾，你没有获得本次开奖机会
             # 1326105: 仅限每周三可以参与
@@ -1452,32 +1452,32 @@ class DjcHelper:
                 break
             time.sleep(5)
 
-        self.dnf_shanguang_op("每日登录游戏", "699136")
-        self.dnf_shanguang_op("每日登录app", "699137")
-        # self.dnf_shanguang_op("每日网吧登录", "699140")
+        self.dnf_shanguang_op("每日登录游戏", "724881")
+        self.dnf_shanguang_op("每日登录app", "724882")
+        # self.dnf_shanguang_op("每日网吧登录", "724883")
 
         lottery_times = self.get_dnf_shanguang_lottery_times()
         logger.info(color("fg_bold_cyan") + "当前剩余闪光夺宝次数为 {} ".format(lottery_times))
         for i in range(lottery_times):
-            self.dnf_shanguang_op("闪光夺宝", "698915")
+            self.dnf_shanguang_op("闪光夺宝", "724880")
             time.sleep(5)
 
     def get_dnf_shanguang_lottery_times(self):
-        res = self.dnf_shanguang_op("闪光夺宝次数", "699142")
+        res = self.dnf_shanguang_op("闪光夺宝次数", "724885")
         return int(res["modRet"]["sOutValue3"])
 
     def check_dnf_shanguang(self):
-        res = self.dnf_shanguang_op("报名礼", "698607", print_res=False)
+        res = self.dnf_shanguang_op("报名礼", "724862", print_res=False)
         # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
         if int(res["ret"]) == 99998:
-            self.guide_to_bind_account("2020DNF闪光杯返场赛", "https://xinyue.qq.com/act/a20200907sgbpc/index.html")
+            self.guide_to_bind_account("DNF闪光杯第三期", "http://xinyue.qq.com/act/a20201221sgbpc/index.html")
 
     def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
 
         weekDay = get_this_week_monday()
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20200907sgbpc/",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20201221sgb",
                                    weekDay=weekDay,
                                    )
 
@@ -2965,12 +2965,10 @@ if __name__ == '__main__':
         # djcHelper.xinyue_guoqing()
         # djcHelper.wegame_guoqing()
         # djcHelper.dnf_922()
-        # djcHelper.dnf_shanguang()
         # djcHelper.qq_video()
         # djcHelper.djc_operations()
         # djcHelper.dnf_female_mage_awaken()
         # djcHelper.guanjia()
-        # djcHelper.dnf_shanguang()
         # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
         # djcHelper.wx_checkin()
         # djcHelper.qq_video()
@@ -2988,4 +2986,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_dianzan()
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
-        djcHelper.dnf_helper_christmas()
+        # djcHelper.dnf_helper_christmas()
+        djcHelper.dnf_shanguang()

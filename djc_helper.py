@@ -2551,7 +2551,7 @@ class DjcHelper:
 
                 if typ in financingTimeInfoMap["alltype"]:
                     info.leftTime = financingTimeInfoMap["alltype"][typ]["leftime"]
-                if typ in financingTimeInfoMap["opened"]:
+                if "opened" in financingTimeInfoMap and typ in financingTimeInfoMap["opened"]:
                     info.endTime = financingTimeInfoMap["opened"][typ]["endtime"]
 
                 info_map[info.name] = info

@@ -2832,8 +2832,16 @@ class DjcHelper:
             "invitee": "", "giftNum": "",
         }
 
-        urlRendered = url.format(**{**default_params, **params})
+        # 首先将默认参数添加进去，避免format时报错
+        merged_params = {**default_params, **params}
 
+        # 需要url encode一下，否则如果用户配置的值中包含&等符号时，会影响后续实际逻辑
+        quoted_params = {k: quote_plus(str(v)) for k, v in merged_params.items()}
+
+        # 将参数全部填充到url的参数中
+        urlRendered = url.format(**quoted_params)
+
+        # 过滤掉没有实际赋值的参数
         return filter_unused_params(urlRendered)
 
     def get_month(self):

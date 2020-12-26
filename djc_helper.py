@@ -405,6 +405,9 @@ class DjcHelper:
         # dnf助手双旦活动
         self.dnf_helper_christmas()
 
+        # 暖冬好礼活动
+        self.warm_winter()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -2813,6 +2816,62 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201224welfare/",
                                    invitee=invitee, giftNum=giftNum, receiver=receiver, receiverName=receiverName, inviterName=inviterName)
 
+    # --------------------------------------------暖冬好礼活动--------------------------------------------
+    def warm_winter(self):
+        # https://dnf.qq.com/lbact/a20200911lbz3dns/index.html
+        show_head_line("暖冬好礼活动")
+
+        if not self.cfg.function_switches.get_warm_winter:
+            logger.warning("未启用领取暖冬好礼活动功能，将跳过")
+            return
+
+        self.check_warm_winter()
+
+        def get_lottery_times():
+            res = self.warm_winter_op("查询剩余抽奖次数", "728476", print_res=False)
+            # "sOutValue1": "279:2:1",
+            val = res["modRet"]["sOutValue1"]
+            jfId, total, remaining = [int(v) for v in val.split(':')]
+            return total, remaining
+
+        def get_checkin_days():
+            res = self.warm_winter_op("查询签到信息", "723178")
+            return int(res["modRet"]["total"])
+
+        # 01 勇士齐聚阿拉德
+        self.warm_winter_op("四个礼盒随机抽取", "723167")
+
+        # 02 累计签到领豪礼
+        self.warm_winter_op("签到礼包", "723165")
+        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(get_checkin_days()))
+        self.warm_winter_op("签到3天礼包", "723170")
+        self.warm_winter_op("签到5天礼包", "723171")
+        self.warm_winter_op("签到7天礼包", "723172")
+        self.warm_winter_op("签到10天礼包", "723173")
+        self.warm_winter_op("签到15天礼包", "723174")
+
+        # 03 累计签到抽大奖
+        self.warm_winter_op("1.在WeGame启动DNF", "723175")
+        self.warm_winter_op("2.游戏在线30分钟", "723176")
+        total_lottery_times, lottery_times = get_lottery_times()
+        logger.info(color("fg_bold_cyan") + "即将进行抽奖，当前剩余抽奖资格为{}，累计获取{}次抽奖机会".format(lottery_times, total_lottery_times))
+        for i in range(lottery_times):
+            res = self.warm_winter_op("每日抽奖", "723177")
+            if res.get('ret', "0") == "600":
+                # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
+                break
+
+    def check_warm_winter(self):
+        res = self.warm_winter_op("查询是否绑定", "723162", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            self.guide_to_bind_account("暖冬好礼", "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html")
+
+    def warm_winter_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_warm_winter
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200911lbz3dns/")
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3008,4 +3067,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
-        djcHelper.dnf_shanguang()
+        # djcHelper.dnf_shanguang()
+        djcHelper.warm_winter()

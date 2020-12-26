@@ -216,7 +216,9 @@ class AccountConfig(ConfigInterface):
         # 如果G分不够多，也可以尝试填写["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]，这样会依次尝试各个方案，确保能用当前能购买的最高等级礼卡来做活动
         self.xinyue_financing_card_names = []
         # 漂流瓶每日邀请列表，最多可填8个（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
-        self.drift_send_qq_list = [] # type: List[str]
+        self.drift_send_qq_list = []  # type: List[str]
+        # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
+        self.majieluo_receiver_qq_list = []  # type: List[str]
         # 各功能开关
         self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
@@ -258,6 +260,7 @@ class AccountConfig(ConfigInterface):
         self.updateUinSkey(self.account_info.uin, self.account_info.skey)
 
         self.drift_send_qq_list = [str(qq) for qq in self.drift_send_qq_list]
+        self.majieluo_receiver_qq_list = [str(qq) for qq in self.majieluo_receiver_qq_list]
 
     def updateUinSkey(self, uin, skey):
         self.account_info.uin = uin

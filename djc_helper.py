@@ -2632,6 +2632,18 @@ class DjcHelper:
 
         self.check_dnf_drift()
 
+        def send_friend_invitation(typStr, flowid, dayLimit):
+            send_count = 0
+            for sendQQ in self.cfg.drift_send_qq_list:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+                self.dnf_drift_op("发送{}好友邀请-{}赠送2积分".format(typStr, sendQQ), flowid, sendQQ=sendQQ, moduleId="2")
+
+                send_count += 1
+                if send_count >= dayLimit:
+                    logger.warning("已达到本日邀请上限({})，将停止邀请".format(dayLimit))
+                    return
+
         def take_friend_awards(typStr, type, moduleId, take_points_flowid):
             page = 1
             while True:
@@ -2654,11 +2666,13 @@ class DjcHelper:
         # 01 这一切都是命运的选择
         # 礼包海
         self.dnf_drift_op("捞一个", "725715")
-        # 丢礼包
+        # 丢礼包，日限8次
+        send_friend_invitation("普通", "725819", 8)
         take_friend_awards("普通", "1", "4", "726267")
 
         # 02 承认吧，这是友情的羁绊
-        # 那些年错过的他
+        # 那些年错过的他，日限5次
+        send_friend_invitation("流失", "726069", 5)
         take_friend_awards("流失", "2", "6", "726269")
         # 礼包领取站
         self.dnf_drift_op("流失用户领取礼包", "727230")
@@ -2699,11 +2713,11 @@ class DjcHelper:
             win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
 
-    def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", print_res=True):
+    def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", sendQQ="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_drift
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201211driftm/",
-                                   page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId)
+                                   page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId, sendQQ=sendQQ)
 
     # --------------------------------------------DNF马杰洛的规划第二期--------------------------------------------
     def majieluo(self):
@@ -2829,7 +2843,7 @@ class DjcHelper:
             "plat": "", "extraStr": "",
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
             "type": "", "moduleId": "", "giftId": "", "acceptId": "",
-            "invitee": "", "giftNum": "",
+            "invitee": "", "giftNum": "", "sendQQ": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错

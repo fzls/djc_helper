@@ -184,6 +184,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_majieluo = True
         # 是否领取dnf助手双旦活动
         self.get_dnf_helper_christmas = True
+        # 是否领取暖冬好礼活动
+        self.get_warm_winter = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

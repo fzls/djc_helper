@@ -2758,9 +2758,16 @@ class DjcHelper:
         self.majieluo_op("【每日签到】点数乘2倍", "727217")
 
         # 03 黑钻送好友
-        # note: 这个必须要分享给好友才行，不整了
-        # self.majieluo_op("【赠礼】查询已邀请的好友列表信息", "727308")
-        # self.majieluo_op("【赠礼】领取引导石+9", "727290", receiver="1054073896")
+        for receiverQQ in self.cfg.majieluo_receiver_qq_list:
+            logger.info("等待2秒，避免请求过快")
+            time.sleep(2)
+            # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
+            res = self.majieluo_op("【赠礼】发送赠送邀请-{}".format(receiverQQ), "727218", receiver=receiverQQ, receiverName="小号", inviterName="大号")
+            if int(res["ret"]) == 700:
+                logger.warning("今日赠送上限已到达，将停止~")
+                break
+
+            self.majieluo_op("【赠礼】领取引导石+9", "727290", receiver=receiverQQ)
 
         # 04 分享得好礼（看看逻辑，可能不做）
         take_share_award()
@@ -2800,11 +2807,11 @@ class DjcHelper:
             ]
             self.guide_to_bind_account("DNF马杰洛的规划第二期", random.choice(urls))
 
-    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", print_res=True):
+    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", receiver="", receiverName="", inviterName="", print_res=True):
         iActivityId = self.urls.iActivityId_majieluo
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201224welfare/",
-                                   invitee=invitee, giftNum=giftNum)
+                                   invitee=invitee, giftNum=giftNum, receiver=receiver, receiverName=receiverName, inviterName=inviterName)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
@@ -2842,8 +2849,8 @@ class DjcHelper:
             "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
             "plat": "", "extraStr": "",
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
-            "type": "", "moduleId": "", "giftId": "", "acceptId": "",
-            "invitee": "", "giftNum": "", "sendQQ": "",
+            "type": "", "moduleId": "", "giftId": "", "acceptId": "", "sendQQ": "",
+            "invitee": "", "giftNum": "", "receiver": "", "receiverName": "", "inviterName": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错

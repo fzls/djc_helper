@@ -496,6 +496,17 @@ def show_support_pic(cfg):
     logger.info("")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
     if cfg.common.show_support_pic or is_weekly_first_run():
+        usedDays = get_count(my_usage_counter_name, "all")
+        message = (
+            "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
+            "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
+            "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
+            "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
+        ).format(
+            used_days=usedDays,
+        )
+        logger.warning(color("fg_bold_cyan") + message)
+        win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
         os.popen("支持一下.png")
 
 

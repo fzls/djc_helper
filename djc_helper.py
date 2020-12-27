@@ -3077,5 +3077,5 @@ if __name__ == '__main__':
         # for name, count in cards_to_send:
         #     for i in range(count):
         #         djcHelper.send_card_by_name(name, targetQQ)
-        
+
         djcHelper.warm_winter()

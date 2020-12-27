@@ -1592,7 +1592,7 @@ class DjcHelper:
                                   sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                   uin=qq, skey=self.cfg.account_info.skey,
-                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
                                   )
 
         # 1000017016: 登录态失效,请重新登录
@@ -1702,7 +1702,7 @@ class DjcHelper:
                                       sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
                                       sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                       uin=qq, skey=self.cfg.account_info.skey,
-                                      nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                      nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
                                       )
         except Exception as e:
             logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
@@ -1710,7 +1710,7 @@ class DjcHelper:
     def dnf_rank_op(self, ctx, url, **params):
         qq = uin2qq(self.cfg.account_info.uin)
         info = self.cfg.dnf_helper_info
-        return self.get(ctx, url, uin=qq, userId=info.userId, token=info.token, **params)
+        return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------dnf助手双旦活动--------------------------------------------
     def dnf_helper_christmas(self):
@@ -1759,7 +1759,7 @@ class DjcHelper:
                                   sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                   uin=qq, skey=self.cfg.account_info.skey,
-                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=dnf_helper_info.token,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
                                   )
 
         # 1000017016: 登录态失效,请重新登录
@@ -2915,11 +2915,11 @@ class DjcHelper:
         # 首先将默认参数添加进去，避免format时报错
         merged_params = {**default_params, **params}
 
-        # 需要url encode一下，否则如果用户配置的值中包含&等符号时，会影响后续实际逻辑
-        quoted_params = {k: quote_plus(str(v)) for k, v in merged_params.items()}
+        # # 需要url encode一下，否则如果用户配置的值中包含&等符号时，会影响后续实际逻辑
+        # quoted_params = {k: quote_plus(str(v)) for k, v in merged_params.items()}
 
         # 将参数全部填充到url的参数中
-        urlRendered = url.format(**quoted_params)
+        urlRendered = url.format(**merged_params)
 
         # 过滤掉没有实际赋值的参数
         return filter_unused_params(urlRendered)

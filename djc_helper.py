@@ -2997,16 +2997,6 @@ def watch_live():
             logger.info(color("bold_cyan") + "本轮累积用时{}秒，将休息{}秒".format(totalUsed, waitTime))
             time.sleep(waitTime)
 
-def sned_cards(djcHelper):
-    djcHelper.fetch_pskey()
-    targetQQ = "240543689"
-    cards_to_send = [
-        # ("哪种都能领奖励", 4)
-    ]
-    for name, count in cards_to_send:
-        for i in range(count):
-            djcHelper.send_card_by_name(name, targetQQ)
-
 
 if __name__ == '__main__':
     # 读取配置信息
@@ -3078,6 +3068,4 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
         # djcHelper.dnf_shanguang()
-        # sned_cards(djcHelper)
-
         djcHelper.warm_winter()

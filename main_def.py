@@ -178,7 +178,7 @@ def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_dj
                 continue
             # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
             if card_name_to_count[card_name] > 0:
-                qq_to_djcHelper[qq].send_card(card_info_map[card_name].id, target_qq)
+                qq_to_djcHelper[qq].send_card(card_name, card_info_map[card_name].id, target_qq)
                 card_name_to_count[card_name] -= 1
                 qq_to_card_name_to_counts[target_qq][card_name] += 1
 

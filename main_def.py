@@ -575,8 +575,9 @@ def show_qiafan_message_box_on_every_big_version(version):
             "Hello，本次新接入了下列活动，欢迎大家使用。\n"
             "{activities}"
             "\n "
-            "您已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
-            "如果愿意，可选择扫码支持哈~\n"
+            "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
+            "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
+            "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
             "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
         ).format(
             activities="".join(["    {}. {}\n".format(idx + 1, name) for idx, name in enumerate(activities)]),

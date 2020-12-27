@@ -64,11 +64,11 @@ login_finished_timeout = 60
 # 各种操作的通用重试配置
 [common.retry]
 # 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
-request_wait_time = 1
+request_wait_time = 2
 # 当提示【"msg": "系统繁忙，请稍候再试。", "ret": "-9905"】时的最大重试次数
 max_retry_count = 3
 # 上述情况下的重试间隔时间（秒）
-retry_wait_time = 1
+retry_wait_time = 5
 
 # 心悦相关配置
 [common.xinyue]

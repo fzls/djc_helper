@@ -311,11 +311,11 @@ class LoginConfig(ConfigInterface):
 class RetryConfig(ConfigInterface):
     def __init__(self):
         # 每次兑换请求之间的间隔时间（秒），避免请求过快而报错，目前测试1s正好不会报错~
-        self.request_wait_time = 1
+        self.request_wait_time = 2
         # 当提示【"msg": "系统繁忙，请稍候再试。", "ret": "-9905"】时的最大重试次数
         self.max_retry_count = 3
         # 上述情况下的重试间隔时间（秒）
-        self.retry_wait_time = 1
+        self.retry_wait_time = 5
 
 
 class XinYueConfig(ConfigInterface):

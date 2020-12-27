@@ -381,9 +381,6 @@ class DjcHelper:
         # hello语音网页礼包兑换
         self.hello_voice()
 
-        # 2020DNF嘉年华页面主页面签到
-        self.dnf_carnival()
-
         # QQ空间抽卡
         self.ark_lottery()
 
@@ -433,6 +430,9 @@ class DjcHelper:
 
         # dnf助手排行榜
         self.dnf_rank()
+
+        # 2020DNF嘉年华页面主页面签到
+        self.dnf_carnival()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

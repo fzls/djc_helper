@@ -2765,7 +2765,7 @@ class DjcHelper:
             logger.info("等待2秒，避免请求过快")
             time.sleep(2)
             # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
-            res = self.majieluo_op("【赠礼】发送赠送邀请-{}".format(receiverQQ), "727218", receiver=receiverQQ, receiverName="小号", inviterName="大号")
+            res = self.majieluo_op("【赠礼】发送赠送邀请-{}".format(receiverQQ), "727218", receiver=receiverQQ, receiverName=quote_plus("小号"), inviterName=quote_plus("大号"))
             if int(res["ret"]) == 700:
                 logger.warning("今日赠送上限已到达，将停止~")
                 break

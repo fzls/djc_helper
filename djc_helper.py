@@ -405,6 +405,9 @@ class DjcHelper:
         # 暖冬好礼活动
         self.warm_winter()
 
+        # DNF闪光杯第三期
+        self.dnf_shanguang()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -412,9 +415,6 @@ class DjcHelper:
 
         # 阿拉德集合站活动合集
         self.dnf_922()
-
-        # DNF闪光杯第三期
-        self.dnf_shanguang()
 
         # 管家蚊子腿
         self.guanjia()
@@ -3064,5 +3064,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
-        # djcHelper.dnf_shanguang()
-        djcHelper.warm_winter()
+        djcHelper.dnf_shanguang()
+        # djcHelper.warm_winter()

@@ -70,8 +70,9 @@ def try_request(request_fn, retryCfg, check_fn=None):
 
             return response
         except Exception as exc:
-            logger.exception("{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time), exc_info=exc)
-            logger.error("current call stack=\n{}".format(color("bold_black") + ''.join(traceback.format_stack())))
+            logger.exception("request failed, detail as below:", exc_info=exc)
+            logger.error("full call stack=\n{}".format(color("bold_black") + ''.join(traceback.format_stack())))
+            logger.warning(color("thin_yellow") + "{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time))
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 

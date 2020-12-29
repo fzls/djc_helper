@@ -2679,10 +2679,10 @@ class DjcHelper:
 
         # 03 来吧，吾之宝藏
         # 积分夺宝
-        totalPoints = self.query_dnf_drift_points()
-        totalLotteryTimes = totalPoints // 4
-        logger.info("当前积分为{}，总计可进行{}次抽奖".format(totalPoints, totalLotteryTimes))
-        for i in range(totalLotteryTimes):
+        totalPoints, remainingPoints = self.query_dnf_drift_points()
+        remainingLotteryTimes = remainingPoints // 4
+        logger.info(color("bold_yellow") + "当前积分为{}，总计可进行{}次抽奖。历史累计获取积分数为{}".format(remainingPoints, remainingLotteryTimes, totalPoints))
+        for i in range(remainingLotteryTimes):
             self.dnf_drift_op("开始夺宝 - 第{}次".format(i + 1), "726379")
 
         # 04 在线好礼站
@@ -2697,7 +2697,8 @@ class DjcHelper:
     def query_dnf_drift_points(self):
         res = self.dnf_drift_op("查询基础信息", "726353")
         info = AmesvrCommonModRet().auto_update_config(res["modRet"])
-        return int(info.sOutValue2) - int(info.sOutValue1) * 4
+        total, remaining = int(info.sOutValue2), int(info.sOutValue2) - int(info.sOutValue1) * 4
+        return total, remaining
 
     def check_dnf_drift(self):
         res = self.dnf_drift_op("查询是否绑定", "725357", print_res=False)

@@ -524,7 +524,7 @@ class DjcHelper:
         self.get("3.2 一键领取{}日常礼包-{}".format(role_info.gameName, giftInfo.sTask), self.urls.receive_game_gift,
                  bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
                  systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
-                 roleCode=role_info.roleCode, sRoleName=role_info.roleName)
+                 roleCode=role_info.roleCode, sRoleName=quote_plus(role_info.roleName))
 
     def make_wish(self):
         bizCode = "yxzj"
@@ -657,7 +657,7 @@ class DjcHelper:
 
     def exchange_item(self, ctx, iGoodsSeqId):
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        return self.get(ctx, self.urls.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=roleinfo.roleName, lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
+        return self.get(ctx, self.urls.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=quote_plus(roleinfo.roleName), lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
 
     def query_all_extra_info(self, dnfServerId):
         """

@@ -2651,7 +2651,7 @@ class DjcHelper:
                 res = self.dnf_drift_op("发送{}好友邀请-{}赠送2积分".format(typStr, sendQQ), flowid, sendQQ=sendQQ, moduleId="2")
 
                 send_count += 1
-                if int(res["ret"]) == 600 or send_count >= dayLimit:
+                if int(res["ret"]) != 0 or send_count >= dayLimit:
                     logger.warning("已达到本日邀请上限({})，将停止邀请".format(dayLimit))
                     return
 

@@ -2662,7 +2662,7 @@ class DjcHelper:
                 time.sleep(2)
 
                 queryRes = self.dnf_drift_op("拉取接受的{}好友列表".format(typStr), "725358", page=str(page), type=type)
-                if queryRes["modRet"]["jData"]["iTotal"] == 0:
+                if int(queryRes["ret"]) != 0 or queryRes["modRet"]["jData"]["iTotal"] == 0:
                     logger.warning("没有更多接收邀请的好友了，停止领取积分")
                     return
 
@@ -2670,6 +2670,10 @@ class DjcHelper:
                     takeRes = self.dnf_drift_op("邀请人领取{}邀请{}的积分".format(typStr, friend_info["iUin"]), take_points_flowid, acceptId=friend_info["id"], moduleId=moduleId)
                     if int(takeRes["ret"]) != 0:
                         logger.warning("似乎已达到今日上限，停止领取")
+                        return
+                    if takeRes["modRet"]["iRet"] != 0:
+                        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267"}, "modRet": {"all_item_list": [], "bHasSendFailItem": "0", "bRealSendSucc": 1, "dTimeNow": "2020-12-30 00:26:52", "iActivityId": "381537", "iDbPackageAutoIncId": 0, "iLastMpResultCode": 2037540212, "iPackageGroupId": "", "iPackageId": "", "iPackageIdCnt": "", "iPackageNum": "1", "iReentry": 0, "iRet": 100002, "iWecatCardResultCode": 0, "isCmemReEntryOpen": "yes", "jData": {"iPackageId": "0", "sPackageName": ""}, "jExtend": "", "sAmsSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267", "sItemMsg": null, "sMidasCouponRes": "null\n", "sMidasPresentRes": "null\n", "sMsg": "非常抱歉，您此次活动领取次数已达最大，不能领取！", "sPackageCDkey": "", "sPackageLimitCheckCode": "2227289:70008,", "sPackageName": "", "sPackageRealFlag": "0", "sVersion": "V1.0.1752b92.00a0875.20201210155534"}, "ret": "0", "msg": ""}
+                        logger.warning("出错了，停止领取，具体原因请看上一行的sMsg")
                         return
 
                 page += 5

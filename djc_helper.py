@@ -1440,9 +1440,20 @@ class DjcHelper:
 
         self.check_dnf_shanguang()
 
+        def query_equip_count():
+            res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            equip_count = 0
+            if info.sOutValue2 != "" and info.sOutValue2 != "0":
+                equip_count = len(info.sOutValue2.split(","))
+
+            return equip_count
+
         # self.dnf_shanguang_op("报名礼", "724862")
         # self.dnf_shanguang_op("app专属礼", "724877")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
+
+        logger.warning(color("bold_yellow") + "本周已获得指定装备{}件，具体装备可去活动页面查看".format(query_equip_count()))
 
         self.dnf_shanguang_op("周周闪光好礼", "724878")
 

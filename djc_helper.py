@@ -1973,17 +1973,17 @@ class DjcHelper:
         # 等一会，避免报错
         time.sleep(self.common_cfg.retry.request_wait_time)
 
-        self.guanjia_op("电脑管家特权礼包", "comjoin_1121", giftId="7546")
-        self.guanjia_op("游戏助手礼包", "comjoin_1121", giftId="7547")
-        self.guanjia_op("回归勇士礼包", "comjoin_1121", giftId="7548")
+        self.guanjia_common_gifts_op("电脑管家特权礼包", giftId="7546")
+        self.guanjia_common_gifts_op("游戏助手礼包", giftId="7547")
+        self.guanjia_common_gifts_op("回归勇士礼包", giftId="7548")
 
-        self.guanjia_op("下载安装并登录电脑管家", "comjoin_1121", giftId="7549")
+        self.guanjia_common_gifts_op("下载安装并登录电脑管家", giftId="7549")
 
-        self.guanjia_op("每日游戏在线30分钟", "comjoin_1121", giftId="7550")
-        self.guanjia_op("每日登录游戏助手", "comjoin_1121", giftId="7551")
+        self.guanjia_common_gifts_op("每日游戏在线30分钟", giftId="7550")
+        self.guanjia_common_gifts_op("每日登录游戏助手", giftId="7551")
 
         for i in range(10):
-            res = self.guanjia_op("抽奖", "lottjoin_1120")
+            res = self.guanjia_lottery_gifts_op("抽奖")
             # {"code": 4101, "msg": "积分不够", "result": []}
             if res["code"] == 4101:
                 break
@@ -1998,10 +1998,17 @@ class DjcHelper:
 
         # {"code": 7005, "msg": "获取accToken失败", "result": []}
         # {"code": 29, "msg": "请求包参数错误", "result": []}
-        res = self.guanjia_op("每日登录游戏助手", "comjoin_1121", giftId="7551", print_res=False)
+        res = self.guanjia_common_gifts_op("每日登录游戏助手", giftId="7551", print_res=False)
         return res["code"] in [7005, 29]
 
-    def guanjia_op(self, ctx, api, giftId="", print_res=True):
+    def guanjia_common_gifts_op(self, ctx, giftId="", print_res=True):
+        return self.guanjia_op(ctx, "comjoin", "1121", giftId=giftId, print_res=print_res)
+
+    def guanjia_lottery_gifts_op(self, ctx, print_res=True):
+        return self.guanjia_op(ctx, "lottjoin", "1120", print_res=print_res)
+
+    def guanjia_op(self, ctx, api_name, act_id, giftId="", print_res=True):
+        api = "{}_{}".format(api_name, act_id)
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         extra_cookies = "__qc__openid={openid}; __qc__k={access_key};".format(
             openid=self.guanjia_lr.qc_openid,

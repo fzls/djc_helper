@@ -1978,7 +1978,7 @@ class DjcHelper:
         self.guanjia_op("回归勇士礼包", "comjoin_1121", giftId="7548")
 
         self.guanjia_op("下载安装并登录电脑管家", "comjoin_1121", giftId="7549")
-        
+
         self.guanjia_op("每日游戏在线30分钟", "comjoin_1121", giftId="7550")
         self.guanjia_op("每日登录游戏助手", "comjoin_1121", giftId="7551")
 
@@ -2011,6 +2011,11 @@ class DjcHelper:
                         extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
 
     def fetch_guanjia_openid(self, print_warning=True):
+        # 检查是否启用管家相关活动
+        if not self.cfg.function_switches.get_guanjia:
+            if print_warning: logger.warning("未启用管家相关活动，将跳过")
+            return
+
         # 检查是否已在道聚城绑定
         if "dnf" not in self.bizcode_2_bind_role_map:
             if print_warning: logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")

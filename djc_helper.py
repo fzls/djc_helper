@@ -1442,10 +1442,11 @@ class DjcHelper:
 
         def query_equip_count():
             res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             equip_count = 0
-            if info.sOutValue2 != "" and info.sOutValue2 != "0":
-                equip_count = len(info.sOutValue2.split(","))
+            if "modRet" in res:
+                info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+                if info.sOutValue2 != "" and info.sOutValue2 != "0":
+                    equip_count = len(info.sOutValue2.split(","))
 
             return equip_count
 

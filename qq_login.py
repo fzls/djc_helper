@@ -246,7 +246,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("https://guanjia.qq.com/act/cop/202010dnf/")
+            self.driver.get("http://guanjia.qq.com/act/cop/202012dnf/")
 
             logger.info("浏览器设为1936x1056")
             self.driver.set_window_size(1936, 1056)
@@ -375,7 +375,15 @@ class QQLogin():
             login_action_fn()
 
         logger.info("等待登录完成（也就是#loginIframe#login登录框消失）")
-        WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+        # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'
+        # 这时候等待一下好像就行了
+        for i in range(3):
+            try:
+                WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+                break
+            except Exception as e:
+                logger.error("出错了，等待两秒再重试", exc_info=e)
+                time.sleep(2)
 
         logger.info("回到主iframe")
         self.driver.switch_to.default_content()
@@ -436,7 +444,7 @@ if __name__ == '__main__':
     account = cfg.account_configs[0]
     acc = account.account_info
     logger.warning("测试账号 {} 的登录情况".format(account.name))
-    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal)
+    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_guanjia)
     # lr = ql.qr_login()
     ql.print_cookie()
     print(lr)

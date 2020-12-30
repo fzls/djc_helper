@@ -593,6 +593,7 @@ def show_qiafan_message_box_on_every_big_version(version):
 
 def _test_main():
     need_check_bind_and_skey = True
+    # need_check_bind_and_skey = False
 
     # # 最大化窗口
     # logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

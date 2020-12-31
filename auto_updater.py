@@ -70,9 +70,7 @@ def auto_update():
 
         target_exe = os.path.join(args.cwd, args.exe_name)
         logger.info("更新完毕，重新启动程序 {}".format(target_exe))
-        subprocess.call([
-            target_exe,
-        ])
+        subprocess.call([target_exe])
     else:
         logger.info("已经是最新版本，不需要更新")
 

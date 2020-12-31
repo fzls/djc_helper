@@ -51,7 +51,7 @@ def auto_update():
         target_dir = filepath.replace('.7z', '')
 
         logger.info("预处理解压缩文件：移除部分文件")
-        for file in ["config.toml", "util/auto_updater.exe"]:
+        for file in ["config.toml", "utils/auto_updater.exe"]:
             file_to_remove = os.path.join(target_dir, file)
             try:
                 logger.info("移除 {}".format(file_to_remove))

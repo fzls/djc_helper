@@ -9,6 +9,7 @@ from log import logger
 
 Folder = namedtuple('Folder', ['name', 'id'])
 
+# 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
 
 class Uploader:
     folder_dnf_calc = Folder("魔改计算器", "1810329")

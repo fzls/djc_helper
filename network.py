@@ -110,6 +110,7 @@ def is_request_ok(data):
             "code",
             "iRet",
             "status",
+            "ecode",
         ]
         for key in returnCodeKeys:
             if key in data:

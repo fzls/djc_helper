@@ -148,22 +148,24 @@ class QQLogin():
             try:
                 self.login_mode = login_mode
                 login_fn = self._login_real
+                suffix = ""
                 if login_mode == self.login_mode_xinyue:
                     login_fn = self._login_xinyue_real
-                    login_type += "-心悦"
+                    suffix += "-心悦"
                 elif login_mode == self.login_mode_qzone:
                     login_fn = self._login_qzone
-                    login_type += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录）"
+                    suffix += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录）"
                 elif login_mode == self.login_mode_guanjia:
                     login_fn = self._login_guanjia
-                    login_type += "-电脑管家（如电脑管家蚊子腿需要用到）"
+                    suffix += "-电脑管家（如电脑管家蚊子腿需要用到）"
                 elif login_mode == self.login_mode_wegame:
                     login_fn = self._login_wegame
-                    login_type += "-wegame（获取wegame相关api需要用到）"
+                    suffix += "-wegame（获取wegame相关api需要用到）"
 
-                self.prepare_chrome(login_type)
+                ctx = login_type + suffix
+                self.prepare_chrome(ctx)
 
-                return login_fn(login_type, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
+                return login_fn(ctx, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
             except Exception as e:
                 logger.exception("第{}/{}次尝试登录出错，等待{}秒后重试".format(idx, self.cfg.login.max_retry_count, self.cfg.login.retry_wait_time), exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
@@ -300,7 +302,6 @@ class QQLogin():
             logger.info("等待#loginIframe显示出来并切换")
             time.sleep(self.cfg.login.load_login_iframe_timeout)
             self.driver.switch_to.frame(self.driver.find_element_by_css_selector("div.widget-login-item.widget-login-item--qq > iframe"))
-
 
         def assert_login_finished_fn():
             logger.info("请等待【登录头像】可见，则说明已经登录完成了...")

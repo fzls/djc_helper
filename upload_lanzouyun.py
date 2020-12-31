@@ -69,6 +69,31 @@ class Uploader:
         # 保底返回1.0.0
         return "1.0.0"
 
+    def download_latest_version(self, download_dir) -> str:
+        """
+        下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
+        """
+        if not os.path.isdir(download_dir):
+            os.mkdir(download_dir)
+
+        latest_version_file = self.find_latest_version()
+
+        download_dir = os.path.realpath(download_dir)
+        target_path = os.path.join(download_dir, latest_version_file.name)
+
+        def after_downloaded(file_name):
+            """下载完成后的回调函数"""
+            target_path = file_name
+            logger.info("最终下载文件路径为 {}".format(file_name))
+
+        logger.info("即将开始下载 {}".format(target_path))
+        retCode = self.lzy.down_file_by_id(latest_version_file.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
+        if retCode != LanZouCloud.SUCCESS:
+            logger.error("下载失败，retCode={}".format(retCode))
+            raise Exception("下载失败")
+
+        return target_path
+
     def find_latest_version(self):
         """
         查找最新版本，如找到，返回lanzouyun提供的file信息，否则抛出异常
@@ -99,6 +124,7 @@ if __name__ == '__main__':
         # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
         # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
         # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
-        logger.info("最新版本为{}".format(uploader.latest_version()))
+        # logger.info("最新版本为{}".format(uploader.latest_version()))
+        uploader.download_latest_version("_update_temp_dir")
     else:
         logger.error("登录失败")

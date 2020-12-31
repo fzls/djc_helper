@@ -1,6 +1,7 @@
 # 更新器不启用文件日志
 from log import logger, fileHandler
 
+logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
 
 import argparse

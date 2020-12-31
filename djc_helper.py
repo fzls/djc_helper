@@ -1447,6 +1447,8 @@ class DjcHelper:
                 info = AmesvrCommonModRet().auto_update_config(res["modRet"])
                 if info.sOutValue2 != "" and info.sOutValue2 != "0":
                     equip_count = len(info.sOutValue2.split(","))
+            else:
+                logger.warning(color("bold_yellow") + "是不是还没有报名？")
 
             return equip_count
 

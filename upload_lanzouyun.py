@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from collections import namedtuple
 from datetime import datetime
 
@@ -9,6 +10,7 @@ from log import logger
 
 Folder = namedtuple('Folder', ['name', 'id'])
 
+
 # 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
 
 class Uploader:
@@ -17,6 +19,8 @@ class Uploader:
     folder_history_files = Folder("历史版本", "2303716")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
+
+    regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
 
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
@@ -51,6 +55,22 @@ class Uploader:
 
         return True
 
+    def latest_version(self) -> str:
+        """
+        返回形如"1.0.0"的最新版本信息
+        """
+        files = self.lzy.get_file_list(self.folder_djc_helper.id)
+        for file in files:
+            if file.name.startswith(self.history_version_prefix):
+                # DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z
+                match = re.search(self.regex_version, file.name)
+                if match is not None:
+                    latest_version = match.group(1)
+                    return latest_version
+
+        # 保底返回1.0.0
+        return "1.0.0"
+
     def show_progress(self, file_name, total_size, now_size):
         """显示进度的回调函数"""
         percent = now_size / total_size
@@ -67,8 +87,9 @@ if __name__ == '__main__':
         cookie = json.load(fp)
     uploader = Uploader(cookie)
     if uploader.login_ok:
-        file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
-        uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
-        uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
+        # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
+        # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
+        # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
+        logger.info("最新版本为{}".format(uploader.latest_version()))
     else:
         logger.error("登录失败")

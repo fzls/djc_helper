@@ -497,7 +497,7 @@ def try_xinyue_sailiyam_start_work(cfg):
 def show_support_pic(cfg):
     logger.info("")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
-    if cfg.common.show_support_pic or is_weekly_first_run():
+    if is_weekly_first_run():
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
             "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"

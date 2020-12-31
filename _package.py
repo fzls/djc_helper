@@ -26,6 +26,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
         "public_key.der",
         "使用教程",
         "npp_portable",
+        "utils",
     ])
     files_to_copy = sorted(files_to_copy)
 

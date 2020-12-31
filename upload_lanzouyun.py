@@ -59,17 +59,26 @@ class Uploader:
         """
         返回形如"1.0.0"的最新版本信息
         """
-        files = self.lzy.get_file_list(self.folder_djc_helper.id)
-        for file in files:
-            if file.name.startswith(self.history_version_prefix):
-                # DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z
-                match = re.search(self.regex_version, file.name)
-                if match is not None:
-                    latest_version = match.group(1)
-                    return latest_version
+        latest_version_file = self.find_latest_version()
+        # DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z
+        match = re.search(self.regex_version, latest_version_file.name)
+        if match is not None:
+            latest_version = match.group(1)
+            return latest_version
 
         # 保底返回1.0.0
         return "1.0.0"
+
+    def find_latest_version(self):
+        """
+        查找最新版本，如找到，返回lanzouyun提供的file信息，否则抛出异常
+        """
+        files = self.lzy.get_file_list(self.folder_djc_helper.id)
+        for file in files:
+            if file.name.startswith(self.history_version_prefix):
+                return file
+
+        raise FileNotFoundError("latest version not found")
 
     def show_progress(self, file_name, total_size, now_size):
         """显示进度的回调函数"""

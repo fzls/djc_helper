@@ -65,6 +65,9 @@ def auto_update():
         logger.info("进行更新操作...")
         dir_util.copy_tree(target_dir, ".")
 
+        logger.info("更新完毕，移除临时目录")
+        dir_util.remove_tree(tmp_dir)
+
         target_exe = os.path.join(args.cwd, args.exe_name)
         logger.info("更新完毕，重新启动程序 {}".format(target_exe))
         subprocess.call([

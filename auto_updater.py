@@ -1,8 +1,9 @@
 # 更新器不启用文件日志
-from log import logger, fileHandler
+from log import logger, fileHandler, new_file_handler
 
 logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
+logger.addHandler(new_file_handler())
 
 import argparse
 import os
@@ -10,13 +11,14 @@ import subprocess
 from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
+from util import maximize_console
 
 lanzou_cookie = {
     "ylogin": "1442903",
     "phpdisk_info": "VmNRZwxqBDpSaVMzXTRWBVIzDDoIWF07ADRVNgczV21UYgU2VzYFOVVhUjdcDwdqWz9QZ108VDQHYQdvATcLO1ZhUTUMOgQ8UjZTYl1iVmpSNwxsCGZdPAAxVTwHNlcxVGAFY1c0BWpVM1I0XD8HVFs6UGVdN1QxBzwHZQE2CzpWYlFlDGs%3D",
 }
 
-bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
+bandizip_executable_path = "./bandizip_portable/bz.exe"
 
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
@@ -47,13 +49,13 @@ def auto_update():
         filepath = uploader.download_latest_version(tmp_dir)
 
         logger.info("下载完毕，开始解压缩")
-        subprocess.call([bandizip_executable_path, "x", "-target:auto", filepath, tmp_dir])
+        subprocess.call([os.path.realpath(bandizip_executable_path), "x", "-target:auto", filepath, tmp_dir])
 
         target_dir = filepath.replace('.7z', '')
 
         logger.info("预处理解压缩文件：移除部分文件")
         for file in ["config.toml", "utils/auto_updater.exe"]:
-            file_to_remove = os.path.join(target_dir, file)
+            file_to_remove = os.path.realpath(os.path.join(target_dir, file))
             try:
                 logger.info("移除 {}".format(file_to_remove))
                 os.remove(file_to_remove)
@@ -77,7 +79,14 @@ def auto_update():
 
 
 if __name__ == '__main__':
-    auto_update()
+    try:
+        # 最大化窗口
+        logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
+        maximize_console()
+
+        auto_update()
+    except Exception as e:
+        logger.error("更新器运行过程中遇到下列报错", exc_info=e)
 
 # 示例用法
 # import subprocess

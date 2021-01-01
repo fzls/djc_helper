@@ -375,9 +375,6 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
-        # DNF福利中心兑换
-        self.dnf_welfare()
-
         # DNF共创投票
         self.dnf_dianzan()
 
@@ -433,6 +430,9 @@ class DjcHelper:
 
         # hello语音网页礼包兑换
         self.hello_voice()
+
+        # DNF福利中心兑换
+        self.dnf_welfare()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

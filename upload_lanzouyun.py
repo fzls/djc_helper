@@ -22,6 +22,7 @@ class Uploader:
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
 
     regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
+    regex_patches = r'DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z'
 
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
@@ -78,26 +79,7 @@ class Uploader:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
-        if not os.path.isdir(download_dir):
-            os.mkdir(download_dir)
-
-        latest_version_file = self.find_latest_version()
-
-        download_dir = os.path.realpath(download_dir)
-        target_path = os.path.join(download_dir, latest_version_file.name)
-
-        def after_downloaded(file_name):
-            """下载完成后的回调函数"""
-            target_path = file_name
-            logger.info("最终下载文件路径为 {}".format(file_name))
-
-        logger.info("即将开始下载 {}".format(target_path))
-        retCode = self.lzy.down_file_by_id(latest_version_file.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
-        if retCode != LanZouCloud.SUCCESS:
-            logger.error("下载失败，retCode={}".format(retCode))
-            raise Exception("下载失败")
-
-        return target_path
+        return self.download_file(self.find_latest_version(), download_dir)
 
     def find_latest_version(self):
         """
@@ -109,6 +91,60 @@ class Uploader:
                 return file
 
         raise FileNotFoundError("latest version not found")
+
+    def latest_patches_range(self):
+        """
+        返回形如("1.0.0", "1.1.2")的补丁范围
+        """
+        latest_patches_file = self.find_latest_patches()
+        # DNF蚊子腿小助手_增量更新文件_v4.6.5_to_v4.6.6.7z
+        match = re.search(self.regex_patches, latest_patches_file.name)
+        if match is not None:
+            version_left, version_right = match.group(1), match.group(2)
+            return (version_left, version_right)
+
+        # 保底返回
+        return ("1.0.0", "1.0.0")
+
+    def download_latest_patches(self, download_dir) -> str:
+        """
+        下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
+        """
+        return self.download_file(self.find_latest_patches(), download_dir)
+
+    def find_latest_patches(self):
+        """
+        查找最新版本的补丁，如找到，返回lanzouyun提供的file信息，否则抛出异常
+        """
+        files = self.lzy.get_file_list(self.folder_djc_helper.id)
+        for file in files:
+            if file.name.startswith(self.history_patches_prefix):
+                return file
+
+        raise FileNotFoundError("latest patches not found")
+
+    def download_file(self, fileinfo, download_dir) -> str:
+        """
+        下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
+        """
+        if not os.path.isdir(download_dir):
+            os.mkdir(download_dir)
+
+        download_dir = os.path.realpath(download_dir)
+        target_path = os.path.join(download_dir, fileinfo.name)
+
+        def after_downloaded(file_name):
+            """下载完成后的回调函数"""
+            target_path = file_name
+            logger.info("最终下载文件路径为 {}".format(file_name))
+
+        logger.info("即将开始下载 {}".format(target_path))
+        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
+        if retCode != LanZouCloud.SUCCESS:
+            logger.error("下载失败，retCode={}".format(retCode))
+            raise Exception("下载失败")
+
+        return target_path
 
     def show_progress(self, file_name, total_size, now_size):
         """显示进度的回调函数"""
@@ -130,6 +166,9 @@ if __name__ == '__main__':
         # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
         # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
         # logger.info("最新版本为{}".format(uploader.latest_version()))
-        uploader.download_latest_version("_update_temp_dir")
+        # uploader.download_latest_version("_update_temp_dir")
+
+        logger.info("最新增量补丁范围为{}".format(uploader.latest_patches_range()))
+        # uploader.download_latest_patches("_update_temp_dir")
     else:
         logger.error("登录失败")

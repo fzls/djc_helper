@@ -36,12 +36,13 @@ class Uploader:
 
             logger.info("下载完成，fid={}".format(fid))
 
-            if history_file_prefix == "":
-                history_file_prefix = self.history_version_prefix
+            prefix = history_file_prefix
+            if prefix == "":
+                prefix = self.history_version_prefix
 
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
-                if file.name.startswith(history_file_prefix):
+                if file.name.startswith(prefix):
                     self.lzy.move_file(file.id, self.folder_history_files.id)
                     logger.info("将{}移动到目录({})".format(file.name, self.folder_history_files.name))
 

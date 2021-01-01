@@ -6,10 +6,10 @@ from datetime import datetime
 from sys import exit
 
 from _build import build
+from _commit_new_version import commit_new_version
 from _create_patches import create_patch
 from _package import package
 from _push_github import push_github
-from _commit_new_version import commit_new_version
 from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console

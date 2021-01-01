@@ -1,5 +1,6 @@
 # 更新器不启用文件日志
-from log import logger, fileHandler, new_file_handler
+from log import logger, fileHandler, new_file_handler, color
+from version import now_version
 
 logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
@@ -86,7 +87,14 @@ if __name__ == '__main__':
 
         auto_update()
     except Exception as e:
-        logger.error("更新器运行过程中遇到下列报错", exc_info=e)
+        msg = (
+            "更新器 ver {} 运行过程中出现未捕获的异常。\n"
+            "目前更新器处于测试模式，可能会有一些未考虑到的点，请加群553925117反馈"
+        ).format(now_version)
+        logger.exception(color("fg_bold_red") + msg, exc_info=e)
+
+        logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~")
+        os.system("PAUSE")
 
 # 示例用法
 # import subprocess

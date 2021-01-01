@@ -383,6 +383,8 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_start = True
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+        # 是否启用自动更新功能（re: 默认不启用，等验证几天，确保OK后再默认启用）
+        self.auto_update_on_start = False
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。

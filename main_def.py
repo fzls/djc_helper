@@ -609,6 +609,8 @@ def try_auto_update():
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
+        logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
+
         logger.info("当前进程pid={}, 版本={}, 工作目录={}，exe名称={}".format(pid, now_version, dirpath, filename))
 
         logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")

@@ -58,13 +58,6 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
 
-    # 额外备份一份最新的供github action 使用
-    logger.info("保存一份供github action使用")
-    dir_github_action_artifact = "_github_action_artifact"
-    shutil.rmtree(dir_github_action_artifact, ignore_errors=True)
-    os.mkdir(dir_github_action_artifact)
-    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
-
 
 def main():
     dir_src = os.path.realpath('.')

@@ -49,8 +49,9 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
             logger.info("拷贝文件 {}".format(filename))
             shutil.copyfile(source, destination)
 
-    logger.info("清除utils目录下的日志")
-    shutil.rmtree(os.path.join(dir_current_release, "utils/logs"), ignore_errors=True)
+    logger.info("清除utils目录下的日志和db")
+    for dir_name in ["logs", ".db"]:
+        shutil.rmtree(os.path.join(dir_current_release, "utils/{}".format(dir_name)), ignore_errors=True)
 
     # 压缩打包
     os.chdir(dir_all_release)

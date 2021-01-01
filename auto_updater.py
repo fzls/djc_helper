@@ -24,12 +24,7 @@ bandizip_executable_path = "./bandizip_portable/bz.exe"
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--pid", default=0, type=int)
-    parser.add_argument("--version", default="1.0.0", type=str)
-    parser.add_argument("--cwd", default=".", type=str)
-    parser.add_argument("--exe_name", default="DNF蚊子腿小助手.exe", type=str)
-    args = parser.parse_args()
+    args = parse_args()
 
     logger.info("更新器的进程为{}，主进程为{}".format(os.getpid(), args.pid))
 
@@ -44,42 +39,79 @@ def auto_update():
     logger.info("当前版本为{}，网盘最新版本为{}".format(args.version, latest_version))
 
     if need_update(args.version, latest_version):
-        tmp_dir = "_update_temp_dir"
-
-        logger.info(color("bold_yellow") + "需要更新，开始下载{}版本的压缩包".format(latest_version))
-        filepath = uploader.download_latest_version(tmp_dir)
-
-        logger.info("下载完毕，开始解压缩")
-        subprocess.call([os.path.realpath(bandizip_executable_path), "x", "-target:auto", filepath, tmp_dir])
-
-        target_dir = filepath.replace('.7z', '')
-
-        logger.info("预处理解压缩文件：移除部分文件")
-        for file in ["config.toml", "utils/auto_updater.exe"]:
-            file_to_remove = os.path.realpath(os.path.join(target_dir, file))
-            try:
-                logger.info("移除 {}".format(file_to_remove))
-                os.remove(file_to_remove)
-            except Exception as e:
-                logger.debug("移除 {} 时出错了".format(file_to_remove), exc_info=e)
-
-        logger.info("尝试干掉原进程={}".format(args.pid))
-        os.kill(args.pid, 9)
-
-        logger.info("等待五秒，确保原进程已经被干掉")
-        time.sleep(5)
-
-        logger.info("进行更新操作...")
-        dir_util.copy_tree(target_dir, ".")
-
-        logger.info("更新完毕，移除临时目录")
-        dir_util.remove_tree(tmp_dir)
-
-        target_exe = os.path.join(args.cwd, args.exe_name)
-        logger.info("更新完毕，重新启动程序 {}".format(target_exe))
-        subprocess.call([target_exe])
+        update(args, uploader)
+        start_new_version(args)
     else:
         logger.info("已经是最新版本，不需要更新")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pid", default=0, type=int)
+    parser.add_argument("--version", default="1.0.0", type=str)
+    parser.add_argument("--cwd", default=".", type=str)
+    parser.add_argument("--exe_name", default="DNF蚊子腿小助手.exe", type=str)
+    args = parser.parse_args()
+
+    return args
+
+
+def update(args, uploader):
+    logger.info("需要更新，开始更新流程")
+
+    # 保底使用全量更新
+    logger.info(color("bold_yellow") + "尝试全量更新")
+    full_update(args, uploader)
+    logger.info("全量更新完毕")
+    return
+
+
+def full_update(args, uploader):
+    tmp_dir = "_update_temp_dir"
+
+    logger.info("开始下载最新版本的压缩包")
+    filepath = uploader.download_latest_version(tmp_dir)
+
+    logger.info("下载完毕，开始解压缩")
+    decompress(filepath, tmp_dir)
+
+    target_dir = filepath.replace('.7z', '')
+    logger.info("预处理解压缩文件：移除部分文件")
+    for file in ["config.toml", "utils/auto_updater.exe"]:
+        file_to_remove = os.path.realpath(os.path.join(target_dir, file))
+        try:
+            logger.info("移除 {}".format(file_to_remove))
+            os.remove(file_to_remove)
+        except Exception as e:
+            logger.debug("移除 {} 时出错了".format(file_to_remove), exc_info=e)
+
+    kill_original_process(args.pid)
+
+    logger.info("进行更新操作...")
+    dir_util.copy_tree(target_dir, ".")
+
+    logger.info("更新完毕，移除临时目录")
+    dir_util.remove_tree(tmp_dir)
+
+    return True
+
+
+def decompress(filepath, target_dir):
+    subprocess.call([os.path.realpath(bandizip_executable_path), "x", "-target:auto", filepath, target_dir])
+
+
+def kill_original_process(pid):
+    logger.info("尝试干掉原进程={}".format(pid))
+    os.kill(pid, 9)
+
+    logger.info("等待五秒，确保原进程已经被干掉")
+    time.sleep(5)
+
+
+def start_new_version(args):
+    target_exe = os.path.join(args.cwd, args.exe_name)
+    logger.info("更新完毕，重新启动程序 {}".format(target_exe))
+    subprocess.call([target_exe])
 
 
 if __name__ == '__main__':

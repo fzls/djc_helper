@@ -59,6 +59,20 @@ def parse_args():
 def update(args, uploader):
     logger.info("需要更新，开始更新流程")
 
+    patches_range = uploader.latest_patches_range()
+    logger.info("当前可以应用增量补丁更新的版本范围为{}".format(patches_range))
+
+    can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(patches_range[1], args.version)
+    if can_use_patch:
+        logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+
+        update_ok = incremental_update(args, uploader)
+        if update_ok:
+            logger.info("增量更新完毕")
+            return
+        else:
+            logger.warning("增量更新失败，尝试默认的全量更新方案")
+
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")
     full_update(args, uploader)
@@ -89,6 +103,40 @@ def full_update(args, uploader):
 
     logger.info("进行更新操作...")
     dir_util.copy_tree(target_dir, ".")
+
+    logger.info("更新完毕，移除临时目录")
+    dir_util.remove_tree(tmp_dir)
+
+    return True
+
+
+def incremental_update(args, uploader):
+    tmp_dir = "_update_temp_dir"
+
+    logger.info("开始下载增量更新包")
+    filepath = uploader.download_latest_patches(tmp_dir)
+
+    logger.info("下载完毕，开始解压缩")
+    decompress(filepath, tmp_dir)
+
+    kill_original_process(args.pid)
+
+    target_dir = filepath.replace('.7z', '')
+    target_patch = os.path.join(target_dir, "{}.patch".format(args.version))
+    logger.info("开始应用补丁 {}".format(target_patch))
+    # hpatchz.exe -C-diff -f . "%target_patch_file%" .
+    ret_code = subprocess.call([
+        os.path.realpath("utils/hpatchz.exe"),
+        "-C-diff",
+        "-f",
+        os.path.realpath("."),
+        os.path.realpath(target_patch),
+        os.path.realpath("."),
+    ])
+
+    if ret_code != 0:
+        logger.error("增量更新失败，错误码为{}，具体报错请看上面日志".format(ret_code))
+        return False
 
     logger.info("更新完毕，移除临时目录")
     dir_util.remove_tree(tmp_dir)

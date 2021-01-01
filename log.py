@@ -31,13 +31,20 @@ except PermissionError as err:
     os.system("PAUSE")
     exit(-1)
 
+
+def new_file_handler():
+    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    newFileHandler = logging.FileHandler("{0}/{1}_{2}_{3}.log".format(log_directory, logger.name, process_name, time_str), encoding="utf-8", delay=True)
+    fileLogFormatter = logging.Formatter(fileFmtStr)
+    newFileHandler.setFormatter(fileLogFormatter)
+    newFileHandler.setLevel(logging.DEBUG)
+
+    return newFileHandler
+
+
 process_name = multiprocessing.current_process().name
 if "MainProcess" in process_name:
-    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-    fileHandler = logging.FileHandler("{0}/{1}_{2}_{3}.log".format(log_directory, logger.name, process_name, time_str), encoding="utf-8", delay=True)
-    fileLogFormatter = logging.Formatter(fileFmtStr)
-    fileHandler.setFormatter(fileLogFormatter)
-    fileHandler.setLevel(logging.DEBUG)
+    fileHandler = new_file_handler()
     logger.addHandler(fileHandler)
 
 # hack: 将底层的color暴露出来

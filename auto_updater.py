@@ -12,7 +12,6 @@ import subprocess
 from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
-from util import maximize_console
 
 lanzou_cookie = {
     "ylogin": "1442903",
@@ -81,10 +80,6 @@ def auto_update():
 
 if __name__ == '__main__':
     try:
-        # 最大化窗口
-        logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-        maximize_console()
-
         auto_update()
     except Exception as e:
         msg = (

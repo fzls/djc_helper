@@ -19,6 +19,7 @@ class Uploader:
     folder_history_files = Folder("历史版本", "2303716")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
+    history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
 
     regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
 

@@ -66,12 +66,15 @@ def update(args, uploader):
     if can_use_patch:
         logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
 
-        update_ok = incremental_update(args, uploader)
-        if update_ok:
-            logger.info("增量更新完毕")
-            return
-        else:
-            logger.warning("增量更新失败，尝试默认的全量更新方案")
+        try:
+            update_ok = incremental_update(args, uploader)
+            if update_ok:
+                logger.info("增量更新完毕")
+                return
+            else:
+                logger.warning("增量更新失败，尝试默认的全量更新方案")
+        except Exception as e:
+            logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")

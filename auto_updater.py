@@ -6,6 +6,7 @@ logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
+import time
 import argparse
 import os
 import subprocess
@@ -64,6 +65,9 @@ def auto_update():
 
         logger.info("尝试干掉原进程={}".format(args.pid))
         os.kill(args.pid, 9)
+
+        logger.info("等待五秒，确保原进程已经被干掉")
+        time.sleep(5)
 
         logger.info("进行更新操作...")
         dir_util.copy_tree(target_dir, ".")

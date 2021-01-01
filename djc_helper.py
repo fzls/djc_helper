@@ -399,6 +399,9 @@ class DjcHelper:
         # 史诗之路来袭活动合集
         self.dnf_1224()
 
+        # qq视频活动
+        self.qq_video()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -409,9 +412,6 @@ class DjcHelper:
 
         # 10月女法师三觉
         self.dnf_female_mage_awaken()
-
-        # qq视频活动
-        self.qq_video()
 
         # dnf助手排行榜
         self.dnf_rank()
@@ -1497,29 +1497,37 @@ class DjcHelper:
 
     # --------------------------------------------qq视频活动--------------------------------------------
     def qq_video(self):
-        # https://film.qq.com/film/p/topic/dnf922/index.html
+        # https://m.film.qq.com/magic-act/110254/index.html
         show_head_line("qq视频活动")
 
         if not self.cfg.function_switches.get_qq_video:
             logger.warning("未启用领取qq视频活动功能，将跳过")
             return
 
+        # note: 接入新活动的流程如下
+        #   1. 电脑打开fiddler，手机连接fiddler的代理
+        #   2. 手机QQ打开活动界面
+        #   3. 点击任意按钮，从query_string中获取最新的act_id
+        #   4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
+
         self.check_qq_video()
 
-        self.qq_video_op("幸运勇士礼包", "125888")
-        self.qq_video_op("勇士见面礼-礼包", "125890")
-        self.qq_video_op("勇士见面礼-令牌", "125911")
+        self.qq_video_op("幸运勇士礼包", "129838")
+        self.qq_video_op("勇士见面礼-礼包", "129879")
+        self.qq_video_op("勇士见面礼-令牌", "129875")
 
-        self.qq_video_op("在线30分钟", "125905")
-        self.qq_video_op("累积3天", "125906")
-        self.qq_video_op("累积7天", "125908")
-        self.qq_video_op("累积15天", "125907")
+        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", "129873")
+
+        self.qq_video_op("在线30分钟", "129877")
+        self.qq_video_op("累积3天", "129881")
+        self.qq_video_op("累积7天", "129883")
+        self.qq_video_op("累积15天", "129882")
 
     def check_qq_video(self):
-        res = self.qq_video_op("幸运勇士礼包", "125888", print_res=False)
+        res = self.qq_video_op("幸运勇士礼包", "129838", print_res=False)
         # {"frame_resp": {"failed_condition": {"condition_op": 3, "cur_value": 0, "data_type": 2, "exp_value": 0, "type": 100418}, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}, "act_id": 108810, "data": {"button_txt": "关闭", "cdkey": "", "custom_list": [], "end_timestamp": -1, "ext_url": "", "give_type": 0, "is_mask_cdkey": 0, "is_pop_jump": 0, "item_share_desc": "", "item_share_title": "", "item_share_url": "", "item_sponsor_title": "", "item_sponsor_url": "", "item_tips": "", "jump_url": "", "jump_url_web": "", "lottery_item_id": "1601827185657s2238078729s192396s1", "lottery_level": 0, "lottery_name": "", "lottery_num": 0, "lottery_result": 0, "lottery_txt": "您当前还未绑定游戏帐号，请先绑定哦~", "lottery_url": "", "lottery_url_ext": "", "lottery_url_ext1": "", "lottery_url_ext2": "", "msg_title": "告诉我怎么寄给你", "need_bind": 0, "next_type": 2, "pop_jump_btn_title": "", "pop_jump_url": "", "prize_give_info": {"prize_give_status": 0}, "property_detail_code": 0, "property_detail_msg": "", "property_type": 0, "share_txt": "", "share_url": "", "source": 0, "sys_code": -904, "url_lottery": "", "user_info": {"addr": "", "name": "", "tel": "", "uin": ""}}, "module_id": 125890, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}
         if int(res["data"]["sys_code"]) == -904 and res["data"]["lottery_txt"] == "您当前还未绑定游戏帐号，请先绑定哦~":
-            msg = "未绑定角色，请打开dnf助手->活动->前往【征战新团本，共享好时光】活动界面进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
+            msg = "未绑定角色，请打开https://m.film.qq.com/magic-act/110254/index.html（需要使用手机打开）进行绑定，然后重新运行程序\n若无需该功能，可前往配置文件自行关闭该功能"
             logger.warning(color("fg_bold_cyan") + msg)
 
     def qq_video_op(self, ctx, module_id, print_res=True):
@@ -1534,13 +1542,14 @@ class DjcHelper:
         return res
 
     def _qq_video_op(self, ctx, type, option, module_id, print_res=True):
+        act_id = "110254"
         extra_cookies = "; ".join([
             "",
             "appid=3000501",
             "main_login=qq",
             "vuserid={vuserid}".format(vuserid=self.vuserid),
         ])
-        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id="108810", module_id=module_id,
+        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=act_id, module_id=module_id,
                         print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------
@@ -3074,12 +3083,10 @@ if __name__ == '__main__':
         # djcHelper.complete_tasks()
         # djcHelper.xinyue_guoqing()
         # djcHelper.wegame_guoqing()
-        # djcHelper.qq_video()
         # djcHelper.djc_operations()
         # djcHelper.dnf_female_mage_awaken()
         # djcHelper.send_card_by_name("独立成团打副本", "1054073896")
         # djcHelper.wx_checkin()
-        # djcHelper.qq_video()
         # djcHelper.dnf_female_mage_awaken()
         # djcHelper.xinyue_sailiyam()
         # djcHelper.dnf_rank()
@@ -3098,4 +3105,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.guanjia()
-        djcHelper.dnf_1224()
+        # djcHelper.dnf_1224()
+        djcHelper.qq_video()

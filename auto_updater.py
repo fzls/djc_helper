@@ -80,6 +80,7 @@ def auto_update():
 
 if __name__ == '__main__':
     try:
+        os.system("title 自动更新工具")
         auto_update()
     except Exception as e:
         msg = (

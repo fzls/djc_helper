@@ -6,7 +6,6 @@ import subprocess
 
 from log import logger
 from version import now_version
-from _create_patches import create_patch
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
@@ -65,11 +64,6 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     shutil.rmtree(dir_github_action_artifact, ignore_errors=True)
     os.mkdir(dir_github_action_artifact)
     shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
-
-    # 构建增量包
-    create_patch_for_latest_n_version = 3
-    logger.info("开始构建增量包，最多包含过去{}个版本到最新版本的补丁".format(create_patch_for_latest_n_version))
-    create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version)
 
 
 def main():

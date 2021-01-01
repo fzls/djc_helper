@@ -5,6 +5,7 @@ from datetime import datetime
 from sys import exit
 
 from _build import build
+from _create_patches import create_patch
 from _package import package
 from _push_github import push_github
 from _commit_new_version import commit_new_version
@@ -46,6 +47,13 @@ build()
 os.chdir(dir_src)
 package(dir_src, dir_all_release, release_dir_name, release_7z_name)
 
+# ---------------构建增量补丁
+# 构建增量包
+os.chdir(dir_all_release)
+create_patch_for_latest_n_version = 3
+logger.info("开始构建增量包，最多包含过去{}个版本到最新版本的补丁".format(create_patch_for_latest_n_version))
+patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version)
+
 # ---------------标记新版本
 logger.info("提交版本和版本变更说明，并同步到docs目录，用于生成github pages")
 os.chdir(dir_src)
@@ -61,6 +69,7 @@ uploader = Uploader(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper)
+    uploader.upload_to_lanzouyun(patch_file_name, uploader.folder_djc_helper, history_file_prefix="DNF蚊子腿小助手_增量更新文件_")
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc)
 else:
     logger.error("蓝奏云登录失败")

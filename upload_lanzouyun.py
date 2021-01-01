@@ -26,7 +26,7 @@ class Uploader:
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath, target_folder):
+    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix=""):
         logger.warning("开始上传 {} 到 {}".format(os.path.basename(filepath), target_folder.name))
         run_start_time = datetime.now()
 
@@ -36,9 +36,12 @@ class Uploader:
 
             logger.info("下载完成，fid={}".format(fid))
 
+            if history_file_prefix == "":
+                history_file_prefix = self.history_version_prefix
+
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
-                if file.name.startswith(self.history_version_prefix):
+                if file.name.startswith(history_file_prefix):
                     self.lzy.move_file(file.id, self.folder_history_files.id)
                     logger.info("将{}移动到目录({})".format(file.name, self.folder_history_files.name))
 

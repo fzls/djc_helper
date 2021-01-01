@@ -369,9 +369,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # DNF进击吧赛利亚
-        self.xinyue_sailiyam()
-
         # 阿拉德勇士征集令
         self.dnf_warriors_call()
 
@@ -433,6 +430,9 @@ class DjcHelper:
 
         # 2020DNF嘉年华页面主页面签到
         self.dnf_carnival()
+
+        # DNF进击吧赛利亚
+        self.xinyue_sailiyam()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

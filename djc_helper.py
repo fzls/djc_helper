@@ -396,13 +396,13 @@ class DjcHelper:
         # 管家蚊子腿
         self.guanjia()
 
+        # 史诗之路来袭活动合集
+        self.dnf_1224()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
         self.wegame_guoqing()
-
-        # 阿拉德集合站活动合集
-        self.dnf_922()
 
         # 微信签到
         self.wx_checkin()
@@ -1395,39 +1395,39 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922wegame/")
 
-    # --------------------------------------------阿拉德集合站活动合集--------------------------------------------
-    def dnf_922(self):
-        # https://dnf.qq.com/lbact/a20200922hdjh/index.html
-        show_head_line("阿拉德集合站活动合集")
+    # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
+    def dnf_1224(self):
+        # https://dnf.qq.com/lbact/a20201224aggregate/index.html
+        show_head_line("史诗之路来袭活动合集")
 
-        if not self.cfg.function_switches.get_dnf_922:
-            logger.warning("未启用领取阿拉德集合站活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_1224:
+            logger.warning("未启用领取史诗之路来袭活动合集功能，将跳过")
             return
 
-        self.check_dnf_922()
+        self.check_dnf_1224()
 
-        self.dnf_922_op("勇士礼包", "703172")
+        self.dnf_1224_op("勇士礼包", "730665")
 
-        self.dnf_922_op("30分签到礼包", "703173")
-        check_days = self.get_dnf_922_checkin_days()
+        self.dnf_1224_op("30分签到礼包", "730666")
+        check_days = self.get_dnf_1224_checkin_days()
         logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(check_days))
-        self.dnf_922_op("3日礼包", "703168")
-        self.dnf_922_op("7日礼包", "703174")
-        self.dnf_922_op("15日礼包", "703175")
+        self.dnf_1224_op("3日礼包", "730663")
+        self.dnf_1224_op("7日礼包", "730667")
+        self.dnf_1224_op("15日礼包", "730668")
 
-    def get_dnf_922_checkin_days(self):
-        res = self.dnf_922_op("查询签到信息", "703177")
-        return res["modRet"]["total"]
+    def get_dnf_1224_checkin_days(self):
+        res = self.dnf_1224_op("查询签到信息", "730670")
+        return int(res["modRet"]["total"])
 
-    def check_dnf_922(self):
-        res = self.dnf_922_op("30分签到礼包", "703173", print_res=False)
-        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
-        if int(res["ret"]) == 99998:
-            self.guide_to_bind_account("阿拉德集合站", "https://dnf.qq.com/lbact/a20200922hdjh/index.html")
+    def check_dnf_1224(self):
+        res = self.dnf_1224_op("查询是否绑定", "730660", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            self.guide_to_bind_account("史诗之路来袭活动合集", "https://dnf.qq.com/lbact/a20201224aggregate/index.html")
 
-    def dnf_922_op(self, ctx, iFlowId, print_res=True):
-        iActivityId = self.urls.iActivityId_dnf_922
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922hdjh/")
+    def dnf_1224_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_dnf_1224
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20201224aggregate/")
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
     def dnf_shanguang(self):
@@ -3074,7 +3074,6 @@ if __name__ == '__main__':
         # djcHelper.complete_tasks()
         # djcHelper.xinyue_guoqing()
         # djcHelper.wegame_guoqing()
-        # djcHelper.dnf_922()
         # djcHelper.qq_video()
         # djcHelper.djc_operations()
         # djcHelper.dnf_female_mage_awaken()
@@ -3098,4 +3097,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_christmas()
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
-        djcHelper.guanjia()
+        # djcHelper.guanjia()
+        djcHelper.dnf_1224()

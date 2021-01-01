@@ -49,9 +49,18 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
             logger.info("拷贝文件 {}".format(filename))
             shutil.copyfile(source, destination)
 
-    logger.info("清除utils目录下的日志和db")
-    for dir_name in ["logs", ".db"]:
-        shutil.rmtree(os.path.join(dir_current_release, "utils/{}".format(dir_name)), ignore_errors=True)
+    logger.info("清除utils目录下的一些内容")
+    for filename in ["logs", ".db", "auto_updater.exe"]:
+        filepath = os.path.join(dir_current_release, "utils/{}".format(filename))
+        if not os.path.exists(filepath):
+            continue
+
+        if os.path.isdir(filepath):
+            logger.info("移除目录 {}".format(filepath))
+            shutil.rmtree(filepath, ignore_errors=True)
+        else:
+            logger.info("移除文件 {}".format(filepath))
+            os.remove(filepath)
 
     # 压缩打包
     os.chdir(dir_all_release)

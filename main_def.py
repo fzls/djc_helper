@@ -515,6 +515,21 @@ def show_support_pic(cfg):
 
 
 def check_update(cfg):
+    auto_updater_path = os.path.realpath("utils/auto_updater.exe")
+    if not os.path.exists(auto_updater_path):
+        logger.warning(color("bold_cyan") + (
+            "未发现自动更新DLC，因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
+            "-----------------\n"
+            "以下为广告时间0-0\n"
+            "花了两天多时间，给小助手加入了目前唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
+            "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
+            "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
+            "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
+            "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0"
+            "购买方式：加小助手群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你，并拉到一个全员禁言且无法主动加入的群，通过群文件分发自动更新DLC的后续更新版本~\n"
+            "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
+        ))
+
     logger.info((
         "\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
@@ -589,7 +604,8 @@ def show_qiafan_message_box_on_every_big_version(version):
             "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
             "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
             "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
-            "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴可以加群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你~\n"
+            "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0"
+            "购买方式：加小助手群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你，并拉到一个全员禁言且无法主动加入的群，通过群文件分发自动更新DLC的后续更新版本~\n"
             "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
         ).format(
             activities="".join(["    {}. {}\n".format(idx + 1, name) for idx, name in enumerate(activities)]),
@@ -619,13 +635,20 @@ def try_auto_update():
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
+        auto_updater_path = os.path.realpath("utils/auto_updater.exe")
+        if not os.path.exists(auto_updater_path):
+            logger.warning(color("bold_cyan") + (
+                "未发现自动更新DLC，将跳过自动更新流程~\n"
+            ))
+            return
+
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
 
         logger.info("当前进程pid={}, 版本={}, 工作目录={}，exe名称={}".format(pid, now_version, dirpath, filename))
 
         logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
         p = subprocess.Popen([
-            os.path.realpath("utils/auto_updater.exe"),
+            auto_updater_path,
             "--pid", str(pid),
             "--version", str(now_version),
             "--cwd", dirpath,

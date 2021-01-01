@@ -79,11 +79,11 @@ def auto_update():
 if __name__ == '__main__':
     auto_update()
 
-# re: 获取版本和下载逻辑搞定后对接到工具中
 # 示例用法
 # import subprocess
 # import os
 # import argparse
+# import sys
 #
 # version = "1.0.0"
 #
@@ -95,15 +95,13 @@ if __name__ == '__main__':
 # dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
 #
 # print("尝试启动更新器，并传入当前进程pid和版本号，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程")
-## re: 测试OK后改为对应exe
 # p = subprocess.Popen([
-#     "python",
-#     "auto_updater.py",
+#     "utils/auto_updater.exe",
 #     "--pid", str(os.getpid()),
 #     "--version", str(version),
 #     "--cwd", dirpath,
 #     "--exe_name", filename,
-# ], shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,)
+# ], shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 # p.wait()
 #
 # print("实际进行相关逻辑")

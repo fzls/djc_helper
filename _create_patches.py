@@ -63,7 +63,9 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version) ->
     logger.info("将为【{}】版本制作补丁包".format(old_version_infos))
 
     # 创建patch目录
-    patches_dir = "patches"
+    patch_oldest_version = old_version_infos[0].version
+    patch_newest_version = old_version_infos[-1].version
+    patches_dir = "DNF蚊子腿小助手_增量更新文件_v{}_to_v{}".format(patch_oldest_version, patch_newest_version)
     temp_dir = "patches_temp"
 
     shutil.rmtree(patches_dir, ignore_errors=True)
@@ -110,9 +112,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version) ->
     shutil.rmtree(temp_dir, ignore_errors=True)
 
     # 压缩打包
-    patch_oldest_version = old_version_infos[0].version
-    patch_newest_version = old_version_infos[-1].version
-    patch_7z_file = "DNF蚊子腿小助手_增量更新文件_v{}_to_v{}.7z".format(patch_oldest_version, patch_newest_version)
+    patch_7z_file = "{}.7z".format(patches_dir)
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
 

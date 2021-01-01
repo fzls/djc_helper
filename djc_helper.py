@@ -369,9 +369,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # hello语音网页礼包兑换
-        self.hello_voice()
-
         # QQ空间抽卡
         self.ark_lottery()
 
@@ -433,6 +430,9 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
+
+        # hello语音网页礼包兑换
+        self.hello_voice()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

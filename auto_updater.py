@@ -59,22 +59,23 @@ def parse_args():
 def update(args, uploader):
     logger.info("需要更新，开始更新流程")
 
-    patches_range = uploader.latest_patches_range()
-    logger.info("当前可以应用增量补丁更新的版本范围为{}".format(patches_range))
+    try:
+        # 首先尝试使用增量更新文件
+        patches_range = uploader.latest_patches_range()
+        logger.info("当前可以应用增量补丁更新的版本范围为{}".format(patches_range))
 
-    can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(patches_range[1], args.version)
-    if can_use_patch:
-        logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+        can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(patches_range[1], args.version)
+        if can_use_patch:
+            logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
 
-        try:
             update_ok = incremental_update(args, uploader)
             if update_ok:
                 logger.info("增量更新完毕")
                 return
             else:
                 logger.warning("增量更新失败，尝试默认的全量更新方案")
-        except Exception as e:
-            logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
+    except Exception as e:
+        logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")

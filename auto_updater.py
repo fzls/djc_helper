@@ -45,7 +45,7 @@ def auto_update():
     if need_update(args.version, latest_version):
         tmp_dir = "_update_temp_dir"
 
-        logger.info("需要更新，开始下载{}版本的压缩包".format(latest_version))
+        logger.info(color("bold_yellow") + "需要更新，开始下载{}版本的压缩包".format(latest_version))
         filepath = uploader.download_latest_version(tmp_dir)
 
         logger.info("下载完毕，开始解压缩")

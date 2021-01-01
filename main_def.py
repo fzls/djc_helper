@@ -571,7 +571,10 @@ def temp_code(cfg):
 def show_qiafan_message_box_on_every_big_version(version):
     # 当添加了多个活动的版本发布时，弹出一条恰饭信息
     if is_first_run("qiafan_{}".format(version)):
-        activities = ["dnf漂流瓶", "马杰洛的规划", "dnf助手双旦"]
+        activities = [
+            "dnf漂流瓶", "马杰洛的规划", "dnf助手双旦", "闪光杯第三期", "wegame暖冬有礼", "管家暖冬献礼", "史诗之路来袭活动合集签到",
+            "QQ视频蚊子腿（开启史诗之路 欢聚美好时光）",
+        ]
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
             "Hello，本次新接入了下列活动，欢迎大家使用。\n"
@@ -581,6 +584,13 @@ def show_qiafan_message_box_on_every_big_version(version):
             "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
             "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
             "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
+            "\n"
+            "顺带打一个小广告~花了两天多时间，给小助手加入了目前唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
+            "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
+            "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
+            "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
+            "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴可以加群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你~\n"
+            "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
         ).format(
             activities="".join(["    {}. {}\n".format(idx + 1, name) for idx, name in enumerate(activities)]),
             used_days=usedDays,

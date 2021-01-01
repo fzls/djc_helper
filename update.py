@@ -10,56 +10,75 @@ import win32con
 
 from dao import UpdateInfo
 from log import logger
+from util import is_first_run
 from version import now_version
 
 
 # 启动时检查是否有更新
 def check_update_on_start(config):
     try:
-        if not config.check_update_on_start:
+        if not config.check_update_on_start and not config.auto_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
             return
 
         ui = get_update_info(config)
-        if need_update(now_version, ui.latest_version):
-            logger.info("当前版本为{}，已有最新版本{}，更新内容为{}".format(now_version, ui.latest_version, ui.update_message))
 
-            ask_update = True
-            if platform.system() == "Windows":
-                message = (
-                    "当前版本为{}，已有最新版本{}. 你需要更新吗?\n"
-                    "{}".format(now_version, ui.latest_version, ui.update_message)
-                )
-                res = win32api.MessageBox(0, message, "更新", win32con.MB_OKCANCEL)
-                if res == win32con.IDOK:
-                    ask_update = True
-                else:
-                    ask_update = False
-            else:
-                # 非windows系统默认更新
-                ask_update = True
+        if config.check_update_on_start:
+            try_manaual_update(ui)
 
-            if ask_update:
-                if not is_shared_content_blocked(ui.netdisk_link):
-                    webbrowser.open(ui.netdisk_link)
-                    win32api.MessageBox(0, "蓝奏云网盘提取码为： {}".format(ui.netdisk_passcode), "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION)
-                else:
-                    # 如果分享的网盘链接被系统屏蔽了，写日志并弹窗提示
-                    logger.warning("网盘链接={}又被系统干掉了=-=".format(ui.netdisk_link))
-                    webbrowser.open("https://github.com/fzls/djc_helper/releases")
-                    message = (
-                        "分享的网盘地址好像又被系统给抽掉了呢=。=先暂时使用github的release页面下载吧0-0\n"
-                        "请稍作等待~ 风之凌殇看到这个报错后会尽快更新网盘链接的呢\n"
-                        "届时再启动程序将自动获取到最新的网盘地址呢~"
-                    )
-                    win32api.MessageBox(0, message, "不好啦", win32con.MB_ICONERROR)
-            else:
-                message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start的值设为false即可"
-                win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
-        else:
-            logger.info("当前版本{}已是最新版本，无需更新".format(now_version))
+        if config.auto_update_on_start:
+            show_update_info_on_first_run(ui)
     except Exception as err:
         logger.error("更新版本失败, 错误为{}".format(err))
+
+
+def try_manaual_update(ui: UpdateInfo):
+    if need_update(now_version, ui.latest_version):
+        logger.info("当前版本为{}，已有最新版本{}，更新内容为{}".format(now_version, ui.latest_version, ui.update_message))
+
+        ask_update = True
+        if platform.system() == "Windows":
+            message = (
+                "当前版本为{}，已有最新版本{}. 你需要更新吗?\n"
+                "{}"
+            ).format(now_version, ui.latest_version, ui.update_message)
+            res = win32api.MessageBox(0, message, "更新", win32con.MB_OKCANCEL)
+            if res == win32con.IDOK:
+                ask_update = True
+            else:
+                ask_update = False
+        else:
+            # 非windows系统默认更新
+            ask_update = True
+
+        if ask_update:
+            if not is_shared_content_blocked(ui.netdisk_link):
+                webbrowser.open(ui.netdisk_link)
+                win32api.MessageBox(0, "蓝奏云网盘提取码为： {}".format(ui.netdisk_passcode), "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION)
+            else:
+                # 如果分享的网盘链接被系统屏蔽了，写日志并弹窗提示
+                logger.warning("网盘链接={}又被系统干掉了=-=".format(ui.netdisk_link))
+                webbrowser.open("https://github.com/fzls/djc_helper/releases")
+                message = (
+                    "分享的网盘地址好像又被系统给抽掉了呢=。=先暂时使用github的release页面下载吧0-0\n"
+                    "请稍作等待~ 风之凌殇看到这个报错后会尽快更新网盘链接的呢\n"
+                    "届时再启动程序将自动获取到最新的网盘地址呢~"
+                )
+                win32api.MessageBox(0, message, "不好啦", win32con.MB_ICONERROR)
+        else:
+            message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start的值设为false即可"
+            win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
+    else:
+        logger.info("当前版本{}已是最新版本，无需更新".format(now_version))
+
+
+def show_update_info_on_first_run(ui: UpdateInfo):
+    if now_version == ui.latest_version and is_first_run("update_version_v{}".format(ui.latest_version)):
+        message = (
+            "新版本v{}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
+            "{}"
+        ).format(ui.latest_version, ui.update_message)
+        win32api.MessageBox(0, message, "更新", win32con.MB_OK)
 
 
 # 获取最新版本号与下载网盘地址
@@ -122,12 +141,14 @@ def is_shared_content_blocked(share_netdisk_addr: str) -> bool:
     # 切换蓝奏云，暂时应该不会被屏蔽了- -
     return False
 
+
 def get_netdisk_addr(config):
     try:
         ui = get_update_info(config)
         return ui.netdisk_link
     except:
         return "https://fzls.lanzous.com/s/djc-helper"
+
 
 if __name__ == '__main__':
     from config import load_config, config

@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import webbrowser
 from sys import exit
 
@@ -589,6 +591,37 @@ def show_qiafan_message_box_on_every_big_version(version):
             os.popen("支持一下.png")
         else:
             win32api.MessageBox(0, "(｡•́︿•̀｡)", "TAT", win32con.MB_ICONINFORMATION)
+
+
+def try_auto_update():
+    try:
+        load_config("config.toml", "config.toml.local")
+        cfg = config()
+
+        if not cfg.common.auto_update_on_start:
+            return
+
+        pid = os.getpid()
+        exe_path = sys.argv[0]
+        dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
+
+        if filename.endswith(".py"):
+            logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
+            return
+
+        logger.info("当前进程pid={}, 版本={}, 工作目录={}，exe名称={}".format(pid, now_version, dirpath, filename))
+
+        logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
+        p = subprocess.Popen([
+            os.path.realpath("utils/auto_updater.exe"),
+            "--pid", str(pid),
+            "--version", str(now_version),
+            "--cwd", dirpath,
+            "--exe_name", filename,
+        ], cwd="utils", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.wait()
+    except Exception as e:
+        logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
 def _test_main():

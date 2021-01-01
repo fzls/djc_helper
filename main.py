@@ -51,8 +51,8 @@ def main():
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg)
 
-    # 尝试派赛利亚出去打工
-    try_xinyue_sailiyam_start_work(cfg)
+    # # 尝试派赛利亚出去打工
+    # try_xinyue_sailiyam_start_work(cfg)
 
     show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
     auto_send_cards(cfg)

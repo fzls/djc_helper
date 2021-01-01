@@ -28,7 +28,7 @@ def main():
 
     try_auto_update()
 
-    show_qiafan_message_box_on_every_big_version("v4.6.1")
+    show_qiafan_message_box_on_every_big_version("v5.0.0")
 
     check_djc_role_binding()
 

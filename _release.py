@@ -79,7 +79,7 @@ uploader = Uploader(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(patch_file_name, uploader.folder_djc_helper, history_file_prefix="DNF蚊子腿小助手_增量更新文件_")
+    uploader.upload_to_lanzouyun(patch_file_name, uploader.folder_djc_helper, history_file_prefix=uploader.history_patches_prefix)
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc)
 else:
     logger.error("蓝奏云登录失败")

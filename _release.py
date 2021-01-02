@@ -52,23 +52,14 @@ clear_github_artifact(dir_all_release, dir_github_action_artifact)
 
 # ---------------打包
 os.chdir(dir_src)
-package(dir_src, dir_all_release, release_dir_name, release_7z_name)
+package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact)
 
 # ---------------构建增量补丁
 # 构建增量包
 os.chdir(dir_all_release)
 create_patch_for_latest_n_version = 3
 logger.info("开始构建增量包，最多包含过去{}个版本到最新版本的补丁".format(create_patch_for_latest_n_version))
-patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version)
-
-# ---------------额外备份一份最新的供github action 使用
-os.chdir(dir_all_release)
-logger.info("保存一份供github action使用")
-dir_github_action_artifact = "_github_action_artifact"
-shutil.rmtree(dir_github_action_artifact, ignore_errors=True)
-os.mkdir(dir_github_action_artifact)
-shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
-shutil.copyfile(patch_file_name, os.path.join(dir_github_action_artifact, 'djc_helper_patches.7z'))
+patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
 
 # ---------------标记新版本
 logger.info("提交版本和版本变更说明，并同步到docs目录，用于生成github pages")

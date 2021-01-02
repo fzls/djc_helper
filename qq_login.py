@@ -104,6 +104,9 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
+        if self.cfg.minimize_window:
+            self.driver.minimize_window()
+
     def destroy_chrome(self):
         if self.driver is not None:
             # 最小化网页
@@ -182,8 +185,7 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
 
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+            self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
@@ -216,8 +218,7 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://act.qzone.qq.com/")
 
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+            self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.LINK_TEXT, "[登录]")))
@@ -250,8 +251,7 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("http://guanjia.qq.com/act/cop/202012dnf/")
 
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+            self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
@@ -289,8 +289,7 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://www.wegame.com.cn/")
 
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+            self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             time.sleep(self.cfg.login.open_url_wait_time)
@@ -323,8 +322,7 @@ class QQLogin():
             logger.info("打开活动界面")
             self.driver.get("https://xinyue.qq.com/act/a20181101rights/index.html")
 
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+            self.set_window_size()
 
             logger.info("等待#loginframe加载完毕并切换")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))
@@ -417,6 +415,14 @@ class QQLogin():
             # logger.info("OK，理论上次数应该刷新了")
 
         return
+
+    def set_window_size(self):
+        if self.cfg.minimize_window:
+            logger.info("浏览器最小化")
+            self.driver.minimize_window()
+        else:
+            logger.info("浏览器设为1936x1056")
+            self.driver.set_window_size(1936, 1056)
 
     def add_cookies(self, cookies):
         to_add = []

@@ -1,4 +1,5 @@
 # 编译脚本
+import argparse
 import os
 import shutil
 import subprocess
@@ -6,7 +7,7 @@ import subprocess
 from log import logger
 
 
-def build():
+def build(disable_douban=False):
     venv_path = ".venv"
     src_name = "main.py"
     exe_name = 'DNF蚊子腿小助手.exe'
@@ -36,13 +37,15 @@ def build():
     logger.info("将使用.venv环境进行编译")
 
     logger.info("尝试更新pip setuptools wheel")
+    douban_op = ["-i", "https://pypi.doubanio.com/simple"]
+    if disable_douban:
+        douban_op = []
     subprocess.call([
         py_path,
         "-m",
         "pip",
         "install",
-        "-i",
-        "https://pypi.doubanio.com/simple",
+        *douban_op,
         "--upgrade",
         "pip",
         "setuptools",
@@ -53,8 +56,7 @@ def build():
     subprocess.call([
         pip_path,
         "install",
-        "-i",
-        "https://pypi.doubanio.com/simple",
+        *douban_op,
         "-r",
         "requirements.txt",
         "wheel",
@@ -104,5 +106,14 @@ def build():
     logger.info("done")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--disable_douban", action='store_true')
+    args = parser.parse_args()
+
+    return args
+
+
 if __name__ == '__main__':
-    build()
+    args = parse_args()
+    build(args.disable_douban)

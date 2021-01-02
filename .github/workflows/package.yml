@@ -33,12 +33,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install Color log
+      - name: Install Requirements
         run: |
-          # for visiablity, build and package use log.py, which need colorlog
-          pip install colorlog
+          python -m pip install -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
+          pip install -i https://pypi.doubanio.com/simple -r requirements.txt wheel pyinstaller
 
-      - name: Install Requirements & Build
+      - name: Build
         run: |
           python _build.py
 

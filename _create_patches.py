@@ -33,6 +33,7 @@ class VersionInfo:
 def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact) -> str:
     latest_version = now_version
 
+    old_cwd = os.getcwd()
     os.chdir(dir_all_release)
     logger.info("工作目录已调整为{}，最新版本为v{}".format(os.getcwd(), latest_version))
 
@@ -118,6 +119,8 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
 
     # 额外备份一份最新的供github action 使用
     shutil.copyfile(patch_7z_file, os.path.join(dir_github_action_artifact, 'djc_helper_patches.7z'))
+
+    os.chdir(old_cwd)
 
     return patch_7z_file
 

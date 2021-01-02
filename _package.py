@@ -9,6 +9,8 @@ from version import now_version
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
+    old_cwd = os.getcwd()
+
     # 需要复制的文件与目录
     files_to_copy = []
     reg_wantted_file = r'.*\.(toml|md|txt|png|docx|url)$'
@@ -70,6 +72,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 
     # 额外备份一份最新的供github action 使用
     shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
+
+    os.chdir(old_cwd)
 
 
 def main():

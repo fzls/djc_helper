@@ -30,7 +30,7 @@ class VersionInfo:
         return str(self.__dict__)
 
 
-def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version) -> str:
+def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact) -> str:
     latest_version = now_version
 
     os.chdir(dir_all_release)
@@ -116,10 +116,14 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version) ->
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
 
+    # 额外备份一份最新的供github action 使用
+    shutil.copyfile(patch_7z_file, os.path.join(dir_github_action_artifact, 'djc_helper_patches.7z'))
+
     return patch_7z_file
 
 
 if __name__ == '__main__':
     dir_src = os.path.realpath('.')
     dir_all_release = os.path.realpath(os.path.join("releases"))
-    create_patch(dir_src, dir_all_release, 3)
+    dir_github_action_artifact = "_github_action_artifact"
+    create_patch(dir_src, dir_all_release, 3, dir_github_action_artifact)

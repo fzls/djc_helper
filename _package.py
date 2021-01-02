@@ -8,7 +8,7 @@ from log import logger
 from version import now_version
 
 
-def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
+def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
     # 需要复制的文件与目录
     files_to_copy = []
     reg_wantted_file = r'.*\.(toml|md|txt|png|docx|url)$'
@@ -68,14 +68,18 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name):
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
 
+    # 额外备份一份最新的供github action 使用
+    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
+
 
 def main():
     dir_src = os.path.realpath('.')
     dir_all_release = os.path.realpath(os.path.join("releases"))
     release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version='v' + now_version)
     release_7z_name = '{}.7z'.format(release_dir_name)
+    dir_github_action_artifact = "_github_action_artifact"
 
-    package(dir_src, dir_all_release, release_dir_name, release_7z_name)
+    package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact)
 
 
 if __name__ == '__main__':

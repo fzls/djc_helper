@@ -641,9 +641,7 @@ def try_auto_update():
 
         auto_updater_path = os.path.realpath("utils/auto_updater.exe")
         if not os.path.exists(auto_updater_path):
-            logger.warning(color("bold_cyan") + (
-                "未发现自动更新DLC，将跳过自动更新流程~\n"
-            ))
+            logger.warning(color("bold_cyan") + "未发现自动更新DLC，将跳过自动更新流程~")
             return
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")

@@ -41,9 +41,17 @@ jobs:
         run: |
           python _build.py
 
+      - name: Clear Old Artifact
+        run: |
+          python clear_github_artifact.py
+
       - name: Package
         run: |
           python _package.py
+
+      - name: Create Patches
+        run: |
+          python _create_patches.py
 
       - name: Create Release
         id: create_release

@@ -309,19 +309,22 @@ class DjcHelper:
                 binded = False
 
         if binded:
-            # 打印dnf和手游的绑定角色信息
-            logger.info("已获取道聚城目前绑定的角色信息如下")
-            games = []
-            if "dnf" in self.bizcode_2_bind_role_map:
-                games.append("dnf")
-            if self.cfg.mobile_game_role_info.enabled():
-                games.append(self.get_mobile_game_info().bizCode)
+            if self.cfg.function_switches.get_djc:
+                # 打印dnf和手游的绑定角色信息
+                logger.info("已获取道聚城目前绑定的角色信息如下")
+                games = []
+                if "dnf" in self.bizcode_2_bind_role_map:
+                    games.append("dnf")
+                if self.cfg.mobile_game_role_info.enabled():
+                    games.append(self.get_mobile_game_info().bizCode)
 
-            for bizcode in games:
-                roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
-                logger.info("{game}: ({server}-{name}-{id})".format(
-                    game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
-                ))
+                for bizcode in games:
+                    roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
+                    logger.info("{game}: ({server}-{name}-{id})".format(
+                        game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
+                    ))
+            else:
+                logger.warning("当前账号未启用道聚城相关功能")
 
         return binded
 

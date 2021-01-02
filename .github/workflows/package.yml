@@ -44,7 +44,7 @@ jobs:
 
       - name: Clear Old Artifact
         run: |
-          python clear_github_artifact.py
+          python _clear_github_artifact.py
 
       - name: Package
         run: |

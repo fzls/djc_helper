@@ -3,11 +3,11 @@ import shutil
 
 
 def clear_github_artifact(dir_all_release, dir_github_action_artifact):
-    # 兼容下github action
-    if not os.path.isdir(dir_all_release):
-        return
-
     old_cwd = os.getcwd()
+
+    if not os.path.isdir(dir_all_release):
+        os.mkdir(dir_all_release)
+
     os.chdir(dir_all_release)
 
     shutil.rmtree(dir_github_action_artifact, ignore_errors=True)

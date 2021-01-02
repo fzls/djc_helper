@@ -6,6 +6,9 @@ force_use_portable_chrome = false
 # 自动登录模式是否不显示浏览器界面
 run_in_headless_mode = false
 
+# 是否最小化浏览器界面
+minimize_window = false
+
 # http(s)请求超时时间(秒)
 http_timeout = 10
 

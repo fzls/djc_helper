@@ -377,6 +377,8 @@ class CommonConfig(ConfigInterface):
         self._debug_show_chrome_logs = False
         # 自动登录模式是否不显示浏览器界面
         self.run_in_headless_mode = False
+        # 是否最小化浏览器界面
+        self.minimize_window = False
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
         # 是否检查更新

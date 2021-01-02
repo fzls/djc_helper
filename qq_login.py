@@ -104,9 +104,6 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
-        if self.cfg.minimize_window:
-            self.driver.minimize_window()
-
     def destroy_chrome(self):
         if self.driver is not None:
             # 最小化网页
@@ -417,12 +414,8 @@ class QQLogin():
         return
 
     def set_window_size(self):
-        if self.cfg.minimize_window:
-            logger.info("浏览器最小化")
-            self.driver.minimize_window()
-        else:
-            logger.info("浏览器设为1936x1056")
-            self.driver.set_window_size(1936, 1056)
+        logger.info("浏览器设为1936x1056")
+        self.driver.set_window_size(1936, 1056)
 
     def add_cookies(self, cookies):
         to_add = []

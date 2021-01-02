@@ -14,6 +14,7 @@ from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console
 from version import now_version
+from _clear_github_artifact import clear_github_artifact
 
 # 最大化窗口
 maximize_console()
@@ -38,11 +39,16 @@ dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
 release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=version)
 release_7z_name = '{}.7z'.format(release_dir_name)
+dir_github_action_artifact = "_github_action_artifact"
 
 # ---------------构建
 # 调用构建脚本
 os.chdir(dir_src)
 build()
+
+# ---------------清除一些历史数据
+os.chdir(dir_all_release)
+clear_github_artifact(dir_all_release, dir_github_action_artifact)
 
 # ---------------打包
 os.chdir(dir_src)

@@ -9,7 +9,7 @@ if __name__ == '__main__':
     cfg = config()
 
     # 12.30 送卡片次数（re:好像送给别人没有上限？）
-    indexes = [2]
+    indexes = [4]
 
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
@@ -22,13 +22,13 @@ if __name__ == '__main__':
         lr = djcHelper.fetch_pskey()
 
         # re: 先填QQ
-        targetQQ = "XXXXXX"
+        targetQQ = "XXXXXXXXXXX"
         # undone: 然后填写卡片
         cards_to_send = [
-            # ("主播趣味来打团", 1),
-            # ("BOSS机制全摸透", 1),
-            # ("四人竞速希洛克", 1),
-            # ("哪种都能领奖励", 1),
+            ("XXXXXXXXXXX", 1),
+            ("XXXXXXXXXXX", 1),
+            ("XXXXXXXXXXX", 1),
+            ("XXXXXXXXXXX", 1),
         ]
         for name, count in cards_to_send:
             for i in range(count):

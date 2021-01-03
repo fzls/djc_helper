@@ -2007,7 +2007,7 @@ class DjcHelper:
         for i in range(10):
             res = self.guanjia_lottery_gifts_op("抽奖")
             # {"code": 4101, "msg": "积分不够", "result": []}
-            if res["code"] == 4101:
+            if res["code"] != 0:
                 break
             time.sleep(self.common_cfg.retry.request_wait_time)
 

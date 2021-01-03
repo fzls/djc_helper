@@ -93,9 +93,18 @@ def show_head_line(msg, msg_color=None):
 
 
 def get_this_week_monday():
+    return _get_this_week_monday().strftime("%Y%m%d")
+
+
+def get_last_week_monday():
+    lastWeekMonday = _get_this_week_monday() - datetime.timedelta(days=7)
+    return lastWeekMonday.strftime("%Y%m%d")
+
+
+def _get_this_week_monday():
     now = datetime.datetime.now()
     monday = now - datetime.timedelta(days=now.weekday())
-    return monday.strftime("%Y%m%d")
+    return monday
 
 
 def get_now():
@@ -201,3 +210,5 @@ def filter_unused_params(urlRendered):
 
 if __name__ == '__main__':
     print(get_now_unix())
+    print(get_this_week_monday())
+    print(get_last_week_monday())

@@ -1050,7 +1050,7 @@ class DjcHelper:
             self.xinyue_sailiyam_op("拜访好友-{}".format(dzid), "714307", dzid=dzid)
             sleep_to_avoid_ban()
 
-        if not self.cfg.function_switches.get_xinyue_sailiyam:
+        if not self.cfg.function_switches.get_xinyue_sailiyam or self.disable_most_activities():
             logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
             return
 
@@ -1150,7 +1150,7 @@ class DjcHelper:
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
         show_head_line("黑钻礼包")
 
-        if not self.cfg.function_switches.get_heizuan_gift:
+        if not self.cfg.function_switches.get_heizuan_gift or self.disable_most_activities():
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
 
@@ -1165,7 +1165,7 @@ class DjcHelper:
     def get_credit_xinyue_gift(self):
         show_head_line("腾讯游戏信用相关礼包")
 
-        if not self.cfg.function_switches.get_credit_xinyue_gift:
+        if not self.cfg.function_switches.get_credit_xinyue_gift or self.disable_most_activities():
             logger.warning("未启用领取腾讯游戏信用相关礼包功能，将跳过")
             return
 
@@ -1229,7 +1229,14 @@ class DjcHelper:
 
     def fetch_pskey(self):
         # 如果未启用qq空间相关的功能，则不需要这个
-        if not self.cfg.function_switches.get_ark_lottery and not self.cfg.function_switches.get_dnf_warriors_call:
+        any_enabled = False
+        for activity_enabled in [
+            self.cfg.function_switches.get_ark_lottery,
+            # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
+        ]:
+            if activity_enabled:
+                any_enabled = True
+        if not any_enabled:
             logger.warning("未启用领取QQ空间相关的功能，将跳过")
             return
 
@@ -1304,7 +1311,7 @@ class DjcHelper:
         # https://act.qzone.qq.com/vip/2020/dnf1126
         show_head_line("阿拉德勇士征集令")
 
-        if not self.cfg.function_switches.get_dnf_warriors_call:
+        if not self.cfg.function_switches.get_dnf_warriors_call or self.disable_most_activities():
             logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
             return
 
@@ -1325,7 +1332,7 @@ class DjcHelper:
         # https://dnf.qq.com/lbact/a20200922wegame/index.html
         show_head_line("wegame国庆活动【秋风送爽关怀常伴】")
 
-        if not self.cfg.function_switches.get_wegame_guoqing:
+        if not self.cfg.function_switches.get_wegame_guoqing or self.disable_most_activities():
             logger.warning("未启用领取wegame国庆活动功能，将跳过")
             return
 
@@ -1403,7 +1410,7 @@ class DjcHelper:
         # https://dnf.qq.com/lbact/a20201224aggregate/index.html
         show_head_line("史诗之路来袭活动合集")
 
-        if not self.cfg.function_switches.get_dnf_1224:
+        if not self.cfg.function_switches.get_dnf_1224 or self.disable_most_activities():
             logger.warning("未启用领取史诗之路来袭活动合集功能，将跳过")
             return
 
@@ -1437,7 +1444,7 @@ class DjcHelper:
         # http://xinyue.qq.com/act/a20201221sgbpc/index.html
         show_head_line("DNF闪光杯第三期")
 
-        if not self.cfg.function_switches.get_dnf_shanguang:
+        if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
             logger.warning("未启用领取DNF闪光杯第三期活动合集功能，将跳过")
             return
 
@@ -1503,7 +1510,7 @@ class DjcHelper:
         # https://m.film.qq.com/magic-act/110254/index.html
         show_head_line("qq视频活动")
 
-        if not self.cfg.function_switches.get_qq_video:
+        if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
             logger.warning("未启用领取qq视频活动功能，将跳过")
             return
 
@@ -1560,7 +1567,7 @@ class DjcHelper:
         # https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006
         show_head_line("10月女法师三觉")
 
-        if not self.cfg.function_switches.get_dnf_female_mage_awaken:
+        if not self.cfg.function_switches.get_dnf_female_mage_awaken or self.disable_most_activities():
             logger.warning("未启用领取10月女法师三觉活动合集功能，将跳过")
             return
 
@@ -1654,7 +1661,7 @@ class DjcHelper:
         # https://mwegame.qq.com/dnf/rankv2/index.html
         show_head_line("dnf助手排行榜")
 
-        if not self.cfg.function_switches.get_dnf_rank:
+        if not self.cfg.function_switches.get_dnf_rank or self.disable_most_activities():
             logger.warning("未启用领取dnf助手排行榜活动合集功能，将跳过")
             return
 
@@ -1740,7 +1747,7 @@ class DjcHelper:
         # https://mwegame.qq.com/act/dnf/christmas/index.html?subGameId=10014&gameId=10014&&gameId=1006
         show_head_line("dnf助手双旦")
 
-        if not self.cfg.function_switches.get_dnf_helper_christmas:
+        if not self.cfg.function_switches.get_dnf_helper_christmas or self.disable_most_activities():
             logger.warning("未启用领取dnf助手双旦活动合集功能，将跳过")
             return
 
@@ -1797,7 +1804,7 @@ class DjcHelper:
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
 
-        if not self.cfg.function_switches.get_dnf_helper_chronicle:
+        if not self.cfg.function_switches.get_dnf_helper_chronicle or self.disable_most_activities():
             logger.warning("未启用领取dnf助手编年史活动功能，将跳过")
             return
 
@@ -1977,7 +1984,7 @@ class DjcHelper:
         # http://guanjia.qq.com/act/cop/202012dnf/
         show_head_line("管家蚊子腿")
 
-        if not self.cfg.function_switches.get_guanjia:
+        if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
             logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
             return
 
@@ -2034,7 +2041,13 @@ class DjcHelper:
 
     def fetch_guanjia_openid(self, print_warning=True):
         # 检查是否启用管家相关活动
-        if not self.cfg.function_switches.get_guanjia:
+        any_enabled = False
+        for activity_enabled in [
+            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+        ]:
+            if activity_enabled:
+                any_enabled = True
+        if not any_enabled:
             if print_warning: logger.warning("未启用管家相关活动，将跳过")
             return
 
@@ -2100,7 +2113,7 @@ class DjcHelper:
         # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
 
-        if not self.cfg.function_switches.get_hello_voice:
+        if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
             logger.warning("未启用hello语音奖励兑换功能，将跳过")
             return
 
@@ -2208,7 +2221,7 @@ class DjcHelper:
         # https://dnf.qq.com/cp/a20201203carnival/index.html
         show_head_line("2020DNF嘉年华页面主页面签到")
 
-        if not self.cfg.function_switches.get_dnf_carnival:
+        if not self.cfg.function_switches.get_dnf_carnival or self.disable_most_activities():
             logger.warning("未启用领取2020DNF嘉年华页面主页面签到活动合集功能，将跳过")
             return
 
@@ -2238,7 +2251,7 @@ class DjcHelper:
         # # https://dnf.qq.com/cp/a20201203carnival/index.html
         # show_head_line("2020DNF嘉年华直播")
 
-        if not self.cfg.function_switches.get_dnf_carnival_live:
+        if not self.cfg.function_switches.get_dnf_carnival_live or self.disable_most_activities():
             logger.warning("未启用领取2020DNF嘉年华直播活动合集功能，将跳过")
             return
 
@@ -2295,7 +2308,7 @@ class DjcHelper:
         # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
 
-        if not self.cfg.function_switches.get_dnf_welfare:
+        if not self.cfg.function_switches.get_dnf_welfare or self.disable_most_activities():
             logger.warning("未启用领取DNF福利中心兑换活动功能，将跳过")
             return
 
@@ -2374,7 +2387,7 @@ class DjcHelper:
         # https://dnf.qq.com/cp/a20201126version/index.shtml
         show_head_line("DNF共创投票")
 
-        if not self.cfg.function_switches.get_dnf_dianzan:
+        if not self.cfg.function_switches.get_dnf_dianzan or self.disable_most_activities():
             logger.warning("未启用领取DNF共创投票活动功能，将跳过")
             return
 
@@ -2517,7 +2530,7 @@ class DjcHelper:
 
         logger.info(color("fg_bold_yellow") + "TODO：等理财礼卡测试OK记得移除上面的测试模式限定，并把功能放出去（功能开关、理财卡列表配置项）")
 
-        if not self.cfg.function_switches.get_xinyue_financing:
+        if not self.cfg.function_switches.get_xinyue_financing or self.disable_most_activities():
             logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
             return
 
@@ -2666,7 +2679,7 @@ class DjcHelper:
         # https://dnf.qq.com/cp/a20201211driftm/index.html
         show_head_line("dnf漂流瓶")
 
-        if not self.cfg.function_switches.get_dnf_drift:
+        if not self.cfg.function_switches.get_dnf_drift or self.disable_most_activities():
             logger.warning("未启用领取dnf漂流瓶活动功能，将跳过")
             return
 
@@ -2769,7 +2782,7 @@ class DjcHelper:
         # https://dnf.qq.com/cp/a20201224welfare/index.html
         show_head_line("DNF马杰洛的规划第二期")
 
-        if not self.cfg.function_switches.get_majieluo:
+        if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
             logger.warning("未启用领取DNF马杰洛的规划第二期活动功能，将跳过")
             return
 
@@ -2863,7 +2876,7 @@ class DjcHelper:
         # https://dnf.qq.com/lbact/a20200911lbz3dns/index.html
         show_head_line("暖冬好礼活动")
 
-        if not self.cfg.function_switches.get_warm_winter:
+        if not self.cfg.function_switches.get_warm_winter or self.disable_most_activities():
             logger.warning("未启用领取暖冬好礼活动功能，将跳过")
             return
 
@@ -3004,6 +3017,9 @@ class DjcHelper:
         win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
         webbrowser.open(activity_url)
         exit(-1)
+
+    def disable_most_activities(self):
+        return self.cfg.function_switches.disable_most_activities
 
 
 def watch_live():

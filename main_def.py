@@ -11,7 +11,7 @@ from log import asciiReset
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
-from update import check_update_on_start
+from update import check_update_on_start, get_update_info
 from util import *
 from version import *
 
@@ -544,6 +544,22 @@ def check_update(cfg):
         "++++++++++++++++++++++++++++++++++++++++\n"
     ))
     check_update_on_start(cfg.common)
+
+
+def print_update_message_on_auto_update_done():
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    if cfg.common.auto_update_on_start and is_first_run("print_update_message_v{}".format(now_version)):
+        try:
+            ui = get_update_info(cfg.common)
+            message = (
+                "新版本v{}已自动更新完毕，具体更新内容展示如下，以供参考：\n"
+                "{}"
+            ).format(ui.latest_version, ui.update_message)
+            logger.warning(color("bold_yellow") + message)
+        except Exception as e:
+            logger.warning("新版本首次运行获取更新内容失败，请自行查看CHANGELOG.MD", exc_info=e)
 
 
 def show_ask_message_box_only_once():

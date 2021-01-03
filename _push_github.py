@@ -5,6 +5,7 @@ from version import now_version
 
 
 def push_github(version):
+    # note: 当手动触发了github action的时候，会创建一个很奇怪的tag，记得去删掉他refs/heads/master
     # 先尝试移除该tag，并同步到github，避免后面加标签失败
     subprocess.call(['git', 'tag', '-d', version])
     subprocess.call(['git', 'push', 'origin', 'master', ':refs/tags/{version}'.format(version=version)])

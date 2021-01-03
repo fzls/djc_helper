@@ -22,8 +22,8 @@ if __name__ == '__main__':
         lr = djcHelper.fetch_pskey()
 
         # re: 先填QQ
-        targetQQ = "XXXXXXXXXXX"
         # undone: 然后填写卡片
+        targetQQ = "XXXXXXXXXXX"
         cards_to_send = [
             ("XXXXXXXXXXX", 1),
             ("XXXXXXXXXXX", 1),

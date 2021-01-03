@@ -139,6 +139,12 @@ class HelloVoiceInfoConfig(ConfigInterface):
 
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
+        # ------------ 全局禁用开关 ------------
+        # 是否禁用各种活动，供小号使用，这样新增的各种活动都将被禁用
+        # 例外情况：道聚城、许愿、心悦特权专区、集卡这四个活动不受该配置项影响
+        # 如果想要单独设置各个活动的开关，请不要设置这个配置项，否则各个新活动都会被禁用
+        self.disable_most_activities = False
+
         # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
         # 是否领取道聚城
         self.get_djc = True

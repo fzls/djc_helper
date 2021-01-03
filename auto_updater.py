@@ -154,7 +154,10 @@ def decompress(filepath, target_dir):
 
 def kill_original_process(pid):
     logger.info("尝试干掉原进程={}".format(pid))
-    os.kill(pid, 9)
+    try:
+        os.kill(pid, 9)
+    except OSError:
+        logger.warning("未找到该pid，也许是早已经杀掉了")
 
     logger.info("等待五秒，确保原进程已经被干掉")
     time.sleep(5)

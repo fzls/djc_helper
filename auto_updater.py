@@ -87,6 +87,9 @@ def update(args, uploader):
 def full_update(args, uploader):
     tmp_dir = "_update_temp_dir"
 
+    logger.info("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
+    dir_util.remove_tree(tmp_dir)
+
     logger.info("开始下载最新版本的压缩包")
     filepath = uploader.download_latest_version(tmp_dir)
 
@@ -116,6 +119,9 @@ def full_update(args, uploader):
 
 def incremental_update(args, uploader):
     tmp_dir = "_update_temp_dir"
+
+    logger.info("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
+    dir_util.remove_tree(tmp_dir)
 
     logger.info("开始下载增量更新包")
     filepath = uploader.download_latest_patches(tmp_dir)

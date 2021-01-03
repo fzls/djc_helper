@@ -6,6 +6,8 @@ from usage_count import *
 def main():
     # show_ask_message_box_only_once()
 
+    print_update_message_on_auto_update_done()
+
     if is_daily_first_run():
         logger.info("今日首次运行，尝试上报使用统计~")
         # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）

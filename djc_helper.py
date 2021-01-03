@@ -1443,23 +1443,11 @@ class DjcHelper:
 
         self.check_dnf_shanguang()
 
-        def query_equip_count():
-            res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", print_res=False)
-            equip_count = 0
-            if "modRet" in res:
-                info = AmesvrCommonModRet().auto_update_config(res["modRet"])
-                if info.sOutValue2 != "" and info.sOutValue2 != "0":
-                    equip_count = len(info.sOutValue2.split(","))
-            else:
-                logger.warning(color("bold_yellow") + "是不是还没有报名？")
-
-            return equip_count
-
         # self.dnf_shanguang_op("报名礼", "724862")
         # self.dnf_shanguang_op("app专属礼", "724877")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
-        logger.warning(color("bold_yellow") + "本周已获得指定装备{}件，具体装备可去活动页面查看".format(query_equip_count()))
+        logger.warning(color("bold_yellow") + "本周已获得指定装备{}件，具体装备可去活动页面查看".format(self.query_dnf_shanguang_equip_count()))
 
         self.dnf_shanguang_op("周周闪光好礼", "724878")
 
@@ -1482,6 +1470,18 @@ class DjcHelper:
     def get_dnf_shanguang_lottery_times(self):
         res = self.dnf_shanguang_op("闪光夺宝次数", "724885")
         return int(res["modRet"]["sOutValue3"])
+
+    def query_dnf_shanguang_equip_count(self, print_warning=True):
+        res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", print_res=False)
+        equip_count = 0
+        if "modRet" in res:
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            if info.sOutValue2 != "" and info.sOutValue2 != "0":
+                equip_count = len(info.sOutValue2.split(","))
+        else:
+            if print_warning: logger.warning(color("bold_yellow") + "是不是还没有报名？")
+
+        return equip_count
 
     def check_dnf_shanguang(self):
         res = self.dnf_shanguang_op("报名礼", "724862", print_res=False)

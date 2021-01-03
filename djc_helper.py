@@ -1499,7 +1499,8 @@ class DjcHelper:
     def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
 
-        weekDay = get_this_week_monday()
+        # 本周可以领取上周的奖励，所以应该是上周的周一的日期
+        weekDay = get_last_week_monday()
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20201221sgb",
                                    weekDay=weekDay,
@@ -3121,8 +3122,8 @@ if __name__ == '__main__':
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
-        # djcHelper.dnf_shanguang()
+        djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.guanjia()
         # djcHelper.dnf_1224()
-        djcHelper.qq_video()
+        # djcHelper.qq_video()

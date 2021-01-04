@@ -1456,7 +1456,7 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "本周已获得指定装备{}件，具体装备可去活动页面查看".format(self.query_dnf_shanguang_equip_count()))
 
-        self.dnf_shanguang_op("周周闪光好礼", "724878")
+        self.dnf_shanguang_op("周周闪光好礼", "724878", weekDay=get_last_week_monday())
 
         for i in range(6):
             res = self.dnf_shanguang_op("周周开大奖", "724879")
@@ -1475,11 +1475,11 @@ class DjcHelper:
             time.sleep(5)
 
     def get_dnf_shanguang_lottery_times(self):
-        res = self.dnf_shanguang_op("闪光夺宝次数", "724885")
+        res = self.dnf_shanguang_op("闪光夺宝次数", "724885", print_res=False)
         return int(res["modRet"]["sOutValue3"])
 
     def query_dnf_shanguang_equip_count(self, print_warning=True):
-        res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", print_res=False)
+        res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", weekDay=get_this_week_monday(), print_res=False)
         equip_count = 0
         if "modRet" in res:
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
@@ -1496,11 +1496,8 @@ class DjcHelper:
         if int(res["ret"]) == 99998:
             self.guide_to_bind_account("DNF闪光杯第三期", "http://xinyue.qq.com/act/a20201221sgbpc/index.html")
 
-    def dnf_shanguang_op(self, ctx, iFlowId, print_res=True):
+    def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
-
-        # 本周可以领取上周的奖励，所以应该是上周的周一的日期
-        weekDay = get_last_week_monday()
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20201221sgb",
                                    weekDay=weekDay,

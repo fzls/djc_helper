@@ -393,6 +393,8 @@ class CommonConfig(ConfigInterface):
         self.auto_update_on_start = True
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
+        # 调整日志等级对应颜色，颜色表可以运行log.py获取
+        self.log_colors = {}  # type: Dict[str, str]
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
         self.auto_send_card_target_qqs = []  # type: List[str]
@@ -414,6 +416,9 @@ class CommonConfig(ConfigInterface):
 
     def on_config_update(self, raw_config: dict):
         consoleHandler.setLevel(self.log_level_map[self.log_level])
+        if type(self.log_colors) is dict:
+            for level, log_color in self.log_colors.items():
+                consoleLogFormatter.log_colors[level] = log_color
 
         # 由于经常会有人填写成数字的列表，如[123, 456]，导致后面从各个dict中取值时出错（dict中都默认QQ为str类型，若传入int类型，会取不到对应的值）
         # 所以这里做下兼容，强制转换为str

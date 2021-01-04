@@ -20,6 +20,7 @@ lanzou_cookie = {
 }
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
+tmp_dir = "_update_temp_dir"
 
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
@@ -85,10 +86,7 @@ def update(args, uploader):
 
 
 def full_update(args, uploader):
-    tmp_dir = "_update_temp_dir"
-
-    logger.info("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
-    dir_util.remove_tree(tmp_dir)
+    remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
     filepath = uploader.download_latest_version(tmp_dir)
@@ -111,17 +109,13 @@ def full_update(args, uploader):
     logger.info("进行更新操作...")
     dir_util.copy_tree(target_dir, ".")
 
-    logger.info("更新完毕，移除临时目录")
-    dir_util.remove_tree(tmp_dir)
+    remove_temp_dir("更新完毕，移除临时目录")
 
     return True
 
 
 def incremental_update(args, uploader):
-    tmp_dir = "_update_temp_dir"
-
-    logger.info("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
-    dir_util.remove_tree(tmp_dir)
+    remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载增量更新包")
     filepath = uploader.download_latest_patches(tmp_dir)
@@ -148,10 +142,15 @@ def incremental_update(args, uploader):
         logger.error("增量更新失败，错误码为{}，具体报错请看上面日志".format(ret_code))
         return False
 
-    logger.info("更新完毕，移除临时目录")
-    dir_util.remove_tree(tmp_dir)
+    remove_temp_dir("更新完毕，移除临时目录")
 
     return True
+
+
+def remove_temp_dir(msg):
+    logger.info(msg)
+    if os.path.isdir(tmp_dir):
+        dir_util.remove_tree(tmp_dir)
 
 
 def decompress(filepath, target_dir):

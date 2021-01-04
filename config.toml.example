@@ -44,6 +44,19 @@ auto_send_card_target_qqs = []
 #   sailiyam_visit_target_qqs = ["123456", "654321", "111111"]
 sailiyam_visit_target_qqs = []
 
+# 调整日志等级对应颜色，颜色表可以运行log.py获取
+[common.log_colors]
+# 调试
+DEBUG="cyan"
+# 信息
+INFO="green"
+# 警告
+WARNING="yellow"
+# 错误
+ERROR="fg_bold_red"
+# 致命错误
+CRITICAL="fg_bold_red"
+
 # 登录的一些参数配置
 [common.login]
 # 重试次数

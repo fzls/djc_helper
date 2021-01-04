@@ -6,7 +6,7 @@ from datetime import datetime
 
 from lanzou.api import LanZouCloud
 
-from log import logger
+from log import logger, color
 
 Folder = namedtuple('Folder', ['name', 'id'])
 
@@ -142,6 +142,16 @@ class Uploader:
         retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
         if retCode != LanZouCloud.SUCCESS:
             logger.error("下载失败，retCode={}".format(retCode))
+            if retCode == LanZouCloud.NETWORK_ERROR:
+                logger.warning(color("bold_yellow") + (
+                    "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
+                    "分别尝试在浏览器中访问下列两个网页，是否一个打的开一个打不开？\n"
+                    "https://fzls.lanzoux.com/s/djc-helper\n"
+                    "https://fzls.lanzous.com/s/djc-helper\n"
+                    "\n"
+                    "如果是这样，请按照下面这个链接，修改本机的dns，使用阿里、腾讯、百度、谷歌dns中的任意一个应该都可以解决。\n"
+                    "https://www.ypojie.com/9830.html\n"
+                ))
             raise Exception("下载失败")
 
         return target_path

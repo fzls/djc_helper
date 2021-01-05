@@ -27,7 +27,7 @@ tmp_dir = "_update_temp_dir"
 def auto_update():
     args = parse_args()
 
-    logger.info("更新器的进程为{}，主进程为{}".format(os.getpid(), args.pid))
+    logger.info("更新器的进程为{}, 版本为{}，主进程为{}, 版本为{}".format(os.getpid(), now_version, args.pid, args.version))
 
     # note: 工作目录预期为小助手的exe所在目录
     logger.info("切换工作目录到{}".format(args.cwd))

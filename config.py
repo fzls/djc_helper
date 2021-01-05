@@ -188,7 +188,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_drift = True
         # 是否领取DNF马杰洛的规划第二期
         self.get_majieluo = True
-        # 是否领取dnf助手双旦活动
+        # 是否领取dnf助手双旦活动（暗夜狂欢），额外需要助手userId和token
         self.get_dnf_helper_christmas = True
         # 是否领取暖冬好礼活动
         self.get_warm_winter = True

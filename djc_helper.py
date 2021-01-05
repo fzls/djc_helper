@@ -2488,11 +2488,16 @@ class DjcHelper:
             res = self.get("今日第{}次投票，目标为{}".format(idx, iContentId), self.urls.dianzan, iContentId=iContentId, is_jsonp=True, is_normal_jsonp=True)
             return int(res["iRet"]) == 0
 
-        # 进行今天剩余的点赞操作
-        today_dianzan()
+        totalDianZanCount, _ = self.query_dnf_dianzan()
+        if totalDianZanCount < 200:
+            # 进行今天剩余的点赞操作
+            today_dianzan()
+        else:
+            logger.warning("累积投票已经超过200次，无需再投票")
 
         # 查询点赞信息
-        self.query_dnf_dianzan()
+        totalDianZanCount, rewardTakenInfo = self.query_dnf_dianzan()
+        logger.warning(color("fg_bold_yellow") + "DNF共创投票活动当前已投票{}次，奖励领取状态为{}".format(totalDianZanCount, rewardTakenInfo))
 
         # 领取点赞奖励
         self.dnf_dianzan_op("累计 10票", "725276")
@@ -2504,7 +2509,7 @@ class DjcHelper:
         res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
         info = AmesvrCommonModRet().auto_update_config(res["modRet"])
 
-        logger.warning(color("fg_bold_yellow") + "DNF共创投票活动当前已投票{}次，奖励领取状态为{}".format(info.sOutValue1, info.sOutValue2))
+        return int(info.sOutValue1), info.sOutValue2
 
     def check_dnf_dianzan(self):
         res = self.dnf_dianzan_op("查询是否绑定", "725330", print_res=False)

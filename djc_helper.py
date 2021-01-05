@@ -11,6 +11,7 @@ import pyperclip
 import win32api
 
 import json_parser
+from black_list import check_in_black_list
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -147,12 +148,15 @@ class DjcHelper:
         query_data = self.query_balance("判断skey是否过期", print_res=False)
         if str(query_data['ret']) == "0":
             # skey尚未过期
-            return
+            pass
+        else:
+            # 已过期，更新skey
+            logger.info("")
+            logger.warning("账号({})的skey已过期，即将尝试更新skey".format(self.cfg.name))
+            self.update_skey(query_data)
 
-        # 更新skey
-        logger.info("")
-        logger.warning("账号({})的skey已过期，即将尝试更新skey".format(self.cfg.name))
-        self.update_skey(query_data)
+        # skey获取完毕后，检查是否在黑名单内
+        check_in_black_list(self.cfg.account_info.uin)
 
     def update_skey(self, query_data):
         login_mode_dict = {

@@ -79,7 +79,7 @@ class QQLogin():
             # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
             if not os.path.isfile(self.chrome_binary_7z):
                 msg = (
-                    "当前电脑未发现合适版本chrome版本，且当前目录无便携版chrome的压缩包({zip_name})\n"
+                    "当前电脑未发现合适版本chrome浏览器版本，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
                     "请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
                     "如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z))

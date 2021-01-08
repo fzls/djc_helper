@@ -393,6 +393,8 @@ class CommonConfig(ConfigInterface):
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 是否启用自动更新功能
         self.auto_update_on_start = True
+        # 是否尝试自动绑定新活动
+        self.try_auto_bind_new_activity = True
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
         # 调整日志等级对应颜色，颜色表可以运行log.py获取

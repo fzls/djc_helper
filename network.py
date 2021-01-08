@@ -97,9 +97,29 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         # 不打印的时候改为使用debug级别，而不是连文件也不输出，这样方便排查问题
         logFunc = logger.debug
 
-    logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+    processed_data = pre_process_data(data)
+    if processed_data is None:
+        logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+    else:
+        # 如果数据需要调整，则打印调整后数据，并额外使用调试级别打印原始数据
+        logFunc("{}\t{}".format(ctx, pretty_json(processed_data, pretty)))
+        logger.debug("{}(原始数据)\t{}".format(ctx, pretty_json(data, pretty)))
 
     return data
+
+
+def pre_process_data(data):
+    # 特殊处理一些数据
+    if type(data) is dict:
+        if 'frame_resp' in data and 'data' in data:
+            # QQ视频活动的回包太杂，重新取特定数据
+            new_data = {}
+            new_data['msg'] = data['data']['lottery_txt']
+            new_data['code'] = data['data']['sys_code']
+            new_data['prize_id'] = data['data']['prize_id']
+            return new_data
+
+    return None
 
 
 def is_request_ok(data):

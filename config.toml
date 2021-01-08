@@ -62,7 +62,7 @@ members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "�
 enable = true
 
 # 账号名称，仅用于区分不同账号
-name = "默认账号_不同账号请取不同名字"
+name = "默认账号_请修改这个名称_并确保不同账号取不同名字"
 
 # 登录模式
 # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
@@ -72,6 +72,36 @@ login_mode = "qr_login"
 
 # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
 cannot_bind_dnf = false
+
+# 腾讯系网页登录通用账号凭据与token
+[account_configs.account_info]
+# 手动登录需要设置的信息
+uin = "o123456789"
+skey = "@a1b2c3d4e"
+
+# 自动登录需要设置的信息
+account = "123456789"
+password = "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用"
+
+# 完成《礼包达人》任务所需的手游的名称信息
+[account_configs.mobile_game_role_info]
+# 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
+game_name = "任意手游"
+
+# 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
+[[account_configs.exchange_items]]
+# 兑换两次调整箱
+iGoodsId = "753"
+sGoodsName = "装备品级调整箱（5个）"
+# 表示领取几次这个奖励
+count = 2
+
+[[account_configs.exchange_items]]
+# 兑换一次疲劳药
+iGoodsId = "755"
+sGoodsName = "魔界抗疲劳秘药（10点）"
+# 表示领取几次这个奖励，千万不要再来群里问怎么设置不兑换疲劳药
+count = 1
 
 # 各功能开关，true表示开启，false表示关闭
 # 示例如下：
@@ -141,38 +171,6 @@ get_dnf_warriors_call = true
 # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
 # 是否领取管家蚊子腿活动
 get_guanjia = true
-
-# 腾讯系网页登录通用账号凭据与token
-[account_configs.account_info]
-# 手动登录需要设置的信息
-uin = "o123456789"
-skey = "@a1b2c3d4e"
-# QQ空间业务群的p_skey，目前用于抽卡活动
-qzone_p_skey = "666666eE2KLV6oYFGx2iYZ9b3UtQuwNitJiPGQ52b*w_"
-
-# 自动登录需要设置的信息
-account = "123456789"
-password = "使用账号密码自动登录有风险_请审慎决定"
-
-# 完成《礼包达人》任务所需的手游的名称信息
-[account_configs.mobile_game_role_info]
-# 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
-game_name = "任意手游"
-
-# 兑换道具信息，其他奖励信息可查阅reference_data/dnf_exchange_list.json
-[[account_configs.exchange_items]]
-# 兑换两次调整箱
-iGoodsId = "753"
-sGoodsName = "装备品级调整箱（5个）"
-# 表示领取几次这个奖励
-count = 2
-
-[[account_configs.exchange_items]]
-# 兑换一次疲劳药
-iGoodsId = "755"
-sGoodsName = "魔界抗疲劳秘药（10点）"
-# 表示领取几次这个奖励，千万不要再来群里问怎么设置不兑换疲劳药
-count = 1
 
 # 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt
 # note: 周期礼包目前在代码中根据心悦级别和白名单信息来自动判定该领取哪一类，无需手动操作，若发现有问题，也可以手动取消注释下列内容来手动启用对应礼包

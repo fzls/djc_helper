@@ -192,6 +192,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_helper_christmas = True
         # 是否领取暖冬好礼活动
         self.get_warm_winter = True
+        # 是否领取qq视频-看江湖有翡
+        self.get_youfei = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

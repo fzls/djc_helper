@@ -409,6 +409,9 @@ class DjcHelper:
         # qq视频活动
         self.qq_video()
 
+        # qq视频-看江湖有翡
+        self.youfei()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1636,7 +1639,8 @@ class DjcHelper:
 
     def show_dnf_helper_info_guide(self):
         logger.warning(color("fg_bold_yellow") + "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】")
-        logger.warning(color("fg_bold_yellow") + "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4, ps: 如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个），将其进行更新到配置文件中【dnf助手信息】配置中")
+        logger.warning(color(
+            "fg_bold_yellow") + "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4, ps: 如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个），将其进行更新到配置文件中【dnf助手信息】配置中")
         logger.warning(color("fg_bold_yellow") + "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073")
         logger.warning(color("fg_bold_yellow") + "_")
         logger.warning(color("fg_bold_yellow") + "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了")
@@ -2934,6 +2938,43 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200911lbz3dns/")
 
+    # --------------------------------------------qq视频-看江湖有翡--------------------------------------------
+    def youfei(self):
+        # https://dnf.qq.com/cp/a20201227youfeim/index.html
+        show_head_line("qq视频-看江湖有翡")
+
+        if not self.cfg.function_switches.get_youfei or self.disable_most_activities():
+            logger.warning("未启用领取qq视频-看江湖有翡活动合集功能，将跳过")
+            return
+
+        self.check_youfei()
+
+        def query_signin_days():
+            res = self.youfei_op("查询签到状态", "728501")
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return int(info.sOutValue1)
+
+        self.youfei_op("幸运用户礼包", "728407")
+        self.youfei_op("勇士见面礼包", "731400")
+        self.youfei_op("分享领取", "730006")
+
+        self.youfei_op("在线30分钟礼包", "728419")
+        logger.warning(color("bold_yellow") + "累计已签到{}天".format(query_signin_days()))
+        self.youfei_op("签到3天礼包", "728420")
+        self.youfei_op("签到7天礼包", "728450")
+        self.youfei_op("签到15天礼包", "728451")
+
+    def check_youfei(self):
+        res = self.youfei_op("查询是否绑定", "727498", print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            self.guide_to_bind_account("qq视频-看江湖有翡", "https://dnf.qq.com/cp/a20201227youfeim/index.html")
+
+    def youfei_op(self, ctx, iFlowId, print_res=True):
+        iActivityId = self.urls.iActivityId_youfei
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201227youfeim/")
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3128,8 +3169,9 @@ if __name__ == '__main__':
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
-        djcHelper.dnf_shanguang()
+        # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.guanjia()
         # djcHelper.dnf_1224()
         # djcHelper.qq_video()
+        djcHelper.youfei()

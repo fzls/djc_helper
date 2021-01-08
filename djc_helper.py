@@ -1233,6 +1233,9 @@ class DjcHelper:
         self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
     def fetch_pskey(self):
+        # note: 抽卡活动结束了，暂时屏蔽pskey
+        return
+
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
@@ -1248,7 +1251,7 @@ class DjcHelper:
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
-            return None
+            return
 
         cached_pskey = self.load_uin_pskey()
         need_update = self.is_pskey_expired(cached_pskey)

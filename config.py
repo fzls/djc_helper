@@ -21,7 +21,7 @@ class AccountInfoConfig(ConfigInterface):
 
         # 自动登录需要设置的信息
         self.account = "123456789"
-        self.password = "使用账号密码自动登录有风险_请审慎决定"
+        self.password = "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用"
 
 
 class MobileGameRoleInfoConfig(ConfigInterface):
@@ -213,7 +213,7 @@ class AccountConfig(ConfigInterface):
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
-        self.name = "默认账号_不同账号请取不同名字"
+        self.name = "默认账号_请修改这个名称_并确保不同账号取不同名字"
         # 登录模式
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
@@ -229,10 +229,10 @@ class AccountConfig(ConfigInterface):
         self.drift_send_qq_list = []  # type: List[str]
         # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
         self.majieluo_receiver_qq_list = []  # type: List[str]
-        # 各功能开关
-        self.function_switches = FunctionSwitchesConfig()
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
+        # 各功能开关
+        self.function_switches = FunctionSwitchesConfig()
         # 完成《礼包达人》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
         # 兑换道具信息

@@ -1140,10 +1140,8 @@ class DjcHelper:
             logger.info("分享口令为： {}".format(res["modRet"]["sOutValue2"]))
 
     def check_xinyue_sailiyam(self):
-        res = self.xinyue_sailiyam_op("领取蛋糕", "714230", print_res=True)
-        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-TGCLUB-1118215502-6NOW8h-339263-714230", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
-        if int(res["ret"]) == 99998:
-            self.guide_to_bind_account("DNF进击吧赛利亚", "https://xinyue.qq.com/act/a20201023sailiya/index.html")
+        self.check_bind_account("DNF进击吧赛利亚", "https://xinyue.qq.com/act/a20201023sailiya/index.html",
+                                activity_op_func=self.xinyue_sailiyam_op, query_bind_flowid="714234", commit_bind_flowid="714233")
 
     def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True):
         iActivityId = self.urls.iActivityId_xinyue_sailiyam
@@ -1164,7 +1162,7 @@ class DjcHelper:
         res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
         # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
         if res["iRet"] == -50014:
-            self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml")
+            self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml", activity_op_func=None)
 
         return res
 
@@ -1402,10 +1400,8 @@ class DjcHelper:
                     return
 
     def check_wegame_guoqing(self):
-        res = self.wegame_op("金秋有礼抽奖", "703512", print_res=False)
-        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
-        if int(res["ret"]) == 99998:
-            self.guide_to_bind_account("wegame国庆", "https://dnf.qq.com/lbact/a20200922wegame/index.html")
+        self.check_bind_account("wegame国庆", "https://dnf.qq.com/lbact/a20200922wegame/index.html",
+                                activity_op_func=self.wegame_op, query_bind_flowid="703509", commit_bind_flowid="703508")
 
     def wegame_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_wegame_guoqing
@@ -1437,10 +1433,8 @@ class DjcHelper:
         return int(res["modRet"]["total"])
 
     def check_dnf_1224(self):
-        res = self.dnf_1224_op("查询是否绑定", "730660", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("史诗之路来袭活动合集", "https://dnf.qq.com/lbact/a20201224aggregate/index.html")
+        self.check_bind_account("qq视频-史诗之路来袭活动合集", "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
+                                activity_op_func=self.dnf_1224_op, query_bind_flowid="730660", commit_bind_flowid="730659")
 
     def dnf_1224_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_1224
@@ -1498,10 +1492,8 @@ class DjcHelper:
         return equip_count
 
     def check_dnf_shanguang(self):
-        res = self.dnf_shanguang_op("报名礼", "724862", print_res=False)
-        # {"ret": "99998", "msg": "请刷新页面，先绑定大区！谢谢！", "flowRet": {"iRet": "99998", "sLogSerialNum": "AMS-DNF-0924120415-8k2lUH-331515-703512", "iAlertSerial": "0", "sMsg": "请刷新页面，先绑定大区！谢谢！"}}
-        if int(res["ret"]) == 99998:
-            self.guide_to_bind_account("DNF闪光杯第三期", "http://xinyue.qq.com/act/a20201221sgbpc/index.html")
+        self.check_bind_account("DNF闪光杯第三期", "http://xinyue.qq.com/act/a20201221sgbpc/index.html",
+                                activity_op_func=self.dnf_shanguang_op, query_bind_flowid="724871", commit_bind_flowid="724870")
 
     def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_shanguang
@@ -2238,10 +2230,8 @@ class DjcHelper:
         self.dnf_carnival_op("12.19-12.26 阶段三与全勤", "722199")
 
     def check_dnf_carnival(self):
-        res = self.dnf_carnival_op("查询是否绑定", "722055", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("2020DNF嘉年华页面主页面签到", "https://dnf.qq.com/cp/a20201203carnival/index.html")
+        self.check_bind_account("2020DNF嘉年华页面主页面签到", "https://dnf.qq.com/cp/a20201203carnival/index.html",
+                                activity_op_func=self.dnf_carnival_op, query_bind_flowid="722055", commit_bind_flowid="722054")
 
     def dnf_carnival_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_carnival
@@ -2299,10 +2289,8 @@ class DjcHelper:
         lottery_remaining_times()
 
     def check_dnf_carnival_live(self):
-        res = self.dnf_carnival_live_op("查询是否绑定", "722472", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("2020DNF嘉年华直播", "https://dnf.qq.com/cp/a20201203carnival/index.html")
+        self.check_bind_account("2020DNF嘉年华直播", "https://dnf.qq.com/cp/a20201203carnival/index.html",
+                                activity_op_func=self.dnf_carnival_live_op, query_bind_flowid="722472", commit_bind_flowid="722471")
 
     def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_carnival_live
@@ -2357,17 +2345,9 @@ class DjcHelper:
         # 分享礼包
         self.dnf_welfare_login_gifts_op("分享奖励领取", "724940")
 
-    def get_dnf_welfare_userinfo(self):
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-
-        res = self.get("查询角色信息", self.urls.get_game_role_list, game="dnf", area=roleinfo.serviceID, sAMSTargetAppId="", platid="", partition="", print_res=False, is_jsonp=True, need_unquote=False)
-        return AmesvrQueryRole().auto_update_config(res)
-
     def check_dnf_welfare(self):
-        res = self.dnf_welfare_op("查询是否绑定", "558227", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm")
+        self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+                                activity_op_func=self.dnf_welfare_op, query_bind_flowid="558227", commit_bind_flowid="558226")
 
     def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_welfare
@@ -2379,7 +2359,7 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        checkInfo = self.get_dnf_welfare_userinfo()
+        checkInfo = self.get_dnf_roleinfo()
 
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
 
@@ -2520,10 +2500,8 @@ class DjcHelper:
         return int(info.sOutValue1), info.sOutValue2
 
     def check_dnf_dianzan(self):
-        res = self.dnf_dianzan_op("查询是否绑定", "725330", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("DNF共创投票", "https://dnf.qq.com/cp/a20201126version/index.shtml")
+        self.check_bind_account("DNF共创投票", "https://dnf.qq.com/cp/a20201126version/index.shtml",
+                                activity_op_func=self.dnf_dianzan_op, query_bind_flowid="725330", commit_bind_flowid="725329")
 
     def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_dianzan
@@ -2769,12 +2747,11 @@ class DjcHelper:
         return total, remaining
 
     def check_dnf_drift(self):
-        res = self.dnf_drift_op("查询是否绑定", "725357", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
         typ = random.choice([1, 2])
         activity_url = "https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ)
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("dnf漂流瓶", activity_url)
+
+        self.check_bind_account("dnf漂流瓶", activity_url,
+                                activity_op_func=self.dnf_drift_op, query_bind_flowid="725357", commit_bind_flowid="725356")
 
         if is_first_run("check_dnf_drift"):
             msg = "求帮忙做一下邀请任务0-0  只用在点击确定按钮后弹出的活动页面中点【确认接受邀请】就行啦（这条消息只会出现一次）"
@@ -2867,14 +2844,12 @@ class DjcHelper:
             self.majieluo_op("【提取福利】提取数量<=600", "727232")
 
     def check_majieluo(self):
-        res = self.majieluo_op("查询是否绑定", "727124", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            urls = [
-                # 二维码分享
-                "https://dnf.qq.com/cp/a20201224welfarem/index.html?inviter=1054073896&pt=1",
-            ]
-            self.guide_to_bind_account("DNF马杰洛的规划第二期", random.choice(urls))
+        urls = [
+            # 二维码分享
+            "https://dnf.qq.com/cp/a20201224welfarem/index.html?inviter=1054073896&pt=1",
+        ]
+        self.check_bind_account("DNF马杰洛的规划第二期", random.choice(urls),
+                                activity_op_func=self.majieluo_op, query_bind_flowid="727124", commit_bind_flowid="727123")
 
     def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", receiver="", receiverName="", inviterName="", print_res=True):
         iActivityId = self.urls.iActivityId_majieluo
@@ -2928,10 +2903,8 @@ class DjcHelper:
                 break
 
     def check_warm_winter(self):
-        res = self.warm_winter_op("查询是否绑定", "723162", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("暖冬好礼", "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html")
+        self.check_bind_account("暖冬好礼", "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
+                                activity_op_func=self.warm_winter_op, query_bind_flowid="723162", commit_bind_flowid="723161")
 
     def warm_winter_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_warm_winter
@@ -2965,15 +2938,14 @@ class DjcHelper:
         self.youfei_op("签到15天礼包", "728451")
 
     def check_youfei(self):
-        res = self.youfei_op("查询是否绑定", "727498", print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1212213814-q4VCJQ-346329-722055"}, "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account("qq视频-看江湖有翡", "https://dnf.qq.com/cp/a20201227youfeim/index.html")
+        self.check_bind_account("qq视频-看江湖有翡", "https://dnf.qq.com/cp/a20201227youfeim/index.html",
+                                activity_op_func=self.youfei_op, query_bind_flowid="727498", commit_bind_flowid="727497")
 
-    def youfei_op(self, ctx, iFlowId, print_res=True):
+    def youfei_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_youfei
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201227youfeim/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201227youfeim/",
+                                   **extra_params)
 
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
@@ -3013,6 +2985,8 @@ class DjcHelper:
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
             "type": "", "moduleId": "", "giftId": "", "acceptId": "", "sendQQ": "",
             "invitee": "", "giftNum": "", "receiver": "", "receiverName": "", "inviterName": "",
+            "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
+            "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -3059,20 +3033,51 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
 
-    def guide_to_bind_account(self, activity_name, activity_url):
-        msg = (
-            "当前账号【{}】未在活动页面绑定角色，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后重新运行程序\n"
-            "若无需该功能，可前往配置文件自行关闭该功能\n"
-            "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
-            "{}\n"
-        ).format(self.cfg.name, activity_name, activity_url)
-        logger.warning(color("bold_cyan") + msg)
-        win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
-        webbrowser.open(activity_url)
-        exit(-1)
+    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True):
+        res = activity_op_func("查询是否绑定-尝试自动({})".format(try_auto_bind), query_bind_flowid, print_res=False)
+        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+        if len(res["modRet"]["jData"]) == 0:
+            self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
+                                       query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind)
+
+    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False):
+        if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
+            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            checkInfo = self.get_dnf_roleinfo()
+
+            def double_quote(strToQuote):
+                return quote_plus(quote_plus(strToQuote))
+
+            logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({}-{})".format(
+                activity_name, roleinfo.serviceName, roleinfo.roleName,
+            ))
+            activity_op_func("提交绑定大区", commit_bind_flowid, True,
+                             user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
+                             user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
+                             user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
+
+            # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
+            self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)
+        else:
+            msg = (
+                "当前账号【{}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后重新运行程序\n"
+                "若无需该功能，可前往配置文件自行关闭该功能\n"
+                "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
+                "{}\n"
+            ).format(self.cfg.name, activity_name, activity_url)
+            logger.warning(color("bold_cyan") + msg)
+            win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
+            webbrowser.open(activity_url)
+            exit(-1)
 
     def disable_most_activities(self):
         return self.cfg.function_switches.disable_most_activities
+
+    def get_dnf_roleinfo(self):
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        res = self.get("查询角色信息", self.urls.get_game_role_list, game="dnf", area=roleinfo.serviceID, sAMSTargetAppId="", platid="", partition="", print_res=False, is_jsonp=True, need_unquote=False)
+        return AmesvrQueryRole().auto_update_config(res)
 
 
 def watch_live():

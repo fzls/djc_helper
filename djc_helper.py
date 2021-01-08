@@ -376,9 +376,6 @@ class DjcHelper:
         # 腾讯游戏信用相关礼包
         self.get_credit_xinyue_gift()
 
-        # QQ空间抽卡
-        self.ark_lottery()
-
         # 心悦app理财礼卡
         self.xinyue_financing()
 
@@ -443,6 +440,9 @@ class DjcHelper:
 
         # DNF福利中心兑换
         self.dnf_welfare()
+
+        # QQ空间抽卡
+        self.ark_lottery()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):

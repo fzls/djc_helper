@@ -1143,12 +1143,12 @@ class DjcHelper:
         self.check_bind_account("DNF进击吧赛利亚", "https://xinyue.qq.com/act/a20201023sailiya/index.html",
                                 activity_op_func=self.xinyue_sailiyam_op, query_bind_flowid="714234", commit_bind_flowid="714233")
 
-    def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True):
+    def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_xinyue_sailiyam
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20201023sailiyam/",
                                    dzid=dzid, page=1, iPackageId=iPackageId,
-                                   )
+                                   **extra_params)
 
     # --------------------------------------------黑钻--------------------------------------------
     def get_heizuan_gift(self):
@@ -1406,10 +1406,11 @@ class DjcHelper:
         self.check_bind_account("wegame国庆", "https://dnf.qq.com/lbact/a20200922wegame/index.html",
                                 activity_op_func=self.wegame_op, query_bind_flowid="703509", commit_bind_flowid="703508")
 
-    def wegame_op(self, ctx, iFlowId, print_res=True):
+    def wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_wegame_guoqing
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922wegame/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200922wegame/",
+                                   **extra_params)
 
     # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
     def dnf_1224(self):
@@ -1439,9 +1440,10 @@ class DjcHelper:
         self.check_bind_account("qq视频-史诗之路来袭活动合集", "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
                                 activity_op_func=self.dnf_1224_op, query_bind_flowid="730660", commit_bind_flowid="730659")
 
-    def dnf_1224_op(self, ctx, iFlowId, print_res=True):
+    def dnf_1224_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_1224
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20201224aggregate/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20201224aggregate/",
+                                   **extra_params)
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
     def dnf_shanguang(self):
@@ -1498,12 +1500,12 @@ class DjcHelper:
         self.check_bind_account("DNF闪光杯第三期", "http://xinyue.qq.com/act/a20201221sgbpc/index.html",
                                 activity_op_func=self.dnf_shanguang_op, query_bind_flowid="724871", commit_bind_flowid="724870")
 
-    def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True):
+    def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_shanguang
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20201221sgb",
                                    weekDay=weekDay,
-                                   )
+                                   **extra_params)
 
     # --------------------------------------------qq视频活动--------------------------------------------
     def qq_video(self):
@@ -2236,10 +2238,11 @@ class DjcHelper:
         self.check_bind_account("2020DNF嘉年华页面主页面签到", "https://dnf.qq.com/cp/a20201203carnival/index.html",
                                 activity_op_func=self.dnf_carnival_op, query_bind_flowid="722055", commit_bind_flowid="722054")
 
-    def dnf_carnival_op(self, ctx, iFlowId, print_res=True):
+    def dnf_carnival_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_carnival
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/",
+                                   **extra_params)
 
     # --------------------------------------------2020DNF嘉年华直播--------------------------------------------
     def dnf_carnival_live(self):
@@ -2295,10 +2298,11 @@ class DjcHelper:
         self.check_bind_account("2020DNF嘉年华直播", "https://dnf.qq.com/cp/a20201203carnival/index.html",
                                 activity_op_func=self.dnf_carnival_live_op, query_bind_flowid="722472", commit_bind_flowid="722471")
 
-    def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True):
+    def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_carnival_live
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201203carnival/",
+                                   **extra_params)
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
     def dnf_welfare(self):
@@ -2352,11 +2356,12 @@ class DjcHelper:
         self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
                                 activity_op_func=self.dnf_welfare_op, query_bind_flowid="558227", commit_bind_flowid="558226")
 
-    def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True):
+    def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_welfare
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
-                                   sContent=sContent)
+                                   sContent=sContent,
+                                   **extra_params)
 
     def dnf_welfare_login_gifts_op(self, ctx, iFlowId, print_res=True):
         iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
@@ -2506,10 +2511,11 @@ class DjcHelper:
         self.check_bind_account("DNF共创投票", "https://dnf.qq.com/cp/a20201126version/index.shtml",
                                 activity_op_func=self.dnf_dianzan_op, query_bind_flowid="725330", commit_bind_flowid="725329")
 
-    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True):
+    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_dianzan
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201126version/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201126version/",
+                                   **extra_params)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     def xinyue_financing(self):
@@ -2762,11 +2768,12 @@ class DjcHelper:
             win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
 
-    def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", sendQQ="", print_res=True):
+    def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", sendQQ="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_drift
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201211driftm/",
-                                   page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId, sendQQ=sendQQ)
+                                   page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId, sendQQ=sendQQ,
+                                   **extra_params)
 
     # --------------------------------------------DNF马杰洛的规划第二期--------------------------------------------
     def majieluo(self):
@@ -2854,11 +2861,12 @@ class DjcHelper:
         self.check_bind_account("DNF马杰洛的规划第二期", random.choice(urls),
                                 activity_op_func=self.majieluo_op, query_bind_flowid="727124", commit_bind_flowid="727123")
 
-    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", receiver="", receiverName="", inviterName="", print_res=True):
+    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", receiver="", receiverName="", inviterName="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201224welfare/",
-                                   invitee=invitee, giftNum=giftNum, receiver=receiver, receiverName=receiverName, inviterName=inviterName)
+                                   invitee=invitee, giftNum=giftNum, receiver=receiver, receiverName=receiverName, inviterName=inviterName,
+                                   **extra_params)
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
     def warm_winter(self):
@@ -2909,10 +2917,11 @@ class DjcHelper:
         self.check_bind_account("暖冬好礼", "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
                                 activity_op_func=self.warm_winter_op, query_bind_flowid="723162", commit_bind_flowid="723161")
 
-    def warm_winter_op(self, ctx, iFlowId, print_res=True):
+    def warm_winter_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_warm_winter
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200911lbz3dns/")
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200911lbz3dns/",
+                                   **extra_params)
 
     # --------------------------------------------qq视频-看江湖有翡--------------------------------------------
     def youfei(self):

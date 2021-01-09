@@ -434,16 +434,25 @@ class QQLogin():
 
             drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
 
+            # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
+            xoffsets = []
+            init_offset = drag_tarck_width - drag_block_width - delta_width
+            # 大部分情况下，将在第3/4次尝试成功，因此优先尝试这俩
+            xoffsets.append(init_offset - 2 * delta_width)
+            xoffsets.append(init_offset - 3 * delta_width)
+            # 将普通序列放入其中
+            xoffset = init_offset
+            while xoffset > 0:
+                xoffsets.append(xoffset)
+                xoffset -= delta_width
+
+            wait_time = 1
+
             logger.info("先release滑块一次，以避免首次必定失败的问题")
             ActionChains(self.driver).release(on_element=drag_button).perform()
 
-            # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
-            xoffset = drag_tarck_width - drag_block_width - delta_width
-            logger.info("开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，首次尝试偏移量为{}".format(drag_tarck_width, drag_block_width, xoffset))
-            while xoffset > 0:
-                captcha_try_count += 1
-                logger.info("开始尝试第{}次拖拽验证码，本次尝试偏移量为{}".format(captcha_try_count, xoffset))
-
+            logger.info("开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，将依次尝试下列偏移量:\n{}".format(drag_tarck_width, drag_block_width, xoffsets))
+            for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
                 time.sleep(0.2)
                 ActionChains(self.driver).move_by_offset(xoffset=xoffset, yoffset=0).perform()  # 将滑块向右滑动指定距离
@@ -451,8 +460,10 @@ class QQLogin():
                 ActionChains(self.driver).release(on_element=drag_button).perform()  # 左键放下，完成一次验证尝试
                 time.sleep(0.2)
 
-                xoffset -= delta_width
-                time.sleep(1)
+                captcha_try_count += 1
+                logger.info("尝试第{}次拖拽验证码，本次尝试偏移量为{}(若失败将等待{}秒)".format(captcha_try_count, xoffset, wait_time))
+
+                time.sleep(wait_time)
 
             self.driver.switch_to.parent_frame()
         except StaleElementReferenceException as e:

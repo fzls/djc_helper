@@ -80,7 +80,7 @@ def try_request(request_fn, retryCfg, check_fn=None):
 
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
-    res.encoding = 'utf-8'
+    # res.encoding = 'utf-8'
 
     if is_jsonp:
         data = jsonp2json(res.text, is_normal_jsonp, need_unquote)

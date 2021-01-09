@@ -194,6 +194,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_warm_winter = True
         # 是否领取qq视频-看江湖有翡
         self.get_youfei = True
+        # 是否进行dnf论坛签到
+        self.get_dnf_bbs_signin = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -229,6 +231,10 @@ class AccountConfig(ConfigInterface):
         self.drift_send_qq_list = []  # type: List[str]
         # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
         self.majieluo_receiver_qq_list = []  # type: List[str]
+        # dbf论坛签到formhash
+        self.dnf_bbs_formhash = ""
+        # dnf论坛cookie
+        self.dnf_bbs_cookie = ""
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

@@ -77,6 +77,7 @@ class Urls:
         self.iActivityId_dnf_helper_christmas = "350252" # dnf助手双旦活动
         self.iActivityId_warm_winter = "347445" # 暖冬有礼
         self.iActivityId_youfei = "350668" # qq视频-看江湖有翡
+        self.iActivityId_dnf_bbs = "351488" # DNF论坛积分兑换活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -136,3 +137,6 @@ class Urls:
 
         # hello语音，额外参数：api，hello_id，type，packid
         self.hello_voice = "https://ulink.game.qq.com/app/1164/c7028bb806cd2d6c/index.php?route=Raward/{api}&iActId=1192&ulenv=&game=dnf&hello_id={hello_id}&type={type}&packid={packid}"
+
+        # dnf论坛签到，额外参数：formhash: 论坛formhash
+        self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"

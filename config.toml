@@ -73,6 +73,25 @@ login_mode = "qr_login"
 # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
 cannot_bind_dnf = false
 
+# 以下dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题。
+# dbf论坛签到formhash
+# 获取方式
+#   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
+#   2. 按f12打开开发者工具
+#   3. 手动签到一次
+#   4. 在左上角筛选项中输入 operation=qiandao
+#   5. 在筛选出的请求中，从请求参数中找到formhash的值，将其填到下面
+dnf_bbs_formhash = ""
+
+# dnf论坛cookie
+# 获取方式：
+#   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
+#   2. 按f12打开开发者工具
+#   3. 按f5刷新一遍网页
+#   4. 在左上角筛选项中输入 k_misign:sign
+#   5. 选择筛选出的任意一个请求，找到请求头信息中的cookie，将其整个复制过来（这一步不知道怎么操作，就百度：chrome开发者工具 教程）
+dnf_bbs_cookie = ""
+
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
 # 手动登录需要设置的信息
@@ -161,6 +180,8 @@ get_dnf_helper_christmas = true
 get_warm_winter = true
 # 是否领取qq视频-看江湖有翡
 get_youfei = true
+# 是否进行dnf论坛签到
+get_dnf_bbs_signin = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

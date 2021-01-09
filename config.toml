@@ -188,6 +188,8 @@ get_dnf_bbs_signin = true
 get_ark_lottery = true
 # 是否启用阿拉德勇士征集令活动
 get_dnf_warriors_call = true
+# 是否启用会员关怀活动
+get_vip_mentor = true
 
 # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
 # 是否领取管家蚊子腿活动

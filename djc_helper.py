@@ -409,6 +409,9 @@ class DjcHelper:
         # qq视频-看江湖有翡
         self.youfei()
 
+        # dnf论坛签到
+        self.dnf_bbs_signin()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -2964,6 +2967,116 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201227youfeim/",
                                    **extra_params)
 
+    # --------------------------------------------dnf论坛签到--------------------------------------------
+    def dnf_bbs_signin(self):
+        # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
+        show_head_line("dnf论坛签到")
+
+        if not self.common_cfg.test_mode:
+            return
+        logger.warning("暂时仅测试模式可用")
+
+        if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
+            logger.warning("未启用领取dnf论坛签到活动合集功能，将跳过")
+            return
+
+        if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
+            logger.warning("未配置dnf论坛的cookie或formhash，将跳过")
+            return
+
+        url = self.urls.dnf_bbs_signin.format(formhash=self.cfg.dnf_bbs_formhash)
+        headers = {
+            "cookie": self.cfg.dnf_bbs_cookie,
+            "accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            "accept-encoding": 'gzip, deflate, br',
+            "accept-language": 'en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5',
+            "cache-control": 'max-age=0',
+            "content-type": 'application/x-www-form-urlencoded',
+            "dnt": '1',
+            "origin": 'https://dnf.gamebbs.qq.com',
+            "referer": 'https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign',
+            "sec-ch-ua": '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+            "sec-ch-ua-mobile": '?0',
+            "sec-fetch-dest": 'document',
+            "sec-fetch-mode": 'navigate',
+            "sec-fetch-site": 'same-origin',
+            "sec-fetch-user": '?1',
+            "upgrade-insecure-requests": '1',
+            "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+        }
+
+        res = requests.post(url, headers=headers)
+        html_text = res.text
+
+        prefix = '<div id="messagetext" class="alert_info">\n<p>'
+        suffix = '</p>'
+        prefix_idx = html_text.index(prefix) + len(prefix)
+        suffix_idx = html_text.index(suffix, prefix_idx)
+        logger.info("论坛签到: {}".format(html_text[prefix_idx:suffix_idx]))
+
+        self.check_dnf_bbs()
+
+        def query_dbq():
+            res = self.dnf_bbs_op("查询代币券", "730277", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return int(info.sOutValue1)
+
+        def query_remaining_quota():
+            res = self.dnf_bbs_op("查询礼包剩余量", "730763", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+            logger.info('\n'.join([
+                "当前礼包全局剩余量如下",
+                "便携式锻造炉: {}".format(info.sOutValue1),
+                "一次性增幅器: {}".format(info.sOutValue2),
+                "凯丽的强化器: {}".format(info.sOutValue3),
+                "抗疲劳秘药(10点): {}".format(info.sOutValue4),
+                "时间引导石礼盒 (10个): {}".format(info.sOutValue5),
+                "抗疲劳秘药 (5点): {}".format(info.sOutValue6),
+            ]))
+
+        def try_exchange():
+            operations = [
+                ("抗疲劳秘药10点兑换", "728541", 2),
+                ("抗疲劳秘药5点兑换", "728543", 2),
+                ("时间引导石兑换", "728542", 2),
+                ("凯丽的强化器兑换", "728540", 6),
+                ("一次性增幅器兑换", "728539", 6),
+                ("便携锻造炉兑换", "728494", 6),
+            ]
+
+            for name, flowid, count in operations:
+                print(name, flowid, count)
+
+                for i in range(count):
+                    res = self.dnf_bbs_op(name, flowid)
+                    if res["ret"] == "700":
+                        condId = res["flowRet"]["iCondNotMetId"]
+                        if condId == "1425065":
+                            # {"ret": "700", "flowRet": {"iRet": "700", "iCondNotMetId": "1425065", "sMsg": "您的该礼包兑换次数已达上限~", "sCondNotMetTips": "您的该礼包兑换次数已达上限~"}}
+                            # 已达到兑换上限，尝试下一个
+                            break
+                        elif condId == "1423792":
+                            # {"ret": "700", "flowRet": {"iRet": "700", "iCondNotMetId": "1423792", "sMsg": "您的代币券不足~", "sCondNotMetTips": "您的代币券不足~"}}
+                            logger.warning("代币券不足，直接退出，确保优先级高的兑换后才会兑换低优先级的")
+                            return
+
+        logger.warning(color("bold_yellow") + "当前拥有代币券为{}".format(query_dbq()))
+
+        query_remaining_quota()
+
+        try_exchange()
+
+    def check_dnf_bbs(self):
+        self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20201229act/index.html",
+                                activity_op_func=self.dnf_bbs_op, query_bind_flowid="728503", commit_bind_flowid="728502")
+
+    def dnf_bbs_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bbs
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/act/a20201229act/",
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3206,4 +3319,5 @@ if __name__ == '__main__':
         # djcHelper.guanjia()
         # djcHelper.dnf_1224()
         # djcHelper.qq_video()
-        djcHelper.youfei()
+        # djcHelper.youfei()
+        djcHelper.dnf_bbs_signin()

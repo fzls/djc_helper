@@ -42,7 +42,10 @@ def maximize_console_sync():
     # 排序，从而找到最接近的那个，就是我们所需的当前窗口
     indexes = sorted(list(candidates_index_to_hwnd.keys()))
     current_hwnd = candidates_index_to_hwnd[indexes[0]]
-    win32gui.ShowWindow(current_hwnd, win32con.SW_MAXIMIZE)
+    op = win32con.SW_MAXIMIZE
+    if os.path.exists(".min_console"):
+        op = win32con.SW_MINIMIZE
+    win32gui.ShowWindow(current_hwnd, op)
 
 
 def get_parents(child):

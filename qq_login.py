@@ -4,8 +4,10 @@ import webbrowser
 
 import win32api
 from selenium import webdriver
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
@@ -370,6 +372,8 @@ class QQLogin():
         if login_action_fn is not None:
             login_action_fn()
 
+        self.try_auto_resolve_captcha()
+
         logger.info("等待登录完成（也就是#loginIframe#login登录框消失）")
         # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'
         # 这时候等待一下好像就行了
@@ -413,6 +417,46 @@ class QQLogin():
 
         return
 
+    def try_auto_resolve_captcha(self):
+        if not self.cfg.login.auto_resolve_captcha:
+            logger.info("未启用自动处理拖拽验证码的功能")
+            return
+
+        captcha_try_count = 0
+        try:
+            WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe")))
+            tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
+            self.driver.switch_to.frame(tcaptcha_iframe)
+
+            drag_tarck_width = self.driver.find_element_by_id('slide').size['width']  # 进度条轨道宽度
+            drag_block_width = self.driver.find_element_by_id('slideBlock').size['width']  # 缺失方块宽度
+            delta_width = drag_block_width // 4  # 每次尝试多移动1/4个缺失方块的宽度
+
+            drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
+
+            # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
+            xoffset = drag_tarck_width - drag_block_width - delta_width
+            logger.info("开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，首次尝试偏移量为{}".format(drag_tarck_width, drag_block_width, xoffset))
+            while xoffset > 0:
+                captcha_try_count += 1
+                logger.info("开始尝试第{}次拖拽验证码，本次尝试偏移量为{}".format(captcha_try_count, xoffset))
+
+                ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
+                time.sleep(0.2)
+                ActionChains(self.driver).move_by_offset(xoffset=xoffset, yoffset=0).perform()  # 将滑块向右滑动指定距离
+                time.sleep(0.2)
+                ActionChains(self.driver).release(on_element=drag_button).perform()  # 左键放下，完成一次验证尝试
+                time.sleep(0.2)
+
+                xoffset -= delta_width
+                time.sleep(1)
+
+            self.driver.switch_to.parent_frame()
+        except StaleElementReferenceException as e:
+            logger.info("成功完成了拖拽验证码操作，总计尝试次数为{}".format(captcha_try_count))
+        except TimeoutException as e:
+            logger.info("看上去没有出现验证码")
+
     def set_window_size(self):
         logger.info("浏览器设为1936x1056")
         self.driver.set_window_size(1936, 1056)
@@ -445,7 +489,7 @@ if __name__ == '__main__':
     account = cfg.account_configs[0]
     acc = account.account_info
     logger.warning("测试账号 {} 的登录情况".format(account.name))
-    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_guanjia)
+    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal)
     # lr = ql.qr_login()
     ql.print_cookie()
     print(lr)

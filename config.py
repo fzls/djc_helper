@@ -314,6 +314,8 @@ class LoginConfig(ConfigInterface):
         self.login_timeout = 600
         # 等待登录完成的超时时间，以活动结束的按钮弹出来标志
         self.login_finished_timeout = 60
+        # 自动处理滑动验证码
+        self.auto_resolve_captcha = True
 
 
 class RetryConfig(ConfigInterface):

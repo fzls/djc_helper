@@ -1159,12 +1159,14 @@ class DjcHelper:
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
             return
 
-        res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
-        # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
-        if res["iRet"] == -50014:
-            self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml", activity_op_func=None)
+        while True:
+            res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
+            # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
+            if res["iRet"] == -50014:
+                self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml", activity_op_func=None)
+                continue
 
-        return res
+            return res
 
     # --------------------------------------------信用礼包--------------------------------------------
     def get_credit_xinyue_gift(self):
@@ -3046,11 +3048,15 @@ class DjcHelper:
         return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
 
     def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True):
-        res = activity_op_func("查询是否绑定-尝试自动({})".format(try_auto_bind), query_bind_flowid, print_res=False)
-        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
-        if len(res["modRet"]["jData"]) == 0:
-            self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
-                                       query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind)
+        while True:
+            res = activity_op_func("查询是否绑定-尝试自动({})".format(try_auto_bind), query_bind_flowid, print_res=False)
+            # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+            if len(res["modRet"]["jData"]) == 0:
+                self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
+                                           query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind)
+            else:
+                # 已经绑定
+                break
 
     def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False):
         if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
@@ -3080,7 +3086,8 @@ class DjcHelper:
             logger.warning(color("bold_cyan") + msg)
             win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
-            exit(-1)
+            logger.info("请在完成绑定后按任意键继续")
+            os.system("PAUSE")
 
     def disable_most_activities(self):
         return self.cfg.function_switches.disable_most_activities

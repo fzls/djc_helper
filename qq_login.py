@@ -434,6 +434,9 @@ class QQLogin():
 
             drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
 
+            logger.info("先release滑块一次，以避免首次必定失败的问题")
+            ActionChains(self.driver).release(on_element=drag_button).perform()
+
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffset = drag_tarck_width - drag_block_width - delta_width
             logger.info("开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，首次尝试偏移量为{}".format(drag_tarck_width, drag_block_width, xoffset))

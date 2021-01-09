@@ -20,6 +20,10 @@ def maximize_console():
 
 
 def maximize_console_sync():
+    if os.path.exists(".no_max_console"):
+        logger.info("不启用最大化窗口")
+        return
+
     current_pid = os.getpid()
     parents = get_parents(current_pid)
 

@@ -412,6 +412,9 @@ class DjcHelper:
         # dnf论坛签到
         self.dnf_bbs_signin()
 
+        # 会员关怀
+        self.vip_mentor()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -1238,14 +1241,12 @@ class DjcHelper:
         self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
     def fetch_pskey(self):
-        # note: 抽卡活动结束了，暂时屏蔽pskey
-        return
-
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_ark_lottery,
+            # self.cfg.function_switches.get_ark_lottery,
             # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
+            self.cfg.function_switches.get_vip_mentor and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True
@@ -3077,6 +3078,27 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/act/a20201229act/",
                                    **extra_params)
 
+    # --------------------------------------------会员关怀--------------------------------------------
+    def vip_mentor(self):
+        # https://act.qzone.qq.com/vip/meteor/blockly/p/6483x3137c
+        show_head_line("会员关怀")
+
+        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
+            logger.warning("未启用领取会员关怀功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+
+        qa = QzoneActivity(self, lr)
+        qa.vip_mentor()
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3320,4 +3342,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_1224()
         # djcHelper.qq_video()
         # djcHelper.youfei()
-        djcHelper.dnf_bbs_signin()
+        # djcHelper.dnf_bbs_signin()
+        djcHelper.vip_mentor()

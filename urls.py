@@ -103,7 +103,7 @@ class Urls:
 
         # --QQ空间相关活动--
         self.qzone_activity = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"
-        self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}"
+        self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}&countid={countid}"
 
         # 抽卡相关
         self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10"

@@ -167,7 +167,7 @@ class QzoneActivity:
         return prize_counts
 
     def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
-        return self.do_qzone_activity(self.zzconfig.actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
+        return self.do_qzone_activity(self.zzconfig.actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, "", pretty, print_res)
 
     # ----------------- 阿拉德勇士征集令 ----------------------
 
@@ -254,7 +254,34 @@ class QzoneActivity:
 
     def do_dnf_warriors_call(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
         # 活动id为self.dnf_warriors_call_data.zz.actid=4117
-        return self.do_qzone_activity(self.zz().actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, pretty, print_res)
+        return self.do_qzone_activity(self.zz().actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, "", pretty, print_res)
+
+    # ----------------- 会员关怀 ----------------------
+
+    def vip_mentor(self):
+        def addLotteryTimes(ctx):
+            return self.do_vip_mentor("fcg_qzact_count", ctx, "29091")
+
+        def queryLotteryTimes(ctx):
+            countid = "118786"
+            res = self.do_vip_mentor("fcg_qzact_count", ctx, "", countid=countid, print_res=False)
+            countInfo = res["data"]["count"][countid]
+            return countInfo["left"], countInfo["used"], countInfo["add"]
+
+        def lottery(ctx):
+            self.do_vip_mentor("fcg_prize_lottery", ctx, "29087", gameid="dnf")
+            return
+
+        addLotteryTimes("每日登录游戏(+2抽奖机会)")
+
+        left, used, total = queryLotteryTimes("查询抽奖次数信息")
+        logger.info("剩余抽奖次数={}，已抽奖次数={}，累积获取抽奖次数={}".format(left, used, total))
+
+        for idx in range(left):
+            lottery("第{}次抽奖".format(idx + 1))
+
+    def do_vip_mentor(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
+        return self.do_qzone_activity(4219, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
 
     # ----------------- QQ空间活动通用逻辑 ----------------------
 
@@ -276,7 +303,7 @@ class QzoneActivity:
 
         return json.loads(page_html[prefix_idx:suffix_idx])
 
-    def do_qzone_activity(self, actid, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
+    def do_qzone_activity(self, actid, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
         url = self.urls.qzone_activity.format(
             api=api,
             g_tk=self.g_tk,
@@ -297,6 +324,7 @@ class QzoneActivity:
             act_name=act_name,
             gameid=gameid,
             uin=uin2qq(self.lr.uin),
+            countid=countid,
         )
 
         request_fn = lambda: requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)

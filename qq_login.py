@@ -461,8 +461,7 @@ class QQLogin():
             # 将普通序列放入其中
             xoffset = init_offset
             while xoffset > 0:
-                if xoffset not in xoffsets:
-                    xoffsets.append(xoffset)
+                xoffsets.append(xoffset)
                 xoffset -= delta_width
 
             wait_time = 1

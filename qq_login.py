@@ -468,6 +468,7 @@ class QQLogin():
 
             logger.info("先release滑块一次，以避免首次必定失败的问题")
             ActionChains(self.driver).release(on_element=drag_button).perform()
+            time.sleep(wait_time)
 
             logger.info(color("bold_yellow") + "开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，偏移递增量为{}({:.2f}倍滑块宽度), 将依次尝试下列偏移量:\n{}".format(
                 drag_tarck_width, drag_block_width, delta_width, self.cfg.login.move_captcha_delta_width_rate, xoffsets,

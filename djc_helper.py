@@ -2985,37 +2985,42 @@ class DjcHelper:
             logger.warning("未配置dnf论坛的cookie或formhash，将跳过")
             return
 
-        url = self.urls.dnf_bbs_signin.format(formhash=self.cfg.dnf_bbs_formhash)
-        headers = {
-            "cookie": self.cfg.dnf_bbs_cookie,
-            "accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-            "accept-encoding": 'gzip, deflate, br',
-            "accept-language": 'en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5',
-            "cache-control": 'max-age=0',
-            "content-type": 'application/x-www-form-urlencoded',
-            "dnt": '1',
-            "origin": 'https://dnf.gamebbs.qq.com',
-            "referer": 'https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign',
-            "sec-ch-ua": '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
-            "sec-ch-ua-mobile": '?0',
-            "sec-fetch-dest": 'document',
-            "sec-fetch-mode": 'navigate',
-            "sec-fetch-site": 'same-origin',
-            "sec-fetch-user": '?1',
-            "upgrade-insecure-requests": '1',
-            "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
-        }
+        def signin():
+            retryCfg = self.common_cfg.retry
+            for idx in range(retryCfg.max_retry_count):
+                url = self.urls.dnf_bbs_signin.format(formhash=self.cfg.dnf_bbs_formhash)
+                headers = {
+                    "cookie": self.cfg.dnf_bbs_cookie,
+                    "accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    "accept-encoding": 'gzip, deflate, br',
+                    "accept-language": 'en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5',
+                    "cache-control": 'max-age=0',
+                    "content-type": 'application/x-www-form-urlencoded',
+                    "dnt": '1',
+                    "origin": 'https://dnf.gamebbs.qq.com',
+                    "referer": 'https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign',
+                    "sec-ch-ua": '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+                    "sec-ch-ua-mobile": '?0',
+                    "sec-fetch-dest": 'document',
+                    "sec-fetch-mode": 'navigate',
+                    "sec-fetch-site": 'same-origin',
+                    "sec-fetch-user": '?1',
+                    "upgrade-insecure-requests": '1',
+                    "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+                }
 
-        res = requests.post(url, headers=headers)
-        html_text = res.text
+                res = requests.post(url, headers=headers)
+                html_text = res.text
 
-        prefix = '<div id="messagetext" class="alert_info">\n<p>'
-        suffix = '</p>'
-        prefix_idx = html_text.index(prefix) + len(prefix)
-        suffix_idx = html_text.index(suffix, prefix_idx)
-        logger.info("论坛签到: {}".format(html_text[prefix_idx:suffix_idx]))
-
-        self.check_dnf_bbs()
+                prefix = '<div id="messagetext" class="alert_info">\n<p>'
+                suffix = '</p>'
+                if prefix in html_text:
+                    prefix_idx = html_text.index(prefix) + len(prefix)
+                    suffix_idx = html_text.index(suffix, prefix_idx)
+                    logger.info("论坛签到: {}".format(html_text[prefix_idx:suffix_idx]))
+                else:
+                    logger.warning(color("bold_yellow") + "不知道为啥没有这个前缀，也许是每日签到成功和后续再调用的内容不一样？，请去日志文件查看具体请求返回的结果是啥")
+                    logger.debug("不在预期内的签到返回内容如下：\n{}".format(html_text))
 
         def query_dbq():
             res = self.dnf_bbs_op("查询代币券", "730277", print_res=False)
@@ -3062,10 +3067,15 @@ class DjcHelper:
                             logger.warning("代币券不足，直接退出，确保优先级高的兑换后才会兑换低优先级的")
                             return
 
+        # ================= 实际逻辑 =================
+        # 签到
+        signin()
+
+        # 兑换签到奖励
+        self.check_dnf_bbs()
+
         logger.warning(color("bold_yellow") + "当前拥有代币券为{}".format(query_dbq()))
-
         query_remaining_quota()
-
         try_exchange()
 
     def check_dnf_bbs(self):

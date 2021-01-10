@@ -3222,8 +3222,8 @@ class DjcHelper:
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)
         else:
             msg = (
-                "当前账号【{}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后重新运行程序\n"
-                "若无需该功能，可前往配置文件自行关闭该功能\n"
+                "当前账号【{}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后按任意键继续\n"
+                "若无需该功能，可关闭工具，然后前往配置文件自行关闭该功能\n"
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
                 "{}\n"
             ).format(self.cfg.name, activity_name, activity_url)

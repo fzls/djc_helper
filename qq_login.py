@@ -474,11 +474,11 @@ class QQLogin():
             ))
             for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
-                time.sleep(0.2)
+                time.sleep(0.333)
                 ActionChains(self.driver).move_by_offset(xoffset=xoffset, yoffset=0).perform()  # 将滑块向右滑动指定距离
-                time.sleep(0.2)
+                time.sleep(0.333)
                 ActionChains(self.driver).release(on_element=drag_button).perform()  # 左键放下，完成一次验证尝试
-                time.sleep(0.2)
+                time.sleep(0.333)
 
                 captcha_try_count += 1
                 success_xoffset = xoffset

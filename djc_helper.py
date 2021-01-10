@@ -3198,19 +3198,25 @@ class DjcHelper:
 
     def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False):
         if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
-            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-            checkInfo = self.get_dnf_roleinfo()
+            if 'dnf' in self.bizcode_2_bind_role_map:
+                # 若道聚城已绑定dnf角色，则尝试绑定这个角色
+                roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+                checkInfo = self.get_dnf_roleinfo()
 
-            def double_quote(strToQuote):
-                return quote_plus(quote_plus(strToQuote))
+                def double_quote(strToQuote):
+                    return quote_plus(quote_plus(strToQuote))
 
-            logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({}-{})".format(
-                activity_name, roleinfo.serviceName, roleinfo.roleName,
-            ))
-            activity_op_func("提交绑定大区", commit_bind_flowid, True,
-                             user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
-                             user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
-                             user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
+                logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({}-{})".format(
+                    activity_name, roleinfo.serviceName, roleinfo.roleName,
+                ))
+                activity_op_func("提交绑定大区", commit_bind_flowid, True,
+                                 user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
+                                 user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
+                                 user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
+            else:
+                logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案".format(
+                    activity_name
+                ))
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)

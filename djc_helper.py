@@ -3230,7 +3230,7 @@ class DjcHelper:
             logger.warning(color("bold_cyan") + msg)
             win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
-            logger.info("请在完成绑定后按任意键继续")
+            logger.info(color("bold_yellow") + "请在完成绑定后按任意键继续")
             os.system("PAUSE")
 
     def disable_most_activities(self):

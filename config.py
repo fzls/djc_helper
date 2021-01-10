@@ -324,6 +324,8 @@ class LoginConfig(ConfigInterface):
         self.login_finished_timeout = 60
         # 自动处理滑动验证码
         self.auto_resolve_captcha = True
+        # 每次尝试滑动验证码的偏移值，为相对值，填倍数，表示相当于该倍数的滑块宽度
+        self.move_captcha_delta_width_rate = 0.2
 
 
 class RetryConfig(ConfigInterface):

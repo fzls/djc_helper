@@ -422,6 +422,10 @@ class QQLogin():
             logger.info("未启用自动处理拖拽验证码的功能")
             return
 
+        if self.cfg.login.move_captcha_delta_width_rate <= 0:
+            logger.info("未设置每次尝试的偏移值，跳过自动拖拽验证码")
+            return
+
         captcha_try_count = 0
         try:
             WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe")))
@@ -430,16 +434,16 @@ class QQLogin():
 
             drag_tarck_width = self.driver.find_element_by_id('slide').size['width']  # 进度条轨道宽度
             drag_block_width = self.driver.find_element_by_id('slideBlock').size['width']  # 缺失方块宽度
-            delta_width = drag_block_width // 4  # 每次尝试多移动1/4个缺失方块的宽度
+            delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate)  # 每次尝试多移动该宽度
 
             drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
 
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []
             init_offset = drag_tarck_width - drag_block_width - delta_width
-            # 大部分情况下，将在第3/4次尝试成功，因此优先尝试这俩
-            xoffsets.append(init_offset - 2 * delta_width)
-            xoffsets.append(init_offset - 3 * delta_width)
+            # 有几个位置经常出现，优先尝试
+            xoffsets.append(init_offset - 2 * (drag_block_width // 4))
+            xoffsets.append(init_offset - 3 * (drag_block_width // 4))
             # 将普通序列放入其中
             xoffset = init_offset
             while xoffset > 0:
@@ -452,7 +456,7 @@ class QQLogin():
             logger.info("先release滑块一次，以避免首次必定失败的问题")
             ActionChains(self.driver).release(on_element=drag_button).perform()
 
-            logger.info("开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，将依次尝试下列偏移量:\n{}".format(drag_tarck_width, drag_block_width, xoffsets))
+            logger.info(color("bold_yellow") + "开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，将依次尝试下列偏移量:\n{}".format(drag_tarck_width, drag_block_width, xoffsets))
             for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
                 time.sleep(0.2)

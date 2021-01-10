@@ -260,7 +260,7 @@ class QzoneActivity:
 
     def vip_mentor(self):
         def addLotteryTimes(ctx):
-            return self.do_vip_mentor("fcg_qzact_count", ctx, "29091")
+            return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, "29091", query="0", gameid="dnf", act_name="act_dnf_huoyue_12")
 
         def queryLotteryTimes(ctx):
             countid = "118786"

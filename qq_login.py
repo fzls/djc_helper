@@ -510,5 +510,5 @@ if __name__ == '__main__':
     logger.warning("测试账号 {} 的登录情况".format(account.name))
     lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal)
     # lr = ql.qr_login()
-    ql.print_cookie()
+    # ql.print_cookie()
     print(lr)

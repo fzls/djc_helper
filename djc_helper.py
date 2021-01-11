@@ -3008,17 +3008,21 @@ class DjcHelper:
                     res = requests.post(url, headers=headers)
                     html_text = res.text
 
-                    prefix = '<div id="messagetext" class="alert_info">\n<p>'
+                    prefixes = [
+                        '<div id="messagetext" class="alert_right">\n<p>',
+                        '<div id="messagetext" class="alert_info">\n<p>',
+                    ]
                     suffix = '</p>'
-                    if prefix in html_text:
-                        prefix_idx = html_text.index(prefix) + len(prefix)
-                        suffix_idx = html_text.index(suffix, prefix_idx)
-                        logger.info("论坛签到OK: {}".format(html_text[prefix_idx:suffix_idx]))
-                        return
-                    else:
-                        logger.warning(color("bold_yellow") + "不知道为啥没有这个前缀，也许是每日签到成功和后续再调用的内容不一样？，请去日志文件查看具体请求返回的结果是啥。将等待一会，然后重试")
-                        logger.debug("不在预期内的签到返回内容如下：\n{}".format(html_text))
-                        time.sleep(retryCfg.retry_wait_time)
+                    for prefix in prefixes:
+                        if prefix in html_text:
+                            prefix_idx = html_text.index(prefix) + len(prefix)
+                            suffix_idx = html_text.index(suffix, prefix_idx)
+                            logger.info("论坛签到OK: {}".format(html_text[prefix_idx:suffix_idx]))
+                            return
+
+                    logger.warning(color("bold_yellow") + "不知道为啥没有这个前缀，请去日志文件查看具体请求返回的结果是啥。将等待一会，然后重试")
+                    logger.debug("不在预期内的签到返回内容如下：\n{}".format(html_text))
+                    time.sleep(retryCfg.retry_wait_time)
                 except Exception as e:
                     logger.exception("第{}次尝试论坛签到失败了，等待一会".format(idx + 1), exc_info=e)
                     time.sleep(retryCfg.retry_wait_time)

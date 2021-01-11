@@ -594,6 +594,9 @@ def temp_code(cfg):
             "史诗之路来袭（活动汇集页）页面以及链接的几个其他活动有一些单次的奖励可领取，考虑到时间成本，将不加入小助手，请自行打开活动页面去领取。"
             "链接：https://dnf.qq.com/lbact/a20201224aggregate/index.html"
         ),
+        (
+            "【预购新春礼包送好礼】活动目前已在auto.js脚本中支持，可参考https://github.com/fzls/autojs/blob/main/qq.js使用~"
+        ),
     ]
 
     if is_first_run("史诗之路来袭"):

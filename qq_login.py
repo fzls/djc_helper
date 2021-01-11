@@ -175,6 +175,18 @@ class QQLogin():
             finally:
                 self.destroy_chrome()
 
+        # 能走到这里说明登录失败了，大概率是网络不行
+        logger.warning(color("bold_yellow") + (
+            "已经尝试登录{}次，均已失败，大概率是网络有问题\n"
+            "建议依次尝试下列措施\n"
+            "1. 重新打开程序\n"
+            "2. 重启电脑\n"
+            "3. 更换dns，如谷歌、阿里、腾讯、百度的dns，具体更换方法请百度\n"
+            "4. 换个网络环境\n"
+            "5. 换台电脑\n"
+        ).format(self.cfg.login.max_retry_count))
+        raise Exception("网络有问题")
+
     def _login_real(self, login_type, login_action_fn=None, need_human_operate=True):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据

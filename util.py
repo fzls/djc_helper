@@ -1,4 +1,5 @@
 import platform
+import sys
 import threading
 import time
 import traceback
@@ -217,6 +218,13 @@ def filter_unused_params(urlRendered):
         return originalUrl
 
 
+def run_from_src():
+    exe_path = sys.argv[0]
+    dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
+
+    return filename.endswith(".py")
+
+
 def get_uuid():
     return "{}-{}".format(platform.node(), uuid.getnode())
 
@@ -226,3 +234,4 @@ if __name__ == '__main__':
     print(get_this_week_monday())
     print(get_last_week_monday())
     print(get_uuid())
+    print(run_from_src())

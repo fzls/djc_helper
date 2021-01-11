@@ -656,7 +656,7 @@ def try_auto_update():
         exe_path = sys.argv[0]
         dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
 
-        if filename.endswith(".py"):
+        if run_from_src():
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 

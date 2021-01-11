@@ -229,9 +229,14 @@ def get_uuid():
     return "{}-{}".format(platform.node(), uuid.getnode())
 
 
+def use_by_myself():
+    return os.path.exists(".use_by_myself")
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())
     print(get_last_week_monday())
     print(get_uuid())
     print(run_from_src())
+    print(use_by_myself())

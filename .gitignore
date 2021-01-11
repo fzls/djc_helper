@@ -24,3 +24,5 @@ utils/auto_updater.exe
 _update_temp_dir/
 
 chrome_portable_87/
+
+.use_by_myself

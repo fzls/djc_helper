@@ -501,7 +501,7 @@ def try_xinyue_sailiyam_start_work(cfg):
 def show_support_pic(cfg):
     logger.info("")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
-    if is_weekly_first_run():
+    if is_weekly_first_run() and not use_by_myself():
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
             "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
@@ -608,7 +608,7 @@ def temp_code(cfg):
 
 def show_qiafan_message_box_on_every_big_version(version):
     # 当添加了多个活动的版本发布时，弹出一条恰饭信息
-    if is_first_run("qiafan_{}".format(version)):
+    if is_first_run("qiafan_{}".format(version)) and not use_by_myself():
         activities = [
             "dnf漂流瓶", "马杰洛的规划", "dnf助手双旦", "闪光杯第三期", "wegame暖冬有礼", "管家暖冬献礼", "史诗之路来袭活动合集签到",
             "QQ视频蚊子腿（开启史诗之路 欢聚美好时光）",

@@ -10,7 +10,7 @@ import win32con
 
 from dao import UpdateInfo
 from log import logger
-from util import is_first_run
+from util import is_first_run, use_by_myself
 from version import now_version
 
 
@@ -73,7 +73,7 @@ def try_manaual_update(ui: UpdateInfo):
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):
-    if now_version == ui.latest_version and is_first_run("update_version_v{}".format(ui.latest_version)):
+    if now_version == ui.latest_version and is_first_run("update_version_v{}".format(ui.latest_version)) and not use_by_myself():
         message = (
             "新版本v{}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
             "{}"

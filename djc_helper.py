@@ -3034,12 +3034,12 @@ class DjcHelper:
 
             logger.info('\n'.join([
                 "当前礼包全局剩余量如下",
-                "便携式锻造炉: {}".format(info.sOutValue1),
-                "一次性增幅器: {}".format(info.sOutValue2),
-                "凯丽的强化器: {}".format(info.sOutValue3),
-                "抗疲劳秘药(10点): {}".format(info.sOutValue4),
-                "时间引导石礼盒 (10个): {}".format(info.sOutValue5),
-                "抗疲劳秘药 (5点): {}".format(info.sOutValue6),
+                "\t便携式锻造炉: {}".format(info.sOutValue1),
+                "\t一次性增幅器: {}".format(info.sOutValue2),
+                "\t凯丽的强化器: {}".format(info.sOutValue3),
+                "\t抗疲劳秘药(10点): {}".format(info.sOutValue4),
+                "\t时间引导石礼盒 (10个): {}".format(info.sOutValue5),
+                "\t抗疲劳秘药 (5点): {}".format(info.sOutValue6),
             ]))
 
         def try_exchange():

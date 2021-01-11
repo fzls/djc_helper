@@ -2973,10 +2973,6 @@ class DjcHelper:
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf论坛签到")
 
-        if not self.common_cfg.test_mode:
-            return
-        logger.warning("暂时仅测试模式可用")
-
         if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
             logger.warning("未启用领取dnf论坛签到活动合集功能，将跳过")
             return

@@ -1,5 +1,4 @@
 import subprocess
-import sys
 import webbrowser
 from sys import exit
 

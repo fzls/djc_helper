@@ -1,8 +1,6 @@
 # 使用次数统计脚本
 
-import platform
 import threading
-import uuid
 
 import leancloud
 import leancloud.object_
@@ -33,6 +31,7 @@ def increase_counter_sync(name):
 
 time_periods = ["all", util.get_today()]
 time_periods_desc = ["累积", "今日"]
+
 
 def get_counters(name):
     """
@@ -88,9 +87,5 @@ def leancloud_api(api):
     return "{}/1.1/{}".format(LEAN_CLOUD_SERVER_ADDR, api)
 
 
-def get_uuid():
-    return "{}-{}".format(platform.node(), uuid.getnode())
-
-
 if __name__ == '__main__':
-    print(get_uuid())
+    pass

@@ -1,6 +1,8 @@
+import platform
 import threading
 import time
 import traceback
+import uuid
 
 import psutil
 import win32con
@@ -215,7 +217,12 @@ def filter_unused_params(urlRendered):
         return originalUrl
 
 
+def get_uuid():
+    return "{}-{}".format(platform.node(), uuid.getnode())
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())
     print(get_last_week_monday())
+    print(get_uuid())

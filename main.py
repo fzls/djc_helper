@@ -4,6 +4,7 @@ from usage_count import *
 
 
 def main():
+    change_title()
     # show_ask_message_box_only_once()
 
     print_update_message_on_auto_update_done()

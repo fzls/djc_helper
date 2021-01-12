@@ -1,3 +1,4 @@
+import random
 import subprocess
 import webbrowser
 from sys import exit
@@ -659,8 +660,7 @@ def try_auto_update():
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
-        auto_updater_path = os.path.realpath("utils/auto_updater.exe")
-        if not os.path.exists(auto_updater_path):
+        if not has_buy_auto_updater_dlc():
             logger.warning(color("bold_cyan") + "未发现自动更新DLC，将跳过自动更新流程~")
             return
 
@@ -670,7 +670,7 @@ def try_auto_update():
 
         logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
         p = subprocess.Popen([
-            auto_updater_path,
+            auto_updater_path(),
             "--pid", str(pid),
             "--version", str(now_version),
             "--cwd", dirpath,
@@ -679,6 +679,29 @@ def try_auto_update():
         p.wait()
     except Exception as e:
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
+
+
+def change_title():
+    dlcInfo = ""
+    if has_buy_auto_updater_dlc():
+        dlcInfo = " 自动更新豪华升级版"
+
+    face = random.choice([
+        'ヾ(◍°∇°◍)ﾉﾞ', 'ヾ(✿ﾟ▽ﾟ)ノ', 'ヾ(๑╹◡╹)ﾉ"', '٩(๑❛ᴗ❛๑)۶', '٩(๑>◡<๑)۶ ',
+        'ヾ(●´∀｀●) ', '(｡◕ˇ∀ˇ◕)', '(◕ᴗ◕✿)', '✺◟(∗❛ัᴗ❛ั∗)◞✺', '(づ｡◕ᴗᴗ◕｡)づ',
+        '(≧∀≦)♪', '♪（＾∀＾●）ﾉ', '(●´∀｀●)ﾉ', "(〃'▽'〃)", '(｀・ω・´)',
+        'ヾ(=･ω･=)o', '(◍´꒳`◍)', '(づ●─●)づ', '｡◕ᴗ◕｡', '●﹏●',
+    ])
+
+    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {face}")
+
+
+def has_buy_auto_updater_dlc():
+    return os.path.exists(auto_updater_path())
+
+
+def auto_updater_path():
+    return os.path.realpath("utils/auto_updater.exe")
 
 
 def _test_main():

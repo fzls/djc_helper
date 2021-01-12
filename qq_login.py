@@ -17,6 +17,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from config import *
 from log import logger, color
 from update import get_netdisk_addr
+from version import now_version
 
 
 class LoginResult(ConfigInterface):
@@ -431,6 +432,15 @@ class QQLogin():
         return
 
     def try_auto_resolve_captcha(self):
+        try:
+            self._try_auto_resolve_captcha()
+        except Exception as e:
+            msg = "ver {} 自动处理验证失败了，出现未捕获的异常，请加群553925117反馈或自行解决。请手动进行处理验证码".format(now_version)
+            logger.exception(color("fg_bold_red") + msg, exc_info=e)
+            logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
+            logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+
+    def _try_auto_resolve_captcha(self):
         if not self.cfg.login.auto_resolve_captcha:
             logger.info("未启用自动处理拖拽验证码的功能")
             return
@@ -449,9 +459,16 @@ class QQLogin():
             tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
-            drag_tarck_width = self.driver.find_element_by_id('slide').size['width']  # 进度条轨道宽度
-            drag_block_width = self.driver.find_element_by_id('slideBlock').size['width']  # 缺失方块宽度
-            delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate)  # 每次尝试多移动该宽度
+            try:
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slide")))
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slideBlock")))
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_drag_button")))
+            except Exception as e:
+                logger.warning("等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
+
+            drag_tarck_width = self.driver.find_element_by_id('slide').size['width'] or 280  # 进度条轨道宽度
+            drag_block_width = self.driver.find_element_by_id('slideBlock').size['width'] or 56  # 缺失方块宽度
+            delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
 
             drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
 
@@ -470,6 +487,10 @@ class QQLogin():
                 xoffsets.append(init_offset - 2 * (drag_block_width // 4))
                 xoffsets.append(init_offset - 3 * (drag_block_width // 4))
 
+            logger.info(color("bold_yellow") + "验证码相关信息：轨道宽度为{}，滑块宽度为{}，偏移递增量为{}({:.2f}倍滑块宽度)".format(
+                drag_tarck_width, drag_block_width, delta_width, self.cfg.login.move_captcha_delta_width_rate,
+            ))
+
             # 将普通序列放入其中
             xoffset = init_offset
             while xoffset > 0:
@@ -482,9 +503,7 @@ class QQLogin():
             ActionChains(self.driver).release(on_element=drag_button).perform()
             time.sleep(wait_time)
 
-            logger.info(color("bold_yellow") + "开始拖拽验证码，轨道宽度为{}，滑块宽度为{}，偏移递增量为{}({:.2f}倍滑块宽度), 将依次尝试下列偏移量:\n{}".format(
-                drag_tarck_width, drag_block_width, delta_width, self.cfg.login.move_captcha_delta_width_rate, xoffsets,
-            ))
+            logger.info(color("bold_yellow") + "开始拖拽验证码，将依次尝试下列偏移量:\n{}".format(xoffsets))
             for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
                 time.sleep(0.5)

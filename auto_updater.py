@@ -22,6 +22,9 @@ lanzou_cookie = {
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
 
+# note: 作为cwd的默认值，用于检测是否直接双击自动更新工具
+invalid_cwd = "./invalid_cwd"
+
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
@@ -30,6 +33,11 @@ def auto_update():
     logger.info("更新器的进程为{}, 版本为{}，主进程为{}, 版本为{}".format(os.getpid(), now_version, args.pid, args.version))
 
     # note: 工作目录预期为小助手的exe所在目录
+    if args.cwd == invalid_cwd:
+        logger.error("请不要直接双击打开自动更新工具，正确的用法是放到utils目录后，照常双击【DNF蚊子腿小助手.exe】来使用，小助手会自行调用自动更新DLC的")
+        os.system("PAUSE")
+        return
+
     logger.info("切换工作目录到{}".format(args.cwd))
     os.chdir(args.cwd)
 
@@ -50,7 +58,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", default=0, type=int)
     parser.add_argument("--version", default="1.0.0", type=str)
-    parser.add_argument("--cwd", default=".", type=str)
+    parser.add_argument("--cwd", default=invalid_cwd, type=str)
     parser.add_argument("--exe_name", default="DNF蚊子腿小助手.exe", type=str)
     args = parser.parse_args()
 

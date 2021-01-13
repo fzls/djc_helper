@@ -677,6 +677,7 @@ def try_auto_update():
             "--exe_name", filename,
         ], cwd="utils", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.wait()
+        logger.info(color("bold_yellow") + "当前版本为最新版本，不需要更新~")
     except Exception as e:
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 

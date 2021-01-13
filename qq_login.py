@@ -244,8 +244,11 @@ class QQLogin():
             self.driver.switch_to.frame(0)
 
         def assert_login_finished_fn():
-            logger.info("请等待【欢迎你，】的文字可见，则说明已经登录完成了...")
+            logger.info("等待几秒后刷新一遍，确保页面变为登陆后的状态")
+            time.sleep(3)
+            logger.info("重新加载页面...")
             self.driver.get("https://act.qzone.qq.com/")
+            logger.info("请等待【欢迎你，】的文字可见，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".tit_text"), "欢迎你，"))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)

@@ -25,12 +25,14 @@ tmp_dir = "_update_temp_dir"
 # note: 作为cwd的默认值，用于检测是否直接双击自动更新工具
 invalid_cwd = "./invalid_cwd"
 
+auto_updater_version = "1.0.5"
+
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
     args = parse_args()
 
-    logger.info("更新器的进程为{}, 版本为{}，主进程为{}, 版本为{}".format(os.getpid(), now_version, args.pid, args.version))
+    logger.info("更新器的进程为{}, 版本为{}，主进程为{}, 版本为{}".format(os.getpid(), auto_updater_version, args.pid, args.version))
 
     # note: 工作目录预期为小助手的exe所在目录
     if args.cwd == invalid_cwd:

@@ -17,7 +17,7 @@ def parse_card_group_info_map(cfg: ArkLotteryZzConfig):
     ]
     for groupIndex, group in enumerate(groups):
         for cardIndex, card in enumerate(group.cardList):
-            card.index = "{}-{}".format(groupIndex + 1, cardIndex + 1)
+            card.index = f"{groupIndex + 1}-{cardIndex + 1}"
             card_group_info_map[card.name] = card
 
     return card_group_info_map

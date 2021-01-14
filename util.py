@@ -213,8 +213,9 @@ def filter_unused_params(urlRendered):
 
         return newUrl
     except Exception as e:
-        logger.error("过滤参数出错了，urlRendered={}".format(originalUrl), exc_info=e)
-        logger.error("看到上面这个报错，请帮忙截图发反馈群里~ 调用堆栈=\n{}".format(color("bold_black") + ''.join(traceback.format_stack())))
+        logger.error(f"过滤参数出错了，urlRendered={originalUrl}", exc_info=e)
+        stack_info = color("bold_black") + ''.join(traceback.format_stack())
+        logger.error(f"看到上面这个报错，请帮忙截图发反馈群里~ 调用堆栈=\n{stack_info}")
         return originalUrl
 
 
@@ -226,7 +227,7 @@ def run_from_src():
 
 
 def get_uuid():
-    return "{}-{}".format(platform.node(), uuid.getnode())
+    return f"{platform.node()}-{uuid.getnode()}"
 
 
 def use_by_myself():

@@ -40,28 +40,28 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     shutil.rmtree(dir_current_release, ignore_errors=True)
     os.mkdir(dir_current_release)
     # 复制文件与目录过去
-    logger.info("将以下内容从{}复制到{}".format(dir_src, dir_current_release))
+    logger.info(f"将以下内容从{dir_src}复制到{dir_current_release}")
     for filename in files_to_copy:
         source = os.path.join(dir_src, filename)
         destination = os.path.join(dir_current_release, filename)
         if os.path.isdir(filename):
-            logger.info("拷贝目录 {}".format(filename))
+            logger.info(f"拷贝目录 {filename}")
             shutil.copytree(source, destination)
         else:
-            logger.info("拷贝文件 {}".format(filename))
+            logger.info(f"拷贝文件 {filename}")
             shutil.copyfile(source, destination)
 
     logger.info("清除utils目录下的一些内容")
     for filename in ["logs", ".db", "auto_updater.exe"]:
-        filepath = os.path.join(dir_current_release, "utils/{}".format(filename))
+        filepath = os.path.join(dir_current_release, f"utils/{filename}")
         if not os.path.exists(filepath):
             continue
 
         if os.path.isdir(filepath):
-            logger.info("移除目录 {}".format(filepath))
+            logger.info(f"移除目录 {filepath}")
             shutil.rmtree(filepath, ignore_errors=True)
         else:
-            logger.info("移除文件 {}".format(filepath))
+            logger.info(f"移除文件 {filepath}")
             os.remove(filepath)
 
     # 压缩打包
@@ -79,8 +79,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 def main():
     dir_src = os.path.realpath('.')
     dir_all_release = os.path.realpath(os.path.join("releases"))
-    release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version='v' + now_version)
-    release_7z_name = '{}.7z'.format(release_dir_name)
+    release_dir_name = f"DNF蚊子腿小助手_v{now_version}_by风之凌殇"
+    release_7z_name = f'{release_dir_name}.7z'
     dir_github_action_artifact = "_github_action_artifact"
 
     package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact)

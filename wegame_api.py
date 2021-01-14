@@ -150,13 +150,13 @@ class WegameApi:
         """
         获取指定装备的描述图片
         """
-        return "https://bb.img.qq.com/bbcdn/dnf/equips/equimg/{equip_id}.png".format(equip_id=equip_id)
+        return f"https://bb.img.qq.com/bbcdn/dnf/equips/equimg/{equip_id}.png"
 
     def get_equip_icon(self, equip_id):
         """
         获取指定装备的图标
         """
-        return "http://cdn.tgp.qq.com/DNF_picture/equip_icon/{equip_id}.png".format(equip_id=equip_id)
+        return f"http://cdn.tgp.qq.com/DNF_picture/equip_icon/{equip_id}.png"
 
     def get_player_equipment_list(self):
         """
@@ -203,7 +203,8 @@ class WegameApi:
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
         if print_res:
-            logger.info("{} {}\n".format(api_name, json.dumps(res.json(), ensure_ascii=False)))
+            pd = json.dumps(res.json(), ensure_ascii=False)
+            logger.info(f"{api_name} {pd}\n")
 
         return res
 
@@ -219,7 +220,7 @@ if __name__ == '__main__':
 
     res = api.get_player_role_list()
     for idx, role in enumerate(res['data']['role_list']):
-        logger.info("{:3s} 区服={:3d}\t角色名={}".format(str(idx), role['area_id'], role['role_name']))
+        logger.info(f"{str(idx):3s} 区服={role['area_id']:3d}\t角色名={role['role_name']}")
     default_role = res['data']['role_list'][0]
     area_id, role_name = default_role['area_id'], default_role['role_name']
     api.set_role_info(area_id, role_name)

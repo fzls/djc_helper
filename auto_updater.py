@@ -32,7 +32,7 @@ auto_updater_version = "1.0.5"
 def auto_update():
     args = parse_args()
 
-    logger.info("更新器的进程为{}, 版本为{}，主进程为{}, 版本为{}".format(os.getpid(), auto_updater_version, args.pid, args.version))
+    logger.info(f"更新器的进程为{os.getpid()}, 版本为{auto_updater_version}，主进程为{args.pid}, 版本为{args.version}")
 
     # note: 工作目录预期为小助手的exe所在目录
     if args.cwd == invalid_cwd:
@@ -40,14 +40,14 @@ def auto_update():
         os.system("PAUSE")
         return
 
-    logger.info("切换工作目录到{}".format(args.cwd))
+    logger.info(f"切换工作目录到{args.cwd}")
     os.chdir(args.cwd)
 
     uploader = Uploader(lanzou_cookie)
 
     # 进行实际的检查是否需要更新操作
     latest_version = uploader.latest_version()
-    logger.info("当前版本为{}，网盘最新版本为{}".format(args.version, latest_version))
+    logger.info(f"当前版本为{args.version}，网盘最新版本为{latest_version}")
 
     if need_update(args.version, latest_version):
         update(args, uploader)
@@ -73,7 +73,7 @@ def update(args, uploader):
     try:
         # 首先尝试使用增量更新文件
         patches_range = uploader.latest_patches_range()
-        logger.info("当前可以应用增量补丁更新的版本范围为{}".format(patches_range))
+        logger.info(f"当前可以应用增量补丁更新的版本范围为{patches_range}")
 
         can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(patches_range[1], args.version)
         if can_use_patch:
@@ -109,10 +109,10 @@ def full_update(args, uploader):
     for file in ["config.toml", "utils/auto_updater.exe"]:
         file_to_remove = os.path.realpath(os.path.join(target_dir, file))
         try:
-            logger.info("移除 {}".format(file_to_remove))
+            logger.info(f"移除 {file_to_remove}")
             os.remove(file_to_remove)
         except Exception as e:
-            logger.debug("移除 {} 时出错了".format(file_to_remove), exc_info=e)
+            logger.debug(f"移除 {file_to_remove} 时出错了", exc_info=e)
 
     kill_original_process(args.pid)
 
@@ -136,8 +136,8 @@ def incremental_update(args, uploader):
     kill_original_process(args.pid)
 
     target_dir = filepath.replace('.7z', '')
-    target_patch = os.path.join(target_dir, "{}.patch".format(args.version))
-    logger.info("开始应用补丁 {}".format(target_patch))
+    target_patch = os.path.join(target_dir, f"{args.version}.patch")
+    logger.info(f"开始应用补丁 {target_patch}")
     # hpatchz.exe -C-diff -f . "%target_patch_file%" .
     ret_code = subprocess.call([
         os.path.realpath("utils/hpatchz.exe"),
@@ -149,7 +149,7 @@ def incremental_update(args, uploader):
     ])
 
     if ret_code != 0:
-        logger.error("增量更新失败，错误码为{}，具体报错请看上面日志".format(ret_code))
+        logger.error(f"增量更新失败，错误码为{ret_code}，具体报错请看上面日志")
         return False
 
     remove_temp_dir("更新完毕，移除临时目录")
@@ -168,7 +168,7 @@ def decompress(filepath, target_dir):
 
 
 def kill_original_process(pid):
-    logger.info("尝试干掉原进程={}".format(pid))
+    logger.info(f"尝试干掉原进程={pid}")
     try:
         os.kill(pid, 9)
     except OSError:
@@ -180,7 +180,7 @@ def kill_original_process(pid):
 
 def start_new_version(args):
     target_exe = os.path.join(args.cwd, args.exe_name)
-    logger.info("更新完毕，重新启动程序 {}".format(target_exe))
+    logger.info(f"更新完毕，重新启动程序 {target_exe}")
     subprocess.call([target_exe])
 
 
@@ -190,9 +190,9 @@ if __name__ == '__main__':
         auto_update()
     except Exception as e:
         msg = (
-            "更新器 ver {} 运行过程中出现未捕获的异常。\n"
+            f"更新器 ver {now_version} 运行过程中出现未捕获的异常。\n"
             "目前更新器处于测试模式，可能会有一些未考虑到的点，请加群553925117反馈"
-        ).format(now_version)
+        )
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
 
         logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~")
@@ -206,9 +206,9 @@ if __name__ == '__main__':
 #
 # version = "1.0.0"
 #
-# print("这是更新前的主进程，version={}".format(version))
+# print(f"这是更新前的主进程，version={version}")
 #
-# print("主进程pid={}".format(os.getpid()))
+# print(f"主进程pid={os.getpid()}")
 #
 # exe_path = sys.argv[0]
 # dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)

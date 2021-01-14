@@ -21,12 +21,12 @@ def increase_counter(name):
 
 def increase_counter_sync(name):
     try:
-        logger.debug("update counter {}".format(name))
+        logger.debug(f"update counter {name}")
         for counter in get_counters(name):
             counter.increment('count')
             counter.save()
     except Exception as exc:
-        logger.debug("increase_counter {} failedexc_info={}".format(name, exc))
+        logger.debug(f"increase_counter {name} failedexc_info={exc}")
 
 
 time_periods = ["all", util.get_today()]
@@ -45,7 +45,7 @@ def get_count(name, time_period):
     try:
         return get_counter(name, time_period).get('count', 0)
     except Exception as e:
-        logger.debug("get_count failed name={}, time_period={} e={}".format(name, time_period, e))
+        logger.debug(f"get_count failed name={name}, time_period={time_period} e={e}")
         return 0
 
 
@@ -57,7 +57,7 @@ def get_record_count_name_start_with(name_start_with, time_period):
         query.equal_to('time_period', time_period)
         return query.count()
     except Exception as e:
-        logger.debug("get_record_count_name_start_with failed name_start_with={}, time_period={} e={}".format(name_start_with, time_period, e))
+        logger.debug(f"get_record_count_name_start_with failed name_start_with={name_start_with}, time_period={time_period} e={e}")
         return 0
 
 
@@ -84,7 +84,7 @@ def get_counter(name, time_period):
 
 
 def leancloud_api(api):
-    return "{}/1.1/{}".format(LEAN_CLOUD_SERVER_ADDR, api)
+    return f"{LEAN_CLOUD_SERVER_ADDR}/1.1/{api}"
 
 
 if __name__ == '__main__':

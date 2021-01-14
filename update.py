@@ -29,19 +29,19 @@ def check_update_on_start(config):
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
     except Exception as err:
-        logger.error("更新版本失败, 错误为{}".format(err))
+        logger.error(f"更新版本失败, 错误为{err}")
 
 
 def try_manaual_update(ui: UpdateInfo):
     if need_update(now_version, ui.latest_version):
-        logger.info("当前版本为{}，已有最新版本{}，更新内容为{}".format(now_version, ui.latest_version, ui.update_message))
+        logger.info(f"当前版本为{now_version}，已有最新版本{ui.latest_version}，更新内容为{ui.update_message}")
 
         ask_update = True
         if platform.system() == "Windows":
             message = (
-                "当前版本为{}，已有最新版本{}. 你需要更新吗?\n"
-                "{}"
-            ).format(now_version, ui.latest_version, ui.update_message)
+                f"当前版本为{now_version}，已有最新版本{ui.latest_version}. 你需要更新吗?\n"
+                f"{ui.update_message}"
+            )
             res = win32api.MessageBox(0, message, "更新", win32con.MB_OKCANCEL)
             if res == win32con.IDOK:
                 ask_update = True
@@ -54,10 +54,10 @@ def try_manaual_update(ui: UpdateInfo):
         if ask_update:
             if not is_shared_content_blocked(ui.netdisk_link):
                 webbrowser.open(ui.netdisk_link)
-                win32api.MessageBox(0, "蓝奏云网盘提取码为： {}".format(ui.netdisk_passcode), "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION)
+                win32api.MessageBox(0, f"蓝奏云网盘提取码为： {ui.netdisk_passcode}", "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION)
             else:
                 # 如果分享的网盘链接被系统屏蔽了，写日志并弹窗提示
-                logger.warning("网盘链接={}又被系统干掉了=-=".format(ui.netdisk_link))
+                logger.warning(f"网盘链接={ui.netdisk_link}又被系统干掉了=-=")
                 webbrowser.open("https://github.com/fzls/djc_helper/releases")
                 message = (
                     "分享的网盘地址好像又被系统给抽掉了呢=。=先暂时使用github的release页面下载吧0-0\n"
@@ -69,15 +69,15 @@ def try_manaual_update(ui: UpdateInfo):
             message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start的值设为false即可"
             win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
     else:
-        logger.info("当前版本{}已是最新版本，无需更新".format(now_version))
+        logger.info(f"当前版本{now_version}已是最新版本，无需更新")
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):
-    if now_version == ui.latest_version and is_first_run("update_version_v{}".format(ui.latest_version)) and not use_by_myself():
+    if now_version == ui.latest_version and is_first_run(f"update_version_v{ui.latest_version}") and not use_by_myself():
         message = (
-            "新版本v{}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
-            "{}"
-        ).format(ui.latest_version, ui.update_message)
+            f"新版本v{ui.latest_version}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
+            f"{ui.update_message}"
+        )
         win32api.MessageBox(0, message, "更新", win32con.MB_OK)
 
 
@@ -114,9 +114,9 @@ def get_update_info(config) -> UpdateInfo:
     if "update_message_list" in update_message_list_match_groupdict:
         update_message_list_str = update_message_list_match_groupdict["update_message_list"]
         update_messages = re.findall("<li>(?P<update_message>.+?)</li>", update_message_list_str, re.MULTILINE)
-        update_info.update_message = "\n".join("{}. {}".format(idx + 1, message) for idx, message in enumerate(update_messages))
+        update_info.update_message = "\n".join(f"{idx + 1}. {message}" for idx, message in enumerate(update_messages))
 
-    logger.info("netdisk_address_matches={}, selected=({}, {})".format(netdisk_address_matches, update_info.netdisk_link, update_info.netdisk_passcode))
+    logger.info(f"netdisk_address_matches={netdisk_address_matches}, selected=({update_info.netdisk_link}, {update_info.netdisk_passcode})")
 
     return update_info
 

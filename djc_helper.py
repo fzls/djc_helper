@@ -136,7 +136,7 @@ class DjcHelper:
         for i in range(show_count):
             _title = title
             if show_count != 1:
-                _title = "第{}/{}次提示 {}".format(i + 1, show_count, title)
+                _title = f"第{i + 1}/{show_count}次提示 {title}"
             win32api.MessageBox(0, tips, _title, win32con.MB_ICONWARNING)
 
         # 创建该文件，从而避免再次弹出错误
@@ -151,7 +151,7 @@ class DjcHelper:
         else:
             # 已过期，更新skey
             logger.info("")
-            logger.warning("账号({})的skey已过期，即将尝试更新skey".format(self.cfg.name))
+            logger.warning(f"账号({self.cfg.name})的skey已过期，即将尝试更新skey")
             self.update_skey(query_data)
 
         # skey获取完毕后，检查是否在黑名单内
@@ -169,28 +169,28 @@ class DjcHelper:
         js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
         fallback_js_code = """document.cookie.split(/; */);"""
         logger.error((
-                         "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
-                         "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
-                         "   1.1 指点击（亲爱的玩家，请【登录】）中的登录按钮，并完成后续登录操作\n"
-                         "2. 点击F12，将默认打开DevTools（开发者工具界面）的Console界面\n"
-                         "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
-                         "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）\n"
-                         "       {js_code}\n"
-                         "-- 如果上述代码执行报错，可能是因为浏览器不支持，这时候可以复制下面的代码进行上述操作\n"
-                         "  执行后，应该会显示一个可点开的内容，戳一下会显示各个cookie的内容，然后手动在里面查找uin和skey即可\n"
-                         "       {fallback_js_code}\n"
-                         "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
-                         "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
-                         "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
-                         "\n"
-                         "具体信息为：ret={ret} msg={msg}"
-                     ).format(js_code=js_code, fallback_js_code=fallback_js_code, ret=query_data['ret'], msg=query_data['msg']))
+            "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
+            "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
+            "   1.1 指点击（亲爱的玩家，请【登录】）中的登录按钮，并完成后续登录操作\n"
+            "2. 点击F12，将默认打开DevTools（开发者工具界面）的Console界面\n"
+            "       如果默认不是该界面，则点击上方第二个tab（Console）（中文版这个tab的名称可能是命令行？）\n"
+            "3. 在下方输入区输入下列内容来从cookie中获取uin和skey（或者直接粘贴，默认已复制到系统剪贴板里了）\n"
+            f"       {js_code}\n"
+            "-- 如果上述代码执行报错，可能是因为浏览器不支持，这时候可以复制下面的代码进行上述操作\n"
+            "  执行后，应该会显示一个可点开的内容，戳一下会显示各个cookie的内容，然后手动在里面查找uin和skey即可\n"
+            f"       {fallback_js_code}\n"
+            "3. 将uin/skey的值分别填写到config.toml中对应配置的值中即可\n"
+            "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
+            "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
+            "\n"
+            f"具体信息为：ret={query_data['ret']} msg={query_data['msg']}"
+        ))
         # 打开配置界面
         cfgFile = "./config.toml"
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        subprocess.Popen("npp_portable/notepad++.exe -n53 {}".format(cfgFile))
+        subprocess.Popen(f"npp_portable/notepad++.exe -n53 {cfgFile}")
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面
@@ -227,7 +227,7 @@ class DjcHelper:
                 "vuserid": str(vuserid),
             }
             json.dump(loginResult, sf)
-            logger.debug("本地保存skey信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"本地保存skey信息，具体内容如下：{loginResult}")
 
     def local_load_uin_skey(self):
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
@@ -242,7 +242,7 @@ class DjcHelper:
             loginResult = json.load(f)
             self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
             self.vuserid = loginResult.get("vuserid", "")
-            logger.debug("读取本地缓存的skey信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"读取本地缓存的skey信息，具体内容如下：{loginResult}")
 
     def get_local_saved_skey_file(self):
         return self.local_saved_skey_file.format(self.cfg.name)
@@ -272,7 +272,7 @@ class DjcHelper:
                 if bind_role_info.is_mobile_game():
                     self.cfg.mobile_game_role_info.game_name = bind_role_info.sRoleInfo.gameName
                     found_binded_game = True
-                    logger.warning("当前游戏名称配置为任意手游，将从道聚城已绑定的手游中随便选一个，挑选为：{}".format(self.cfg.mobile_game_role_info.game_name))
+                    logger.warning(f"当前游戏名称配置为任意手游，将从道聚城已绑定的手游中随便选一个，挑选为：{self.cfg.mobile_game_role_info.game_name}")
                     break
 
             if not found_binded_game:
@@ -323,9 +323,7 @@ class DjcHelper:
 
                 for bizcode in games:
                     roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
-                    logger.info("{game}: ({server}-{name}-{id})".format(
-                        game=roleinfo.gameName, server=roleinfo.serviceName, name=roleinfo.roleName, id=roleinfo.roleCode,
-                    ))
+                    logger.info(f"{roleinfo.gameName}: ({roleinfo.serviceName}-{roleinfo.roleName}-{roleinfo.roleCode})")
             else:
                 logger.warning("当前账号未启用道聚城相关功能")
 
@@ -341,14 +339,14 @@ class DjcHelper:
         # 检查道聚城是否已绑定该手游的角色，若未绑定则警告并停止运行
         bizcode = gameinfo.bizCode
         if bizcode not in self.bizcode_2_bind_role_map:
-            logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【{}】的角色信息，请前往道聚城app进行绑定。".format(get_game_info_by_bizcode(bizcode).bizName))
+            logger.warning(color("fg_bold_yellow") + f"未在道聚城绑定【{get_game_info_by_bizcode(bizcode).bizName}】的角色信息，请前往道聚城app进行绑定。")
             logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
             return False
 
         # 检查这个游戏是否是手游
         role_info = self.bizcode_2_bind_role_map[bizcode]
         if not role_info.is_mobile_game():
-            logger.warning(color("fg_bold_yellow") + "【{}】是端游，不是手游。".format(get_game_info_by_bizcode(bizcode).bizName))
+            logger.warning(color("fg_bold_yellow") + f"【{get_game_info_by_bizcode(bizcode).bizName}】是端游，不是手游。")
             logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
             return False
 
@@ -478,7 +476,7 @@ class DjcHelper:
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
 
         delta = new_allin - old_allin
-        logger.warning(color("fg_bold_yellow") + "账号 {} 本次道聚城操作共获得 {} 个豆子（历史总获取： {} -> {}  余额： {} -> {} ）".format(self.cfg.name, delta, old_allin, new_allin, old_balance, new_balance))
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次道聚城操作共获得 {delta} 个豆子（历史总获取： {old_allin} -> {new_allin}  余额： {old_balance} -> {new_balance} ）")
 
     def query_balance(self, ctx, print_res=True):
         return self.get(ctx, self.urls.balance, print_res=print_res)
@@ -502,7 +500,7 @@ class DjcHelper:
         # 根据本月已签到数，领取符合条件的每月签到若干日的奖励（也就是聚豆页面最上面的那个横条）
         for sign_reward_rule in self.get("2.3.2 查询连续签到奖励规则", self.urls.sign_reward_rule, print_res=False)["data"]:
             if sign_reward_rule["iCanUse"] == 1 and month_total_signed_days >= int(sign_reward_rule["iDays"]):
-                ctx = "2.3.3 领取连续签到{}天奖励".format(sign_reward_rule["iDays"])
+                ctx = f"2.3.3 领取连续签到{sign_reward_rule['iDays']}天奖励"
                 self.post(ctx, self.urls.sign, self.sign_flow_data(str(sign_reward_rule["iFlowId"])))
 
     def sign_flow_data(self, iFlowId):
@@ -530,13 +528,13 @@ class DjcHelper:
 
         giftInfos = self.get_mobile_game_gifts()
         if len(giftInfos) == 0:
-            logger.warning("未找到手游【{}】的有效七日签到配置，请换个手游，比如王者荣耀".format(game_info.bizName))
+            logger.warning(f"未找到手游【{game_info.bizName}】的有效七日签到配置，请换个手游，比如王者荣耀")
             return
 
         dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
         giftInfo = giftInfos[dayIndex]
 
-        self.get("3.2 一键领取{}日常礼包-{}".format(role_info.gameName, giftInfo.sTask), self.urls.receive_game_gift,
+        self.get(f"3.2 一键领取{role_info.gameName}日常礼包-{giftInfo.sTask}", self.urls.receive_game_gift,
                  bizcode=game_info.bizCode, iruleId=giftInfo.iRuleId,
                  systemID=role_info.systemID, sPartition=role_info.areaID, channelID=role_info.channelID, channelKey=role_info.channelKey,
                  roleCode=role_info.roleCode, sRoleName=quote_plus(role_info.roleName))
@@ -549,13 +547,13 @@ class DjcHelper:
 
         roleModel = self.bizcode_2_bind_role_map[bizCode].sRoleInfo
         if '苹果' in roleModel.channelKey:
-            logger.warning(color("fg_bold_cyan") + "ios端不能许愿手游，建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀。roleModel={}".format(roleModel))
+            logger.warning(color("fg_bold_cyan") + f"ios端不能许愿手游，建议使用安卓模拟器下载道聚城，在上面绑定王者荣耀。roleModel={roleModel}")
             return
 
         # 查询许愿道具信息
         query_wish_item_list_res = self.get("3.3.0  查询许愿道具", self.urls.query_wish_goods_list, plat=roleModel.systemID, biz=roleModel.bizCode, print_res=False)
         if "data" not in query_wish_item_list_res or len(query_wish_item_list_res["data"]) == 0:
-            logger.warning("在{}上游戏【{}】暂不支持许愿，query_wish_item_list_res={}".format(roleModel.systemKey, roleModel.gameName, query_wish_item_list_res))
+            logger.warning(f"在{roleModel.systemKey}上游戏【{roleModel.gameName}】暂不支持许愿，query_wish_item_list_res={query_wish_item_list_res}")
             return
 
         propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
@@ -565,7 +563,7 @@ class DjcHelper:
 
         # 删除已经许愿的列表，确保许愿成功
         for wish_info in wish_list_res["data"]["list"]:
-            ctx = "3.3.2 删除已有许愿-{}-{}".format(wish_info["bizName"], wish_info["sGoodsName"])
+            ctx = f"3.3.2 删除已有许愿-{wish_info['bizName']}-{wish_info['sGoodsName']}"
             self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"])
 
         # 许愿
@@ -606,7 +604,7 @@ class DjcHelper:
         # 检查是否不支持许愿
         # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
         if wish_res["ret"] == "-8735":
-            logger.warning("游戏【{}】暂未开放许愿，请换个道聚城许愿界面中支持的游戏来进行许愿哦，比如王者荣耀~".format(roleModel.gameName))
+            logger.warning(f"游戏【{roleModel.gameName}】暂未开放许愿，请换个道聚城许愿界面中支持的游戏来进行许愿哦，比如王者荣耀~")
 
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
@@ -628,11 +626,11 @@ class DjcHelper:
         self.take_task_award("4.3.1", "327091", "兑换有礼")
 
     def take_task_award(self, prefix, iRuleId, taskName=""):
-        ctx = "{} 查询当前任务状态".format(prefix)
+        ctx = f"{prefix} 查询当前任务状态"
         taskinfo = self.get(ctx, self.urls.usertask, print_res=False)
 
         if self.can_take_task_award(taskinfo, iRuleId):
-            ctx = "{} 领取任务-{}-奖励".format(prefix, taskName)
+            ctx = f"{prefix} 领取任务-{taskName}-奖励"
             self.get(ctx, self.urls.take_task_reward, iruleId=iRuleId)
 
     # 尝试领取每日任务奖励
@@ -660,13 +658,13 @@ class DjcHelper:
         for ei in self.cfg.exchange_items:
             for i in range(ei.count):
                 for try_index in range(retryCfg.max_retry_count):
-                    res = self.exchange_item("4.2 兑换 {}".format(ei.sGoodsName), ei.iGoodsId)
+                    res = self.exchange_item(f"4.2 兑换 {ei.sGoodsName}", ei.iGoodsId)
                     if int(res.get('ret', '0')) == -9905:
-                        logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(ei.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
+                        logger.warning(f"兑换 {ei.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})")
                         time.sleep(retryCfg.retry_wait_time)
                         continue
 
-                    logger.debug("领取 {} ok，等待{}s，避免请求过快报错".format(ei.sGoodsName, retryCfg.request_wait_time))
+                    logger.debug(f"领取 {ei.sGoodsName} ok，等待{retryCfg.request_wait_time}s，避免请求过快报错")
                     time.sleep(retryCfg.request_wait_time)
                     break
 
@@ -687,7 +685,7 @@ class DjcHelper:
         # self.query_dnf_gifts()
 
     def query_dnf_rolelist(self, dnfServerId):
-        ctx = "获取账号({})的dnf角色列表".format(self.cfg.name)
+        ctx = f"获取账号({self.cfg.name})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
         roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
@@ -697,9 +695,9 @@ class DjcHelper:
         lines.append(ctx)
         if len(roleLists) != 0:
             for idx, role in enumerate(roleLists):
-                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
+                lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid}\t 名字 = {role.rolename}")
         else:
-            lines.append("\t未查到dnf服务器id={}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色".format(dnfServerId))
+            lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
             lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
             lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
@@ -712,7 +710,7 @@ class DjcHelper:
         """
         cfg = self.cfg.mobile_game_role_info
         game_info = self.get_mobile_game_info()
-        ctx = "获取账号({})的{}角色列表".format(self.cfg.name, cfg.game_name)
+        ctx = f"获取账号({self.cfg.name})的{cfg.game_name}角色列表"
         if not cfg.enabled():
             logger.info("未启用自动完成《礼包达人》任务功能")
             return
@@ -725,13 +723,13 @@ class DjcHelper:
         lines.append(ctx)
         if len(roleList) != 0:
             for idx, role in enumerate(roleList):
-                lines.append("\t第{:2d}个角色信息：\tid = {}\t 名字 = {}".format(idx + 1, role.roleid, role.rolename))
+                lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid}\t 名字 = {role.rolename}")
         else:
-            lines.append("\t未查到{} 平台={} 渠道={} 区服={}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色".format(cfg.game_name, cfg.platid, cfg.area, cfg.partition))
-            lines.append("\t上述id的列表可查阅稍后自动打开的server_list_{bizName}.js，详情参见config.toml的对应注释".format(bizName=game_info.bizName))
-            lines.append("\t渠道(area)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v".format(bizName=game_info.bizName))
-            lines.append("\t平台(platid)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v".format(bizName=game_info.bizName))
-            lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/server_list_{bizName}.js或手动打开这个文件， 查看 STD_DATA中对应区服的v".format(bizName=game_info.bizName))
+            lines.append(f"\t未查到{cfg.game_name} 平台={cfg.platid} 渠道={cfg.area} 区服={cfg.partition}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色")
+            lines.append(f"\t上述id的列表可查阅稍后自动打开的server_list_{game_info.bizName}.js，详情参见config.toml的对应注释")
+            lines.append(f"\t渠道(area)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v")
+            lines.append(f"\t平台(platid)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v")
+            lines.append(f"\t区服(partition)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             self.open_mobile_game_server_list()
         lines.append("+" * 40)
         logger.info("\n".join(lines))
@@ -739,17 +737,17 @@ class DjcHelper:
     def open_mobile_game_server_list(self):
         game_info = self.get_mobile_game_info()
         res = requests.get(self.urls.query_game_server_list.format(bizcode=game_info.bizCode))
-        server_list_file = "reference_data/server_list_{bizName}.js".format(bizName=game_info.bizName)
+        server_list_file = f"reference_data/server_list_{game_info.bizName}.js"
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
-        subprocess.Popen("npp_portable/notepad++.exe {}".format(server_list_file))
+        subprocess.Popen(f"npp_portable/notepad++.exe {server_list_file}")
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.urls.show_exchange_item_list)
 
     def get_mobile_game_gifts(self):
         game_info = self.get_mobile_game_info()
-        data = self.get("查询{}礼包信息".format(game_info), self.urls.query_game_gift_bags, bizcode=game_info.bizCode, print_res=False)
+        data = self.get(f"查询{game_info}礼包信息", self.urls.query_game_gift_bags, bizcode=game_info.bizCode, print_res=False)
 
         sign_in_gifts = []
         for raw_gift in data["data"]["list"]["data"]:
@@ -782,7 +780,7 @@ class DjcHelper:
             "type": "0"
         }
 
-        self.get("绑定账号-{}-{}".format(serviceName, roleName), self.urls.bind_role, role_info=json.dumps(roleInfo, ensure_ascii=False), is_jsonp=True)
+        self.get(f"绑定账号-{serviceName}-{roleName}", self.urls.bind_role, role_info=json.dumps(roleInfo, ensure_ascii=False), is_jsonp=True)
 
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
     def xinyue_operations(self):
@@ -803,7 +801,7 @@ class DjcHelper:
 
         # 查询道具信息
         old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
-        logger.info("查询到的心悦道具信息为：{}".format(old_itemInfo))
+        logger.info(f"查询到的心悦道具信息为：{old_itemInfo}")
 
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
@@ -845,19 +843,19 @@ class DjcHelper:
 
         # 查询道具信息
         new_itemInfo = self.query_xinyue_items("6.3.0 操作完成后查询各种道具信息")
-        logger.info("查询到的心悦道具信息为：{}".format(new_itemInfo))
+        logger.info(f"查询到的心悦道具信息为：{new_itemInfo}")
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
         delta = new_info.score - old_info.score
-        logger.warning(color("fg_bold_yellow") + "账号 {} 本次心悦相关操作共获得 {} 个成就点（ {} -> {} ）".format(self.cfg.name, delta, old_info.score, new_info.score))
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦相关操作共获得 {delta} 个成就点（ {old_info.score} -> {new_info.score} ）")
 
         # 查询下心悦组队进度
         teaminfo = self.query_xinyue_teaminfo(print_res=False)
         if teaminfo.id != "":
-            logger.warning(color("fg_bold_yellow") + "账号 {} 当前队伍进度为 {}/20".format(self.cfg.name, teaminfo.score))
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍进度为 {teaminfo.score}/20")
         else:
-            logger.warning(color("fg_bold_yellow") + "账号 {} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能".format(self.cfg.name))
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
     def do_xinyue_op(self, xytype, op):
         """
@@ -869,19 +867,19 @@ class DjcHelper:
         current_hour = now.hour
         required_hour = self.common_cfg.xinyue.submit_task_after
         for i in range(op.count):
-            ctx = "6.2 心悦操作： {}({}/{})".format(op.sFlowName, i + 1, op.count)
+            ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
             if current_hour < required_hour:
-                logger.warning("当前时间为{}，在本日{}点之前，将不执行操作: {}".format(now, required_hour, ctx))
+                logger.warning(f"当前时间为{now}，在本日{required_hour}点之前，将不执行操作: {ctx}")
                 continue
 
             for try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
                 # if int(res.get('ret', '0')) == -9905:
-                #     logger.warning("兑换 {} 时提示 {} ，等待{}s后重试（{}/{})".format(op.sGoodsName, res.get('msg'), retryCfg.retry_wait_time, try_index + 1, retryCfg.max_retry_count))
+                #     logger.warning(f"兑换 {op.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})")
                 #     time.sleep(retryCfg.retry_wait_time)
                 #     continue
 
-                logger.debug("心悦操作 {} ok，等待{}s，避免请求过快报错".format(op.sFlowName, retryCfg.request_wait_time))
+                logger.debug(f"心悦操作 {op.sFlowName} ok，等待{retryCfg.request_wait_time}s，避免请求过快报错")
                 time.sleep(retryCfg.request_wait_time)
                 break
 
@@ -899,11 +897,11 @@ class DjcHelper:
             logger.warning("未找到本地固定队伍信息，跳过队伍相关流程")
             return
 
-        logger.info("当前账号的本地固定队信息为{}".format(fixed_team))
+        logger.info(f"当前账号的本地固定队信息为{fixed_team}")
 
         teaminfo = self.query_xinyue_teaminfo()
         if teaminfo.id != "":
-            logger.info("目前已有队伍={}".format(teaminfo))
+            logger.info(f"目前已有队伍={teaminfo}")
             # 本地保存一下
             self.save_teamid(fixed_team.id, teaminfo.id)
             return
@@ -912,21 +910,21 @@ class DjcHelper:
         remote_teamid = self.load_teamid(fixed_team.id)
         if remote_teamid != "":
             # 尝试加入远程队伍
-            logger.info("尝试加入远程队伍id={}".format(remote_teamid))
+            logger.info(f"尝试加入远程队伍id={remote_teamid}")
             teaminfo = self.query_xinyue_teaminfo_by_id(remote_teamid)
             # 如果队伍仍有效则加入
             if teaminfo.id == remote_teamid:
                 teaminfo = self.join_xinyue_team(remote_teamid)
                 if teaminfo is not None:
-                    logger.info("成功加入远程队伍，队伍信息为{}".format(teaminfo))
+                    logger.info(f"成功加入远程队伍，队伍信息为{teaminfo}")
                     return
 
-            logger.info("远程队伍={}已失效，应该是新的一周自动解散了，将重新创建队伍".format(remote_teamid))
+            logger.info(f"远程队伍={remote_teamid}已失效，应该是新的一周自动解散了，将重新创建队伍")
 
         # 尝试创建小队并保存到本地
         teaminfo = self.create_xinyue_team()
         self.save_teamid(fixed_team.id, teaminfo.id)
-        logger.info("创建小队并保存到本地成功，队伍信息={}".format(teaminfo))
+        logger.info(f"创建小队并保存到本地成功，队伍信息={teaminfo}")
 
     def get_fixed_team(self):
         """
@@ -940,7 +938,7 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning("本地调试日志：本地固定队伍={}的队伍成员({})不符合要求，请确保是三个有效的qq号".format(team.id, team.members))
+                logger.warning(f"本地调试日志：本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是三个有效的qq号")
                 continue
 
             fixed_team = team
@@ -1004,7 +1002,7 @@ class DjcHelper:
                 "remote_teamid": remote_teamid,
             }
             json.dump(teamidInfo, sf)
-            logger.debug("本地保存固定队信息，具体内容如下：{}".format(teamidInfo))
+            logger.debug(f"本地保存固定队信息，具体内容如下：{teamidInfo}")
 
     def load_teamid(self, fixed_teamid):
         fname = self.local_saved_teamid_file.format(fixed_teamid)
@@ -1014,7 +1012,7 @@ class DjcHelper:
 
         with open(fname, "r", encoding="utf-8") as f:
             teamidInfo = json.load(f)
-            logger.debug("读取本地缓存的固定队信息，具体内容如下：{}".format(teamidInfo))
+            logger.debug(f"读取本地缓存的固定队信息，具体内容如下：{teamidInfo}")
             return teamidInfo["remote_teamid"]
 
     def query_xinyue_whitelist(self, ctx, print_res=True):
@@ -1059,7 +1057,7 @@ class DjcHelper:
         for dzid in self.common_cfg.sailiyam_visit_target_qqs:
             if dzid == uin2qq(self.cfg.account_info.uin):
                 continue
-            self.xinyue_sailiyam_op("拜访好友-{}".format(dzid), "714307", dzid=dzid)
+            self.xinyue_sailiyam_op(f"拜访好友-{dzid}", "714307", dzid=dzid)
             sleep_to_avoid_ban()
 
         if not self.cfg.function_switches.get_xinyue_sailiyam or self.disable_most_activities():
@@ -1095,11 +1093,12 @@ class DjcHelper:
                 fromtimestamp = datetime.datetime.fromtimestamp
                 if workinfo.endTime > nowtime:
                     lefttime = int(workinfo.endTime - nowtime)
-                    work_message += "赛利亚打工倒计时：{:02d}:{:02d}:{:02d}".format(lefttime // 3600, lefttime % 3600 // 60, lefttime % 60)
+                    hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
+                    work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
                 else:
                     work_message += "赛利亚已经完成今天的工作了"
 
-                work_message += "。开始时间为{}，结束时间为{}，奖励最终领取时间为{}".format(fromtimestamp(workinfo.startTime), fromtimestamp(workinfo.endTime), fromtimestamp(workinfo.endLQtime))
+                work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
             else:
                 work_message += "赛利亚尚未出门工作"
 
@@ -1116,9 +1115,7 @@ class DjcHelper:
             dangao = modRet.sOutValue2
             xinqingzhi = modRet.sOutValue3
             qiandaodate = modRet.sOutValue4
-            return "领取蛋糕：{}, 投喂蛋糕: {}, 已拜访次数: {}/5, 剩余蛋糕: {}, 心情值: {}/100, 已连续签到: {}次".format(
-                lingqudangao == "1", touwei == "1", baifang, dangao, xinqingzhi, qiandaodate
-            )
+            return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
         except:
             return ""
 
@@ -1135,14 +1132,15 @@ class DjcHelper:
             if len(logs) != 0:
                 logger.info("赛利亚打工日志如下")
                 for log in logs:
-                    logger.info("{}月{}日：{}".format(log[0][:2], log[0][2:], logContents[log[2]]))
+                    month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
+                    logger.info(f"{month}月{day}日：{message}")
         except:
             pass
 
     def show_xinyue_sailiyam_kouling(self):
         res = self.xinyue_sailiyam_op("输出项", "714618", print_res=False)
         if 'modRet' in res:
-            logger.info("分享口令为： {}".format(res["modRet"]["sOutValue2"]))
+            logger.info(f"分享口令为： {res['modRet']['sOutValue2']}")
 
     def check_xinyue_sailiyam(self):
         self.check_bind_account("DNF进击吧赛利亚", "https://xinyue.qq.com/act/a20201023sailiya/index.html",
@@ -1207,7 +1205,7 @@ class DjcHelper:
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10
-        show_head_line("QQ空间抽卡 - {}_{}".format(self.zzconfig.actid, self.zzconfig.actName))
+        show_head_line(f"QQ空间抽卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
 
         if not self.cfg.function_switches.get_ark_lottery:
             logger.warning("未启用领取QQ空间抽卡功能，将跳过")
@@ -1221,7 +1219,7 @@ class DjcHelper:
         qa.ark_lottery()
 
     def ark_lottery_query_left_times(self, to_qq):
-        ctx = "查询 {} 的剩余被赠送次数".format(to_qq)
+        ctx = f"查询 {to_qq} 的剩余被赠送次数"
         res = self.get(ctx, self.urls.ark_lottery_query_left_times, to_qq=to_qq, actName=self.zzconfig.actName, print_res=False)
         # # {"13320":{"data":{"uAccuPoint":4,"uPoint":3},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934735801}
         if res['13320']['ret'] != 0:
@@ -1231,7 +1229,7 @@ class DjcHelper:
     def send_card(self, card_name, cardId, to_qq, print_res=False):
         from_qq = uin2qq(self.cfg.account_info.uin)
 
-        ctx = "{} 赠送卡片 {}({}) 给 {}".format(from_qq, card_name, cardId, to_qq)
+        ctx = f"{from_qq} 赠送卡片 {card_name}({cardId}) 给 {to_qq}"
         self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, actName=self.zzconfig.actName, print_res=print_res)
         # # {"13333":{"data":{},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934736057}
 
@@ -1300,7 +1298,7 @@ class DjcHelper:
                 "p_skey": str(pskey),
             }
             json.dump(loginResult, sf)
-            logger.debug("本地保存pskey信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"本地保存pskey信息，具体内容如下：{loginResult}")
 
     def load_uin_pskey(self):
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
@@ -1313,7 +1311,7 @@ class DjcHelper:
 
         with open(self.get_local_saved_pskey_file(), "r", encoding="utf-8") as f:
             loginResult = json.load(f)
-            logger.debug("读取本地缓存的pskey信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"读取本地缓存的pskey信息，具体内容如下：{loginResult}")
             return loginResult
 
     def get_local_saved_pskey_file(self):
@@ -1362,14 +1360,14 @@ class DjcHelper:
 
         # 阿拉德智慧星-兑换奖励
         star_count, _ = self.get_wegame_star_count_lottery_times()
-        logger.info(color("fg_bold_cyan") + "即将进行兑换道具，当前剩余智慧星为{}".format(star_count))
+        logger.info(color("fg_bold_cyan") + f"即将进行兑换道具，当前剩余智慧星为{star_count}")
         self.wegame_exchange_items()
 
         # 签到抽大奖
         self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
         self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
         _, lottery_times = self.get_wegame_star_count_lottery_times()
-        logger.info(color("fg_bold_cyan") + "即将进行抽奖，当前剩余抽奖资格为{}".format(lottery_times))
+        logger.info(color("fg_bold_cyan") + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}")
         for i in range(lottery_times):
             res = self.wegame_op("抽奖", "703957")
             if res.get('ret', "0") == "600":
@@ -1379,7 +1377,7 @@ class DjcHelper:
         # 在线得好礼
         self.wegame_op("累计在线30分钟签到", "703529")
         check_days = self.get_wegame_checkin_days()
-        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(check_days))
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {check_days} 天")
         self.wegame_op("签到3天礼包", "703530")
         self.wegame_op("签到5天礼包", "703531")
         self.wegame_op("签到7天礼包", "703532")
@@ -1401,10 +1399,10 @@ class DjcHelper:
         for ei in self.cfg.wegame_guoqing_exchange_items:
             for i in range(ei.count):
                 # 700-幸运星数目不足，600-已经达到最大兑换次数
-                res = self.wegame_op("兑换 {}".format(ei.sGoodsName), ei.iFlowId)
+                res = self.wegame_op(f"兑换 {ei.sGoodsName}", ei.iFlowId)
                 if res["ret"] == "700":
                     # 默认先兑换完前面的所有道具的最大上限，才会尝试兑换后面的道具
-                    logger.warning("兑换第{}个【{}】的时候幸运星剩余数量不足，将停止兑换流程，从而确保排在前面的兑换道具达到最大兑换次数后才尝试后面的道具".format(i + 1, ei.sGoodsName))
+                    logger.warning(f"兑换第{i + 1}个【{ei.sGoodsName}】的时候幸运星剩余数量不足，将停止兑换流程，从而确保排在前面的兑换道具达到最大兑换次数后才尝试后面的道具")
                     return
 
     def check_wegame_guoqing(self):
@@ -1432,7 +1430,7 @@ class DjcHelper:
 
         self.dnf_1224_op("30分签到礼包", "730666")
         check_days = self.get_dnf_1224_checkin_days()
-        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(check_days))
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {check_days} 天")
         self.dnf_1224_op("3日礼包", "730663")
         self.dnf_1224_op("7日礼包", "730667")
         self.dnf_1224_op("15日礼包", "730668")
@@ -1465,7 +1463,7 @@ class DjcHelper:
         # self.dnf_shanguang_op("app专属礼", "724877")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
 
-        logger.warning(color("bold_yellow") + "本周已获得指定装备{}件，具体装备可去活动页面查看".format(self.query_dnf_shanguang_equip_count()))
+        logger.warning(color("bold_yellow") + f"本周已获得指定装备{self.query_dnf_shanguang_equip_count()}件，具体装备可去活动页面查看")
 
         self.dnf_shanguang_op("周周闪光好礼", "724878", weekDay=get_last_week_monday())
 
@@ -1480,7 +1478,7 @@ class DjcHelper:
         # self.dnf_shanguang_op("每日网吧登录", "724883")
 
         lottery_times = self.get_dnf_shanguang_lottery_times()
-        logger.info(color("fg_bold_cyan") + "当前剩余闪光夺宝次数为 {} ".format(lottery_times))
+        logger.info(color("fg_bold_cyan") + f"当前剩余闪光夺宝次数为 {lottery_times} ")
         for i in range(lottery_times):
             self.dnf_shanguang_op("闪光夺宝", "724880")
             time.sleep(5)
@@ -1567,7 +1565,7 @@ class DjcHelper:
             "",
             "appid=3000501",
             "main_login=qq",
-            "vuserid={vuserid}".format(vuserid=self.vuserid),
+            f"vuserid={self.vuserid}",
         ])
         return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=act_id, module_id=module_id,
                         print_res=print_res, extra_cookies=extra_cookies)
@@ -1586,10 +1584,8 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        # fixme: 这个之后签到几天后再看看各个outvalue到底是啥含义
-        logger.warning("这个之后签到几天后再看看各个outvalue到底是啥含义")
-        checkin_days = self.query_dnf_female_mage_awaken_info()
-        # logger.warning(color("fg_bold_cyan") + "已累计签到 {} 天".format(checkin_days))
+        # checkin_days = self.query_dnf_female_mage_awaken_info()
+        # logger.warning(color("fg_bold_cyan") + f"已累计签到 {checkin_days} 天")
 
         if self.cfg.dnf_helper_info.token == "":
             logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置")
@@ -1709,9 +1705,9 @@ class DjcHelper:
         id = 7  # 大硕
         name = "疯奶丶大硕"
         total_score = int(self.dnf_rank_get_user_info().score)
-        ctx = "给{}({})打榜{}鲜花".format(id, name, total_score)
+        ctx = f"给{id}({name})打榜{total_score}鲜花"
         if total_score <= 0:
-            logger.info("{} 没有多余的鲜花，暂时不能进行打榜~".format(ctx))
+            logger.info(f"{ctx} 没有多余的鲜花，暂时不能进行打榜~")
             return
 
         return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
@@ -1724,11 +1720,11 @@ class DjcHelper:
             user_info.auto_update_config(res["data"])
         except Exception as e:
             # {"res": 201, "msg": "重新登录后重试", "data": []}
-            logger.debug("dnf_rank_get_user_info exception={}".format(e))
+            logger.debug(f"dnf_rank_get_user_info exception={e}")
         return user_info
 
     def dnf_rank_receive_diamond(self, gift_name, gift_id):
-        return self.dnf_rank_op('领取黑钻-{}'.format(gift_name), self.urls.rank_receive_diamond, gift_id=gift_id)
+        return self.dnf_rank_op(f'领取黑钻-{gift_name}', self.urls.rank_receive_diamond, gift_id=gift_id)
 
     def dnf_rank_receive_diamond_amesvr(self, ctx):
         try:
@@ -1867,22 +1863,22 @@ class DjcHelper:
         # ------ 领取各种奖励 ------
 
         def takeTaskAward(suffix, taskName, actionId, status, exp):
-            actionName = "[{}-{}]".format(taskName, suffix)
+            actionName = f"[{taskName}-{suffix}]"
 
             if status in [0, 2]:
                 # 0-未完成，2-已完成未领取，但是助手签到任务在未完成的时候可以直接领取，所以这俩一起处理，在内部根据回包进行区分
                 doActionIncrExp(actionName, actionId, exp)
             else:
                 # 1 表示已经领取过
-                logger.info("{}已经领取过了".format(actionName))
+                logger.info(f"{actionName}已经领取过了")
 
         def doActionIncrExp(actionName, actionId, exp):
             res = self.post("领取任务经验", url_mwegame, "", api="doActionIncrExp", actionId=actionId, **common_params)
             data = res.get("data", 0)
             if data != 0:
-                logger.info("领取{}-{}，获取经验为{}，回包data={}".format(actionName, actionId, exp, data))
+                logger.info(f"领取{actionName}-{actionId}，获取经验为{exp}，回包data={data}")
             else:
-                logger.warning("{}尚未完成，无法领取哦~".format(actionName))
+                logger.warning(f"{actionName}尚未完成，无法领取哦~")
 
         def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
@@ -1893,25 +1889,25 @@ class DjcHelper:
                 side = "队友"
             res = self.get("领取基础奖励", url_wang, api="send/basic", **common_params,
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
-            logger.info("领取{}的第{}个基础奖励: {}".format(side, awardInfo.sName, res.get("giftName", "出错啦")))
+            logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', '出错啦')}")
 
         def exchange_award(giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get("兑换奖励", url_wang, api="send/exchange", **common_params,
                            exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)
-            logger.info("兑换奖励: {}".format(res.get("giftName", "出错啦")))
+            logger.info(f"兑换奖励: {res.get('giftName', '出错啦')}")
 
         def lottery():
             res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
             gift = res.get("giftName", "出错啦")
             beforeMoney = res.get("money", 0)
             afterMoney = res.get("value", 0)
-            logger.info("抽奖结果为: {}，年史诗片：{}->{}".format(gift, beforeMoney, afterMoney))
+            logger.info(f"抽奖结果为: {gift}，年史诗片：{beforeMoney}->{afterMoney}")
 
         # ------ 实际逻辑 ------
 
         # 检查一下userid是否真实存在
         if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
-            logger.warning(color("fg_bold_yellow") + "dnf助手的userId未配置或配置有误，当前值为[{}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置".format(self.cfg.dnf_helper_info.userId))
+            logger.warning(color("fg_bold_yellow") + f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置")
             self.show_dnf_helper_info_guide()
             return
 
@@ -1921,7 +1917,7 @@ class DjcHelper:
         # 领取任务奖励的经验
         taskInfo = getUserTaskList()
         if taskInfo.hasPartner:
-            logger.info("搭档为{}".format(taskInfo.pUserId))
+            logger.info(f"搭档为{taskInfo.pUserId}")
         else:
             logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
         for task in taskInfo.taskList:
@@ -1954,18 +1950,18 @@ class DjcHelper:
             all_exchanged = True
             for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
                 if ei.sLbcode not in exchangeGiftMap:
-                    logger.error("未找到兑换项{}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json".format(ei.sLbcode))
+                    logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
                     continue
 
                 gift = exchangeGiftMap[ei.sLbcode]
                 if gift.usedNum >= int(gift.iNum):
-                    logger.warning("{}已经达到兑换上限{}次, 将跳过".format(gift.sName, gift.iNum))
+                    logger.warning(f"{gift.sName}已经达到兑换上限{gift.iNum}次, 将跳过")
                     continue
 
                 userInfo = getUserActivityTopInfo()
                 if userInfo.point < int(gift.iCard):
                     all_exchanged = False
-                    logger.warning("目前年史碎片数目为{}，不够兑换{}所需的{}个，将跳过后续优先级较低的兑换奖励".format(userInfo.point, gift.sName, gift.iCard))
+                    logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
                     break
 
                 for i in range(ei.count):
@@ -1979,16 +1975,17 @@ class DjcHelper:
         if self.cfg.dnf_helper_info.chronicle_lottery:
             userInfo = getUserActivityTopInfo()
             totalLotteryTimes = userInfo.point // 10
-            logger.info("当前共有{}年史诗片，将进行{}次抽奖".format(userInfo.point, totalLotteryTimes))
+            logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
             for i in range(totalLotteryTimes):
                 lottery()
         else:
             logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
 
-        userInfo = getUserActivityTopInfo()
-        logger.warning(color("fg_bold_yellow") + "账号 {} 当前编年史等级为LV{}({}) 本级经验：{}/{} 当前总获取经验为{} 剩余年史碎片为{}".format(
-            self.cfg.name, userInfo.level, userInfo.levelName, userInfo.currentExp, userInfo.levelExp, userInfo.totalExp, userInfo.point,
-        ))
+        ui = getUserActivityTopInfo()
+        logger.warning(
+            color("fg_bold_yellow") +
+            f"账号 {self.cfg.name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
+        )
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     def guanjia(self):
@@ -2041,12 +2038,9 @@ class DjcHelper:
         return self.guanjia_op(ctx, "lottjoin", "1120", print_res=print_res)
 
     def guanjia_op(self, ctx, api_name, act_id, giftId="", print_res=True):
-        api = "{}_{}".format(api_name, act_id)
+        api = f"{api_name}_{act_id}"
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        extra_cookies = "__qc__openid={openid}; __qc__k={access_key};".format(
-            openid=self.guanjia_lr.qc_openid,
-            access_key=self.guanjia_lr.qc_k
-        )
+        extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"
         return self.get(ctx, self.urls.guanjia, api=api, giftId=giftId, area_id=roleinfo.serviceID, charac_no=roleinfo.roleCode, charac_name=quote_plus(roleinfo.roleName),
                         extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
 
@@ -2100,7 +2094,7 @@ class DjcHelper:
                 "qc_k": str(qc_k),
             }
             json.dump(loginResult, sf)
-            logger.debug("本地保存管家openid信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"本地保存管家openid信息，具体内容如下：{loginResult}")
 
     def load_guanjia_openid(self):
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
@@ -2113,7 +2107,7 @@ class DjcHelper:
 
         with open(self.get_local_saved_guanjia_openid_file(), "r", encoding="utf-8") as f:
             loginResult = json.load(f)
-            logger.debug("读取本地缓存的管家openid信息，具体内容如下：{}".format(loginResult))
+            logger.debug(f"读取本地缓存的管家openid信息，具体内容如下：{loginResult}")
             return loginResult
 
     def get_local_saved_guanjia_openid_file(self):
@@ -2183,7 +2177,7 @@ class DjcHelper:
             getActDui(6, "装备提升礼盒*1兑换券")
 
         except Exception as e:
-            logger.error("hello_voice exception={}".format(e))
+            logger.error(f"hello_voice exception={e}")
 
     def check_hello_voice_bind_role(self):
         data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
@@ -2194,7 +2188,7 @@ class DjcHelper:
         else:
             # 已选择大区
             roleInfo = HelloVoiceDnfRoleInfo().auto_update_config(data["jData"])
-            logger.info("绑定角色信息: {}".format(roleInfo))
+            logger.info(f"绑定角色信息: {roleInfo}")
             return True
 
     def do_hello_voice(self, ctx, api, type="", packid="", print_res=True):
@@ -2277,7 +2271,7 @@ class DjcHelper:
 
             current_watch_time = query_watch_time()
             remaining_time = 15 * 8 - current_watch_time
-            logger.info("账号 {} 当前已观看{}分钟，仍需观看{}分钟".format(self.cfg.name, current_watch_time, remaining_time))
+            logger.info(f"账号 {self.cfg.name} 当前已观看{current_watch_time}分钟，仍需观看{remaining_time}分钟")
 
         def query_used_lottery_times():
             res = self.dnf_carnival_live_op("查询获奖次数", "725567", print_res=False)
@@ -2288,15 +2282,15 @@ class DjcHelper:
             total_lottery_times = query_watch_time() // 15
             used_lottery_times = query_used_lottery_times()
             remaining_lottery_times = total_lottery_times - used_lottery_times
-            logger.info("账号 {} 抽奖次数信息：总计={} 已使用={} 剩余={}".format(self.cfg.name, total_lottery_times, used_lottery_times, remaining_lottery_times))
+            logger.info(f"账号 {self.cfg.name} 抽奖次数信息：总计={total_lottery_times} 已使用={used_lottery_times} 剩余={remaining_lottery_times}")
             if remaining_lottery_times == 0:
                 logger.warning("没有剩余次数，将不进行抽奖")
                 return
 
             for i in range(remaining_lottery_times):
-                res = self.dnf_carnival_live_op("{}. 抽奖".format(i + 1), "722473")
+                res = self.dnf_carnival_live_op(f"{i + 1}. 抽奖", "722473")
                 if res["ret"] != "0":
-                    logger.warning("出错了，停止抽奖，剩余抽奖次数为{}".format(remaining_lottery_times - i))
+                    logger.warning(f"出错了，停止抽奖，剩余抽奖次数为{remaining_lottery_times - i}")
                     break
 
         watch_remaining_time()
@@ -2329,10 +2323,10 @@ class DjcHelper:
             # 检查是否已经兑换过
             account_db = load_db_for(self.cfg.name)
             if key in account_db and account_db[key].get(sContent, False):
-                logger.warning("已经兑换过【{}】，不再尝试兑换".format(sContent))
+                logger.warning(f"已经兑换过【{sContent}】，不再尝试兑换")
                 return
 
-            self.dnf_welfare_op("兑换口令-{}".format(sContent), "558229", sContent=quote_plus(quote_plus(quote_plus(sContent))))
+            self.dnf_welfare_op(f"兑换口令-{sContent}", "558229", sContent=quote_plus(quote_plus(quote_plus(sContent))))
 
             # 本地标记已经兑换过
             def callback(account_db):
@@ -2471,7 +2465,7 @@ class DjcHelper:
                     newContentIds, _ = getWorksData(iCategory2, page)
                     contentIds.extend(newContentIds)
 
-            logger.info("获取所有内容ID共计{}个，将保存到本地，具体如下：{}".format(len(contentIds), contentIds))
+            logger.info(f"获取所有内容ID共计{len(contentIds)}个，将保存到本地，具体如下：{contentIds}")
 
             def _update_db(db):
                 if db_key not in db:
@@ -2484,12 +2478,12 @@ class DjcHelper:
             return contentIds
 
         def getWorksData(iCategory2, page):
-            ctx = "查询点赞内容-{}-{}".format(iCategory2, page)
+            ctx = f"查询点赞内容-{iCategory2}-{page}"
             res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=pagesize, is_jsonp=True, is_normal_jsonp=True)
             return [v["iContentId"] for v in res["jData"]["data"]], int(res["jData"]["total"])
 
         def dianzan(idx, iContentId) -> bool:
-            res = self.get("今日第{}次投票，目标为{}".format(idx, iContentId), self.urls.dianzan, iContentId=iContentId, is_jsonp=True, is_normal_jsonp=True)
+            res = self.get(f"今日第{idx}次投票，目标为{iContentId}", self.urls.dianzan, iContentId=iContentId, is_jsonp=True, is_normal_jsonp=True)
             return int(res["iRet"]) == 0
 
         totalDianZanCount, _ = self.query_dnf_dianzan()
@@ -2501,7 +2495,7 @@ class DjcHelper:
 
         # 查询点赞信息
         totalDianZanCount, rewardTakenInfo = self.query_dnf_dianzan()
-        logger.warning(color("fg_bold_yellow") + "DNF共创投票活动当前已投票{}次，奖励领取状态为{}".format(totalDianZanCount, rewardTakenInfo))
+        logger.warning(color("fg_bold_yellow") + f"DNF共创投票活动当前已投票{totalDianZanCount}次，奖励领取状态为{rewardTakenInfo}")
 
         # 领取点赞奖励
         self.dnf_dianzan_op("累计 10票", "725276")
@@ -2545,7 +2539,7 @@ class DjcHelper:
             logger.warning("未配置心悦app理财礼卡活动选择的理财卡类型(xinyue_financing_card_names)，将跳过")
             return
 
-        logger.info(color("fg_bold_green") + "当前配置的理财卡列表为: {}".format(selectedCards))
+        logger.info(color("fg_bold_green") + f"当前配置的理财卡列表为: {selectedCards}")
 
         type2name = {
             "type1": "体验版周卡",
@@ -2565,7 +2559,7 @@ class DjcHelper:
 
             cardTakenMap = {}
             for i in range(1, 4 + 1):
-                name = type2name["type{}".format(i)]
+                name = type2name[f"type{i}"]
                 if int(statusList[i]) > 0:
                     taken = True
                 else:
@@ -2622,7 +2616,7 @@ class DjcHelper:
             pass
             gPoints = query_gpoints()
             startPoints = gPoints
-            logger.info("当前G分为{}".format(startPoints))
+            logger.info(f"当前G分为{startPoints}")
 
             # 活动规则
             # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
@@ -2640,7 +2634,7 @@ class DjcHelper:
             cardTakenMap = query_card_taken_map()
             for cardName in selectedCards:
                 if cardName not in financingCardsToBuyAndMap:
-                    logger.warning("没有找到名为【{}】的理财卡，请确认是否配置错误".format(cardName))
+                    logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
                     continue
 
                 buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
@@ -2649,22 +2643,22 @@ class DjcHelper:
                 # 如果尚未购买（或过期），则购买
                 if not cardInfo.buy:
                     if gPoints >= buyPrice:
-                        self.xinyue_financing_op("购买{}".format(cardName), buyFlowId)
+                        self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
                         gPoints -= buyPrice
                     else:
-                        logger.warning("积分不够，将跳过购买~，购买{}需要{}G分，当前仅有{}G分".format(cardName, buyPrice, gPoints))
+                        logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
                         continue
 
                 # 此处以确保购买，尝试领取
                 if taken:
-                    logger.warning("今日已经领取过{}了，本次将跳过".format(cardName))
+                    logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
                 else:
-                    self.xinyue_financing_op("领取{}".format(cardName), takeFlowId)
+                    self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
 
             newGPoints = query_gpoints()
             delta = newGPoints - startPoints
             logger.warning("")
-            logger.warning(color("fg_bold_yellow") + "账号 {} 本次心悦理财礼卡操作共获得 {} G分（ {} -> {} ）".format(self.cfg.name, delta, startPoints, newGPoints))
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
             logger.warning("")
 
             show_financing_info()
@@ -2696,11 +2690,11 @@ class DjcHelper:
             for sendQQ in self.cfg.drift_send_qq_list:
                 logger.info("等待2秒，避免请求过快")
                 time.sleep(2)
-                res = self.dnf_drift_op("发送{}好友邀请-{}赠送2积分".format(typStr, sendQQ), flowid, sendQQ=sendQQ, moduleId="2")
+                res = self.dnf_drift_op(f"发送{typStr}好友邀请-{sendQQ}赠送2积分", flowid, sendQQ=sendQQ, moduleId="2")
 
                 send_count += 1
                 if int(res["ret"]) != 0 or send_count >= dayLimit:
-                    logger.warning("已达到本日邀请上限({})，将停止邀请".format(dayLimit))
+                    logger.warning(f"已达到本日邀请上限({dayLimit})，将停止邀请")
                     return
 
         def take_friend_awards(typStr, type, moduleId, take_points_flowid):
@@ -2709,13 +2703,13 @@ class DjcHelper:
                 logger.info("等待2秒，避免请求过快")
                 time.sleep(2)
 
-                queryRes = self.dnf_drift_op("拉取接受的{}好友列表".format(typStr), "725358", page=str(page), type=type)
+                queryRes = self.dnf_drift_op(f"拉取接受的{typStr}好友列表", "725358", page=str(page), type=type)
                 if int(queryRes["ret"]) != 0 or queryRes["modRet"]["jData"]["iTotal"] == 0:
                     logger.warning("没有更多接收邀请的好友了，停止领取积分")
                     return
 
                 for friend_info in queryRes["modRet"]["jData"]["jData"]:
-                    takeRes = self.dnf_drift_op("邀请人领取{}邀请{}的积分".format(typStr, friend_info["iUin"]), take_points_flowid, acceptId=friend_info["id"], moduleId=moduleId)
+                    takeRes = self.dnf_drift_op(f"邀请人领取{typStr}邀请{friend_info['iUin']}的积分", take_points_flowid, acceptId=friend_info["id"], moduleId=moduleId)
                     if int(takeRes["ret"]) != 0:
                         logger.warning("似乎已达到今日上限，停止领取")
                         return
@@ -2744,9 +2738,9 @@ class DjcHelper:
         # 积分夺宝
         totalPoints, remainingPoints = self.query_dnf_drift_points()
         remainingLotteryTimes = remainingPoints // 4
-        logger.info(color("bold_yellow") + "当前积分为{}，总计可进行{}次抽奖。历史累计获取积分数为{}".format(remainingPoints, remainingLotteryTimes, totalPoints))
+        logger.info(color("bold_yellow") + f"当前积分为{remainingPoints}，总计可进行{remainingLotteryTimes}次抽奖。历史累计获取积分数为{totalPoints}")
         for i in range(remainingLotteryTimes):
-            self.dnf_drift_op("开始夺宝 - 第{}次".format(i + 1), "726379")
+            self.dnf_drift_op(f"开始夺宝 - 第{i + 1}次", "726379")
 
         # 04 在线好礼站
         self.dnf_drift_op("在线30min", "725675", moduleId="2")
@@ -2765,7 +2759,7 @@ class DjcHelper:
 
     def check_dnf_drift(self):
         typ = random.choice([1, 2])
-        activity_url = "https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={}".format(typ)
+        activity_url = f"https://dnf.qq.com/cp/a20201211driftm/index.html?sId=0252c9b811d66dc1f0c9c6284b378e40&type={typ}"
 
         self.check_bind_account("dnf漂流瓶", activity_url,
                                 activity_op_func=self.dnf_drift_op, query_bind_flowid="725357", commit_bind_flowid="725356")
@@ -2826,7 +2820,7 @@ class DjcHelper:
             logger.info("等待2秒，避免请求过快")
             time.sleep(2)
             # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
-            res = self.majieluo_op("【赠礼】发送赠送邀请-{}".format(receiverQQ), "727218", receiver=receiverQQ, receiverName=quote_plus("小号"), inviterName=quote_plus("大号"))
+            res = self.majieluo_op(f"【赠礼】发送赠送邀请-{receiverQQ}", "727218", receiver=receiverQQ, receiverName=quote_plus("小号"), inviterName=quote_plus("大号"))
             if int(res["ret"]) == 700:
                 logger.warning("今日赠送上限已到达，将停止~")
                 break
@@ -2839,7 +2833,7 @@ class DjcHelper:
         # 05 分享得好礼
         # 提取石头并领取提取奖励
         stoneCount = query_stone_count()
-        logger.warning(color("bold_yellow") + "当前共有{}个引导石".format(stoneCount))
+        logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
         thisMonthLastDay = calendar.monthrange(now.year, now.month)[1]
@@ -2903,7 +2897,7 @@ class DjcHelper:
 
         # 02 累计签到领豪礼
         self.warm_winter_op("签到礼包", "723165")
-        logger.info(color("fg_bold_cyan") + "当前已累积签到 {} 天".format(get_checkin_days()))
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {get_checkin_days()} 天")
         self.warm_winter_op("签到3天礼包", "723170")
         self.warm_winter_op("签到5天礼包", "723171")
         self.warm_winter_op("签到7天礼包", "723172")
@@ -2914,7 +2908,7 @@ class DjcHelper:
         self.warm_winter_op("1.在WeGame启动DNF", "723175")
         self.warm_winter_op("2.游戏在线30分钟", "723176")
         total_lottery_times, lottery_times = get_lottery_times()
-        logger.info(color("fg_bold_cyan") + "即将进行抽奖，当前剩余抽奖资格为{}，累计获取{}次抽奖机会".format(lottery_times, total_lottery_times))
+        logger.info(color("fg_bold_cyan") + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}，累计获取{total_lottery_times}次抽奖机会")
         for i in range(lottery_times):
             res = self.warm_winter_op("每日抽奖", "723177")
             if res.get('ret', "0") == "600":
@@ -2952,7 +2946,7 @@ class DjcHelper:
         self.youfei_op("分享领取", "730006")
 
         self.youfei_op("在线30分钟礼包", "728419")
-        logger.warning(color("bold_yellow") + "累计已签到{}天".format(query_signin_days()))
+        logger.warning(color("bold_yellow") + f"累计已签到{query_signin_days()}天")
         self.youfei_op("签到3天礼包", "728420")
         self.youfei_op("签到7天礼包", "728450")
         self.youfei_op("签到15天礼包", "728451")
@@ -3017,14 +3011,14 @@ class DjcHelper:
                         if prefix in html_text:
                             prefix_idx = html_text.index(prefix) + len(prefix)
                             suffix_idx = html_text.index(suffix, prefix_idx)
-                            logger.info("论坛签到OK: {}".format(html_text[prefix_idx:suffix_idx]))
+                            logger.info(f"论坛签到OK: {html_text[prefix_idx:suffix_idx]}")
                             return
 
                     logger.warning(color("bold_yellow") + "不知道为啥没有这个前缀，请去日志文件查看具体请求返回的结果是啥。将等待一会，然后重试")
-                    logger.debug("不在预期内的签到返回内容如下：\n{}".format(html_text))
+                    logger.debug(f"不在预期内的签到返回内容如下：\n{html_text}")
                     time.sleep(retryCfg.retry_wait_time)
                 except Exception as e:
-                    logger.exception("第{}次尝试论坛签到失败了，等待一会".format(idx + 1), exc_info=e)
+                    logger.exception(f"第{idx + 1}次尝试论坛签到失败了，等待一会", exc_info=e)
                     time.sleep(retryCfg.retry_wait_time)
 
         def query_dbq():
@@ -3038,12 +3032,12 @@ class DjcHelper:
 
             logger.info('\n'.join([
                 "当前礼包全局剩余量如下",
-                "\t便携式锻造炉: {}".format(info.sOutValue1),
-                "\t一次性增幅器: {}".format(info.sOutValue2),
-                "\t凯丽的强化器: {}".format(info.sOutValue3),
-                "\t抗疲劳秘药(10点): {}".format(info.sOutValue4),
-                "\t时间引导石礼盒 (10个): {}".format(info.sOutValue5),
-                "\t抗疲劳秘药 (5点): {}".format(info.sOutValue6),
+                f"\t便携式锻造炉: {info.sOutValue1}",
+                f"\t一次性增幅器: {info.sOutValue2}",
+                f"\t凯丽的强化器: {info.sOutValue3}",
+                f"\t抗疲劳秘药(10点): {info.sOutValue4}",
+                f"\t时间引导石礼盒 (10个): {info.sOutValue5}",
+                f"\t抗疲劳秘药 (5点): {info.sOutValue6}",
             ]))
 
         def try_exchange():
@@ -3073,15 +3067,20 @@ class DjcHelper:
                             return
 
         # ================= 实际逻辑 =================
+        old_dbq = query_dbq()
+
         # 签到
         signin()
 
+        after_sign_dbq = query_dbq()
+
         # 兑换签到奖励
         self.check_dnf_bbs()
-
-        logger.warning(color("bold_yellow") + "当前拥有代币券为{}".format(query_dbq()))
         query_remaining_quota()
         try_exchange()
+
+        after_exchange_dbq = query_dbq()
+        logger.warning(color("bold_yellow") + f"账号 {self.cfg.name} 本次论坛签到获得 {after_sign_dbq - old_dbq} 个代币券，兑换道具消耗了 {after_exchange_dbq - after_sign_dbq} 个代币券，余额：{old_dbq} => {after_exchange_dbq}")
 
     def check_dnf_bbs(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20201229act/index.html",
@@ -3173,7 +3172,7 @@ class DjcHelper:
         return "%4d%02d" % (now.year, now.month)
 
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
-        return "{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}".format(year, month, day, hour, minute, second)
+        return f"{year:04d}{month:02d}{day:02d}{hour:02d}{minute:02d}{second:02d}"
 
     def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, **data_extra_params):
         data = self.format(self.urls.amesvr_raw_data,
@@ -3186,23 +3185,17 @@ class DjcHelper:
                          print_res=print_res)
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
-        return "AMS-MILO-{iActivityId}-{iFlowId}-{id}-{millseconds}-{rand6}".format(
-            iActivityId=iActivityId,
-            iFlowId=iFlowId,
-            id=self.cfg.account_info.uin,
-            millseconds=getMillSecondsUnix(),
-            rand6=self.rand6()
-        )
+        return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"
 
     def rand6(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
 
     def make_cookie(self, map: dict):
-        return '; '.join(['{}={}'.format(k, v) for k, v in map.items()])
+        return '; '.join([f'{k}={v}' for k, v in map.items()])
 
     def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True):
         while True:
-            res = activity_op_func("查询是否绑定-尝试自动({})".format(try_auto_bind), query_bind_flowid, print_res=False)
+            res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
             # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
             if len(res["modRet"]["jData"]) == 0:
                 self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
@@ -3221,27 +3214,23 @@ class DjcHelper:
                 def double_quote(strToQuote):
                     return quote_plus(quote_plus(strToQuote))
 
-                logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({}-{})".format(
-                    activity_name, roleinfo.serviceName, roleinfo.roleName,
-                ))
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({roleinfo.serviceName}-{roleinfo.roleName})")
                 activity_op_func("提交绑定大区", commit_bind_flowid, True,
                                  user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
                                  user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
                                  user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
             else:
-                logger.warning(color("bold_yellow") + "活动【{}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案".format(
-                    activity_name
-                ))
+                logger.warning(color("bold_yellow") + "活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)
         else:
             msg = (
-                "当前账号【{}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{}】活动页面进行绑定，然后按任意键继续\n"
+                f"当前账号【{self.cfg.name}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
                 "若无需该功能，可关闭工具，然后前往配置文件自行关闭该功能\n"
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
-                "{}\n"
-            ).format(self.cfg.name, activity_name, activity_url)
+                f"{activity_url}\n"
+            )
             logger.warning(color("bold_cyan") + msg)
             win32api.MessageBox(0, msg, "需绑定账号", win32con.MB_ICONWARNING)
             webbrowser.open(activity_url)
@@ -3269,11 +3258,11 @@ def watch_live():
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
     totalTime = 2 * 60 + 5  # 为了保险起见，多执行5分钟
-    logger.info("totalTime={}".format(totalTime))
+    logger.info(f"totalTime={totalTime}")
 
     for t in range(totalTime):
         timeStart = datetime.datetime.now()
-        logger.info(color("bold_yellow") + "开始执行第{}分钟的流程".format(t + 1))
+        logger.info(color("bold_yellow") + f"开始执行第{t + 1}分钟的流程")
         for idx in indexes:  # 从1开始，第i个
             account_config = cfg.account_configs[idx - 1]
             if not account_config.is_enabled() or account_config.cannot_bind_dnf:
@@ -3288,7 +3277,7 @@ def watch_live():
         totalUsed = (datetime.datetime.now() - timeStart).total_seconds()
         if totalUsed < 60:
             waitTime = 60.1 - totalUsed
-            logger.info(color("bold_cyan") + "本轮累积用时{}秒，将休息{}秒".format(totalUsed, waitTime))
+            logger.info(color("bold_cyan") + f"本轮累积用时{totalUsed}秒，将休息{waitTime}秒")
             time.sleep(waitTime)
 
 
@@ -3305,7 +3294,7 @@ if __name__ == '__main__':
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
-        show_head_line("预先获取第{}个账户[{}]的skey".format(idx, account_config.name), color("fg_bold_yellow"))
+        show_head_line(f"预先获取第{idx}个账户[{account_config.name}]的skey", color("fg_bold_yellow"))
 
         if not account_config.is_enabled():
             logger.warning("账号被禁用，将跳过")
@@ -3317,7 +3306,7 @@ if __name__ == '__main__':
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
-        show_head_line("开始处理第{}个账户[{}]".format(idx, account_config.name), color("fg_bold_yellow"))
+        show_head_line(f"开始处理第{idx}个账户[{account_config.name}]", color("fg_bold_yellow"))
 
         if not account_config.is_enabled():
             logger.warning("账号被禁用，将跳过")

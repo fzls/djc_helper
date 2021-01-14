@@ -34,7 +34,7 @@ except PermissionError as err:
 
 def new_file_handler():
     time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-    newFileHandler = logging.FileHandler("{0}/{1}_{2}_{3}.log".format(log_directory, logger.name, process_name, time_str), encoding="utf-8", delay=True)
+    newFileHandler = logging.FileHandler(f"{log_directory}/{logger.name}_{process_name}_{time_str}.log", encoding="utf-8", delay=True)
     fileLogFormatter = logging.Formatter(fileFmtStr)
     newFileHandler.setFormatter(fileLogFormatter)
     newFileHandler.setLevel(logging.DEBUG)

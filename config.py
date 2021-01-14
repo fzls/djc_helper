@@ -1,5 +1,4 @@
 import re
-import uuid
 from typing import List, Dict
 
 import toml
@@ -288,7 +287,7 @@ class AccountConfig(ConfigInterface):
         self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, uin2qq(self.account_info.uin), self.sDeviceID, appVersion)
 
     def getSDeviceID(self):
-        sDeviceIdFileName = os.path.join(cached_dir, ".sDeviceID.{}.txt".format(self.name))
+        sDeviceIdFileName = os.path.join(cached_dir, f".sDeviceID.{self.name}.txt")
 
         if os.path.isfile(sDeviceIdFileName):
             with open(sDeviceIdFileName, "r", encoding="utf-8") as file:
@@ -466,12 +465,12 @@ class Config(ConfigInterface):
 
             # 检查是否填写名称
             if len(account.name) == 0:
-                logger.error(color("fg_bold_red") + "第{}个账号未设置名称，请确保已填写对应账号配置的name".format(idx))
+                logger.error(color("fg_bold_red") + f"第{idx}个账号未设置名称，请确保已填写对应账号配置的name")
                 return False
 
             # 检查名称是否重复
             if account.name in name2index:
-                logger.error(color("fg_bold_red") + "第{}个账号的名称 {} 与第{}个账号的名称重复，请调整为不同的名字".format(idx, account.name, name2index[account.name]))
+                logger.error(color("fg_bold_red") + f"第{idx}个账号的名称 {account.name} 与第{name2index[account.name]}个账号的名称重复，请调整为不同的名字")
                 return False
             name2index[account.name] = idx
 
@@ -481,8 +480,9 @@ class Config(ConfigInterface):
                 try:
                     int(dhi.userId)
                 except ValueError:
-                    logger.error(color("fg_bold_red") + "第{}个账号配置的dnf助手信息的社区ID(userId)=[{}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{}]的值填反了？id应该类似[504051073]，而昵称则形如[风之凌殇]".format(
-                        idx, dhi.userId, dhi.nickName
+                    logger.error(color("fg_bold_red") + (
+                        f"第{idx}个账号配置的dnf助手信息的社区ID(userId)=[{dhi.userId}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{dhi.nickName}]的值填反了？"
+                        "id应该类似[504051073]，而昵称则形如[风之凌殇]"
                     ))
                     return False
 
@@ -500,14 +500,14 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         raw_config = toml.load(config_path)
         g_config.auto_update_config(raw_config)
     except UnicodeDecodeError as error:
-        logger.error(color("fg_bold_yellow") + "{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
+        logger.error(color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{error}\n")
         exit(0)
     except Exception as error:
         if encoding_error_str in str(error):
-            logger.error(color("fg_bold_yellow") + "{}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{}\n".format(config_path, error))
+            logger.error(color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode或notepad++等文本编辑器\n错误信息：{error}\n")
             exit(0)
 
-        logger.error(color("fg_bold_red") + "读取{}文件出错，是否直接在压缩包中打开了或者toml语法有问题？\n具体出错为：{}\n".format(config_path, error) +
+        logger.error(color("fg_bold_red") + f"读取{config_path}文件出错，是否直接在压缩包中打开了或者toml语法有问题？\n具体出错为：{error}\n" +
                      color("fg_bold_yellow") + "若未完整解压，请先解压。否则请根据上面的英文报错信息，自行百度学习toml的基本语法，然后处理对应行的语法错误（看不懂的话自行用百度翻译或有道翻译）")
         exit(-1)
 

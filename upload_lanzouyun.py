@@ -29,14 +29,14 @@ class Uploader:
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
     def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix=""):
-        logger.warning("开始上传 {} 到 {}".format(os.path.basename(filepath), target_folder.name))
+        logger.warning(f"开始上传 {os.path.basename(filepath)} 到 {target_folder.name}")
         run_start_time = datetime.now()
 
         def on_uploaded(fid, is_file):
             if not is_file:
                 return
 
-            logger.info("下载完成，fid={}".format(fid))
+            logger.info(f"下载完成，fid={fid}")
 
             prefix = history_file_prefix
             if prefix == "":
@@ -46,18 +46,18 @@ class Uploader:
             for file in files:
                 if file.name.startswith(prefix):
                     self.lzy.move_file(file.id, self.folder_history_files.id)
-                    logger.info("将{}移动到目录({})".format(file.name, self.folder_history_files.name))
+                    logger.info(f"将{file.name}移动到目录({self.folder_history_files.name})")
 
-            logger.info("将文件移到目录({})中".format(target_folder.name))
+            logger.info(f"将文件移到目录({target_folder.name})中")
             self.lzy.move_file(fid, target_folder.id)
 
         # 上传到指定的文件夹中
         retCode = self.lzy.upload_file(filepath, -1, callback=self.show_progress, uploaded_handler=on_uploaded)
         if retCode != LanZouCloud.SUCCESS:
-            logger.error("上传失败，retCode={}".format(retCode))
+            logger.error(f"上传失败，retCode={retCode}")
             return False
 
-        logger.warning("上传当前文件总计耗时{}".format(datetime.now() - run_start_time))
+        logger.warning(f"上传当前文件总计耗时{datetime.now() - run_start_time}")
 
         return True
 
@@ -136,12 +136,12 @@ class Uploader:
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
             target_path = file_name
-            logger.info("最终下载文件路径为 {}".format(file_name))
+            logger.info(f"最终下载文件路径为 {file_name}")
 
-        logger.info("即将开始下载 {}".format(target_path))
+        logger.info(f"即将开始下载 {target_path}")
         retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
         if retCode != LanZouCloud.SUCCESS:
-            logger.error("下载失败，retCode={}".format(retCode))
+            logger.error(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
                 logger.warning(color("bold_yellow") + (
                     "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
@@ -163,8 +163,10 @@ class Uploader:
         percent = now_size / total_size
         bar_len = 40  # 进度条长总度
         bar_str = '>' * round(bar_len * percent) + '=' * round(bar_len * (1 - percent))
-        print('\r{:.2f}%\t[{}] {:.1f}/{:.1f}MB | {} '.format(
-            percent * 100, bar_str, now_size / 1048576, total_size / 1048576, file_name), end='')
+        show_percent = percent * 100
+        now_mb = now_size / 1048576
+        total_mb = total_size / 1048576
+        print(f'\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.1f}/{total_mb:.1f}MB | {file_name} ', end='')
         if total_size == now_size:
             print('')  # 下载完成换行
 
@@ -177,10 +179,10 @@ if __name__ == '__main__':
         # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
         # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
         # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
-        # logger.info("最新版本为{}".format(uploader.latest_version()))
+        # logger.info(f"最新版本为{uploader.latest_version()}")
         # uploader.download_latest_version("_update_temp_dir")
 
-        logger.info("最新增量补丁范围为{}".format(uploader.latest_patches_range()))
+        logger.info(f"最新增量补丁范围为{uploader.latest_patches_range()}")
         # uploader.download_latest_patches("_update_temp_dir")
     else:
         logger.error("登录失败")

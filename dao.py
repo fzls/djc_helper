@@ -167,9 +167,9 @@ class XinYueInfo(DaoObject):
         xytype = int(xytype)
         self.xytype = xytype
         if xytype < 5:
-            self.xytype_str = "游戏家G{}".format(xytype)
+            self.xytype_str = f"游戏家G{xytype}"
         else:
-            self.xytype_str = "心悦VIP{}".format(xytype - 4)
+            self.xytype_str = f"心悦VIP{xytype - 4}"
         # 特邀会员
         self.is_special_member = int(specialMember) == 1
         # 用户名
@@ -551,11 +551,10 @@ class XinyueFinancingInfo(ConfigInterface):
         self.leftTime = 0
         self.endTime = ""
 
+
 class MajieluoShareInfo(ConfigInterface):
     def __init__(self):
         self.iInvitee = "386596804"
         self.iShareLottery = "0"
         self.iLostLottery = "0"
         self.iAssistLottery = "0"
-
-

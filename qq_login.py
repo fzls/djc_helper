@@ -158,10 +158,10 @@ class QQLogin():
                     suffix += "-心悦"
                 elif login_mode == self.login_mode_qzone:
                     login_fn = self._login_qzone
-                    suffix += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录）"
+                    suffix += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）"
                 elif login_mode == self.login_mode_guanjia:
                     login_fn = self._login_guanjia
-                    suffix += "-电脑管家（如电脑管家蚊子腿需要用到）"
+                    suffix += "-电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）"
                 elif login_mode == self.login_mode_wegame:
                     login_fn = self._login_wegame
                     suffix += "-wegame（获取wegame相关api需要用到）"

@@ -51,7 +51,7 @@ class Network:
             return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
         res = try_request(request_fn, self.common_cfg.retry)
-        logger.debug("{}".format(data))
+        logger.debug(f"{data}")
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
 
@@ -71,12 +71,13 @@ def try_request(request_fn, retryCfg, check_fn=None):
             return response
         except Exception as exc:
             logger.exception("request failed, detail as below:", exc_info=exc)
-            logger.error("full call stack=\n{}".format(color("bold_black") + ''.join(traceback.format_stack())))
-            logger.warning(color("thin_yellow") + "{}/{}: request failed, wait {}s".format(i + 1, retryCfg.max_retry_count, retryCfg.retry_wait_time))
+            stack_info = color("bold_black") + ''.join(traceback.format_stack())
+            logger.error(f"full call stack=\n{stack_info}")
+            logger.warning(color("thin_yellow") + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s")
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 
-    logger.error("重试{}次后仍失败".format(retryCfg.max_retry_count))
+    logger.error(f"重试{retryCfg.max_retry_count}次后仍失败")
 
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
@@ -101,11 +102,11 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
 
     processed_data = pre_process_data(data)
     if processed_data is None:
-        logFunc("{}\t{}".format(ctx, pretty_json(data, pretty)))
+        logFunc(f"{ctx}\t{pretty_json(data, pretty)}")
     else:
         # 如果数据需要调整，则打印调整后数据，并额外使用调试级别打印原始数据
-        logFunc("{}\t{}".format(ctx, pretty_json(processed_data, pretty)))
-        logger.debug("{}(原始数据)\t{}".format(ctx, pretty_json(data, pretty)))
+        logFunc(f"{ctx}\t{pretty_json(processed_data, pretty)}")
+        logger.debug(f"{ctx}(原始数据)\t{pretty_json(data, pretty)}")
 
     return data
 
@@ -148,7 +149,7 @@ def is_request_ok(data):
             success = int(data["13333"]["ret"]) == 0
 
     except Exception as e:
-        logger.error("is_request_ok parse failed data={}, exception=\n{}".format(data, e))
+        logger.error(f"is_request_ok parse failed data={data}, exception=\n{e}")
 
     return success
 

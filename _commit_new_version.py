@@ -1,6 +1,7 @@
 # 构建发布压缩包
 import shutil
 import subprocess
+
 from version import now_version
 
 
@@ -13,7 +14,7 @@ def commit_new_version():
     # ps：需要确保运行前本地git无其他待commit内容，否则会一起提交
     subprocess.call(['git', 'add', 'README.MD', 'CHANGELOG.MD', 'version.py'])
     subprocess.call(['git', 'add', '--', './docs'])
-    subprocess.call(['git', 'commit', '-m', 'v{} 版本说明'.format(now_version)])
+    subprocess.call(['git', 'commit', '-m', f'v{now_version} 版本说明'])
 
 
 def main():

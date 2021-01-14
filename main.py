@@ -26,7 +26,7 @@ def main():
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     maximize_console()
 
-    logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+    logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     try_auto_update()
@@ -85,9 +85,9 @@ if __name__ == '__main__':
     try:
         run_start_time = datetime.datetime.now()
         main()
-        logger.warning(color("fg_bold_yellow") + "运行完成，共用时{}".format(datetime.datetime.now() - run_start_time))
+        logger.warning(color("fg_bold_yellow") + f"运行完成，共用时{datetime.datetime.now() - run_start_time}")
     except Exception as e:
-        msg = "ver {} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决。".format(now_version)
+        msg = f"ver {now_version} 运行过程中出现未捕获的异常，请加群553925117反馈或自行解决。"
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")

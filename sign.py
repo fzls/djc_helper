@@ -20,7 +20,7 @@ def getACSRFTokenForAMS(skey):
 # AES/ECB/PKCS5Padding
 def getDjcSignParams(aes_key, rsa_public_key_file, qq_number, sDeviceID, appVersion):
     nowMillSecond = getMillSecondsUnix()
-    dataToSign = "{}+{}+{}+{}".format(qq_number, sDeviceID, nowMillSecond, appVersion)
+    dataToSign = f"{qq_number}+{sDeviceID}+{nowMillSecond}+{appVersion}"
 
     # aes
     encrypted = AESCipher(aes_key).encrypt(dataToSign)

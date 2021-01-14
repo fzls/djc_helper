@@ -1,11 +1,11 @@
 import json
 import os
 import re
-import shutil
 from datetime import datetime
 from sys import exit
 
 from _build import build
+from _clear_github_artifact import clear_github_artifact
 from _commit_new_version import commit_new_version
 from _create_patches import create_patch
 from _package import package
@@ -14,31 +14,30 @@ from log import logger
 from upload_lanzouyun import Uploader
 from util import maximize_console
 from version import now_version
-from _clear_github_artifact import clear_github_artifact
 
 # 最大化窗口
 maximize_console()
 
 # ---------------准备工作
-prompt = "如需直接使用默认版本号：{} 请直接按回车\n或手动输入版本号后按回车：".format(now_version)
+prompt = f"如需直接使用默认版本号：{now_version} 请直接按回车\n或手动输入版本号后按回车："
 version = input(prompt) or now_version
 
 version_reg = r"\d+\.\d+\.\d+"
 
 if re.match(version_reg, version) is None:
-    logger.info("版本号格式有误，正确的格式类似：1.0.0 ，而不是 {}".format(version))
+    logger.info(f"版本号格式有误，正确的格式类似：1.0.0 ，而不是 {version}")
     exit(-1)
 
 version = 'v' + version
 
 run_start_time = datetime.now()
-logger.info("开始发布版本 {}".format(version))
+logger.info(f"开始发布版本 {version}")
 
 # 先声明一些需要用到的目录的地址
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))
-release_dir_name = "DNF蚊子腿小助手_{version}_by风之凌殇".format(version=version)
-release_7z_name = '{}.7z'.format(release_dir_name)
+release_dir_name = f"DNF蚊子腿小助手_{version}_by风之凌殇"
+release_7z_name = f'{release_dir_name}.7z'
 dir_github_action_artifact = "_github_action_artifact"
 
 # ---------------构建
@@ -58,7 +57,7 @@ package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_
 # 构建增量包
 os.chdir(dir_all_release)
 create_patch_for_latest_n_version = 3
-logger.info("开始构建增量包，最多包含过去{}个版本到最新版本的补丁".format(create_patch_for_latest_n_version))
+logger.info(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁")
 patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
 
 # ---------------标记新版本
@@ -89,7 +88,7 @@ push_github(version)
 
 # ---------------结束
 logger.info('+' * 40)
-logger.info("发布完成，共用时{}，请检查上传至蓝奏云流程是否OK".format(datetime.now() - run_start_time))
+logger.info(f"发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
 logger.info('+' * 40)
 
 os.system("PAUSE")

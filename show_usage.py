@@ -3,11 +3,11 @@ from util import *
 from version import *
 
 global_usage_counter_name = "global_count"
-this_version_global_usage_counter_name = "version/ver{} {}".format(now_version, ver_time)
+this_version_global_usage_counter_name = f"version/ver{now_version} {ver_time}"
 user_usage_counter_name_prefix = "user_count"
-my_usage_counter_name = "{}/{}".format(user_usage_counter_name_prefix, get_uuid())
-this_version_user_usage_prefix = "version_user_usage/{}".format(now_version)
-this_version_my_usage_counter_name = "{}/{}".format(this_version_user_usage_prefix, get_uuid())
+my_usage_counter_name = f"{user_usage_counter_name_prefix}/{get_uuid()}"
+this_version_user_usage_prefix = f"version_user_usage/{now_version}"
+this_version_my_usage_counter_name = f"{this_version_user_usage_prefix}/{get_uuid()}"
 
 
 def show_usage():

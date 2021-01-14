@@ -15,9 +15,7 @@ class BlackListInfo:
         self.reason = reason
 
     def __str__(self):
-        return "{}({})在{}因[{}]被本工具拉入黑名单".format(
-            self.qq, self.nickname, self.ban_at, self.reason,
-        )
+        return f"{self.qq}({self.nickname})在{self.ban_at}因[{self.reason}]被本工具拉入黑名单"
 
 
 black_list = {
@@ -31,8 +29,8 @@ def check_in_black_list(uin):
         message = (
             "发现你的QQ在本工具的黑名单里，本工具禁止你使用，将在本窗口消失后退出运行。\n"
             "黑名单相关信息如下：\n"
-            "{}"
-        ).format(black_list[qq])
+            f"{black_list[qq]}"
+        )
         logger.warning(color("fg_bold_cyan") + message)
         win32api.MessageBox(0, message, "禁止使用", win32con.MB_OK)
         exit(0)

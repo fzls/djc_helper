@@ -35,7 +35,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
 
     old_cwd = os.getcwd()
     os.chdir(dir_all_release)
-    logger.info("工作目录已调整为{}，最新版本为v{}".format(os.getcwd(), latest_version))
+    logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
 
     version_dir_regex = r"DNF蚊子腿小助手_v(.*)_by风之凌殇"
 
@@ -61,12 +61,12 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
         create_patch_for_latest_n_version = len(old_version_infos)
 
     old_version_infos = sorted(old_version_infos)[-create_patch_for_latest_n_version:]
-    logger.info("将为【{}】版本制作补丁包".format(old_version_infos))
+    logger.info(f"将为【{old_version_infos}】版本制作补丁包")
 
     # 创建patch目录
     patch_oldest_version = old_version_infos[0].version
     patch_newest_version = old_version_infos[-1].version
-    patches_dir = "DNF蚊子腿小助手_增量更新文件_v{}_to_v{}".format(patch_oldest_version, patch_newest_version)
+    patches_dir = f"DNF蚊子腿小助手_增量更新文件_v{patch_oldest_version}_to_v{patch_newest_version}"
     temp_dir = "patches_temp"
 
     shutil.rmtree(patches_dir, ignore_errors=True)
@@ -84,26 +84,26 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
                 os.remove(filepath)
 
     # 为旧版本创建patch文件
-    target_version_dir = "DNF蚊子腿小助手_v{}_by风之凌殇".format(latest_version)
-    logger.info("目标版本目录为{}".format(target_version_dir))
+    target_version_dir = f"DNF蚊子腿小助手_v{latest_version}_by风之凌殇"
+    logger.info(f"目标版本目录为{target_version_dir}")
     shutil.copytree(target_version_dir, temp_path(target_version_dir))
     preprocess_before_patch(temp_path(target_version_dir))
 
     for idx, version_info in enumerate(old_version_infos):
         version = version_info.version
-        patch_file = "{}/{}.patch".format(patches_dir, version)
+        patch_file = f"{patches_dir}/{version}.patch"
 
         logger.info("-" * 80)
-        logger.info("[{}/{}] 创建从v{}升级到v{}的补丁{}".format(idx + 1, len(old_version_infos), version, latest_version, patch_file))
+        logger.info(f"[{idx + 1}/{len(old_version_infos)}] 创建从v{version}升级到v{latest_version}的补丁{patch_file}")
 
-        version_dir = "DNF蚊子腿小助手_v{}_by风之凌殇".format(version)
+        version_dir = f"DNF蚊子腿小助手_v{version}_by风之凌殇"
 
         shutil.copytree(version_dir, temp_path(version_dir))
         preprocess_before_patch(temp_path(version_dir))
 
         subprocess.call([
             os.path.realpath(os.path.join(dir_src, "utils/hdiffz.exe")),
-            "-p-{}".format(multiprocessing.cpu_count()),  # 设置系统最大cpu数
+            f"-p-{multiprocessing.cpu_count()}",  # 设置系统最大cpu数
             os.path.realpath(os.path.join(temp_dir, version_dir)),
             os.path.realpath(os.path.join(temp_dir, target_version_dir)),
             patch_file,
@@ -113,7 +113,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     shutil.rmtree(temp_dir, ignore_errors=True)
 
     # 压缩打包
-    patch_7z_file = "{}.7z".format(patches_dir)
+    patch_7z_file = f"{patches_dir}.7z"
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
 

@@ -51,7 +51,7 @@ def check_djc_role_binding():
                 # 未启用的账户的账户不走该流程
                 continue
 
-            logger.warning(color("fg_bold_yellow") + "------------检查第{}个账户({})------------".format(idx, account_config.name))
+            logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
             djcHelper = DjcHelper(account_config, cfg.common)
             if not djcHelper.check_djc_role_binding():
                 all_binded = False
@@ -60,7 +60,7 @@ def check_djc_role_binding():
         if all_binded:
             break
         else:
-            logger.warning(color("fg_bold_yellow") + "请前往道聚城将上述提示的未绑定dnf或任意手游的账号【{}】进行绑定，具体操作流程可以参考使用文档或者教学视频。".format(not_binded_accounts))
+            logger.warning(color("fg_bold_yellow") + f"请前往道聚城将上述提示的未绑定dnf或任意手游的账号【{not_binded_accounts}】进行绑定，具体操作流程可以参考使用文档或者教学视频。")
             logger.warning(color("fg_bold_yellow") + "如果本账号不需要道聚城相关操作，可以打开配置表，将该账号的cannot_bind_dnf设为true，game_name设为无，即可跳过道聚城相关操作")
             logger.warning(color("fg_bold_yellow") + "  ps: 上面这个cannot_bind_dnf之前笔误写成了cannot_band_dnf，如果之前填过，请手动把配置名称改成cannot_bind_dnf~")
             logger.warning(color("fg_bold_cyan") + "操作完成后点击任意键即可再次进行检查流程...")
@@ -82,7 +82,7 @@ def check_all_skey_and_pskey(cfg):
             # 未启用的账户的账户不走该流程
             continue
 
-        logger.warning(color("fg_bold_yellow") + "------------检查第{}个账户({})------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)
@@ -126,15 +126,14 @@ def auto_send_cards(cfg):
         qq_to_prize_counts[qq] = qa.get_prize_counts()
         qq_to_djcHelper[qq] = djcHelper
 
-        logger.info("{}/{} 账号 {:} 的数据拉取完毕".format(idx, len(cfg.account_configs), padLeftRight(account_config.name, 12)))
+        logger.info(f"{idx}/{len(cfg.account_configs)} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
 
     # 赠送卡片
     for idx, target_qq in enumerate(target_qqs):
         if target_qq in qq_to_djcHelper:
             left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
-            logger.warning(color("fg_bold_green") + "第{}/{}个赠送目标账号 {}({}) 今日仍可被赠送 {} 次卡片".format(
-                idx + 1, len(target_qqs), qq_to_djcHelper[target_qq].cfg.name, target_qq, left_times
-            ))
+            name = qq_to_djcHelper[target_qq].cfg.name
+            logger.warning(color("fg_bold_green") + f"第{idx + 1}/{len(target_qqs)}个赠送目标账号 {name}({target_qq}) 今日仍可被赠送 {left_times} 次卡片")
             # 最多赠送目标账号今日仍可接收的卡片数
             for i in range(left_times):
                 send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)
@@ -186,11 +185,11 @@ def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_dj
                 card_name_to_count[card_name] -= 1
                 qq_to_card_name_to_counts[target_qq][card_name] += 1
 
-                logger.warning(color("fg_bold_cyan") + "账号 {} 赠送一张 {}({}) 给 {}".format(
-                    qq_to_djcHelper[qq].cfg.name,
-                    card_info_map[card_name].index, card_name,
-                    qq_to_djcHelper[target_qq].cfg.name
-                ))
+                name = qq_to_djcHelper[qq].cfg.name
+                index = card_info_map[card_name].index
+                target_name = qq_to_djcHelper[target_qq].cfg.name
+
+                logger.warning(color("fg_bold_cyan") + f"账号 {name} 赠送一张 {index}({card_name}) 给 {target_name}")
                 return
 
 
@@ -207,7 +206,7 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
 
     end_time = "2021-01-09"
     remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d") - datetime.datetime.now()
-    logger.info(color("bold_black") + "本次集卡活动的结束时间为{}，剩余时间为{}".format(end_time, remaining_time))
+    logger.info(color("bold_black") + f"本次集卡活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
     lottery_zzconfig = zzconfig()
     card_info_map = parse_card_group_info_map(lottery_zzconfig)
@@ -313,7 +312,8 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
     logger.info(tableify(summaryCols, colSizes))
 
     if need_show_tips and len(accounts_that_should_enable_cost_card_to_lottery) > 0:
-        msg = "账户({})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能".format(', '.join(accounts_that_should_enable_cost_card_to_lottery))
+        accounts = ', '.join(accounts_that_should_enable_cost_card_to_lottery)
+        msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
         logger.warning(color("fg_bold_yellow") + msg)
 
 
@@ -373,10 +373,10 @@ def show_accounts_status(cfg, ctx):
         teaminfo = djcHelper.query_xinyue_teaminfo(print_res=False)
         team_score = "无队伍"
         if teaminfo.id != "":
-            team_score = "{}/20".format(teaminfo.score)
+            team_score = f"{teaminfo.score}/20"
             fixed_team = djcHelper.get_fixed_team()
             if fixed_team is not None:
-                team_score = "[{}]{}".format(fixed_team.id, team_score)
+                team_score = f"[{fixed_team.id}]{team_score}"
 
         shanguang_equip_count = djcHelper.query_dnf_shanguang_equip_count(print_warning=False)
 
@@ -397,7 +397,7 @@ def try_join_xinyue_team(cfg):
             continue
 
         logger.info("")
-        logger.warning(color("fg_bold_yellow") + "------------尝试第{}个账户({})------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_yellow") + f"------------尝试第{idx}个账户({account_config.name})------------")
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
@@ -415,10 +415,10 @@ def run(cfg):
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
         if not account_config.is_enabled():
-            logger.info("第{}个账号({})未启用，将跳过".format(idx, account_config.name))
+            logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
             continue
 
-        _show_head_line("开始处理第{}个账户({})".format(idx, account_config.name))
+        _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run()
@@ -441,7 +441,7 @@ def try_take_xinyue_team_award(cfg):
             continue
 
         logger.info("")
-        logger.warning(color("fg_bold_green") + "------------开始尝试为第{}个账户({})领取心悦组队奖励------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_green") + f"------------开始尝试为第{idx}个账户({account_config.name})领取心悦组队奖励------------")
 
         if len(account_config.xinyue_operations) == 0:
             logger.warning("未设置心悦相关操作信息，将跳过")
@@ -479,7 +479,7 @@ def try_xinyue_sailiyam_start_work(cfg):
             continue
 
         logger.info("")
-        logger.warning(color("fg_bold_green") + "------------开始处理第{}个账户({})的赛利亚的打工和领工资~------------".format(idx, account_config.name))
+        logger.warning(color("fg_bold_green") + f"------------开始处理第{idx}个账户({account_config.name})的赛利亚的打工和领工资~------------")
 
         djcHelper = DjcHelper(account_config, cfg.common)
         if account_config.function_switches.get_xinyue_sailiyam or account_config.function_switches.disable_most_activities:
@@ -504,12 +504,10 @@ def show_support_pic(cfg):
     if is_weekly_first_run() and not use_by_myself():
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
-            "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
+            f"你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力~\n"
             "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
             "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
             "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
-        ).format(
-            used_days=usedDays,
         )
         logger.warning(color("fg_bold_cyan") + message)
         win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
@@ -550,13 +548,13 @@ def print_update_message_on_auto_update_done():
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    if cfg.common.auto_update_on_start and is_first_run("print_update_message_v{}".format(now_version)):
+    if cfg.common.auto_update_on_start and is_first_run(f"print_update_message_v{now_version}"):
         try:
             ui = get_update_info(cfg.common)
             message = (
-                "新版本v{}已自动更新完毕，具体更新内容展示如下，以供参考：\n"
-                "{}"
-            ).format(ui.latest_version, ui.update_message)
+                f"新版本v{ui.latest_version}已自动更新完毕，具体更新内容展示如下，以供参考：\n"
+                f"{ui.update_message}"
+            )
             logger.warning(color("bold_yellow") + message)
         except Exception as e:
             logger.warning("新版本首次运行获取更新内容失败，请自行查看CHANGELOG.MD", exc_info=e)
@@ -603,22 +601,23 @@ def temp_code(cfg):
         webbrowser.open("https://dnf.qq.com/lbact/a20201224aggregate/index.html")
 
     for idx, tip in enumerate(tips):
-        logger.warning(color("fg_bold_yellow") + "{}. {}\n ".format(idx + 1, tip))
+        logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")
 
 
 def show_qiafan_message_box_on_every_big_version(version):
     # 当添加了多个活动的版本发布时，弹出一条恰饭信息
-    if is_first_run("qiafan_{}".format(version)) and not use_by_myself():
+    if is_first_run(f"qiafan_{version}") and not use_by_myself():
         activities = [
             "dnf漂流瓶", "马杰洛的规划", "dnf助手双旦", "闪光杯第三期", "wegame暖冬有礼", "管家暖冬献礼", "史诗之路来袭活动合集签到",
             "QQ视频蚊子腿（开启史诗之路 欢聚美好时光）",
         ]
+        activities = "".join([f"    {idx + 1}. {name}\n" for idx, name in enumerate(activities)])
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
             "Hello，本次新接入了下列活动，欢迎大家使用。\n"
-            "{activities}"
+            f"{activities}"
             "\n "
-            "你已经累积使用小助手{used_days}天，希望小助手为你节省了些许时间和精力~\n"
+            f"你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力~\n"
             "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
             "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
             "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
@@ -632,9 +631,6 @@ def show_qiafan_message_box_on_every_big_version(version):
             "价格：10.24元\n"
             "购买方式：加小助手群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你，并拉到一个无法主动加入的专用群，通过群文件分发自动更新DLC的后续更新版本~\n"
             "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
-        ).format(
-            activities="".join(["    {}. {}\n".format(idx + 1, name) for idx, name in enumerate(activities)]),
-            used_days=usedDays,
         )
         res = win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
@@ -666,7 +662,7 @@ def try_auto_update():
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
 
-        logger.info("当前进程pid={}, 版本={}, 工作目录={}，exe名称={}".format(pid, now_version, dirpath, filename))
+        logger.info(f"当前进程pid={pid}, 版本={now_version}, 工作目录={dirpath}，exe名称={filename}")
 
         logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
         p = subprocess.Popen([
@@ -713,7 +709,7 @@ def _test_main():
     # logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
     # maximize_console()
 
-    logger.warning("开始运行DNF蚊子腿小助手，ver={} {}，powered by {}".format(now_version, ver_time, author))
+    logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
     # 读取配置信息

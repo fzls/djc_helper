@@ -43,7 +43,7 @@ class QzoneActivity:
         self.headers = {
             "Accept": "application/json, text/javascript, */*; q=0.01",
             "User-Agent": "Mozilla/5.0 (Linux; Android 9; MIX 2 Build/PKQ1.190118.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045332 Mobile Safari/537.36 V1_AND_SQ_8.4.8_1492_YYB_D QQ/8.4.8.4810 NetType/WIFI WebP/0.3.0 Pixel/1080 StatusBarHeight/76 SimpleUISwitch/0 QQTheme/1000 InMagicWin/0",
-            "Cookie": "p_uin={p_uin}; p_skey={pskey}; ".format(p_uin=self.lr.uin, pskey=self.lr.p_skey),
+            "Cookie": f"p_uin={self.lr.uin}; p_skey={self.lr.p_skey}; ",
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         }
 
@@ -65,7 +65,7 @@ class QzoneActivity:
             logger.warning("未配置抽卡的幸运勇士的区服和角色信息，将使用道聚城绑定的角色信息")
         else:
             if self.cfg.ark_lottery.lucky_dnf_role_id == "":
-                logger.warning("配置了抽卡幸运勇士的区服ID为{}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表".format(self.cfg.ark_lottery.lucky_dnf_server_id))
+                logger.warning(f"配置了抽卡幸运勇士的区服ID为{self.cfg.ark_lottery.lucky_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
                 self.djc_helper.query_dnf_rolelist(self.cfg.ark_lottery.lucky_dnf_server_id)
             else:
                 logger.info("使用配置的区服和角色信息来进行幸运勇士加次数")
@@ -77,9 +77,9 @@ class QzoneActivity:
 
         # 抽卡
         count = self.remaining_lottery_times()
-        logger.info("上述操作完毕后，最新抽卡次数为{}，将全部用来抽卡".format(count))
+        logger.info(f"上述操作完毕后，最新抽卡次数为{count}，将全部用来抽卡")
         for idx in range(count):
-            self.do_ark_lottery("fcg_qzact_lottery", "抽卡-第{}次".format(idx + 1), self.zzconfig.rules.lottery)
+            self.do_ark_lottery("fcg_qzact_lottery", f"抽卡-第{idx + 1}次", self.zzconfig.rules.lottery)
 
         # # 领取集卡奖励
         if self.cfg.ark_lottery.need_take_awards:
@@ -93,19 +93,19 @@ class QzoneActivity:
                         api = "fcg_prize_lottery"
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid=self.zzconfig.gameid)
         else:
-            logger.warning("未配置领取集卡礼包奖励，如果账号【{}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~".format(self.cfg.name))
+            logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
 
         # 消耗卡片来抽奖
         self.try_lottery_using_cards()
 
     def try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():
-            if print_warning: logger.warning(color("fg_bold_cyan") + "已开启抽卡活动({})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能".format(self.zzconfig.actid))
+            if print_warning: logger.warning(color("fg_bold_cyan") + f"已开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
             card_counts = self.get_card_counts()
             for name, count in card_counts.items():
                 self.lottery_using_cards(name, count)
         else:
-            if print_warning: logger.warning(color("fg_bold_cyan") + "尚未开启抽卡活动({})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。".format(self.zzconfig.actid))
+            if print_warning: logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
 
     def enable_cost_all_cards_and_do_lottery(self):
         return self.cfg.ark_lottery.act_id_to_cost_all_cards_and_do_lottery.get(self.zzconfig.actid, False)
@@ -114,13 +114,13 @@ class QzoneActivity:
         if count <= 0:
             return
 
-        logger.info("尝试消耗{}张卡片【{}】来进行抽奖".format(count, card_name))
+        logger.info(f"尝试消耗{count}张卡片【{card_name}】来进行抽奖")
 
         card_info_map = parse_card_group_info_map(self.zzconfig)
         ruleid = card_info_map[card_name].lotterySwitchId
         for idx in range(count):
             # 消耗卡片获得抽奖资格
-            self.do_ark_lottery("fcg_qzact_present", "增加抽奖次数-消耗卡片({})".format(card_name), ruleid)
+            self.do_ark_lottery("fcg_qzact_present", f"增加抽奖次数-消耗卡片({card_name})", ruleid)
 
             # 抽奖
             self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", self.zzconfig.rules.lotteryByCard, gameid=self.zzconfig.gameid)
@@ -200,9 +200,9 @@ class QzoneActivity:
         getPrize("购买vip奖励", rule.buyVipPrize)
 
         remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(str(zz.actbossZige.lottery), 0)
-        logger.info("剩余抽奖次数为{}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)".format(remaining_lottery_times))
+        logger.info(f"剩余抽奖次数为{remaining_lottery_times}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)")
         for i in range(remaining_lottery_times):
-            lottery("抽奖-第{}次".format(i + 1))
+            lottery(f"抽奖-第{i + 1}次")
 
         logger.warning("只处理大家都能领到的普发奖励，像周赛决赛之类的奖励请自行领取")
         getPrize("1. 智慧的引导礼包", rule.pfPrize1)
@@ -213,13 +213,13 @@ class QzoneActivity:
         getPrize("2.特权网吧登陆游戏（1分）", rule.wangba)
         # 刷新一下积分数据
         self.fetch_dnf_warriors_call_data()
-        logger.info(color("fg_bold_cyan") + "当前助力积分为{}".format(self.dnf_warriors_call_get_score()))
+        logger.info(color("fg_bold_cyan") + f"当前助力积分为{self.dnf_warriors_call_get_score()}")
 
         if datetime.datetime.now() >= datetime.datetime.strptime('2020-12-26', "%Y-%m-%d"):
             level = self.dnf_warriors_call_get_level()
             if level > 0:
-                getPrize("领取宝箱", zz.actbossRule.__getattribute__("getBox{}".format(level)))
-                getPrize("开宝箱", zz.actbossRule.__getattribute__("box{}".format(level)))
+                getPrize("领取宝箱", zz.actbossRule.__getattribute__(f"getBox{level}"))
+                getPrize("开宝箱", zz.actbossRule.__getattribute__(f"box{level}"))
         else:
             logger.warning("12月26日开始领取宝箱和开宝箱")
         logger.warning("冠军大区奖励请自行领取")
@@ -275,10 +275,10 @@ class QzoneActivity:
         addLotteryTimes("每日登录游戏(+2抽奖机会)")
 
         left, used, total = queryLotteryTimes("查询抽奖次数信息")
-        logger.info("剩余抽奖次数={}，已抽奖次数={}，累积获取抽奖次数={}".format(left, used, total))
+        logger.info(f"剩余抽奖次数={left}，已抽奖次数={used}，累积获取抽奖次数={total}")
 
         for idx in range(left):
-            lottery("第{}次抽奖".format(idx + 1))
+            lottery(f"第{idx + 1}次抽奖")
 
     def do_vip_mentor(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
         return self.do_qzone_activity(4219, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
@@ -329,5 +329,5 @@ class QzoneActivity:
 
         request_fn = lambda: requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
         res = try_request(request_fn, self.djc_helper.common_cfg.retry)
-        logger.debug("{}".format(raw_data))
+        logger.debug(f"{raw_data}")
         return process_result(ctx, res, pretty, print_res)

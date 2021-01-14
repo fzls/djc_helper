@@ -70,7 +70,7 @@ def build(disable_douban=False):
         "-install",
     ])
 
-    logger.info("开始编译 {}".format(exe_name))
+    logger.info(f"开始编译 {exe_name}")
 
     cmd_build = [
         pyinstaller_path,
@@ -82,7 +82,7 @@ def build(disable_douban=False):
 
     subprocess.call(cmd_build)
 
-    logger.info("开始编译 {}".format(updater_exe_name))
+    logger.info(f"开始编译 {updater_exe_name}")
 
     cmd_build = [
         pyinstaller_path,
@@ -100,7 +100,7 @@ def build(disable_douban=False):
     # 删除临时文件
     for directory in ["build", "dist", "__pycache__"]:
         shutil.rmtree(directory, ignore_errors=True)
-    for file in ["{}.spec".format(name) for name in [exe_name, updater_exe_name]]:
+    for file in [f"{name}.spec" for name in [exe_name, updater_exe_name]]:
         os.remove(file)
 
     logger.info("done")

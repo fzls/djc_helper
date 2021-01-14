@@ -47,7 +47,7 @@ class AESCipher:
 class ConfigInterface(metaclass=ABCMeta):
     def auto_update_config(self, raw_config: dict):
         if type(raw_config) is not dict:
-            logger.warning("raw_config={} is not dict".format(raw_config))
+            logger.warning(f"raw_config={raw_config} is not dict")
         else:
             for key, val in raw_config.items():
                 if hasattr(self, key):

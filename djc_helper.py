@@ -1538,6 +1538,8 @@ class DjcHelper:
         self.qq_video_op("累积7天", "129883")
         self.qq_video_op("累积15天", "129882")
 
+        logger.warning("如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据")
+
     def check_qq_video(self):
         while True:
             res = self.qq_video_op("幸运勇士礼包", "129838", print_res=False)

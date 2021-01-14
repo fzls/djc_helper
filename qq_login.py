@@ -462,6 +462,8 @@ class QQLogin():
             tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
+            logger.info(color("bold_yellow") + "检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
+
             try:
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slide")))
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slideBlock")))

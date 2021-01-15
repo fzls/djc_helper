@@ -106,7 +106,7 @@ class Urls:
         self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}&countid={countid}"
 
         # 抽卡相关
-        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10"
+        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11"
         # 查询次数信息：参数：to_qq, actName
         self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq, actName

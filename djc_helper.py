@@ -412,6 +412,9 @@ class DjcHelper:
         # 会员关怀
         self.vip_mentor()
 
+        # QQ空间抽卡
+        self.ark_lottery()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -443,9 +446,6 @@ class DjcHelper:
 
         # DNF福利中心兑换
         self.dnf_welfare()
-
-        # QQ空间抽卡
-        self.ark_lottery()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -1198,13 +1198,14 @@ class DjcHelper:
         #   1.3 重新启用代码
         #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
         #   1.3.2 在main.py中将main函数中取消注释show_lottery_status和auto_send_cards的调用处
+        #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
         #
         # hack:
         #   2. 废弃
         #   2.1 在djc_helper.py中将ark_lottery的调用处从normal_run移到expired_activities
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
 
-        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=5&verifyid=qqvipdnf10
+        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
         show_head_line(f"QQ空间抽卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
 
         if not self.cfg.function_switches.get_ark_lottery:
@@ -1241,7 +1242,7 @@ class DjcHelper:
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
-            # self.cfg.function_switches.get_ark_lottery,
+            self.cfg.function_switches.get_ark_lottery,
             # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
             self.cfg.function_switches.get_vip_mentor and not self.disable_most_activities(),
         ]:
@@ -3340,7 +3341,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.hello_voice()
         # djcHelper.dnf_carnival()
-        # djcHelper.ark_lottery()
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
         # djcHelper.dnf_welfare()
@@ -3355,4 +3355,5 @@ if __name__ == '__main__':
         # djcHelper.qq_video()
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
-        djcHelper.vip_mentor()
+        # djcHelper.vip_mentor()
+        djcHelper.ark_lottery()

@@ -666,6 +666,8 @@ need_take_awards = false
 3886 = false
 # 2020.12.14 阿拉德勇士征集令
 4166 = false
+# 2020.1.15 超萌雪人送祝福
+4261 = false
 
 # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
 #[[account_configs.wegame_guoqing_exchange_items]]

@@ -204,8 +204,8 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         return
     _show_head_line(ctx)
 
-    end_time = "2021-01-09"
-    remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d") - datetime.datetime.now()
+    end_time = "2021-01-31 23:59:59"
+    remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S") - datetime.datetime.now()
     logger.info(color("bold_black") + f"本次集卡活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
     lottery_zzconfig = zzconfig()

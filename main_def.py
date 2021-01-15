@@ -678,9 +678,8 @@ def try_auto_update():
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
-def change_title():
-    dlcInfo = ""
-    if has_buy_auto_updater_dlc():
+def change_title(dlcInfo = ""):
+    if dlcInfo == "" and has_buy_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
     face = random.choice([

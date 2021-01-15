@@ -2967,14 +2967,14 @@ class DjcHelper:
     # --------------------------------------------dnf论坛签到--------------------------------------------
     def dnf_bbs_signin(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
-        show_head_line("dnf论坛签到")
+        show_head_line("dnf官方论坛签到")
 
         if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
-            logger.warning("未启用领取dnf论坛签到活动合集功能，将跳过")
+            logger.warning("未启用领取dnf官方论坛签到活动合集功能，将跳过")
             return
 
         if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
-            logger.warning("未配置dnf论坛的cookie或formhash，将跳过（dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
+            logger.warning("未配置dnf官方论坛的cookie或formhash，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
         def signin():

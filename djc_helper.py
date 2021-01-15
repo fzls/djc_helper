@@ -2974,7 +2974,7 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
-            logger.warning("未配置dnf论坛的cookie或formhash，将跳过")
+            logger.warning("未配置dnf论坛的cookie或formhash，将跳过（dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
         def signin():

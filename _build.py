@@ -9,16 +9,6 @@ from log import logger
 
 def build(disable_douban=False):
     venv_path = ".venv"
-    src_name = "main.py"
-    exe_name = 'DNF蚊子腿小助手.exe'
-    icon = 'DNF蚊子腿小助手.ico'
-    updater_src_name = "auto_updater.py"
-    updater_exe_name = "auto_updater.exe"
-    util_dir = "utils"
-    updater_target_path = os.path.join(util_dir, updater_exe_name)
-
-    if not os.path.isdir(util_dir):
-        os.mkdir(util_dir)
 
     # 初始化相关路径变量
     pyscript_path = os.path.join(venv_path, "Scripts")
@@ -70,38 +60,44 @@ def build(disable_douban=False):
         "-install",
     ])
 
-    logger.info(f"开始编译 {exe_name}")
-
-    cmd_build = [
-        pyinstaller_path,
-        '--icon', icon,
-        '--name', exe_name,
-        '-F',
-        src_name,
+    build_configs = [
+        ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", "."),
+        ("auto_updater.py", "auto_updater.exe", "", "utils"),
     ]
 
-    subprocess.call(cmd_build)
+    for idx, config in enumerate(build_configs):
+        prefix = f"{idx+1}/{len(build_configs)}"
 
-    logger.info(f"开始编译 {updater_exe_name}")
+        src_path, exe_name, icon_path, target_dir = config
+        logger.info(f"{prefix} 开始编译 {exe_name}")
 
-    cmd_build = [
-        pyinstaller_path,
-        '--name', updater_exe_name,
-        '-F',
-        updater_src_name,
-    ]
+        cmd_build = [
+            pyinstaller_path,
+            '--name', exe_name,
+            '-F',
+            src_path,
+        ]
+        if icon_path != "":
+            cmd_build.extend(['--icon', icon_path])
 
-    subprocess.call(cmd_build)
+        subprocess.call(cmd_build)
 
-    logger.info("编译结束，进行善后操作")
-    # 复制二进制
-    shutil.copyfile(os.path.join("dist", exe_name), exe_name)
-    shutil.copyfile(os.path.join("dist", updater_exe_name), updater_target_path)
-    # 删除临时文件
-    for directory in ["build", "dist", "__pycache__"]:
-        shutil.rmtree(directory, ignore_errors=True)
-    for file in [f"{name}.spec" for name in [exe_name, updater_exe_name]]:
-        os.remove(file)
+        logger.info(f"编译结束，进行善后操作")
+
+        # 复制二进制
+        logger.info(f"复制{exe_name}到目标目录{target_dir}")
+        if not os.path.isdir(target_dir):
+            os.mkdir(target_dir)
+        target_path = os.path.join(target_dir, exe_name)
+        shutil.copyfile(os.path.join("dist", exe_name), target_path)
+
+        # 删除临时文件
+        logger.info("删除临时文件")
+        for directory in ["build", "dist", "__pycache__"]:
+            shutil.rmtree(directory, ignore_errors=True)
+        os.remove(f"{exe_name}.spec")
+
+        logger.info(f"{prefix} 编译{exe_name}结束")
 
     logger.info("done")
 

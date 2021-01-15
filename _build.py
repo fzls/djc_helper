@@ -63,7 +63,7 @@ def build(disable_douban=False):
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", "."),
         ("auto_updater.py", "auto_updater.exe", "", "utils"),
-        ("ark_lottery_special_version.py", "ark_lottery_special_version.exe", "ark_lottery_special_version.ico", "."),
+        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "ark_lottery_special_version.ico", "."),
     ]
 
     for idx, config in enumerate(build_configs):

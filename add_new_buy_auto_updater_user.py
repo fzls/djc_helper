@@ -16,7 +16,7 @@ def update_buy_user_local(new_buy_users) -> []:
     new_add = []
     for user in new_buy_users:
         if user in buy_users:
-            logger.info(f"user={user}已经添加过了，将跳过")
+            logger.error(f"user={user}已经添加过了，将跳过")
             continue
 
         logger.info(f"user={user}为新用户，将加入名单")

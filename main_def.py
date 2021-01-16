@@ -692,7 +692,7 @@ def try_auto_update(cfg):
 def has_buy_auto_updater_dlc(cfg: Config):
     try:
         uploader = Uploader(lanzou_cookie)
-        user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached")
+        user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached", show_log=False)
         buy_users = []
         with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
             buy_users = json.load(data_file)

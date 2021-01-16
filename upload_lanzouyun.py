@@ -137,6 +137,23 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
+    def download_file_in_folder(self, folder, name, download_dir) -> str:
+        """
+        下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
+        """
+        return self.download_file(self.find_file(folder, name), download_dir)
+
+    def find_file(self, folder, name):
+        """
+        在对应目录查找指定名称的文件，如找到，返回lanzouyun提供的file信息，否则抛出异常
+        """
+        files = self.lzy.get_file_list(folder.id)
+        for file in files:
+            if file.name == name:
+                return file
+
+        raise FileNotFoundError("latest patches not found")
+
     def download_file(self, fileinfo, download_dir) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径

@@ -660,13 +660,15 @@ def try_auto_update(cfg):
             return
 
         if not has_buy_auto_updater_dlc(cfg):
-            logger.warning(color("bold_yellow") + (
+            msg = (
                 "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的？\n"
                 "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
                 "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
                 "目前名单是基于DLC付费群的群成员整合出来的，若之前是通过其他朋友获取到的这个DLC，并通过他来转账给我（是有这么几个，但是我记不清是谁了）。请加群私聊我当时的付款截图，我会将你加到购买名单中~\n"
                 "如果游戏账号和加群的QQ不一样，请私聊我反馈。\n"
-            ))
+            )
+            logger.warning(color("bold_yellow") + msg)
+            win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
             return
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")

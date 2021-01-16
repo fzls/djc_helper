@@ -5,13 +5,14 @@ from sys import exit
 
 import win32api
 
-from config import load_config, config, XinYueOperationConfig
+from config import load_config, config, XinYueOperationConfig, Config
 from djc_helper import DjcHelper
 from log import asciiReset
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start, get_update_info
+from upload_lanzouyun import Uploader, lanzou_cookie
 from util import *
 from version import *
 
@@ -641,11 +642,8 @@ def show_qiafan_message_box_on_every_big_version(version):
             win32api.MessageBox(0, "(｡•́︿•̀｡)", "TAT", win32con.MB_ICONINFORMATION)
 
 
-def try_auto_update():
+def try_auto_update(cfg):
     try:
-        load_config("config.toml", "config.toml.local")
-        cfg = config()
-
         if not cfg.common.auto_update_on_start:
             return
 
@@ -657,8 +655,17 @@ def try_auto_update():
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
-        if not has_buy_auto_updater_dlc():
+        if not exists_auto_updater_dlc():
             logger.warning(color("bold_cyan") + "未发现自动更新DLC，将跳过自动更新流程~")
+            return
+
+        if not has_buy_auto_updater_dlc(cfg):
+            logger.warning(color("bold_yellow") + (
+                "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的？"
+                "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。"
+                "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。"
+                "目前名单是基于DLC付费群的群成员整合出来的，若之前是通过其他朋友获取到的这个DLC，并通过他来转账给我（是有这么几个，但是我记不清是谁了）。请加群私聊我当时的付款截图，我会将你加到购买名单中~"
+            ))
             return
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
@@ -679,8 +686,30 @@ def try_auto_update():
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
+def has_buy_auto_updater_dlc(cfg: Config):
+    uploader = Uploader(lanzou_cookie)
+    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached")
+    buy_users = []
+    try:
+        with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
+            buy_users = json.load(data_file)
+    except Exception as e:
+        pass
+
+    if len(buy_users) == 0:
+        # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
+        return True
+
+    for account_cfg in cfg.account_configs:
+        qq = uin2qq(account_cfg.account_info.uin)
+        if qq in buy_users:
+            return True
+
+    return False
+
+
 def change_title(dlcInfo=""):
-    if dlcInfo == "" and has_buy_auto_updater_dlc():
+    if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
     face = random.choice([
@@ -693,7 +722,7 @@ def change_title(dlcInfo=""):
     os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {face}")
 
 
-def has_buy_auto_updater_dlc():
+def exists_auto_updater_dlc():
     return os.path.exists(auto_updater_path())
 
 

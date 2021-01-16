@@ -29,8 +29,6 @@ def main():
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
-    try_auto_update()
-
     change_title()
 
     show_qiafan_message_box_on_every_big_version("v5.2.0")
@@ -46,6 +44,9 @@ def main():
         exit(-1)
 
     check_all_skey_and_pskey(cfg)
+
+    # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
+    try_auto_update(cfg)
 
     show_accounts_status(cfg, "启动时展示账号概览")
 

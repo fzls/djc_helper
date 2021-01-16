@@ -690,27 +690,33 @@ def try_auto_update(cfg):
 
 
 def has_buy_auto_updater_dlc(cfg: Config):
-    try:
-        uploader = Uploader(lanzou_cookie)
-        user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached", show_log=False)
-        buy_users = []
-        with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
-            buy_users = json.load(data_file)
+    retrtCfg = cfg.common.retry
+    for idx in range(retrtCfg.max_retry_count):
+        try:
+            uploader = Uploader(lanzou_cookie)
+            user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached", show_log=False)
+            buy_users = []
+            with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
+                buy_users = json.load(data_file)
 
-        if len(buy_users) == 0:
-            # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
-            return True
-
-        for account_cfg in cfg.account_configs:
-            qq = uin2qq(account_cfg.account_info.uin)
-            if qq in buy_users:
+            if len(buy_users) == 0:
+                # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 return True
 
-        return False
-    except Exception as e:
-        logger.error("检查是否购买DLC时出错了", exc_info=e)
-        return True
+            for account_cfg in cfg.account_configs:
+                qq = uin2qq(account_cfg.account_info.uin)
+                if qq in buy_users:
+                    return True
 
+            return False
+        except Exception as e:
+            logFunc = logger.debug
+            if use_by_myself():
+                logFunc = logger.error
+            logFunc(f"第{idx+1}次检查是否购买DLC时出错了，稍后重试", exc_info=e)
+            time.sleep(retrtCfg.retry_wait_time)
+
+    return True
 
 
 def change_title(dlcInfo=""):

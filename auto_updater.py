@@ -11,13 +11,8 @@ import argparse
 import os
 import subprocess
 from distutils import dir_util
-from upload_lanzouyun import Uploader
+from upload_lanzouyun import Uploader, lanzou_cookie
 from update import need_update
-
-lanzou_cookie = {
-    "ylogin": "1442903",
-    "phpdisk_info": "VmNRZwxqBDpSaVMzXTRWBVIzDDoIWF07ADRVNgczV21UYgU2VzYFOVVhUjdcDwdqWz9QZ108VDQHYQdvATcLO1ZhUTUMOgQ8UjZTYl1iVmpSNwxsCGZdPAAxVTwHNlcxVGAFY1c0BWpVM1I0XD8HVFs6UGVdN1QxBzwHZQE2CzpWYlFlDGs%3D",
-}
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"

@@ -137,11 +137,11 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder, name, download_dir) -> str:
+    def download_file_in_folder(self, folder, name, download_dir, overwrite=True) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
-        return self.download_file(self.find_file(folder, name), download_dir)
+        return self.download_file(self.find_file(folder, name), download_dir, overwrite=overwrite)
 
     def find_file(self, folder, name):
         """
@@ -154,7 +154,7 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file(self, fileinfo, download_dir) -> str:
+    def download_file(self, fileinfo, download_dir, overwrite=True) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -170,7 +170,7 @@ class Uploader:
             logger.info(f"最终下载文件路径为 {file_name}")
 
         logger.info(f"即将开始下载 {target_path}")
-        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded)
+        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded, overwrite=overwrite)
         if retCode != LanZouCloud.SUCCESS:
             logger.error(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:

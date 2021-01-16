@@ -53,3 +53,7 @@ if __name__ == '__main__':
     ]
 
     add_user(new_buy_users)
+
+    AlwaysUpload = False
+    if AlwaysUpload:
+        upload()

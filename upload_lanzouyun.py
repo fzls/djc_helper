@@ -137,11 +137,11 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder, name, download_dir, overwrite=True) -> str:
+    def download_file_in_folder(self, folder, name, download_dir, overwrite=True, show_log=True) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
-        return self.download_file(self.find_file(folder, name), download_dir, overwrite=overwrite)
+        return self.download_file(self.find_file(folder, name), download_dir, overwrite=overwrite, show_log=show_log)
 
     def find_file(self, folder, name):
         """
@@ -154,7 +154,7 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file(self, fileinfo, download_dir, overwrite=True) -> str:
+    def download_file(self, fileinfo, download_dir, overwrite=True, show_log=True) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -167,14 +167,16 @@ class Uploader:
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
             target_path = file_name
-            logger.info(f"最终下载文件路径为 {file_name}")
+            if show_log: logger.info(f"最终下载文件路径为 {file_name}")
 
-        logger.info(f"即将开始下载 {target_path}")
-        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=self.show_progress, downloaded_handler=after_downloaded, overwrite=overwrite)
+        if show_log: logger.info(f"即将开始下载 {target_path}")
+        callback = None
+        if show_log: callback = self.show_progress
+        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
         if retCode != LanZouCloud.SUCCESS:
-            logger.error(f"下载失败，retCode={retCode}")
+            if show_log: logger.error(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
-                logger.warning(color("bold_yellow") + (
+                if show_log: logger.warning(color("bold_yellow") + (
                     "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
                     "分别尝试在浏览器中访问下列两个网页，是否一个打的开一个打不开？\n"
                     "https://fzls.lanzoux.com/s/djc-helper\n"

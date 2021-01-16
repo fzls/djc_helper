@@ -17,12 +17,17 @@ class Uploader:
     folder_dnf_calc = Folder("魔改计算器", "1810329")
     folder_djc_helper = Folder("蚊子腿小助手", "2290618")
     folder_history_files = Folder("历史版本", "2303716")
+    folder_online_files = Folder("在线文件存储", "2866929")
+    folder_online_files_history_files = Folder("历史版本", "2867307")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
 
     regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
     regex_patches = r'DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z'
+
+    # 保存购买了自动更新工具的角色的
+    buy_auto_updater_users_filename = "buy_auto_updater_users.txt"
 
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
@@ -42,11 +47,15 @@ class Uploader:
             if prefix == "":
                 prefix = self.history_version_prefix
 
+            folder_history_files = self.folder_history_files
+            if target_folder.id == self.folder_online_files.id:
+                folder_history_files = self.folder_online_files_history_files
+
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
                 if file.name.startswith(prefix):
-                    self.lzy.move_file(file.id, self.folder_history_files.id)
-                    logger.info(f"将{file.name}移动到目录({self.folder_history_files.name})")
+                    self.lzy.move_file(file.id, folder_history_files.id)
+                    logger.info(f"将{file.name}移动到目录({folder_history_files.name})")
 
             logger.info(f"将文件移到目录({target_folder.name})中")
             self.lzy.move_file(fid, target_folder.id)

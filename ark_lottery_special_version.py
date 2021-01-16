@@ -49,8 +49,6 @@ def main():
     logger.warning(f"开始运行DNF蚊子腿小助手 集卡特别版，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
-    check_djc_role_binding()
-
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -58,6 +56,10 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。")
         exit(-1)
+
+    # 特别版强制启用每一个账号
+    for account_config in cfg.account_configs:
+        account_config.enable = True
 
     check_all_skey_and_pskey(cfg)
 

@@ -2531,8 +2531,6 @@ class DjcHelper:
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
 
-        logger.info(color("fg_bold_yellow") + "TODO：等理财礼卡测试OK记得移除上面的测试模式限定，并把功能放出去（功能开关、理财卡列表配置项）")
-
         if not self.cfg.function_switches.get_xinyue_financing:
             logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
             return

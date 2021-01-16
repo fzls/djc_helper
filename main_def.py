@@ -688,25 +688,27 @@ def try_auto_update(cfg):
 
 
 def has_buy_auto_updater_dlc(cfg: Config):
-    uploader = Uploader(lanzou_cookie)
-    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached")
-    buy_users = []
     try:
+        uploader = Uploader(lanzou_cookie)
+        user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached")
+        buy_users = []
         with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
             buy_users = json.load(data_file)
-    except Exception as e:
-        pass
 
-    if len(buy_users) == 0:
-        # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
-        return True
-
-    for account_cfg in cfg.account_configs:
-        qq = uin2qq(account_cfg.account_info.uin)
-        if qq in buy_users:
+        if len(buy_users) == 0:
+            # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
             return True
 
-    return False
+        for account_cfg in cfg.account_configs:
+            qq = uin2qq(account_cfg.account_info.uin)
+            if qq in buy_users:
+                return True
+
+        return False
+    except Exception as e:
+        logger.error("检查是否购买DLC时出错了", exc_info=e)
+        return True
+
 
 
 def change_title(dlcInfo=""):

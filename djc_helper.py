@@ -415,6 +415,9 @@ class DjcHelper:
         # QQ空间抽卡
         self.ark_lottery()
 
+        # hello语音网页礼包兑换
+        self.hello_voice()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -440,9 +443,6 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
-
-        # hello语音网页礼包兑换
-        self.hello_voice()
 
         # DNF福利中心兑换
         self.dnf_welfare()

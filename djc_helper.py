@@ -418,6 +418,9 @@ class DjcHelper:
         # hello语音网页礼包兑换
         self.hello_voice()
 
+        # DNF新春夺宝大作战
+        self.dnf_spring()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -3114,6 +3117,103 @@ class DjcHelper:
         qa = QzoneActivity(self, lr)
         qa.vip_mentor()
 
+    # --------------------------------------------DNF新春夺宝大作战--------------------------------------------
+    def dnf_spring(self):
+        # https://xinyue.qq.com/act/a20210104cjhdh5/index.html
+        show_head_line("DNF新春夺宝大作战")
+
+        if not self.cfg.function_switches.get_dnf_spring or self.disable_most_activities():
+            logger.warning("未启用领取DNF新春夺宝大作战活动合集功能，将跳过")
+            return
+
+        self.check_dnf_spring()
+
+        xinyue_info = self.query_xinyue_info("查询心悦信息", print_res=False)
+        today = get_today()
+
+        if today >= "20210121":
+            # 会员专属 开买就送
+            if xinyue_info.xytype < 5:
+                self.dnf_spring_op("特邀充值礼", "730772")
+            else:
+                self.dnf_spring_op("VIP充值礼", "730800", cz=xinyue_info.xytype)
+
+            # 全民夺宝 追忆天空
+            info = self.query_dnf_spring_info()
+            logger.warning(color("bold_yellow") +
+                           f"活动期间共充值DNF{info.recharge_money}元, 目前有{info.current_spoon_count}个汤勺，历史共获取{info.total_spoon_count}个汤勺")
+
+            for i in range(info.current_spoon_count):
+                self.dnf_spring_op(f"第{i + 1}次捞饺子", "731311")
+
+            # 刷新一下
+            info = self.query_dnf_spring_info()
+            logger.warning(color("bold_yellow") + f"累积捞饺子{info.laojiaozi_count}次")
+
+            if info.laojiaozi_count >= 24:
+                self.dnf_spring_op("福袋激活", "731492")
+                self.dnf_spring_op("专属福袋", "731858")
+
+            # 再刷新一下
+            info = self.query_dnf_spring_info()
+            if info.total_take_fudai >= 10000:
+                self.dnf_spring_op("福袋B级", "731863")
+            if info.total_take_fudai >= 50000:
+                self.dnf_spring_op("福袋A级", "731867")
+            if info.total_take_fudai >= 500000:
+                self.dnf_spring_op("福袋S级", "731870")
+        else:
+            logger.info("充值礼、捞饺子和福袋1.21后才开始，先跳过")
+
+        # 会员专享新年礼
+        if xinyue_info.xytype < 5:
+            self.dnf_spring_op("特邀专享礼", "730801")
+        else:
+            self.dnf_spring_op("VIP专享礼", "730803", dj=xinyue_info.xytype)
+        self.dnf_spring_op("成为心悦礼", "730806")
+
+        # 累计签到福利大升级
+        if "20210121" <= today <= "20210127":
+            self.dnf_spring_op("签到", "730822", weekDay=today)
+            self.dnf_spring_op("连续签到三天", "731160")
+            self.dnf_spring_op("连续签到七天", "731161")
+        else:
+            logger.info("签到仅限1.21到1.27，先跳过")
+
+    def query_dnf_spring_info(self):
+        springInfo = DnfSpringInfo()
+
+        # 查询第一部分
+        res = self.dnf_spring_op("输出", "731313")
+        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+        springInfo.recharge_money = int(info.sOutValue1) // 100
+
+        springInfo.total_spoon_count = int(info.sOutValue1) // 35000
+        springInfo.current_spoon_count = springInfo.total_spoon_count - int(info.sOutValue2)
+        if springInfo.current_spoon_count <= 0:
+            springInfo.current_spoon_count = 0
+
+        springInfo.laojiaozi_count = int(info.sOutValue3)
+
+        # 查询第二部分
+        res = self.dnf_spring_op("输出二", "731854")
+        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+        springInfo.total_take_fudai = int(info.sOutValue1)
+
+        return springInfo
+
+    def check_dnf_spring(self):
+        self.check_bind_account("DNF新春夺宝大作战", "https://xinyue.qq.com/act/a20210104cjhdh5/index.html",
+                                activity_op_func=self.dnf_spring_op, query_bind_flowid="730793", commit_bind_flowid="730792")
+
+    def dnf_spring_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_spring
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210104cjhdh5/",
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3154,6 +3254,7 @@ class DjcHelper:
             "invitee": "", "giftNum": "", "receiver": "", "receiverName": "", "inviterName": "",
             "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
             "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
+            "cz": "", "dj": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -3354,4 +3455,5 @@ if __name__ == '__main__':
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.vip_mentor()
-        djcHelper.ark_lottery()
+        # djcHelper.ark_lottery()
+        djcHelper.dnf_spring()

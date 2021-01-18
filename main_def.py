@@ -127,7 +127,7 @@ def auto_send_cards(cfg):
         qq_to_prize_counts[qq] = qa.get_prize_counts()
         qq_to_djcHelper[qq] = djcHelper
 
-        logger.info(f"{idx}/{len(cfg.account_configs)} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
+        logger.info(f"{idx:2d}/{len(cfg.account_configs)} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
 
     # 赠送卡片
     for idx, target_qq in enumerate(target_qqs):

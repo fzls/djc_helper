@@ -384,6 +384,7 @@ class QQLogin():
         switch_to_login_frame_fn()
 
         logger.info("等待#loginframe#ptlogin_iframe#switcher_plogin加载完毕")
+        time.sleep(self.cfg.login.open_url_wait_time)
         WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
 
         if need_human_operate:

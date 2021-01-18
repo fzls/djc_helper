@@ -38,6 +38,9 @@ class LoginResult(ConfigInterface):
 
 
 class QQLogin():
+    login_type_auto_login = "账密自动登录"
+    login_type_qr_login = "扫码登录"
+
     login_mode_normal = "normal"
     login_mode_xinyue = "xinyue"
     login_mode_qzone = "qzone"
@@ -54,8 +57,8 @@ class QQLogin():
         self.cfg = common_config  # type: CommonConfig
         self.driver = None  # type: WebDriver
 
-    def prepare_chrome(self, login_type):
-        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{login_type}】相关操作")
+    def prepare_chrome(self, ctx, login_type):
+        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
@@ -64,8 +67,11 @@ class QQLogin():
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if self.cfg.run_in_headless_mode:
-            logger.warning("已配置使用headless模式运行chrome")
-            options.headless = True
+            if login_type == self.login_type_auto_login:
+                logger.warning("已配置在自动登录模式时使用headless模式运行chrome")
+                options.headless = True
+            else:
+                logger.warning("扫码登录模式不使用headless模式")
 
         inited = False
 
@@ -136,7 +142,7 @@ class QQLogin():
             time.sleep(3)
             self.driver.find_element(By.ID, "login_button").click()
 
-        return self._login("账密自动登录", login_action_fn=login_with_account_and_password, need_human_operate=False, login_mode=login_mode)
+        return self._login(self.login_type_auto_login, login_action_fn=login_with_account_and_password, need_human_operate=False, login_mode=login_mode)
 
     def qr_login(self, login_mode="normal"):
         """
@@ -144,7 +150,7 @@ class QQLogin():
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        return self._login("扫码登录", login_mode=login_mode)
+        return self._login(self.login_type_qr_login, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, need_human_operate=True, login_mode="normal"):
         for idx in range(self.cfg.login.max_retry_count):
@@ -167,7 +173,7 @@ class QQLogin():
                     suffix += "-wegame（获取wegame相关api需要用到）"
 
                 ctx = login_type + suffix
-                self.prepare_chrome(ctx)
+                self.prepare_chrome(ctx, login_type)
 
                 return login_fn(ctx, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
             except Exception as e:

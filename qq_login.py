@@ -89,11 +89,19 @@ class QQLogin():
             # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
             if not os.path.isfile(self.chrome_binary_7z):
                 msg = (
+                    "================ 这一段是问题描述 ================\n"
                     "当前电脑未发现合适版本chrome浏览器版本，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
-                    "请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
+                    "\n"
+                    "================ 这一段是解决方法 ================\n"
+                    "如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
+                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载Chrome_87.0.4280.141_普通安装包_非便携版.exe，下载完成后双击安装即可\n"
+                    "\n"
+                    "================ 这一段是补充说明 ================\n"
                     "如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
+                    "\n"
+                    "------- 如果这样还有人进群问，将直接踢出群聊 -------\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z))
-                win32api.MessageBox(0, msg, "出错啦", win32con.MB_ICONERROR)
+                win32api.MessageBox(0, msg, "你没有chrome浏览器，需要安装完整版或下载便携版", win32con.MB_ICONERROR)
                 webbrowser.open(get_netdisk_addr(self.cfg))
                 os.system("PAUSE")
                 exit(-1)

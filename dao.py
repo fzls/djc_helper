@@ -558,3 +558,17 @@ class MajieluoShareInfo(ConfigInterface):
         self.iShareLottery = "0"
         self.iLostLottery = "0"
         self.iAssistLottery = "0"
+
+
+class DnfSpringInfo(ConfigInterface):
+    def __init__(self):
+        # 1月21日9:00至2月20日23:59充值DNF的金额
+        self.recharge_money = 0
+        # 累计获取汤勺数目
+        self.total_spoon_count = 0
+        # 当前剩余汤勺数目
+        self.current_spoon_count = 0
+        # 捞饺子次数
+        self.laojiaozi_count = 0
+        # 整个活动专属附带激活的总数目
+        self.total_take_fudai = 0

@@ -241,6 +241,8 @@ get_warm_winter = true
 get_youfei = true
 # 是否进行dnf论坛签到
 get_dnf_bbs_signin = true
+# 是否领取DNF新春夺宝大作战
+get_dnf_spring = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

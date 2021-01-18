@@ -29,7 +29,7 @@ def check_update_on_start(config):
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
     except Exception as err:
-        logger.error(f"更新版本失败, 错误为{err}")
+        logger.error(f"检查版本更新失败,大概率是访问不了github导致的，可自行前往网盘查看是否有更新, 错误为{err}")
 
 
 def try_manaual_update(ui: UpdateInfo):

@@ -666,6 +666,7 @@ def try_auto_update(cfg):
                 "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
                 "目前名单是基于DLC付费群的群成员整合出来的，若之前是通过其他朋友获取到的这个DLC，并通过他来转账给我（是有这么几个，但是我记不清是谁了）。请加群私聊我当时的付款截图，我会将你加到购买名单中~\n"
                 "如果游戏账号和加群的QQ不一样，请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
+                "如果没有购买，也没有向别人索取，可以直接将utils目录下的auto_updater.exe删除即可\n"
             )
             logger.warning(color("bold_yellow") + msg)
             win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)

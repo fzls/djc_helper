@@ -131,6 +131,8 @@ class QQLogin():
         logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
         def login_with_account_and_password():
+            logger.info(color("bold_yellow") + "当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
+
             # 切换到自动登录界面
             logger.info("等待#loginframe#ptlogin_iframe#switcher_plogin加载完毕")
             time.sleep(self.cfg.login.open_url_wait_time)

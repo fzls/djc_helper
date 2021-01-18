@@ -149,7 +149,10 @@ class QQLogin():
             time.sleep(3)
             self.driver.find_element(By.ID, "login_button").click()
 
-        return self._login(self.login_type_auto_login, login_action_fn=login_with_account_and_password, need_human_operate=False, login_mode=login_mode)
+            # 尝试自动处理验证码
+            self.try_auto_resolve_captcha()
+
+        return self._login(self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode)
 
     def qr_login(self, login_mode="normal"):
         """
@@ -157,9 +160,13 @@ class QQLogin():
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        return self._login(self.login_type_qr_login, login_mode=login_mode)
 
-    def _login(self, login_type, login_action_fn=None, need_human_operate=True, login_mode="normal"):
+        def login_with_qr_code():
+            logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成扫码登录操作或快捷登录操作")
+
+        return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
+
+    def _login(self, login_type, login_action_fn=None, login_mode="normal"):
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
             try:
@@ -182,7 +189,7 @@ class QQLogin():
                 ctx = login_type + suffix
                 self.prepare_chrome(ctx, login_type)
 
-                return login_fn(ctx, login_action_fn=login_action_fn, need_human_operate=need_human_operate)
+                return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
                 logger.exception(f"第{idx}/{self.cfg.login.max_retry_count}次尝试登录出错，等待{self.cfg.login.retry_wait_time}秒后重试", exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
@@ -201,7 +208,7 @@ class QQLogin():
         ))
         raise Exception("网络有问题")
 
-    def _login_real(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login_real(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -228,13 +235,13 @@ class QQLogin():
             logger.info("请等待#logined的div可见，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
 
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
         return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
                            p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
-    def _login_qzone(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login_qzone(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -264,13 +271,13 @@ class QQLogin():
             logger.info("请等待【欢迎你，】的文字可见，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".tit_text"), "欢迎你，"))
 
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
         return LoginResult(p_skey=self.get_cookie("p_skey"),
                            uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"))
 
-    def _login_guanjia(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login_guanjia(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -302,13 +309,13 @@ class QQLogin():
             logger.info("请等待#logined的div可见，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
 
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
         return LoginResult(qc_openid=self.get_cookie("__qc__openid"), qc_k=self.get_cookie("__qc__k"),
                            uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
-    def _login_wegame(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login_wegame(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -336,12 +343,12 @@ class QQLogin():
             # self.driver.get("https://www.wegame.com.cn/")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".widget-header-login-info")))
 
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
         return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
 
-    def _login_xinyue_real(self, login_type, login_action_fn=None, need_human_operate=True):
+    def _login_xinyue_real(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -378,28 +385,22 @@ class QQLogin():
                     continue
                 break
 
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn, need_human_operate)
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取openid
         return LoginResult(openid=self.get_cookie("openid"))
 
-    def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None, need_human_operate=True):
+    def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
         """
         switch_to_login_frame_fn()
 
-        if need_human_operate:
-            logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成{login_type}操作")
-
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"开始{login_type}流程")
         if login_action_fn is not None:
             login_action_fn()
-
-        if not need_human_operate:
-            self.try_auto_resolve_captcha()
 
         logger.info("等待登录完成（也就是#loginIframe#login登录框消失）")
         # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'

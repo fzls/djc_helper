@@ -131,6 +131,11 @@ class QQLogin():
         logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
         def login_with_account_and_password():
+            # 切换到自动登录界面
+            logger.info("等待#loginframe#ptlogin_iframe#switcher_plogin加载完毕")
+            time.sleep(self.cfg.login.open_url_wait_time)
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
+
             # 选择密码登录
             self.driver.find_element(By.ID, "switcher_plogin").click()
             # 输入账号
@@ -383,19 +388,16 @@ class QQLogin():
         """
         switch_to_login_frame_fn()
 
-        logger.info("等待#loginframe#ptlogin_iframe#switcher_plogin加载完毕")
-        time.sleep(self.cfg.login.open_url_wait_time)
-        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
-
         if need_human_operate:
-            logger.info(f"请在{self.cfg.login.login_timeout}s内完成{login_type}操作")
+            logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成{login_type}操作")
 
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"开始{login_type}流程")
         if login_action_fn is not None:
             login_action_fn()
 
-        self.try_auto_resolve_captcha()
+        if not need_human_operate:
+            self.try_auto_resolve_captcha()
 
         logger.info("等待登录完成（也就是#loginIframe#login登录框消失）")
         # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'

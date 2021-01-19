@@ -139,11 +139,12 @@ def auto_send_cards(cfg):
             for i in range(left_times):
                 send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)
 
-            # 赠送卡片完毕后尝试抽奖
+            # 赠送卡片完毕后尝试领取奖励和抽奖
             djcHelper = qq_to_djcHelper[target_qq]
             lr = djcHelper.fetch_pskey()
             if lr is not None:
                 qa = QzoneActivity(djcHelper, lr)
+                qa.take_ark_lottery_awards(print_warning=False)
                 qa.try_lottery_using_cards(print_warning=False)
 
 

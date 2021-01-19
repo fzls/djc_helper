@@ -143,6 +143,7 @@ def auto_send_cards(cfg):
             djcHelper = qq_to_djcHelper[target_qq]
             lr = djcHelper.fetch_pskey()
             if lr is not None:
+                logger.info("赠送完毕，尝试领取奖励和抽奖")
                 qa = QzoneActivity(djcHelper, lr)
                 qa.take_ark_lottery_awards(print_warning=False)
                 qa.try_lottery_using_cards(print_warning=False)

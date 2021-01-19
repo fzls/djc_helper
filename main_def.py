@@ -558,17 +558,18 @@ def check_update(cfg):
     check_update_on_start(cfg.common)
 
 
-def print_update_message_on_auto_update_done():
+def print_update_message_on_first_run_new_version():
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    if cfg.common.auto_update_on_start and is_first_run(f"print_update_message_v{now_version}"):
+    if is_first_run(f"print_update_message_v{now_version}"):
         try:
             ui = get_update_info(cfg.common)
             message = (
-                f"新版本v{ui.latest_version}已自动更新完毕，具体更新内容展示如下，以供参考：\n"
+                f"新版本v{ui.latest_version}已更新完毕，具体更新内容展示如下，以供参考：\n"
                 f"{ui.update_message}"
                 "\n"
+                "若未购买自动更新dlc，可无视下一句\n"
                 "PS：自动更新会更新示例配置config.toml.example，但不会更新config.toml。不过由于基本所有活动的默认配置都是开启的，所以除非你想要关闭特定活动，或者调整活动配置，其实没必要修改config.toml\n"
             )
             logger.warning(color("bold_yellow") + message)
@@ -718,7 +719,7 @@ def has_buy_auto_updater_dlc(cfg: Config):
             logFunc = logger.debug
             if use_by_myself():
                 logFunc = logger.error
-            logFunc(f"第{idx+1}次检查是否购买DLC时出错了，稍后重试", exc_info=e)
+            logFunc(f"第{idx + 1}次检查是否购买DLC时出错了，稍后重试", exc_info=e)
             time.sleep(retrtCfg.retry_wait_time)
 
     return True

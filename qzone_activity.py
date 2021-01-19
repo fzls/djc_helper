@@ -93,7 +93,7 @@ class QzoneActivity:
         for idx in range(count):
             self.do_ark_lottery("fcg_qzact_lottery", f"抽卡-第{idx + 1}次", self.zzconfig.rules.lottery)
 
-    def take_ark_lottery_awards(self):
+    def take_ark_lottery_awards(self, print_warning=True):
         if self.cfg.ark_lottery.need_take_awards:
             take_awards = parse_prize_list(self.zzconfig)
 
@@ -105,7 +105,7 @@ class QzoneActivity:
                         api = "fcg_prize_lottery"
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid=self.zzconfig.gameid)
         else:
-            logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
+            if print_warning: logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
 
     def try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():

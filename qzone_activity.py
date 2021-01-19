@@ -54,6 +54,18 @@ class QzoneActivity:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
         # 增加次数
+        self.add_ark_lottery_times()
+
+        # 抽卡
+        self.draw_ark_lottery()
+
+        # 领取集卡奖励
+        self.take_ark_lottery_awards()
+
+        # 消耗卡片来抽奖
+        self.try_lottery_using_cards()
+
+    def add_ark_lottery_times(self):
         # self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面（本次似乎没启用这个，所以会提示没资格）", self.zzconfig.rules.loginPage)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", self.zzconfig.rules.login, query="0", act_name=self.zzconfig.loginActId)
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", self.zzconfig.rules.share)
@@ -75,13 +87,13 @@ class QzoneActivity:
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", self.zzconfig.rules.imback, query="0", act_name=self.zzconfig.backActId,
                             area=server_id, partition=server_id, roleid=roleid)
 
-        # 抽卡
+    def draw_ark_lottery(self):
         count = self.remaining_lottery_times()
         logger.info(f"上述操作完毕后，最新抽卡次数为{count}，将全部用来抽卡")
         for idx in range(count):
             self.do_ark_lottery("fcg_qzact_lottery", f"抽卡-第{idx + 1}次", self.zzconfig.rules.lottery)
 
-        # # 领取集卡奖励
+    def take_ark_lottery_awards(self):
         if self.cfg.ark_lottery.need_take_awards:
             take_awards = parse_prize_list(self.zzconfig)
 
@@ -94,9 +106,6 @@ class QzoneActivity:
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid=self.zzconfig.gameid)
         else:
             logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
-
-        # 消耗卡片来抽奖
-        self.try_lottery_using_cards()
 
     def try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():

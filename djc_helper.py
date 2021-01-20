@@ -2853,15 +2853,16 @@ class DjcHelper:
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
-        thisMonthLastDay = calendar.monthrange(now.year, now.month)[1]
+        # 无视活动中的月底清空那句话
+        endTime = "20210121"
 
         takeStone = False
         if stoneCount >= 1000:
             # 达到1000个
             self.majieluo_op("提取时间引导石", "727229", giftNum="10")
             takeStone = True
-        elif now.day == thisMonthLastDay or str(now.date()) == "2021-01-21":
-            # 今天是本月最后一天（因为新的一个月会清零）或者是活动最后一天
+        elif get_today() == endTime:
+            # 今天是活动最后一天
             self.majieluo_op("提取时间引导石", "727229", giftNum=str(stoneCount // 100))
             takeStone = True
         else:

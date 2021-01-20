@@ -16,10 +16,9 @@ if __name__ == '__main__':
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}]", color("fg_bold_yellow"))
 
         djcHelper = DjcHelper(account_config, cfg.common)
+        lr = djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
-
-        lr = djcHelper.fetch_pskey()
 
         # re: 先填QQ
         # undone: 然后填写卡片

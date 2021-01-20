@@ -382,9 +382,6 @@ class DjcHelper:
         # dnf漂流瓶
         self.dnf_drift()
 
-        # DNF马杰洛的规划第二期
-        self.majieluo()
-
         # dnf助手双旦活动
         self.dnf_helper_christmas()
 
@@ -453,6 +450,9 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
+
+        # DNF马杰洛的规划第二期
+        self.majieluo()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -2856,6 +2856,7 @@ class DjcHelper:
 
         now = datetime.datetime.now()
         # 无视活动中的月底清空那句话
+        # note：根据1.21这次的经验，如果标记是1.21，当天就结束了，需要在1.20去领取奖励
         endTime = "20210121"
 
         takeStone = False

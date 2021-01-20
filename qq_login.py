@@ -432,16 +432,9 @@ class QQLogin():
 
         if self.login_mode == self.login_mode_normal:
             # 普通登录额外获取腾讯视频的vqq_vuserid
-            logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
-            self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
-            for i in range(5):
-                vuserid = self.driver.get_cookie('vuserid')
-                if vuserid is not None:
-                    break
-                time.sleep(1)
-            self.add_cookies(self.driver.get_cookies())
+            self.fetch_qq_video_vuserid()
         elif self.login_mode == self.login_mode_qzone:
-            pass
+            self.fetch_qq_video_vuserid()
             # logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")
             # logger.info("第一次访问，并停留5秒")
             # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
@@ -452,6 +445,16 @@ class QQLogin():
             # logger.info("OK，理论上次数应该刷新了")
 
         return
+
+    def fetch_qq_video_vuserid(self):
+        logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
+        self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
+        for i in range(5):
+            vuserid = self.driver.get_cookie('vuserid')
+            if vuserid is not None:
+                break
+            time.sleep(1)
+        self.add_cookies(self.driver.get_cookies())
 
     def try_auto_resolve_captcha(self):
         try:

@@ -1275,9 +1275,13 @@ class DjcHelper:
                 # 自动登录
                 lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone)
             # 保存
-            self.save_uin_pskey(lr.uin, lr.p_skey)
+            self.save_uin_pskey(lr.uin, lr.p_skey, lr.skey, lr.vuserid)
         else:
-            lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
+            lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"], skey=cached_pskey["skey"], vuserid=cached_pskey["vuserid"])
+
+        if lr.skey != "" and lr.vuserid != "":
+            self.memory_save_uin_skey(lr.uin, lr.skey)
+            self.vuserid = lr.vuserid
 
         return lr
 
@@ -1294,12 +1298,14 @@ class DjcHelper:
         res = qa.do_dnf_warriors_call("fcg_receive_reward", "测试pskey是否过期", qa.zz().actbossRule.buyVipPrize, gameid=qa.zz().gameid, print_res=False)
         return res['code'] == -3000 and res['subcode'] == -4001
 
-    def save_uin_pskey(self, uin, pskey):
+    def save_uin_pskey(self, uin, pskey, skey, vuserid):
         # 本地缓存
         with open(self.get_local_saved_pskey_file(), "w", encoding="utf-8") as sf:
             loginResult = {
                 "p_uin": str(uin),
                 "p_skey": str(pskey),
+                "skey": str(skey),
+                "vuserid": str(vuserid),
             }
             json.dump(loginResult, sf)
             logger.debug(f"本地保存pskey信息，具体内容如下：{loginResult}")
@@ -3416,6 +3422,7 @@ if __name__ == '__main__':
 
         djcHelper = DjcHelper(account_config, cfg.common)
         # djcHelper.run()
+        djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
 

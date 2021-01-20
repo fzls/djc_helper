@@ -422,8 +422,9 @@ class DjcHelper:
         # DNF新春夺宝大作战
         self.dnf_spring()
 
-        # DNF福利中心兑换
-        self.dnf_welfare()
+        if get_today() >= "20210121":
+            # DNF福利中心兑换
+            self.dnf_welfare()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -2326,10 +2327,6 @@ class DjcHelper:
 
         if not self.cfg.function_switches.get_dnf_welfare or self.disable_most_activities():
             logger.warning("未启用领取DNF福利中心兑换活动功能，将跳过")
-            return
-
-        if get_today() < "20210121":
-            logger.warning("本次福利中心兑换将在1.21开启")
             return
 
         self.check_dnf_welfare()

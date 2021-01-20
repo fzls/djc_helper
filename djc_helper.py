@@ -146,8 +146,9 @@ class DjcHelper:
     def check_skey_expired(self):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
         if str(query_data['ret']) == "0":
-            # skey尚未过期
-            pass
+            # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
+            account_info = self.cfg.account_info
+            self.save_uin_skey(account_info.uin, account_info.skey, self.vuserid)
         else:
             # 已过期，更新skey
             logger.info("")

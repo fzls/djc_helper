@@ -572,3 +572,12 @@ class DnfSpringInfo(ConfigInterface):
         self.laojiaozi_count = 0
         # 整个活动专属附带激活的总数目
         self.total_take_fudai = 0
+
+
+class Dnf0121Info(ConfigInterface):
+    def __init__(self):
+        self.sItemIds = []
+        self.lottery_times = 0
+        self.hasTakeShare = False
+        self.hasTakeBind = False
+        self.hasTakeLogin = False

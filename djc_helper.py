@@ -1,4 +1,3 @@
-import calendar
 import math
 import random
 import string
@@ -425,6 +424,9 @@ class DjcHelper:
         if get_today() >= "20210121":
             # DNF福利中心兑换
             self.dnf_welfare()
+
+            # DNF0121新春落地页活动
+            self.dnf_0121()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -3225,6 +3227,50 @@ class DjcHelper:
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210104cjhdh5/",
                                    **extra_params)
 
+    # --------------------------------------------DNF0121新春落地页活动--------------------------------------------
+    def dnf_0121(self):
+        # https://dnf.qq.com/cp/a20210121index/
+        show_head_line("DNF0121新春落地页活动")
+
+        if not self.cfg.function_switches.get_dnf_0121 or self.disable_most_activities():
+            logger.warning("未启用领取DNF0121新春落地页活动功能，将跳过")
+            return
+
+        self.check_dnf_0121()
+
+        def query_info():
+            res = self.dnf_0121_op("查询用户信息", "733258", print_res=False)
+            common_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+            info = Dnf0121Info()
+            info.sItemIds = common_info.sOutValue1.split(",")
+            info.lottery_times = int(common_info.sOutValue2)
+            info.hasTakeShare = common_info.sOutValue3 == "1"
+            info.hasTakeBind = common_info.sOutValue4 == "1"
+            info.hasTakeLogin = common_info.sOutValue5 == "1"
+
+            return info
+
+        info = query_info()
+        if not info.hasTakeShare:
+            self.dnf_0121_op("领取分享资格", "732634")
+        if not info.hasTakeBind:
+            self.dnf_0121_op("绑定大区领取资格", "732636")
+        if not info.hasTakeLogin:
+            self.dnf_0121_op("登录游戏领取资格", "732637")
+
+        for i in range(info.lottery_times):
+            self.dnf_0121_op(f"第{i + 1}次抽奖", "732593")
+
+    def check_dnf_0121(self):
+        self.check_bind_account("DNF0121新春落地页活动", "https://dnf.qq.com/cp/a20210121index/",
+                                activity_op_func=self.dnf_0121_op, query_bind_flowid="732631", commit_bind_flowid="732630")
+
+    def dnf_0121_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_0121
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210121index/",
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3468,4 +3514,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs_signin()
         # djcHelper.vip_mentor()
         # djcHelper.ark_lottery()
-        djcHelper.dnf_spring()
+        # djcHelper.dnf_spring()
+        djcHelper.dnf_0121()

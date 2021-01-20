@@ -422,6 +422,9 @@ class DjcHelper:
         # DNF新春夺宝大作战
         self.dnf_spring()
 
+        # DNF福利中心兑换
+        self.dnf_welfare()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -447,9 +450,6 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
-
-        # DNF福利中心兑换
-        self.dnf_welfare()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -2328,6 +2328,10 @@ class DjcHelper:
             logger.warning("未启用领取DNF福利中心兑换活动功能，将跳过")
             return
 
+        if get_today() < "20210121":
+            logger.warning("本次福利中心兑换将在1.21开启")
+            return
+
         self.check_dnf_welfare()
 
         def exchange_package(sContent):
@@ -2351,11 +2355,13 @@ class DjcHelper:
             update_db_for(self.cfg.name, callback)
 
         sContents = [
-            "DNF1224",
-            "你好啊勇士",
-            "2021欧气满满",
-            "321fight",
+            "dnf2021",
+            "寒冬雪人加持三觉助力新春",
+            "来COLG百万勇士在线交友",
+            "YZZ2021",
+            "dnf121",
         ]
+        random.shuffle(sContents)
         for sContent in sContents:
             exchange_package(sContent)
 

@@ -2359,6 +2359,8 @@ class DjcHelper:
             "来COLG百万勇士在线交友",
             "YZZ2021",
             "dnf121",
+            "客服新春版本献礼",
+            "客服恭祝春节快乐"
         ]
         random.shuffle(sContents)
         for sContent in sContents:

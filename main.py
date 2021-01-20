@@ -33,8 +33,6 @@ def main():
 
     show_qiafan_message_box_on_every_big_version("v5.2.0")
 
-    check_djc_role_binding()
-
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -44,6 +42,8 @@ def main():
         exit(-1)
 
     check_all_skey_and_pskey(cfg)
+
+    check_djc_role_binding()
 
     # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
     try_auto_update(cfg)

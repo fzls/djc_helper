@@ -2323,6 +2323,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
+    @try_except
     def dnf_welfare(self):
         # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
@@ -3230,6 +3231,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF0121新春落地页活动--------------------------------------------
+    @try_except
     def dnf_0121(self):
         # https://dnf.qq.com/cp/a20210121index/
         show_head_line("DNF0121新春落地页活动")

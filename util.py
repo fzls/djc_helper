@@ -234,6 +234,16 @@ def use_by_myself():
     return os.path.exists(".use_by_myself")
 
 
+def try_except(fun):
+    def decorator(*args, **kwargs):
+        try:
+            fun(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"执行{fun.__name__}出错了", exc_info=e)
+
+    return decorator
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

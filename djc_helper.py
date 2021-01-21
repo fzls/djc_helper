@@ -1274,7 +1274,7 @@ class DjcHelper:
         need_update = self.is_pskey_expired(cached_pskey)
 
         # qq空间登录也需要获取skey后，若是旧版本存档，视作已过期
-        if "skey" not in cached_pskey or "vuserid" not in cached_pskey:
+        if not need_update and (cached_pskey is None or "skey" not in cached_pskey or "vuserid" not in cached_pskey):
             logger.warning("qq空间登录改版后，需要有skey和vuserid。当前为旧版本cache，需要重新拉取")
             need_update = True
 

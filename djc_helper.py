@@ -422,8 +422,9 @@ class DjcHelper:
             # DNF福利中心兑换
             self.dnf_welfare()
 
-            # DNF0121新春落地页活动
-            self.dnf_0121()
+            # 暂时屏蔽
+            # # DNF0121新春落地页活动
+            # self.dnf_0121()
 
             # WeGame春节活动
             self.wegame_spring()

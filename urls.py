@@ -80,6 +80,7 @@ class Urls:
         self.iActivityId_dnf_bbs = "351488" # DNF论坛积分兑换活动
         self.iActivityId_dnf_spring = "353340" # DNF新春夺宝大作战
         self.iActivityId_dnf_0121 = "354854" # DNF0121新春落地页活动需求
+        self.iActivityId_wegame_spring = "356836" # WeGame春节活动 新春献豪礼 首次盲盒限时领
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

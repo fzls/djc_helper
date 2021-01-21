@@ -1273,6 +1273,11 @@ class DjcHelper:
         cached_pskey = self.load_uin_pskey()
         need_update = self.is_pskey_expired(cached_pskey)
 
+        # qq空间登录也需要获取skey后，若是旧版本存档，视作已过期
+        if "skey" not in cached_pskey or "vuserid" not in cached_pskey:
+            logger.warning("qq空间登录改版后，需要有skey和vuserid。当前为旧版本cache，需要重新拉取")
+            need_update = True
+
         if need_update:
             # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
             logger.warning("pskey需要更新，将尝试重新登录QQ空间获取并保存到本地")

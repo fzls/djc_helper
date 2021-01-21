@@ -3438,7 +3438,7 @@ class DjcHelper:
         # 抽奖
         logger.info(color("bold_yellow") + f"当前共有{info.lottery_times}抽奖积分，历史累计获取数目为{info.total_lottery_times}抽奖积分")
         for i in range(info.lottery_times):
-            self.spring_fudai_op(f"第{i+1}次积分抽奖", "733411")
+            self.spring_fudai_op(f"第{i + 1}次积分抽奖", "733411")
 
         # 签到
         self.spring_fudai_op("在线30min礼包", "732400", needADD="1")

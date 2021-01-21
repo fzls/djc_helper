@@ -3465,6 +3465,7 @@ if __name__ == '__main__':
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
 
     for idx in indexes:  # 从1开始，第i个

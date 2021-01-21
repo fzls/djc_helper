@@ -428,6 +428,9 @@ class DjcHelper:
         # WeGame春节活动
         self.wegame_spring()
 
+        # 新春福袋大作战
+        self.spring_fudai()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -3363,6 +3366,61 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210121wegame/",
                                    **extra_params)
 
+    # --------------------------------------------新春福袋大作战--------------------------------------------
+    @try_except
+    def spring_fudai(self):
+        # https://dnf.qq.com/cp/a20210108luckym/index.html
+        show_head_line("新春福袋大作战")
+
+        if not self.cfg.function_switches.get_spring_fudai or self.disable_most_activities():
+            logger.warning("未启用领取新春福袋大作战功能，将跳过")
+            return
+
+        self.check_spring_fudai()
+
+        self.spring_fudai_op("分享领取礼包", "733412")
+
+        # re: 晚上把邀请普通和流失的参考漂流瓶加上 @2021-01-21 05:15:21 By Chen Ji
+
+        # 邀请普通玩家（福袋）
+        self.spring_fudai_op("绑定大区获得1次获取福袋机会", "732406")
+        self.spring_fudai_op("打开一个福袋", "732405")
+        # self.spring_fudai_op("展示好友接受列表", "733413", page="1", type="1")
+        # self.spring_fudai_op("发送普通好友邀请", "732407", dateInfo=str(dateInfo), sendQQ=sendQQ) # re: LUCKY_DNF.dateInfo=res.sOutValue8
+        # self.spring_fudai_op("索要福袋", "733390", dateInfo=str(dateInfo+8), sendQQ=sendQQ)
+        # self.spring_fudai_op("赠送好友福袋", "733380", sId=sId)
+        # # self.spring_fudai_op("普通好友接受邀请", "732548", sId=sId)
+        # self.spring_fudai_op("邀请人领取接受好友邀请2积分", "732550", acceptId=acceptQQ, needADD="2")
+
+        # # 邀请流失玩家和领奖
+        # self.spring_fudai_op("流失好友领取礼包", "732597")
+        # self.spring_fudai_op("展示好友接受列表", "733413", page="1", type="2")
+        # self.spring_fudai_op("给流失好友发送消息", "732602", sendQQ=sendQQ)
+        # self.spring_fudai_op("邀请人领取流失用户接受礼包", "733369", userNum="1")
+        # # self.spring_fudai_op("流失好友接受邀请", "732635", sId=sId)
+        # self.spring_fudai_op("邀请人更新流失邀请进度条", "733352", acceptId=acceptId)
+
+        # 抽奖
+        self.spring_fudai_op("查询各种数据，如抽奖次数（积分）", "733432")
+        # re: 根据抽奖次数来抽奖 @2021-01-21 05:14:08 By Chen Ji
+        self.spring_fudai_op("积分抽奖", "733411")
+
+        # 签到
+        self.spring_fudai_op("在线30min礼包", "732400", needADD="1")
+        self.spring_fudai_op("累计3天礼包", "732404", giftId="1470919")
+        self.spring_fudai_op("累计7天礼包", "732404", giftId="1470920")
+        self.spring_fudai_op("累计15天礼包", "732404", giftId="1470921")
+
+    def check_spring_fudai(self):
+        self.check_bind_account("新春福袋大作战", "https://dnf.qq.com/cp/a20210108luckym/index.html",
+                                activity_op_func=self.spring_fudai_op, query_bind_flowid="732399", commit_bind_flowid="732398")
+
+    def spring_fudai_op(self, ctx, iFlowId, needADD="0", page="", type="", dateInfo="", sendQQ="", sId="", acceptId="", userNum="", giftId="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_spring_fudai
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210108luckym/",
+                                   needADD=needADD, page=page, type=type, dateInfo=dateInfo, sendQQ=sendQQ, sId=sId, acceptId=acceptId, userNum=userNum, giftId=giftId,
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3405,6 +3463,7 @@ class DjcHelper:
             "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
             "cz": "", "dj": "",
             "siActivityId": "",
+            "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -3610,4 +3669,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_spring()
         # djcHelper.dnf_0121()
         # djcHelper.wegame_spring()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.spring_fudai()

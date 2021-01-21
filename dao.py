@@ -581,3 +581,23 @@ class Dnf0121Info(ConfigInterface):
         self.hasTakeShare = False
         self.hasTakeBind = False
         self.hasTakeLogin = False
+
+
+class SpringFuDaiInfo(ConfigInterface):
+    def __init__(self):
+        # 今日是否已打开过福袋
+        self.today_has_take_fudai = False
+        # 拥有的福袋数目
+        self.fudai_count = 0
+        # 是否已领取绑定区服赠送的福袋
+        self.has_take_bind_award = False
+        # 已经邀请成功的流失好友数
+        self.invited_ok_liushi_friends = 0
+        # 是否已经领取过分享奖励
+        self.has_take_share_award = False
+        # 累积抽奖数目
+        self.total_lottery_times = 0
+        # 当前抽奖数目
+        self.lottery_times = 0
+        # 请求时传参用的一个参数
+        self.date_info = 0

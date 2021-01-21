@@ -425,6 +425,9 @@ class DjcHelper:
             # DNF0121新春落地页活动
             self.dnf_0121()
 
+            # WeGame春节活动
+            self.wegame_spring()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -3276,6 +3279,60 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210121index/",
                                    **extra_params)
 
+    # --------------------------------------------WeGame春节活动--------------------------------------------
+    @try_except
+    def wegame_spring(self):
+        # https://dnf.qq.com/lbact/a20210121wegame/index.html
+        show_head_line("WeGame春节活动")
+
+        if not self.cfg.function_switches.get_wegame_spring or self.disable_most_activities():
+            logger.warning("未启用领取WeGame春节活动功能，将跳过")
+            return
+
+        self.check_wegame_spring()
+
+        def query_signin_days():
+            res = self.wegame_spring_op("查询签到天数", "736051", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
+            parts = info.sOutValue1.split('|')[0].split(':')
+            days = int(parts[2])
+            return days
+
+        def query_lottery_times():
+            res = self.wegame_spring_op("查询抽奖次数", "735731", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            # "sOutValue1": "239:16:4|240:8:1",
+            parts = info.sOutValue1.split('|')[0].split(':')
+            total, remaining = int(parts[1]), int(parts[2])
+            return total, remaining
+
+        # 阿拉德盲盒限时抽
+        self.wegame_spring_op("新春盲盒抽奖-4礼包抽奖", "735368")
+
+        # 勇士齐聚阿拉德
+        self.wegame_spring_op("签到", "735365")
+        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
+        self.wegame_spring_op("签到3天礼包", "735369")
+        self.wegame_spring_op("签到7天礼包", "735370")
+        self.wegame_spring_op("签到15天礼包", "735372")
+
+        self.wegame_spring_op("1.在WeGame启动DNF", "735373")
+        self.wegame_spring_op("2.游戏在线30分钟", "735374")
+        totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
+        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        for i in range(remainingLotteryTimes):
+            self.wegame_spring_op(f"每日抽奖-第{i + 1}次", "735375")
+
+    def check_wegame_spring(self):
+        self.check_bind_account("WeGame春节活动", "https://dnf.qq.com/lbact/a20210121wegame/index.html",
+                                activity_op_func=self.wegame_spring_op, query_bind_flowid="735362", commit_bind_flowid="735361")
+
+    def wegame_spring_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_wegame_spring
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210121wegame/",
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3521,4 +3578,5 @@ if __name__ == '__main__':
         # djcHelper.vip_mentor()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
-        djcHelper.dnf_0121()
+        # djcHelper.dnf_0121()
+        djcHelper.wegame_spring()

@@ -2337,6 +2337,8 @@ class DjcHelper:
 
         self.check_dnf_welfare()
 
+        key_shareCodes = "shareCodes"
+
         def exchange_package(sContent):
             key = "dnf_welfare_exchange_package"
 
@@ -2346,7 +2348,12 @@ class DjcHelper:
                 logger.warning(f"已经兑换过【{sContent}】，不再尝试兑换")
                 return
 
-            res = self.dnf_welfare_op(f"兑换口令-{sContent}", "558229", sContent=quote_plus(quote_plus(quote_plus(sContent))))
+            reg = '^[0-9]+-[0-9A-Za-z]{18}$'
+            if re.fullmatch(reg, sContent) is not None:
+                siActivityId, sContent = sContent.split('-')
+                res = self.dnf_welfare_op(f"兑换分享口令-{siActivityId}-{sContent}", "649260", siActivityId=siActivityId, sContent=quote_plus(quote_plus(quote_plus(sContent))))
+            else:
+                res = self.dnf_welfare_op(f"兑换口令-{sContent}", "558229", sContent=quote_plus(quote_plus(quote_plus(sContent))))
             if int(res["ret"]) != 0 or int(res["modRet"]["iRet"]) != 0:
                 return
 
@@ -2359,6 +2366,25 @@ class DjcHelper:
 
             update_db_for(self.cfg.name, callback)
 
+            try:
+                shareCode = res["modRet"]["jData"]["shareCode"]
+                if shareCode != "":
+                    db = load_db()
+
+                    if key_shareCodes not in db:
+                        db[key_shareCodes] = []
+                    shareCodeList = db[key_shareCodes]
+
+                    if shareCode not in shareCodeList:
+                        shareCodeList.append(shareCode)
+
+                    save_db(db)
+            except Exception as e:
+                pass
+
+        db = load_db()
+        shareCodeList = db.get(key_shareCodes, [])
+
         sContents = [
             "dnf2021",
             "寒冬雪人加持三觉助力新春",
@@ -2369,6 +2395,7 @@ class DjcHelper:
             "客服恭祝春节快乐"
         ]
         random.shuffle(sContents)
+        sContents = [*shareCodeList, *sContents]
         for sContent in sContents:
             exchange_package(sContent)
 
@@ -2384,11 +2411,11 @@ class DjcHelper:
         self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
                                 activity_op_func=self.dnf_welfare_op, query_bind_flowid="558227", commit_bind_flowid="558226")
 
-    def dnf_welfare_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
+    def dnf_welfare_op(self, ctx, iFlowId, siActivityId="", sContent="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_welfare
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
-                                   sContent=sContent,
+                                   siActivityId=siActivityId, sContent=sContent,
                                    **extra_params)
 
     def dnf_welfare_login_gifts_op(self, ctx, iFlowId, siActivityId="", print_res=True):

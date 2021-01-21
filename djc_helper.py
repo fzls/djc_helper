@@ -418,16 +418,15 @@ class DjcHelper:
         # DNF新春夺宝大作战
         self.dnf_spring()
 
-        if get_today() >= "20210121":
-            # DNF福利中心兑换
-            self.dnf_welfare()
+        # DNF福利中心兑换
+        self.dnf_welfare()
 
-            # 暂时屏蔽
-            # # DNF0121新春落地页活动
-            # self.dnf_0121()
+        # 暂时屏蔽
+        # # DNF0121新春落地页活动
+        # self.dnf_0121()
 
-            # WeGame春节活动
-            self.wegame_spring()
+        # WeGame春节活动
+        self.wegame_spring()
 
     # -- 已过期的一些活动
     def expired_activities(self):

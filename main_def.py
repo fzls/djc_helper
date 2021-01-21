@@ -612,10 +612,13 @@ def temp_code(cfg):
         (
             "【预购新春礼包送好礼】活动目前已在auto.js脚本中支持，可参考https://github.com/fzls/autojs/blob/main/qq.js使用~"
         ),
+        (
+            "万物皆新意 牛转阿拉德 活动只需要抽签三次，不再加入，请自行添加"
+        ),
     ]
 
-    if is_first_run("史诗之路来袭"):
-        webbrowser.open("https://dnf.qq.com/lbact/a20201224aggregate/index.html")
+    if is_first_run("牛转阿拉德"):
+        webbrowser.open("https://dnf.qq.com/cp/a20210121index/")
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")

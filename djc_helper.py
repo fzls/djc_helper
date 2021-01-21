@@ -2373,12 +2373,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("第一个 2020.12.20 - 2020.12.23 登录游戏", "724929")
-        self.dnf_welfare_login_gifts_op("第二个 2020.12.24 - 2020.12.26 登录游戏", "724930")
-        self.dnf_welfare_login_gifts_op("第三个 2020.12.28 - 2021.01.03 登录游戏", "724936")
+        self.dnf_welfare_login_gifts_op("第一个 2020.01.21 - 2020.01.24 登录游戏", "732812")
+        self.dnf_welfare_login_gifts_op("第二个 2020.01.25 - 2020.01.28 登录游戏", "732821")
+        self.dnf_welfare_login_gifts_op("第三个 2020.01.29 - 2021.02.07 登录游戏", "732822")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "724940")
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "732820", siActivityId="19")
 
     def check_dnf_welfare(self):
         self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -2391,7 +2391,7 @@ class DjcHelper:
                                    sContent=sContent,
                                    **extra_params)
 
-    def dnf_welfare_login_gifts_op(self, ctx, iFlowId, print_res=True):
+    def dnf_welfare_login_gifts_op(self, ctx, iFlowId, siActivityId="", print_res=True):
         iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
@@ -2402,7 +2402,8 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
                                    sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                                    sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam)
+                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
+                                   siActivityId=siActivityId)
 
     # --------------------------------------------DNF共创投票--------------------------------------------
     def dnf_dianzan(self):
@@ -3376,6 +3377,7 @@ class DjcHelper:
             "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
             "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
             "cz": "", "dj": "",
+            "siActivityId": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -3565,7 +3567,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_carnival()
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
-        # djcHelper.dnf_welfare()
         # djcHelper.dnf_dianzan()
         # djcHelper.dnf_drift()
         # djcHelper.majieluo()
@@ -3581,4 +3582,5 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
         # djcHelper.dnf_0121()
-        djcHelper.wegame_spring()
+        # djcHelper.wegame_spring()
+        djcHelper.dnf_welfare()

@@ -113,12 +113,11 @@ def auto_send_cards(cfg):
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
-
         lr = djcHelper.fetch_pskey()
         if lr is None:
             continue
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list(print_warning=False)
 
         qq = uin2qq(lr.uin)
         qa = QzoneActivity(djcHelper, lr)
@@ -266,12 +265,11 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
-
         lr = djcHelper.fetch_pskey()
         if lr is None:
             continue
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list(print_warning=False)
 
         qa = QzoneActivity(djcHelper, lr)
 

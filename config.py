@@ -201,6 +201,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_0121 = True
         # 是否领取 新春献豪礼 首次盲盒限时领 活动
         self.get_wegame_spring = True
+        # 是否领取 新春福袋大作战 活动
+        self.get_spring_fudai = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

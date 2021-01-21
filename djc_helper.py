@@ -3378,19 +3378,46 @@ class DjcHelper:
 
         self.check_spring_fudai()
 
-        self.spring_fudai_op("分享领取礼包", "733412")
+        def query_info():
+            # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",
+            # "sOutValue5": "0252c9b811d66dc1f0c9c6284b378e40", "sOutValue6": "", "sOutValue7": "0", "sOutValue8": "4"}
+            res = self.spring_fudai_op("查询各种数据", "733432", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = SpringFuDaiInfo()
 
-        # re: 晚上把邀请普通和流失的参考漂流瓶加上 @2021-01-21 05:15:21 By Chen Ji
+            temp = raw_info.sOutValue1.split('|')
+            info.today_has_take_fudai = temp[0] == "1"
+            info.fudai_count = int(raw_info.sOutValue4)
+            info.has_take_bind_award = raw_info.sOutValue2 == "1"
+            info.invited_ok_liushi_friends = int(raw_info.sOutValue7)
+            info.has_take_share_award = temp[1] == "1"
+            info.total_lottery_times = int(raw_info.sOutValue3)
+            info.lottery_times = info.total_lottery_times - int(temp[2])
+            info.date_info = int(raw_info.sOutValue8)
+
+            return info
+
+        info = query_info()
+
+        if not info.has_take_share_award:
+            self.spring_fudai_op("分享领取礼包", "733412")
 
         # 邀请普通玩家（福袋）
-        self.spring_fudai_op("绑定大区获得1次获取福袋机会", "732406")
-        self.spring_fudai_op("打开一个福袋", "732405")
+        if not info.has_take_bind_award:
+            self.spring_fudai_op("绑定大区获得1次获取福袋机会", "732406")
+        if not info.today_has_take_fudai:
+            self.spring_fudai_op("打开一个福袋", "732405")
+
+        # re: 晚上把邀请普通和流失的参考漂流瓶加上 @2021-01-21 05:15:21 By Chen Ji
         # self.spring_fudai_op("展示好友接受列表", "733413", page="1", type="1")
         # self.spring_fudai_op("发送普通好友邀请", "732407", dateInfo=str(dateInfo), sendQQ=sendQQ) # re: LUCKY_DNF.dateInfo=res.sOutValue8
         # self.spring_fudai_op("索要福袋", "733390", dateInfo=str(dateInfo+8), sendQQ=sendQQ)
         # self.spring_fudai_op("赠送好友福袋", "733380", sId=sId)
         # # self.spring_fudai_op("普通好友接受邀请", "732548", sId=sId)
         # self.spring_fudai_op("邀请人领取接受好友邀请2积分", "732550", acceptId=acceptQQ, needADD="2")
+        ## 更新下数据
+        info = query_info()
+        logger.info(color("bold_yellow") + f"当前拥有{info.fudai_count}个福袋")
 
         # # 邀请流失玩家和领奖
         # self.spring_fudai_op("流失好友领取礼包", "732597")
@@ -3399,11 +3426,14 @@ class DjcHelper:
         # self.spring_fudai_op("邀请人领取流失用户接受礼包", "733369", userNum="1")
         # # self.spring_fudai_op("流失好友接受邀请", "732635", sId=sId)
         # self.spring_fudai_op("邀请人更新流失邀请进度条", "733352", acceptId=acceptId)
+        ## 更新下数据
+        info = query_info()
+        logger.info(color("bold_yellow") + f"已成功邀请{info.invited_ok_liushi_friends}个流失好友")
 
         # 抽奖
-        self.spring_fudai_op("查询各种数据，如抽奖次数（积分）", "733432")
-        # re: 根据抽奖次数来抽奖 @2021-01-21 05:14:08 By Chen Ji
-        self.spring_fudai_op("积分抽奖", "733411")
+        logger.info(color("bold_yellow") + f"当前共有{info.lottery_times}抽奖积分，历史累计获取数目为{info.total_lottery_times}抽奖积分")
+        for i in range(info.lottery_times):
+            self.spring_fudai_op(f"第{i+1}次积分抽奖", "733411")
 
         # 签到
         self.spring_fudai_op("在线30min礼包", "732400", needADD="1")

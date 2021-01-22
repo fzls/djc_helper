@@ -240,6 +240,8 @@ class AccountConfig(ConfigInterface):
         self.drift_send_qq_list = []  # type: List[str]
         # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
         self.majieluo_receiver_qq_list = []  # type: List[str]
+        # 新春福袋大作战邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
+        self.spring_fudai_receiver_qq_list = []  # type: List[str]
         # dnf论坛签到formhash
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
@@ -286,6 +288,7 @@ class AccountConfig(ConfigInterface):
 
         self.drift_send_qq_list = [str(qq) for qq in self.drift_send_qq_list]
         self.majieluo_receiver_qq_list = [str(qq) for qq in self.majieluo_receiver_qq_list]
+        self.spring_fudai_receiver_qq_list = [str(qq) for qq in self.spring_fudai_receiver_qq_list]
 
     def updateUinSkey(self, uin, skey):
         self.account_info.uin = uin

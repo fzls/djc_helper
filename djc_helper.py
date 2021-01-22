@@ -3530,7 +3530,7 @@ class DjcHelper:
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
         return f"{year:04d}{month:02d}{day:02d}{hour:02d}{minute:02d}{second:02d}"
 
-    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, **data_extra_params):
+    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", **data_extra_params):
         data = self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),
                            iActivityId=iActivityId, iFlowId=iFlowId, **data_extra_params)
@@ -3538,7 +3538,7 @@ class DjcHelper:
         return self.post(ctx, self.urls.amesvr, data,
                          amesvr_host=amesvr_host, sServiceDepartment=sServiceDepartment, sServiceType=sServiceType,
                          iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res)
+                         print_res=print_res, extra_cookies=extra_cookies)
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"

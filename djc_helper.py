@@ -3383,6 +3383,16 @@ class DjcHelper:
 
         self.check_spring_fudai()
 
+        if is_first_run("fudai_invite"):
+            msg = (
+                "Hello~，可否在稍后弹出的福袋大作战活动页面点一下确认接收哇（不会损失任何东西）\n"
+                "(〃'▽'〃)"
+                "（本消息只会弹出一次）\n"
+            )
+            logger.warning(color("bold_cyan") + msg)
+            win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
+            webbrowser.open("https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId=0252c9b811d66dc1f0c9c6284b378e40")
+
         def query_info():
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",
             # "sOutValue5": "0252c9b811d66dc1f0c9c6284b378e40", "sOutValue6": "", "sOutValue7": "0", "sOutValue8": "4"}

@@ -2868,6 +2868,17 @@ class DjcHelper:
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             return int(info.sOutValue1)
 
+        def query_card_info():
+            res = self.majieluo_op("查询信息", "733883", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            # 默认排序与表现一致，改为跟ui表现一致
+            temp = info.sOutValue1.split('|')
+            order = [3, 4, 1, 2, 5]
+            actual = []
+            for idx in order:
+                actual.append(temp[idx - 1])
+            return '|'.join(actual)
+
         # 马杰洛的见面礼
         self.majieluo_op("领取见面礼", "733355")
 
@@ -2879,6 +2890,8 @@ class DjcHelper:
         if receiveUin != "" and receiveUin != uin2qq(self.cfg.account_info.uin):
             for cardType in cards:
                 self.majieluo_op(f"赠送好友卡片-{cardType}", "733657", sendName=quote_plus(self.cfg.name), cardType=str(cardType), receiveUin=receiveUin)
+
+        logger.info(color("bold_yellow") + f"当前拥有的卡牌为{query_card_info()}")
         self.majieluo_op("集齐五个赛利亚，兑换200个时间引导石", "733385")
 
         # 马杰洛的特殊任务

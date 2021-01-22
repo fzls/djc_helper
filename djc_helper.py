@@ -3252,7 +3252,7 @@ class DjcHelper:
         springInfo = DnfSpringInfo()
 
         # 查询第一部分
-        res = self.dnf_spring_op("输出", "731313")
+        res = self.dnf_spring_op("输出", "731313", print_res=False)
         info = AmesvrCommonModRet().auto_update_config(res["modRet"])
 
         springInfo.recharge_money = int(info.sOutValue1) // 100
@@ -3265,7 +3265,7 @@ class DjcHelper:
         springInfo.laojiaozi_count = int(info.sOutValue3)
 
         # 查询第二部分
-        res = self.dnf_spring_op("输出二", "731854")
+        res = self.dnf_spring_op("输出二", "731854", print_res=False)
         info = AmesvrCommonModRet().auto_update_config(res["modRet"])
 
         springInfo.total_take_fudai = int(info.sOutValue1)

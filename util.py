@@ -11,7 +11,7 @@ import win32gui
 import win32process
 
 from db import *
-from log import logger, color
+from log import logger, color, asciiReset
 
 
 def uin2qq(uin):
@@ -239,9 +239,20 @@ def try_except(fun):
         try:
             fun(*args, **kwargs)
         except Exception as e:
-            logger.error(f"执行{fun.__name__}出错了", exc_info=e)
+            logger.error(f"执行{fun.__name__}出错了" + check_some_exception(e), exc_info=e)
 
     return decorator
+
+
+def check_some_exception(e) -> str:
+    msg = ""
+
+    # 特判一些错误
+    if type(e) is KeyError and e.args[0] == 'modRet':
+        # 大概率是活动过期了
+        msg += "\n" + color("bold_yellow") + "大概率是这个活动过期了，或者放鸽子到点了还没开放，若影响正常运行流程，可先自行关闭这个活动开关(若config.toml中没有，请去config.toml.example找到对应开关名称)，或等待新版本（日常加班，有时候可能会很久才发布新版本）" + asciiReset
+
+    return msg
 
 
 if __name__ == '__main__':

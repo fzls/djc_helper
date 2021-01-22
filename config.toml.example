@@ -23,6 +23,9 @@ auto_update_on_start = true
 # 是否尝试自动绑定新活动
 try_auto_bind_new_activity = true
 
+# 马杰洛新春版本赠送卡片目标QQ
+majieluo_send_card_target_qq = ""
+
 # 抽卡汇总展示色彩
 ark_lottery_summary_show_color = ""
 
@@ -231,7 +234,7 @@ get_dnf_dianzan = true
 get_dnf_welfare = true
 # 是否领取dnf漂流瓶
 get_dnf_drift = true
-# 是否领取DNF马杰洛的规划第二期
+# 是否领取DNF马杰洛的规划第三期
 get_majieluo = true
 # 是否领取dnf助手双旦活动（暗夜狂欢），额外需要助手userId和token
 get_dnf_helper_christmas = true

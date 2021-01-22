@@ -3522,7 +3522,6 @@ class DjcHelper:
                                    **extra_params,
                                    extra_cookies=f"p_skey={p_skey}")
 
-
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)

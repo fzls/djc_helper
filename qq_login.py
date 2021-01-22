@@ -433,6 +433,19 @@ class QQLogin():
         if self.login_mode == self.login_mode_normal:
             # 普通登录额外获取腾讯视频的vqq_vuserid
             self.fetch_qq_video_vuserid()
+
+            logger.info("转到福袋大作战活动，从而可以获取pskey")
+            self.driver.get("https://dnf.qq.com/cp/a20210108luckym/index.html")
+            time.sleep(1)
+            logger.info("再跳转到apps.game.qq.com，用于获取该域名下的p_skey")
+            self.driver.get("https://apps.game.qq.com/")
+            time.sleep(1)
+            for i in range(5):
+                p_skey = self.driver.get_cookie('p_skey')
+                if p_skey is not None:
+                    break
+                time.sleep(1)
+            self.add_cookies(self.driver.get_cookies())
         elif self.login_mode == self.login_mode_qzone:
             self.fetch_qq_video_vuserid()
             # logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")

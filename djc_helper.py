@@ -434,6 +434,9 @@ class DjcHelper:
         # DNF马杰洛的规划第三期
         self.majieluo()
 
+        # DNF新春福利集合站
+        self.spring_collection()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -3535,6 +3538,41 @@ class DjcHelper:
                                    **extra_params,
                                    extra_cookies=f"p_skey={p_skey}")
 
+    # --------------------------------------------DNF新春福利集合站--------------------------------------------
+    @try_except
+    def spring_collection(self):
+        # https://dnf.qq.com/lbact/a20210121hdhj/index.html
+        show_head_line("DNF新春福利集合站")
+
+        if not self.cfg.function_switches.get_spring_collection or self.disable_most_activities():
+            logger.warning("未启用领取DNF新春福利集合站功能，将跳过")
+            return
+
+        self.check_spring_collection()
+
+        def query_signin_days():
+            res = self.spring_collection_op("查询", "736591", print_res=False)
+            info = AmesvrSigninInfo().auto_update_config(res["modRet"])
+            return int(info.total)
+
+        self.spring_collection_op("验证白名单", "736590")
+        self.spring_collection_op("勇士礼包", "736585")
+
+        self.spring_collection_op("在线30min", "736586")
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+        self.spring_collection_op("签到满3天", "736583")
+        self.spring_collection_op("签到满7天", "736587")
+        self.spring_collection_op("签到满15天", "736589")
+
+    def check_spring_collection(self):
+        self.check_bind_account("DNF新春福利集合站", "https://dnf.qq.com/lbact/a20210121hdhj/index.html",
+                                activity_op_func=self.spring_collection_op, query_bind_flowid="736580", commit_bind_flowid="736579")
+
+    def spring_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_spring_collection
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210121hdhj/",
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3784,4 +3822,5 @@ if __name__ == '__main__':
         # djcHelper.wegame_spring()
         # djcHelper.dnf_welfare()
         # djcHelper.majieluo()
-        djcHelper.spring_fudai()
+        # djcHelper.spring_fudai()
+        djcHelper.spring_collection()

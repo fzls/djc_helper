@@ -601,3 +601,15 @@ class SpringFuDaiInfo(ConfigInterface):
         self.lottery_times = 0
         # 请求时传参用的一个参数
         self.date_info = 0
+
+
+class AmesvrSigninInfo(ConfigInterface):
+    def __init__(self):
+        self.nick_name = "1054073896"
+        self.uin = "1054073896"
+        self.data = []
+        self.total = "0"
+        self.msg = "OK"
+        self.sMsg = "OK"
+        self.ret = "0"
+        self.iRet = "0"

@@ -3429,6 +3429,7 @@ class DjcHelper:
             if len(self.cfg.spring_fudai_receiver_qq_list) == 0:
                 return
 
+            logger.warning(color("bold_yellow") + "开启了赠送福袋功能，因此需要登录活动页面来获取p_skey，请稍候~")
             ql = QQLogin(self.common_cfg)
             if self.cfg.login_mode == "qr_login":
                 # 扫码登录

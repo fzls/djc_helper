@@ -431,6 +431,9 @@ class DjcHelper:
         # 新春福袋大作战
         self.spring_fudai()
 
+        # DNF马杰洛的规划第三期
+        self.majieluo()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -456,9 +459,6 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
-
-        # DNF马杰洛的规划第二期
-        self.majieluo()
 
     # --------------------------------------------道聚城--------------------------------------------
     def djc_operations(self):
@@ -2837,99 +2837,90 @@ class DjcHelper:
                                    page=page, type=type, moduleId=moduleId, giftId=giftId, acceptId=acceptId, sendQQ=sendQQ,
                                    **extra_params)
 
-    # --------------------------------------------DNF马杰洛的规划第二期--------------------------------------------
+    # --------------------------------------------DNF马杰洛的规划第三期--------------------------------------------
+    @try_except
     def majieluo(self):
-        # https://dnf.qq.com/cp/a20201224welfare/index.html
-        show_head_line("DNF马杰洛的规划第二期")
+        # https://dnf.qq.com/cp/a20210121welfare/index.html
+        show_head_line("DNF马杰洛的规划第三期")
 
         if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
-            logger.warning("未启用领取DNF马杰洛的规划第二期活动功能，将跳过")
+            logger.warning("未启用领取DNF马杰洛的规划第三期活动功能，将跳过")
             return
 
         self.check_majieluo()
 
         def query_stone_count():
-            res = self.majieluo_op("查询当前时间引导石数量", "727334", print_res=False)
+            res = self.majieluo_op("查询当前时间引导石数量", "734106", print_res=False)
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             return int(info.sOutValue1)
 
-        def take_share_award():
-            queryRes = self.majieluo_op("【分享】查询已接受分享邀请的好友列表", "727340")
-            if queryRes["modRet"]["jData"]["iTotal"] == 0:
-                logger.warning("没有接收分享的好友，无法领取奖励")
-                return
+        # 马杰洛的见面礼
+        self.majieluo_op("领取见面礼", "733355")
 
-            for raw_friend_info in queryRes["modRet"]["jData"]["jData"]:
-                friend_info = MajieluoShareInfo().auto_update_config(raw_friend_info)
-                if friend_info.iShareLottery == '0':
-                    self.majieluo_op("【分享】好友扫码，分享者+9", "727276", invitee=friend_info.iInvitee)
-                if friend_info.iLostLottery == '0':
-                    self.majieluo_op("【分享】好友为流失玩家，分享者额外+10", "727281", invitee=friend_info.iInvitee)
-                if friend_info.iAssistLottery == '0':
-                    self.majieluo_op("【分享】好友为流失玩家且登录游戏（即助力好友），额外再+10", "727285", invitee=friend_info.iInvitee)
+        # 赛利亚的新春祝福
+        self.majieluo_op("抽取卡片", "733394")
+        cards = [1, 2, 3, 4, 5]
+        random.shuffle(cards)
+        receiveUin = self.common_cfg.majieluo_send_card_target_qq
+        if receiveUin != "" and receiveUin != uin2qq(self.cfg.account_info.uin):
+            for cardType in cards:
+                self.majieluo_op(f"赠送好友卡片-{cardType}", "733657", sendName=quote_plus(self.cfg.name), cardType=str(cardType), receiveUin=receiveUin)
+        self.majieluo_op("集齐五个赛利亚，兑换200个时间引导石", "733385")
 
-        # 01 马杰洛的见面礼
-        self.majieluo_op("领取见面礼", "727212")
+        # 马杰洛的特殊任务
+        self.majieluo_op("【登录游戏】抽取时间引导石", "733386")
+        self.majieluo_op("【通关任意一次副本】奖励翻倍", "733884")
 
-        # 02 马杰洛的幸运骰子
-        self.majieluo_op("【每日签到】摇一摇", "727213")
-        self.majieluo_op("【每日签到】点数乘2倍", "727217")
-
-        # 03 黑钻送好友
+        # 黑钻送好友
         for receiverQQ in self.cfg.majieluo_receiver_qq_list:
             logger.info("等待2秒，避免请求过快")
             time.sleep(2)
             # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
-            res = self.majieluo_op(f"【赠礼】发送赠送邀请-{receiverQQ}", "727218", receiver=receiverQQ, receiverName=quote_plus("小号"), inviterName=quote_plus("大号"))
+            res = self.majieluo_op(f"【赠礼】发送赠送黑钻邀请-{receiverQQ}", "734033", receiver=receiverQQ, receiverName=quote_plus("小号"))
             if int(res["ret"]) == 700:
                 logger.warning("今日赠送上限已到达，将停止~")
                 break
 
-            self.majieluo_op("【赠礼】领取引导石+9", "727290", receiver=receiverQQ)
+            self.majieluo_op("赠送黑钻后，领取9个时间引导石", "733885", receiver=receiverQQ)
 
-        # 04 分享得好礼（看看逻辑，可能不做）
-        take_share_award()
+        self.majieluo_op("接受好友赠送邀请，领取黑钻", "733886", inviteId="239125", receiverUrl=quote_plus("https://game.gtimg.cn/images/dnf/cp/a20210121welfare/share.png"))
 
-        # 05 分享得好礼
-        # 提取石头并领取提取奖励
+        # 提取得福利
         stoneCount = query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
         # 无视活动中的月底清空那句话
         # note：根据1.21这次的经验，如果标记是1.21，当天就结束了，需要在1.20去领取奖励
-        endTime = "20210121"
+        endTime = "20210222"
 
         takeStone = False
         if stoneCount >= 1000:
             # 达到1000个
-            self.majieluo_op("提取时间引导石", "727229", giftNum="10")
+            self.majieluo_op("提取时间引导石", "733887", giftNum="10")
             takeStone = True
         elif get_today() == endTime:
             # 今天是活动最后一天
-            self.majieluo_op("提取时间引导石", "727229", giftNum=str(stoneCount // 100))
+            self.majieluo_op("提取时间引导石", "733887", giftNum=str(stoneCount // 100))
             takeStone = True
         else:
-            logger.info("当前未到最后领取期限（本月末或活动结束时），且石头数目不足1000，故不尝试提取")
+            logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足1000，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("【提取福利】提取数量大于1000", "727246")
-            self.majieluo_op("【提取福利】提取数量大于600小于1000", "727240")
-            self.majieluo_op("【提取福利】提取数量<=600", "727232")
+            self.majieluo_op("提取福利（1000）", "734065")
+            self.majieluo_op("提取福利（700、800、900）", "734064")
+            self.majieluo_op("提取福利（300、400、500、600）", "733888")
 
     def check_majieluo(self):
-        urls = [
-            # 二维码分享
-            "https://dnf.qq.com/cp/a20201224welfarem/index.html?inviter=1054073896&pt=1",
-        ]
-        self.check_bind_account("DNF马杰洛的规划第二期", random.choice(urls),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="727124", commit_bind_flowid="727123")
+        self.check_bind_account("DNF马杰洛的规划第三期", "https://dnf.qq.com/cp/a20210121welfare/index.html",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="732627", commit_bind_flowid="732626")
 
-    def majieluo_op(self, ctx, iFlowId, invitee="", giftNum="", receiver="", receiverName="", inviterName="", print_res=True, **extra_params):
+    def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201224welfare/",
-                                   invitee=invitee, giftNum=giftNum, receiver=receiver, receiverName=receiverName, inviterName=inviterName,
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210121welfare/",
+                                   cardType=cardType, inviteId=inviteId, sendName=sendName, receiveUin=receiveUin,
+                                   receiver=receiver, receiverName=receiverName, receiverUrl=receiverUrl, giftNum=giftNum,
                                    **extra_params)
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
@@ -3503,7 +3494,7 @@ class DjcHelper:
             "plat": "", "extraStr": "",
             "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
             "type": "", "moduleId": "", "giftId": "", "acceptId": "", "sendQQ": "",
-            "invitee": "", "giftNum": "", "receiver": "", "receiverName": "", "inviterName": "",
+            "cardType": "", "giftNum": "", "inviteId": "", "inviterName": "", "sendName": "", "invitee": "", "receiveUin": "", "receiver": "", "receiverName": "", "receiverUrl": "",
             "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
             "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
             "cz": "", "dj": "",
@@ -3700,7 +3691,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_carnival_live()
         # djcHelper.dnf_dianzan()
         # djcHelper.dnf_drift()
-        # djcHelper.majieluo()
         # djcHelper.dnf_helper_christmas()
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
@@ -3715,4 +3705,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_0121()
         # djcHelper.wegame_spring()
         # djcHelper.dnf_welfare()
-        djcHelper.spring_fudai()
+        # djcHelper.spring_fudai()
+        djcHelper.majieluo()

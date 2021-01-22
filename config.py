@@ -185,7 +185,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_xinyue_financing = True
         # 是否领取dnf漂流瓶
         self.get_dnf_drift = True
-        # 是否领取DNF马杰洛的规划第二期
+        # 是否领取DNF马杰洛的规划第三期
         self.get_majieluo = True
         # 是否领取dnf助手双旦活动（暗夜狂欢），额外需要助手userId和token
         self.get_dnf_helper_christmas = True
@@ -414,6 +414,8 @@ class CommonConfig(ConfigInterface):
         self.auto_update_on_start = True
         # 是否尝试自动绑定新活动
         self.try_auto_bind_new_activity = True
+        # 马杰洛新春版本赠送卡片目标QQ
+        self.majieluo_send_card_target_qq = ""
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
         # 调整日志等级对应颜色，颜色表可以运行log.py获取

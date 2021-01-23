@@ -2414,7 +2414,10 @@ class DjcHelper:
             "YZZ2021",
             "dnf121",
             "客服新春版本献礼",
-            "客服恭祝春节快乐"
+            "客服恭祝春节快乐",
+            "小酱油新春版本献礼",
+            "官方论坛献豪礼",
+            "神话尽从柱中来",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]

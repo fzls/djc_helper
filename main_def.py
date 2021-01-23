@@ -576,17 +576,19 @@ def print_update_message_on_first_run_new_version():
 
 
 def show_ask_message_box_only_once():
-    # 临时加一个请求帮忙弄下红包活动的逻辑
-    if is_first_run("a20201110packet"):
+    # 临时加一个请求帮忙弄下叶子猪的逻辑
+    if is_first_run("叶子猪春节活动"):
         message = (
-            "今天看到有个【DPL大狂欢 邀请好友拆红包】，类似于拼多多，需要找其他人在自己的邀请页面中登录并绑定角色，进度足够就可以获得一个红包了\n"
-            "大家可不可以帮我点一下哇0-0  点开链接后登录然后绑定角色就OK啦，提前谢谢大家啦0-0 就当是一直免费维护和更新这个小工具的小报酬啦^_^\n"
-            "ps: 点确定就会弹出我的邀请页面啦，点否就再也不会弹出这个窗口啦\n"
+            "今天看到有个【叶子猪春节活动】，类似于拼多多，需要找其他人帮忙戳一下，并顺带输入手机号和QQ号生成专属链接。\n"
+            "大家可不可以帮我点一下哇0-0  点开链接后往下翻到【分享活动赚积分】，输入手机号和QQ，然后点击生成专属链接就好啦，不需要登录啥的\n"
+            "想用这个活动白嫖个春节套，嘻嘻(#^.^#)\n"
+            "提前谢谢大家啦0-0 就当是一直免费维护和更新这个小工具的小报酬啦^_^\n"
+            "ps: 点确定就会弹出我的分享页面啦，点否就再也不会弹出这个窗口啦\n"
         )
-        res = win32api.MessageBox(0, message, "请求各位帮忙助力一下~", win32con.MB_OKCANCEL)
+        res = win32api.MessageBox(0, message, "请求各位帮忙点击一下~", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
-            webbrowser.open("https://dnf.qq.com/cp/a20201110packet/index.html?inviter=2637262711&&gameId=1006")
-            win32api.MessageBox(0, "在网页里登录并绑定就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
+            webbrowser.open("http://dnf.yzz.cn/special/20210121/?c=e2AHR41LEEpsf4Kq")
+            win32api.MessageBox(0, "在网页里输入手机号和QQ，再戳下【生成专属链接】按钮就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
 

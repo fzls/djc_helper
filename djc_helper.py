@@ -1470,7 +1470,7 @@ class DjcHelper:
         self.dnf_1224_op("15日礼包", "730668")
 
     def get_dnf_1224_checkin_days(self):
-        res = self.dnf_1224_op("查询签到信息", "730670")
+        res = self.dnf_1224_op("查询签到信息", "730670", print_res=False)
         return int(res["modRet"]["total"])
 
     def check_dnf_1224(self):

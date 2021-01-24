@@ -75,7 +75,7 @@ def exchange(startTime, endTime):
     show_progress_start_time = time.time()
     show_progress_delta = 0.1
     update_user_info_start_time = time.time()
-    update_user_info_delta = 60
+    update_user_info_delta = 30 * 60
 
     latest_user_info = query_user_info()
 

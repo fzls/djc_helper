@@ -83,14 +83,16 @@ def exchange(startTime, endTime):
     while datetime.now() < startTime:
         now_time = time.time()
         if now_time - show_progress_start_time >= show_progress_delta:
+            end = ''
             if now_time - update_user_info_start_time >= update_user_info_delta:
                 latest_user_info = query_user_info()
                 update_user_info_start_time = now_time
+                end = '\n'
 
             print("\r" +
                   color("bold_cyan") + latest_user_info +
                   color("bold_green") + f"当前时间为{datetime.now()}...，还需要等待{startTime - datetime.now()}才会开始尝试。",
-                  end='')
+                  end=end)
             show_progress_start_time = now_time
 
         time.sleep(waitTime)

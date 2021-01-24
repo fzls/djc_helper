@@ -72,25 +72,24 @@ def query_info():
 
 def exchange(startTime, endTime):
     waitTime = 0.001
-    show_progress_progress = 0
+    show_progress_start_time = time.time()
     show_progress_delta = 0.1
-    update_user_info_progress = 0
+    update_user_info_start_time = time.time()
     update_user_info_delta = 60
 
     latest_user_info = query_user_info()
 
     logger.info(color("bold_yellow") + f"本轮开始时间为{startTime}，结束时间为{endTime}，请求等待间隔为{waitTime}s，预计将尝试{(endTime - startTime).seconds // waitTime}次")
     while datetime.now() < startTime:
-        show_progress_progress += waitTime
-        update_user_info_progress += waitTime
-
-        if show_progress_progress >= show_progress_delta:
-            if update_user_info_progress >= update_user_info_delta:
+        now_time = time.time()
+        if now_time - show_progress_start_time >= show_progress_delta:
+            if now_time - update_user_info_start_time >= update_user_info_delta:
                 latest_user_info = query_user_info()
-                update_user_info_progress -= update_user_info_delta
+                update_user_info_start_time = now_time
 
             print(color("bold_cyan") + f"\r{latest_user_info}。当前时间为{datetime.now()}...，还需要等待{startTime - datetime.now()}才会开始尝试。", end='')
-            show_progress_progress -= show_progress_delta
+            show_progress_start_time = now_time
+
         time.sleep(waitTime)
     print("\r", end='')
 

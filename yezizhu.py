@@ -52,7 +52,7 @@ def query_user_info():
     url = f"http://dnf.api.yzz.cn/activity/userInfo?mobile={mobile}"
     res = requests.get(url, headers=headers).json()
 
-    return "账号({mobile}) 当前积分为{point_amount}，已使用{point_used}，已领取的奖励为：{prize_jfcj} {prize_jfdh}(查询于{ts})".format(**res["data"], ts=datetime.now())
+    return "账号({mobile}) 当前积分为{point_amount}，已使用{point_used}，已领取的奖励为：{prize_jfcj} {prize_jfdh}(查询于{ts})。".format(**res["data"], ts=datetime.now())
 
 
 def query_info():
@@ -87,7 +87,10 @@ def exchange(startTime, endTime):
                 latest_user_info = query_user_info()
                 update_user_info_start_time = now_time
 
-            print(color("bold_cyan") + f"\r{latest_user_info}。当前时间为{datetime.now()}...，还需要等待{startTime - datetime.now()}才会开始尝试。", end='')
+            print("\r" +
+                  color("bold_cyan") + latest_user_info +
+                  color("bold_green") + f"当前时间为{datetime.now()}...，还需要等待{startTime - datetime.now()}才会开始尝试。",
+                  end='')
             show_progress_start_time = now_time
 
         time.sleep(waitTime)

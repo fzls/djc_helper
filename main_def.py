@@ -762,9 +762,6 @@ def _test_main():
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
-    if need_check_bind_and_skey:
-        check_djc_role_binding()
-
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -775,6 +772,7 @@ def _test_main():
 
     if need_check_bind_and_skey:
         check_all_skey_and_pskey(cfg)
+        check_djc_role_binding()
 
     # note: 用于本地测试main的相关逻辑
     # show_accounts_status(cfg, "启动时展示账号概览")

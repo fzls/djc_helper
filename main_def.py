@@ -7,7 +7,6 @@ import win32api
 
 from config import load_config, config, XinYueOperationConfig, Config
 from djc_helper import DjcHelper
-from log import asciiReset
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name

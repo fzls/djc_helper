@@ -2874,17 +2874,6 @@ class DjcHelper:
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             return int(info.sOutValue1)
 
-        def query_card_info():
-            res = self.majieluo_op("查询信息", "733883", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
-            # 默认排序与表现一致，改为跟ui表现一致
-            temp = info.sOutValue1.split('|')
-            order = [3, 4, 1, 2, 5]
-            actual = []
-            for idx in order:
-                actual.append(temp[idx - 1])
-            return '|'.join(actual)
-
         # 马杰洛的见面礼
         self.majieluo_op("领取见面礼", "733355")
 
@@ -2897,7 +2886,7 @@ class DjcHelper:
             for cardType in cards:
                 self.majieluo_op(f"赠送好友卡片-{cardType}", "733657", sendName=quote_plus(self.cfg.name), cardType=str(cardType), receiveUin=receiveUin)
 
-        logger.info(color("bold_yellow") + f"当前拥有的卡牌为{query_card_info()}")
+        logger.info(color("bold_yellow") + f"当前拥有的卡牌为{self.query_majieluo_card_info()}")
         self.majieluo_op("集齐五个赛利亚，兑换200个时间引导石", "733385")
 
         # 马杰洛的特殊任务
@@ -2943,6 +2932,25 @@ class DjcHelper:
             self.majieluo_op("提取福利（1000）", "734065")
             self.majieluo_op("提取福利（700、800、900）", "734064")
             self.majieluo_op("提取福利（300、400、500、600）", "733888")
+
+    def query_majieluo_card_info(self):
+        res = self.majieluo_op("查询信息", "733883", print_res=False)
+
+        card_info = ""
+        try:
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            # 默认排序与表现一致，改为跟ui表现一致
+            temp = info.sOutValue1.split('|')
+            order = [3, 4, 1, 2, 5]
+            actual = []
+            for idx in order:
+                actual.append(temp[idx - 1])
+
+            card_info = '|'.join(actual)
+        except Exception as e:
+            pass
+
+        return card_info
 
     def check_majieluo(self):
         self.check_bind_account("DNF马杰洛的规划第三期", "https://dnf.qq.com/cp/a20210121welfare/index.html",

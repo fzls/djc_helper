@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 import requests
 
 from log import logger, color
-from util import tableify
+from util import tableify, maximize_console_sync
 
 mobile = 17328213065
 prize_name = quote_plus("春节套*1")
@@ -129,4 +129,5 @@ def do_exchange(index=0):
 
 
 if __name__ == '__main__':
+    maximize_console_sync()
     try_exchange()

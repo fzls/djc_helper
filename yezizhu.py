@@ -12,7 +12,7 @@ from util import tableify, maximize_console_sync
 mobile = 17328213065
 prize_name = quote_plus("春节套*1")
 
-processor_count = 2 * multiprocessing.cpu_count()
+processor_count = multiprocessing.cpu_count()
 pool = Pool(processor_count)
 
 headers = {

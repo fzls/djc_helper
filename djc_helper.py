@@ -272,7 +272,7 @@ class DjcHelper:
                 if bind_role_info.is_mobile_game():
                     self.cfg.mobile_game_role_info.game_name = bind_role_info.sRoleInfo.gameName
                     found_binded_game = True
-                    logger.warning(f"当前游戏名称配置为任意手游，将从道聚城已绑定的手游中随便选一个，挑选为：{self.cfg.mobile_game_role_info.game_name}")
+                    logger.warning(f"当前手游名称配置为任意手游，将从道聚城已绑定的手游中随便选一个，挑选为：{self.cfg.mobile_game_role_info.game_name}")
                     break
 
             if not found_binded_game:
@@ -309,6 +309,7 @@ class DjcHelper:
                 binded = False
 
             if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
+                logger.warning(color("fg_bold_green") + "！！！请注意，我说的是手游，不是DNF！！！")
                 binded = False
 
         if binded:
@@ -333,13 +334,13 @@ class DjcHelper:
         # 检查配置的手游是否有效
         gameinfo = self.get_mobile_game_info()
         if gameinfo is None:
-            logger.warning(color("fg_bold_yellow") + "当前游戏名称配置为【任意手游】，但未在道聚城找到任何绑定的手游，请前往道聚城绑定任意一个手游，如王者荣耀")
+            logger.warning(color("fg_bold_yellow") + "当前手游名称配置为【任意手游】，但未在道聚城找到任何绑定的手游，请前往道聚城绑定任意一个手游，如王者荣耀")
             return False
 
         # 检查道聚城是否已绑定该手游的角色，若未绑定则警告并停止运行
         bizcode = gameinfo.bizCode
         if bizcode not in self.bizcode_2_bind_role_map:
-            logger.warning(color("fg_bold_yellow") + f"未在道聚城绑定【{get_game_info_by_bizcode(bizcode).bizName}】的角色信息，请前往道聚城app进行绑定。")
+            logger.warning(color("fg_bold_yellow") + f"未在道聚城绑定手游【{get_game_info_by_bizcode(bizcode).bizName}】的角色信息，请前往道聚城app进行绑定。")
             logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
             return False
 

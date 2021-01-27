@@ -36,8 +36,8 @@ def try_exchange():
     logger.info("开始运行兑换叶子猪春节套脚本")
     while True:
         now = datetime.now()
-        startTime = now.replace(hour=11, minute=59, second=59, microsecond=0)
-        endTime = startTime + timedelta(seconds=2)
+        startTime = now.replace(hour=11, minute=59, second=57, microsecond=0)
+        endTime = startTime + timedelta(seconds=3*2)
 
         # 如果今天的尝试时间已经过了，则切换为下一轮时间
         if now > endTime:

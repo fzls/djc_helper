@@ -31,8 +31,6 @@ def main():
 
     change_title()
 
-    show_ask_message_box_only_once()
-
     show_qiafan_message_box_on_every_big_version("v5.2.0")
 
     # 读取配置信息

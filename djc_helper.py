@@ -380,15 +380,6 @@ class DjcHelper:
         # DNF共创投票
         self.dnf_dianzan()
 
-        # dnf漂流瓶
-        self.dnf_drift()
-
-        # dnf助手双旦活动
-        self.dnf_helper_christmas()
-
-        # 暖冬好礼活动
-        self.warm_winter()
-
         # DNF闪光杯第三期
         self.dnf_shanguang()
 
@@ -463,6 +454,15 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
+
+        # dnf漂流瓶
+        self.dnf_drift()
+
+        # dnf助手双旦活动
+        self.dnf_helper_christmas()
+
+        # 暖冬好礼活动
+        self.warm_winter()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except

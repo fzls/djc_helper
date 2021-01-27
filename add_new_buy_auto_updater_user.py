@@ -42,8 +42,7 @@ def upload():
 
 
 def add_user(new_buy_users):
-    new_add = update_buy_user_local(new_buy_users)
-    if len(new_add) != 0:
+    if len(update_buy_user_local(new_buy_users)) != 0:
         upload()
 
 

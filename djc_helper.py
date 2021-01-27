@@ -3034,7 +3034,7 @@ class DjcHelper:
         self.check_youfei()
 
         def query_signin_days():
-            res = self.youfei_op("查询签到状态", "728501")
+            res = self.youfei_op("查询签到状态", "728501", print_res=False)
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             return int(info.sOutValue1)
 

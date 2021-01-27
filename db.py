@@ -2,6 +2,8 @@ import datetime
 import json
 import os
 
+from log import logger, color
+
 db_dir = ".db"
 if not os.path.isdir(db_dir):
     os.mkdir(db_dir)
@@ -72,6 +74,18 @@ def set_account_to_db(accountName, db, accountDb):
     accounts[accountName] = accountDb
 
 
-localdb_file = os.path.join(db_dir, 'db.json')
-if not os.path.isfile(localdb_file):
+def init_db():
     save_db({"created_at": datetime.datetime.now().timestamp()})
+    logger.info(color("bold_green") + "数据库已初始化完毕")
+
+
+localdb_file = os.path.join(db_dir, 'db.json')
+# 如果未创建，则初始化
+if not os.path.isfile(localdb_file):
+    init_db()
+# 检测数据库是否损坏，若损坏则重新初始化
+try:
+    load_db()
+except json.decoder.JSONDecodeError as e:
+    logger.error("数据库似乎损坏了，具体出错情况如下，将重新初始化数据库文件", exc_info=e)
+    init_db()

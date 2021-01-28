@@ -3607,11 +3607,11 @@ class DjcHelper:
             return int(raw_info.sOutValue1)
 
         # 完成任务获取爆竹
-        self.firecrackers_op("获取爆竹-今日游戏在线", "733098")
-        self.firecrackers_op("获取爆竹-累计在线30分钟", "733125")
-        self.firecrackers_op("获取爆竹-通关推荐副本2次", "733127")
+        self.firecrackers_op("获取爆竹*1-今日游戏在线", "733098")
+        self.firecrackers_op("获取爆竹*1-累计在线30分钟", "733125")
+        self.firecrackers_op("获取爆竹*2-通关推荐副本2次", "733127")
         self.firecrackers_op("发送好友邀请给自己", "735263", receiveUin=uin2qq(self.cfg.account_info.uin))
-        self.firecrackers_op("获取爆竹-每日分享好友", "733129")
+        self.firecrackers_op("获取爆竹*1-每日分享好友", "733129")
 
         firecrackers_count = query_count()
         logger.info(color("bold_cyan") + f"经过上述操作，当前爆竹数目为{firecrackers_count}个")

@@ -49,6 +49,14 @@ class DnfHelperChronicleExchangeItemConfig(ConfigInterface):
         self.count = 3
 
 
+class FirecrackersExchangeItemConfig(ConfigInterface):
+    def __init__(self):
+        self.index = 6
+        self.name = "灿烂的徽章自选礼盒*1"
+        self.need_points = 120
+        self.count = 1
+
+
 class XinYueOperationConfig(ConfigInterface):
     def __init__(self):
         self.iFlowId = "512411"
@@ -136,6 +144,19 @@ class HelloVoiceInfoConfig(ConfigInterface):
         self.hello_id = ""
 
 
+class FirecrackersConfig(ConfigInterface):
+    def __init__(self):
+        # 是否开启抽奖，建议兑换完所有道具后再开启
+        self.enable_lottery = False
+        # 兑换道具信息
+        self.exchange_items = []  # type: List[FirecrackersExchangeItemConfig]
+
+    def fields_to_fill(self):
+        return [
+            ('exchange_items', FirecrackersExchangeItemConfig),
+        ]
+
+
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
         # ------------ 全局禁用开关 ------------
@@ -205,6 +226,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_spring_fudai = True
         # 是否领取 DNF新春福利集合站 活动
         self.get_spring_collection = True
+        # 燃放爆竹活动
+        self.get_firecrackers = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -266,6 +289,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_helper_info = DnfHelperInfoConfig()
         # hello语音相关信息
         self.hello_voice = HelloVoiceInfoConfig()
+        # 燃放爆竹相关配置
+        self.firecrackers = FirecrackersConfig()
 
     def fields_to_fill(self):
         return [

@@ -805,6 +805,52 @@ chronicle_lottery = false
 # 获取方式：打开hello语音，点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
 hello_id = ""
 
+# 燃放爆竹相关配置
+[account_configs.firecrackers]
+# 是否开启抽奖，建议兑换完所有道具后再开启
+chronicle_lottery = false
+
+## 兑换道具信息，将按照配置的顺序去尝试兑换，只有在前面的兑换完次数后才会尝试兑换后面的。
+## index: 奖励index
+## name：奖励名称
+## need_points: 需要的积分
+## count: 每次尝试兑换的数目
+#[[account_configs.firecrackers.exchange_items]]
+#index = "6"
+#name = "灿烂的徽章自选礼盒*1"
+#need_points = 120
+#count = 1
+#
+#[[account_configs.firecrackers.exchange_items]]
+#index = "5"
+#name = "时间引导石礼盒(100个)*1"
+#need_points = 60
+#count = 1
+#
+#[[account_configs.firecrackers.exchange_items]]
+#index = "4"
+#name = "智慧的引导通行证*1"
+#need_points = 20
+#count = 1
+#
+#[[account_configs.firecrackers.exchange_items]]
+#index = "3"
+#name = "装备提升礼盒*1"
+#need_points = 5
+#count = 1
+#
+#[[account_configs.firecrackers.exchange_items]]
+#index = "2"
+#name = "黑钻会员1天"
+#need_points = 4
+#count = 1
+#
+#[[account_configs.firecrackers.exchange_items]]
+#index = "1"
+#name = "复活币*1"
+#need_points = 4
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 ## 多账号的具体配置方式，可以查看使用文档

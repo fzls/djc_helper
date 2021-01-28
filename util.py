@@ -75,6 +75,22 @@ def printed_width(msg):
     return sum([1 if ord(c) < 128 else 2 for c in msg])
 
 
+def truncate(msg, expect_width) -> str:
+    if printed_width(msg) <= expect_width:
+        return msg
+
+    truncated = []
+    current_width = 3
+    for substr in msg:
+        current_width += printed_width(substr)
+        if current_width > expect_width:
+            truncated.append("...")
+            break
+        truncated.append(substr)
+
+    return ''.join(truncated)
+
+
 def padLeftRight(msg, target_size, pad_char=" "):
     msg = str(msg)
     msg_len = printed_width(msg)
@@ -281,3 +297,4 @@ if __name__ == '__main__':
     print(run_from_src())
     print(use_by_myself())
     print(show_end_time("2021-02-23 00:00:00"))
+    print(truncate("风之凌殇风之凌殇", 12))

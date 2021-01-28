@@ -3610,6 +3610,7 @@ class DjcHelper:
         self.firecrackers_op("获取爆竹-今日游戏在线", "733098")
         self.firecrackers_op("获取爆竹-累计在线30分钟", "733125")
         self.firecrackers_op("获取爆竹-通关推荐副本2次", "733127")
+        self.firecrackers_op("发送好友邀请给自己", "735263", receiveUin=uin2qq(self.cfg.account_info.uin))
         self.firecrackers_op("获取爆竹-每日分享好友", "733129")
 
         firecrackers_count = query_count()

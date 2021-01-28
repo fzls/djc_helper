@@ -29,6 +29,8 @@ if __name__ == '__main__':
                          ("XXXXXXXXXXX", 1),
                          ]
         for name, count in cards_to_send:
+            if name == "XXXXXXXXXXX":
+                continue
             for i in range(count):
                 djcHelper.send_card_by_name(name, targetQQ)
 

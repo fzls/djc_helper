@@ -33,17 +33,17 @@ if __name__ == '__main__':
                 djcHelper.send_card_by_name(name, targetQQ)
 
 # -----------具体卡片相关信息---------------
-# '1-1' 巅峰大佬刷竞速 {'name': '巅峰大佬刷竞速', 'id': 118409, 'prizeId': 44460, 'lotterySwitchId': 28608, 'index': '1-1'}
-# '1-2' 主播趣味来打团 {'name': '主播趣味来打团', 'id': 118408, 'prizeId': 44459, 'lotterySwitchId': 28607, 'index': '1-2'}
-# '1-3' BOSS机制全摸透 {'name': 'BOSS机制全摸透', 'id': 118407, 'prizeId': 44458, 'lotterySwitchId': 28606, 'index': '1-3'}
-# '1-4' 萌新翻身把歌唱 {'name': '萌新翻身把歌唱', 'id': 118406, 'prizeId': 44457, 'lotterySwitchId': 28605, 'index': '1-4'}
+# 1-1 深渊七彩闪不停 {'name': '深渊七彩闪不停', 'id': 119186, 'prizeId': 45800, 'lotterySwitchId': 29598, 'index': '1-1'}
+# 1-2 增幅强化次次成 {'name': '增幅强化次次成', 'id': 119185, 'prizeId': 45799, 'lotterySwitchId': 29597, 'index': '1-2'}
+# 1-3 缺啥爆啥秒毕业 {'name': '缺啥爆啥秒毕业', 'id': 119184, 'prizeId': 45798, 'lotterySwitchId': 29596, 'index': '1-3'}
+# 1-4 变身主C战使徒 {'name': '变身主C战使徒', 'id': 119183, 'prizeId': 45797, 'lotterySwitchId': 29595, 'index': '1-4'}
 
-# '2-1' 四人竞速希洛克 {'name': '四人竞速希洛克', 'id': 118405, 'prizeId': 44456, 'lotterySwitchId': 28604, 'index': '2-1'}
-# '2-2' 普通困难任你选 {'name': '普通困难任你选', 'id': 118404, 'prizeId': 44455, 'lotterySwitchId': 28603, 'index': '2-2'}
-# '2-3' 哪种都能领奖励 {'name': '哪种都能领奖励', 'id': 118403, 'prizeId': 44454, 'lotterySwitchId': 28602, 'index': '2-3'}
-# '2-4' 点击报名薅大礼 {'name': '点击报名薅大礼', 'id': 118402, 'prizeId': 44453, 'lotterySwitchId': 28601, 'index': '2-4'}
+# 2-1 组队征战希洛克 {'name': '组队征战希洛克', 'id': 119182, 'prizeId': 45796, 'lotterySwitchId': 29594, 'index': '2-1'}
+# 2-2 频频金牌闪亮眼 {'name': '频频金牌闪亮眼', 'id': 119181, 'prizeId': 45795, 'lotterySwitchId': 29593, 'index': '2-2'}
+# 2-3 提升摸金两不误 {'name': '提升摸金两不误', 'id': 119180, 'prizeId': 45794, 'lotterySwitchId': 29592, 'index': '2-3'}
+# 2-4 日进斗金成土豪 {'name': '日进斗金成土豪', 'id': 119179, 'prizeId': 45793, 'lotterySwitchId': 29591, 'index': '2-4'}
 
-# '3-1' 打团就可赢好礼 {'name': '打团就可赢好礼', 'id': 118401, 'prizeId': 44452, 'lotterySwitchId': 28600, 'index': '3-1'}
-# '3-2' 报名即可领豪礼 {'name': '报名即可领豪礼', 'id': 118400, 'prizeId': 44451, 'lotterySwitchId': 28599, 'index': '3-2'}
-# '3-3' 直播Q币抽不停  {'name': '直播Q币抽不停', 'id': 118399, 'prizeId': 44450, 'lotterySwitchId': 28598, 'index': '3-3'}
-# '3-4' 决赛红包等着你 {'name': '决赛红包等着你', 'id': 118398, 'prizeId': 44449, 'lotterySwitchId': 28597, 'index': '3-4'}
+# 3-1 集卡抽奖送豪礼 {'name': '集卡抽奖送豪礼', 'id': 119178, 'prizeId': 45792, 'lotterySwitchId': 29590, 'index': '3-1'}
+# 3-2 灿烂黑钻拿不停 {'name': '灿烂黑钻拿不停', 'id': 119177, 'prizeId': 45791, 'lotterySwitchId': 29589, 'index': '3-2'}
+# 3-3 追忆白金黄金书 {'name': '追忆白金黄金书', 'id': 119176, 'prizeId': 45790, 'lotterySwitchId': 29588, 'index': '3-3'}
+# 3-4 超强奖励等你拿 {'name': '超强奖励等你拿', 'id': 119175, 'prizeId': 45789, 'lotterySwitchId': 29587, 'index': '3-4'}

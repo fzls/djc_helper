@@ -22,12 +22,11 @@ if __name__ == '__main__':
 
         # re: 先填QQ undone: 然后填写卡片
         targetQQ = "XXXXXXXXXXX"
-        cards_to_send = [
-            ("XXXXXXXXXXX", 1),
-            ("XXXXXXXXXXX", 1),
-            ("XXXXXXXXXXX", 1),
-            ("XXXXXXXXXXX", 1),
-        ]
+        cards_to_send = [("XXXXXXXXXXX", 1),
+                         ("XXXXXXXXXXX", 1),
+                         ("XXXXXXXXXXX", 1),
+                         ("XXXXXXXXXXX", 1),
+                         ]
         for name, count in cards_to_send:
             if name == "XXXXXXXXXXX":
                 continue

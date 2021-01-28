@@ -49,7 +49,7 @@ if __name__ == '__main__':
     cfg = zzconfig()
     print("卡片信息如下")
     for name, card in parse_card_group_info_map(cfg).items():
-        print(name, card)
+        print(card.index, name, card)
 
     print()
     print("奖励信息如下")

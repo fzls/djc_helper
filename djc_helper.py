@@ -429,6 +429,9 @@ class DjcHelper:
         # DNF新春福利集合站
         self.spring_collection()
 
+        # 燃放爆竹活动
+        self.firecrackers()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -3585,6 +3588,78 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210121hdhj/",
                                    **extra_params)
 
+    # --------------------------------------------燃放爆竹活动--------------------------------------------
+    @try_except
+    def firecrackers(self):
+        # https://dnf.qq.com/cp/a20210118rfbz/index.html
+        show_head_line("燃放爆竹活动")
+
+        if not self.cfg.function_switches.get_firecrackers or self.disable_most_activities():
+            logger.warning("未启用领取燃放爆竹活动功能，将跳过")
+            return
+
+        self.check_firecrackers()
+
+        def query_count():
+            res = self.firecrackers_op("查询剩余爆竹数", "733395", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+            return int(raw_info.sOutValue1)
+
+        # 完成任务获取爆竹
+        self.firecrackers_op("获取爆竹-今日游戏在线", "733098")
+        self.firecrackers_op("获取爆竹-累计在线30分钟", "733125")
+        self.firecrackers_op("获取爆竹-通关推荐副本2次", "733127")
+        self.firecrackers_op("获取爆竹-每日分享好友", "733129")
+
+        firecrackers_count = query_count()
+        logger.info(color("bold_cyan") + f"经过上述操作，当前爆竹数目为{firecrackers_count}个")
+        for i in range(firecrackers_count):
+            self.firecrackers_op(f"第{i + 1}次燃放鞭炮获取积分", "733132")
+
+        show_end_time("2021-02-23 00:00:00")
+
+        # 积分兑换奖励
+        if len(self.cfg.firecrackers.exchange_items) != 0:
+            points = self.query_firecrackers_points()
+            points_to_120_need_days = (120 - points+4) // 5
+            logger.info(color("bold_cyan") + f"当前积分为{points}，距离兑换自选灿烂所需120预计还需要{points_to_120_need_days}天，将尝试按照配置的优先级兑换奖励")
+            for ei in self.cfg.firecrackers.exchange_items:
+                res = self.firecrackers_op(f"道具兑换-{ei.need_points}积分-{ei.name}", "733133", index=str(ei.index))
+                if res["ret"] == "700" and res["flowRet"]["iCondNotMetId"] == "1432184":
+                    logger.warning("当前奖励积分不够，将跳过后续奖励")
+                    break
+        else:
+            logger.info("当前未配置兑换道具，请根据需要自行配置需要兑换的道具列表")
+
+        # 积分抽奖
+        if self.cfg.firecrackers.enable_lottery:
+            points = self.query_firecrackers_points()
+            logger.info(color("bold_cyan") + f"当前积分为{points}，将进行{points // 2}次抽奖")
+            for i in range(points // 2):
+                self.firecrackers_op(f"第{i + 1}次积分抽奖", "733134")
+        else:
+            logger.info(color("bold_green") + "如果已经兑换完所有奖励，建议开启使用积分抽奖功能")
+
+    def query_firecrackers_points(self):
+        try:
+            res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+            return int(raw_info.sOutValue1)
+        except Exception as e:
+            return 0
+
+    def check_firecrackers(self):
+        self.check_bind_account("燃放爆竹活动", "https://dnf.qq.com/cp/a20210118rfbz/index.html",
+                                activity_op_func=self.firecrackers_op, query_bind_flowid="733400", commit_bind_flowid="733399")
+
+    def firecrackers_op(self, ctx, iFlowId, index="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_firecrackers
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210118rfbz/",
+                                   index=index,
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies)
@@ -3628,6 +3703,7 @@ class DjcHelper:
             "cz": "", "dj": "",
             "siActivityId": "",
             "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
+            "index": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -3835,4 +3911,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.majieluo()
         # djcHelper.spring_fudai()
-        djcHelper.spring_collection()
+        # djcHelper.spring_collection()
+        djcHelper.firecrackers()

@@ -73,8 +73,8 @@ def try_request(request_fn, retryCfg, check_fn=None):
             extra_info = check_some_exception(exc)
             logger.exception("request failed, detail as below:" + extra_info, exc_info=exc)
             stack_info = color("bold_black") + ''.join(traceback.format_stack())
-            logger.error(f"full call stack{extra_info}=\n{stack_info}")
-            logger.warning(color("thin_yellow") + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s")
+            logger.error(f"full call stack=\n{stack_info}")
+            logger.warning(color("thin_yellow") + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s。异常补充说明如下：{extra_info}")
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 

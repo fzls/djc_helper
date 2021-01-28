@@ -576,19 +576,20 @@ def print_update_message_on_first_run_new_version():
 
 
 def show_ask_message_box_only_once():
-    # 临时加一个请求帮忙弄下叶子猪的逻辑
-    if is_first_run("叶子猪春节活动"):
+    # 临时加一个请求帮忙弄下白嫖活动的逻辑
+    if is_first_run("DNF公众号拉新"):
         message = (
-            "今天看到有个【叶子猪春节活动】，类似于拼多多，需要找其他人帮忙戳一下，并顺带输入手机号和QQ号生成专属链接。\n"
-            "大家可不可以帮我点一下哇0-0  点开链接后往下翻到【分享活动赚积分】，输入手机号和QQ，然后点击生成专属链接就好啦，不需要登录啥的\n"
-            "想用这个活动白嫖个春节套，嘻嘻(#^.^#)\n"
+            "(*/ω＼*)白嫖王我又来了\n"
+            "刚看到DNF公众号推了个【新春阿拉德】拉新活动，前十的可以白嫖一个春节套~\n"
+            "如果没关注过的话，可不可以用微信帮我扫一下活动二维码哇0-0扫完应该是弹出公众号，点下关注就好啦(｀・ω・´)\n"
+            "想用这个活动白嫖个春节套，嘻嘻(#^.^#)（TAT之前的叶子猪似乎在耍猴）\n"
             "提前谢谢大家啦0-0 就当是一直免费维护和更新这个小工具的小报酬啦^_^\n"
-            "ps: 点确定就会弹出我的分享页面啦，点否就再也不会弹出这个窗口啦\n"
+            "ps: 点确定就会弹出我的活动二维码啦，点否就再也不会弹出这个窗口啦\n"
         )
-        res = win32api.MessageBox(0, message, "请求各位帮忙点击一下~", win32con.MB_OKCANCEL)
+        res = win32api.MessageBox(0, message, "请求各位帮忙扫一下~", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
-            webbrowser.open("http://dnf.yzz.cn/special/20210121/?c=e2AHR41LEEpsf4Kq")
-            win32api.MessageBox(0, "在网页里输入手机号和QQ，再戳下【生成专属链接】按钮就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
+            webbrowser.open("新春阿拉德活动二维码.jpg")
+            win32api.MessageBox(0, "扫码关注DNF官方公众号就完事啦，很快的~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
 

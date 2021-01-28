@@ -13,7 +13,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 
     # 需要复制的文件与目录
     files_to_copy = []
-    reg_wantted_file = r'.*\.(toml|md|txt|png|docx|url)$'
+    reg_wantted_file = r'.*\.(toml|md|txt|png|jpg|docx|url)$'
     for file in os.listdir('.'):
         if not re.search(reg_wantted_file, file, flags=re.IGNORECASE):
             continue

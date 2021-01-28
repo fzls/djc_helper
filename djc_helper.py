@@ -3615,7 +3615,8 @@ class DjcHelper:
         firecrackers_count = query_count()
         logger.info(color("bold_cyan") + f"经过上述操作，当前爆竹数目为{firecrackers_count}个")
         for i in range(firecrackers_count):
-            self.firecrackers_op(f"第{i + 1}次燃放鞭炮获取积分", "733132")
+            self.firecrackers_op(f"第{i + 1}次燃放鞭炮获取积分，并等待一秒", "733132")
+            time.sleep(1)
 
         show_end_time("2021-02-23 00:00:00")
 

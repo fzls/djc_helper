@@ -91,8 +91,10 @@ def truncate(msg, expect_width) -> str:
     return ''.join(truncated)
 
 
-def padLeftRight(msg, target_size, pad_char=" "):
+def padLeftRight(msg, target_size, pad_char=" ", need_truncate=False):
     msg = str(msg)
+    if need_truncate:
+        msg = truncate(msg, target_size)
     msg_len = printed_width(msg)
     pad_left_len, pad_right_len = 0, 0
     if msg_len < target_size:
@@ -103,8 +105,8 @@ def padLeftRight(msg, target_size, pad_char=" "):
     return pad_char * pad_left_len + msg + pad_char * pad_right_len
 
 
-def tableify(cols, colSizes, delimiter=' '):
-    return delimiter.join([padLeftRight(col, colSizes[idx]) for idx, col in enumerate(cols)])
+def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
+    return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
 def show_head_line(msg, msg_color=None):

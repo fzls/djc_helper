@@ -1051,8 +1051,11 @@ class DjcHelper:
 
     def query_xinyue_info(self, ctx, print_res=True):
         data = self.xinyue_battle_ground_op(ctx, "512411", print_res=print_res)
-        r = data["modRet"]
-        score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"]
+        if "modRet" in data:
+            r = data["modRet"]
+            score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"]
+        else:
+            score, ysb, xytype, specialMember, username, usericon = "0", "0", "1", "0", "查询失败了", ""
         return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
 
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):

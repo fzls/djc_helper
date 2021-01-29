@@ -3619,8 +3619,12 @@ class DjcHelper:
             res = self.firecrackers_op("查询成功邀请好友列表", "735412", print_res=False)
 
             invited_friends = []
-            for info in res["modRet"]["jData"]["jData"]:
-                invited_friends.append(info["sendToQQ"])
+            try:
+                for info in res["modRet"]["jData"]["jData"]:
+                    invited_friends.append(info["sendToQQ"])
+            except:
+                # 如果没有邀请过任何人，上面这样获取似乎是会报错的。手头上暂时没有这种号，先兼容下吧。
+                pass
 
             return invited_friends
 

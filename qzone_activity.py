@@ -1,11 +1,12 @@
 import datetime
 import json
 import random
+import time
 
 import requests
 
 from config import AccountConfig
-from dao import RoleInfo, DnfWarriorsCallInfo
+from dao import RoleInfo, DnfWarriorsCallInfo, GuanhuaiActInfo
 from log import logger, color
 from network import process_result, try_request
 from qq_login import LoginResult
@@ -268,18 +269,63 @@ class QzoneActivity:
     # ----------------- 会员关怀 ----------------------
 
     def vip_mentor(self):
+        # 当过期的时候，可以去找找看是不是有新的出来了
+        #
+        # note: 会员关怀接入方式：
+        #   1. 浏览器打开活动页面 https://act.qzone.qq.com/vip/meteor/blockly/p/6658xcbed0
+        #   2. network中找到 https://qzonestyle.gtimg.cn/qzone/qzact/act/xcube/6658xcbed0/index.js
+
+        # note: 2.1 搜索 _guaihuai 定位 领取回归礼包的ruleid和actname
+        guanhuai_gifts = [
+            GuanhuaiActInfo("act_dnf_1_guaihuai1", "30198"),
+            GuanhuaiActInfo("act_dnf_1_guaihuai2", "30197"),  # 一般是这个最好
+            GuanhuaiActInfo("act_dnf_1_guaihuai3", "30196"),
+        ]
+        guanhuai_gift = guanhuai_gifts[self.cfg.vip_mentor.take_index - 1]
+
+        # note: 2.2 搜索 act_dnf_huoyue_ 定位 增加抽奖次数的ruleid和actname
+        add_lottery_times_act_info = GuanhuaiActInfo("act_dnf_huoyue_1", "30200")
+
+        # note: 2.3 搜索 asyncBudget 定位 剩余抽奖次数的countid
+        query_lottery_times_countid = "119664"
+
+        # note: 2.4 搜索 gameDraw 定位 抽奖的ruleid
+        lottery_ruleid = "30199"
+
+        def take_guanhuai_gift(ctx):
+            cfg = self.cfg.vip_mentor
+
+            # 确认使用的角色
+            server_id, roleid = "", ""
+            if cfg.guanhuai_dnf_server_id == "":
+                logger.warning("未配置会员关怀礼包的区服和角色信息，将使用道聚城绑定的角色信息")
+                logger.warning(color("bold_cyan") + "如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的关怀活动和集卡活动都可以拿这个来获取回归相关的领取资格")
+            else:
+                if cfg.guanhuai_dnf_role_id == "":
+                    logger.warning(f"配置了会员关怀礼包的区服ID为{cfg.guanhuai_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
+                    self.djc_helper.query_dnf_rolelist(cfg.guanhuai_dnf_server_id)
+                else:
+                    logger.info("使用配置的区服和角色信息来进行领取会员关怀礼包")
+                    server_id, roleid = cfg.guanhuai_dnf_server_id, cfg.guanhuai_dnf_role_id
+
+            return _game_award(ctx, guanhuai_gift.act_name, guanhuai_gift.ruleid, area=server_id, partition=server_id, roleid=roleid)
+
         def addLotteryTimes(ctx):
-            return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, "29091", query="0", gameid="dnf", act_name="act_dnf_huoyue_12")
+            return _game_award(ctx, add_lottery_times_act_info.act_name, add_lottery_times_act_info.ruleid)
+
+        def _game_award(ctx, act_name, ruleid, area="", partition="", roleid=""):
+            return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, ruleid, query="0", gameid="dnf", act_name=act_name, area=area, partition=partition, roleid=roleid)
 
         def queryLotteryTimes(ctx):
-            countid = "118786"
-            res = self.do_vip_mentor("fcg_qzact_count", ctx, "", countid=countid, print_res=False)
-            countInfo = res["data"]["count"][countid]
+            res = self.do_vip_mentor("fcg_qzact_count", ctx, "", countid=query_lottery_times_countid, print_res=False)
+            countInfo = res["data"]["count"][query_lottery_times_countid]
             return countInfo["left"], countInfo["used"], countInfo["add"]
 
         def lottery(ctx):
-            self.do_vip_mentor("fcg_prize_lottery", ctx, "29087", gameid="dnf")
+            self.do_vip_mentor("fcg_prize_lottery", ctx, lottery_ruleid, gameid="dnf")
             return
+
+        take_guanhuai_gift(f"尝试领取第{self.cfg.vip_mentor.take_index}个关怀礼包")
 
         addLotteryTimes("每日登录游戏(+2抽奖机会)")
 
@@ -287,10 +333,11 @@ class QzoneActivity:
         logger.info(f"剩余抽奖次数={left}，已抽奖次数={used}，累积获取抽奖次数={total}")
 
         for idx in range(left):
-            lottery(f"第{idx + 1}次抽奖")
+            lottery(f"第{idx + 1}次抽奖，并等待一会")
+            time.sleep(5)
 
     def do_vip_mentor(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
-        return self.do_qzone_activity(4219, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
+        return self.do_qzone_activity(4304, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
 
     # ----------------- QQ空间活动通用逻辑 ----------------------
 

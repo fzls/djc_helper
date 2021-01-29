@@ -638,3 +638,9 @@ class AmesvrFriendInfo(ConfigInterface):
         self.label = ""
         self.lost = 1
         self.iProba = "0.8625"
+
+
+class GuanhuaiActInfo(DaoObject):
+    def __init__(self, act_name, ruleid):
+        self.act_name = act_name
+        self.ruleid = ruleid

@@ -110,6 +110,15 @@ class ArkLotteryConfig(ConfigInterface):
         self.act_id_to_cost_all_cards_and_do_lottery = {int(k): bool(v) for k, v in self.act_id_to_cost_all_cards_and_do_lottery.items()}
 
 
+class VipMentorConfig(ConfigInterface):
+    def __init__(self):
+        # 领取第几个关怀礼包，可填1/2/3，一般是第二个最好
+        self.take_index = 2
+        # 用于完成关怀礼包的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
+        self.guanhuai_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.guanhuai_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
+
+
 class DnfHelperInfoConfig(ConfigInterface):
     def __init__(self):
         # userId/nickName的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则社区ID即为userId，昵称即为nickname，如我的这俩值为504051073、风之凌殇
@@ -285,6 +294,8 @@ class AccountConfig(ConfigInterface):
         self.xinyue_operations = []  # type: List[XinYueOperationConfig]
         # 抽卡相关配置
         self.ark_lottery = ArkLotteryConfig()
+        # 会员关怀相关配置
+        self.vip_mentor = VipMentorConfig()
         # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
         self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
         # dnf助手信息

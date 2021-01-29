@@ -3676,10 +3676,12 @@ class DjcHelper:
         show_end_time("2021-02-23 00:00:00")
 
         # 积分兑换奖励
+        points = self.query_firecrackers_points()
+        points_to_120_need_days = (120 - points + 4) // 5
+        logger.info(color("bold_cyan") + f"当前积分为{points}，距离兑换自选灿烂所需120预计还需要{points_to_120_need_days}天")
+
         if len(self.cfg.firecrackers.exchange_items) != 0:
-            points = self.query_firecrackers_points()
-            points_to_120_need_days = (120 - points + 4) // 5
-            logger.info(color("bold_cyan") + f"当前积分为{points}，距离兑换自选灿烂所需120预计还需要{points_to_120_need_days}天，将尝试按照配置的优先级兑换奖励")
+            logger.info("将尝试按照配置的优先级兑换奖励")
             for ei in self.cfg.firecrackers.exchange_items:
                 res = self.firecrackers_op(f"道具兑换-{ei.need_points}积分-{ei.name}", "733133", index=str(ei.index))
                 if res["ret"] == "700" and res["flowRet"]["iCondNotMetId"] == "1432184":

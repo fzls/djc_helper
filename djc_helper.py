@@ -3652,11 +3652,14 @@ class DjcHelper:
             self.firecrackers_op(f"发送好友邀请给{friend.nick}({friend.uin})", "735263", receiveUin=str(friend.uin))
 
         # 完成 分享好友 任务
-        if not today_has_invite_friend():
-            logger.info("尝试挑选一个未邀请过的好友进行邀请~")
-            invite_one_friend()
+        if self.cfg.enable_firecrackers_invite_friend:
+            if not today_has_invite_friend():
+                logger.info("尝试挑选一个未邀请过的好友进行邀请~")
+                invite_one_friend()
+            else:
+                logger.info("今日已经邀请过好友，不必再次进行")
         else:
-            logger.info("今日已经邀请过好友，不必再次进行")
+            logger.info("未启用燃放爆竹邀请好友功能，将跳过~")
 
         # 完成任务获取爆竹
         self.firecrackers_op("获取爆竹*1-今日游戏在线", "733098")

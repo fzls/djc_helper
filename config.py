@@ -271,6 +271,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
+        # 燃放爆竹活动是否尝试邀请好友
+        self.enable_firecrackers_invite_friend = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

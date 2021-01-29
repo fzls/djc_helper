@@ -156,6 +156,9 @@ dnf_bbs_formhash = ""
 #   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 dnf_bbs_cookie = ""
 
+# 燃放爆竹活动是否尝试邀请好友
+enable_firecrackers_invite_friend = false
+
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
 # 手动登录需要设置的信息

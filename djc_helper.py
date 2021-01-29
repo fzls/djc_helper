@@ -3199,7 +3199,6 @@ class DjcHelper:
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except
     def vip_mentor(self):
-        # https://act.qzone.qq.com/vip/meteor/blockly/p/6483x3137c
         show_head_line("会员关怀")
 
         if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
@@ -3965,7 +3964,6 @@ if __name__ == '__main__':
         # djcHelper.qq_video()
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
-        # djcHelper.vip_mentor()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
         # djcHelper.dnf_0121()
@@ -3974,4 +3972,5 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.spring_fudai()
         # djcHelper.spring_collection()
-        djcHelper.firecrackers()
+        # djcHelper.firecrackers()
+        djcHelper.vip_mentor()

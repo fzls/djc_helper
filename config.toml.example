@@ -750,6 +750,14 @@ show_color = ""
 # 2021.1.15 超萌雪人送祝福
 4261 = false
 
+# 会员关怀相关配置
+[account_configs.vip_mentor]
+# 领取第几个关怀礼包，可填1/2/3，一般是第二个最好
+take_index = 2
+# 用于完成关怀礼包的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
+guanhuai_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+guanhuai_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
+
 # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
 #[[account_configs.wegame_guoqing_exchange_items]]
 #iFlowId = "703514"

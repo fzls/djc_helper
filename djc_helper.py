@@ -3606,11 +3606,62 @@ class DjcHelper:
 
             return int(raw_info.sOutValue1)
 
+        def today_has_invite_friend():
+            res = self.firecrackers_op("查询各个任务状态", "733392", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            taskStatus = raw_info.sOutValue1.split(',')
+
+            return int(taskStatus[3]) >= 1
+
+        def query_invited_friends():
+            res = self.firecrackers_op("查询成功邀请好友列表", "735412", print_res=False)
+
+            invited_friends = []
+            for info in res["modRet"]["jData"]["jData"]:
+                invited_friends.append(info["sendToQQ"])
+
+            return invited_friends
+
+        def query_friends(page, page_size):
+            res = self.firecrackers_op("查询好友列表", "735262", pageNow=str(page), pageSize=str(page_size), print_res=False)
+            info = AmesvrQueryFriendsInfo().auto_update_config(res["modRet"]["jData"])
+            return info
+
+        def get_one_not_invited_friend():
+            page = 1
+            page_size = 4
+            invited_friends = query_invited_friends()
+            while True:
+                info = query_friends(page, page_size)
+                if len(info.list) == 0:
+                    # 没有未邀请的好友了
+                    return None
+                for friend in info.list:
+                    if str(friend.uin) not in invited_friends:
+                        # 未邀请的好友
+                        return friend
+
+                # 本页均已邀请过，尝试下一页
+                page += 1
+
+        def invite_one_friend():
+            friend = get_one_not_invited_friend()
+            if friend is None:
+                logger.warning("没有更多未邀请过的好友了=、=每个好友目前限制只能邀请一次")
+                return
+            self.firecrackers_op(f"发送好友邀请给{friend.nick}({friend.uin})", "735263", receiveUin=str(friend.uin))
+
+        # 完成 分享好友 任务
+        if not today_has_invite_friend():
+            logger.info("尝试挑选一个未邀请过的好友进行邀请~")
+            invite_one_friend()
+        else:
+            logger.info("今日已经邀请过好友，不必再次进行")
+
         # 完成任务获取爆竹
         self.firecrackers_op("获取爆竹*1-今日游戏在线", "733098")
         self.firecrackers_op("获取爆竹*1-累计在线30分钟", "733125")
         self.firecrackers_op("获取爆竹*2-通关推荐副本2次", "733127")
-        self.firecrackers_op("发送好友邀请给自己", "735263", receiveUin=uin2qq(self.cfg.account_info.uin))
         self.firecrackers_op("获取爆竹*1-每日分享好友", "733129")
 
         firecrackers_count = query_count()
@@ -3624,7 +3675,7 @@ class DjcHelper:
         # 积分兑换奖励
         if len(self.cfg.firecrackers.exchange_items) != 0:
             points = self.query_firecrackers_points()
-            points_to_120_need_days = (120 - points+4) // 5
+            points_to_120_need_days = (120 - points + 4) // 5
             logger.info(color("bold_cyan") + f"当前积分为{points}，距离兑换自选灿烂所需120预计还需要{points_to_120_need_days}天，将尝试按照配置的优先级兑换奖励")
             for ei in self.cfg.firecrackers.exchange_items:
                 res = self.firecrackers_op(f"道具兑换-{ei.need_points}积分-{ei.name}", "733133", index=str(ei.index))
@@ -3656,10 +3707,10 @@ class DjcHelper:
         self.check_bind_account("燃放爆竹活动", "https://dnf.qq.com/cp/a20210118rfbz/index.html",
                                 activity_op_func=self.firecrackers_op, query_bind_flowid="733400", commit_bind_flowid="733399")
 
-    def firecrackers_op(self, ctx, iFlowId, index="", print_res=True, **extra_params):
+    def firecrackers_op(self, ctx, iFlowId, index="", pageNow="", pageSize="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_firecrackers
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210118rfbz/",
-                                   index=index,
+                                   index=index, pageNow=pageNow, pageSize=pageSize,
                                    **extra_params)
 
     # --------------------------------------------辅助函数--------------------------------------------
@@ -3706,6 +3757,7 @@ class DjcHelper:
             "siActivityId": "",
             "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
             "index": "",
+            "pageNow": "", "pageSize": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错

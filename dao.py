@@ -613,3 +613,28 @@ class AmesvrSigninInfo(ConfigInterface):
         self.sMsg = "OK"
         self.ret = "0"
         self.iRet = "0"
+
+
+class AmesvrQueryFriendsInfo(ConfigInterface):
+    def __init__(self):
+        self.sMsg = "ok"
+        self.iRet = 0
+        self.retcode = 0
+        self.page = 1
+        self.pageSize = 4
+        self.total = 90
+        self.list = []  # type: List[AmesvrFriendInfo]
+
+    def fields_to_fill(self):
+        return [
+            ('list', AmesvrFriendInfo),
+        ]
+
+
+class AmesvrFriendInfo(ConfigInterface):
+    def __init__(self):
+        self.uin = 56885028
+        self.nick = "追风"
+        self.label = ""
+        self.lost = 1
+        self.iProba = "0.8625"

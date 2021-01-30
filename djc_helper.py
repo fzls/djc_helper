@@ -3160,12 +3160,12 @@ class DjcHelper:
                 for i in range(count):
                     res = self.dnf_bbs_op(name, flowid)
                     if res["ret"] == "700":
-                        condId = res["flowRet"]["iCondNotMetId"]
-                        if condId == "1425065":
+                        msg = res["flowRet"]["sMsg"]
+                        if msg in ["您的该礼包兑换次数已达上限~", "抱歉，该礼包已被领完~"]:
                             # {"ret": "700", "flowRet": {"iRet": "700", "iCondNotMetId": "1425065", "sMsg": "您的该礼包兑换次数已达上限~", "sCondNotMetTips": "您的该礼包兑换次数已达上限~"}}
                             # 已达到兑换上限，尝试下一个
                             break
-                        elif condId == "1423792":
+                        elif msg == "您的代币券不足~":
                             # {"ret": "700", "flowRet": {"iRet": "700", "iCondNotMetId": "1423792", "sMsg": "您的代币券不足~", "sCondNotMetTips": "您的代币券不足~"}}
                             logger.warning("代币券不足，直接退出，确保优先级高的兑换后才会兑换低优先级的")
                             return

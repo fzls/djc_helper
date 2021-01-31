@@ -3628,34 +3628,72 @@ class DjcHelper:
 
             return invited_friends
 
-        def query_friends(page, page_size):
-            res = self.firecrackers_op("查询好友列表", "735262", pageNow=str(page), pageSize=str(page_size), print_res=False)
-            info = AmesvrQueryFriendsInfo().auto_update_config(res["modRet"]["jData"])
-            return info
+        def qeury_not_invitied_friends_with_cache():
+            account_db = load_db_for(self.cfg.name)
 
-        def get_one_not_invited_friend():
+            invited_friends = query_invited_friends()
+
+            def filter_not_invited_friends(friendQQs):
+                validFriendQQs = []
+                for friendQQ in friendQQs:
+                    if friendQQ not in invited_friends:
+                        validFriendQQs.append(friendQQ)
+
+                return validFriendQQs
+
+            if "friendQQs" in account_db:
+                friendQQs = account_db["friendQQs"]
+
+                validFriendQQs = filter_not_invited_friends(friendQQs)
+
+                if len(validFriendQQs) > 0:
+                    return validFriendQQs
+
+            return filter_not_invited_friends(qeury_not_invitied_friends())
+
+        def qeury_not_invitied_friends():
+            logger.info("本地无好友名单，或缓存的好友均已邀请过，需要重新拉取，请稍后~")
+            friendQQs = []
+
             page = 1
             page_size = 4
-            invited_friends = query_invited_friends()
             while True:
                 info = query_friends(page, page_size)
                 if len(info.list) == 0:
                     # 没有未邀请的好友了
-                    return None
+                    break
                 for friend in info.list:
-                    if str(friend.uin) not in invited_friends:
-                        # 未邀请的好友
-                        return friend
+                    friendQQs.append(str(friend.uin))
 
-                # 本页均已邀请过，尝试下一页
                 page += 1
 
+            logger.info(f"获取好友名单共计{len(friendQQs)}个，将保存到本地，具体如下：{friendQQs}")
+
+            def _update_db(udb):
+                udb["db"] = friendQQs
+
+            update_db_for(self.cfg.name, _update_db)
+
+            return friendQQs
+
+        def query_friends(page, page_size):
+            res = self.firecrackers_op("查询好友列表", "735262", pageNow=str(page), pageSize=str(page_size), print_res=True)
+            info = AmesvrQueryFriendsInfo().auto_update_config(res["modRet"]["jData"])
+            return info
+
+        def get_one_not_invited_friend():
+            friends = qeury_not_invitied_friends_with_cache()
+            if len(friends) == 0:
+                return None
+
+            return friends[0]
+
         def invite_one_friend():
-            friend = get_one_not_invited_friend()
-            if friend is None:
+            friendQQ = get_one_not_invited_friend()
+            if friendQQ is None:
                 logger.warning("没有更多未邀请过的好友了=、=每个好友目前限制只能邀请一次")
                 return
-            self.firecrackers_op(f"发送好友邀请给{friend.nick}({friend.uin})", "735263", receiveUin=str(friend.uin))
+            self.firecrackers_op(f"发送好友邀请给{friendQQ}", "735263", receiveUin=str(friendQQ))
 
         # 完成 分享好友 任务
         if self.cfg.enable_firecrackers_invite_friend:

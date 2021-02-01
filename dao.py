@@ -534,6 +534,31 @@ class DnfHelperChronicleUserTaskInfo(ConfigInterface):
         self.pStatus = 0
 
 
+class DnfHelperChronicleSignList(ConfigInterface):
+    def __init__(self):
+        self.code = 200
+        self.gifts = []  # type: List[DnfHelperChronicleSignGiftInfo]
+        self.msg = "success"
+
+    def fields_to_fill(self):
+        return [
+            ('gifts', DnfHelperChronicleSignGiftInfo),
+        ]
+
+
+class DnfHelperChronicleSignGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.sIdentifyId = ""
+        self.sName = "时间引导石礼盒 (5个)"
+        self.sLbcode = "sign_0001_1"
+        self.sDays = "第1天"
+        self.sPic1 = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20210128145952.png?version=5952"
+        self.iRank = "7"
+        self.iNum = "1"
+        self.status = 2  # 2-未完成，0-已完成未领取，1-已领取
+        self.iLbSel = "1"
+
+
 class HelloVoiceDnfRoleInfo(ConfigInterface):
     def __init__(self):
         self.area = "11"

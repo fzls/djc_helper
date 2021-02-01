@@ -609,25 +609,17 @@ def temp_code(cfg):
 
     tips = [
         (
-            "微信的2020DNF嘉年华派送好礼活动目前由于技术问题，无法稳定获取微信登录态，故而无法加入小助手。"
-            "若想自动完成，推荐使用auto.js来实现签到功能，使用auto.js自带的定时操作或tasker来实现定时触发签到流程。"
-            "具体操作可参考网盘中[DNF蚊子腿小助手 auto.js版本.txt]相关内容。"
-            "其他小助手未涉及的蚊子腿也可以通过类似方法完成~"
-        ),
-        (
-            "史诗之路来袭（活动汇集页）页面以及链接的几个其他活动有一些单次的奖励可领取，考虑到时间成本，将不加入小助手，请自行打开活动页面去领取。"
-            "链接：https://dnf.qq.com/lbact/a20201224aggregate/index.html"
-        ),
-        (
             "【预购新春礼包送好礼】活动目前已在auto.js脚本中支持，可参考https://github.com/fzls/autojs/blob/main/qq.js使用~"
         ),
         (
-            "万物皆新意 牛转阿拉德 活动只需要抽签三次，不再加入，请自行添加"
+            "万物皆新意 牛转阿拉德 活动只需要抽签三次，不再加入，请自行参与。链接为：https://dnf.qq.com/cp/a20210121index/"
+        ),
+        (
+            "QQ黄钻和超级会员惠东白嫖只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127",
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9",
         ),
     ]
-
-    if is_first_run("牛转阿拉德"):
-        webbrowser.open("https://dnf.qq.com/cp/a20210121index/")
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")

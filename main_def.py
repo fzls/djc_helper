@@ -510,19 +510,27 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 
 
-def show_support_pic(cfg):
-    logger.info("")
-    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以打开支持一下.png，扫码打赏哦~")
-    if is_weekly_first_run() and not use_by_myself():
+def show_support_pic_monthly(cfg):
+    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
+    if is_first_run("show_support_pic_monthly"):
+        # 第一次使用的时候不弹出
+        return
+
+    if is_monthly_first_run():
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
-            f"你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力~\n"
-            "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
-            "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
-            "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
+            f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"
+            "\n"
+            "小助手可以一直免费使用，但是如果小助手确实有帮到你，希望你可以按月依据小助手在本月为你节省的时间精力以及领到的蚊子腿数目来支付一定金额，比如2.33元/4.88元/6.66元等(｡◕ˇ∀ˇ◕)\n"
+            "毕竟用爱发电不能持久，人毕竟是要恰饭的ლ(╹◡╹ლ)\n"
+            "你的打赏能让我更乐意使用本来用于玩DNF的闲暇时间来及时更新小助手，适配各种新出的蚊子腿活动，添加更多自动功能。( • ̀ω•́ )✧\n"
+            "\n"
+            "支付方式：扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
+            "（这个消息每月会弹出一次ヾ(=･ω･=)o）"
         )
         logger.warning(color("fg_bold_cyan") + message)
-        win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
+        if not use_by_myself():
+            win32api.MessageBox(0, message, f"{get_month()} 恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
         os.popen("支持一下.png")
 
 
@@ -625,32 +633,6 @@ def temp_code(cfg):
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")
-
-
-def show_qiafan_message_box_on_every_big_version(version):
-    # 当添加了多个活动的版本发布时，弹出一条恰饭信息
-    if is_first_run(f"qiafan_{version}") and not use_by_myself():
-        activities = [
-            "dnf漂流瓶", "马杰洛的规划", "dnf助手双旦", "闪光杯第三期", "wegame暖冬有礼", "管家暖冬献礼", "史诗之路来袭活动合集签到",
-            "QQ视频蚊子腿（开启史诗之路 欢聚美好时光）",
-        ]
-        activities = "".join([f"    {idx + 1}. {name}\n" for idx, name in enumerate(activities)])
-        usedDays = get_count(my_usage_counter_name, "all")
-        message = (
-            "Hello，本次新接入了下列活动，欢迎大家使用。\n"
-            f"{activities}"
-            "\n "
-            f"你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力~\n"
-            "小助手可以免费使用，如果小助手确实帮到你，你可以通过打赏作者来鼓励继续更新小助手。\n"
-            "你的打赏能帮助小助手保持更新，适配各种新出的蚊子腿活动，添加更多自动功能。\n"
-            "一点点支持，将会是我持续维护和接入新活动的极大动力哇( • ̀ω•́ )✧\n"
-        )
-        res = win32api.MessageBox(0, message, "恰饭恰饭(〃'▽'〃)", win32con.MB_OKCANCEL)
-        if res == win32con.IDOK:
-            win32api.MessageBox(0, "٩(๑>◡<๑)۶ ", "致谢", win32con.MB_ICONINFORMATION)
-            os.popen("支持一下.png")
-        else:
-            win32api.MessageBox(0, "(｡•́︿•̀｡)", "TAT", win32con.MB_ICONINFORMATION)
 
 
 def try_auto_update(cfg):
@@ -786,7 +768,7 @@ def _test_main():
     # auto_send_cards(cfg)
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
     # show_accounts_status(cfg, "运行完毕展示账号概览")
-    # show_support_pic(cfg)
+    # show_support_pic_monthly(cfg)
     # temp_code(cfg)
     # if cfg.common._show_usage:
     #     show_usage()

@@ -31,8 +31,6 @@ def main():
 
     change_title()
 
-    show_qiafan_message_box_on_every_big_version("v5.2.0")
-
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -40,6 +38,9 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
+
+    # 每月首次运行时，弹出付费提示
+    show_support_pic_monthly(cfg)
 
     check_all_skey_and_pskey(cfg)
 
@@ -66,9 +67,6 @@ def main():
     show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
     show_accounts_status(cfg, "运行完毕展示账号概览")
-
-    # 每次正式模式运行成功时弹出打赏图片
-    show_support_pic(cfg)
 
     # 临时代码
     temp_code(cfg)

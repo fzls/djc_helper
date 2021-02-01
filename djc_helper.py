@@ -1557,16 +1557,16 @@ class DjcHelper:
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
     #   2. 打开活动页面 https://m.film.qq.com/magic-act/zrayedj8q888yf2rq6z6rcuwsu/index.html
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
-    qq_video_act_id = "110254"
-    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
-    qq_video_module_id_lucky_user = "129838"  # 幸运勇士礼包
-    qq_video_module_id_first_meet_gift = "129879"  # 勇士见面礼-礼包
-    qq_video_module_id_first_meet_token = "129875"  # 勇士见面礼-令牌
-    qq_video_module_id_lottery = "129873"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
-    qq_video_module_id_online_30_minutes = "129877"  # 在线30分钟
-    qq_video_module_id_online_3_days = "129881"  # 累积3天
-    qq_video_module_id_online_7_days = "129883"  # 累积7天
-    qq_video_module_id_online_15_days = "129882"  # 累积15天
+    qq_video_act_id = "zrayedj8q888yf2rq6z6rcuwsu"
+    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
+    qq_video_module_id_lucky_user = "91fp08t6uqaaaoqejrauqg2s05"  # 幸运勇士礼包
+    qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
+    qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
+    qq_video_module_id_lottery = "4g10wjqfz666i6rjgysryiowtu"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "14p5563e1fc4khr94px1te9yp9"  # 在线30分钟
+    qq_video_module_id_online_3_days = "sl2l0redd0wrid3e2ps17is0il"  # 累积3天
+    qq_video_module_id_online_7_days = "ui7hp23tr46ae07poruw2uf5xe"  # 累积7天
+    qq_video_module_id_online_15_days = "h1y2e73itl1ej4cy6l7ilzd001"  # 累积15天
 
     @try_except
     def qq_video(self):

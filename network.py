@@ -118,12 +118,20 @@ def pre_process_data(data):
         if 'frame_resp' in data and 'data' in data:
             # QQ视频活动的回包太杂，重新取特定数据
             new_data = {}
-            new_data['msg'] = data['data'].get('lottery_txt', data.get('msg', "unknown"))
+            new_data['msg'] = extract_qq_video_message(data)
             new_data['code'] = data['data']['sys_code']
             new_data['prize_id'] = data['data'].get('prize_id', "0")
             return new_data
 
     return None
+
+
+def extract_qq_video_message(res):
+    data = res['data']
+    if 'lottery_txt' in data:
+        return data['lottery_txt']
+    else:
+        return data['wording_info']['custom_words']
 
 
 def is_request_ok(data):

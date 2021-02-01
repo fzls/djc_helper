@@ -1554,7 +1554,7 @@ class DjcHelper:
 
     # --------------------------------------------qq视频活动--------------------------------------------
     # note: 接入新qq视频活动的流程如下
-    #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 fcgi-bin/asyn_activity
+    #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
     #   2. 打开活动页面 https://m.film.qq.com/magic-act/zrayedj8q888yf2rq6z6rcuwsu/index.html
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
     qq_video_act_id = "110254"

@@ -1553,39 +1553,47 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------qq视频活动--------------------------------------------
+    # note: 接入新qq视频活动的流程如下
+    #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 fcgi-bin/asyn_activity
+    #   2. 打开活动页面 https://m.film.qq.com/magic-act/zrayedj8q888yf2rq6z6rcuwsu/index.html
+    #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
+    qq_video_act_id = "110254"
+    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
+    qq_video_module_id_lucky_user = "129838"  # 幸运勇士礼包
+    qq_video_module_id_first_meet_gift = "129879"  # 勇士见面礼-礼包
+    qq_video_module_id_first_meet_token = "129875"  # 勇士见面礼-令牌
+    qq_video_module_id_lottery = "129873"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "129877"  # 在线30分钟
+    qq_video_module_id_online_3_days = "129881"  # 累积3天
+    qq_video_module_id_online_7_days = "129883"  # 累积7天
+    qq_video_module_id_online_15_days = "129882"  # 累积15天
+
     @try_except
     def qq_video(self):
-        # https://m.film.qq.com/magic-act/110254/index.html
         show_head_line("qq视频活动")
 
         if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
             logger.warning("未启用领取qq视频活动功能，将跳过")
             return
 
-        # note: 接入新活动的流程如下
-        #   1. 电脑打开fiddler，手机连接fiddler的代理
-        #   2. 手机QQ打开活动界面
-        #   3. 点击任意按钮，从query_string中获取最新的act_id
-        #   4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
-
         self.check_qq_video()
 
-        self.qq_video_op("幸运勇士礼包", "129838")
-        self.qq_video_op("勇士见面礼-礼包", "129879")
-        self.qq_video_op("勇士见面礼-令牌", "129875")
+        self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user)
+        self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift)
+        self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
 
-        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", "129873")
+        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery)
 
-        self.qq_video_op("在线30分钟", "129877")
-        self.qq_video_op("累积3天", "129881")
-        self.qq_video_op("累积7天", "129883")
-        self.qq_video_op("累积15天", "129882")
+        self.qq_video_op("在线30分钟", self.qq_video_module_id_online_30_minutes)
+        self.qq_video_op("累积3天", self.qq_video_module_id_online_3_days)
+        self.qq_video_op("累积7天", self.qq_video_module_id_online_7_days)
+        self.qq_video_op("累积15天", self.qq_video_module_id_online_15_days)
 
         logger.warning("如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据")
 
     def check_qq_video(self):
         while True:
-            res = self.qq_video_op("幸运勇士礼包", "129838", print_res=False)
+            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, print_res=False)
             # {"frame_resp": {"failed_condition": {"condition_op": 3, "cur_value": 0, "data_type": 2, "exp_value": 0, "type": 100418}, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}, "act_id": 108810, "data": {"button_txt": "关闭", "cdkey": "", "custom_list": [], "end_timestamp": -1, "ext_url": "", "give_type": 0, "is_mask_cdkey": 0, "is_pop_jump": 0, "item_share_desc": "", "item_share_title": "", "item_share_url": "", "item_sponsor_title": "", "item_sponsor_url": "", "item_tips": "", "jump_url": "", "jump_url_web": "", "lottery_item_id": "1601827185657s2238078729s192396s1", "lottery_level": 0, "lottery_name": "", "lottery_num": 0, "lottery_result": 0, "lottery_txt": "您当前还未绑定游戏帐号，请先绑定哦~", "lottery_url": "", "lottery_url_ext": "", "lottery_url_ext1": "", "lottery_url_ext2": "", "msg_title": "告诉我怎么寄给你", "need_bind": 0, "next_type": 2, "pop_jump_btn_title": "", "pop_jump_url": "", "prize_give_info": {"prize_give_status": 0}, "property_detail_code": 0, "property_detail_msg": "", "property_type": 0, "share_txt": "", "share_url": "", "source": 0, "sys_code": -904, "url_lottery": "", "user_info": {"addr": "", "name": "", "tel": "", "uin": ""}}, "module_id": 125890, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}
             if int(res["data"]["sys_code"]) == -904 and res["data"]["lottery_txt"] == "您当前还未绑定游戏帐号，请先绑定哦~":
                 self.guide_to_bind_account("qq视频活动", "https://m.film.qq.com/magic-act/110254/index.html", activity_op_func=None)
@@ -1605,14 +1613,13 @@ class DjcHelper:
         return res
 
     def _qq_video_op(self, ctx, type, option, module_id, print_res=True):
-        act_id = "110254"
         extra_cookies = "; ".join([
             "",
             "appid=3000501",
             "main_login=qq",
             f"vuserid={self.vuserid}",
         ])
-        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=act_id, module_id=module_id,
+        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id,
                         print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------
@@ -4039,7 +4046,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.dnf_1224()
-        # djcHelper.qq_video()
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.ark_lottery()
@@ -4053,4 +4059,5 @@ if __name__ == '__main__':
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
         # djcHelper.dnf_helper_chronicle()
-        djcHelper.guanjia()
+        # djcHelper.guanjia()
+        djcHelper.qq_video()

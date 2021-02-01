@@ -1866,7 +1866,7 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        # 为了不与其他函数名称冲突，切让函数名称短一些，写到函数内部~
+        # 为了不与其他函数名称冲突，且让函数名称短一些，写到函数内部~
         url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info

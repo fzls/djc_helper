@@ -2064,21 +2064,21 @@ class DjcHelper:
     #   2. 按F12，在Console中输入 console.log(JSON.stringify(GLOBAL_AMP_CONFIG))，将结果复制到 format_json.json 中格式化，方便查看
     #   3. 在json中搜索 comGifts，定位到各个礼包的信息，并将下列变量的数值更新为新版本
     # 礼包活动ID
-    guanjia_common_gifts_act_id = "1121"
+    guanjia_common_gifts_act_id = "1134"
     # 电脑管家特权礼包
-    guanjia_gift_id_special_rights = "7546"
+    guanjia_gift_id_special_rights = "7605"
     # 游戏助手礼包
-    guanjia_gift_id_game_helper = "7547"
+    guanjia_gift_id_game_helper = "7606"
     # 回归勇士礼包
-    guanjia_gift_id_return_user = "7548"
+    guanjia_gift_id_return_user = "7607"
     # 下载登录管家任务
-    guanjia_gift_id_download_and_login_this_version_guanjia = "7549"
+    guanjia_gift_id_download_and_login_this_version_guanjia = "7608"
     # 每日游戏在线30分钟任务
-    guanjia_gift_id_game_online_30_minutes = "7550"
+    guanjia_gift_id_game_online_30_minutes = "7609"
     # 每日登录游戏助手任务
-    guanjia_gift_id_login_game_helper = "7551"
+    guanjia_gift_id_login_game_helper = "7610"
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
-    guanjia_lottery_gifts_act_id = "1120"
+    guanjia_lottery_gifts_act_id = "1133"
 
     @try_except
     def guanjia(self):

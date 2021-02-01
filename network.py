@@ -118,9 +118,9 @@ def pre_process_data(data):
         if 'frame_resp' in data and 'data' in data:
             # QQ视频活动的回包太杂，重新取特定数据
             new_data = {}
-            new_data['msg'] = data['data']['lottery_txt']
+            new_data['msg'] = data['data'].get('lottery_txt', data.get('msg', "unknown"))
             new_data['code'] = data['data']['sys_code']
-            new_data['prize_id'] = data['data']['prize_id']
+            new_data['prize_id'] = data['data'].get('prize_id', "0")
             return new_data
 
     return None

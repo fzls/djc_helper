@@ -377,17 +377,11 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
-        # DNF共创投票
-        self.dnf_dianzan()
-
         # DNF闪光杯第三期
         self.dnf_shanguang()
 
         # 管家蚊子腿
         self.guanjia()
-
-        # 史诗之路来袭活动合集
-        self.dnf_1224()
 
         # qq视频活动
         self.qq_video()
@@ -403,9 +397,6 @@ class DjcHelper:
 
         # QQ空间抽卡
         self.ark_lottery()
-
-        # hello语音网页礼包兑换
-        self.hello_voice()
 
         # DNF新春夺宝大作战
         self.dnf_spring()
@@ -466,6 +457,15 @@ class DjcHelper:
 
         # 暖冬好礼活动
         self.warm_winter()
+
+        # DNF共创投票
+        self.dnf_dianzan()
+
+        # 史诗之路来袭活动合集
+        self.dnf_1224()
+
+        # hello语音网页礼包兑换
+        self.hello_voice()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except

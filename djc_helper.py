@@ -2059,9 +2059,29 @@ class DjcHelper:
         )
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
+    # note: 管家活动接入流程：
+    #   1. 打开新活动的页面 http://guanjia.qq.com/act/cop/20210127dnf/pc/
+    #   2. 按F12，在Console中输入 console.log(JSON.stringify(GLOBAL_AMP_CONFIG))，将结果复制到 format_json.json 中格式化，方便查看
+    #   3. 在json中搜索 comGifts，定位到各个礼包的信息，并将下列变量的数值更新为新版本
+    # 礼包活动ID
+    guanjia_common_gifts_act_id = "1121"
+    # 电脑管家特权礼包
+    guanjia_gift_id_special_rights = "7546"
+    # 游戏助手礼包
+    guanjia_gift_id_game_helper = "7547"
+    # 回归勇士礼包
+    guanjia_gift_id_return_user = "7548"
+    # 下载登录管家任务
+    guanjia_gift_id_download_and_login_this_version_guanjia = "7549"
+    # 每日游戏在线30分钟任务
+    guanjia_gift_id_game_online_30_minutes = "7550"
+    # 每日登录游戏助手任务
+    guanjia_gift_id_login_game_helper = "7551"
+    # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
+    guanjia_lottery_gifts_act_id = "1120"
+
     @try_except
     def guanjia(self):
-        # http://guanjia.qq.com/act/cop/202012dnf/
         show_head_line("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
@@ -2075,14 +2095,14 @@ class DjcHelper:
         # 等一会，避免报错
         time.sleep(self.common_cfg.retry.request_wait_time)
 
-        self.guanjia_common_gifts_op("电脑管家特权礼包", giftId="7546")
-        self.guanjia_common_gifts_op("游戏助手礼包", giftId="7547")
-        self.guanjia_common_gifts_op("回归勇士礼包", giftId="7548")
+        self.guanjia_common_gifts_op("电脑管家特权礼包", giftId=self.guanjia_gift_id_special_rights)
+        self.guanjia_common_gifts_op("游戏助手礼包", giftId=self.guanjia_gift_id_game_helper)
+        self.guanjia_common_gifts_op("回归勇士礼包", giftId=self.guanjia_gift_id_return_user)
 
-        self.guanjia_common_gifts_op("下载安装并登录电脑管家", giftId="7549")
+        self.guanjia_common_gifts_op("下载安装并登录电脑管家", giftId=self.guanjia_gift_id_download_and_login_this_version_guanjia)
 
-        self.guanjia_common_gifts_op("每日游戏在线30分钟", giftId="7550")
-        self.guanjia_common_gifts_op("每日登录游戏助手", giftId="7551")
+        self.guanjia_common_gifts_op("每日游戏在线30分钟", giftId=self.guanjia_gift_id_game_online_30_minutes)
+        self.guanjia_common_gifts_op("每日登录游戏助手", giftId=self.guanjia_gift_id_login_game_helper)
 
         for i in range(10):
             res = self.guanjia_lottery_gifts_op("抽奖")
@@ -2100,14 +2120,14 @@ class DjcHelper:
 
         # {"code": 7005, "msg": "获取accToken失败", "result": []}
         # {"code": 29, "msg": "请求包参数错误", "result": []}
-        res = self.guanjia_common_gifts_op("每日登录游戏助手", giftId="7551", print_res=False)
+        res = self.guanjia_common_gifts_op("每日登录游戏助手", giftId=self.guanjia_gift_id_login_game_helper, print_res=False)
         return res["code"] in [7005, 29]
 
     def guanjia_common_gifts_op(self, ctx, giftId="", print_res=True):
-        return self.guanjia_op(ctx, "comjoin", "1121", giftId=giftId, print_res=print_res)
+        return self.guanjia_op(ctx, "comjoin", self.guanjia_common_gifts_act_id, giftId=giftId, print_res=print_res)
 
     def guanjia_lottery_gifts_op(self, ctx, print_res=True):
-        return self.guanjia_op(ctx, "lottjoin", "1120", print_res=print_res)
+        return self.guanjia_op(ctx, "lottjoin", self.guanjia_lottery_gifts_act_id, print_res=print_res)
 
     def guanjia_op(self, ctx, api_name, act_id, giftId="", print_res=True):
         api = f"{api_name}_{act_id}"
@@ -4025,7 +4045,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_christmas()
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
-        # djcHelper.guanjia()
         # djcHelper.dnf_1224()
         # djcHelper.qq_video()
         # djcHelper.youfei()
@@ -4040,4 +4059,5 @@ if __name__ == '__main__':
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
-        djcHelper.dnf_helper_chronicle()
+        # djcHelper.dnf_helper_chronicle()
+        djcHelper.guanjia()

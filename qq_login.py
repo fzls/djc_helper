@@ -293,7 +293,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("http://guanjia.qq.com/act/cop/202012dnf/")
+            self.driver.get("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
 
             self.set_window_size()
 

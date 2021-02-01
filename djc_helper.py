@@ -432,6 +432,9 @@ class DjcHelper:
         # 燃放爆竹活动
         self.firecrackers()
 
+        # dnf助手编年史活动
+        self.dnf_helper_chronicle()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -454,9 +457,6 @@ class DjcHelper:
 
         # 阿拉德勇士征集令
         self.dnf_warriors_call()
-
-        # dnf助手编年史活动
-        self.dnf_helper_chronicle()
 
         # dnf漂流瓶
         self.dnf_drift()
@@ -1853,6 +1853,7 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
+    @try_except
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
@@ -1906,6 +1907,10 @@ class DjcHelper:
             res = _getUserTaskList()
             return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
+        def sign_gifts_list():
+            res = self.get("连续签到奖励列表", url_wang, api="list/sign", **common_params)
+            return DnfHelperChronicleSignList().auto_update_config(res)
+
         # ------ 领取各种奖励 ------
 
         def takeTaskAward(suffix, taskName, actionId, status, exp):
@@ -1925,6 +1930,11 @@ class DjcHelper:
                 logger.info(f"领取{actionName}-{actionId}，获取经验为{exp}，回包data={data}")
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
+
+        def take_continuous_signin_gift(giftInfo: DnfHelperChronicleSignGiftInfo):
+            res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params,
+                           amsid=giftInfo.sLbcode)
+            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', '出错啦')}")
 
         def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
@@ -1970,6 +1980,21 @@ class DjcHelper:
             takeTaskAward("自己", task.name, task.mActionId, task.mStatus, task.mExp)
             if taskInfo.hasPartner:
                 takeTaskAward("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+
+        # 领取连续签到奖励
+        signGiftsList = sign_gifts_list()
+        hasTakenAnySignGift = False
+        for signGift in signGiftsList.gifts:
+            # 2-未完成，0-已完成未领取，1-已领取
+            if signGift.status in [0]:
+                # 0-已完成未领取
+                take_continuous_signin_gift(signGift)
+                hasTakenAnySignGift = True
+            else:
+                # 2-未完成，1-已领取
+                pass
+        if not hasTakenAnySignGift:
+            logger.info("连续签到均已领取")
 
         # 领取基础奖励
         basicAwardList = basic_award_list()
@@ -3991,7 +4016,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_sailiyam()
         # djcHelper.dnf_rank()
         # djcHelper.dnf_warriors_call()
-        # djcHelper.dnf_helper_chronicle()
         # djcHelper.hello_voice()
         # djcHelper.dnf_carnival()
         # djcHelper.xinyue_financing()
@@ -4015,4 +4039,5 @@ if __name__ == '__main__':
         # djcHelper.spring_fudai()
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
-        djcHelper.vip_mentor()
+        # djcHelper.vip_mentor()
+        djcHelper.dnf_helper_chronicle()

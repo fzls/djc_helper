@@ -576,6 +576,8 @@ def print_update_message_on_first_run_new_version():
 
 
 def show_ask_message_box_only_once():
+    # note: 不用时直接return，需要的时候再注释掉return来启用
+    return
     # 临时加一个请求帮忙弄下白嫖活动的逻辑
     if is_first_run("DNF公众号拉新v2"):
         message = (

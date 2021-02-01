@@ -189,6 +189,19 @@ def is_weekly_first_run():
     return last_run_at_week != week
 
 
+def is_monthly_first_run():
+    db = load_db()
+
+    month = get_month()
+    monthly_run_key = 'last_run_at_month'
+    last_run_at_month = db.get(monthly_run_key, "")
+
+    db[monthly_run_key] = month
+
+    save_db(db)
+    return last_run_at_month != month
+
+
 def is_first_run(key):
     db = load_db()
 

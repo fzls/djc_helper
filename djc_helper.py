@@ -2924,6 +2924,122 @@ class DjcHelper:
             info = AmesvrCommonModRet().auto_update_config(res["modRet"])
             return int(info.sOutValue1)
 
+        friend_db_key = "majieluoFriendQQs"
+        local_invited_friends_db_key = "majieluo_local_invited_friend"
+        invited_by_other_db_key = "majieluo_invited_by_other_list"
+        award_taken_friends_db_key = "majieluo_award_taken_friends"
+
+        def qeury_not_invitied_friends_with_cache():
+            account_db = load_db_for(self.cfg.name)
+
+            invited_friends = query_invited_friends()
+            invited_by_other = query_invited_by_other_list()
+
+            def filter_not_invited_friends(friendQQs):
+                validFriendQQs = []
+                for friendQQ in friendQQs:
+                    if friendQQ not in invited_friends and friendQQ not in invited_by_other:
+                        validFriendQQs.append(friendQQ)
+
+                return validFriendQQs
+
+            if friend_db_key in account_db:
+                friendQQs = account_db[friend_db_key]
+
+                return filter_not_invited_friends(friendQQs)
+
+            return filter_not_invited_friends(qeury_not_invitied_friends())
+
+        def query_invited_friends():
+            res = self.majieluo_op("查询已邀请的好友列表", "734607", print_res=False)
+
+            invited_friends = query_local_invited_friends()
+            try:
+                for info in res["modRet"]["jData"]["jData"]:
+                    qq = info["sendToQQ"]
+                    if qq not in invited_friends:
+                        invited_friends.append(qq)
+            except:
+                # 如果没有邀请过任何人，上面这样获取似乎是会报错的。手头上暂时没有这种号，先兼容下吧。
+                pass
+
+            return invited_friends
+
+        def qeury_not_invitied_friends():
+            logger.info("本地无好友名单，或缓存的好友均已邀请过，需要重新拉取，请稍后~")
+            friendQQs = []
+
+            page = 1
+            page_size = 6
+            while True:
+                info = query_friends(page, page_size)
+                if len(info.list) == 0:
+                    # 没有未邀请的好友了
+                    break
+                for friend in info.list:
+                    friendQQs.append(str(friend.uin))
+
+                page += 1
+
+            logger.info(f"获取好友名单共计{len(friendQQs)}个，将保存到本地，具体如下：{friendQQs}")
+
+            def _update_db(udb):
+                udb[friend_db_key] = friendQQs
+
+            update_db_for(self.cfg.name, _update_db)
+
+            return friendQQs
+
+        def query_friends(page, page_size):
+            res = self.majieluo_op("查询好友列表（赠送）", "734026", pageNow=str(page), pageSize=str(page_size), print_res=True)
+            info = AmesvrQueryFriendsInfo().auto_update_config(res["modRet"]["jData"])
+            return info
+
+        def update_invited_by_other_list(qq):
+            def _update_db(udb):
+                if invited_by_other_db_key not in udb:
+                    udb[invited_by_other_db_key] = []
+
+                if qq not in udb[invited_by_other_db_key]:
+                    udb[invited_by_other_db_key].append(qq)
+
+            update_db_for(self.cfg.name, _update_db)
+
+        def query_invited_by_other_list():
+            udb = load_db_for(self.cfg.name)
+
+            return udb.get(invited_by_other_db_key, [])
+
+        def update_local_invited_friends(qq):
+            def _update_db(udb):
+                if local_invited_friends_db_key not in udb:
+                    udb[local_invited_friends_db_key] = []
+
+                if qq not in udb[local_invited_friends_db_key]:
+                    udb[local_invited_friends_db_key].append(qq)
+
+            update_db_for(self.cfg.name, _update_db)
+
+        def query_local_invited_friends():
+            udb = load_db_for(self.cfg.name)
+
+            return udb.get(local_invited_friends_db_key, [])
+
+        def update_award_taken_friends(qq):
+            def _update_db(udb):
+                if award_taken_friends_db_key not in udb:
+                    udb[award_taken_friends_db_key] = []
+
+                if qq not in udb[award_taken_friends_db_key]:
+                    udb[award_taken_friends_db_key].append(qq)
+
+            update_db_for(self.cfg.name, _update_db)
+
+        def query_award_taken_friends():
+            udb = load_db_for(self.cfg.name)
+
+            return udb.get(award_taken_friends_db_key, [])
+
         # 马杰洛的见面礼
         self.majieluo_op("领取见面礼", "733355")
 
@@ -2944,16 +3060,39 @@ class DjcHelper:
         self.majieluo_op("【通关任意一次副本】奖励翻倍", "733884")
 
         # 黑钻送好友
-        for receiverQQ in self.cfg.majieluo_receiver_qq_list:
-            logger.info("等待2秒，避免请求过快")
-            time.sleep(2)
-            # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
-            res = self.majieluo_op(f"【赠礼】发送赠送黑钻邀请-{receiverQQ}", "734033", receiver=receiverQQ, receiverName=quote_plus("小号"))
-            if int(res["ret"]) == 700:
-                logger.warning("今日赠送上限已到达，将停止~")
-                break
+        if self.cfg.enable_majieluo_invite_friend:
+            for receiverQQ in qeury_not_invitied_friends_with_cache():
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+                # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
+                res = self.majieluo_op(f"【赠礼】发送赠送黑钻邀请-{receiverQQ}", "734033", receiver=receiverQQ, receiverName=quote_plus("小号"))
+                if int(res["ret"]) == 700:
+                    if res["flowRet"]["sMsg"] == "该好友已被其他玩家邀请，请重新选择想邀请的好友或刷新好友列表~":
+                        update_invited_by_other_list(receiverQQ)
+                        continue
+                    elif res["flowRet"]["sMsg"] == "您已经给该好友发过消息了~":
+                        update_local_invited_friends(receiverQQ)
+                        continue
+                    else:
+                        logger.warning("今日赠送上限已到达，将停止~")
+                        break
+                else:
+                    update_local_invited_friends(receiverQQ)
 
-            self.majieluo_op("赠送黑钻后，领取9个时间引导石", "733885", receiver=receiverQQ)
+            award_taken_friends = query_award_taken_friends()
+            for receiverQQ in query_invited_friends():
+                if receiverQQ in award_taken_friends:
+                    continue
+                res = self.majieluo_op("赠送黑钻后，领取9个时间引导石", "733885", receiver=receiverQQ)
+                if int(res["ret"]) == 600 and res["flowRet"]["sMsg"] == "抱歉，您已经领取过该奖励了~":
+                    update_award_taken_friends(receiverQQ)
+                    continue
+                elif int(res["ret"]) == 0 and res["modRet"]["sMsg"] == "非常抱歉，您今日领取次数已达最大，请明日再来领取！":
+                    break
+                else:
+                    update_award_taken_friends(receiverQQ)
+        else:
+            logger.info("未启用马杰洛黑钻送好友功能，将跳过~")
 
         self.majieluo_op("接受好友赠送邀请，领取黑钻", "733886", inviteId="239125", receiverUrl=quote_plus("https://game.gtimg.cn/images/dnf/cp/a20210121welfare/share.png"))
 
@@ -4053,11 +4192,11 @@ if __name__ == '__main__':
         # djcHelper.dnf_0121()
         # djcHelper.wegame_spring()
         # djcHelper.dnf_welfare()
-        # djcHelper.majieluo()
+        djcHelper.majieluo()
         # djcHelper.spring_fudai()
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.guanjia()
-        djcHelper.qq_video()
+        # djcHelper.qq_video()

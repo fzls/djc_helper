@@ -39,7 +39,7 @@ def check_update_on_start(config):
             if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
                 win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
                 webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
-                
+
 
 def try_manaual_update(ui: UpdateInfo):
     if need_update(now_version, ui.latest_version):

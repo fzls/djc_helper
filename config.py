@@ -272,12 +272,12 @@ class AccountConfig(ConfigInterface):
         self.xinyue_financing_card_names = []
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
         self.drift_send_qq_list = []  # type: List[str]
-        # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
-        self.majieluo_receiver_qq_list = []  # type: List[str]
         # 新春福袋大作战邀请列表（会实际发消息）
         self.spring_fudai_receiver_qq_list = []  # type: List[str]
         # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
         self.enable_firecrackers_invite_friend = False
+        # 马杰洛活动是否尝试黑钻送好友（不会实际发消息）
+        self.enable_majieluo_invite_friend = False
         # dnf论坛签到formhash
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
@@ -327,7 +327,6 @@ class AccountConfig(ConfigInterface):
         self.updateUinSkey(self.account_info.uin, self.account_info.skey)
 
         self.drift_send_qq_list = [str(qq) for qq in self.drift_send_qq_list]
-        self.majieluo_receiver_qq_list = [str(qq) for qq in self.majieluo_receiver_qq_list]
         self.spring_fudai_receiver_qq_list = [str(qq) for qq in self.spring_fudai_receiver_qq_list]
 
     def updateUinSkey(self, uin, skey):

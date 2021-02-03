@@ -627,7 +627,7 @@ def temp_code(cfg):
             "万物皆新意 牛转阿拉德 活动只需要抽签三次，不再加入，请自行参与。链接为：https://dnf.qq.com/cp/a20210121index/"
         ),
         (
-            "QQ黄钻和超级会员惠东白嫖只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
+            "QQ黄钻和超级会员惠的白嫖活动只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
             "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127",
             "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9",
         ),

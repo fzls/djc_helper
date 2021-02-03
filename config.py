@@ -270,18 +270,18 @@ class AccountConfig(ConfigInterface):
         # 示例：xinyue_financing_card_names = ["升级版月卡", "体验版月卡"]
         # 如果G分不够多，也可以尝试填写["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]，这样会依次尝试各个方案，确保能用当前能购买的最高等级礼卡来做活动
         self.xinyue_financing_card_names = []
-        # 漂流瓶每日邀请列表，最多可填8个（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
+        # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
         self.drift_send_qq_list = []  # type: List[str]
         # 马杰洛黑钻送好友邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
         self.majieluo_receiver_qq_list = []  # type: List[str]
-        # 新春福袋大作战邀请列表（！！！由于真的会发送消息给对方，强烈建议只在其中填写自己的小号！！！）
+        # 新春福袋大作战邀请列表（会实际发消息）
         self.spring_fudai_receiver_qq_list = []  # type: List[str]
+        # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
+        self.enable_firecrackers_invite_friend = False
         # dnf论坛签到formhash
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
-        # 燃放爆竹活动是否尝试邀请好友
-        self.enable_firecrackers_invite_friend = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

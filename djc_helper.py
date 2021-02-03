@@ -2035,6 +2035,10 @@ class DjcHelper:
                     continue
 
                 userInfo = getUserActivityTopInfo()
+                if userInfo.level < int(gift.iLevel):
+                    all_exchanged = False
+                    logger.warning(f"目前等级为{userInfo.level}，不够兑换{gift.sName}所需的{gift.iLevel}级，将跳过后续优先级较低的兑换奖励")
+                    break
                 if userInfo.point < int(gift.iCard):
                     all_exchanged = False
                     logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")

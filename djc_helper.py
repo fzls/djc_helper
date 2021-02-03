@@ -3671,6 +3671,8 @@ class DjcHelper:
 
             return invited_friends
 
+        friend_db_key = "friendQQs"
+
         def qeury_not_invitied_friends_with_cache():
             account_db = load_db_for(self.cfg.name)
 
@@ -3684,8 +3686,8 @@ class DjcHelper:
 
                 return validFriendQQs
 
-            if "friendQQs" in account_db:
-                friendQQs = account_db["friendQQs"]
+            if friend_db_key in account_db:
+                friendQQs = account_db[friend_db_key]
 
                 validFriendQQs = filter_not_invited_friends(friendQQs)
 
@@ -3713,7 +3715,7 @@ class DjcHelper:
             logger.info(f"获取好友名单共计{len(friendQQs)}个，将保存到本地，具体如下：{friendQQs}")
 
             def _update_db(udb):
-                udb["db"] = friendQQs
+                udb[friend_db_key] = friendQQs
 
             update_db_for(self.cfg.name, _update_db)
 

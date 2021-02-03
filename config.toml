@@ -76,6 +76,12 @@ login_mode = "qr_login"
 # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
 cannot_bind_dnf = false
 
+# 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
+drift_send_qq_list = []
+
+# 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
+enable_firecrackers_invite_friend = false
+
 # 以下dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题。
 # dnf论坛签到formhash
 # 获取方式
@@ -94,9 +100,6 @@ dnf_bbs_formhash = ""
 #   4. 在左上角筛选项中输入 k_misign:sign
 #   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 dnf_bbs_cookie = ""
-
-# 燃放爆竹活动是否尝试邀请好友
-enable_firecrackers_invite_friend = false
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]

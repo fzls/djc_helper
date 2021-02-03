@@ -586,30 +586,18 @@ def print_update_message_on_first_run_new_version():
 
 
 def show_ask_message_box_only_once():
-    # note: 不用时直接return，需要的时候再注释掉return来启用
-    return
     # 临时加一个请求帮忙弄下白嫖活动的逻辑
-    if is_first_run("DNF公众号拉新v2"):
+    if is_first_run("赛利亚卡牌"):
         message = (
-            "(*/ω＼*)白嫖王我又来了\n"
-            "刚看到DNF公众号推了个【新春阿拉德】拉新活动，前十的可以白嫖一个春节套~\n"
+            "马杰洛活动中的赛利亚卡牌，有小伙伴有多余的Q版赛利亚卡牌吗（第5个）？\n"
+            "如果有多的话，可以不可以送我一张哇0-0\n"
             "\n"
-            "之前已经扫过码的小伙伴麻烦也按照下面的操作下0-0刚听一个群友说了，只要取消关注再扫码就都算的~\n"
-            "\n"
-            "流程如下，最多大概需要十几秒，先谢谢大家啦(#^.^#)\n"
-            "    1. 点击确定，用微信扫描出现的二维码进入DNF官方公众号\n"
-            "    2. 如果未关注，则点击关注，哦了\n"
-            "    3. 如果已关注，请先取消关注，然后重新扫码，然后点击关注，欧拉\n"
-            "PS: 点了关注后请不要立刻取消关注，2.4号之后再取消关注(｀・ω・´)\n"
-            "\n"
-            "想用这个活动白嫖个春节套，嘻嘻(#^.^#)（TAT之前的叶子猪似乎在耍猴）\n"
-            "提前谢谢大家啦0-0 就当是一直免费维护和更新这个小工具的小报酬啦^_^\n"
-            "ps: 点确定就会弹出我的活动二维码啦，点否就再也不会弹出这个窗口啦\n"
+            "点 确定 打开赠送页面进行赠送，点 取消 拒绝-。-\n"
         )
-        res = win32api.MessageBox(0, message, "请求各位帮忙扫一下~", win32con.MB_OKCANCEL)
+        res = win32api.MessageBox(0, message, "求送卡", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
-            webbrowser.open("新春阿拉德活动二维码.jpg")
-            win32api.MessageBox(0, "扫码关注DNF官方公众号就完事啦，很快的~多谢啦，嘿嘿嘿0-0\n如果已关注的话，先取消关注，然后再扫码就好啦", "致谢", win32con.MB_ICONINFORMATION)
+            webbrowser.open("https://dnf.qq.com/cp/a20210121welfare/index.html?askforId=11820&askforUin=1054073896")
+            win32api.MessageBox(0, "打开网页后登陆后点击[确认]按钮赠送就好啦~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
 

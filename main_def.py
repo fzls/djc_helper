@@ -513,29 +513,32 @@ def try_xinyue_sailiyam_start_work(cfg):
 
 
 def show_support_pic_monthly(cfg):
-    threading.Thread(target=show_support_pic_monthly_sync, args=(cfg,), daemon=True).start()
-
-
-def show_support_pic_monthly_sync(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
 
     if is_monthly_first_run("show_support_pic"):
-        usedDays = get_count(my_usage_counter_name, "all")
-        message = (
-            f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"
-            "\n"
-            "小助手可以一直免费使用。\n"
-            "但是如果小助手确实有帮到你，希望你可以按月依据小助手在本月为你节省的时间精力以及领到的蚊子腿数目来支付一定金额，比如2.33元/4.88元/6.66元等(｡◕ˇ∀ˇ◕)\n"
-            "毕竟用爱发电不能持久，人毕竟是要恰饭的ლ(╹◡╹ლ)\n"
-            "你的打赏能让我更乐意使用本来用于玩DNF的闲暇时间来及时更新小助手，适配各种新出的蚊子腿活动，添加更多自动功能。( • ̀ω•́ )✧\n"
-            "\n"
-            "支付方式：扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
-            "（这个消息每月会弹出一次ヾ(=･ω･=)o）"
-        )
-        logger.warning(color("fg_bold_cyan") + message)
-        if not use_by_myself():
-            win32api.MessageBox(0, message, f"{get_month()} 恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
-        os.popen("支持一下.png")
+        threading.Thread(target=show_support_pic_monthly_sync, args=(cfg,), daemon=True).start()
+        wait_seconds = 15
+        logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
+        time.sleep(wait_seconds)
+
+
+def show_support_pic_monthly_sync(cfg):
+    usedDays = get_count(my_usage_counter_name, "all")
+    message = (
+        f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"
+        "\n"
+        "小助手可以一直免费使用。\n"
+        "但是如果小助手确实有帮到你，希望你可以按月依据小助手在本月为你节省的时间精力以及领到的蚊子腿数目来支付一定金额，比如2.33元/4.88元/6.66元等(｡◕ˇ∀ˇ◕)\n"
+        "毕竟用爱发电不能持久，人毕竟是要恰饭的ლ(╹◡╹ლ)\n"
+        "你的打赏能让我更乐意使用本来用于玩DNF的闲暇时间来及时更新小助手，适配各种新出的蚊子腿活动，添加更多自动功能。( • ̀ω•́ )✧\n"
+        "\n"
+        "支付方式：扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
+        "（这个消息每月会弹出一次ヾ(=･ω･=)o）"
+    )
+    logger.warning(color("fg_bold_cyan") + message)
+    if not use_by_myself():
+        win32api.MessageBox(0, message, f"{get_month()} 恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
+    os.popen("支持一下.png")
 
 
 def check_update(cfg):

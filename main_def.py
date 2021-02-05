@@ -519,7 +519,7 @@ def show_support_pic_monthly(cfg):
 def show_support_pic_monthly_sync(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
 
-    if is_monthly_first_run():
+    if is_monthly_first_run("show_support_pic"):
         usedDays = get_count(my_usage_counter_name, "all")
         message = (
             f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"

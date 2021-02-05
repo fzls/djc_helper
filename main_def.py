@@ -514,9 +514,6 @@ def try_xinyue_sailiyam_start_work(cfg):
 
 def show_support_pic_monthly(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
-    if is_first_run("show_support_pic_monthly"):
-        # 第一次使用的时候不弹出
-        return
 
     if is_monthly_first_run():
         usedDays = get_count(my_usage_counter_name, "all")

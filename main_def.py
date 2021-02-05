@@ -588,6 +588,11 @@ def print_update_message_on_first_run_new_version():
 
 
 def show_ask_message_box_only_once():
+    threading.Thread(target=show_ask_message_box_only_once_sync, daemon=True).start()
+
+
+def show_ask_message_box_only_once_sync():
+    return
     # 临时加一个请求帮忙弄下白嫖活动的逻辑
     if is_first_run("赛利亚卡牌"):
         message = (

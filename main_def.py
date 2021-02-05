@@ -513,6 +513,10 @@ def try_xinyue_sailiyam_start_work(cfg):
 
 
 def show_support_pic_monthly(cfg):
+    threading.Thread(target=show_support_pic_monthly_sync, args=(cfg,), daemon=True).start()
+
+
+def show_support_pic_monthly_sync(cfg):
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
 
     if is_monthly_first_run():

@@ -163,11 +163,11 @@ def get_month():
     return get_now().strftime("%Y%m")
 
 
-def is_daily_first_run():
+def is_daily_first_run(key=""):
     db = load_db()
 
     today = get_today()
-    daily_run_key = 'last_run_at'
+    daily_run_key = f'last_run_at_{key}'
     last_run_at = db.get(daily_run_key, "")
 
     db[daily_run_key] = today
@@ -176,11 +176,11 @@ def is_daily_first_run():
     return last_run_at != today
 
 
-def is_weekly_first_run():
+def is_weekly_first_run(key=""):
     db = load_db()
 
     week = get_week()
-    weekly_run_key = 'last_run_at_week'
+    weekly_run_key = f'last_run_at_week_{key}'
     last_run_at_week = db.get(weekly_run_key, "")
 
     db[weekly_run_key] = week
@@ -189,11 +189,11 @@ def is_weekly_first_run():
     return last_run_at_week != week
 
 
-def is_monthly_first_run():
+def is_monthly_first_run(key=""):
     db = load_db()
 
     month = get_month()
-    monthly_run_key = 'last_run_at_month'
+    monthly_run_key = f'last_run_at_month_{key}'
     last_run_at_month = db.get(monthly_run_key, "")
 
     db[monthly_run_key] = month

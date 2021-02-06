@@ -281,8 +281,8 @@ class DjcHelper:
         return get_game_info(self.cfg.mobile_game_role_info.game_name)
 
     # --------------------------------------------各种操作--------------------------------------------
-    def run(self):
-        self.normal_run()
+    def run(self, user_buy_info: BuyInfo):
+        self.normal_run(user_buy_info)
 
     def check_first_run(self):
         self.show_tip_on_first_run_promot()
@@ -354,7 +354,7 @@ class DjcHelper:
         return True
 
     # 正式运行阶段
-    def normal_run(self):
+    def normal_run(self, user_buy_info: BuyInfo):
         # 检查skey是否过期
         self.check_skey_expired()
 
@@ -426,6 +426,18 @@ class DjcHelper:
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
 
+        if user_buy_info.is_active():
+            self.paied_activities()
+        else:
+            if user_buy_info.total_buy_month != 0:
+                msg = f"账号{user_buy_info.qq}的付费内容已到期，到期时间点为{user_buy_info.expire_at}。"
+            else:
+                msg = f"账号{user_buy_info.qq}未购买付费内容。"
+            msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可扫描目录中的付款码付费激活。目前定价为5元每月，购买后QQ私聊我付款截图、使用QQ即可。"
+            msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
+            logger.warning(color("bold_yellow") + msg)
+
+    def paied_activities(self):
         # dnf助手活动
         self.dnf_helper()
 

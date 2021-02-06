@@ -78,6 +78,7 @@ if uploader.login_ok:
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper)
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc)
     uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/buy_auto_updater_users.txt")), uploader.folder_online_files, uploader.buy_auto_updater_users_filename)
+    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/user_monthly_pay_info.txt")), uploader.folder_online_files, uploader.user_monthly_pay_info_filename)
 else:
     logger.error("蓝奏云登录失败")
 

@@ -31,7 +31,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
 
     for order_info in order_infos:
         if has_buy_in_an_hour(order_info.qq):
-            logger.warning(f"{order_info.qq}在一小时内已经处理过，是否是重复运行了?")
+            logger.error(f"{order_info.qq}在一小时内已经处理过，是否是重复运行了?")
             continue
 
         if order_info.qq in buy_users:

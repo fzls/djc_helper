@@ -3691,8 +3691,10 @@ class DjcHelper:
                 "（本消息只会弹出一次）\n"
             )
             logger.warning(color("bold_cyan") + msg)
-            win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
-            webbrowser.open(f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
+            def cb():
+                win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
+                webbrowser.open(f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
+            async_call(cb)
 
         def query_info():
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",

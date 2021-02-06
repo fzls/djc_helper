@@ -7,7 +7,7 @@ from typing import Dict
 import win32api
 
 from config import load_config, config, XinYueOperationConfig, Config
-from dao import BuyInfo
+from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
@@ -429,6 +429,26 @@ def run(cfg):
     _show_head_line("开始核心逻辑")
 
     user_buy_info = get_user_buy_info(cfg)
+
+    # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
+    if has_buy_auto_updater_dlc(cfg):
+        max_present_times = datetime.timedelta(days=2 * 31)
+
+        free_start_time = parse_time("2021-02-07 00:00:00")
+
+        now = datetime.datetime.now()
+        since_start_time = now - free_start_time
+        not_paied_time = max(since_start_time - datetime.timedelta(days=user_buy_info.total_buy_month * 31), datetime.timedelta())
+
+        present_times = datetime.timedelta()
+        if not_paied_time < max_present_times:
+            # 如果当前到2.7号的未付费时长少于两个月，则补齐差值到过期时间
+            present_times = max_present_times - not_paied_time
+
+        user_buy_info.expire_at = format_time(parse_time(user_buy_info.expire_at) + present_times)
+        user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({"buy_month": 2, "buy_at": free_start_time}))
+        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}")
+
     show_buy_info(user_buy_info)
 
     for idx, account_config in enumerate(cfg.account_configs):

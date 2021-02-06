@@ -5,8 +5,10 @@ from typing import Dict, List
 
 from dao import BuyInfo, BuyRecord, OrderInfo
 from data_struct import to_json
+from db import load_db, save_db
 from log import logger
 from upload_lanzouyun import Uploader
+from util import format_time, parse_time
 
 local_save_path = "utils/user_monthly_pay_info.txt"
 
@@ -28,6 +30,10 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     now_str = now.strftime(datetime_fmt)
 
     for order_info in order_infos:
+        if has_buy_in_an_hour(order_info.qq):
+            logger.warning(f"{order_info.qq}在一小时内已经处理过，是否是重复运行了?")
+            continue
+
         if order_info.qq in buy_users:
             user_info = buy_users[order_info.qq]
         else:
@@ -61,9 +67,32 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
         msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} 购买{record.buy_month}月' for record in user_info.buy_records)
         logger.info(msg)
 
+        save_buy_timestamp(order_info.qq)
+
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
         json.dump(to_json(buy_users), save_file, indent=2)
 
+key_buy_time = "pay_by_month_last_buy_time"
+
+def has_buy_in_an_hour(qq):
+    db = load_db()
+
+    if key_buy_time not in db:
+        return False
+
+    buy_time = db[key_buy_time].get(str(qq), "2021-01-01 00:00:00")
+
+    return parse_time(buy_time) >= datetime.now() - timedelta(hours=1)
+
+def save_buy_timestamp(qq):
+    db = load_db()
+
+    if key_buy_time not in db:
+        db[key_buy_time] = {}
+
+    db[key_buy_time][str(qq)] = format_time(datetime.now())
+
+    save_db(db)
 
 def upload():
     logger.info("开始上传到蓝奏云")

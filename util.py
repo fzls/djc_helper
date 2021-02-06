@@ -315,6 +315,14 @@ def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(time_str, time_fmt)
 
 
+def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return dt.strftime(time_fmt)
+
+
+def format_now(time_fmt="%Y-%m-%d %H:%M:%S"):
+    return format_time(datetime.datetime.now(), time_fmt=time_fmt)
+
+
 def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 

@@ -77,7 +77,7 @@ def upload():
         logger.error("蓝奏云登录失败")
 
 
-def process_orders(order_info: List[OrderInfo]):
+def process_orders(order_infos: List[OrderInfo]):
     update_buy_user_local(order_infos)
     upload()
 

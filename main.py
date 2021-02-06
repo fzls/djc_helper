@@ -39,9 +39,6 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
-    # 每月首次运行时，弹出付费提示
-    show_support_pic_monthly(cfg)
-
     check_all_skey_and_pskey(cfg)
 
     check_djc_role_binding()

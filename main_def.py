@@ -2,10 +2,12 @@ import random
 import subprocess
 import webbrowser
 from sys import exit
+from typing import Dict
 
 import win32api
 
 from config import load_config, config, XinYueOperationConfig, Config
+from dao import BuyInfo
 from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
@@ -426,6 +428,9 @@ def try_join_xinyue_team(cfg):
 def run(cfg):
     _show_head_line("开始核心逻辑")
 
+    user_buy_info = get_user_buy_info(cfg)
+    show_buy_info(user_buy_info)
+
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
         if not account_config.is_enabled():
@@ -435,7 +440,7 @@ def run(cfg):
         _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
         djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.run()
+        djcHelper.run(user_buy_info)
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
@@ -512,32 +517,40 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 
 
-def show_support_pic_monthly(cfg):
-    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，请打开 支持一下.png ，扫码打赏哦~")
+def show_buy_info(user_buy_info: BuyInfo):
+    msg = f"{user_buy_info.qq} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
+    if len(user_buy_info.buy_records) != 0:
+        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} 购买{record.buy_month}月' for record in user_buy_info.buy_records)
+    logger.info(color("bold_yellow") + msg)
 
-    if is_monthly_first_run("show_support_pic"):
-        threading.Thread(target=show_support_pic_monthly_sync, args=(cfg,), daemon=True).start()
+    if not user_buy_info.is_active() and is_weekly_first_run("show_buy_info"):
+        threading.Thread(target=show_buy_info_sync, args=(user_buy_info,), daemon=True).start()
         wait_seconds = 15
         logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
         time.sleep(wait_seconds)
 
 
-def show_support_pic_monthly_sync(cfg):
+def show_buy_info_sync(msg):
     usedDays = get_count(my_usage_counter_name, "all")
     message = (
         f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"
         "\n"
-        "小助手可以一直免费使用。\n"
-        "但是如果小助手确实有帮到你，希望你可以按月依据小助手在本月为你节省的时间精力以及领到的蚊子腿数目来支付一定金额，比如2.33元/4.88元/6.66元等(｡◕ˇ∀ˇ◕)\n"
+        "2.2号添加了一个付费弹窗，但是截至2.6晚上六点，仅有不到百分之一的使用者进行了付费。\n"
+        "考虑到近日来花在维护小助手上的时间比较久，因此本人决定，自2021-02-06 00:00:00之后添加的所有短期活动都将只能付费使用，此前已有的功能（如道聚城、心悦）或之后出的长期功能都将继续免费使用。\n"
         "毕竟用爱发电不能持久，人毕竟是要恰饭的ლ(╹◡╹ლ)\n"
-        "你的打赏能让我更乐意使用本来用于玩DNF的闲暇时间来及时更新小助手，适配各种新出的蚊子腿活动，添加更多自动功能。( • ̀ω•́ )✧\n"
+        "你的付费能让我更乐意使用本来用于玩DNF的闲暇时间来及时更新小助手，适配各种新出的蚊子腿活动，添加更多自动功能。( • ̀ω•́ )✧\n"
         "\n"
-        "支付方式：扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
-        "（这个消息每月会弹出一次ヾ(=･ω･=)o）"
+        "使用源码运行将不受该限制，但是使用我的打包二进制时，只有付费生效期间才能运行上述日期后的短期新活动，各位可自行决定通过付费激活还是自己研究如何使用源码去运行~\n"
+        "\n"
+        "目前定价为5元每月\n"
+        "支付方式：\n"
+        "    1. 扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
+        "    2. 加群后QQ私聊我（风之凌殇）以下内容：1. 付款截图 2. 要使用该服务的游戏QQ号"
+        "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）"
     )
     logger.warning(color("fg_bold_cyan") + message)
     if not use_by_myself():
-        win32api.MessageBox(0, message, f"{get_month()} 恰饭恰饭(〃'▽'〃)", win32con.MB_OK)
+        win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
     os.popen("支持一下.png")
 
 
@@ -714,6 +727,49 @@ def has_buy_auto_updater_dlc(cfg: Config):
             time.sleep(retrtCfg.retry_wait_time)
 
     return True
+
+
+def get_user_buy_info(cfg: Config):
+    retrtCfg = cfg.common.retry
+    default_user_buy_info = BuyInfo()
+    for idx in range(retrtCfg.max_retry_count):
+        try:
+            # 默认设置首个qq为购买信息
+            default_user_buy_info.qq = uin2qq(cfg.account_configs[0].account_info.uin)
+
+            uploader = Uploader(lanzou_cookie)
+            buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.user_monthly_pay_info_filename, ".cached", show_log=False)
+            buy_users = {}  # type: Dict[str, BuyInfo]
+            with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
+                raw_infos = json.load(data_file)
+                for qq, raw_info in raw_infos.items():
+                    info = BuyInfo().auto_update_config(raw_info)
+                    buy_users[qq] = info
+                    for game_qq in info.game_qqs:
+                        buy_users[game_qq] = info
+
+            if len(buy_users) == 0:
+                # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
+                default_user_buy_info.expire_at = "2120-01-01 00:00:00"
+                return default_user_buy_info
+
+            user_buy_info = default_user_buy_info
+            for account_cfg in cfg.account_configs:
+                qq = uin2qq(account_cfg.account_info.uin)
+                if qq in buy_users:
+                    if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
+                        # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
+                        user_buy_info = buy_users[qq]
+
+            return user_buy_info
+        except Exception as e:
+            logFunc = logger.debug
+            if use_by_myself():
+                logFunc = logger.error
+            logFunc(f"第{idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
+            time.sleep(retrtCfg.retry_wait_time)
+
+    return default_user_buy_info
 
 
 def change_title(dlcInfo=""):

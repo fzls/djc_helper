@@ -186,8 +186,8 @@ get_dnf_welfare = true
 get_dnf_drift = true
 # 是否领取DNF马杰洛的规划第三期
 get_majieluo = true
-# 是否领取dnf助手双旦活动（暗夜狂欢），额外需要助手userId和token
-get_dnf_helper_christmas = true
+# 是否领取dnf助手活动（牛气冲天迎新年），额外需要助手userId和token
+get_dnf_helper = true
 # 是否领取暖冬好礼活动
 get_warm_winter = true
 # 是否领取qq视频-看江湖有翡

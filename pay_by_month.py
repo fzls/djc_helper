@@ -72,7 +72,9 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
         json.dump(to_json(buy_users), save_file, indent=2)
 
+
 key_buy_time = "pay_by_month_last_buy_time"
+
 
 def has_buy_in_an_hour(qq):
     db = load_db()
@@ -84,6 +86,7 @@ def has_buy_in_an_hour(qq):
 
     return parse_time(buy_time) >= datetime.now() - timedelta(hours=1)
 
+
 def save_buy_timestamp(qq):
     db = load_db()
 
@@ -93,6 +96,7 @@ def save_buy_timestamp(qq):
     db[key_buy_time][str(qq)] = format_time(datetime.now())
 
     save_db(db)
+
 
 def upload():
     logger.info("开始上传到蓝奏云")
@@ -110,10 +114,6 @@ def process_orders(order_infos: List[OrderInfo]):
     update_buy_user_local(order_infos)
     upload()
 
-# 凑字数凑到第一个记录以1开头
-# 凑字数凑到第一个记录以1开头
-# 凑字数凑到第一个记录以1开头
-# 凑字数凑到第一个记录以1开头
 
 if __name__ == '__main__':
     raw_order_infos = [

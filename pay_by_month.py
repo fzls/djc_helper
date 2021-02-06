@@ -110,6 +110,10 @@ def process_orders(order_infos: List[OrderInfo]):
     update_buy_user_local(order_infos)
     upload()
 
+# 凑字数凑到第一个记录以1开头
+# 凑字数凑到第一个记录以1开头
+# 凑字数凑到第一个记录以1开头
+# 凑字数凑到第一个记录以1开头
 
 if __name__ == '__main__':
     raw_order_infos = [

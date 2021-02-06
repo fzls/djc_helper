@@ -669,3 +669,30 @@ class GuanhuaiActInfo(DaoObject):
     def __init__(self, act_name, ruleid):
         self.act_name = act_name
         self.ruleid = ruleid
+
+
+class BuyInfo(ConfigInterface):
+    def __init__(self):
+        self.qq = "1234567"
+        self.game_qqs = []
+        self.expire_at = "2020-02-06 12:30:15"
+        self.total_buy_month = 0
+        self.buy_records = []  # type: List[BuyRecord]
+
+    def fields_to_fill(self):
+        return [
+            ('buy_records', BuyRecord),
+        ]
+
+
+class BuyRecord(ConfigInterface):
+    def __init__(self):
+        self.buy_month = 1
+        self.buy_at = "2020-02-06 12:30:15"
+
+
+class OrderInfo(ConfigInterface):
+    def __init__(self):
+        self.qq = "1234567"
+        self.game_qqs = []
+        self.buy_month = 1

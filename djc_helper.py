@@ -426,6 +426,9 @@ class DjcHelper:
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
 
+        # dnf助手活动
+        self.dnf_helper()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -451,9 +454,6 @@ class DjcHelper:
 
         # dnf漂流瓶
         self.dnf_drift()
-
-        # dnf助手双旦活动
-        self.dnf_helper_christmas()
 
         # 暖冬好礼活动
         self.warm_winter()
@@ -1799,14 +1799,14 @@ class DjcHelper:
         info = self.cfg.dnf_helper_info
         return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
-    # --------------------------------------------dnf助手双旦活动--------------------------------------------
+    # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
     @try_except
-    def dnf_helper_christmas(self):
-        # https://mwegame.qq.com/act/dnf/christmas/index.html?subGameId=10014&gameId=10014&&gameId=1006
-        show_head_line("dnf助手双旦")
+    def dnf_helper(self):
+        # https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew
+        show_head_line("dnf助手 牛气冲天迎新年")
 
-        if not self.cfg.function_switches.get_dnf_helper_christmas or self.disable_most_activities():
-            logger.warning("未启用领取dnf助手双旦活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
+            logger.warning("未启用领取dnf助手活动功能，将跳过")
             return
 
         # 检查是否已在道聚城绑定
@@ -1815,40 +1815,99 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手双旦相关活动，请按照下列流程进行配置")
+            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置")
             self.show_dnf_helper_info_guide()
             return
 
-        self.dnf_helper_christmas_op("每日签到", "726989")
+        def query_signin_info():
+            res = self.dnf_helper_op("查询", "734421", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            temp = raw_info.sOutValue1.split(';')
+            signin_days = int(temp[0])
+            today_signed = temp[1] == "1"
 
-        self.dnf_helper_christmas_op("圣诞节 12/25", "727621")
-        self.dnf_helper_christmas_op("元旦节 1/1", "727622")
+            return signin_days, today_signed
 
-        self.dnf_helper_christmas_op("累计1次", "727623")
-        self.dnf_helper_christmas_op("累计3次", "727624")
-        self.dnf_helper_christmas_op("累计5次", "727625")
-        self.dnf_helper_christmas_op("累计7次", "727626")
-        self.dnf_helper_christmas_op("累计11次", "727627")
-        self.dnf_helper_christmas_op("累计14次", "727628")
-        self.dnf_helper_christmas_op("累计18次", "727629")
-        self.dnf_helper_christmas_op("累计21次", "727630")
+        def query_card_info():
+            res = self.dnf_helper_op("查询", "734421", print_res=False)
+            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            return raw_info.sOutValue3
 
-        self.dnf_helper_christmas_op("抽奖", "727631")
-        logger.info(color("bold_cyan") + "请自行前往助手活动页面填写身份信息，否则领取到实物奖励会无法发放（虽然应该没几个人会中实物奖<_<）")
+        datetime_fmt = "%Y-%m-%d %H:%M:%S"
+        red_packet_configs = [
+            ("小年2月5", "736620", datetime.datetime.strptime("2021-02-05 00:00:00", datetime_fmt)),
+            ("除夕2月11", "736634", datetime.datetime.strptime("2021-02-11 00:00:00", datetime_fmt)),
+            ("春节2月12", "736635", datetime.datetime.strptime("2021-02-12 00:00:00", datetime_fmt)),
+            ("情人节2月14", "736636", datetime.datetime.strptime("2021-02-14 00:00:00", datetime_fmt)),
+            ("初五2月16", "736637", datetime.datetime.strptime("2021-02-16 00:00:00", datetime_fmt)),
+            ("初八2月19", "736638", datetime.datetime.strptime("2021-02-19 00:00:00", datetime_fmt)),
+            ("元宵2月26", "736639", datetime.datetime.strptime("2021-02-26 00:00:00", datetime_fmt)),
+        ]
+        now = datetime.datetime.now()
+        for name, flowid, expected_datetime in red_packet_configs:
+            if now.month != expected_datetime.month or now.day != expected_datetime.day:
+                logger.warning(f"当前不是{expected_datetime}，跳过领取{name}的红包")
+                continue
 
-    def dnf_helper_christmas_op(self, ctx, iFlowId, print_res=True):
-        iActivityId = self.urls.iActivityId_dnf_helper_christmas
+            self.dnf_helper_op(name, flowid, clickTime=str(random.randint(10, 15)))
+
+        signin_configs = [
+            (1, "734422", "一次性材质转换器", ""),
+            (2, "735136", "神秘契约礼盒(1天)", ""),
+            (3, "735395", "魂灭结晶礼盒（100个）", ""),
+            (4, "735405", "智慧的引导通行证", ""),
+            (5, "735431", "黑钻3天", "索西亚"),
+            (6, "735410", "装备提升礼盒", ""),
+            (7, "735414", "雷米的援助", ""),
+            (8, "735434", "德洛斯矿山追加入场自选礼盒", "赛丽亚"),
+            (9, "734422", "一次性材质转换器", ""),
+            (10, "735136", "神秘契约礼盒(1天)", ""),
+            (11, "735435", "装备提升礼盒", "花之女王"),
+            (12, "735395", "魂灭结晶礼盒（100个）", ""),
+            (13, "735405", "智慧的引导通行证", ""),
+            (14, "735410", "装备提升礼盒", ""),
+            (15, "735436", "黑钻7天", "凯丽"),
+            (16, "735414", "雷米的援助", ""),
+            (17, "734422", "一次性材质转换器", ""),
+            (18, "735136", "神秘契约礼盒(1天)", ""),
+            (19, "735395", "魂灭结晶礼盒（100个）", ""),
+            (20, "735437", "时间引导石礼盒(50个)", "敏泰"),
+            (21, "735405", "智慧的引导通行证", ""),
+            (22, "735410", "装备提升礼盒", ""),
+            (23, "735438", "+11黑铁装备强化券", "歌兰蒂斯"),
+        ]
+        signin_days, today_signed = query_signin_info()
+        if today_signed:
+            logger.info("今日已经签到过")
+        else:
+            logger.info(f"尝试签到第{signin_days + 1}天")
+            index, flowid, name, npc_name = signin_configs[signin_days]
+            if npc_name != "":
+                name = f"{npc_name} 赠送的 {name}"
+            self.dnf_helper_op(name, flowid)
+            signin_days += 1
+
+        logger.info(color("bold_yellow") + f"当前已签到{signin_days}天，卡片信息：{query_card_info()}")
+
+        self.dnf_helper_op("鸿运红包", "735719")
+
+    def check_dnf_helper(self):
+        self.check_bind_account("dnf助手活动", "https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew",
+                                activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
+
+    def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_helper
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         qq = uin2qq(self.cfg.account_info.uin)
         dnf_helper_info = self.cfg.dnf_helper_info
 
-        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/christmas/index.html",
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew",
                                   sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                   uin=qq, skey=self.cfg.account_info.skey,
                                   nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                  )
+                                  **extra_params)
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
@@ -3995,6 +4054,7 @@ class DjcHelper:
             "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
             "index": "",
             "pageNow": "", "pageSize": "",
+            "clickTime": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -4185,7 +4245,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_carnival_live()
         # djcHelper.dnf_dianzan()
         # djcHelper.dnf_drift()
-        # djcHelper.dnf_helper_christmas()
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.dnf_1224()
@@ -4196,7 +4255,7 @@ if __name__ == '__main__':
         # djcHelper.dnf_0121()
         # djcHelper.wegame_spring()
         # djcHelper.dnf_welfare()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
         # djcHelper.spring_fudai()
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
@@ -4204,3 +4263,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.guanjia()
         # djcHelper.qq_video()
+        djcHelper.dnf_helper()

@@ -10,7 +10,7 @@ import win32con
 
 from dao import UpdateInfo
 from log import logger, color
-from util import is_first_run, use_by_myself
+from util import is_first_run, use_by_myself, async_call
 from version import now_version, ver_time
 
 
@@ -87,7 +87,11 @@ def show_update_info_on_first_run(ui: UpdateInfo):
             f"新版本v{ui.latest_version}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
             f"{ui.update_message}"
         )
-        win32api.MessageBox(0, message, "更新", win32con.MB_OK)
+
+        def cb():
+            win32api.MessageBox(0, message, "更新", win32con.MB_OK)
+
+        async_call(cb)
 
 
 # 获取最新版本号与下载网盘地址

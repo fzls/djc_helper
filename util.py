@@ -304,6 +304,16 @@ def show_end_time(end_time):
     logger.info(color("bold_black") + f"活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
 
+def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
+    left_time = datetime.datetime.strptime(left_time_str, time_fmt)
+    right_time = datetime.datetime.strptime(right_time_str, time_fmt)
+
+    return left_time < right_time
+
+
+def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.strptime(time_str, time_fmt)
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

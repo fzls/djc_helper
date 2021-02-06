@@ -48,7 +48,12 @@ def add_user(new_buy_users):
 
 if __name__ == '__main__':
     new_buy_users = [
-        "1054073896",
+        # "QQ号",  # QQ昵称
+        # "QQ号",  # QQ昵称
+        # "QQ号",  # QQ昵称
+        # "QQ号",  # QQ昵称
+        # "QQ号",  # QQ昵称
+        # "QQ号",  # QQ昵称
     ]
 
     add_user(new_buy_users)

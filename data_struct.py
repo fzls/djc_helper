@@ -1,3 +1,4 @@
+import json
 from abc import ABCMeta
 
 from Crypto.Cipher import AES
@@ -80,23 +81,22 @@ class ConfigInterface(metaclass=ABCMeta):
     def on_config_update(self, raw_config: dict):
         return
 
-    def get_str_for(self, v):
-        res = v
-        if isinstance(v, ConfigInterface):
-            res = v.__str__()
-        elif isinstance(v, list):
-            res = list(self.get_str_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, tuple):
-            res = tuple(self.get_str_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, set):
-            res = set(self.get_str_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, dict):
-            res = {sk: self.get_str_for(sv) for sk, sv in v.items()}
+    def to_json(self):
+        return self.get_json_for(self)
 
-        return res
+    def get_json_for(self, v):
+        if isinstance(v, ConfigInterface):
+            return {sk: self.get_json_for(sv) for sk, sv in v.__dict__.items()}
+        elif isinstance(v, list):
+            return list(self.get_json_for(sv) for sk, sv in enumerate(v))
+        elif isinstance(v, tuple):
+            return tuple(self.get_json_for(sv) for sk, sv in enumerate(v))
+        elif isinstance(v, set):
+            return set(self.get_json_for(sv) for sk, sv in enumerate(v))
+        elif isinstance(v, dict):
+            return {sk: self.get_json_for(sv) for sk, sv in v.items()}
+        else:
+            return v
 
     def __str__(self):
-        res = {}
-        for k, v in self.__dict__.items():
-            res[k] = self.get_str_for(v)
-        return str(res)
+        return json.dumps(self.to_json(), ensure_ascii=False)

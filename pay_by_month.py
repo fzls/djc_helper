@@ -6,7 +6,7 @@ from typing import Dict, List
 from dao import BuyInfo, BuyRecord, OrderInfo
 from data_struct import to_json
 from db import load_db, save_db
-from log import logger
+from log import logger, color
 from upload_lanzouyun import Uploader
 from util import format_time, parse_time
 
@@ -71,6 +71,12 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
 
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
         json.dump(to_json(buy_users), save_file, indent=2)
+
+    total_month = 0
+    for qq, user_info in buy_users.items():
+        total_month += user_info.total_buy_month
+    total_money = 5 * total_month
+    logger.info(color("bold_green") + f"目前总购买人数为{len(buy_users)}，累计购买月数为{total_month}，累积金额约为{total_money}")
 
 
 key_buy_time = "pay_by_month_last_buy_time"

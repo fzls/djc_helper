@@ -673,9 +673,9 @@ class GuanhuaiActInfo(DaoObject):
 
 class BuyInfo(ConfigInterface):
     def __init__(self):
-        self.qq = "1234567"
+        self.qq = ""
         self.game_qqs = []
-        self.expire_at = "2020-02-06 12:30:15"
+        self.expire_at = "2020-01-01 00:00:00"
         self.total_buy_month = 0
         self.buy_records = []  # type: List[BuyRecord]
 

@@ -74,6 +74,9 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
 
     total_month = 0
     for qq, user_info in buy_users.items():
+        if qq == "1054073896":
+            # 跳过自己<_<，不然数据被污染了
+            continue
         total_month += user_info.total_buy_month
     total_money = 5 * total_month
     logger.info(color("bold_green") + f"目前总购买人数为{len(buy_users)}，累计购买月数为{total_month}，累积金额约为{total_money}")

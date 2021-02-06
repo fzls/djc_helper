@@ -10,6 +10,9 @@ from upload_lanzouyun import Uploader
 
 local_save_path = "utils/user_monthly_pay_info.txt"
 
+# 一个月的天数以31计算
+month_inc = timedelta(days=31)
+
 
 def update_buy_user_local(order_infos: List[OrderInfo]):
     buy_users = {}  # type: Dict[str, BuyInfo]
@@ -23,7 +26,6 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     datetime_fmt = "%Y-%m-%d %H:%M:%S"
     now = datetime.now()
     now_str = now.strftime(datetime_fmt)
-    month_inc = timedelta(days=31)
 
     for order_info in order_infos:
         if order_info.qq in buy_users:

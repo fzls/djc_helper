@@ -82,21 +82,22 @@ class ConfigInterface(metaclass=ABCMeta):
         return
 
     def to_json(self):
-        return self.get_json_for(self)
-
-    def get_json_for(self, v):
-        if isinstance(v, ConfigInterface):
-            return {sk: self.get_json_for(sv) for sk, sv in v.__dict__.items()}
-        elif isinstance(v, list):
-            return list(self.get_json_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, tuple):
-            return tuple(self.get_json_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, set):
-            return set(self.get_json_for(sv) for sk, sv in enumerate(v))
-        elif isinstance(v, dict):
-            return {sk: self.get_json_for(sv) for sk, sv in v.items()}
-        else:
-            return v
+        return to_json(self)
 
     def __str__(self):
         return json.dumps(self.to_json(), ensure_ascii=False)
+
+
+def to_json(v):
+    if isinstance(v, ConfigInterface):
+        return {sk: to_json(sv) for sk, sv in v.__dict__.items()}
+    elif isinstance(v, list):
+        return list(to_json(sv) for sk, sv in enumerate(v))
+    elif isinstance(v, tuple):
+        return tuple(to_json(sv) for sk, sv in enumerate(v))
+    elif isinstance(v, set):
+        return set(to_json(sv) for sk, sv in enumerate(v))
+    elif isinstance(v, dict):
+        return {sk: to_json(sv) for sk, sv in v.items()}
+    else:
+        return v

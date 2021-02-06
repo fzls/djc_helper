@@ -31,8 +31,11 @@ class Uploader:
     regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
     regex_patches = r'DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z'
 
-    # 保存购买了自动更新工具的角色的
+    # 保存购买了自动更新工具的用户信息
     buy_auto_updater_users_filename = "buy_auto_updater_users.txt"
+
+    # 保存用户的付费信息
+    user_monthly_pay_info_filename = "user_monthly_pay_info.txt"
 
     def __init__(self, cookie):
         self.lzy = LanZouCloud()

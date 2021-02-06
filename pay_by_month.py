@@ -83,9 +83,12 @@ def process_orders(order_info: List[OrderInfo]):
 if __name__ == '__main__':
     raw_order_infos = [
         # QQ号   游戏QQ列表  购买月数
-        ("11234567", ["89", "66"], 3),
-        ("21234567", ["89", "66"], 2),
-        ("31234567", ["89", "66"], 1),
+        # ("XXXXXXXX", [], 1),
+        # ("XXXXXXXX", [], 1),
+        # ("XXXXXXXX", [], 1),
+        # ("XXXXXXXX", [], 1),
+        # ("XXXXXXXX", [], 1),
+        # ("XXXXXXXX", [], 1),
     ]
 
     order_infos = []

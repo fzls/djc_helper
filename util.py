@@ -314,6 +314,11 @@ def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
 def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(time_str, time_fmt)
 
+
+def async_call(cb, *args, **params):
+    threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

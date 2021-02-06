@@ -400,6 +400,10 @@ def show_accounts_status(cfg, ctx):
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, shanguang_equip_count, sailiya_cards, firecrackers_points]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
+    logger.info("")
+    user_buy_info = get_user_buy_info(cfg)
+    show_buy_info(user_buy_info)
+
 
 def try_join_xinyue_team(cfg):
     if not has_any_account_in_normal_run(cfg):

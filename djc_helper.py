@@ -435,9 +435,17 @@ class DjcHelper:
                 msg = f"账号{user_buy_info.qq}未购买付费内容。"
             msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可扫描目录中的付款码付费激活。目前定价为5元每月，购买后QQ私聊我付款截图、使用QQ即可。"
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
+            # note: 更新新的活动时记得更新这个列表
+            paied_activities = [
+                "dnf助手活动 牛气冲天迎新年",
+            ]
+            msg += "\n目前受影响的活动如下："
+            msg += "\n" + "\n".join([f'    {act_name}' for act_name in paied_activities])
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):
+        # note: 更新新的活动时记得更新上面的列表
+
         # dnf助手活动
         self.dnf_helper()
 
@@ -3691,9 +3699,11 @@ class DjcHelper:
                 "（本消息只会弹出一次）\n"
             )
             logger.warning(color("bold_cyan") + msg)
+
             def cb():
                 win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
                 webbrowser.open(f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
+
             async_call(cb)
 
         def query_info():

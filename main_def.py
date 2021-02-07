@@ -554,6 +554,7 @@ def show_buy_info_sync(msg):
         "        2.1 付款截图\n"
         "        2.2 要使用该服务的游戏QQ号\n"
         "        2.3 ps: 私聊小号是因为大号接受太多私聊会被系统冻结- -有点危险\n"
+        "        2.4 群号见小助手目录中 【DNF蚊子腿小助手交流群群二维码.jpg】\n"
         "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)

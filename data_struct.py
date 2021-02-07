@@ -73,6 +73,9 @@ class ConfigInterface(metaclass=ABCMeta):
     def fill_array_fields(self, raw_config: dict, fields_to_fill):
         for field_name, field_type in fields_to_fill:
             if field_name in raw_config:
+                if raw_config[field_name] is None:
+                    setattr(self, field_name, [])
+                    continue
                 setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
 
     def fields_to_fill(self):

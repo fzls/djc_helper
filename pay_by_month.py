@@ -30,8 +30,9 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     now_str = now.strftime(datetime_fmt)
 
     for order_info in order_infos:
-        if has_buy_in_an_hour(order_info.qq):
-            logger.error(f"{order_info.qq}在一小时内已经处理过，是否是重复运行了?")
+        delta = timedelta(days=1)
+        if has_buy_recently(order_info.qq, delta):
+            logger.error(f"{order_info.qq}在{delta}内已经处理过，是否是重复运行了?")
             continue
 
         if order_info.qq in buy_users:
@@ -86,7 +87,8 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
 key_buy_time = "pay_by_month_last_buy_time"
 
 
-def has_buy_in_an_hour(qq):
+# 判断最近是否买过，一般不会短时间内购买，若出现大概率是不小心重复执行了。
+def has_buy_recently(qq, delta):
     db = load_db()
 
     if key_buy_time not in db:
@@ -94,7 +96,7 @@ def has_buy_in_an_hour(qq):
 
     buy_time = db[key_buy_time].get(str(qq), "2021-01-01 00:00:00")
 
-    return parse_time(buy_time) >= datetime.now() - timedelta(hours=1)
+    return parse_time(buy_time) >= datetime.now() - delta
 
 
 def save_buy_timestamp(qq):

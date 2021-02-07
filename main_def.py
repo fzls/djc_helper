@@ -526,7 +526,7 @@ def show_buy_info(user_buy_info: BuyInfo):
     msg = f"{user_buy_info.qq} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
     if len(user_buy_info.buy_records) != 0:
         msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in user_buy_info.buy_records)
-    logger.info(color("bold_yellow") + msg)
+    logger.info(color("bold_cyan") + msg)
 
     if not user_buy_info.is_active() and is_weekly_first_run("show_buy_info"):
         threading.Thread(target=show_buy_info_sync, args=(user_buy_info,), daemon=True).start()

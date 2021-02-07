@@ -401,6 +401,7 @@ def show_accounts_status(cfg, ctx):
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
     logger.info("")
+    _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
 

@@ -699,6 +699,7 @@ class BuyRecord(ConfigInterface):
     def __init__(self):
         self.buy_month = 1
         self.buy_at = "2020-02-06 12:30:15"
+        self.reason = "购买"
 
 
 class OrderInfo(ConfigInterface):

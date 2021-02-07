@@ -742,7 +742,7 @@ def get_user_buy_info(cfg: Config):
     if has_buy_auto_updater_dlc(cfg):
         max_present_times = datetime.timedelta(days=2 * 31)
 
-        free_start_time = parse_time("2021-02-07 00:00:00")
+        free_start_time = parse_time("2021-02-08 00:00:00")
         if user_buy_info.total_buy_month == 0:
             # 如果从未购买过，过期时间改为免费开始时间点
             user_buy_info.expire_at = format_time(free_start_time)

@@ -30,7 +30,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     now_str = now.strftime(datetime_fmt)
 
     for order_info in order_infos:
-        delta = timedelta(days=1)
+        delta = timedelta(hours=6)
         if has_buy_recently(order_info.qq, delta):
             logger.error(f"{order_info.qq}在{delta}内已经处理过，是否是重复运行了?")
             continue

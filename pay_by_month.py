@@ -56,6 +56,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
         user_info.buy_records.append(BuyRecord().auto_update_config({
             "buy_month": order_info.buy_month,
             "buy_at": now_str,
+            "reason": "购买",
         }))
 
         # 更新游戏QQ
@@ -64,7 +65,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
                 user_info.game_qqs.append(game_qq)
 
         msg = f"{user_info.qq} 购买 {order_info.buy_month} 个月成功，过期时间为{user_info.expire_at}，购买前过期时间为{expired_at}。累计购买{user_info.total_buy_month}个月。"
-        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} 购买{record.buy_month}月' for record in user_info.buy_records)
+        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in user_info.buy_records)
         logger.info(msg)
 
         save_buy_timestamp(order_info.qq)

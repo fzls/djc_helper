@@ -400,6 +400,11 @@ def show_accounts_status(cfg, ctx):
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, shanguang_equip_count, sailiya_cards, firecrackers_points]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
+    logger.info("")
+    _show_head_line("付费相关信息")
+    user_buy_info = get_user_buy_info(cfg)
+    show_buy_info(user_buy_info)
+
 
 def try_join_xinyue_team(cfg):
     if not has_any_account_in_normal_run(cfg):
@@ -429,26 +434,6 @@ def run(cfg):
     _show_head_line("开始核心逻辑")
 
     user_buy_info = get_user_buy_info(cfg)
-
-    # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
-    if has_buy_auto_updater_dlc(cfg):
-        max_present_times = datetime.timedelta(days=2 * 31)
-
-        free_start_time = parse_time("2021-02-07 00:00:00")
-
-        now = datetime.datetime.now()
-        since_start_time = now - free_start_time
-        not_paied_time = max(since_start_time - datetime.timedelta(days=user_buy_info.total_buy_month * 31), datetime.timedelta())
-
-        present_times = datetime.timedelta()
-        if not_paied_time < max_present_times:
-            # 如果当前到2.7号的未付费时长少于两个月，则补齐差值到过期时间
-            present_times = max_present_times - not_paied_time
-
-        user_buy_info.expire_at = format_time(parse_time(user_buy_info.expire_at) + present_times)
-        user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({"buy_month": 2, "buy_at": free_start_time}))
-        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}")
-
     show_buy_info(user_buy_info)
 
     for idx, account_config in enumerate(cfg.account_configs):
@@ -540,8 +525,8 @@ def try_xinyue_sailiyam_start_work(cfg):
 def show_buy_info(user_buy_info: BuyInfo):
     msg = f"{user_buy_info.qq} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
     if len(user_buy_info.buy_records) != 0:
-        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} 购买{record.buy_month}月' for record in user_buy_info.buy_records)
-    logger.info(color("bold_yellow") + msg)
+        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in user_buy_info.buy_records)
+    logger.info(color("bold_cyan") + msg)
 
     if not user_buy_info.is_active() and is_weekly_first_run("show_buy_info"):
         threading.Thread(target=show_buy_info_sync, args=(user_buy_info,), daemon=True).start()
@@ -565,9 +550,10 @@ def show_buy_info_sync(msg):
         "目前定价为5元每月（31天）\n"
         "支付方式：\n"
         "    1. 扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
-        "    2. 加群后QQ私聊我（风之凌殇）以下内容：\n"
+        "    2. 加群后QQ私聊我的小号（1470237902，群昵称为 付费相关私聊我~（我是小号））以下内容：\n"
         "        2.1 付款截图\n"
         "        2.2 要使用该服务的游戏QQ号\n"
+        "        2.3 ps: 私聊小号是因为大号接受太多私聊会被系统冻结- -有点危险\n"
         "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)
@@ -752,6 +738,37 @@ def has_buy_auto_updater_dlc(cfg: Config):
 
 
 def get_user_buy_info(cfg: Config):
+    user_buy_info = _get_user_buy_info(cfg)
+    # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
+    if has_buy_auto_updater_dlc(cfg):
+        max_present_times = datetime.timedelta(days=2 * 31)
+
+        free_start_time = parse_time("2021-02-08 00:00:00")
+        if user_buy_info.total_buy_month == 0:
+            # 如果从未购买过，过期时间改为免费开始时间点
+            user_buy_info.expire_at = format_time(free_start_time)
+
+        now = datetime.datetime.now()
+        since_start_time = now - free_start_time
+        not_paied_time = max(since_start_time - datetime.timedelta(days=user_buy_info.total_buy_month * 31), datetime.timedelta())
+
+        present_times = datetime.timedelta()
+        if not_paied_time < max_present_times:
+            # 如果当前到2.7号的未付费时长少于两个月，则补齐差值到过期时间
+            present_times = max_present_times - not_paied_time
+
+        user_buy_info.expire_at = format_time(parse_time(user_buy_info.expire_at) + present_times)
+        user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
+            "buy_month": 2,
+            "buy_at": free_start_time,
+            "reason": "自动更新DLC赠送"
+        }))
+        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}")
+
+    return user_buy_info
+
+
+def _get_user_buy_info(cfg: Config):
     retrtCfg = cfg.common.retry
     default_user_buy_info = BuyInfo()
     for idx in range(retrtCfg.max_retry_count):

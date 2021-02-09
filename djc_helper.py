@@ -2,11 +2,9 @@ import math
 import random
 import string
 import subprocess
-import webbrowser
 from urllib.parse import quote_plus
 
 import pyperclip
-import win32api
 
 import json_parser
 from black_list import check_in_black_list
@@ -2979,9 +2977,7 @@ class DjcHelper:
 
         if is_first_run("check_dnf_drift"):
             msg = "求帮忙做一下邀请任务0-0  只用在点击确定按钮后弹出的活动页面中点【确认接受邀请】就行啦（这条消息只会出现一次）"
-            logger.warning(color("bold_cyan") + msg)
-            win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
-            webbrowser.open(activity_url)
+            async_message_box(msg, "帮忙接受一下邀请0-0", open_url=activity_url)
 
     def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", sendQQ="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_drift
@@ -3698,13 +3694,7 @@ class DjcHelper:
                 "(〃'▽'〃)"
                 "（本消息只会弹出一次）\n"
             )
-            logger.warning(color("bold_cyan") + msg)
-
-            def cb():
-                win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
-                webbrowser.open(f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
-
-            async_call(cb)
+            async_message_box(msg, "帮忙点一点", open_url=f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
 
         def query_info():
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",

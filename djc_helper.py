@@ -438,7 +438,7 @@ class DjcHelper:
                 "dnf助手活动 牛气冲天迎新年",
             ]
             msg += "\n目前受影响的活动如下："
-            msg += "\n" + "\n".join([f'    {idx+1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):

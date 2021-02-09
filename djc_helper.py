@@ -425,6 +425,7 @@ class DjcHelper:
         self.dnf_helper_chronicle()
 
         if user_buy_info.is_active():
+            show_head_line("以下为付费期间才会运行的短期活动")
             self.paied_activities()
         else:
             if user_buy_info.total_buy_month != 0:

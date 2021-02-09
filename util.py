@@ -5,11 +5,13 @@ import threading
 import time
 import traceback
 import uuid
+import webbrowser
 
 import psutil
 import requests.exceptions
 import selenium.common.exceptions
 import urllib3.exceptions
+import win32api
 import win32con
 import win32gui
 import win32process
@@ -325,6 +327,19 @@ def format_now(time_fmt="%Y-%m-%d %H:%M:%S"):
 
 def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
+
+
+def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
+    def cb():
+        if print_log:
+            logger.warning(color("bold_cyan") + msg)
+
+        win32api.MessageBox(0, msg, title, icon)
+
+        if open_url != "":
+            webbrowser.open(open_url)
+
+    async_call(cb)
 
 
 if __name__ == '__main__':

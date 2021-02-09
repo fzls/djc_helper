@@ -523,7 +523,10 @@ def try_xinyue_sailiyam_start_work(cfg):
 
 
 def show_buy_info(user_buy_info: BuyInfo):
-    msg = f"{user_buy_info.qq} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
+    buy_accounts = user_buy_info.qq
+    if len(user_buy_info.game_qqs) != 0:
+        buy_accounts += f"({', '.join(user_buy_info.game_qqs)})"
+    msg = f"{buy_accounts} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
     if len(user_buy_info.buy_records) != 0:
         msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in user_buy_info.buy_records)
     logger.info(color("bold_cyan") + msg)
@@ -680,7 +683,7 @@ def try_auto_update(cfg):
 
         if not has_buy_auto_updater_dlc(cfg):
             msg = (
-                "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的？\n"
+                "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
                 "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
                 "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
                 "目前名单是基于DLC付费群的群成员整合出来的，若之前是通过其他朋友获取到的这个DLC，并通过他来转账给我（是有这么几个，但是我记不清是谁了）。请加群私聊我当时的付款截图，我会将你加到购买名单中~\n"

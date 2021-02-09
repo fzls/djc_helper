@@ -2,11 +2,9 @@ import math
 import random
 import string
 import subprocess
-import webbrowser
 from urllib.parse import quote_plus
 
 import pyperclip
-import win32api
 
 import json_parser
 from black_list import check_in_black_list
@@ -440,7 +438,7 @@ class DjcHelper:
                 "dnf助手活动 牛气冲天迎新年",
             ]
             msg += "\n目前受影响的活动如下："
-            msg += "\n" + "\n".join([f'    {idx+1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):
@@ -1658,8 +1656,8 @@ class DjcHelper:
         # logger.warning(color("fg_bold_cyan") + f"已累计签到 {checkin_days} 天")
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken")
             return
 
         self.dnf_female_mage_awaken_op("时间的引导石 * 10", "712951")
@@ -1703,35 +1701,49 @@ class DjcHelper:
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today())
 
         return res
 
-    def show_dnf_helper_info_guide(self):
-        logger.warning(color("fg_bold_yellow") + "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】")
-        logger.warning(color(
-            "fg_bold_yellow") + "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4, ps: 如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个），将其进行更新到配置文件中【dnf助手信息】配置中")
-        logger.warning(color("fg_bold_yellow") + "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073")
-        logger.warning(color("fg_bold_yellow") + "_")
-        logger.warning(color("fg_bold_yellow") + "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了")
-        logger.warning(color("fg_bold_yellow") + "有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开")
-        logger.warning(color("fg_bold_green") + (
-            "\n"
-            "如果上面这个活动在助手里找不到了，可以试试看其他的活动\n"
-            "如果所有活动的转发链接里都找不到token，那么只能手动抓包，从请求的cookie或post data中获取token信息了，具体可以百度 安卓 https 抓包\n"
-            "下面给出几种推荐的方案\n"
-            "1. 安卓下使用HttpCanary来实现对dnf助手抓包（开启http canary抓包后，打开助手，点击任意一个活动页面，然后去链接或cookie中查找token），可参考\n"
-            "    1.1 https://httpcanary.com/zh-hans/\n"
-            "    1.2 抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH\n"
-            "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考\n"
-            "    2.1 https://www.jianshu.com/p/a818a0d0aa9f\n"
-            "    2.2 https://testerhome.com/articles/18609\n"
-            "    2.3 https://juejin.im/post/6844903602209685517\n"
-            "    2.4 https://blog.csdn.net/hebbely/article/details/79248077\n"
-            "    2.5 https://juejin.im/post/6844903831579394055\n"
-            "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功\n"
-        ))
+    def show_dnf_helper_info_guide(self, extra_msg="", show_message_box_once_key="", always_show_message_box=False):
+        if extra_msg != "":
+            logger.warning(color("fg_bold_yellow") + extra_msg)
+
+        tips_from_url = '\n'.join([
+            "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】",
+            "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4, ps: 如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个），将其进行更新到配置文件中【dnf助手信息】配置中",
+            "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073",
+            "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了",
+            "有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开",
+        ])
+
+        tips_from_zhuabao = '\n'.join([
+            "",
+            "如果上面这个活动在助手里找不到了，可以试试看其他的活动",
+            "如果所有活动的转发链接里都找不到token，那么只能手动抓包，从请求的cookie或post data中获取token信息了，具体可以百度 安卓 https 抓包",
+            "下面给出几种推荐的方案",
+            "1. 安卓下使用HttpCanary来实现对dnf助手抓包（开启http canary抓包后，打开助手，点击任意一个活动页面，然后去链接或cookie中查找token），可参考",
+            "    1.1 https://httpcanary.com/zh-hans/",
+            "    1.2 抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH",
+            "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考",
+            "    2.1 https://www.jianshu.com/p/a818a0d0aa9f",
+            "    2.2 https://testerhome.com/articles/18609",
+            "    2.3 https://juejin.im/post/6844903602209685517",
+            "    2.4 https://blog.csdn.net/hebbely/article/details/79248077",
+            "    2.5 https://juejin.im/post/6844903831579394055",
+            "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功",
+
+        ])
+
+        logger.warning(
+            color("fg_bold_yellow") + tips_from_url +
+            '\n' +
+            color("fg_bold_green") + tips_from_zhuabao
+        )
+        # 首次在对应场景时弹窗
+        if always_show_message_box or (show_message_box_once_key != "" and is_first_run(f"show_dnf_helper_info_guide_{show_message_box_once_key}")):
+            async_message_box(tips_from_url + '\n' + tips_from_zhuabao, "助手信息获取指引", print_log=False)
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):
@@ -1748,8 +1760,8 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_rank")
             return
 
         # note: 获取鲜花（使用autojs去操作）
@@ -1835,8 +1847,8 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
         def query_signin_info():
@@ -1931,8 +1943,8 @@ class DjcHelper:
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
 
         return res
 
@@ -2047,12 +2059,16 @@ class DjcHelper:
 
         # 检查一下userid是否真实存在
         if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
-            logger.warning(color("fg_bold_yellow") + f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
 
         # 做任务
-        logger.warning("dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-")
+        msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"
+        if is_first_run("dnf_helper_chronicle_task_tips"):
+            async_message_box(msg, "编年史任务提示")
+        else:
+            logger.warning(msg)
 
         # 领取任务奖励的经验
         taskInfo = getUserTaskList()
@@ -2979,9 +2995,7 @@ class DjcHelper:
 
         if is_first_run("check_dnf_drift"):
             msg = "求帮忙做一下邀请任务0-0  只用在点击确定按钮后弹出的活动页面中点【确认接受邀请】就行啦（这条消息只会出现一次）"
-            logger.warning(color("bold_cyan") + msg)
-            win32api.MessageBox(0, msg, "帮忙接受一下邀请0-0", win32con.MB_ICONWARNING)
-            webbrowser.open(activity_url)
+            async_message_box(msg, "帮忙接受一下邀请0-0", open_url=activity_url)
 
     def dnf_drift_op(self, ctx, iFlowId, page="", type="", moduleId="", giftId="", acceptId="", sendQQ="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_drift
@@ -3698,13 +3712,7 @@ class DjcHelper:
                 "(〃'▽'〃)"
                 "（本消息只会弹出一次）\n"
             )
-            logger.warning(color("bold_cyan") + msg)
-
-            def cb():
-                win32api.MessageBox(0, msg, "帮忙点一点", win32con.MB_ICONWARNING)
-                webbrowser.open(f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
-
-            async_call(cb)
+            async_message_box(msg, "帮忙点一点", open_url=f"https://dnf.qq.com/cp/a20210108luckym/index.html?type=2&sId={inviter_sid}")
 
         def query_info():
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",

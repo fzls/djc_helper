@@ -329,9 +329,11 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, icon=win32con.MB_ICONWARNING, open_url=""):
+def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
     def cb():
-        logger.warning(color("bold_cyan") + msg)
+        if print_log:
+            logger.warning(color("bold_cyan") + msg)
+
         win32api.MessageBox(0, msg, title, icon)
 
         if open_url != "":

@@ -141,8 +141,8 @@ if __name__ == '__main__':
     order_infos = []
     for qq, game_qqs, buy_month in raw_order_infos:
         order_info = OrderInfo()
-        order_info.qq = qq
-        order_info.game_qqs = game_qqs
+        order_info.qq = str(qq)
+        order_info.game_qqs = [str(qq) for qq in game_qqs]
         order_info.buy_month = buy_month
         order_infos.append(order_info)
 

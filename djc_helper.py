@@ -2064,7 +2064,11 @@ class DjcHelper:
             return
 
         # 做任务
-        logger.warning("dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-")
+        msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"
+        if is_first_run("dnf_helper_chronicle_task_tips"):
+            async_message_box(msg, "编年史任务提示")
+        else:
+            logger.warning(msg)
 
         # 领取任务奖励的经验
         taskInfo = getUserTaskList()

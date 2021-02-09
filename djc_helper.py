@@ -1656,8 +1656,8 @@ class DjcHelper:
         # logger.warning(color("fg_bold_cyan") + f"已累计签到 {checkin_days} 天")
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken")
             return
 
         self.dnf_female_mage_awaken_op("时间的引导石 * 10", "712951")
@@ -1701,8 +1701,8 @@ class DjcHelper:
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today())
 
         return res
 
@@ -1760,8 +1760,8 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_rank")
             return
 
         # note: 获取鲜花（使用autojs去操作）
@@ -1847,8 +1847,8 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            logger.warning(color("fg_bold_yellow") + "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
         def query_signin_info():
@@ -1943,8 +1943,8 @@ class DjcHelper:
 
         # 1000017016: 登录态失效,请重新登录
         if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
-            logger.warning(color("fg_bold_yellow") + "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下")
-            self.show_dnf_helper_info_guide()
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
 
         return res
 
@@ -2059,8 +2059,8 @@ class DjcHelper:
 
         # 检查一下userid是否真实存在
         if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
-            logger.warning(color("fg_bold_yellow") + f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置")
-            self.show_dnf_helper_info_guide()
+            extra_msg = f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
 
         # 做任务

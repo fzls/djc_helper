@@ -72,7 +72,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
         save_buy_timestamp(order_info.qq)
 
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
-        json.dump(to_json(buy_users), save_file, indent=2)
+        json.dump(to_json(buy_users), save_file, indent=2, ensure_ascii=False)
 
     total_month = 0
     for qq, user_info in buy_users.items():

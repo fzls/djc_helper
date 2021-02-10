@@ -5,6 +5,7 @@ import shutil
 import subprocess
 
 from log import logger
+from util import human_readable_size
 
 
 def build(disable_douban=False):
@@ -98,7 +99,8 @@ def build(disable_douban=False):
             shutil.rmtree(directory, ignore_errors=True)
         os.remove(f"{exe_name}.spec")
 
-        logger.info(f"{prefix} 编译{exe_name}结束")
+        filesize = os.path.getsize(target_path)
+        logger.info(f"{prefix} 编译{exe_name}结束，最终大小为{human_readable_size(filesize)}")
 
     logger.info("done")
 

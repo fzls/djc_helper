@@ -565,8 +565,9 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
 
     # 然后尝试读取本地文件（不受版本管理系统控制）
     try:
-        raw_config = toml.load(local_config_path)
-        g_config.auto_update_config(raw_config)
+        if local_config_path != "":
+            raw_config = toml.load(local_config_path)
+            g_config.auto_update_config(raw_config)
     except Exception as e:
         pass
 

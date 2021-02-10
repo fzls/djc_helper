@@ -62,15 +62,15 @@ def build(disable_douban=False):
     ])
 
     build_configs = [
-        ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", "."),
-        ("auto_updater.py", "auto_updater.exe", "", "utils"),
-        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "ark_lottery_special_version.ico", "."),
+        ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", ".", ["PyQt5"]),
+        ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"]),
+        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "ark_lottery_special_version.ico", ".", ["PyQt5"]),
     ]
 
     for idx, config in enumerate(build_configs):
-        prefix = f"{idx+1}/{len(build_configs)}"
+        prefix = f"{idx + 1}/{len(build_configs)}"
 
-        src_path, exe_name, icon_path, target_dir = config
+        src_path, exe_name, icon_path, target_dir, exclude_modules = config
         logger.info(f"{prefix} 开始编译 {exe_name}")
 
         cmd_build = [
@@ -81,6 +81,8 @@ def build(disable_douban=False):
         ]
         if icon_path != "":
             cmd_build.extend(['--icon', icon_path])
+        for module in exclude_modules:
+            cmd_build.extend(['--exclude-module', module])
 
         subprocess.call(cmd_build)
 

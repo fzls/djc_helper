@@ -342,6 +342,14 @@ def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, 
     async_call(cb)
 
 
+def human_readable_size(num, suffix='B'):
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

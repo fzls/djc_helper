@@ -214,6 +214,7 @@ class CommonConfigUi(QWidget):
 
         self.spinbox_http_timeout = QSpinBox()
         self.spinbox_http_timeout.setValue(cfg.http_timeout)
+        self.spinbox_http_timeout.setMaximum(99999)
         form_layout.addRow("HTTP超时（秒）", self.spinbox_http_timeout)
 
         self.combobox_log_level = QComboBox()

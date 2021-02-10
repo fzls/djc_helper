@@ -4,7 +4,7 @@ from typing import List, Dict
 import toml
 
 from const import *
-from data_struct import ConfigInterface
+from data_struct import ConfigInterface, to_raw_type
 from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import *
@@ -572,6 +572,12 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         pass
 
 
+def save_config(cfg: Config, config_path="config.toml"):
+    with open(config_path, 'w', encoding='utf-8') as save_file:
+        data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
+        toml.dump(data_to_save, save_file)
+
+
 def config():
     return g_config
 
@@ -579,3 +585,7 @@ def config():
 if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     logger.info(config())
+
+    # cfg = config()
+    # cfg.common.auto_update_on_start = True
+    # save_config(cfg)

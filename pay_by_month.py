@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from dao import BuyInfo, BuyRecord, OrderInfo
-from data_struct import to_json
+from data_struct import to_raw_type
 from db import load_db, save_db
 from log import logger, color
 from upload_lanzouyun import Uploader
@@ -72,7 +72,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
         save_buy_timestamp(order_info.qq)
 
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
-        json.dump(to_json(buy_users), save_file, indent=2, ensure_ascii=False)
+        json.dump(to_raw_type(buy_users), save_file, indent=2, ensure_ascii=False)
 
     total_month = 0
     for qq, user_info in buy_users.items():

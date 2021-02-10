@@ -84,11 +84,8 @@ class ConfigInterface(metaclass=ABCMeta):
     def on_config_update(self, raw_config: dict):
         return
 
-    def to_json(self):
-        return to_raw_type(self)
-
     def __str__(self):
-        return json.dumps(self.to_json(), ensure_ascii=False)
+        return json.dumps(to_raw_type(self), ensure_ascii=False)
 
 
 def to_raw_type(v):

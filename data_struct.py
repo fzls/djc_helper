@@ -85,22 +85,22 @@ class ConfigInterface(metaclass=ABCMeta):
         return
 
     def to_json(self):
-        return to_json(self)
+        return to_raw_type(self)
 
     def __str__(self):
         return json.dumps(self.to_json(), ensure_ascii=False)
 
 
-def to_json(v):
+def to_raw_type(v):
     if isinstance(v, ConfigInterface):
-        return {sk: to_json(sv) for sk, sv in v.__dict__.items()}
+        return {sk: to_raw_type(sv) for sk, sv in v.__dict__.items()}
     elif isinstance(v, list):
-        return list(to_json(sv) for sk, sv in enumerate(v))
+        return list(to_raw_type(sv) for sk, sv in enumerate(v))
     elif isinstance(v, tuple):
-        return tuple(to_json(sv) for sk, sv in enumerate(v))
+        return tuple(to_raw_type(sv) for sk, sv in enumerate(v))
     elif isinstance(v, set):
-        return set(to_json(sv) for sk, sv in enumerate(v))
+        return set(to_raw_type(sv) for sk, sv in enumerate(v))
     elif isinstance(v, dict):
-        return {sk: to_json(sv) for sk, sv in v.items()}
+        return {sk: to_raw_type(sv) for sk, sv in v.items()}
     else:
         return v

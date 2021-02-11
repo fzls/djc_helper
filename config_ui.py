@@ -28,6 +28,56 @@ class QVLine(QFrame):
         self.setFrameShadow(QFrame.Sunken)
 
 
+def create_checkbox(val=False, name="") -> QCheckBox:
+    checkbox = QCheckBox(name)
+
+    checkbox.setChecked(val)
+
+    return checkbox
+
+
+def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> QSpinBox:
+    spinbox = QSpinBox()
+
+    spinbox.setValue(value)
+    spinbox.setMaximum(maximum)
+    spinbox.setMinimum(minimum)
+
+    return spinbox
+
+
+def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 0.0) -> QDoubleSpinBox:
+    spinbox = QDoubleSpinBox()
+
+    spinbox.setValue(value)
+    spinbox.setMaximum(maximum)
+    spinbox.setMinimum(minimum)
+
+    return spinbox
+
+
+def create_combobox(current_val: str, values: List[str] = None) -> QComboBox:
+    combobox = QComboBox()
+
+    if values is not None:
+        combobox.addItems(values)
+    combobox.setCurrentText(current_val)
+
+    return combobox
+
+
+def create_lineedit(current_text: str, placeholder_text="") -> QLineEdit:
+    lineedit = QLineEdit(current_text)
+
+    lineedit.setPlaceholderText(placeholder_text)
+
+    return lineedit
+
+
+def add_form_seperator(form_layout: QFormLayout, title: str):
+    form_layout.addRow(f"=== {title} ===", QHLine())
+
+
 def list_to_str(vlist: List[str]):
     return ','.join(str(v) for v in vlist)
 

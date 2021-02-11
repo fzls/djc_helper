@@ -655,8 +655,8 @@ def temp_code(cfg):
         ),
         (
             "QQ黄钻和超级会员惠的白嫖活动只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127",
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9",
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127\n"
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9\n"
         ),
     ]
 

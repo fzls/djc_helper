@@ -1,3 +1,5 @@
+import subprocess
+
 from log import logger, fileHandler, new_file_handler
 from version import now_version
 
@@ -67,9 +69,10 @@ class ConfigUi(QFrame):
     def notify_reopen(self):
         show_message("请重新打开", "目前因为不知道如何清除pyqt的已有组件然后再添加新的组件，暂时没有实现重新读取配置的功能，请直接右上角关掉重新打开-。-")
 
-    def save(self):
+    def save(self, show_message_box=True):
         self.save_config(self.to_config())
-        show_message("保存成功", "已保存成功，请自行运行小助手本体")
+        if show_message_box:
+            show_message("保存成功", "已保存成功，请自行运行小助手本体")
 
     def load_config(self) -> Config:
         load_config(local_config_path="")
@@ -88,6 +91,10 @@ class ConfigUi(QFrame):
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
+        btn_run_djc_helper = QPushButton("运行小助手")
+        btn_run_djc_helper.clicked.connect(self.run_djc_helper)
+        top_layout.addWidget(btn_run_djc_helper)
+
         btn_load = QPushButton("读取配置")
         btn_save = QPushButton("保存配置")
 
@@ -111,6 +118,19 @@ class ConfigUi(QFrame):
         layout.addWidget(btn_del_account)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
+
+    def run_djc_helper(self):
+        logger.info("运行小助手前自动保存配置")
+        self.save(show_message_box=False)
+
+        exe_path = "DNF蚊子腿小助手.exe"
+        if run_from_src():
+            exe_path = "main.py"
+        subprocess.Popen([
+            os.path.realpath(exe_path),
+        ], cwd=".", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        logger.info(f"{exe_path} 已经启动~请等待其完成操作")
 
     def add_account(self):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")

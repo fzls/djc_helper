@@ -1,9 +1,18 @@
 from main_def import *
 from show_usage import *
 from usage_count import *
+import argparse
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--no_max_console", default=False, action="store_true", help="是否不将窗口调整为最大化")
+    args = parser.parse_args()
+
+    return args
 
 def main():
+    args = parse_args()
+
     change_title()
     show_ask_message_box_only_once()
 
@@ -24,7 +33,9 @@ def main():
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-    maximize_console()
+
+    if not args.no_max_console:
+        maximize_console()
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

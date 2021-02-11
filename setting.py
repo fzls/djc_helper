@@ -72,7 +72,7 @@ def dnf_server_name_to_id(name):
         if server.t == name:
             return server.v
 
-    return "0"
+    return ""
 
 
 def dnf_server_id_to_name(id):

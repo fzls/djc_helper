@@ -64,7 +64,7 @@ def dnf_server_list_config():
 
 
 def dnf_server_name_list():
-    return [server.t for server in dnf_server_list_config()]
+    return ['', *[server.t for server in dnf_server_list_config()]]
 
 
 def dnf_server_name_to_id(name):

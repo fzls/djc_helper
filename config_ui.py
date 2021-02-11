@@ -7,7 +7,6 @@ logger.name = "config_ui"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
                              QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
 

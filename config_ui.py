@@ -9,7 +9,7 @@ logger.addHandler(new_file_handler())
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
-                             QWidget, QTabWidget, QComboBox, QStyleFactory, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog)
+                             QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
 
 from config import *
 
@@ -76,6 +76,20 @@ def create_lineedit(current_text: str, placeholder_text="") -> QLineEdit:
 
 def add_form_seperator(form_layout: QFormLayout, title: str):
     form_layout.addRow(f"=== {title} ===", QHLine())
+
+
+def make_scroll_layout(inner_layout: QLayout):
+    widget = QWidget()
+    widget.setLayout(inner_layout)
+
+    scroll = QScrollArea()
+    scroll.setWidgetResizable(True)
+    scroll.setWidget(widget)
+
+    scroll_layout = QVBoxLayout()
+    scroll_layout.addWidget(scroll)
+
+    return scroll_layout
 
 
 def list_to_str(vlist: List[str]):

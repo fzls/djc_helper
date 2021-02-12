@@ -658,6 +658,9 @@ def temp_code(cfg):
             "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127\n"
             "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9\n"
         ),
+        (
+            "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
+        )
     ]
 
     for idx, tip in enumerate(tips):

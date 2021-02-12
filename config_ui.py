@@ -7,8 +7,10 @@ logger.addHandler(new_file_handler())
 import typing
 import shutil
 import subprocess
-from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
-                             QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
+from PyQt5.QtWidgets import (
+    QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
+    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout,
+)
 from PyQt5.QtGui import QValidator, QIcon
 from PyQt5.QtCore import QCoreApplication
 

@@ -65,6 +65,7 @@ def build(disable_douban=False):
         ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", ".", ["PyQt5"]),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"]),
         ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "ark_lottery_special_version.ico", ".", ["PyQt5"]),
+        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "config_ui.ico", ".", []),
     ]
 
     for idx, config in enumerate(build_configs):

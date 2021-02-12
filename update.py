@@ -42,7 +42,7 @@ def check_update_on_start(config: CommonConfig):
                 webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
 
 
-def try_manaual_update(ui: UpdateInfo):
+def try_manaual_update(ui: UpdateInfo) -> bool:
     if need_update(now_version, ui.latest_version):
         logger.info(f"当前版本为{now_version}，已有最新版本{ui.latest_version}，更新内容为{ui.update_message}")
 
@@ -80,6 +80,9 @@ def try_manaual_update(ui: UpdateInfo):
             win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
     else:
         logger.info(f"当前版本{now_version}已是最新版本，无需更新")
+
+    has_new_version = need_update(now_version, ui.latest_version)
+    return has_new_version
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):

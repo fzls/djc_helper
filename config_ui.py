@@ -313,23 +313,34 @@ class CommonConfigUi(QFrame):
     def from_config(self, cfg: CommonConfig):
         form_layout = QFormLayout()
 
-        self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
-        form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
-
-        self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
-        form_layout.addRow("自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
-
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
         form_layout.addRow("检查更新", self.checkbox_check_update_on_start)
 
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
         form_layout.addRow("自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
+        self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
+        form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
+
+        self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
+        form_layout.addRow("自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
+
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
         form_layout.addRow("尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
 
-        self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
-        form_layout.addRow("HTTP超时（秒）", self.spinbox_http_timeout)
+        self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写qq号")
+        form_layout.addRow("马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
+
+        self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
+        form_layout.addRow("自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
+
+        self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
+        self.fixed_teams = []
+        for team in cfg.fixed_teams:
+            self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
+
+        add_form_seperator(form_layout, "其他")
 
         self.combobox_log_level = create_combobox(cfg.log_level, [
             "debug",
@@ -340,19 +351,11 @@ class CommonConfigUi(QFrame):
         ])
         form_layout.addRow("日志级别", self.combobox_log_level)
 
-        self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写qq号")
-        form_layout.addRow("马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
-
-        self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
-        self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
-        form_layout.addRow("自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
+        self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
+        form_layout.addRow("HTTP超时（秒）", self.spinbox_http_timeout)
 
         self.login = LoginConfigUi(form_layout, cfg.login)
         self.retry = RetryConfigUi(form_layout, cfg.retry)
-        self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
-        self.fixed_teams = []
-        for team in cfg.fixed_teams:
-            self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
 
         self.setLayout(make_scroll_layout(form_layout))
 
@@ -512,11 +515,26 @@ class AccountConfigUi(QWidget):
         self.lineedit_name = create_lineedit(cfg.name, "账号名称，仅用于区分不同账号，请确保不同账号名称不一样")
         form_layout.addRow("账号名称", self.lineedit_name)
 
+        self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
+        form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
+
         self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
         form_layout.addRow("登录模式", self.combobox_login_mode)
 
-        self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
-        form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
+        self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
+
+
+        self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
+        self.exchange_items = []
+        for exchange_item in cfg.exchange_items:
+            self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
+        self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
+        self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
+        self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
+        self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
+        self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
+
+        add_form_seperator(form_layout, "其他")
 
         self.lineedit_drift_send_qq_list = create_lineedit(list_to_str(cfg.drift_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_drift_send_qq_list.setValidator(QQListValidator())
@@ -538,17 +556,7 @@ class AccountConfigUi(QWidget):
         self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串")
         form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
-        self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
-        self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
-        self.exchange_items = []
-        for exchange_item in cfg.exchange_items:
-            self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
-        self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
-        self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
-        self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
-        self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
-        self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
 
         self.setLayout(make_scroll_layout(form_layout))
 

@@ -392,6 +392,7 @@ class LoginConfigUi(QWidget):
         form_layout.addRow("启用", self.checkbox_auto_resolve_captcha)
 
         self.doublespinbox_move_captcha_delta_width_rate = create_double_spin_box(cfg.move_captcha_delta_width_rate)
+        self.doublespinbox_move_captcha_delta_width_rate.setSingleStep(0.01)
         form_layout.addRow("每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
 
     def update_config(self, cfg: LoginConfig):

@@ -1,9 +1,9 @@
+from datetime import datetime
 from typing import List
 from urllib.parse import unquote_plus
-from datetime import datetime
-from util import parse_time, run_from_src
 
 from data_struct import ConfigInterface
+from util import parse_time, run_from_src
 
 
 class DaoObject:

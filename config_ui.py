@@ -236,15 +236,18 @@ class ConfigUi(QFrame):
         btn_add_account = create_pushbutton("添加账号", "lightgreen")
         btn_del_account = create_pushbutton("删除账号", "lightgreen")
         btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan", "登录错账户，或者想要登录其他账户时，点击这个即可清除登录状态")
+        btn_add_group = create_pushbutton("加群反馈问题/交流", "Orange")
 
         btn_add_account.clicked.connect(self.add_account)
         btn_del_account.clicked.connect(self.del_account)
         btn_clear_login_status.clicked.connect(self.clear_login_status)
+        btn_add_group.clicked.connect(self.add_group)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_add_account)
         layout.addWidget(btn_del_account)
         layout.addWidget(btn_clear_login_status)
+        layout.addWidget(btn_add_group)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
@@ -327,6 +330,10 @@ class ConfigUi(QFrame):
         os.mkdir(cached_dir)
 
         show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
+
+    def add_group(self, checked=False):
+        # note: 如果群满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
+        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=qq31ZiZD6nK8gztuMGmYRLWPMbAEkn64&jump_from=webapi")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")

@@ -146,6 +146,8 @@ class ConfigUi(QFrame):
         self.resize(1080, 720)
         self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）")
 
+        self.setStyleSheet(f"font-family: Microsoft YaHei")
+
         if run_from_src():
             self.setWindowIcon(QIcon("config_ui.ico"))
 
@@ -867,7 +869,7 @@ class FirecrackersConfigUi(QWidget):
 def main():
     app = QApplication([])
 
-    QApplication.setStyle(QStyleFactory.create("fusion"))
+    app.setStyle(QStyleFactory.create("fusion"))
 
     ui = ConfigUi()
     ui.show()

@@ -314,11 +314,8 @@ class CommonConfigUi(QFrame):
         form_layout.addRow("自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
 
         self.login = LoginConfigUi(form_layout, cfg.login)
-
         self.retry = RetryConfigUi(form_layout, cfg.retry)
-
         self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
-
         self.fixed_teams = []
         for team in cfg.fixed_teams:
             self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
@@ -337,8 +334,11 @@ class CommonConfigUi(QFrame):
         cfg.majieluo_send_card_target_qq = self.lineedit_majieluo_send_card_target_qq.text()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
 
-        cfg.login.max_retry_count = self.login.spinbox_max_retry_count.value()
-        cfg.login.retry_wait_time = self.login.spinbox_retry_wait_time.value()
+        self.login.update_config(cfg.login)
+        self.retry.update_config(cfg.retry)
+        self.xinyue.update_config(cfg.xinyue)
+        for idx, team in enumerate(self.fixed_teams):
+            team.update_config(cfg.fixed_teams[idx])
 
 
 class LoginConfigUi(QWidget):
@@ -380,7 +380,15 @@ class LoginConfigUi(QWidget):
         form_layout.addRow("每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
 
     def update_config(self, cfg: LoginConfig):
-        pass
+        cfg.max_retry_count = self.spinbox_max_retry_count.value()
+        cfg.retry_wait_time = self.spinbox_retry_wait_time.value()
+        cfg.open_url_wait_time = self.spinbox_open_url_wait_time.value()
+        cfg.load_page_timeout = self.spinbox_load_page_timeout.value()
+        cfg.load_login_iframe_timeout = self.spinbox_load_login_iframe_timeout.value()
+        cfg.login_timeout = self.spinbox_login_timeout.value()
+        cfg.login_finished_timeout = self.spinbox_login_finished_timeout.value()
+        cfg.auto_resolve_captcha = self.checkbox_auto_resolve_captcha.isChecked()
+        cfg.move_captcha_delta_width_rate = self.doublespinbox_move_captcha_delta_width_rate.value()
 
 
 class RetryConfigUi(QWidget):
@@ -402,7 +410,9 @@ class RetryConfigUi(QWidget):
         form_layout.addRow("重试间隔时间", self.spinbox_retry_wait_time)
 
     def update_config(self, cfg: RetryConfig):
-        pass
+        cfg.request_wait_time = self.spinbox_request_wait_time.value()
+        cfg.max_retry_count = self.spinbox_max_retry_count.value()
+        cfg.retry_wait_time = self.spinbox_retry_wait_time.value()
 
 
 class XinYueConfigUi(QWidget):
@@ -418,7 +428,7 @@ class XinYueConfigUi(QWidget):
         form_layout.addRow("心悦操作最早处理时间", self.combobox_submit_task_after)
 
     def update_config(self, cfg: XinYueConfig):
-        pass
+        cfg.submit_task_after = int(self.combobox_submit_task_after.currentText())
 
 
 class FixedTeamConfigUi(QWidget):
@@ -440,7 +450,9 @@ class FixedTeamConfigUi(QWidget):
         form_layout.addRow("成员", self.lineedit_members)
 
     def update_config(self, cfg: FixedTeamConfig):
-        pass
+        cfg.enable = self.checkbox_enable.isChecked()
+        cfg.id = self.lineedit_id.text()
+        cfg.members = str_to_list(self.lineedit_members.text())
 
 
 class AccountConfigUi(QWidget):
@@ -487,23 +499,15 @@ class AccountConfigUi(QWidget):
         form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
-
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
-
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
-
         self.exchange_items = []
         for exchange_item in cfg.exchange_items:
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
-
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
-
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
-
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
-
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
-
         self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
 
         self.setLayout(make_scroll_layout(form_layout))
@@ -511,8 +515,27 @@ class AccountConfigUi(QWidget):
     def update_config(self, cfg: AccountConfig):
         cfg.enable = self.checkbox_enable.isChecked()
         cfg.name = self.lineedit_name.text()
-
         cfg.login_mode = self.combobox_login_mode.currentText()
+        cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
+
+        cfg.drift_send_qq_list = str_to_list(self.lineedit_drift_send_qq_list.text())
+        cfg.spring_fudai_receiver_qq_list = str_to_list(self.lineedit_spring_fudai_receiver_qq_list.text())
+        cfg.enable_firecrackers_invite_friend = self.checkbox_enable_firecrackers_invite_friend.isChecked()
+        cfg.enable_majieluo_invite_friend = self.checkbox_enable_majieluo_invite_friend.isChecked()
+
+        cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
+        cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
+
+        self.account_info.update_config(cfg.account_info)
+        self.function_switches.update_config(cfg.function_switches)
+        self.mobile_game_role_info.update_config(cfg.mobile_game_role_info)
+        for idx, exchange_item in enumerate(self.exchange_items):
+            exchange_item.update_config(cfg.exchange_items[idx])
+        self.ark_lottery.update_config(cfg.ark_lottery)
+        self.vip_mentor.update_config(cfg.vip_mentor)
+        self.dnf_helper_info.update_config(cfg.dnf_helper_info)
+        self.hello_voice.update_config(cfg.hello_voice)
+        self.firecrackers.update_config(cfg.firecrackers)
 
 
 class AccountInfoConfigUi(QWidget):
@@ -531,7 +554,8 @@ class AccountInfoConfigUi(QWidget):
         form_layout.addRow("QQ密码", self.lineedit_password)
 
     def update_config(self, cfg: AccountInfoConfig):
-        pass
+        cfg.account = self.lineedit_account.text()
+        cfg.password = self.lineedit_password.text()
 
 
 class FunctionSwitchesConfigUi(QWidget):
@@ -622,7 +646,32 @@ class FunctionSwitchesConfigUi(QWidget):
         form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
-        pass
+        cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
+
+        cfg.get_djc = self.checkbox_get_djc.isChecked()
+        cfg.make_wish = self.checkbox_make_wish.isChecked()
+        cfg.get_xinyue = self.checkbox_get_xinyue.isChecked()
+        cfg.get_credit_xinyue_gift = self.checkbox_get_credit_xinyue_gift.isChecked()
+        cfg.get_heizuan_gift = self.checkbox_get_heizuan_gift.isChecked()
+        cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
+        cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
+        cfg.get_youfei = self.checkbox_get_youfei.isChecked()
+        cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
+        cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
+        cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
+        cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
+        cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
+        cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
+        cfg.get_dnf_spring = self.checkbox_get_dnf_spring.isChecked()
+        cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
+        cfg.get_spring_fudai = self.checkbox_get_spring_fudai.isChecked()
+        cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
+        cfg.get_firecrackers = self.checkbox_get_firecrackers.isChecked()
+
+        cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
+        cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
+
+        cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 
 
 class MobileGameRoleInfoConfigUi(QWidget):
@@ -638,7 +687,7 @@ class MobileGameRoleInfoConfigUi(QWidget):
         form_layout.addRow("手游名称", self.combobox_game_name)
 
     def update_config(self, cfg: MobileGameRoleInfoConfig):
-        pass
+        cfg.game_name = self.combobox_game_name.currentText()
 
 
 class ExchangeItemConfigUi(QWidget):
@@ -654,7 +703,7 @@ class ExchangeItemConfigUi(QWidget):
         form_layout.addRow("兑换数目", self.spinbox_count)
 
     def update_config(self, cfg: ExchangeItemConfig):
-        pass
+        cfg.count = self.spinbox_count.value()
 
 
 class ArkLotteryConfigUi(QWidget):
@@ -669,7 +718,7 @@ class ArkLotteryConfigUi(QWidget):
         self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 
-        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID，形如 1282822，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID，形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
         form_layout.addRow("幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
@@ -680,7 +729,12 @@ class ArkLotteryConfigUi(QWidget):
         form_layout.addRow("是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
     def update_config(self, cfg: ArkLotteryConfig):
-        pass
+        cfg.lucky_dnf_server_id = dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
+        cfg.lucky_dnf_role_id = self.lineedit_lucky_dnf_role_id.text()
+
+        cfg.need_take_awards = self.checkbox_need_take_awards.isChecked()
+
+        cfg.act_id_to_cost_all_cards_and_do_lottery[zzconfig().actid] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
 
 
 class VipMentorConfigUi(QWidget):
@@ -698,11 +752,14 @@ class VipMentorConfigUi(QWidget):
         self.combobox_guanhuai_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
 
-        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID，形如 1282822，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID，形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
         form_layout.addRow("关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
     def update_config(self, cfg: VipMentorConfig):
-        pass
+        cfg.take_index = self.spinbox_take_index.value()
+
+        cfg.guanhuai_dnf_server_id = dnf_server_name_to_id(self.combobox_guanhuai_dnf_server_name.currentText())
+        cfg.guanhuai_dnf_role_id = self.lineedit_guanhuai_dnf_role_id.text()
 
 
 class DnfHelperInfoConfigUi(QWidget):
@@ -727,7 +784,11 @@ class DnfHelperInfoConfigUi(QWidget):
         form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)
 
     def update_config(self, cfg: DnfHelperInfoConfig):
-        pass
+        cfg.userId = self.lineedit_userId.text()
+        cfg.nickName = self.lineedit_nickName.text()
+        cfg.token = self.lineedit_token.text()
+
+        cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
 
 
 class HelloVoiceInfoConfigUi(QWidget):
@@ -743,7 +804,7 @@ class HelloVoiceInfoConfigUi(QWidget):
         form_layout.addRow("hello语音的用户ID", self.lineedit_hello_id)
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
-        pass
+        cfg.hello_id = self.lineedit_hello_id.text()
 
 
 class FirecrackersConfigUi(QWidget):
@@ -759,7 +820,7 @@ class FirecrackersConfigUi(QWidget):
         form_layout.addRow("开启抽奖", self.checkbox_enable_lottery)
 
     def update_config(self, cfg: FirecrackersConfig):
-        pass
+        cfg.enable_lottery = self.checkbox_enable_lottery.isChecked()
 
 
 def main():

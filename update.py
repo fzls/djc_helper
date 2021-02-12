@@ -23,7 +23,7 @@ def get_update_desc(config: CommonConfig):
 
         return f"最新版本为v{ui.latest_version}，请及时更新~"
     except Exception as e:
-        logger.error("get_update_desc error", exc_info=e)
+        logger.debug("get_update_desc error", exc_info=e)
 
 
 # 启动时检查是否有更新

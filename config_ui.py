@@ -385,20 +385,21 @@ class ConfigUi(QFrame):
     def to_config(self) -> Config:
         cfg = self.load_config()
 
-        self.common.update_config(cfg.common)
+        if hasattr(self, "common") and hasattr(self, "accounts"):
+            self.common.update_config(cfg.common)
 
-        account_configs = []
-        for idx, account in enumerate(self.accounts):
-            # 以在账号中的次序作为唯一定位key，从而获取当前配置中该账号的配置，以便能保留一些配置工具中未涉及的配置，可以与文本编辑器改动兼容
-            if idx < len(cfg.account_configs):
-                account_config = cfg.account_configs[idx]
-            else:
-                account_config = AccountConfig()
+            account_configs = []
+            for idx, account in enumerate(self.accounts):
+                # 以在账号中的次序作为唯一定位key，从而获取当前配置中该账号的配置，以便能保留一些配置工具中未涉及的配置，可以与文本编辑器改动兼容
+                if idx < len(cfg.account_configs):
+                    account_config = cfg.account_configs[idx]
+                else:
+                    account_config = AccountConfig()
 
-            account.update_config(account_config)
-            account_configs.append(account_config)
+                account.update_config(account_config)
+                account_configs.append(account_config)
 
-        cfg.account_configs = account_configs
+            cfg.account_configs = account_configs
 
         return cfg
 

@@ -564,6 +564,9 @@ class AccountConfigUi(QWidget):
         self.hello_voice.update_config(cfg.hello_voice)
         self.firecrackers.update_config(cfg.firecrackers)
 
+        # 这些是动态生成的，不需要保存到配置表中
+        delattr(cfg, "sDjcSign")
+
 
 class AccountInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: AccountInfoConfig, parent=None):

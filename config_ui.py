@@ -36,6 +36,13 @@ class BiDict():
         self.val_to_key = dict({v: k for k, v in original_dict.items()})
 
 
+def create_pushbutton(text, color="") -> QPushButton:
+    btn = QPushButton(text)
+    btn.setStyleSheet(f"background-color: {color}; font-weight: bold; font-family: Microsoft YaHei")
+
+    return btn
+
+
 def create_checkbox(val=False, name="") -> QCheckBox:
     checkbox = QCheckBox(name)
 
@@ -139,7 +146,6 @@ class ConfigUi(QFrame):
         self.resize(1080, 720)
         self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）")
 
-
         if run_from_src():
             self.setWindowIcon(QIcon("config_ui.ico"))
 
@@ -179,12 +185,8 @@ class ConfigUi(QFrame):
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
-        btn_run_djc_helper = QPushButton("运行小助手")
-        btn_run_djc_helper.clicked.connect(self.run_djc_helper)
-        top_layout.addWidget(btn_run_djc_helper)
-
-        btn_load = QPushButton("读取配置")
-        btn_save = QPushButton("保存配置")
+        btn_load = create_pushbutton("读取配置", "DeepSkyBlue")
+        btn_save = create_pushbutton("保存配置", "Aquamarine")
 
         btn_load.clicked.connect(self.notify_reopen)
         btn_save.clicked.connect(self.save)
@@ -195,8 +197,8 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_add_account = QPushButton("添加账号")
-        btn_del_account = QPushButton("删除账号")
+        btn_add_account = create_pushbutton("添加账号", "lightgreen")
+        btn_del_account = create_pushbutton("删除账号", "hotpink")
 
         btn_add_account.clicked.connect(self.add_account)
         btn_del_account.clicked.connect(self.del_account)
@@ -205,6 +207,11 @@ class ConfigUi(QFrame):
         layout.addWidget(btn_add_account)
         layout.addWidget(btn_del_account)
         top_layout.addLayout(layout)
+        top_layout.addWidget(QHLine())
+
+        btn_run_djc_helper = create_pushbutton("运行小助手", "cyan")
+        btn_run_djc_helper.clicked.connect(self.run_djc_helper)
+        top_layout.addWidget(btn_run_djc_helper)
         top_layout.addWidget(QHLine())
 
     def run_djc_helper(self):

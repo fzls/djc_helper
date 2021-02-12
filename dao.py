@@ -698,6 +698,17 @@ class BuyInfo(ConfigInterface):
         now = datetime.now()
         return now <= parse_time(self.expire_at)
 
+    def description(self) -> str:
+        buy_accounts = self.qq
+        if len(self.game_qqs) != 0:
+            buy_accounts += f"({', '.join(self.game_qqs)})"
+
+        msg = f"{buy_accounts} 付费内容过期时间为{self.expire_at}，累计购买{self.total_buy_month}个月。"
+        if len(self.buy_records) != 0:
+            msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in self.buy_records)
+
+        return msg
+
 
 class BuyRecord(ConfigInterface):
     def __init__(self):

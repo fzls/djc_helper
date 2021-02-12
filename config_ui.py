@@ -512,7 +512,7 @@ class AccountConfigUi(QWidget):
         self.lineedit_name = create_lineedit(cfg.name, "账号名称，仅用于区分不同账号，请确保不同账号名称不一样")
         form_layout.addRow("账号名称", self.lineedit_name)
 
-        self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), self.login_mode_bidict.key_to_val.keys())
+        self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
         form_layout.addRow("登录模式", self.combobox_login_mode)
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)

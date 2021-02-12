@@ -1,4 +1,3 @@
-import random
 import subprocess
 import webbrowser
 from sys import exit
@@ -826,14 +825,7 @@ def change_title(dlcInfo=""):
     if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
-    face = random.choice([
-        'ヾ(◍°∇°◍)ﾉﾞ', 'ヾ(✿ﾟ▽ﾟ)ノ', 'ヾ(๑╹◡╹)ﾉ"', '٩(๑❛ᴗ❛๑)۶', '٩(๑-◡-๑)۶ ',
-        'ヾ(●´∀｀●) ', '(｡◕ˇ∀ˇ◕)', '(◕ᴗ◕✿)', '✺◟(∗❛ัᴗ❛ั∗)◞✺', '(づ｡◕ᴗᴗ◕｡)づ',
-        '(≧∀≦)♪', '♪（＾∀＾●）ﾉ', '(●´∀｀●)ﾉ', "(〃'▽'〃)", '(｀・ω・´)',
-        'ヾ(=･ω･=)o', '(◍´꒳`◍)', '(づ●─●)づ', '｡◕ᴗ◕｡', '●﹏●',
-    ])
-
-    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {face}")
+    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}")
 
 
 def exists_auto_updater_dlc():

@@ -9,7 +9,7 @@ import shutil
 import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
-    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout,
+    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel,
 )
 from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
 from PyQt5.QtCore import QCoreApplication, Qt
@@ -18,6 +18,7 @@ from config import *
 from setting import *
 from game_info import name_2_mobile_game_info_map
 from update import *
+from main_def import check_all_skey_and_pskey, has_buy_auto_updater_dlc, get_user_buy_info
 
 
 class QHLine(QFrame):
@@ -374,9 +375,36 @@ class ConfigUi(QFrame):
 
     def create_tabs(self, cfg: Config, top_layout: QVBoxLayout):
         self.tabs = QTabWidget()
+
+        self.create_userinfo_tab(cfg)
         self.create_common_tab(cfg)
         self.create_account_tabs(cfg)
+
+        # ，默认页显示为common
+        self.tabs.setCurrentWidget(self.common)
+
         top_layout.addWidget(self.tabs)
+
+    def create_userinfo_tab(self, cfg: Config):
+        tab = QFrame()
+        tab.setStyleSheet("font-size: 18px; font-weight: bold;")
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
+
+        self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，会卡顿一会)")
+        self.btn_show_buy_info.clicked.connect(self.show_buy_info)
+        layout.addWidget(self.btn_show_buy_info)
+
+        self.label_auto_udpate_info = QLabel("点击登录按钮后可显示是否购买自动更新DLC")
+        self.label_auto_udpate_info.setVisible(False)
+        layout.addWidget(self.label_auto_udpate_info)
+
+        self.label_monthly_pay_info = QLabel("点击登录按钮后可显示按月付费信息")
+        self.label_monthly_pay_info.setVisible(False)
+        layout.addWidget(self.label_monthly_pay_info)
+
+        tab.setLayout(make_scroll_layout(layout))
+        self.tabs.addTab(tab, "个人信息")
 
     def create_common_tab(self, cfg: Config):
         self.common = CommonConfigUi(cfg.common)
@@ -388,6 +416,28 @@ class ConfigUi(QFrame):
             account_ui = AccountConfigUi(account)
             self.accounts.append(account_ui)
             self.tabs.addTab(account_ui, account.name)
+
+    def show_buy_info(self, clicked=False):
+        cfg = self.to_config()
+        check_all_skey_and_pskey(cfg, check_skey_only=True)
+
+        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
+        user_buy_info = get_user_buy_info(cfg)
+
+        if has_buy_auto_update_dlc:
+            dlc_info = "当前某一个账号已购买自动更新DLC"
+        else:
+            dlc_info = "当前所有账号均未购买自动更新DLC"
+        monthly_pay_info = user_buy_info.description()
+
+        logger.info(f"\n{dlc_info}\n\n{monthly_pay_info}")
+
+        self.label_auto_udpate_info.setText(dlc_info)
+        self.label_monthly_pay_info.setText(monthly_pay_info)
+
+        self.btn_show_buy_info.setVisible(False)
+        self.label_auto_udpate_info.setVisible(True)
+        self.label_monthly_pay_info.setVisible(True)
 
     def to_config(self) -> Config:
         cfg = self.load_config()

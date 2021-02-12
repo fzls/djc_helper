@@ -17,6 +17,10 @@ class GameInfo(DaoObject):
         self.bizCode = data["bizCode"]
         self.gameCode = data["gameCode"]
         self.wxAppid = data["wxAppid"]
+        self.type = data["type"]
+
+    def is_mobile_game(self):
+        return self.type == "1"
 
 
 class GameRoleInfo(ConfigInterface):

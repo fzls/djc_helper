@@ -26,6 +26,7 @@ class DjcHelper:
     first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
     first_run_document_flag_file = os.path.join(first_run_dir, "document")
     first_run_use_old_config_flag_file = os.path.join(first_run_dir, "use_old_config")
+    first_run_config_ui_flag_file = os.path.join(first_run_dir, "config_ui")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
@@ -116,6 +117,16 @@ class DjcHelper:
         更多信息可查看使用教程/使用文档.docx中背景知识章节中关于继承存档的描述
                 """
         loginfo = "首次运行弹出提示继承以前配置"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
+
+    def show_tip_on_first_run_config_ui(self):
+        filename = self.first_run_config_ui_flag_file
+        title = "配置工具"
+        tips = """
+        现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~
+                """
+        loginfo = "首次运行弹出配置工具提示"
 
         self.show_tip_on_first_run(filename, title, tips, loginfo)
 
@@ -283,6 +294,7 @@ class DjcHelper:
         self.normal_run(user_buy_info)
 
     def check_first_run(self):
+        self.show_tip_on_first_run_config_ui()
         self.show_tip_on_first_run_promot()
         self.show_tip_on_first_run_any()
         self.show_tip_on_first_run_document()

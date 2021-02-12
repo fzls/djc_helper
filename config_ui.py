@@ -137,7 +137,7 @@ class ConfigUi(QFrame):
         super(ConfigUi, self).__init__(parent)
 
         self.resize(1080, 720)
-        self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）（保存后config.toml将丢失注释信息，可去config.toml.example查看注释）")
+        self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）")
 
         self.setWhatsThis("简易配置工具")
 
@@ -156,7 +156,7 @@ class ConfigUi(QFrame):
     def save(self, checked=False, show_message_box=True):
         self.save_config(self.to_config())
         if show_message_box:
-            show_message("保存成功", "已保存成功")
+            show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.toml.example查看注释")
 
     def load_config(self) -> Config:
         load_config(local_config_path="")

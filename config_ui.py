@@ -8,7 +8,7 @@ import typing
 import subprocess
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
                              QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
-from PyQt5.QtGui import QValidator
+from PyQt5.QtGui import QValidator, QIcon
 
 from config import *
 from setting import *
@@ -138,6 +138,10 @@ class ConfigUi(QFrame):
 
         self.resize(1080, 720)
         self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）")
+
+
+        if run_from_src():
+            self.setWindowIcon(QIcon("config_ui.ico"))
 
         self.setWhatsThis("简易配置工具")
 

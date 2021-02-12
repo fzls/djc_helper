@@ -11,8 +11,8 @@ from PyQt5.QtWidgets import (
     QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
     QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout,
 )
-from PyQt5.QtGui import QValidator, QIcon
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
+from PyQt5.QtCore import QCoreApplication, Qt
 
 from config import *
 from setting import *
@@ -32,6 +32,32 @@ class QVLine(QFrame):
         super(QVLine, self).__init__()
         self.setFrameShape(QFrame.VLine)
         self.setFrameShadow(QFrame.Sunken)
+
+
+class MySpinbox(QSpinBox):
+    def __init__(self, parent=None):
+        super(MySpinbox, self).__init__(parent)
+
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        if self.hasFocus():
+            super(MySpinbox, self).wheelEvent(event)
+        else:
+            event.ignore()
+
+
+class MyDoubleSpinbox(QDoubleSpinBox):
+    def __init__(self, parent=None):
+        super(MyDoubleSpinbox, self).__init__(parent)
+
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        if self.hasFocus():
+            super(MyDoubleSpinbox, self).wheelEvent(event)
+        else:
+            event.ignore()
 
 
 class BiDict():
@@ -56,8 +82,8 @@ def create_checkbox(val=False, name="") -> QCheckBox:
     return checkbox
 
 
-def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> QSpinBox:
-    spinbox = QSpinBox()
+def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> MySpinbox:
+    spinbox = MySpinbox()
 
     spinbox.setValue(value)
     spinbox.setMaximum(maximum)
@@ -66,8 +92,8 @@ def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> QSpin
     return spinbox
 
 
-def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 0.0) -> QDoubleSpinBox:
-    spinbox = QDoubleSpinBox()
+def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 0.0) -> MyDoubleSpinbox:
+    spinbox = MyDoubleSpinbox()
 
     spinbox.setValue(value)
     spinbox.setMaximum(maximum)

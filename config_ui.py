@@ -305,7 +305,7 @@ class ConfigUi(QFrame):
         else:
             self.btn_run_djc_helper.setText("运行小助手")
 
-    def run_djc_helper(self):
+    def run_djc_helper(self, checked=False):
         logger.info("运行小助手前自动保存配置")
         self.save(show_message_box=False)
 
@@ -322,7 +322,7 @@ class ConfigUi(QFrame):
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
             QCoreApplication.exit()
 
-    def clear_login_status(self):
+    def clear_login_status(self, checked=False):
         shutil.rmtree(cached_dir, ignore_errors=True)
         os.mkdir(cached_dir)
 

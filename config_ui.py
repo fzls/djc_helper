@@ -523,6 +523,8 @@ class AccountConfigUi(QWidget):
 
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
+        self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)
+        self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
         self.exchange_items = []
@@ -588,6 +590,9 @@ class AccountConfigUi(QWidget):
         # 这些是动态生成的，不需要保存到配置表中
         delattr(cfg, "sDjcSign")
 
+    def on_login_mode_change(self, text):
+        self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])
+
 
 class AccountInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: AccountInfoConfig, parent=None):
@@ -607,6 +612,12 @@ class AccountInfoConfigUi(QWidget):
     def update_config(self, cfg: AccountInfoConfig):
         cfg.account = self.lineedit_account.text()
         cfg.password = self.lineedit_password.text()
+
+    def setDisabled(self, disabled: bool) -> None:
+        super().setDisabled(disabled)
+
+        self.lineedit_account.setDisabled(disabled)
+        self.lineedit_password.setDisabled(disabled)
 
 
 class FunctionSwitchesConfigUi(QWidget):

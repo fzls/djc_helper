@@ -4168,7 +4168,7 @@ class DjcHelper:
                                  user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
                                  user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
             else:
-                logger.warning(color("bold_yellow") + "活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)

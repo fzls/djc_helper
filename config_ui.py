@@ -40,9 +40,10 @@ class BiDict():
         self.val_to_key = dict({v: k for k, v in original_dict.items()})
 
 
-def create_pushbutton(text, color="") -> QPushButton:
+def create_pushbutton(text, color="", tooltip="") -> QPushButton:
     btn = QPushButton(text)
     btn.setStyleSheet(f"background-color: {color}; font-weight: bold; font-family: Microsoft YaHei")
+    btn.setToolTip(tooltip)
 
     return btn
 
@@ -207,7 +208,7 @@ class ConfigUi(QFrame):
 
         btn_add_account = create_pushbutton("添加账号", "lightgreen")
         btn_del_account = create_pushbutton("删除账号", "hotpink")
-        btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan")
+        btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan", "登录错账户，或者想要登录其他账户时，点击这个即可清除登录状态")
 
         btn_add_account.clicked.connect(self.add_account)
         btn_del_account.clicked.connect(self.del_account)

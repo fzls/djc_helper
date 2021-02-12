@@ -69,7 +69,7 @@ def check_djc_role_binding():
             cfg = config()
 
 
-def check_all_skey_and_pskey(cfg):
+def check_all_skey_and_pskey(cfg, check_skey_only=False):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
@@ -84,8 +84,10 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
-        djcHelper.fetch_guanjia_openid(print_warning=False)
+
+        if not check_skey_only:
+            djcHelper.get_bind_role_list(print_warning=False)
+            djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
 def auto_send_cards(cfg):

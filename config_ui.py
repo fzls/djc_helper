@@ -4,9 +4,11 @@ logger.name = "config_ui"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
+import typing
 import subprocess
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
                              QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
+from PyQt5.QtGui import QValidator
 
 from config import *
 from setting import *
@@ -97,10 +99,22 @@ def list_to_str(vlist: List[str]):
 
 
 def str_to_list(str_list: str):
-    if str_list.strip() == "":
+    str_list = str_list.strip(" ,")
+    if str_list == "":
         return []
 
     return [s.strip() for s in str_list.split(',')]
+
+
+class QQListValidator(QValidator):
+    def validate(self, text: str, pos: int) -> typing.Tuple['QValidator.State', str, int]:
+        sl = str_to_list(text)
+
+        for qq in sl:
+            if not qq.isnumeric():
+                return (QValidator.Invalid, text, pos)
+
+        return (QValidator.Acceptable, text, pos)
 
 
 def show_message(title, text):
@@ -311,6 +325,7 @@ class CommonConfigUi(QFrame):
         form_layout.addRow("马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
 
         self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
         form_layout.addRow("自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
 
         self.login = LoginConfigUi(form_layout, cfg.login)
@@ -447,6 +462,7 @@ class FixedTeamConfigUi(QWidget):
         form_layout.addRow("队伍id", self.lineedit_id)
 
         self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
+        self.lineedit_members.setValidator(QQListValidator())
         form_layout.addRow("成员", self.lineedit_members)
 
     def update_config(self, cfg: FixedTeamConfig):
@@ -481,9 +497,11 @@ class AccountConfigUi(QWidget):
         form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
 
         self.lineedit_drift_send_qq_list = create_lineedit(list_to_str(cfg.drift_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_drift_send_qq_list.setValidator(QQListValidator())
         form_layout.addRow("漂流瓶每日邀请列表（不会实际发消息）", self.lineedit_drift_send_qq_list)
 
         self.lineedit_spring_fudai_receiver_qq_list = create_lineedit(list_to_str(cfg.spring_fudai_receiver_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_spring_fudai_receiver_qq_list.setValidator(QQListValidator())
         form_layout.addRow("新春福袋大作战邀请列表（会实际发消息）", self.lineedit_spring_fudai_receiver_qq_list)
 
         self.checkbox_enable_firecrackers_invite_friend = create_checkbox(cfg.enable_firecrackers_invite_friend)

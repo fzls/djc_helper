@@ -22,7 +22,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "config.toml.example",
         "DNF蚊子腿小助手.exe",
         "DNF蚊子腿小助手配置工具.exe",
-        "DNF蚊子腿小助手配置工具.bat",
+        "双击打开配置文件.bat",
         "清除登录信息_误登录其他账号后请点击这个.bat",
         "bandizip_portable",
         "reference_data",

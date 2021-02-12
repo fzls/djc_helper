@@ -5,6 +5,7 @@ logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
 import typing
+import shutil
 import subprocess
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
                              QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
@@ -199,13 +200,16 @@ class ConfigUi(QFrame):
 
         btn_add_account = create_pushbutton("添加账号", "lightgreen")
         btn_del_account = create_pushbutton("删除账号", "hotpink")
+        btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan")
 
         btn_add_account.clicked.connect(self.add_account)
         btn_del_account.clicked.connect(self.del_account)
+        btn_clear_login_status.clicked.connect(self.clear_login_status)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_add_account)
         layout.addWidget(btn_del_account)
+        layout.addWidget(btn_clear_login_status)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
@@ -226,6 +230,12 @@ class ConfigUi(QFrame):
         ], cwd=".", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         logger.info(f"{exe_path} 已经启动~请等待其完成操作")
+
+    def clear_login_status(self):
+        shutil.rmtree(cached_dir, ignore_errors=True)
+        os.mkdir(cached_dir)
+
+        show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")

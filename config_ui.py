@@ -761,8 +761,8 @@ class ExchangeItemConfigUi(QWidget):
     def from_config(self, form_layout: QFormLayout, cfg: ExchangeItemConfig):
         add_form_seperator(form_layout, f"道聚城兑换道具 - {cfg.sGoodsName}")
 
-        self.spinbox_count = create_spin_box(cfg.count)
-        form_layout.addRow("兑换数目", self.spinbox_count)
+        self.spinbox_count = create_spin_box(cfg.count, 10)
+        form_layout.addRow("兑换数目/次数（0表示不兑换）", self.spinbox_count)
 
     def update_config(self, cfg: ExchangeItemConfig):
         cfg.count = self.spinbox_count.value()

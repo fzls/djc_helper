@@ -186,6 +186,10 @@ class ConfigUi(QFrame):
         self.create_buttons(top_layout)
         self.create_tabs(cfg, top_layout)
 
+        # 设置一些关联事件
+        self.common.checkbox_auto_update_on_start.clicked.connect(self.on_click_auto_update)
+        self.on_click_auto_update(self.common.checkbox_auto_update_on_start.isChecked())
+
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
@@ -216,10 +220,16 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
-        btn_run_djc_helper.clicked.connect(self.run_djc_helper)
-        top_layout.addWidget(btn_run_djc_helper)
+        self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
+        self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
+        top_layout.addWidget(self.btn_run_djc_helper)
         top_layout.addWidget(QHLine())
+
+    def on_click_auto_update(self, checked=False):
+        if checked:
+            self.btn_run_djc_helper.setText("运行小助手并退出配置工具")
+        else:
+            self.btn_run_djc_helper.setText("运行小助手")
 
     def run_djc_helper(self):
         logger.info("运行小助手前自动保存配置")

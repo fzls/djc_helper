@@ -16,8 +16,8 @@ from PyQt5.QtCore import QCoreApplication, Qt
 
 from config import *
 from setting import *
-from version import now_version
 from game_info import name_2_mobile_game_info_map
+from update import *
 
 
 class QHLine(QFrame):
@@ -203,6 +203,12 @@ class ConfigUi(QFrame):
         load_config(local_config_path="")
         return config()
 
+    def get_merged_config(self) -> Config:
+        latest_saved_config = self.load_config()
+        self.save_config(latest_saved_config)
+
+        return latest_saved_config
+
     def save_config(self, cfg: Config):
         save_config(cfg)
 
@@ -220,7 +226,8 @@ class ConfigUi(QFrame):
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
-        btn_load = create_pushbutton("读取配置", "DeepSkyBlue")
+        #         DarkCyan
+        btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
 
         btn_load.clicked.connect(self.notify_reopen)
@@ -233,7 +240,7 @@ class ConfigUi(QFrame):
         top_layout.addWidget(QHLine())
 
         btn_add_account = create_pushbutton("添加账号", "lightgreen")
-        btn_del_account = create_pushbutton("删除账号", "hotpink")
+        btn_del_account = create_pushbutton("删除账号", "lightgreen")
         btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan", "登录错账户，或者想要登录其他账户时，点击这个即可清除登录状态")
 
         btn_add_account.clicked.connect(self.add_account)
@@ -247,10 +254,56 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
+        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
+        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
+        btn_support = create_pushbutton("我啥也不买，作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue")
+        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
+
+        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
+        btn_pay_by_month.clicked.connect(self.pay_by_month)
+        btn_support.clicked.connect(self.support)
+        btn_check_update.clicked.connect(self.check_update)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_buy_auto_updater_dlc)
+        layout.addWidget(btn_pay_by_month)
+        layout.addWidget(btn_support)
+        layout.addWidget(btn_check_update)
+        top_layout.addLayout(layout)
+        top_layout.addWidget(QHLine())
+
         self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
         top_layout.addWidget(QHLine())
+
+    def buy_auto_updater_dlc(self, checked=False):
+        show_message("付费指引", "请按照【付费指引.docx】中的流程购买自动更新DLC~")
+
+    def pay_by_month(self, checked=False):
+        show_message("付费指引", "请按照【付费指引.docx】中的流程购买按月付费~")
+
+    def support(self, checked=False):
+        show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
+        os.popen("支持一下.png")
+
+    def check_update(self, checked=False):
+        cfg = self.get_merged_config().common
+
+        try:
+            ui = get_update_info(cfg)
+            if not try_manaual_update(ui):
+                show_message("无需更新", "当前已经是最新版本~")
+        except Exception as err:
+            netdisk_addr = "https://fzls.lanzous.com/s/djc-helper"
+
+            # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
+            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y-%m-%d")
+            if time_since_last_update.days >= 7:
+                msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]({netdisk_addr})看看是否有新版本，或者购买自动更新DLC省去手动更新的操作"
+                show_message("检查更新失败", msg)
+            else:
+                show_message("检查更新失败", f"检查版本更新失败,大概率是访问不了github导致的，可自行前往网盘({netdisk_addr})查看是否有更新, 错误为{err}")
 
     def on_click_auto_update(self, checked=False):
         if checked:

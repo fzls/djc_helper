@@ -144,13 +144,13 @@ class ConfigUi(QFrame):
 
         logger.info("已读取成功，请按需调整配置，调整完记得点下保存~")
 
-    def notify_reopen(self):
+    def notify_reopen(self, checked=False):
         show_message("请重新打开", "目前因为不知道如何清除pyqt的已有组件然后再添加新的组件，暂时没有实现重新读取配置的功能，请直接右上角关掉重新打开-。-")
 
-    def save(self, show_message_box=True):
+    def save(self, checked=False, show_message_box=True):
         self.save_config(self.to_config())
         if show_message_box:
-            show_message("保存成功", "已保存成功，请自行运行小助手本体")
+            show_message("保存成功", "已保存成功")
 
     def load_config(self) -> Config:
         load_config(local_config_path="")
@@ -210,7 +210,7 @@ class ConfigUi(QFrame):
 
         logger.info(f"{exe_path} 已经启动~请等待其完成操作")
 
-    def add_account(self):
+    def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")
         if ok:
             logger.info(f"尝试添加账号 {account_name} ...")
@@ -228,7 +228,7 @@ class ConfigUi(QFrame):
 
             show_message("添加成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
 
-    def del_account(self):
+    def del_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "删除账号", "要删除的账号名称", QLineEdit.Normal, "")
         if ok:
             logger.info(f"尝试删除账号 {account_name} ...")

@@ -640,7 +640,10 @@ class AccountConfigUi(QWidget):
         self.firecrackers.update_config(cfg.firecrackers)
 
         # 这些是动态生成的，不需要保存到配置表中
-        delattr(cfg, "sDjcSign")
+        for attr in ["sDjcSign"]:
+            if not hasattr(cfg, attr):
+                continue
+            delattr(cfg, attr)
 
     def on_login_mode_change(self, text):
         self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])

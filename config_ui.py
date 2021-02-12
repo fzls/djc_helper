@@ -148,7 +148,7 @@ class ConfigUi(QFrame):
         super(ConfigUi, self).__init__(parent)
 
         self.resize(1080, 720)
-        self.setWindowTitle("简易配置工具（如需要更细化配置，请使用文本编辑器编辑config.toml）")
+        self.setWindowTitle(f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}")
 
         self.setStyleSheet(f"font-family: Microsoft YaHei")
         self.setWindowIcon(QIcon("icons/config_ui.ico"))

@@ -1,9 +1,6 @@
 import subprocess
-import webbrowser
 from sys import exit
 from typing import Dict
-
-import win32api
 
 from config import load_config, config, XinYueOperationConfig, Config
 from dao import BuyInfo, BuyRecord

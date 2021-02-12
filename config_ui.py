@@ -10,6 +10,7 @@ import subprocess
 from PyQt5.QtWidgets import (QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox,
                              QWidget, QTabWidget, QComboBox, QStyleFactory, QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout)
 from PyQt5.QtGui import QValidator, QIcon
+from PyQt5.QtCore import QCoreApplication
 
 from config import *
 from setting import *
@@ -213,7 +214,7 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_run_djc_helper = create_pushbutton("运行小助手", "cyan")
+        btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
         btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(btn_run_djc_helper)
         top_layout.addWidget(QHLine())
@@ -229,7 +230,11 @@ class ConfigUi(QFrame):
             os.path.realpath(exe_path),
         ], cwd=".", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        logger.info(f"{exe_path} 已经启动~请等待其完成操作")
+        logger.info(f"{exe_path} 已经启动~")
+
+        if self.common.checkbox_auto_update_on_start.isChecked():
+            logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
+            QCoreApplication.exit()
 
     def clear_login_status(self):
         shutil.rmtree(cached_dir, ignore_errors=True)
@@ -916,7 +921,7 @@ def main():
     ui = ConfigUi()
     ui.show()
 
-    app.exec()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

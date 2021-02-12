@@ -30,6 +30,12 @@ class QVLine(QFrame):
         self.setFrameShadow(QFrame.Sunken)
 
 
+class BiDict():
+    def __init__(self, original_dict:dict):
+        self.key_to_val = dict({k: v for k, v in original_dict.items()})
+        self.val_to_key = dict({v: k for k, v in original_dict.items()})
+
+
 def create_checkbox(val=False, name="") -> QCheckBox:
     checkbox = QCheckBox(name)
 

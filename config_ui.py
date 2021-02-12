@@ -250,7 +250,7 @@ class ConfigUi(QFrame):
 
         btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
         btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
-        btn_support = create_pushbutton("我啥也不买，作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue")
+        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
         btn_check_update = create_pushbutton("检查更新", "SpringGreen")
 
         btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)

@@ -8,6 +8,7 @@ import requests
 import win32api
 import win32con
 
+from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
 from util import is_first_run, use_by_myself, async_call
@@ -15,7 +16,7 @@ from version import now_version, ver_time
 
 
 # 启动时检查是否有更新
-def check_update_on_start(config):
+def check_update_on_start(config: CommonConfig):
     try:
         if not config.check_update_on_start and not config.auto_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")

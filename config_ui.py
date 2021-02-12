@@ -203,12 +203,6 @@ class ConfigUi(QFrame):
         load_config(local_config_path="")
         return config()
 
-    def get_merged_config(self) -> Config:
-        latest_saved_config = self.load_config()
-        self.save_config(latest_saved_config)
-
-        return latest_saved_config
-
     def save_config(self, cfg: Config):
         save_config(cfg)
 
@@ -288,7 +282,7 @@ class ConfigUi(QFrame):
         os.popen("支持一下.png")
 
     def check_update(self, checked=False):
-        cfg = self.get_merged_config().common
+        cfg = self.to_config().common
 
         try:
             ui = get_update_info(cfg)

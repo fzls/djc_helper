@@ -8,7 +8,7 @@ from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
-from update import check_update_on_start, get_update_info
+from update import check_update_on_start, get_update_info, get_update_desc
 from upload_lanzouyun import Uploader, lanzou_cookie
 from util import *
 from version import *
@@ -822,7 +822,7 @@ def change_title(dlcInfo=""):
     if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
-    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}")
+    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()} {get_update_desc(config().common)}")
 
 
 def exists_auto_updater_dlc():

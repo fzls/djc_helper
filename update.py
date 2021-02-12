@@ -15,6 +15,17 @@ from util import is_first_run, use_by_myself, async_call
 from version import now_version, ver_time
 
 
+def get_update_desc(config: CommonConfig):
+    try:
+        ui = get_update_info(config)
+        if not need_update(now_version, ui.latest_version):
+            return ""
+
+        return f"最新版本为v{ui.latest_version}，请及时更新~"
+    except Exception as e:
+        logger.error("get_update_desc error", exc_info=e)
+
+
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
     try:

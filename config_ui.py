@@ -607,7 +607,22 @@ class AccountInfoConfigUi(QWidget):
         form_layout.addRow("QQ账号", self.lineedit_account)
 
         self.lineedit_password = create_lineedit(cfg.password, "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用")
-        form_layout.addRow("QQ密码", self.lineedit_password)
+        self.lineedit_password.setEchoMode(QLineEdit.Password)
+
+        btn_show_password = QPushButton("按住显示密码")
+        btn_show_password.pressed.connect(self.show_password)
+        btn_show_password.released.connect(self.hide_password)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.lineedit_password)
+        layout.addWidget(btn_show_password)
+        form_layout.addRow("QQ密码", layout)
+
+    def show_password(self):
+        self.lineedit_password.setEchoMode(QLineEdit.Normal)
+
+    def hide_password(self):
+        self.lineedit_password.setEchoMode(QLineEdit.Password)
 
     def update_config(self, cfg: AccountInfoConfig):
         cfg.account = self.lineedit_account.text()

@@ -61,6 +61,14 @@ class MyDoubleSpinbox(QDoubleSpinBox):
             event.ignore()
 
 
+class MyComboBox(QComboBox):
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        if self.hasFocus():
+            super(MyComboBox, self).wheelEvent(event)
+        else:
+            event.ignore()
+
+
 class BiDict():
     def __init__(self, original_dict: dict):
         self.key_to_val = dict({k: v for k, v in original_dict.items()})
@@ -103,8 +111,10 @@ def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 
     return spinbox
 
 
-def create_combobox(current_val: str, values: List[str] = None) -> QComboBox:
-    combobox = QComboBox()
+def create_combobox(current_val: str, values: List[str] = None) -> MyComboBox:
+    combobox = MyComboBox()
+
+    combobox.setFocusPolicy(Qt.StrongFocus)
 
     if values is not None:
         combobox.addItems(values)

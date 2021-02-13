@@ -705,7 +705,12 @@ class BuyInfo(ConfigInterface):
 
         msg = f"{buy_accounts} 付费内容过期时间为{self.expire_at}，累计购买{self.total_buy_month}个月。"
         if len(self.buy_records) != 0:
-            msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in self.buy_records)
+            msg += "\n购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in self.buy_records)
+
+        msg += "\n"
+        msg += "\n私聊 付款信息、购买内容、需要使用的所有QQ 后可随时查看此面板确认是否到账。"
+        msg += "\n出于效率和QQ被冻结风险的综合考量，不会回复QQ私聊。一般每天会统一处理一到两次，届时看到你的私聊时肯定会处理。"
+        msg += "\n如果私聊一天（24小时）后仍未看到对应充值记录，可以私聊我提醒下，看到肯定会处理的。"
 
         return msg
 

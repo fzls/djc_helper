@@ -11,19 +11,23 @@ import win32con
 from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
+from upload_lanzouyun import Uploader, lanzou_cookie
 from util import is_first_run, use_by_myself, async_call
 from version import now_version, ver_time
 
 
 def get_update_desc(config: CommonConfig):
     try:
-        ui = get_update_info(config)
-        if not need_update(now_version, ui.latest_version):
+        uploader = Uploader(lanzou_cookie)
+        latest_version = uploader.latest_version()
+
+        if not need_update(now_version, latest_version):
             return ""
 
-        return f"最新版本为v{ui.latest_version}，请及时更新~"
+        return f"最新版本为v{latest_version}，请及时更新~"
     except Exception as e:
         logger.debug("get_update_desc error", exc_info=e)
+        return ""
 
 
 # 启动时检查是否有更新

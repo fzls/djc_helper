@@ -40,7 +40,7 @@ def run(cfg):
 
 
 def main():
-    change_title("集卡特别版")
+    change_title("集卡特别版", need_append_new_version_info=False)
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")

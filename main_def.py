@@ -814,11 +814,20 @@ def _get_user_buy_info(cfg: Config):
     return default_user_buy_info
 
 
-def change_title(dlcInfo=""):
+def change_title(dlcInfo="", need_append_new_version_info=True):
     if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
-    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()} {get_update_desc(config().common)}")
+    set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}"
+    os.system(set_title_cmd)
+
+    # 尝试异步添加新版本提示
+    def cb():
+        if need_append_new_version_info:
+            new_cmd = set_title_cmd + f" {get_update_desc(config().common)}"
+            os.system(new_cmd)
+
+    async_call(cb)
 
 
 def exists_auto_updater_dlc():

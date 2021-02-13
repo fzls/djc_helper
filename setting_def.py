@@ -100,3 +100,23 @@ class ArkLotteryRules(ConfigInterface):
         self.midRule2 = 28609
         self.midBack1 = 28612
         self.midBack2 = 28611
+
+
+class DnfAreaServerListConfig(ConfigInterface):
+    def __init__(self):
+        self.t = "广东"
+        self.v = "21"
+        self.opt_data_array = []  # type: List[DnfServerConfig]
+
+    def fields_to_fill(self):
+        return [
+            ('opt_data_array', DnfServerConfig),
+        ]
+
+
+class DnfServerConfig(ConfigInterface):
+    def __init__(self):
+        self.t = "广东一区"
+        self.v = "1"
+        self.status = "1"
+        self.display = "1"

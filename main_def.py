@@ -1,10 +1,6 @@
-import random
 import subprocess
-import webbrowser
 from sys import exit
 from typing import Dict
-
-import win32api
 
 from config import load_config, config, XinYueOperationConfig, Config
 from dao import BuyInfo, BuyRecord
@@ -12,7 +8,7 @@ from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
-from update import check_update_on_start, get_update_info
+from update import check_update_on_start, get_update_info, get_update_desc
 from upload_lanzouyun import Uploader, lanzou_cookie
 from util import *
 from version import *
@@ -73,7 +69,7 @@ def check_djc_role_binding():
             cfg = config()
 
 
-def check_all_skey_and_pskey(cfg):
+def check_all_skey_and_pskey(cfg, check_skey_only=False):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
@@ -88,8 +84,10 @@ def check_all_skey_and_pskey(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
-        djcHelper.fetch_guanjia_openid(print_warning=False)
+
+        if not check_skey_only:
+            djcHelper.get_bind_role_list(print_warning=False)
+            djcHelper.fetch_guanjia_openid(print_warning=False)
 
 
 def auto_send_cards(cfg):
@@ -523,13 +521,7 @@ def try_xinyue_sailiyam_start_work(cfg):
 
 
 def show_buy_info(user_buy_info: BuyInfo):
-    buy_accounts = user_buy_info.qq
-    if len(user_buy_info.game_qqs) != 0:
-        buy_accounts += f"({', '.join(user_buy_info.game_qqs)})"
-    msg = f"{buy_accounts} 付费内容过期时间为{user_buy_info.expire_at}，累计购买{user_buy_info.total_buy_month}个月。"
-    if len(user_buy_info.buy_records) != 0:
-        msg += "购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in user_buy_info.buy_records)
-    logger.info(color("bold_cyan") + msg)
+    logger.info(color("bold_cyan") + user_buy_info.description())
 
     if not user_buy_info.is_active() and is_weekly_first_run("show_buy_info"):
         threading.Thread(target=show_buy_info_sync, args=(user_buy_info,), daemon=True).start()
@@ -655,9 +647,12 @@ def temp_code(cfg):
         ),
         (
             "QQ黄钻和超级会员惠的白嫖活动只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127",
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9",
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127\n"
+            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9\n"
         ),
+        (
+            "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
+        )
     ]
 
     for idx, tip in enumerate(tips):
@@ -823,14 +818,7 @@ def change_title(dlcInfo=""):
     if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
-    face = random.choice([
-        'ヾ(◍°∇°◍)ﾉﾞ', 'ヾ(✿ﾟ▽ﾟ)ノ', 'ヾ(๑╹◡╹)ﾉ"', '٩(๑❛ᴗ❛๑)۶', '٩(๑-◡-๑)۶ ',
-        'ヾ(●´∀｀●) ', '(｡◕ˇ∀ˇ◕)', '(◕ᴗ◕✿)', '✺◟(∗❛ัᴗ❛ั∗)◞✺', '(づ｡◕ᴗᴗ◕｡)づ',
-        '(≧∀≦)♪', '♪（＾∀＾●）ﾉ', '(●´∀｀●)ﾉ', "(〃'▽'〃)", '(｀・ω・´)',
-        'ヾ(=･ω･=)o', '(◍´꒳`◍)', '(づ●─●)づ', '｡◕ᴗ◕｡', '●﹏●',
-    ])
-
-    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {face}")
+    os.system(f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()} {get_update_desc(config().common)}")
 
 
 def exists_auto_updater_dlc():

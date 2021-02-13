@@ -5,6 +5,7 @@ import shutil
 import subprocess
 
 from log import logger
+from util import human_readable_size
 
 
 def build(disable_douban=False):
@@ -61,15 +62,16 @@ def build(disable_douban=False):
     ])
 
     build_configs = [
-        ("main.py", "DNF蚊子腿小助手.exe", "DNF蚊子腿小助手.ico", "."),
-        ("auto_updater.py", "auto_updater.exe", "", "utils"),
-        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "ark_lottery_special_version.ico", "."),
+        ("main.py", "DNF蚊子腿小助手.exe", "icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
+        ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
+        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "icons/ark_lottery_special_version.ico", ".", ["PyQt5"], []),
+        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "icons/config_ui.ico", ".", [], ["--noconsole"]),
     ]
 
     for idx, config in enumerate(build_configs):
-        prefix = f"{idx+1}/{len(build_configs)}"
+        prefix = f"{idx + 1}/{len(build_configs)}"
 
-        src_path, exe_name, icon_path, target_dir = config
+        src_path, exe_name, icon_path, target_dir, exclude_modules, extra_args = config
         logger.info(f"{prefix} 开始编译 {exe_name}")
 
         cmd_build = [
@@ -80,6 +82,9 @@ def build(disable_douban=False):
         ]
         if icon_path != "":
             cmd_build.extend(['--icon', icon_path])
+        for module in exclude_modules:
+            cmd_build.extend(['--exclude-module', module])
+        cmd_build.extend(extra_args)
 
         subprocess.call(cmd_build)
 
@@ -98,7 +103,8 @@ def build(disable_douban=False):
             shutil.rmtree(directory, ignore_errors=True)
         os.remove(f"{exe_name}.spec")
 
-        logger.info(f"{prefix} 编译{exe_name}结束")
+        filesize = os.path.getsize(target_path)
+        logger.info(f"{prefix} 编译{exe_name}结束，最终大小为{human_readable_size(filesize)}")
 
     logger.info("done")
 

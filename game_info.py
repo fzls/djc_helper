@@ -11,14 +11,18 @@ from log import logger
 
 name_2_game_info_map = {}
 code_2_game_info_map = {}
+name_2_mobile_game_info_map = {}
 
 try:
     with open("reference_data/djc_biz_list.json", "r", encoding="utf-8") as f:
         raw_data = json.load(f)
         for game_data in raw_data["data"]:
             gameInfo = GameInfo(game_data)
-            name_2_game_info_map[game_data["bizName"]] = GameInfo(game_data)
-            code_2_game_info_map[game_data["bizCode"]] = GameInfo(game_data)
+            name_2_game_info_map[game_data["bizName"]] = gameInfo
+            code_2_game_info_map[game_data["bizCode"]] = gameInfo
+
+            if gameInfo.is_mobile_game():
+                name_2_mobile_game_info_map[game_data["bizName"]] = gameInfo
 except FileNotFoundError as e:
     logger.error((
         "未找到djc配置文件，是否是下述两种情况之一\n"

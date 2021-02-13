@@ -8,14 +8,26 @@ import requests
 import win32api
 import win32con
 
+from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
 from util import is_first_run, use_by_myself, async_call
 from version import now_version, ver_time
 
 
+def get_update_desc(config: CommonConfig):
+    try:
+        ui = get_update_info(config)
+        if not need_update(now_version, ui.latest_version):
+            return ""
+
+        return f"最新版本为v{ui.latest_version}，请及时更新~"
+    except Exception as e:
+        logger.debug("get_update_desc error", exc_info=e)
+
+
 # 启动时检查是否有更新
-def check_update_on_start(config):
+def check_update_on_start(config: CommonConfig):
     try:
         if not config.check_update_on_start and not config.auto_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
@@ -41,7 +53,7 @@ def check_update_on_start(config):
                 webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
 
 
-def try_manaual_update(ui: UpdateInfo):
+def try_manaual_update(ui: UpdateInfo) -> bool:
     if need_update(now_version, ui.latest_version):
         logger.info(f"当前版本为{now_version}，已有最新版本{ui.latest_version}，更新内容为{ui.update_message}")
 
@@ -79,6 +91,9 @@ def try_manaual_update(ui: UpdateInfo):
             win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
     else:
         logger.info(f"当前版本{now_version}已是最新版本，无需更新")
+
+    has_new_version = need_update(now_version, ui.latest_version)
+    return has_new_version
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):

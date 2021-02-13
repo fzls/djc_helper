@@ -26,6 +26,7 @@ class DjcHelper:
     first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
     first_run_document_flag_file = os.path.join(first_run_dir, "document")
     first_run_use_old_config_flag_file = os.path.join(first_run_dir, "use_old_config")
+    first_run_config_ui_flag_file = os.path.join(first_run_dir, "config_ui")
 
     local_saved_skey_file = os.path.join(cached_dir, ".saved_skey.{}.json")
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
@@ -102,6 +103,7 @@ class DjcHelper:
             1. 使用教程/使用文档.docx
             2. 使用教程/道聚城自动化助手使用视频教程.url
             3. config.toml以及config.toml.example中各个配置项说明
+            4. DNF蚊子腿小助手配置工具.exe
                 """
         loginfo = "首次运行弹出提示查看教程"
 
@@ -116,6 +118,16 @@ class DjcHelper:
         更多信息可查看使用教程/使用文档.docx中背景知识章节中关于继承存档的描述
                 """
         loginfo = "首次运行弹出提示继承以前配置"
+
+        self.show_tip_on_first_run(filename, title, tips, loginfo)
+
+    def show_tip_on_first_run_config_ui(self):
+        filename = self.first_run_config_ui_flag_file
+        title = "配置工具"
+        tips = """
+        现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~
+                """
+        loginfo = "首次运行弹出配置工具提示"
 
         self.show_tip_on_first_run(filename, title, tips, loginfo)
 
@@ -283,6 +295,7 @@ class DjcHelper:
         self.normal_run(user_buy_info)
 
     def check_first_run(self):
+        self.show_tip_on_first_run_config_ui()
         self.show_tip_on_first_run_promot()
         self.show_tip_on_first_run_any()
         self.show_tip_on_first_run_document()
@@ -425,6 +438,7 @@ class DjcHelper:
         self.dnf_helper_chronicle()
 
         if user_buy_info.is_active():
+            show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
             self.paied_activities()
         else:
             if user_buy_info.total_buy_month != 0:
@@ -1700,7 +1714,7 @@ class DjcHelper:
                                   )
 
         # 1000017016: 登录态失效,请重新登录
-        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
+        if res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
             extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today())
 
@@ -1942,7 +1956,7 @@ class DjcHelper:
                                   **extra_params)
 
         # 1000017016: 登录态失效,请重新登录
-        if res["flowRet"]["iRet"] == "700" and res["flowRet"]["sMsg"] == "登录态失效,请重新登录":
+        if res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
             extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
 
@@ -4154,7 +4168,7 @@ class DjcHelper:
                                  user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
                                  user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
             else:
-                logger.warning(color("bold_yellow") + "活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)

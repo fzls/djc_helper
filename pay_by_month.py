@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from dao import BuyInfo, BuyRecord, OrderInfo
-from data_struct import to_json
+from data_struct import to_raw_type
 from db import load_db, save_db
 from log import logger, color
 from upload_lanzouyun import Uploader
@@ -30,7 +30,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
     now_str = now.strftime(datetime_fmt)
 
     for order_info in order_infos:
-        delta = timedelta(hours=6)
+        delta = timedelta(hours=24)
         if has_buy_recently(order_info.qq, delta):
             logger.error(f"{order_info.qq}在{delta}内已经处理过，是否是重复运行了?")
             continue
@@ -72,7 +72,7 @@ def update_buy_user_local(order_infos: List[OrderInfo]):
         save_buy_timestamp(order_info.qq)
 
     with open(local_save_path, 'w', encoding='utf-8') as save_file:
-        json.dump(to_json(buy_users), save_file, indent=2)
+        json.dump(to_raw_type(buy_users), save_file, indent=2, ensure_ascii=False)
 
     total_month = 0
     for qq, user_info in buy_users.items():
@@ -141,8 +141,8 @@ if __name__ == '__main__':
     order_infos = []
     for qq, game_qqs, buy_month in raw_order_infos:
         order_info = OrderInfo()
-        order_info.qq = qq
-        order_info.game_qqs = game_qqs
+        order_info.qq = str(qq)
+        order_info.game_qqs = [str(qq) for qq in game_qqs]
         order_info.buy_month = buy_month
         order_infos.append(order_info)
 

@@ -21,7 +21,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     files_to_copy.extend([
         "config.toml.example",
         "DNF蚊子腿小助手.exe",
-        "DNF蚊子腿小助手配置工具.bat",
+        "DNF蚊子腿小助手配置工具.exe",
+        "双击打开配置文件.bat",
         "清除登录信息_误登录其他账号后请点击这个.bat",
         "bandizip_portable",
         "reference_data",
@@ -30,6 +31,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "使用教程",
         "npp_portable",
         "utils",
+        "icons",
     ])
     files_to_copy = sorted(files_to_copy)
 

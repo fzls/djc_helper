@@ -1,3 +1,4 @@
+import pathlib
 import platform
 import random
 import socket
@@ -349,6 +350,60 @@ def human_readable_size(num, suffix='B'):
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
+
+
+KiB = 1024
+MiB = 1024 * KiB
+GiB = 1024 * MiB
+TiB = 1024 * GiB
+
+
+@try_except
+def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB):
+    # 检查一下是否存在目录
+    if not os.path.isdir(dir_name):
+        return
+
+    hrs = human_readable_size
+
+    logger.info(color("bold_green") + f"尝试清理日志目录({dir_name})，避免日志目录越来越大~")
+
+    logs_size = get_directory_size(dir_name)
+    if logs_size <= max_logs_size:
+        logger.info(f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理")
+        return
+
+    logger.info(f"当前日志目录大小为{hrs(logs_size)}，超出设定最大值为{hrs(max_logs_size)}，将按照时间顺序移除部分日志，直至不高于设定清理后剩余大小{hrs(keep_logs_size)}")
+
+    # 获取全部日志文件，并按照时间升序排列
+    logs = list(pathlib.Path(dir_name).glob('**/*'))
+
+    def sort_key(f: pathlib.Path):
+        return f.stat().st_mtime
+
+    logs.sort(key=sort_key)
+
+    # 清除日志，直至剩余日志大小低于设定值
+    remaining_logs_size = logs_size
+    remove_log_count = 0
+    remove_log_size = 0
+    for log_file in logs:
+        stat = log_file.stat()
+        remaining_logs_size -= stat.st_size
+        remove_log_count += 1
+        remove_log_size += stat.st_size
+
+        os.remove(f"{log_file}")
+        logger.info(f"移除第{remove_log_count}个日志:{log_file.name} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}")
+
+        if remaining_logs_size <= keep_logs_size:
+            logger.info(color("bold_green") + f"当前剩余日志大小为{hrs(remaining_logs_size)}，将停止日志清理流程~ 本次累计清理{remove_log_count}个日志文件，总大小为{hrs(remove_log_size)}")
+            break
+
+
+def get_directory_size(dir_name: str) -> int:
+    root_directory = pathlib.Path(dir_name)
+    return sum(f.stat().st_size for f in root_directory.glob('**/*') if f.is_file())
 
 
 def get_random_face():

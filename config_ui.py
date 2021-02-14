@@ -702,9 +702,24 @@ class AccountConfigUi(QWidget):
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
+
+        # 特殊处理下道聚城兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
+        if len(cfg.exchange_items) == 0:
+            default_items = [
+                ("753", "装备品级调整箱（5个）"),
+                ("755", "魔界抗疲劳秘药（10点）")
+            ]
+            for iGoodsId, sGoodsName in default_items:
+                item = ExchangeItemConfig()
+                item.iGoodsId = iGoodsId
+                item.sGoodsName = sGoodsName
+                item.count = 0
+                cfg.exchange_items.append(item)
+
         self.exchange_items = []
         for exchange_item in cfg.exchange_items:
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
+
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)

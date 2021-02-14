@@ -56,6 +56,8 @@ if __name__ == '__main__':
         # "QQ号",  # QQ昵称
     ]
 
+    new_buy_users = [str(qq) for qq in new_buy_users]
+
     add_user(new_buy_users)
 
     AlwaysUpload = False

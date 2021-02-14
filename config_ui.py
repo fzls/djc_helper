@@ -369,6 +369,7 @@ class ConfigUi(QFrame):
             account_ui = AccountConfigUi(account_config)
             self.accounts.append(account_ui)
             self.tabs.addTab(account_ui, account_name)
+            self.tabs.setCurrentWidget(account_ui)
 
             show_message("添加成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
 

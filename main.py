@@ -1,7 +1,10 @@
+import argparse
+
+from log import log_directory
 from main_def import *
 from show_usage import *
 from usage_count import *
-import argparse
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -9,6 +12,7 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
 
 def main():
     args = parse_args()
@@ -49,6 +53,9 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
+
+    clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
+    clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
 
     check_all_skey_and_pskey(cfg)
 

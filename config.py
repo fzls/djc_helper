@@ -448,6 +448,10 @@ class CommonConfig(ConfigInterface):
         self.run_in_headless_mode = False
         # 日志等级, 级别从低到高依次为 "debug", "info", "warning", "error", "critical"
         self.log_level = "info"
+        # 日志目录最大允许大小（单位为MiB），当超出该大小时将进行清理
+        self.max_logs_size = 1024
+        # 日志目录保留大小（单位为Mib），每次清理时将按时间顺序清理日志，直至剩余日志大小不超过该值
+        self.keep_logs_size = 512
         # 是否检查更新
         self.check_update_on_start = True
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"

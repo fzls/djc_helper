@@ -8,7 +8,7 @@ from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
-from update import check_update_on_start, get_update_info, get_update_desc
+from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader, lanzou_cookie
 from util import *
 from version import *
@@ -820,14 +820,6 @@ def change_title(dlcInfo="", need_append_new_version_info=True):
 
     set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}"
     os.system(set_title_cmd)
-
-    # 尝试异步添加新版本提示
-    def cb():
-        if need_append_new_version_info:
-            new_cmd = set_title_cmd + f" {get_update_desc(config().common)}"
-            os.system(new_cmd)
-
-    async_call(cb)
 
 
 def exists_auto_updater_dlc():

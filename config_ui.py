@@ -369,6 +369,7 @@ class ConfigUi(QFrame):
             account_ui = AccountConfigUi(account_config)
             self.accounts.append(account_ui)
             self.tabs.addTab(account_ui, account_name)
+            self.tabs.setCurrentWidget(account_ui)
 
             show_message("添加成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
 
@@ -702,9 +703,12 @@ class AccountConfigUi(QWidget):
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
+
+        self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = []
         for exchange_item in cfg.exchange_items:
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
+
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
@@ -754,6 +758,7 @@ class AccountConfigUi(QWidget):
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)
         self.mobile_game_role_info.update_config(cfg.mobile_game_role_info)
+        self.try_set_default_exchange_items_for_cfg(cfg)
         for idx, exchange_item in enumerate(self.exchange_items):
             exchange_item.update_config(cfg.exchange_items[idx])
         self.ark_lottery.update_config(cfg.ark_lottery)
@@ -767,6 +772,21 @@ class AccountConfigUi(QWidget):
             if not hasattr(cfg, attr):
                 continue
             delattr(cfg, attr)
+
+    def try_set_default_exchange_items_for_cfg(self, cfg:AccountConfig):
+        # 特殊处理下道聚城兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
+        if len(cfg.exchange_items) == 0:
+            default_items = [
+                ("753", "装备品级调整箱（5个）"),
+                ("755", "魔界抗疲劳秘药（10点）")
+            ]
+            for iGoodsId, sGoodsName in default_items:
+                item = ExchangeItemConfig()
+                item.iGoodsId = iGoodsId
+                item.sGoodsName = sGoodsName
+                item.count = 0
+                cfg.exchange_items.append(item)
+
 
     def on_login_mode_change(self, text):
         self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])

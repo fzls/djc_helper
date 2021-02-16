@@ -4032,7 +4032,8 @@ class DjcHelper:
             points = self.query_firecrackers_points()
             logger.info(color("bold_cyan") + f"当前积分为{points}，将进行{points // 2}次抽奖")
             for i in range(points // 2):
-                self.firecrackers_op(f"第{i + 1}次积分抽奖", "733134")
+                self.firecrackers_op(f"第{i + 1}次积分抽奖，并等待五秒", "733134")
+                time.sleep(5)
         else:
             logger.info(color("bold_green") + "如果已经兑换完所有奖励，建议开启使用积分抽奖功能")
 

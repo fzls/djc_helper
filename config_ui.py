@@ -294,7 +294,7 @@ class ConfigUi(QFrame):
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        os.popen("支持一下.png")
+        subprocess.Popen("支持一下.png", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def check_update(self, checked=False):
         cfg = self.to_config().common

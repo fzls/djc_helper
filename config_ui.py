@@ -189,13 +189,6 @@ class ConfigUi(QFrame):
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 
-        # 尝试异步添加新版本提示
-        def cb():
-            new_title = title + f" {get_update_desc(self.to_config().common)}"
-            self.setWindowTitle(new_title)
-
-        async_call(cb)
-
         self.setStyleSheet(f"font-family: Microsoft YaHei")
         self.setWindowIcon(QIcon("icons/config_ui.ico"))
 
@@ -301,7 +294,7 @@ class ConfigUi(QFrame):
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        os.popen("支持一下.png")
+        subprocess.Popen("支持一下.png", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def check_update(self, checked=False):
         cfg = self.to_config().common
@@ -773,7 +766,7 @@ class AccountConfigUi(QWidget):
                 continue
             delattr(cfg, attr)
 
-    def try_set_default_exchange_items_for_cfg(self, cfg:AccountConfig):
+    def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
         # 特殊处理下道聚城兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
         if len(cfg.exchange_items) == 0:
             default_items = [
@@ -786,7 +779,6 @@ class AccountConfigUi(QWidget):
                 item.sGoodsName = sGoodsName
                 item.count = 0
                 cfg.exchange_items.append(item)
-
 
     def on_login_mode_change(self, text):
         self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])

@@ -8,7 +8,7 @@ from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
-from update import check_update_on_start, get_update_info, get_update_desc
+from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader, lanzou_cookie
 from util import *
 from version import *
@@ -747,26 +747,31 @@ def get_user_buy_info(cfg: Config):
         max_present_times = datetime.timedelta(days=2 * 31)
 
         free_start_time = parse_time("2021-02-08 00:00:00")
-        if user_buy_info.total_buy_month == 0:
-            # 如果从未购买过，过期时间改为免费开始时间点
-            user_buy_info.expire_at = format_time(free_start_time)
 
+        # 计算自2.8开始累积未付费时长
         now = datetime.datetime.now()
         since_start_time = now - free_start_time
         not_paied_time = max(since_start_time - datetime.timedelta(days=user_buy_info.total_buy_month * 31), datetime.timedelta())
 
+        # 计算至今剩余的免费时长
         present_times = datetime.timedelta()
         if not_paied_time < max_present_times:
-            # 如果当前到2.7号的未付费时长少于两个月，则补齐差值到过期时间
+            # 如果当前到2.8号的未付费时长少于两个月，则补齐差值到过期时间
             present_times = max_present_times - not_paied_time
 
-        user_buy_info.expire_at = format_time(parse_time(user_buy_info.expire_at) + present_times)
+        if user_buy_info.total_buy_month == 0:
+            # 如果从未购买过，过期时间改为现在
+            expire_at_time = now
+        else:
+            expire_at_time = parse_time(user_buy_info.expire_at)
+
+        user_buy_info.expire_at = format_time(expire_at_time + present_times)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
             "buy_month": 2,
             "buy_at": free_start_time,
             "reason": "自动更新DLC赠送"
         }))
-        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}")
+        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}，实际过期时间为{user_buy_info.expire_at}")
 
     return user_buy_info
 
@@ -820,14 +825,6 @@ def change_title(dlcInfo="", need_append_new_version_info=True):
 
     set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}"
     os.system(set_title_cmd)
-
-    # 尝试异步添加新版本提示
-    def cb():
-        if need_append_new_version_info:
-            new_cmd = set_title_cmd + f" {get_update_desc(config().common)}"
-            os.system(new_cmd)
-
-    async_call(cb)
 
 
 def exists_auto_updater_dlc():

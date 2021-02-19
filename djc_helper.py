@@ -1,5 +1,4 @@
 import math
-import random
 import string
 import subprocess
 from urllib.parse import quote_plus
@@ -3030,11 +3029,6 @@ class DjcHelper:
 
         self.check_majieluo()
 
-        def query_stone_count():
-            res = self.majieluo_op("查询当前时间引导石数量", "734106", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
-            return int(info.sOutValue1)
-
         friend_db_key = "majieluoFriendQQs"
         local_invited_friends_db_key = "majieluo_local_invited_friend"
         invited_by_other_db_key = "majieluo_invited_by_other_list"
@@ -3208,7 +3202,7 @@ class DjcHelper:
         self.majieluo_op("接受好友赠送邀请，领取黑钻", "733886", inviteId="239125", receiverUrl=quote_plus("https://game.gtimg.cn/images/dnf/cp/a20210121welfare/share.png"))
 
         # 提取得福利
-        stoneCount = query_stone_count()
+        stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
@@ -3232,6 +3226,17 @@ class DjcHelper:
             self.majieluo_op("提取福利（1000）", "734065")
             self.majieluo_op("提取福利（700、800、900）", "734064")
             self.majieluo_op("提取福利（300、400、500、600）", "733888")
+
+    def query_stone_count(self):
+        count = 0
+        try:
+            res = self.majieluo_op("查询当前时间引导石数量", "734106", print_res=False)
+            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            count = int(info.sOutValue1)
+        except Exception as e:
+            pass
+
+        return count
 
     def query_majieluo_card_info(self):
         res = self.majieluo_op("查询信息", "733883", print_res=False)

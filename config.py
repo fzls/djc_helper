@@ -263,7 +263,7 @@ class AccountConfig(ConfigInterface):
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
-        self.login_mode = "by_hand"
+        self.login_mode = "qr_login"
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
         self.cannot_bind_dnf = False
         # 心悦app理财礼卡活动选择的理财卡类型。最多生效两个~。可选项分别为：体验版周卡、升级版周卡、体验版月卡、升级版月卡。推荐最后俩月卡，收益最高

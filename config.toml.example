@@ -897,7 +897,7 @@ hello_id = ""
 # 燃放爆竹相关配置
 [account_configs.firecrackers]
 # 是否开启抽奖，建议兑换完所有道具后再开启
-chronicle_lottery = false
+enable_lottery = false
 
 ## 兑换道具信息，将按照配置的顺序去尝试兑换，只有在前面的兑换完次数后才会尝试兑换后面的。
 ## index: 奖励index

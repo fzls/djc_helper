@@ -305,6 +305,8 @@ def check_some_exception(e) -> str:
 
     return msg
 
+def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
 def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()

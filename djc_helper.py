@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls
+from urls import Urls, search_act
 from util import show_head_line, get_this_week_monday
 
 
@@ -4128,7 +4128,15 @@ class DjcHelper:
     def getMoneyFlowTime(self, year, month, day, hour, minute, second):
         return f"{year:04d}{month:02d}{day:02d}{hour:02d}{minute:02d}{second:02d}"
 
-    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", **data_extra_params):
+    def show_amesvr_act_info(self, activity_op_func):
+        activity_op_func("查询活动信息", "", show_info_only=True)
+
+    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", show_info_only=False, **data_extra_params):
+        if show_info_only:
+            act = search_act(iActivityId)
+            logger.info(color("bold_green") + f"活动 {act.sActivityName}({act.iActivityId}) 开始时间为 {act.dtBeginTime} 结束时间为 {act.dtEndTime}，距离结束还有 {get_remaining_time(act.dtEndTime)}")
+            return
+
         data = self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),
                            iActivityId=iActivityId, iFlowId=iFlowId, **data_extra_params)

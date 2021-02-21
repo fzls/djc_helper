@@ -10,6 +10,7 @@ from setting import *
 from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader, lanzou_cookie
+from urls import Urls
 from util import *
 from version import *
 
@@ -404,6 +405,10 @@ def show_accounts_status(cfg, ctx):
     _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
+
+    logger.info("")
+    _show_head_line("部分短期活动信息")
+    Urls().show_current_valid_act_infos()
 
 
 def try_join_xinyue_team(cfg):

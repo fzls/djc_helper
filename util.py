@@ -276,9 +276,10 @@ def use_by_myself():
 def try_except(fun):
     def decorator(*args, **kwargs):
         try:
-            fun(*args, **kwargs)
+            return fun(*args, **kwargs)
         except Exception as e:
             logger.error(f"执行{fun.__name__}出错了" + check_some_exception(e), exc_info=e)
+            return None
 
     return decorator
 

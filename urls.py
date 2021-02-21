@@ -3,7 +3,8 @@ import json
 import requests
 
 from dao import AmsActInfo
-from log import logger
+from log import logger, color
+from util import get_remaining_time, try_except, is_act_expired
 
 
 class Urls:
@@ -155,7 +156,27 @@ class Urls:
         # dnf论坛签到，额外参数：formhash: 论坛formhash
         self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
 
+    def show_current_valid_act_infos(self):
+        act_infos = []
 
+        for attr_name, act_id in self.__dict__.items():
+            if not attr_name.startswith("iActivityId_"):
+                continue
+
+            act = search_act(act_id)
+            if act is None:
+                continue
+
+            if is_act_expired(act.dtEndTime):
+                continue
+
+            act_infos.append(format_act(act))
+
+        for act_info in act_infos:
+            logger.info(color("bold_green") + act_info)
+
+
+@try_except
 def search_act(actId):
     actId = str(actId)
     actUrls = [
@@ -186,19 +207,25 @@ def search_act(actId):
 
 
 def get_act_desc(actId):
-    act_desc = None
-
-    try:
-        act_desc = search_act(urls.iActivityId_dnf_bbs)
-    except Exception as e:
-        logger.debug("get_act_desc 出错了", exc_info=e)
-
-    if act_desc is None:
+    act = search_act(actId)
+    if act is None:
         return ""
 
-    return act_desc.description()
+    return format_act(act)
+
+
+def format_act(act: AmsActInfo):
+    msg = f"活动 {act.sActivityName}({act.iActivityId})"
+
+    if act.dtEndTime != "":
+        msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，距离结束还有 {get_remaining_time(act.dtEndTime)}"
+    else:
+        msg += " 尚无已知的开始和结束时间"
+
+    return msg
 
 
 if __name__ == '__main__':
     urls = Urls()
     print(search_act(urls.iActivityId_dnf_bbs).description())
+    urls.show_current_valid_act_infos()

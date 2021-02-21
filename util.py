@@ -306,9 +306,13 @@ def check_some_exception(e) -> str:
     return msg
 
 
-def show_end_time(end_time):
+def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()
+
+
+def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     # end_time = "2021-02-23 00:00:00"
-    remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S") - datetime.datetime.now()
+    remaining_time = get_remaining_time(end_time, time_fmt)
     logger.info(color("bold_black") + f"活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
 

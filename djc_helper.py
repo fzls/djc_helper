@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, search_act
+from urls import Urls, get_act_desc
 from util import show_head_line, get_this_week_monday
 
 
@@ -4158,8 +4158,7 @@ class DjcHelper:
 
     def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", show_info_only=False, **data_extra_params):
         if show_info_only:
-            act = search_act(iActivityId)
-            logger.info(color("bold_green") + f"活动 {act.sActivityName}({act.iActivityId}) 开始时间为 {act.dtBeginTime} 结束时间为 {act.dtEndTime}，距离结束还有 {get_remaining_time(act.dtEndTime)}")
+            self.show_act_info(iActivityId)
             return
 
         data = self.format(self.urls.amesvr_raw_data,
@@ -4170,6 +4169,9 @@ class DjcHelper:
                          amesvr_host=amesvr_host, sServiceDepartment=sServiceDepartment, sServiceType=sServiceType,
                          iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
                          print_res=print_res, extra_cookies=extra_cookies)
+
+    def show_act_info(self, iActivityId):
+        logger.info(color("bold_green") + get_act_desc(iActivityId))
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"

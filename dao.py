@@ -760,6 +760,3 @@ class AmsActInfo(ConfigInterface):
             "wx_appid": "wxb30cf8a19c708c2a"
         }
         self.flows = {}
-
-    def description(self):
-        return f"{self.iActivityId}-{self.sActivityName}-{self.dtBeginTime}-{self.dtEndTime}"

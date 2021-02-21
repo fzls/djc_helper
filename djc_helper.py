@@ -248,7 +248,12 @@ class DjcHelper:
             return
 
         with open(self.get_local_saved_skey_file(), "r", encoding="utf-8") as f:
-            loginResult = json.load(f)
+            try:
+                loginResult = json.load(f)
+            except json.decoder.JSONDecodeError as e:
+                logger.error(f"账号 {self.cfg.name} 的skey缓存已损坏，将视为已过期")
+                return
+
             self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
             self.vuserid = loginResult.get("vuserid", "")
             logger.debug(f"读取本地缓存的skey信息，具体内容如下：{loginResult}")

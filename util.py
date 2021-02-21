@@ -95,7 +95,7 @@ def truncate(msg, expect_width) -> str:
     return ''.join(truncated)
 
 
-def padLeftRight(msg, target_size, pad_char=" ", need_truncate=False):
+def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=False):
     msg = str(msg)
     if need_truncate:
         msg = truncate(msg, target_size)
@@ -106,7 +106,12 @@ def padLeftRight(msg, target_size, pad_char=" ", need_truncate=False):
         pad_left_len = total // 2
         pad_right_len = total - pad_left_len
 
-    return pad_char * pad_left_len + msg + pad_char * pad_right_len
+    if mode == "middle":
+        return pad_char * pad_left_len + msg + pad_char * pad_right_len
+    elif mode == "left":
+        return msg + pad_char * (pad_left_len + pad_right_len)
+    else:
+        return pad_char * (pad_left_len + pad_right_len) + msg
 
 
 def tableify(cols, colSizes, delimiter=' ', need_truncate=False):

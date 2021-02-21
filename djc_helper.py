@@ -843,6 +843,7 @@ class DjcHelper:
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
+        self.show_amesvr_act_info(self.xinyue_battle_ground_op)
 
         if not self.cfg.function_switches.get_xinyue:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
@@ -1092,19 +1093,20 @@ class DjcHelper:
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
         return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid)
 
-    def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid=""):
+    def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
         if lqlevel < 5:
             lqlevel = 1
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "xinyue", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20181101rights/",
                                    package_id=package_id, lqlevel=lqlevel, teamid=teamid,
-                                   )
+                                   **extra_params)
 
     # DNF进击吧赛利亚
     def xinyue_sailiyam(self):
         # https://xinyue.qq.com/act/a20201023sailiya/index.html
         show_head_line("DNF进击吧赛利亚")
+        self.show_amesvr_act_info(self.xinyue_sailiyam_op)
 
         def sleep_to_avoid_ban():
             logger.info("等待五秒，防止提示操作太快")
@@ -1413,6 +1415,7 @@ class DjcHelper:
     def wegame_guoqing(self):
         # https://dnf.qq.com/lbact/a20200922wegame/index.html
         show_head_line("wegame国庆活动【秋风送爽关怀常伴】")
+        self.show_amesvr_act_info(self.wegame_op)
 
         if not self.cfg.function_switches.get_wegame_guoqing or self.disable_most_activities():
             logger.warning("未启用领取wegame国庆活动功能，将跳过")
@@ -1491,6 +1494,7 @@ class DjcHelper:
     def dnf_1224(self):
         # https://dnf.qq.com/lbact/a20201224aggregate/index.html
         show_head_line("史诗之路来袭活动合集")
+        self.show_amesvr_act_info(self.dnf_1224_op)
 
         if not self.cfg.function_switches.get_dnf_1224 or self.disable_most_activities():
             logger.warning("未启用领取史诗之路来袭活动合集功能，将跳过")
@@ -1525,6 +1529,7 @@ class DjcHelper:
     def dnf_shanguang(self):
         # http://xinyue.qq.com/act/a20201221sgbpc/index.html
         show_head_line("DNF闪光杯第三期")
+        self.show_amesvr_act_info(self.dnf_shanguang_op)
 
         if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
             logger.warning("未启用领取DNF闪光杯第三期活动合集功能，将跳过")
@@ -1655,6 +1660,7 @@ class DjcHelper:
     def dnf_female_mage_awaken(self):
         # https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006
         show_head_line("10月女法师三觉")
+        self.show_amesvr_act_info(self.dnf_female_mage_awaken_op)
 
         if not self.cfg.function_switches.get_dnf_female_mage_awaken or self.disable_most_activities():
             logger.warning("未启用领取10月女法师三觉活动合集功能，将跳过")
@@ -1698,7 +1704,7 @@ class DjcHelper:
         #
         # return checkin_days
 
-    def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True):
+    def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
@@ -1710,10 +1716,10 @@ class DjcHelper:
                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                   uin=qq, skey=self.cfg.account_info.skey,
                                   nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                  )
+                                  **extra_params)
 
         # 1000017016: 登录态失效,请重新登录
-        if res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
+        if res is not None and res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
             extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today())
 
@@ -1821,7 +1827,7 @@ class DjcHelper:
     def dnf_rank_receive_diamond(self, gift_name, gift_id):
         return self.dnf_rank_op(f'领取黑钻-{gift_name}', self.urls.rank_receive_diamond, gift_id=gift_id)
 
-    def dnf_rank_receive_diamond_amesvr(self, ctx):
+    def dnf_rank_receive_diamond_amesvr(self, ctx, **extra_params):
         try:
             iActivityId = self.urls.iActivityId_dnf_rank
             iFlowId = "723192"
@@ -1835,7 +1841,7 @@ class DjcHelper:
                                       sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
                                       uin=qq, skey=self.cfg.account_info.skey,
                                       nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                      )
+                                      **extra_params)
         except Exception as e:
             logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
 
@@ -1849,6 +1855,7 @@ class DjcHelper:
     def dnf_helper(self):
         # https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew
         show_head_line("dnf助手 牛气冲天迎新年")
+        self.show_amesvr_act_info(self.dnf_helper_op)
 
         if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
             logger.warning("未启用领取dnf助手活动功能，将跳过")
@@ -1955,7 +1962,7 @@ class DjcHelper:
                                   **extra_params)
 
         # 1000017016: 登录态失效,请重新登录
-        if res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
+        if res is not None and res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
             extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
 
@@ -2428,6 +2435,7 @@ class DjcHelper:
     def dnf_carnival(self):
         # https://dnf.qq.com/cp/a20201203carnival/index.html
         show_head_line("2020DNF嘉年华页面主页面签到")
+        self.show_amesvr_act_info(self.dnf_carnival_op)
 
         if not self.cfg.function_switches.get_dnf_carnival or self.disable_most_activities():
             logger.warning("未启用领取2020DNF嘉年华页面主页面签到活动合集功能，将跳过")
@@ -2455,8 +2463,9 @@ class DjcHelper:
             # 仅限测试模式运行
             return
 
-        # # https://dnf.qq.com/cp/a20201203carnival/index.html
-        # show_head_line("2020DNF嘉年华直播")
+        # https://dnf.qq.com/cp/a20201203carnival/index.html
+        show_head_line("2020DNF嘉年华直播")
+        self.show_amesvr_act_info(self.dnf_carnival_live_op)
 
         if not self.cfg.function_switches.get_dnf_carnival_live or self.disable_most_activities():
             logger.warning("未启用领取2020DNF嘉年华直播活动合集功能，将跳过")
@@ -2514,6 +2523,7 @@ class DjcHelper:
     def dnf_welfare(self):
         # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
+        self.show_amesvr_act_info(self.dnf_welfare_op)
 
         if not self.cfg.function_switches.get_dnf_welfare or self.disable_most_activities():
             logger.warning("未启用领取DNF福利中心兑换活动功能，将跳过")
@@ -2605,7 +2615,7 @@ class DjcHelper:
                                    siActivityId=siActivityId, sContent=sContent,
                                    **extra_params)
 
-    def dnf_welfare_login_gifts_op(self, ctx, iFlowId, siActivityId="", print_res=True):
+    def dnf_welfare_login_gifts_op(self, ctx, iFlowId, siActivityId="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
@@ -2617,13 +2627,15 @@ class DjcHelper:
                                    sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                                    sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                                    md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
-                                   siActivityId=siActivityId)
+                                   siActivityId=siActivityId,
+                                   **extra_params)
 
     # --------------------------------------------DNF共创投票--------------------------------------------
     @try_except
     def dnf_dianzan(self):
         # https://dnf.qq.com/cp/a20201126version/index.shtml
         show_head_line("DNF共创投票")
+        self.show_amesvr_act_info(self.dnf_dianzan_op)
 
         if not self.cfg.function_switches.get_dnf_dianzan or self.disable_most_activities():
             logger.warning("未启用领取DNF共创投票活动功能，将跳过")
@@ -2770,6 +2782,7 @@ class DjcHelper:
 
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
+        self.show_amesvr_act_info(self.xinyue_financing_op)
 
         if not self.cfg.function_switches.get_xinyue_financing:
             logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
@@ -2906,20 +2919,22 @@ class DjcHelper:
         except Exception as e:
             logger.error("处理心悦app理财礼卡出错了", exc_info=e)
 
-    def xinyue_financing_op(self, ctx, iFlowId, print_res=True):
+    def xinyue_financing_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_xinyue_financing
 
         plat = 3  # app
         extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x27"')
 
         return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-                                   plat=plat, extraStr=extraStr)
+                                   plat=plat, extraStr=extraStr,
+                                   **extra_params)
 
     # --------------------------------------------dnf漂流瓶--------------------------------------------
     @try_except
     def dnf_drift(self):
         # https://dnf.qq.com/cp/a20201211driftm/index.html
         show_head_line("dnf漂流瓶")
+        self.show_amesvr_act_info(self.dnf_drift_op)
 
         if not self.cfg.function_switches.get_dnf_drift or self.disable_most_activities():
             logger.warning("未启用领取dnf漂流瓶活动功能，将跳过")
@@ -3022,6 +3037,7 @@ class DjcHelper:
     def majieluo(self):
         # https://dnf.qq.com/cp/a20210121welfare/index.html
         show_head_line("DNF马杰洛的规划第三期")
+        self.show_amesvr_act_info(self.majieluo_op)
 
         if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
             logger.warning("未启用领取DNF马杰洛的规划第三期活动功能，将跳过")
@@ -3274,6 +3290,7 @@ class DjcHelper:
     def warm_winter(self):
         # https://dnf.qq.com/lbact/a20200911lbz3dns/index.html
         show_head_line("暖冬好礼活动")
+        self.show_amesvr_act_info(self.warm_winter_op)
 
         if not self.cfg.function_switches.get_warm_winter or self.disable_most_activities():
             logger.warning("未启用领取暖冬好礼活动功能，将跳过")
@@ -3330,6 +3347,7 @@ class DjcHelper:
     def youfei(self):
         # https://dnf.qq.com/cp/a20201227youfeim/index.html
         show_head_line("qq视频-看江湖有翡")
+        self.show_amesvr_act_info(self.youfei_op)
 
         if not self.cfg.function_switches.get_youfei or self.disable_most_activities():
             logger.warning("未启用领取qq视频-看江湖有翡活动合集功能，将跳过")
@@ -3367,6 +3385,7 @@ class DjcHelper:
     def dnf_bbs_signin(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf官方论坛签到")
+        self.show_amesvr_act_info(self.dnf_bbs_op)
 
         if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
             logger.warning("未启用领取dnf官方论坛签到活动合集功能，将跳过")
@@ -3520,6 +3539,7 @@ class DjcHelper:
     def dnf_spring(self):
         # https://xinyue.qq.com/act/a20210104cjhdh5/index.html
         show_head_line("DNF新春夺宝大作战")
+        self.show_amesvr_act_info(self.dnf_spring_op)
 
         if not self.cfg.function_switches.get_dnf_spring or self.disable_most_activities():
             logger.warning("未启用领取DNF新春夺宝大作战活动合集功能，将跳过")
@@ -3618,6 +3638,7 @@ class DjcHelper:
     def dnf_0121(self):
         # https://dnf.qq.com/cp/a20210121index/
         show_head_line("DNF0121新春落地页活动")
+        self.show_amesvr_act_info(self.dnf_0121_op)
 
         if not self.cfg.function_switches.get_dnf_0121 or self.disable_most_activities():
             logger.warning("未启用领取DNF0121新春落地页活动功能，将跳过")
@@ -3663,6 +3684,7 @@ class DjcHelper:
     def wegame_spring(self):
         # https://dnf.qq.com/lbact/a20210121wegamepc/index.html
         show_head_line("WeGame春节活动")
+        self.show_amesvr_act_info(self.wegame_spring_op)
 
         if not self.cfg.function_switches.get_wegame_spring or self.disable_most_activities():
             logger.warning("未启用领取WeGame春节活动功能，将跳过")
@@ -3717,6 +3739,7 @@ class DjcHelper:
     def spring_fudai(self):
         # https://dnf.qq.com/cp/a20210108luckym/index.html
         show_head_line("新春福袋大作战")
+        self.show_amesvr_act_info(self.spring_fudai_op)
 
         if not self.cfg.function_switches.get_spring_fudai or self.disable_most_activities():
             logger.warning("未启用领取新春福袋大作战功能，将跳过")
@@ -3856,6 +3879,7 @@ class DjcHelper:
     def spring_collection(self):
         # https://dnf.qq.com/lbact/a20210121hdhj/index.html
         show_head_line("DNF新春福利集合站")
+        self.show_amesvr_act_info(self.spring_collection_op)
 
         if not self.cfg.function_switches.get_spring_collection or self.disable_most_activities():
             logger.warning("未启用领取DNF新春福利集合站功能，将跳过")
@@ -3891,6 +3915,7 @@ class DjcHelper:
     def firecrackers(self):
         # https://dnf.qq.com/cp/a20210118rfbz/index.html
         show_head_line("燃放爆竹活动")
+        self.show_amesvr_act_info(self.firecrackers_op)
 
         if not self.cfg.function_switches.get_firecrackers or self.disable_most_activities():
             logger.warning("未启用领取燃放爆竹活动功能，将跳过")

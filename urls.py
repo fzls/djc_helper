@@ -229,5 +229,4 @@ def format_act(act: AmsActInfo):
 
 if __name__ == '__main__':
     urls = Urls()
-    print(search_act(urls.iActivityId_dnf_bbs).description())
     urls.show_current_valid_act_infos()

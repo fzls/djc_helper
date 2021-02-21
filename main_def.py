@@ -359,6 +359,15 @@ def count_with_color(card_count, show_color, show_width=3):
 
 
 def show_accounts_status(cfg, ctx):
+    logger.info("")
+    _show_head_line("部分短期活动信息")
+    Urls().show_current_valid_act_infos()
+    
+    logger.info("")
+    _show_head_line("付费相关信息")
+    user_buy_info = get_user_buy_info(cfg)
+    show_buy_info(user_buy_info)
+
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)
@@ -400,15 +409,6 @@ def show_accounts_status(cfg, ctx):
 
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, shanguang_equip_count, sailiya_cards, firecrackers_points, stone_count]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
-
-    logger.info("")
-    _show_head_line("付费相关信息")
-    user_buy_info = get_user_buy_info(cfg)
-    show_buy_info(user_buy_info)
-
-    logger.info("")
-    _show_head_line("部分短期活动信息")
-    Urls().show_current_valid_act_infos()
 
 
 def try_join_xinyue_team(cfg):

@@ -735,6 +735,11 @@ def has_buy_auto_updater_dlc(cfg: Config):
                 if qq in buy_users:
                     return True
 
+            logger.debug((
+                "DLC购买调试日志：\n"
+                f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
+                f"用户列表={buy_users}\n"
+            ))
             return False
         except Exception as e:
             logFunc = logger.debug

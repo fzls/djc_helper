@@ -3,11 +3,15 @@ import os
 
 from log import logger
 from upload_lanzouyun import Uploader
+from util import use_by_myself
 
 local_save_path = "utils/buy_auto_updater_users.txt"
 
 
 def update_buy_user_local(new_buy_users) -> []:
+    if not use_by_myself():
+        return []
+
     buy_users = []
     if os.path.exists(local_save_path):
         with open(local_save_path, 'r', encoding='utf-8') as data_file:

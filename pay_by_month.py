@@ -8,7 +8,7 @@ from data_struct import to_raw_type
 from db import load_db, save_db
 from log import logger, color
 from upload_lanzouyun import Uploader
-from util import format_time, parse_time
+from util import format_time, parse_time, use_by_myself
 
 local_save_path = "utils/user_monthly_pay_info.txt"
 
@@ -123,6 +123,9 @@ def upload():
 
 
 def process_orders(order_infos: List[OrderInfo]):
+    if not use_by_myself():
+        return
+
     update_buy_user_local(order_infos)
     upload()
 

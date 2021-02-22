@@ -724,10 +724,10 @@ class AccountConfigUi(QWidget):
         self.checkbox_enable_majieluo_invite_friend = create_checkbox(cfg.enable_majieluo_invite_friend)
         form_layout.addRow("马杰洛活动是否尝试黑钻送好友（不会实际发消息）", self.checkbox_enable_majieluo_invite_friend)
 
-        self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678")
+        self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_formhash字段的说明")
         form_layout.addRow("dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
 
-        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串")
+        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_cookie字段的说明")
         form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)

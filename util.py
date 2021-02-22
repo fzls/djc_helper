@@ -286,8 +286,8 @@ def try_except(fun):
 def check_some_exception(e) -> str:
     msg = ""
 
-    def format_msg(msg):
-        return "\n" + color("bold_yellow") + msg + asciiReset
+    def format_msg(msg, _color="bold_yellow"):
+        return "\n" + color(_color) + msg + asciiReset
 
     # 特判一些错误
     if type(e) is KeyError and e.args[0] == 'modRet':
@@ -298,6 +298,10 @@ def check_some_exception(e) -> str:
         msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<")
     elif type(e) in [selenium.common.exceptions.TimeoutException, ]:
         msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.toml.example将登录超时相关配置加到config.toml中，并调大超时时间")
+
+    from network import last_process_result
+    if last_process_result is not None:
+        msg += format_msg(f"最近一次的请求结果为：{last_process_result}", "bold_green")
 
     return msg
 

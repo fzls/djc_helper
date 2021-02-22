@@ -81,6 +81,10 @@ def try_request(request_fn, retryCfg, check_fn=None):
     logger.error(f"重试{retryCfg.max_retry_count}次后仍失败")
 
 
+# 每次处理完备份一次最后的报错，方便出错时打印出来~
+last_process_result = None
+
+
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
     if res.encoding not in ['gbk']:
         # 某些特殊编码不要转，否则会显示乱码
@@ -108,6 +112,9 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         # 如果数据需要调整，则打印调整后数据，并额外使用调试级别打印原始数据
         logFunc(f"{ctx}\t{pretty_json(processed_data, pretty)}")
         logger.debug(f"{ctx}(原始数据)\t{pretty_json(data, pretty)}")
+
+    global last_process_result
+    last_process_result = data
 
     return data
 

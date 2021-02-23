@@ -315,6 +315,13 @@ class ConfigUi(QFrame):
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
             QCoreApplication.exit()
 
+    def get_djc_helper_path(self):
+        exe_path = "DNF蚊子腿小助手.exe"
+        if run_from_src():
+            exe_path = "main.py"
+
+        return os.path.realpath(exe_path)
+
     def popen(self, args, cwd="."):
         subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

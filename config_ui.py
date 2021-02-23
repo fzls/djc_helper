@@ -189,6 +189,7 @@ class GetBuyInfoThread(QThread):
         super(GetBuyInfoThread, self).__init__(parent)
 
         self.cfg = cfg
+        self.time_start = datetime.now()
 
     def __del__(self):
         self.exiting = True
@@ -233,7 +234,8 @@ class GetBuyInfoThread(QThread):
             self.update_progress(f"完成处理第{idx}个账户({account_config.name})")
 
     def update_progress(self, progress_message):
-        self.signal_results.emit(progress_message, "", "")
+        ut = datetime.now() - self.time_start
+        self.signal_results.emit(f"{progress_message}(目前共耗时{ut.total_seconds():.1f}秒)", "", "")
 
     def send_results(self, dlc_info, monthly_pay_info):
         self.signal_results.emit("", dlc_info, monthly_pay_info)

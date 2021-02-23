@@ -1,10 +1,7 @@
-import json
-
 import requests
 
 from dao import AmsActInfo
-from log import logger, color
-from util import get_remaining_time, try_except, is_act_expired, padLeftRight
+from util import *
 
 
 class Urls:
@@ -220,7 +217,11 @@ def format_act(act: AmsActInfo):
     msg = f"活动 {padLeftRight(act.sActivityName, 44, mode='left')}({act.iActivityId})"
 
     if act.dtEndTime != "":
-        msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，距离结束还有 {get_remaining_time(act.dtEndTime)}"
+        msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，"
+        if not is_act_expired(act.dtEndTime):
+            msg += f"距离结束还有 {get_remaining_time(act.dtEndTime)}"
+        else:
+            msg += f"已经结束了 {get_past_time(act.dtEndTime)}"
     else:
         msg += " 尚无已知的开始和结束时间"
 

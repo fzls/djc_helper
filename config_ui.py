@@ -263,24 +263,6 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
-        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
-        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
-        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
-
-        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
-        btn_pay_by_month.clicked.connect(self.pay_by_month)
-        btn_support.clicked.connect(self.support)
-        btn_check_update.clicked.connect(self.check_update)
-
-        layout = QHBoxLayout()
-        layout.addWidget(btn_buy_auto_updater_dlc)
-        layout.addWidget(btn_pay_by_month)
-        layout.addWidget(btn_support)
-        layout.addWidget(btn_check_update)
-        top_layout.addLayout(layout)
-        top_layout.addWidget(QHLine())
-
         self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
@@ -388,10 +370,11 @@ class ConfigUi(QFrame):
         self.tabs = QTabWidget()
 
         self.create_userinfo_tab(cfg)
+        self.create_others_tab(cfg)
         self.create_common_tab(cfg)
         self.create_account_tabs(cfg)
 
-        # ，默认页显示为common
+        # 设置默认页
         self.tabs.setCurrentWidget(self.common)
 
         top_layout.addWidget(self.tabs)
@@ -416,6 +399,31 @@ class ConfigUi(QFrame):
 
         tab.setLayout(make_scroll_layout(layout))
         self.tabs.addTab(tab, "个人信息")
+
+    def create_others_tab(self, cfg: Config):
+        top_layout = QVBoxLayout()
+
+        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
+        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
+        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
+        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
+
+        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
+        btn_pay_by_month.clicked.connect(self.pay_by_month)
+        btn_support.clicked.connect(self.support)
+        btn_check_update.clicked.connect(self.check_update)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_buy_auto_updater_dlc)
+        layout.addWidget(btn_pay_by_month)
+        layout.addWidget(btn_support)
+        layout.addWidget(btn_check_update)
+        top_layout.addLayout(layout)
+
+        self.others = QFrame()
+        self.others.setLayout(make_scroll_layout(top_layout))
+
+        self.tabs.addTab(self.others, "其他功能")
 
     def create_common_tab(self, cfg: Config):
         self.common = CommonConfigUi(cfg.common)

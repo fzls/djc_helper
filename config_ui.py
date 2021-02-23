@@ -294,7 +294,7 @@ class ConfigUi(QFrame):
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        subprocess.Popen("支持一下.png", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.popen("支持一下.png")
 
     def check_update(self, checked=False):
         cfg = self.to_config().common
@@ -324,18 +324,17 @@ class ConfigUi(QFrame):
         logger.info("运行小助手前自动保存配置")
         self.save(show_message_box=False)
 
-        exe_path = "DNF蚊子腿小助手.exe"
-        if run_from_src():
-            exe_path = "main.py"
-        subprocess.Popen([
-            os.path.realpath(exe_path),
-        ], cwd=".", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        exe_path = self.get_djc_helper_path()
+        self.popen(exe_path)
 
         logger.info(f"{exe_path} 已经启动~")
 
         if self.common.checkbox_auto_update_on_start.isChecked():
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
             QCoreApplication.exit()
+
+    def popen(self, args, cwd="."):
+        subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def clear_login_status(self, checked=False):
         shutil.rmtree(cached_dir, ignore_errors=True)

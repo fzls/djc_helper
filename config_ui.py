@@ -427,10 +427,41 @@ class ConfigUi(QFrame):
         layout.addWidget(btn_check_update)
         top_layout.addLayout(layout)
 
+        btn_auto_run_on_login = create_pushbutton("开机自启", "MediumTurquoise")
+        btn_stop_auto_run_on_login = create_pushbutton("取消自启", "MediumTurquoise")
+
+        btn_auto_run_on_login.clicked.connect(self.auto_run_on_login)
+        btn_stop_auto_run_on_login.clicked.connect(self.stop_auto_run_on_login)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_auto_run_on_login)
+        layout.addWidget(btn_stop_auto_run_on_login)
+        top_layout.addLayout(layout)
+
         self.others = QFrame()
         self.others.setLayout(make_scroll_layout(top_layout))
 
         self.tabs.addTab(self.others, "其他功能")
+
+    def auto_run_on_login(self):
+        self.popen([
+            "reg",
+            "add", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "/v", "DNF蚊子腿小助手",
+            "/t", "reg_sz",
+            "/d", self.get_djc_helper_path(),
+            "/f",
+        ])
+        show_message("设置完毕", "已设置为开机自动启动~\n若想定时运行，请打开【使用教程/使用文档.docx】，参照【定时自动运行】章节（目前在第21页）设置")
+
+    def stop_auto_run_on_login(self):
+        self.popen([
+            "reg",
+            "delete", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "/v", "DNF蚊子腿小助手",
+            "/f",
+        ])
+        show_message("设置完毕", "已取消开机自动启动~")
 
     def create_common_tab(self, cfg: Config):
         self.common = CommonConfigUi(cfg.common)

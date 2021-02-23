@@ -1,3 +1,16 @@
+import os
+import sys
+
+# 修改工作目录为程序所在目录，这样通过注册表实现开机自动启动时也能获取到正确的工作目录
+# PS: 放到这个地方，是确保在所有其他初始化代码之前先修改掉工作目录
+dirpath = os.path.dirname(sys.argv[0])
+old_path = os.getcwd()
+os.chdir(dirpath)
+
+from log import logger, color
+
+logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
+
 import argparse
 
 from log import log_directory

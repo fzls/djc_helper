@@ -727,3 +727,36 @@ class OrderInfo(ConfigInterface):
         self.qq = "1234567"
         self.game_qqs = []
         self.buy_month = 1
+
+
+class AmsActInfo(ConfigInterface):
+    def __init__(self):
+        self.iActivityId = "354870"
+        self.sActivityName = "马杰洛的关怀第三期活动"
+        self.iActivityStatus = "3.70"
+        self.sServiceType = "dnf"
+        self.sServiceDepartment = "group_3"
+        self.sClientType = "2"
+        self.sAccountType = "1"
+        self.dtBeginTime = "2021-01-21 10:30:00"
+        self.dtEndTime = "2021-02-23 23:59:59"
+        self.tOpenTime = "00:00:00"
+        self.tCloseTime = "23:59:59"
+        self.iTableNum = "100"
+        self.iShutdown = "0"
+        self.sBeginFailPrompted = ""
+        self.sEndFailPrompted = ""
+        self.sNotAllowPrompted = ""
+        self.sSDID = "defd4f0ba2d8d6ae2fd0d915f0df1fdf"
+        self.sAMSTrusteeship = 0
+        self.sAmePcUrl = "x6m5.ams.game.qq.com/ams/ame/amesvr"
+        self.sAmeMobileUrl = "x6m5.ams.game.qq.com/ams/ame/amesvr"
+        self.capAppId = ""
+        self.iAreaRoleModId = "15640"
+        self.iAreaModIsNew = 1
+        self.iAreaRoleFlowId = "732626"
+        self.iAreaRoleAppId = {
+            "qq_appid": "",
+            "wx_appid": "wxb30cf8a19c708c2a"
+        }
+        self.flows = {}

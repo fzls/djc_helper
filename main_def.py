@@ -10,6 +10,7 @@ from setting import *
 from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader, lanzou_cookie
+from urls import Urls
 from util import *
 from version import *
 
@@ -358,6 +359,15 @@ def count_with_color(card_count, show_color, show_width=3):
 
 
 def show_accounts_status(cfg, ctx):
+    logger.info("")
+    _show_head_line("部分短期活动信息")
+    Urls().show_current_valid_act_infos()
+    
+    logger.info("")
+    _show_head_line("付费相关信息")
+    user_buy_info = get_user_buy_info(cfg)
+    show_buy_info(user_buy_info)
+
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)
@@ -399,11 +409,6 @@ def show_accounts_status(cfg, ctx):
 
         cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, shanguang_equip_count, sailiya_cards, firecrackers_points, stone_count]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
-
-    logger.info("")
-    _show_head_line("付费相关信息")
-    user_buy_info = get_user_buy_info(cfg)
-    show_buy_info(user_buy_info)
 
 
 def try_join_xinyue_team(cfg):
@@ -683,12 +688,11 @@ def try_auto_update(cfg):
                 "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
                 "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
                 "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
-                "目前名单是基于DLC付费群的群成员整合出来的，若之前是通过其他朋友获取到的这个DLC，并通过他来转账给我（是有这么几个，但是我记不清是谁了）。请加群私聊我当时的付款截图，我会将你加到购买名单中~\n"
                 "\n"
-                "（重点看下面这句话，大部分时候都属于这个情况）\n"
-                "如果游戏账号和加群的QQ不一样，请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
-                "\n"
-                "如果没有购买，也没有向别人索取，可以直接将utils目录下的auto_updater.exe删除即可\n"
+                "请对照下列列表，确认是否属于以下情况\n"
+                "1. 游戏账号和加群的QQ不一样，导致使用游戏账号登录时被判定为未购买。对策：请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
+                "2. 未购买，也没有从别人那边拿过来。对策：直接将utils目录下的auto_updater.exe删除即可\n"
+                "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
             )
             logger.warning(color("bold_yellow") + msg)
             win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
@@ -731,6 +735,11 @@ def has_buy_auto_updater_dlc(cfg: Config):
                 if qq in buy_users:
                     return True
 
+            logger.debug((
+                "DLC购买调试日志：\n"
+                f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
+                f"用户列表={buy_users}\n"
+            ))
             return False
         except Exception as e:
             logFunc = logger.debug

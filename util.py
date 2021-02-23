@@ -95,7 +95,7 @@ def truncate(msg, expect_width) -> str:
     return ''.join(truncated)
 
 
-def padLeftRight(msg, target_size, pad_char=" ", need_truncate=False):
+def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=False):
     msg = str(msg)
     if need_truncate:
         msg = truncate(msg, target_size)
@@ -106,7 +106,12 @@ def padLeftRight(msg, target_size, pad_char=" ", need_truncate=False):
         pad_left_len = total // 2
         pad_right_len = total - pad_left_len
 
-    return pad_char * pad_left_len + msg + pad_char * pad_right_len
+    if mode == "middle":
+        return pad_char * pad_left_len + msg + pad_char * pad_right_len
+    elif mode == "left":
+        return msg + pad_char * (pad_left_len + pad_right_len)
+    else:
+        return pad_char * (pad_left_len + pad_right_len) + msg
 
 
 def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
@@ -276,9 +281,10 @@ def use_by_myself():
 def try_except(fun):
     def decorator(*args, **kwargs):
         try:
-            fun(*args, **kwargs)
+            return fun(*args, **kwargs)
         except Exception as e:
             logger.error(f"执行{fun.__name__}出错了" + check_some_exception(e), exc_info=e)
+            return None
 
     return decorator
 
@@ -305,10 +311,16 @@ def check_some_exception(e) -> str:
 
     return msg
 
+def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
-def show_end_time(end_time):
+def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()
+
+
+def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     # end_time = "2021-02-23 00:00:00"
-    remaining_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S") - datetime.datetime.now()
+    remaining_time = get_remaining_time(end_time, time_fmt)
     logger.info(color("bold_black") + f"活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
 

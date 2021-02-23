@@ -1,3 +1,12 @@
+import json
+
+import requests
+
+from dao import AmsActInfo
+from log import logger, color
+from util import get_remaining_time, try_except, is_act_expired, padLeftRight
+
+
 class Urls:
     def __init__(self):
         # 余额
@@ -71,19 +80,19 @@ class Urls:
         self.iActivityId_dnf_dianzan = "348845"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "354984"  # DNF福利中心-登陆游戏领福利
-        self.iActivityId_xinyue_financing = "126962" # 心悦app理财礼卡
-        self.iActivityId_dnf_drift = "348890" # dnf漂流瓶
-        self.iActivityId_majieluo = "354870" # DNF马杰洛的规划第三期
-        self.iActivityId_dnf_helper = "356203" # DNF助手活动 牛气冲天迎新年
-        self.iActivityId_warm_winter = "347445" # 暖冬有礼
-        self.iActivityId_youfei = "350668" # qq视频-看江湖有翡
-        self.iActivityId_dnf_bbs = "351488" # DNF论坛积分兑换活动
-        self.iActivityId_dnf_spring = "353340" # DNF新春夺宝大作战
-        self.iActivityId_dnf_0121 = "354854" # DNF0121新春落地页活动需求
-        self.iActivityId_wegame_spring = "357647" # WeGame春节活动 新春献豪礼 首次盲盒限时领
-        self.iActivityId_spring_fudai = "354771" # 新春福袋大作战
-        self.iActivityId_spring_collection = "357834" # DNF新春福利集合站
-        self.iActivityId_firecrackers = "355187" # 燃放爆竹活动
+        self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
+        self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
+        self.iActivityId_majieluo = "354870"  # DNF马杰洛的规划第三期
+        self.iActivityId_dnf_helper = "356203"  # DNF助手活动 牛气冲天迎新年
+        self.iActivityId_warm_winter = "347445"  # 暖冬有礼
+        self.iActivityId_youfei = "350668"  # qq视频-看江湖有翡
+        self.iActivityId_dnf_bbs = "351488"  # DNF论坛积分兑换活动
+        self.iActivityId_dnf_spring = "353340"  # DNF新春夺宝大作战
+        self.iActivityId_dnf_0121 = "354854"  # DNF0121新春落地页活动需求
+        self.iActivityId_wegame_spring = "357647"  # WeGame春节活动 新春献豪礼 首次盲盒限时领
+        self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
+        self.iActivityId_spring_collection = "357834"  # DNF新春福利集合站
+        self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -146,3 +155,78 @@ class Urls:
 
         # dnf论坛签到，额外参数：formhash: 论坛formhash
         self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
+
+    def show_current_valid_act_infos(self):
+        acts = []
+
+        for attr_name, act_id in self.__dict__.items():
+            if not attr_name.startswith("iActivityId_"):
+                continue
+
+            act = search_act(act_id)
+            if act is None:
+                continue
+
+            if is_act_expired(act.dtEndTime):
+                continue
+
+            acts.append(act)
+
+        acts.sort(key=lambda act: act.dtEndTime)
+
+        act_infos = [format_act(act) for act in acts]
+        logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
+
+
+@try_except
+def search_act(actId):
+    actId = str(actId)
+    actUrls = [
+        'https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
+        'https://apps.game.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
+        'https://apps.game.qq.com/comm-htdocs/js/ams/v0.2R02/act/{actId}/act.desc.js',
+    ]
+    for idx in range(len(actUrls)):
+        url = actUrls[idx].format(actId=actId, last_three=str(actId[-3:]))
+
+        res = requests.get(url, timeout=10)
+        if res.status_code != 200:
+            continue
+
+        v = res.text.strip().split('\r\n')
+
+        for line in v:
+            if not line.startswith("var ams_actdesc="):
+                continue
+            act_json = line.replace("var ams_actdesc=", "")
+            act_desc = json.loads(act_json)
+
+            info = AmsActInfo().auto_update_config(act_desc)
+
+            return info
+
+    return None
+
+
+def get_act_desc(actId):
+    act = search_act(actId)
+    if act is None:
+        return ""
+
+    return format_act(act)
+
+
+def format_act(act: AmsActInfo):
+    msg = f"活动 {padLeftRight(act.sActivityName, 44, mode='left')}({act.iActivityId})"
+
+    if act.dtEndTime != "":
+        msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，距离结束还有 {get_remaining_time(act.dtEndTime)}"
+    else:
+        msg += " 尚无已知的开始和结束时间"
+
+    return msg
+
+
+if __name__ == '__main__':
+    urls = Urls()
+    urls.show_current_valid_act_infos()

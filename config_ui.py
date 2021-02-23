@@ -12,13 +12,14 @@ from PyQt5.QtWidgets import (
     QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel,
 )
 from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
-from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
 
 from config import *
 from setting import *
 from game_info import name_2_mobile_game_info_map
 from update import *
-from main_def import check_all_skey_and_pskey, has_buy_auto_updater_dlc, get_user_buy_info
+from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
+from djc_helper import DjcHelper
 
 
 class QHLine(QFrame):
@@ -179,6 +180,63 @@ def show_message(title, text):
     message_box.setWindowTitle(title)
     message_box.setText(text)
     message_box.exec_()
+
+
+class GetBuyInfoThread(QThread):
+    signal_results = pyqtSignal(str, str, str)
+
+    def __init__(self, parent, cfg: Config):
+        super(GetBuyInfoThread, self).__init__(parent)
+
+        self.cfg = cfg
+
+    def __del__(self):
+        self.exiting = True
+
+    def run(self) -> None:
+        self.update_progress("1/3 开始尝试更新各个账号的skey")
+        self.check_all_skey_and_pskey()
+
+        self.update_progress("2/3 开始尝试获取自动更新DLC的信息")
+        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(self.cfg)
+
+        self.update_progress("3/3 开始尝试获取按月付费的信息")
+        user_buy_info = get_user_buy_info(self.cfg)
+
+        if has_buy_auto_update_dlc:
+            dlc_info = "当前某一个账号已购买自动更新DLC"
+        else:
+            dlc_info = "当前所有账号均未购买自动更新DLC"
+        monthly_pay_info = user_buy_info.description()
+
+        logger.info(f"\n{dlc_info}\n\n{monthly_pay_info}")
+        self.send_results(dlc_info, monthly_pay_info)
+
+    def check_all_skey_and_pskey(self):
+        if not has_any_account_in_normal_run(self.cfg):
+            return
+        _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
+
+        for _idx, account_config in enumerate(self.cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+            self.update_progress(f"1/3 正在处理第{idx}/{len(self.cfg.account_configs)}个账户({account_config.name})，请耐心等候...")
+
+            djcHelper = DjcHelper(account_config, self.cfg.common)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+
+            self.update_progress(f"完成处理第{idx}个账户({account_config.name})")
+
+    def update_progress(self, progress_message):
+        self.signal_results.emit(progress_message, "", "")
+
+    def send_results(self, dlc_info, monthly_pay_info):
+        self.signal_results.emit("", dlc_info, monthly_pay_info)
 
 
 class ConfigUi(QFrame):
@@ -392,7 +450,7 @@ class ConfigUi(QFrame):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
-        self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，会卡顿一会)")
+        self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，可能需要较长时间，请耐心等候)")
         self.btn_show_buy_info.clicked.connect(self.show_buy_info)
         layout.addWidget(self.btn_show_buy_info)
 
@@ -476,25 +534,23 @@ class ConfigUi(QFrame):
 
     def show_buy_info(self, clicked=False):
         cfg = self.to_config()
-        check_all_skey_and_pskey(cfg, check_skey_only=True)
 
-        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
-        user_buy_info = get_user_buy_info(cfg)
+        worker = GetBuyInfoThread(self, cfg)
+        worker.signal_results.connect(self.on_get_buy_info)
+        worker.start()
 
-        if has_buy_auto_update_dlc:
-            dlc_info = "当前某一个账号已购买自动更新DLC"
+    def on_get_buy_info(self, progress_message: str, dlc_info: str, monthly_pay_info: str):
+        if progress_message != "":
+            # 更新进度
+            self.btn_show_buy_info.setText(progress_message)
         else:
-            dlc_info = "当前所有账号均未购买自动更新DLC"
-        monthly_pay_info = user_buy_info.description()
+            # 发送最终结果
+            self.label_auto_udpate_info.setText(dlc_info)
+            self.label_monthly_pay_info.setText(monthly_pay_info)
 
-        logger.info(f"\n{dlc_info}\n\n{monthly_pay_info}")
-
-        self.label_auto_udpate_info.setText(dlc_info)
-        self.label_monthly_pay_info.setText(monthly_pay_info)
-
-        self.btn_show_buy_info.setVisible(False)
-        self.label_auto_udpate_info.setVisible(True)
-        self.label_monthly_pay_info.setVisible(True)
+            self.btn_show_buy_info.setVisible(False)
+            self.label_auto_udpate_info.setVisible(True)
+            self.label_monthly_pay_info.setVisible(True)
 
     def to_config(self) -> Config:
         cfg = self.load_config()

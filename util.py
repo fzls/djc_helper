@@ -1,6 +1,7 @@
 import pathlib
 import platform
 import random
+import shutil
 import socket
 import sys
 import threading
@@ -18,6 +19,7 @@ import win32con
 import win32gui
 import win32process
 
+from const import cached_dir
 from db import *
 from log import logger, color, asciiReset
 
@@ -435,6 +437,11 @@ def get_random_face():
         '(≧∀≦)♪', '♪（＾∀＾●）ﾉ', '(●´∀｀●)ﾉ', "(〃'▽'〃)", '(｀・ω・´)',
         'ヾ(=･ω･=)o', '(◍´꒳`◍)', '(づ●─●)づ', '｡◕ᴗ◕｡', '●﹏●',
     ])
+
+
+def clear_login_status():
+    shutil.rmtree(cached_dir, ignore_errors=True)
+    os.mkdir(cached_dir)
 
 
 if __name__ == '__main__':

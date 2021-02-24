@@ -12,13 +12,14 @@ from PyQt5.QtWidgets import (
     QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel,
 )
 from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
-from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
 
 from config import *
 from setting import *
 from game_info import name_2_mobile_game_info_map
 from update import *
-from main_def import check_all_skey_and_pskey, has_buy_auto_updater_dlc, get_user_buy_info
+from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
+from djc_helper import DjcHelper
 
 
 class QHLine(QFrame):
@@ -181,6 +182,65 @@ def show_message(title, text):
     message_box.exec_()
 
 
+class GetBuyInfoThread(QThread):
+    signal_results = pyqtSignal(str, str, str)
+
+    def __init__(self, parent, cfg: Config):
+        super(GetBuyInfoThread, self).__init__(parent)
+
+        self.cfg = cfg
+        self.time_start = datetime.now()
+
+    def __del__(self):
+        self.exiting = True
+
+    def run(self) -> None:
+        self.update_progress("1/3 开始尝试更新各个账号的skey")
+        self.check_all_skey_and_pskey()
+
+        self.update_progress("2/3 开始尝试获取自动更新DLC的信息")
+        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(self.cfg)
+
+        self.update_progress("3/3 开始尝试获取按月付费的信息")
+        user_buy_info = get_user_buy_info(self.cfg)
+
+        if has_buy_auto_update_dlc:
+            dlc_info = "当前某一个账号已购买自动更新DLC"
+        else:
+            dlc_info = "当前所有账号均未购买自动更新DLC"
+        monthly_pay_info = user_buy_info.description()
+
+        logger.info(f"\n{dlc_info}\n\n{monthly_pay_info}")
+        self.send_results(dlc_info, monthly_pay_info)
+
+    def check_all_skey_and_pskey(self):
+        if not has_any_account_in_normal_run(self.cfg):
+            return
+        _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
+
+        for _idx, account_config in enumerate(self.cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+            self.update_progress(f"1/3 正在处理第{idx}/{len(self.cfg.account_configs)}个账户({account_config.name})，请耐心等候...")
+
+            djcHelper = DjcHelper(account_config, self.cfg.common)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+
+            self.update_progress(f"完成处理第{idx}个账户({account_config.name})")
+
+    def update_progress(self, progress_message):
+        ut = datetime.now() - self.time_start
+        self.signal_results.emit(f"{progress_message}(目前共耗时{ut.total_seconds():.1f}秒)", "", "")
+
+    def send_results(self, dlc_info, monthly_pay_info):
+        self.signal_results.emit("", dlc_info, monthly_pay_info)
+
+
 class ConfigUi(QFrame):
     def __init__(self, parent=None):
         super(ConfigUi, self).__init__(parent)
@@ -263,24 +323,6 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
-        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
-        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
-        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
-
-        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
-        btn_pay_by_month.clicked.connect(self.pay_by_month)
-        btn_support.clicked.connect(self.support)
-        btn_check_update.clicked.connect(self.check_update)
-
-        layout = QHBoxLayout()
-        layout.addWidget(btn_buy_auto_updater_dlc)
-        layout.addWidget(btn_pay_by_month)
-        layout.addWidget(btn_support)
-        layout.addWidget(btn_check_update)
-        top_layout.addLayout(layout)
-        top_layout.addWidget(QHLine())
-
         self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
@@ -294,7 +336,7 @@ class ConfigUi(QFrame):
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        subprocess.Popen("支持一下.png", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.popen("支持一下.png")
 
     def check_update(self, checked=False):
         cfg = self.to_config().common
@@ -324,18 +366,24 @@ class ConfigUi(QFrame):
         logger.info("运行小助手前自动保存配置")
         self.save(show_message_box=False)
 
-        exe_path = "DNF蚊子腿小助手.exe"
-        if run_from_src():
-            exe_path = "main.py"
-        subprocess.Popen([
-            os.path.realpath(exe_path),
-        ], cwd=".", shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        exe_path = self.get_djc_helper_path()
+        self.popen(exe_path)
 
         logger.info(f"{exe_path} 已经启动~")
 
         if self.common.checkbox_auto_update_on_start.isChecked():
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
             QCoreApplication.exit()
+
+    def get_djc_helper_path(self):
+        exe_path = "DNF蚊子腿小助手.exe"
+        if run_from_src():
+            exe_path = "main.py"
+
+        return os.path.realpath(exe_path)
+
+    def popen(self, args, cwd="."):
+        subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def clear_login_status(self, checked=False):
         shutil.rmtree(cached_dir, ignore_errors=True)
@@ -389,10 +437,11 @@ class ConfigUi(QFrame):
         self.tabs = QTabWidget()
 
         self.create_userinfo_tab(cfg)
+        self.create_others_tab(cfg)
         self.create_common_tab(cfg)
         self.create_account_tabs(cfg)
 
-        # ，默认页显示为common
+        # 设置默认页
         self.tabs.setCurrentWidget(self.common)
 
         top_layout.addWidget(self.tabs)
@@ -403,7 +452,7 @@ class ConfigUi(QFrame):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
-        self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，会卡顿一会)")
+        self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，可能需要较长时间，请耐心等候)")
         self.btn_show_buy_info.clicked.connect(self.show_buy_info)
         layout.addWidget(self.btn_show_buy_info)
 
@@ -418,6 +467,62 @@ class ConfigUi(QFrame):
         tab.setLayout(make_scroll_layout(layout))
         self.tabs.addTab(tab, "个人信息")
 
+    def create_others_tab(self, cfg: Config):
+        top_layout = QVBoxLayout()
+
+        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
+        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
+        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
+        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
+
+        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
+        btn_pay_by_month.clicked.connect(self.pay_by_month)
+        btn_support.clicked.connect(self.support)
+        btn_check_update.clicked.connect(self.check_update)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_buy_auto_updater_dlc)
+        layout.addWidget(btn_pay_by_month)
+        layout.addWidget(btn_support)
+        layout.addWidget(btn_check_update)
+        top_layout.addLayout(layout)
+
+        btn_auto_run_on_login = create_pushbutton("开机自启", "MediumTurquoise")
+        btn_stop_auto_run_on_login = create_pushbutton("取消自启", "MediumTurquoise")
+
+        btn_auto_run_on_login.clicked.connect(self.auto_run_on_login)
+        btn_stop_auto_run_on_login.clicked.connect(self.stop_auto_run_on_login)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_auto_run_on_login)
+        layout.addWidget(btn_stop_auto_run_on_login)
+        top_layout.addLayout(layout)
+
+        self.others = QFrame()
+        self.others.setLayout(make_scroll_layout(top_layout))
+
+        self.tabs.addTab(self.others, "其他功能")
+
+    def auto_run_on_login(self):
+        self.popen([
+            "reg",
+            "add", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "/v", "DNF蚊子腿小助手",
+            "/t", "reg_sz",
+            "/d", self.get_djc_helper_path(),
+            "/f",
+        ])
+        show_message("设置完毕", "已设置为开机自动启动~\n若想定时运行，请打开【使用教程/使用文档.docx】，参照【定时自动运行】章节（目前在第21页）设置")
+
+    def stop_auto_run_on_login(self):
+        self.popen([
+            "reg",
+            "delete", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "/v", "DNF蚊子腿小助手",
+            "/f",
+        ])
+        show_message("设置完毕", "已取消开机自动启动~")
+
     def create_common_tab(self, cfg: Config):
         self.common = CommonConfigUi(cfg.common)
         self.tabs.addTab(self.common, "公共配置")
@@ -431,25 +536,23 @@ class ConfigUi(QFrame):
 
     def show_buy_info(self, clicked=False):
         cfg = self.to_config()
-        check_all_skey_and_pskey(cfg, check_skey_only=True)
 
-        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
-        user_buy_info = get_user_buy_info(cfg)
+        worker = GetBuyInfoThread(self, cfg)
+        worker.signal_results.connect(self.on_get_buy_info)
+        worker.start()
 
-        if has_buy_auto_update_dlc:
-            dlc_info = "当前某一个账号已购买自动更新DLC"
+    def on_get_buy_info(self, progress_message: str, dlc_info: str, monthly_pay_info: str):
+        if progress_message != "":
+            # 更新进度
+            self.btn_show_buy_info.setText(progress_message)
         else:
-            dlc_info = "当前所有账号均未购买自动更新DLC"
-        monthly_pay_info = user_buy_info.description()
+            # 发送最终结果
+            self.label_auto_udpate_info.setText(dlc_info)
+            self.label_monthly_pay_info.setText(monthly_pay_info)
 
-        logger.info(f"\n{dlc_info}\n\n{monthly_pay_info}")
-
-        self.label_auto_udpate_info.setText(dlc_info)
-        self.label_monthly_pay_info.setText(monthly_pay_info)
-
-        self.btn_show_buy_info.setVisible(False)
-        self.label_auto_udpate_info.setVisible(True)
-        self.label_monthly_pay_info.setVisible(True)
+            self.btn_show_buy_info.setVisible(False)
+            self.label_auto_udpate_info.setVisible(True)
+            self.label_monthly_pay_info.setVisible(True)
 
     def to_config(self) -> Config:
         cfg = self.load_config()

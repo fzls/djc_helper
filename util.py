@@ -311,11 +311,17 @@ def check_some_exception(e) -> str:
 
     return msg
 
+
 def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
+
 def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()
+
+
+def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S"):
+    return datetime.datetime.now() - datetime.datetime.strptime(t, time_fmt)
 
 
 def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
@@ -440,3 +446,4 @@ if __name__ == '__main__':
     print(use_by_myself())
     print(show_end_time("2021-02-23 00:00:00"))
     print(truncate("风之凌殇风之凌殇", 12))
+    print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))

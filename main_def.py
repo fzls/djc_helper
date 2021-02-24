@@ -315,19 +315,6 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
         logger.warning(color("fg_bold_yellow") + msg)
 
-    if not os.path.exists("DNF蚊子腿小助手_集卡特别版.exe"):
-        logger.warning(color("bold_cyan") + (
-            "以下为广告时间0-0\n"
-            "如果只需要集卡功能，可以联系我购买集卡特别版哦，特别版仅包含集卡相关功能（集卡、送卡、展示卡片信息、兑换卡片奖励、使用卡片抽奖），供某些只需要集卡的朋友使用\n"
-            "演示地址：https://www.bilibili.com/video/BV1zA411H7mP\n"
-            "价格：6.66元\n"
-            "购买方式：加小助手群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你，并拉到一个无法主动加入的专用群，通过群文件分发该DLC的后续更新版本~\n"
-            "PS：这个DLC相当于是小助手的子集，用于仅处理集卡相关内容，之前听到有的朋友有这样的需求，所以特地制作的，是否购买自行考量哈。\n"
-            "如果购买的话能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
-            "\n"
-            "2021.2.2 update: 本轮集卡我又换完啦，有需要买卡的朋友可以加群私聊我购买哦~依旧是一元一张任意卡。先问下有没有卡，得到确定回复后直接发付款截图和要收卡片的QQ号码即可（不需要加好友）"
-        ))
-
 
 def colored_count(accountIdx, card_count, show_color=""):
     # 特殊处理色彩

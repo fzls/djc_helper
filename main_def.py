@@ -75,6 +75,8 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
+    qq2index = {}
+
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.is_enabled():
@@ -89,6 +91,16 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         if not check_skey_only:
             djcHelper.get_bind_role_list(print_warning=False)
             djcHelper.fetch_guanjia_openid(print_warning=False)
+
+        qq = uin2qq(djcHelper.cfg.account_info.uin)
+        if qq in qq2index:
+            msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
+            logger.error(color("fg_bold_red") + msg)
+            win32api.MessageBox(0, msg, "重复登录", win32con.MB_ICONINFORMATION)
+            clear_login_status()
+            sys.exit(-1)
+
+        qq2index[qq] = idx
 
 
 def auto_send_cards(cfg):
@@ -349,7 +361,7 @@ def show_accounts_status(cfg, ctx):
     logger.info("")
     _show_head_line("部分短期活动信息")
     Urls().show_current_valid_act_infos()
-    
+
     logger.info("")
     _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)

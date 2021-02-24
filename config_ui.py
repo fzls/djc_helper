@@ -205,7 +205,7 @@ class GetBuyInfoThread(QThread):
         user_buy_info = get_user_buy_info(self.cfg)
 
         if has_buy_auto_update_dlc:
-            dlc_info = "当前某一个账号已购买自动更新DLC"
+            dlc_info = "当前某一个账号已购买自动更新DLC(若对自动更新送的两月有疑义，请看付费指引的常见问题章节)"
         else:
             dlc_info = "当前所有账号均未购买自动更新DLC"
         monthly_pay_info = user_buy_info.description()

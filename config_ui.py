@@ -386,8 +386,7 @@ class ConfigUi(QFrame):
         subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def clear_login_status(self, checked=False):
-        shutil.rmtree(cached_dir, ignore_errors=True)
-        os.mkdir(cached_dir)
+        clear_login_status()
 
         show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
 

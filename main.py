@@ -17,11 +17,14 @@ from log import log_directory
 from main_def import *
 from show_usage import *
 from usage_count import *
+import psutil
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--no_max_console", default=False, action="store_true", help="是否不将窗口调整为最大化")
+    parser.add_argument("--wait_for_pid_exit", default=0, type=int, help="启动后是否等待对应pid的进程结束后再启动，主要用于使用配置工具启动小助手的情况，只有配置工具退出运行，自动更新才能正常进行")
+    parser.add_argument("--max_wait_time", default=5, type=int, help="最大等待时间")
     args = parser.parse_args()
 
     return args
@@ -29,6 +32,19 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    if args.wait_for_pid_exit != 0:
+        logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
+
+        wait_time = 0
+        retry_time = 0.1
+        while wait_time <= args.max_wait_time:
+            if not psutil.pid_exists(args.wait_for_pid_exit):
+                logger.info("配置工具已成功退出，将开始运行小助手~")
+                break
+
+            time.sleep(retry_time)
+            wait_time += retry_time
 
     change_title()
     show_ask_message_box_only_once()

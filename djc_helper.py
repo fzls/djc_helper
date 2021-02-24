@@ -392,9 +392,6 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
-        # DNF闪光杯第三期
-        self.dnf_shanguang()
-
         # 管家蚊子腿
         self.guanjia()
 
@@ -413,9 +410,6 @@ class DjcHelper:
         # QQ空间抽卡
         self.ark_lottery()
 
-        # DNF新春夺宝大作战
-        self.dnf_spring()
-
         # DNF福利中心兑换
         self.dnf_welfare()
 
@@ -426,17 +420,8 @@ class DjcHelper:
         # WeGame春节活动
         self.wegame_spring()
 
-        # 新春福袋大作战
-        self.spring_fudai()
-
-        # DNF马杰洛的规划第三期
-        self.majieluo()
-
         # DNF新春福利集合站
         self.spring_collection()
-
-        # 燃放爆竹活动
-        self.firecrackers()
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
@@ -502,6 +487,21 @@ class DjcHelper:
 
         # hello语音网页礼包兑换
         self.hello_voice()
+
+        # DNF闪光杯第三期
+        self.dnf_shanguang()
+
+        # DNF新春夺宝大作战
+        self.dnf_spring()
+
+        # 新春福袋大作战
+        self.spring_fudai()
+
+        # DNF马杰洛的规划第三期
+        self.majieluo()
+
+        # 燃放爆竹活动
+        self.firecrackers()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except

@@ -5,7 +5,6 @@ logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
 import typing
-import shutil
 import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
@@ -367,7 +366,11 @@ class ConfigUi(QFrame):
         self.save(show_message_box=False)
 
         exe_path = self.get_djc_helper_path()
-        self.popen(exe_path)
+        self.popen([
+            exe_path,
+            "--wait_for_pid_exit", os.getpid(),
+            "--max_wait_time", 5,
+        ])
 
         logger.info(f"{exe_path} 已经启动~")
 
@@ -383,6 +386,9 @@ class ConfigUi(QFrame):
         return os.path.realpath(exe_path)
 
     def popen(self, args, cwd="."):
+        if type(args) is list:
+            args = [str(arg) for arg in args]
+
         subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def clear_login_status(self, checked=False):

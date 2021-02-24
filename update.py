@@ -45,7 +45,7 @@ def check_update_on_start(config: CommonConfig):
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
     except Exception as err:
-        logger.error(f"检查版本更新失败,大概率是访问不了github导致的，可自行前往网盘查看是否有更新, 错误为{err}")
+        logger.error(f"检查版本更新失败（这个不是自动更新，是检查更新）,大概率是访问不了github导致的，可自行前往网盘查看是否有更新, 错误为{err}")
 
         # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
         time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y-%m-%d")

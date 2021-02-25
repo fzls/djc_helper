@@ -86,6 +86,7 @@ def build(disable_douban=False):
             cmd_build.extend(['--exclude-module', module])
         cmd_build.extend(extra_args)
 
+        logger.info(f"{prefix} 开始编译 {exe_name}，命令为：{' '.join(cmd_build)}")
         subprocess.call(cmd_build)
 
         logger.info(f"编译结束，进行善后操作")

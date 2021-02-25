@@ -75,6 +75,8 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
+    qq2index = {}
+
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.is_enabled():
@@ -89,6 +91,16 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         if not check_skey_only:
             djcHelper.get_bind_role_list(print_warning=False)
             djcHelper.fetch_guanjia_openid(print_warning=False)
+
+        qq = uin2qq(djcHelper.cfg.account_info.uin)
+        if qq in qq2index:
+            msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
+            logger.error(color("fg_bold_red") + msg)
+            win32api.MessageBox(0, msg, "重复登录", win32con.MB_ICONINFORMATION)
+            clear_login_status()
+            sys.exit(-1)
+
+        qq2index[qq] = idx
 
 
 def auto_send_cards(cfg):
@@ -315,19 +327,6 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
         logger.warning(color("fg_bold_yellow") + msg)
 
-    if not os.path.exists("DNF蚊子腿小助手_集卡特别版.exe"):
-        logger.warning(color("bold_cyan") + (
-            "以下为广告时间0-0\n"
-            "如果只需要集卡功能，可以联系我购买集卡特别版哦，特别版仅包含集卡相关功能（集卡、送卡、展示卡片信息、兑换卡片奖励、使用卡片抽奖），供某些只需要集卡的朋友使用\n"
-            "演示地址：https://www.bilibili.com/video/BV1zA411H7mP\n"
-            "价格：6.66元\n"
-            "购买方式：加小助手群后QQ私聊我付款截图，我确认无误后会将DLC以及用法发给你，并拉到一个无法主动加入的专用群，通过群文件分发该DLC的后续更新版本~\n"
-            "PS：这个DLC相当于是小助手的子集，用于仅处理集卡相关内容，之前听到有的朋友有这样的需求，所以特地制作的，是否购买自行考量哈。\n"
-            "如果购买的话能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
-            "\n"
-            "2021.2.2 update: 本轮集卡我又换完啦，有需要买卡的朋友可以加群私聊我购买哦~依旧是一元一张任意卡。先问下有没有卡，得到确定回复后直接发付款截图和要收卡片的QQ号码即可（不需要加好友）"
-        ))
-
 
 def colored_count(accountIdx, card_count, show_color=""):
     # 特殊处理色彩
@@ -362,7 +361,7 @@ def show_accounts_status(cfg, ctx):
     logger.info("")
     _show_head_line("部分短期活动信息")
     Urls().show_current_valid_act_infos()
-    
+
     logger.info("")
     _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)
@@ -372,8 +371,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "闪光杯出货数", "赛丽亚卡片", "爆竹积分", "马杰洛石头"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8, 12, 14, 8, 10]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
+    colSizes = [4, 12, 8, 8, 12, 6, 8]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -399,15 +398,7 @@ def show_accounts_status(cfg, ctx):
             if fixed_team is not None:
                 team_score = f"[{fixed_team.id}]{team_score}"
 
-        shanguang_equip_count = djcHelper.query_dnf_shanguang_equip_count(print_warning=False)
-
-        sailiya_cards = djcHelper.query_majieluo_card_info()
-
-        firecrackers_points = djcHelper.query_firecrackers_points()
-
-        stone_count = djcHelper.query_stone_count()
-
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, shanguang_equip_count, sailiya_cards, firecrackers_points, stone_count]
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 

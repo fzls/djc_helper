@@ -58,6 +58,7 @@ class QQLogin():
     def __init__(self, common_config):
         self.cfg = common_config  # type: CommonConfig
         self.driver = None  # type: WebDriver
+        self.window_title = ""
 
     def prepare_chrome(self, ctx, login_type):
         logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
@@ -131,13 +132,14 @@ class QQLogin():
             self.driver.minimize_window()
             threading.Thread(target=self.driver.quit, daemon=True).start()
 
-    def login(self, account, password, login_mode="normal"):
+    def login(self, account, password, login_mode="normal", name=""):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
         :param password: 密码
         :rtype: LoginResult
         """
+        self.window_title = f"将登录 {name}({account}) - {login_mode}"
         logger.info("即将开始自动登录，无需任何手动操作，等待其完成即可")
         logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
@@ -174,14 +176,7 @@ class QQLogin():
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        if name != "":
-            msg = (
-                f"账号【{name}】的登录状态已过期，需要重新登录。\n"
-                f"请在点击确认后弹出的网页中扫码登录该账号【{name}】。\n"
-                "\n"
-                "如果重复登录程序将会报错并退出运行~"
-            )
-            win32api.MessageBox(0, msg, "需要重新登录", win32con.MB_ICONINFORMATION)
+        self.window_title = f"请扫码登录账号 {name} - {login_mode}"
 
         def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成扫码登录操作或快捷登录操作")
@@ -403,6 +398,8 @@ class QQLogin():
         :rtype: LoginResult
         """
         switch_to_login_frame_fn()
+
+        self.driver.execute_script(f"document.title = '{self.window_title}'")
 
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"开始{login_type}流程")

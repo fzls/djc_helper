@@ -604,7 +604,8 @@ if __name__ == '__main__':
 
 
     def run_test(mode):
-        lr = ql.login(acc.account, acc.password, login_mode=mode)
+        lr = ql.login(acc.account, acc.password, login_mode=mode, name=account.name)
+        # lr = ql.qr_login(login_mode=mode, name=account.name)
         logger.info(color("bold_green") + f"{lr}")
 
 

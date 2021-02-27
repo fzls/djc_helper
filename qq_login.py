@@ -150,13 +150,16 @@ class QQLogin():
 
             # 选择密码登录
             self.driver.find_element(By.ID, "switcher_plogin").click()
+
             # 输入账号
             self.driver.find_element(By.ID, "u").send_keys(account)
             # 输入密码
             self.driver.find_element(By.ID, "p").send_keys(password)
-            # 发送登录请求
+
             logger.info("等待一会，确保登录键可以点击")
             time.sleep(3)
+
+            # 发送登录请求
             self.driver.find_element(By.ID, "login_button").click()
 
             # 尝试自动处理验证码

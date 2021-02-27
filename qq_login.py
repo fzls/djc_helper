@@ -610,7 +610,25 @@ if __name__ == '__main__':
     account = cfg.account_configs[0]
     acc = account.account_info
     logger.warning(f"测试账号 {account.name} 的登录情况")
-    # lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal)
-    lr = ql.qr_login(name="测试账号登录")
-    # ql.print_cookie()
-    print(lr)
+
+
+    def run_test(mode):
+        lr = ql.login(acc.account, acc.password, login_mode=mode)
+        logger.info(color("bold_green") + f"{lr}")
+
+
+    test_all = False
+
+    if not test_all:
+        run_test(ql.login_mode_normal)
+    else:
+        for attr in dir(ql):
+            if not attr.startswith("login_mode_"):
+                continue
+
+            mode = getattr(ql, attr)
+
+            logger.info(f"开始测试登录模式 {mode}，请按任意键开始测试")
+            input()
+
+            run_test(mode)

@@ -264,6 +264,14 @@ def get_act_desc(actId):
     return format_act(act)
 
 
+def get_not_ams_act_desc(act_name):
+    for act in not_ams_activities:
+        if act.sActivityName == act_name:
+            return format_act(act)
+
+    return f"未找到活动 {act_name} 的相关信息"
+
+
 def format_act(act: AmsActInfo):
     msg = f"活动 {padLeftRight(act.sActivityName, 44, mode='left')}({act.iActivityId})"
 

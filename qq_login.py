@@ -230,7 +230,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
+            self.open_url("https://dnf.qq.com/lbact/a20200716wgmhz/index.html")
 
             self.set_window_size()
 
@@ -263,7 +263,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("https://act.qzone.qq.com/")
+            self.open_url("https://act.qzone.qq.com/")
 
             self.set_window_size()
 
@@ -281,7 +281,7 @@ class QQLogin():
             logger.info("等待几秒后刷新一遍，确保页面变为登陆后的状态")
             time.sleep(3)
             logger.info("重新加载页面...")
-            self.driver.get("https://act.qzone.qq.com/")
+            self.open_url("https://act.qzone.qq.com/")
             logger.info("请等待【欢迎你，】的文字可见，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".tit_text"), "欢迎你，"))
 
@@ -299,7 +299,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
+            self.open_url("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
 
             self.set_window_size()
 
@@ -337,7 +337,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("https://www.wegame.com.cn/")
+            self.open_url("https://www.wegame.com.cn/")
 
             self.set_window_size()
 
@@ -354,7 +354,7 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info("请等待【登录头像】可见，则说明已经登录完成了...")
-            # self.driver.get("https://www.wegame.com.cn/")
+            # self.open_url("https://www.wegame.com.cn/")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".widget-header-login-info")))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -370,7 +370,7 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.driver.get("https://xinyue.qq.com/act/a20181101rights/index.html")
+            self.open_url("https://xinyue.qq.com/act/a20181101rights/index.html")
 
             self.set_window_size()
 
@@ -441,10 +441,10 @@ class QQLogin():
             self.fetch_qq_video_vuserid()
 
             logger.info("转到福袋大作战活动，从而可以获取pskey")
-            self.driver.get("https://dnf.qq.com/cp/a20210108luckym/index.html")
+            self.open_url("https://dnf.qq.com/cp/a20210108luckym/index.html")
             time.sleep(1)
             logger.info("再跳转到apps.game.qq.com，用于获取该域名下的p_skey")
-            self.driver.get("https://apps.game.qq.com/")
+            self.open_url("https://apps.game.qq.com/")
             time.sleep(1)
             for i in range(5):
                 p_skey = self.driver.get_cookie('p_skey')
@@ -456,10 +456,10 @@ class QQLogin():
             self.fetch_qq_video_vuserid()
             # logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")
             # logger.info("第一次访问，并停留5秒")
-            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
+            # self.open_url("https://act.qzone.qq.com/vip/2020/dnf1126")
             # time.sleep(5)
             # logger.info("第二次访问，并停留5秒")
-            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
+            # self.open_url("https://act.qzone.qq.com/vip/2020/dnf1126")
             # time.sleep(5)
             # logger.info("OK，理论上次数应该刷新了")
 
@@ -467,7 +467,7 @@ class QQLogin():
 
     def fetch_qq_video_vuserid(self):
         logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
-        self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
+        self.open_url("https://m.film.qq.com/magic-act/110254/index.html")
         for i in range(5):
             vuserid = self.driver.get_cookie('vuserid')
             if vuserid is not None:
@@ -601,6 +601,16 @@ class QQLogin():
         for cookie in self.cookies:
             domain, name, value = cookie['domain'], cookie['name'], cookie['value']
             print(f"{domain:20s} {name:20s} {cookie}")
+
+    def open_url(self, url):
+        chrome_default_url = 'data:,'
+        while True:
+            self.driver.get(url)
+            if self.driver.current_url != chrome_default_url:
+                break
+
+            logger.info(f"尝试打开网页({url})，但似乎指令未生效，当前地址栏仍为{chrome_default_url}，等待{self.cfg.login.retry_wait_time}秒后重试")
+            time.sleep(self.cfg.login.retry_wait_time)
 
 
 if __name__ == '__main__':

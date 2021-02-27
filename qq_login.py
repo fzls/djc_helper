@@ -444,10 +444,10 @@ class QQLogin():
             self.fetch_qq_video_vuserid()
             # logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")
             # logger.info("第一次访问，并停留5秒")
-            # self.open_url("https://act.qzone.qq.com/vip/2020/dnf1126")
+            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
             # time.sleep(5)
             # logger.info("第二次访问，并停留5秒")
-            # self.open_url("https://act.qzone.qq.com/vip/2020/dnf1126")
+            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
             # time.sleep(5)
             # logger.info("OK，理论上次数应该刷新了")
 
@@ -455,7 +455,7 @@ class QQLogin():
 
     def fetch_qq_video_vuserid(self):
         logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
-        self.open_url("https://m.film.qq.com/magic-act/110254/index.html")
+        self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
         for i in range(5):
             vuserid = self.driver.get_cookie('vuserid')
             if vuserid is not None:

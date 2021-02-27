@@ -216,7 +216,9 @@ class QQLogin():
                 time.sleep(self.cfg.login.retry_wait_time)
             finally:
                 used_time = datetime.datetime.now() - self.time_start_login
+                logger.info("")
                 logger.info(color("bold_yellow") + f"本次 {ctx} 共耗时为 {used_time}")
+                logger.info("")
                 self.destroy_chrome()
 
         # 能走到这里说明登录失败了，大概率是网络不行

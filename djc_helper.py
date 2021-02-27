@@ -417,9 +417,6 @@ class DjcHelper:
         # # DNF0121新春落地页活动
         # self.dnf_0121()
 
-        # WeGame春节活动
-        self.wegame_spring()
-
         # DNF新春福利集合站
         self.spring_collection()
 
@@ -502,6 +499,9 @@ class DjcHelper:
 
         # 燃放爆竹活动
         self.firecrackers()
+
+        # WeGame春节活动
+        self.wegame_spring()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except

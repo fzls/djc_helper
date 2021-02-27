@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc
 from util import show_head_line, get_this_week_monday
 
 
@@ -507,6 +507,7 @@ class DjcHelper:
     @try_except
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")
+        self.show_not_ams_act_info("道聚城")
 
         if not self.cfg.function_switches.get_djc:
             logger.warning("未启用领取道聚城功能，将跳过")
@@ -1221,6 +1222,7 @@ class DjcHelper:
     def get_heizuan_gift(self):
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
         show_head_line("黑钻礼包")
+        self.show_not_ams_act_info("黑钻礼包")
 
         if not self.cfg.function_switches.get_heizuan_gift or self.disable_most_activities():
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
@@ -1239,6 +1241,7 @@ class DjcHelper:
     @try_except
     def get_credit_xinyue_gift(self):
         show_head_line("腾讯游戏信用相关礼包")
+        self.show_not_ams_act_info("腾讯游戏信用礼包")
 
         if not self.cfg.function_switches.get_credit_xinyue_gift or self.disable_most_activities():
             logger.warning("未启用领取腾讯游戏信用相关礼包功能，将跳过")
@@ -1265,6 +1268,7 @@ class DjcHelper:
         #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
         #   1.3.2 在main.py中将main函数中取消注释show_lottery_status和auto_send_cards的调用处
         #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
+        #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #
         # hack:
         #   2. 废弃
@@ -1273,6 +1277,7 @@ class DjcHelper:
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
         show_head_line(f"QQ空间抽卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
+        self.show_not_ams_act_info("集卡")
 
         if not self.cfg.function_switches.get_ark_lottery:
             logger.warning("未启用领取QQ空间抽卡功能，将跳过")
@@ -1612,6 +1617,7 @@ class DjcHelper:
     @try_except
     def qq_video(self):
         show_head_line("qq视频活动")
+        self.show_not_ams_act_info("qq视频蚊子腿")
 
         if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
             logger.warning("未启用领取qq视频活动功能，将跳过")
@@ -1978,6 +1984,7 @@ class DjcHelper:
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
+        self.show_not_ams_act_info("DNF助手编年史")
 
         if not self.cfg.function_switches.get_dnf_helper_chronicle or self.disable_most_activities():
             logger.warning("未启用领取dnf助手编年史活动功能，将跳过")
@@ -2205,6 +2212,7 @@ class DjcHelper:
     @try_except
     def guanjia(self):
         show_head_line("管家蚊子腿")
+        self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
             logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
@@ -3522,6 +3530,7 @@ class DjcHelper:
     @try_except
     def vip_mentor(self):
         show_head_line("会员关怀")
+        self.show_not_ams_act_info("会员关怀")
 
         if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
             logger.warning("未启用领取会员关怀功能，将跳过")
@@ -4177,6 +4186,9 @@ class DjcHelper:
 
     def show_ams_act_info(self, iActivityId):
         logger.info(color("bold_green") + get_ams_act_desc(iActivityId))
+
+    def show_not_ams_act_info(self, act_name):
+        logger.info(color("bold_green") + get_not_ams_act_desc(act_name))
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"

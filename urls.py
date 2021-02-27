@@ -4,6 +4,32 @@ from dao import AmsActInfo
 from util import *
 
 
+def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
+    info = AmsActInfo()
+    info.iActivityId = "000000"
+    info.sActivityName = sActivityName
+    info.dtBeginTime = dtBeginTime
+    info.dtEndTime = dtEndTime
+
+    return info
+
+
+not_know_start_time = "2000-01-01 00:00:00"
+not_know_end_time = "2099-01-01 00:00:00"
+
+not_ams_activities = [
+    newAmsActInfo("道聚城", not_know_start_time, not_know_end_time),
+    newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
+    newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
+    newAmsActInfo("管家蚊子腿", "2021-02-01 00:00:00", "2021-03-01 00:00:00"),
+    newAmsActInfo("qq视频蚊子腿", "2021-02-01 00:00:00", "2021-03-01 00:00:00"),
+    newAmsActInfo("qq视频-看江湖有翡", "2021-01-08 00:00:00", "2021-02-28 23:59:59"),
+    newAmsActInfo("会员关怀", "2021-02-01 00:00:00", not_know_end_time),
+    newAmsActInfo("集卡", "2021-01-15 00:00:00", "2021-02-28 23:59:59"),
+    newAmsActInfo("DNF助手编年史", "2021-02-01 00:00:00", "2021-02-28 23:59:59"),
+]
+
+
 class Urls:
     def __init__(self):
         # 余额
@@ -154,7 +180,7 @@ class Urls:
         self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
 
     def show_current_valid_act_infos(self):
-        acts = []
+        acts = [*not_ams_activities]
 
         for attr_name, act_id in self.__dict__.items():
             if not attr_name.startswith("iActivityId_"):

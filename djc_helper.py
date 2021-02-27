@@ -442,7 +442,7 @@ class DjcHelper:
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):
-        # note: 更新新的活动时记得更新上面的列表
+        # re: 更新新的活动时记得更新上面的列表，以及urls.py的not_ams_activities
 
         # dnf助手活动
         self.dnf_helper()

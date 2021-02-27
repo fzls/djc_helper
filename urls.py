@@ -204,6 +204,38 @@ class Urls:
 @try_except
 def search_act(actId):
     actId = str(actId)
+    act_desc_js = get_act_desc_js(actId)
+    if act_desc_js == "":
+        return None
+
+    v = act_desc_js.strip().replace('\r', '\n').split('\n')
+
+    for line in v:
+        if not line.startswith("var ams_actdesc="):
+            continue
+        act_json = line.replace("var ams_actdesc=", "")
+        act_desc = json.loads(act_json)
+
+        info = AmsActInfo().auto_update_config(act_desc)
+
+        return info
+
+    return None
+
+
+def get_act_desc_js(actId):
+    actId = str(actId)
+    last_three = str(actId[-3:])
+
+    act_cache_dir = f"{cached_dir}/actDesc/{last_three}/{actId}"
+    act_cache_file = f"{act_cache_dir}/act.desc.js"
+
+    # 先尝试从本地缓存获取
+    if os.path.exists(act_cache_file):
+        with open(act_cache_file, 'r', encoding="utf-8") as f:
+            return f.read()
+
+    # 然后从服务器获取活动信息
     actUrls = [
         'https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
         'https://apps.game.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
@@ -216,19 +248,13 @@ def search_act(actId):
         if res.status_code != 200:
             continue
 
-        v = res.text.strip().split('\r\n')
+        make_sure_dir_exists(act_cache_dir)
+        with open(act_cache_file, 'w', encoding="utf-8") as f:
+            f.write(res.text)
 
-        for line in v:
-            if not line.startswith("var ams_actdesc="):
-                continue
-            act_json = line.replace("var ams_actdesc=", "")
-            act_desc = json.loads(act_json)
+        return res.text
 
-            info = AmsActInfo().auto_update_config(act_desc)
-
-            return info
-
-    return None
+    return ""
 
 
 def get_act_desc(actId):

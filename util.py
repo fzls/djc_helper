@@ -449,6 +449,11 @@ def get_screen_size():
     return width, height
 
 
+def make_sure_dir_exists(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

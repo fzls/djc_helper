@@ -59,6 +59,7 @@ class QQLogin():
         self.cfg = common_config  # type: CommonConfig
         self.driver = None  # type: WebDriver
         self.window_title = ""
+        self.time_start_login = datetime.datetime.now()
 
     def prepare_chrome(self, ctx, login_type):
         logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
@@ -186,24 +187,27 @@ class QQLogin():
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
         for idx in range(self.cfg.login.max_retry_count):
             idx += 1
-            try:
-                self.login_mode = login_mode
-                login_fn = self._login_real
-                suffix = ""
-                if login_mode == self.login_mode_xinyue:
-                    login_fn = self._login_xinyue_real
-                    suffix += "-心悦"
-                elif login_mode == self.login_mode_qzone:
-                    login_fn = self._login_qzone
-                    suffix += "-QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）"
-                elif login_mode == self.login_mode_guanjia:
-                    login_fn = self._login_guanjia
-                    suffix += "-电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）"
-                elif login_mode == self.login_mode_wegame:
-                    login_fn = self._login_wegame
-                    suffix += "-wegame（获取wegame相关api需要用到）"
 
-                ctx = login_type + suffix
+            self.login_mode = login_mode
+
+            login_fn = self._login_real
+            suffix = ""
+            if login_mode == self.login_mode_xinyue:
+                login_fn = self._login_xinyue_real
+                suffix += "心悦"
+            elif login_mode == self.login_mode_qzone:
+                login_fn = self._login_qzone
+                suffix += "QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）"
+            elif login_mode == self.login_mode_guanjia:
+                login_fn = self._login_guanjia
+                suffix += "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）"
+            elif login_mode == self.login_mode_wegame:
+                login_fn = self._login_wegame
+                suffix += "wegame（获取wegame相关api需要用到）"
+
+            ctx = f"{login_type}-{suffix}"
+
+            try:
                 self.prepare_chrome(ctx, login_type)
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
@@ -211,6 +215,8 @@ class QQLogin():
                 logger.exception(f"第{idx}/{self.cfg.login.max_retry_count}次尝试登录出错，等待{self.cfg.login.retry_wait_time}秒后重试", exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
             finally:
+                used_time = datetime.datetime.now() - self.time_start_login
+                logger.info(color("bold_green") + f"本次 {ctx} 共耗时为 {used_time}")
                 self.destroy_chrome()
 
         # 能走到这里说明登录失败了，大概率是网络不行

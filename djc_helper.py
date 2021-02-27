@@ -218,7 +218,7 @@ class DjcHelper:
 
         qqLogin = QQLogin(self.common_cfg)
         ai = self.cfg.account_info
-        loginResult = qqLogin.login(ai.account, ai.password)
+        loginResult = qqLogin.login(ai.account, ai.password, name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def save_uin_skey(self, uin, skey, vuserid):
@@ -1341,7 +1341,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey, lr.skey, lr.vuserid)
         else:
@@ -2292,7 +2292,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_guanjia, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia, name=self.cfg.name)
             # 保存
             self.save_guanjia_openid(lr.qc_openid, lr.qc_k)
         else:
@@ -3793,7 +3793,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_normal, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
             spring_fudai_pskey = lr.p_skey
 
             send_count = 0

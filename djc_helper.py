@@ -1940,7 +1940,9 @@ class DjcHelper:
             (23, "735438", "+11黑铁装备强化券", "歌兰蒂斯"),
         ]
         signin_days, today_signed = query_signin_info()
-        if today_signed:
+        if signin_days >= len(signin_configs):
+            logger.info("已经完全全部签到~")
+        elif today_signed:
             logger.info("今日已经签到过")
         else:
             logger.info(f"尝试签到第{signin_days + 1}天")

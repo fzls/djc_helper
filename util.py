@@ -444,6 +444,11 @@ def clear_login_status():
     os.mkdir(cached_dir)
 
 
+def get_screen_size():
+    width, height = win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
+    return width, height
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

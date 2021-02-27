@@ -601,6 +601,8 @@ class QQLogin():
         chrome_default_url = 'data:,'
         while True:
             self.driver.get(url)
+            # 等待一会，确保地址栏url变量已变更
+            time.sleep(0.1)
             if self.driver.current_url != chrome_default_url:
                 break
 

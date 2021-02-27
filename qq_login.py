@@ -51,6 +51,9 @@ class QQLogin():
     chrome_binary_directory = os.path.realpath("./chrome_portable_87")
     chrome_binary_location = os.path.realpath("./chrome_portable_87/chrome.exe")
 
+    default_window_width = 516
+    default_window_height = 516
+
     def __init__(self, common_config):
         self.cfg = common_config  # type: CommonConfig
         self.driver = None  # type: WebDriver
@@ -62,6 +65,7 @@ class QQLogin():
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
 
         options = Options()
+        options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if self.cfg.run_in_headless_mode:

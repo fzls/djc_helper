@@ -176,7 +176,7 @@ class QQLogin():
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
-        self.window_title = f"请扫码登录账号 {name} - {login_mode}"
+        self.window_title = f"请扫码 {name} - {login_mode}"
 
         def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成扫码登录操作或快捷登录操作")

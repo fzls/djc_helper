@@ -388,8 +388,7 @@ class QQLogin():
         # 参数：theme
         # 绿色风格：1
         # 蓝色风格：2 re: 选用
-        logger.info("打开活动界面")
-
+        logger.info("打开登录界面")
         self.open_url_on_start(f"https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid={appid}&daid={daid}&s_url={quote_plus(s_url)}&style={style}&theme={theme}&target=self")
 
     def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None):

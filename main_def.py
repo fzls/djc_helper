@@ -359,7 +359,7 @@ def count_with_color(card_count, show_color, show_width=3):
 
 def show_accounts_status(cfg, ctx):
     logger.info("")
-    _show_head_line("部分短期活动信息")
+    _show_head_line("部分活动信息")
     Urls().show_current_valid_act_infos()
 
     logger.info("")

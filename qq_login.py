@@ -145,7 +145,7 @@ class QQLogin():
         logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
         def login_with_account_and_password():
-            logger.info(color("bold_yellow") + "当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
+            logger.info(color("bold_green") + "当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
 
             # 切换到自动登录界面
             logger.info("等待#switcher_plogin加载完毕")
@@ -216,7 +216,7 @@ class QQLogin():
                 time.sleep(self.cfg.login.retry_wait_time)
             finally:
                 used_time = datetime.datetime.now() - self.time_start_login
-                logger.info(color("bold_green") + f"本次 {ctx} 共耗时为 {used_time}")
+                logger.info(color("bold_yellow") + f"本次 {ctx} 共耗时为 {used_time}")
                 self.destroy_chrome()
 
         # 能走到这里说明登录失败了，大概率是网络不行
@@ -485,7 +485,7 @@ class QQLogin():
             tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
-            logger.info(color("bold_yellow") + "检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
+            logger.info(color("bold_green") + "检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
 
             try:
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slide")))
@@ -516,7 +516,7 @@ class QQLogin():
                 xoffsets.append(init_offset - 3 * (drag_block_width // 4))
 
             logger.info(
-                color("bold_yellow") +
+                color("bold_green") +
                 f"验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
             )
 
@@ -532,7 +532,7 @@ class QQLogin():
             ActionChains(self.driver).release(on_element=drag_button).perform()
             time.sleep(wait_time)
 
-            logger.info(color("bold_yellow") + f"开始拖拽验证码，将依次尝试下列偏移量:\n{xoffsets}")
+            logger.info(color("bold_green") + f"开始拖拽验证码，将依次尝试下列偏移量:\n{xoffsets}")
             for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
                 time.sleep(0.5)

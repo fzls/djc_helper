@@ -256,7 +256,7 @@ def get_act_desc_js(actId):
     return ""
 
 
-def get_act_desc(actId):
+def get_ams_act_desc(actId):
     act = search_act(actId)
     if act is None:
         return ""

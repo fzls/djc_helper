@@ -180,7 +180,13 @@ class Urls:
         self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
 
     def show_current_valid_act_infos(self):
-        acts = [*not_ams_activities]
+        acts = []
+
+        for not_ams_act in not_ams_activities:
+            if is_act_expired(not_ams_act.dtEndTime):
+                continue
+
+            acts.append(not_ams_act)
 
         for attr_name, act_id in self.__dict__.items():
             if not attr_name.startswith("iActivityId_"):

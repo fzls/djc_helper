@@ -407,7 +407,7 @@ class DjcHelper:
         # 会员关怀
         self.vip_mentor()
 
-        # QQ空间抽卡
+        # QQ空间集卡
         self.ark_lottery()
 
         # DNF福利中心兑换
@@ -1257,7 +1257,7 @@ class DjcHelper:
         except Exception as e:
             logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
-    # --------------------------------------------QQ空间抽卡--------------------------------------------
+    # --------------------------------------------QQ空间集卡--------------------------------------------
     @try_except
     def ark_lottery(self):
         # note: 启用和废弃抽卡活动的流程如下
@@ -1276,11 +1276,11 @@ class DjcHelper:
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
-        show_head_line(f"QQ空间抽卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
+        show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
         self.show_not_ams_act_info("集卡")
 
         if not self.cfg.function_switches.get_ark_lottery:
-            logger.warning("未启用领取QQ空间抽卡功能，将跳过")
+            logger.warning("未启用领取QQ空间集卡功能，将跳过")
             return
 
         lr = self.fetch_pskey()

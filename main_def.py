@@ -440,8 +440,13 @@ def run(cfg):
 
         _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
+        start_time = datetime.datetime.now()
+
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run(user_buy_info)
+
+        used_time = datetime.datetime.now() - start_time
+        _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")

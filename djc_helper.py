@@ -2791,10 +2791,6 @@ class DjcHelper:
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     @try_except
     def xinyue_financing(self):
-        if not self.common_cfg.test_mode:
-            # undone: 心悦app理财礼卡活动似乎还有一些问题，先本地运行一段时间再放出去
-            return
-
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
         self.show_amesvr_act_info(self.xinyue_financing_op)
@@ -2803,12 +2799,8 @@ class DjcHelper:
             logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
             return
 
-        selectedCards = self.cfg.xinyue_financing_card_names
-        if len(selectedCards) == 0:
-            logger.warning("未配置心悦app理财礼卡活动选择的理财卡类型(xinyue_financing_card_names)，将跳过")
-            return
-
-        logger.info(color("fg_bold_green") + f"当前配置的理财卡列表为: {selectedCards}")
+        selectedCards = ["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]
+        logger.info(color("fg_bold_green") + f"当前设定的理财卡优先列表为: {selectedCards}")
 
         type2name = {
             "type1": "体验版周卡",

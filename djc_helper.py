@@ -1174,7 +1174,7 @@ class DjcHelper:
     def get_xinyue_sailiyam_status(self):
         res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
         try:
-            modRet = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            modRet = parse_amesvr_common_info(res)
             lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
             dangao = modRet.sOutValue2
             xinqingzhi = modRet.sOutValue3
@@ -1579,7 +1579,7 @@ class DjcHelper:
         res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", weekDay=get_this_week_monday(), print_res=False)
         equip_count = 0
         if "modRet" in res:
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             if info.sOutValue2 != "" and info.sOutValue2 != "0":
                 equip_count = len(info.sOutValue2.split(","))
         else:
@@ -1884,7 +1884,7 @@ class DjcHelper:
 
         def query_signin_info():
             res = self.dnf_helper_op("查询", "734421", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             temp = raw_info.sOutValue1.split(';')
             signin_days = int(temp[0])
             today_signed = temp[1] == "1"
@@ -1893,7 +1893,7 @@ class DjcHelper:
 
         def query_card_info():
             res = self.dnf_helper_op("查询", "734421", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             return raw_info.sOutValue3
 
         datetime_fmt = "%Y-%m-%d %H:%M:%S"
@@ -2490,7 +2490,7 @@ class DjcHelper:
 
         def query_watch_time():
             res = self.dnf_carnival_live_op("查询观看时间", "722482", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue3)
 
         def watch_remaining_time():
@@ -2502,7 +2502,7 @@ class DjcHelper:
 
         def query_used_lottery_times():
             res = self.dnf_carnival_live_op("查询获奖次数", "725567", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         def lottery_remaining_times():
@@ -2774,7 +2774,7 @@ class DjcHelper:
 
     def query_dnf_dianzan(self):
         res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         return int(info.sOutValue1), info.sOutValue2
 
@@ -3013,7 +3013,7 @@ class DjcHelper:
 
     def query_dnf_drift_points(self):
         res = self.dnf_drift_op("查询基础信息", "726353")
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
         total, remaining = int(info.sOutValue2), int(info.sOutValue2) - int(info.sOutValue1) * 4
         return total, remaining
 
@@ -3250,7 +3250,7 @@ class DjcHelper:
         count = 0
         try:
             res = self.majieluo_op("查询当前时间引导石数量", "734106", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             count = int(info.sOutValue1)
         except Exception as e:
             pass
@@ -3262,7 +3262,7 @@ class DjcHelper:
 
         card_info = ""
         try:
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             # 默认排序与表现一致，改为跟ui表现一致
             temp = info.sOutValue1.split('|')
             order = [3, 4, 1, 2, 5]
@@ -3360,7 +3360,7 @@ class DjcHelper:
 
         def query_signin_days():
             res = self.youfei_op("查询签到状态", "728501", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         self.youfei_op("幸运用户礼包", "728407")
@@ -3447,12 +3447,12 @@ class DjcHelper:
 
         def query_dbq():
             res = self.dnf_bbs_op("查询代币券", "730277", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         def query_remaining_quota():
             res = self.dnf_bbs_op("查询礼包剩余量", "730763", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
 
             logger.info('\n'.join([
                 "当前礼包全局剩余量如下",
@@ -3608,7 +3608,7 @@ class DjcHelper:
 
         # 查询第一部分
         res = self.dnf_spring_op("输出", "731313", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         springInfo.recharge_money = int(info.sOutValue1) // 100
 
@@ -3621,7 +3621,7 @@ class DjcHelper:
 
         # 查询第二部分
         res = self.dnf_spring_op("输出二", "731854", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         springInfo.total_take_fudai = int(info.sOutValue1)
 
@@ -3652,7 +3652,7 @@ class DjcHelper:
 
         def query_info():
             res = self.dnf_0121_op("查询用户信息", "733258", print_res=False)
-            common_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            common_info = parse_amesvr_common_info(res)
 
             info = Dnf0121Info()
             info.sItemIds = common_info.sOutValue1.split(",")
@@ -3698,7 +3698,7 @@ class DjcHelper:
 
         def query_signin_days():
             res = self.wegame_spring_op("查询签到天数", "736307", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
             parts = info.sOutValue1.split('|')[0].split(':')
             days = int(parts[2])
@@ -3706,7 +3706,7 @@ class DjcHelper:
 
         def query_lottery_times():
             res = self.wegame_spring_op("查询抽奖次数", "736306", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             # "sOutValue1": "239:16:4|240:8:1",
             parts = info.sOutValue1.split('|')[0].split(':')
             total, remaining = int(parts[1]), int(parts[2])
@@ -3764,7 +3764,7 @@ class DjcHelper:
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",
             # "sOutValue5": "0252c9b811d66dc1f0c9c6284b378e40", "sOutValue6": "", "sOutValue7": "0", "sOutValue8": "4"}
             res = self.spring_fudai_op("查询各种数据", "733432", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             info = SpringFuDaiInfo()
 
             temp = raw_info.sOutValue1.split('|')
@@ -3929,13 +3929,13 @@ class DjcHelper:
 
         def query_count():
             res = self.firecrackers_op("查询剩余爆竹数", "733395", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
 
             return int(raw_info.sOutValue1)
 
         def today_has_invite_friend():
             res = self.firecrackers_op("查询各个任务状态", "733392", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             taskStatus = raw_info.sOutValue1.split(',')
 
             return int(taskStatus[3]) >= 1
@@ -4074,7 +4074,7 @@ class DjcHelper:
     def query_firecrackers_points(self):
         try:
             res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
 
             return int(raw_info.sOutValue1)
         except Exception as e:

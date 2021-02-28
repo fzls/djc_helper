@@ -203,7 +203,7 @@ class Urls:
 
         acts.sort(key=lambda act: act.dtEndTime)
 
-        act_infos = [f"{idx + 1:2d} {format_act(act)}" for idx, act in enumerate(acts)]
+        act_infos = [f"{idx + 1:2d} {format_act(act, needPadding=True)}" for idx, act in enumerate(acts)]
         logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
 
 
@@ -279,8 +279,12 @@ def get_not_ams_act_desc(act_name):
     return f"未找到活动 {act_name} 的相关信息"
 
 
-def format_act(act: AmsActInfo):
-    msg = f"活动 {padLeftRight(act.sActivityName, 44, mode='left')}({act.iActivityId})"
+def format_act(act: AmsActInfo, needPadding=False):
+    act_name = act.sActivityName
+    if needPadding:
+        act_name = padLeftRight(act.sActivityName, 44, mode='left')
+
+    msg = f"活动 {act_name}({act.iActivityId})"
 
     if act.dtEndTime != "":
         msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，"

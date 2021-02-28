@@ -440,8 +440,11 @@ class DjcHelper:
             paied_activities = [
                 "dnf助手活动 牛气冲天迎新年",
             ]
-            msg += "\n目前受影响的活动如下："
-            msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            if len(paied_activities) != 0:
+                msg += "\n目前受影响的活动如下："
+                msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            else:
+                msg += "\n目前尚无需要付费的短期活动，当新的短期活动出现时会及时加入~"
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):

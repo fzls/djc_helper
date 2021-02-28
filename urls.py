@@ -203,7 +203,7 @@ class Urls:
 
         acts.sort(key=lambda act: act.dtEndTime)
 
-        act_infos = [format_act(act) for act in acts]
+        act_infos = [f"{idx + 1:2d} {format_act(act)}" for idx, act in enumerate(acts)]
         logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
 
 

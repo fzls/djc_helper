@@ -49,7 +49,7 @@ class Uploader:
             if not is_file:
                 return
 
-            logger.info(f"下载完成，fid={fid}")
+            logger.info(f"上传完成，fid={fid}")
 
             prefix = history_file_prefix
             if prefix == "":

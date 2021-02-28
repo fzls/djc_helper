@@ -963,23 +963,20 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_heizuan_gift = create_checkbox(cfg.get_heizuan_gift)
         form_layout.addRow("每月黑钻等级礼包", self.checkbox_get_heizuan_gift)
 
-        self.checkbox_get_dnf_shanguang = create_checkbox(cfg.get_dnf_shanguang)
-        form_layout.addRow("DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
+        # self.checkbox_get_dnf_shanguang = create_checkbox(cfg.get_dnf_shanguang)
+        # form_layout.addRow("DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
 
         self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
         form_layout.addRow("qq视频活动", self.checkbox_get_qq_video)
 
-        self.checkbox_get_youfei = create_checkbox(cfg.get_youfei)
-        form_layout.addRow("qq视频-看江湖有翡", self.checkbox_get_youfei)
-
-        self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
-        form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
-
-        self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
-        form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
-
-        self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
-        form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
+        # self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
+        # form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
+        #
+        # self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
+        # form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
+        #
+        # self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
+        # form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
 
         self.checkbox_get_dnf_welfare = create_checkbox(cfg.get_dnf_welfare)
         form_layout.addRow("DNF福利中心兑换", self.checkbox_get_dnf_welfare)
@@ -990,32 +987,23 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
         form_layout.addRow("心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
 
-        self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
-        form_layout.addRow("DNF马杰洛的规划第三期", self.checkbox_get_majieluo)
+        # self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
+        # form_layout.addRow("DNF马杰洛的规划第三期", self.checkbox_get_majieluo)
 
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
         form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
 
-        self.checkbox_get_dnf_spring = create_checkbox(cfg.get_dnf_spring)
-        form_layout.addRow("DNF新春夺宝大作战", self.checkbox_get_dnf_spring)
+        # self.checkbox_get_wegame_spring = create_checkbox(cfg.get_wegame_spring)
+        # form_layout.addRow("新春献豪礼 首次盲盒限时领", self.checkbox_get_wegame_spring)
 
-        self.checkbox_get_wegame_spring = create_checkbox(cfg.get_wegame_spring)
-        form_layout.addRow("新春献豪礼 首次盲盒限时领", self.checkbox_get_wegame_spring)
-
-        self.checkbox_get_spring_fudai = create_checkbox(cfg.get_spring_fudai)
-        form_layout.addRow("新春福袋大作战", self.checkbox_get_spring_fudai)
-
-        self.checkbox_get_spring_collection = create_checkbox(cfg.get_spring_collection)
-        form_layout.addRow("DNF新春福利集合站", self.checkbox_get_spring_collection)
-
-        self.checkbox_get_firecrackers = create_checkbox(cfg.get_firecrackers)
-        form_layout.addRow("燃放爆竹", self.checkbox_get_firecrackers)
+        # self.checkbox_get_spring_collection = create_checkbox(cfg.get_spring_collection)
+        # form_layout.addRow("DNF新春福利集合站", self.checkbox_get_spring_collection)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
-        self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
-        form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
+        # self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
+        # form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
 
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
@@ -1034,24 +1022,20 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_xinyue = self.checkbox_get_xinyue.isChecked()
         cfg.get_credit_xinyue_gift = self.checkbox_get_credit_xinyue_gift.isChecked()
         cfg.get_heizuan_gift = self.checkbox_get_heizuan_gift.isChecked()
-        cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
+        # cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
         cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
-        cfg.get_youfei = self.checkbox_get_youfei.isChecked()
-        cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
-        cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
-        cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
+        # cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
+        # cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
+        # cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
         cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
-        cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
+        # cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
-        cfg.get_dnf_spring = self.checkbox_get_dnf_spring.isChecked()
-        cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
-        cfg.get_spring_fudai = self.checkbox_get_spring_fudai.isChecked()
-        cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
-        cfg.get_firecrackers = self.checkbox_get_firecrackers.isChecked()
+        # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
+        # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
 
-        cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
+        # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()

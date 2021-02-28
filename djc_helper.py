@@ -401,30 +401,14 @@ class DjcHelper:
         # qq视频活动
         self.qq_video()
 
-        # qq视频-看江湖有翡
-        self.youfei()
-
         # dnf论坛签到
         self.dnf_bbs_signin()
 
         # 会员关怀
         self.vip_mentor()
 
-        # QQ空间集卡
-        self.ark_lottery()
-
         # DNF福利中心兑换
         self.dnf_welfare()
-
-        # 暂时屏蔽
-        # # DNF0121新春落地页活动
-        # self.dnf_0121()
-
-        # DNF新春福利集合站
-        self.spring_collection()
-
-        # dnf助手编年史活动
-        self.dnf_helper_chronicle()
 
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
@@ -438,7 +422,6 @@ class DjcHelper:
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
-                "dnf助手活动 牛气冲天迎新年",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -450,8 +433,7 @@ class DjcHelper:
     def paied_activities(self):
         # re: 更新新的活动时记得更新上面的列表，以及urls.py的not_ams_activities
 
-        # dnf助手活动
-        self.dnf_helper()
+        pass
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -508,6 +490,25 @@ class DjcHelper:
 
         # WeGame春节活动
         self.wegame_spring()
+
+        # qq视频-看江湖有翡
+        self.youfei()
+
+        # QQ空间集卡
+        self.ark_lottery()
+
+        # DNF新春福利集合站
+        self.spring_collection()
+
+        # 暂时屏蔽
+        # # DNF0121新春落地页活动
+        # self.dnf_0121()
+
+        # dnf助手编年史活动
+        self.dnf_helper_chronicle()
+
+        # dnf助手活动
+        self.dnf_helper()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except

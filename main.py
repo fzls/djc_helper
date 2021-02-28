@@ -107,8 +107,8 @@ def main():
     # # 尝试派赛利亚出去打工
     # try_xinyue_sailiyam_start_work(cfg)
 
-    auto_send_cards(cfg)
-    show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+    # auto_send_cards(cfg)
+    # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
     show_accounts_status(cfg, "运行完毕展示账号概览")
 

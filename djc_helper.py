@@ -2973,11 +2973,26 @@ class DjcHelper:
 
             return info
 
+        @try_except
+        def take_all_gifts():
+            # note: 因为已经有一键领取的接口，暂不接入单个领取的接口
+            # self.xinyue_weekly_gift_op("领取单个周礼包_G分改造", "508441", PackId="1")
+            
+            rc = self.common_cfg.retry
+            for idx in range(rc.max_retry_count):
+                #   {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-TGCLUB-0301004339-TZX3Xv-155525-508440", "iAlertSerial": "0", "iCondNotMetId": "860713", "sMsg": "仅限心悦用户参与", "sCondNotMetTips": "仅限心悦用户参与"}}
+                res = self.xinyue_weekly_gift_op("一键领取周礼包_G分改造", "508440")
+                if res["ret"] == "700" and res["flowRet"]["sMsg"] == "仅限心悦用户参与":
+                    logger.info(f"第{idx + 1}/{rc.max_retry_count}次尝试 这个一键领取接口似乎每日第一次请求会提示仅限心悦用户参与，实际上任何级别都可以的，将等待{rc.retry_wait_time}")
+                    time.sleep(rc.retry_wait_time)
+                    continue
+
+                # 领取完成
+                break
+
         old_gpoints_info = query_gpoints_info()
 
-        # note: 因为已经有一键领取的接口，暂不接入单个领取的接口
-        # self.xinyue_weekly_gift_op("领取单个周礼包_G分改造", "508441", PackId="1")
-        self.xinyue_weekly_gift_op("一键领取周礼包_G分改造", "508440")
+        take_all_gifts()
 
         info = query_info()
         logger.info(f"当前剩余免G分抽奖券数目为{info.tTicket}")

@@ -2873,58 +2873,54 @@ class DjcHelper:
             return info_map
 
         # ------------- 正式逻辑 ----------------
-        try:
-            pass
-            gPoints = query_gpoints()
-            startPoints = gPoints
-            logger.info(f"当前G分为{startPoints}")
+        gPoints = query_gpoints()
+        startPoints = gPoints
+        logger.info(f"当前G分为{startPoints}")
 
-            # 活动规则
-            # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
-            # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
-            # ps：推荐购买体验版月卡和升级版月卡
-            financingCardsToBuyAndMap = {
-                ## 名称   购买价格   购买FlowId    领取FlowId
-                "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
-                "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
-                "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
-                "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
-            }
+        # 活动规则
+        # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
+        # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
+        # ps：推荐购买体验版月卡和升级版月卡
+        financingCardsToBuyAndMap = {
+            ## 名称   购买价格   购买FlowId    领取FlowId
+            "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
+            "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
+            "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
+            "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
+        }
 
-            cardInfoMap = get_financing_info_map()
-            cardTakenMap = query_card_taken_map()
-            for cardName in selectedCards:
-                if cardName not in financingCardsToBuyAndMap:
-                    logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
+        cardInfoMap = get_financing_info_map()
+        cardTakenMap = query_card_taken_map()
+        for cardName in selectedCards:
+            if cardName not in financingCardsToBuyAndMap:
+                logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
+                continue
+
+            buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
+            cardInfo = cardInfoMap[cardName]
+            taken = cardTakenMap[cardName]
+            # 如果尚未购买（或过期），则购买
+            if not cardInfo.buy:
+                if gPoints >= buyPrice:
+                    self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
+                    gPoints -= buyPrice
+                else:
+                    logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
                     continue
 
-                buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
-                cardInfo = cardInfoMap[cardName]
-                taken = cardTakenMap[cardName]
-                # 如果尚未购买（或过期），则购买
-                if not cardInfo.buy:
-                    if gPoints >= buyPrice:
-                        self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
-                        gPoints -= buyPrice
-                    else:
-                        logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
-                        continue
+            # 此处以确保购买，尝试领取
+            if taken:
+                logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
+            else:
+                self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
 
-                # 此处以确保购买，尝试领取
-                if taken:
-                    logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
-                else:
-                    self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
+        newGPoints = query_gpoints()
+        delta = newGPoints - startPoints
+        logger.warning("")
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
+        logger.warning("")
 
-            newGPoints = query_gpoints()
-            delta = newGPoints - startPoints
-            logger.warning("")
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
-            logger.warning("")
-
-            show_financing_info()
-        except Exception as e:
-            logger.error("处理心悦app理财礼卡出错了", exc_info=e)
+        show_financing_info()
 
     def xinyue_financing_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_xinyue_financing

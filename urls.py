@@ -103,6 +103,7 @@ class Urls:
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "354984"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
+        self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "354870"  # DNF马杰洛的规划第三期
         self.iActivityId_dnf_helper = "356203"  # DNF助手活动 牛气冲天迎新年

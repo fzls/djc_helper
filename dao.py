@@ -248,6 +248,10 @@ class AmesvrCommonModRet(ConfigInterface):
         self.sOutValue8 = ""
 
 
+def parse_amesvr_common_info(res) -> AmesvrCommonModRet:
+    return AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+
 class AmesvrUserBindInfo(ConfigInterface):
     def __init__(self):
         self.Fid = "7179"

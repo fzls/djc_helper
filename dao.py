@@ -764,3 +764,18 @@ class AmsActInfo(ConfigInterface):
             "wx_appid": "wxb30cf8a19c708c2a"
         }
         self.flows = {}
+
+
+class XinyueWeeklyGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.qq = "123456"
+        self.iLevel = 4
+        self.sLevel = "4"
+        self.tTicket = 0
+        self.gift_got_list = ["1", "1", "1", "1", "0", "0", "0"]
+
+
+class XinyueWeeklyGPointsInfo(ConfigInterface):
+    def __init__(self):
+        self.nickname = "风之凌殇"
+        self.gpoints = 6666

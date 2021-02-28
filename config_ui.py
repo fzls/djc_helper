@@ -987,6 +987,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_xinyue_financing = create_checkbox(cfg.get_xinyue_financing)
         form_layout.addRow("心悦app理财礼卡", self.checkbox_get_xinyue_financing)
 
+        self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
+        form_layout.addRow("心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
+
         self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
         form_layout.addRow("DNF马杰洛的规划第三期", self.checkbox_get_majieluo)
 
@@ -1039,6 +1042,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
+        cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
         cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
         cfg.get_dnf_spring = self.checkbox_get_dnf_spring.isChecked()

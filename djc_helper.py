@@ -2843,9 +2843,6 @@ class DjcHelper:
         }
 
         # ------------- 封装函数 ----------------
-        def query_gpoints():
-            res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
-            return int(res.sOutValue2)
 
         def query_card_taken_map():
             res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
@@ -2906,7 +2903,7 @@ class DjcHelper:
             return info_map
 
         # ------------- 正式逻辑 ----------------
-        gPoints = query_gpoints()
+        gPoints = self.query_gpoints()
         startPoints = gPoints
         logger.info(f"当前G分为{startPoints}")
 
@@ -2947,13 +2944,18 @@ class DjcHelper:
             else:
                 self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
 
-        newGPoints = query_gpoints()
+        newGPoints = self.query_gpoints()
         delta = newGPoints - startPoints
         logger.warning("")
         logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
         logger.warning("")
 
         show_financing_info()
+
+    @try_except(return_val_on_except=0)
+    def query_gpoints(self):
+        res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
+        return int(res.sOutValue2)
 
     def xinyue_financing_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_xinyue_financing

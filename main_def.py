@@ -371,8 +371,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分"]
+    colSizes = [4, 12, 8, 8, 12, 6, 8, 8]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -398,7 +398,9 @@ def show_accounts_status(cfg, ctx):
             if fixed_team is not None:
                 team_score = f"[{fixed_team.id}]{team_score}"
 
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
+        gpoints = djcHelper.query_gpoints()
+
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 

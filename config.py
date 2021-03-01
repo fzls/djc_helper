@@ -213,6 +213,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_welfare = True
         # 是否领取心悦app理财礼卡
         self.get_xinyue_financing = True
+        # 是否领取心悦猫咪
+        self.get_xinyue_cat = True
         # 是否领取心悦app周礼包
         self.get_xinyue_weekly_gift = True
         # 是否领取dnf漂流瓶

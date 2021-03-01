@@ -280,18 +280,25 @@ def use_by_myself():
     return os.path.exists(".use_by_myself")
 
 
-def try_except(fun):
-    def decorator(*args, **kwargs):
-        try:
-            return fun(*args, **kwargs)
-        except Exception as e:
-            logger.error(f"执行{fun.__name__}出错了" + check_some_exception(e), exc_info=e)
-            return None
+def try_except(show_last_process_result=True, extra_msg=""):
+    def decorator(fun):
+        def wrapper(*args, **kwargs):
+            try:
+                return fun(*args, **kwargs)
+            except Exception as e:
+                msg = f"执行{fun.__name__}出错了"
+                if extra_msg != "":
+                    msg += ", " + extra_msg
+                msg += check_some_exception(e, show_last_process_result)
+                logger.error(msg, exc_info=e)
+                return None
+
+        return wrapper
 
     return decorator
 
 
-def check_some_exception(e) -> str:
+def check_some_exception(e, show_last_process_result=True) -> str:
     msg = ""
 
     def format_msg(msg, _color="bold_yellow"):
@@ -308,7 +315,7 @@ def check_some_exception(e) -> str:
         msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.toml.example将登录超时相关配置加到config.toml中，并调大超时时间")
 
     from network import last_process_result
-    if last_process_result is not None:
+    if last_process_result is not None and show_last_process_result:
         msg += format_msg(f"最近一次的请求结果为：{last_process_result}", "bold_green")
 
     return msg

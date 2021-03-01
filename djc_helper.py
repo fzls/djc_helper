@@ -510,7 +510,7 @@ class DjcHelper:
         self.dnf_helper()
 
     # --------------------------------------------道聚城--------------------------------------------
-    @try_except
+    @try_except()
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")
         self.show_not_ams_act_info("道聚城")
@@ -847,7 +847,7 @@ class DjcHelper:
         self.get(f"绑定账号-{serviceName}-{roleName}", self.urls.bind_role, role_info=json.dumps(roleInfo, ensure_ascii=False), is_jsonp=True)
 
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
-    @try_except
+    @try_except()
     def xinyue_operations(self):
         """
         https://xinyue.qq.com/act/a20181101rights/index.html
@@ -1224,7 +1224,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------黑钻--------------------------------------------
-    @try_except
+    @try_except()
     def get_heizuan_gift(self):
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
         show_head_line("黑钻礼包")
@@ -1244,7 +1244,7 @@ class DjcHelper:
             return res
 
     # --------------------------------------------信用礼包--------------------------------------------
-    @try_except
+    @try_except()
     def get_credit_xinyue_gift(self):
         show_head_line("腾讯游戏信用相关礼包")
         self.show_not_ams_act_info("腾讯游戏信用礼包")
@@ -1264,7 +1264,7 @@ class DjcHelper:
             logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
     # --------------------------------------------QQ空间集卡--------------------------------------------
-    @try_except
+    @try_except()
     def ark_lottery(self):
         # note: 启用和废弃抽卡活动的流程如下
         #   1. 启用
@@ -1506,7 +1506,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_1224(self):
         # https://dnf.qq.com/lbact/a20201224aggregate/index.html
         show_head_line("史诗之路来袭活动合集")
@@ -1541,7 +1541,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_shanguang(self):
         # http://xinyue.qq.com/act/a20201221sgbpc/index.html
         show_head_line("DNF闪光杯第三期")
@@ -1620,7 +1620,7 @@ class DjcHelper:
     qq_video_module_id_online_7_days = "ui7hp23tr46ae07poruw2uf5xe"  # 累积7天
     qq_video_module_id_online_15_days = "h1y2e73itl1ej4cy6l7ilzd001"  # 累积15天
 
-    @try_except
+    @try_except()
     def qq_video(self):
         show_head_line("qq视频活动")
         self.show_not_ams_act_info("qq视频蚊子腿")
@@ -1868,7 +1868,7 @@ class DjcHelper:
         return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_helper(self):
         # https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew
         show_head_line("dnf助手 牛气冲天迎新年")
@@ -1988,7 +1988,7 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
@@ -2048,7 +2048,9 @@ class DjcHelper:
             return DnfHelperChronicleSignList().auto_update_config(res)
 
         # ------ 领取各种奖励 ------
-        @try_except
+        extra_msg = color("bold_green") + "很可能是编年史尚未正式开始，导致无法领取游戏内奖励~"
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAwards():
             taskInfo = getUserTaskList()
             if taskInfo.hasPartner:
@@ -2078,7 +2080,7 @@ class DjcHelper:
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
 
-        @try_except
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gifts():
             signGiftsList = sign_gifts_list()
             hasTakenAnySignGift = False
@@ -2099,7 +2101,7 @@ class DjcHelper:
                            amsid=giftInfo.sLbcode)
             logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', '出错啦')}")
 
-        @try_except
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_awards():
             basicAwardList = basic_award_list()
             listOfBasicList = [(True, basicAwardList.basic1List)]
@@ -2126,7 +2128,7 @@ class DjcHelper:
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', '出错啦')}")
 
-        @try_except
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_awards():
             exchangeList = exchange_list()
             exchangeGiftMap = {}
@@ -2168,7 +2170,7 @@ class DjcHelper:
                            exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)
             logger.info(f"兑换奖励: {res.get('giftName', '出错啦')}")
 
-        @try_except
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def lottery():
             if self.cfg.dnf_helper_info.chronicle_lottery:
                 userInfo = getUserActivityTopInfo()
@@ -2237,7 +2239,7 @@ class DjcHelper:
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
     guanjia_lottery_gifts_act_id = "1133"  # 抽奖活动ID
 
-    @try_except
+    @try_except()
     def guanjia(self):
         show_head_line("管家蚊子腿")
         self.show_not_ams_act_info("管家蚊子腿")
@@ -2364,7 +2366,7 @@ class DjcHelper:
         return self.local_saved_guanjia_openid_file.format(self.cfg.name)
 
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
-    @try_except
+    @try_except()
     def hello_voice(self):
         # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
@@ -2560,7 +2562,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_welfare(self):
         # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
@@ -2672,7 +2674,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF共创投票--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_dianzan(self):
         # https://dnf.qq.com/cp/a20201126version/index.shtml
         show_head_line("DNF共创投票")
@@ -2815,7 +2817,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
-    @try_except
+    @try_except()
     def xinyue_financing(self):
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
@@ -2959,7 +2961,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------心悦app周礼包--------------------------------------------
-    @try_except
+    @try_except()
     def xinyue_weekly_gift(self):
         # https://xinyue.qq.com/act/a20180906gifts/index.html
         show_head_line("心悦app周礼包")
@@ -2992,7 +2994,7 @@ class DjcHelper:
 
             return info
 
-        @try_except
+        @try_except()
         def take_all_gifts():
             # note: 因为已经有一键领取的接口，暂不接入单个领取的接口
             # self.xinyue_weekly_gift_op("领取单个周礼包", "508441", PackId="1")
@@ -3037,7 +3039,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------dnf漂流瓶--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_drift(self):
         # https://dnf.qq.com/cp/a20201211driftm/index.html
         show_head_line("dnf漂流瓶")
@@ -3140,7 +3142,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF马杰洛的规划第三期--------------------------------------------
-    @try_except
+    @try_except()
     def majieluo(self):
         # https://dnf.qq.com/cp/a20210121welfare/index.html
         show_head_line("DNF马杰洛的规划第三期")
@@ -3393,7 +3395,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
-    @try_except
+    @try_except()
     def warm_winter(self):
         # https://dnf.qq.com/lbact/a20200911lbz3dns/index.html
         show_head_line("暖冬好礼活动")
@@ -3450,7 +3452,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------qq视频-看江湖有翡--------------------------------------------
-    @try_except
+    @try_except()
     def youfei(self):
         # https://dnf.qq.com/cp/a20201227youfeim/index.html
         show_head_line("qq视频-看江湖有翡")
@@ -3488,7 +3490,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------dnf论坛签到--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_bbs_signin(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf官方论坛签到")
@@ -3621,7 +3623,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------会员关怀--------------------------------------------
-    @try_except
+    @try_except()
     def vip_mentor(self):
         show_head_line("会员关怀")
         self.show_not_ams_act_info("会员关怀")
@@ -3643,7 +3645,7 @@ class DjcHelper:
         qa.vip_mentor()
 
     # --------------------------------------------DNF新春夺宝大作战--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_spring(self):
         # https://xinyue.qq.com/act/a20210104cjhdh5/index.html
         show_head_line("DNF新春夺宝大作战")
@@ -3742,7 +3744,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF0121新春落地页活动--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_0121(self):
         # https://dnf.qq.com/cp/a20210121index/
         show_head_line("DNF0121新春落地页活动")
@@ -3788,7 +3790,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------WeGame春节活动--------------------------------------------
-    @try_except
+    @try_except()
     def wegame_spring(self):
         # https://dnf.qq.com/lbact/a20210121wegamepc/index.html
         show_head_line("WeGame春节活动")
@@ -3843,7 +3845,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------新春福袋大作战--------------------------------------------
-    @try_except
+    @try_except()
     def spring_fudai(self):
         # https://dnf.qq.com/cp/a20210108luckym/index.html
         show_head_line("新春福袋大作战")
@@ -3983,7 +3985,7 @@ class DjcHelper:
                                    extra_cookies=f"p_skey={p_skey}")
 
     # --------------------------------------------DNF新春福利集合站--------------------------------------------
-    @try_except
+    @try_except()
     def spring_collection(self):
         # https://dnf.qq.com/lbact/a20210121hdhj/index.html
         show_head_line("DNF新春福利集合站")
@@ -4019,7 +4021,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------燃放爆竹活动--------------------------------------------
-    @try_except
+    @try_except()
     def firecrackers(self):
         # https://dnf.qq.com/cp/a20210118rfbz/index.html
         show_head_line("燃放爆竹活动")

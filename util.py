@@ -389,7 +389,7 @@ GiB = 1024 * MiB
 TiB = 1024 * GiB
 
 
-@try_except
+@try_except()
 def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB):
     # 检查一下是否存在目录
     if not os.path.isdir(dir_name):

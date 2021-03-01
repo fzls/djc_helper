@@ -766,6 +766,19 @@ class AmsActInfo(ConfigInterface):
         self.flows = {}
 
 
+class AmsActFlowInfo(ConfigInterface):
+    def __init__(self):
+        self.sFlowName = "输出项"
+        self.iNeedLogin = "1"
+        self.sFlowAccountType = "undefined"
+        self.iAreaCheck = "0"
+        self.iNeedAreaRole = "0"
+        self.iNeedAreaRoleService = ""
+        self.openToOpen = {}
+        self.iCap = "0"
+        self.functions = []
+
+
 class XinyueWeeklyGiftInfo(ConfigInterface):
     def __init__(self):
         self.qq = "123456"

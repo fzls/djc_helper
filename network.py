@@ -153,7 +153,15 @@ def is_request_ok(data):
         ]
         for key in returnCodeKeys:
             if key in data:
-                success = int(data[key]) == 0
+                # 特殊处理 status
+                val = data[key]
+                if key == "status":
+                    if type(val) is str and not val.isnumeric():
+                        success = False
+                    else:
+                        success = int(val) in [0, 1]
+                else:
+                    success = int(val) == 0
                 break
 
         # 特殊处理qq视频

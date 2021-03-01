@@ -280,7 +280,7 @@ def use_by_myself():
     return os.path.exists(".use_by_myself")
 
 
-def try_except(show_last_process_result=True, extra_msg=""):
+def try_except(show_last_process_result=True, extra_msg="", return_val_on_except=None):
     def decorator(fun):
         def wrapper(*args, **kwargs):
             try:
@@ -291,7 +291,7 @@ def try_except(show_last_process_result=True, extra_msg=""):
                     msg += ", " + extra_msg
                 msg += check_some_exception(e, show_last_process_result)
                 logger.error(msg, exc_info=e)
-                return None
+                return return_val_on_except
 
         return wrapper
 

@@ -422,6 +422,7 @@ class DjcHelper:
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
+                "dnf助手编年史活动",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -433,7 +434,8 @@ class DjcHelper:
     def paied_activities(self):
         # re: 更新新的活动时记得更新上面的列表，以及urls.py的not_ams_activities
 
-        pass
+        # dnf助手编年史活动
+        self.dnf_helper_chronicle()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -503,9 +505,6 @@ class DjcHelper:
         # 暂时屏蔽
         # # DNF0121新春落地页活动
         # self.dnf_0121()
-
-        # dnf助手编年史活动
-        self.dnf_helper_chronicle()
 
         # dnf助手活动
         self.dnf_helper()
@@ -2049,8 +2048,19 @@ class DjcHelper:
             return DnfHelperChronicleSignList().auto_update_config(res)
 
         # ------ 领取各种奖励 ------
+        @try_except
+        def takeTaskAwards():
+            taskInfo = getUserTaskList()
+            if taskInfo.hasPartner:
+                logger.info(f"搭档为{taskInfo.pUserId}")
+            else:
+                logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+            for task in taskInfo.taskList:
+                takeTaskAward_op("自己", task.name, task.mActionId, task.mStatus, task.mExp)
+                if taskInfo.hasPartner:
+                    takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
 
-        def takeTaskAward(suffix, taskName, actionId, status, exp):
+        def takeTaskAward_op(suffix, taskName, actionId, status, exp):
             actionName = f"[{taskName}-{suffix}]"
 
             if status in [0, 2]:
@@ -2068,12 +2078,44 @@ class DjcHelper:
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
 
-        def take_continuous_signin_gift(giftInfo: DnfHelperChronicleSignGiftInfo):
+        @try_except
+        def take_continuous_signin_gifts():
+            signGiftsList = sign_gifts_list()
+            hasTakenAnySignGift = False
+            for signGift in signGiftsList.gifts:
+                # 2-未完成，0-已完成未领取，1-已领取
+                if signGift.status in [0]:
+                    # 0-已完成未领取
+                    take_continuous_signin_gift_op(signGift)
+                    hasTakenAnySignGift = True
+                else:
+                    # 2-未完成，1-已领取
+                    pass
+            if not hasTakenAnySignGift:
+                logger.info("连续签到均已领取")
+
+        def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
             res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params,
                            amsid=giftInfo.sLbcode)
             logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', '出错啦')}")
 
-        def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
+        @try_except
+        def take_basic_awards():
+            basicAwardList = basic_award_list()
+            listOfBasicList = [(True, basicAwardList.basic1List)]
+            if basicAwardList.hasPartner:
+                listOfBasicList.append((False, basicAwardList.basic2List))
+            hasTakenAnyBasicAward = False
+            for selfGift, basicList in listOfBasicList:
+                for award in basicList:
+                    if award.isLock == 0 and award.isUsed == 0:
+                        # 已解锁，且未领取，则尝试领取
+                        take_basic_award_op(award, selfGift)
+                        hasTakenAnyBasicAward = True
+            if not hasTakenAnyBasicAward:
+                logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+
+        def take_basic_award_op(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
                 mold = 1  # 自己
                 side = "自己"
@@ -2084,12 +2126,60 @@ class DjcHelper:
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', '出错啦')}")
 
-        def exchange_award(giftInfo: DnfHelperChronicleExchangeGiftInfo):
+        @try_except
+        def exchange_awards():
+            exchangeList = exchange_list()
+            exchangeGiftMap = {}
+            for gift in exchangeList.gifts:
+                exchangeGiftMap[gift.sLbcode] = gift
+
+            if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
+                all_exchanged = True
+                for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
+                    if ei.sLbcode not in exchangeGiftMap:
+                        logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
+                        continue
+
+                    gift = exchangeGiftMap[ei.sLbcode]
+                    if gift.usedNum >= int(gift.iNum):
+                        logger.warning(f"{gift.sName}已经达到兑换上限{gift.iNum}次, 将跳过")
+                        continue
+
+                    userInfo = getUserActivityTopInfo()
+                    if userInfo.level < int(gift.iLevel):
+                        all_exchanged = False
+                        logger.warning(f"目前等级为{userInfo.level}，不够兑换{gift.sName}所需的{gift.iLevel}级，将跳过后续优先级较低的兑换奖励")
+                        break
+                    if userInfo.point < int(gift.iCard):
+                        all_exchanged = False
+                        logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
+                        break
+
+                    for i in range(ei.count):
+                        exchange_award_op(gift)
+
+                if all_exchanged:
+                    logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
+            else:
+                logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
+
+        def exchange_award_op(giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get("兑换奖励", url_wang, api="send/exchange", **common_params,
                            exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)
             logger.info(f"兑换奖励: {res.get('giftName', '出错啦')}")
 
+        @try_except
         def lottery():
+            if self.cfg.dnf_helper_info.chronicle_lottery:
+                userInfo = getUserActivityTopInfo()
+                totalLotteryTimes = userInfo.point // 10
+                logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
+                for i in range(totalLotteryTimes):
+                    op_lottery()
+            else:
+                logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+
+        def op_lottery():
             res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
             gift = res.get("giftName", "出错啦")
             beforeMoney = res.get("money", 0)
@@ -2104,98 +2194,27 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
 
-        # 做任务
+        # 提示做任务
         msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"
-        if is_first_run("dnf_helper_chronicle_task_tips"):
+        if is_first_run("dnf_helper_chronicle_task_tips_month_3"):
             async_message_box(msg, "编年史任务提示")
         else:
             logger.warning(msg)
 
         # 领取任务奖励的经验
-        taskInfo = getUserTaskList()
-        if taskInfo.hasPartner:
-            logger.info(f"搭档为{taskInfo.pUserId}")
-        else:
-            logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
-        for task in taskInfo.taskList:
-            takeTaskAward("自己", task.name, task.mActionId, task.mStatus, task.mExp)
-            if taskInfo.hasPartner:
-                takeTaskAward("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+        takeTaskAwards()
 
         # 领取连续签到奖励
-        signGiftsList = sign_gifts_list()
-        hasTakenAnySignGift = False
-        for signGift in signGiftsList.gifts:
-            # 2-未完成，0-已完成未领取，1-已领取
-            if signGift.status in [0]:
-                # 0-已完成未领取
-                take_continuous_signin_gift(signGift)
-                hasTakenAnySignGift = True
-            else:
-                # 2-未完成，1-已领取
-                pass
-        if not hasTakenAnySignGift:
-            logger.info("连续签到均已领取")
+        take_continuous_signin_gifts()
 
         # 领取基础奖励
-        basicAwardList = basic_award_list()
-        listOfBasicList = [(True, basicAwardList.basic1List)]
-        if basicAwardList.hasPartner:
-            listOfBasicList.append((False, basicAwardList.basic2List))
-        hasTakenAnyBasicAward = False
-        for selfGift, basicList in listOfBasicList:
-            for award in basicList:
-                if award.isLock == 0 and award.isUsed == 0:
-                    # 已解锁，且未领取，则尝试领取
-                    take_basic_award(award, selfGift)
-                    hasTakenAnyBasicAward = True
-        if not hasTakenAnyBasicAward:
-            logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+        take_basic_awards()
 
         # 根据配置兑换奖励
-        exchangeList = exchange_list()
-        exchangeGiftMap = {}
-        for gift in exchangeList.gifts:
-            exchangeGiftMap[gift.sLbcode] = gift
+        exchange_awards()
 
-        if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
-            all_exchanged = True
-            for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
-                if ei.sLbcode not in exchangeGiftMap:
-                    logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
-                    continue
-
-                gift = exchangeGiftMap[ei.sLbcode]
-                if gift.usedNum >= int(gift.iNum):
-                    logger.warning(f"{gift.sName}已经达到兑换上限{gift.iNum}次, 将跳过")
-                    continue
-
-                userInfo = getUserActivityTopInfo()
-                if userInfo.level < int(gift.iLevel):
-                    all_exchanged = False
-                    logger.warning(f"目前等级为{userInfo.level}，不够兑换{gift.sName}所需的{gift.iLevel}级，将跳过后续优先级较低的兑换奖励")
-                    break
-                if userInfo.point < int(gift.iCard):
-                    all_exchanged = False
-                    logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
-                    break
-
-                for i in range(ei.count):
-                    exchange_award(gift)
-
-            if all_exchanged:
-                logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
-        else:
-            logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
-
-        if self.cfg.dnf_helper_info.chronicle_lottery:
-            userInfo = getUserActivityTopInfo()
-            totalLotteryTimes = userInfo.point // 10
-            logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
-            for i in range(totalLotteryTimes):
-                lottery()
-        else:
-            logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+        # 抽奖
+        lottery()
 
         ui = getUserActivityTopInfo()
         logger.warning(
@@ -4445,8 +4464,8 @@ if __name__ == '__main__':
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
-        # djcHelper.dnf_helper_chronicle()
         # djcHelper.guanjia()
         # djcHelper.qq_video()
         # djcHelper.dnf_helper()
-        djcHelper.xinyue_weekly_gift()
+        # djcHelper.xinyue_weekly_gift()
+        djcHelper.dnf_helper_chronicle()

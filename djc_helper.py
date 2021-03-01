@@ -1274,12 +1274,14 @@ class DjcHelper:
         #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
         #   1.3.2 在main.py中将main函数中取消注释show_lottery_status和auto_send_cards的调用处
         #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
+        #   1.3.4 在djc_helper.py中将fetch_pskey的p_skey的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #
         # hack:
         #   2. 废弃
         #   2.1 在djc_helper.py中将ark_lottery的调用处从normal_run移到expired_activities
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
+        #   2.3 在djc_helper.py中将fetch_pskey的p_skey的判断条件注释
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
@@ -1319,7 +1321,7 @@ class DjcHelper:
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_ark_lottery,
+            # self.cfg.function_switches.get_ark_lottery,
             # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
             self.cfg.function_switches.get_vip_mentor and not self.disable_most_activities(),
         ]:

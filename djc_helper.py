@@ -4359,7 +4359,9 @@ class DjcHelper:
         endTime = datetime.datetime.now()
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
         date = get_today()
-        default_params = {
+
+        # 有值的默认值
+        default_valued_params = {
             "appVersion": appVersion,
             "p_tk": self.cfg.g_tk,
             "g_tk": self.cfg.g_tk,
@@ -4373,30 +4375,37 @@ class DjcHelper:
             "uuid": self.cfg.sDeviceID,
             "millseconds": getMillSecondsUnix(),
             "rand": random.random(),
-            "package_id": "", "lqlevel": "", "teamid": "",
-            "weekDay": "",
-            "sArea": "", "serverId": "", "areaId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
-            "iActionId": "", "iGoodsId": "", "sBizCode": "", "partition": "", "iZoneId": "", "platid": "", "sZoneDesc": "", "sGetterDream": "",
             "date": date,
-            "dzid": "",
-            "page": "",
-            "iPackageId": "",
-            "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
-            "plat": "", "extraStr": "",
-            "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
-            "type": "", "moduleId": "", "giftId": "", "acceptId": "", "sendQQ": "",
-            "cardType": "", "giftNum": "", "inviteId": "", "inviterName": "", "sendName": "", "invitee": "", "receiveUin": "", "receiver": "", "receiverName": "", "receiverUrl": "",
-            "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
-            "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
-            "cz": "", "dj": "",
-            "siActivityId": "",
-            "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
-            "index": "",
-            "pageNow": "", "pageSize": "",
-            "clickTime": "",
-            "skin_id": "", "decoration_id": "", "adLevel": "", "adPower": "",
-            "username": "", "petId": "",
         }
+
+        # 无值的默认值
+        default_empty_params = {key: "" for key in [
+            "package_id", "lqlevel", "teamid",
+            "weekDay",
+            "sArea", "serverId", "areaId", "nickName", "sRoleId", "sRoleName", "uin", "skey", "userId", "token",
+            "iActionId", "iGoodsId", "sBizCode", "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream",
+            "dzid",
+            "page",
+            "iPackageId",
+            "isLock", "amsid", "iLbSel1", "num", "mold", "exNum", "iCard", "iNum", "actionId",
+            "plat", "extraStr",
+            "sContent", "sPartition", "sAreaName", "md5str", "ams_checkparam", "checkparam",
+            "type", "moduleId", "giftId", "acceptId", "sendQQ",
+            "cardType", "giftNum", "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl",
+            "user_area", "user_partition", "user_areaName", "user_roleId", "user_roleName",
+            "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId",
+            "cz", "dj",
+            "siActivityId",
+            "needADD", "dateInfo", "sId", "userNum",
+            "index",
+            "pageNow", "pageSize",
+            "clickTime",
+            "skin_id", "decoration_id", "adLevel", "adPower",
+            "username", "petId"
+        ]}
+
+        # 整合得到所有默认值
+        default_params = {**default_valued_params, **default_empty_params}
 
         # 首先将默认参数添加进去，避免format时报错
         merged_params = {**default_params, **params}

@@ -1147,68 +1147,59 @@ class DjcHelper:
 
         logger.info("ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工")
 
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_package_id(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        try:
-            return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
-        except:
-            return ""
+        return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
 
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_workinfo(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        try:
-            workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
+        workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
 
-            work_message = ""
+        work_message = ""
 
-            if workinfo.status == 2:
-                nowtime = get_now_unix()
-                fromtimestamp = datetime.datetime.fromtimestamp
-                if workinfo.endTime > nowtime:
-                    lefttime = int(workinfo.endTime - nowtime)
-                    hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
-                    work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
-                else:
-                    work_message += "赛利亚已经完成今天的工作了"
-
-                work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
+        if workinfo.status == 2:
+            nowtime = get_now_unix()
+            fromtimestamp = datetime.datetime.fromtimestamp
+            if workinfo.endTime > nowtime:
+                lefttime = int(workinfo.endTime - nowtime)
+                hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
+                work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
             else:
-                work_message += "赛利亚尚未出门工作"
+                work_message += "赛利亚已经完成今天的工作了"
 
-            return work_message
-        except Exception as e:
-            logger.error("获取打工信息出错了", exc_info=e)
-            return ""
+            work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
+        else:
+            work_message += "赛利亚尚未出门工作"
 
+        return work_message
+
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_status(self):
         res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
-        try:
-            modRet = parse_amesvr_common_info(res)
-            lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
-            dangao = modRet.sOutValue2
-            xinqingzhi = modRet.sOutValue3
-            qiandaodate = modRet.sOutValue4
-            return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
-        except:
-            return ""
+        modRet = parse_amesvr_common_info(res)
+        lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
+        dangao = modRet.sOutValue2
+        xinqingzhi = modRet.sOutValue3
+        qiandaodate = modRet.sOutValue4
+        return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
 
+    @try_except()
     def show_xinyue_sailiyam_work_log(self):
         res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
-        try:
-            logContents = {
-                '2168440': '遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；',
-                '2168439': '愉快的一天又开始了，是不是该来一杯咖啡？',
-                '2168442': '给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；',
-                '2168441': '工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；'
-            }
-            logs = res["modRet"]["jData"]["loglist"]["list"]
-            if len(logs) != 0:
-                logger.info("赛利亚打工日志如下")
-                for log in logs:
-                    month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
-                    logger.info(f"{month}月{day}日：{message}")
-        except:
-            pass
+        logContents = {
+            '2168440': '遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；',
+            '2168439': '愉快的一天又开始了，是不是该来一杯咖啡？',
+            '2168442': '给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；',
+            '2168441': '工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；'
+        }
+        logs = res["modRet"]["jData"]["loglist"]["list"]
+        if len(logs) != 0:
+            logger.info("赛利亚打工日志如下")
+            for log in logs:
+                month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
+                logger.info(f"{month}月{day}日：{message}")
 
     def show_xinyue_sailiyam_kouling(self):
         res = self.xinyue_sailiyam_op("输出项", "714618", print_res=False)
@@ -1835,37 +1826,30 @@ class DjcHelper:
 
         return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
 
+    @try_except(return_val_on_except=RankUserInfo())
     def dnf_rank_get_user_info(self, print_res=False):
         res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
 
-        user_info = RankUserInfo()
-        try:
-            user_info.auto_update_config(res["data"])
-        except Exception as e:
-            # {"res": 201, "msg": "重新登录后重试", "data": []}
-            logger.debug(f"dnf_rank_get_user_info exception={e}")
-        return user_info
+        return RankUserInfo().auto_update_config(res["data"])
 
     def dnf_rank_receive_diamond(self, gift_name, gift_id):
         return self.dnf_rank_op(f'领取黑钻-{gift_name}', self.urls.rank_receive_diamond, gift_id=gift_id)
 
+    @try_except()
     def dnf_rank_receive_diamond_amesvr(self, ctx, **extra_params):
-        try:
-            iActivityId = self.urls.iActivityId_dnf_rank
-            iFlowId = "723192"
+        iActivityId = self.urls.iActivityId_dnf_rank
+        iFlowId = "723192"
 
-            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-            qq = uin2qq(self.cfg.account_info.uin)
-            dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
 
-            res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
-                                      sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
-                                      sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
-                                      uin=qq, skey=self.cfg.account_info.skey,
-                                      nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                      **extra_params)
-        except Exception as e:
-            logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
+                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  uin=qq, skey=self.cfg.account_info.skey,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
+                                  **extra_params)
 
     def dnf_rank_op(self, ctx, url, **params):
         qq = uin2qq(self.cfg.account_info.uin)
@@ -2405,37 +2389,33 @@ class DjcHelper:
                 # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻7天”！", "jData": {"afterStatus": -1, "helloTicketCount": 0, "packid": null, "packname": "黑钻7天"}, "sSerial": "ULINK-DNF-1207140537-5gDMvR-228919-718017"}
                 break
 
-        try:
-            # ------实际逻辑-----------
+        # ------实际逻辑-----------
 
-            self.do_hello_voice("领取新人礼包", "lotteryGift")
+        self.do_hello_voice("领取新人礼包", "lotteryGift")
 
-            # # 每天兑换1次
-            # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-            # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
+        # # 每天兑换1次
+        # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
+        # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
 
-            # # 每周兑换1次
-            # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
-            # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
-            # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
-            # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
+        # # 每周兑换1次
+        # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
+        # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
+        # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
+        # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
 
-            # 每月兑换1次
-            getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
-            getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
-            getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
-            getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
+        # 每月兑换1次
+        getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
+        getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
+        getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
+        getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
 
-            # 活动奖励兑换
-            getActDui(1, "黑钻3天兑换券")
-            getActDui(2, "黑钻7天兑换券")
-            getActDui(3, "时间引导石（10个）兑换券")
-            getActDui(4, "升级券*1（lv95-99）兑换券")
-            getActDui(5, "智慧的引导通行证*1兑换券")
-            getActDui(6, "装备提升礼盒*1兑换券")
-
-        except Exception as e:
-            logger.error(f"hello_voice exception={e}")
+        # 活动奖励兑换
+        getActDui(1, "黑钻3天兑换券")
+        getActDui(2, "黑钻7天兑换券")
+        getActDui(3, "时间引导石（10个）兑换券")
+        getActDui(4, "升级券*1（lv95-99）兑换券")
+        getActDui(5, "智慧的引导通行证*1兑换券")
+        getActDui(6, "装备提升礼盒*1兑换券")
 
     def check_hello_voice_bind_role(self):
         data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
@@ -3517,22 +3497,20 @@ class DjcHelper:
 
         return count
 
+    @try_except(return_val_on_except="")
     def query_majieluo_card_info(self):
         res = self.majieluo_op("查询信息", "733883", print_res=False)
 
         card_info = ""
-        try:
-            info = parse_amesvr_common_info(res)
-            # 默认排序与表现一致，改为跟ui表现一致
-            temp = info.sOutValue1.split('|')
-            order = [3, 4, 1, 2, 5]
-            actual = []
-            for idx in order:
-                actual.append(temp[idx - 1])
+        info = parse_amesvr_common_info(res)
+        # 默认排序与表现一致，改为跟ui表现一致
+        temp = info.sOutValue1.split('|')
+        order = [3, 4, 1, 2, 5]
+        actual = []
+        for idx in order:
+            actual.append(temp[idx - 1])
 
-            card_info = '|'.join(actual)
-        except Exception as e:
-            pass
+        card_info = '|'.join(actual)
 
         return card_info
 
@@ -4200,16 +4178,13 @@ class DjcHelper:
 
             return int(taskStatus[3]) >= 1
 
+        @try_except(return_val_on_except=[])
         def query_invited_friends():
             res = self.firecrackers_op("查询成功邀请好友列表", "735412", print_res=False)
 
             invited_friends = []
-            try:
-                for info in res["modRet"]["jData"]["jData"]:
-                    invited_friends.append(info["sendToQQ"])
-            except:
-                # 如果没有邀请过任何人，上面这样获取似乎是会报错的。手头上暂时没有这种号，先兼容下吧。
-                pass
+            for info in res["modRet"]["jData"]["jData"]:
+                invited_friends.append(info["sendToQQ"])
 
             return invited_friends
 
@@ -4331,14 +4306,12 @@ class DjcHelper:
         else:
             logger.info(color("bold_green") + "如果已经兑换完所有奖励，建议开启使用积分抽奖功能")
 
+    @try_except(return_val_on_except=0)
     def query_firecrackers_points(self):
-        try:
-            res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+        res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
+        raw_info = parse_amesvr_common_info(res)
 
-            return int(raw_info.sOutValue1)
-        except Exception as e:
-            return 0
+        return int(raw_info.sOutValue1)
 
     def check_firecrackers(self):
         self.check_bind_account("燃放爆竹活动", "https://dnf.qq.com/cp/a20210118rfbz/index.html",

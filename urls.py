@@ -207,7 +207,7 @@ class Urls:
         logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
 
 
-@try_except
+@try_except()
 def search_act(actId):
     actId = str(actId)
     act_desc_js = get_act_desc_js(actId)

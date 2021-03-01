@@ -392,6 +392,9 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
+        # 心悦猫咪
+        self.xinyue_cat()
+
         # 心悦app周礼包
         self.xinyue_weekly_gift()
 
@@ -2962,6 +2965,153 @@ class DjcHelper:
                                    plat=plat, extraStr=extraStr,
                                    **extra_params)
 
+    # --------------------------------------------心悦猫咪--------------------------------------------
+    @try_except()
+    def xinyue_cat(self):
+        # https://xinyue.qq.com/act/a20180912tgclubcat/index.html
+        show_head_line("心悦猫咪")
+        self.show_amesvr_act_info(self.xinyue_cat_op)
+
+        if not self.cfg.function_switches.get_xinyue_cat:
+            logger.warning("未启用领取心悦猫咪活动合集功能，将跳过")
+            return
+
+        # --------------- 封装接口 ---------------
+
+        def queryUserInfo():
+            res = self.xinyue_cat_op("查询用户信息", "449169", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueCatUserInfo()
+            info.name = unquote_plus(raw_info.sOutValue1.split('|')[0])
+            info.gpoints = int(raw_info.sOutValue2)
+            info.account = raw_info.sOutValue4
+            info.vipLevel = int(raw_info.sOutValue6)
+            info.has_cat = raw_info.sOutValue8 == "1"
+
+            return info
+
+        def getPetFinghtInfo():
+            res = self.xinyue_cat_op("查询心悦猫咪信息", "532974", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueCatInfo()
+            info.fighting_capacity = int(raw_info.sOutValue1)
+            info.yuanqi = int(raw_info.sOutValue2)
+
+            return info
+
+        def get_skin_list():
+            return self.xinyue_cat_app_op("查询心悦猫咪皮肤列表", api="get_skin_list")
+
+        def use_skin(skin_id):
+            return self.xinyue_cat_app_op("使用皮肤", api="use_skin", skin_id=skin_id)
+
+        def get_decoration_list():
+            return self.xinyue_cat_app_op("查询心悦猫咪装饰列表", api="get_decoration_list")
+
+        def use_decoration(decoration_id):
+            return self.xinyue_cat_app_op("使用装饰", api="use_decoration", decoration_id=decoration_id)
+
+        def make_money_new(uin, adLevel, adPower):
+            return self.xinyue_cat_app_op("历练", api="make_money_new", uin=uin, adLevel=adLevel, adPower=adPower)
+
+        def queryCatInfoFromApp():
+            res = self.xinyue_cat_app_op("从app接口查询心悦猫咪信息", api="get_user", print_res=False)
+            info = XinyueCatInfoFromApp().auto_update_config(res["data"])
+
+            return info
+
+        def queryPetId():
+            return queryCatInfoFromApp().pet_id
+
+        def fight(ctx, username):
+            res = self.xinyue_cat_op(f"{ctx}-匹配", "471145")
+            wait()
+
+            result = XinyueCatMatchResult().auto_update_config(res["modRet"]["jData"])
+            if result.ending == 1:
+                self.xinyue_cat_op(f"{ctx}-结算-胜利", "508006", username=quote_plus(username))
+            else:
+                self.xinyue_cat_op(f"{ctx}-结算-失败", "471383", username=quote_plus(username))
+
+            wait()
+
+        def wait():
+            time.sleep(5)
+
+        # --------------- 正式逻辑 ---------------
+
+        old_user_info = queryUserInfo()
+        old_pet_info = getPetFinghtInfo()
+
+        # 查询相关信息
+        if not old_user_info.has_cat:
+            self.xinyue_cat_op("领取猫咪", "532871")
+        else:
+            logger.info("已经领取过猫咪，无需再次领取")
+
+        # 领取历练奖励
+        self.xinyue_cat_op("每日首次进入页面增加元气值", "497774")
+        self.xinyue_cat_op("领取历练奖励", "532968")
+
+        # 妆容和装饰（小橘子和贤德昭仪）
+        petId = queryPetId()
+        skin_id = "8"  # 贤德昭仪
+        decoration_id = "7"  # 小橘子
+
+        # 尝试购买
+        self.xinyue_cat_op("G分购买猫咪皮肤-贤德昭仪", "507986", petId=petId, skin_id=skin_id)
+        wait()
+        self.xinyue_cat_op("G分购买装饰-小橘子", "508072", petId=petId, decoration_id=decoration_id)
+        wait()
+
+        # 尝试穿戴妆容和装饰
+        use_skin(skin_id)
+        wait()
+        use_decoration(decoration_id)
+        wait()
+
+        # 战斗
+        pet_info = getPetFinghtInfo()
+        total_fight_times = pet_info.yuanqi // 20
+        logger.warning(color("fg_bold_yellow") + f"当前元气为{pet_info.yuanqi}，共可进行{total_fight_times}次战斗")
+        for i in range(total_fight_times):
+            fight(f"第{i + 1}/{total_fight_times}次战斗", old_user_info.name)
+
+        # 历练
+        user_info = queryUserInfo()
+        pet_info = getPetFinghtInfo()
+        for adLevel in [4, 3, 2, 1]:
+            make_money_new(user_info.account, adLevel, pet_info.fighting_capacity)
+
+        new_user_info = queryUserInfo()
+        new_pet_info = getPetFinghtInfo()
+
+        delta = new_user_info.gpoints - old_user_info.gpoints
+        fc_delta = new_pet_info.fighting_capacity - old_pet_info.fighting_capacity
+        logger.warning("")
+        logger.warning(color("fg_bold_yellow") + (
+            f"账号 {self.cfg.name} 本次心悦猫咪操作共获得 {delta} G分（ {old_user_info.gpoints} -> {new_user_info.gpoints} ）"
+            f"，战力增加 {fc_delta}（ {old_pet_info.fighting_capacity} -> {new_pet_info.fighting_capacity} ）"
+        ))
+        logger.warning("")
+
+    def xinyue_cat_app_op(self, ctx, api, skin_id="", decoration_id="", uin="", adLevel="", adPower="", print_res=True):
+        return self.get(ctx, self.urls.xinyue_cat_api, api=api,
+                        skin_id=skin_id, decoration_id=decoration_id,
+                        uin=uin, adLevel=adLevel, adPower=adPower,
+                        print_res=print_res)
+
+    def xinyue_cat_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_xinyue_cat
+
+        extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x42"')
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20180912tgclubcat/",
+                                   extraStr=extraStr,
+                                   **extra_params)
+
     # --------------------------------------------心悦app周礼包--------------------------------------------
     @try_except()
     def xinyue_weekly_gift(self):
@@ -4244,6 +4394,8 @@ class DjcHelper:
             "index": "",
             "pageNow": "", "pageSize": "",
             "clickTime": "",
+            "skin_id": "", "decoration_id": "", "adLevel": "", "adPower": "",
+            "username": "", "petId": "",
         }
 
         # 首先将默认参数添加进去，避免format时报错
@@ -4472,4 +4624,5 @@ if __name__ == '__main__':
         # djcHelper.qq_video()
         # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
-        djcHelper.dnf_helper_chronicle()
+        # djcHelper.dnf_helper_chronicle()
+        djcHelper.xinyue_cat()

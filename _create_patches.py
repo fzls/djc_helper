@@ -15,6 +15,7 @@ from typing import List
 
 from log import logger
 from update import need_update
+from util import human_readable_size
 from version import now_version
 
 
@@ -108,6 +109,9 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
             os.path.realpath(os.path.join(temp_dir, target_version_dir)),
             patch_file,
         ])
+
+        filesize = os.path.getsize(patch_file)
+        logger.info(f"创建补丁{patch_file}结束，最终大小为{human_readable_size(filesize)}")
 
     # 移除临时目录
     shutil.rmtree(temp_dir, ignore_errors=True)

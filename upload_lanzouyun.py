@@ -202,7 +202,7 @@ class Uploader:
         show_percent = percent * 100
         now_mb = now_size / 1048576
         total_mb = total_size / 1048576
-        print(f'\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.1f}/{total_mb:.1f}MB | {file_name} ', end='')
+        print(f'\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ', end='')
         if total_size == now_size:
             print('')  # 下载完成换行
 

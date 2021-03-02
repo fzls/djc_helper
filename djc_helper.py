@@ -398,9 +398,6 @@ class DjcHelper:
         # 心悦app周礼包
         self.xinyue_weekly_gift()
 
-        # 管家蚊子腿
-        self.guanjia()
-
         # qq视频活动
         self.qq_video()
 
@@ -511,6 +508,9 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
+
+        # 管家蚊子腿
+        self.guanjia()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()
@@ -2228,6 +2228,8 @@ class DjcHelper:
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
     guanjia_lottery_gifts_act_id = "1133"  # 抽奖活动ID
 
+    # note: 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
+
     @try_except()
     def guanjia(self):
         show_head_line("管家蚊子腿")
@@ -2289,7 +2291,7 @@ class DjcHelper:
         # 检查是否启用管家相关活动
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+            # self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True

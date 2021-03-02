@@ -2051,6 +2051,7 @@ class DjcHelper:
                 if taskInfo.hasPartner:
                     takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
 
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAward_op(suffix, taskName, actionId, status, exp):
             actionName = f"[{taskName}-{suffix}]"
 
@@ -2085,6 +2086,7 @@ class DjcHelper:
             if not hasTakenAnySignGift:
                 logger.info("连续签到均已领取")
 
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
             res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params,
                            amsid=giftInfo.sLbcode)
@@ -2106,6 +2108,7 @@ class DjcHelper:
             if not hasTakenAnyBasicAward:
                 logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
 
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_award_op(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
                 mold = 1  # 自己
@@ -2154,6 +2157,7 @@ class DjcHelper:
             else:
                 logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
 
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_award_op(giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get("兑换奖励", url_wang, api="send/exchange", **common_params,
                            exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)

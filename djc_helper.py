@@ -1769,6 +1769,7 @@ class DjcHelper:
         ])
 
         logger.warning(
+            '\n' +
             color("fg_bold_yellow") + tips_from_url +
             '\n' +
             color("fg_bold_green") + tips_from_zhuabao

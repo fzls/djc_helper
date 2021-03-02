@@ -52,8 +52,8 @@ class QQLogin():
     chrome_binary_directory = os.path.realpath("./chrome_portable_87")
     chrome_binary_location = os.path.realpath("./chrome_portable_87/chrome.exe")
 
-    default_window_width = 516
-    default_window_height = 516
+    default_window_width = 390
+    default_window_height = 360
 
     def __init__(self, common_config):
         self.cfg = common_config  # type: CommonConfig

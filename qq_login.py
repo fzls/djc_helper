@@ -61,7 +61,7 @@ class QQLogin():
         self.window_title = ""
         self.time_start_login = datetime.datetime.now()
 
-    def prepare_chrome(self, ctx, login_type):
+    def prepare_chrome(self, ctx, login_type, login_url):
         logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
@@ -69,6 +69,7 @@ class QQLogin():
 
         options = Options()
         options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
+        options.add_argument(f"app={login_url}")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if self.cfg.run_in_headless_mode:
@@ -192,23 +193,28 @@ class QQLogin():
 
             login_fn = self._login_real
             suffix = ""
+            login_url = self.get_login_url(21000127, 8, "https://dnf.qq.com/")
             if login_mode == self.login_mode_xinyue:
                 login_fn = self._login_xinyue_real
                 suffix += "心悦"
+                login_url = "https://xinyue.qq.com/act/a20181101rights/index.html"
             elif login_mode == self.login_mode_qzone:
                 login_fn = self._login_qzone
                 suffix += "QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）"
+                login_url = self.get_login_url(15000103, 5, "https://act.qzone.qq.com/")
             elif login_mode == self.login_mode_guanjia:
                 login_fn = self._login_guanjia
                 suffix += "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）"
+                login_url = "http://guanjia.qq.com/act/cop/20210127dnf/pc/"
             elif login_mode == self.login_mode_wegame:
                 login_fn = self._login_wegame
                 suffix += "wegame（获取wegame相关api需要用到）"
+                login_url = self.get_login_url(1600001063, 733, "https://www.wegame.com.cn/")
 
             ctx = f"{login_type}-{suffix}"
 
             try:
-                self.prepare_chrome(ctx, login_type)
+                self.prepare_chrome(ctx, login_type, login_url)
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
@@ -242,7 +248,8 @@ class QQLogin():
         s_url = "https://dnf.qq.com/"
 
         def switch_to_login_frame_fn():
-            self.get_switch_to_login_frame_fn(21000127, 8, s_url)
+            # self.get_switch_to_login_frame_fn(21000127, 8, s_url)
+            pass
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -262,7 +269,8 @@ class QQLogin():
         s_url = "https://act.qzone.qq.com/"
 
         def switch_to_login_frame_fn():
-            self.get_switch_to_login_frame_fn(15000103, 5, s_url)
+            # self.get_switch_to_login_frame_fn(15000103, 5, s_url)
+            pass
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -282,7 +290,8 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.open_url_on_start("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
+            # self.open_url_on_start("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
+            pass
 
             self.set_window_size()
 
@@ -320,7 +329,8 @@ class QQLogin():
         s_url = "https://www.wegame.com.cn/"
 
         def switch_to_login_frame_fn():
-            self.get_switch_to_login_frame_fn(1600001063, 733, s_url)
+            # self.get_switch_to_login_frame_fn(1600001063, 733, s_url)
+            pass
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -339,7 +349,8 @@ class QQLogin():
 
         def switch_to_login_frame_fn():
             logger.info("打开活动界面")
-            self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
+            # self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
+            pass
 
             self.set_window_size()
 
@@ -397,7 +408,11 @@ class QQLogin():
         # 绿色风格：1
         # 蓝色风格：2 re: 选用
         logger.info("打开登录界面")
-        self.open_url_on_start(f"https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid={appid}&daid={daid}&s_url={quote_plus(s_url)}&style={style}&theme={theme}&target=self")
+        login_url = self.get_login_url(appid, daid, s_url, style, theme)
+        self.open_url_on_start(login_url)
+
+    def get_login_url(self, appid, daid, s_url, style=34, theme=2):
+        return f"https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid={appid}&daid={daid}&s_url={quote_plus(s_url)}&style={style}&theme={theme}&target=self"
 
     def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None):
         """

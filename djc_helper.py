@@ -398,9 +398,6 @@ class DjcHelper:
         # 心悦app周礼包
         self.xinyue_weekly_gift()
 
-        # qq视频活动
-        self.qq_video()
-
         # dnf论坛签到
         self.dnf_bbs_signin()
 
@@ -511,6 +508,9 @@ class DjcHelper:
 
         # 管家蚊子腿
         self.guanjia()
+
+        # qq视频活动
+        self.qq_video()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()

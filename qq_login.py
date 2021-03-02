@@ -191,25 +191,34 @@ class QQLogin():
 
             self.login_mode = login_mode
 
-            login_fn = self._login_real
-            suffix = ""
-            login_url = self.get_login_url(21000127, 8, "https://dnf.qq.com/")
-            if login_mode == self.login_mode_xinyue:
-                login_fn = self._login_xinyue_real
-                suffix += "心悦"
-                login_url = "https://xinyue.qq.com/act/a20181101rights/index.html"
-            elif login_mode == self.login_mode_qzone:
-                login_fn = self._login_qzone
-                suffix += "QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）"
-                login_url = self.get_login_url(15000103, 5, "https://act.qzone.qq.com/")
-            elif login_mode == self.login_mode_guanjia:
-                login_fn = self._login_guanjia
-                suffix += "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）"
-                login_url = "http://guanjia.qq.com/act/cop/20210127dnf/pc/"
-            elif login_mode == self.login_mode_wegame:
-                login_fn = self._login_wegame
-                suffix += "wegame（获取wegame相关api需要用到）"
-                login_url = self.get_login_url(1600001063, 733, "https://www.wegame.com.cn/")
+            # note: 如果get_login_url的surl变更，代码中确认登录完成的地方也要一起改
+            login_fn, suffix, login_url = {
+                self.login_mode_normal: (
+                    self._login_real,
+                    "",
+                    self.get_login_url(21000127, 8, "https://dnf.qq.com/"),
+                ),
+                self.login_mode_xinyue: (
+                    self._login_xinyue_real,
+                    "心悦",
+                    "https://xinyue.qq.com/act/a20181101rights/index.html",
+                ),
+                self.login_mode_qzone: (
+                    self._login_qzone,
+                    "QQ空间业务（如抽卡等需要用到）（不启用QQ空间系活动就不会触发本类型的登录，完整列表参见示例配置）",
+                    self.get_login_url(15000103, 5, "https://act.qzone.qq.com/"),
+                ),
+                self.login_mode_guanjia: (
+                    self._login_guanjia,
+                    "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）",
+                    "http://guanjia.qq.com/act/cop/20210127dnf/pc/",
+                ),
+                self.login_mode_wegame: (
+                    self._login_wegame,
+                    "wegame（获取wegame相关api需要用到）",
+                    self.get_login_url(1600001063, 733, "https://www.wegame.com.cn/"),
+                ),
+            }[login_mode]
 
             ctx = f"{login_type}-{suffix}"
 

@@ -371,8 +371,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8, 8]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片"]
+    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -383,6 +383,7 @@ def show_accounts_status(cfg, ctx):
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list(print_warning=False)
 
         status = "启用" if account_config.is_enabled() else "未启用"
 
@@ -400,7 +401,14 @@ def show_accounts_status(cfg, ctx):
 
         gpoints = djcHelper.query_gpoints()
 
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints]
+        ui = djcHelper.query_dnf_helper_chronicle_info()
+        levelInfo = f"LV{ui.level}({ui.currentExp}/{ui.levelExp})"
+        chronicle_points = ui.point
+        if ui.totalExp == 0:
+            levelInfo = ""
+            chronicle_points = ""
+
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints, levelInfo, chronicle_points]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 

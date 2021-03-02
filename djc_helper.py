@@ -2047,10 +2047,32 @@ class DjcHelper:
                 logger.info(f"搭档为{taskInfo.pUserId}")
             else:
                 logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+
+            logger.info("首先尝试完成接到身上的任务")
+            normal_tasks = set()
             for task in taskInfo.taskList:
                 takeTaskAward_op("自己", task.name, task.mActionId, task.mStatus, task.mExp)
+                normal_tasks.add(task.mActionId)
                 if taskInfo.hasPartner:
                     takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+                    normal_tasks.add(task.pActionId)
+
+            logger.info("与心悦战场类似，即使未展示在接取列表内的任务，只要满足条件就可以领取奖励。因此接下来尝试领取其余任务(ps：这种情况下日志提示未完成也有可能是因为已经领取过~）")
+            all_task = (
+                ("001", 11, "013", 5, "DNF助手签到"),
+                ("002", 11, "014", 6, "浏览资讯详情页"),
+                ("003", 11, "015", 6, "浏览动态详情页"),
+                ("004", 11, "016", 6, "浏览视频详情页"),
+                ("005", 17, "017", 10, "登陆游戏"),
+                ("007", 17, "019", 10, "进入游戏30分钟"),
+                ("008", 17, "020", 10, "分享助手周报"),
+                ("011", 23, "023", 11, "进入游戏超过1小时"),
+            )
+            for mActionId, mExp, pActionId, pExp, name in all_task:
+                if mActionId not in normal_tasks:
+                    takeTaskAward_op("自己", name, mActionId, 0, mExp)
+                if taskInfo.hasPartner and pActionId not in normal_tasks:
+                    takeTaskAward_op("队友", name, pActionId, 0, pExp)
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAward_op(suffix, taskName, actionId, status, exp):

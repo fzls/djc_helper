@@ -966,8 +966,8 @@ class FunctionSwitchesConfigUi(QWidget):
         # self.checkbox_get_dnf_shanguang = create_checkbox(cfg.get_dnf_shanguang)
         # form_layout.addRow("DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
 
-        self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
-        form_layout.addRow("qq视频活动", self.checkbox_get_qq_video)
+        # self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
+        # form_layout.addRow("qq视频活动", self.checkbox_get_qq_video)
 
         # self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
         # form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
@@ -1011,11 +1011,11 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
 
-        # ----------------------------------------------------------
-        add_form_seperator(form_layout, "安全管家pskey")
-
-        self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
-        form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
+        # # ----------------------------------------------------------
+        # add_form_seperator(form_layout, "安全管家pskey")
+        #
+        # self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
+        # form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
@@ -1026,7 +1026,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_credit_xinyue_gift = self.checkbox_get_credit_xinyue_gift.isChecked()
         cfg.get_heizuan_gift = self.checkbox_get_heizuan_gift.isChecked()
         # cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
-        cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
+        # cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
         # cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
         # cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
         # cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
@@ -1042,7 +1042,7 @@ class FunctionSwitchesConfigUi(QWidget):
         # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
-        cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
+        # cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 
 
 class MobileGameRoleInfoConfigUi(QWidget):

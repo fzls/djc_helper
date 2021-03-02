@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_act_desc
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc
 from util import show_head_line, get_this_week_monday
 
 
@@ -218,7 +218,7 @@ class DjcHelper:
 
         qqLogin = QQLogin(self.common_cfg)
         ai = self.cfg.account_info
-        loginResult = qqLogin.login(ai.account, ai.password)
+        loginResult = qqLogin.login(ai.account, ai.password, name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def save_uin_skey(self, uin, skey, vuserid):
@@ -392,14 +392,11 @@ class DjcHelper:
         # 心悦app理财礼卡
         self.xinyue_financing()
 
-        # 管家蚊子腿
-        self.guanjia()
+        # 心悦猫咪
+        self.xinyue_cat()
 
-        # qq视频活动
-        self.qq_video()
-
-        # qq视频-看江湖有翡
-        self.youfei()
+        # 心悦app周礼包
+        self.xinyue_weekly_gift()
 
         # dnf论坛签到
         self.dnf_bbs_signin()
@@ -407,24 +404,8 @@ class DjcHelper:
         # 会员关怀
         self.vip_mentor()
 
-        # QQ空间抽卡
-        self.ark_lottery()
-
         # DNF福利中心兑换
         self.dnf_welfare()
-
-        # 暂时屏蔽
-        # # DNF0121新春落地页活动
-        # self.dnf_0121()
-
-        # WeGame春节活动
-        self.wegame_spring()
-
-        # DNF新春福利集合站
-        self.spring_collection()
-
-        # dnf助手编年史活动
-        self.dnf_helper_chronicle()
 
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
@@ -438,17 +419,20 @@ class DjcHelper:
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
-                "dnf助手活动 牛气冲天迎新年",
+                "dnf助手编年史活动",
             ]
-            msg += "\n目前受影响的活动如下："
-            msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            if len(paied_activities) != 0:
+                msg += "\n目前受影响的活动如下："
+                msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
+            else:
+                msg += "\n目前尚无需要付费的短期活动，当新的短期活动出现时会及时加入~"
             logger.warning(color("bold_yellow") + msg)
 
     def paied_activities(self):
-        # note: 更新新的活动时记得更新上面的列表
+        # re: 更新新的活动时记得更新上面的列表，以及urls.py的not_ams_activities
 
-        # dnf助手活动
-        self.dnf_helper()
+        # dnf助手编年史活动
+        self.dnf_helper_chronicle()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -503,10 +487,36 @@ class DjcHelper:
         # 燃放爆竹活动
         self.firecrackers()
 
+        # WeGame春节活动
+        self.wegame_spring()
+
+        # qq视频-看江湖有翡
+        self.youfei()
+
+        # QQ空间集卡
+        self.ark_lottery()
+
+        # DNF新春福利集合站
+        self.spring_collection()
+
+        # 暂时屏蔽
+        # # DNF0121新春落地页活动
+        # self.dnf_0121()
+
+        # dnf助手活动
+        self.dnf_helper()
+
+        # 管家蚊子腿
+        self.guanjia()
+
+        # qq视频活动
+        self.qq_video()
+
     # --------------------------------------------道聚城--------------------------------------------
-    @try_except
+    @try_except()
     def djc_operations(self):
         show_head_line("开始道聚城相关操作")
+        self.show_not_ams_act_info("道聚城")
 
         if not self.cfg.function_switches.get_djc:
             logger.warning("未启用领取道聚城功能，将跳过")
@@ -840,7 +850,7 @@ class DjcHelper:
         self.get(f"绑定账号-{serviceName}-{roleName}", self.urls.bind_role, role_info=json.dumps(roleInfo, ensure_ascii=False), is_jsonp=True)
 
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
-    @try_except
+    @try_except()
     def xinyue_operations(self):
         """
         https://xinyue.qq.com/act/a20181101rights/index.html
@@ -1137,68 +1147,59 @@ class DjcHelper:
 
         logger.info("ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工")
 
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_package_id(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        try:
-            return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
-        except:
-            return ""
+        return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
 
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_workinfo(self):
         res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        try:
-            workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
+        workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
 
-            work_message = ""
+        work_message = ""
 
-            if workinfo.status == 2:
-                nowtime = get_now_unix()
-                fromtimestamp = datetime.datetime.fromtimestamp
-                if workinfo.endTime > nowtime:
-                    lefttime = int(workinfo.endTime - nowtime)
-                    hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
-                    work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
-                else:
-                    work_message += "赛利亚已经完成今天的工作了"
-
-                work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
+        if workinfo.status == 2:
+            nowtime = get_now_unix()
+            fromtimestamp = datetime.datetime.fromtimestamp
+            if workinfo.endTime > nowtime:
+                lefttime = int(workinfo.endTime - nowtime)
+                hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
+                work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
             else:
-                work_message += "赛利亚尚未出门工作"
+                work_message += "赛利亚已经完成今天的工作了"
 
-            return work_message
-        except Exception as e:
-            logger.error("获取打工信息出错了", exc_info=e)
-            return ""
+            work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
+        else:
+            work_message += "赛利亚尚未出门工作"
 
+        return work_message
+
+    @try_except(return_val_on_except="")
     def get_xinyue_sailiyam_status(self):
         res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
-        try:
-            modRet = AmesvrCommonModRet().auto_update_config(res["modRet"])
-            lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
-            dangao = modRet.sOutValue2
-            xinqingzhi = modRet.sOutValue3
-            qiandaodate = modRet.sOutValue4
-            return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
-        except:
-            return ""
+        modRet = parse_amesvr_common_info(res)
+        lingqudangao, touwei, _, baifang = modRet.sOutValue1.split('|')
+        dangao = modRet.sOutValue2
+        xinqingzhi = modRet.sOutValue3
+        qiandaodate = modRet.sOutValue4
+        return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
 
+    @try_except()
     def show_xinyue_sailiyam_work_log(self):
         res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
-        try:
-            logContents = {
-                '2168440': '遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；',
-                '2168439': '愉快的一天又开始了，是不是该来一杯咖啡？',
-                '2168442': '给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；',
-                '2168441': '工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；'
-            }
-            logs = res["modRet"]["jData"]["loglist"]["list"]
-            if len(logs) != 0:
-                logger.info("赛利亚打工日志如下")
-                for log in logs:
-                    month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
-                    logger.info(f"{month}月{day}日：{message}")
-        except:
-            pass
+        logContents = {
+            '2168440': '遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；',
+            '2168439': '愉快的一天又开始了，是不是该来一杯咖啡？',
+            '2168442': '给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；',
+            '2168441': '工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；'
+        }
+        logs = res["modRet"]["jData"]["loglist"]["list"]
+        if len(logs) != 0:
+            logger.info("赛利亚打工日志如下")
+            for log in logs:
+                month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
+                logger.info(f"{month}月{day}日：{message}")
 
     def show_xinyue_sailiyam_kouling(self):
         res = self.xinyue_sailiyam_op("输出项", "714618", print_res=False)
@@ -1217,10 +1218,11 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------黑钻--------------------------------------------
-    @try_except
+    @try_except()
     def get_heizuan_gift(self):
         # https://dnf.qq.com/act/blackDiamond/gift.shtml
         show_head_line("黑钻礼包")
+        self.show_not_ams_act_info("黑钻礼包")
 
         if not self.cfg.function_switches.get_heizuan_gift or self.disable_most_activities():
             logger.warning("未启用领取每月黑钻等级礼包功能，将跳过")
@@ -1236,9 +1238,10 @@ class DjcHelper:
             return res
 
     # --------------------------------------------信用礼包--------------------------------------------
-    @try_except
+    @try_except()
     def get_credit_xinyue_gift(self):
         show_head_line("腾讯游戏信用相关礼包")
+        self.show_not_ams_act_info("腾讯游戏信用礼包")
 
         if not self.cfg.function_switches.get_credit_xinyue_gift or self.disable_most_activities():
             logger.warning("未启用领取腾讯游戏信用相关礼包功能，将跳过")
@@ -1254,8 +1257,8 @@ class DjcHelper:
         except Exception as e:
             logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
-    # --------------------------------------------QQ空间抽卡--------------------------------------------
-    @try_except
+    # --------------------------------------------QQ空间集卡--------------------------------------------
+    @try_except()
     def ark_lottery(self):
         # note: 启用和废弃抽卡活动的流程如下
         #   1. 启用
@@ -1265,17 +1268,21 @@ class DjcHelper:
         #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
         #   1.3.2 在main.py中将main函数中取消注释show_lottery_status和auto_send_cards的调用处
         #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
+        #   1.3.4 在djc_helper.py中将fetch_pskey的p_skey的判断条件取消注释
+        #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #
         # hack:
         #   2. 废弃
         #   2.1 在djc_helper.py中将ark_lottery的调用处从normal_run移到expired_activities
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
+        #   2.3 在djc_helper.py中将fetch_pskey的p_skey的判断条件注释
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
-        show_head_line(f"QQ空间抽卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
+        show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
+        self.show_not_ams_act_info("集卡")
 
         if not self.cfg.function_switches.get_ark_lottery:
-            logger.warning("未启用领取QQ空间抽卡功能，将跳过")
+            logger.warning("未启用领取QQ空间集卡功能，将跳过")
             return
 
         lr = self.fetch_pskey()
@@ -1308,7 +1315,7 @@ class DjcHelper:
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_ark_lottery,
+            # self.cfg.function_switches.get_ark_lottery,
             # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
             self.cfg.function_switches.get_vip_mentor and not self.disable_most_activities(),
         ]:
@@ -1341,7 +1348,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey, lr.skey, lr.vuserid)
         else:
@@ -1495,7 +1502,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_1224(self):
         # https://dnf.qq.com/lbact/a20201224aggregate/index.html
         show_head_line("史诗之路来袭活动合集")
@@ -1530,7 +1537,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_shanguang(self):
         # http://xinyue.qq.com/act/a20201221sgbpc/index.html
         show_head_line("DNF闪光杯第三期")
@@ -1574,7 +1581,7 @@ class DjcHelper:
         res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", weekDay=get_this_week_monday(), print_res=False)
         equip_count = 0
         if "modRet" in res:
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             if info.sOutValue2 != "" and info.sOutValue2 != "0":
                 equip_count = len(info.sOutValue2.split(","))
         else:
@@ -1609,9 +1616,10 @@ class DjcHelper:
     qq_video_module_id_online_7_days = "ui7hp23tr46ae07poruw2uf5xe"  # 累积7天
     qq_video_module_id_online_15_days = "h1y2e73itl1ej4cy6l7ilzd001"  # 累积15天
 
-    @try_except
+    @try_except()
     def qq_video(self):
         show_head_line("qq视频活动")
+        self.show_not_ams_act_info("qq视频蚊子腿")
 
         if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
             logger.warning("未启用领取qq视频活动功能，将跳过")
@@ -1818,37 +1826,30 @@ class DjcHelper:
 
         return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
 
+    @try_except(return_val_on_except=RankUserInfo())
     def dnf_rank_get_user_info(self, print_res=False):
         res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
 
-        user_info = RankUserInfo()
-        try:
-            user_info.auto_update_config(res["data"])
-        except Exception as e:
-            # {"res": 201, "msg": "重新登录后重试", "data": []}
-            logger.debug(f"dnf_rank_get_user_info exception={e}")
-        return user_info
+        return RankUserInfo().auto_update_config(res["data"])
 
     def dnf_rank_receive_diamond(self, gift_name, gift_id):
         return self.dnf_rank_op(f'领取黑钻-{gift_name}', self.urls.rank_receive_diamond, gift_id=gift_id)
 
+    @try_except()
     def dnf_rank_receive_diamond_amesvr(self, ctx, **extra_params):
-        try:
-            iActivityId = self.urls.iActivityId_dnf_rank
-            iFlowId = "723192"
+        iActivityId = self.urls.iActivityId_dnf_rank
+        iFlowId = "723192"
 
-            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-            qq = uin2qq(self.cfg.account_info.uin)
-            dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = uin2qq(self.cfg.account_info.uin)
+        dnf_helper_info = self.cfg.dnf_helper_info
 
-            res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
-                                      sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
-                                      sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
-                                      uin=qq, skey=self.cfg.account_info.skey,
-                                      nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                      **extra_params)
-        except Exception as e:
-            logger.exception("dnf_rank_receive_diamond_amesvr出错了", exc_info=e)
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
+                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  uin=qq, skey=self.cfg.account_info.skey,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
+                                  **extra_params)
 
     def dnf_rank_op(self, ctx, url, **params):
         qq = uin2qq(self.cfg.account_info.uin)
@@ -1856,7 +1857,7 @@ class DjcHelper:
         return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_helper(self):
         # https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew
         show_head_line("dnf助手 牛气冲天迎新年")
@@ -1878,7 +1879,7 @@ class DjcHelper:
 
         def query_signin_info():
             res = self.dnf_helper_op("查询", "734421", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             temp = raw_info.sOutValue1.split(';')
             signin_days = int(temp[0])
             today_signed = temp[1] == "1"
@@ -1887,7 +1888,7 @@ class DjcHelper:
 
         def query_card_info():
             res = self.dnf_helper_op("查询", "734421", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             return raw_info.sOutValue3
 
         datetime_fmt = "%Y-%m-%d %H:%M:%S"
@@ -1934,7 +1935,9 @@ class DjcHelper:
             (23, "735438", "+11黑铁装备强化券", "歌兰蒂斯"),
         ]
         signin_days, today_signed = query_signin_info()
-        if today_signed:
+        if signin_days >= len(signin_configs):
+            logger.info("已经完全全部签到~")
+        elif today_signed:
             logger.info("今日已经签到过")
         else:
             logger.info(f"尝试签到第{signin_days + 1}天")
@@ -1974,10 +1977,11 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
+        self.show_not_ams_act_info("DNF助手编年史")
 
         if not self.cfg.function_switches.get_dnf_helper_chronicle or self.disable_most_activities():
             logger.warning("未启用领取dnf助手编年史活动功能，将跳过")
@@ -2033,8 +2037,22 @@ class DjcHelper:
             return DnfHelperChronicleSignList().auto_update_config(res)
 
         # ------ 领取各种奖励 ------
+        extra_msg = color("bold_green") + "很可能是编年史尚未正式开始，导致无法领取游戏内奖励~"
 
-        def takeTaskAward(suffix, taskName, actionId, status, exp):
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def takeTaskAwards():
+            taskInfo = getUserTaskList()
+            if taskInfo.hasPartner:
+                logger.info(f"搭档为{taskInfo.pUserId}")
+            else:
+                logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+            for task in taskInfo.taskList:
+                takeTaskAward_op("自己", task.name, task.mActionId, task.mStatus, task.mExp)
+                if taskInfo.hasPartner:
+                    takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def takeTaskAward_op(suffix, taskName, actionId, status, exp):
             actionName = f"[{taskName}-{suffix}]"
 
             if status in [0, 2]:
@@ -2052,12 +2070,46 @@ class DjcHelper:
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
 
-        def take_continuous_signin_gift(giftInfo: DnfHelperChronicleSignGiftInfo):
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def take_continuous_signin_gifts():
+            signGiftsList = sign_gifts_list()
+            hasTakenAnySignGift = False
+            for signGift in signGiftsList.gifts:
+                # 2-未完成，0-已完成未领取，1-已领取
+                if signGift.status in [0]:
+                    # 0-已完成未领取
+                    take_continuous_signin_gift_op(signGift)
+                    hasTakenAnySignGift = True
+                else:
+                    # 2-未完成，1-已领取
+                    pass
+            if not hasTakenAnySignGift:
+                logger.info("连续签到均已领取")
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
             res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params,
                            amsid=giftInfo.sLbcode)
             logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', '出错啦')}")
 
-        def take_basic_award(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def take_basic_awards():
+            basicAwardList = basic_award_list()
+            listOfBasicList = [(True, basicAwardList.basic1List)]
+            if basicAwardList.hasPartner:
+                listOfBasicList.append((False, basicAwardList.basic2List))
+            hasTakenAnyBasicAward = False
+            for selfGift, basicList in listOfBasicList:
+                for award in basicList:
+                    if award.isLock == 0 and award.isUsed == 0:
+                        # 已解锁，且未领取，则尝试领取
+                        take_basic_award_op(award, selfGift)
+                        hasTakenAnyBasicAward = True
+            if not hasTakenAnyBasicAward:
+                logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def take_basic_award_op(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
                 mold = 1  # 自己
                 side = "自己"
@@ -2068,12 +2120,61 @@ class DjcHelper:
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', '出错啦')}")
 
-        def exchange_award(giftInfo: DnfHelperChronicleExchangeGiftInfo):
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def exchange_awards():
+            exchangeList = exchange_list()
+            exchangeGiftMap = {}
+            for gift in exchangeList.gifts:
+                exchangeGiftMap[gift.sLbcode] = gift
+
+            if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
+                all_exchanged = True
+                for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
+                    if ei.sLbcode not in exchangeGiftMap:
+                        logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
+                        continue
+
+                    gift = exchangeGiftMap[ei.sLbcode]
+                    if gift.usedNum >= int(gift.iNum):
+                        logger.warning(f"{gift.sName}已经达到兑换上限{gift.iNum}次, 将跳过")
+                        continue
+
+                    userInfo = getUserActivityTopInfo()
+                    if userInfo.level < int(gift.iLevel):
+                        all_exchanged = False
+                        logger.warning(f"目前等级为{userInfo.level}，不够兑换{gift.sName}所需的{gift.iLevel}级，将跳过后续优先级较低的兑换奖励")
+                        break
+                    if userInfo.point < int(gift.iCard):
+                        all_exchanged = False
+                        logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
+                        break
+
+                    for i in range(ei.count):
+                        exchange_award_op(gift)
+
+                if all_exchanged:
+                    logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
+            else:
+                logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def exchange_award_op(giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get("兑换奖励", url_wang, api="send/exchange", **common_params,
                            exNum=1, iCard=giftInfo.iCard, amsid=giftInfo.sLbcode, iNum=giftInfo.iNum, isLock=giftInfo.isLock)
             logger.info(f"兑换奖励: {res.get('giftName', '出错啦')}")
 
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def lottery():
+            if self.cfg.dnf_helper_info.chronicle_lottery:
+                userInfo = getUserActivityTopInfo()
+                totalLotteryTimes = userInfo.point // 10
+                logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
+                for i in range(totalLotteryTimes):
+                    op_lottery()
+            else:
+                logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+
+        def op_lottery():
             res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
             gift = res.get("giftName", "出错啦")
             beforeMoney = res.get("money", 0)
@@ -2088,98 +2189,27 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
 
-        # 做任务
+        # 提示做任务
         msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"
-        if is_first_run("dnf_helper_chronicle_task_tips"):
+        if is_first_run("dnf_helper_chronicle_task_tips_month_3"):
             async_message_box(msg, "编年史任务提示")
         else:
             logger.warning(msg)
 
         # 领取任务奖励的经验
-        taskInfo = getUserTaskList()
-        if taskInfo.hasPartner:
-            logger.info(f"搭档为{taskInfo.pUserId}")
-        else:
-            logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
-        for task in taskInfo.taskList:
-            takeTaskAward("自己", task.name, task.mActionId, task.mStatus, task.mExp)
-            if taskInfo.hasPartner:
-                takeTaskAward("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+        takeTaskAwards()
 
         # 领取连续签到奖励
-        signGiftsList = sign_gifts_list()
-        hasTakenAnySignGift = False
-        for signGift in signGiftsList.gifts:
-            # 2-未完成，0-已完成未领取，1-已领取
-            if signGift.status in [0]:
-                # 0-已完成未领取
-                take_continuous_signin_gift(signGift)
-                hasTakenAnySignGift = True
-            else:
-                # 2-未完成，1-已领取
-                pass
-        if not hasTakenAnySignGift:
-            logger.info("连续签到均已领取")
+        take_continuous_signin_gifts()
 
         # 领取基础奖励
-        basicAwardList = basic_award_list()
-        listOfBasicList = [(True, basicAwardList.basic1List)]
-        if basicAwardList.hasPartner:
-            listOfBasicList.append((False, basicAwardList.basic2List))
-        hasTakenAnyBasicAward = False
-        for selfGift, basicList in listOfBasicList:
-            for award in basicList:
-                if award.isLock == 0 and award.isUsed == 0:
-                    # 已解锁，且未领取，则尝试领取
-                    take_basic_award(award, selfGift)
-                    hasTakenAnyBasicAward = True
-        if not hasTakenAnyBasicAward:
-            logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+        take_basic_awards()
 
         # 根据配置兑换奖励
-        exchangeList = exchange_list()
-        exchangeGiftMap = {}
-        for gift in exchangeList.gifts:
-            exchangeGiftMap[gift.sLbcode] = gift
+        exchange_awards()
 
-        if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
-            all_exchanged = True
-            for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
-                if ei.sLbcode not in exchangeGiftMap:
-                    logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
-                    continue
-
-                gift = exchangeGiftMap[ei.sLbcode]
-                if gift.usedNum >= int(gift.iNum):
-                    logger.warning(f"{gift.sName}已经达到兑换上限{gift.iNum}次, 将跳过")
-                    continue
-
-                userInfo = getUserActivityTopInfo()
-                if userInfo.level < int(gift.iLevel):
-                    all_exchanged = False
-                    logger.warning(f"目前等级为{userInfo.level}，不够兑换{gift.sName}所需的{gift.iLevel}级，将跳过后续优先级较低的兑换奖励")
-                    break
-                if userInfo.point < int(gift.iCard):
-                    all_exchanged = False
-                    logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
-                    break
-
-                for i in range(ei.count):
-                    exchange_award(gift)
-
-            if all_exchanged:
-                logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
-        else:
-            logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
-
-        if self.cfg.dnf_helper_info.chronicle_lottery:
-            userInfo = getUserActivityTopInfo()
-            totalLotteryTimes = userInfo.point // 10
-            logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
-            for i in range(totalLotteryTimes):
-                lottery()
-        else:
-            logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+        # 抽奖
+        lottery()
 
         ui = getUserActivityTopInfo()
         logger.warning(
@@ -2202,9 +2232,12 @@ class DjcHelper:
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
     guanjia_lottery_gifts_act_id = "1133"  # 抽奖活动ID
 
-    @try_except
+    # note: 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
+
+    @try_except()
     def guanjia(self):
         show_head_line("管家蚊子腿")
+        self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
             logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
@@ -2262,7 +2295,7 @@ class DjcHelper:
         # 检查是否启用管家相关活动
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+            # self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True
@@ -2292,7 +2325,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_guanjia, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia, name=self.cfg.name)
             # 保存
             self.save_guanjia_openid(lr.qc_openid, lr.qc_k)
         else:
@@ -2328,7 +2361,7 @@ class DjcHelper:
         return self.local_saved_guanjia_openid_file.format(self.cfg.name)
 
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
-    @try_except
+    @try_except()
     def hello_voice(self):
         # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
@@ -2362,37 +2395,33 @@ class DjcHelper:
                 # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻7天”！", "jData": {"afterStatus": -1, "helloTicketCount": 0, "packid": null, "packname": "黑钻7天"}, "sSerial": "ULINK-DNF-1207140537-5gDMvR-228919-718017"}
                 break
 
-        try:
-            # ------实际逻辑-----------
+        # ------实际逻辑-----------
 
-            self.do_hello_voice("领取新人礼包", "lotteryGift")
+        self.do_hello_voice("领取新人礼包", "lotteryGift")
 
-            # # 每天兑换1次
-            # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-            # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
+        # # 每天兑换1次
+        # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
+        # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
 
-            # # 每周兑换1次
-            # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
-            # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
-            # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
-            # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
+        # # 每周兑换1次
+        # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
+        # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
+        # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
+        # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
 
-            # 每月兑换1次
-            getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
-            getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
-            getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
-            getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
+        # 每月兑换1次
+        getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
+        getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
+        getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
+        getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
 
-            # 活动奖励兑换
-            getActDui(1, "黑钻3天兑换券")
-            getActDui(2, "黑钻7天兑换券")
-            getActDui(3, "时间引导石（10个）兑换券")
-            getActDui(4, "升级券*1（lv95-99）兑换券")
-            getActDui(5, "智慧的引导通行证*1兑换券")
-            getActDui(6, "装备提升礼盒*1兑换券")
-
-        except Exception as e:
-            logger.error(f"hello_voice exception={e}")
+        # 活动奖励兑换
+        getActDui(1, "黑钻3天兑换券")
+        getActDui(2, "黑钻7天兑换券")
+        getActDui(3, "时间引导石（10个）兑换券")
+        getActDui(4, "升级券*1（lv95-99）兑换券")
+        getActDui(5, "智慧的引导通行证*1兑换券")
+        getActDui(6, "装备提升礼盒*1兑换券")
 
     def check_hello_voice_bind_role(self):
         data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
@@ -2480,7 +2509,7 @@ class DjcHelper:
 
         def query_watch_time():
             res = self.dnf_carnival_live_op("查询观看时间", "722482", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue3)
 
         def watch_remaining_time():
@@ -2492,7 +2521,7 @@ class DjcHelper:
 
         def query_used_lottery_times():
             res = self.dnf_carnival_live_op("查询获奖次数", "725567", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         def lottery_remaining_times():
@@ -2524,7 +2553,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_welfare(self):
         # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
@@ -2636,7 +2665,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF共创投票--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_dianzan(self):
         # https://dnf.qq.com/cp/a20201126version/index.shtml
         show_head_line("DNF共创投票")
@@ -2764,7 +2793,7 @@ class DjcHelper:
 
     def query_dnf_dianzan(self):
         res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         return int(info.sOutValue1), info.sOutValue2
 
@@ -2779,12 +2808,8 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
-    @try_except
+    @try_except()
     def xinyue_financing(self):
-        if not self.common_cfg.test_mode:
-            # undone: 心悦app理财礼卡活动似乎还有一些问题，先本地运行一段时间再放出去
-            return
-
         # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
         self.show_amesvr_act_info(self.xinyue_financing_op)
@@ -2793,12 +2818,8 @@ class DjcHelper:
             logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
             return
 
-        selectedCards = self.cfg.xinyue_financing_card_names
-        if len(selectedCards) == 0:
-            logger.warning("未配置心悦app理财礼卡活动选择的理财卡类型(xinyue_financing_card_names)，将跳过")
-            return
-
-        logger.info(color("fg_bold_green") + f"当前配置的理财卡列表为: {selectedCards}")
+        selectedCards = ["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]
+        logger.info(color("fg_bold_green") + f"当前设定的理财卡优先列表为: {selectedCards}")
 
         type2name = {
             "type1": "体验版周卡",
@@ -2808,9 +2829,6 @@ class DjcHelper:
         }
 
         # ------------- 封装函数 ----------------
-        def query_gpoints():
-            res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
-            return int(res.sOutValue2)
 
         def query_card_taken_map():
             res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
@@ -2871,58 +2889,59 @@ class DjcHelper:
             return info_map
 
         # ------------- 正式逻辑 ----------------
-        try:
-            pass
-            gPoints = query_gpoints()
-            startPoints = gPoints
-            logger.info(f"当前G分为{startPoints}")
+        gPoints = self.query_gpoints()
+        startPoints = gPoints
+        logger.info(f"当前G分为{startPoints}")
 
-            # 活动规则
-            # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
-            # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
-            # ps：推荐购买体验版月卡和升级版月卡
-            financingCardsToBuyAndMap = {
-                ## 名称   购买价格   购买FlowId    领取FlowId
-                "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
-                "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
-                "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
-                "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
-            }
+        # 活动规则
+        # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
+        # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
+        # ps：推荐购买体验版月卡和升级版月卡
+        financingCardsToBuyAndMap = {
+            ## 名称   购买价格   购买FlowId    领取FlowId
+            "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
+            "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
+            "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
+            "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
+        }
 
-            cardInfoMap = get_financing_info_map()
-            cardTakenMap = query_card_taken_map()
-            for cardName in selectedCards:
-                if cardName not in financingCardsToBuyAndMap:
-                    logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
+        cardInfoMap = get_financing_info_map()
+        cardTakenMap = query_card_taken_map()
+        for cardName in selectedCards:
+            if cardName not in financingCardsToBuyAndMap:
+                logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
+                continue
+
+            buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
+            cardInfo = cardInfoMap[cardName]
+            taken = cardTakenMap[cardName]
+            # 如果尚未购买（或过期），则购买
+            if not cardInfo.buy:
+                if gPoints >= buyPrice:
+                    self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
+                    gPoints -= buyPrice
+                else:
+                    logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
                     continue
 
-                buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
-                cardInfo = cardInfoMap[cardName]
-                taken = cardTakenMap[cardName]
-                # 如果尚未购买（或过期），则购买
-                if not cardInfo.buy:
-                    if gPoints >= buyPrice:
-                        self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
-                        gPoints -= buyPrice
-                    else:
-                        logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
-                        continue
+            # 此处以确保购买，尝试领取
+            if taken:
+                logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
+            else:
+                self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
 
-                # 此处以确保购买，尝试领取
-                if taken:
-                    logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
-                else:
-                    self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
+        newGPoints = self.query_gpoints()
+        delta = newGPoints - startPoints
+        logger.warning("")
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
+        logger.warning("")
 
-            newGPoints = query_gpoints()
-            delta = newGPoints - startPoints
-            logger.warning("")
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）")
-            logger.warning("")
+        show_financing_info()
 
-            show_financing_info()
-        except Exception as e:
-            logger.error("处理心悦app理财礼卡出错了", exc_info=e)
+    @try_except(return_val_on_except=0)
+    def query_gpoints(self):
+        res = AmesvrCommonModRet().auto_update_config(self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"])
+        return int(res.sOutValue2)
 
     def xinyue_financing_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_xinyue_financing
@@ -2934,8 +2953,233 @@ class DjcHelper:
                                    plat=plat, extraStr=extraStr,
                                    **extra_params)
 
+    # --------------------------------------------心悦猫咪--------------------------------------------
+    @try_except()
+    def xinyue_cat(self):
+        # https://xinyue.qq.com/act/a20180912tgclubcat/index.html
+        show_head_line("心悦猫咪")
+        self.show_amesvr_act_info(self.xinyue_cat_op)
+
+        if not self.cfg.function_switches.get_xinyue_cat:
+            logger.warning("未启用领取心悦猫咪活动合集功能，将跳过")
+            return
+
+        # --------------- 封装接口 ---------------
+
+        def queryUserInfo():
+            res = self.xinyue_cat_op("查询用户信息", "449169", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueCatUserInfo()
+            info.name = unquote_plus(raw_info.sOutValue1.split('|')[0])
+            info.gpoints = int(raw_info.sOutValue2)
+            info.account = raw_info.sOutValue4
+            info.vipLevel = int(raw_info.sOutValue6)
+            info.has_cat = raw_info.sOutValue8 == "1"
+
+            return info
+
+        def getPetFinghtInfo():
+            res = self.xinyue_cat_op("查询心悦猫咪信息", "532974", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueCatInfo()
+            info.fighting_capacity = int(raw_info.sOutValue1)
+            info.yuanqi = int(raw_info.sOutValue2)
+
+            return info
+
+        def get_skin_list():
+            return self.xinyue_cat_app_op("查询心悦猫咪皮肤列表", api="get_skin_list")
+
+        def use_skin(skin_id):
+            return self.xinyue_cat_app_op("使用皮肤", api="use_skin", skin_id=skin_id)
+
+        def get_decoration_list():
+            return self.xinyue_cat_app_op("查询心悦猫咪装饰列表", api="get_decoration_list")
+
+        def use_decoration(decoration_id):
+            return self.xinyue_cat_app_op("使用装饰", api="use_decoration", decoration_id=decoration_id)
+
+        def make_money_new(uin, adLevel, adPower):
+            return self.xinyue_cat_app_op("历练", api="make_money_new", uin=uin, adLevel=adLevel, adPower=adPower)
+
+        def queryCatInfoFromApp():
+            res = self.xinyue_cat_app_op("从app接口查询心悦猫咪信息", api="get_user", print_res=False)
+            info = XinyueCatInfoFromApp().auto_update_config(res["data"])
+
+            return info
+
+        def queryPetId():
+            return queryCatInfoFromApp().pet_id
+
+        def fight(ctx, username):
+            res = self.xinyue_cat_op(f"{ctx}-匹配", "471145")
+            wait()
+
+            result = XinyueCatMatchResult().auto_update_config(res["modRet"]["jData"])
+            if result.ending == 1:
+                self.xinyue_cat_op(f"{ctx}-结算-胜利", "508006", username=quote_plus(username))
+            else:
+                self.xinyue_cat_op(f"{ctx}-结算-失败", "471383", username=quote_plus(username))
+
+            wait()
+
+        def wait():
+            time.sleep(5)
+
+        # --------------- 正式逻辑 ---------------
+
+        old_user_info = queryUserInfo()
+        old_pet_info = getPetFinghtInfo()
+
+        # 查询相关信息
+        if not old_user_info.has_cat:
+            self.xinyue_cat_op("领取猫咪", "532871")
+        else:
+            logger.info("已经领取过猫咪，无需再次领取")
+
+        # 领取历练奖励
+        self.xinyue_cat_op("每日首次进入页面增加元气值", "497774")
+        self.xinyue_cat_op("领取历练奖励", "532968")
+
+        # 妆容和装饰（小橘子和贤德昭仪）
+        petId = queryPetId()
+        skin_id = "8"  # 贤德昭仪
+        decoration_id = "7"  # 小橘子
+
+        # 尝试购买
+        self.xinyue_cat_op("G分购买猫咪皮肤-贤德昭仪", "507986", petId=petId, skin_id=skin_id)
+        wait()
+        self.xinyue_cat_op("G分购买装饰-小橘子", "508072", petId=petId, decoration_id=decoration_id)
+        wait()
+
+        # 尝试穿戴妆容和装饰
+        use_skin(skin_id)
+        wait()
+        use_decoration(decoration_id)
+        wait()
+
+        # 战斗
+        pet_info = getPetFinghtInfo()
+        total_fight_times = pet_info.yuanqi // 20
+        logger.warning(color("fg_bold_yellow") + f"当前元气为{pet_info.yuanqi}，共可进行{total_fight_times}次战斗")
+        for i in range(total_fight_times):
+            fight(f"第{i + 1}/{total_fight_times}次战斗", old_user_info.name)
+
+        # 历练
+        user_info = queryUserInfo()
+        pet_info = getPetFinghtInfo()
+        for adLevel in [4, 3, 2, 1]:
+            make_money_new(user_info.account, adLevel, pet_info.fighting_capacity)
+
+        new_user_info = queryUserInfo()
+        new_pet_info = getPetFinghtInfo()
+
+        delta = new_user_info.gpoints - old_user_info.gpoints
+        fc_delta = new_pet_info.fighting_capacity - old_pet_info.fighting_capacity
+        logger.warning("")
+        logger.warning(color("fg_bold_yellow") + (
+            f"账号 {self.cfg.name} 本次心悦猫咪操作共获得 {delta} G分（ {old_user_info.gpoints} -> {new_user_info.gpoints} ）"
+            f"，战力增加 {fc_delta}（ {old_pet_info.fighting_capacity} -> {new_pet_info.fighting_capacity} ）"
+        ))
+        logger.warning("")
+
+    def xinyue_cat_app_op(self, ctx, api, skin_id="", decoration_id="", uin="", adLevel="", adPower="", print_res=True):
+        return self.get(ctx, self.urls.xinyue_cat_api, api=api,
+                        skin_id=skin_id, decoration_id=decoration_id,
+                        uin=uin, adLevel=adLevel, adPower=adPower,
+                        print_res=print_res)
+
+    def xinyue_cat_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_xinyue_cat
+
+        extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x42"')
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20180912tgclubcat/",
+                                   extraStr=extraStr,
+                                   **extra_params)
+
+    # --------------------------------------------心悦app周礼包--------------------------------------------
+    @try_except()
+    def xinyue_weekly_gift(self):
+        # https://xinyue.qq.com/act/a20180906gifts/index.html
+        show_head_line("心悦app周礼包")
+        self.show_amesvr_act_info(self.xinyue_weekly_gift_op)
+
+        if not self.cfg.function_switches.get_xinyue_weekly_gift:
+            logger.warning("未启用领取心悦app周礼包活动合集功能，将跳过")
+            return
+
+        def query_info():
+            res = self.xinyue_weekly_gift_op("查询信息", "484520", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueWeeklyGiftInfo()
+            info.qq = raw_info.sOutValue1
+            info.iLevel = int(raw_info.sOutValue2)
+            info.sLevel = raw_info.sOutValue3
+            info.tTicket = int(raw_info.sOutValue4) + int(raw_info.sOutValue5)
+            info.gift_got_list = raw_info.sOutValue6.split('|')
+
+            return info
+
+        def query_gpoints_info():
+            res = self.xinyue_weekly_gift_op("查询G分信息", "603392", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = XinyueWeeklyGPointsInfo()
+            info.nickname = unquote_plus(raw_info.sOutValue1)
+            info.gpoints = int(raw_info.sOutValue2)
+
+            return info
+
+        @try_except()
+        def take_all_gifts():
+            # note: 因为已经有一键领取的接口，暂不接入单个领取的接口
+            # self.xinyue_weekly_gift_op("领取单个周礼包", "508441", PackId="1")
+
+            rc = self.common_cfg.retry
+            for idx in range(rc.max_retry_count):
+                #   {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-TGCLUB-0301004339-TZX3Xv-155525-508440", "iAlertSerial": "0", "iCondNotMetId": "860713", "sMsg": "仅限心悦用户参与", "sCondNotMetTips": "仅限心悦用户参与"}}
+                res = self.xinyue_weekly_gift_op("一键领取周礼包", "508440")
+                if res["ret"] == "700" and res["flowRet"]["sMsg"] == "仅限心悦用户参与":
+                    logger.info(f"第{idx + 1}/{rc.max_retry_count}次尝试 这个一键领取接口似乎每日第一次请求会提示仅限心悦用户参与，实际上任何级别都可以的，将等待{rc.retry_wait_time}")
+                    time.sleep(rc.retry_wait_time)
+                    continue
+
+                # 领取完成
+                break
+
+        old_gpoints_info = query_gpoints_info()
+
+        take_all_gifts()
+
+        info = query_info()
+        logger.info(f"当前剩余免G分抽奖券数目为{info.tTicket}")
+        for idx in range(info.tTicket):
+            self.xinyue_weekly_gift_op(f"第{idx + 1}/{info.tTicket}次免费抽奖并等待五秒", "603340")
+            if idx != info.tTicket - 1:
+                time.sleep(5)
+
+        new_gpoints_info = query_gpoints_info()
+
+        delta = new_gpoints_info.gpoints - old_gpoints_info.gpoints
+        logger.warning("")
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦周礼包操作共免费抽奖{info.tTicket}次，共获得 {delta} G分（ {old_gpoints_info.gpoints} -> {new_gpoints_info.gpoints} ）")
+        logger.warning("")
+
+    def xinyue_weekly_gift_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_xinyue_weekly_gift
+
+        extraStr = quote_plus('"mod1":"1","mod2":"4","mod3":"x48"')
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20180906gifts/",
+                                   extraStr=extraStr,
+                                   **extra_params)
+
     # --------------------------------------------dnf漂流瓶--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_drift(self):
         # https://dnf.qq.com/cp/a20201211driftm/index.html
         show_head_line("dnf漂流瓶")
@@ -3015,7 +3259,7 @@ class DjcHelper:
 
     def query_dnf_drift_points(self):
         res = self.dnf_drift_op("查询基础信息", "726353")
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
         total, remaining = int(info.sOutValue2), int(info.sOutValue2) - int(info.sOutValue1) * 4
         return total, remaining
 
@@ -3038,7 +3282,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF马杰洛的规划第三期--------------------------------------------
-    @try_except
+    @try_except()
     def majieluo(self):
         # https://dnf.qq.com/cp/a20210121welfare/index.html
         show_head_line("DNF马杰洛的规划第三期")
@@ -3252,29 +3496,27 @@ class DjcHelper:
         count = 0
         try:
             res = self.majieluo_op("查询当前时间引导石数量", "734106", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             count = int(info.sOutValue1)
         except Exception as e:
             pass
 
         return count
 
+    @try_except(return_val_on_except="")
     def query_majieluo_card_info(self):
         res = self.majieluo_op("查询信息", "733883", print_res=False)
 
         card_info = ""
-        try:
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
-            # 默认排序与表现一致，改为跟ui表现一致
-            temp = info.sOutValue1.split('|')
-            order = [3, 4, 1, 2, 5]
-            actual = []
-            for idx in order:
-                actual.append(temp[idx - 1])
+        info = parse_amesvr_common_info(res)
+        # 默认排序与表现一致，改为跟ui表现一致
+        temp = info.sOutValue1.split('|')
+        order = [3, 4, 1, 2, 5]
+        actual = []
+        for idx in order:
+            actual.append(temp[idx - 1])
 
-            card_info = '|'.join(actual)
-        except Exception as e:
-            pass
+        card_info = '|'.join(actual)
 
         return card_info
 
@@ -3291,7 +3533,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
-    @try_except
+    @try_except()
     def warm_winter(self):
         # https://dnf.qq.com/lbact/a20200911lbz3dns/index.html
         show_head_line("暖冬好礼活动")
@@ -3348,7 +3590,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------qq视频-看江湖有翡--------------------------------------------
-    @try_except
+    @try_except()
     def youfei(self):
         # https://dnf.qq.com/cp/a20201227youfeim/index.html
         show_head_line("qq视频-看江湖有翡")
@@ -3362,7 +3604,7 @@ class DjcHelper:
 
         def query_signin_days():
             res = self.youfei_op("查询签到状态", "728501", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         self.youfei_op("幸运用户礼包", "728407")
@@ -3386,7 +3628,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------dnf论坛签到--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_bbs_signin(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf官方论坛签到")
@@ -3449,12 +3691,12 @@ class DjcHelper:
 
         def query_dbq():
             res = self.dnf_bbs_op("查询代币券", "730277", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         def query_remaining_quota():
             res = self.dnf_bbs_op("查询礼包剩余量", "730763", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
 
             logger.info('\n'.join([
                 "当前礼包全局剩余量如下",
@@ -3519,9 +3761,10 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------会员关怀--------------------------------------------
-    @try_except
+    @try_except()
     def vip_mentor(self):
         show_head_line("会员关怀")
+        self.show_not_ams_act_info("会员关怀")
 
         if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
             logger.warning("未启用领取会员关怀功能，将跳过")
@@ -3540,7 +3783,7 @@ class DjcHelper:
         qa.vip_mentor()
 
     # --------------------------------------------DNF新春夺宝大作战--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_spring(self):
         # https://xinyue.qq.com/act/a20210104cjhdh5/index.html
         show_head_line("DNF新春夺宝大作战")
@@ -3609,7 +3852,7 @@ class DjcHelper:
 
         # 查询第一部分
         res = self.dnf_spring_op("输出", "731313", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         springInfo.recharge_money = int(info.sOutValue1) // 100
 
@@ -3622,7 +3865,7 @@ class DjcHelper:
 
         # 查询第二部分
         res = self.dnf_spring_op("输出二", "731854", print_res=False)
-        info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        info = parse_amesvr_common_info(res)
 
         springInfo.total_take_fudai = int(info.sOutValue1)
 
@@ -3639,7 +3882,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------DNF0121新春落地页活动--------------------------------------------
-    @try_except
+    @try_except()
     def dnf_0121(self):
         # https://dnf.qq.com/cp/a20210121index/
         show_head_line("DNF0121新春落地页活动")
@@ -3653,7 +3896,7 @@ class DjcHelper:
 
         def query_info():
             res = self.dnf_0121_op("查询用户信息", "733258", print_res=False)
-            common_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            common_info = parse_amesvr_common_info(res)
 
             info = Dnf0121Info()
             info.sItemIds = common_info.sOutValue1.split(",")
@@ -3685,7 +3928,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------WeGame春节活动--------------------------------------------
-    @try_except
+    @try_except()
     def wegame_spring(self):
         # https://dnf.qq.com/lbact/a20210121wegamepc/index.html
         show_head_line("WeGame春节活动")
@@ -3699,7 +3942,7 @@ class DjcHelper:
 
         def query_signin_days():
             res = self.wegame_spring_op("查询签到天数", "736307", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
             parts = info.sOutValue1.split('|')[0].split(':')
             days = int(parts[2])
@@ -3707,7 +3950,7 @@ class DjcHelper:
 
         def query_lottery_times():
             res = self.wegame_spring_op("查询抽奖次数", "736306", print_res=False)
-            info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            info = parse_amesvr_common_info(res)
             # "sOutValue1": "239:16:4|240:8:1",
             parts = info.sOutValue1.split('|')[0].split(':')
             total, remaining = int(parts[1]), int(parts[2])
@@ -3740,7 +3983,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------新春福袋大作战--------------------------------------------
-    @try_except
+    @try_except()
     def spring_fudai(self):
         # https://dnf.qq.com/cp/a20210108luckym/index.html
         show_head_line("新春福袋大作战")
@@ -3765,7 +4008,7 @@ class DjcHelper:
             # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",
             # "sOutValue5": "0252c9b811d66dc1f0c9c6284b378e40", "sOutValue6": "", "sOutValue7": "0", "sOutValue8": "4"}
             res = self.spring_fudai_op("查询各种数据", "733432", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             info = SpringFuDaiInfo()
 
             temp = raw_info.sOutValue1.split('|')
@@ -3793,7 +4036,7 @@ class DjcHelper:
                 lr = ql.qr_login(login_mode=ql.login_mode_normal, name=self.cfg.name)
             else:
                 # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal)
+                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
             spring_fudai_pskey = lr.p_skey
 
             send_count = 0
@@ -3880,7 +4123,7 @@ class DjcHelper:
                                    extra_cookies=f"p_skey={p_skey}")
 
     # --------------------------------------------DNF新春福利集合站--------------------------------------------
-    @try_except
+    @try_except()
     def spring_collection(self):
         # https://dnf.qq.com/lbact/a20210121hdhj/index.html
         show_head_line("DNF新春福利集合站")
@@ -3916,7 +4159,7 @@ class DjcHelper:
                                    **extra_params)
 
     # --------------------------------------------燃放爆竹活动--------------------------------------------
-    @try_except
+    @try_except()
     def firecrackers(self):
         # https://dnf.qq.com/cp/a20210118rfbz/index.html
         show_head_line("燃放爆竹活动")
@@ -3930,27 +4173,24 @@ class DjcHelper:
 
         def query_count():
             res = self.firecrackers_op("查询剩余爆竹数", "733395", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
 
             return int(raw_info.sOutValue1)
 
         def today_has_invite_friend():
             res = self.firecrackers_op("查询各个任务状态", "733392", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+            raw_info = parse_amesvr_common_info(res)
             taskStatus = raw_info.sOutValue1.split(',')
 
             return int(taskStatus[3]) >= 1
 
+        @try_except(return_val_on_except=[])
         def query_invited_friends():
             res = self.firecrackers_op("查询成功邀请好友列表", "735412", print_res=False)
 
             invited_friends = []
-            try:
-                for info in res["modRet"]["jData"]["jData"]:
-                    invited_friends.append(info["sendToQQ"])
-            except:
-                # 如果没有邀请过任何人，上面这样获取似乎是会报错的。手头上暂时没有这种号，先兼容下吧。
-                pass
+            for info in res["modRet"]["jData"]["jData"]:
+                invited_friends.append(info["sendToQQ"])
 
             return invited_friends
 
@@ -4072,14 +4312,12 @@ class DjcHelper:
         else:
             logger.info(color("bold_green") + "如果已经兑换完所有奖励，建议开启使用积分抽奖功能")
 
+    @try_except(return_val_on_except=0)
     def query_firecrackers_points(self):
-        try:
-            res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
-            raw_info = AmesvrCommonModRet().auto_update_config(res["modRet"])
+        res = self.firecrackers_op("查询剩余积分数", "733396", print_res=False)
+        raw_info = parse_amesvr_common_info(res)
 
-            return int(raw_info.sOutValue1)
-        except Exception as e:
-            return 0
+        return int(raw_info.sOutValue1)
 
     def check_firecrackers(self):
         self.check_bind_account("燃放爆竹活动", "https://dnf.qq.com/cp/a20210118rfbz/index.html",
@@ -4102,7 +4340,9 @@ class DjcHelper:
         endTime = datetime.datetime.now()
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
         date = get_today()
-        default_params = {
+
+        # 有值的默认值
+        default_valued_params = {
             "appVersion": appVersion,
             "p_tk": self.cfg.g_tk,
             "g_tk": self.cfg.g_tk,
@@ -4116,28 +4356,37 @@ class DjcHelper:
             "uuid": self.cfg.sDeviceID,
             "millseconds": getMillSecondsUnix(),
             "rand": random.random(),
-            "package_id": "", "lqlevel": "", "teamid": "",
-            "weekDay": "",
-            "sArea": "", "serverId": "", "areaId": "", "nickName": "", "sRoleId": "", "sRoleName": "", "uin": "", "skey": "", "userId": "", "token": "",
-            "iActionId": "", "iGoodsId": "", "sBizCode": "", "partition": "", "iZoneId": "", "platid": "", "sZoneDesc": "", "sGetterDream": "",
             "date": date,
-            "dzid": "",
-            "page": "",
-            "iPackageId": "",
-            "isLock": "", "amsid": "", "iLbSel1": "", "num": "", "mold": "", "exNum": "", "iCard": "", "iNum": "", "actionId": "",
-            "plat": "", "extraStr": "",
-            "sContent": "", "sPartition": "", "sAreaName": "", "md5str": "", "ams_checkparam": "", "checkparam": "",
-            "type": "", "moduleId": "", "giftId": "", "acceptId": "", "sendQQ": "",
-            "cardType": "", "giftNum": "", "inviteId": "", "inviterName": "", "sendName": "", "invitee": "", "receiveUin": "", "receiver": "", "receiverName": "", "receiverUrl": "",
-            "user_area": "", "user_partition": "", "user_areaName": "", "user_roleId": "", "user_roleName": "",
-            "user_roleLevel": "", "user_checkparam": "", "user_md5str": "", "user_sex": "", "user_platId": "",
-            "cz": "", "dj": "",
-            "siActivityId": "",
-            "needADD": "", "dateInfo": "", "sId": "", "userNum": "",
-            "index": "",
-            "pageNow": "", "pageSize": "",
-            "clickTime": "",
         }
+
+        # 无值的默认值
+        default_empty_params = {key: "" for key in [
+            "package_id", "lqlevel", "teamid",
+            "weekDay",
+            "sArea", "serverId", "areaId", "nickName", "sRoleId", "sRoleName", "uin", "skey", "userId", "token",
+            "iActionId", "iGoodsId", "sBizCode", "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream",
+            "dzid",
+            "page",
+            "iPackageId",
+            "isLock", "amsid", "iLbSel1", "num", "mold", "exNum", "iCard", "iNum", "actionId",
+            "plat", "extraStr",
+            "sContent", "sPartition", "sAreaName", "md5str", "ams_checkparam", "checkparam",
+            "type", "moduleId", "giftId", "acceptId", "sendQQ",
+            "cardType", "giftNum", "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl",
+            "user_area", "user_partition", "user_areaName", "user_roleId", "user_roleName",
+            "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId",
+            "cz", "dj",
+            "siActivityId",
+            "needADD", "dateInfo", "sId", "userNum",
+            "index",
+            "pageNow", "pageSize",
+            "clickTime",
+            "skin_id", "decoration_id", "adLevel", "adPower",
+            "username", "petId"
+        ]}
+
+        # 整合得到所有默认值
+        default_params = {**default_valued_params, **default_empty_params}
 
         # 首先将默认参数添加进去，避免format时报错
         merged_params = {**default_params, **params}
@@ -4163,7 +4412,7 @@ class DjcHelper:
 
     def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", show_info_only=False, **data_extra_params):
         if show_info_only:
-            self.show_act_info(iActivityId)
+            self.show_ams_act_info(iActivityId)
             return
 
         data = self.format(self.urls.amesvr_raw_data,
@@ -4175,8 +4424,11 @@ class DjcHelper:
                          iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
                          print_res=print_res, extra_cookies=extra_cookies)
 
-    def show_act_info(self, iActivityId):
-        logger.info(color("bold_green") + get_act_desc(iActivityId))
+    def show_ams_act_info(self, iActivityId):
+        logger.info(color("bold_green") + get_ams_act_desc(iActivityId))
+
+    def show_not_ams_act_info(self, act_name):
+        logger.info(color("bold_green") + get_not_ams_act_desc(act_name))
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"
@@ -4358,7 +4610,9 @@ if __name__ == '__main__':
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
-        # djcHelper.dnf_helper_chronicle()
         # djcHelper.guanjia()
         # djcHelper.qq_video()
-        djcHelper.dnf_helper()
+        # djcHelper.dnf_helper()
+        # djcHelper.xinyue_weekly_gift()
+        # djcHelper.dnf_helper_chronicle()
+        djcHelper.xinyue_cat()

@@ -4,6 +4,31 @@ from dao import AmsActInfo
 from util import *
 
 
+def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
+    info = AmsActInfo()
+    info.iActivityId = "000000"
+    info.sActivityName = sActivityName
+    info.dtBeginTime = dtBeginTime
+    info.dtEndTime = dtEndTime
+
+    return info
+
+
+not_know_start_time = "2000-01-01 00:00:00"
+not_know_end_time = "2099-01-01 00:00:00"
+
+not_ams_activities = [
+    newAmsActInfo("道聚城", not_know_start_time, not_know_end_time),
+    newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
+    newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
+    newAmsActInfo("管家蚊子腿", "2021-02-01 00:00:00", "2021-03-01 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿", "2021-02-01 00:00:00", "2021-03-01 23:59:59"),
+    newAmsActInfo("会员关怀", "2021-02-01 00:00:00", not_know_end_time),
+    newAmsActInfo("集卡", "2021-01-15 00:00:00", "2021-02-28 23:59:59"),
+    newAmsActInfo("DNF助手编年史", "2021-03-01 00:00:00", "2021-03-31 23:59:59"),
+]
+
+
 class Urls:
     def __init__(self):
         # 余额
@@ -78,6 +103,8 @@ class Urls:
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "354984"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
+        self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
+        self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "354870"  # DNF马杰洛的规划第三期
         self.iActivityId_dnf_helper = "356203"  # DNF助手活动 牛气冲天迎新年
@@ -96,7 +123,7 @@ class Urls:
         self.amesvr = "https://{amesvr_host}/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType={sServiceType}&iActivityId={iActivityId}&sServiceDepartment={sServiceDepartment}&isXhrPost=true"
         # &sArea={sArea}&sRoleId={sRoleId}&uin={uin}&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&skey={skey}&nickName={nickName}
         # 需要手动额外传入参数：iFlowId/package_id/lqlevel/teamid, sServiceDepartment/sServiceType, sArea/serverId/nickName/sRoleId/sRoleName/uin/skey/userId/token, date
-        self.amesvr_raw_data = "iActivityId={iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&weekDay={weekDay}&e_code=0&g_code=0&eas_url={eas_url}&xhr=1&sServiceDepartment={sServiceDepartment}&sServiceType={sServiceType}&sArea={sArea}&sRoleId={sRoleId}&uin={uin}&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&areaId={areaId}&skey={skey}&nickName={nickName}&date={date}&dzid={dzid}&page={page}&iPackageId={iPackageId}&plat={plat}&extraStr={extraStr}&sContent={sContent}&sPartition={sPartition}&sAreaName={sAreaName}&md5str={md5str}&ams_checkparam={ams_checkparam}&checkparam={checkparam}&type={type}&moduleId={moduleId}&giftId={giftId}&acceptId={acceptId}&invitee={invitee}&giftNum={giftNum}&sendQQ={sendQQ}&receiver={receiver}&receiverName={receiverName}&inviterName={inviterName}&user_area={user_area}&user_partition={user_partition}&user_areaName={user_areaName}&user_roleId={user_roleId}&user_roleName={user_roleName}&user_roleLevel={user_roleLevel}&user_checkparam={user_checkparam}&user_md5str={user_md5str}&user_sex={user_sex}&user_platId={user_platId}&cz={cz}&dj={dj}&siActivityId={siActivityId}&needADD={needADD}&dateInfo={dateInfo}&sId={sId}&userNum={userNum}&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}"
+        self.amesvr_raw_data = "iActivityId={iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}&teamid={teamid}&weekDay={weekDay}&e_code=0&g_code=0&eas_url={eas_url}&xhr=1&sServiceDepartment={sServiceDepartment}&sServiceType={sServiceType}&sArea={sArea}&sRoleId={sRoleId}&uin={uin}&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&areaId={areaId}&skey={skey}&nickName={nickName}&date={date}&dzid={dzid}&page={page}&iPackageId={iPackageId}&plat={plat}&extraStr={extraStr}&sContent={sContent}&sPartition={sPartition}&sAreaName={sAreaName}&md5str={md5str}&ams_checkparam={ams_checkparam}&checkparam={checkparam}&type={type}&moduleId={moduleId}&giftId={giftId}&acceptId={acceptId}&invitee={invitee}&giftNum={giftNum}&sendQQ={sendQQ}&receiver={receiver}&receiverName={receiverName}&inviterName={inviterName}&user_area={user_area}&user_partition={user_partition}&user_areaName={user_areaName}&user_roleId={user_roleId}&user_roleName={user_roleName}&user_roleLevel={user_roleLevel}&user_checkparam={user_checkparam}&user_md5str={user_md5str}&user_sex={user_sex}&user_platId={user_platId}&cz={cz}&dj={dj}&siActivityId={siActivityId}&needADD={needADD}&dateInfo={dateInfo}&sId={sId}&userNum={userNum}&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize
@@ -153,8 +180,18 @@ class Urls:
         # dnf论坛签到，额外参数：formhash: 论坛formhash
         self.dnf_bbs_signin = "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
 
+        # 心悦app
+        # 心悦猫咪api
+        self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"
+
     def show_current_valid_act_infos(self):
         acts = []
+
+        for not_ams_act in not_ams_activities:
+            if is_act_expired(not_ams_act.dtEndTime):
+                continue
+
+            acts.append(not_ams_act)
 
         for attr_name, act_id in self.__dict__.items():
             if not attr_name.startswith("iActivityId_"):
@@ -171,13 +208,45 @@ class Urls:
 
         acts.sort(key=lambda act: act.dtEndTime)
 
-        act_infos = [format_act(act) for act in acts]
+        act_infos = [f"{idx + 1:2d} {format_act(act, needPadding=True)}" for idx, act in enumerate(acts)]
         logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
 
 
-@try_except
+@try_except()
 def search_act(actId):
     actId = str(actId)
+    act_desc_js = get_act_desc_js(actId)
+    if act_desc_js == "":
+        return None
+
+    v = act_desc_js.strip().replace('\r', '\n').split('\n')
+
+    for line in v:
+        if not line.startswith("var ams_actdesc="):
+            continue
+        act_json = line.replace("var ams_actdesc=", "")
+        act_desc = json.loads(act_json)
+
+        info = AmsActInfo().auto_update_config(act_desc)
+
+        return info
+
+    return None
+
+
+def get_act_desc_js(actId):
+    actId = str(actId)
+    last_three = str(actId[-3:])
+
+    act_cache_dir = f"{cached_dir}/actDesc/{last_three}/{actId}"
+    act_cache_file = f"{act_cache_dir}/act.desc.js"
+
+    # 先尝试从本地缓存获取
+    if os.path.exists(act_cache_file):
+        with open(act_cache_file, 'r', encoding="utf-8") as f:
+            return f.read()
+
+    # 然后从服务器获取活动信息
     actUrls = [
         'https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
         'https://apps.game.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
@@ -190,22 +259,16 @@ def search_act(actId):
         if res.status_code != 200:
             continue
 
-        v = res.text.strip().split('\r\n')
+        make_sure_dir_exists(act_cache_dir)
+        with open(act_cache_file, 'w', encoding="utf-8") as f:
+            f.write(res.text)
 
-        for line in v:
-            if not line.startswith("var ams_actdesc="):
-                continue
-            act_json = line.replace("var ams_actdesc=", "")
-            act_desc = json.loads(act_json)
+        return res.text
 
-            info = AmsActInfo().auto_update_config(act_desc)
-
-            return info
-
-    return None
+    return ""
 
 
-def get_act_desc(actId):
+def get_ams_act_desc(actId):
     act = search_act(actId)
     if act is None:
         return ""
@@ -213,8 +276,20 @@ def get_act_desc(actId):
     return format_act(act)
 
 
-def format_act(act: AmsActInfo):
-    msg = f"活动 {padLeftRight(act.sActivityName, 44, mode='left')}({act.iActivityId})"
+def get_not_ams_act_desc(act_name):
+    for act in not_ams_activities:
+        if act.sActivityName == act_name:
+            return format_act(act)
+
+    return f"未找到活动 {act_name} 的相关信息"
+
+
+def format_act(act: AmsActInfo, needPadding=False):
+    act_name = act.sActivityName
+    if needPadding:
+        act_name = padLeftRight(act.sActivityName, 44, mode='left')
+
+    msg = f"活动 {act_name}({act.iActivityId})"
 
     if act.dtEndTime != "":
         msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，"

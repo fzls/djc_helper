@@ -359,7 +359,7 @@ def count_with_color(card_count, show_color, show_width=3):
 
 def show_accounts_status(cfg, ctx):
     logger.info("")
-    _show_head_line("部分短期活动信息")
+    _show_head_line("部分活动信息")
     Urls().show_current_valid_act_infos()
 
     logger.info("")
@@ -371,8 +371,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分"]
+    colSizes = [4, 12, 8, 8, 12, 6, 8, 8]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -398,7 +398,9 @@ def show_accounts_status(cfg, ctx):
             if fixed_team is not None:
                 team_score = f"[{fixed_team.id}]{team_score}"
 
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score]
+        gpoints = djcHelper.query_gpoints()
+
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 
@@ -440,8 +442,13 @@ def run(cfg):
 
         _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
+        start_time = datetime.datetime.now()
+
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.run(user_buy_info)
+
+        used_time = datetime.datetime.now() - start_time
+        _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
@@ -641,18 +648,11 @@ def temp_code(cfg):
 
     tips = [
         (
-            "【预购新春礼包送好礼】活动目前已在auto.js脚本中支持，可参考https://github.com/fzls/autojs/blob/main/qq.js使用~"
-        ),
-        (
-            "万物皆新意 牛转阿拉德 活动只需要抽签三次，不再加入，请自行参与。链接为：https://dnf.qq.com/cp/a20210121index/"
-        ),
-        (
-            "QQ黄钻和超级会员惠的白嫖活动只能领取一次性的幸运礼包、登录礼包、分享礼包，不再加入，请自行参与。链接分别为：\n"
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6700xbe127\n"
-            "https://act.qzone.qq.com/vip/meteor/blockly/p/6702x585e9\n"
-        ),
-        (
             "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
+        ),
+        (
+            "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
+            "目前兑换流程暂不支持，需自行每日点开心悦app去兑换，或者使用auto.js脚本去每日定期自动操作。"
         )
     ]
 

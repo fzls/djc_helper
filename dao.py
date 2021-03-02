@@ -248,6 +248,10 @@ class AmesvrCommonModRet(ConfigInterface):
         self.sOutValue8 = ""
 
 
+def parse_amesvr_common_info(res) -> AmesvrCommonModRet:
+    return AmesvrCommonModRet().auto_update_config(res["modRet"])
+
+
 class AmesvrUserBindInfo(ConfigInterface):
     def __init__(self):
         self.Fid = "7179"
@@ -760,3 +764,79 @@ class AmsActInfo(ConfigInterface):
             "wx_appid": "wxb30cf8a19c708c2a"
         }
         self.flows = {}
+
+
+class AmsActFlowInfo(ConfigInterface):
+    def __init__(self):
+        self.sFlowName = "输出项"
+        self.iNeedLogin = "1"
+        self.sFlowAccountType = "undefined"
+        self.iAreaCheck = "0"
+        self.iNeedAreaRole = "0"
+        self.iNeedAreaRoleService = ""
+        self.openToOpen = {}
+        self.iCap = "0"
+        self.functions = []
+
+
+class XinyueWeeklyGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.qq = "123456"
+        self.iLevel = 4
+        self.sLevel = "4"
+        self.tTicket = 0
+        self.gift_got_list = ["1", "1", "1", "1", "0", "0", "0"]
+
+
+class XinyueWeeklyGPointsInfo(ConfigInterface):
+    def __init__(self):
+        self.nickname = "风之凌殇"
+        self.gpoints = 6666
+
+
+class XinyueCatUserInfo(ConfigInterface):
+    def __init__(self):
+        self.name = "风之凌殇"
+        self.account = "12345678"
+        self.gpoints = 6666
+        self.vipLevel = 4
+        self.has_cat = False
+
+
+class XinyueCatInfo(ConfigInterface):
+    def __init__(self):
+        self.fighting_capacity = 233
+        self.yuanqi = 100
+
+
+class XinyueCatInfoFromApp(ConfigInterface):
+    def __init__(self):
+        self.id = "12345"
+        self.user_id = "1234567"
+        self.user_group = "4"
+        self.pet_id = "pet95f5xxxxxxxxxxxxx317530"
+        self.create_time = "1600112292"
+        self.deleted = "0"
+        self.update_time = "0"
+        self.ext1 = None
+        self.ext2 = None
+        self.pet = {}
+        self.makeMoneyCount = 0
+        self.mSkinId = 8
+        self.mLevel = "2"
+        self.mPower = "230"
+        self.mDecorationId = "7"
+        self.sendV = 0
+        self.sendP = 0
+
+
+class XinyueCatMatchResult(ConfigInterface):
+    def __init__(self):
+        self.iRet = 0
+        self.result = 1
+        self.matchId = "ojl_Pwosr1KLPgphP3LkcoowmHyI"
+        self.matchPower = "231"
+        self.matchSkinId = 0
+        self.matchPetName = "猫星人"
+        self.ending = 1
+        self.matchVitality = 300

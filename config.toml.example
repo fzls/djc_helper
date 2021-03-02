@@ -246,6 +246,12 @@ get_dnf_carnival = true
 get_dnf_dianzan = true
 # 是否领取DNF福利中心兑换
 get_dnf_welfare = true
+# 是否领取心悦app理财礼卡
+get_xinyue_financing = true
+# 是否领取心悦猫咪
+get_xinyue_cat = true
+# 是否领取心悦app周礼包
+get_xinyue_weekly_gift = true
 # 是否领取dnf漂流瓶
 get_dnf_drift = true
 # 是否领取DNF马杰洛的规划第三期

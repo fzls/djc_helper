@@ -15,7 +15,7 @@ class WegameApi:
     cached_dir = ".cached"
     cached_file = ".token.{}.json"
 
-    def auto_login_with_password(self, common_cfg, account, password):
+    def auto_login_with_password(self, common_cfg, account, password, account_name):
         cached = self.load_token(account)
         if cached is not None:
             api.set_uin_skey(cached["uin"], cached["skey"], cached["p_skey"])
@@ -27,7 +27,7 @@ class WegameApi:
                 logger.warning("token invalided, try get new")
 
         ql = QQLogin(common_cfg)
-        lr = ql.login(account, password, login_mode=ql.login_mode_wegame)
+        lr = ql.login(account, password, login_mode=ql.login_mode_wegame, name=account_name)
         logger.info(lr)
         api.login(lr.uin, lr.skey, lr.p_skey)
         self.save_token(account)
@@ -215,8 +215,9 @@ if __name__ == '__main__':
     # # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
-    acc = cfg.account_configs[0].account_info
-    api.auto_login_with_password(cfg.common, acc.account, acc.password)
+    account = cfg.account_configs[0]
+    acc = account.account_info
+    api.auto_login_with_password(cfg.common, acc.account, acc.password, account.name)
 
     res = api.get_player_role_list()
     for idx, role in enumerate(res['data']['role_list']):

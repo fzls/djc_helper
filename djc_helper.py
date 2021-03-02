@@ -1740,7 +1740,7 @@ class DjcHelper:
 
     def show_dnf_helper_info_guide(self, extra_msg="", show_message_box_once_key="", always_show_message_box=False):
         if extra_msg != "":
-            logger.warning(color("fg_bold_yellow") + extra_msg)
+            logger.warning(color("fg_bold_green") + extra_msg)
 
         tips_from_url = '\n'.join([
             "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】",

@@ -2218,6 +2218,24 @@ class DjcHelper:
             f"账号 {self.cfg.name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
         )
 
+    @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
+    def query_dnf_helper_chronicle_info(self):
+        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
+        dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        area = roleinfo.serviceID
+        partition = roleinfo.serviceID
+        roleid = roleinfo.roleCode
+
+        common_params = {
+            "userId": dnf_helper_info.userId,
+            "sPartition": partition,
+            "sRoleId": roleid,
+            "print_res": False,
+        }
+        res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
+        return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
+
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：
     #   1. 打开新活动的页面 http://guanjia.qq.com/act/cop/20210127dnf/pc/

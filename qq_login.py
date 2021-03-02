@@ -257,8 +257,8 @@ class QQLogin():
         s_url = "https://dnf.qq.com/"
 
         def switch_to_login_frame_fn():
-            # self.get_switch_to_login_frame_fn(21000127, 8, s_url)
-            pass
+            if self.need_reopen_url(login_type):
+                self.get_switch_to_login_frame_fn(21000127, 8, s_url)
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -278,8 +278,8 @@ class QQLogin():
         s_url = "https://act.qzone.qq.com/"
 
         def switch_to_login_frame_fn():
-            # self.get_switch_to_login_frame_fn(15000103, 5, s_url)
-            pass
+            if self.need_reopen_url(login_type):
+                self.get_switch_to_login_frame_fn(15000103, 5, s_url)
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -298,9 +298,9 @@ class QQLogin():
         """
 
         def switch_to_login_frame_fn():
-            logger.info("打开活动界面")
-            # self.open_url_on_start("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
-            pass
+            if self.need_reopen_url(login_type):
+                logger.info("打开活动界面")
+                self.open_url_on_start("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
 
             self.set_window_size()
 
@@ -338,8 +338,8 @@ class QQLogin():
         s_url = "https://www.wegame.com.cn/"
 
         def switch_to_login_frame_fn():
-            # self.get_switch_to_login_frame_fn(1600001063, 733, s_url)
-            pass
+            if self.need_reopen_url(login_type):
+                self.get_switch_to_login_frame_fn(1600001063, 733, s_url)
 
         def assert_login_finished_fn():
             logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
@@ -357,9 +357,9 @@ class QQLogin():
         """
 
         def switch_to_login_frame_fn():
-            logger.info("打开活动界面")
-            # self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
-            pass
+            if self.need_reopen_url(login_type):
+                logger.info("打开活动界面")
+                self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
 
             self.set_window_size()
 
@@ -621,6 +621,9 @@ class QQLogin():
 
             logger.info(f"尝试打开网页({url})，但似乎指令未生效，当前地址栏仍为{chrome_default_url}，等待{self.cfg.login.retry_wait_time}秒后重试")
             time.sleep(self.cfg.login.retry_wait_time)
+
+    def need_reopen_url(self, login_type):
+        return self.login_type_auto_login in login_type and self.cfg.run_in_headless_mode
 
 
 if __name__ == '__main__':

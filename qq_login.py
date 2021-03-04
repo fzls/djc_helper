@@ -47,10 +47,10 @@ class QQLogin():
     login_mode_wegame = "wegame"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
-    chrome_driver_executable_path = os.path.realpath("./chromedriver_87.exe")
-    chrome_binary_7z = os.path.realpath("./chrome_portable_87.7z")
-    chrome_binary_directory = os.path.realpath("./chrome_portable_87")
-    chrome_binary_location = os.path.realpath("./chrome_portable_87/chrome.exe")
+    chrome_driver_executable_path = os.path.realpath("./chromedriver_89.exe")
+    chrome_binary_7z = os.path.realpath("./chrome_portable_89.7z")
+    chrome_binary_directory = os.path.realpath("./chrome_portable_89")
+    chrome_binary_location = os.path.realpath("./chrome_portable_89/chrome.exe")
 
     default_window_width = 390
     default_window_height = 360

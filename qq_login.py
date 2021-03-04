@@ -631,8 +631,8 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    # cfg.common.run_in_headless_mode = True
-    # cfg.common.run_in_headless_mode = False
+    cfg.common.force_use_portable_chrome = True
+    cfg.common.run_in_headless_mode = False
 
     ql = QQLogin(cfg.common)
     account = cfg.account_configs[0]

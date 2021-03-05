@@ -399,6 +399,7 @@ class ConfigUi(QFrame):
     def add_group(self, checked=False):
         # note: 如果群满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=dKS0MF1YTajyj-UURScD3PWbk-B_6-x7&jump_from=webapi")
+        self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")

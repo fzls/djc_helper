@@ -1740,7 +1740,7 @@ class DjcHelper:
 
     def show_dnf_helper_info_guide(self, extra_msg="", show_message_box_once_key="", always_show_message_box=False):
         if extra_msg != "":
-            logger.warning(color("fg_bold_yellow") + extra_msg)
+            logger.warning(color("fg_bold_green") + extra_msg)
 
         tips_from_url = '\n'.join([
             "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】",
@@ -1769,6 +1769,7 @@ class DjcHelper:
         ])
 
         logger.warning(
+            '\n' +
             color("fg_bold_yellow") + tips_from_url +
             '\n' +
             color("fg_bold_green") + tips_from_zhuabao
@@ -2046,10 +2047,32 @@ class DjcHelper:
                 logger.info(f"搭档为{taskInfo.pUserId}")
             else:
                 logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+
+            logger.info("首先尝试完成接到身上的任务")
+            normal_tasks = set()
             for task in taskInfo.taskList:
                 takeTaskAward_op("自己", task.name, task.mActionId, task.mStatus, task.mExp)
+                normal_tasks.add(task.mActionId)
                 if taskInfo.hasPartner:
                     takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
+                    normal_tasks.add(task.pActionId)
+
+            logger.info("与心悦战场类似，即使未展示在接取列表内的任务，只要满足条件就可以领取奖励。因此接下来尝试领取其余任务(ps：这种情况下日志提示未完成也有可能是因为已经领取过~）")
+            all_task = (
+                ("001", 11, "013", 5, "DNF助手签到"),
+                ("002", 11, "014", 6, "浏览资讯详情页"),
+                ("003", 11, "015", 6, "浏览动态详情页"),
+                ("004", 11, "016", 6, "浏览视频详情页"),
+                ("005", 17, "017", 10, "登陆游戏"),
+                ("007", 17, "019", 10, "进入游戏30分钟"),
+                ("008", 17, "020", 10, "分享助手周报"),
+                ("011", 23, "023", 11, "进入游戏超过1小时"),
+            )
+            for mActionId, mExp, pActionId, pExp, name in all_task:
+                if mActionId not in normal_tasks:
+                    takeTaskAward_op("自己", name, mActionId, 0, mExp)
+                if taskInfo.hasPartner and pActionId not in normal_tasks:
+                    takeTaskAward_op("队友", name, pActionId, 0, pExp)
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAward_op(suffix, taskName, actionId, status, exp):
@@ -2216,6 +2239,24 @@ class DjcHelper:
             color("fg_bold_yellow") +
             f"账号 {self.cfg.name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
         )
+
+    @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
+    def query_dnf_helper_chronicle_info(self):
+        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
+        dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        area = roleinfo.serviceID
+        partition = roleinfo.serviceID
+        roleid = roleinfo.roleCode
+
+        common_params = {
+            "userId": dnf_helper_info.userId,
+            "sPartition": partition,
+            "sRoleId": roleid,
+            "print_res": False,
+        }
+        res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
+        return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：

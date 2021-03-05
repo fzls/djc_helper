@@ -129,7 +129,7 @@ if __name__ == '__main__':
         main()
         logger.warning(color("fg_bold_yellow") + f"运行完成，共用时{datetime.datetime.now() - run_start_time}")
     except Exception as e:
-        msg = f"ver {now_version} 运行过程中出现未捕获的异常，请加群966403777反馈或自行解决。" + check_some_exception(e)
+        msg = f"ver {now_version} 运行过程中出现未捕获的异常，请加群1041823293反馈或自行解决。" + check_some_exception(e)
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")

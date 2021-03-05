@@ -255,7 +255,7 @@ def get_act_desc_js(actId):
     for idx in range(len(actUrls)):
         url = actUrls[idx].format(actId=actId, last_three=str(actId[-3:]))
 
-        res = requests.get(url, timeout=10)
+        res = requests.get(url, timeout=1)
         if res.status_code != 200:
             continue
 

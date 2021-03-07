@@ -197,6 +197,10 @@ class Urls:
             if not attr_name.startswith("iActivityId_"):
                 continue
 
+            # 部分电脑上可能会在这一步卡住，因此加一个标志项，允许不启用活动
+            if os.path.exists("不查询活动.txt"):
+                continue
+
             act = search_act(act_id)
             if act is None:
                 continue

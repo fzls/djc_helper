@@ -360,6 +360,7 @@ def count_with_color(card_count, show_color, show_width=3):
 def show_accounts_status(cfg, ctx):
     logger.info("")
     _show_head_line("部分活动信息")
+    logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
     Urls().show_current_valid_act_infos()
 
     logger.info("")

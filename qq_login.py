@@ -51,6 +51,7 @@ class QQLogin():
     chrome_binary_7z = os.path.realpath("./chrome_portable_89.7z")
     chrome_binary_directory = os.path.realpath("./chrome_portable_89")
     chrome_binary_location = os.path.realpath("./chrome_portable_89/chrome.exe")
+    chrome_installer_name = "Chrome_89.(小版本号)_普通安装包_非便携版.exe"
 
     default_window_width = 390
     default_window_height = 360
@@ -100,7 +101,8 @@ class QQLogin():
                     "\n"
                     "================ 这一段是解决方法 ================\n"
                     "如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
-                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载Chrome_87.0.4280.141_普通安装包_非便携版.exe，下载完成后双击安装即可\n"
+                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载{installer_name}，下载完成后双击安装即可\n"
+                    "(一定要看清版本，如果发现网盘里的便携版和安装版版本都比提示里的高（比如这里提示87，网盘里显示89），建议直接下个最新的小助手压缩包，解压后把配置文件复制过去~)\n"
                     "\n"
                     "================ 这一段是补充说明 ================\n"
                     "1. 如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
@@ -109,7 +111,7 @@ class QQLogin():
                     "2.2 新版小助手升级了驱动，当前系统安装的chrome或便携版chrome的版本太低了。解决办法：升级新版本chrome或下载新版本的便携版chrome\n"
                     "\n"
                     "------- 如果这样还有人进群问，将直接踢出群聊 -------\n"
-                ).format(zip_name=os.path.basename(self.chrome_binary_7z))
+                ).format(zip_name=os.path.basename(self.chrome_binary_7z), installer_name=self.chrome_installer_name)
                 win32api.MessageBox(0, msg, "你没有chrome浏览器，需要安装完整版或下载便携版", win32con.MB_ICONERROR)
                 webbrowser.open(get_netdisk_addr(self.cfg))
                 os.system("PAUSE")

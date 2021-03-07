@@ -656,6 +656,9 @@ def temp_code(cfg):
 
     tips = [
         (
+            "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzous.com/s/djc-tools"
+        ),
+        (
             "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
         ),
         (

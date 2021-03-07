@@ -440,6 +440,8 @@ class CommonConfig(ConfigInterface):
         self._show_usage = False
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
+        # 强制使用特定大版本的chrome，默认为0，表示使用小助手默认设定的版本。
+        self.force_use_chrome_major_version = 0
         # http(s)请求超时时间(秒)
         self.http_timeout = 10
         # 是否展示chrome的debug日志，如DevTools listening，Bluetooth等

@@ -600,6 +600,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
         form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
 
+        self.spinbox_force_use_chrome_major_version = create_spin_box(cfg.force_use_chrome_major_version)
+        form_layout.addRow("强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
+
         self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
         form_layout.addRow("自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
 
@@ -639,6 +642,7 @@ class CommonConfigUi(QFrame):
 
     def update_config(self, cfg: CommonConfig):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()
+        cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()

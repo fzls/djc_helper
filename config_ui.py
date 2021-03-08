@@ -1016,11 +1016,11 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
 
-        # # ----------------------------------------------------------
-        # add_form_seperator(form_layout, "安全管家pskey")
-        #
-        # self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
-        # form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
+        # ----------------------------------------------------------
+        add_form_seperator(form_layout, "安全管家pskey")
+
+        self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
+        form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
@@ -1047,7 +1047,7 @@ class FunctionSwitchesConfigUi(QWidget):
         # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
-        # cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
+        cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 
 
 class MobileGameRoleInfoConfigUi(QWidget):

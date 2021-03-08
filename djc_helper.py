@@ -420,6 +420,7 @@ class DjcHelper:
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
                 "dnf助手编年史活动",
+                "管家蚊子腿",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -433,6 +434,9 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
+
+        # 管家蚊子腿
+        self.guanjia()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -505,9 +509,6 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
-
-        # 管家蚊子腿
-        self.guanjia()
 
         # qq视频活动
         self.qq_video()
@@ -2260,20 +2261,22 @@ class DjcHelper:
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：
-    #   1. 打开新活动的页面 http://guanjia.qq.com/act/cop/20210127dnf/pc/
+    #   1. 打开新活动的页面 https://guanjia.qq.com/act/cop/20210303dnf/index.html
     #   2. 按F12，在Console中输入 console.log(JSON.stringify(GLOBAL_AMP_CONFIG))，将结果复制到 format_json.json 中格式化，方便查看
     #   3. 在json中搜索 comGifts，定位到各个礼包的信息，并将下列变量的数值更新为新版本
-    guanjia_common_gifts_act_id = "1134"  # 礼包活动ID
-    guanjia_gift_id_special_rights = "7605"  # 电脑管家特权礼包
-    guanjia_gift_id_game_helper = "7606"  # 游戏助手礼包
-    guanjia_gift_id_return_user = "7607"  # 回归勇士礼包
-    guanjia_gift_id_download_and_login_this_version_guanjia = "7608"  # 下载登录管家任务
-    guanjia_gift_id_game_online_30_minutes = "7609"  # 每日游戏在线30分钟任务
-    guanjia_gift_id_login_game_helper = "7610"  # 每日登录游戏助手任务
+    guanjia_common_gifts_act_id = "1146"  # 礼包活动ID
+    guanjia_gift_id_special_rights = "7688"  # 电脑管家特权礼包
+    guanjia_gift_id_game_helper = "7689"  # 游戏助手礼包
+    guanjia_gift_id_return_user = "7690"  # 回归勇士礼包
+    guanjia_gift_id_download_and_login_this_version_guanjia = "7691"  # 下载登录管家任务
+    guanjia_gift_id_game_online_30_minutes = "7692"  # 每日游戏在线30分钟任务
+    guanjia_gift_id_login_game_helper = "7693"  # 每日登录游戏助手任务
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
-    guanjia_lottery_gifts_act_id = "1133"  # 抽奖活动ID
+    guanjia_lottery_gifts_act_id = "1145"  # 抽奖活动ID
 
-    # note: 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
+    # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
+    # note: 6. 调整urls中管家蚊子腿的起止时间
+    # note: 7. 调整config_ui中管家开关
 
     @try_except()
     def guanjia(self):
@@ -2336,7 +2339,7 @@ class DjcHelper:
         # 检查是否启用管家相关活动
         any_enabled = False
         for activity_enabled in [
-            # self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True
@@ -4642,9 +4645,9 @@ if __name__ == '__main__':
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
-        # djcHelper.guanjia()
         # djcHelper.qq_video()
         # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
-        djcHelper.xinyue_cat()
+        # djcHelper.xinyue_cat()
+        djcHelper.guanjia()

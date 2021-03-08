@@ -21,7 +21,7 @@ not_ams_activities = [
     newAmsActInfo("道聚城", not_know_start_time, not_know_end_time),
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-02-01 00:00:00", "2021-03-01 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2021-03-05 00:00:00", "2021-03-25 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-02-01 00:00:00", "2021-03-01 23:59:59"),
     newAmsActInfo("会员关怀", "2021-02-01 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-01-15 00:00:00", "2021-02-28 23:59:59"),

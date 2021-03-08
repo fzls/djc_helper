@@ -59,7 +59,7 @@ class QQLogin():
         self.time_start_login = datetime.datetime.now()
 
     def prepare_chrome(self, ctx, login_type, login_url):
-        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
+        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load

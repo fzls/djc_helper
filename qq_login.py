@@ -15,7 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from config import *
 from log import logger, color
-from update import get_netdisk_addr
+from util import async_message_box
 from version import now_version
 
 
@@ -47,10 +47,7 @@ class QQLogin():
     login_mode_wegame = "wegame"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
-    chrome_driver_executable_path = os.path.realpath("./chromedriver_89.exe")
-    chrome_binary_7z = os.path.realpath("./chrome_portable_89.7z")
-    chrome_binary_directory = os.path.realpath("./chrome_portable_89")
-    chrome_binary_location = os.path.realpath("./chrome_portable_89/chrome.exe")
+    chrome_major_version = 89
 
     default_window_width = 390
     default_window_height = 360
@@ -62,7 +59,7 @@ class QQLogin():
         self.time_start_login = datetime.datetime.now()
 
     def prepare_chrome(self, ctx, login_type, login_url):
-        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver，用以进行【{ctx}】相关操作")
+        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
@@ -84,7 +81,7 @@ class QQLogin():
         try:
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
-                self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path, desired_capabilities=caps, options=options)
+                self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
                 logger.info("使用自带chrome")
                 inited = True
         except:
@@ -93,37 +90,40 @@ class QQLogin():
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome
             # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
-            if not os.path.isfile(self.chrome_binary_7z):
+            if not os.path.isfile(self.chrome_binary_7z()):
                 msg = (
                     "================ 这一段是问题描述 ================\n"
-                    "当前电脑未发现合适版本chrome浏览器版本，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
+                    "当前电脑未发现{version}版本chrome浏览器版本，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
                     "\n"
                     "================ 这一段是解决方法 ================\n"
                     "如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
-                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载Chrome_87.0.4280.141_普通安装包_非便携版.exe，下载完成后双击安装即可\n"
+                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载{installer_name}，下载完成后双击安装即可\n"
+                    "(一定要看清版本，如果发现网盘里的便携版和安装版版本都比提示里的高（比如这里提示87，网盘里显示89），建议直接下个最新的小助手压缩包，解压后把配置文件复制过去~)\n"
                     "\n"
                     "================ 这一段是补充说明 ================\n"
-                    "如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
+                    "1. 如果之前版本已经下载过这个文件，可以直接去之前版本复制过来~不需要再下载一次~\n"
+                    "2. 如果之前一直都运行的好好的，今天突然不行了，可能是以下原因\n"
+                    "2.1 系统安装的chrome自动升级到新版本了，当前小助手使用的驱动不支持该版本。解决办法：下载当前版本小助手对应版本的便携版chrome\n"
+                    "2.2 新版小助手升级了驱动，当前系统安装的chrome或便携版chrome的版本太低了。解决办法：升级新版本chrome或下载新版本的便携版chrome\n"
                     "\n"
                     "------- 如果这样还有人进群问，将直接踢出群聊 -------\n"
-                ).format(zip_name=os.path.basename(self.chrome_binary_7z))
-                win32api.MessageBox(0, msg, "你没有chrome浏览器，需要安装完整版或下载便携版", win32con.MB_ICONERROR)
-                webbrowser.open(get_netdisk_addr(self.cfg))
+                ).format(zip_name=os.path.basename(self.chrome_binary_7z()), installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
+                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzous.com/s/djc-tools")
                 os.system("PAUSE")
                 exit(-1)
 
             # 先判断便携版chrome是否已解压
-            if not os.path.isdir(self.chrome_binary_directory):
+            if not os.path.isdir(self.chrome_binary_directory()):
                 logger.info("自动解压便携版chrome到当前目录")
-                subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z])
+                subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
             # 然后使用本地的chrome来初始化driver对象
-            options.binary_location = self.chrome_binary_location
+            options.binary_location = self.chrome_binary_location()
             # you may need some other options
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
-            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path, desired_capabilities=caps, options=options)
+            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
             logger.info("使用便携版chrome")
 
         self.cookies = self.driver.get_cookies()
@@ -133,6 +133,27 @@ class QQLogin():
             # 最小化网页
             self.driver.minimize_window()
             threading.Thread(target=self.driver.quit, daemon=True).start()
+
+    def chrome_driver_executable_path(self):
+        return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")
+
+    def chrome_binary_7z(self):
+        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}.7z")
+
+    def chrome_binary_directory(self):
+        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}")
+
+    def chrome_binary_location(self):
+        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}/chrome.exe")
+
+    def chrome_installer_name(self):
+        return f"Chrome_{self.get_chrome_major_version()}.(小版本号)_普通安装包_非便携版.exe"
+
+    def get_chrome_major_version(self):
+        if self.cfg is None or self.cfg.force_use_chrome_major_version == 0:
+            return self.chrome_major_version
+        else:
+            return self.cfg.force_use_chrome_major_version
 
     def login(self, account, password, login_mode="normal", name=""):
         """
@@ -306,6 +327,9 @@ class QQLogin():
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+
+            logger.info("等待5秒，确保加载完成")
+            time.sleep(5)
 
             logger.info("点击登录按钮")
             self.driver.find_element(By.ID, "dologin").click()
@@ -487,7 +511,7 @@ class QQLogin():
         try:
             self._try_auto_resolve_captcha()
         except Exception as e:
-            msg = f"ver {now_version} 自动处理验证失败了，出现未捕获的异常，请加群966403777反馈或自行解决。请手动进行处理验证码"
+            msg = f"ver {now_version} 自动处理验证失败了，出现未捕获的异常，请加群1041823293反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
             logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")

@@ -399,6 +399,7 @@ class ConfigUi(QFrame):
     def add_group(self, checked=False):
         # note: 如果群满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=dKS0MF1YTajyj-UURScD3PWbk-B_6-x7&jump_from=webapi")
+        self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, "")
@@ -599,6 +600,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
         form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
 
+        self.spinbox_force_use_chrome_major_version = create_spin_box(cfg.force_use_chrome_major_version)
+        form_layout.addRow("强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
+
         self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
         form_layout.addRow("自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
 
@@ -638,6 +642,7 @@ class CommonConfigUi(QFrame):
 
     def update_config(self, cfg: CommonConfig):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()
+        cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
@@ -1011,11 +1016,11 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
 
-        # # ----------------------------------------------------------
-        # add_form_seperator(form_layout, "安全管家pskey")
-        #
-        # self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
-        # form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
+        # ----------------------------------------------------------
+        add_form_seperator(form_layout, "安全管家pskey")
+
+        self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
+        form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
@@ -1042,7 +1047,7 @@ class FunctionSwitchesConfigUi(QWidget):
         # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
-        # cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
+        cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 
 
 class MobileGameRoleInfoConfigUi(QWidget):

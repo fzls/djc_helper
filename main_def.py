@@ -360,6 +360,7 @@ def count_with_color(card_count, show_color, show_width=3):
 def show_accounts_status(cfg, ctx):
     logger.info("")
     _show_head_line("部分活动信息")
+    logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
     Urls().show_current_valid_act_infos()
 
     logger.info("")
@@ -655,6 +656,9 @@ def temp_code(cfg):
     _show_head_line("一些小提示")
 
     tips = [
+        (
+            "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzous.com/s/djc-tools"
+        ),
         (
             "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
         ),

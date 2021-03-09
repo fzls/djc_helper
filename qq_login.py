@@ -328,6 +328,9 @@ class QQLogin():
             logger.info("等待登录按钮#dologin出来，确保加载完成")
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
 
+            logger.info("等待5秒，确保加载完成")
+            time.sleep(5)
+
             logger.info("点击登录按钮")
             self.driver.find_element(By.ID, "dologin").click()
 

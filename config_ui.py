@@ -974,8 +974,8 @@ class FunctionSwitchesConfigUi(QWidget):
         # self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
         # form_layout.addRow("qq视频活动", self.checkbox_get_qq_video)
 
-        # self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
-        # form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
+        self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
+        form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
         #
         # self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
         # form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
@@ -995,8 +995,8 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
         form_layout.addRow("心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
 
-        # self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
-        # form_layout.addRow("DNF马杰洛的规划第三期", self.checkbox_get_majieluo)
+        self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
+        form_layout.addRow("DNF马杰洛的规划", self.checkbox_get_majieluo)
 
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
         form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
@@ -1032,14 +1032,14 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_heizuan_gift = self.checkbox_get_heizuan_gift.isChecked()
         # cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
         # cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
-        # cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
+        cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
         # cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
         # cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
         cfg.get_xinyue_cat = self.checkbox_get_xinyue_cat.isChecked()
         cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
-        # cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
+        cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
         # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
@@ -1153,7 +1153,7 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
         form_layout.addRow("昵称", self.lineedit_nickName)
 
-        self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH , 可通过助手分享出的活动链接或抓包得到的活动链接中找到token参数")
+        self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         form_layout.addRow("登陆票据", self.lineedit_token)
 
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)

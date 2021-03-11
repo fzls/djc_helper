@@ -69,6 +69,11 @@ class QQLogin():
         options.add_argument(f"app={login_url}")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
+            selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+            selenium_logger.setLevel(logging.WARNING)
+            # 使用Selenium期间将urllib的日志关闭
+            urllib_logger = logging.getLogger('urllib3.connectionpool')
+            urllib_logger.setLevel(logging.WARNING)
         if self.cfg.run_in_headless_mode:
             if login_type == self.login_type_auto_login:
                 logger.warning("已配置在自动登录模式时使用headless模式运行chrome")
@@ -133,6 +138,10 @@ class QQLogin():
             # 最小化网页
             self.driver.minimize_window()
             threading.Thread(target=self.driver.quit, daemon=True).start()
+
+        # 使用Selenium结束将日志级别改回去
+        urllib_logger = logging.getLogger('urllib3.connectionpool')
+        urllib_logger.setLevel(logger.level)
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")

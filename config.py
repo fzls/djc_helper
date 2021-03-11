@@ -219,7 +219,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_xinyue_weekly_gift = True
         # 是否领取dnf漂流瓶
         self.get_dnf_drift = True
-        # 是否领取DNF马杰洛的规划第三期
+        # 是否领取DNF马杰洛的规划
         self.get_majieluo = True
         # 是否领取dnf助手活动，额外需要助手userId和token
         self.get_dnf_helper = True

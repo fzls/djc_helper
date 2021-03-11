@@ -1153,7 +1153,7 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
         form_layout.addRow("昵称", self.lineedit_nickName)
 
-        self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH , 可通过助手分享出的活动链接或抓包得到的活动链接中找到token参数")
+        self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         form_layout.addRow("登陆票据", self.lineedit_token)
 
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)

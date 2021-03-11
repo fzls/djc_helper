@@ -2363,6 +2363,7 @@ class DjcHelper:
 
         if need_update:
             logger.warning("管家openid需要更新，将尝试重新登录电脑管家网页获取并保存到本地")
+            logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就关闭管家活动的开关~")
             # 重新获取
             ql = QQLogin(self.common_cfg)
             if self.cfg.login_mode == "qr_login":

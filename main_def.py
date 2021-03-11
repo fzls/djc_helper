@@ -373,7 +373,7 @@ def show_accounts_status(cfg, ctx):
     _show_head_line(ctx)
 
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8]
+    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8, 10, 10]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):

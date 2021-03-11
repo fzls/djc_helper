@@ -106,7 +106,7 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_majieluo = "354870"  # DNF马杰洛的规划第三期
+        self.iActivityId_majieluo = "363901"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "356203"  # DNF助手活动 牛气冲天迎新年
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_youfei = "350668"  # qq视频-看江湖有翡

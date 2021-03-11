@@ -372,7 +372,7 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片"]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
     colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8]
 
     logger.info(tableify(heads, colSizes))
@@ -409,7 +409,11 @@ def show_accounts_status(cfg, ctx):
             levelInfo = ""
             chronicle_points = ""
 
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints, levelInfo, chronicle_points]
+        majieluo_cards = djcHelper.query_majieluo_card_info()
+
+        stone_count = djcHelper.query_stone_count()
+
+        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints, levelInfo, chronicle_points, majieluo_cards, stone_count]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 
@@ -635,16 +639,16 @@ def show_ask_message_box_only_once():
 def show_ask_message_box_only_once_sync():
     return
     # 临时加一个请求帮忙弄下白嫖活动的逻辑
-    if is_first_run("赛利亚卡牌"):
+    if is_first_run("守护者卡牌"):
         message = (
-            "马杰洛活动中的赛利亚卡牌，有小伙伴有多余的Q版赛利亚卡牌吗（第5个）？\n"
+            "马杰洛活动中的守护者卡牌，有小伙伴有多余的守护者卡牌吗（第5个）？\n"
             "如果有多的话，可以不可以送我一张哇0-0\n"
             "\n"
             "点 确定 打开赠送页面进行赠送，点 取消 拒绝-。-\n"
         )
         res = win32api.MessageBox(0, message, "求送卡", win32con.MB_OKCANCEL)
         if res == win32con.IDOK:
-            webbrowser.open("https://dnf.qq.com/cp/a20210121welfare/index.html?askforId=11820&askforUin=1054073896")
+            webbrowser.open("https://dnf.qq.com/cp/a20210311welfare/index.html?askforId=11820&askforUin=1054073896")
             win32api.MessageBox(0, "打开网页后登陆后点击[确认]按钮赠送就好啦~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
         else:
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)

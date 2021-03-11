@@ -3352,9 +3352,7 @@ class DjcHelper:
             if friend_db_key in account_db:
                 friendQQs = account_db[friend_db_key]
 
-                validFriendQQs = filter_not_invited_friends(friendQQs)
-                if len(validFriendQQs) > 0:
-                    return validFriendQQs
+                return filter_not_invited_friends(friendQQs)
 
             return filter_not_invited_friends(qeury_not_invited_friends())
 

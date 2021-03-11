@@ -3535,13 +3535,13 @@ class DjcHelper:
             self.majieluo_op("提取福利（700、800、900）", "744188")
             self.majieluo_op("提取福利（300、400、500、600）", "744182")
 
-    @try_except(return_val_on_except=0)
+    @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
         res = self.majieluo_op("查询当前时间引导石数量", "744195", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
-    @try_except(return_val_on_except="")
+    @try_except(return_val_on_except="", show_exception_info=False)
     def query_majieluo_card_info(self):
         res = self.majieluo_op("查询信息", "744177", print_res=False)
 

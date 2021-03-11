@@ -880,12 +880,12 @@ def _test_main():
         check_djc_role_binding()
 
     # note: 用于本地测试main的相关逻辑
-    # show_accounts_status(cfg, "启动时展示账号概览")
+    show_accounts_status(cfg, "启动时展示账号概览")
     # try_join_xinyue_team(cfg)
     # run(cfg)
     # try_take_xinyue_team_award(cfg)
     # try_xinyue_sailiyam_start_work(cfg)
-    show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+    # show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
     # auto_send_cards(cfg)
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
     # show_accounts_status(cfg, "运行完毕展示账号概览")

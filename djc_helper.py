@@ -1324,7 +1324,7 @@ class DjcHelper:
             if activity_enabled:
                 any_enabled = True
         if not any_enabled:
-            logger.warning("未启用领取QQ空间相关的功能，将跳过")
+            logger.warning("未启用领取QQ空间相关的功能，将跳过尝试更新QQ空间的p_skey的流程")
             return
 
         # 仅支持扫码登录和自动登录
@@ -2345,7 +2345,7 @@ class DjcHelper:
             if activity_enabled:
                 any_enabled = True
         if not any_enabled:
-            if print_warning: logger.warning("未启用管家相关活动，将跳过")
+            if print_warning: logger.warning("未启用管家相关活动，将跳过尝试更新管家p_skey流程")
             return
 
         # 检查是否已在道聚城绑定
@@ -4571,7 +4571,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RunAll = False
+    RunAll = True
     indexes = [1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]

@@ -995,8 +995,8 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
         form_layout.addRow("心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
 
-        # self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
-        # form_layout.addRow("DNF马杰洛的规划第三期", self.checkbox_get_majieluo)
+        self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
+        form_layout.addRow("DNF马杰洛的规划", self.checkbox_get_majieluo)
 
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
         form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
@@ -1039,7 +1039,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
         cfg.get_xinyue_cat = self.checkbox_get_xinyue_cat.isChecked()
         cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
-        # cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
+        cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
         # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()

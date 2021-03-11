@@ -190,7 +190,7 @@ get_xinyue_cat = true
 get_xinyue_weekly_gift = true
 # 是否领取dnf漂流瓶
 get_dnf_drift = true
-# 是否领取DNF马杰洛的规划第三期
+# 是否领取DNF马杰洛的规划
 get_majieluo = true
 # 是否领取dnf助手活动（牛气冲天迎新年），额外需要助手userId和token
 get_dnf_helper = true

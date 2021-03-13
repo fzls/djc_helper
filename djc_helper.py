@@ -866,10 +866,6 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        if len(self.cfg.xinyue_operations) == 0:
-            logger.warning("未设置心悦相关操作信息，将跳过")
-            return
-
         # 查询道具信息
         old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
         logger.info(f"查询到的心悦道具信息为：{old_itemInfo}")

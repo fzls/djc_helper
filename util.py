@@ -286,7 +286,7 @@ def try_except(show_exception_info=True, show_last_process_result=True, extra_ms
             try:
                 return fun(*args, **kwargs)
             except Exception as e:
-                msg = f"执行{fun.__name__}出错了"
+                msg = f"执行{fun.__name__}({args}, {kwargs})出错了"
                 if extra_msg != "":
                     msg += ", " + extra_msg
                 msg += check_some_exception(e, show_last_process_result)

@@ -1,9 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 from urllib.parse import unquote_plus
 
 from data_struct import ConfigInterface
-from util import parse_time, run_from_src
+from util import parse_time, run_from_src, format_time
 
 
 class DaoObject:
@@ -694,6 +694,38 @@ class BuyInfo(ConfigInterface):
             ('buy_records', BuyRecord),
         ]
 
+    def merge(self, other):
+        if other.total_buy_month == 0:
+            return
+
+        if other.qq != self.qq and other.qq not in self.game_qqs:
+            self.game_qqs.append(other.qq)
+
+        for qq in other.game_qqs:
+            if qq not in self.game_qqs:
+                self.game_qqs.append(qq)
+
+        self.total_buy_month += other.total_buy_month
+
+        records = [*self.buy_records, *other.buy_records]  # type: List[BuyRecord]
+        records.sort(key=lambda br: br.buy_at)
+
+        # 重新计算时长
+        expired_at = parse_time(records[0].buy_at)
+        for record in records:
+            now = parse_time(record.buy_at)
+            if now > expired_at:
+                # 已过期，从当前时间开始重新计算
+                start_time = now
+            else:
+                # 续期，从之前结束时间叠加
+                start_time = expired_at
+
+            expired_at = start_time + record.buy_month * timedelta(days=31)
+
+        self.expire_at = format_time(expired_at)
+        self.buy_records = records
+
     def is_active(self):
         if run_from_src():
             # 使用源码运行不受限制
@@ -846,3 +878,31 @@ class CardSecret(ConfigInterface):
     def __init__(self):
         self.card = "auto_update-20210310274059-00001"
         self.secret = "cUtsSx0CwVF1p1VurbKuiI3WHQuKP3uz"
+
+
+if __name__ == '__main__':
+    a = BuyInfo()
+    a.qq = "11"
+    a.game_qqs = ["12", "13"]
+    a.total_buy_month = 3
+    a.buy_records = [
+        BuyRecord().auto_update_config({"buy_at": "2020-02-06 12:30:15"}),
+        BuyRecord().auto_update_config({"buy_at": "2021-02-08 12:30:15", "buy_month": 2}),
+    ]
+    a.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 3))
+
+    b = BuyInfo()
+    b.qq = "11"
+    b.game_qqs = ["12", "14"]
+    b.total_buy_month = 2
+    b.buy_records = [
+        BuyRecord().auto_update_config({"buy_at": "2020-02-06 12:30:15"}),
+        BuyRecord().auto_update_config({"buy_at": "2021-02-08 12:30:15"}),
+    ]
+    b.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 2))
+
+    print(a)
+    print(b)
+
+    a.merge(b)
+    print(a)

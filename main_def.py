@@ -731,25 +731,37 @@ def has_buy_auto_updater_dlc(cfg: Config):
     for idx in range(retrtCfg.max_retry_count):
         try:
             uploader = Uploader(lanzou_cookie)
-            user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached", show_log=False)
-            buy_users = []
-            with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
-                buy_users = json.load(data_file)
+            has_no_users = True
+            for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
+                try:
+                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                except FileNotFoundError as e:
+                    # 如果网盘没有这个文件，就跳过
+                    continue
 
-            if len(buy_users) == 0:
+                buy_users = []
+                with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
+                    buy_users = json.load(data_file)
+
+                if len(buy_users) != 0:
+                    has_no_users = False
+
+                for account_cfg in cfg.account_configs:
+                    qq = uin2qq(account_cfg.account_info.uin)
+                    if qq in buy_users:
+                        return True
+
+                logger.debug((
+                    "DLC购买调试日志：\n"
+                    f"remote_filename={remote_filename}\n"
+                    f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
+                    f"用户列表={buy_users}\n"
+                ))
+
+            if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 return True
 
-            for account_cfg in cfg.account_configs:
-                qq = uin2qq(account_cfg.account_info.uin)
-                if qq in buy_users:
-                    return True
-
-            logger.debug((
-                "DLC购买调试日志：\n"
-                f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
-                f"用户列表={buy_users}\n"
-            ))
             return False
         except Exception as e:
             logFunc = logger.debug
@@ -800,41 +812,69 @@ def get_user_buy_info(cfg: Config):
 def _get_user_buy_info(cfg: Config):
     retrtCfg = cfg.common.retry
     default_user_buy_info = BuyInfo()
-    for idx in range(retrtCfg.max_retry_count):
+    for try_idx in range(retrtCfg.max_retry_count):
         try:
             # 默认设置首个qq为购买信息
             default_user_buy_info.qq = uin2qq(cfg.account_configs[0].account_info.uin)
 
             uploader = Uploader(lanzou_cookie)
-            buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.user_monthly_pay_info_filename, ".cached", show_log=False)
-            buy_users = {}  # type: Dict[str, BuyInfo]
-            with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
-                raw_infos = json.load(data_file)
-                for qq, raw_info in raw_infos.items():
-                    info = BuyInfo().auto_update_config(raw_info)
-                    buy_users[qq] = info
-                    for game_qq in info.game_qqs:
-                        buy_users[game_qq] = info
+            has_no_users = True
 
-            if len(buy_users) == 0:
+            remote_filenames = [uploader.user_monthly_pay_info_filename, uploader.cs_user_monthly_pay_info_filename]
+            import copy
+            # 单种渠道内选择付费结束时间最晚的，手动和卡密间则叠加
+            user_buy_info_list = [copy.deepcopy(default_user_buy_info) for v in remote_filenames]
+            for idx, remote_filename in enumerate(remote_filenames):
+                user_buy_info = user_buy_info_list[idx]
+
+                try:
+                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                except FileNotFoundError as e:
+                    # 如果网盘没有这个文件，就跳过
+                    continue
+
+                buy_users = {}  # type: Dict[str, BuyInfo]
+                with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
+                    raw_infos = json.load(data_file)
+                    for qq, raw_info in raw_infos.items():
+                        info = BuyInfo().auto_update_config(raw_info)
+                        buy_users[qq] = info
+                        for game_qq in info.game_qqs:
+                            buy_users[game_qq] = info
+
+                if len(buy_users) != 0:
+                    has_no_users = False
+
+                for account_cfg in cfg.account_configs:
+                    qq = uin2qq(account_cfg.account_info.uin)
+                    if qq in buy_users:
+                        if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
+                            # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
+                            user_buy_info = buy_users[qq]
+
+                user_buy_info_list[idx] = user_buy_info
+
+            if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 default_user_buy_info.expire_at = "2120-01-01 00:00:00"
                 return default_user_buy_info
 
-            user_buy_info = default_user_buy_info
-            for account_cfg in cfg.account_configs:
-                qq = uin2qq(account_cfg.account_info.uin)
-                if qq in buy_users:
-                    if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
-                        # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
-                        user_buy_info = buy_users[qq]
+            merged_user_buy_info = copy.deepcopy(default_user_buy_info)
+            for user_buy_info in user_buy_info_list:
+                if user_buy_info.total_buy_month == 0:
+                    continue
 
-            return user_buy_info
+                if merged_user_buy_info.total_buy_month == 0:
+                    merged_user_buy_info = copy.deepcopy(user_buy_info)
+                else:
+                    merged_user_buy_info.merge(user_buy_info)
+
+            return merged_user_buy_info
         except Exception as e:
             logFunc = logger.debug
             if use_by_myself():
                 logFunc = logger.error
-            logFunc(f"第{idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
+            logFunc(f"第{try_idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
             time.sleep(retrtCfg.retry_wait_time)
 
     return default_user_buy_info
@@ -896,5 +936,26 @@ def _test_main():
     # check_update(cfg)
 
 
+def test_pay_info():
+    # 读取配置信息
+    load_config("config.toml")
+    cfg = config()
+
+    cfg.account_configs[0].account_info.uin = "o12"
+
+    has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
+    user_buy_info = get_user_buy_info(cfg)
+
+    if has_buy_auto_update_dlc:
+        dlc_info = "当前某一个账号已购买自动更新DLC(若对自动更新送的两月有疑义，请看付费指引的常见问题章节)"
+    else:
+        dlc_info = "当前所有账号均未购买自动更新DLC"
+    monthly_pay_info = user_buy_info.description()
+
+    logger.info(dlc_info)
+    logger.info(monthly_pay_info)
+
+
 if __name__ == '__main__':
-    _test_main()
+    # _test_main()
+    test_pay_info()

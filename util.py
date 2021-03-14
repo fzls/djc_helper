@@ -28,6 +28,10 @@ def uin2qq(uin):
     return str(uin)[1:].lstrip('0')
 
 
+def is_valid_qq(qq: str) -> bool:
+    return qq.isnumeric()
+
+
 def maximize_console():
     threading.Thread(target=maximize_console_sync, daemon=True).start()
 

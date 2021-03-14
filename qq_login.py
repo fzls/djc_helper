@@ -277,6 +277,9 @@ class QQLogin():
             "5. 换个网络环境\n"
             "6. 换台电脑\n"
         ))
+        if login_mode == self.login_mode_guanjia:
+            logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就去配置工具关闭管家活动的开关（不是关闭这个登录页面）~")
+
         raise Exception("网络有问题")
 
     def _login_real(self, login_type, login_action_fn=None):

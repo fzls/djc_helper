@@ -267,7 +267,7 @@ class ConfigUi(QFrame):
     def __init__(self, parent=None):
         super(ConfigUi, self).__init__(parent)
 
-        self.resize(1080, 770)
+        self.resize(1080, 720)
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 

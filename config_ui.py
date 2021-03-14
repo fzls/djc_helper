@@ -8,8 +8,7 @@ import typing
 import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
-    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel,
-)
+    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel, )
 from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
 from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
 
@@ -19,6 +18,30 @@ from game_info import name_2_mobile_game_info_map
 from update import *
 from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
 from djc_helper import DjcHelper
+from dao import CardSecret
+from data_struct import to_raw_type
+
+# 客户端错误码
+CHECK_RESULT_OK = "检查通过"
+
+# 服务器错误码
+RESULT_OK = "操作成功"
+RESULT_INVALID = "卡密不存在或不匹配"
+RESULT_QQ_NOT_SET = "未设置QQ"
+RESULT_ALREADY_USED = "卡密已经使用过"
+RESULT_ALREADY_BUY = "自动更新只需购买一次"
+
+
+class PayRequest(ConfigInterface):
+    def __init__(self):
+        self.card_secret = CardSecret()  # 卡密信息
+        self.qq = ""  # 使用QQ
+        self.game_qqs = ""  # 附属游戏QQ
+
+
+class PayResponse(ConfigInterface):
+    def __init__(self):
+        self.msg = "ok"
 
 
 class QHLine(QFrame):
@@ -244,7 +267,7 @@ class ConfigUi(QFrame):
     def __init__(self, parent=None):
         super(ConfigUi, self).__init__(parent)
 
-        self.resize(1080, 720)
+        self.resize(1080, 770)
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 
@@ -326,12 +349,6 @@ class ConfigUi(QFrame):
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
         top_layout.addWidget(QHLine())
-
-    def buy_auto_updater_dlc(self, checked=False):
-        show_message("付费指引", "请按照【付费指引.docx】中的流程购买自动更新DLC~")
-
-    def pay_by_month(self, checked=False):
-        show_message("付费指引", "请按照【付费指引.docx】中的流程购买按月付费~")
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
@@ -458,6 +475,49 @@ class ConfigUi(QFrame):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
+        # 卡密相关内容
+        layout_cs = QVBoxLayout()
+
+        tmp_layout = QHBoxLayout()
+
+        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC的卡密", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
+        btn_pay_by_month = create_pushbutton("购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
+
+        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
+        btn_pay_by_month.clicked.connect(self.pay_by_month)
+
+        tmp_layout.addWidget(btn_buy_auto_updater_dlc)
+        tmp_layout.addWidget(btn_pay_by_month)
+
+        layout_cs.addLayout(tmp_layout)
+
+        layout_form = QFormLayout()
+
+        self.lineedit_card = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的卡号，形如 auto_update-20210313133230-00001")
+        layout_form.addRow("卡号", self.lineedit_card)
+
+        self.lineedit_secret = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的密码，形如 BF8h0y1Zcb8ukY6rsn5YFhkh0Nbe9hit")
+        layout_form.addRow("卡密", self.lineedit_secret)
+
+        self.lineedit_qq = create_lineedit("", placeholder_text="形如 1234567")
+        layout_form.addRow("主QQ", self.lineedit_qq)
+
+        self.lineedit_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
+        self.lineedit_game_qqs.setValidator(QQListValidator())
+        layout_form.addRow("其他要使用的QQ", self.lineedit_game_qqs)
+
+        layout_cs.addLayout(layout_form)
+
+        btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务", "MediumSpringGreen")
+        layout_cs.addWidget(btn_pay_by_card_and_secret)
+
+        btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
+
+        layout.addLayout(layout_cs)
+
+        layout.addWidget(QHLine())
+
+        # 显示付费相关内容
         self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，可能需要较长时间，请耐心等候)")
         self.btn_show_buy_info.clicked.connect(self.show_buy_info)
         layout.addWidget(self.btn_show_buy_info)
@@ -471,24 +531,110 @@ class ConfigUi(QFrame):
         layout.addWidget(self.label_monthly_pay_info)
 
         tab.setLayout(make_scroll_layout(layout))
-        self.tabs.addTab(tab, "个人信息")
+        self.tabs.addTab(tab, "付费相关")
+
+    def buy_auto_updater_dlc(self, checked=False):
+        if not self.check_pay_server():
+            return
+
+        message_box = QMessageBox()
+        message_box.setWindowTitle("友情提示")
+        message_box.setText("自动更新DLC只需购买一次，请确认从未购买过后再点击【确认】按钮进行购买")
+        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        ret = message_box.exec_()
+        if ret == QMessageBox.Cancel:
+            logger.info("取消购买")
+            return
+
+        # UNDONE: 调整为打开自动更新的卡密购买页面 @2021-03-14 01:40:02 By Chen Ji
+
+    def pay_by_month(self, checked=False):
+        if not self.check_pay_server():
+            return
+        # UNDONE: 调整为打开按月付费的卡密购买页面（包含1/2/3/6/12月的对应付款链接页面） @2021-03-14 01:41:28 By Chen Ji
+
+    def pay_by_card_and_secret(self, checked=False):
+        card = self.lineedit_card.text().strip()
+        secret = self.lineedit_secret.text().strip()
+        qq = self.lineedit_qq.text().strip()
+        game_qqs = str_to_list(self.lineedit_game_qqs.text().strip())
+
+        msg = self.check_pay_params(card, secret, qq, game_qqs)
+        if msg != CHECK_RESULT_OK:
+            show_message("出错了", msg)
+            return
+
+        if not self.check_pay_server():
+            return
+
+        try:
+            self.do_pay_request(card, secret, qq, game_qqs)
+        except Exception as e:
+            show_message("出错了", f"请求出现异常，报错如下:\n{e}")
+
+    def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: List[str]) -> str:
+        if len(card.split('-')) != 3:
+            return "无效的卡号"
+
+        if len(secret) != 32:
+            return "无效的卡密"
+
+        for qq_to_check in [qq, *game_qqs]:
+            if not is_valid_qq(qq_to_check):
+                return f"无效的QQ：{qq_to_check}"
+
+        if len(game_qqs) > 5:
+            return f"最多五个QQ哦，如果有更多QQ，建议用配置工具添加多个账号一起使用（任意一个有权限就可以），无需全部填写~"
+
+        return CHECK_RESULT_OK
+
+    def do_pay_request(self, card: str, secret: str, qq: str, game_qqs: List[str]):
+        req = PayRequest()
+        req.card_secret.card = card
+        req.card_secret.secret = secret
+        req.qq = qq
+        req.game_qqs = game_qqs
+
+        server_addr = self.get_pay_server_addr()
+        raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=self.to_config().common.http_timeout)
+        if raw_res.status_code != 200:
+            show_message("出错了", "服务器似乎暂时挂掉了, 请稍后再试试")
+            return
+
+        res = PayResponse().auto_update_config(raw_res.json())
+        show_message("服务器处理结果", res.msg)
+
+        if res.msg == RESULT_OK:
+            self.lineedit_card.clear()
+            self.lineedit_secret.clear()
+
+    def check_pay_server(self) -> bool:
+        if not self.is_pay_server_online():
+            show_message("出错了", "服务器不在线，请使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】")
+            return False
+
+        return True
+
+    @try_except(return_val_on_except=False)
+    def is_pay_server_online(self) -> bool:
+        import requests
+        res = requests.get(self.get_pay_server_addr(), timeout=3)
+        return res.status_code == 200
+
+    def get_pay_server_addr(self) -> str:
+        # UNDONE: 填入正式的服务器地址 @2021-03-14 04:09:08 By Chen Ji
+        return "http://localhost:8438"
 
     def create_others_tab(self, cfg: Config):
         top_layout = QVBoxLayout()
 
-        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
-        btn_pay_by_month = create_pushbutton("按月付费", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
         btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
         btn_check_update = create_pushbutton("检查更新", "SpringGreen")
 
-        btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
-        btn_pay_by_month.clicked.connect(self.pay_by_month)
         btn_support.clicked.connect(self.support)
         btn_check_update.clicked.connect(self.check_update)
 
         layout = QHBoxLayout()
-        layout.addWidget(btn_buy_auto_updater_dlc)
-        layout.addWidget(btn_pay_by_month)
         layout.addWidget(btn_support)
         layout.addWidget(btn_check_update)
         top_layout.addLayout(layout)

@@ -840,3 +840,9 @@ class XinyueCatMatchResult(ConfigInterface):
         self.matchPetName = "猫星人"
         self.ending = 1
         self.matchVitality = 300
+
+
+class CardSecret(ConfigInterface):
+    def __init__(self):
+        self.card = "auto_update-20210310274059-00001"
+        self.secret = "cUtsSx0CwVF1p1VurbKuiI3WHQuKP3uz"

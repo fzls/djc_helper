@@ -608,22 +608,21 @@ class ConfigUi(QFrame):
             self.lineedit_card.clear()
             self.lineedit_secret.clear()
 
+    @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:
-        if not self.is_pay_server_online():
+        res = requests.get(self.get_pay_server_addr(), timeout=3)
+        if res.status_code == 200:
+            return True
+        elif res.status_code == 403:
+            show_message("请求过快", "请不要频繁点击按钮，小水管撑不住的<_<")
+            return False
+        else:
             show_message("出错了", "服务器不在线，请使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】")
             return False
 
-        return True
-
-    @try_except(return_val_on_except=False)
-    def is_pay_server_online(self) -> bool:
-        import requests
-        res = requests.get(self.get_pay_server_addr(), timeout=3)
-        return res.status_code == 200
-
     def get_pay_server_addr(self) -> str:
-        # UNDONE: 填入正式的服务器地址 @2021-03-14 04:09:08 By Chen Ji
-        return "http://localhost:8438"
+        # UNDONE: 测试完毕后填入正式的服务器地址 @2021-03-14 04:09:08 By Chen Ji
+        return "http://139.198.168.231:8438"
 
     def create_others_tab(self, cfg: Config):
         top_layout = QVBoxLayout()

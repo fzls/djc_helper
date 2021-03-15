@@ -468,7 +468,7 @@ def run(cfg):
             break
 
 
-def try_take_xinyue_team_award(cfg):
+def try_take_xinyue_team_award(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("尝试领取心悦组队奖励")
@@ -483,8 +483,8 @@ def try_take_xinyue_team_award(cfg):
         logger.info("")
         logger.warning(color("fg_bold_green") + f"------------开始尝试为第{idx}个账户({account_config.name})领取心悦组队奖励------------")
 
-        if len(account_config.xinyue_operations) == 0:
-            logger.warning("未设置心悦相关操作信息，将跳过")
+        if not account_config.function_switches.get_xinyue:
+            logger.warning("未启用领取心悦特权专区功能，将跳过")
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)

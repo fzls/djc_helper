@@ -4567,7 +4567,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RunAll = True
+    RunAll = False
     indexes = [1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]

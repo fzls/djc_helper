@@ -876,33 +876,84 @@ class DjcHelper:
         # 查询白名单
         is_white_list = self.query_xinyue_whitelist("6.2 查询心悦白名单")
 
+        default_xinyue_operations = []
+
         # 尝试根据心悦级别领取对应周期礼包
         if old_info.xytype < 5:
             # 513581	Y600周礼包_特邀会员
             # 673270	月礼包_特邀会员_20200610后使用
-            week_month_gifts = [("513581", "Y600周礼包_特邀会员"), ("673270", "月礼包_特邀会员_20200610后使用")]
+            default_xinyue_operations.extend([("513581", "Y600周礼包_特邀会员"), ("673270", "月礼包_特邀会员_20200610后使用")])
         else:
             if is_white_list:
                 # 673262	周礼包_白名单用户
                 # 673264	月礼包_白名单用户
-                week_month_gifts = [("673262", "周礼包_白名单用户"), ("673264", "月礼包_白名单用户")]
+                default_xinyue_operations.extend([("673262", "周礼包_白名单用户"), ("673264", "月礼包_白名单用户")])
             else:
                 # 513573	Y600周礼包
                 # 673269	月礼包_20200610后使用
-                week_month_gifts = [("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")]
+                default_xinyue_operations.extend([("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")])
 
         # 513585	累计宝箱
-        week_month_gifts.append(("513585", "累计宝箱"))
+        default_xinyue_operations.append(("513585", "累计宝箱"))
+
+        # 默认附加上心悦每日任务，避免后面使用配置工具添加新账号时会漏掉这些
+        # 顺序与配置文件中的顺序一致，这里不再赘述
+        default_xinyue_operations.extend([
+            # 领取积分卡
+            ("512408", "每月赠送双倍积分卡（仅心悦会员）"),
+
+            # 双倍（仅尝试最高级别的，不然比较浪费）
+            ("512432", "充值DNF3000点券_双倍（成就点=6）"),
+            ("512435", "游戏内消耗疲劳值120_双倍（成就点=6）"),
+            ("512437", "游戏内在线时长40_双倍（成就点=6）"),
+            ("512441", "游戏内PK3次_双倍（成就点=6）"),
+
+            # 普通
+            ("512396", "充值DNF3000点券（成就点=3）"),
+            ("512398", "游戏内在线时长40（成就点=3）"),
+            ("512400", "游戏内消耗疲劳值120（成就点=3）"),
+            ("512402", "游戏内PK3次（成就点=3）"),
+
+            # 免做（仅尝试最高级别的，不然比较浪费）
+            ("512490", "领取每周免做卡"),
+            ("512415", "充值DNF3000点券_免做（成就点=3）"),
+            ("512418", "游戏内消耗疲劳值120_免做（成就点=3）"),
+            ("512421", "游戏内在线时长40_免做（成就点=3）"),
+            ("512424", "游戏内PK3次_免做（成就点=3）"),
+
+            # 如果还没做完三个，尝试一些普通任务，但是免做任务和双倍不尝试非3点的，避免浪费
+            ("512395", "充值DNF2000点券（成就点=2）"),
+            ("512397", "游戏内在线时长30（成就点=2）"),
+            ("512399", "游戏内消耗疲劳值50（成就点=2）"),
+            ("512401", "游戏内PK2次（成就点=2）"),
+            ("512393", "邮箱无未读邮件（成就点=2）"),
+            ("578321", "精英赛投票（成就点=未知）"),
+            ("512388", "充值DNF1000点券（成就点=1）"),
+            ("512389", "游戏内在线时长15（成就点=1）"),
+            ("512390", "游戏内消耗疲劳值10（成就点=1）"),
+            ("512391", "游戏内PK1次（成就点=1）"),
+        ])
 
         xinyue_operations = []
-        for gift in week_month_gifts:
+        op_set = set()
+
+        def try_add_op(op: XinYueOperationConfig):
+            op_key = f"{op.iFlowId} {op.sFlowName}"
+            if op_key in op_set:
+                return
+
+            xinyue_operations.append(op)
+            op_set.add(op_key)
+
+        for gift in default_xinyue_operations:
             op = XinYueOperationConfig()
             op.iFlowId, op.sFlowName = gift
             op.count = 1
-            xinyue_operations.append(op)
+            try_add_op(op)
 
-        # 加上其他的配置
-        xinyue_operations.extend(self.cfg.xinyue_operations)
+        # 与配置文件中配置的去重后叠加
+        for op in self.cfg.xinyue_operations:
+            try_add_op(op)
 
         # 进行相应的心悦操作
         for op in xinyue_operations:

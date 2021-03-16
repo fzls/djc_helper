@@ -564,6 +564,19 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
+        message_box = QMessageBox()
+        message_box.setWindowTitle("请确认账号信息")
+        message_box.setText((
+            "请确认输入的账号信息是否无误，避免充错账号~\n\n"
+            f"主QQ：{qq}\n"
+            f"其他QQ列表：{game_qqs}\n"
+        ))
+        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        ret = message_box.exec_()
+        if ret == QMessageBox.Cancel:
+            logger.info("取消使用卡密")
+            return
+
         if not self.check_pay_server():
             return
 

@@ -611,10 +611,10 @@ def gen_config_for_github_action():
     cfg.common.auto_update_on_start = False
 
     # 调低网络超时时间（github的网络情况比较稳定，降低时间也可以减少整体运行时长）
-    cfg.common.http_timeout = 3
-    cfg.common.login.load_page_timeout = 5
-    cfg.common.login.login_timeout = 10
-    cfg.common.login.login_finished_timeout = 10
+    cfg.common.http_timeout = 5
+    cfg.common.login.load_page_timeout = 60
+    cfg.common.login.login_timeout = 60
+    cfg.common.login.login_finished_timeout = 60
 
     # 保存到专门配置文件
     show_config_size(cfg, "精简前")
@@ -641,7 +641,7 @@ def gen_config_for_github_action():
 
     save_filename = 'config.toml.github_action'
     save_config(cfg, save_filename)
-    logger.info(f"已经保存到{save_filename}")
+    logger.info(f"已经保存到 {save_filename}")
 
 def show_config_size(cfg:Config, ctx):
     data_to_save = json.loads(json.dumps(to_raw_type(cfg)))

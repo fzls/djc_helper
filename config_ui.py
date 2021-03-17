@@ -635,8 +635,7 @@ class ConfigUi(QFrame):
             return False
 
     def get_pay_server_addr(self) -> str:
-        # UNDONE: 测试完毕后填入正式的服务器地址 @2021-03-14 04:09:08 By Chen Ji
-        return "http://139.198.168.231:8438"
+        return "http://139.198.179.81:8438"
 
     def create_others_tab(self, cfg: Config):
         top_layout = QVBoxLayout()

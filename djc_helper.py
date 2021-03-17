@@ -10,7 +10,7 @@ from black_list import check_in_black_list
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from qq_login import QQLogin, LoginResult
+from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
@@ -1396,12 +1396,20 @@ class DjcHelper:
             logger.warning("pskey需要更新，将尝试重新登录QQ空间获取并保存到本地")
             # 重新获取
             ql = QQLogin(self.common_cfg)
-            if self.cfg.login_mode == "qr_login":
-                # 扫码登录
-                lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
-            else:
-                # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
+            try:
+                if self.cfg.login_mode == "qr_login":
+                    # 扫码登录
+                    lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
+                else:
+                    # 自动登录
+                    lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
+            except GithubActionLoginException as e:
+                logger.error("在github action环境下qq空间登录失败了，很大可能是因为该网络环境与日常环境不一致导致的（qq空间检查的很严），只能将qq空间相关配置禁用咯")
+                self.cfg.function_switches.get_ark_lottery = False
+                self.cfg.function_switches.get_dnf_warriors_call = False
+                self.cfg.function_switches.get_vip_mentor = False
+                return
+
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey, lr.skey, lr.vuserid)
         else:

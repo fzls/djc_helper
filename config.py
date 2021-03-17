@@ -584,6 +584,11 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         g_config.auto_update_config(raw_config)
 
 
+def gen_config_for_github_action():
+    load_config()
+    save_config(config(), "config.toml.github_action")
+
+
 def save_config(cfg: Config, config_path="config.toml"):
     with open(config_path, 'w', encoding='utf-8') as save_file:
         data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
@@ -595,9 +600,11 @@ def config():
 
 
 if __name__ == '__main__':
-    load_config("config.toml", "config.toml.local")
-    logger.info(config())
+    # load_config("config.toml", "config.toml.local")
+    # logger.info(config())
 
     # cfg = config()
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
+
+    gen_config_for_github_action()

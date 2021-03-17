@@ -15,6 +15,7 @@ start.bat
 .db/
 
 config.toml.local
+config.toml.github_action
 upload_cookie.json
 
 道聚城助手.exe

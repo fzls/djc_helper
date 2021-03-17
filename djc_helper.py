@@ -138,6 +138,10 @@ class DjcHelper:
         if platform.system() != "Windows":
             return
 
+        # 如果在github action环境下，则不弹窗
+        if is_run_in_github_action():
+            return
+
         # 若不存在该文件，则说明是首次运行，提示相关信息
         logger.info(loginfo)
 

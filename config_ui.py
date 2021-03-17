@@ -631,7 +631,7 @@ class ConfigUi(QFrame):
             show_message("请求过快", "请不要频繁点击按钮，小水管撑不住的<_<")
             return False
         else:
-            show_message("出错了", "服务器不在线，请使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】")
+            show_message("出错了", "无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】")
             return False
 
     def get_pay_server_addr(self) -> str:

@@ -578,9 +578,11 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         pass
 
     # re: 调试用
+    logger.warning(f"本地调试日志：是否运行在github action: {is_run_in_github_action()}")
+    logger.warning(f"本地调试日志：从github获取的配置信息如下：\n\n{get_config_from_env()}")
     if is_run_in_github_action():
         with open(config_path, 'r', encoding='utf-8') as file:
-            print(file.read())
+            logger.warning(f"本地调试日志：配置文件内容如下：\n\n{file.read()}")
 
 
 def save_config(cfg: Config, config_path="config.toml"):

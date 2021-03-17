@@ -1,0 +1,51 @@
+name: Run
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+  workflow_dispatch:
+  schedule:
+    # 参考 https://jasonet.co/posts/scheduled-actions/
+    # re: 等测试完毕后，一日运行两次
+    # minute hour day month dayOfWeek
+    - cron: '30 22 * * *'
+
+jobs:
+  run:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Requirements
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt wheel
+
+      - name: Run
+        env:
+          DJC_HELPER_CONFIG_TOML: ${{ secrets.DJC_HELPER_CONFIG_TOML }}
+        run: |
+          echo "$DJC_HELPER_CONFIG_TOML" > ./config.toml
+          python main.py

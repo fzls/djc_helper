@@ -617,7 +617,50 @@ def gen_config_for_github_action():
     cfg.common.login.login_finished_timeout = 10
 
     # 保存到专门配置文件
-    save_config(cfg, "config.toml.github_action")
+    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
+    toml_str = toml.dumps(data_to_save)
+    logger.warning(f"本地调试日志：精简前字符串大小={len(toml_str)}")
+
+    # hack: 官方文档写secrets最多64KB，实测最多45022个字符。
+    #  https://docs.github.com/en/actions/reference/encrypted-secrets#limits-for-secrets
+    #  因此这里特殊处理一些账号级别开关，若配置与默认配置相同，则直接从配置文件中移除~
+    remove_unnecessary_configs(cfg.common, CommonConfig())
+    remove_unnecessary_configs(cfg.common.login, LoginConfig())
+    remove_unnecessary_configs(cfg.common.retry, RetryConfig())
+    remove_unnecessary_configs(cfg.common.xinyue, XinYueConfig())
+    for account_cfg in cfg.account_configs:
+        remove_unnecessary_configs(account_cfg, AccountConfig())
+        remove_unnecessary_configs(account_cfg.account_info, AccountInfoConfig())
+        remove_unnecessary_configs(account_cfg.function_switches, FunctionSwitchesConfig())
+        remove_unnecessary_configs(account_cfg.mobile_game_role_info, MobileGameRoleInfoConfig())
+        remove_unnecessary_configs(account_cfg.ark_lottery, ArkLotteryConfig())
+        remove_unnecessary_configs(account_cfg.vip_mentor, VipMentorConfig())
+        remove_unnecessary_configs(account_cfg.dnf_helper_info, DnfHelperInfoConfig())
+        remove_unnecessary_configs(account_cfg.hello_voice, HelloVoiceInfoConfig())
+        remove_unnecessary_configs(account_cfg.firecrackers, FirecrackersConfig())
+
+    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
+    toml_str = toml.dumps(data_to_save)
+    logger.warning(f"本地调试日志：精简后字符串大小={len(toml_str)}")
+
+    save_filename = 'config.toml.github_action'
+    with open(save_filename, 'w', encoding='utf-8') as save_file:
+        save_file.write(toml_str)
+
+        total_size = len(toml_str)
+        total_lines = toml_str.count('\n')
+        logger.info(f"已经保存到{save_filename}, 总大小为{total_size}，总行数为{total_lines}")
+
+
+def remove_unnecessary_configs(cfg, default_cfg):
+    attrs_to_remove = []
+
+    for attr, value in cfg.__dict__.items():
+        if not hasattr(default_cfg, attr) or getattr(default_cfg, attr) == value:
+            attrs_to_remove.append(attr)
+
+    for attr in attrs_to_remove:
+        delattr(cfg, attr)
 
 
 def save_config(cfg: Config, config_path="config.toml"):

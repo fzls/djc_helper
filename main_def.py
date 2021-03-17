@@ -618,6 +618,10 @@ def check_update(cfg):
 
 
 def print_update_message_on_first_run_new_version():
+    if is_run_in_github_action():
+        logger.info("github action环境下无需打印新版本更新内容")
+        return
+
     load_config("config.toml", "config.toml.local")
     cfg = config()
 

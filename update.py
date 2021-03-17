@@ -12,7 +12,7 @@ from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
 from upload_lanzouyun import Uploader, lanzou_cookie
-from util import is_first_run, use_by_myself, async_call
+from util import is_first_run, use_by_myself, async_call, is_run_in_github_action
 from version import now_version, ver_time
 
 
@@ -33,6 +33,10 @@ def get_update_desc(config: CommonConfig):
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
     try:
+        if is_run_in_github_action():
+            logger.info("当前在github action环境下运行，无需检查更新")
+            return
+
         if not config.check_update_on_start and not config.auto_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
             return

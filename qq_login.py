@@ -19,6 +19,11 @@ from util import async_message_box
 from version import now_version
 
 
+# 在github action环境下登录异常
+class GithubActionLoginException(Exception):
+    pass
+
+
 class LoginResult(ConfigInterface):
     def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k=""):
         super().__init__()
@@ -279,6 +284,10 @@ class QQLogin():
         ))
         if login_mode == self.login_mode_guanjia:
             logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就去配置工具关闭管家活动的开关（不是关闭这个登录页面）~")
+
+        if is_run_in_github_action():
+            # github action 环境下特殊处理
+            raise GithubActionLoginException()
 
         raise Exception("网络有问题")
 

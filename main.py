@@ -87,7 +87,7 @@ def main():
     for account_cfg in cfg.account_configs:
         account_names.append(account_cfg.name)
 
-    logger.info(f"当前共配置{account_names}个账号，具体如下：{account_names}")
+    logger.info(f"当前共配置{len(account_names)}个账号，具体如下：{account_names}")
 
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)

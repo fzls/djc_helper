@@ -951,7 +951,9 @@ def test_pay_info():
 
     cfg.account_configs[0].account_info.uin = "o12"
 
+    logger.info("尝试获取DLC信息")
     has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
+    logger.info("尝试获取按月付费信息")
     user_buy_info = get_user_buy_info(cfg)
 
     if has_buy_auto_update_dlc:

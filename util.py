@@ -376,6 +376,9 @@ def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, 
         if print_log:
             logger.warning(color("bold_cyan") + msg)
 
+        if is_run_in_github_action():
+            return
+
         win32api.MessageBox(0, msg, title, icon)
 
         if open_url != "":
@@ -468,6 +471,14 @@ def get_screen_size():
 def make_sure_dir_exists(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
+
+
+def is_run_in_github_action():
+    return get_config_from_env() != ""
+
+
+def get_config_from_env():
+    return os.environ.get("DJC_HELPER_CONFIG_TOML", "")
 
 
 if __name__ == '__main__':

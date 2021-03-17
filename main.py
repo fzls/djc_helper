@@ -135,4 +135,5 @@ if __name__ == '__main__':
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
     finally:
         # 暂停一下，方便看结果
-        os.system("PAUSE")
+        if not is_run_in_github_action():
+            os.system("PAUSE")

@@ -577,6 +577,11 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
     except Exception as e:
         pass
 
+    # re: 调试用
+    if is_run_in_github_action():
+        with open(config_path, 'utf-8', 'r') as file:
+            print(file.read())
+
 
 def save_config(cfg: Config, config_path="config.toml"):
     with open(config_path, 'w', encoding='utf-8') as save_file:

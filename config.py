@@ -617,9 +617,7 @@ def gen_config_for_github_action():
     cfg.common.login.login_finished_timeout = 10
 
     # 保存到专门配置文件
-    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
-    toml_str = toml.dumps(data_to_save)
-    logger.warning(f"本地调试日志：精简前字符串大小={len(toml_str)}")
+    show_config_size(cfg, "精简前")
 
     # hack: 官方文档写secrets最多64KB，实测最多45022个字符。
     #  https://docs.github.com/en/actions/reference/encrypted-secrets#limits-for-secrets
@@ -639,18 +637,18 @@ def gen_config_for_github_action():
         remove_unnecessary_configs(account_cfg.hello_voice, HelloVoiceInfoConfig())
         remove_unnecessary_configs(account_cfg.firecrackers, FirecrackersConfig())
 
-    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
-    toml_str = toml.dumps(data_to_save)
-    logger.warning(f"本地调试日志：精简后字符串大小={len(toml_str)}")
+    show_config_size(cfg, "精简后")
 
     save_filename = 'config.toml.github_action'
-    with open(save_filename, 'w', encoding='utf-8') as save_file:
-        save_file.write(toml_str)
+    save_config(cfg, save_filename)
+    logger.info(f"已经保存到{save_filename}")
 
-        total_size = len(toml_str)
-        total_lines = toml_str.count('\n')
-        logger.info(f"已经保存到{save_filename}, 总大小为{total_size}，总行数为{total_lines}")
-
+def show_config_size(cfg:Config, ctx):
+    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
+    toml_str = toml.dumps(data_to_save)
+    total_size = len(toml_str)
+    total_lines = toml_str.count('\n')
+    logger.info(f"{ctx} 生成配置文件大小为{total_size}，总行数为{total_lines}")
 
 def remove_unnecessary_configs(cfg, default_cfg):
     attrs_to_remove = []

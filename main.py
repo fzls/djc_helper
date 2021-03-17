@@ -133,6 +133,9 @@ if __name__ == '__main__':
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+        # 如果在github action，则继续抛出异常
+        if is_run_in_github_action():
+            raise e
     finally:
         # 暂停一下，方便看结果
         if not is_run_in_github_action():

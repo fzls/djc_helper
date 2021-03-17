@@ -582,6 +582,10 @@ def show_buy_info_sync(msg):
 
 
 def check_update(cfg):
+    if is_run_in_github_action():
+        logger.info("当前在github action环境下运行，无需检查更新")
+        return
+
     auto_updater_path = os.path.realpath("utils/auto_updater.exe")
     if not os.path.exists(auto_updater_path):
         logger.warning(color("bold_cyan") + (

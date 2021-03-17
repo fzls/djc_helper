@@ -83,6 +83,12 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
+    account_names = []
+    for account_cfg in cfg.account_configs:
+        account_names.append(account_cfg.name)
+
+    logger.info(f"当前共配置{account_names}个账号，具体如下：{account_names}")
+
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
 

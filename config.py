@@ -259,6 +259,8 @@ class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
         self.enable = True
+        # 是否在github action模式下启用
+        self.enable_in_github_action = True
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
@@ -315,6 +317,10 @@ class AccountConfig(ConfigInterface):
     def is_enabled(self):
         if self.in_safe_mode and not config().common.enable_in_safe_mode_accounts:
             # 若账号处于安全模式，且当前不启用处于安全模式的账号，则视为未启用当前账号
+            return False
+
+        if is_run_in_github_action() and not self.enable_in_github_action:
+            # 若当前在github action环境中运行，且设定为不在该环境中使用该QQ，则认为未启用
             return False
 
         return self.enable

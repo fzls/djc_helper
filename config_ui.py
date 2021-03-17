@@ -546,12 +546,13 @@ class ConfigUi(QFrame):
             logger.info("取消购买")
             return
 
-        # UNDONE: 调整为打开自动更新的卡密购买页面 @2021-03-14 01:40:02 By Chen Ji
+        webbrowser.open("https://www.kuaifaka.net/purchasing?link=auto-updater")
 
     def pay_by_month(self, checked=False):
         if not self.check_pay_server():
             return
-        # UNDONE: 调整为打开按月付费的卡密购买页面（包含1/2/3/6/12月的对应付款链接页面） @2021-03-14 01:41:28 By Chen Ji
+
+        webbrowser.open("https://www.kuaifaka.net/purchasing?link=pay-by-month")
 
     def pay_by_card_and_secret(self, checked=False):
         card = self.lineedit_card.text().strip()

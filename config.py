@@ -579,7 +579,7 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
 
     # re: 调试用
     if is_run_in_github_action():
-        with open(config_path, 'utf-8', 'r') as file:
+        with open(config_path, 'r', encoding='utf-8') as file:
             print(file.read())
 
 

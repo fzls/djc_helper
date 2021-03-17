@@ -585,8 +585,39 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
 
 
 def gen_config_for_github_action():
+    # 读取配置
     load_config()
-    save_config(config(), "config.toml.github_action")
+    cfg = config()
+
+    # 检查是否所有账号都是账密登录，不是则抛异常退出
+    for account_cfg in cfg.account_configs:
+        if account_cfg.login_mode != "auto_login":
+            raise Exception("github action专用配置应全部使用账密自动登录模式，请修改~")
+
+    # note: 做一些github action上专门的改动
+    # 不打开浏览器（因为没有显示器可以看<_<)
+    cfg.common.run_in_headless_mode = True
+    # 不显示使用情况
+    cfg.common._show_usage = False
+    # 强制使用便携版（因为必定没有安装chrome）
+    cfg.common.force_use_portable_chrome = True
+    # 不展示chrome调试日志
+    cfg.common._debug_show_chrome_logs = False
+    # 设置日志级别为log，方便查问题
+    cfg.common.log_level = "debug"
+    # 不必检查更新，必定是最新版本
+    cfg.common.check_update_on_start = False
+    # 不必自动更新，同理
+    cfg.common.auto_update_on_start = False
+
+    # 调低网络超时时间（github的网络情况比较稳定，降低时间也可以减少整体运行时长）
+    cfg.common.http_timeout = 3
+    cfg.common.login.load_page_timeout = 5
+    cfg.common.login.login_timeout = 10
+    cfg.common.login.login_finished_timeout = 10
+
+    # 保存到专门配置文件
+    save_config(cfg, "config.toml.github_action")
 
 
 def save_config(cfg: Config, config_path="config.toml"):

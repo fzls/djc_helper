@@ -577,12 +577,18 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
     except Exception as e:
         pass
 
+    # 最后尝试从环境变量获取配置，主要用于github action自动运行
     # re: 调试用
     logger.warning(f"本地调试日志：是否运行在github action: {is_run_in_github_action()}")
     logger.warning(f"本地调试日志：从github获取的配置信息如下：\n\n{get_config_from_env()}")
+    logger.warning(f"本地调试日志：读取前g_config={g_config}")
     if is_run_in_github_action():
-        with open(config_path, 'r', encoding='utf-8') as file:
-            logger.warning(f"本地调试日志：配置文件内容如下：\n\n{file.read()}")
+        logger.info("检测到已配置环境变量，将从环境变量中读取配置信息强制覆盖~")
+        raw_config = toml.loads(get_config_from_env())
+        g_config.auto_update_config(raw_config)
+
+        logger.warning(f"本地调试日志：raw_config={raw_config}")
+        logger.warning(f"本地调试日志：g_config={g_config}")
 
 
 def save_config(cfg: Config, config_path="config.toml"):

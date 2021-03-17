@@ -579,7 +579,7 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
 
     # 最后尝试从环境变量获取配置，主要用于github action自动运行
     if is_run_in_github_action():
-        logger.info("检测到已配置环境变量，将从环境变量中读取配置信息强制覆盖~")
+        logger.info("当前在github action环境下运行，将从环境变量中读取配置信息强制覆盖~")
         raw_config = toml.loads(get_config_from_env())
         g_config.auto_update_config(raw_config)
 

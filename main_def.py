@@ -804,7 +804,7 @@ def get_user_buy_info(cfg: Config):
             # 如果从未购买过，过期时间改为现在
             expire_at_time = now
         else:
-            expire_at_time = parse_time(user_buy_info.expire_at)
+            expire_at_time = max(parse_time(user_buy_info.expire_at), now)
 
         user_buy_info.expire_at = format_time(expire_at_time + present_times)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({

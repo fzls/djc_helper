@@ -622,6 +622,10 @@ class ConfigUi(QFrame):
             self.lineedit_card.clear()
             self.lineedit_secret.clear()
 
+            # 自动更新购买完成后提示去网盘下载
+            if card.startswith("auto_update"):
+                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引.docx】")
+
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:
         server_not_online_message = "无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】"

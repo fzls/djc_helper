@@ -57,7 +57,7 @@ def check_update_on_start(config: CommonConfig):
         # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
         time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y-%m-%d")
         if time_since_last_update.days >= 7:
-            msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作"
+            msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
             logger.info(color("bold_green") + msg)
             if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
                 win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)

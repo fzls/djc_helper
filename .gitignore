@@ -8,6 +8,7 @@ test/
 test.py
 
 start.bat
+start_config_ui.bat
 *.lnk
 
 .first_run/

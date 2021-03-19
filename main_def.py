@@ -672,8 +672,15 @@ def temp_code(cfg):
         (
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "目前兑换流程暂不支持，需自行每日点开心悦app去兑换，或者使用auto.js脚本去每日定期自动操作。"
+        ),
+        (
+            "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
         )
     ]
+
+    if is_first_run("319微信答题"):
+        msg = "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
+        async_message_box(msg, "签到活动", icon=win32con.MB_ICONINFORMATION, open_url="https://gzhcos.qq.com/awp-activity/common-daily-question/?ADTAG=dnf#/?site=dnf&game=dnf")
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")

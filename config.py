@@ -259,6 +259,8 @@ class AccountConfig(ConfigInterface):
     def __init__(self):
         # 是否启用该账号
         self.enable = True
+        # 是否在github action模式下启用
+        self.enable_in_github_action = True
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
@@ -315,6 +317,10 @@ class AccountConfig(ConfigInterface):
     def is_enabled(self):
         if self.in_safe_mode and not config().common.enable_in_safe_mode_accounts:
             # 若账号处于安全模式，且当前不启用处于安全模式的账号，则视为未启用当前账号
+            return False
+
+        if is_run_in_github_action() and not self.enable_in_github_action:
+            # 若当前在github action环境中运行，且设定为不在该环境中使用该QQ，则认为未启用
             return False
 
         return self.enable
@@ -577,6 +583,89 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
     except Exception as e:
         pass
 
+    # 最后尝试从环境变量获取配置，主要用于github action自动运行
+    if is_run_in_github_action():
+        logger.info("当前在github action环境下运行，将从环境变量中读取配置信息强制覆盖~")
+        raw_config = toml.loads(get_config_from_env())
+        g_config.auto_update_config(raw_config)
+
+
+def gen_config_for_github_action():
+    # 读取配置
+    load_config()
+    cfg = config()
+
+    # 检查是否所有账号都是账密登录，不是则抛异常退出
+    for account_cfg in cfg.account_configs:
+        if account_cfg.login_mode != "auto_login":
+            raise Exception("github action专用配置应全部使用账密自动登录模式，请修改~")
+
+    # note: 做一些github action上专门的改动
+    # 不打开浏览器（因为没有显示器可以看<_<)
+    cfg.common.run_in_headless_mode = True
+    # 不显示使用情况
+    cfg.common._show_usage = False
+    # 强制使用便携版（因为必定没有安装chrome）
+    cfg.common.force_use_portable_chrome = True
+    # 不展示chrome调试日志
+    cfg.common._debug_show_chrome_logs = False
+    # 设置日志级别为log，方便查问题
+    cfg.common.log_level = "debug"
+    # 不必检查更新，必定是最新版本
+    cfg.common.check_update_on_start = False
+    # 不必自动更新，同理
+    cfg.common.auto_update_on_start = False
+
+    # 调低网络超时时间（github的网络情况比较稳定，降低时间也可以减少整体运行时长）
+    cfg.common.http_timeout = 5
+    cfg.common.login.load_page_timeout = 60
+    cfg.common.login.login_timeout = 60
+    cfg.common.login.login_finished_timeout = 60
+
+    # 保存到专门配置文件
+    show_config_size(cfg, "精简前")
+
+    # hack: 官方文档写secrets最多64KB，实测最多45022个字符。
+    #  https://docs.github.com/en/actions/reference/encrypted-secrets#limits-for-secrets
+    #  因此这里特殊处理一些账号级别开关，若配置与默认配置相同，则直接从配置文件中移除~
+    remove_unnecessary_configs(cfg.common, CommonConfig())
+    remove_unnecessary_configs(cfg.common.login, LoginConfig())
+    remove_unnecessary_configs(cfg.common.retry, RetryConfig())
+    remove_unnecessary_configs(cfg.common.xinyue, XinYueConfig())
+    for account_cfg in cfg.account_configs:
+        remove_unnecessary_configs(account_cfg, AccountConfig())
+        remove_unnecessary_configs(account_cfg.account_info, AccountInfoConfig())
+        remove_unnecessary_configs(account_cfg.function_switches, FunctionSwitchesConfig())
+        remove_unnecessary_configs(account_cfg.mobile_game_role_info, MobileGameRoleInfoConfig())
+        remove_unnecessary_configs(account_cfg.ark_lottery, ArkLotteryConfig())
+        remove_unnecessary_configs(account_cfg.vip_mentor, VipMentorConfig())
+        remove_unnecessary_configs(account_cfg.dnf_helper_info, DnfHelperInfoConfig())
+        remove_unnecessary_configs(account_cfg.hello_voice, HelloVoiceInfoConfig())
+        remove_unnecessary_configs(account_cfg.firecrackers, FirecrackersConfig())
+
+    show_config_size(cfg, "精简后")
+
+    save_filename = 'config.toml.github_action'
+    save_config(cfg, save_filename)
+    logger.info(f"已经保存到 {save_filename}")
+
+def show_config_size(cfg:Config, ctx):
+    data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
+    toml_str = toml.dumps(data_to_save)
+    total_size = len(toml_str)
+    total_lines = toml_str.count('\n')
+    logger.info(f"{ctx} 生成配置文件大小为{total_size}，总行数为{total_lines}")
+
+def remove_unnecessary_configs(cfg, default_cfg):
+    attrs_to_remove = []
+
+    for attr, value in cfg.__dict__.items():
+        if not hasattr(default_cfg, attr) or getattr(default_cfg, attr) == value:
+            attrs_to_remove.append(attr)
+
+    for attr in attrs_to_remove:
+        delattr(cfg, attr)
+
 
 def save_config(cfg: Config, config_path="config.toml"):
     with open(config_path, 'w', encoding='utf-8') as save_file:
@@ -589,9 +678,11 @@ def config():
 
 
 if __name__ == '__main__':
-    load_config("config.toml", "config.toml.local")
-    logger.info(config())
+    # load_config("config.toml", "config.toml.local")
+    # logger.info(config())
 
     # cfg = config()
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
+
+    gen_config_for_github_action()

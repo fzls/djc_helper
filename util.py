@@ -28,6 +28,10 @@ def uin2qq(uin):
     return str(uin)[1:].lstrip('0')
 
 
+def is_valid_qq(qq: str) -> bool:
+    return qq.isnumeric()
+
+
 def maximize_console():
     threading.Thread(target=maximize_console_sync, daemon=True).start()
 
@@ -286,7 +290,7 @@ def try_except(show_exception_info=True, show_last_process_result=True, extra_ms
             try:
                 return fun(*args, **kwargs)
             except Exception as e:
-                msg = f"执行{fun.__name__}出错了"
+                msg = f"执行{fun.__name__}({args}, {kwargs})出错了"
                 if extra_msg != "":
                     msg += ", " + extra_msg
                 msg += check_some_exception(e, show_last_process_result)
@@ -371,6 +375,9 @@ def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, 
     def cb():
         if print_log:
             logger.warning(color("bold_cyan") + msg)
+
+        if is_run_in_github_action():
+            return
 
         win32api.MessageBox(0, msg, title, icon)
 
@@ -464,6 +471,14 @@ def get_screen_size():
 def make_sure_dir_exists(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
+
+
+def is_run_in_github_action():
+    return get_config_from_env() != ""
+
+
+def get_config_from_env():
+    return os.environ.get("DJC_HELPER_CONFIG_TOML", "")
 
 
 if __name__ == '__main__':

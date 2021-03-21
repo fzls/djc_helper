@@ -373,7 +373,7 @@ def show_accounts_status(cfg, ctx):
     _show_head_line(ctx)
 
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8, 10, 10]
+    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8, 15, 10]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -468,7 +468,7 @@ def run(cfg):
             break
 
 
-def try_take_xinyue_team_award(cfg):
+def try_take_xinyue_team_award(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("尝试领取心悦组队奖励")
@@ -483,8 +483,8 @@ def try_take_xinyue_team_award(cfg):
         logger.info("")
         logger.warning(color("fg_bold_green") + f"------------开始尝试为第{idx}个账户({account_config.name})领取心悦组队奖励------------")
 
-        if len(account_config.xinyue_operations) == 0:
-            logger.warning("未设置心悦相关操作信息，将跳过")
+        if not account_config.function_switches.get_xinyue:
+            logger.warning("未启用领取心悦特权专区功能，将跳过")
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -547,6 +547,11 @@ def show_buy_info(user_buy_info: BuyInfo):
         logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
         time.sleep(wait_seconds)
 
+    if len(user_buy_info.buy_records) != 0 and is_first_run("卡密付费方案提示"):
+        msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能。日后续费可以选择这个方案~ 详情请看 【付费指引.docx】"
+        title = "新增卡密付费"
+        async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION)
+
 
 def show_buy_info_sync(msg):
     usedDays = get_count(my_usage_counter_name, "all")
@@ -564,15 +569,7 @@ def show_buy_info_sync(msg):
         "(重要的话说三遍)\n"
         "\n"
         "目前定价为5元每月（31天）\n"
-        "支付方式：\n"
-        "    1. 扫描稍后弹出的付款码（左侧微信，右侧支付宝）\n"
-        "    2. 加群后QQ私聊我以下内容：\n"
-        "        2.1 付款截图\n"
-        "        2.2 要使用该服务的游戏QQ号（可以是多个）\n"
-        "        2.3 因为频繁回复他人，QQ会被系统冻结，因此不会回复任何消息（真有必要会在群里@回复）\n"
-        "        2.4 群号见小助手目录中 【DNF蚊子腿小助手交流群群二维码.jpg】\n"
-        "    3. 我看到消息后会更新付费情况，理论上一天（24小时）内会处理，可在账号概览处或配置工具的个人信息处看到付费情况。若一天内仍提示未购买，则请再次联系我，提醒一下~很可能是看漏了\n"
-        "        3.1 处于时间效率和账号冻结风险，将不再回复消息，只是处理消息，更新对应账号的付费情况\n"
+        "购买方式可查看目录中的【付费指引.docx】\n"
         "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)
@@ -582,23 +579,25 @@ def show_buy_info_sync(msg):
 
 
 def check_update(cfg):
+    if is_run_in_github_action():
+        logger.info("当前在github action环境下运行，无需检查更新")
+        return
+
     auto_updater_path = os.path.realpath("utils/auto_updater.exe")
     if not os.path.exists(auto_updater_path):
         logger.warning(color("bold_cyan") + (
             "未发现自动更新DLC，因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
             "-----------------\n"
             "以下为广告时间0-0\n"
-            "花了两天多时间，给小助手加入了目前唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
+            "花了两天多时间，给小助手加入了目前(指2021.1.6)唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
             "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
             "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
             "演示视频: https://www.bilibili.com/video/BV1FA411W7Nq\n"
             "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
             "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0\n"
             "价格：10.24元\n"
-            "购买方式：付款后直接私聊我付款截图和要使用的qq（可以是多个），我看到后会添加~\n"
-            "使用方式：下载群里的auto_updater.exe，放到utils目录下就行了。未购买时这样操作后会弹窗，购买成功后则会正常运行自动更新功能。\n"
-            "PS：处于时间和账号冻结风险考虑，将不再回复消息，一般一天内会处理，若一天后仍提示未购买，则请私聊提醒我一下，大概率是看漏了\n"
-            "PS2：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
+            "购买方式和使用方式可查看目录中的【付费指引.docx】\n"
+            "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
         ))
 
     logger.info((
@@ -614,6 +613,10 @@ def check_update(cfg):
 
 
 def print_update_message_on_first_run_new_version():
+    if is_run_in_github_action():
+        logger.info("github action环境下无需打印新版本更新内容")
+        return
+
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
@@ -669,8 +672,15 @@ def temp_code(cfg):
         (
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "目前兑换流程暂不支持，需自行每日点开心悦app去兑换，或者使用auto.js脚本去每日定期自动操作。"
+        ),
+        (
+            "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
         )
     ]
+
+    if is_first_run("319微信答题"):
+        msg = "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
+        async_message_box(msg, "签到活动", icon=win32con.MB_ICONINFORMATION, open_url="https://gzhcos.qq.com/awp-activity/common-daily-question/?ADTAG=dnf#/?site=dnf&game=dnf")
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")
@@ -731,25 +741,37 @@ def has_buy_auto_updater_dlc(cfg: Config):
     for idx in range(retrtCfg.max_retry_count):
         try:
             uploader = Uploader(lanzou_cookie)
-            user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.buy_auto_updater_users_filename, ".cached", show_log=False)
-            buy_users = []
-            with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
-                buy_users = json.load(data_file)
+            has_no_users = True
+            for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
+                try:
+                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                except FileNotFoundError as e:
+                    # 如果网盘没有这个文件，就跳过
+                    continue
 
-            if len(buy_users) == 0:
+                buy_users = []
+                with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
+                    buy_users = json.load(data_file)
+
+                if len(buy_users) != 0:
+                    has_no_users = False
+
+                for account_cfg in cfg.account_configs:
+                    qq = uin2qq(account_cfg.account_info.uin)
+                    if qq in buy_users:
+                        return True
+
+                logger.debug((
+                    "DLC购买调试日志：\n"
+                    f"remote_filename={remote_filename}\n"
+                    f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
+                    f"用户列表={buy_users}\n"
+                ))
+
+            if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 return True
 
-            for account_cfg in cfg.account_configs:
-                qq = uin2qq(account_cfg.account_info.uin)
-                if qq in buy_users:
-                    return True
-
-            logger.debug((
-                "DLC购买调试日志：\n"
-                f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
-                f"用户列表={buy_users}\n"
-            ))
             return False
         except Exception as e:
             logFunc = logger.debug
@@ -784,7 +806,7 @@ def get_user_buy_info(cfg: Config):
             # 如果从未购买过，过期时间改为现在
             expire_at_time = now
         else:
-            expire_at_time = parse_time(user_buy_info.expire_at)
+            expire_at_time = max(parse_time(user_buy_info.expire_at), now)
 
         user_buy_info.expire_at = format_time(expire_at_time + present_times)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
@@ -800,41 +822,69 @@ def get_user_buy_info(cfg: Config):
 def _get_user_buy_info(cfg: Config):
     retrtCfg = cfg.common.retry
     default_user_buy_info = BuyInfo()
-    for idx in range(retrtCfg.max_retry_count):
+    for try_idx in range(retrtCfg.max_retry_count):
         try:
             # 默认设置首个qq为购买信息
             default_user_buy_info.qq = uin2qq(cfg.account_configs[0].account_info.uin)
 
             uploader = Uploader(lanzou_cookie)
-            buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, uploader.user_monthly_pay_info_filename, ".cached", show_log=False)
-            buy_users = {}  # type: Dict[str, BuyInfo]
-            with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
-                raw_infos = json.load(data_file)
-                for qq, raw_info in raw_infos.items():
-                    info = BuyInfo().auto_update_config(raw_info)
-                    buy_users[qq] = info
-                    for game_qq in info.game_qqs:
-                        buy_users[game_qq] = info
+            has_no_users = True
 
-            if len(buy_users) == 0:
+            remote_filenames = [uploader.user_monthly_pay_info_filename, uploader.cs_user_monthly_pay_info_filename]
+            import copy
+            # 单种渠道内选择付费结束时间最晚的，手动和卡密间则叠加
+            user_buy_info_list = [copy.deepcopy(default_user_buy_info) for v in remote_filenames]
+            for idx, remote_filename in enumerate(remote_filenames):
+                user_buy_info = user_buy_info_list[idx]
+
+                try:
+                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                except FileNotFoundError as e:
+                    # 如果网盘没有这个文件，就跳过
+                    continue
+
+                buy_users = {}  # type: Dict[str, BuyInfo]
+                with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
+                    raw_infos = json.load(data_file)
+                    for qq, raw_info in raw_infos.items():
+                        info = BuyInfo().auto_update_config(raw_info)
+                        buy_users[qq] = info
+                        for game_qq in info.game_qqs:
+                            buy_users[game_qq] = info
+
+                if len(buy_users) != 0:
+                    has_no_users = False
+
+                for account_cfg in cfg.account_configs:
+                    qq = uin2qq(account_cfg.account_info.uin)
+                    if qq in buy_users:
+                        if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
+                            # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
+                            user_buy_info = buy_users[qq]
+
+                user_buy_info_list[idx] = user_buy_info
+
+            if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 default_user_buy_info.expire_at = "2120-01-01 00:00:00"
                 return default_user_buy_info
 
-            user_buy_info = default_user_buy_info
-            for account_cfg in cfg.account_configs:
-                qq = uin2qq(account_cfg.account_info.uin)
-                if qq in buy_users:
-                    if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
-                        # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
-                        user_buy_info = buy_users[qq]
+            merged_user_buy_info = copy.deepcopy(default_user_buy_info)
+            for user_buy_info in user_buy_info_list:
+                if user_buy_info.total_buy_month == 0:
+                    continue
 
-            return user_buy_info
+                if merged_user_buy_info.total_buy_month == 0:
+                    merged_user_buy_info = copy.deepcopy(user_buy_info)
+                else:
+                    merged_user_buy_info.merge(user_buy_info)
+
+            return merged_user_buy_info
         except Exception as e:
             logFunc = logger.debug
             if use_by_myself():
                 logFunc = logger.error
-            logFunc(f"第{idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
+            logFunc(f"第{try_idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
             time.sleep(retrtCfg.retry_wait_time)
 
     return default_user_buy_info
@@ -896,5 +946,28 @@ def _test_main():
     # check_update(cfg)
 
 
+def test_pay_info():
+    # 读取配置信息
+    load_config("config.toml")
+    cfg = config()
+
+    cfg.account_configs[0].account_info.uin = "o12"
+
+    logger.info("尝试获取DLC信息")
+    has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
+    logger.info("尝试获取按月付费信息")
+    user_buy_info = get_user_buy_info(cfg)
+
+    if has_buy_auto_update_dlc:
+        dlc_info = "当前某一个账号已购买自动更新DLC(若对自动更新送的两月有疑义，请看付费指引的常见问题章节)"
+    else:
+        dlc_info = "当前所有账号均未购买自动更新DLC"
+    monthly_pay_info = user_buy_info.description()
+
+    logger.info(dlc_info)
+    logger.info(monthly_pay_info)
+
+
 if __name__ == '__main__':
-    _test_main()
+    # _test_main()
+    test_pay_info()

@@ -15,6 +15,7 @@ start.bat
 .db/
 
 config.toml.local
+config.toml.github_action
 upload_cookie.json
 
 道聚城助手.exe
@@ -36,3 +37,4 @@ ark_lottery_special_version_customized.py
 
 pay_by_month.py
 add_new_buy_auto_updater_user.py
+card_secrets/

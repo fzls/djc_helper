@@ -37,6 +37,10 @@ class Uploader:
     # 保存用户的付费信息
     user_monthly_pay_info_filename = "user_monthly_pay_info.txt"
 
+    # 卡密操作的付费信息
+    cs_buy_auto_updater_users_filename = "cs_buy_auto_updater_users.txt"
+    cs_user_monthly_pay_info_filename = "cs_user_monthly_pay_info.txt"
+
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
@@ -155,7 +159,7 @@ class Uploader:
             if file.name == name:
                 return file
 
-        raise FileNotFoundError("latest patches not found")
+        raise FileNotFoundError(f"file={name} not found in folder={folder.name}")
 
     def download_file(self, fileinfo, download_dir, overwrite=True, show_log=True) -> str:
         """

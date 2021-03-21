@@ -10,7 +10,7 @@ from black_list import check_in_black_list
 from dao import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from qq_login import QQLogin, LoginResult
+from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
@@ -136,6 +136,10 @@ class DjcHelper:
 
         # 仅在window系统下检查
         if platform.system() != "Windows":
+            return
+
+        # 如果在github action环境下，则不弹窗
+        if is_run_in_github_action():
             return
 
         # 若不存在该文件，则说明是首次运行，提示相关信息
@@ -415,7 +419,7 @@ class DjcHelper:
                 msg = f"账号{user_buy_info.qq}的付费内容已到期，到期时间点为{user_buy_info.expire_at}。"
             else:
                 msg = f"账号{user_buy_info.qq}未购买付费内容。"
-            msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可扫描目录中的付款码付费激活。目前定价为5元每月，购买后QQ私聊我付款截图、使用QQ即可。"
+            msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可查看目录中的【付费指引.docx】，目前定价为5元每月。"
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
@@ -866,10 +870,6 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        if len(self.cfg.xinyue_operations) == 0:
-            logger.warning("未设置心悦相关操作信息，将跳过")
-            return
-
         # 查询道具信息
         old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
         logger.info(f"查询到的心悦道具信息为：{old_itemInfo}")
@@ -880,33 +880,84 @@ class DjcHelper:
         # 查询白名单
         is_white_list = self.query_xinyue_whitelist("6.2 查询心悦白名单")
 
+        default_xinyue_operations = []
+
         # 尝试根据心悦级别领取对应周期礼包
         if old_info.xytype < 5:
             # 513581	Y600周礼包_特邀会员
             # 673270	月礼包_特邀会员_20200610后使用
-            week_month_gifts = [("513581", "Y600周礼包_特邀会员"), ("673270", "月礼包_特邀会员_20200610后使用")]
+            default_xinyue_operations.extend([("513581", "Y600周礼包_特邀会员"), ("673270", "月礼包_特邀会员_20200610后使用")])
         else:
             if is_white_list:
                 # 673262	周礼包_白名单用户
                 # 673264	月礼包_白名单用户
-                week_month_gifts = [("673262", "周礼包_白名单用户"), ("673264", "月礼包_白名单用户")]
+                default_xinyue_operations.extend([("673262", "周礼包_白名单用户"), ("673264", "月礼包_白名单用户")])
             else:
                 # 513573	Y600周礼包
                 # 673269	月礼包_20200610后使用
-                week_month_gifts = [("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")]
+                default_xinyue_operations.extend([("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")])
 
         # 513585	累计宝箱
-        week_month_gifts.append(("513585", "累计宝箱"))
+        default_xinyue_operations.append(("513585", "累计宝箱"))
+
+        # 默认附加上心悦每日任务，避免后面使用配置工具添加新账号时会漏掉这些
+        # 顺序与配置文件中的顺序一致，这里不再赘述
+        default_xinyue_operations.extend([
+            # 领取积分卡
+            ("512408", "每月赠送双倍积分卡（仅心悦会员）"),
+
+            # 双倍（仅尝试最高级别的，不然比较浪费）
+            ("512432", "充值DNF3000点券_双倍（成就点=6）"),
+            ("512435", "游戏内消耗疲劳值120_双倍（成就点=6）"),
+            ("512437", "游戏内在线时长40_双倍（成就点=6）"),
+            ("512441", "游戏内PK3次_双倍（成就点=6）"),
+
+            # 普通
+            ("512396", "充值DNF3000点券（成就点=3）"),
+            ("512398", "游戏内在线时长40（成就点=3）"),
+            ("512400", "游戏内消耗疲劳值120（成就点=3）"),
+            ("512402", "游戏内PK3次（成就点=3）"),
+
+            # 免做（仅尝试最高级别的，不然比较浪费）
+            ("512490", "领取每周免做卡"),
+            ("512415", "充值DNF3000点券_免做（成就点=3）"),
+            ("512418", "游戏内消耗疲劳值120_免做（成就点=3）"),
+            ("512421", "游戏内在线时长40_免做（成就点=3）"),
+            ("512424", "游戏内PK3次_免做（成就点=3）"),
+
+            # 如果还没做完三个，尝试一些普通任务，但是免做任务和双倍不尝试非3点的，避免浪费
+            ("512395", "充值DNF2000点券（成就点=2）"),
+            ("512397", "游戏内在线时长30（成就点=2）"),
+            ("512399", "游戏内消耗疲劳值50（成就点=2）"),
+            ("512401", "游戏内PK2次（成就点=2）"),
+            ("512393", "邮箱无未读邮件（成就点=2）"),
+            ("578321", "精英赛投票（成就点=未知）"),
+            ("512388", "充值DNF1000点券（成就点=1）"),
+            ("512389", "游戏内在线时长15（成就点=1）"),
+            ("512390", "游戏内消耗疲劳值10（成就点=1）"),
+            ("512391", "游戏内PK1次（成就点=1）"),
+        ])
 
         xinyue_operations = []
-        for gift in week_month_gifts:
+        op_set = set()
+
+        def try_add_op(op: XinYueOperationConfig):
+            op_key = f"{op.iFlowId} {op.sFlowName}"
+            if op_key in op_set:
+                return
+
+            xinyue_operations.append(op)
+            op_set.add(op_key)
+
+        for gift in default_xinyue_operations:
             op = XinYueOperationConfig()
             op.iFlowId, op.sFlowName = gift
             op.count = 1
-            xinyue_operations.append(op)
+            try_add_op(op)
 
-        # 加上其他的配置
-        xinyue_operations.extend(self.cfg.xinyue_operations)
+        # 与配置文件中配置的去重后叠加
+        for op in self.cfg.xinyue_operations:
+            try_add_op(op)
 
         # 进行相应的心悦操作
         for op in xinyue_operations:
@@ -1345,12 +1396,20 @@ class DjcHelper:
             logger.warning("pskey需要更新，将尝试重新登录QQ空间获取并保存到本地")
             # 重新获取
             ql = QQLogin(self.common_cfg)
-            if self.cfg.login_mode == "qr_login":
-                # 扫码登录
-                lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
-            else:
-                # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
+            try:
+                if self.cfg.login_mode == "qr_login":
+                    # 扫码登录
+                    lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
+                else:
+                    # 自动登录
+                    lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
+            except GithubActionLoginException as e:
+                logger.error("在github action环境下qq空间登录失败了，很大可能是因为该网络环境与日常环境不一致导致的（qq空间检查的很严），只能将qq空间相关配置禁用咯")
+                self.cfg.function_switches.get_ark_lottery = False
+                self.cfg.function_switches.get_dnf_warriors_call = False
+                self.cfg.function_switches.get_vip_mentor = False
+                return
+
             # 保存
             self.save_uin_pskey(lr.uin, lr.p_skey, lr.skey, lr.vuserid)
         else:
@@ -4571,7 +4630,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RunAll = True
+    RunAll = False
     indexes = [1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]

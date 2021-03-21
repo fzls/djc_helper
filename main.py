@@ -83,6 +83,12 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
+    account_names = []
+    for account_cfg in cfg.account_configs:
+        account_names.append(account_cfg.name)
+
+    logger.info(f"当前共配置{len(account_names)}个账号，具体如下：{account_names}")
+
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
 
@@ -133,6 +139,10 @@ if __name__ == '__main__':
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+        # 如果在github action，则继续抛出异常
+        if is_run_in_github_action():
+            raise e
     finally:
         # 暂停一下，方便看结果
-        os.system("PAUSE")
+        if not is_run_in_github_action():
+            os.system("PAUSE")

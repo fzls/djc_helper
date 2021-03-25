@@ -288,6 +288,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
+        # 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
+        self.use_xinyue_operations_in_config_only = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

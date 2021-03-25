@@ -426,6 +426,7 @@ class DjcHelper:
                 "dnf助手编年史活动",
                 "管家蚊子腿",
                 "DNF马杰洛的规划",
+                "DNF落地页活动",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -445,6 +446,9 @@ class DjcHelper:
 
         # DNF马杰洛的规划
         self.majieluo()
+
+        # DNF落地页活动
+        self.dnf_luodiye()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -507,10 +511,6 @@ class DjcHelper:
 
         # DNF新春福利集合站
         self.spring_collection()
-
-        # 暂时屏蔽
-        # # DNF0121新春落地页活动
-        # self.dnf_0121()
 
         # dnf助手活动
         self.dnf_helper()
@@ -1364,7 +1364,7 @@ class DjcHelper:
         card_info_map = parse_card_group_info_map(self.zzconfig)
         self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
-    def fetch_pskey(self):
+    def fetch_pskey(self, force=False):
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
@@ -1374,7 +1374,7 @@ class DjcHelper:
         ]:
             if activity_enabled:
                 any_enabled = True
-        if not any_enabled:
+        if not force and not any_enabled:
             logger.warning("未启用领取QQ空间相关的功能，将跳过尝试更新QQ空间的p_skey的流程")
             return
 
@@ -3979,51 +3979,37 @@ class DjcHelper:
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210104cjhdh5/",
                                    **extra_params)
 
-    # --------------------------------------------DNF0121新春落地页活动--------------------------------------------
+    # --------------------------------------------DNF落地页活动--------------------------------------------
     @try_except()
-    def dnf_0121(self):
-        # https://dnf.qq.com/cp/a20210121index/
-        show_head_line("DNF0121新春落地页活动")
-        self.show_amesvr_act_info(self.dnf_0121_op)
+    def dnf_luodiye(self):
+        # https://dnf.qq.com/cp/a20210325index/
+        show_head_line("DNF落地页活动")
+        self.show_amesvr_act_info(self.dnf_luodiye_op)
 
-        if not self.cfg.function_switches.get_dnf_0121 or self.disable_most_activities():
-            logger.warning("未启用领取DNF0121新春落地页活动功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_luodiye or self.disable_most_activities():
+            logger.warning("未启用领取DNF落地页活动功能，将跳过")
             return
 
-        self.check_dnf_0121()
+        res = self.dnf_luodiye_op("领取分享奖励", "746279")
+        if res["ret"] == "700" and res["flowRet"]["sMsg"] == "请先将活动页面分享给好友~":
+            self.dnf_luodiye_op("发送分享消息给自己", "746282", receiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
 
-        def query_info():
-            res = self.dnf_0121_op("查询用户信息", "733258", print_res=False)
-            common_info = parse_amesvr_common_info(res)
+            self.dnf_luodiye_op("分享后再尝试领取分享奖励", "746279")
 
-            info = Dnf0121Info()
-            info.sItemIds = common_info.sOutValue1.split(",")
-            info.lottery_times = int(common_info.sOutValue2)
-            info.hasTakeShare = common_info.sOutValue3 == "1"
-            info.hasTakeBind = common_info.sOutValue4 == "1"
-            info.hasTakeLogin = common_info.sOutValue5 == "1"
+    def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_luodiye
 
-            return info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        checkInfo = self.get_dnf_roleinfo()
 
-        info = query_info()
-        if not info.hasTakeShare:
-            self.dnf_0121_op("领取分享资格", "732634")
-        if not info.hasTakeBind:
-            self.dnf_0121_op("绑定大区领取资格", "732636")
-        if not info.hasTakeLogin:
-            self.dnf_0121_op("登录游戏领取资格", "732637")
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
 
-        for i in range(info.lottery_times):
-            self.dnf_0121_op(f"第{i + 1}次抽奖", "732593")
-
-    def check_dnf_0121(self):
-        self.check_bind_account("DNF0121新春落地页活动", "https://dnf.qq.com/cp/a20210121index/",
-                                activity_op_func=self.dnf_0121_op, query_bind_flowid="732631", commit_bind_flowid="732630")
-
-    def dnf_0121_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_0121
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210121index/",
-                                   **extra_params)
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210325index/",
+                                   sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
+                                   **extra_params,
+                                   extra_cookies=f"p_skey={p_skey}")
 
     # --------------------------------------------WeGame春节活动--------------------------------------------
     @try_except()
@@ -4127,15 +4113,7 @@ class DjcHelper:
             if len(self.cfg.spring_fudai_receiver_qq_list) == 0:
                 return
 
-            logger.warning(color("bold_yellow") + "开启了赠送福袋功能，因此需要登录活动页面来获取p_skey，请稍候~")
-            ql = QQLogin(self.common_cfg)
-            if self.cfg.login_mode == "qr_login":
-                # 扫码登录
-                lr = ql.qr_login(login_mode=ql.login_mode_normal, name=self.cfg.name)
-            else:
-                # 自动登录
-                lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
-            spring_fudai_pskey = lr.p_skey
+            spring_fudai_pskey = self.fetch_share_p_skey("赠送福袋")
 
             send_count = 0
             for sendQQ in self.cfg.spring_fudai_receiver_qq_list:
@@ -4590,6 +4568,19 @@ class DjcHelper:
         res = self.get("查询角色信息", self.urls.get_game_role_list, game="dnf", area=roleinfo.serviceID, sAMSTargetAppId="", platid="", partition="", print_res=False, is_jsonp=True, need_unquote=False)
         return AmesvrQueryRole().auto_update_config(res)
 
+    def fetch_share_p_skey(self, ctx) -> str:
+        logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录活动页面来获取p_skey，请稍候~")
+
+        ql = QQLogin(self.common_cfg)
+        if self.cfg.login_mode == "qr_login":
+            # 扫码登录
+            lr = ql.qr_login(login_mode=ql.login_mode_normal, name=self.cfg.name)
+        else:
+            # 自动登录
+            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
+
+        return lr.p_skey
+
 
 def watch_live():
     # 读取配置信息
@@ -4700,7 +4691,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs_signin()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
-        # djcHelper.dnf_0121()
         # djcHelper.wegame_spring()
         # djcHelper.dnf_welfare()
         # djcHelper.spring_fudai()
@@ -4713,4 +4703,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
         # djcHelper.guanjia()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
+        djcHelper.dnf_luodiye()

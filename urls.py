@@ -112,7 +112,7 @@ class Urls:
         self.iActivityId_youfei = "350668"  # qq视频-看江湖有翡
         self.iActivityId_dnf_bbs = "351488"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_spring = "353340"  # DNF新春夺宝大作战
-        self.iActivityId_dnf_0121 = "354854"  # DNF0121新春落地页活动需求
+        self.iActivityId_dnf_luodiye = "363886"  # DNF落地页活动需求
         self.iActivityId_wegame_spring = "357647"  # WeGame春节活动 新春献豪礼 首次盲盒限时领
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_spring_collection = "357834"  # DNF新春福利集合站

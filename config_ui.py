@@ -1168,6 +1168,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
         form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
 
+        self.checkbox_get_dnf_luodiye = create_checkbox(cfg.get_dnf_luodiye)
+        form_layout.addRow("DNF落地页", self.checkbox_get_dnf_luodiye)
+
         # self.checkbox_get_wegame_spring = create_checkbox(cfg.get_wegame_spring)
         # form_layout.addRow("新春献豪礼 首次盲盒限时领", self.checkbox_get_wegame_spring)
 
@@ -1208,6 +1211,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
         cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
+        cfg.get_dnf_luodiye = self.checkbox_get_dnf_luodiye.isChecked()
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
         # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
 

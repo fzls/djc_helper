@@ -408,9 +408,6 @@ class DjcHelper:
         # 会员关怀
         self.vip_mentor()
 
-        # DNF福利中心兑换
-        self.dnf_welfare()
-
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
             self.paied_activities()
@@ -427,6 +424,7 @@ class DjcHelper:
                 "管家蚊子腿",
                 "DNF马杰洛的规划",
                 "DNF落地页活动",
+                "DNF福利中心兑换",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -449,6 +447,9 @@ class DjcHelper:
 
         # DNF落地页活动
         self.dnf_luodiye()
+
+        # DNF福利中心兑换
+        self.dnf_welfare()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -2670,14 +2671,16 @@ class DjcHelper:
 
         self.check_dnf_welfare()
 
-        key_shareCodes = "shareCodes"
+        # note: 这里面的奖励都需要先登陆过游戏才可以领取
+
+        # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
+        key_shareCodes = "shareCodes_v2"
+        key_dnf_welfare_exchange_package = "dnf_welfare_exchange_package_v2"
 
         def exchange_package(sContent):
-            key = "dnf_welfare_exchange_package"
-
             # 检查是否已经兑换过
             account_db = load_db_for(self.cfg.name)
-            if key in account_db and account_db[key].get(sContent, False):
+            if key_dnf_welfare_exchange_package in account_db and account_db[key_dnf_welfare_exchange_package].get(sContent, False):
                 logger.warning(f"已经兑换过【{sContent}】，不再尝试兑换")
                 return
 
@@ -2692,10 +2695,10 @@ class DjcHelper:
 
             # 本地标记已经兑换过
             def callback(account_db):
-                if key not in account_db:
-                    account_db[key] = {}
+                if key_dnf_welfare_exchange_package not in account_db:
+                    account_db[key_dnf_welfare_exchange_package] = {}
 
-                account_db[key][sContent] = True
+                account_db[key_dnf_welfare_exchange_package][sContent] = True
 
             update_db_for(self.cfg.name, callback)
 
@@ -2715,20 +2718,20 @@ class DjcHelper:
             except Exception as e:
                 pass
 
+        @try_except(return_val_on_except="19")
+        def query_siActivityId():
+            res = self.dnf_welfare_op(f"查询我的分享码状态", "649261", print_res=False)
+            return res["modRet"]["jData"]["siActivityId"]
+
+        # 正式逻辑
+
         db = load_db()
         shareCodeList = db.get(key_shareCodes, [])
 
         sContents = [
-            "dnf2021",
-            "寒冬雪人加持三觉助力新春",
-            "来COLG百万勇士在线交友",
-            "YZZ2021",
-            "dnf121",
-            "客服新春版本献礼",
-            "客服恭祝春节快乐",
-            "小酱油新春版本献礼",
-            "官方论坛献豪礼",
-            "神话尽从柱中来",
+            "dnf123",
+            "dnf666",
+            "dnf888",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -2736,12 +2739,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("第一个 2020.01.21 - 2020.01.24 登录游戏", "732812")
-        self.dnf_welfare_login_gifts_op("第二个 2020.01.25 - 2020.01.28 登录游戏", "732821")
-        self.dnf_welfare_login_gifts_op("第三个 2020.01.29 - 2021.02.07 登录游戏", "732822")
+        self.dnf_welfare_login_gifts_op("第一个 2020.03.25 - 2020.03.27 登录游戏", "749509")
+        self.dnf_welfare_login_gifts_op("第二个 2020.03.28 - 2020.03.31 登录游戏", "749514")
+        self.dnf_welfare_login_gifts_op("第三个 2020.04.01 - 2021.04.07 登录游戏", "749515")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "732820", siActivityId="19")
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "749518", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -4622,7 +4625,7 @@ if __name__ == '__main__':
     cfg = config()
 
     RunAll = False
-    indexes = [1]
+    indexes = [4]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -4692,7 +4695,6 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
         # djcHelper.wegame_spring()
-        # djcHelper.dnf_welfare()
         # djcHelper.spring_fudai()
         # djcHelper.spring_collection()
         # djcHelper.firecrackers()
@@ -4704,4 +4706,5 @@ if __name__ == '__main__':
         # djcHelper.xinyue_cat()
         # djcHelper.guanjia()
         # djcHelper.majieluo()
-        djcHelper.dnf_luodiye()
+        # djcHelper.dnf_luodiye()
+        djcHelper.dnf_welfare()

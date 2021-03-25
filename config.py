@@ -233,8 +233,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_spring = True
         # 是否领取 DNF落地页 活动
         self.get_dnf_luodiye = True
-        # 是否领取 新春献豪礼 首次盲盒限时领 活动
-        self.get_wegame_spring = True
+        # 是否领取 WeGame 活动
+        self.get_dnf_wegame = True
         # 是否领取 新春福袋大作战 活动
         self.get_spring_fudai = True
         # 是否领取 DNF福签大作战 活动

@@ -115,7 +115,7 @@ class Urls:
         self.iActivityId_dnf_luodiye = "363886"  # DNF落地页活动需求
         self.iActivityId_wegame_spring = "357647"  # WeGame春节活动 新春献豪礼 首次盲盒限时领
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
-        self.iActivityId_dnf_collection = "362403"  # DNF活动集合站
+        self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_heiya = "365524" # 黑鸦竞速
 

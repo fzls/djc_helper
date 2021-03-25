@@ -1174,8 +1174,8 @@ class FunctionSwitchesConfigUi(QWidget):
         # self.checkbox_get_wegame_spring = create_checkbox(cfg.get_wegame_spring)
         # form_layout.addRow("新春献豪礼 首次盲盒限时领", self.checkbox_get_wegame_spring)
 
-        self.checkbox_get_dnf_collection = create_checkbox(cfg.get_dnf_collection)
-        form_layout.addRow("DNF活动集合站", self.checkbox_get_dnf_collection)
+        self.checkbox_get_dnf_fuqian = create_checkbox(cfg.get_dnf_fuqian)
+        form_layout.addRow("DNF福签大作战", self.checkbox_get_dnf_fuqian)
 
         self.checkbox_get_dnf_heiya = create_checkbox(cfg.get_dnf_heiya)
         form_layout.addRow("DNF黑鸦竞速", self.checkbox_get_dnf_heiya)
@@ -1216,7 +1216,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
         cfg.get_dnf_luodiye = self.checkbox_get_dnf_luodiye.isChecked()
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
-        cfg.get_dnf_collection = self.checkbox_get_dnf_collection.isChecked()
+        cfg.get_dnf_fuqian = self.checkbox_get_dnf_fuqian.isChecked()
         cfg.get_dnf_heiya = self.checkbox_get_dnf_heiya.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()

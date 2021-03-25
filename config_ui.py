@@ -1180,8 +1180,8 @@ class FunctionSwitchesConfigUi(QWidget):
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
-        # self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
-        # form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
+        self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
+        form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
 
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
@@ -1215,7 +1215,7 @@ class FunctionSwitchesConfigUi(QWidget):
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
         # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
 
-        # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
+        cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()

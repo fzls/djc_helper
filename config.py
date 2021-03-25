@@ -239,8 +239,10 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_spring_fudai = True
         # 是否领取 DNF活动集合站 活动
         self.get_dnf_collection = True
-        # 燃放爆竹活动
+        # 是否领取 燃放爆竹 活动
         self.get_firecrackers = True
+        # 是否领取 DNF黑鸦竞速 活动
+        self.get_dnf_heiya = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -649,12 +651,14 @@ def gen_config_for_github_action():
     save_config(cfg, save_filename)
     logger.info(f"已经保存到 {save_filename}")
 
-def show_config_size(cfg:Config, ctx):
+
+def show_config_size(cfg: Config, ctx):
     data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
     toml_str = toml.dumps(data_to_save)
     total_size = len(toml_str)
     total_lines = toml_str.count('\n')
     logger.info(f"{ctx} 生成配置文件大小为{total_size}，总行数为{total_lines}")
+
 
 def remove_unnecessary_configs(cfg, default_cfg):
     attrs_to_remove = []

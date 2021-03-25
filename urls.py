@@ -117,6 +117,7 @@ class Urls:
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_collection = "362403"  # DNF活动集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
+        self.iActivityId_dnf_heiya = "365524" # 黑鸦竞速
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

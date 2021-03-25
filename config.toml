@@ -210,8 +210,10 @@ get_wegame_spring = true
 get_spring_fudai = true
 # 是否领取 DNF活动集合站 活动
 get_dnf_collection = true
-# 燃放爆竹活动
+# 是否领取 燃放爆竹 活动
 get_firecrackers = true
+# 是否领取 DNF黑鸦竞速 活动
+get_dnf_heiya = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

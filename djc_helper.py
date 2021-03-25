@@ -426,7 +426,7 @@ class DjcHelper:
                 "DNF落地页活动",
                 "DNF福利中心兑换",
                 "QQ空间集卡",
-                "DNF活动集合站",
+                "DNF福签大作战",
                 "DNF黑鸦竞速",
             ]
             if len(paied_activities) != 0:
@@ -457,8 +457,8 @@ class DjcHelper:
         # QQ空间集卡
         self.ark_lottery()
 
-        # DNF活动集合站
-        self.dnf_collection()
+        # DNF福签大作战
+        self.dnf_fuqian()
 
         # DNF黑鸦竞速
         self.dnf_heiya()
@@ -4289,21 +4289,21 @@ class DjcHelper:
                                    **extra_params,
                                    extra_cookies=f"p_skey={p_skey}")
 
-    # --------------------------------------------DNF活动集合站--------------------------------------------
+    # --------------------------------------------DNF福签大作战--------------------------------------------
     @try_except()
-    def dnf_collection(self):
+    def dnf_fuqian(self):
         # https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html
-        show_head_line("DNF活动集合站")
-        self.show_amesvr_act_info(self.dnf_collection_op)
+        show_head_line("DNF福签大作战")
+        self.show_amesvr_act_info(self.dnf_fuqian_op)
 
-        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
-            logger.warning("未启用领取DNF活动集合站功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_fuqian or self.disable_most_activities():
+            logger.warning("未启用领取DNF福签大作战功能，将跳过")
             return
 
-        self.check_dnf_collection()
+        self.check_dnf_fuqian()
 
         def query_info():
-            res = self.dnf_collection_op("查询资格", "742112", print_res=False)
+            res = self.dnf_fuqian_op("查询资格", "742112", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
             info = DnfCollectionInfo()
@@ -4315,60 +4315,60 @@ class DjcHelper:
             return info
 
         def take_invite_awards():
-            res = self.dnf_collection_op("查询邀请成功的列表", "744443", sendPage="1", print_res=False)
+            res = self.dnf_fuqian_op("查询邀请成功的列表", "744443", sendPage="1", print_res=False)
             data = res["modRet"]["jData"]
             if data["iTotal"] > 0:
                 for invite_info in data["jData"]:
                     if invite_info["iGet"] == "0":
                         uin = invite_info["iUin2"]
                         iId = invite_info["iId"]
-                        self.dnf_collection_op(f"领取积分奖励-{uin}", "743861", iId=iId)
+                        self.dnf_fuqian_op(f"领取积分奖励-{uin}", "743861", iId=iId)
 
         # 正式逻辑如下
 
         info = query_info()
         if not info.has_init:
-            self.dnf_collection_op("初次赠送一个福签积分", "742513")
-        self.dnf_collection_op("随机抽一个福签", "742491")
+            self.dnf_fuqian_op("初次赠送一个福签积分", "742513")
+        self.dnf_fuqian_op("随机抽一个福签", "742491")
 
-        self.dnf_collection_op("幸运玩家礼包领取", "742315")
+        self.dnf_fuqian_op("幸运玩家礼包领取", "742315")
 
-        self.dnf_collection_op("接受福签赠送", "742846",
+        self.dnf_fuqian_op("接受福签赠送", "742846",
                                sCode="f8526c5f3dddf7c5c45b895b7c2eb35858e1576e312b70a2cbf17214e19a2ec0",
                                sNickName=quote_plus(quote_plus(quote_plus("小号"))))
 
         if len(self.cfg.spring_fudai_receiver_qq_list) != 0:
             share_pskey = self.fetch_share_p_skey("福签赠送")
             for qq in self.cfg.spring_fudai_receiver_qq_list:
-                self.dnf_collection_op(f"福签赠送-{qq}", "742115", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
+                self.dnf_fuqian_op(f"福签赠送-{qq}", "742115", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
         else:
             logger.warning(color("bold_yellow") + f"未配置新春福袋大作战邀请列表, 将跳过赠送福签")
 
         take_invite_awards()
 
-        self.dnf_collection_op("福签累计奖励1", "742728")
-        self.dnf_collection_op("福签累计奖励2", "742732")
-        self.dnf_collection_op("福签累计奖励3", "742733")
-        self.dnf_collection_op("福签累计奖励4", "742734")
-        self.dnf_collection_op("福签累计奖励5", "742735")
-        self.dnf_collection_op("福签累计奖励6", "742736")
-        self.dnf_collection_op("福签累计奖励7", "742737")
-        self.dnf_collection_op("福签累计奖励20", "742738")
+        self.dnf_fuqian_op("福签累计奖励1", "742728")
+        self.dnf_fuqian_op("福签累计奖励2", "742732")
+        self.dnf_fuqian_op("福签累计奖励3", "742733")
+        self.dnf_fuqian_op("福签累计奖励4", "742734")
+        self.dnf_fuqian_op("福签累计奖励5", "742735")
+        self.dnf_fuqian_op("福签累计奖励6", "742736")
+        self.dnf_fuqian_op("福签累计奖励7", "742737")
+        self.dnf_fuqian_op("福签累计奖励20", "742738")
 
         info = query_info()
         logger.info(color("bold_cyan") + f"当前共有{info.scoreCount}个积分")
         for idx in range(info.scoreCount):
-            self.dnf_collection_op(f"第{idx + 1}次积分夺宝并等待5秒", "742740")
+            self.dnf_fuqian_op(f"第{idx + 1}次积分夺宝并等待5秒", "742740")
             time.sleep(5)
 
-        self.dnf_collection_op("分享奖励", "742742")
+        self.dnf_fuqian_op("分享奖励", "742742")
 
-    def check_dnf_collection(self):
-        self.check_bind_account("DNF活动集合站", "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
-                                activity_op_func=self.dnf_collection_op, query_bind_flowid="742110", commit_bind_flowid="742109")
+    def check_dnf_fuqian(self):
+        self.check_bind_account("DNF福签大作战", "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
+                                activity_op_func=self.dnf_fuqian_op, query_bind_flowid="742110", commit_bind_flowid="742109")
 
-    def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_collection
+    def dnf_fuqian_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_fuqian
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210325sjlbv3pc/",
                                    **extra_params)
 
@@ -4843,5 +4843,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_welfare()
         # djcHelper.ark_lottery()
-        # djcHelper.dnf_collection()
+        # djcHelper.dnf_fuqian()
         djcHelper.dnf_heiya()

@@ -421,7 +421,6 @@ class DjcHelper:
             # note: 更新新的活动时记得更新这个列表
             paied_activities = [
                 "dnf助手编年史活动",
-                "管家蚊子腿",
                 "DNF马杰洛的规划",
                 "DNF落地页活动",
                 "DNF福利中心兑换",
@@ -443,9 +442,6 @@ class DjcHelper:
 
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
-
-        # 管家蚊子腿
-        self.guanjia()
 
         # DNF马杰洛的规划
         self.majieluo()
@@ -529,6 +525,9 @@ class DjcHelper:
 
         # qq视频活动
         self.qq_video()
+
+        # 管家蚊子腿
+        self.guanjia()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()

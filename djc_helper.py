@@ -425,6 +425,7 @@ class DjcHelper:
                 "DNF马杰洛的规划",
                 "DNF落地页活动",
                 "DNF福利中心兑换",
+                "QQ空间集卡",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -450,6 +451,9 @@ class DjcHelper:
 
         # DNF福利中心兑换
         self.dnf_welfare()
+
+        # QQ空间集卡
+        self.ark_lottery()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -506,9 +510,6 @@ class DjcHelper:
 
         # qq视频-看江湖有翡
         self.youfei()
-
-        # QQ空间集卡
-        self.ark_lottery()
 
         # DNF新春福利集合站
         self.spring_collection()
@@ -1331,7 +1332,7 @@ class DjcHelper:
         #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
         #   2.3 在djc_helper.py中将fetch_pskey的p_skey的判断条件注释
 
-        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=6&verifyid=qqvipdnf11
+        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=7&verifyid=qq2021dnf12
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
         self.show_not_ams_act_info("集卡")
 
@@ -1369,7 +1370,7 @@ class DjcHelper:
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
-            # self.cfg.function_switches.get_ark_lottery,
+            self.cfg.function_switches.get_ark_lottery,
             # self.cfg.function_switches.get_dnf_warriors_call and not self.disable_most_activities(),
             self.cfg.function_switches.get_vip_mentor and not self.disable_most_activities(),
         ]:
@@ -4625,7 +4626,7 @@ if __name__ == '__main__':
     cfg = config()
 
     RunAll = False
-    indexes = [4]
+    indexes = [1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -4692,7 +4693,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_1224()
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
-        # djcHelper.ark_lottery()
         # djcHelper.dnf_spring()
         # djcHelper.wegame_spring()
         # djcHelper.spring_fudai()
@@ -4707,4 +4707,5 @@ if __name__ == '__main__':
         # djcHelper.guanjia()
         # djcHelper.majieluo()
         # djcHelper.dnf_luodiye()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.ark_lottery()

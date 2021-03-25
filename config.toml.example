@@ -772,6 +772,8 @@ show_color = ""
 4166 = false
 # 2021.1.15 超萌雪人送祝福
 4261 = false
+# 2021.1.15 集卡赢战灵天舞套!
+4437 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

@@ -429,6 +429,7 @@ class DjcHelper:
                 "DNF福签大作战",
                 "DNF黑鸦竞速",
                 "DNF集合站",
+                "WeGame活动",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -466,6 +467,9 @@ class DjcHelper:
 
         # DNF集合站
         self.dnf_collection()
+
+        # WeGame活动
+        self.dnf_wegame()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -516,9 +520,6 @@ class DjcHelper:
 
         # 燃放爆竹活动
         self.firecrackers()
-
-        # WeGame春节活动
-        self.wegame_spring()
 
         # qq视频-看江湖有翡
         self.youfei()
@@ -4106,21 +4107,21 @@ class DjcHelper:
                                    **extra_params,
                                    extra_cookies=f"p_skey={p_skey}")
 
-    # --------------------------------------------WeGame春节活动--------------------------------------------
+    # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
-    def wegame_spring(self):
-        # https://dnf.qq.com/lbact/a20210121wegamepc/index.html
-        show_head_line("WeGame春节活动")
-        self.show_amesvr_act_info(self.wegame_spring_op)
+    def dnf_wegame(self):
+        # https://dnf.qq.com/lbact/a20210325lbpzwegame/index.html
+        show_head_line("WeGame活动")
+        self.show_amesvr_act_info(self.dnf_wegame_op)
 
-        if not self.cfg.function_switches.get_wegame_spring or self.disable_most_activities():
-            logger.warning("未启用领取WeGame春节活动功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_wegame or self.disable_most_activities():
+            logger.warning("未启用领取WeGame活动功能，将跳过")
             return
 
-        self.check_wegame_spring()
+        self.check_dnf_wegame()
 
         def query_signin_days():
-            res = self.wegame_spring_op("查询签到天数", "736307", print_res=False)
+            res = self.dnf_wegame_op("查询签到天数-condOutput", "750498", print_res=False)
             info = parse_amesvr_common_info(res)
             # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
             parts = info.sOutValue1.split('|')[0].split(':')
@@ -4128,7 +4129,7 @@ class DjcHelper:
             return days
 
         def query_lottery_times():
-            res = self.wegame_spring_op("查询抽奖次数", "736306", print_res=False)
+            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "750497", print_res=False)
             info = parse_amesvr_common_info(res)
             # "sOutValue1": "239:16:4|240:8:1",
             parts = info.sOutValue1.split('|')[0].split(':')
@@ -4136,29 +4137,35 @@ class DjcHelper:
             return total, remaining
 
         # 阿拉德盲盒限时抽
-        self.wegame_spring_op("新春盲盒抽奖-4礼包抽奖", "736265")
-
-        # 勇士齐聚阿拉德
-        self.wegame_spring_op("签到", "736263")
-        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
-        self.wegame_spring_op("签到3天礼包", "736266")
-        self.wegame_spring_op("签到7天礼包", "736268")
-        self.wegame_spring_op("签到15天礼包", "736270")
-
-        self.wegame_spring_op("1.在WeGame启动DNF", "736271")
-        self.wegame_spring_op("2.游戏在线30分钟", "736272")
+        self.dnf_wegame_op("黑鸦之境通关获得盲盒", "750487")
+        self.dnf_wegame_op("页面签到获得盲盒", "750488")
+        self.dnf_wegame_op("在线30min获得盲盒", "750489")
         totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
-            self.wegame_spring_op(f"每日抽奖-第{i + 1}次", "736274")
+            self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "750476")
 
-    def check_wegame_spring(self):
-        self.check_bind_account("WeGame春节活动", "https://dnf.qq.com/lbact/a20210121wegamepc/index.html",
-                                activity_op_func=self.wegame_spring_op, query_bind_flowid="736260", commit_bind_flowid="736259")
+        # 升级
+        self.dnf_wegame_op("升级礼包-96级", "750482")
+        self.dnf_wegame_op("升级礼包-97级", "750483")
+        self.dnf_wegame_op("升级礼包-98级", "750484")
+        self.dnf_wegame_op("升级礼包-99级", "750485")
+        self.dnf_wegame_op("升级礼包-100级", "750486")
 
-    def wegame_spring_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_wegame_spring
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210121wegame/",
+        # 勇士齐聚阿拉德
+        self.dnf_wegame_op("在线30min签到礼包", "750658")
+        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
+        self.dnf_wegame_op("签到3天礼包", "750478")
+        self.dnf_wegame_op("签到7天礼包", "750479")
+        self.dnf_wegame_op("签到15天礼包", "750480")
+
+    def check_dnf_wegame(self):
+        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210325lbpzwegame/index.html",
+                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="750472", commit_bind_flowid="750471")
+
+    def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_wegame
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210325lbpzwegame/",
                                    **extra_params)
 
     # --------------------------------------------新春福袋大作战--------------------------------------------
@@ -4319,7 +4326,6 @@ class DjcHelper:
         self.dnf_collection_op("7日礼包", "749791")
         self.dnf_collection_op("15日礼包", "749792")
 
-
     def check_dnf_collection(self):
         self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210325flqbz/index.html",
                                 activity_op_func=self.dnf_collection_op, query_bind_flowid="749704", commit_bind_flowid="749703")
@@ -4374,8 +4380,8 @@ class DjcHelper:
         self.dnf_fuqian_op("幸运玩家礼包领取", "742315")
 
         self.dnf_fuqian_op("接受福签赠送", "742846",
-                               sCode="f8526c5f3dddf7c5c45b895b7c2eb35858e1576e312b70a2cbf17214e19a2ec0",
-                               sNickName=quote_plus(quote_plus(quote_plus("小号"))))
+                           sCode="f8526c5f3dddf7c5c45b895b7c2eb35858e1576e312b70a2cbf17214e19a2ec0",
+                           sNickName=quote_plus(quote_plus(quote_plus("小号"))))
 
         if len(self.cfg.spring_fudai_receiver_qq_list) != 0:
             share_pskey = self.fetch_share_p_skey("福签赠送")
@@ -4869,7 +4875,6 @@ if __name__ == '__main__':
         # djcHelper.youfei()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.dnf_spring()
-        # djcHelper.wegame_spring()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
@@ -4885,4 +4890,5 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
-        djcHelper.dnf_collection()
+        # djcHelper.dnf_collection()
+        djcHelper.dnf_wegame()

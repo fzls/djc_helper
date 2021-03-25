@@ -272,8 +272,8 @@ get_dnf_bbs_signin = true
 get_dnf_spring = true
 # 是否领取 DNF落地页 活动
 get_dnf_luodiye = true
-# 是否领取 新春献豪礼 首次盲盒限时领 活动
-get_wegame_spring = true
+# 是否领取 WeGame 活动
+get_dnf_wegame = true
 # 是否领取 新春福袋大作战 活动
 get_spring_fudai = true
 # 是否领取 DNF福签大作战 活动

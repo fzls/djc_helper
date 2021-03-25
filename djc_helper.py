@@ -427,6 +427,7 @@ class DjcHelper:
                 "DNF福利中心兑换",
                 "QQ空间集卡",
                 "DNF活动集合站",
+                "DNF黑鸦竞速",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -458,6 +459,9 @@ class DjcHelper:
 
         # DNF活动集合站
         self.dnf_collection()
+
+        # DNF黑鸦竞速
+        self.dnf_heiya()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -1662,6 +1666,88 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20201221sgb",
                                    weekDay=weekDay,
+                                   **extra_params)
+
+    # --------------------------------------------DNF黑鸦竞速--------------------------------------------
+    @try_except()
+    def dnf_heiya(self):
+        # http://xinyue.qq.com/act/a20201221sgbpc/index.html
+        show_head_line("DNF黑鸦竞速")
+        self.show_amesvr_act_info(self.dnf_heiya_op)
+
+        if not self.cfg.function_switches.get_dnf_heiya or self.disable_most_activities():
+            logger.warning("未启用领取DNF黑鸦竞速活动合集功能，将跳过")
+            return
+
+        self.check_dnf_heiya()
+
+        def query_info():
+            res = self.dnf_heiya_op("查询信息", "746293", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = DnfHeiyaInfo()
+            info.lottery_count = int(raw_info.sOutValue1)
+            info.box_score = int(raw_info.sOutValue2)
+
+            return info
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        checkInfo = self.get_dnf_roleinfo()
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
+        self.dnf_heiya_op("报名礼包", "746289",
+                          sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                          sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                          md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam, )
+
+        self.dnf_heiya_op("通关黑鸦之境赠送抽奖券", "746448")
+        info = query_info()
+        logger.info(f"当前有{info.lottery_count}张抽奖券")
+        for idx in range(info.lottery_count):
+            self.dnf_heiya_op(f"第{idx + 1}次抽奖", "746449")
+
+        self.dnf_heiya_op("每日登录游戏送开箱积分", "746451")
+        self.dnf_heiya_op("每日登录心悦APP送开箱积分", "746453")
+        self.dnf_heiya_op("每日网吧登录送开箱积分", "746458")
+        endTime = "20210430"
+        info = query_info()
+        logger.info(f"当前开箱积分为{info.box_score}")
+        # 不确定是否跟勇者征集令一样宝箱互斥，保底期间，最后一天再全领，在这之前则是先只尝试领取第五个
+        # 青铜宝箱 4-19分
+        # 白银宝箱 20-29分
+        # 黄金宝箱 30-44分
+        # 钻石宝箱 45-59分
+        # 泰拉宝箱 60分
+        if info.box_score >= 60:
+            self.dnf_heiya_op(f"开启宝箱-level=5", "746459", level=5)
+        if get_today() == endTime:
+            logger.info("已到活动最后一天，尝试从高到低领取每个宝箱")
+            for level in range(5, 0, -1):
+                self.dnf_heiya_op(f"开启宝箱-level={level}", "746459", level=level)
+
+        self.dnf_heiya_op("登录心悦APP送礼包", "746471")
+
+        # <option value="1">跨1</option>
+        # <option value="2">跨2</option>
+        # <option value="3">跨3A</option>
+        # <option value="4">跨3B</option>
+        # <option value="5">跨4</option>
+        # <option value="6">跨5</option>
+        # <option value="7">跨6</option>
+        # <option value="8">跨7A</option>
+        # <option value="9">跨7B</option>
+        # <option value="10">跨8</option>
+        # self.dnf_heiya_op("绑定对应跨区", "746474", kuaqu="7")
+        logger.info(color("bold_yellow") + "请自行前往活动页面绑定跨区~")
+        self.dnf_heiya_op("第一跨区奖励礼包", "746472")
+
+    def check_dnf_heiya(self):
+        self.check_bind_account("DNF黑鸦竞速", "http://xinyue.qq.com/act/a20210310dnf/m/index.html",
+                                activity_op_func=self.dnf_heiya_op, query_bind_flowid="746292", commit_bind_flowid="746291")
+
+    def dnf_heiya_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_heiya
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210310dnf/m/",
                                    **extra_params)
 
     # --------------------------------------------qq视频活动--------------------------------------------
@@ -4757,4 +4843,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_welfare()
         # djcHelper.ark_lottery()
-        djcHelper.dnf_collection()
+        # djcHelper.dnf_collection()
+        djcHelper.dnf_heiya()

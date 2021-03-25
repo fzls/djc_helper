@@ -1177,6 +1177,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_collection = create_checkbox(cfg.get_dnf_collection)
         form_layout.addRow("DNF活动集合站", self.checkbox_get_dnf_collection)
 
+        self.checkbox_get_dnf_heiya = create_checkbox(cfg.get_dnf_heiya)
+        form_layout.addRow("DNF黑鸦竞速", self.checkbox_get_dnf_heiya)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1214,6 +1217,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_luodiye = self.checkbox_get_dnf_luodiye.isChecked()
         # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
         cfg.get_dnf_collection = self.checkbox_get_dnf_collection.isChecked()
+        cfg.get_dnf_heiya = self.checkbox_get_dnf_heiya.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

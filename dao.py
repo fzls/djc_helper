@@ -888,6 +888,12 @@ class DnfCollectionInfo(ConfigInterface):
         self.openLuckyCount = 0
 
 
+class DnfHeiyaInfo(ConfigInterface):
+    def __init__(self):
+        self.lottery_count = 0
+        self.box_score = 0
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

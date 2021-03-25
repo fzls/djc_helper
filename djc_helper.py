@@ -428,6 +428,7 @@ class DjcHelper:
                 "QQ空间集卡",
                 "DNF福签大作战",
                 "DNF黑鸦竞速",
+                "DNF集合站",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -462,6 +463,9 @@ class DjcHelper:
 
         # DNF黑鸦竞速
         self.dnf_heiya()
+
+        # DNF集合站
+        self.dnf_collection()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -4289,6 +4293,42 @@ class DjcHelper:
                                    **extra_params,
                                    extra_cookies=f"p_skey={p_skey}")
 
+    # --------------------------------------------DNF集合站--------------------------------------------
+    @try_except()
+    def dnf_collection(self):
+        # https://dnf.qq.com/lbact/a20210325flqbz/index.html
+        show_head_line("DNF集合站")
+        self.show_amesvr_act_info(self.dnf_collection_op)
+
+        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
+            logger.warning("未启用领取DNF集合站功能，将跳过")
+            return
+
+        self.check_dnf_collection()
+
+        def query_signin_days():
+            res = self.dnf_collection_op("查询", "749793", print_res=False)
+            info = AmesvrSigninInfo().auto_update_config(res["modRet"])
+            return int(info.total)
+
+        self.dnf_collection_op("勇士礼包", "749788")
+
+        self.dnf_collection_op("30分签到礼包", "749790")
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+        self.dnf_collection_op("3日礼包", "749786")
+        self.dnf_collection_op("7日礼包", "749791")
+        self.dnf_collection_op("15日礼包", "749792")
+
+
+    def check_dnf_collection(self):
+        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210325flqbz/index.html",
+                                activity_op_func=self.dnf_collection_op, query_bind_flowid="749704", commit_bind_flowid="749703")
+
+    def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_collection
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210325flqbz/",
+                                   **extra_params)
+
     # --------------------------------------------DNF福签大作战--------------------------------------------
     @try_except()
     def dnf_fuqian(self):
@@ -4844,4 +4884,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_fuqian()
-        djcHelper.dnf_heiya()
+        # djcHelper.dnf_heiya()
+        djcHelper.dnf_collection()

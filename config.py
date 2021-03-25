@@ -237,8 +237,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_wegame_spring = True
         # 是否领取 新春福袋大作战 活动
         self.get_spring_fudai = True
-        # 是否领取 DNF新春福利集合站 活动
-        self.get_spring_collection = True
+        # 是否领取 DNF活动集合站 活动
+        self.get_dnf_collection = True
         # 燃放爆竹活动
         self.get_firecrackers = True
 

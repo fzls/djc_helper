@@ -278,6 +278,8 @@ get_wegame_spring = true
 get_spring_fudai = true
 # 是否领取 DNF福签大作战 活动
 get_dnf_fuqian = true
+# 是否领取 DNF集合站 活动
+get_dnf_collection = true
 # 是否领取 燃放爆竹 活动
 get_firecrackers = true
 # 是否领取 DNF黑鸦竞速 活动

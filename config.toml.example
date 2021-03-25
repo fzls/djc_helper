@@ -276,8 +276,8 @@ get_dnf_luodiye = true
 get_wegame_spring = true
 # 是否领取 新春福袋大作战 活动
 get_spring_fudai = true
-# 是否领取 DNF新春福利集合站 活动
-get_spring_collection = true
+# 是否领取 DNF活动集合站 活动
+get_dnf_collection = true
 # 燃放爆竹活动
 get_firecrackers = true
 

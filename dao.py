@@ -880,6 +880,14 @@ class CardSecret(ConfigInterface):
         self.secret = "cUtsSx0CwVF1p1VurbKuiI3WHQuKP3uz"
 
 
+class DnfCollectionInfo(ConfigInterface):
+    def __init__(self):
+        self.has_init = False
+        self.luckyCount = 0
+        self.scoreCount = 0
+        self.openLuckyCount = 0
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

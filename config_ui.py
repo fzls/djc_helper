@@ -1168,17 +1168,26 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
         form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
 
-        # self.checkbox_get_wegame_spring = create_checkbox(cfg.get_wegame_spring)
-        # form_layout.addRow("新春献豪礼 首次盲盒限时领", self.checkbox_get_wegame_spring)
+        self.checkbox_get_dnf_luodiye = create_checkbox(cfg.get_dnf_luodiye)
+        form_layout.addRow("DNF落地页", self.checkbox_get_dnf_luodiye)
 
-        # self.checkbox_get_spring_collection = create_checkbox(cfg.get_spring_collection)
-        # form_layout.addRow("DNF新春福利集合站", self.checkbox_get_spring_collection)
+        self.checkbox_get_dnf_wegame = create_checkbox(cfg.get_dnf_wegame)
+        form_layout.addRow("WeGame", self.checkbox_get_dnf_wegame)
+
+        self.checkbox_get_dnf_collection = create_checkbox(cfg.get_dnf_collection)
+        form_layout.addRow("DNF集合站", self.checkbox_get_dnf_collection)
+
+        self.checkbox_get_dnf_fuqian = create_checkbox(cfg.get_dnf_fuqian)
+        form_layout.addRow("DNF福签大作战", self.checkbox_get_dnf_fuqian)
+
+        self.checkbox_get_dnf_heiya = create_checkbox(cfg.get_dnf_heiya)
+        form_layout.addRow("DNF黑鸦竞速", self.checkbox_get_dnf_heiya)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
-        # self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
-        # form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
+        self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
+        form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
 
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
@@ -1208,10 +1217,13 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
         cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
         cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
-        # cfg.get_wegame_spring = self.checkbox_get_wegame_spring.isChecked()
-        # cfg.get_spring_collection = self.checkbox_get_spring_collection.isChecked()
+        cfg.get_dnf_luodiye = self.checkbox_get_dnf_luodiye.isChecked()
+        cfg.get_dnf_wegame = self.checkbox_get_dnf_wegame.isChecked()
+        cfg.get_dnf_collection = self.checkbox_get_dnf_collection.isChecked()
+        cfg.get_dnf_fuqian = self.checkbox_get_dnf_fuqian.isChecked()
+        cfg.get_dnf_heiya = self.checkbox_get_dnf_heiya.isChecked()
 
-        # cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
+        cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()

@@ -231,16 +231,20 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_bbs_signin = True
         # 是否领取DNF新春夺宝大作战
         self.get_dnf_spring = True
-        # 是否领取 万物皆新意 牛转阿拉德 活动
-        self.get_dnf_0121 = True
-        # 是否领取 新春献豪礼 首次盲盒限时领 活动
-        self.get_wegame_spring = True
+        # 是否领取 DNF落地页 活动
+        self.get_dnf_luodiye = True
+        # 是否领取 WeGame 活动
+        self.get_dnf_wegame = True
         # 是否领取 新春福袋大作战 活动
         self.get_spring_fudai = True
-        # 是否领取 DNF新春福利集合站 活动
-        self.get_spring_collection = True
-        # 燃放爆竹活动
+        # 是否领取 DNF福签大作战 活动
+        self.get_dnf_fuqian = True
+        # 是否领取 DNF集合站 活动
+        self.get_dnf_collection = True
+        # 是否领取 燃放爆竹 活动
         self.get_firecrackers = True
+        # 是否领取 DNF黑鸦竞速 活动
+        self.get_dnf_heiya = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -284,6 +288,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
+        # 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
+        self.use_xinyue_operations_in_config_only = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关
@@ -649,12 +655,14 @@ def gen_config_for_github_action():
     save_config(cfg, save_filename)
     logger.info(f"已经保存到 {save_filename}")
 
-def show_config_size(cfg:Config, ctx):
+
+def show_config_size(cfg: Config, ctx):
     data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
     toml_str = toml.dumps(data_to_save)
     total_size = len(toml_str)
     total_lines = toml_str.count('\n')
     logger.info(f"{ctx} 生成配置文件大小为{total_size}，总行数为{total_lines}")
+
 
 def remove_unnecessary_configs(cfg, default_cfg):
     attrs_to_remove = []

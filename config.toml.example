@@ -173,6 +173,9 @@ dnf_bbs_formhash = ""
 #   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 dnf_bbs_cookie = ""
 
+# 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
+use_xinyue_operations_in_config_only = false
+
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
 # 手动登录需要设置的信息
@@ -270,16 +273,20 @@ get_youfei = true
 get_dnf_bbs_signin = true
 # 是否领取DNF新春夺宝大作战
 get_dnf_spring = true
-# 是否领取 万物皆新意 牛转阿拉德 活动
-get_dnf_0121 = true
-# 是否领取 新春献豪礼 首次盲盒限时领 活动
-get_wegame_spring = true
+# 是否领取 DNF落地页 活动
+get_dnf_luodiye = true
+# 是否领取 WeGame 活动
+get_dnf_wegame = true
 # 是否领取 新春福袋大作战 活动
 get_spring_fudai = true
-# 是否领取 DNF新春福利集合站 活动
-get_spring_collection = true
-# 燃放爆竹活动
+# 是否领取 DNF福签大作战 活动
+get_dnf_fuqian = true
+# 是否领取 DNF集合站 活动
+get_dnf_collection = true
+# 是否领取 燃放爆竹 活动
 get_firecrackers = true
+# 是否领取 DNF黑鸦竞速 活动
+get_dnf_heiya = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能
@@ -772,6 +779,8 @@ show_color = ""
 4166 = false
 # 2021.1.15 超萌雪人送祝福
 4261 = false
+# 2021.1.15 集卡赢战灵天舞套!
+4437 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

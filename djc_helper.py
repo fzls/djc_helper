@@ -2493,7 +2493,7 @@ class DjcHelper:
         # 检查是否启用管家相关活动
         any_enabled = False
         for activity_enabled in [
-            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+            # self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True

@@ -312,3 +312,4 @@ def format_act(act: AmsActInfo, needPadding=False):
 if __name__ == '__main__':
     urls = Urls()
     urls.show_current_valid_act_infos()
+    # print(get_not_ams_act_desc("集卡"))

@@ -10,7 +10,7 @@ from setting import *
 from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader, lanzou_cookie
-from urls import Urls
+from urls import Urls, get_not_ams_act_desc
 from util import *
 from version import *
 
@@ -218,7 +218,7 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
         return
     _show_head_line(ctx)
 
-    show_end_time("2021-02-28 23:59:59")
+    logger.info(get_not_ams_act_desc("集卡"))
 
     lottery_zzconfig = zzconfig()
     card_info_map = parse_card_group_info_map(lottery_zzconfig)

@@ -4153,7 +4153,8 @@ class DjcHelper:
         self.dnf_wegame_op("升级礼包-100级", "750486")
 
         # 勇士齐聚阿拉德
-        self.dnf_wegame_op("在线30min签到礼包", "750658")
+        self.dnf_wegame_op("在线30min签到", "750658")
+        self.dnf_wegame_op("领取签到礼包", "750658")
         logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
         self.dnf_wegame_op("签到3天礼包", "750478")
         self.dnf_wegame_op("签到7天礼包", "750479")

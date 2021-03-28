@@ -737,9 +737,9 @@ class BuyInfo(ConfigInterface):
     def description(self) -> str:
         buy_accounts = self.qq
 
-        msg = f"聊天QQ {buy_accounts} 付费内容过期时间为{self.expire_at}，累计购买{self.total_buy_month}个月。"
+        msg = f"主QQ {buy_accounts} 付费内容过期时间为{self.expire_at}，累计购买{self.total_buy_month}个月。"
         if len(self.game_qqs) != 0:
-            msg += f"\n游戏QQ {', '.join(self.game_qqs)}"
+            msg += f"\n附属QQ {', '.join(self.game_qqs)}"
         if len(self.buy_records) != 0:
             msg += "\n购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in self.buy_records)
 

@@ -1771,13 +1771,16 @@ class DjcHelper:
     qq_video_module_id_online_3_days = "1uqyc39eekh34r9kez65qz1eou"  # 累积3天
     qq_video_module_id_online_7_days = "s8luuy4aplds46yxy8t4q2etiu"  # 累积7天
     qq_video_module_id_online_15_days = "ztkle7x3yl6ulzfr5pc4pytht9"  # 累积15天
+
+    qq_video_module_id_query_card_info = "0fo2o165uyd3sgw4ekyqltiaoe"  # 查询卡片信息
+
+    qq_video_module_id_enter_page = "hswl1y6zrgke43rf4z33o7q1wu"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "xfpxos29piy543f9qqdruqhfsu"  # 领取进入页面的卡片
+
     qq_video_module_id_card_gift_1 = "grarpxryxujdjskyytzt20wala"  # 使用1张卡兑换奖励
     qq_video_module_id_card_gift_2 = "9j5wtf1wpxul4twop3u6qeyewl"  # 使用2张卡兑换奖励
     qq_video_module_id_card_gift_3 = "pu47hlt0gdqfucqal3astjquou"  # 使用3张卡兑换奖励
     qq_video_module_id_card_gift_4 = "lfe64335reozhkeekfjoty08j9"  # 使用4张卡兑换奖励
-
-    qq_video_module_id_enter_page = "hswl1y6zrgke43rf4z33o7q1wu"  # 首次进入页面
-    qq_video_module_id_take_enter_page_card = "xfpxos29piy543f9qqdruqhfsu"  # 领取进入页面的卡片
 
     # @try_except()
     def qq_video(self):
@@ -1789,6 +1792,21 @@ class DjcHelper:
             return
 
         self.check_qq_video()
+
+        @try_except()
+        def query_card_info(ctx):
+            show_head_line(ctx, msg_color=color("bold_cyan"))
+
+            res = self.qq_video_op("查询卡片信息", "0fo2o165uyd3sgw4ekyqltiaoe", option="111", type="71", is_prepublish="0", print_res=False)
+
+            heads = ["名称", "数目"]
+            colSizes = [20, 4]
+            logger.info(tableify(heads, colSizes))
+            for card in res["do_act"]["score_list"]:
+                cols = [card["score_name"], card["score_num"]]
+                logger.info(tableify(cols, colSizes))
+
+        # 正式逻辑
 
         self.qq_video_op("首次进入页面", self.qq_video_module_id_enter_page, type="51", option="1", task="51")
         self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
@@ -1834,6 +1852,9 @@ class DjcHelper:
                     if res['data']['sys_code'] != 0:
                         break
 
+        # 查询一遍集卡信息
+        query_card_info("最新卡片信息")
+
     def check_qq_video(self):
         while True:
             res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112", print_res=False)
@@ -1844,8 +1865,8 @@ class DjcHelper:
 
             return res
 
-    def qq_video_op(self, ctx, module_id, option="100", type="21", task="", print_res=True):
-        res = self._qq_video_op(ctx, type, option, module_id, task, print_res)
+    def qq_video_op(self, ctx, module_id, option="100", type="21", task="", is_prepublish="", print_res=True):
+        res = self._qq_video_op(ctx, type, option, module_id, task, is_prepublish, print_res)
 
         if "data" in res and int(res["data"].get("sys_code", res['ret'])) == -1010 and extract_qq_video_message(res) == "系统错误":
             msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"
@@ -1853,14 +1874,14 @@ class DjcHelper:
 
         return res
 
-    def _qq_video_op(self, ctx, type, option, module_id, task, print_res=True):
+    def _qq_video_op(self, ctx, type, option, module_id, task, is_prepublish, print_res=True):
         extra_cookies = "; ".join([
             "",
             "appid=3000501",
             "main_login=qq",
             f"vuserid={self.vuserid}",
         ])
-        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id, task=task,
+        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id, task=task, is_prepublish=is_prepublish,
                         print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------

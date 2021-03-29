@@ -22,7 +22,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("管家蚊子腿", "2021-03-05 00:00:00", "2021-03-25 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿", "2021-02-01 00:00:00", "2021-03-01 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿", "2021-03-26 00:00:00", "2021-04-09 23:59:59"),
     newAmsActInfo("会员关怀", "2021-02-01 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-03-25 00:00:00", "2021-04-30 23:59:59"),
     newAmsActInfo("DNF助手编年史", "2021-03-01 00:00:00", "2021-03-31 23:59:59"),
@@ -118,7 +118,7 @@ class Urls:
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_dnf_collection = "368454"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
-        self.iActivityId_dnf_heiya = "365524" # 黑鸦竞速
+        self.iActivityId_dnf_heiya = "365524"  # 黑鸦竞速
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -157,7 +157,7 @@ class Urls:
         self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"
 
         # qq视频活动
-        self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}"
+        self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}"
 
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
         self.guanjia = url = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
@@ -288,6 +288,14 @@ def get_not_ams_act_desc(act_name):
             return format_act(act)
 
     return f"未找到活动 {act_name} 的相关信息"
+
+
+def get_not_ams_act(act_name):
+    for act in not_ams_activities:
+        if act.sActivityName == act_name:
+            return act
+
+    return None
 
 
 def format_act(act: AmsActInfo, needPadding=False):

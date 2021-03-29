@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act
 from util import show_head_line, get_this_week_monday
 
 
@@ -429,6 +429,7 @@ class DjcHelper:
                 "DNF黑鸦竞速",
                 "DNF集合站",
                 "WeGame活动",
+                "qq视频活动",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -466,6 +467,9 @@ class DjcHelper:
 
         # WeGame活动
         self.dnf_wegame()
+
+        # qq视频活动
+        self.qq_video()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -522,9 +526,6 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
-
-        # qq视频活动
-        self.qq_video()
 
         # 管家蚊子腿
         self.guanjia()
@@ -1758,20 +1759,27 @@ class DjcHelper:
     # --------------------------------------------qq视频活动--------------------------------------------
     # note: 接入新qq视频活动的流程如下
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
-    #   2. 打开活动页面 https://m.film.qq.com/magic-act/zrayedj8q888yf2rq6z6rcuwsu/index.html
+    #   2. 打开活动页面 https://m.film.qq.com/magic-act/ty6cr4ljs8d0ph84l7iog361el/index.html
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
-    qq_video_act_id = "zrayedj8q888yf2rq6z6rcuwsu"
+    qq_video_act_id = "ty6cr4ljs8d0ph84l7iog361el"
     #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
-    qq_video_module_id_lucky_user = "91fp08t6uqaaaoqejrauqg2s05"  # 幸运勇士礼包
-    qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
-    qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
-    qq_video_module_id_lottery = "4g10wjqfz666i6rjgysryiowtu"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
-    qq_video_module_id_online_30_minutes = "14p5563e1fc4khr94px1te9yp9"  # 在线30分钟
-    qq_video_module_id_online_3_days = "sl2l0redd0wrid3e2ps17is0il"  # 累积3天
-    qq_video_module_id_online_7_days = "ui7hp23tr46ae07poruw2uf5xe"  # 累积7天
-    qq_video_module_id_online_15_days = "h1y2e73itl1ej4cy6l7ilzd001"  # 累积15天
+    qq_video_module_id_lucky_user = "fj4i6oejg0u5lqapxy44z6qzoe"  # 幸运勇士礼包
+    # qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
+    # qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
+    qq_video_module_id_lottery = "5eei6y8agrhhrgyxxq8yq3fjp5"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "cfps6rqji1o28hkjr0aog945wa"  # 在线30分钟
+    qq_video_module_id_online_3_days = "1uqyc39eekh34r9kez65qz1eou"  # 累积3天
+    qq_video_module_id_online_7_days = "s8luuy4aplds46yxy8t4q2etiu"  # 累积7天
+    qq_video_module_id_online_15_days = "ztkle7x3yl6ulzfr5pc4pytht9"  # 累积15天
+    qq_video_module_id_card_gift_1 = "grarpxryxujdjskyytzt20wala"  # 使用1张卡兑换奖励
+    qq_video_module_id_card_gift_2 = "9j5wtf1wpxul4twop3u6qeyewl"  # 使用2张卡兑换奖励
+    qq_video_module_id_card_gift_3 = "pu47hlt0gdqfucqal3astjquou"  # 使用3张卡兑换奖励
+    qq_video_module_id_card_gift_4 = "lfe64335reozhkeekfjoty08j9"  # 使用4张卡兑换奖励
 
-    @try_except()
+    qq_video_module_id_enter_page = "hswl1y6zrgke43rf4z33o7q1wu"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "xfpxos29piy543f9qqdruqhfsu"  # 领取进入页面的卡片
+
+    # @try_except()
     def qq_video(self):
         show_head_line("qq视频活动")
         self.show_not_ams_act_info("qq视频蚊子腿")
@@ -1782,18 +1790,49 @@ class DjcHelper:
 
         self.check_qq_video()
 
+        self.qq_video_op("首次进入页面", self.qq_video_module_id_enter_page, type="51", option="1", task="51")
+        self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
+
         self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112")
-        self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift, type="100112")
-        self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
+        # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift, type="100112")
+        # self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
 
         self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery)
 
         self.qq_video_op("在线30分钟", self.qq_video_module_id_online_30_minutes)
         self.qq_video_op("累积3天", self.qq_video_module_id_online_3_days)
         self.qq_video_op("累积7天", self.qq_video_module_id_online_7_days)
-        self.qq_video_op("累积15天", self.qq_video_module_id_online_15_days)
+        self.qq_video_op("累积10天", self.qq_video_module_id_online_15_days)
 
         logger.warning("如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据")
+
+        # 首先尝试按照优先级领取
+        res = self.qq_video_op("使用4张卡兑换奖励（限1次）", self.qq_video_module_id_card_gift_4)
+        if res['data']['lottery_txt'] == '您当前尚未集齐卡片哦~':
+            logger.info("尚未兑换至尊礼包，先跳过其他礼包")
+        else:
+            res = self.qq_video_op("使用3张卡兑换奖励（限1次）", self.qq_video_module_id_card_gift_3)
+            if res['data']['lottery_txt'] == '您当前尚未集齐卡片哦~':
+                logger.info("尚未兑换高级礼包，先跳过其他礼包")
+            else:
+                self.qq_video_op("使用2张卡兑换奖励（限10次）", self.qq_video_module_id_card_gift_2)
+                self.qq_video_op("使用1张卡兑换奖励（限10次）", self.qq_video_module_id_card_gift_1)
+
+        # 如果到了最后一天，就尝试领取所有可以领取的奖励
+        actInfo = get_not_ams_act("qq视频蚊子腿")
+        if format_time(parse_time(actInfo.dtEndTime), "%Y%m%d") == get_today():
+            logger.info("已到活动最后一天，尝试领取所有可以领取的奖励")
+            gifts = [
+                (4, self.qq_video_module_id_card_gift_4),
+                (3, self.qq_video_module_id_card_gift_3),
+                (2, self.qq_video_module_id_card_gift_2),
+                (1, self.qq_video_module_id_card_gift_1),
+            ]
+            for card_count, module_id in gifts:
+                for i in range(10):
+                    res = self.qq_video_op(f"使用{card_count}张卡兑换奖励", module_id)
+                    if res['data']['sys_code'] != 0:
+                        break
 
     def check_qq_video(self):
         while True:
@@ -1805,23 +1844,23 @@ class DjcHelper:
 
             return res
 
-    def qq_video_op(self, ctx, module_id, type="21", print_res=True):
-        res = self._qq_video_op(ctx, type, "100", module_id, print_res)
+    def qq_video_op(self, ctx, module_id, option="100", type="21", task="", print_res=True):
+        res = self._qq_video_op(ctx, type, option, module_id, task, print_res)
 
-        if int(res["data"]["sys_code"]) == -1010 and extract_qq_video_message(res) == "系统错误":
+        if "data" in res and int(res["data"].get("sys_code", res['ret'])) == -1010 and extract_qq_video_message(res) == "系统错误":
             msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"
             logger.warning(color("fg_bold_yellow") + msg)
 
         return res
 
-    def _qq_video_op(self, ctx, type, option, module_id, print_res=True):
+    def _qq_video_op(self, ctx, type, option, module_id, task, print_res=True):
         extra_cookies = "; ".join([
             "",
             "appid=3000501",
             "main_login=qq",
             f"vuserid={self.vuserid}",
         ])
-        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id,
+        return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id, task=task,
                         print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------
@@ -4879,7 +4918,6 @@ if __name__ == '__main__':
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
         # djcHelper.vip_mentor()
-        # djcHelper.qq_video()
         # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
@@ -4892,4 +4930,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
         # djcHelper.dnf_collection()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.qq_video()

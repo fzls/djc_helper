@@ -481,6 +481,23 @@ def get_config_from_env():
     return os.environ.get("DJC_HELPER_CONFIG_TOML", "")
 
 
+# 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
+def parse_unicode_escape_string(filename: str):
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.read()
+
+        invalid_chars = []
+        for code in range(ord('g'), ord('z') + 1):
+            invalid_chars.append(chr(code))
+        for code in range(ord('G'), ord('Z') + 1):
+            invalid_chars.append(chr(code))
+        print(invalid_chars)
+        for char in invalid_chars:
+            lines = lines.replace(f"u{char}", f"_u{char}")
+
+        print(lines.encode().decode("unicode-escape"))
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

@@ -1782,7 +1782,7 @@ class DjcHelper:
     qq_video_module_id_card_gift_3 = "pu47hlt0gdqfucqal3astjquou"  # 使用3张卡兑换奖励
     qq_video_module_id_card_gift_4 = "lfe64335reozhkeekfjoty08j9"  # 使用4张卡兑换奖励
 
-    # @try_except()
+    @try_except()
     def qq_video(self):
         show_head_line("qq视频活动")
         self.show_not_ams_act_info("qq视频蚊子腿")

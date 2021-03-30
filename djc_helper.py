@@ -1081,6 +1081,7 @@ class DjcHelper:
 
         return fixed_team
 
+    @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=True):
         data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "513818", print_res=print_res)
         jdata = data["modRet"]["jData"]

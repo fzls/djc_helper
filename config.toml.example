@@ -58,6 +58,23 @@ auto_send_card_target_qqs = []
 #   sailiyam_visit_target_qqs = ["123456", "654321", "111111"]
 sailiyam_visit_target_qqs = []
 
+# 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
+# 示例
+# scode_list_accept_give = [
+#    "036e0fc2ee23ac386c88a5149ea7ab6b51b0baf4e6ac5454d0e7c034fe927201",
+#    "d09e992cb0457f5f6146c4706e57c9a20fb7f91ae5246de1450a2daceec7ad8a",
+#    "0ec3f3434dba70d69013edb57d3341c10fee13c57c20acc59c2b59cd7b5207f6",
+#]
+scode_list_accept_give = []
+# 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知
+# 示例
+# scode_list_accept_ask = [
+#    "5c81df94e94b7c724ab80b257fb0e59451b0baf4e6ac5454d0e7c034fe927201",
+#    "27ac856540962fd01c0d5234d7a497c90fb7f91ae5246de1450a2daceec7ad8a",
+#    "6de178fb6a2d839275ce903b0bb62ac10fee13c57c20acc59c2b59cd7b5207f6",
+#]
+scode_list_accept_ask = []
+
 # 调整日志等级对应颜色，颜色表可以运行log.py获取
 [common.log_colors]
 # 调试

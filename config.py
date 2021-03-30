@@ -483,6 +483,10 @@ class CommonConfig(ConfigInterface):
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
         self.auto_send_card_target_qqs = []  # type: List[str]
+        # 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
+        self.scode_list_accept_give = []
+        # 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知
+        self.scode_list_accept_ask = []
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
         # 各种操作的通用重试配置

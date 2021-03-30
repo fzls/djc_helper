@@ -4442,18 +4442,14 @@ class DjcHelper:
 
         for sCode in [
             "f8526c5f3dddf7c5c45b895b7c2eb35858e1576e312b70a2cbf17214e19a2ec0",
-            "036e0fc2ee23ac386c88a5149ea7ab6b51b0baf4e6ac5454d0e7c034fe927201",
-            "d09e992cb0457f5f6146c4706e57c9a20fb7f91ae5246de1450a2daceec7ad8a",
-            "0ec3f3434dba70d69013edb57d3341c10fee13c57c20acc59c2b59cd7b5207f6",
+            *self.common_cfg.scode_list_accept_give,
         ]:
             self.dnf_fuqian_op("接受福签赠送", "742846",
                                sCode=sCode,
                                sNickName=quote_plus(quote_plus(quote_plus("小号"))))
         for sCode in [
             "b99ac8818759c0d25b6932cff664b74958e1576e312b70a2cbf17214e19a2ec0",
-            "5c81df94e94b7c724ab80b257fb0e59451b0baf4e6ac5454d0e7c034fe927201",
-            "27ac856540962fd01c0d5234d7a497c90fb7f91ae5246de1450a2daceec7ad8a",
-            "6de178fb6a2d839275ce903b0bb62ac10fee13c57c20acc59c2b59cd7b5207f6",
+            *self.common_cfg.scode_list_accept_ask,
         ]:
             self.dnf_fuqian_op("接受福签索要", "742927",
                                sCode=sCode)

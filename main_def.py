@@ -586,7 +586,7 @@ def check_update(cfg):
     auto_updater_path = os.path.realpath("utils/auto_updater.exe")
     if not os.path.exists(auto_updater_path):
         logger.warning(color("bold_cyan") + (
-            "未发现自动更新DLC，因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
+            "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
             "-----------------\n"
             "以下为广告时间0-0\n"
             "花了两天多时间，给小助手加入了目前(指2021.1.6)唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"

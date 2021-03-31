@@ -405,9 +405,6 @@ class DjcHelper:
         # dnf论坛签到
         self.dnf_bbs_signin()
 
-        # 会员关怀
-        self.vip_mentor()
-
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
             self.paied_activities()
@@ -431,6 +428,7 @@ class DjcHelper:
                 "WeGame活动",
                 "qq视频活动",
                 "管家蚊子腿",
+                "会员关怀",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -474,6 +472,9 @@ class DjcHelper:
 
         # 管家蚊子腿
         self.guanjia()
+
+        # 会员关怀
+        self.vip_mentor()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -4951,7 +4952,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_spring()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
-        # djcHelper.vip_mentor()
         # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
@@ -4965,4 +4965,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection()
         # djcHelper.dnf_wegame()
         # djcHelper.qq_video()
-        djcHelper.guanjia()
+        # djcHelper.guanjia()
+        djcHelper.vip_mentor()

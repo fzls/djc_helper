@@ -365,7 +365,7 @@ class ConfigUi(QFrame):
             netdisk_addr = "https://fzls.lanzous.com/s/djc-helper"
 
             # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y-%m-%d")
+            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
             if time_since_last_update.days >= 7:
                 msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]({netdisk_addr})看看是否有新版本，或者购买自动更新DLC省去手动更新的操作"
                 show_message("检查更新失败", msg)

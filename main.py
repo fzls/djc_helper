@@ -148,5 +148,5 @@ if __name__ == '__main__':
             raise e
     finally:
         # 暂停一下，方便看结果
-        if not is_run_in_github_action():
+        if not disable_pause_after_run() and not is_run_in_github_action():
             os.system("PAUSE")

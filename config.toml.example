@@ -120,19 +120,16 @@ retry_wait_time = 5
 
 # 心悦相关配置
 [common.xinyue]
-# 在每日几点后才尝试提交心悦的成就点任务，避免在没有上游戏时执行心悦成就点任务，导致高成就点的任务没法完成，只能完成低成就点的
-submit_task_after = 0
-
 # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
 [[common.fixed_teams]]
 # 是否启用该固定队
 enable = false
 # 固定队伍id，仅用于本地区分用
 id = "1"
-# 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
-# 示例：小队成员为3个QQ 123456和654321和111111
-#   members = ["123456", "654321", "111111"]
-members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
+# 固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效
+# 示例：小队成员为2个QQ 123456和654321
+#   members = ["123456", "654321"]
+members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号"]
 
 # 第二个固定队，更多的固定队则以此类推
 [[common.fixed_teams]]
@@ -140,10 +137,10 @@ members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "�
 enable = false
 # 固定队伍id，仅用于本地区分用
 id = "2"
-# 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
-# 示例：小队成员为3个QQ 123456和654321和111111
-#   members = ["123456", "654321", "111111"]
-members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
+# 固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效
+# 示例：小队成员为2个QQ 123456和654321
+#   members = ["123456", "654321"]
+members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号"]
 
 # ---------------------------第1个账号相关配置开始-----------------------------
 [[account_configs]]
@@ -189,9 +186,6 @@ dnf_bbs_formhash = ""
 #   4. 在左上角筛选项中输入 k_misign:sign
 #   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 dnf_bbs_cookie = ""
-
-# 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
-use_xinyue_operations_in_config_only = false
 
 # 腾讯系网页登录通用账号凭据与token
 [account_configs.account_info]
@@ -322,450 +316,246 @@ get_guanjia = true
 ## ++++++++++周期礼包++++++++++++
 #[[account_configs.xinyue_operations]]
 ## 尝试领取每周礼包（特邀会员）
-#iFlowId = "513581"
-#sFlowName = "Y600周礼包_特邀会员"
+#iFlowId = "747507"
+#sFlowName = "周礼包_特邀会员"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
 ## 尝试领取每月礼包（特邀会员）
-#iFlowId = "673270"
-#sFlowName = "月礼包_特邀会员_20200610后使用"
+#iFlowId = "747539"
+#sFlowName = "月礼包_特邀会员"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
 ## 尝试领取每周礼包（心悦会员）
-#iFlowId = "513573"
-#sFlowName = "Y600周礼包"
+#iFlowId = "747534"
+#sFlowName = "周礼包_心悦会员"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
 ## 尝试领取每月礼包（心悦会员）
-#iFlowId = "673269"
-#sFlowName = "月礼包_20200610后使用"
+#iFlowId = "747541"
+#sFlowName = "月礼包_心悦会员"
 #count = 1
-#
-#[[account_configs.xinyue_operations]]
-## 尝试领取周礼包_白名单用户（心悦会员）
-#iFlowId = "673262"
-#sFlowName = "周礼包_白名单用户"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-## 尝试领取月礼包_白名单用户（心悦会员）
-#iFlowId = "673264"
-#sFlowName = "月礼包_白名单用户"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-## 尝试领取每月累计宝箱（月领取周期礼包达到5个可领取）
-#iFlowId = "513585"
-#sFlowName = "累计宝箱"
-#count = 1
-
 
 # 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换
 ## --------------- 荣耀战场-勇者宝库（成就点兑换） --------------------
 ## ++++++++++特邀会员++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512484"
+#iFlowId = "747596"
 #sFlowName = "特邀会员兑换心悦称号（最强战王称号）(需260成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512485"
+#iFlowId = "747562"
 #sFlowName = "特邀会员兑换腾龙光环(需330成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512498"
+#iFlowId = "747588"
 #sFlowName = "特邀会员兑换星空射手光环(需330成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656611"
+#iFlowId = "747599"
 #sFlowName = "特邀会员兑换星恋双鱼光环(需330成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512494"
+#iFlowId = "747592"
 #sFlowName = "特邀会员兑换心悦宠物_牛小哞(需260成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512486"
+#iFlowId = "747593"
 #sFlowName = "特邀会员兑换心悦宠物_羊小咩(需260成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656648"
+#iFlowId = "747597"
 #sFlowName = "特邀会员兑换心悦宠物_弓小弦(需260成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656613"
+#iFlowId = "747598"
 #sFlowName = "特邀会员兑换心悦宠物_甜小鱼(需280成就点)"
 #count = 1
 #
 #
 ## ++++++++++心悦会员++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512487"
+#iFlowId = "747657"
 #sFlowName = "心悦会员兑换心悦称号（1-最强战王/2-最强战皇/3-最强战神）(需220成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512488"
+#iFlowId = "747644"
 #sFlowName = "心悦会员兑换腾龙光环(需280成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512497"
+#iFlowId = "747652"
 #sFlowName = "心悦会员兑换星空射手光环(需280成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656612"
+#iFlowId = "747665"
 #sFlowName = "心悦会员兑换星恋双鱼光环(需280成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512495"
+#iFlowId = "747653"
 #sFlowName = "心悦会员兑换心悦宠物_牛小哞(需220成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512489"
+#iFlowId = "747654"
 #sFlowName = "心悦会员兑换心悦宠物_羊小咩(需220成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656653"
+#iFlowId = "747659"
 #sFlowName = "心悦会员兑换心悦宠物_弓小弦(需220成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "656614"
+#iFlowId = "747664"
 #sFlowName = "心悦会员兑换心悦宠物_甜小鱼(需220成就点)"
 #count = 1
 #
-#
 ## ++++++++++宝库兑换++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512473"
+#iFlowId = "747672"
 #sFlowName = "复活币礼袋(日限10)(需8成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512474"
+#iFlowId = "747681"
 #sFlowName = "[活动]时间引导石礼盒 (10个)(日限5)(需10成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512475"
-#sFlowName = "抗疲劳秘药50点（95lv以上，1天1次）(日限3)(需50成就点)"
+#iFlowId = "747684"
+#sFlowName = "抗疲劳秘药30点（95lv以上，1天1次）(日限3)(需50成就点)"
 #count = 1
 #
+#[[account_configs.xinyue_operations]]
+#iFlowId = "747690"
+#sFlowName = "升级券（50-99）(月限1)(需50成就点)"
+#count = 1
 #
 ## ++++++++++礼包兑换++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702214"
-#sFlowName = "装备品级调整箱(需8点成就点)"
+#iFlowId = "747693"
+#package_id = "1537762"
+#sFlowName = "符文原石随机礼盒（高级~稀有）(需8点成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702216"
-#sFlowName = "超级远古精灵秘药（持续30分钟）(需10点成就点)"
+#iFlowId = "747693"
+#package_id = "1537764"
+#sFlowName = "超级远古精灵秘药(需10点成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702217"
-#sFlowName = "神秘契约礼袋（适用1日）(需20点成就点)"
+#iFlowId = "747693"
+#package_id = "1537765"
+#sFlowName = "神秘契约礼袋(需20点成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702218"
+#iFlowId = "747693"
+#package_id = "1537766"
 #sFlowName = "装备提升礼盒(需10点成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702220"
+#iFlowId = "747693"
+#package_id = "1537767"
 #sFlowName = "华丽徽章随机礼盒(需20点成就点)"
 #count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "512469"
-#package_id = "702222"
-#sFlowName = "升级券(Lv90-94)(月限1)(需50点成就点)"
-#count = 1
-#
 #
 #
 ## --------------- 充值权益（勇士币兑换） --------------------
 ## ++++++++++普通兑换专场（特邀会员以及心悦会员可兑换）++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513234"
+#iFlowId = "747718"
 #sFlowName = "复活币*1(日限100)(需1点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513235"
-#sFlowName = "复活币*10(日限100)(需10点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513236"
-#sFlowName = "复活币*20(日限100)(需20点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "616809"
+#iFlowId = "747738"
 #sFlowName = "[活动]时间引导石礼盒 (10个)(日限10)(需28点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513242"
+#iFlowId = "747759"
+#package_id = "1537689"
 #sFlowName = "神秘契约礼袋（适用1日）(需10点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513251"
+#iFlowId = "747759"
+#package_id = "1537690"
 #sFlowName = "装备提升礼盒(需30点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513244"
+#iFlowId = "747741"
+#package_id = "1537692"
 #sFlowName = "抗疲劳秘药（95lv以上,5点,1天1次）(日限3)(需10点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513245"
+#iFlowId = "747741"
+#package_id = "1537693"
 #sFlowName = "抗疲劳秘药（95lv以上,<br>10点,1天1次）(日限3)(需20点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513246"
+#iFlowId = "747741"
+#package_id = "1537694"
 #sFlowName = "抗疲劳秘药（95lv以上,<br>20点,1天1次）(日限3)(需40点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513247"
-#sFlowName = "抗疲劳秘药（95lv以上,<br>50点,1天1次）(日限3)(需100点勇士币)"
+#iFlowId = "747741"
+#package_id = "1537695"
+#sFlowName = "抗疲劳秘药（95lv以上,<br>30点,1天1次）(日限3)(需60点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513248"
+#iFlowId = "747759"
+#package_id = "1537696"
 #sFlowName = "超级远古精灵秘药（持续30分钟）(需25点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513253"
-#sFlowName = "金库扩展券(需400点勇士币)"
+#iFlowId = "749075"
+#sFlowName = "高级装扮兑换券(需400点勇士币)（每月1次）"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513256"
-#sFlowName = "物品栏扩展券(需150点勇士币)"
+#iFlowId = "749076"
+#sFlowName = "华丽的徽章自选礼盒(需150点勇士币)（每周3次）"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513259"
-#sFlowName = "升级券（Lv90~94）(需100点勇士币)"
+#iFlowId = "747758"
+#sFlowName = "升级券（50-99）(需100点勇士币)（每月1次）"
 #count = 1
 #
 #
 ## ++++++++++心悦兑换专场（心悦会员可兑换）++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513263"
+#iFlowId = "749162"
 #sFlowName = "霓裳仙子(需600点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
-#iFlowId = "513274"
+#iFlowId = "749175"
 #sFlowName = "塑身教练先生(需600点勇士币)"
 #count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513275"
-#sFlowName = "金钱兔(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513276"
-#sFlowName = "蛇灵虹霜(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513277"
-#sFlowName = "迷你小公主(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513279"
-#sFlowName = "迷你艾利斯(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513281"
-#sFlowName = "迷你寒冰虎(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513285"
-#sFlowName = "亚米(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513286"
-#sFlowName = "枫树精灵希尔蒂(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513293"
-#sFlowName = "枫树精灵希尔夫(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513294"
-#sFlowName = "绿树精灵希尔蒂(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "513295"
-#sFlowName = "绿树精灵希尔夫(需600点勇士币)"
-#count = 1
-
-
-# ++++++++++每日任务++++++++++++
-# 下列默认尝试按照成就点数从高到低完成任务，可根据自己的游戏习惯进行调整
-# 建议设置为在每天比较迟的时间自动运行，这样可以尽可能确保运行的时候任务的条件已达成
-[[account_configs.xinyue_operations]]
-iFlowId = "512408"
-sFlowName = "每月赠送双倍积分卡（仅心悦会员）"
-count = 1
-
-# ------------双倍（仅尝试最高级别的，不然比较浪费）----------------
-[[account_configs.xinyue_operations]]
-iFlowId = "512432"
-sFlowName = "充值DNF3000点券_双倍（成就点=6）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512435"
-sFlowName = "游戏内消耗疲劳值120_双倍（成就点=6）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512437"
-sFlowName = "游戏内在线时长40_双倍（成就点=6）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512441"
-sFlowName = "游戏内PK3次_双倍（成就点=6）"
-count = 1
-
-# -----------普通------------------
-[[account_configs.xinyue_operations]]
-iFlowId = "512396"
-sFlowName = "充值DNF3000点券（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512398"
-sFlowName = "游戏内在线时长40（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512400"
-sFlowName = "游戏内消耗疲劳值120（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512402"
-sFlowName = "游戏内PK3次（成就点=3）"
-count = 1
-
-# -----------免做（仅尝试最高级别的，不然比较浪费）------------------
-[[account_configs.xinyue_operations]]
-iFlowId = "512490"
-sFlowName = "领取每周免做卡"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512415"
-sFlowName = "充值DNF3000点券_免做（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512418"
-sFlowName = "游戏内消耗疲劳值120_免做（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512421"
-sFlowName = "游戏内在线时长40_免做（成就点=3）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512424"
-sFlowName = "游戏内PK3次_免做（成就点=3）"
-count = 1
-
-# -----------如果还没做完三个，尝试一些普通任务，但是免做任务和双倍不尝试非3点的，避免浪费------------------
-[[account_configs.xinyue_operations]]
-iFlowId = "512395"
-sFlowName = "充值DNF2000点券（成就点=2）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512397"
-sFlowName = "游戏内在线时长30（成就点=2）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512399"
-sFlowName = "游戏内消耗疲劳值50（成就点=2）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512401"
-sFlowName = "游戏内PK2次（成就点=2）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512393"
-sFlowName = "邮箱无未读邮件（成就点=2）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "578321"
-sFlowName = "精英赛投票（成就点=未知）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512388"
-sFlowName = "充值DNF1000点券（成就点=1）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512389"
-sFlowName = "游戏内在线时长15（成就点=1）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512390"
-sFlowName = "游戏内消耗疲劳值10（成就点=1）"
-count = 1
-
-[[account_configs.xinyue_operations]]
-iFlowId = "512391"
-sFlowName = "游戏内PK1次（成就点=1）"
-count = 1
 
 # 抽卡相关配置
 [account_configs.ark_lottery]

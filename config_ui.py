@@ -933,7 +933,7 @@ class FixedTeamConfigUi(QWidget):
         self.lineedit_id = create_lineedit(cfg.id, "固定队伍id，仅用于本地区分用")
         form_layout.addRow("队伍id", self.lineedit_id)
 
-        self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
+        self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
         self.lineedit_members.setValidator(QQListValidator())
         form_layout.addRow("成员", self.lineedit_members)
 

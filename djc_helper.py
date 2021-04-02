@@ -430,6 +430,7 @@ class DjcHelper:
                 "管家蚊子腿",
                 "会员关怀",
                 "hello语音网页礼包兑换",
+                "colg每日签到",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -479,6 +480,9 @@ class DjcHelper:
 
         # hello语音网页礼包兑换
         self.hello_voice()
+
+        # colg每日签到
+        self.colg_signin()
 
     # -- 已过期的一些活动
     def expired_activities(self):
@@ -2620,6 +2624,7 @@ class DjcHelper:
     def hello_voice(self):
         # https://dnf.qq.com/cp/a20210312hello/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
+        self.show_amesvr_act_info(self.hello_voice_op)
 
         if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
             logger.warning("未启用hello语音奖励兑换功能，将跳过")
@@ -4009,6 +4014,40 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/act/a20201229act/",
                                    **extra_params)
 
+    # --------------------------------------------colg每日签到--------------------------------------------
+    @try_except()
+    def colg_signin(self):
+        # https://bbs.colg.cn/forum-171-1.html
+        show_head_line("colg每日签到")
+        self.show_not_ams_act_info("colg每日签到")
+
+        if not self.cfg.function_switches.get_colg_signin or self.disable_most_activities():
+            logger.warning("未启用colg每日签到功能，将跳过")
+            return
+
+        if self.cfg.colg_cookie == "":
+            logger.warning("未配置colg的cookie，将跳过（colg相关的配置会配置就配置，不会就不要配置，我不会回答关于这玩意如何获取的问题）")
+            return
+
+        headers = {
+            "accept": "application/json, text/javascript, */*; q=0.01",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "origin": "https://bbs.colg.cn",
+            "referer": "https://bbs.colg.cn/forum-171-1.html",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": self.cfg.colg_cookie,
+        }
+        signin_res = requests.post(self.urls.colg_sign_in_url, data="task_id=84", headers=headers)
+        logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
+
+        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers)
+        logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
+
+        logger.info(color("bold_cyan") + "其他积分的领取，以及各个奖励的领取，请自己前往colg进行嗷")
+
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()
     def vip_mentor(self):
@@ -4960,5 +4999,6 @@ if __name__ == '__main__':
         # djcHelper.guanjia()
         # djcHelper.vip_mentor()
         # djcHelper.hello_voice()
-        djcHelper.xinyue_operations()
-        djcHelper.try_join_fixed_xinyue_team()
+        # djcHelper.xinyue_operations()
+        # djcHelper.try_join_fixed_xinyue_team()
+        djcHelper.colg_signin()

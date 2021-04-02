@@ -1010,6 +1010,9 @@ class AccountConfigUi(QWidget):
         self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_cookie字段的说明")
         form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
+        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中colg_cookie字段的说明")
+        form_layout.addRow("colg cookie", self.lineedit_colg_cookie)
+
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 
         self.setLayout(make_scroll_layout(form_layout))
@@ -1027,6 +1030,7 @@ class AccountConfigUi(QWidget):
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
+        cfg.colg_cookie = self.lineedit_colg_cookie.text()
 
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)

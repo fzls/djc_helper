@@ -4444,6 +4444,7 @@ class DjcHelper:
         self.dnf_fuqian_op("幸运玩家礼包领取", "742315")
 
         for sCode in [
+            "4f739a998cb44201484a8fa7d4e9eaed58e1576e312b70a2cbf17214e19a2ec0",
             "c79fd5c303d0d9a8421a427badae87fd58e1576e312b70a2cbf17214e19a2ec0",
             *self.common_cfg.scode_list_accept_give,
         ]:
@@ -4451,6 +4452,7 @@ class DjcHelper:
                                sCode=sCode,
                                sNickName=quote_plus(quote_plus(quote_plus("小号"))))
         for sCode in [
+            "f3256878f5744a90d9efe0ee6f4d3c3158e1576e312b70a2cbf17214e19a2ec0",
             "f43f1d4d525f55ccd88ff03b60638e0058e1576e312b70a2cbf17214e19a2ec0",
             *self.common_cfg.scode_list_accept_ask,
         ]:

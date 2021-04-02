@@ -26,6 +26,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-03-25 00:00:00", "2021-04-30 23:59:59"),
     newAmsActInfo("DNF助手编年史", "2021-03-01 00:00:00", "2021-03-31 23:59:59"),
+    newAmsActInfo("colg每日签到", "2021-03-31 00:00:00", "2021-04-30 23:59:59"),
 ]
 
 
@@ -186,6 +187,10 @@ class Urls:
         # 心悦app
         # 心悦猫咪api
         self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"
+
+        # colg
+        self.colg_sign_in_url = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=passUserSign"
+        self.colg_take_sign_in_credits = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid=3&task_id=84"
 
     def show_current_valid_act_infos(self):
         acts = []

@@ -245,6 +245,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_firecrackers = True
         # 是否领取 DNF黑鸦竞速 活动
         self.get_dnf_heiya = True
+        # 是否自动进行colg每日签到和积分领取（其他需自行操作~）
+        self.get_colg_signin = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -288,6 +290,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
+        # colg cookie
+        self.colg_cookie = ""
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

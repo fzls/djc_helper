@@ -288,8 +288,6 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
-        # 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
-        self.use_xinyue_operations_in_config_only = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关
@@ -413,8 +411,8 @@ class FixedTeamConfig(ConfigInterface):
         self.enable = False
         # 固定队伍id，仅用于本地区分用
         self.id = "1"
-        # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
-        self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
+        # 固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效
+        self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号"]
 
     def on_config_update(self, raw_config: dict):
         # 由于经常会有人填写成数字，如[123, 456]，导致后面从各个dict中取值时出错（dict中都默认QQ为str类型，若传入int类型，会取不到对应的值）
@@ -422,7 +420,7 @@ class FixedTeamConfig(ConfigInterface):
         self.members = [str(qq) for qq in self.members]
 
     def check(self) -> bool:
-        if len(self.members) != 3:
+        if len(self.members) != 2:
             return False
 
         for qq in self.members:

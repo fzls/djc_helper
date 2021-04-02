@@ -2,7 +2,7 @@ import subprocess
 from sys import exit
 from typing import Dict
 
-from config import load_config, config, XinYueOperationConfig, Config
+from config import load_config, config, Config
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
@@ -372,8 +372,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "成就点", "心悦组队", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
-    colSizes = [4, 12, 8, 8, 12, 6, 8, 8, 14, 8, 15, 10]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
+    colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8, 15, 10]
 
     logger.info(tableify(heads, colSizes))
     for _idx, account_config in enumerate(cfg.account_configs):
@@ -392,13 +392,13 @@ def show_accounts_status(cfg, ctx):
         djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
 
         xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
-        teaminfo = djcHelper.query_xinyue_teaminfo(print_res=False)
-        team_score = "无队伍"
+        teaminfo = djcHelper.query_xinyue_teaminfo()
+        team_award_summary = "无队伍"
         if teaminfo.id != "":
-            team_score = f"{teaminfo.score}/20"
+            team_award_summary = teaminfo.award_summary
             fixed_team = djcHelper.get_fixed_team()
             if fixed_team is not None:
-                team_score = f"[{fixed_team.id}]{team_score}"
+                team_award_summary = f"[{fixed_team.id}]{team_award_summary}"
 
         gpoints = djcHelper.query_gpoints()
 
@@ -413,7 +413,14 @@ def show_accounts_status(cfg, ctx):
 
         stone_count = djcHelper.query_stone_count()
 
-        cols = [idx, account_config.name, status, djc_balance, djc_allin, xinyue_info.score, team_score, gpoints, levelInfo, chronicle_points, majieluo_cards, stone_count]
+        cols = [
+            idx, account_config.name, status,
+            djc_balance, djc_allin,
+            xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
+            gpoints,
+            levelInfo, chronicle_points,
+            majieluo_cards, stone_count,
+        ]
         logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
 
 
@@ -488,19 +495,7 @@ def try_take_xinyue_team_award(cfg: Config):
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
-        xinyue_info = djcHelper.query_xinyue_info("获取心悦信息", print_res=False)
-
-        op_cfgs = [("513818", "查询小队信息"), ("514385", "领取组队奖励")]
-
-        xinyue_operations = []
-        for opcfg in op_cfgs:
-            op = XinYueOperationConfig()
-            op.iFlowId, op.sFlowName = opcfg
-            op.count = 1
-            xinyue_operations.append(op)
-
-        for op in xinyue_operations:
-            djcHelper.do_xinyue_op(xinyue_info.xytype, op)
+        djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
 
         if cfg.common._debug_run_first_only:
             logger.warning("调试开关打开，不再处理后续账户")
@@ -969,5 +964,5 @@ def test_pay_info():
 
 
 if __name__ == '__main__':
-    # _test_main()
-    test_pay_info()
+    _test_main()
+    # test_pay_info()

@@ -236,7 +236,7 @@ class QQLogin():
                 self.login_mode_xinyue: (
                     self._login_xinyue_real,
                     "心悦",
-                    "https://xinyue.qq.com/act/a20181101rights/index.html",
+                    "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
                 ),
                 self.login_mode_qzone: (
                     self._login_qzone,
@@ -404,7 +404,7 @@ class QQLogin():
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
+                self.open_url_on_start("https://xinyue.qq.com/act/a20210317dnf/index_pc.html")
 
             self.set_window_size()
 

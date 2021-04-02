@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from typing import List
-from urllib.parse import unquote_plus
 
 from data_struct import ConfigInterface
 from util import parse_time, run_from_src, format_time
@@ -164,24 +163,40 @@ class UpdateInfo(DaoObject):
 
 
 class XinYueInfo(DaoObject):
-    def __init__(self, score, ysb, xytype, specialMember, username, usericon):
-        # 成就点
-        self.score = int(score)
-        # 勇士币
-        self.ysb = int(ysb)
+    def __init__(self):
         # 1-4=游戏家G1-4，5-7=心悦VIP1-3
-        xytype = int(xytype)
-        self.xytype = xytype
-        if xytype < 5:
-            self.xytype_str = f"游戏家G{xytype}"
-        else:
-            self.xytype_str = f"心悦VIP{xytype - 4}"
+        self.xytype = 1
+        self.xytype_str = "游戏家G1"
         # 特邀会员
-        self.is_special_member = int(specialMember) == 1
+        self.is_special_member = False
+        # 勇士币
+        self.ysb = 0
+        # 成就点
+        self.score = 0
+        # 抽奖券
+        self.ticket = 0
         # 用户名
-        self.username = unquote_plus(username)
-        # 用户头像
-        self.usericon_url = usericon
+        self.username = ""
+        # 头像框地址
+        self.usericon = ""
+        # 登录QQ
+        self.login_qq = ""
+
+        # ------------- 赛利亚打工相关信息 -------------
+        # 工作状态(-2:摸鱼状态，1:可以领取工资, 2: 打工人搬砖中)
+        self.work_status = -2
+        # 工作结束时间(unix时间戳，0时表示摸鱼状态)
+        self.work_end_time = 0
+        # 领取奖励结束时间
+        self.take_award_end_time = 0
+
+    def work_info(self) -> str:
+        if self.work_status == -2:
+            return "摸鱼中"
+        elif self.work_status == 1:
+            return "坐等领工资"
+        else:
+            return "打工仔搬砖中"
 
 
 class XinYueItemInfo(DaoObject):
@@ -209,19 +224,22 @@ class XinYueItemInfo(DaoObject):
         self.used_refresh = used_refresh
 
 
-class XinYueTeamInfo(DaoObject):
+class XinYueTeamInfo(ConfigInterface):
     def __init__(self):
         self.result = 0
         self.id = ""
-        self.score = 0
+        self.award_summary = "大大小|小中大"
         self.members = []  # type: List[XinYueTeamMember]
 
 
-class XinYueTeamMember(DaoObject):
-    def __init__(self, qq, nickname, score):
-        self.qq = qq
-        self.nickname = nickname
-        self.score = score
+class XinYueTeamMember(ConfigInterface):
+    def __init__(self):
+        self.headurl = "http://thirdqq.qlogo.cn/g?b=oidb&k=KJKNiasFOwe0EGjTyHI7CLg&s=640&t=1556481203"
+        self.nickname = "%E6%9C%88%E4%B9%8B%E7%8E%84%E6%AE%87"
+        self.qq = ""
+        self.captain = 0
+        self.pak = ""
+        self.code = ""
 
 
 class SailiyamWorkInfo(ConfigInterface):

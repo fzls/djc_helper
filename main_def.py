@@ -670,12 +670,15 @@ def temp_code(cfg):
         ),
         (
             "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
-        )
+        ),
+        (
+            "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷"
+        ),
     ]
 
     if is_first_run("319微信答题"):
         msg = "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
-        async_message_box(msg, "签到活动", icon=win32con.MB_ICONINFORMATION, open_url="https://gzhcos.qq.com/awp-activity/common-daily-question/?ADTAG=dnf#/?site=dnf&game=dnf")
+        async_message_box(msg, "签到活动", icon=win32con.MB_ICONINFORMATION)
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")

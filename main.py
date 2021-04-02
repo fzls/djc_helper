@@ -136,8 +136,9 @@ if __name__ == '__main__':
         main()
         logger.warning(color("fg_bold_yellow") + f"运行完成，共用时{datetime.datetime.now() - run_start_time}")
     except Exception as e:
-        msg = f"ver {now_version} 运行过程中出现未捕获的异常，请加群1041823293反馈或自行解决。" + check_some_exception(e)
-        logger.exception(color("fg_bold_red") + msg, exc_info=e)
+        time_since_release = get_now() - parse_time(ver_time, "%Y.%m.%d")
+        msg = f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群1041823293反馈或自行解决。" + check_some_exception(e)
+        logger.exception(color("fg_bold_yellow") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")

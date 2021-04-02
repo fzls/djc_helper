@@ -72,6 +72,8 @@ class QQLogin():
         options = Options()
         options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
         options.add_argument(f"app={login_url}")
+        # 设置静音
+        options.add_argument("--mute-audio")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
             selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')

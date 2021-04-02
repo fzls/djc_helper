@@ -2686,6 +2686,8 @@ class DjcHelper:
         # 打印最新信息
         logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
 
+        logger.info(color("bold_cyan") + "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷")
+
     def check_hello_voice(self):
         self.check_bind_account("hello语音奖励兑换", "https://dnf.qq.com/cp/a20210312hello/index.html",
                                 activity_op_func=self.hello_voice_op, query_bind_flowid="748063", commit_bind_flowid="748062")

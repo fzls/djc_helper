@@ -429,6 +429,7 @@ class DjcHelper:
                 "qq视频活动",
                 "管家蚊子腿",
                 "会员关怀",
+                "hello语音网页礼包兑换",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -476,6 +477,9 @@ class DjcHelper:
         # 会员关怀
         self.vip_mentor()
 
+        # hello语音网页礼包兑换
+        self.hello_voice()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -510,9 +514,6 @@ class DjcHelper:
 
         # 史诗之路来袭活动合集
         self.dnf_1224()
-
-        # hello语音网页礼包兑换
-        self.hello_voice()
 
         # DNF闪光杯第三期
         self.dnf_shanguang()
@@ -2625,7 +2626,7 @@ class DjcHelper:
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
     @try_except()
     def hello_voice(self):
-        # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
+        # https://dnf.qq.com/cp/a20210312hello/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
 
         if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
@@ -2636,69 +2637,68 @@ class DjcHelper:
             logger.warning("未配置hello_id，若需要该功能，请前往配置文件查看说明并添加该配置")
             return
 
-        if not self.check_hello_voice_bind_role():
-            return
+        self.check_hello_voice()
 
-        # ------封装函数-----------
+        def query_coin():
+            res = self.hello_voice_op("hello贝查询", "747516", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-        def getDayDui(type, packid, ctx):
-            return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)
+            return int(raw_info.sOutValue1)
 
-        def getActDui(packid, ctx):
-            while True:
-                res = self.do_hello_voice(ctx, "lotteryTicket", packid=packid)
-                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻3天”！", "jData": {"afterStatus": 0, "helloTicketCount": 4, "packid": null, "packname": "黑钻3天"}, "sSerial": "ULINK-DNF-1207140536-6PNeKs-228919-394635"}
-                if res["iRet"] == 0 and res["jData"]["afterStatus"] == 0:
-                    # 仍有剩余兑换次数，继续兑换
-                    continue
+        def query_ticket():
+            res = self.hello_voice_op("兑换券查询", "747515", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-                # 无兑换次数或本次兑换结束后无剩余次数
-                # {"iRet": -1014, "sMsg": "兑换券不足", "jData": [], "sSerial": "ULINK-DNF-1207140538-vs2JQk-228919-378934"}
-                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻7天”！", "jData": {"afterStatus": -1, "helloTicketCount": 0, "packid": null, "packname": "黑钻7天"}, "sSerial": "ULINK-DNF-1207140537-5gDMvR-228919-718017"}
-                break
+            ticket = 0
+            for idx in range(1, 7 + 1):
+                ticket += int(getattr(raw_info, f"sOutValue{idx}"))
 
-        # ------实际逻辑-----------
+            return ticket
 
-        self.do_hello_voice("领取新人礼包", "lotteryGift")
+        # ------ 专属福利区 ------
+        # Hello见面礼
+        self.hello_voice_op("hello见面礼包", "749289")
+        # hello专属周礼包
+        self.hello_voice_op("hello专属周礼包", "749297")
+        # hello专属月礼包
+        self.hello_voice_op("hello专属月礼包", "749301")
+        # hello专属特权礼包
+        self.hello_voice_op("hello专属特权礼包", "750502", "1539248")
 
-        # # 每天兑换1次
-        # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-        # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
-
-        # # 每周兑换1次
-        # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
-        # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
-        # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
-        # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
-
-        # 每月兑换1次
-        getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
-        getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
-        getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
-        getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
+        # ------ Hello贝兑换区 ------
+        # Hello贝兑换
+        logger.info(color("bold_green") + "下面Hello贝可兑换的内容已写死，如需调整，请自行修改源码")
+        # self.hello_voice_op("神秘契约礼盒(1天)(150Hello贝)(日限1)", "750307", "1539249")
+        # self.hello_voice_op("闪亮的雷米援助礼盒(5个)(150Hello贝)(日限1)", "750307", "1539250")
+        # self.hello_voice_op("远古精灵的超级秘药(150Hello贝)(日限1)", "750307", "1539252")
+        # self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "750499", "1539253")
+        self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "750499", "1539254")
+        self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "750499", "1539256")
+        self.hello_voice_op("装备提升礼盒*5(800Hello贝)(月限1)", "750500", "1539257")
+        self.hello_voice_op("时间引导石*20(550Hello贝)(月限1)", "750500", "1539258")
+        # self.hello_voice_op("升级券(lv50~99)(2000Hello贝)(月限1)", "750500", "1539259")
 
         # 活动奖励兑换
-        getActDui(1, "黑钻3天兑换券")
-        getActDui(2, "黑钻7天兑换券")
-        getActDui(3, "时间引导石（10个）兑换券")
-        getActDui(4, "升级券*1（lv95-99）兑换券")
-        getActDui(5, "智慧的引导通行证*1兑换券")
-        getActDui(6, "装备提升礼盒*1兑换券")
+        self.hello_voice_op("时间引导石*20(日限1)", "750352", "1539260")
+        self.hello_voice_op("神秘契约礼盒(1天)(日限1)", "750352", "1539263")
+        self.hello_voice_op("黑钻3天(周限1)", "750501", "1539262")
+        self.hello_voice_op("神器守护珠神秘礼盒(周限1)", "750501", "1539273")
+        self.hello_voice_op("装备提升礼盒*5(月限1)", "750502", "1539274")
+        self.hello_voice_op("升级券(Lv50~99)(月限1)", "750502", "1539275")
 
-    def check_hello_voice_bind_role(self):
-        data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
-        if data["iRet"] == -1011:
-            # 未选择大区
-            logger.warning(color("fg_bold_yellow") + "未绑定角色，请前往hello语音，点击左下方【首页】->左上角【游戏】->左上方【福利中心】->【DNF活动奖励&hello贝兑换】->在打开的网页中进行角色绑定")
-            return False
-        else:
-            # 已选择大区
-            roleInfo = HelloVoiceDnfRoleInfo().auto_update_config(data["jData"])
-            logger.info(f"绑定角色信息: {roleInfo}")
-            return True
+        # 打印最新信息
+        logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
 
-    def do_hello_voice(self, ctx, api, type="", packid="", print_res=True):
-        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid, print_res=print_res)
+    def check_hello_voice(self):
+        self.check_bind_account("hello语音奖励兑换", "https://dnf.qq.com/cp/a20210312hello/index.html",
+                                activity_op_func=self.hello_voice_op, query_bind_flowid="748063", commit_bind_flowid="748062")
+
+    def hello_voice_op(self, ctx, iFlowId, prize="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_hello_voice
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210312hello/",
+                                   hello_id=self.cfg.hello_voice.hello_id, prize=prize,
+                                   **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):
@@ -4721,6 +4721,7 @@ class DjcHelper:
             "skin_id", "decoration_id", "adLevel", "adPower",
             "username", "petId",
             "fuin", "sCode", "sNickName", "iId", "sendPage",
+            "hello_id", "prize",
         ]}
 
         # 整合得到所有默认值
@@ -4940,7 +4941,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_sailiyam()
         # djcHelper.dnf_rank()
         # djcHelper.dnf_warriors_call()
-        # djcHelper.hello_voice()
         # djcHelper.dnf_carnival()
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
@@ -4968,4 +4968,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.qq_video()
         # djcHelper.guanjia()
-        djcHelper.vip_mentor()
+        # djcHelper.vip_mentor()
+        djcHelper.hello_voice()

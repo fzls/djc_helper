@@ -1010,6 +1010,8 @@ class DjcHelper:
 
         logger.info(f"当前账号的本地固定队信息为{fixed_team}")
 
+        self.check_xinyue_battle_ground()
+
         teaminfo = self.query_xinyue_teaminfo(print_res=True)
         if teaminfo.id != "":
             logger.info(f"目前已有队伍={teaminfo}")

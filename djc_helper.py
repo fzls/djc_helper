@@ -2434,7 +2434,7 @@ class DjcHelper:
         if is_first_run("dnf_helper_chronicle_task_tips_month_3"):
             async_message_box(msg, "编年史任务提示")
         else:
-            logger.warning(msg)
+            logger.warning(color("bold_cyan") + msg)
 
         # 领取任务奖励的经验
         takeTaskAwards()

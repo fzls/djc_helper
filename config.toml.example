@@ -120,7 +120,7 @@ retry_wait_time = 5
 
 # 心悦相关配置
 [common.xinyue]
-# 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
+# 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。
 [[common.fixed_teams]]
 # 是否启用该固定队
 enable = false

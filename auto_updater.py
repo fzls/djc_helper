@@ -27,7 +27,7 @@ auto_updater_version = "1.0.5"
 def auto_update():
     args = parse_args()
 
-    logger.info(f"更新器的进程为{os.getpid()}, 版本为{auto_updater_version}，主进程为{args.pid}, 版本为{args.version}")
+    logger.info(f"更新器的进程为{os.getpid()}, 版本为{auto_updater_version}(主代码版本为{now_version})，主进程为{args.pid}, 版本为{args.version}")
 
     # note: 工作目录预期为小助手的exe所在目录
     if args.cwd == invalid_cwd:

@@ -365,7 +365,7 @@ class ConfigUi(QFrame):
             netdisk_addr = "https://fzls.lanzous.com/s/djc-helper"
 
             # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y-%m-%d")
+            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
             if time_since_last_update.days >= 7:
                 msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]({netdisk_addr})看看是否有新版本，或者购买自动更新DLC省去手动更新的操作"
                 show_message("检查更新失败", msg)
@@ -933,7 +933,7 @@ class FixedTeamConfigUi(QWidget):
         self.lineedit_id = create_lineedit(cfg.id, "固定队伍id，仅用于本地区分用")
         form_layout.addRow("队伍id", self.lineedit_id)
 
-        self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
+        self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
         self.lineedit_members.setValidator(QQListValidator())
         form_layout.addRow("成员", self.lineedit_members)
 
@@ -1010,6 +1010,9 @@ class AccountConfigUi(QWidget):
         self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_cookie字段的说明")
         form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
+        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中colg_cookie字段的说明")
+        form_layout.addRow("colg cookie", self.lineedit_colg_cookie)
+
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 
         self.setLayout(make_scroll_layout(form_layout))
@@ -1027,6 +1030,7 @@ class AccountConfigUi(QWidget):
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
+        cfg.colg_cookie = self.lineedit_colg_cookie.text()
 
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)
@@ -1146,9 +1150,9 @@ class FunctionSwitchesConfigUi(QWidget):
         #
         # self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
         # form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
-        #
-        # self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
-        # form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
+
+        self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
+        form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
 
         self.checkbox_get_dnf_welfare = create_checkbox(cfg.get_dnf_welfare)
         form_layout.addRow("DNF福利中心兑换", self.checkbox_get_dnf_welfare)
@@ -1210,7 +1214,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
         cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
         # cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
-        # cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
+        cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
         cfg.get_xinyue_cat = self.checkbox_get_xinyue_cat.isChecked()

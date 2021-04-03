@@ -272,29 +272,40 @@ class QzoneActivity:
 
     # ----------------- 会员关怀 ----------------------
 
+    # note: 2.0 搜索 actId 确定活动id
+    vip_mentor_actId = 4438
+
     def vip_mentor(self):
         # 当过期的时候，可以去找找看是不是有新的出来了
         #
         # note: 会员关怀接入方式：
-        #   1. 浏览器打开活动页面 https://act.qzone.qq.com/vip/meteor/blockly/p/6658xcbed0
-        #   2. network中找到 https://qzonestyle.gtimg.cn/qzone/qzact/act/xcube/6658xcbed0/index.js
+        #   1. 浏览器打开活动页面 https://act.qzone.qq.com/vip/meteor/blockly/p/6865x93954
+        #   2. Sources 中找到 https://qzonestyle.gtimg.cn/qzone/qzact/act/xcube/6865x93954/index.js
 
-        # note: 2.1 搜索 _guaihuai 定位 领取回归礼包的ruleid和actname
+        # note: 2.1 搜索 gameAward 定位 j_widget_4/5/6的onclick 领取回归礼包的ruleid和actname
         guanhuai_gifts = [
-            GuanhuaiActInfo("act_dnf_1_guaihuai1", "30198"),
-            GuanhuaiActInfo("act_dnf_1_guaihuai2", "30197"),  # 一般是这个最好
-            GuanhuaiActInfo("act_dnf_1_guaihuai3", "30196"),
+            GuanhuaiActInfo("", "31264"),
+            GuanhuaiActInfo("", "31265"),  # 一般是这个最好
+            GuanhuaiActInfo("", "31263"),
         ]
         guanhuai_gift = guanhuai_gifts[self.cfg.vip_mentor.take_index - 1]
 
+        # note: 2.1.1 搜索 distinctActive 看该值为 1 还是 0， 将决定后续流程具体使用什么接口
+        guanhuai_distinctActive = "0"
+
         # note: 2.2 搜索 act_dnf_huoyue_ 定位 增加抽奖次数的ruleid和actname
-        add_lottery_times_act_info = GuanhuaiActInfo("act_dnf_huoyue_1", "30200")
+        add_lottery_times_act_info = GuanhuaiActInfo("act_dnf_huoyue_2", "31267")
 
         # note: 2.3 搜索 asyncBudget 定位 剩余抽奖次数的countid
-        query_lottery_times_countid = "119664"
+        query_lottery_times_countid = "120720"
 
         # note: 2.4 搜索 gameDraw 定位 抽奖的ruleid
-        lottery_ruleid = "30199"
+        lottery_ruleid = "31266"
+
+        # note: 2.5.1 将活动添加到实际运行队列中
+        # note: 2.5.2 fetch_pskey 中取消注释该开关
+        # note: 2.5.3 调整 urls 中活动的时间
+        # note: 2.5.4 调整 config_ui.py 中的开关
 
         def take_guanhuai_gift(ctx):
             cfg = self.cfg.vip_mentor
@@ -312,13 +323,19 @@ class QzoneActivity:
                     logger.info("使用配置的区服和角色信息来进行领取会员关怀礼包")
                     server_id, roleid = cfg.guanhuai_dnf_server_id, cfg.guanhuai_dnf_role_id
 
+            if guanhuai_distinctActive == "0":
+                logger.warning(color("bold_cyan") + "本次会员关怀活动不允许获取资格和领取奖励的账号不同，因此若当前QQ未被判定为幸运玩家，则不会领取成功~")
+
             return _game_award(ctx, guanhuai_gift.act_name, guanhuai_gift.ruleid, area=server_id, partition=server_id, roleid=roleid)
 
         def addLotteryTimes(ctx):
             return _game_award(ctx, add_lottery_times_act_info.act_name, add_lottery_times_act_info.ruleid)
 
         def _game_award(ctx, act_name, ruleid, area="", partition="", roleid=""):
-            return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, ruleid, query="0", gameid="dnf", act_name=act_name, area=area, partition=partition, roleid=roleid)
+            if guanhuai_distinctActive == '1':
+                return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, ruleid, query="0", gameid="dnf", act_name=act_name, area=area, partition=partition, roleid=roleid)
+            else:
+                return self.do_vip_mentor("fcg_receive_reward", ctx, ruleid, gameid="dnf", partition=partition, roleid=roleid)
 
         def queryLotteryTimes(ctx):
             res = self.do_vip_mentor("fcg_qzact_count", ctx, "", countid=query_lottery_times_countid, print_res=False)
@@ -341,7 +358,7 @@ class QzoneActivity:
             time.sleep(5)
 
     def do_vip_mentor(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
-        return self.do_qzone_activity(4304, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
+        return self.do_qzone_activity(self.vip_mentor_actId, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
 
     # ----------------- QQ空间活动通用逻辑 ----------------------
 

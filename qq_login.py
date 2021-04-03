@@ -72,6 +72,8 @@ class QQLogin():
         options = Options()
         options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
         options.add_argument(f"app={login_url}")
+        # 设置静音
+        options.add_argument("--mute-audio")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
             selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
@@ -236,7 +238,7 @@ class QQLogin():
                 self.login_mode_xinyue: (
                     self._login_xinyue_real,
                     "心悦",
-                    "https://xinyue.qq.com/act/a20181101rights/index.html",
+                    "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
                 ),
                 self.login_mode_qzone: (
                     self._login_qzone,
@@ -404,7 +406,7 @@ class QQLogin():
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start("https://xinyue.qq.com/act/a20181101rights/index.html")
+                self.open_url_on_start("https://xinyue.qq.com/act/a20210317dnf/index_pc.html")
 
             self.set_window_size()
 

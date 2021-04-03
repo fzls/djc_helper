@@ -245,6 +245,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_firecrackers = True
         # 是否领取 DNF黑鸦竞速 活动
         self.get_dnf_heiya = True
+        # 是否自动进行colg每日签到和积分领取（其他需自行操作~）
+        self.get_colg_signin = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -288,8 +290,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
-        # 是否仅使用配置中设定的心悦操作，若设定为true，则不会在运行时将所有心悦任务都尝试完成一遍
-        self.use_xinyue_operations_in_config_only = False
+        # colg cookie
+        self.colg_cookie = ""
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关
@@ -413,8 +415,8 @@ class FixedTeamConfig(ConfigInterface):
         self.enable = False
         # 固定队伍id，仅用于本地区分用
         self.id = "1"
-        # 固定队成员，必须是三个，则必须都配置在本地的账号列表中了，否则将报错，不生效
-        self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号", "小队第三个账号的QQ号"]
+        # 固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效
+        self.members = ["小队第一个账号的QQ号", "小队第二个账号的QQ号"]
 
     def on_config_update(self, raw_config: dict):
         # 由于经常会有人填写成数字，如[123, 456]，导致后面从各个dict中取值时出错（dict中都默认QQ为str类型，若传入int类型，会取不到对应的值）
@@ -422,7 +424,7 @@ class FixedTeamConfig(ConfigInterface):
         self.members = [str(qq) for qq in self.members]
 
     def check(self) -> bool:
-        if len(self.members) != 3:
+        if len(self.members) != 2:
             return False
 
         for qq in self.members:
@@ -483,6 +485,10 @@ class CommonConfig(ConfigInterface):
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
         self.auto_send_card_target_qqs = []  # type: List[str]
+        # 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
+        self.scode_list_accept_give = []
+        # 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知
+        self.scode_list_accept_ask = []
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
         # 各种操作的通用重试配置

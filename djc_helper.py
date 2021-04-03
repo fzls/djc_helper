@@ -31,7 +31,7 @@ class DjcHelper:
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
     local_saved_guanjia_openid_file = os.path.join(cached_dir, ".saved_guanjia_openid.{}.json")
 
-    local_saved_teamid_file = os.path.join(db_dir, ".teamid.{}.json")
+    local_saved_teamid_file = os.path.join(db_dir, ".teamid_new.{}.json")
 
     def __init__(self, account_config, common_config):
         self.cfg = account_config  # type: AccountConfig
@@ -405,9 +405,6 @@ class DjcHelper:
         # dnf论坛签到
         self.dnf_bbs_signin()
 
-        # 会员关怀
-        self.vip_mentor()
-
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
             self.paied_activities()
@@ -430,6 +427,10 @@ class DjcHelper:
                 "DNF集合站",
                 "WeGame活动",
                 "qq视频活动",
+                "管家蚊子腿",
+                "会员关怀",
+                "hello语音网页礼包兑换",
+                "colg每日签到",
             ]
             if len(paied_activities) != 0:
                 msg += "\n目前受影响的活动如下："
@@ -471,6 +472,18 @@ class DjcHelper:
         # qq视频活动
         self.qq_video()
 
+        # 管家蚊子腿
+        self.guanjia()
+
+        # 会员关怀
+        self.vip_mentor()
+
+        # hello语音网页礼包兑换
+        self.hello_voice()
+
+        # colg每日签到
+        self.colg_signin()
+
     # -- 已过期的一些活动
     def expired_activities(self):
         # wegame国庆活动【秋风送爽关怀常伴】
@@ -506,9 +519,6 @@ class DjcHelper:
         # 史诗之路来袭活动合集
         self.dnf_1224()
 
-        # hello语音网页礼包兑换
-        self.hello_voice()
-
         # DNF闪光杯第三期
         self.dnf_shanguang()
 
@@ -526,9 +536,6 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
-
-        # 管家蚊子腿
-        self.guanjia()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()
@@ -871,7 +878,7 @@ class DjcHelper:
     @try_except()
     def xinyue_operations(self):
         """
-        https://xinyue.qq.com/act/a20181101rights/index.html
+        https://xinyue.qq.com/act/a20210317dnf/index_pc.html
         根据配置进行心悦相关操作
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
@@ -882,73 +889,29 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        # 查询道具信息
-        old_itemInfo = self.query_xinyue_items("6.1.0 操作前查询各种道具信息")
-        logger.info(f"查询到的心悦道具信息为：{old_itemInfo}")
+        self.check_xinyue_battle_ground()
+
+        # self.xinyue_battle_ground_op("周期获奖记录", "747508")
+        # self.xinyue_battle_ground_op("花园获奖记录", "747563")
+        # self.xinyue_battle_ground_op("充值获奖记录", "747719")
 
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
-        # 查询白名单
-        is_white_list = self.query_xinyue_whitelist("6.2 查询心悦白名单")
-
-        default_xinyue_operations = []
+        default_xinyue_operations = [
+            ("747791", "回流礼"),
+        ]
 
         # 尝试根据心悦级别领取对应周期礼包
         if old_info.xytype < 5:
-            # 513581	Y600周礼包_特邀会员
-            # 673270	月礼包_特邀会员_20200610后使用
-            default_xinyue_operations.extend([("513581", "Y600周礼包_特邀会员"), ("673270", "月礼包_特邀会员_20200610后使用")])
-        else:
-            if is_white_list:
-                # 673262	周礼包_白名单用户
-                # 673264	月礼包_白名单用户
-                default_xinyue_operations.extend([("673262", "周礼包_白名单用户"), ("673264", "月礼包_白名单用户")])
-            else:
-                # 513573	Y600周礼包
-                # 673269	月礼包_20200610后使用
-                default_xinyue_operations.extend([("513573", "Y600周礼包"), ("673269", "月礼包_20200610后使用")])
-
-        # 513585	累计宝箱
-        default_xinyue_operations.append(("513585", "累计宝箱"))
-
-        if not self.cfg.use_xinyue_operations_in_config_only:
-            # 默认附加上心悦每日任务，避免后面使用配置工具添加新账号时会漏掉这些
-            # 顺序与配置文件中的顺序一致，这里不再赘述
             default_xinyue_operations.extend([
-                # 领取积分卡
-                ("512408", "每月赠送双倍积分卡（仅心悦会员）"),
-
-                # 双倍（仅尝试最高级别的，不然比较浪费）
-                ("512432", "充值DNF3000点券_双倍（成就点=6）"),
-                ("512435", "游戏内消耗疲劳值120_双倍（成就点=6）"),
-                ("512437", "游戏内在线时长40_双倍（成就点=6）"),
-                ("512441", "游戏内PK3次_双倍（成就点=6）"),
-
-                # 普通
-                ("512396", "充值DNF3000点券（成就点=3）"),
-                ("512398", "游戏内在线时长40（成就点=3）"),
-                ("512400", "游戏内消耗疲劳值120（成就点=3）"),
-                ("512402", "游戏内PK3次（成就点=3）"),
-
-                # 免做（仅尝试最高级别的，不然比较浪费）
-                ("512490", "领取每周免做卡"),
-                ("512415", "充值DNF3000点券_免做（成就点=3）"),
-                ("512418", "游戏内消耗疲劳值120_免做（成就点=3）"),
-                ("512421", "游戏内在线时长40_免做（成就点=3）"),
-                ("512424", "游戏内PK3次_免做（成就点=3）"),
-
-                # 如果还没做完三个，尝试一些普通任务，但是免做任务和双倍不尝试非3点的，避免浪费
-                ("512395", "充值DNF2000点券（成就点=2）"),
-                ("512397", "游戏内在线时长30（成就点=2）"),
-                ("512399", "游戏内消耗疲劳值50（成就点=2）"),
-                ("512401", "游戏内PK2次（成就点=2）"),
-                ("512393", "邮箱无未读邮件（成就点=2）"),
-                ("578321", "精英赛投票（成就点=未知）"),
-                ("512388", "充值DNF1000点券（成就点=1）"),
-                ("512389", "游戏内在线时长15（成就点=1）"),
-                ("512390", "游戏内消耗疲劳值10（成就点=1）"),
-                ("512391", "游戏内PK1次（成就点=1）"),
+                ("747507", "周礼包_特邀会员"),
+                ("747539", "月礼包_特邀会员"),
+            ])
+        else:
+            default_xinyue_operations.extend([
+                ("747534", "周礼包_心悦会员"),
+                ("747541", "月礼包_心悦会员"),
             ])
 
         xinyue_operations = []
@@ -976,19 +939,37 @@ class DjcHelper:
         for op in xinyue_operations:
             self.do_xinyue_op(old_info.xytype, op)
 
-        # 查询道具信息
-        new_itemInfo = self.query_xinyue_items("6.3.0 操作完成后查询各种道具信息")
-        logger.info(f"查询到的心悦道具信息为：{new_itemInfo}")
+        # ------------ 赛利亚打工 -----------------
+        info = self.query_xinyue_info("查询打工信息", print_res=False)
+        # 可能的状态如下
+        # 工作状态 描述 结束时间 领取结束时间 可进行操作
+        #    -2   待机    0                  可打工（若本周总次数未用完），之后状态变为2
+        #    2    打工中  a         b        在结束时间a之前，不能进行任何操作，a之后状态变为1
+        #    1    领工资  a         b        在结束时间b之前，可以领取奖励。领取后状态变为-2
+        if info.work_status == -2:
+            self.xinyue_battle_ground_op("打工仔去打工", "748050")
+        elif info.work_status == 2:
+            logger.info(color("bold_green") + f"赛利亚正在打工中~ 结束时间为{datetime.datetime.fromtimestamp(info.work_end_time)}")
+        elif info.work_status == 1:
+            self.xinyue_battle_ground_op("搬砖人领工资", "748077")
+            self.xinyue_battle_ground_op("打工仔去打工", "748050")
+
+        # 然后尝试抽奖
+        info = self.query_xinyue_info("查询抽奖次数", print_res=False)
+        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
+        for idx in range(info.ticket):
+            self.xinyue_battle_ground_op(f"第{idx + 1}次抽奖券抽奖", "749081")
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
         delta = new_info.score - old_info.score
         logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 本次心悦相关操作共获得 {delta} 个成就点（ {old_info.score} -> {new_info.score} ）")
+        logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前是 {new_info.xytype_str} , 最新勇士币数目为 {new_info.ysb}")
 
         # 查询下心悦组队进度
-        teaminfo = self.query_xinyue_teaminfo(print_res=False)
+        teaminfo = self.query_xinyue_teaminfo()
         if teaminfo.id != "":
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍进度为 {teaminfo.score}/20")
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {teaminfo.award_summary}")
         else:
             logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
@@ -1018,13 +999,8 @@ class DjcHelper:
                 time.sleep(retryCfg.request_wait_time)
                 break
 
+    @try_except()
     def try_join_fixed_xinyue_team(self):
-        try:
-            self._try_join_fixed_xinyue_team()
-        except Exception as e:
-            logger.exception("加入固定心悦队伍出现异常", exc_info=e)
-
-    def _try_join_fixed_xinyue_team(self):
         # 检查是否有固定队伍
         fixed_team = self.get_fixed_team()
 
@@ -1034,7 +1010,9 @@ class DjcHelper:
 
         logger.info(f"当前账号的本地固定队信息为{fixed_team}")
 
-        teaminfo = self.query_xinyue_teaminfo()
+        self.check_xinyue_battle_ground()
+
+        teaminfo = self.query_xinyue_teaminfo(print_res=True)
         if teaminfo.id != "":
             logger.info(f"目前已有队伍={teaminfo}")
             # 本地保存一下
@@ -1073,7 +1051,7 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning(f"本地调试日志：本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是三个有效的qq号")
+                logger.warning(f"本地调试日志：本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是两个有效的qq号")
                 continue
 
             fixed_team = team
@@ -1081,52 +1059,71 @@ class DjcHelper:
 
         return fixed_team
 
-    def query_xinyue_teaminfo(self, print_res=True):
-        data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "513818", print_res=print_res)
+    @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
+    def query_xinyue_teaminfo(self, print_res=False):
+        data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "748075", print_res=print_res)
         jdata = data["modRet"]["jData"]
 
         return self.parse_teaminfo(jdata)
 
     def query_xinyue_teaminfo_by_id(self, remote_teamid):
-        # 513919	传入小队ID查询队伍信息
-        data = self.xinyue_battle_ground_op("查询特定id的心悦队伍信息", "513919", teamid=remote_teamid)
+        # 748071	传入小队ID查询队伍信息
+        data = self.xinyue_battle_ground_op("查询特定id的心悦队伍信息", "748071", teamid=remote_teamid)
         jdata = data["modRet"]["jData"]
         teaminfo = self.parse_teaminfo(jdata)
         return teaminfo
 
     def join_xinyue_team(self, remote_teamid):
-        # 513803	加入小队
-        data = self.xinyue_battle_ground_op("尝试加入小队", "513803", teamid=remote_teamid)
+        # 748069	加入小队
+        data = self.xinyue_battle_ground_op("尝试加入小队", "748069", teamid=remote_teamid)
         if int(data["flowRet"]["iRet"]) == 700:
             # 小队已经解散
             return None
 
-        jdata = data["modRet"]["jData"]
-        teaminfo = self.parse_teaminfo(jdata)
-        return teaminfo
+        return self.query_xinyue_teaminfo()
 
     def create_xinyue_team(self):
-        # 513512	创建小队
-        data = self.xinyue_battle_ground_op("尝试创建小队", "513512")
-        jdata = data["modRet"]["jData"]
-        teaminfo = self.parse_teaminfo(jdata)
-        return teaminfo
+        # 748052	创建小队
+        data = self.xinyue_battle_ground_op("尝试创建小队", "748052")
+
+        return self.query_xinyue_teaminfo()
 
     def parse_teaminfo(self, jdata):
         teamInfo = XinYueTeamInfo()
         teamInfo.result = jdata["result"]
         if teamInfo.result == 0:
-            teamInfo.score = jdata["score"]
-            teamid = jdata["teamid"]
-            if type(teamid) == str:
-                teamInfo.id = teamid
-            else:
-                for id in jdata["teamid"]:
-                    teamInfo.id = id
-            for member_json_str in jdata["teaminfo"]:
-                member_json = json.loads(member_json_str)
-                member = XinYueTeamMember(member_json["sqq"], unquote_plus(member_json["nickname"]), member_json["score"])
+            teamInfo.ttl_time = jdata.get("ttl_time", 0)
+            teamInfo.id = jdata.get("code", "")  # 根据code查询时从这获取
+
+            # 解析队伍信息
+            team_list = jdata["team_list"]
+            for member_json_str in jdata["team_list"]:
+                member = XinYueTeamMember().auto_update_config(json.loads(member_json_str))
                 teamInfo.members.append(member)
+                if member.code != "":
+                    teamInfo.id = member.code  # 而查询自己的队伍信息时，则需要从队员信息中获取
+
+            # 解析奖励状态
+            awardIdToName = {
+                "2373983": "大",  # 20
+                "2373988": "中",  # 15
+                "2373987": "小",  # 10
+            }
+
+            award_summarys = []
+            for member in teamInfo.members:
+                award_names = []
+
+                pak_list = member.pak.split("|")
+                for pak in pak_list:
+                    award_id, idx = pak.split('_')
+                    award_name = awardIdToName[award_id]
+
+                    award_names.append(award_name)
+
+                award_summarys.append(''.join(award_names))
+            teamInfo.award_summary = '|'.join(award_summarys)
+
         return teamInfo
 
     def save_teamid(self, fixed_teamid, remote_teamid):
@@ -1150,26 +1147,31 @@ class DjcHelper:
             logger.debug(f"读取本地缓存的固定队信息，具体内容如下：{teamidInfo}")
             return teamidInfo["remote_teamid"]
 
-    def query_xinyue_whitelist(self, ctx, print_res=True):
-        data = self.xinyue_battle_ground_op(ctx, "673280", print_res=print_res)
-        r = data["modRet"]
-        user_is_white = int(r["sOutValue1"]) != 0
-        return user_is_white
-
-    def query_xinyue_items(self, ctx):
-        data = self.xinyue_battle_ground_op(ctx, "512407")
-        r = data["modRet"]
-        total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh = r["sOutValue1"], r["sOutValue5"], r["sOutValue3"], r["sOutValue4"], r["sOutValue6"], r["sOutValue7"]
-        return XinYueItemInfo(total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh)
-
+    @try_except(return_val_on_except=XinYueInfo())
     def query_xinyue_info(self, ctx, print_res=True):
-        data = self.xinyue_battle_ground_op(ctx, "512411", print_res=print_res)
-        if "modRet" in data:
-            r = data["modRet"]
-            score, ysb, xytype, specialMember, username, usericon = r["sOutValue1"], r["sOutValue2"], r["sOutValue3"], r["sOutValue4"], r["sOutValue5"], r["sOutValue6"]
+        res = self.xinyue_battle_ground_op(ctx, "748082", print_res=print_res)
+        raw_info = parse_amesvr_common_info(res)
+
+        info = XinYueInfo()
+        info.xytype = int(raw_info.sOutValue1)
+        if info.xytype < 5:
+            info.xytype_str = f"游戏家G{info.xytype}"
         else:
-            score, ysb, xytype, specialMember, username, usericon = "0", "0", "1", "0", "查询失败了", ""
-        return XinYueInfo(score, ysb, xytype, specialMember, username, usericon)
+            info.xytype_str = f"心悦VIP{info.xytype - 4}"
+        info.is_special_member = int(raw_info.sOutValue2) == 1
+        info.ysb, info.score, info.ticket = [int(val) for val in raw_info.sOutValue3.split('|')]
+        info.username, info.usericon = raw_info.sOutValue4.split('|')
+        info.username = unquote_plus(info.username)
+        info.login_qq = raw_info.sOutValue5
+        info.work_status = int(raw_info.sOutValue6 or "0")
+        info.work_end_time = int(raw_info.sOutValue7 or "0")
+        info.take_award_end_time = int(raw_info.sOutValue8 or "0")
+
+        return info
+
+    def check_xinyue_battle_ground(self):
+        self.check_bind_account("心悦战场", "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
+                                activity_op_func=self.xinyue_battle_ground_op, query_bind_flowid="748044", commit_bind_flowid="748043")
 
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
         return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid, **extra_params)
@@ -2475,18 +2477,18 @@ class DjcHelper:
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：
-    #   1. 打开新活动的页面 https://guanjia.qq.com/act/cop/20210303dnf/index.html
+    #   1. 打开新活动的页面 https://guanjia.qq.com/act/cop/20210322dnf/pc/index.html
     #   2. 按F12，在Console中输入 console.log(JSON.stringify(GLOBAL_AMP_CONFIG))，将结果复制到 format_json.json 中格式化，方便查看
     #   3. 在json中搜索 comGifts，定位到各个礼包的信息，并将下列变量的数值更新为新版本
-    guanjia_common_gifts_act_id = "1146"  # 礼包活动ID
-    guanjia_gift_id_special_rights = "7688"  # 电脑管家特权礼包
-    guanjia_gift_id_game_helper = "7689"  # 游戏助手礼包
-    guanjia_gift_id_return_user = "7690"  # 回归勇士礼包
-    guanjia_gift_id_download_and_login_this_version_guanjia = "7691"  # 下载登录管家任务
-    guanjia_gift_id_game_online_30_minutes = "7692"  # 每日游戏在线30分钟任务
-    guanjia_gift_id_login_game_helper = "7693"  # 每日登录游戏助手任务
+    guanjia_common_gifts_act_id = "1149"  # 礼包活动ID
+    guanjia_gift_id_special_rights = "7715"  # 电脑管家特权礼包
+    guanjia_gift_id_sign_in_2_days = "7716"  # 连续签到2天礼包
+    guanjia_gift_id_return_user = "7717"  # 幸运勇士礼包
+    guanjia_gift_id_download_and_login_this_version_guanjia = "7718"  # 下载登录管家任务
+    guanjia_gift_id_game_online_30_minutes = "7719"  # 每日游戏在线30分钟任务
+    guanjia_gift_id_sign_in = "7720"  # 每日签到任务
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
-    guanjia_lottery_gifts_act_id = "1145"  # 抽奖活动ID
+    guanjia_lottery_gifts_act_id = "1148"  # 抽奖活动ID
 
     # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
     # note: 6. 调整urls中管家蚊子腿的起止时间
@@ -2509,13 +2511,13 @@ class DjcHelper:
         time.sleep(self.common_cfg.retry.request_wait_time)
 
         self.guanjia_common_gifts_op("电脑管家特权礼包", giftId=self.guanjia_gift_id_special_rights)
-        self.guanjia_common_gifts_op("游戏助手礼包", giftId=self.guanjia_gift_id_game_helper)
-        self.guanjia_common_gifts_op("回归勇士礼包", giftId=self.guanjia_gift_id_return_user)
+        self.guanjia_common_gifts_op("连续签到2天礼包", giftId=self.guanjia_gift_id_sign_in_2_days)
+        self.guanjia_common_gifts_op("幸运勇士礼包", giftId=self.guanjia_gift_id_return_user)
 
         self.guanjia_common_gifts_op("下载安装并登录电脑管家", giftId=self.guanjia_gift_id_download_and_login_this_version_guanjia)
 
         self.guanjia_common_gifts_op("每日游戏在线30分钟", giftId=self.guanjia_gift_id_game_online_30_minutes)
-        self.guanjia_common_gifts_op("每日登录游戏助手", giftId=self.guanjia_gift_id_login_game_helper)
+        self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in)
 
         for i in range(10):
             res = self.guanjia_lottery_gifts_op("抽奖")
@@ -2533,7 +2535,7 @@ class DjcHelper:
 
         # {"code": 7005, "msg": "获取accToken失败", "result": []}
         # {"code": 29, "msg": "请求包参数错误", "result": []}
-        res = self.guanjia_common_gifts_op("每日登录游戏助手", giftId=self.guanjia_gift_id_login_game_helper, print_res=False)
+        res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
         return res["code"] in [7005, 29]
 
     def guanjia_common_gifts_op(self, ctx, giftId="", print_res=True):
@@ -2553,7 +2555,7 @@ class DjcHelper:
         # 检查是否启用管家相关活动
         any_enabled = False
         for activity_enabled in [
-            # self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
+            self.cfg.function_switches.get_guanjia and not self.disable_most_activities(),
         ]:
             if activity_enabled:
                 any_enabled = True
@@ -2622,8 +2624,9 @@ class DjcHelper:
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
     @try_except()
     def hello_voice(self):
-        # https://dnf.qq.com/act/1192/f19665d784ac041d/index.html  （从hello语音app中兑换奖励页点开网页）
+        # https://dnf.qq.com/cp/a20210312hello/index.html  （从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
+        self.show_amesvr_act_info(self.hello_voice_op)
 
         if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
             logger.warning("未启用hello语音奖励兑换功能，将跳过")
@@ -2633,69 +2636,70 @@ class DjcHelper:
             logger.warning("未配置hello_id，若需要该功能，请前往配置文件查看说明并添加该配置")
             return
 
-        if not self.check_hello_voice_bind_role():
-            return
+        self.check_hello_voice()
 
-        # ------封装函数-----------
+        def query_coin():
+            res = self.hello_voice_op("hello贝查询", "747516", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-        def getDayDui(type, packid, ctx):
-            return self.do_hello_voice(ctx, "lotteryHellob", type=type, packid=packid)
+            return int(raw_info.sOutValue1)
 
-        def getActDui(packid, ctx):
-            while True:
-                res = self.do_hello_voice(ctx, "lotteryTicket", packid=packid)
-                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻3天”！", "jData": {"afterStatus": 0, "helloTicketCount": 4, "packid": null, "packname": "黑钻3天"}, "sSerial": "ULINK-DNF-1207140536-6PNeKs-228919-394635"}
-                if res["iRet"] == 0 and res["jData"]["afterStatus"] == 0:
-                    # 仍有剩余兑换次数，继续兑换
-                    continue
+        def query_ticket():
+            res = self.hello_voice_op("兑换券查询", "747515", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-                # 无兑换次数或本次兑换结束后无剩余次数
-                # {"iRet": -1014, "sMsg": "兑换券不足", "jData": [], "sSerial": "ULINK-DNF-1207140538-vs2JQk-228919-378934"}
-                # {"iRet": 0, "sMsg": " 恭喜您获得“黑钻7天”！", "jData": {"afterStatus": -1, "helloTicketCount": 0, "packid": null, "packname": "黑钻7天"}, "sSerial": "ULINK-DNF-1207140537-5gDMvR-228919-718017"}
-                break
+            ticket = 0
+            for idx in range(1, 7 + 1):
+                ticket += int(getattr(raw_info, f"sOutValue{idx}"))
 
-        # ------实际逻辑-----------
+            return ticket
 
-        self.do_hello_voice("领取新人礼包", "lotteryGift")
+        # ------ 专属福利区 ------
+        # Hello见面礼
+        self.hello_voice_op("hello见面礼包", "749289")
+        # hello专属周礼包
+        self.hello_voice_op("hello专属周礼包", "749297")
+        # hello专属月礼包
+        self.hello_voice_op("hello专属月礼包", "749301")
+        # hello专属特权礼包
+        self.hello_voice_op("hello专属特权礼包", "750502", "1539248")
 
-        # # 每天兑换1次
-        # getDayDui(1, 1, "每天兑换-神秘契约礼盒（1天） - 200 Hello贝")
-        # getDayDui(1, 2, "每天兑换-装备品级调整箱 - 400 Hello贝")
-
-        # # 每周兑换1次
-        # getDayDui(2, 1, "每周兑换-复活币礼盒（1个） - 450 Hello贝")
-        # getDayDui(2, 2, "每周兑换-装备品级调整箱 - 600 Hello贝")
-        # getDayDui(2, 3, "每周兑换-黑钻3天 - 550 Hello贝")
-        # getDayDui(2, 4, "每周兑换-抗疲劳秘药（5点） - 400 Hello贝")
-
-        # 每月兑换1次
-        getDayDui(3, 1, "每月兑换-装备提升礼盒 - 900 Hello贝")
-        getDayDui(3, 2, "每月兑换-时间引导石10个 - 600 Hello贝")
-        getDayDui(3, 3, "每月兑换-装备提升礼盒 - 900 Hello贝")
-        getDayDui(3, 4, "每月兑换-装扮合成器 - 600 Hello贝")
+        # ------ Hello贝兑换区 ------
+        # Hello贝兑换
+        logger.info(color("bold_green") + "下面Hello贝可兑换的内容已写死，如需调整，请自行修改源码")
+        # self.hello_voice_op("神秘契约礼盒(1天)(150Hello贝)(日限1)", "750307", "1539249")
+        # self.hello_voice_op("闪亮的雷米援助礼盒(5个)(150Hello贝)(日限1)", "750307", "1539250")
+        # self.hello_voice_op("远古精灵的超级秘药(150Hello贝)(日限1)", "750307", "1539252")
+        # self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "750499", "1539253")
+        self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "750499", "1539254")
+        self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "750499", "1539256")
+        self.hello_voice_op("装备提升礼盒*5(800Hello贝)(月限1)", "750500", "1539257")
+        self.hello_voice_op("时间引导石*20(550Hello贝)(月限1)", "750500", "1539258")
+        # self.hello_voice_op("升级券(lv50~99)(2000Hello贝)(月限1)", "750500", "1539259")
 
         # 活动奖励兑换
-        getActDui(1, "黑钻3天兑换券")
-        getActDui(2, "黑钻7天兑换券")
-        getActDui(3, "时间引导石（10个）兑换券")
-        getActDui(4, "升级券*1（lv95-99）兑换券")
-        getActDui(5, "智慧的引导通行证*1兑换券")
-        getActDui(6, "装备提升礼盒*1兑换券")
+        self.hello_voice_op("时间引导石*20(日限1)", "750352", "1539260")
+        self.hello_voice_op("神秘契约礼盒(1天)(日限1)", "750352", "1539263")
+        self.hello_voice_op("黑钻3天(周限1)", "750501", "1539262")
+        self.hello_voice_op("神器守护珠神秘礼盒(周限1)", "750501", "1539273")
+        self.hello_voice_op("装备提升礼盒*5(月限1)", "750502", "1539274")
+        self.hello_voice_op("升级券(Lv50~99)(月限1)", "750502", "1539275")
 
-    def check_hello_voice_bind_role(self):
-        data = self.do_hello_voice("检查账号绑定信息", "getRole", print_res=False)
-        if data["iRet"] == -1011:
-            # 未选择大区
-            logger.warning(color("fg_bold_yellow") + "未绑定角色，请前往hello语音，点击左下方【首页】->左上角【游戏】->左上方【福利中心】->【DNF活动奖励&hello贝兑换】->在打开的网页中进行角色绑定")
-            return False
-        else:
-            # 已选择大区
-            roleInfo = HelloVoiceDnfRoleInfo().auto_update_config(data["jData"])
-            logger.info(f"绑定角色信息: {roleInfo}")
-            return True
+        # 打印最新信息
+        logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
 
-    def do_hello_voice(self, ctx, api, type="", packid="", print_res=True):
-        return self.get(ctx, self.urls.hello_voice, api=api, hello_id=self.cfg.hello_voice.hello_id, type=type, packid=packid, print_res=print_res)
+        logger.info(color("bold_cyan") + "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷")
+
+    def check_hello_voice(self):
+        self.check_bind_account("hello语音奖励兑换", "https://dnf.qq.com/cp/a20210312hello/index.html",
+                                activity_op_func=self.hello_voice_op, query_bind_flowid="748063", commit_bind_flowid="748062")
+
+    def hello_voice_op(self, ctx, iFlowId, prize="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_hello_voice
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210312hello/",
+                                   hello_id=self.cfg.hello_voice.hello_id, prize=prize,
+                                   **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):
@@ -4014,6 +4018,40 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/act/a20201229act/",
                                    **extra_params)
 
+    # --------------------------------------------colg每日签到--------------------------------------------
+    @try_except()
+    def colg_signin(self):
+        # https://bbs.colg.cn/forum-171-1.html
+        show_head_line("colg每日签到")
+        self.show_not_ams_act_info("colg每日签到")
+
+        if not self.cfg.function_switches.get_colg_signin or self.disable_most_activities():
+            logger.warning("未启用colg每日签到功能，将跳过")
+            return
+
+        if self.cfg.colg_cookie == "":
+            logger.warning("未配置colg的cookie，将跳过（colg相关的配置会配置就配置，不会就不要配置，我不会回答关于这玩意如何获取的问题）")
+            return
+
+        headers = {
+            "accept": "application/json, text/javascript, */*; q=0.01",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "origin": "https://bbs.colg.cn",
+            "referer": "https://bbs.colg.cn/forum-171-1.html",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": self.cfg.colg_cookie,
+        }
+        signin_res = requests.post(self.urls.colg_sign_in_url, data="task_id=84", headers=headers)
+        logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
+
+        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers)
+        logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
+
+        logger.info(color("bold_cyan") + "其他积分的领取，以及各个奖励的领取，请自己前往colg进行嗷")
+
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()
     def vip_mentor(self):
@@ -4440,14 +4478,27 @@ class DjcHelper:
 
         self.dnf_fuqian_op("幸运玩家礼包领取", "742315")
 
-        self.dnf_fuqian_op("接受福签赠送", "742846",
-                           sCode="f8526c5f3dddf7c5c45b895b7c2eb35858e1576e312b70a2cbf17214e19a2ec0",
-                           sNickName=quote_plus(quote_plus(quote_plus("小号"))))
+        for sCode in [
+            "4f739a998cb44201484a8fa7d4e9eaed58e1576e312b70a2cbf17214e19a2ec0",
+            "c79fd5c303d0d9a8421a427badae87fd58e1576e312b70a2cbf17214e19a2ec0",
+            *self.common_cfg.scode_list_accept_give,
+        ]:
+            self.dnf_fuqian_op("接受福签赠送", "742846",
+                               sCode=sCode,
+                               sNickName=quote_plus(quote_plus(quote_plus("小号"))))
+        for sCode in [
+            "f3256878f5744a90d9efe0ee6f4d3c3158e1576e312b70a2cbf17214e19a2ec0",
+            "f43f1d4d525f55ccd88ff03b60638e0058e1576e312b70a2cbf17214e19a2ec0",
+            *self.common_cfg.scode_list_accept_ask,
+        ]:
+            self.dnf_fuqian_op("接受福签索要", "742927",
+                               sCode=sCode)
 
         if len(self.cfg.spring_fudai_receiver_qq_list) != 0:
             share_pskey = self.fetch_share_p_skey("福签赠送")
             for qq in self.cfg.spring_fudai_receiver_qq_list:
                 self.dnf_fuqian_op(f"福签赠送-{qq}", "742115", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
+                self.dnf_fuqian_op(f"福签索要-{qq}", "742824", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
         else:
             logger.warning(color("bold_yellow") + f"未配置新春福袋大作战邀请列表, 将跳过赠送福签")
 
@@ -4705,6 +4756,7 @@ class DjcHelper:
             "skin_id", "decoration_id", "adLevel", "adPower",
             "username", "petId",
             "fuin", "sCode", "sNickName", "iId", "sendPage",
+            "hello_id", "prize",
         ]}
 
         # 整合得到所有默认值
@@ -4908,8 +4960,6 @@ if __name__ == '__main__':
 
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()
-        # djcHelper.xinyue_operations()
-        # djcHelper.try_join_fixed_xinyue_team()
         # djcHelper.get_heizuan_gift()
         # djcHelper.get_credit_xinyue_gift()
         # djcHelper.query_mobile_game_rolelist()
@@ -4924,7 +4974,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_sailiyam()
         # djcHelper.dnf_rank()
         # djcHelper.dnf_warriors_call()
-        # djcHelper.hello_voice()
         # djcHelper.dnf_carnival()
         # djcHelper.xinyue_financing()
         # djcHelper.dnf_carnival_live()
@@ -4938,12 +4987,10 @@ if __name__ == '__main__':
         # djcHelper.dnf_spring()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
-        # djcHelper.vip_mentor()
         # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
-        # djcHelper.guanjia()
         # djcHelper.majieluo()
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_welfare()
@@ -4952,4 +4999,10 @@ if __name__ == '__main__':
         # djcHelper.dnf_heiya()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_wegame()
-        djcHelper.qq_video()
+        # djcHelper.qq_video()
+        # djcHelper.guanjia()
+        # djcHelper.vip_mentor()
+        # djcHelper.hello_voice()
+        # djcHelper.xinyue_operations()
+        # djcHelper.try_join_fixed_xinyue_team()
+        djcHelper.colg_signin()

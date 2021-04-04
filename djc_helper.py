@@ -1112,6 +1112,9 @@ class DjcHelper:
 
             award_summarys = []
             for member in teamInfo.members:
+                if member.pak == "":
+                    continue
+
                 award_names = []
 
                 pak_list = member.pak.split("|")

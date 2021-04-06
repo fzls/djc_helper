@@ -12,7 +12,7 @@ from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
 from upload_lanzouyun import Uploader, lanzou_cookie
-from util import is_first_run, use_by_myself, async_call, is_run_in_github_action
+from util import is_first_run, use_by_myself, async_call, is_run_in_github_action, try_except
 from version import now_version, ver_time
 
 
@@ -49,19 +49,31 @@ def check_update_on_start(config: CommonConfig):
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
     except Exception as err:
-        logger.error(
-            f"检查版本更新失败（这个跟自动更新没有任何关系）,大概率是访问不了github导致的，可自行前往网盘查看是否有更新, 错误为{err}"
-            + color("bold_green") + f"\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
-        )
+        try:
+            # 到这里一般是无法访问github，这时候试试gitee的方案
+            if config.check_update_on_start:
+                latest_version = get_version_from_gitee()
+                ui = UpdateInfo()
+                ui.latest_version = latest_version
+                ui.netdisk_link = "https://fzls.lanzous.com/s/djc-helper"
+                ui.netdisk_passcode = "fzls"
+                ui.update_message = "当前无法访问github，暂时无法获取更新内容，若欲知更新内容，请浏览gitee主页进行查看哦~\n\nhttps://gitee.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
-        # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-        time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
-        if time_since_last_update.days >= 7:
-            msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
-            logger.info(color("bold_green") + msg)
-            if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-                win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
-                webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
+                try_manaual_update(ui)
+        except Exception as err:
+            logger.error(
+                f"手动检查版本更新失败（这个跟自动更新没有任何关系）,大概率是访问不了github和gitee导致的，可自行前往网盘查看是否有更新, 错误为{err}"
+                + color("bold_green") + f"\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
+            )
+
+            # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
+            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
+            if time_since_last_update.days >= 7:
+                msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
+                logger.info(color("bold_green") + msg)
+                if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
+                    win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
+                    webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
 
 
 def try_manaual_update(ui: UpdateInfo) -> bool:
@@ -189,9 +201,22 @@ def get_netdisk_addr(config):
         return "https://fzls.lanzous.com/s/djc-helper"
 
 
+# 备选方案：从gitee获取最新版本号（但不解析具体版本内容，作为github的fallback）
+@try_except(return_val_on_except="1.0.0")
+def get_version_from_gitee() -> str:
+    api = "https://gitee.com/api/v5/repos/fzls/djc_helper/tags"
+    res = requests.get(api).json()
+    latest_version_info = max(res, key=lambda x: version_to_version_int_list(x['name'][1:]))
+
+    return latest_version_info['name'][1:]
+
+
 if __name__ == '__main__':
     from config import load_config, config
 
     load_config()
     cfg = config()
     check_update_on_start(cfg.common)
+
+    ver = get_version_from_gitee()
+    print(f"最新版本是：{ver}")

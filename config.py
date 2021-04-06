@@ -495,7 +495,7 @@ class CommonConfig(ConfigInterface):
         self.retry = RetryConfig()
         # 心悦相关配置
         self.xinyue = XinYueConfig()
-        # 固定队相关配置。用于本地三个号来组成一个固定队伍，完成心悦任务。
+        # 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。
         self.fixed_teams = []  # type: List[FixedTeamConfig]
         # 赛利亚活动拜访目标QQ列表
         self.sailiyam_visit_target_qqs = []  # type: List[str]

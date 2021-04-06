@@ -1112,6 +1112,9 @@ class DjcHelper:
 
             award_summarys = []
             for member in teamInfo.members:
+                if member.pak == "":
+                    continue
+
                 award_names = []
 
                 pak_list = member.pak.split("|")
@@ -2434,7 +2437,7 @@ class DjcHelper:
         if is_first_run("dnf_helper_chronicle_task_tips_month_3"):
             async_message_box(msg, "编年史任务提示")
         else:
-            logger.warning(msg)
+            logger.warning(color("bold_cyan") + msg)
 
         # 领取任务奖励的经验
         takeTaskAwards()
@@ -4049,6 +4052,11 @@ class DjcHelper:
 
         take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers)
         logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
+        # {'code': 100000, 'data': {'user_credits': 295, 'task_credits': '15'}, 'msg': ''}
+        resJson = take_credits_res.json()
+        if resJson['code'] == 100000 and resJson['data']['user_credits'] >= 650:
+            msg = "Colg活跃值已经达到650了咯，记得去Colg领取灿烂哦"
+            async_message_box(msg, "可以领灿烂啦", open_url="https://bbs.colg.cn/forum-171-1.html")
 
         logger.info(color("bold_cyan") + "其他积分的领取，以及各个奖励的领取，请自己前往colg进行嗷")
 

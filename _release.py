@@ -12,7 +12,7 @@ from _package import package
 from _push_github import push_github
 from log import logger
 from upload_lanzouyun import Uploader
-from util import maximize_console
+from util import maximize_console, make_sure_dir_exists
 from version import now_version
 
 # 最大化窗口
@@ -46,6 +46,7 @@ os.chdir(dir_src)
 build()
 
 # ---------------清除一些历史数据
+make_sure_dir_exists(dir_all_release)
 os.chdir(dir_all_release)
 clear_github_artifact(dir_all_release, dir_github_action_artifact)
 

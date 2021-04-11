@@ -1112,7 +1112,8 @@ class DjcHelper:
 
             award_summarys = []
             for member in teamInfo.members:
-                if member.pak == "":
+                # 尚未有奖励时将会是false
+                if member.pak == "" or member.pak == False:
                     continue
 
                 award_names = []

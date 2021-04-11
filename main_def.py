@@ -788,31 +788,30 @@ def get_user_buy_info(cfg: Config):
         max_present_times = datetime.timedelta(days=2 * 31)
 
         free_start_time = parse_time("2021-02-08 00:00:00")
+        free_end_time = free_start_time + max_present_times
 
-        # 计算自2.8开始累积未付费时长
-        now = datetime.datetime.now()
-        since_start_time = now - free_start_time
-        not_paied_time = max(since_start_time - datetime.timedelta(days=user_buy_info.total_buy_month * 31), datetime.timedelta())
-
-        # 计算至今剩余的免费时长
-        present_times = datetime.timedelta()
-        if not_paied_time < max_present_times:
-            # 如果当前到2.8号的未付费时长少于两个月，则补齐差值到过期时间
-            present_times = max_present_times - not_paied_time
+        fixup_times = datetime.timedelta()
 
         if user_buy_info.total_buy_month == 0:
-            # 如果从未购买过，过期时间改为现在
-            expire_at_time = now
+            # 如果从未购买过，过期时间改为DLC免费赠送结束时间
+            expire_at_time = free_end_time
         else:
-            expire_at_time = max(parse_time(user_buy_info.expire_at), now)
+            # 计算与免费时长重叠的时长，补偿这段时间
+            for record in user_buy_info.buy_records:
+                buy_at = parse_time(record.buy_at)
+                if buy_at >= free_end_time:
+                    continue
+                fixup_times += min(free_end_time, buy_at + datetime.timedelta(days=record.buy_month * 31)) - buy_at
 
-        user_buy_info.expire_at = format_time(expire_at_time + present_times)
+            expire_at_time = max(parse_time(user_buy_info.expire_at), free_end_time) + fixup_times
+
+        user_buy_info.expire_at = format_time(expire_at_time)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
             "buy_month": 2,
             "buy_at": free_start_time,
-            "reason": "自动更新DLC赠送"
+            "reason": "自动更新DLC赠送(2.8-4.11区间)"
         }))
-        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前累积未付费时长为{not_paied_time}，故而补偿{present_times}，实际过期时间为{user_buy_info.expire_at}")
+        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前付费激活区间与2.8-4.11重合部分为{fixup_times}，故而补偿该段时长~，实际过期时间为{user_buy_info.expire_at}")
 
     return user_buy_info
 

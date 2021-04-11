@@ -50,6 +50,7 @@ def build(disable_douban=False):
         *douban_op,
         "-r",
         "requirements.txt",
+        "--upgrade",
         "wheel",
         "pyinstaller",
     ])

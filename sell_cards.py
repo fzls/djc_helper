@@ -12,6 +12,7 @@ CARD_PLACEHOLDER = "XXXXXXXXXXX"
 
 def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     cards_to_send = [name for name in cards_to_send if name != CARD_PLACEHOLDER]
+    original_cards = [*cards_to_send]
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
@@ -39,10 +40,15 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
         remaining_cards = []
         for name in cards_to_send:
             res = djcHelper.send_card_by_name(name, targetQQ)
-            if int(res["13333"]["ret"]) == 0:
+            retCode = int(res["13333"]["ret"])
+            if retCode == 0:
                 success_send_list.append(name)
             else:
                 remaining_cards.append(name)
+
+                if len(original_cards) == 1:
+                    if retCode == 10017:
+                        return "该账号今日已被赠送过四次"
 
         cards_to_send = remaining_cards
         if len(cards_to_send) == 0:

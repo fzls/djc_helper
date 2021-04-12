@@ -445,9 +445,6 @@ class DjcHelper:
         # dnf助手编年史活动
         self.dnf_helper_chronicle()
 
-        # DNF马杰洛的规划
-        self.majieluo()
-
         # DNF落地页活动
         self.dnf_luodiye()
 
@@ -536,6 +533,9 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
+
+        # DNF马杰洛的规划
+        self.majieluo()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()

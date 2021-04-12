@@ -1376,12 +1376,12 @@ class DjcHelper:
         from_qq = uin2qq(self.cfg.account_info.uin)
 
         ctx = f"{from_qq} 赠送卡片 {card_name}({cardId}) 给 {to_qq}"
-        self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, actName=self.zzconfig.actName, print_res=print_res)
+        return self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, actName=self.zzconfig.actName, print_res=print_res)
         # # {"13333":{"data":{},"ret":0,"msg":"成功"},"ecode":0,"ts":1607934736057}
 
     def send_card_by_name(self, card_name, to_qq):
         card_info_map = parse_card_group_info_map(self.zzconfig)
-        self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
+        return self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
     def fetch_pskey(self, force=False):
         # 如果未启用qq空间相关的功能，则不需要这个

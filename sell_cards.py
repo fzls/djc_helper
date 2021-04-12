@@ -18,7 +18,7 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     cfg = config()
 
     # 12.30 送卡片次数（re:好像送给别人没有上限？）
-    indexes = [8]
+    indexes = list(range(len(cfg.account_configs), 0, -1))
 
     card_info_map = parse_card_group_info_map(zzconfig())
     for name in cards_to_send:
@@ -50,9 +50,12 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
 
     msg = ""
     if len(success_send_list) != 0:
-        msg += f"成功发送以下卡片：{success_send_list}"
+        msg += f"\n成功发送以下卡片：{success_send_list}"
     if len(cards_to_send) != 0:
-        msg += f" 无法发送以下卡片：{cards_to_send}，是否已达到赠送上限？"
+        msg += f"\n无法发送以下卡片：{cards_to_send}，是否已达到赠送上限？"
+    if len(success_send_list) != 0:
+        msg += f"\n请使用手机打开集卡页面确认是否到账~ 若到账请按1元每张的价格主动扫码转账哦~"
+    msg += "\n"
 
     return msg
 

@@ -70,7 +70,9 @@ def run_local():
 
 
 def run_remote(args):
-    msg = sell_card(args.target_qq, [args.card_name])
+    card_info_map = parse_card_group_info_map(zzconfig())
+    card_name_list = [card_name for card_name, card_info in card_info_map.items() if card_info.index == args.card_index]
+    msg = sell_card(args.target_qq, card_name_list)
     import json
     print(json.dumps(msg))
 
@@ -79,7 +81,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_remote", action='store_true')
     parser.add_argument("--target_qq", required=True, default="", type=str, help="qq to send card, eg. 1054073896")
-    parser.add_argument("--card_name", required=True, default="", type=str, help="card to send, eg. 神话闪光新途径")
+    parser.add_argument("--card_index", required=True, default="", type=str, help="card index to send, eg. 2-3")
     args = parser.parse_args()
 
     return args

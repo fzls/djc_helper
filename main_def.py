@@ -797,11 +797,16 @@ def get_user_buy_info(cfg: Config):
             expire_at_time = free_end_time
         else:
             # 计算与免费时长重叠的时长，补偿这段时间
+            user_buy_info.buy_records = sorted(user_buy_info.buy_records, key=lambda record: parse_time(record.buy_at))
+            last_end = free_start_time
             for record in user_buy_info.buy_records:
                 buy_at = parse_time(record.buy_at)
                 if buy_at >= free_end_time:
                     continue
-                fixup_times += min(free_end_time, buy_at + datetime.timedelta(days=record.buy_month * 31)) - buy_at
+                end_time = buy_at + datetime.timedelta(days=record.buy_month * 31)
+
+                fixup_times += min(free_end_time, end_time) - min(free_end_time, end_time, max(buy_at, last_end))
+                last_end = end_time
 
             expire_at_time = max(parse_time(user_buy_info.expire_at), free_end_time) + fixup_times
 

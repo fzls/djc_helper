@@ -113,10 +113,13 @@ def query_card_info():
             summaryCols[card_position] += card_count
 
     msg = "\n卡片详情如下"
+    msg += "\n "
+    for col in range(4):
+        msg += f" {col + 1:3d}"
     for row in range(3):
-        msg += "\n"
+        msg += f"\n{row + 1}"
         for col in range(4):
-            msg += f" {summaryCols[row * 4 + col]}"
+            msg += f" {summaryCols[row * 4 + col]:3d}"
     msg += "\n"
 
     return msg

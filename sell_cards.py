@@ -1,9 +1,11 @@
 import argparse
+import json
 from typing import List
 
 from config import load_config, config
 from djc_helper import DjcHelper
 from log import color, logger
+from qzone_activity import QzoneActivity
 from setting import zzconfig, parse_card_group_info_map
 from util import show_head_line
 
@@ -66,6 +68,60 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     return msg
 
 
+def query_card_info():
+    # 读取配置信息
+    load_config("config.toml", "config.toml.local")
+    cfg = config()
+
+    # 12.30 送卡片次数（re:好像送给别人没有上限？）
+    indexes = list(range(len(cfg.account_configs), 0, -1))
+
+    # 展示卡仓信息
+    lottery_zzconfig = zzconfig()
+    card_info_map = parse_card_group_info_map(lottery_zzconfig)
+    order_map = {}
+    # 卡片编码 => 名称
+    for name, card_info in card_info_map.items():
+        order_map[card_info.index] = name
+
+    heads = []
+    colSizes = []
+
+    card_indexes = ["1-1", "1-2", "1-3", "1-4", "2-1", "2-2", "2-3", "2-4", "3-1", "3-2", "3-3", "3-4"]
+    card_width = 3
+    heads.extend(card_indexes)
+    colSizes.extend([card_width for i in card_indexes])
+
+    summaryCols = [*[0 for card in card_indexes]]
+
+    for idx in indexes:  # 从1开始，第i个
+        account_config = cfg.account_configs[idx - 1]
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        lr = djcHelper.fetch_pskey()
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
+        qa = QzoneActivity(djcHelper, lr)
+
+        card_counts = qa.get_card_counts()
+
+        # 处理各个卡片数目
+        for card_position, card_index in enumerate(card_indexes):
+            card_count = card_counts[order_map[card_index]]
+
+            # 更新统计信息
+            summaryCols[card_position] += card_count
+
+    msg = "\n卡片详情如下"
+    for row in range(3):
+        msg += "\n"
+        for col in range(4):
+            msg += f" {summaryCols[row * 4 + col]}"
+    msg += "\n"
+
+    return msg
+
+
 def run_local():
     # re: 先填QQ undone: 然后填写卡片
     targetQQ = "1054073896"
@@ -79,18 +135,21 @@ def run_local():
 
 
 def run_remote(args):
-    card_info_map = parse_card_group_info_map(zzconfig())
-    card_name_list = [card_name for card_name, card_info in card_info_map.items() if card_info.index == args.card_index]
-    msg = sell_card(args.target_qq, card_name_list)
-    import json
+    if args.query:
+        msg = query_card_info()
+    else:
+        card_info_map = parse_card_group_info_map(zzconfig())
+        card_name_list = [card_name for card_name, card_info in card_info_map.items() if card_info.index == args.card_index]
+        msg = sell_card(args.target_qq, card_name_list)
     print(json.dumps(msg))
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_remote", action='store_true')
-    parser.add_argument("--target_qq", required=True, default="", type=str, help="qq to send card, eg. 1054073896")
-    parser.add_argument("--card_index", required=True, default="", type=str, help="card index to send, eg. 2-3")
+    parser.add_argument("--query", action='store_true')
+    parser.add_argument("--target_qq", default="", type=str, help="qq to send card, eg. 1054073896")
+    parser.add_argument("--card_index", default="", type=str, help="card index to send, eg. 2-3")
     args = parser.parse_args()
 
     return args

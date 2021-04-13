@@ -1021,8 +1021,7 @@ def _test_main():
     cfg = config()
 
     if len(cfg.account_configs) == 0:
-        logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
-        exit(-1)
+        raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
     if need_check_bind_and_skey:
         check_all_skey_and_pskey(cfg)

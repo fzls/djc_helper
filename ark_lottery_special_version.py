@@ -90,8 +90,7 @@ def main():
     cfg = config()
 
     if len(cfg.account_configs) == 0:
-        logger.error("未找到有效的账号配置，请检查是否正确配置。")
-        exit(-1)
+        raise Exception("未找到有效的账号配置，请检查是否正确配置。")
 
     change_title("集卡特别版", need_append_new_version_info=False, multiprocessing_pool_size=cfg.get_pool_size())
 

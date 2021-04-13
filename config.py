@@ -575,6 +575,9 @@ class Config(ConfigInterface):
         return True
 
     def get_pool_size(self) -> int:
+        if not self.common.enable_multiprocessing:
+            return 0
+
         pool_size = self.common.multiprocessing_pool_size
         if pool_size == 0:
             # 若为0，则默认为当前cpu核心数

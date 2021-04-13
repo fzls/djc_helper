@@ -535,13 +535,19 @@ def run(cfg: Config):
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
 
-    for idx, account_config in enumerate(cfg.account_configs):
-        idx += 1
-        if not account_config.is_enabled():
-            logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
-            continue
+    if cfg.common.enable_multiprocessing:
+        logger.info("已开启多进程模式，将并行运行~")
+        with Pool(cfg.get_pool_size()) as pool:
+            pool.starmap(do_run, [(_idx + 1, account_config, cfg.common, user_buy_info)
+                                  for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+    else:
+        for idx, account_config in enumerate(cfg.account_configs):
+            idx += 1
+            if not account_config.is_enabled():
+                logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
+                continue
 
-        do_run(idx, account_config, cfg.common, user_buy_info)
+            do_run(idx, account_config, cfg.common, user_buy_info)
 
 
 def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):

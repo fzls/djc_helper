@@ -302,13 +302,19 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     # 获取数据
     logger.warning("开始获取数据，请耐心等待~")
     rows = []
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
+    if cfg.common.enable_multiprocessing:
+        logger.info("已开启多进程模式，将并行拉取数据~")
+        with Pool(cfg.get_pool_size()) as pool:
+            for row in pool.starmap(query_lottery_status, [(_idx + 1, account_config, cfg.common, card_indexes, prize_indexes, order_map) for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()]):
+                rows.append(row)
+    else:
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
 
-        rows.append(query_lottery_status(idx, account_config, cfg.common, card_indexes, prize_indexes, order_map))
+            rows.append(query_lottery_status(idx, account_config, cfg.common, card_indexes, prize_indexes, order_map))
 
     rows = [row for row in rows if row is not None]
 

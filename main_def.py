@@ -996,6 +996,11 @@ def auto_updater_path():
     return os.path.realpath("utils/auto_updater.exe")
 
 
+def show_multiprocessing_info(cfg: Config):
+    if cfg.common.enable_multiprocessing:
+        logger.info(color("bold_yellow") + f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}")
+
+
 def _test_main():
     need_check_bind_and_skey = True
     # need_check_bind_and_skey = False

@@ -455,7 +455,7 @@ class CommonConfig(ConfigInterface):
         self._show_usage = False
         # 是否启用多进程功能
         self.enable_multiprocessing = False
-        # 进程池大小，若为0，则默认为当前cpu核心数
+        # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
         self.multiprocessing_pool_size = 0
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
@@ -521,9 +521,6 @@ class CommonConfig(ConfigInterface):
         self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
         self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
 
-    def get_pool_size(self) -> int:
-        return self.multiprocessing_pool_size or cpu_count()
-
 
 class Config(ConfigInterface):
     def __init__(self):
@@ -578,6 +575,17 @@ class Config(ConfigInterface):
                 return False
 
         return True
+
+    def get_pool_size(self) -> int:
+        pool_size = self.common.multiprocessing_pool_size
+        if pool_size == 0:
+            # 若为0，则默认为当前cpu核心数
+            return cpu_count()
+        elif pool_size == -1:
+            # 若为-1，则默认为当前账号数
+            return len(self.account_configs)
+        else:
+            return pool_size
 
 
 g_config = Config()

@@ -135,17 +135,26 @@ def auto_send_cards(cfg: Config):
 
     # 统计各账号卡片数目
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
+    account_data = []
+    if cfg.common.enable_multiprocessing:
+        logger.info("已开启多进程模式，将并行拉取数据~")
+        with Pool(cfg.get_pool_size()) as pool:
+            for data in pool.starmap(query_account_ark_lottery_info, [(_idx + 1, len(cfg.account_configs), account_config, cfg.common) for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()]):
+                account_data.append(data)
+    else:
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            account_data.append(query_account_ark_lottery_info(idx, len(cfg.account_configs), account_config, cfg.common))
+
     qq_to_card_name_to_counts = {}
     qq_to_prize_counts = {}
     qq_to_djcHelper = {}
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
-
-        card_name_to_counts, prize_counts, djcHelper = query_account_ark_lottery_info(idx, len(cfg.account_configs), account_config, cfg.common)
-        qq = uin2qq(account_config.account_info.uin)
+    for card_name_to_counts, prize_counts, djcHelper in account_data:
+        qq = uin2qq(djcHelper.cfg.account_info.uin)
 
         qq_to_card_name_to_counts[qq] = card_name_to_counts
         qq_to_prize_counts[qq] = prize_counts

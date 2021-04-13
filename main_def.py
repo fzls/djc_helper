@@ -71,23 +71,6 @@ def check_djc_role_binding():
             cfg = config()
 
 
-def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
-    if not account_config.is_enabled():
-        # 未启用的账户的账户不走该流程
-        return None
-
-    logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
-    djcHelper = DjcHelper(account_config, common)
-    djcHelper.fetch_pskey()
-    djcHelper.check_skey_expired()
-
-    if not check_skey_only:
-        djcHelper.get_bind_role_list(print_warning=False)
-        djcHelper.fetch_guanjia_openid(print_warning=False)
-
-    return djcHelper
-
-
 def check_all_skey_and_pskey(cfg, check_skey_only=False):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -122,6 +105,23 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
             sys.exit(-1)
 
         qq2index[qq] = idx
+
+
+def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
+    if not account_config.is_enabled():
+        # 未启用的账户的账户不走该流程
+        return None
+
+    logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+    djcHelper = DjcHelper(account_config, common)
+    djcHelper.fetch_pskey()
+    djcHelper.check_skey_expired()
+
+    if not check_skey_only:
+        djcHelper.get_bind_role_list(print_warning=False)
+        djcHelper.fetch_guanjia_openid(print_warning=False)
+
+    return djcHelper
 
 
 def auto_send_cards(cfg: Config):

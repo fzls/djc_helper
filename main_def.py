@@ -308,37 +308,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
             # 未启用的账户的账户不走该流程
             continue
 
-        def query_lottery_status(idx: int, account_config: AccountConfig, common_config: CommonConfig) -> Optional[List]:
-            if not account_config.ark_lottery.show_status:
-                return
-
-            djcHelper = DjcHelper(account_config, common_config)
-            lr = djcHelper.fetch_pskey()
-            if lr is None:
-                return
-            djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list(print_warning=False)
-
-            qa = QzoneActivity(djcHelper, lr)
-
-            card_counts = qa.get_card_counts()
-            prize_counts = qa.get_prize_counts()
-
-            cols = [idx, account_config.name]
-            # 处理各个卡片数目
-            for card_position, card_index in enumerate(card_indexes):
-                card_count = card_counts[order_map[card_index]]
-
-                cols.append(card_count)
-
-            # 处理各个奖励剩余领取次数
-            for prize_index in prize_indexes:
-                prize_count = prize_counts[order_map[prize_index]]
-                cols.append(prize_count)
-
-            return cols
-
-        rows.append(query_lottery_status(idx, account_config, cfg.common))
+        rows.append(query_lottery_status(idx, account_config, cfg.common, card_indexes, prize_indexes, order_map))
 
     rows = [row for row in rows if row is not None]
 
@@ -388,6 +358,37 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
         accounts = ', '.join(accounts_that_should_enable_cost_card_to_lottery)
         msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
         logger.warning(color("fg_bold_yellow") + msg)
+
+
+def query_lottery_status(idx: int, account_config: AccountConfig, common_config: CommonConfig, card_indexes: List[str], prize_indexes: List[str], order_map: Dict[str, str]) -> Optional[List]:
+    if not account_config.ark_lottery.show_status:
+        return
+
+    djcHelper = DjcHelper(account_config, common_config)
+    lr = djcHelper.fetch_pskey()
+    if lr is None:
+        return
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list(print_warning=False)
+
+    qa = QzoneActivity(djcHelper, lr)
+
+    card_counts = qa.get_card_counts()
+    prize_counts = qa.get_prize_counts()
+
+    cols = [idx, account_config.name]
+    # 处理各个卡片数目
+    for card_position, card_index in enumerate(card_indexes):
+        card_count = card_counts[order_map[card_index]]
+
+        cols.append(card_count)
+
+    # 处理各个奖励剩余领取次数
+    for prize_index in prize_indexes:
+        prize_count = prize_counts[order_map[prize_index]]
+        cols.append(prize_count)
+
+    return cols
 
 
 def colored_count(accountIdx, card_count, show_color=""):

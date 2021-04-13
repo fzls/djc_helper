@@ -26,13 +26,13 @@ def check_all_skey_and_pskey(cfg):
             do_check_all_skey_and_pskey(idx, account_config, cfg.common)
 
 
-def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common: CommonConfig):
+def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common_config: CommonConfig):
     if not account_config.is_enabled():
         # 未启用的账户的账户不走该流程
         return None
 
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
-    djcHelper = DjcHelper(account_config, cfg.common)
+    djcHelper = DjcHelper(account_config, common_config)
     djcHelper.fetch_pskey()
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)

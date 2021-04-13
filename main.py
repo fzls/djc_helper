@@ -69,8 +69,6 @@ def main():
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
 
-    change_title()
-
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -78,6 +76,8 @@ def main():
     if len(cfg.account_configs) == 0:
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
+
+    change_title(multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)
 

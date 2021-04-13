@@ -980,11 +980,15 @@ def _get_user_buy_info(cfg: Config):
     return default_user_buy_info
 
 
-def change_title(dlcInfo="", need_append_new_version_info=True):
+def change_title(dlcInfo="", need_append_new_version_info=True, multiprocessing_pool_size=0):
     if dlcInfo == "" and exists_auto_updater_dlc():
         dlcInfo = " 自动更新豪华升级版"
 
-    set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} v{now_version} by风之凌殇 {get_random_face()}"
+    pool_info = ""
+    if multiprocessing_pool_size != 0:
+        pool_info = f"火力全开版本({multiprocessing_pool_size})"
+
+    set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
     os.system(set_title_cmd)
 
 

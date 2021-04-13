@@ -74,8 +74,7 @@ def main():
     cfg = config()
 
     if len(cfg.account_configs) == 0:
-        logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
-        exit(-1)
+        raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
     change_title(multiprocessing_pool_size=cfg.get_pool_size())
 

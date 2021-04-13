@@ -251,7 +251,7 @@ def reverse_map(map):
     return kvs
 
 
-def show_lottery_status(ctx, cfg, need_show_tips=False):
+def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)
@@ -299,67 +299,91 @@ def show_lottery_status(ctx, cfg, need_show_tips=False):
     heads.extend(prize_indexes)
     colSizes.extend([printed_width(name) for name in prize_indexes])
 
-    accounts_that_should_enable_cost_card_to_lottery = []
-
-    logger.info(tableify(heads, colSizes))
-    summaryCols = [1, "总计", *[0 for card in card_indexes], *[count_with_color(0, "bold_green", show_width=printed_width(prize_index)) for prize_index in prize_indexes]]
+    # 获取数据
+    logger.warning("开始获取数据，请耐心等待~")
+    rows = []
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.is_enabled():
             # 未启用的账户的账户不走该流程
             continue
 
-        if not account_config.ark_lottery.show_status:
-            continue
+        def query_lottery_status(idx: int, account_config: AccountConfig, common_config: CommonConfig) -> Optional[List]:
+            if not account_config.ark_lottery.show_status:
+                return
 
-        djcHelper = DjcHelper(account_config, cfg.common)
-        lr = djcHelper.fetch_pskey()
-        if lr is None:
-            continue
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
+            djcHelper = DjcHelper(account_config, common_config)
+            lr = djcHelper.fetch_pskey()
+            if lr is None:
+                return
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list(print_warning=False)
 
-        qa = QzoneActivity(djcHelper, lr)
+            qa = QzoneActivity(djcHelper, lr)
 
-        card_counts = qa.get_card_counts()
-        prize_counts = qa.get_prize_counts()
+            card_counts = qa.get_card_counts()
+            prize_counts = qa.get_prize_counts()
 
+            cols = [idx, account_config.name]
+            # 处理各个卡片数目
+            for card_position, card_index in enumerate(card_indexes):
+                card_count = card_counts[order_map[card_index]]
+
+                cols.append(card_count)
+
+            # 处理各个奖励剩余领取次数
+            for prize_index in prize_indexes:
+                prize_count = prize_counts[order_map[prize_index]]
+                cols.append(prize_count)
+
+            return cols
+
+        rows.append(query_lottery_status(idx, account_config, cfg.common))
+
+    rows = [row for row in rows if row is not None]
+
+    # 计算概览
+    summaryCols = [1, "总计", *[0 for card in card_indexes], *[count_with_color(0, "bold_green", show_width=printed_width(prize_index)) for prize_index in prize_indexes]]
+    for row in rows:
         summaryCols[0] += 1
-
-        cols = [idx, account_config.name]
-        has_any_card = False
-        has_any_left_gift = False
-        # 处理各个卡片数目
-        for card_position, card_index in enumerate(card_indexes):
-            card_count = card_counts[order_map[card_index]]
-
-            cols.append(colored_count(idx, card_count, account_config.ark_lottery.show_color))
-
-            # 更新统计信息
-            summaryCols[len(baseHeads) + card_position] += card_count
-
-            if card_count > 0:
-                has_any_card = True
-
-        # 处理各个奖励剩余领取次数
-        for prize_index in prize_indexes:
-            prize_count = prize_counts[order_map[prize_index]]
-            cols.append(count_with_color(prize_count, "bold_green", show_width=printed_width(prize_index)))
-
-            if prize_count > 0:
-                has_any_left_gift = True
-
-        logger.info(tableify(cols, colSizes))
-
-        if has_any_card and not has_any_left_gift:
-            accounts_that_should_enable_cost_card_to_lottery.append(account_config.name)
+        for i in range(2, 2 + 12):
+            summaryCols[i] += row[i]
 
     for cardIdx in range(len(card_indexes)):
         idx = len(baseHeads) + cardIdx
         summaryCols[idx] = colored_count(len(cfg.account_configs), summaryCols[idx], cfg.common.ark_lottery_summary_show_color or "fg_thin_cyan")
 
+    # 计算可以开启抽奖卡片的账号
+    accounts_that_should_enable_cost_card_to_lottery = []
+    for row in rows:
+        has_any_card = False
+        has_any_left_gift = False
+        for i in range(2, 2 + 12):
+            if row[i] > 0:
+                has_any_card = True
+        for i in range(14, 14 + 4):
+            if row[i] > 0:
+                has_any_left_gift = True
+        if has_any_card and not has_any_left_gift:
+            accounts_that_should_enable_cost_card_to_lottery.append(row[1])
+
+    # 给每一行上色
+    for row in rows[:-1]:
+        idx = row[0]
+        name = row[1]
+
+        for i in range(2, 2 + 12):
+            row[i] = colored_count(idx, row[i], cfg.get_account_config_by_name(name).ark_lottery.show_color)
+        for i in range(14, 14 + 4):
+            row[i] = count_with_color(row[i], "bold_green", show_width=printed_width(prize_indexes[i - 14]))
+
+    # 打印卡片情况
+    logger.info(tableify(heads, colSizes))
+    for row in rows:
+        logger.info(tableify(row, colSizes))
     logger.info(tableify(summaryCols, colSizes))
 
+    # 打印提示
     if need_show_tips and len(accounts_that_should_enable_cost_card_to_lottery) > 0:
         accounts = ', '.join(accounts_that_should_enable_cost_card_to_lottery)
         msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
@@ -981,12 +1005,12 @@ def _test_main():
         check_djc_role_binding()
 
     # note: 用于本地测试main的相关逻辑
-    show_accounts_status(cfg, "启动时展示账号概览")
+    # show_accounts_status(cfg, "启动时展示账号概览")
     # try_join_xinyue_team(cfg)
     # run(cfg)
     # try_take_xinyue_team_award(cfg)
     # try_xinyue_sailiyam_start_work(cfg)
-    # show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+    show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
     # auto_send_cards(cfg)
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
     # show_accounts_status(cfg, "运行完毕展示账号概览")

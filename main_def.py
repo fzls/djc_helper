@@ -1,8 +1,9 @@
 import subprocess
+from multiprocessing import Pool, freeze_support
 from sys import exit
-from typing import Dict
+from typing import Dict, Optional
 
-from config import load_config, config, Config
+from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
 from qzone_activity import QzoneActivity
@@ -70,27 +71,46 @@ def check_djc_role_binding():
             cfg = config()
 
 
+def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
+    if not account_config.is_enabled():
+        # 未启用的账户的账户不走该流程
+        return None
+
+    logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+    djcHelper = DjcHelper(account_config, common)
+    djcHelper.fetch_pskey()
+    djcHelper.check_skey_expired()
+
+    if not check_skey_only:
+        djcHelper.get_bind_role_list(print_warning=False)
+        djcHelper.fetch_guanjia_openid(print_warning=False)
+
+    return djcHelper
+
+
 def check_all_skey_and_pskey(cfg, check_skey_only=False):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
+    if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
+        logger.info(color("bold_yellow") + "当前已开启多进程模式，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
+
+        with Pool(cfg.common.get_pool_size()) as pool:
+            pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account, cfg.common, check_skey_only) for _idx, account in enumerate(cfg.account_configs)])
+
+        logger.info("全部账号检查完毕")
+        return
+
+    # 串行登录
     qq2index = {}
 
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
+
+        djcHelper = do_check_all_skey_and_pskey(idx, account_config, cfg.common, check_skey_only)
+        if djcHelper is None:
             continue
-
-        logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
-        djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.fetch_pskey()
-        djcHelper.check_skey_expired()
-
-        if not check_skey_only:
-            djcHelper.get_bind_role_list(print_warning=False)
-            djcHelper.fetch_guanjia_openid(print_warning=False)
 
         qq = uin2qq(djcHelper.cfg.account_info.uin)
         if qq in qq2index:
@@ -971,5 +991,7 @@ def test_pay_info():
 
 
 if __name__ == '__main__':
+    freeze_support()
+
     # _test_main()
     test_pay_info()

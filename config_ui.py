@@ -758,6 +758,12 @@ class CommonConfigUi(QFrame):
     def from_config(self, cfg: CommonConfig):
         form_layout = QFormLayout()
 
+        self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
+        form_layout.addRow("是否启用多进程功能", self.checkbox_enable_multiprocessing)
+
+        self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
+        form_layout.addRow("进程池大小(0=cpu核心数,-1=当前账号数,其他=进程数)", self.spinbox_multiprocessing_pool_size)
+
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
         form_layout.addRow("检查更新", self.checkbox_check_update_on_start)
 
@@ -811,6 +817,8 @@ class CommonConfigUi(QFrame):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()
         cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
+        cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
+        cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()

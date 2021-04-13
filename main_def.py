@@ -636,7 +636,7 @@ def show_buy_info(user_buy_info: BuyInfo):
             has_use_card_secret = True
             break
 
-    if is_first_run("卡密付费方案提示v2") or (user_buy_info.total_buy_month > 0 and not has_use_card_secret and is_weekly_first_run("每周提示一次已付费用户续费可使用卡密自助操作")):
+    if is_first_run("卡密付费方案提示v2") or (not use_by_myself() and user_buy_info.total_buy_month > 0 and not has_use_card_secret and is_weekly_first_run("每周提示一次已付费用户续费可使用卡密自助操作")):
         msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能（自动更新或按月付费）。\n如果想要付费或者续费可以选择这个方案~ 详情请看 【付费指引.docx】"
         title = "新增卡密付费"
         async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION)

@@ -395,7 +395,8 @@ def show_accounts_status(cfg, ctx):
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
     colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8, 15, 10]
 
-    logger.info(tableify(heads, colSizes))
+    # 获取数据
+    rows = []
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
         if not account_config.is_enabled():
@@ -433,7 +434,7 @@ def show_accounts_status(cfg, ctx):
 
         stone_count = djcHelper.query_stone_count()
 
-        cols = [
+        row = [
             idx, account_config.name, status,
             djc_balance, djc_allin,
             xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
@@ -441,7 +442,11 @@ def show_accounts_status(cfg, ctx):
             levelInfo, chronicle_points,
             majieluo_cards, stone_count,
         ]
-        logger.info(color("fg_bold_green") + tableify(cols, colSizes, need_truncate=True))
+        rows.append(row)
+
+    logger.info(tableify(heads, colSizes))
+    for row in rows:
+        logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
 
 
 def try_join_xinyue_team(cfg):

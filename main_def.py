@@ -1004,5 +1004,5 @@ def test_pay_info():
 if __name__ == '__main__':
     freeze_support()
 
-    # _test_main()
-    test_pay_info()
+    _test_main()
+    # test_pay_info()

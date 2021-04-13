@@ -1,5 +1,3 @@
-from multiprocessing import freeze_support
-
 from main_def import *
 from main_def import _show_head_line
 from show_usage import *
@@ -27,18 +25,38 @@ def check_all_skey_and_pskey(cfg):
 def run(cfg):
     _show_head_line("开始核心逻辑")
 
-    for idx, account_config in enumerate(cfg.account_configs):
-        idx += 1
-        if not account_config.is_enabled():
-            logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
-            continue
+    start_time = datetime.datetime.now()
 
-        _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
+    if cfg.common.enable_multiprocessing:
+        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
+        with Pool(cfg.get_pool_size()) as pool:
+            pool.starmap(do_run, [(_idx + 1, account_config, cfg.common)
+                                  for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+    else:
+        for idx, account_config in enumerate(cfg.account_configs):
+            idx += 1
+            if not account_config.is_enabled():
+                logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
+                continue
 
-        djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list()
-        djcHelper.ark_lottery()
+            do_run(idx, account_config, cfg.common)
+
+    used_time = datetime.datetime.now() - start_time
+    _show_head_line(f"处理总计{len(cfg.account_configs)}个账户 共耗时 {used_time}")
+
+
+def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig):
+    _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
+
+    start_time = datetime.datetime.now()
+
+    djcHelper = DjcHelper(account_config, common_config)
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list()
+    djcHelper.ark_lottery()
+
+    used_time = datetime.datetime.now() - start_time
+    _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
 
 def main():

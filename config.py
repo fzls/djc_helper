@@ -1,6 +1,6 @@
 import re
 from multiprocessing import cpu_count
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 import toml
 
@@ -586,6 +586,13 @@ class Config(ConfigInterface):
             return len(self.account_configs)
         else:
             return pool_size
+
+    def get_account_config_by_name(self, name: str) -> Optional[AccountConfig]:
+        for account_config in self.account_configs:
+            if account_config.name == name:
+                return account_config
+
+        return None
 
 
 g_config = Config()

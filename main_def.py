@@ -392,8 +392,8 @@ def show_accounts_status(cfg, ctx):
         return
     _show_head_line(ctx)
 
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "守护者卡片", "马杰洛石头"]
-    colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8, 15, 10]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片"]
+    colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8]
 
     # 获取数据
     rows = []
@@ -430,17 +430,12 @@ def show_accounts_status(cfg, ctx):
             levelInfo = ""
             chronicle_points = ""
 
-        majieluo_cards = djcHelper.query_majieluo_card_info()
-
-        stone_count = djcHelper.query_stone_count()
-
         row = [
             idx, account_config.name, status,
             djc_balance, djc_allin,
             xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
             gpoints,
             levelInfo, chronicle_points,
-            majieluo_cards, stone_count,
         ]
         rows.append(row)
 

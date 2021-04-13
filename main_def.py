@@ -80,8 +80,8 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         with Pool(cfg.get_pool_size()) as pool:
-            pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account, cfg.common, check_skey_only)
-                                                       for _idx, account in enumerate(cfg.account_configs)])
+            pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common, check_skey_only)
+                                                       for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
 
         logger.info("全部账号检查完毕")
         return

@@ -79,6 +79,9 @@ def main():
         logger.error("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
         exit(-1)
 
+    if cfg.common.enable_multiprocessing:
+        logger.info(color("bold_yellow") + f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}")
+
     account_names = []
     for account_cfg in cfg.account_configs:
         account_names.append(account_cfg.name)

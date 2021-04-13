@@ -524,9 +524,10 @@ def try_join_xinyue_team(cfg):
         djcHelper.try_join_fixed_xinyue_team()
 
 
-def run(cfg):
+def run(cfg: Config):
     _show_head_line("开始核心逻辑")
 
+    logger.warning("开始查询付费信息，请稍候~")
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
 
@@ -536,15 +537,19 @@ def run(cfg):
             logger.info(f"第{idx}个账号({account_config.name})未启用，将跳过")
             continue
 
-        _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
+        do_run(idx, account_config, cfg.common, user_buy_info)
 
-        start_time = datetime.datetime.now()
 
-        djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.run(user_buy_info)
+def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
+    _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
-        used_time = datetime.datetime.now() - start_time
-        _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
+    start_time = datetime.datetime.now()
+
+    djcHelper = DjcHelper(account_config, common_config)
+    djcHelper.run(user_buy_info)
+
+    used_time = datetime.datetime.now() - start_time
+    _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
 
 def try_take_xinyue_team_award(cfg: Config):

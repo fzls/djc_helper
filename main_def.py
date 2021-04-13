@@ -395,55 +395,63 @@ def show_accounts_status(cfg, ctx):
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片"]
     colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8]
 
-    def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig):
-        djcHelper = DjcHelper(account_config, common_config)
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
-
-        status = "启用" if account_config.is_enabled() else "未启用"
-
-        djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
-        djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
-
-        xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
-        teaminfo = djcHelper.query_xinyue_teaminfo()
-        team_award_summary = "无队伍"
-        if teaminfo.id != "":
-            team_award_summary = teaminfo.award_summary
-            fixed_team = djcHelper.get_fixed_team()
-            if fixed_team is not None:
-                team_award_summary = f"[{fixed_team.id}]{team_award_summary}"
-
-        gpoints = djcHelper.query_gpoints()
-
-        ui = djcHelper.query_dnf_helper_chronicle_info()
-        levelInfo = f"LV{ui.level}({ui.currentExp}/{ui.levelExp})"
-        chronicle_points = ui.point
-        if ui.totalExp == 0:
-            levelInfo = ""
-            chronicle_points = ""
-
-        return [
-            idx, account_config.name, status,
-            djc_balance, djc_allin,
-            xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
-            gpoints,
-            levelInfo, chronicle_points,
-        ]
-
     # 获取数据
     rows = []
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
+    if cfg.common.enable_multiprocessing:
+        logger.warning("已启用多进程模式，将开始并行拉取数据，请稍后")
+        with Pool(cfg.get_pool_size()) as pool:
+            for row in pool.starmap(get_account_status, [(_idx + 1, account_config, cfg.common) for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()]):
+                rows.append(row)
+    else:
+        logger.warning("拉取数据中，请稍候")
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
 
-        rows.append(get_account_status(idx, account_config, cfg.common))
+            rows.append(get_account_status(idx, account_config, cfg.common))
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
         logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
+
+
+def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig):
+    djcHelper = DjcHelper(account_config, common_config)
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list(print_warning=False)
+
+    status = "启用" if account_config.is_enabled() else "未启用"
+
+    djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
+    djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
+
+    xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
+    teaminfo = djcHelper.query_xinyue_teaminfo()
+    team_award_summary = "无队伍"
+    if teaminfo.id != "":
+        team_award_summary = teaminfo.award_summary
+        fixed_team = djcHelper.get_fixed_team()
+        if fixed_team is not None:
+            team_award_summary = f"[{fixed_team.id}]{team_award_summary}"
+
+    gpoints = djcHelper.query_gpoints()
+
+    ui = djcHelper.query_dnf_helper_chronicle_info()
+    levelInfo = f"LV{ui.level}({ui.currentExp}/{ui.levelExp})"
+    chronicle_points = ui.point
+    if ui.totalExp == 0:
+        levelInfo = ""
+        chronicle_points = ""
+
+    return [
+        idx, account_config.name, status,
+        djc_balance, djc_allin,
+        xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
+        gpoints,
+        levelInfo, chronicle_points,
+    ]
 
 
 def try_join_xinyue_team(cfg):

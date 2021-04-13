@@ -1,4 +1,5 @@
 import re
+from multiprocessing import cpu_count
 from typing import List, Dict
 
 import toml
@@ -452,6 +453,10 @@ class CommonConfig(ConfigInterface):
         self.enable_in_safe_mode_accounts = False
         # 是否展示小助手的累积使用情况
         self._show_usage = False
+        # 是否启用多进程功能
+        self.enable_multiprocessing = False
+        # 进程池大小，若为0，则默认为当前cpu核心数
+        self.multiprocessing_pool_size = 0
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
         # 强制使用特定大版本的chrome，默认为0，表示使用小助手默认设定的版本。
@@ -516,6 +521,9 @@ class CommonConfig(ConfigInterface):
         self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
         self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
 
+    def get_pool_size(self) -> int:
+        return self.multiprocessing_pool_size or cpu_count()
+
 
 class Config(ConfigInterface):
     def __init__(self):
@@ -561,6 +569,13 @@ class Config(ConfigInterface):
                         "id应该类似[504051073]，而昵称则形如[风之凌殇]"
                     ))
                     return False
+
+        return True
+
+    def is_all_account_auto_login(self) -> bool:
+        for account in self.account_configs:
+            if account.login_mode != "auto_login":
+                return False
 
         return True
 

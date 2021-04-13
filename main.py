@@ -12,6 +12,7 @@ from log import logger, color
 logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
 
 import argparse
+from multiprocessing import freeze_support
 
 from log import log_directory
 from main_def import *
@@ -131,6 +132,7 @@ def main():
 
 
 if __name__ == '__main__':
+    freeze_support()
     try:
         run_start_time = datetime.datetime.now()
         main()

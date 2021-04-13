@@ -1,3 +1,5 @@
+from multiprocessing import freeze_support
+
 from main_def import *
 from main_def import _show_head_line
 from show_usage import *
@@ -71,6 +73,7 @@ def main():
 
 
 if __name__ == '__main__':
+    freeze_support()
     try:
         run_start_time = datetime.datetime.now()
         main()

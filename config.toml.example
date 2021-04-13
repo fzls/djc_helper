@@ -1,5 +1,10 @@
 # 所有账号共用的配置
 [common]
+# 是否启用多进程功能
+enable_multiprocessing = false
+# 进程池大小，若为0，则默认为当前cpu核心数
+multiprocessing_pool_size = 0
+
 # 是否强制使用打包附带的便携版chrome
 force_use_portable_chrome = false
 

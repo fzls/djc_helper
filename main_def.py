@@ -535,6 +535,8 @@ def run(cfg: Config):
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
 
+    start_time = datetime.datetime.now()
+
     if cfg.common.enable_multiprocessing:
         logger.info("已开启多进程模式，将并行运行~")
         with Pool(cfg.get_pool_size()) as pool:
@@ -548,6 +550,9 @@ def run(cfg: Config):
                 continue
 
             do_run(idx, account_config, cfg.common, user_buy_info)
+
+    used_time = datetime.datetime.now() - start_time
+    _show_head_line(f"处理总计{len(cfg.account_configs)}个账户 共耗时 {used_time}")
 
 
 def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):

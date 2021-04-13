@@ -9,17 +9,33 @@ def check_all_skey_and_pskey(cfg):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
+    if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
+        logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
-        logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
-        djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.fetch_pskey()
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
+        with Pool(cfg.get_pool_size()) as pool:
+            pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common)
+                                                       for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+        logger.info("全部账号检查完毕")
+    else:
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            do_check_all_skey_and_pskey(idx, account_config, cfg.common)
+
+
+def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common: CommonConfig):
+    if not account_config.is_enabled():
+        # 未启用的账户的账户不走该流程
+        return None
+
+    logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+    djcHelper = DjcHelper(account_config, cfg.common)
+    djcHelper.fetch_pskey()
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list(print_warning=False)
 
 
 def run(cfg):

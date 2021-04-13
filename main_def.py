@@ -523,10 +523,6 @@ def try_join_xinyue_team(cfg):
         # 尝试加入固定心悦队伍
         djcHelper.try_join_fixed_xinyue_team()
 
-        if cfg.common._debug_run_first_only:
-            logger.warning("调试开关打开，不再处理后续账户")
-            break
-
 
 def run(cfg):
     _show_head_line("开始核心逻辑")
@@ -550,10 +546,6 @@ def run(cfg):
         used_time = datetime.datetime.now() - start_time
         _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
-        if cfg.common._debug_run_first_only:
-            logger.warning("调试开关打开，不再处理后续账户")
-            break
-
 
 def try_take_xinyue_team_award(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
@@ -576,10 +568,6 @@ def try_take_xinyue_team_award(cfg: Config):
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
-
-        if cfg.common._debug_run_first_only:
-            logger.warning("调试开关打开，不再处理后续账户")
-            break
 
 
 def try_xinyue_sailiyam_start_work(cfg):

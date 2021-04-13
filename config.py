@@ -447,8 +447,6 @@ class CommonConfig(ConfigInterface):
     def __init__(self):
         # 测试模式，若开启，则一些实验性功能将会启用
         self.test_mode = False
-        # 测试用开关，将仅运行首个账号配置
-        self._debug_run_first_only = False
         # 是否启用处于安全模式的账号
         self.enable_in_safe_mode_accounts = False
         # 是否展示小助手的累积使用情况

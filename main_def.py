@@ -123,7 +123,7 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         qq2index[qq] = idx
 
 
-def auto_send_cards(cfg):
+def auto_send_cards(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("运行完毕自动赠送卡片")
@@ -144,21 +144,12 @@ def auto_send_cards(cfg):
             # 未启用的账户的账户不走该流程
             continue
 
-        djcHelper = DjcHelper(account_config, cfg.common)
-        lr = djcHelper.fetch_pskey()
-        if lr is None:
-            continue
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list(print_warning=False)
+        card_name_to_counts, prize_counts, djcHelper = query_account_ark_lottery_info(idx, len(cfg.account_configs), account_config, cfg.common)
+        qq = uin2qq(account_config.account_info.uin)
 
-        qq = uin2qq(lr.uin)
-        qa = QzoneActivity(djcHelper, lr)
-
-        qq_to_card_name_to_counts[qq] = qa.get_card_counts()
-        qq_to_prize_counts[qq] = qa.get_prize_counts()
+        qq_to_card_name_to_counts[qq] = card_name_to_counts
+        qq_to_prize_counts[qq] = prize_counts
         qq_to_djcHelper[qq] = djcHelper
-
-        logger.info(f"{idx:2d}/{len(cfg.account_configs)} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
 
     # 赠送卡片
     for idx, target_qq in enumerate(target_qqs):
@@ -178,6 +169,24 @@ def auto_send_cards(cfg):
                 qa = QzoneActivity(djcHelper, lr)
                 qa.take_ark_lottery_awards(print_warning=False)
                 qa.try_lottery_using_cards(print_warning=False)
+
+
+def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> (Dict[str, int], Dict[str, int], DjcHelper):
+    djcHelper = DjcHelper(account_config, common_config)
+    lr = djcHelper.fetch_pskey()
+    if lr is None:
+        return
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list(print_warning=False)
+
+    qa = QzoneActivity(djcHelper, lr)
+
+    card_name_to_counts = qa.get_card_counts()
+    prize_counts = qa.get_prize_counts()
+
+    logger.info(f"{idx:2d}/{total_account} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
+
+    return card_name_to_counts, prize_counts, djcHelper
 
 
 def send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs):

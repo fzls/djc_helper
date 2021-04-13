@@ -683,38 +683,59 @@ class QQLogin():
         return self.login_type_auto_login in login_type and self.cfg.run_in_headless_mode
 
 
+def do_login(common_cfg, account: AccountConfig):
+    acc = account.account_info
+    ql = QQLogin(common_cfg)
+
+    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal, name=account.name)
+    # lr = ql.qr_login(login_mode=mode, name=account.name)
+    logger.info(color("bold_green") + f"{account.name}登录结果为： {lr}")
+
+
 if __name__ == '__main__':
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    cfg.common.force_use_portable_chrome = True
-    cfg.common.run_in_headless_mode = False
+    RUN_PARALLEL = True
 
-    ql = QQLogin(cfg.common)
-    account = cfg.account_configs[0]
-    acc = account.account_info
-    logger.warning(f"测试账号 {account.name} 的登录情况")
+    if RUN_PARALLEL:
+        from multiprocessing import Pool, cpu_count, freeze_support
 
+        freeze_support()
 
-    def run_test(mode):
-        lr = ql.login(acc.account, acc.password, login_mode=mode, name=account.name)
-        # lr = ql.qr_login(login_mode=mode, name=account.name)
-        logger.info(color("bold_green") + f"{lr}")
+        with Pool(cpu_count() * 2) as pool:
+            pool.starmap(do_login, [(cfg.common, account) for account in cfg.account_configs])
 
-
-    test_all = False
-
-    if not test_all:
-        run_test(ql.login_mode_normal)
+            logger.info("全部账号登录完毕")
     else:
-        for attr in dir(ql):
-            if not attr.startswith("login_mode_"):
-                continue
+        cfg.common.force_use_portable_chrome = True
+        cfg.common.run_in_headless_mode = False
 
-            mode = getattr(ql, attr)
+        ql = QQLogin(cfg.common)
+        account = cfg.account_configs[0]
+        acc = account.account_info
+        logger.warning(f"测试账号 {account.name} 的登录情况")
 
-            logger.info(f"开始测试登录模式 {mode}，请按任意键开始测试")
-            input()
 
-            run_test(mode)
+        def run_test(mode):
+            lr = ql.login(acc.account, acc.password, login_mode=mode, name=account.name)
+            # lr = ql.qr_login(login_mode=mode, name=account.name)
+            logger.info(color("bold_green") + f"{lr}")
+
+
+        test_all = False
+
+        if not test_all:
+            run_test(ql.login_mode_normal)
+        else:
+            for attr in dir(ql):
+                if not attr.startswith("login_mode_"):
+                    continue
+
+                mode = getattr(ql, attr)
+
+                logger.info(f"开始测试登录模式 {mode}，请按任意键开始测试")
+                input()
+
+                run_test(mode)

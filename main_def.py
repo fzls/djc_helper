@@ -94,7 +94,7 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
 
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
-        logger.info(color("bold_yellow") + "当前已开启多进程模式，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
+        logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         with Pool(cfg.get_pool_size()) as pool:
             pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account, cfg.common, check_skey_only)
@@ -138,7 +138,7 @@ def auto_send_cards(cfg: Config):
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
     account_data = []
     if cfg.common.enable_multiprocessing:
-        logger.info("已开启多进程模式，将并行拉取数据~")
+        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行拉取数据~")
         with Pool(cfg.get_pool_size()) as pool:
             for data in pool.starmap(query_account_ark_lottery_info, [(_idx + 1, len(cfg.account_configs), account_config, cfg.common)
                                                                       for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()]):
@@ -305,7 +305,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     logger.warning("开始获取数据，请耐心等待~")
     rows = []
     if cfg.common.enable_multiprocessing:
-        logger.info("已开启多进程模式，将并行拉取数据~")
+        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行拉取数据~")
         with Pool(cfg.get_pool_size()) as pool:
             for row in pool.starmap(query_lottery_status, [(_idx + 1, account_config, cfg.common, card_indexes, prize_indexes, order_map)
                                                            for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()]):
@@ -447,7 +447,7 @@ def show_accounts_status(cfg, ctx):
     # 获取数据
     rows = []
     if cfg.common.enable_multiprocessing:
-        logger.warning("已启用多进程模式，将开始并行拉取数据，请稍后")
+        logger.warning(f"已开启多进程模式({cfg.get_pool_size()})，将开始并行拉取数据，请稍后")
         with Pool(cfg.get_pool_size()) as pool:
             for row in pool.starmap(get_account_status, [(_idx + 1, account_config, cfg.common) for _idx, account_config in enumerate(cfg.account_configs)
                                                          if account_config.is_enabled()]):
@@ -538,7 +538,7 @@ def run(cfg: Config):
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
-        logger.info("已开启多进程模式，将并行运行~")
+        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
         with Pool(cfg.get_pool_size()) as pool:
             pool.starmap(do_run, [(_idx + 1, account_config, cfg.common, user_buy_info)
                                   for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])

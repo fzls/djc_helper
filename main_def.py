@@ -395,15 +395,8 @@ def show_accounts_status(cfg, ctx):
     heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片"]
     colSizes = [4, 12, 8, 8, 12, 8, 6, 6, 16, 12, 8, 14, 8]
 
-    # 获取数据
-    rows = []
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
-
-        djcHelper = DjcHelper(account_config, cfg.common)
+    def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig):
+        djcHelper = DjcHelper(account_config, common_config)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list(print_warning=False)
 
@@ -430,14 +423,23 @@ def show_accounts_status(cfg, ctx):
             levelInfo = ""
             chronicle_points = ""
 
-        row = [
+        return [
             idx, account_config.name, status,
             djc_balance, djc_allin,
             xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
             gpoints,
             levelInfo, chronicle_points,
         ]
-        rows.append(row)
+
+    # 获取数据
+    rows = []
+    for _idx, account_config in enumerate(cfg.account_configs):
+        idx = _idx + 1
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
+            continue
+
+        rows.append(get_account_status(idx, account_config, cfg.common))
 
     logger.info(tableify(heads, colSizes))
     for row in rows:

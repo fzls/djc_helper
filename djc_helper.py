@@ -981,12 +981,8 @@ class DjcHelper:
         retryCfg = self.common_cfg.retry
         now = datetime.datetime.now()
         current_hour = now.hour
-        required_hour = self.common_cfg.xinyue.submit_task_after
         for i in range(op.count):
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
-            if current_hour < required_hour:
-                logger.warning(f"当前时间为{now}，在本日{required_hour}点之前，将不执行操作: {ctx}")
-                continue
 
             for try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)

@@ -1,5 +1,6 @@
 from main_def import *
 from main_def import _show_head_line
+from pool import init_pool, get_pool
 from show_usage import *
 from usage_count import *
 
@@ -12,9 +13,8 @@ def check_all_skey_and_pskey(cfg):
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
-        with Pool(cfg.get_pool_size()) as pool:
-            pool.starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common)
-                                                       for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+        get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common)
+                                                         for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
         logger.info("全部账号检查完毕")
     else:
         for _idx, account_config in enumerate(cfg.account_configs):
@@ -45,9 +45,8 @@ def run(cfg):
 
     if cfg.common.enable_multiprocessing:
         logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
-        with Pool(cfg.get_pool_size()) as pool:
-            pool.starmap(do_run, [(_idx + 1, account_config, cfg.common)
-                                  for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+        get_pool().starmap(do_run, [(_idx + 1, account_config, cfg.common)
+                                    for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
     else:
         for idx, account_config in enumerate(cfg.account_configs):
             idx += 1
@@ -91,6 +90,8 @@ def main():
 
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。")
+
+    init_pool(cfg.get_pool_size())
 
     change_title("集卡特别版", need_append_new_version_info=False, multiprocessing_pool_size=cfg.get_pool_size())
 

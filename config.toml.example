@@ -571,6 +571,28 @@ get_guanjia = true
 #sFlowName = "塑身教练先生(需600点勇士币)"
 #count = 1
 
+## 心悦app相关操作
+#[[account_configs.xinyue_app_operations]]
+## 加密http请求体获取方式：抓包获取http body。如fiddler，抓包，找到对应请求（body大小为150的请求），右侧点Inspector/HexView，选中Http Body部分的字节码（未标蓝部分），右击Copy/Copy as 0x##，然后粘贴出来，将其中的bytes复制到下列对应数组位置
+##
+## 操作名称
+#name = "兑换复活币"
+## 抓包获取的加密http请求体。
+#encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00, 0x00]
+#
+#[[account_configs.xinyue_app_operations]]
+## 操作名称
+#name = "兑换雷米"
+## 抓包获取的加密http请求体。
+#encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00, 0x00]
+#
+#[[account_configs.xinyue_app_operations]]
+## 操作名称
+#name = "兑换霸王契约"
+## 抓包获取的加密http请求体。
+#encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00, 0x00]
+
+
 # 抽卡相关配置
 [account_configs.ark_lottery]
 # 用于完成幸运勇士的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息

@@ -883,7 +883,8 @@ def get_user_buy_info(cfg: Config):
         free_start_time = parse_time("2021-02-08 00:00:00")
         free_end_time = free_start_time + max_present_times
 
-        fixup_times = datetime.timedelta()
+        not_paied_times = datetime.timedelta()
+        fixup_times = max_present_times
 
         if user_buy_info.total_buy_month == 0:
             # 如果从未购买过，过期时间改为DLC免费赠送结束时间
@@ -891,25 +892,34 @@ def get_user_buy_info(cfg: Config):
         else:
             # 计算与免费时长重叠的时长，补偿这段时间
             user_buy_info.buy_records = sorted(user_buy_info.buy_records, key=lambda record: parse_time(record.buy_at))
-            last_end = free_start_time
+            last_end = min(free_start_time, parse_time(user_buy_info.buy_records[0].buy_at))
             for record in user_buy_info.buy_records:
                 buy_at = parse_time(record.buy_at)
-                if buy_at >= free_end_time:
-                    continue
-                end_time = buy_at + datetime.timedelta(days=record.buy_month * 31)
 
-                fixup_times += min(free_end_time, end_time) - min(free_end_time, end_time, max(buy_at, last_end))
-                last_end = end_time
+                if buy_at > last_end:
+                    # 累加未付费区间
+                    not_paied_times += buy_at - last_end
 
-            expire_at_time = max(parse_time(user_buy_info.expire_at), free_end_time) + fixup_times
+                    # 从新的位置开始计算结束时间
+                    last_end = buy_at + datetime.timedelta(days=record.buy_month * 31)
+                else:
+                    # 从当前结束时间叠加时长（未产生未付费区间）
+                    last_end = last_end + datetime.timedelta(days=record.buy_month * 31)
 
+                print(last_end)
+
+            fixup_times = max(max_present_times - not_paied_times, datetime.timedelta())
+
+            expire_at_time = parse_time(user_buy_info.expire_at) + fixup_times
+
+        old_expire_at = user_buy_info.expire_at
         user_buy_info.expire_at = format_time(expire_at_time)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
             "buy_month": 2,
             "buy_at": free_start_time,
-            "reason": "自动更新DLC赠送(2.8到4.11这两个月的付费时长)（换言之，4.11以后买可以无视这条<_<）"
+            "reason": "自动更新DLC赠送(自2.8至今最多累积未付费时长两个月)"
         }))
-        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前付费激活区间与2.8-4.11重合部分为{fixup_times}，故而补偿该段时长~，实际过期时间为{user_buy_info.expire_at}")
+        logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}~，实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
 
     return user_buy_info
 

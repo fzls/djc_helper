@@ -25,7 +25,7 @@ class GithubActionLoginException(Exception):
 
 
 class LoginResult(ConfigInterface):
-    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k=""):
+    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k="", apps_p_skey="", xinyue_openid="", xinyue_access_token=""):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
@@ -39,6 +39,11 @@ class LoginResult(ConfigInterface):
         # 登录电脑管家页面得到
         self.qc_openid = qc_openid
         self.qc_k = qc_k
+        # 分享用p_skey
+        self.apps_p_skey = apps_p_skey
+        # 心悦相关信息
+        self.xinyue_openid = xinyue_openid
+        self.xinyue_access_token = xinyue_access_token
 
 
 class QQLogin():
@@ -312,7 +317,9 @@ class QQLogin():
 
         # 从cookie中获取uin和skey
         return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
-                           p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
+                           p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"),
+                           apps_p_skey=self.get_cookie("apps_p_skey"),
+                           )
 
     def _login_qzone(self, login_type, login_action_fn=None):
         """
@@ -333,7 +340,9 @@ class QQLogin():
 
         # 从cookie中获取uin和skey
         return LoginResult(p_skey=self.get_cookie("p_skey"),
-                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"))
+                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"),
+                           apps_p_skey=self.get_cookie("apps_p_skey"),
+                           )
 
     def _login_guanjia(self, login_type, login_action_fn=None):
         """
@@ -438,7 +447,7 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取openid
-        return LoginResult(openid=self.get_cookie("openid"))
+        return LoginResult(openid=self.get_cookie("openid"), xinyue_openid=self.get_cookie("xinyue_openid"), xinyue_access_token=self.get_cookie("xinyue_access_token"))
 
     def get_switch_to_login_frame_fn(self, appid, daid, s_url, style=34, theme=2):
         # 参数：appid  daid
@@ -504,29 +513,11 @@ class QQLogin():
 
         self.cookies = self.driver.get_cookies()
 
-        if self.login_mode == self.login_mode_normal:
-            # 普通登录额外获取腾讯视频的vqq_vuserid
+        if self.login_mode in [self.login_mode_normal, self.login_mode_qzone]:
             self.fetch_qq_video_vuserid()
-
-            logger.info("跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
-            self.driver.get("https://apps.game.qq.com/")
-            time.sleep(1)
-            for i in range(5):
-                p_skey = self.driver.get_cookie('p_skey')
-                if p_skey is not None:
-                    break
-                time.sleep(1)
-            self.add_cookies(self.driver.get_cookies())
-        elif self.login_mode == self.login_mode_qzone:
-            self.fetch_qq_video_vuserid()
-            # logger.info("QQ空间登录类型额外访问一下征集令活动界面，然后还得刷新一遍浏览器，不然不刷新次数（什么鬼）")
-            # logger.info("第一次访问，并停留5秒")
-            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
-            # time.sleep(5)
-            # logger.info("第二次访问，并停留5秒")
-            # self.driver.get("https://act.qzone.qq.com/vip/2020/dnf1126")
-            # time.sleep(5)
-            # logger.info("OK，理论上次数应该刷新了")
+            self.fetch_apps_p_skey()
+        elif self.login_mode in [self.login_mode_xinyue]:
+            self.fetch_xinyue_openid_access_token()
 
         return
 
@@ -538,7 +529,31 @@ class QQLogin():
             if vuserid is not None:
                 break
             time.sleep(1)
-        self.add_cookies(self.driver.get_cookies())
+        self.add_cookie('vuserid', self.driver.get_cookie('vuserid'))
+
+    def fetch_apps_p_skey(self):
+        logger.info("跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
+        self.driver.get("https://apps.game.qq.com/")
+        time.sleep(1)
+        for i in range(5):
+            p_skey = self.driver.get_cookie('p_skey')
+            if p_skey is not None:
+                break
+            time.sleep(1)
+        self.add_cookie('apps_p_skey', self.driver.get_cookie('p_skey'))
+
+    def fetch_xinyue_openid_access_token(self):
+        logger.info("跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        self.driver.get("https://xinyue.qq.com/")
+        time.sleep(1)
+        for i in range(5):
+            openid = self.driver.get_cookie('openid')
+            access_token = self.driver.get_cookie('access_token')
+            if openid is not None and access_token is not None:
+                break
+            time.sleep(1)
+        self.add_cookie('xinyue_openid', self.driver.get_cookie('openid'))
+        self.add_cookie('xinyue_access_token', self.driver.get_cookie('access_token'))
 
     def try_auto_resolve_captcha(self):
         try:
@@ -656,6 +671,14 @@ class QQLogin():
 
         self.cookies.extend(to_add)
 
+    def add_cookie(self, new_name, cookie):
+        if cookie is None:
+            return
+
+        cookie['name'] = new_name
+        self.cookies.append(cookie)
+        logger.warning(f"add_cookie {cookie['domain']} {cookie['name']} {cookie['value']}")
+
     def get_cookie(self, name):
         for cookie in self.cookies:
             if cookie['name'] == name:
@@ -697,7 +720,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RUN_PARALLEL = True
+    RUN_PARALLEL = False
 
     if RUN_PARALLEL:
         from multiprocessing import Pool, cpu_count, freeze_support
@@ -727,7 +750,7 @@ if __name__ == '__main__':
         test_all = False
 
         if not test_all:
-            run_test(ql.login_mode_normal)
+            run_test(ql.login_mode_xinyue)
         else:
             for attr in dir(ql):
                 if not attr.startswith("login_mode_"):

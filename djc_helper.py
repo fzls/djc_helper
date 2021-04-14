@@ -4886,7 +4886,7 @@ class DjcHelper:
             # 自动登录
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
 
-        return lr.p_skey
+        return lr.apps_p_skey
 
 
 def watch_live():

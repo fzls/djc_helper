@@ -515,8 +515,9 @@ class QQLogin():
 
         if self.login_mode in [self.login_mode_normal, self.login_mode_qzone]:
             self.fetch_qq_video_vuserid()
+        if self.login_mode in [self.login_mode_normal]:
             self.fetch_apps_p_skey()
-        elif self.login_mode in [self.login_mode_xinyue]:
+        if self.login_mode in [self.login_mode_xinyue]:
             self.fetch_xinyue_openid_access_token()
 
         return

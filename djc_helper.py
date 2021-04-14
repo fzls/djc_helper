@@ -387,6 +387,9 @@ class DjcHelper:
         # DNF地下城与勇士心悦特权专区
         self.xinyue_operations()
 
+        # 心悦app相关操作
+        self.xinyue_app_operations()
+
         # 黑钻礼包
         self.get_heizuan_gift()
 
@@ -1184,6 +1187,50 @@ class DjcHelper:
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "xinyue", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20181101rights/",
                                    package_id=package_id, lqlevel=lqlevel, teamid=teamid,
                                    **extra_params)
+
+    # --------------------------------------------心悦app--------------------------------------------
+    @try_except()
+    def xinyue_app_operations(self):
+        """
+        根据配置进行心悦app相关操作
+        """
+        show_head_line("心悦app")
+        self.show_not_ams_act_info("心悦app")
+
+        if not self.cfg.function_switches.get_xinyue_app:
+            logger.warning("未启用领取心悦app功能，将跳过")
+            return
+
+        if len(self.cfg.xinyue_app_operations) == 0:
+            logger.warning("未配置心悦app相关操作，将跳过")
+            return
+
+        lr = self.fetch_xinyue_login_info("心悦app")
+        access_token = lr.xinyue_access_token
+        openid = lr.openid
+        if access_token == "" or openid == "":
+            logger.warning(f"心悦app的票据未能成功获取。access_token={access_token}, openid={openid}")
+            return
+
+        # 请求体目前看来每次请求包可以保持一致
+        # note：获取方式，抓包获取http body。如fiddler，抓包，找到对应请求（body大小为150的请求），右侧点Inspector/HexView，选中Http Body部分的字节码（未标蓝部分），右击Copy/Copy as 0x##，然后粘贴出来，将其中的bytes复制到下列对应数组位置
+
+        url = "https://a.xinyue.qq.com/"
+        headers = {
+            "Cookie": f"xyapp_login_type=qc;access_token={access_token};openid={openid};appid=101484782",
+            "Accept": "application/json",
+            "Referer": "http://apps.game.qq.com/php/tgclub/v2/",
+            "User-Agent": "tgclub/5.7.6.81(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)",
+            "Charset": "UTF-8",
+            "Accept-Language": "zh-Hans-US;q=1,en-US;q=0.9",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        }
+
+        for op in self.cfg.xinyue_app_operations:
+            res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers)
+            logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content}")
+
+        logger.info(color("bold_yellow") + f"当前心悦app相关操作处于测试阶段，请前往心悦app自行确认是否兑换成功~")
 
     # DNF进击吧赛利亚
     def xinyue_sailiyam(self):
@@ -4875,14 +4922,29 @@ class DjcHelper:
         logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录活动页面来获取p_skey，请稍候~")
 
         ql = QQLogin(self.common_cfg)
+        login_mode = ql.login_mode_normal
         if self.cfg.login_mode == "qr_login":
             # 扫码登录
-            lr = ql.qr_login(login_mode=ql.login_mode_normal, name=self.cfg.name)
+            lr = ql.qr_login(login_mode=login_mode, name=self.cfg.name)
         else:
             # 自动登录
-            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_normal, name=self.cfg.name)
+            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name)
 
         return lr.apps_p_skey
+
+    def fetch_xinyue_login_info(self, ctx) -> LoginResult:
+        logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录心悦页面来获取心悦相关信息，请稍候~")
+
+        ql = QQLogin(self.common_cfg)
+        login_mode = ql.login_mode_xinyue
+        if self.cfg.login_mode == "qr_login":
+            # 扫码登录
+            lr = ql.qr_login(login_mode=login_mode, name=self.cfg.name)
+        else:
+            # 自动登录
+            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name)
+
+        return lr
 
 
 def watch_live():
@@ -5010,4 +5072,5 @@ if __name__ == '__main__':
         # djcHelper.hello_voice()
         # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
-        djcHelper.colg_signin()
+        # djcHelper.colg_signin()
+        djcHelper.xinyue_app_operations()

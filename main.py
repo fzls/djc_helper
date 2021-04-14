@@ -14,6 +14,7 @@ from main_def import *
 from show_usage import *
 from usage_count import *
 import psutil
+from pool import init_pool
 
 
 def parse_args():
@@ -76,6 +77,7 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
+    init_pool(cfg.get_pool_size())
     change_title(multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)

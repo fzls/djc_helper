@@ -31,10 +31,18 @@ except PermissionError as err:
     os.system("PAUSE")
     exit(-1)
 
+process_name = multiprocessing.current_process().name
+log_filename_file = ".log.filename"
+if "MainProcess" in process_name:
+    # 为了兼容多进程模式，仅主进程确定日志文件名并存盘，后续其他进程则读取该文件内容作为写日志的目标地址，比如出现很多日志文件
+    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    log_filename = f"{log_directory}/{logger.name}_{process_name}_{time_str}.log"
+    pathlib.Path(log_filename_file).write_text(log_filename, encoding='utf-8')
+
+log_filename = pathlib.Path(log_filename_file).read_text(encoding='utf-8')
 
 def new_file_handler():
-    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-    newFileHandler = logging.FileHandler(f"{log_directory}/{logger.name}_{process_name}_{time_str}.log", encoding="utf-8", delay=True)
+    newFileHandler = logging.FileHandler(log_filename, encoding="utf-8", delay=True)
     fileLogFormatter = logging.Formatter(fileFmtStr)
     newFileHandler.setFormatter(fileLogFormatter)
     newFileHandler.setLevel(logging.DEBUG)
@@ -42,10 +50,8 @@ def new_file_handler():
     return newFileHandler
 
 
-process_name = multiprocessing.current_process().name
-if "MainProcess" in process_name:
-    fileHandler = new_file_handler()
-    logger.addHandler(fileHandler)
+fileHandler = new_file_handler()
+logger.addHandler(fileHandler)
 
 # hack: 将底层的color暴露出来
 COLORS = [

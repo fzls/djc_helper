@@ -476,9 +476,9 @@ class CommonConfig(ConfigInterface):
         # 是否展示小助手的累积使用情况
         self._show_usage = False
         # 是否启用多进程功能
-        self.enable_multiprocessing = False
+        self.enable_multiprocessing = True
         # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
-        self.multiprocessing_pool_size = 0
+        self.multiprocessing_pool_size = -1
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
         # 强制使用特定大版本的chrome，默认为0，表示使用小助手默认设定的版本。

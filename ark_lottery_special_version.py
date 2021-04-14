@@ -95,6 +95,8 @@ def main():
 
     change_title("集卡特别版", need_append_new_version_info=False, multiprocessing_pool_size=cfg.get_pool_size())
 
+    show_multiprocessing_info(cfg)
+
     # 特别版强制启用每一个账号
     for account_config in cfg.account_configs:
         account_config.enable = True
@@ -106,6 +108,9 @@ def main():
 
     auto_send_cards(cfg)
     show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+
+    # 运行结束展示下多进程信息
+    show_multiprocessing_info(cfg)
 
 
 if __name__ == '__main__':

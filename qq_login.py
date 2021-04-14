@@ -498,6 +498,7 @@ class QQLogin():
         # 这时候等待一下好像就行了
         for i in range(3):
             try:
+                logger.info(f"尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
                 WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
                 break
             except Exception as e:

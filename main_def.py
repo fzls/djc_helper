@@ -907,7 +907,7 @@ def get_user_buy_info(cfg: Config):
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
             "buy_month": 2,
             "buy_at": free_start_time,
-            "reason": "自动更新DLC赠送(2.8-4.11区间)"
+            "reason": "自动更新DLC赠送(2.8到4.11这两个月的付费时长)（换言之，4.11以后买可以无视这条<_<）"
         }))
         logger.info(color("bold_green") + f"当前运行的qq中已有某个qq购买过自动更新dlc，自{free_start_time}开始将累积可免费使用付费功能两个月，目前付费激活区间与2.8-4.11重合部分为{fixup_times}，故而补偿该段时长~，实际过期时间为{user_buy_info.expire_at}")
 

@@ -78,6 +78,7 @@ def main():
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
     init_pool(cfg.get_pool_size())
+
     change_title(multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)

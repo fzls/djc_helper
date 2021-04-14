@@ -14,6 +14,7 @@ start_config_ui.bat
 .first_run/
 .cached/
 .db/
+.log.filename
 
 config.toml.local
 config.toml.github_action

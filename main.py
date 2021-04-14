@@ -14,7 +14,7 @@ from main_def import *
 from show_usage import *
 from usage_count import *
 import psutil
-from pool import init_pool
+from pool import init_pool, close_pool
 
 
 def parse_args():
@@ -155,6 +155,7 @@ if __name__ == '__main__':
         if is_run_in_github_action():
             raise e
     finally:
+        close_pool()
         # 暂停一下，方便看结果
         if not disable_pause_after_run() and not is_run_in_github_action():
             os.system("PAUSE")

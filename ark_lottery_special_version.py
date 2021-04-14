@@ -1,6 +1,6 @@
 from main_def import *
 from main_def import _show_head_line
-from pool import init_pool, get_pool
+from pool import init_pool, get_pool, close_pool
 from show_usage import *
 from usage_count import *
 
@@ -125,5 +125,6 @@ if __name__ == '__main__':
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
     finally:
+        close_pool()
         # 暂停一下，方便看结果
         os.system("PAUSE")

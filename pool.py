@@ -16,6 +16,14 @@ def init_pool(pool_size):
     logger.info(color("bold_cyan") + f"进程池已初始化完毕，大小为 {pool_size}")
 
 
+def close_pool():
+    if pool is None:
+        return
+
+    pool.close()
+    logger.info(color("bold_cyan") + "程序运行完毕，将清理线程池，释放相应资源")
+
+
 def get_pool() -> Optional[TPool]:
     return pool
 

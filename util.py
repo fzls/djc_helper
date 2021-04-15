@@ -502,6 +502,10 @@ def parse_unicode_escape_string(filename: str):
         print(lines.encode().decode("unicode-escape"))
 
 
+def remove_none_from_list(l: list) -> list:
+    return list(filter(lambda x: x is not None, l))
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())
@@ -512,3 +516,4 @@ if __name__ == '__main__':
     print(show_end_time("2021-02-23 00:00:00"))
     print(truncate("风之凌殇风之凌殇", 12))
     print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
+    print(remove_none_from_list([None, 1, 2, 3, None]))

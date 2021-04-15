@@ -12,7 +12,7 @@ import colorlog
 ###########################################################
 asciiReset = colorlog.escape_codes['reset']
 
-fileFmtStr = "%(asctime)s [%(name)s] %(funcName)s:%(lineno)d %(levelname)-5.5s: %(message)s"
+fileFmtStr = "%(asctime)s %(filename)s:%(lineno)d %(funcName)s %(levelname)-5.5s: %(message)s [%(name)s] [%(processName)s(%(process)d)]"
 consoleFmtStr = "{}%(asctime)s{} {}%(funcName)s:%(lineno)-3d{} {}%(levelname)-5.5s: %(message)s{}".format(
     "%(bold_purple)s", asciiReset,
     "%(purple)s", asciiReset,
@@ -40,6 +40,7 @@ if "MainProcess" in process_name:
     pathlib.Path(log_filename_file).write_text(log_filename, encoding='utf-8')
 
 log_filename = pathlib.Path(log_filename_file).read_text(encoding='utf-8')
+
 
 def new_file_handler():
     newFileHandler = logging.FileHandler(log_filename, encoding="utf-8", delay=True)

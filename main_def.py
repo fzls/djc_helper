@@ -124,6 +124,7 @@ def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common_
     return djcHelper
 
 
+@try_except()
 def auto_send_cards(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -254,6 +255,7 @@ def reverse_map(map):
     return kvs
 
 
+@try_except()
 def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -429,6 +431,7 @@ def count_with_color(card_count, show_color, show_width=3):
     return color(show_color) + padLeftRight(card_count, show_width) + asciiReset + color("INFO")
 
 
+@try_except()
 def show_accounts_status(cfg, ctx):
     logger.info("")
     _show_head_line("部分活动信息")
@@ -507,6 +510,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     ]
 
 
+@try_except()
 def try_join_xinyue_team(cfg):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -565,6 +569,7 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig,
     _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
 
+@try_except()
 def try_take_xinyue_team_award(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
@@ -744,6 +749,7 @@ def show_ask_message_box_only_once_sync():
             win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
 
 
+@try_except()
 def temp_code(cfg):
     if not has_any_account_in_normal_run(cfg):
         return

@@ -69,7 +69,7 @@ class QQLogin():
         self.time_start_login = datetime.datetime.now()
 
     def prepare_chrome(self, ctx, login_type, login_url):
-        logger.info(color("fg_bold_cyan") + f"正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作")
+        logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
@@ -88,10 +88,10 @@ class QQLogin():
             urllib_logger.setLevel(logging.WARNING)
         if self.cfg.run_in_headless_mode:
             if login_type == self.login_type_auto_login:
-                logger.warning("已配置在自动登录模式时使用headless模式运行chrome")
+                logger.warning(f"{self.name} 已配置在自动登录模式时使用headless模式运行chrome")
                 options.headless = True
             else:
-                logger.warning("扫码登录模式不使用headless模式")
+                logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
         inited = False
 
@@ -99,7 +99,7 @@ class QQLogin():
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
-                logger.info("使用自带chrome")
+                logger.info(f"{self.name} 使用自带chrome")
                 inited = True
         except:
             pass
@@ -183,6 +183,7 @@ class QQLogin():
         :param password: 密码
         :rtype: LoginResult
         """
+        self.name = name
         self.window_title = f"将登录 {name}({account}) - {login_mode}"
         logger.info("即将开始自动登录，无需任何手动操作，等待其完成即可")
         logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
@@ -220,6 +221,7 @@ class QQLogin():
         :rtype: LoginResult
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
+        self.name = name
         self.window_title = f"请扫码 {name} - {login_mode}"
 
         def login_with_qr_code():
@@ -269,18 +271,18 @@ class QQLogin():
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
-                logger.exception(f"第{idx}/{self.cfg.login.max_retry_count}次尝试登录出错，等待{self.cfg.login.retry_wait_time}秒后重试", exc_info=e)
+                logger.exception(f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次尝试登录出错，等待{self.cfg.login.retry_wait_time}秒后重试", exc_info=e)
                 time.sleep(self.cfg.login.retry_wait_time)
             finally:
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")
-                logger.info(color("bold_yellow") + f"本次 {ctx} 共耗时为 {used_time}")
+                logger.info(color("bold_yellow") + f"本次 {self.name} {ctx} 共耗时为 {used_time}")
                 logger.info("")
                 self.destroy_chrome()
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (
-            f"已经尝试登录{self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题\n"
+            f"已经尝试登录 {self.name} {self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题\n"
             "建议依次尝试下列措施\n"
             "1. 重新打开程序\n"
             "2. 重启电脑\n"
@@ -489,28 +491,30 @@ class QQLogin():
         self.driver.execute_script(f"document.title = '{self.window_title}'")
 
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
-        logger.info(f"开始{login_type}流程")
+        logger.info(f"{self.name} 开始{login_type}流程")
         if login_action_fn is not None:
             login_action_fn()
 
-        logger.info("等待登录完成（也就是#loginIframe#login登录框消失）")
+        logger.info(f"{self.name} 等待登录完成（也就是#loginIframe#login登录框消失）")
         # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'
         # 这时候等待一下好像就行了
         for i in range(3):
             try:
-                logger.info(f"尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
+                logger.info(f"{self.name} 尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
                 WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
                 break
             except Exception as e:
-                logger.error("出错了，等待两秒再重试", exc_info=e)
+                logger.error(f"{self.name} 出错了，等待两秒再重试。" +
+                             color("bold_yellow") + "也许是网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
+                             exc_info=e)
                 time.sleep(2)
 
-        logger.info("回到主iframe")
+        logger.info(f"{self.name} 回到主iframe")
         self.driver.switch_to.default_content()
 
         assert_login_finished_fn()
 
-        logger.info("登录完成")
+        logger.info(f"{self.name} 登录完成")
 
         self.cookies = self.driver.get_cookies()
 
@@ -524,7 +528,7 @@ class QQLogin():
         return
 
     def fetch_qq_video_vuserid(self):
-        logger.info("转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
+        logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
         self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
         for i in range(5):
             vuserid = self.driver.get_cookie('vuserid')
@@ -534,7 +538,7 @@ class QQLogin():
         self.add_cookie('vuserid', self.driver.get_cookie('vuserid'))
 
     def fetch_apps_p_skey(self):
-        logger.info("跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
+        logger.info(f"{self.name} 跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
         self.driver.get("https://apps.game.qq.com/")
         time.sleep(1)
         for i in range(5):
@@ -545,7 +549,7 @@ class QQLogin():
         self.add_cookie('apps_p_skey', self.driver.get_cookie('p_skey'))
 
     def fetch_xinyue_openid_access_token(self):
-        logger.info("跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        logger.info(f"{self.name} 跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
         for i in range(5):
@@ -561,18 +565,18 @@ class QQLogin():
         try:
             self._try_auto_resolve_captcha()
         except Exception as e:
-            msg = f"ver {now_version} 自动处理验证失败了，出现未捕获的异常，请加群1041823293反馈或自行解决。请手动进行处理验证码"
+            msg = f"ver {now_version} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群1041823293反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
             logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
 
     def _try_auto_resolve_captcha(self):
         if not self.cfg.login.auto_resolve_captcha:
-            logger.info("未启用自动处理拖拽验证码的功能")
+            logger.info(f"{self.name} 未启用自动处理拖拽验证码的功能")
             return
 
         if self.cfg.login.move_captcha_delta_width_rate <= 0:
-            logger.info("未设置每次尝试的偏移值，跳过自动拖拽验证码")
+            logger.info(f"{self.name} 未设置每次尝试的偏移值，跳过自动拖拽验证码")
             return
 
         captcha_try_count = 0
@@ -585,14 +589,14 @@ class QQLogin():
             tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
-            logger.info(color("bold_green") + "检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
+            logger.info(color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
 
             try:
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slide")))
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slideBlock")))
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_drag_button")))
             except Exception as e:
-                logger.warning("等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
+                logger.warning(f"{self.name} 等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
 
             drag_tarck_width = self.driver.find_element_by_id('slide').size['width'] or 280  # 进度条轨道宽度
             drag_block_width = self.driver.find_element_by_id('slideBlock').size['width'] or 56  # 缺失方块宽度
@@ -606,7 +610,7 @@ class QQLogin():
             if len(history_captcha_succes_data) != 0:
                 # 若有则取其中最频繁的前几个作为优先尝试项
                 mostCommon = Counter(history_captcha_succes_data).most_common()
-                logger.info(f"根据本地记录数据，过去运行中成功解锁次数最多的偏移值为：{mostCommon}，将首先尝试他们")
+                logger.info(f"{self.name} 根据本地记录数据，过去运行中成功解锁次数最多的偏移值为：{mostCommon}，将首先尝试他们")
                 for xoffset, success_count in mostCommon:
                     xoffsets.append(int(xoffset))
             else:
@@ -617,7 +621,7 @@ class QQLogin():
 
             logger.info(
                 color("bold_green") +
-                f"验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
+                f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
             )
 
             # 将普通序列放入其中
@@ -628,11 +632,11 @@ class QQLogin():
 
             wait_time = 1
 
-            logger.info("先release滑块一次，以避免首次必定失败的问题")
+            logger.info(f"{self.name} 先release滑块一次，以避免首次必定失败的问题")
             ActionChains(self.driver).release(on_element=drag_button).perform()
             time.sleep(wait_time)
 
-            logger.info(color("bold_green") + f"开始拖拽验证码，将依次尝试下列偏移量:\n{xoffsets}")
+            logger.info(color("bold_green") + f"{self.name} 开始拖拽验证码，将依次尝试下列偏移量:\n{xoffsets}")
             for xoffset in xoffsets:
                 ActionChains(self.driver).click_and_hold(on_element=drag_button).perform()  # 左键按下
                 time.sleep(0.5)
@@ -644,13 +648,13 @@ class QQLogin():
                 captcha_try_count += 1
                 success_xoffset = xoffset
                 distance_rate = (init_offset - xoffset) / drag_block_width
-                logger.info(f"尝试第{captcha_try_count}次拖拽验证码，本次尝试偏移量为{xoffset}，距离右侧初始尝试位置({init_offset})距离相当于{distance_rate:.2f}个滑块宽度(若失败将等待{wait_time}秒)")
+                logger.info(f"{self.name} 尝试第{captcha_try_count}次拖拽验证码，本次尝试偏移量为{xoffset}，距离右侧初始尝试位置({init_offset})距离相当于{distance_rate:.2f}个滑块宽度(若失败将等待{wait_time}秒)")
 
                 time.sleep(wait_time)
 
             self.driver.switch_to.parent_frame()
         except StaleElementReferenceException as e:
-            logger.info(f"成功完成了拖拽验证码操作，总计尝试次数为{captcha_try_count}")
+            logger.info(f"{self.name} 成功完成了拖拽验证码操作，总计尝试次数为{captcha_try_count}")
             # 更新历史数据
             success_key = str(success_xoffset)  # 因为json只支持str作为key，所以需要强转一下，使用时再转回int
             if success_key not in history_captcha_succes_data:
@@ -659,7 +663,7 @@ class QQLogin():
             db[history_key] = history_captcha_succes_data
             save_db(db)
         except TimeoutException as e:
-            logger.info("看上去没有出现验证码")
+            logger.info(f"{self.name} 看上去没有出现验证码")
 
     def set_window_size(self):
         logger.info("浏览器设为1936x1056")
@@ -679,7 +683,7 @@ class QQLogin():
 
         cookie['name'] = new_name
         self.cookies.append(cookie)
-        logger.warning(f"add_cookie {cookie['domain']} {cookie['name']} {cookie['value']}")
+        logger.warning(f"{self.name} add_cookie {cookie['domain']} {cookie['name']} {cookie['value']}")
 
     def get_cookie(self, name):
         for cookie in self.cookies:

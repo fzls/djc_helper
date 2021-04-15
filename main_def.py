@@ -151,6 +151,8 @@ def auto_send_cards(cfg: Config):
 
             account_data.append(query_account_ark_lottery_info(idx, len(cfg.account_configs), account_config, cfg.common))
 
+    account_data = remove_none_from_list(account_data)
+
     qq_to_card_name_to_counts = {}
     qq_to_prize_counts = {}
     qq_to_djcHelper = {}
@@ -317,7 +319,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
 
             rows.append(query_lottery_status(idx, account_config, cfg.common, card_indexes, prize_indexes, order_map))
 
-    rows = [row for row in rows if row is not None]
+    rows = remove_none_from_list(rows)
 
     # 计算概览
     summaryCols = [1, "总计", *[0 for card in card_indexes], *[count_with_color(0, "bold_green", show_width=printed_width(prize_index)) for prize_index in prize_indexes]]

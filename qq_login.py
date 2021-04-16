@@ -230,8 +230,8 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
-        for idx in range(self.cfg.login.max_retry_count):
-            idx += 1
+        for _idx in range(self.cfg.login.max_retry_count):
+            idx = _idx + 1
 
             self.login_mode = login_mode
 
@@ -267,6 +267,10 @@ class QQLogin():
             ctx = f"{login_type}-{suffix}"
 
             try:
+                if idx > 1:
+                    logger.info(color("bold_cyan") + f"已经是第{idx}次登陆，说明可能出现某些问题，将关闭隐藏浏览器选项，方便观察出现什么问题")
+                    self.cfg.run_in_headless_mode = False
+
                 self.prepare_chrome(ctx, login_type, login_url)
 
                 return login_fn(ctx, login_action_fn=login_action_fn)

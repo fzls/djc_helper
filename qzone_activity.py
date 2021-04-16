@@ -5,15 +5,15 @@ import time
 
 import requests
 
-from config import AccountConfig
+from config import AccountConfig, CommonConfig
 from dao import RoleInfo, DnfWarriorsCallInfo, GuanhuaiActInfo
 from log import logger, color
 from network import process_result, try_request
 from qq_login import LoginResult
 from setting import *
 from sign import getACSRFTokenForAMS
-from urls import Urls
-from util import uin2qq
+from urls import Urls, get_not_ams_act
+from util import uin2qq, parse_time, format_time, format_now
 
 
 class QzoneActivity:
@@ -36,6 +36,7 @@ class QzoneActivity:
         self.lr = lr
 
         self.cfg = djc_helper.cfg  # type: AccountConfig
+        self.common_cfg = djc_helper.common_cfg  # type: CommonConfig
         self.zzconfig = djc_helper.zzconfig  # type: ArkLotteryZzConfig
 
         self.g_tk = getACSRFTokenForAMS(lr.p_skey)
@@ -122,7 +123,16 @@ class QzoneActivity:
             if print_warning: logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
 
     def enable_cost_all_cards_and_do_lottery(self):
+        if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.is_last_day():
+            logger.info("已是最后一天，且配置在最后一天将全部卡片抽掉，故而将开始消耗卡片抽奖~")
+            return True
+
         return self.cfg.ark_lottery.act_id_to_cost_all_cards_and_do_lottery.get(self.zzconfig.actid, False)
+
+    def is_last_day(self) -> bool:
+        act_info = get_not_ams_act("集卡")
+        day_fmt = "%Y-%m-%d"
+        return format_time(parse_time(act_info.dtEndTime), day_fmt) == format_now(day_fmt)
 
     def lottery_using_cards(self, card_name, count=1):
         if count <= 0:

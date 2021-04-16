@@ -507,6 +507,8 @@ class CommonConfig(ConfigInterface):
         self.majieluo_send_card_target_qq = ""
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
+        # 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）
+        self.cost_all_cards_and_do_lottery_on_last_day = False
         # 调整日志等级对应颜色，颜色表可以运行log.py获取
         self.log_colors = {}  # type: Dict[str, str]
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。

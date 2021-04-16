@@ -100,6 +100,14 @@ consoleHandler.setFormatter(consoleLogFormatter)
 consoleHandler.setLevel(logging.INFO)
 logger.addHandler(consoleHandler)
 
+try:
+    from lanzou.api.utils import logger as lanzou_logger
+
+    # 将lanzou的日志也显示
+    lanzou_logger.setLevel(logging.INFO)
+except Exception:
+    pass
+
 
 def color(color_name):
     return consoleLogFormatter.color(consoleLogFormatter.log_colors, color_name)

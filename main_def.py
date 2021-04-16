@@ -883,6 +883,7 @@ def has_buy_auto_updater_dlc(cfg: Config):
 
 
 def get_user_buy_info(cfg: Config):
+    logger.info("如果卡在这里不能动，说明你无法访问蓝奏云的网站，比如https://fzls.lanzous.com/s/djc-helper，一般是你网络有问题，比如DNS，请百度 修改DNS为腾讯、百度、阿里、谷歌的DNS之一")
     user_buy_info = _get_user_buy_info(cfg)
     # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
     if has_buy_auto_updater_dlc(cfg):

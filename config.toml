@@ -16,6 +16,9 @@ try_auto_bind_new_activity = true
 # 马杰洛新春版本赠送卡片目标QQ
 majieluo_send_card_target_qq = ""
 
+# 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）
+cost_all_cards_and_do_lottery_on_last_day = false
+
 # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
 # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
 # 依次赠送给一到三个QQ的示例如下，更多赠送目标则类推

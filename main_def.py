@@ -430,9 +430,8 @@ def colored_count(accountIdx, card_count, show_color=""):
 def count_with_color(card_count, show_color, show_width=3):
     return color(show_color) + padLeftRight(card_count, show_width) + asciiReset + color("INFO")
 
-
 @try_except()
-def show_accounts_status(cfg, ctx):
+def show_extra_infos(cfg):
     logger.info("")
     _show_head_line("部分活动信息")
     logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
@@ -443,6 +442,8 @@ def show_accounts_status(cfg, ctx):
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
 
+@try_except()
+def show_accounts_status(cfg, ctx):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)

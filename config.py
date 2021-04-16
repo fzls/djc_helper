@@ -535,7 +535,16 @@ class CommonConfig(ConfigInterface):
         ]
 
     def on_config_update(self, raw_config: dict):
-        consoleHandler.setLevel(self.log_level_map[self.log_level])
+        log_level = self.log_level_map[self.log_level]
+        consoleHandler.setLevel(log_level)
+
+        try:
+            from lanzou.api.utils import logger as lanzou_logger
+
+            # 将lanzou的日志也显示
+            lanzou_logger.setLevel(log_level)
+        except Exception:
+            pass
         if type(self.log_colors) is dict:
             for level, log_color in self.log_colors.items():
                 consoleLogFormatter.log_colors[level] = log_color

@@ -429,7 +429,6 @@ class DjcHelper:
                 "DNF黑鸦竞速",
                 "DNF集合站",
                 "WeGame活动",
-                "qq视频活动",
                 "管家蚊子腿",
                 "会员关怀",
                 "hello语音网页礼包兑换",
@@ -468,9 +467,6 @@ class DjcHelper:
 
         # WeGame活动
         self.dnf_wegame()
-
-        # qq视频活动
-        self.qq_video()
 
         # 管家蚊子腿
         self.guanjia()
@@ -539,6 +535,9 @@ class DjcHelper:
 
         # DNF马杰洛的规划
         self.majieluo()
+
+        # qq视频活动
+        self.qq_video()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()

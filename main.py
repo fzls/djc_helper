@@ -119,6 +119,8 @@ def main():
     auto_send_cards(cfg)
 
     show_extra_infos(cfg)
+    show_accounts_status(cfg, "运行完毕展示账号概览")
+
     show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
     # 临时代码

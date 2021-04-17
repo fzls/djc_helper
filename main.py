@@ -96,6 +96,9 @@ def main():
 
     check_djc_role_binding()
 
+    # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
+    check_update(cfg)
+
     # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
     try_auto_update(cfg)
 
@@ -124,9 +127,6 @@ def main():
     # 显示小助手的使用概览
     if cfg.common._show_usage:
         show_usage()
-
-    # 全部账号操作完成后，检查更新
-    check_update(cfg)
 
     # 运行结束展示下多进程信息
     show_multiprocessing_info(cfg)

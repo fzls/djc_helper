@@ -921,8 +921,6 @@ def get_user_buy_info(cfg: Config):
                     # 从当前结束时间叠加时长（未产生未付费区间）
                     last_end = last_end + datetime.timedelta(days=record.buy_month * 31)
 
-                print(last_end)
-
             fixup_times = max(max_present_times - not_paied_times, datetime.timedelta())
 
             expire_at_time = parse_time(user_buy_info.expire_at) + fixup_times

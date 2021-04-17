@@ -1,4 +1,5 @@
 import json
+import lzma
 import os
 import re
 from collections import namedtuple
@@ -7,6 +8,7 @@ from datetime import datetime
 from lanzou.api import LanZouCloud
 
 from log import logger, color
+from util import make_sure_dir_exists
 
 lanzou_cookie = {
     "ylogin": "1442903",
@@ -41,11 +43,15 @@ class Uploader:
     cs_buy_auto_updater_users_filename = "cs_buy_auto_updater_users.txt"
     cs_user_monthly_pay_info_filename = "cs_user_monthly_pay_info.txt"
 
+    # 压缩版本的前后缀
+    compressed_version_prefix = "compressed_"
+    compressed_version_suffix = ".7z"
+
     def __init__(self, cookie):
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix=""):
+    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False):
         logger.warning(f"开始上传 {os.path.basename(filepath)} 到 {target_folder.name}")
         run_start_time = datetime.now()
 
@@ -80,7 +86,25 @@ class Uploader:
 
         logger.warning(f"上传当前文件总计耗时{datetime.now() - run_start_time}")
 
+        if also_upload_compressed_version:
+            filename = os.path.basename(filepath)
+
+            make_sure_dir_exists('.cached')
+            compressed_filepath = os.path.join('.cached', self.get_compressed_version_filename(filename))
+            compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"
+
+            logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")
+            # 创建压缩版本
+            with open(f"{filepath}", "rb") as file_in:
+                with lzma.open(f"{compressed_filepath}", "wb") as file_out:
+                    file_out.writelines(file_in)
+            # 上传
+            return self.upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix, False)
+
         return True
+
+    def get_compressed_version_filename(self, filename: str) -> str:
+        return f"{self.compressed_version_prefix}{filename}{self.compressed_version_suffix}"
 
     def latest_version(self) -> str:
         """
@@ -144,11 +168,35 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder, name, download_dir, overwrite=True, show_log=True) -> str:
+    def download_file_in_folder(self, folder, name, download_dir, overwrite=True, show_log=True, try_compressed_version_first=False) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
-        return self.download_file(self.find_file(folder, name), download_dir, overwrite=overwrite, show_log=show_log)
+
+        def _download(fname: str) -> str:
+            return self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log)
+
+        if try_compressed_version_first:
+            # 先尝试获取压缩版本
+            compressed_filename = self.get_compressed_version_filename(name)
+            try:
+                if show_log: logger.info(color("bold_green") + f"尝试优先下载压缩版本 {compressed_filename}")
+                # 下载压缩版本
+                compressed_filepath = _download(compressed_filename)
+
+                # 解压缩
+                dirname = os.path.dirname(compressed_filepath)
+                target_path = os.path.join(dirname, name)
+                with lzma.open(f"{compressed_filepath}", "rb") as file_in:
+                    with open(f"{target_path}", "wb") as file_out:
+                        file_out.writelines(file_in)
+                # 返回解压缩的文件路径
+                return target_path
+            except Exception as e:
+                if show_log: logger.error(f"下载压缩版本 {compressed_filename} 失败，将尝试普通版本~", exc_info=e)
+
+        # 下载普通版本
+        return _download(name)
 
     def find_file(self, folder, name):
         """

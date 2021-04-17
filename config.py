@@ -469,6 +469,8 @@ class CommonConfig(ConfigInterface):
     }
 
     def __init__(self):
+        # 账号数目，将在读取完配置后动态设定为当前设置的账号数目
+        self.account_count = 1
         # 测试模式，若开启，则一些实验性功能将会启用
         self.test_mode = False
         # 是否启用处于安全模式的账号
@@ -571,6 +573,8 @@ class Config(ConfigInterface):
         if not self.check():
             logger.error("配置有误，请根据提示信息修改")
             exit(-1)
+
+        self.common.account_count = len(self.account_configs)
 
     def check(self) -> bool:
         name2index = {}
@@ -758,11 +762,12 @@ def config():
 
 
 if __name__ == '__main__':
-    # load_config("config.toml", "config.toml.local")
-    # logger.info(config())
+    load_config("config.toml", "config.toml.local")
+    logger.info(config().common.account_count)
 
-    # cfg = config()
+    cfg = config()
+
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
 
-    gen_config_for_github_action()
+    # gen_config_for_github_action()

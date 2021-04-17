@@ -1079,7 +1079,9 @@ def test_pay_info():
     load_config("config.toml")
     cfg = config()
 
-    cfg.account_configs[0].account_info.uin = "o" + "1234567"
+    cfg.account_configs[0].account_info.uin = "o" + "1054073896"
+
+    cfg.common.log_level = "debug"
 
     logger.info("尝试获取DLC信息")
     has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
@@ -1099,5 +1101,5 @@ def test_pay_info():
 if __name__ == '__main__':
     freeze_support()
 
-    _test_main()
-    # test_pay_info()
+    # _test_main()
+    test_pay_info()

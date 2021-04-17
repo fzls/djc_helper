@@ -430,6 +430,7 @@ def colored_count(accountIdx, card_count, show_color=""):
 def count_with_color(card_count, show_color, show_width=3):
     return color(show_color) + padLeftRight(card_count, show_width) + asciiReset + color("INFO")
 
+
 @try_except()
 def show_extra_infos(cfg):
     logger.info("")
@@ -441,6 +442,7 @@ def show_extra_infos(cfg):
     _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
+
 
 @try_except()
 def show_accounts_status(cfg, ctx):
@@ -677,26 +679,28 @@ def check_update(cfg):
         return
 
     auto_updater_path = os.path.realpath("utils/auto_updater.exe")
-    if not os.path.exists(auto_updater_path):
-        logger.warning(color("bold_cyan") + (
-            "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
-            "-----------------\n"
-            "以下为广告时间0-0\n"
-            "花了两天多时间，给小助手加入了目前(指2021.1.6)唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
-            "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
-            "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
-            "演示视频: https://www.bilibili.com/video/BV1FA411W7Nq\n"
-            "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
-            "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0\n"
-            "价格：10.24元\n"
-            "购买方式和使用方式可查看目录中的【付费指引.docx】\n"
-            "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
-        ))
+    if os.path.exists(auto_updater_path):
+        # 如果存在自动更新DLC，则走自动更新的流程，不再手动检查是否有更新内容
+        return
+
+    logger.warning(color("bold_cyan") + (
+        "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
+        "-----------------\n"
+        "以下为广告时间0-0\n"
+        "花了两天多时间，给小助手加入了目前(指2021.1.6)唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
+        "当没有该DLC时，所有功能将正常运行，只是需要跟以往一样，检测到更新时需要自己去手动更新\n"
+        "当添加该DLC后，将额外增加自动更新功能，启动时将会判断是否需要更新，若需要则直接干掉小助手，然后更新到最新版后自动启动新版本\n"
+        "演示视频: https://www.bilibili.com/video/BV1FA411W7Nq\n"
+        "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
+        "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0\n"
+        "价格：10.24元\n"
+        "购买方式和使用方式可查看目录中的【付费指引.docx】\n"
+        "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
+    ))
 
     logger.info((
         "\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
-        "全部账号操作已经成功完成\n"
         "现在准备访问github仓库相关页面来检查是否有新版本\n"
         "由于国内网络问题，访问可能会比较慢，请不要立即关闭，可以选择最小化或切换到其他窗口0-0\n"
         "若有新版本会自动弹窗提示~\n"

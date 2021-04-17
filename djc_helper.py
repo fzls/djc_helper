@@ -380,37 +380,42 @@ class DjcHelper:
         # 获取dnf和手游的绑定信息
         self.get_bind_role_list()
 
-        # 执行道聚城相关操作
-        self.djc_operations()
+        # 需要运行的活动
+        activity_funcs_to_run = [
+            ("执行道聚城相关操作", self.djc_operations),
+            ("DNF地下城与勇士心悦特权专区", self.xinyue_operations),
+            ("心悦app相关操作", self.xinyue_app_operations),
+            ("黑钻礼包", self.get_heizuan_gift),
+            ("腾讯游戏信用相关礼包", self.get_credit_xinyue_gift),
+            ("心悦app理财礼卡", self.xinyue_financing),
+            ("心悦猫咪", self.xinyue_cat),
+            ("心悦app周礼包", self.xinyue_weekly_gift),
+            ("dnf论坛签到", self.dnf_bbs_signin),
+        ]
+        paied_activities = self.paied_activities()
 
-        # 执行心悦相关操作
-        # DNF地下城与勇士心悦特权专区
-        self.xinyue_operations()
+        # 展示活动的信息
+        def get_activities_summary(categray: str, activities: list) -> str:
+            activities_summary = ""
+            activities_names = list([act_name for act_name, act_func in activities])
+            if len(activities_names) != 0:
+                activities_summary += f"\n目前的{categray}活动如下："
+                activities_summary += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(activities_names)])
+            else:
+                activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 
-        # 心悦app相关操作
-        self.xinyue_app_operations()
+            return activities_summary
 
-        # 黑钻礼包
-        self.get_heizuan_gift()
+        # 免费活动信息
+        free_activities_summary = get_activities_summary("长期免费", activity_funcs_to_run)
+        show_head_line("以下为免费的长期活动", msg_color=color("bold_cyan"))
+        logger.info(free_activities_summary)
 
-        # 腾讯游戏信用相关礼包
-        self.get_credit_xinyue_gift()
-
-        # 心悦app理财礼卡
-        self.xinyue_financing()
-
-        # 心悦猫咪
-        self.xinyue_cat()
-
-        # 心悦app周礼包
-        self.xinyue_weekly_gift()
-
-        # dnf论坛签到
-        self.dnf_bbs_signin()
-
+        # 付费活动信息
+        paied_activities_summary = get_activities_summary("短期付费", paied_activities)
         if user_buy_info.is_active():
             show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
-            self.paied_activities()
+            logger.info(paied_activities_summary)
         else:
             if user_buy_info.total_buy_month != 0:
                 msg = f"账号{user_buy_info.qq}的付费内容已到期，到期时间点为{user_buy_info.expire_at}。"
@@ -418,67 +423,35 @@ class DjcHelper:
                 msg = f"账号{user_buy_info.qq}未购买付费内容。"
             msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可查看目录中的【付费指引.docx】，目前定价为5元每月。"
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
-            # note: 更新新的活动时记得更新这个列表
-            paied_activities = [
-                "dnf助手编年史活动",
-                "DNF马杰洛的规划",
-                "DNF落地页活动",
-                "DNF福利中心兑换",
-                "QQ空间集卡",
-                "DNF福签大作战",
-                "DNF黑鸦竞速",
-                "DNF集合站",
-                "WeGame活动",
-                "管家蚊子腿",
-                "会员关怀",
-                "hello语音网页礼包兑换",
-                "colg每日签到",
-            ]
-            if len(paied_activities) != 0:
-                msg += "\n目前受影响的活动如下："
-                msg += "\n" + "\n".join([f'    {idx + 1:2d}. {act_name}' for idx, act_name in enumerate(paied_activities)])
-            else:
-                msg += "\n目前尚无需要付费的短期活动，当新的短期活动出现时会及时加入~"
+
+            msg += paied_activities_summary
+
             logger.warning(color("bold_yellow") + msg)
 
+        # 运行活动
+        if user_buy_info.is_active():
+            # 付费期间将付费活动也加入到执行列表中
+            activity_funcs_to_run.extend(paied_activities)
+
+        for act_name, activity_func in activity_funcs_to_run:
+            activity_func()
+
     def paied_activities(self):
-        # re: 更新新的活动时记得更新上面的列表，以及urls.py的not_ams_activities
-
-        # dnf助手编年史活动
-        self.dnf_helper_chronicle()
-
-        # DNF落地页活动
-        self.dnf_luodiye()
-
-        # DNF福利中心兑换
-        self.dnf_welfare()
-
-        # QQ空间集卡
-        self.ark_lottery()
-
-        # DNF福签大作战
-        self.dnf_fuqian()
-
-        # DNF黑鸦竞速
-        self.dnf_heiya()
-
-        # DNF集合站
-        self.dnf_collection()
-
-        # WeGame活动
-        self.dnf_wegame()
-
-        # 管家蚊子腿
-        self.guanjia()
-
-        # 会员关怀
-        self.vip_mentor()
-
-        # hello语音网页礼包兑换
-        self.hello_voice()
-
-        # colg每日签到
-        self.colg_signin()
+        # re: 更新新的活动时记得更新urls.py的not_ams_activities
+        return [
+            ("dnf助手编年史活动", self.dnf_helper_chronicle),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF福利中心兑换", self.dnf_welfare),
+            ("QQ空间集卡", self.ark_lottery),
+            ("DNF福签大作战", self.dnf_fuqian),
+            ("DNF黑鸦竞速", self.dnf_heiya),
+            ("DNF集合站", self.dnf_collection),
+            ("WeGame活动", self.dnf_wegame),
+            ("管家蚊子腿", self.guanjia),
+            ("会员关怀", self.vip_mentor),
+            ("hello语音网页礼包兑换", self.hello_voice),
+            ("colg每日签到", self.colg_signin),
+        ]
 
     # -- 已过期的一些活动
     def expired_activities(self):

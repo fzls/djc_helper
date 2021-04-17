@@ -844,7 +844,7 @@ def has_buy_auto_updater_dlc(cfg: Config):
             has_no_users = True
             for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
                 try:
-                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=cfg.common.log_level == "debug", try_compressed_version_first=True)
                 except FileNotFoundError as e:
                     # 如果网盘没有这个文件，就跳过
                     continue
@@ -954,7 +954,7 @@ def _get_user_buy_info(cfg: Config):
                 user_buy_info = user_buy_info_list[idx]
 
                 try:
-                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=False)
+                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=cfg.common.log_level == "debug", try_compressed_version_first=True)
                 except FileNotFoundError as e:
                     # 如果网盘没有这个文件，就跳过
                     continue

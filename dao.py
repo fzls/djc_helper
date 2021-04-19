@@ -904,6 +904,8 @@ class DnfCollectionInfo(ConfigInterface):
         self.luckyCount = 0
         self.scoreCount = 0
         self.openLuckyCount = 0
+        self.send_total = 0
+        self.total_page = 0
 
 
 class DnfHeiyaInfo(ConfigInterface):

@@ -4479,6 +4479,8 @@ class DjcHelper:
 
             info = DnfCollectionInfo()
             info.has_init = raw_info.sOutValue2 != "0"
+            info.send_total = int(raw_info.sOutValue3)
+            info.total_page = math.ceil(info.send_total / 6)
             info.luckyCount = int(raw_info.sOutValue5)
             info.scoreCount = int(raw_info.sOutValue6)
             info.openLuckyCount = int(raw_info.sOutValue7)
@@ -4486,14 +4488,20 @@ class DjcHelper:
             return info
 
         def take_invite_awards():
-            res = self.dnf_fuqian_op("查询邀请成功的列表", "744443", sendPage="1", print_res=False)
-            data = res["modRet"]["jData"]
-            if data["iTotal"] > 0:
-                for invite_info in data["jData"]:
-                    if invite_info["iGet"] == "0":
-                        uin = invite_info["iUin2"]
-                        iId = invite_info["iId"]
-                        self.dnf_fuqian_op(f"领取积分奖励-{uin}", "743861", iId=iId)
+            info = query_info()
+            for page in range(1, info.total_page + 1):
+                res = self.dnf_fuqian_op(f"查询第{page}/{info.total_page}页邀请成功的列表", "744443", sendPage=str(page))
+                data = res["modRet"]["jData"]
+                logger.info(data["iTotal"])
+                if data["iTotal"] > 0:
+                    for invite_info in data["jData"]:
+                        if invite_info["iGet"] == "0":
+                            uin = invite_info["iUin2"]
+                            iId = invite_info["iId"]
+                            self.dnf_fuqian_op(f"领取第{page}页积分奖励-{uin}", "743861", iId=iId)
+                else:
+                    logger.info("没有更多已邀请好友了，将跳过~")
+                    return
 
         # 正式逻辑如下
 

@@ -13,6 +13,7 @@ def check_all_skey_and_pskey(cfg):
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
+        QQLogin(cfg.common).extract_portable_chrome_ahead()
         get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common)
                                                          for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
         logger.info("全部账号检查完毕")

@@ -155,6 +155,16 @@ class QQLogin():
         urllib_logger = logging.getLogger('urllib3.connectionpool')
         urllib_logger.setLevel(logger.level)
 
+    def extract_portable_chrome_ahead(self):
+        """
+        若存在便携版压缩包，且未解压，则预先解压缩
+        主要用于处理多进程模式下，可能多个进程同时尝试解压导致的问题
+        :return:
+        """
+        if os.path.isfile(self.chrome_binary_7z()) and not os.path.isdir(self.chrome_binary_directory()):
+            logger.info("预先在主进程自动解压便携版chrome到当前目录，避免后续多进程同时尝试解压")
+            subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
+
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")
 

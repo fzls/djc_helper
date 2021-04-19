@@ -954,6 +954,8 @@ class DjcHelper:
         :type op: XinYueOperationConfig
         """
         retryCfg = self.common_cfg.retry
+        # 最少等待5秒
+        wait_time = max(retryCfg.request_wait_time, 5)
         now = datetime.datetime.now()
         current_hour = now.hour
         for i in range(op.count):
@@ -966,8 +968,8 @@ class DjcHelper:
                 #     time.sleep(retryCfg.retry_wait_time)
                 #     continue
 
-                logger.debug(f"心悦操作 {op.sFlowName} ok，等待{retryCfg.request_wait_time}s，避免请求过快报错")
-                time.sleep(retryCfg.request_wait_time)
+                logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
+                time.sleep(wait_time)
                 break
 
     @try_except()

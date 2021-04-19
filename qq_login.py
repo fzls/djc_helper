@@ -579,7 +579,7 @@ class QQLogin():
         try:
             self._try_auto_resolve_captcha()
         except Exception as e:
-            msg = f"ver {now_version} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群1041823293反馈或自行解决。请手动进行处理验证码"
+            msg = f"ver {now_version} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群743671885反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
             logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")

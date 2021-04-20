@@ -745,12 +745,14 @@ class BuyInfo(ConfigInterface):
         self.buy_records = records
 
     def is_active(self):
+        return not self.will_expire_in_days(0)
+
+    def will_expire_in_days(self, days: int) -> bool:
         if run_from_src():
             # 使用源码运行不受限制
-            return True
+            return False
 
-        now = datetime.now()
-        return now <= parse_time(self.expire_at)
+        return datetime.now() + timedelta(days=days) > parse_time(self.expire_at)
 
     def description(self) -> str:
         buy_accounts = self.qq

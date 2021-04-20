@@ -9,6 +9,7 @@ import time
 import traceback
 import uuid
 import webbrowser
+from typing import Callable, Any, Optional
 
 import psutil
 import requests.exceptions
@@ -504,6 +505,47 @@ def parse_unicode_escape_string(filename: str):
 
 def remove_none_from_list(l: list) -> list:
     return list(filter(lambda x: x is not None, l))
+
+
+def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600):
+    """
+
+    :param cache_category: 缓存类别，不同类别的key不冲突
+    :param cache_key: 缓存key，单个类别内唯一
+    :param cache_miss_func: 缓存未命中时获取最新值的回调，返回值必须要是python原生类型，以便进行json的序列化和反序列化
+    :param cache_validate_func: func(cached_value)->bool, 用于检查缓存值是否仍有效，比如如果缓存的是文件路径，则判断路径是否存在
+    :param cache_max_seconds: 缓存时限（秒），默认600s
+    :return: 缓存中获取的数据（若未过期），或最新获取的数据
+    """
+    db = load_db()
+
+    root_caches_key = "caches"
+    if root_caches_key not in db:
+        db[root_caches_key] = {}
+    cache = db[root_caches_key]
+
+    # 尝试使用缓存内容
+    if cache_category in cache and cache_key in cache[cache_category]:
+        cache_info = cache[cache_category][cache_key]
+        if parse_time(cache_info["last_update_at"]) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
+            cached_value = cache_info["value"]
+            if cache_validate_func is None or cache_validate_func(cached_value):
+                logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
+                return cached_value
+
+    # 调用回调获取最新结果，并保存
+    latest_value = cache_miss_func()
+
+    if cache_category not in cache:
+        cache[cache_category] = {}
+    cache[cache_category][cache_key] = {
+        "last_update_at": format_now(),
+        "value": latest_value,
+    }
+
+    save_db(db)
+
+    return latest_value
 
 
 if __name__ == '__main__':

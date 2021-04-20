@@ -277,7 +277,7 @@ class QQLogin():
 
             ctx = f"{login_type}-{suffix}"
 
-            login_result = color("bold_green") + "登录成功"
+            login_exception = None
 
             try:
                 if idx > 1:
@@ -288,25 +288,30 @@ class QQLogin():
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
-                login_result = color("bold_cyan") + "登录失败"
-
-                lc = self.cfg.login
-
-                msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
-                if idx < lc.max_retry_count:
-                    # 每次等待时长线性递增
-                    wait_time = (lc.retry_wait_time * idx / (lc.max_retry_count - 1))
-                    msg += f"，等待{wait_time}秒后重试"
-                    logger.exception(msg, exc_info=e)
-                    count_down(f"{self.name:20s} 重试", wait_time)
-                else:
-                    logger.exception(msg, exc_info=e)
+                login_exception = e
             finally:
+                login_result = color("bold_green") + "登录成功"
+                if login_exception is not None:
+                    login_result = color("bold_cyan") + "登录失败"
+
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")
                 logger.info(f"[{login_result}] " + color("bold_yellow") + f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次 {ctx} 共耗时为 {used_time}")
                 logger.info("")
                 self.destroy_chrome()
+
+                if login_exception is not None:
+                    lc = self.cfg.login
+
+                    msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
+                    if idx < lc.max_retry_count:
+                        # 每次等待时长线性递增
+                        wait_time = (lc.retry_wait_time * idx / (lc.max_retry_count - 1))
+                        msg += f"，等待{wait_time}秒后重试"
+                        logger.exception(msg, exc_info=login_exception)
+                        count_down(f"{self.name:20s} 重试", wait_time)
+                    else:
+                        logger.exception(msg, exc_info=login_exception)
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (

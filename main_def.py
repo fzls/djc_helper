@@ -1098,7 +1098,9 @@ def test_pay_info():
 
     cfg.account_configs[0].account_info.uin = "o" + "1054073896"
 
-    cfg.common.log_level = "debug"
+    # cfg.common.log_level = "debug"
+    # from config import to_raw_type
+    # cfg.common.on_config_update(to_raw_type(cfg.common))
 
     logger.info("尝试获取DLC信息")
     has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
@@ -1112,7 +1114,7 @@ def test_pay_info():
     monthly_pay_info = user_buy_info.description()
 
     logger.info(dlc_info)
-    logger.info(monthly_pay_info)
+    logger.info(color("bold_cyan") + monthly_pay_info)
 
 
 if __name__ == '__main__':

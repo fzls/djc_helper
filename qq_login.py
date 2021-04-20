@@ -294,7 +294,7 @@ class QQLogin():
                 msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
                 if idx < lc.max_retry_count:
                     # 每次等待时长线性递增
-                    wait_time = (lc.retry_wait_time * idx / lc.max_retry_count - 1)
+                    wait_time = (lc.retry_wait_time * idx / (lc.max_retry_count - 1))
                     msg += f"，等待{wait_time}秒后重试"
                     logger.exception(msg, exc_info=e)
                     count_down(wait_time)

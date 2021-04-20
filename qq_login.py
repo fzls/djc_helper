@@ -276,6 +276,8 @@ class QQLogin():
 
             ctx = f"{login_type}-{suffix}"
 
+            login_result = "登录成功"
+
             try:
                 if idx > 1:
                     logger.info(color("bold_cyan") + f"已经是第{idx}次登陆，说明可能出现某些问题，将关闭隐藏浏览器选项，方便观察出现什么问题")
@@ -285,6 +287,8 @@ class QQLogin():
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
+                login_result = "登录失败"
+
                 lc = self.cfg.login
 
                 msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
@@ -299,7 +303,7 @@ class QQLogin():
             finally:
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")
-                logger.info(color("bold_yellow") + f"本次 {self.name} {ctx} 共耗时为 {used_time}")
+                logger.info(color("bold_yellow") + f"[{login_result}] {self.name} 第{idx}/{self.cfg.login.max_retry_count}次 {ctx} 共耗时为 {used_time}")
                 logger.info("")
                 self.destroy_chrome()
 

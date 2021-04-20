@@ -558,7 +558,7 @@ def count_down(ctx:str, seconds: int, update_interval=0.1):
 
         time.sleep(update_interval)
         now_time = get_now()
-    print()
+    print("\r" + " "* 80)
 
 
 if __name__ == '__main__':

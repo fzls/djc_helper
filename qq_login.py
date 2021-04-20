@@ -748,7 +748,7 @@ if __name__ == '__main__':
 
         freeze_support()
 
-        with Pool(cpu_count() * 2) as pool:
+        with Pool(len(cfg.account_configs)) as pool:
             pool.starmap(do_login, [(cfg.common, account) for account in cfg.account_configs])
 
             logger.info("全部账号登录完毕")

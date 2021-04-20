@@ -287,7 +287,7 @@ class QQLogin():
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
-                login_result = color("red") + "登录失败"
+                login_result = color("bold_cyan") + "登录失败"
 
                 lc = self.cfg.login
 

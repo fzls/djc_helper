@@ -131,7 +131,7 @@ class QQLogin():
 
             # 先判断便携版chrome是否已解压
             if not os.path.isdir(self.chrome_binary_directory()):
-                logger.info("自动解压便携版chrome到当前目录")
+                logger.info(f"{self.name} 自动解压便携版chrome到当前目录")
                 subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
             # 然后使用本地的chrome来初始化driver对象
@@ -141,7 +141,7 @@ class QQLogin():
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
-            logger.info("使用便携版chrome")
+            logger.info(f"{self.name} 使用便携版chrome")
 
         self.cookies = self.driver.get_cookies()
 
@@ -195,14 +195,14 @@ class QQLogin():
         """
         self.name = name
         self.window_title = f"将登录 {name}({account}) - {login_mode}"
-        logger.info("即将开始自动登录，无需任何手动操作，等待其完成即可")
-        logger.info("如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
+        logger.info(f"{name} 即将开始自动登录，无需任何手动操作，等待其完成即可")
+        logger.info(f"{name} 如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
 
         def login_with_account_and_password():
-            logger.info(color("bold_green") + "当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
+            logger.info(color("bold_green") + f"{name} 当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
 
             # 切换到自动登录界面
-            logger.info("等待#switcher_plogin加载完毕")
+            logger.info(f"{name} 等待#switcher_plogin加载完毕")
             time.sleep(self.cfg.login.open_url_wait_time)
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
 
@@ -349,7 +349,7 @@ class QQLogin():
                 self.get_switch_to_login_frame_fn(15000103, 5, s_url)
 
         def assert_login_finished_fn():
-            logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了...")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)

@@ -719,8 +719,8 @@ class QQLogin():
             if self.driver.current_url != chrome_default_url:
                 break
 
-            logger.info(f"尝试打开网页({url})，但似乎指令未生效，当前地址栏仍为{chrome_default_url}，等待{self.cfg.login.retry_wait_time}秒后重试")
-            time.sleep(self.cfg.login.retry_wait_time)
+            logger.info(f"尝试打开网页({url})，但似乎指令未生效，当前地址栏仍为{chrome_default_url}，等待{self.cfg.retry.retry_wait_time}秒后重试")
+            time.sleep(self.cfg.retry.retry_wait_time)
 
     def need_reopen_url(self, login_type):
         return self.login_type_auto_login in login_type and self.cfg.run_in_headless_mode

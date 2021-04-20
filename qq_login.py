@@ -772,7 +772,7 @@ if __name__ == '__main__':
         test_all = False
 
         if not test_all:
-            run_test(ql.login_mode_xinyue)
+            run_test(ql.login_mode_normal)
         else:
             for attr in dir(ql):
                 if not attr.startswith("login_mode_"):

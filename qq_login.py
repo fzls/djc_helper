@@ -214,7 +214,7 @@ class QQLogin():
             # 输入密码
             self.driver.find_element(By.ID, "p").send_keys(password)
 
-            logger.info("等待一会，确保登录键可以点击")
+            logger.info(f"{name} 等待一会，确保登录键可以点击")
             time.sleep(3)
 
             # 发送登录请求

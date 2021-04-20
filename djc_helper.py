@@ -4488,6 +4488,10 @@ class DjcHelper:
             return info
 
         def take_invite_awards():
+            if not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.name}"):
+                logger.warning("本周已运行过领取邀请奖励，暂不继续领取~")
+                return
+
             info = query_info()
             for page in range(1, info.total_page + 1):
                 res = self.dnf_fuqian_op(f"查询第{page}/{info.total_page}页邀请成功的列表", "744443", sendPage=str(page))

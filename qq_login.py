@@ -285,8 +285,17 @@ class QQLogin():
 
                 return login_fn(ctx, login_action_fn=login_action_fn)
             except Exception as e:
-                logger.exception(f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次尝试登录出错，等待{self.cfg.login.retry_wait_time}秒后重试", exc_info=e)
-                time.sleep(self.cfg.login.retry_wait_time)
+                lc = self.cfg.login
+
+                msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
+                if idx < lc.max_retry_count:
+                    # 每次等待时长线性递增
+                    wait_time = (lc.retry_wait_time * idx / lc.max_retry_count - 1)
+                    msg += f"，等待{wait_time}秒后重试"
+                    logger.exception(msg, exc_info=e)
+                    time.sleep(wait_time)
+                else:
+                    logger.exception(msg, exc_info=e)
             finally:
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")

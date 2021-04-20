@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from data_struct import ConfigInterface
-from util import parse_time, run_from_src, format_time
+from util import parse_time, run_from_src, format_time, get_today
 
 
 class DaoObject:
@@ -816,6 +816,9 @@ class AmsActInfo(ConfigInterface):
             "wx_appid": "wxb30cf8a19c708c2a"
         }
         self.flows = {}
+
+    def is_last_day(self):
+        return format_time(parse_time(self.dtEndTime), "%Y%m%d") == get_today()
 
 
 class AmsActFlowInfo(ConfigInterface):

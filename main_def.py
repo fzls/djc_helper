@@ -757,7 +757,7 @@ def show_ask_message_box_only_once_sync():
 
 
 @try_except()
-def temp_code(cfg):
+def show_tips(cfg):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("一些小提示")
@@ -771,22 +771,15 @@ def temp_code(cfg):
         ),
         (
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
-            "目前兑换流程暂不支持，需自行每日点开心悦app去兑换，或者使用auto.js脚本去每日定期自动操作。"
+            "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
         ),
         (
             "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
         ),
         (
-            "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷"
-        ),
-        (
             "现已添加多进程支持，有兴趣可打开多进程开关进行体验。请注意，多进程运行时日志会混杂<_<"
         ),
     ]
-
-    if is_first_run("319微信答题"):
-        msg = "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
-        async_message_box(msg, "签到活动", icon=win32con.MB_ICONINFORMATION)
 
     for idx, tip in enumerate(tips):
         logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")
@@ -1071,7 +1064,7 @@ def _test_main():
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
     # show_accounts_status(cfg, "运行完毕展示账号概览")
     # show_support_pic_monthly(cfg)
-    # temp_code(cfg)
+    # show_tips(cfg)
     # if cfg.common._show_usage:
     #     show_usage()
     # check_update(cfg)

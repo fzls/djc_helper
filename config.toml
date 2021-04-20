@@ -13,6 +13,9 @@ auto_update_on_start = true
 # 是否尝试自动绑定新活动
 try_auto_bind_new_activity = true
 
+# 提前多少天提示付费过期
+notify_pay_expired_in_days = 7
+
 # 马杰洛新春版本赠送卡片目标QQ
 majieluo_send_card_target_qq = ""
 

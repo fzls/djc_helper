@@ -505,6 +505,8 @@ class CommonConfig(ConfigInterface):
         self.auto_update_on_start = True
         # 是否尝试自动绑定新活动
         self.try_auto_bind_new_activity = True
+        # 提前多少天提示付费过期
+        self.notify_pay_expired_in_days = 7
         # 马杰洛新春版本赠送卡片目标QQ
         self.majieluo_send_card_target_qq = ""
         # 抽卡汇总展示色彩

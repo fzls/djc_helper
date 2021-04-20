@@ -146,6 +146,7 @@ class QQLogin():
         self.cookies = self.driver.get_cookies()
 
     def destroy_chrome(self):
+        logger.info(f"{self.name} 释放chrome实例")
         if self.driver is not None:
             # 最小化网页
             self.driver.minimize_window()

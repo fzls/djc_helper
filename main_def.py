@@ -435,15 +435,25 @@ def count_with_color(card_count, show_color, show_width=3):
 
 @try_except()
 def show_extra_infos(cfg):
-    logger.info("")
-    _show_head_line("部分活动信息")
-    logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
-    Urls().show_current_valid_act_infos()
+    show_activity_info()
 
+    show_tips(cfg)
+
+
+@try_except()
+def show_pay_info(cfg):
     logger.info("")
     _show_head_line("付费相关信息")
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info)
+
+
+@try_except()
+def show_activity_info():
+    logger.info("")
+    _show_head_line("部分活动信息")
+    logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
+    Urls().show_current_valid_act_infos()
 
 
 @try_except()

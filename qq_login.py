@@ -523,15 +523,18 @@ class QQLogin():
         # 这时候等待一下好像就行了
         max_try = 2
         for i in range(max_try):
+            idx = i + 1
             try:
-                logger.info(f"[{i + 1}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
-                WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+                wait_time = int(self.cfg.login.login_timeout * idx / max_try)
+                logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒")
+                WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
                 break
             except Exception as e:
-                logger.error(f"[{i + 1}/{max_try}] {self.name} 出错了，等待两秒再重试。" +
+                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试。" +
                              color("bold_yellow") + "也许是网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
                              exc_info=e)
-                time.sleep(2)
+                if idx < max_try:
+                    time.sleep(2)
 
         logger.info(f"{self.name} 回到主iframe")
         self.driver.switch_to.default_content()

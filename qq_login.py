@@ -325,7 +325,7 @@ class QQLogin():
             # github action 环境下特殊处理
             raise GithubActionLoginException()
 
-        raise Exception("网络有问题")
+        raise Exception("网络很有可能有问题（备注：访问其他网页没问题不代表访问这个网页也没问题-。-）")
 
     def _login_real(self, login_type, login_action_fn=None):
         """

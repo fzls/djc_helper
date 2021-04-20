@@ -3,12 +3,13 @@ import lzma
 import os
 import re
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from lanzou.api import LanZouCloud
 
+from db import load_db, save_db
 from log import logger, color
-from util import make_sure_dir_exists
+from util import make_sure_dir_exists, format_now, get_now, parse_time
 
 lanzou_cookie = {
     "ylogin": "1442903",
@@ -168,13 +169,38 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder, name, download_dir, overwrite=True, show_log=True, try_compressed_version_first=False) -> str:
+    def download_file_in_folder(self, folder: Folder, name, download_dir, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
 
         def _download(fname: str) -> str:
-            return self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log)
+            db_key = "download_cache"
+            remote_target_path = os.path.join(folder.name, fname)
+
+            if cache_max_seconds != 0:
+                # 尝试读取缓存信息
+                db = load_db()
+                if db_key in db and remote_target_path in db[db_key]:
+                    cache_info = db[db_key][remote_target_path]
+                    if parse_time(cache_info["last_update_at"]) + timedelta(seconds=cache_max_seconds) >= get_now():
+                        logger.debug(f"{remote_target_path} 本地缓存尚未过期，使用缓存内容。缓存信息为 {cache_info}")
+                        return cache_info["local_target_path"]
+
+            local_target_path = self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log)
+
+            if cache_max_seconds != 0:
+                # 缓存
+                db = load_db()
+                if db_key not in db:
+                    db[db_key] = {}
+                db[db_key][remote_target_path] = {
+                    "last_update_at": format_now(),
+                    "local_target_path": local_target_path,
+                }
+                save_db(db)
+
+            return local_target_path
 
         if try_compressed_version_first:
             # 先尝试获取压缩版本

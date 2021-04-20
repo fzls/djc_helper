@@ -806,7 +806,7 @@ def try_auto_update(cfg):
             return
 
         if not exists_auto_updater_dlc():
-            logger.warning(color("bold_cyan") + "未发现自动更新DLC，将跳过自动更新流程~")
+            logger.warning(color("bold_cyan") + "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
             return
 
         if not has_buy_auto_updater_dlc(cfg):

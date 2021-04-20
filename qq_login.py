@@ -512,13 +512,14 @@ class QQLogin():
         logger.info(f"{self.name} 等待登录完成（也就是#loginIframe#login登录框消失）")
         # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'
         # 这时候等待一下好像就行了
-        for i in range(3):
+        max_try = 2
+        for i in range(max_try):
             try:
-                logger.info(f"{self.name} 尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
+                logger.info(f"[{i+1}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {self.cfg.login.login_timeout} 秒")
                 WebDriverWait(self.driver, self.cfg.login.login_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
                 break
             except Exception as e:
-                logger.error(f"{self.name} 出错了，等待两秒再重试。" +
+                logger.error(f"[{i+1}/{max_try}] {self.name} 出错了，等待两秒再重试。" +
                              color("bold_yellow") + "也许是网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
                              exc_info=e)
                 time.sleep(2)

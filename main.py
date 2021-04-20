@@ -123,6 +123,7 @@ def main():
 
     show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
+    show_pay_info(cfg)
 
     # 显示小助手的使用概览
     if cfg.common._show_usage:

@@ -757,7 +757,8 @@ if __name__ == '__main__':
         cfg.common.run_in_headless_mode = False
 
         ql = QQLogin(cfg.common)
-        account = cfg.account_configs[0]
+        idx = 1
+        account = cfg.account_configs[idx - 1]
         acc = account.account_info
         logger.warning(f"测试账号 {account.name} 的登录情况")
 

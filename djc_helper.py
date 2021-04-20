@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act
 from util import show_head_line, get_this_week_monday
 
 
@@ -4488,7 +4488,12 @@ class DjcHelper:
             return info
 
         def take_invite_awards():
-            if not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.name}"):
+            act_info = search_act(self.urls.iActivityId_dnf_fuqian)
+            is_last_day = False
+            if act_info is not None and act_info.is_last_day():
+                is_last_day = True
+
+            if not is_last_day and not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.name}"):
                 logger.warning("本周已运行过领取邀请奖励，暂不继续领取~")
                 return
 

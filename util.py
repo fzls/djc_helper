@@ -548,13 +548,13 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     return latest_value
 
 
-def count_down(seconds: int, update_interval=0.1):
+def count_down(ctx:str, seconds: int, update_interval=0.1):
     now_time = get_now()
     end_time = now_time + datetime.timedelta(seconds=seconds)
 
     while now_time < end_time:
         remaining_duration = end_time - now_time
-        print("\r" + f"剩余等待时间: {remaining_duration}", end='')
+        print("\r" + f"{ctx} 剩余等待时间: {remaining_duration}", end='')
 
         time.sleep(update_interval)
         now_time = get_now()

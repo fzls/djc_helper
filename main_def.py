@@ -7,6 +7,7 @@ from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
 from pool import get_pool
+from qq_login import QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
@@ -15,7 +16,6 @@ from upload_lanzouyun import Uploader, lanzou_cookie
 from urls import Urls, get_not_ams_act_desc
 from util import *
 from version import *
-from qq_login import QQLogin
 
 
 def has_any_account_in_normal_run(cfg):
@@ -639,7 +639,7 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 
 
-def show_buy_info(user_buy_info: BuyInfo, cfg:Config):
+def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
     logger.info(color("bold_cyan") + user_buy_info.description())
 
     expired = not user_buy_info.is_active()
@@ -650,7 +650,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg:Config):
             ctx = "按月付费已过期"
         elif will_expired_soon:
             ctx = "按月付费即将过期"
-        threading.Thread(target=show_buy_info_sync, args=(ctx, ), daemon=True).start()
+        threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
         wait_seconds = 15
         logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
         time.sleep(wait_seconds)

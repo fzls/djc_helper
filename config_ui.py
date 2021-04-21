@@ -527,10 +527,12 @@ class ConfigUi(QFrame):
 
         self.label_auto_udpate_info = QLabel("点击登录按钮后可显示是否购买自动更新DLC")
         self.label_auto_udpate_info.setVisible(False)
+        self.label_auto_udpate_info.setStyleSheet("color : DarkSlateGray; ")
         layout.addWidget(self.label_auto_udpate_info)
 
         self.label_monthly_pay_info = QLabel("点击登录按钮后可显示按月付费信息")
         self.label_monthly_pay_info.setVisible(False)
+        self.label_monthly_pay_info.setStyleSheet("color : DarkCyan; ")
         layout.addWidget(self.label_monthly_pay_info)
 
         tab.setLayout(make_scroll_layout(layout))

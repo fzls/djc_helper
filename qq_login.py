@@ -241,6 +241,28 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
+        # 结合历史数据和配置，计算各轮重试等待的时间
+        login_retry_key = "login_retry_key"
+        db = load_db()
+        login_retry_data = db.get(login_retry_key, {
+            "recommended_first_retry_timeout": 0,
+            "history_success_timeouts": [],
+        })
+
+        actual_retry_count = self.cfg.login.max_retry_count - 1
+
+        retry_timeouts = []
+        if actual_retry_count == 1:
+            retry_timeouts = [self.cfg.login.retry_wait_time]
+        elif actual_retry_count > 1:
+            # 默认重试时间为按时长等分递增
+            retry_timeouts = list([int(idx / actual_retry_count * self.cfg.login.retry_wait_time) for idx in range_from_one(actual_retry_count)])
+            if login_retry_data['recommended_first_retry_timeout'] != 0:
+                # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
+                retry_timeouts = [login_retry_data["recommended_first_retry_timeout"]]
+                remaining_retry_count = actual_retry_count - 1
+                retry_timeouts.extend(list([int(idx / (remaining_retry_count) * self.cfg.login.retry_wait_time) for idx in range_from_one(remaining_retry_count)]))
+
         for idx in range_from_one(self.cfg.login.max_retry_count):
             self.login_mode = login_mode
 
@@ -299,17 +321,36 @@ class QQLogin():
                 self.destroy_chrome()
 
                 if login_exception is not None:
+                    # 登陆失败
                     lc = self.cfg.login
 
                     msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
                     if idx < lc.max_retry_count:
                         # 每次等待时长线性递增
-                        wait_time = (lc.retry_wait_time * idx / (lc.max_retry_count - 1))
+                        wait_time = retry_timeouts[idx - 1]
                         msg += f"，等待{wait_time}秒后重试"
+                        msg += f"\n\t当前登录重试等待时间序列：{retry_timeouts}"
+                        msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data['recommended_first_retry_timeout']}"
+                        if use_by_myself():
+                            msg += f"\n\t(仅我可见)历史重试成功等待时间列表：{login_retry_data['history_success_timeouts']}"
                         logger.exception(msg, exc_info=login_exception)
                         count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
                     else:
                         logger.exception(msg, exc_info=login_exception)
+                else:
+                    # 登陆成功
+                    if idx > 1:
+                        # 第idx-1次的重试成功了，尝试更新历史数据
+                        success_timeout = retry_timeouts[idx - 2]
+                        if login_retry_data['recommended_first_retry_timeout'] == 0:
+                            login_retry_data['recommended_first_retry_timeout'] = success_timeout
+                        else:
+                            cr = self.cfg.login.recommended_retry_wait_time_change_rate
+                            login_retry_data['recommended_first_retry_timeout'] = int((1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout)
+                        login_retry_data['history_success_timeouts'].append(success_timeout)
+
+                        db[login_retry_key] = login_retry_data
+                        save_db(db)
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (

@@ -318,6 +318,10 @@ get_dnf_collection = true
 get_firecrackers = true
 # 是否领取 DNF黑鸦竞速 活动
 get_dnf_heiya = true
+# 是否领取 colg每日签到和积分领取 活动
+get_colg_signin = true
+# 是否领取 心悦app 活动
+get_xinyue_app = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

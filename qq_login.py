@@ -241,9 +241,7 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
-        for _idx in range(self.cfg.login.max_retry_count):
-            idx = _idx + 1
-
+        for idx in range_from_one(self.cfg.login.max_retry_count):
             self.login_mode = login_mode
 
             # note: 如果get_login_url的surl变更，代码中确认登录完成的地方也要一起改

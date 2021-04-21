@@ -560,6 +560,9 @@ def count_down(ctx:str, seconds: int, update_interval=0.1):
         now_time = get_now()
     print("\r" + " "* 80)
 
+def range_from_one(stop:int):
+    return range(1, stop+1)
+
 
 if __name__ == '__main__':
     print(get_now_unix())

@@ -345,7 +345,7 @@ class QQLogin():
                 self.get_switch_to_login_frame_fn(21000127, 8, s_url)
 
         def assert_login_finished_fn():
-            logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -368,7 +368,7 @@ class QQLogin():
                 self.get_switch_to_login_frame_fn(15000103, 5, s_url)
 
         def assert_login_finished_fn():
-            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -412,7 +412,7 @@ class QQLogin():
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
-            logger.info("请等待#logined的div可见，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待#logined的div可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -433,7 +433,7 @@ class QQLogin():
                 self.get_switch_to_login_frame_fn(1600001063, 733, s_url)
 
         def assert_login_finished_fn():
-            logger.info("请等待网页切换为目标网页，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -465,7 +465,7 @@ class QQLogin():
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
-            logger.info("请等待#btn_wxqclogin可见，则说明已经登录完成了...")
+            logger.info(f"{self.name} 请等待#btn_wxqclogin可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin")))
 
             logger.info("等待1s，确认获取openid的请求完成")

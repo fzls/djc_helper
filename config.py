@@ -579,7 +579,7 @@ class Config(ConfigInterface):
             exit(-1)
 
         self.common.account_count = len(self.account_configs)
-        if len(self.account_configs) == 1 and self.common.enable_multiprocessing:
+        if len(self.account_configs) == 1 and self.common.enable_multiprocessing and not os.path.isfile("config.toml.local"):
             logger.info(color("bold_green") + "当前仅有一个账号，没必要开启多进程模式，将关闭多进程模式~")
             self.common.enable_multiprocessing = False
 

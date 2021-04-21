@@ -340,6 +340,13 @@ class QQLogin():
                 else:
                     # 登陆成功
                     if idx > 1:
+                        # 重新读取数据，避免其他进程已经更新过数据
+                        db = load_db()
+                        login_retry_data = db.get(login_retry_key, {
+                            "recommended_first_retry_timeout": 0,
+                            "history_success_timeouts": [],
+                        })
+
                         # 第idx-1次的重试成功了，尝试更新历史数据
                         success_timeout = retry_timeouts[idx - 2]
                         if login_retry_data['recommended_first_retry_timeout'] == 0:

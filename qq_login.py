@@ -309,7 +309,7 @@ class QQLogin():
                         wait_time = (lc.retry_wait_time * idx / (lc.max_retry_count - 1))
                         msg += f"，等待{wait_time}秒后重试"
                         logger.exception(msg, exc_info=login_exception)
-                        count_down(f"{self.name:20s} 重试", wait_time)
+                        count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
                     else:
                         logger.exception(msg, exc_info=login_exception)
 

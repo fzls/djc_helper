@@ -349,11 +349,8 @@ class QQLogin():
 
                         # 第idx-1次的重试成功了，尝试更新历史数据
                         success_timeout = retry_timeouts[idx - 2]
-                        if login_retry_data['recommended_first_retry_timeout'] == 0:
-                            login_retry_data['recommended_first_retry_timeout'] = success_timeout
-                        else:
-                            cr = self.cfg.login.recommended_retry_wait_time_change_rate
-                            login_retry_data['recommended_first_retry_timeout'] = int((1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout)
+                        cr = self.cfg.login.recommended_retry_wait_time_change_rate
+                        login_retry_data['recommended_first_retry_timeout'] = int((1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout)
                         login_retry_data['history_success_timeouts'].append(success_timeout)
 
                         db[login_retry_key] = login_retry_data

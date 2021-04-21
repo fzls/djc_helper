@@ -451,6 +451,7 @@ class DjcHelper:
             ("会员关怀", self.vip_mentor),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("colg每日签到", self.colg_signin),
+            ("DNF格斗大赛", self.dnf_pk),
         ]
 
     # -- 已过期的一些活动
@@ -2720,6 +2721,49 @@ class DjcHelper:
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210312hello/",
                                    hello_id=self.cfg.hello_voice.hello_id, prize=prize,
+                                   **extra_params)
+
+    # --------------------------------------------DNF格斗大赛--------------------------------------------
+    @try_except()
+    def dnf_pk(self):
+        # https://dnf.qq.com/cp/a20210405pk/
+        show_head_line("DNF格斗大赛功能")
+        self.show_amesvr_act_info(self.dnf_pk_op)
+
+        if not self.cfg.function_switches.get_dnf_pk or self.disable_most_activities():
+            logger.warning("未启用DNF格斗大赛功能，将跳过")
+            return
+
+        self.check_dnf_pk()
+
+        def query_ticket_count():
+            res = self.dnf_pk_op("查询数据", "752272", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue3)
+
+        self.dnf_pk_op("每日在线30分钟（827960）", "752270")
+        self.dnf_pk_op("每日PK（828682）", "752644")
+        self.dnf_pk_op("每日特权网吧登陆（828687）", "752650")
+
+        ticket = query_ticket_count()
+        logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
+        for idx in range(1, ticket + 1):
+            self.dnf_pk_op(f"[{idx}/{ticket}]幸运夺宝", "752651")
+
+        self.dnf_pk_op("海选普发奖励（828715）", "752679")
+        self.dnf_pk_op("决赛普发奖励（830335）", "753784")
+        self.dnf_pk_op("周赛晋级奖励（828689）", "752652")
+        self.dnf_pk_op("决赛冠军奖励（828714）", "752678")
+
+    def check_dnf_pk(self):
+        self.check_bind_account("DNF格斗大赛", "https://dnf.qq.com/cp/a20210405pk/",
+                                activity_op_func=self.dnf_pk_op, query_bind_flowid="752161", commit_bind_flowid="752160")
+
+    def dnf_pk_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_pk
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210405pk/",
                                    **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------
@@ -5064,4 +5108,5 @@ if __name__ == '__main__':
         # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
         # djcHelper.colg_signin()
-        djcHelper.xinyue_app_operations()
+        # djcHelper.xinyue_app_operations()
+        djcHelper.dnf_pk()

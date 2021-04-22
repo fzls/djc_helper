@@ -2795,9 +2795,13 @@ class DjcHelper:
 
         self.dnf_xinyue_51_op("签到", "756204")
         self.dnf_xinyue_51_op("累计签到礼-3天", "756207", qd="3")
+        time.sleep(5)
         self.dnf_xinyue_51_op("累计签到礼-7天", "756207", qd="7")
+        time.sleep(5)
         self.dnf_xinyue_51_op("累计签到礼-10天", "756207", qd="10")
+        time.sleep(5)
         self.dnf_xinyue_51_op("累计签到礼-15天", "756207", qd="15")
+        time.sleep(5)
         self.dnf_xinyue_51_op("累计签到礼-21天", "756207", qd="21")
 
         # self.dnf_xinyue_51_op("app专属礼", "756223")

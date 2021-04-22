@@ -23,7 +23,7 @@ not_ams_activities = [
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
     newAmsActInfo("管家蚊子腿", "2021-03-30 00:00:00", "2021-04-30 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿", "2021-03-26 00:00:00", "2021-04-09 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿", "2021-04-22 00:00:00", "2021-05-21 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-03-25 00:00:00", "2021-04-30 23:59:59"),
     newAmsActInfo("DNF助手编年史", "2021-04-01 00:00:00", "2021-04-30 23:59:59"),

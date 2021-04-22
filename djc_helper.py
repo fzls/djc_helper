@@ -453,6 +453,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF心悦51", self.dnf_xinyue_51),
+            ("qq视频活动", self.qq_video),
         ]
 
     # -- 已过期的一些活动
@@ -507,9 +508,6 @@ class DjcHelper:
 
         # DNF马杰洛的规划
         self.majieluo()
-
-        # qq视频活动
-        self.qq_video()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()
@@ -1781,28 +1779,28 @@ class DjcHelper:
     # --------------------------------------------qq视频活动--------------------------------------------
     # note: 接入新qq视频活动的流程如下
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
-    #   2. 打开活动页面 https://m.film.qq.com/magic-act/ty6cr4ljs8d0ph84l7iog361el/index.html
+    #   2. 打开活动页面 https://m.film.qq.com/magic-act/112317/index.html
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
-    qq_video_act_id = "ty6cr4ljs8d0ph84l7iog361el"
+    qq_video_act_id = "112317"
     #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
-    qq_video_module_id_lucky_user = "fj4i6oejg0u5lqapxy44z6qzoe"  # 幸运勇士礼包
+    qq_video_module_id_lucky_user = "136534"  # 幸运勇士礼包
     # qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
     # qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
-    qq_video_module_id_lottery = "5eei6y8agrhhrgyxxq8yq3fjp5"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
-    qq_video_module_id_online_30_minutes = "cfps6rqji1o28hkjr0aog945wa"  # 在线30分钟
-    qq_video_module_id_online_3_days = "1uqyc39eekh34r9kez65qz1eou"  # 累积3天
-    qq_video_module_id_online_7_days = "s8luuy4aplds46yxy8t4q2etiu"  # 累积7天
-    qq_video_module_id_online_15_days = "ztkle7x3yl6ulzfr5pc4pytht9"  # 累积15天
+    qq_video_module_id_lottery = "136527"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "136519"  # 在线30分钟
+    qq_video_module_id_online_3_days = "136522"  # 累积3天
+    qq_video_module_id_online_7_days = "136523"  # 累积7天
+    qq_video_module_id_online_15_days = "136526"  # 累积15天
 
-    qq_video_module_id_query_card_info = "0fo2o165uyd3sgw4ekyqltiaoe"  # 查询卡片信息
+    qq_video_module_id_query_card_info = "136515"  # 查询卡片信息
 
-    qq_video_module_id_enter_page = "hswl1y6zrgke43rf4z33o7q1wu"  # 首次进入页面
-    qq_video_module_id_take_enter_page_card = "xfpxos29piy543f9qqdruqhfsu"  # 领取进入页面的卡片
+    qq_video_module_id_enter_page = "136517"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "136518"  # 领取进入页面的卡片
 
-    qq_video_module_id_card_gift_1 = "grarpxryxujdjskyytzt20wala"  # 使用1张卡兑换奖励
-    qq_video_module_id_card_gift_2 = "9j5wtf1wpxul4twop3u6qeyewl"  # 使用2张卡兑换奖励
-    qq_video_module_id_card_gift_3 = "pu47hlt0gdqfucqal3astjquou"  # 使用3张卡兑换奖励
-    qq_video_module_id_card_gift_4 = "lfe64335reozhkeekfjoty08j9"  # 使用4张卡兑换奖励
+    qq_video_module_id_card_gift_1 = "136528"  # 使用1张卡兑换奖励
+    qq_video_module_id_card_gift_2 = "136531"  # 使用2张卡兑换奖励
+    qq_video_module_id_card_gift_3 = "136532"  # 使用3张卡兑换奖励
+    qq_video_module_id_card_gift_4 = "136533"  # 使用4张卡兑换奖励
 
     @try_except()
     def qq_video(self):
@@ -1819,7 +1817,7 @@ class DjcHelper:
         def query_card_info(ctx):
             show_head_line(ctx, msg_color=color("bold_cyan"))
 
-            res = self.qq_video_op("查询卡片信息", "0fo2o165uyd3sgw4ekyqltiaoe", option="111", type="71", is_prepublish="0", print_res=False)
+            res = self.qq_video_op("查询卡片信息", self.qq_video_module_id_query_card_info, option="111", type="71", is_prepublish="0", print_res=False)
 
             heads = ["名称", "数目"]
             colSizes = [20, 4]
@@ -5050,7 +5048,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_heiya()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_wegame()
-        # djcHelper.qq_video()
         # djcHelper.guanjia()
         # djcHelper.vip_mentor()
         # djcHelper.hello_voice()
@@ -5059,4 +5056,5 @@ if __name__ == '__main__':
         # djcHelper.colg_signin()
         # djcHelper.xinyue_app_operations()
         # djcHelper.dnf_pk()
-        djcHelper.dnf_xinyue_51()
+        # djcHelper.dnf_xinyue_51()
+        djcHelper.qq_video()

@@ -454,6 +454,7 @@ class DjcHelper:
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF心悦51", self.dnf_xinyue_51),
             ("qq视频活动", self.qq_video),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     # -- 已过期的一些活动
@@ -505,9 +506,6 @@ class DjcHelper:
 
         # dnf助手活动
         self.dnf_helper()
-
-        # DNF马杰洛的规划
-        self.majieluo()
 
     # --------------------------------------------道聚城--------------------------------------------
     @try_except()
@@ -3656,7 +3654,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
-        # https://dnf.qq.com/cp/a20210311welfare/index.html
+        # https://dnf.qq.com/cp/a20210412care/indexm.html
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
 
@@ -3666,242 +3664,60 @@ class DjcHelper:
 
         self.check_majieluo()
 
-        friend_db_key = "majieluoFriendQQs"
-        local_invited_friends_db_key = "majieluo_local_invited_friend_v4"
-        invited_by_other_db_key = "majieluo_invited_by_other_list_v4"
-        award_taken_friends_db_key = "majieluo_award_taken_friends_v4"
-
-        def qeury_not_invited_friends_with_cache():
-            account_db = load_db_for(self.cfg.name)
-
-            invited_friends = query_invited_friends()
-            invited_by_other = query_invited_by_other_list()
-
-            def filter_not_invited_friends(friendQQs):
-                validFriendQQs = []
-                for friendQQ in friendQQs:
-                    if friendQQ not in invited_friends and friendQQ not in invited_by_other:
-                        validFriendQQs.append(friendQQ)
-
-                return validFriendQQs
-
-            if friend_db_key in account_db:
-                friendQQs = account_db[friend_db_key]
-
-                return filter_not_invited_friends(friendQQs)
-
-            return filter_not_invited_friends(qeury_not_invited_friends())
-
-        def query_invited_friends():
-            res = self.majieluo_op("查询已邀请的好友列表", "744194", print_res=False)
-
-            invited_friends = query_local_invited_friends()
-            try:
-                for info in res["modRet"]["jData"]["jData"]:
-                    qq = info["sendToQQ"]
-                    if qq not in invited_friends:
-                        invited_friends.append(qq)
-            except:
-                # 如果没有邀请过任何人，上面这样获取似乎是会报错的。手头上暂时没有这种号，先兼容下吧。
-                pass
-
-            return invited_friends
-
-        def qeury_not_invited_friends():
-            logger.info("本地无好友名单，或缓存的好友均已邀请过，需要重新拉取，请稍后~")
-            friendQQs = []
-
-            page = 1
-            page_size = 6
-            while True:
-                info = query_friends(page, page_size)
-                if len(info.list) == 0:
-                    # 没有未邀请的好友了
-                    break
-                for friend in info.list:
-                    friendQQs.append(str(friend.uin))
-
-                page += 1
-
-            logger.info(f"获取好友名单共计{len(friendQQs)}个，将保存到本地，具体如下：{friendQQs}")
-
-            def _update_db(udb):
-                udb[friend_db_key] = friendQQs
-
-            update_db_for(self.cfg.name, _update_db)
-
-            return friendQQs
-
-        def query_friends(page, page_size):
-            res = self.majieluo_op("查询好友列表（赠送）", "744184", pageNow=str(page), pageSize=str(page_size), print_res=True)
-            info = AmesvrQueryFriendsInfo().auto_update_config(res["modRet"]["jData"])
-            return info
-
-        def update_invited_by_other_list(qq):
-            def _update_db(udb):
-                if invited_by_other_db_key not in udb:
-                    udb[invited_by_other_db_key] = []
-
-                if qq not in udb[invited_by_other_db_key]:
-                    udb[invited_by_other_db_key].append(qq)
-
-            update_db_for(self.cfg.name, _update_db)
-
-        def query_invited_by_other_list():
-            udb = load_db_for(self.cfg.name)
-
-            return udb.get(invited_by_other_db_key, [])
-
-        def update_local_invited_friends(qq):
-            def _update_db(udb):
-                if local_invited_friends_db_key not in udb:
-                    udb[local_invited_friends_db_key] = []
-
-                if qq not in udb[local_invited_friends_db_key]:
-                    udb[local_invited_friends_db_key].append(qq)
-
-            update_db_for(self.cfg.name, _update_db)
-
-        def query_local_invited_friends():
-            udb = load_db_for(self.cfg.name)
-
-            return udb.get(local_invited_friends_db_key, [])
-
-        def update_award_taken_friends(qq):
-            def _update_db(udb):
-                if award_taken_friends_db_key not in udb:
-                    udb[award_taken_friends_db_key] = []
-
-                if qq not in udb[award_taken_friends_db_key]:
-                    udb[award_taken_friends_db_key].append(qq)
-
-            update_db_for(self.cfg.name, _update_db)
-
-        def query_award_taken_friends():
-            udb = load_db_for(self.cfg.name)
-
-            return udb.get(award_taken_friends_db_key, [])
-
         # 马杰洛的见面礼
-        self.majieluo_op("领取见面礼", "744170")
-
-        # 赛利亚的新春祝福
-        self.majieluo_op("抽取卡片", "744173")
-        cards = [1, 2, 3, 4, 5]
-        random.shuffle(cards)
-        receiveUin = self.common_cfg.majieluo_send_card_target_qq
-        if receiveUin != "" and receiveUin != uin2qq(self.cfg.account_info.uin):
-            for cardType in cards:
-                self.majieluo_op(f"赠送好友卡片-{cardType}", "744175", sendName=quote_plus(self.cfg.name), cardType=str(cardType), receiveUin=receiveUin)
-
-        logger.info(color("bold_yellow") + f"当前拥有的卡牌为{self.query_majieluo_card_info()}")
-        self.majieluo_op("集齐五个赛利亚，兑换200个时间引导石", "744171")
+        self.majieluo_op("验证是否幸运用户", "756182")
+        self.majieluo_op("领取见面礼", "755065")
 
         # 马杰洛的特殊任务
-        self.majieluo_op("【登录游戏】抽取时间引导石", "744172")
-        self.majieluo_op("【通关任意一次副本】奖励翻倍", "744178")
-        self.majieluo_op("连续登录7天额外领取100个时间引导石", "744337")
+        self.majieluo_op("登录游戏 石头*5", "755067")
+        self.majieluo_op("通关副本 石头*5", "755073")
+        self.majieluo_op("连续登录7天额外领取100个时间引导石", "755093")
 
-        # 黑钻送好友
-        if self.cfg.enable_majieluo_invite_friend:
-            not_invited_friends = qeury_not_invited_friends_with_cache()
-            if len(not_invited_friends) > 0:
-                logger.info(color("bold_green") + f"接下来将尝试给总计{len(not_invited_friends)}个好友发送黑钻邀请（不会实际发送消息，不必担心社死<_<）")
-
-            for idx, receiverQQ in enumerate(not_invited_friends):
-                logger.info("等待2秒，避免请求过快")
-                time.sleep(2)
-                # {"ret": "700", "msg": "非常抱歉，您还不满足参加该活动的条件！", "flowRet": {"iRet": "700", "sLogSerialNum": "AMS-DNF-1226165046-1QvZiG-350347-727218", "iAlertSerial": "0", "iCondNotMetId": "1412917", "sMsg": "您每天最多为2名好友赠送黑钻~", "sCondNotMetTips": "您每天最多为2名好友赠送黑钻~"}, "failedRet": {"793123": {"iRuleId": "793123", "jRuleFailedInfo": {"iFailedRet": 700, "iCondId": "1412917", "iCondParam": "sCondition1", "iCondRet": "2"}}}}
-                res = self.majieluo_op(f"{idx + 1}/{len(not_invited_friends)} 【赠礼】发送赠送黑钻邀请-{receiverQQ}(不会实际发消息)", "744186", receiver=receiverQQ, receiverName=quote_plus("小号"))
-                if int(res["ret"]) == 700:
-                    if res["flowRet"]["sMsg"] == "该好友已被其他玩家邀请，请重新选择想邀请的好友或刷新好友列表~":
-                        update_invited_by_other_list(receiverQQ)
-                        continue
-                    elif res["flowRet"]["sMsg"] == "您已经给该好友发过消息了~":
-                        update_local_invited_friends(receiverQQ)
-                        continue
-                    else:
-                        logger.warning("今日赠送上限已到达，将停止~")
-                        break
-                else:
-                    update_local_invited_friends(receiverQQ)
-
-            award_taken_friends = query_award_taken_friends()
-            for receiverQQ in query_invited_friends():
-                if receiverQQ in award_taken_friends:
-                    continue
-                res = self.majieluo_op("赠送黑钻后，领取9个时间引导石", "744179", receiver=receiverQQ)
-                if int(res["ret"]) == 600 and res["flowRet"]["sMsg"] == "抱歉，您已经领取过该奖励了~":
-                    update_award_taken_friends(receiverQQ)
-                    continue
-                elif int(res["ret"]) == 0 and res["modRet"]["sMsg"] == "非常抱歉，您今日领取次数已达最大，请明日再来领取！":
-                    break
-                else:
-                    update_award_taken_friends(receiverQQ)
-        else:
-            logger.info("未启用马杰洛黑钻送好友功能，将跳过~")
-
-        self.majieluo_op("接受好友赠送邀请，领取黑钻", "744180", inviteId="239125", receiverUrl=quote_plus("https://game.gtimg.cn/images/dnf/cp/a20210121welfare/share.png"))
+        ## https://dnf.qq.com/cp/a20210412care/index.html?iCode=63370&iPartion=6
+        # share_pskey=self.fetch_share_p_skey("发送猜拳邀请")
+        # self.majieluo_op("发送猜拳邀请", "755291", iReceiveUin="3428842367", extra_cookies=f"p_skey={share_pskey}")
+        # self.majieluo_op("接受猜拳邀请", "755733", iCode="63370", iPartion="6")
+        # self.majieluo_op("猜拳大挑战累计成(30次)", "756226")
+        logger.info(color("bold_cyan") + "猜拳请自行完成~")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
-        # 无视活动中的月底清空那句话
-        # note：根据1.21这次的经验，如果标记是1.21，当天就结束了，需要在1.20去领取奖励
-        endTime = "20210411"
+        endTime = "20210521"
 
         takeStone = False
-        takeStoneActId = "744181"
-        if stoneCount >= 1000:
-            # 达到1000个
-            self.majieluo_op("提取时间引导石", takeStoneActId, giftNum="10")
+        takeStoneActId = "755076"
+        maxStoneCount = 1500
+        if stoneCount >= maxStoneCount:
+            # 达到上限
+            self.majieluo_op("提取时间引导石", takeStoneActId, giftNum=str(maxStoneCount // 100))
             takeStone = True
         elif get_today() == endTime:
             # 今天是活动最后一天
             self.majieluo_op("提取时间引导石", takeStoneActId, giftNum=str(stoneCount // 100))
             takeStone = True
         else:
-            logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足1000，故不尝试提取")
+            logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利（1000）", "744189")
-            self.majieluo_op("提取福利（700、800、900）", "744188")
-            self.majieluo_op("提取福利（300、400、500、600）", "744182")
+            self.majieluo_op("提取福利", "755084")
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "744195", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "755089", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
-    @try_except(return_val_on_except="", show_exception_info=False)
-    def query_majieluo_card_info(self):
-        res = self.majieluo_op("查询信息", "744177", print_res=False)
-
-        card_info = ""
-        info = parse_amesvr_common_info(res)
-        # 默认排序与表现一致，改为跟ui表现一致
-        # 守护者 | 龙骑士三觉 | 帕拉丁三觉 | 混沌魔灵三觉 | 精灵骑士三觉
-        temp = info.sOutValue1.split('|')
-        order = [1, 3, 2, 5, 4]
-        actual = []
-        for idx in order:
-            actual.append(temp[idx - 1])
-
-        card_info = '|'.join(actual)
-
-        return card_info
-
     def check_majieluo(self):
-        self.check_bind_account("DNF马杰洛的规划", "https://dnf.qq.com/cp/a20210311welfare/index.html",
-                                activity_op_func=self.majieluo_op, query_bind_flowid="744167", commit_bind_flowid="744166")
+        self.check_bind_account("DNF马杰洛的规划", "https://dnf.qq.com/cp/a20210412care/indexm.html",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="755062", commit_bind_flowid="755061")
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210311welfare/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210412care/indexm.html",
                                    cardType=cardType, inviteId=inviteId, sendName=sendName, receiveUin=receiveUin,
                                    receiver=receiver, receiverName=receiverName, receiverUrl=receiverUrl, giftNum=giftNum,
                                    **extra_params)
@@ -4797,6 +4613,7 @@ class DjcHelper:
             "fuin", "sCode", "sNickName", "iId", "sendPage",
             "hello_id", "prize",
             "qd",
+            "iReceiveUin",
         ]}
 
         # 整合得到所有默认值
@@ -4975,7 +4792,7 @@ if __name__ == '__main__':
     cfg = config()
 
     RunAll = False
-    indexes = [1]
+    indexes = [3]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -5045,7 +4862,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
-        # djcHelper.majieluo()
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_welfare()
         # djcHelper.ark_lottery()
@@ -5062,4 +4878,5 @@ if __name__ == '__main__':
         # djcHelper.xinyue_app_operations()
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
-        djcHelper.qq_video()
+        # djcHelper.qq_video()
+        djcHelper.majieluo()

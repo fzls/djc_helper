@@ -4796,6 +4796,7 @@ class DjcHelper:
             "username", "petId",
             "fuin", "sCode", "sNickName", "iId", "sendPage",
             "hello_id", "prize",
+            "qd",
         ]}
 
         # 整合得到所有默认值

@@ -51,10 +51,11 @@ class Uploader:
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False) -> bool:
-        ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
-        if not ok:
-            return False
+    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+        if not only_upload_compressed_version:
+            ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
+            if not ok:
+                return False
 
         if also_upload_compressed_version:
             make_sure_dir_exists('.cached')

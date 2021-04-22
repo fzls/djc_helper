@@ -51,7 +51,28 @@ class Uploader:
         self.lzy = LanZouCloud()
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False):
+    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False) -> bool:
+        ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
+        if not ok:
+            return False
+
+        if also_upload_compressed_version:
+            make_sure_dir_exists('.cached')
+            filename = os.path.basename(filepath)
+            compressed_filepath = os.path.join('.cached', self.get_compressed_version_filename(filename))
+            compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"
+
+            logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")
+            # 创建压缩版本
+            with open(f"{filepath}", "rb") as file_in:
+                with lzma.open(f"{compressed_filepath}", "wb") as file_out:
+                    file_out.writelines(file_in)
+            # 上传
+            return self._upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix)
+
+        return True
+
+    def _upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="") -> bool:
         filename = os.path.basename(filepath)
         logger.warning(f"开始上传 {filename} 到 {target_folder.name}")
         run_start_time = datetime.now()
@@ -87,19 +108,6 @@ class Uploader:
 
         filesize = os.path.getsize(filepath)
         logger.warning(f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}")
-
-        if also_upload_compressed_version:
-            make_sure_dir_exists('.cached')
-            compressed_filepath = os.path.join('.cached', self.get_compressed_version_filename(filename))
-            compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"
-
-            logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")
-            # 创建压缩版本
-            with open(f"{filepath}", "rb") as file_in:
-                with lzma.open(f"{compressed_filepath}", "wb") as file_out:
-                    file_out.writelines(file_in)
-            # 上传
-            return self.upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix, False)
 
         return True
 

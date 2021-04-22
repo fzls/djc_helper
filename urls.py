@@ -123,6 +123,7 @@ class Urls:
         self.iActivityId_dnf_heiya = "365524"  # 黑鸦竞速
         self.iActivityId_hello_voice = "366492"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
+        self.iActivityId_dnf_xinyue_51 = "373457"  # DNF心悦51
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

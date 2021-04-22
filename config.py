@@ -271,6 +271,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_xinyue_app = True
         # 是否领取 DNF格斗大赛 活动
         self.get_dnf_pk = True
+        # 是否领取 心悦51 活动
+        self.get_dnf_xinyue_51 = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

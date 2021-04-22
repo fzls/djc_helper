@@ -2742,8 +2742,10 @@ class DjcHelper:
 
         ticket = query_ticket_count()
         logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
-        for idx in range(1, ticket + 1):
+        for idx in range_from_one(ticket):
             self.dnf_pk_op(f"[{idx}/{ticket}]幸运夺宝", "752651")
+            if idx != ticket:
+                time.sleep(5)
 
         self.dnf_pk_op("海选普发奖励（828715）", "752679")
         self.dnf_pk_op("决赛普发奖励（830335）", "753784")

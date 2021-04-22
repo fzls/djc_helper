@@ -116,20 +116,20 @@ def create_checkbox(val=False, name="") -> QCheckBox:
 
 def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> MySpinbox:
     spinbox = MySpinbox()
-
-    spinbox.setValue(value)
     spinbox.setMaximum(maximum)
     spinbox.setMinimum(minimum)
+
+    spinbox.setValue(value)
 
     return spinbox
 
 
 def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 0.0) -> MyDoubleSpinbox:
     spinbox = MyDoubleSpinbox()
-
-    spinbox.setValue(value)
     spinbox.setMaximum(maximum)
     spinbox.setMinimum(minimum)
+
+    spinbox.setValue(value)
 
     return spinbox
 

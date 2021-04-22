@@ -6,7 +6,7 @@ from typing import Dict
 from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
-from pool import get_pool
+from pool import get_pool, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
@@ -1072,6 +1072,8 @@ def _test_main():
 
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
+
+    init_pool(cfg.get_pool_size())
 
     if need_check_bind_and_skey:
         check_all_skey_and_pskey(cfg)

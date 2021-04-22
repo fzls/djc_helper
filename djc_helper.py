@@ -452,6 +452,7 @@ class DjcHelper:
             ("hello语音网页礼包兑换", self.hello_voice),
             ("colg每日签到", self.colg_signin),
             ("DNF格斗大赛", self.dnf_pk),
+            ("DNF心悦51", self.dnf_xinyue_51),
         ]
 
     # -- 已过期的一些活动
@@ -2764,6 +2765,56 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_pk
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210405pk/",
+                                   **extra_params)
+
+    # --------------------------------------------DNF心悦51--------------------------------------------
+    @try_except()
+    def dnf_xinyue_51(self):
+        # https://xinyue.qq.com/act/a20210413ldjm/index_zs.html
+        show_head_line("DNF心悦51")
+        self.show_amesvr_act_info(self.dnf_xinyue_51_op)
+
+        if not self.cfg.function_switches.get_dnf_xinyue_51 or self.disable_most_activities():
+            logger.warning("未启用领取DNF心悦51活动合集功能，将跳过")
+            return
+
+        self.check_dnf_xinyue_51()
+
+        self.dnf_xinyue_51_op("查询信息", "756145")
+
+        xinyue_info = self.query_xinyue_info("查询心悦信息", print_res=False)
+        if xinyue_info.xytype < 5:
+            self.dnf_xinyue_51_op("特邀充值礼", "756071")
+        else:
+            self.dnf_xinyue_51_op("VIP充值礼", "756146", cz=xinyue_info.xytype)
+
+        self.dnf_xinyue_51_op("抽奖", "756160")
+
+        self.dnf_xinyue_51_op("全员礼包1", "756175")
+        self.dnf_xinyue_51_op("全员礼包2", "756183")
+        self.dnf_xinyue_51_op("全员礼包3", "756184")
+
+        logger.info("可以用260/220去兑换一个宠物，有兴趣的可以自行去心悦app兑换")
+        # self.dnf_xinyue_51_op("特邀兑换", "756195")
+        # self.dnf_xinyue_51_op("VIP兑换", "756196")
+
+        self.dnf_xinyue_51_op("签到", "756204")
+        self.dnf_xinyue_51_op("累计签到礼-3天", "756207", qd="3")
+        self.dnf_xinyue_51_op("累计签到礼-7天", "756207", qd="7")
+        self.dnf_xinyue_51_op("累计签到礼-10天", "756207", qd="10")
+        self.dnf_xinyue_51_op("累计签到礼-15天", "756207", qd="15")
+        self.dnf_xinyue_51_op("累计签到礼-21天", "756207", qd="21")
+
+        self.dnf_xinyue_51_op("app专属礼", "756223")
+
+    def check_dnf_xinyue_51(self):
+        self.check_bind_account("DNF心悦51", "https://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
+                                activity_op_func=self.dnf_xinyue_51_op, query_bind_flowid="756075", commit_bind_flowid="756074")
+
+    def dnf_xinyue_51_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_xinyue_51
+
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
                                    **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------
@@ -5109,4 +5160,5 @@ if __name__ == '__main__':
         # djcHelper.try_join_fixed_xinyue_team()
         # djcHelper.colg_signin()
         # djcHelper.xinyue_app_operations()
-        djcHelper.dnf_pk()
+        # djcHelper.dnf_pk()
+        djcHelper.dnf_xinyue_51()

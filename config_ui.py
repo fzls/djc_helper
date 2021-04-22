@@ -1209,6 +1209,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_pk = create_checkbox(cfg.get_dnf_pk)
         form_layout.addRow("DNF格斗大赛", self.checkbox_get_dnf_pk)
 
+        self.checkbox_get_dnf_xinyue_51 = create_checkbox(cfg.get_dnf_xinyue_51)
+        form_layout.addRow("心悦51", self.checkbox_get_dnf_xinyue_51)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1251,6 +1254,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_colg_signin = self.checkbox_get_colg_signin.isChecked()
         cfg.get_xinyue_app = self.checkbox_get_xinyue_app.isChecked()
         cfg.get_dnf_pk = self.checkbox_get_dnf_pk.isChecked()
+        cfg.get_dnf_xinyue_51 = self.checkbox_get_dnf_xinyue_51.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

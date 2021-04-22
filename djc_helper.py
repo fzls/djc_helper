@@ -2805,7 +2805,8 @@ class DjcHelper:
         self.dnf_xinyue_51_op("累计签到礼-15天", "756207", qd="15")
         self.dnf_xinyue_51_op("累计签到礼-21天", "756207", qd="21")
 
-        self.dnf_xinyue_51_op("app专属礼", "756223")
+        # self.dnf_xinyue_51_op("app专属礼", "756223")
+        logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
 
     def check_dnf_xinyue_51(self):
         self.check_bind_account("DNF心悦51", "https://xinyue.qq.com/act/a20210413ldjm/index_zs.html",

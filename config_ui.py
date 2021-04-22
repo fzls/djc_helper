@@ -615,7 +615,7 @@ class ConfigUi(QFrame):
         req.game_qqs = game_qqs
 
         server_addr = self.get_pay_server_addr()
-        raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=self.to_config().common.http_timeout)
+        raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=20)
         if raw_res.status_code != 200:
             show_message("出错了", "服务器似乎暂时挂掉了, 请稍后再试试")
             return

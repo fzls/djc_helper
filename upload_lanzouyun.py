@@ -8,7 +8,7 @@ from datetime import datetime
 from lanzou.api import LanZouCloud
 
 from log import logger, color
-from util import make_sure_dir_exists, with_cache
+from util import make_sure_dir_exists, with_cache, human_readable_size
 
 lanzou_cookie = {
     "ylogin": "1442903",
@@ -52,7 +52,8 @@ class Uploader:
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
     def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False):
-        logger.warning(f"开始上传 {os.path.basename(filepath)} 到 {target_folder.name}")
+        filename = os.path.basename(filepath)
+        logger.warning(f"开始上传 {filename} 到 {target_folder.name}")
         run_start_time = datetime.now()
 
         def on_uploaded(fid, is_file):
@@ -84,11 +85,10 @@ class Uploader:
             logger.error(f"上传失败，retCode={retCode}")
             return False
 
-        logger.warning(f"上传当前文件总计耗时{datetime.now() - run_start_time}")
+        filesize = os.path.getsize(filepath)
+        logger.warning(f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}")
 
         if also_upload_compressed_version:
-            filename = os.path.basename(filepath)
-
             make_sure_dir_exists('.cached')
             compressed_filepath = os.path.join('.cached', self.get_compressed_version_filename(filename))
             compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"

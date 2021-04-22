@@ -249,8 +249,6 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_youfei = True
         # 是否进行dnf论坛签到
         self.get_dnf_bbs_signin = True
-        # 是否领取DNF新春夺宝大作战
-        self.get_dnf_spring = True
         # 是否领取 DNF落地页 活动
         self.get_dnf_luodiye = True
         # 是否领取 WeGame 活动

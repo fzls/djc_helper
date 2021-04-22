@@ -302,8 +302,6 @@ get_warm_winter = true
 get_youfei = true
 # 是否进行dnf论坛签到
 get_dnf_bbs_signin = true
-# 是否领取DNF新春夺宝大作战
-get_dnf_spring = true
 # 是否领取 DNF落地页 活动
 get_dnf_luodiye = true
 # 是否领取 WeGame 活动

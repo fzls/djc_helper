@@ -399,9 +399,9 @@ class AccountConfig(ConfigInterface):
 class LoginConfig(ConfigInterface):
     def __init__(self):
         # 重试次数
-        self.max_retry_count = 3
+        self.max_retry_count = 6
         # 重试间隔时间（秒）
-        self.retry_wait_time = 600
+        self.retry_wait_time = 1200
         # 打开网页后等待时长
         self.open_url_wait_time = 3
         # 加载页面的超时时间，以登录按钮出现为完成标志

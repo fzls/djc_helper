@@ -2950,8 +2950,8 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        key_shareCodes = "shareCodes_v2"
-        key_dnf_welfare_exchange_package = "dnf_welfare_exchange_package_v2"
+        key_shareCodes = "shareCodes_v3"
+        key_dnf_welfare_exchange_package = "dnf_welfare_exchange_package_v3"
 
         def exchange_package(sContent):
             # 检查是否已经兑换过
@@ -3015,12 +3015,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("第一个 2020.03.25 - 2020.03.27 登录游戏", "749509")
-        self.dnf_welfare_login_gifts_op("第二个 2020.03.28 - 2020.03.31 登录游戏", "749514")
-        self.dnf_welfare_login_gifts_op("第三个 2020.04.01 - 2021.04.07 登录游戏", "749515")
+        self.dnf_welfare_login_gifts_op("第一个 2020.04.22 - 2020.04.24 登录游戏", "756433")
+        self.dnf_welfare_login_gifts_op("第二个 2020.04.25 - 2020.04.28 登录游戏", "756436")
+        self.dnf_welfare_login_gifts_op("第三个 2020.04.29 - 2021.05.05 登录游戏", "756437")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "749518", siActivityId=query_siActivityId())
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "756439", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -4797,7 +4797,7 @@ if __name__ == '__main__':
     cfg = config()
 
     RunAll = False
-    indexes = [3]
+    indexes = [1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -4868,7 +4868,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
         # djcHelper.dnf_luodiye()
-        # djcHelper.dnf_welfare()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
@@ -4884,4 +4883,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
         # djcHelper.qq_video()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
+        djcHelper.dnf_welfare()

@@ -754,6 +754,15 @@ class BuyInfo(ConfigInterface):
 
         return datetime.now() + timedelta(days=days) > parse_time(self.expire_at)
 
+    def remaining_time(self):
+        now = datetime.now()
+        expire_at = parse_time(self.expire_at)
+
+        if now < expire_at:
+            return expire_at - now
+        else:
+            return timedelta()
+
     def description(self) -> str:
         buy_accounts = self.qq
 

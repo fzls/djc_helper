@@ -648,7 +648,8 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
     monthly_pay_info = "按月付费未激活"
     if user_buy_info.total_buy_month != 0:
         if user_buy_info.is_active():
-            monthly_pay_info = f"按月付费剩余时长为{user_buy_info.remaining_time()}"
+            rt = user_buy_info.remaining_time()
+            monthly_pay_info = f"按月付费剩余时长为 {rt.days}天{rt.seconds//3600}小时"
         else:
             monthly_pay_info = "按月付费已过期"
     change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size())

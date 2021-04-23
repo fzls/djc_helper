@@ -549,20 +549,18 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
 
 
 def count_down(ctx: str, seconds: int, update_interval=0.1):
+    if is_run_in_github_action():
+        # 在github action环境下直接sleep
+        logger.info(f"{ctx} 等待 {seconds}秒")
+        time.sleep(seconds)
+        return
+
     now_time = get_now()
     end_time = now_time + datetime.timedelta(seconds=seconds)
 
-    in_github_action = is_run_in_github_action()
-
     while now_time < end_time:
         remaining_duration = end_time - now_time
-        msg = f"{ctx} 剩余等待时间: {remaining_duration}"
-        if in_github_action:
-            print("\r", end='')
-            print(msg.encode('utf-8'), end='')
-        else:
-            print("\r" + msg, end='')
-
+        print("\r" + f"{ctx} 剩余等待时间: {remaining_duration}", end='')
         time.sleep(update_interval)
         now_time = get_now()
     print("\r" + " " * 80)

@@ -548,20 +548,28 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     return latest_value
 
 
-def count_down(ctx:str, seconds: int, update_interval=0.1):
+def count_down(ctx: str, seconds: int, update_interval=0.1):
     now_time = get_now()
     end_time = now_time + datetime.timedelta(seconds=seconds)
 
+    in_github_action = is_run_in_github_action()
+
     while now_time < end_time:
         remaining_duration = end_time - now_time
-        print("\r" + f"{ctx} 剩余等待时间: {remaining_duration}", end='')
+        msg = f"{ctx} 剩余等待时间: {remaining_duration}"
+        if in_github_action:
+            print("\r", end='')
+            print(msg.encode('utf-8'), end='')
+        else:
+            print("\r" + msg, end='')
 
         time.sleep(update_interval)
         now_time = get_now()
-    print("\r" + " "* 80)
+    print("\r" + " " * 80)
 
-def range_from_one(stop:int):
-    return range(1, stop+1)
+
+def range_from_one(stop: int):
+    return range(1, stop + 1)
 
 
 if __name__ == '__main__':
@@ -575,3 +583,4 @@ if __name__ == '__main__':
     print(truncate("风之凌殇风之凌殇", 12))
     print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
     print(remove_none_from_list([None, 1, 2, 3, None]))
+    count_down("test", 5)

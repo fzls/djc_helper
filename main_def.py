@@ -645,6 +645,14 @@ def try_xinyue_sailiyam_start_work(cfg):
 def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
     logger.info(color("bold_cyan") + user_buy_info.description())
 
+    monthly_pay_info = "按月付费未激活"
+    if user_buy_info.total_buy_month != 0:
+        if user_buy_info.is_active():
+            monthly_pay_info = f"按月付费剩余时长为{user_buy_info.remaining_time()}"
+        else:
+            monthly_pay_info = "按月付费已过期"
+    change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size())
+
     expired = not user_buy_info.is_active()
     will_expired_soon = user_buy_info.will_expire_in_days(cfg.common.notify_pay_expired_in_days)
     if (expired or will_expired_soon) and is_weekly_first_run("show_buy_info"):
@@ -1031,15 +1039,15 @@ def _get_user_buy_info(cfg: Config):
     return default_user_buy_info
 
 
-def change_title(dlcInfo="", need_append_new_version_info=True, multiprocessing_pool_size=0):
-    if dlcInfo == "" and exists_auto_updater_dlc():
-        dlcInfo = " 自动更新豪华升级版"
+def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0):
+    if dlc_info == "" and exists_auto_updater_dlc():
+        dlc_info = " 自动更新豪华升级版"
 
     pool_info = ""
     if multiprocessing_pool_size != 0:
         pool_info = f"火力全开版本({multiprocessing_pool_size})"
 
-    set_title_cmd = f"title DNF蚊子腿小助手 {dlcInfo} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
+    set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
     os.system(set_title_cmd)
 
 

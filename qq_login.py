@@ -357,7 +357,7 @@ class QQLogin():
                         save_db(db)
 
                         if use_by_myself():
-                            logger.info(f"(仅我可见){self.name} 重试{idx - 1}次后成功登录，本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
+                            logger.info(color("bold_cyan") + f"(仅我可见){self.name} 重试{idx - 1}次后成功登录，本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (

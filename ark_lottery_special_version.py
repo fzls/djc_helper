@@ -76,7 +76,7 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig)
 
 
 def main():
-    change_title("集卡特别版", need_append_new_version_info=False)
+    change_title("集卡特别版")
 
     # 最大化窗口
     logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
@@ -94,7 +94,7 @@ def main():
 
     init_pool(cfg.get_pool_size())
 
-    change_title("集卡特别版", need_append_new_version_info=False, multiprocessing_pool_size=cfg.get_pool_size())
+    change_title("集卡特别版", multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)
 

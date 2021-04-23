@@ -551,7 +551,7 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
 def count_down(ctx: str, seconds: int, update_interval=0.1):
     if is_run_in_github_action():
         # 在github action环境下直接sleep
-        logger.info(f"{ctx} 等待 {seconds}秒")
+        logger.info(f"{ctx} wait for {seconds}seconds")
         time.sleep(seconds)
         return
 

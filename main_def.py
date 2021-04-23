@@ -810,6 +810,7 @@ def show_tips(cfg):
 def try_auto_update(cfg):
     try:
         if not cfg.common.auto_update_on_start:
+            logger.info(color("bold_cyan") + "已关闭自动更新功能，将跳过。可在配置工具的公共配置区域进行配置")
             return
 
         pid = os.getpid()

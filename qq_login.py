@@ -218,8 +218,10 @@ class QQLogin():
             self.driver.find_element(By.ID, "switcher_plogin").click()
 
             # 输入账号
+            self.driver.find_element(By.ID, "u").clear()
             self.driver.find_element(By.ID, "u").send_keys(account)
             # 输入密码
+            self.driver.find_element(By.ID, "p").clear()
             self.driver.find_element(By.ID, "p").send_keys(password)
 
             logger.info(f"{name} 等待一会，确保登录键可以点击")
@@ -578,23 +580,21 @@ class QQLogin():
 
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"{self.name} 开始{login_type}流程")
-        if login_action_fn is not None:
-            login_action_fn()
 
-        logger.info(f"{self.name} 等待登录完成（也就是#loginIframe#login登录框消失）")
-        # 出验证码的时候，下面这个操作可能会报错 'target frame detached\n(Session info: chrome=87.0.4280.88)'
-        # 这时候等待一下好像就行了
-        max_try = 2
-        for i in range(max_try):
-            idx = i + 1
+        max_try = 10
+        for idx in range_from_one(max_try):
             try:
+                logger.info(f"[{idx}/{max_try}] {self.name} 尝试进行登陆")
+                if login_action_fn is not None:
+                    login_action_fn()
+
                 wait_time = int(self.cfg.login.login_timeout * idx / max_try)
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒")
                 WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
                 break
             except Exception as e:
-                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试。" +
-                             color("bold_yellow") + "也许是网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
+                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +
+                             color("bold_yellow") + "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
                              exc_info=e)
                 if idx < max_try:
                     time.sleep(2)

@@ -547,15 +547,22 @@ class QQLogin():
         logger.info(f"{self.name} 开始{login_type}流程")
 
         max_try = 10
+
+        short_login_retry_key = "short_login_retry_key"
+        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try - 1, self.cfg.login.login_timeout)
+
         for idx in range_from_one(max_try):
             try:
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试进行登陆")
                 if login_action_fn is not None:
                     login_action_fn()
 
-                wait_time = int(self.cfg.login.login_timeout * idx / max_try)
+                wait_time = retry_timeouts[idx - -1]
+
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒")
                 WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+
+                update_retry_data(short_login_retry_key, wait_time, self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
                 break
             except Exception as e:
                 logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +

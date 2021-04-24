@@ -557,8 +557,7 @@ class QQLogin():
                 if login_action_fn is not None:
                     login_action_fn()
 
-                wait_time = retry_timeouts[idx - -1]
-
+                wait_time = retry_timeouts[idx - 1]
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}")
                 WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
 

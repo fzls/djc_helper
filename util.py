@@ -586,7 +586,7 @@ def get_retry_data(retry_key: str, max_retry_count: int, max_retry_wait_time: in
         retry_timeouts = list([int(idx / max_retry_count * max_retry_wait_time) for idx in range_from_one(max_retry_count)])
         if login_retry_data['recommended_first_retry_timeout'] != 0:
             # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
-            retry_timeouts = [login_retry_data["recommended_first_retry_timeout"]]
+            retry_timeouts = [round(login_retry_data["recommended_first_retry_timeout"])]
             remaining_retry_count = max_retry_count - 1
             retry_timeouts.extend(list([int(idx / (remaining_retry_count) * max_retry_wait_time) for idx in range_from_one(remaining_retry_count)]))
 
@@ -603,7 +603,7 @@ def update_retry_data(retry_key: str, success_timeout: int, recommended_retry_wa
 
     # 第idx-1次的重试成功了，尝试更新历史数据
     cr = recommended_retry_wait_time_change_rate
-    login_retry_data['recommended_first_retry_timeout'] = int((1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout)
+    login_retry_data['recommended_first_retry_timeout'] = (1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout
     login_retry_data['history_success_timeouts'].append(success_timeout)
 
     db[retry_key] = login_retry_data

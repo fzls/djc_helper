@@ -250,27 +250,8 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
-        # 结合历史数据和配置，计算各轮重试等待的时间
         login_retry_key = "login_retry_key"
-        db = load_db()
-        login_retry_data = db.get(login_retry_key, {
-            "recommended_first_retry_timeout": 0,
-            "history_success_timeouts": [],
-        })
-
-        actual_retry_count = self.cfg.login.max_retry_count - 1
-
-        retry_timeouts = []
-        if actual_retry_count == 1:
-            retry_timeouts = [self.cfg.login.retry_wait_time]
-        elif actual_retry_count > 1:
-            # 默认重试时间为按时长等分递增
-            retry_timeouts = list([int(idx / actual_retry_count * self.cfg.login.retry_wait_time) for idx in range_from_one(actual_retry_count)])
-            if login_retry_data['recommended_first_retry_timeout'] != 0:
-                # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
-                retry_timeouts = [login_retry_data["recommended_first_retry_timeout"]]
-                remaining_retry_count = actual_retry_count - 1
-                retry_timeouts.extend(list([int(idx / (remaining_retry_count) * self.cfg.login.retry_wait_time) for idx in range_from_one(remaining_retry_count)]))
+        login_retry_data, retry_timeouts = get_retry_data(login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time)
 
         for idx in range_from_one(self.cfg.login.max_retry_count):
             self.login_mode = login_mode
@@ -349,24 +330,8 @@ class QQLogin():
                 else:
                     # 登陆成功
                     if idx > 1:
-                        # 重新读取数据，避免其他进程已经更新过数据
-                        db = load_db()
-                        login_retry_data = db.get(login_retry_key, {
-                            "recommended_first_retry_timeout": 0,
-                            "history_success_timeouts": [],
-                        })
-
                         # 第idx-1次的重试成功了，尝试更新历史数据
-                        success_timeout = retry_timeouts[idx - 2]
-                        cr = self.cfg.login.recommended_retry_wait_time_change_rate
-                        login_retry_data['recommended_first_retry_timeout'] = int((1 - cr) * login_retry_data['recommended_first_retry_timeout'] + cr * success_timeout)
-                        login_retry_data['history_success_timeouts'].append(success_timeout)
-
-                        db[login_retry_key] = login_retry_data
-                        save_db(db)
-
-                        if use_by_myself():
-                            logger.info(color("bold_cyan") + f"(仅我可见){self.name} 重试{idx - 1}次后成功登录，本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
+                        update_retry_data(login_retry_key, retry_timeouts[idx - 2], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (

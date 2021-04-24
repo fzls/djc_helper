@@ -541,8 +541,6 @@ class QQLogin():
         """
         switch_to_login_frame_fn()
 
-        self.driver.execute_script(f"document.title = '{self.window_title}'")
-
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"{self.name} 开始{login_type}流程")
 
@@ -553,6 +551,8 @@ class QQLogin():
 
         for idx in range_from_one(max_try):
             try:
+                self.driver.execute_script(f"document.title = '{self.window_title}'")
+                
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试进行登陆")
                 if login_action_fn is not None:
                     login_action_fn()

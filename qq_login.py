@@ -559,7 +559,7 @@ class QQLogin():
 
                 wait_time = retry_timeouts[idx - -1]
 
-                logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒")
+                logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}")
                 WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
 
                 update_retry_data(short_login_retry_key, wait_time, self.cfg.login.recommended_retry_wait_time_change_rate, self.name)

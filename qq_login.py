@@ -320,9 +320,9 @@ class QQLogin():
                         wait_time = retry_timeouts[idx - 1]
                         msg += f"，等待{wait_time}秒后重试"
                         msg += f"\n\t当前登录重试等待时间序列：{retry_timeouts}"
-                        msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data['recommended_first_retry_timeout']}"
+                        msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data.recommended_first_retry_timeout}"
                         if use_by_myself():
-                            msg += f"\n\t(仅我可见)历史重试成功等待时间列表：{login_retry_data['history_success_timeouts']}"
+                            msg += f"\n\t(仅我可见)历史重试成功等待时间列表：{login_retry_data.history_success_timeouts}"
                         logger.exception(msg, exc_info=login_exception)
                         count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
                     else:

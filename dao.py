@@ -928,6 +928,12 @@ class DnfHeiyaInfo(ConfigInterface):
         self.box_score = 0
 
 
+class RetryData(ConfigInterface):
+    def __init__(self):
+        self.recommended_first_retry_timeout = 0.0
+        self.history_success_timeouts = []
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

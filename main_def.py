@@ -82,7 +82,7 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         QQLogin(cfg.common).extract_portable_chrome_ahead()
-        get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common, check_skey_only)
+        get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, _idx + 1, account_config, cfg.common, check_skey_only)
                                                          for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
 
         logger.info("全部账号检查完毕")
@@ -94,7 +94,7 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
     for _idx, account_config in enumerate(cfg.account_configs):
         idx = _idx + 1
 
-        djcHelper = do_check_all_skey_and_pskey(idx, account_config, cfg.common, check_skey_only)
+        djcHelper = do_check_all_skey_and_pskey(idx, 1, account_config, cfg.common, check_skey_only)
         if djcHelper is None:
             continue
 
@@ -109,15 +109,15 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         qq2index[qq] = idx
 
 
-def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
+def do_check_all_skey_and_pskey(idx: int, window_index:int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
     if not account_config.is_enabled():
         # 未启用的账户的账户不走该流程
         return None
 
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
     djcHelper = DjcHelper(account_config, common_config)
-    djcHelper.fetch_pskey()
-    djcHelper.check_skey_expired()
+    djcHelper.fetch_pskey(window_index=window_index)
+    djcHelper.check_skey_expired(window_index=window_index)
 
     if not check_skey_only:
         djcHelper.get_bind_role_list(print_warning=False)

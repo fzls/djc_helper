@@ -15,7 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from config import *
 from log import logger, color
-from util import async_message_box
+from util import async_message_box, get_screen_size
 from version import now_version
 
 
@@ -62,19 +62,26 @@ class QQLogin():
     default_window_width = 390
     default_window_height = 360
 
-    def __init__(self, common_config):
+    def __init__(self, common_config, window_index=1):
         self.cfg = common_config  # type: CommonConfig
         self.driver = None  # type: WebDriver
         self.window_title = ""
         self.time_start_login = datetime.datetime.now()
 
+        self.screen_width, self.screen_height = get_screen_size()
+        col_size, row_size = round(self.screen_width / self.default_window_width), round(self.screen_height / self.default_window_height)
+        self.window_position_x = self.default_window_width * ((window_index - 1) % col_size)
+        self.window_position_y = self.default_window_height * (((window_index - 1) // col_size) % row_size)
+
     def prepare_chrome(self, ctx, login_type, login_url):
-        logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作")
+        logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
+                                            f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
 
         options = Options()
+        options.add_argument(f"window-position={self.window_position_x},{self.window_position_y}")
         options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
         options.add_argument(f"app={login_url}")
         # 设置静音
@@ -795,9 +802,9 @@ class QQLogin():
         return self.login_type_auto_login in login_type and self.cfg.run_in_headless_mode
 
 
-def do_login(common_cfg, account: AccountConfig):
+def do_login(window_index, common_cfg, account: AccountConfig):
     acc = account.account_info
-    ql = QQLogin(common_cfg)
+    ql = QQLogin(common_cfg, window_index=window_index)
 
     lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal, name=account.name)
     # lr = ql.qr_login(login_mode=mode, name=account.name)
@@ -809,21 +816,23 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RUN_PARALLEL = False
+    RUN_PARALLEL = True
+    cfg.common.force_use_portable_chrome = True
+    cfg.common.run_in_headless_mode = False
 
     if RUN_PARALLEL:
         from multiprocessing import Pool, cpu_count, freeze_support
 
         freeze_support()
 
-        with Pool(len(cfg.account_configs)) as pool:
-            pool.starmap(do_login, [(cfg.common, account) for account in cfg.account_configs])
+        total = 10
+        for idx in range_from_one(total):
+            logger.info(color("bold_yellow") + f"第{idx}/{total}次测试")
+            with Pool(len(cfg.account_configs)) as pool:
+                pool.starmap(do_login, [(idx + 1, cfg.common, account) for idx, account in enumerate(cfg.account_configs)])
 
-            logger.info("全部账号登录完毕")
+                logger.info("全部账号登录完毕")
     else:
-        cfg.common.force_use_portable_chrome = True
-        cfg.common.run_in_headless_mode = False
-
         ql = QQLogin(cfg.common)
         idx = 1
         account = cfg.account_configs[idx - 1]

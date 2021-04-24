@@ -561,7 +561,9 @@ class QQLogin():
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}")
                 WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
 
-                update_retry_data(short_login_retry_key, wait_time, self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
+                if idx > 1:
+                    # 第idx-1次的重试成功了，尝试更新历史数据
+                    update_retry_data(short_login_retry_key, retry_timeouts[idx - 1 - 1], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
                 break
             except Exception as e:
                 logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +

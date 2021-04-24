@@ -584,12 +584,12 @@ def get_retry_data(retry_key: str, max_retry_count: int, max_retry_wait_time: in
         retry_timeouts = [max_retry_wait_time]
     elif max_retry_count > 1:
         # 默认重试时间为按时长等分递增
-        retry_timeouts = list([int(idx / max_retry_count * max_retry_wait_time) for idx in range_from_one(max_retry_count)])
+        retry_timeouts = list([idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)])
         if login_retry_data.recommended_first_retry_timeout != 0:
             # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
-            retry_timeouts = [round(login_retry_data.recommended_first_retry_timeout)]
+            retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
             remaining_retry_count = max_retry_count - 1
-            retry_timeouts.extend(list([int(idx / (remaining_retry_count) * max_retry_wait_time) for idx in range_from_one(remaining_retry_count)]))
+            retry_timeouts.extend(list([idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)]))
 
     return login_retry_data, retry_timeouts
 

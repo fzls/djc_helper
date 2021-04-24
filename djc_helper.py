@@ -155,7 +155,7 @@ class DjcHelper:
         with open(filename, "w", encoding="utf-8") as f:
             f.write("ok")
 
-    def check_skey_expired(self):
+    def check_skey_expired(self, window_index=1):
         query_data = self.query_balance("判断skey是否过期", print_res=False)
         if str(query_data['ret']) == "0":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
@@ -165,20 +165,20 @@ class DjcHelper:
             # 已过期，更新skey
             logger.info("")
             logger.warning(f"账号({self.cfg.name})的skey已过期，即将尝试更新skey")
-            self.update_skey(query_data)
+            self.update_skey(query_data, window_index=window_index)
 
         # skey获取完毕后，检查是否在黑名单内
         check_in_black_list(self.cfg.account_info.uin)
 
-    def update_skey(self, query_data):
+    def update_skey(self, query_data, window_index=1):
         login_mode_dict = {
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
             "auto_login": self.update_skey_auto_login,
         }
-        login_mode_dict[self.cfg.login_mode](query_data)
+        login_mode_dict[self.cfg.login_mode](query_data, window_index)
 
-    def update_skey_by_hand(self, query_data):
+    def update_skey_by_hand(self, query_data, window_index=1):
         js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
         fallback_js_code = """document.cookie.split(/; */);"""
         logger.error((
@@ -212,15 +212,15 @@ class DjcHelper:
         input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
         exit(-1)
 
-    def update_skey_qr_login(self, query_data):
-        qqLogin = QQLogin(self.common_cfg)
+    def update_skey_qr_login(self, query_data, window_index=1):
+        qqLogin = QQLogin(self.common_cfg, window_index=window_index)
         loginResult = qqLogin.qr_login(name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
-    def update_skey_auto_login(self, query_data):
+    def update_skey_auto_login(self, query_data, window_index=1):
         self.show_tip_on_first_run_auto_login_mode()
 
-        qqLogin = QQLogin(self.common_cfg)
+        qqLogin = QQLogin(self.common_cfg, window_index=window_index)
         ai = self.cfg.account_info
         loginResult = qqLogin.login(ai.account, ai.password, name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
@@ -1398,7 +1398,7 @@ class DjcHelper:
         card_info_map = parse_card_group_info_map(self.zzconfig)
         return self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
-    def fetch_pskey(self, force=False):
+    def fetch_pskey(self, force=False, window_index=1):
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
@@ -1429,7 +1429,7 @@ class DjcHelper:
             # 抽卡走的账号体系是使用pskey的，不与其他业务共用登录态，需要单独获取QQ空间业务的p_skey。参考链接：https://cloud.tencent.com/developer/article/1008901
             logger.warning("pskey需要更新，将尝试重新登录QQ空间获取并保存到本地")
             # 重新获取
-            ql = QQLogin(self.common_cfg)
+            ql = QQLogin(self.common_cfg, window_index=window_index)
             try:
                 if self.cfg.login_mode == "qr_login":
                     # 扫码登录

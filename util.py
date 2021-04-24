@@ -581,4 +581,4 @@ if __name__ == '__main__':
     print(truncate("风之凌殇风之凌殇", 12))
     print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
     print(remove_none_from_list([None, 1, 2, 3, None]))
-    count_down("test", 5)
+    print(get_screen_size())

@@ -6,13 +6,13 @@ logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
-import time
 import argparse
 import os
 import subprocess
 from distutils import dir_util
 from upload_lanzouyun import Uploader, lanzou_cookie
 from update import need_update
+from util import kill_process
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -163,14 +163,7 @@ def decompress(filepath, target_dir):
 
 
 def kill_original_process(pid):
-    logger.info(f"尝试干掉原进程={pid}")
-    try:
-        os.kill(pid, 9)
-    except OSError:
-        logger.warning("未找到该pid，也许是早已经杀掉了")
-
-    logger.info("等待五秒，确保原进程已经被干掉")
-    time.sleep(5)
+    return kill_process(pid)
 
 
 def start_new_version(args):

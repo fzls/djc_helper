@@ -1005,8 +1005,14 @@ def _get_user_buy_info(cfg: Config):
                 if len(buy_users) != 0:
                     has_no_users = False
 
-                for account_cfg in cfg.account_configs:
-                    qq = uin2qq(account_cfg.account_info.uin)
+                qqs_to_check = list([uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs])
+                for i in range(idx):
+                    other_way_user_buy_info = user_buy_info_list[i]
+                    append_if_not_in(qqs_to_check, other_way_user_buy_info.qq)
+                    for qq in other_way_user_buy_info.game_qqs:
+                        append_if_not_in(qqs_to_check, qq)
+
+                for qq in qqs_to_check:
                     if qq in buy_users:
                         if time_less(user_buy_info.expire_at, buy_users[qq].expire_at):
                             # 若当前配置的账号中有多个账号都付费了，选择其中付费结束时间最晚的那个
@@ -1021,10 +1027,10 @@ def _get_user_buy_info(cfg: Config):
 
             merged_user_buy_info = copy.deepcopy(default_user_buy_info)
             for user_buy_info in user_buy_info_list:
-                if user_buy_info.total_buy_month == 0:
+                if len(user_buy_info.buy_records) == 0:
                     continue
 
-                if merged_user_buy_info.total_buy_month == 0:
+                if len(merged_user_buy_info.buy_records) == 0:
                     merged_user_buy_info = copy.deepcopy(user_buy_info)
                 else:
                     merged_user_buy_info.merge(user_buy_info)

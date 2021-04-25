@@ -33,6 +33,9 @@ changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 # 是否启用自动更新功能
 auto_update_on_start = true
 
+# 是否仅允许单个运行实例
+allow_only_one_instance = true
+
 # 是否尝试自动绑定新活动
 try_auto_bind_new_activity = true
 

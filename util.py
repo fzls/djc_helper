@@ -643,6 +643,11 @@ def kill_other_instance_on_start():
     logger.info(f"当前pid为{current_pid}")
 
 
+def append_if_not_in(l: list, v: Any):
+    if v not in l:
+        l.append(v)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

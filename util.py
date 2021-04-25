@@ -614,15 +614,15 @@ def update_retry_data(retry_key: str, success_timeout: int, recommended_retry_wa
         logger.info(color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
 
 
-def kill_process(pid: int):
+def kill_process(pid: int, wait_time=5):
     logger.info(f"尝试干掉原进程={pid}")
     try:
         os.kill(pid, 9)
     except OSError:
         logger.warning("未找到该pid，也许是早已经杀掉了")
 
-    logger.info("等待五秒，确保原进程已经被干掉")
-    time.sleep(5)
+    logger.info(f"等待{wait_time}秒，确保原进程已经被干掉")
+    time.sleep(wait_time)
 
 
 if __name__ == '__main__':

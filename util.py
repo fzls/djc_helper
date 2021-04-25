@@ -2,6 +2,7 @@ import pathlib
 import platform
 import random
 import shutil
+import signal
 import socket
 import sys
 import threading
@@ -617,7 +618,7 @@ def update_retry_data(retry_key: str, success_timeout: int, recommended_retry_wa
 def kill_process(pid: int, wait_time=5):
     logger.info(f"尝试干掉原进程={pid}")
     try:
-        os.kill(pid, 9)
+        os.kill(pid, signal.SIGTERM)
     except OSError:
         logger.warning("未找到该pid，也许是早已经杀掉了")
 

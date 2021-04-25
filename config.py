@@ -509,6 +509,8 @@ class CommonConfig(ConfigInterface):
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 是否启用自动更新功能
         self.auto_update_on_start = True
+        # 是否仅允许单个运行实例
+        self.allow_only_one_instance = True
         # 是否尝试自动绑定新活动
         self.try_auto_bind_new_activity = True
         # 提前多少天提示付费过期

@@ -775,6 +775,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
         form_layout.addRow("自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
+        self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
+        form_layout.addRow("是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
+
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
         form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
 
@@ -826,6 +829,7 @@ class CommonConfigUi(QFrame):
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
+        cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
 
         cfg.http_timeout = self.spinbox_http_timeout.value()

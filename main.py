@@ -78,6 +78,12 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
+    if cfg.common.allow_only_one_instance:
+        logger.info("当前仅允许单个实例运行，将尝试干掉其他实例~")
+        async_call(kill_other_instance_on_start)
+    else:
+        logger.info("当前允许多个实例同时运行~")
+
     init_pool(cfg.get_pool_size())
 
     change_title(multiprocessing_pool_size=cfg.get_pool_size())
@@ -138,7 +144,6 @@ if __name__ == '__main__':
     freeze_support()
 
     logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
-    async_call(kill_other_instance_on_start)
 
     try:
         run_start_time = datetime.datetime.now()

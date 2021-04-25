@@ -21,9 +21,9 @@ import win32gui
 import win32process
 
 from const import cached_dir
+from data_struct import to_raw_type
 from db import *
 from log import logger, color, asciiReset
-from data_struct import to_raw_type
 
 
 def uin2qq(uin):
@@ -612,6 +612,17 @@ def update_retry_data(retry_key: str, success_timeout: int, recommended_retry_wa
 
     if use_by_myself():
         logger.info(color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
+
+
+def kill_process(pid: int):
+    logger.info(f"尝试干掉原进程={pid}")
+    try:
+        os.kill(pid, 9)
+    except OSError:
+        logger.warning("未找到该pid，也许是早已经杀掉了")
+
+    logger.info("等待五秒，确保原进程已经被干掉")
+    time.sleep(5)
 
 
 if __name__ == '__main__':

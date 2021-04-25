@@ -138,6 +138,7 @@ if __name__ == '__main__':
     freeze_support()
 
     logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
+    async_call(kill_other_instance_on_start)
 
     try:
         run_start_time = datetime.datetime.now()

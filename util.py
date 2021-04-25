@@ -625,6 +625,23 @@ def kill_process(pid: int, wait_time=5):
     time.sleep(wait_time)
 
 
+def kill_other_instance_on_start():
+    pids_dir = os.path.join(cached_dir, 'pids')
+    make_sure_dir_exists(pids_dir)
+
+    old_pids = os.listdir(pids_dir)
+    if len(old_pids) != 0:
+        logger.info(f"尝试干掉之前的实例: {old_pids}")
+        for old_instance_pid in old_pids:
+            kill_process(int(old_instance_pid), 1)
+            os.remove(os.path.join(pids_dir, old_instance_pid))
+
+    current_pid = os.getpid()
+    pid_filename = os.path.join(pids_dir, str(current_pid))
+    open(pid_filename, 'w').close()
+    logger.info(f"当前pid为{current_pid}")
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())
@@ -637,3 +654,4 @@ if __name__ == '__main__':
     print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
     print(remove_none_from_list([None, 1, 2, 3, None]))
     print(get_screen_size())
+    kill_other_instance_on_start()

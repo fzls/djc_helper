@@ -1,11 +1,11 @@
 import re
 from multiprocessing import cpu_count
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 import toml
 
 from const import *
-from data_struct import ConfigInterface, to_raw_type
+from data_struct import ConfigInterface
 from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import *
@@ -475,6 +475,8 @@ class CommonConfig(ConfigInterface):
     }
 
     def __init__(self):
+        # 仅运行首个账户（调试用）
+        self.run_first_account_only = False
         # 账号数目，将在读取完配置后动态设定为当前设置的账号数目
         self.account_count = 1
         # 测试模式，若开启，则一些实验性功能将会启用
@@ -583,6 +585,10 @@ class Config(ConfigInterface):
         if not self.check():
             logger.error("配置有误，请根据提示信息修改")
             exit(-1)
+
+        if len(self.account_configs) != 0 and self.common.run_first_account_only:
+            logger.warning(color("bold_yellow") + f"当前是调试模式，仅处理第一个账号")
+            self.account_configs = self.account_configs[:1]
 
         self.common.account_count = len(self.account_configs)
         if len(self.account_configs) == 1 and self.common.enable_multiprocessing and not os.path.isfile("config.toml.local"):

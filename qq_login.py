@@ -569,6 +569,10 @@ class QQLogin():
                 logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +
                              color("bold_yellow") + "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致，若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题",
                              exc_info=e)
+                if '电脑管家' in login_type:
+                    logger.info("电脑管家模式不尝试短时间重试，直接等待下次重试")
+                    break
+
                 if idx < max_try:
                     time.sleep(2)
 

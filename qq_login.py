@@ -57,6 +57,22 @@ class QQLogin():
     login_mode_wegame = "wegame"
 
     bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
+
+    # note: chrome版本升级流程
+    #  1. 下载新版本chrome driver => chromedriver_{ver}.exe
+    #   1.1 https://sites.google.com/a/chromium.org/chromedriver/downloads
+    #  2. 制作新版本便携版压缩包 => chrome_portable_{ver}.7z
+    #   2.1 获取安装包
+    #       2.1.1 找到系统安装的chrome的安装包
+    #           2.1.1.1 C:\Program Files (x86)\Google\Chrome\Application\90.0.4430.93\Installer\chrome.7z
+    #           2.1.1.2 90.0.4430.93可替换为最新版本的版本号
+    #       2.1.2 也可以从网上下载离线版安装包
+    #           2.1.2.1 下载地址
+    #               2.1.2.1.1 https://www.iplaysoft.com/tools/chrome/
+    #           2.1.2.2 下载内容形如90.0.4430.93_chrome_installer.exe，使用bandizip打开然后解压得到chrome.7z，即可进行下一步
+    #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
+    #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
+    #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手根目录，并更新入库
     chrome_major_version = 89
 
     default_window_width = 390

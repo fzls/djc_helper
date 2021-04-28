@@ -935,6 +935,29 @@ class RetryData(ConfigInterface):
         self.recommended_first_retry_timeout = 0.0
         self.history_success_timeouts = []
 
+class DnfHelperInfo(ConfigInterface):
+    def __init__(self):
+        self.unlocked_maps = set()
+        self.remaining_play_times = 0
+
+class DnfHelperGameInfo(ConfigInterface):
+    def __init__(self):
+        self.shareeuin = "f566PsFtrpanByrpzzhpcc6TLZ80qf83r8mY3GcjsQWLgAoBSWrj"
+        self.shareenickname = "41c1-JYm0PG0NvcdHzyR_DkOqUrgaKW61rCo8VI4AlJ3RMPDRmxZw9C9c_eHt-ol5tqASsiNfuW6Dffq7QFgjcWxKmPO9GovbtfZ46dxAw3Ln1lDWNAvmvolFcl-CZ7oNVLmivPVL7bY8spbjJEhNI0"
+        self.GameTimes = "3"
+        self.lastTime = -1
+        self.gametype = 0
+        self.map1 = -1
+        self.map2 = -1
+        self.len = -1
+        self.euin = -1
+        self.enickname = -1
+        self.bindeuin = -1
+        self.bindenickname = -1
+        self.finishArrRes = []
+        self.bindStatus = False
+        self.bindTime = 1619576495
+        self.bindLastTime = 0
 
 if __name__ == '__main__':
     a = BuyInfo()

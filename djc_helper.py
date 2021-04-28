@@ -452,6 +452,7 @@ class DjcHelper:
             ("DNF心悦51", self.dnf_xinyue_51),
             ("qq视频活动", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     # -- 已过期的一些活动
@@ -500,9 +501,6 @@ class DjcHelper:
 
         # qq视频-看江湖有翡
         self.youfei()
-
-        # dnf助手活动
-        self.dnf_helper()
 
         return [
             ("DNF落地页活动", self.dnf_luodiye),
@@ -2096,8 +2094,8 @@ class DjcHelper:
     # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
     @try_except()
     def dnf_helper(self):
-        # https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew
-        show_head_line("dnf助手 牛气冲天迎新年")
+        # https://mwegame.qq.com/act/dnf/Time2021/index
+        show_head_line("dnf助手")
         self.show_amesvr_act_info(self.dnf_helper_op)
 
         if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
@@ -2114,83 +2112,127 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
-        def query_signin_info():
-            res = self.dnf_helper_op("查询", "734421", print_res=False)
+        def query_info():
+            res = self.dnf_helper_op("查询", "753432", print_res=False)
             raw_info = parse_amesvr_common_info(res)
-            temp = raw_info.sOutValue1.split(';')
-            signin_days = int(temp[0])
-            today_signed = temp[1] == "1"
 
-            return signin_days, today_signed
+            info = DnfHelperInfo()
+            info.unlocked_maps.add(1)
+            for idx, v in enumerate(raw_info.sOutValue2.split(';')):
+                if int(v) > 0:
+                    info.unlocked_maps.add(idx + 2)
+            info.remaining_play_times = int(raw_info.sOutValue3)
 
-        def query_card_info():
-            res = self.dnf_helper_op("查询", "734421", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-            return raw_info.sOutValue3
+            return info
 
-        datetime_fmt = "%Y-%m-%d %H:%M:%S"
-        red_packet_configs = [
-            ("小年2月5", "736620", datetime.datetime.strptime("2021-02-05 00:00:00", datetime_fmt)),
-            ("除夕2月11", "736634", datetime.datetime.strptime("2021-02-11 00:00:00", datetime_fmt)),
-            ("春节2月12", "736635", datetime.datetime.strptime("2021-02-12 00:00:00", datetime_fmt)),
-            ("情人节2月14", "736636", datetime.datetime.strptime("2021-02-14 00:00:00", datetime_fmt)),
-            ("初五2月16", "736637", datetime.datetime.strptime("2021-02-16 00:00:00", datetime_fmt)),
-            ("初八2月19", "736638", datetime.datetime.strptime("2021-02-19 00:00:00", datetime_fmt)),
-            ("元宵2月26", "736639", datetime.datetime.strptime("2021-02-26 00:00:00", datetime_fmt)),
+        def query_game_info():
+            qq = uin2qq(self.cfg.account_info.uin)
+            url = f"https://mwegame.qq.com/act/dnf/Time2021/ajax/init?uin={qq}"
+            res = self.post("查询小游戏信息", url, {}, print_res=False)
+
+            info = DnfHelperGameInfo().auto_update_config(res['data'])
+
+            return info
+
+        self.dnf_helper_op("每天加游戏次数", "753415")
+
+        logger.info("当前仅支持单人模式，组队模式请手动完成")
+
+        stage_infos = [
+            (6, 17, 19, "天空之城", "754337", "754138"),
+            (5, 14, 16, "天际", "759384", "753758"),
+            (4, 13, 13, "地轨", "759386", "754076"),
+            (3, 9, 12, "能源之地", "759388", "754078"),
+            (2, 6, 8, "时空之门", "759393", "754083"),
+            (1, 4, 5, "天界", "759395", "754085"),
+            (0, 0, 3, "远古", "759397", "754080"),
         ]
-        now = datetime.datetime.now()
-        for name, flowid, expected_datetime in red_packet_configs:
-            if now.month != expected_datetime.month or now.day != expected_datetime.day:
-                logger.warning(f"当前不是{expected_datetime}，跳过领取{name}的红包")
+
+        remaining_play_times = query_info().remaining_play_times
+        for play_idx in range_from_one(remaining_play_times):
+            info = query_info()
+            logger.info(f"开始{play_idx}/{remaining_play_times}次小游戏，当前解锁关卡为{info.unlocked_maps}")
+            for stage_idx in range(7, 0, -1):
+                if stage_idx not in info.unlocked_maps:
+                    continue
+
+                mapIndex, oImgsIndex_min, oImgsIndex_max, stage_name, start_flowid, end_flowid = stage_infos[stage_idx - 1]
+
+                oImgsIndex = random.randrange(oImgsIndex_min, oImgsIndex_max + 1)
+                oIndex = oImgsIndex - oImgsIndex_min
+
+                stage = f"{stage_name}-{mapIndex}-{oImgsIndex}"
+
+                logger.info(color("bold_cyan") + f"开始 {stage}")
+                self.dnf_helper_op(f"开始游戏(单人)---{stage}", start_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
+                wait_for("等待小游戏完成", 8 * 60 + 1)
+                self.dnf_helper_op(f"领取奖励(单人)---{stage}", end_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
+
+                break
+
+        # self.dnf_helper_op("开始游戏(单人)---天空之城", "754337")
+        # self.dnf_helper_op("开始游戏(单人)---决战天际", "759384")
+        # self.dnf_helper_op("开始游戏(单人)---地轨", "759386")
+        # self.dnf_helper_op("开始游戏(单人)---能源之地", "759388")
+        # self.dnf_helper_op("开始游戏(单人)---时空之门", "759393")
+        # self.dnf_helper_op("开始游戏(单人)---天界", "759395")
+        # self.dnf_helper_op("开始游戏(单人)---远古", "759397")
+        #
+        # self.dnf_helper_op("决战天空之城游戏模式(单人)", "754138")
+        # self.dnf_helper_op("决战天际游戏模式(单人)", "753758")
+        # self.dnf_helper_op("决战地轨者游戏模式(单人)", "754076")
+        # self.dnf_helper_op("决战能源之地游戏模式(单人)", "754078")
+        # self.dnf_helper_op("决战时空之门游戏模式(单人)", "754083")
+        # self.dnf_helper_op("决战天界游戏模式(单人)", "754085")
+        # self.dnf_helper_op("决战远古游戏模式(单人)", "754080")
+
+        # self.dnf_helper_op("提前结束游戏", "755483")
+
+        # self.dnf_helper_op("邀请组队", "754338")
+        #
+        # self.dnf_helper_op("开始游戏(组队)----天空之城", "756737")
+        # self.dnf_helper_op("开始游戏(组队)----决战天际", "759385")
+        # self.dnf_helper_op("开始游戏(组队)----地轨", "759387")
+        # self.dnf_helper_op("开始游戏(组队)----能源", "759389")
+        # self.dnf_helper_op("开始游戏(组队)----时空之门", "759394")
+        # self.dnf_helper_op("开始游戏(组队)----天界", "759396")
+        # self.dnf_helper_op("开始游戏(组队)----远古", "759398")
+        #
+        # self.dnf_helper_op("决战天际游戏模式(组队)", "754075")
+        # self.dnf_helper_op("决战地轨者游戏模式(组队)", "754077")
+        # self.dnf_helper_op("决战能源之地游戏模式(组队)", "754079")
+        # self.dnf_helper_op("决战远古游戏模式(组队)", "754081")
+        # self.dnf_helper_op("决战时空之门游戏模式(组队)", "754084")
+        # self.dnf_helper_op("决战天界游戏模式(组队)", "754086")
+        # self.dnf_helper_op("决战天空之城游戏模式(组队)", "754139")
+        #
+        ## self.dnf_helper_op("提前结束游戏_from755483", "755485")
+
+        self.dnf_helper_op("最终奖励", "756324")
+
+        game_times = int(query_game_info().GameTimes)
+        for need_game_times, name, flowid in [
+            (9, "解锁9次(决战天际)", "753695"),
+            (15, "解锁15次(决战地轨者)", "753749"),
+            (21, "解锁21次(决战能源之地)", "753750"),
+            (30, "解锁30次(决战时空之门)", "753751"),
+            (45, "解锁45次(决战天界)", "753752"),
+            (60, "解锁60次(决战远古)", "753753"),
+
+            (9, "解锁9次(决战天际)_from753695", "755230"),
+            (15, "解锁15次(决战地轨者)_from753749", "755232"),
+            (21, "解锁21次(决战能源之地)_from753750", "755234"),
+            (30, "解锁30次(决战时空之门)_from753751", "755235"),
+            (45, "解锁45次(决战天界)_from753752", "755236"),
+            (60, "解锁60次(决战远古)_from753753", "755237"),
+        ]:
+            if game_times < need_game_times:
                 continue
-
-            self.dnf_helper_op(name, flowid, clickTime=str(random.randint(10, 15)))
-
-        signin_configs = [
-            (1, "734422", "一次性材质转换器", ""),
-            (2, "735136", "神秘契约礼盒(1天)", ""),
-            (3, "735395", "魂灭结晶礼盒（100个）", ""),
-            (4, "735405", "智慧的引导通行证", ""),
-            (5, "735431", "黑钻3天", "索西亚"),
-            (6, "735410", "装备提升礼盒", ""),
-            (7, "735414", "雷米的援助", ""),
-            (8, "735434", "德洛斯矿山追加入场自选礼盒", "赛丽亚"),
-            (9, "734422", "一次性材质转换器", ""),
-            (10, "735136", "神秘契约礼盒(1天)", ""),
-            (11, "735435", "装备提升礼盒", "花之女王"),
-            (12, "735395", "魂灭结晶礼盒（100个）", ""),
-            (13, "735405", "智慧的引导通行证", ""),
-            (14, "735410", "装备提升礼盒", ""),
-            (15, "735436", "黑钻7天", "凯丽"),
-            (16, "735414", "雷米的援助", ""),
-            (17, "734422", "一次性材质转换器", ""),
-            (18, "735136", "神秘契约礼盒(1天)", ""),
-            (19, "735395", "魂灭结晶礼盒（100个）", ""),
-            (20, "735437", "时间引导石礼盒(50个)", "敏泰"),
-            (21, "735405", "智慧的引导通行证", ""),
-            (22, "735410", "装备提升礼盒", ""),
-            (23, "735438", "+11黑铁装备强化券", "歌兰蒂斯"),
-        ]
-        signin_days, today_signed = query_signin_info()
-        if signin_days >= len(signin_configs):
-            logger.info("已经完全全部签到~")
-        elif today_signed:
-            logger.info("今日已经签到过")
-        else:
-            logger.info(f"尝试签到第{signin_days + 1}天")
-            index, flowid, name, npc_name = signin_configs[signin_days]
-            if npc_name != "":
-                name = f"{npc_name} 赠送的 {name}"
             self.dnf_helper_op(name, flowid)
-            signin_days += 1
 
-        logger.info(color("bold_yellow") + f"当前已签到{signin_days}天，卡片信息：{query_card_info()}")
-
-        self.dnf_helper_op("鸿运红包", "735719")
-
-    def check_dnf_helper(self):
-        self.check_bind_account("dnf助手活动", "https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew",
-                                activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
+    # def check_dnf_helper(self):
+    #     self.check_bind_account("dnf助手活动", "https://mwegame.qq.com/act/dnf/Time2021/index",
+    #                             activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
 
     def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper
@@ -2199,11 +2241,11 @@ class DjcHelper:
         qq = uin2qq(self.cfg.account_info.uin)
         dnf_helper_info = self.cfg.dnf_helper_info
 
-        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/SpringFestival21/indexNew",
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/Time2021/index",
                                   sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
-                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                                   uin=qq, skey=self.cfg.account_info.skey,
-                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
+                                  nickName=quote_plus(quote_plus(dnf_helper_info.nickName)), userId=dnf_helper_info.userId, token=quote_plus(quote_plus(dnf_helper_info.token)),
                                   **extra_params)
 
         # 1000017016: 登录态失效,请重新登录
@@ -4619,6 +4661,7 @@ class DjcHelper:
             "hello_id", "prize",
             "qd",
             "iReceiveUin",
+            "map1", "map2", "len",
         ]}
 
         # 整合得到所有默认值
@@ -4863,7 +4906,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs_signin()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
-        # djcHelper.dnf_helper()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
@@ -4884,4 +4926,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_xinyue_51()
         # djcHelper.qq_video()
         # djcHelper.majieluo()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.dnf_helper()

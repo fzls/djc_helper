@@ -648,6 +648,11 @@ def append_if_not_in(l: list, v: Any):
         l.append(v)
 
 
+def wait_for(msg: str, seconds):
+    logger.info(msg + f", 等待{seconds}秒")
+    time.sleep(seconds)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

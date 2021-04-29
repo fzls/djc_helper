@@ -108,7 +108,7 @@ class Uploader:
             return False
 
         filesize = os.path.getsize(filepath)
-        logger.warning(f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}")
+        logger.warning(color("bold_yellow") + f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}")
 
         return True
 

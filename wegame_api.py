@@ -223,6 +223,7 @@ if __name__ == '__main__':
     for idx, role in enumerate(res['data']['role_list']):
         logger.info(f"{str(idx):3s} 区服={role['area_id']:3d}\t角色名={role['role_name']}")
     default_role = res['data']['role_list'][0]
+    # default_role = list(filter(lambda role: role['area_id'] == 11 and role['role_name'] == "风之凌殇喵", res['data']['role_list']))[0]
     area_id, role_name = default_role['area_id'], default_role['role_name']
     api.set_role_info(area_id, role_name)
     api.get_capacity_detail_info()

@@ -203,8 +203,8 @@ class WegameApi:
         res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
 
         if print_res:
-            pd = json.dumps(res.json(), ensure_ascii=False)
-            logger.info(f"{api_name} {pd}\n")
+            pd = json.dumps(res.json(), ensure_ascii=False, indent=2)
+            logger.info(f"{api_name} \n{pd}\n")
 
         return res
 

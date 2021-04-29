@@ -40,6 +40,8 @@ def maximize_console():
 
 
 def maximize_console_sync():
+    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件。若想最小化，则可创建 .min_console 文件。")
+
     if os.path.exists(".no_max_console"):
         logger.info("不启用最大化窗口")
         return
@@ -65,6 +67,7 @@ def maximize_console_sync():
     op = win32con.SW_MAXIMIZE
     if os.path.exists(".min_console"):
         op = win32con.SW_MINIMIZE
+        logger.info("已启用最小化模式")
     win32gui.ShowWindow(current_hwnd, op)
 
 

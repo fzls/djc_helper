@@ -1164,9 +1164,9 @@ class FunctionSwitchesConfigUi(QWidget):
 
         self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
         form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
-        #
-        # self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
-        # form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
+
+        self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
+        form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
 
         self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
         form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
@@ -1242,7 +1242,7 @@ class FunctionSwitchesConfigUi(QWidget):
         # cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
         cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
         cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
-        # cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
+        cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
         cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()

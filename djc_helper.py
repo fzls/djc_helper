@@ -3927,32 +3927,32 @@ class DjcHelper:
                     time.sleep(retryCfg.retry_wait_time)
 
         def query_dbq():
-            res = self.dnf_bbs_op("查询代币券", "730277", print_res=False)
+            res = self.dnf_bbs_op("查询代币券", "758118", print_res=False)
             info = parse_amesvr_common_info(res)
             return int(info.sOutValue1)
 
         def query_remaining_quota():
-            res = self.dnf_bbs_op("查询礼包剩余量", "730763", print_res=False)
+            res = self.dnf_bbs_op("查询礼包剩余量", "758279", print_res=False)
             info = parse_amesvr_common_info(res)
 
             logger.info('\n'.join([
                 "当前礼包全局剩余量如下",
-                f"\t便携式锻造炉: {info.sOutValue1}",
-                f"\t一次性增幅器: {info.sOutValue2}",
-                f"\t凯丽的强化器: {info.sOutValue3}",
-                f"\t抗疲劳秘药(10点): {info.sOutValue4}",
-                f"\t时间引导石礼盒 (10个): {info.sOutValue5}",
-                f"\t抗疲劳秘药 (5点): {info.sOutValue6}",
+                f"\t装备提升礼盒: {info.sOutValue1}",
+                f"\t抗疲劳秘药: {info.sOutValue2}",
+                f"\t时间引导石礼盒: {info.sOutValue3}",
+                f"\t暗魂水晶礼盒: {info.sOutValue4}",
+                f"\t华丽的徽章自选礼盒: {info.sOutValue5}",
+                f"\t灿烂的徽章自选礼盒: {info.sOutValue6}",
             ]))
 
         def try_exchange():
             operations = [
-                ("抗疲劳秘药10点兑换", "728541", 2),
-                ("抗疲劳秘药5点兑换", "728543", 2),
-                ("时间引导石兑换", "728542", 2),
-                ("凯丽的强化器兑换", "728540", 6),
-                ("一次性增幅器兑换", "728539", 6),
-                ("便携锻造炉兑换", "728494", 6),
+                ("灿烂的徽章自选礼盒<官方论坛活动>【100代币券】", "758258", 1),
+                ("装备提升礼盒<官方论坛活动>【2代币券】", "758113", 5),
+                ("抗疲劳秘药 (20点)<官方论坛活动>【20代币券】", "758253", 1),
+                ("华丽的徽章自选礼盒<官方论坛活动>【25代币券】", "758257", 1),
+                ("[期限]时间引导石礼盒 (10个)<官方论坛活动>【5代币券】", "758254", 2),
+                ("暗魂水晶礼盒 (100个)<官方论坛活动>【15代币券】", "758255", 2),
             ]
 
             for name, flowid, count in operations:
@@ -3989,7 +3989,7 @@ class DjcHelper:
 
     def check_dnf_bbs(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20201229act/index.html",
-                                activity_op_func=self.dnf_bbs_op, query_bind_flowid="728503", commit_bind_flowid="728502")
+                                activity_op_func=self.dnf_bbs_op, query_bind_flowid="758117", commit_bind_flowid="758116")
 
     def dnf_bbs_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_bbs
@@ -4903,7 +4903,6 @@ if __name__ == '__main__':
         # djcHelper.warm_winter()
         # djcHelper.dnf_1224()
         # djcHelper.youfei()
-        # djcHelper.dnf_bbs_signin()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
         # djcHelper.xinyue_weekly_gift()
@@ -4927,4 +4926,5 @@ if __name__ == '__main__':
         # djcHelper.qq_video()
         # djcHelper.majieluo()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_helper()
+        # djcHelper.dnf_helper()
+        djcHelper.dnf_bbs_signin()

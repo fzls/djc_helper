@@ -2253,6 +2253,8 @@ class DjcHelper:
             extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
 
+            raise RuntimeError("dnf助手token过期，请重试获取")
+
         return res
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------

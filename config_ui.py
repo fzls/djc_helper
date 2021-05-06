@@ -591,6 +591,9 @@ class ConfigUi(QFrame):
         except Exception as e:
             show_message("出错了", f"请求出现异常，报错如下:\n{e}")
 
+        # 点击付费按钮后重置cache
+        reset_cache(cache_name_download)
+
     def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: List[str]) -> str:
         if len(card.split('-')) != 3:
             return "无效的卡号"

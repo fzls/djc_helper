@@ -4030,7 +4030,7 @@ class DjcHelper:
         logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
         # {'code': 100000, 'data': {'user_credits': 295, 'task_credits': '15'}, 'msg': ''}
         resJson = take_credits_res.json()
-        if resJson['code'] == 100000 and resJson['data']['user_credits'] >= 650:
+        if resJson['code'] == 100000 and resJson['data']['user_credits'] >= 650 and is_first_run("colg_领取灿烂"):
             msg = "Colg活跃值已经达到650了咯，记得去Colg领取灿烂哦"
             async_message_box(msg, "可以领灿烂啦", open_url="https://bbs.colg.cn/forum-171-1.html")
 

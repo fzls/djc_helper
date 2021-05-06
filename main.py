@@ -123,12 +123,17 @@ def main():
     # # 尝试派赛利亚出去打工
     # try_xinyue_sailiyam_start_work(cfg)
 
-    auto_send_cards(cfg)
+    # 活动开启关闭时调这个开关即可
+    enable_card_lottery = False
+
+    if enable_card_lottery:
+        auto_send_cards(cfg)
 
     show_extra_infos(cfg)
     show_accounts_status(cfg, "运行完毕展示账号概览")
 
-    show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
+    if enable_card_lottery:
+        show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
     show_pay_info(cfg)
 

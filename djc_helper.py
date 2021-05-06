@@ -1351,7 +1351,7 @@ class DjcHelper:
         #   1.2 填写新链接   在urls.py中，替换self.ark_lottery_page的值为新版抽卡活动的链接（理论上应该只有zz和verifyid参数的值会变动，而且大概率是+1）
         #   1.3 重新启用代码
         #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
-        #   1.3.2 在main.py中将main函数中取消注释show_lottery_status和auto_send_cards的调用处
+        #   1.3.2 在main.py中将main函数中将enable_card_lottery设置为true
         #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
         #   1.3.4 在djc_helper.py中将fetch_pskey的p_skey的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
@@ -1359,7 +1359,7 @@ class DjcHelper:
         # hack:
         #   2. 废弃
         #   2.1 在djc_helper.py中将ark_lottery的调用处从normal_run移到expired_activities
-        #   2.2 在main.py中将main函数中注释show_lottery_status和auto_send_cards的调用处
+        #   2.2 在main.py中将main函数中将enable_card_lottery设置为false
         #   2.3 在djc_helper.py中将fetch_pskey的p_skey的判断条件注释
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=7&verifyid=qq2021dnf12

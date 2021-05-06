@@ -8,7 +8,7 @@ from datetime import datetime
 from lanzou.api import LanZouCloud
 
 from log import logger, color
-from util import make_sure_dir_exists, with_cache, human_readable_size
+from util import make_sure_dir_exists, with_cache, human_readable_size, cache_name_download
 
 lanzou_cookie = {
     "ylogin": "1442903",
@@ -183,7 +183,7 @@ class Uploader:
         """
 
         def _download(fname: str) -> str:
-            return with_cache("download_cache", os.path.join(folder.name, fname), cache_max_seconds=cache_max_seconds,
+            return with_cache(cache_name_download, os.path.join(folder.name, fname), cache_max_seconds=cache_max_seconds,
                               cache_miss_func=lambda: self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log),
                               cache_validate_func=lambda target_path: os.path.isfile(target_path),
                               )

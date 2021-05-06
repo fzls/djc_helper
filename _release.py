@@ -15,9 +15,6 @@ from upload_lanzouyun import Uploader
 from util import maximize_console, make_sure_dir_exists
 from version import now_version
 
-# 最大化窗口
-maximize_console()
-
 # ---------------准备工作
 prompt = f"如需直接使用默认版本号：{now_version} 请直接按回车\n或手动输入版本号后按回车："
 version = input(prompt) or now_version
@@ -27,6 +24,9 @@ version_reg = r"\d+\.\d+\.\d+"
 if re.match(version_reg, version) is None:
     logger.info(f"版本号格式有误，正确的格式类似：1.0.0 ，而不是 {version}")
     exit(-1)
+
+# 最大化窗口
+maximize_console()
 
 version = 'v' + version
 

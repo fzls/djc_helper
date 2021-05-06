@@ -2165,7 +2165,7 @@ class DjcHelper:
 
                 logger.info(color("bold_cyan") + f"开始 {stage}")
                 self.dnf_helper_op(f"开始游戏(单人)---{stage}", start_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
-                wait_for("等待小游戏完成", 8 * 60 + 1)
+                count_down("等待小游戏完成", 8 * 60 + 1)
                 self.dnf_helper_op(f"领取奖励(单人)---{stage}", end_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
 
                 break

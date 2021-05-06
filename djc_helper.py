@@ -2136,7 +2136,7 @@ class DjcHelper:
 
         self.dnf_helper_op("每天加游戏次数", "753415")
 
-        logger.info("当前仅支持单人模式，组队模式请手动完成")
+        logger.info(color("bold_cyan") + "当前仅支持单人模式，组队模式请手动完成")
 
         stage_infos = [
             (6, 17, 19, "天空之城", "754337", "754138"),
@@ -2151,7 +2151,7 @@ class DjcHelper:
         remaining_play_times = query_info().remaining_play_times
         for play_idx in range_from_one(remaining_play_times):
             info = query_info()
-            logger.info(f"开始{play_idx}/{remaining_play_times}次小游戏，当前解锁关卡为{info.unlocked_maps}")
+            logger.info(color("bold_green") + f"开始{play_idx}/{remaining_play_times}次小游戏，当前解锁关卡为{info.unlocked_maps}")
             for stage_idx in range(7, 0, -1):
                 if stage_idx not in info.unlocked_maps:
                     continue
@@ -2165,7 +2165,7 @@ class DjcHelper:
 
                 logger.info(color("bold_cyan") + f"开始 {stage}")
                 self.dnf_helper_op(f"开始游戏(单人)---{stage}", start_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
-                count_down("等待小游戏完成", 8 * 60 + 1)
+                count_down(color("bold_green") + "等待小游戏完成", 8 * 60 + 1)
                 self.dnf_helper_op(f"领取奖励(单人)---{stage}", end_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
 
                 break

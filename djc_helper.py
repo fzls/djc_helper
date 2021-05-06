@@ -441,13 +441,7 @@ class DjcHelper:
         return [
             ("dnf助手编年史活动", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("QQ空间集卡", self.ark_lottery),
-            ("DNF黑鸦竞速", self.dnf_heiya),
-            ("DNF集合站", self.dnf_collection),
-            ("管家蚊子腿", self.guanjia),
-            ("会员关怀", self.vip_mentor),
             ("hello语音网页礼包兑换", self.hello_voice),
-            ("colg每日签到", self.colg_signin),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF心悦51", self.dnf_xinyue_51),
             ("qq视频活动", self.qq_video),
@@ -506,6 +500,12 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
             ("WeGame活动", self.dnf_wegame),
+            ("QQ空间集卡", self.ark_lottery),
+            ("DNF黑鸦竞速", self.dnf_heiya),
+            ("DNF集合站", self.dnf_collection),
+            ("管家蚊子腿", self.guanjia),
+            ("会员关怀", self.vip_mentor),
+            ("colg每日签到", self.colg_signin),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

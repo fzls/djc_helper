@@ -511,6 +511,8 @@ def parse_unicode_escape_string(filename: str):
 def remove_none_from_list(l: list) -> list:
     return list(filter(lambda x: x is not None, l))
 
+_root_caches_key = "caches"
+cache_name_download = "download_cache"
 
 def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600):
     """
@@ -524,10 +526,9 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     """
     db = load_db()
 
-    root_caches_key = "caches"
-    if root_caches_key not in db:
-        db[root_caches_key] = {}
-    cache = db[root_caches_key]
+    if _root_caches_key not in db:
+        db[_root_caches_key] = {}
+    cache = db[_root_caches_key]
 
     # 尝试使用缓存内容
     if cache_category in cache and cache_key in cache[cache_category]:
@@ -551,6 +552,23 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     save_db(db)
 
     return latest_value
+
+
+def reset_cache(cache_category: str):
+    db = load_db()
+
+    if _root_caches_key not in db:
+        db[_root_caches_key] = {}
+    cache = db[_root_caches_key]
+
+    # 清空cache
+    cache[cache_category] = {}
+
+    save_db(db)
+
+    logger.debug(f"清空cache={cache_category}")
+
+    return
 
 
 def count_down(ctx: str, seconds: int, update_interval=0.1):

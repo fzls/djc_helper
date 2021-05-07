@@ -11,14 +11,14 @@ import win32con
 from config import CommonConfig
 from dao import UpdateInfo
 from log import logger, color
-from upload_lanzouyun import Uploader, lanzou_cookie
+from upload_lanzouyun import Uploader
 from util import is_first_run, use_by_myself, async_call, is_run_in_github_action, try_except
 from version import now_version, ver_time
 
 
 def get_update_desc(config: CommonConfig):
     try:
-        uploader = Uploader(lanzou_cookie)
+        uploader = Uploader()
         latest_version = uploader.latest_version()
 
         if not need_update(now_version, latest_version):

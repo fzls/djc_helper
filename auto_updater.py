@@ -10,7 +10,7 @@ import argparse
 import os
 import subprocess
 from distutils import dir_util
-from upload_lanzouyun import Uploader, lanzou_cookie
+from upload_lanzouyun import Uploader
 from update import need_update
 from util import kill_process
 
@@ -38,7 +38,7 @@ def auto_update():
     logger.info(f"切换工作目录到{args.cwd}")
     os.chdir(args.cwd)
 
-    uploader = Uploader(lanzou_cookie)
+    uploader = Uploader()
 
     # 进行实际的检查是否需要更新操作
     latest_version = uploader.latest_version()

@@ -12,7 +12,7 @@ from qzone_activity import QzoneActivity
 from setting import *
 from show_usage import get_count, my_usage_counter_name
 from update import check_update_on_start, get_update_info
-from upload_lanzouyun import Uploader, lanzou_cookie
+from upload_lanzouyun import Uploader
 from urls import Urls, get_not_ams_act_desc
 from util import *
 from version import *
@@ -871,7 +871,7 @@ def has_buy_auto_updater_dlc(cfg: Config):
     retrtCfg = cfg.common.retry
     for idx in range(retrtCfg.max_retry_count):
         try:
-            uploader = Uploader(lanzou_cookie)
+            uploader = Uploader()
             has_no_users = True
             for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
                 try:
@@ -977,7 +977,7 @@ def _get_user_buy_info(cfg: Config):
             # 默认设置首个qq为购买信息
             default_user_buy_info.qq = uin2qq(cfg.account_configs[0].account_info.uin)
 
-            uploader = Uploader(lanzou_cookie)
+            uploader = Uploader()
             has_no_users = True
 
             remote_filenames = [uploader.user_monthly_pay_info_filename, uploader.cs_user_monthly_pay_info_filename]

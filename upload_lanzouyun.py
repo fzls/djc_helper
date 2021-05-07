@@ -6,26 +6,22 @@ from collections import namedtuple
 from datetime import datetime
 
 from lanzou.api import LanZouCloud
+from lanzou.api.types import FileInFolder
 
 from log import logger, color
 from util import make_sure_dir_exists, with_cache, human_readable_size, cache_name_download
 
-lanzou_cookie = {
-    "ylogin": "1442903",
-    "phpdisk_info": "VmNRZwxqBDpSaVMzXTRWBVIzDDoIWF07ADRVNgczV21UYgU2VzYFOVVhUjdcDwdqWz9QZ108VDQHYQdvATcLO1ZhUTUMOgQ8UjZTYl1iVmpSNwxsCGZdPAAxVTwHNlcxVGAFY1c0BWpVM1I0XD8HVFs6UGVdN1QxBzwHZQE2CzpWYlFlDGs%3D",
-}
-
-Folder = namedtuple('Folder', ['name', 'id'])
+Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 
 
 # 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
 
 class Uploader:
-    folder_dnf_calc = Folder("魔改计算器", "1810329")
-    folder_djc_helper = Folder("蚊子腿小助手", "2290618")
-    folder_history_files = Folder("历史版本", "2303716")
-    folder_online_files = Folder("在线文件存储", "2866929")
-    folder_online_files_history_files = Folder("历史版本", "2867307")
+    folder_dnf_calc = Folder("魔改计算器", "1810329", "https://fzls.lanzous.com/s/dnf-calc", "")
+    folder_djc_helper = Folder("蚊子腿小助手", "2290618", "https://fzls.lanzous.com/s/djc-helper", "")
+    folder_history_files = Folder("历史版本", "2303716", "https://fzls.lanzous.com/b01bp17zg", "")
+    folder_online_files = Folder("在线文件存储", "2866929", "https://fzls.lanzous.com/s/myfiles", "6tnk")
+    folder_online_files_history_files = Folder("历史版本", "2867307", "https://fzls.lanzous.com/b01c143ah", "5r75")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
@@ -47,11 +43,19 @@ class Uploader:
     compressed_version_prefix = "compressed_"
     compressed_version_suffix = ".7z"
 
-    def __init__(self, cookie):
+    def __init__(self):
         self.lzy = LanZouCloud()
+        self.login_ok = False
+
+    def login(self, cookie):
+        # 仅上传需要登录
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+    def upload_to_lanzouyun(self, filepath:str, target_folder:Folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+        if not self.login_ok:
+            logger.info("未登录，不能上传文件")
+            return False
+
         if not only_upload_compressed_version:
             ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
             if not ok:
@@ -73,7 +77,7 @@ class Uploader:
 
         return True
 
-    def _upload_to_lanzouyun(self, filepath, target_folder, history_file_prefix="") -> bool:
+    def _upload_to_lanzouyun(self, filepath:str, target_folder:Folder, history_file_prefix="") -> bool:
         filename = os.path.basename(filepath)
         logger.warning(f"开始上传 {filename} 到 {target_folder.name}")
         run_start_time = datetime.now()
@@ -135,12 +139,12 @@ class Uploader:
         """
         return self.download_file(self.find_latest_version(), download_dir)
 
-    def find_latest_version(self):
+    def find_latest_version(self) -> FileInFolder:
         """
         查找最新版本，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        files = self.lzy.get_file_list(self.folder_djc_helper.id)
-        for file in files:
+        folder_info = self.lzy.get_folder_info_by_url(self.folder_djc_helper.url)
+        for file in folder_info.files:
             if file.name.startswith(self.history_version_prefix):
                 return file
 
@@ -166,18 +170,18 @@ class Uploader:
         """
         return self.download_file(self.find_latest_patches(), download_dir)
 
-    def find_latest_patches(self):
+    def find_latest_patches(self) -> FileInFolder:
         """
         查找最新版本的补丁，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        files = self.lzy.get_file_list(self.folder_djc_helper.id)
-        for file in files:
+        folder_info = self.lzy.get_folder_info_by_url(self.folder_djc_helper.url)
+        for file in folder_info.files:
             if file.name.startswith(self.history_patches_prefix):
                 return file
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder: Folder, name, download_dir, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
+    def download_file_in_folder(self, folder: Folder, name:str, download_dir:str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
@@ -210,18 +214,18 @@ class Uploader:
         # 下载普通版本
         return _download(name)
 
-    def find_file(self, folder, name):
+    def find_file(self, folder, name) -> FileInFolder:
         """
         在对应目录查找指定名称的文件，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        files = self.lzy.get_file_list(folder.id)
-        for file in files:
+        folder_info = self.lzy.get_folder_info_by_url(folder.url, folder.password)
+        for file in folder_info.files:
             if file.name == name:
                 return file
 
         raise FileNotFoundError(f"file={name} not found in folder={folder.name}")
 
-    def download_file(self, fileinfo, download_dir, overwrite=True, show_log=True) -> str:
+    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -239,7 +243,7 @@ class Uploader:
         if show_log: logger.info(f"即将开始下载 {target_path}")
         callback = None
         if show_log: callback = self.show_progress
-        retCode = self.lzy.down_file_by_id(fileinfo.id, download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
+        retCode = self.lzy.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
         if retCode != LanZouCloud.SUCCESS:
             if show_log: logger.error(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
@@ -272,17 +276,28 @@ class Uploader:
 
 
 if __name__ == '__main__':
-    with open("upload_cookie.json") as fp:
-        cookie = json.load(fp)
-    uploader = Uploader(cookie)
-    if uploader.login_ok:
-        # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
-        # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
-        # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
-        # logger.info(f"最新版本为{uploader.latest_version()}")
-        # uploader.download_latest_version("_update_temp_dir")
+    uploader = Uploader()
 
-        logger.info(f"最新增量补丁范围为{uploader.latest_patches_range()}")
-        # uploader.download_latest_patches("_update_temp_dir")
-    else:
-        logger.error("登录失败")
+    # 不需要登录的接口
+    logger.info(f"最新版本为{uploader.latest_version()}")
+    # uploader.download_latest_version(".cached")
+
+    logger.info(f"最新增量补丁范围为{uploader.latest_patches_range()}")
+    logger.info(f"最新增量补丁为{uploader.find_latest_patches()}")
+    uploader.download_latest_patches(".cached")
+
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, ".cached", try_compressed_version_first=True)
+
+    # 需要登录才能使用的接口
+    test_login_functions = False
+    if test_login_functions:
+        with open("upload_cookie.json") as fp:
+            cookie = json.load(fp)
+        uploader.login(cookie)
+        if uploader.login_ok:
+            # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
+            # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
+            # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
+            pass
+        else:
+            logger.error("登录失败")

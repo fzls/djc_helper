@@ -447,6 +447,7 @@ class DjcHelper:
             ("qq视频活动", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
+            ("管家蚊子腿", self.guanjia),
         ]
 
     # -- 已过期的一些活动
@@ -503,7 +504,6 @@ class DjcHelper:
             ("QQ空间集卡", self.ark_lottery),
             ("DNF黑鸦竞速", self.dnf_heiya),
             ("DNF集合站", self.dnf_collection),
-            ("管家蚊子腿", self.guanjia),
             ("会员关怀", self.vip_mentor),
             ("colg每日签到", self.colg_signin),
         ]
@@ -2540,18 +2540,18 @@ class DjcHelper:
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：
-    #   1. 打开新活动的页面 https://guanjia.qq.com/act/cop/20210322dnf/pc/index.html
+    #   1. 打开新活动的页面 https://guanjia.qq.com/act/cop/20210425dnf/pc/
     #   2. 按F12，在Console中输入 console.log(JSON.stringify(GLOBAL_AMP_CONFIG))，将结果复制到 format_json.json 中格式化，方便查看
     #   3. 在json中搜索 comGifts，定位到各个礼包的信息，并将下列变量的数值更新为新版本
-    guanjia_common_gifts_act_id = "1149"  # 礼包活动ID
-    guanjia_gift_id_special_rights = "7715"  # 电脑管家特权礼包
-    guanjia_gift_id_sign_in_2_days = "7716"  # 连续签到2天礼包
-    guanjia_gift_id_return_user = "7717"  # 幸运勇士礼包
-    guanjia_gift_id_download_and_login_this_version_guanjia = "7718"  # 下载登录管家任务
-    guanjia_gift_id_game_online_30_minutes = "7719"  # 每日游戏在线30分钟任务
-    guanjia_gift_id_sign_in = "7720"  # 每日签到任务
+    guanjia_common_gifts_act_id = "1160"  # 礼包活动ID
+    guanjia_gift_id_special_rights = "7761"  # 电脑管家特权礼包
+    guanjia_gift_id_sign_in_2_days = "7762"  # 连续签到2天礼包
+    guanjia_gift_id_return_user = "7763"  # 幸运勇士礼包
+    guanjia_gift_id_download_and_login_this_version_guanjia = "7764"  # 下载登录管家任务
+    guanjia_gift_id_game_online_30_minutes = "7765"  # 每日游戏在线30分钟任务
+    guanjia_gift_id_sign_in = "7766"  # 每日签到任务
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
-    guanjia_lottery_gifts_act_id = "1148"  # 抽奖活动ID
+    guanjia_lottery_gifts_act_id = "1159"  # 抽奖活动ID
 
     # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
     # note: 6. 调整urls中管家蚊子腿的起止时间
@@ -4916,7 +4916,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_heiya()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_wegame()
-        # djcHelper.guanjia()
         # djcHelper.vip_mentor()
         # djcHelper.hello_voice()
         # djcHelper.xinyue_operations()
@@ -4929,4 +4928,5 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_helper()
-        djcHelper.dnf_bbs_signin()
+        # djcHelper.dnf_bbs_signin()
+        djcHelper.guanjia()

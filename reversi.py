@@ -43,6 +43,13 @@ class Reversi(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.init_logic()
+        self.init_ui()
+        self.init_invalid_cells()
+
+    def init_logic(self):
+        print(f"初始化逻辑数据")
+
         self.loop_index = 1
         self.invalid_cell_count = 0
 
@@ -66,15 +73,18 @@ class Reversi(QWidget):
 
         self.init_board_without_invalid_cells()
 
-        self.initUI()
-
-        # self.init_invalid_cells_randomly()
-        self.init_invalid_cells_by_click()
-        # self.init_invalid_cells_by_input()
+    def init_invalid_cells(self):
+        if len(self.ai_cells) < 2:
+            # self.init_invalid_cells_randomly()
+            self.init_invalid_cells_by_click()
+            # self.init_invalid_cells_by_input()
+        else:
+            self.init_invalid_cells_randomly()
 
         self.ai_try_put_cell()
 
-    def initUI(self):
+
+    def init_ui(self):
         width = 800
         height = 580
 
@@ -150,7 +160,7 @@ class Reversi(QWidget):
                             self.board[ri][ci] = cell_invalid
                             self.invalid_cell_count = self.invalid_cell_count + 1
                             print(f"设置第{self.invalid_cell_count}个无效位置")
-                            self.print()
+                            self.paint()
 
                             if self.invalid_cell_count == invalid_cell_count:
                                 # 记录点击次数，到达五个按钮时进入正式游戏模式（尝试ai点击）并隐藏提示按钮
@@ -163,9 +173,8 @@ class Reversi(QWidget):
                         self.ai_moving = False
 
                         # 判断是否可行
-                        if self.game_over():
-                            print(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
-                            self.notify('游戏结束')
+                        if self.is_game_over():
+                            self.game_over()
                             return
 
                         if not self.has_any_valid_cell():
@@ -173,8 +182,7 @@ class Reversi(QWidget):
                             self.next_turn()
                             if not self.has_any_valid_cell():
                                 print("双方均不可再落子，游戏结束")
-                                self.notify('游戏结束')
-                                print(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
+                                self.game_over()
                                 return
 
                         # 落子
@@ -182,7 +190,7 @@ class Reversi(QWidget):
                         self.loop_index += 1
 
                         # 重绘界面
-                        self.print()
+                        self.paint()
 
                         # 若轮到机器人
                         self.ai_try_put_cell()
@@ -195,7 +203,7 @@ class Reversi(QWidget):
 
             self.btn_list_board.append(label_row)
 
-        self.print()
+        self.paint()
 
         self.show()
 
@@ -245,7 +253,7 @@ class Reversi(QWidget):
             self.board[row][col] = cell_invalid
             self.invalid_cell_count = self.invalid_cell_count + 1
 
-        self.print()
+        self.paint()
 
     def init_invalid_cells_by_input(self):
         prompt = f"输入游戏内显示的五个无效格子位置，用单个空格分开。eg. a1 b1 c1 d1 e1: \n"
@@ -264,7 +272,7 @@ class Reversi(QWidget):
             self.board[row][col] = cell_invalid
             self.invalid_cell_count = self.invalid_cell_count + 1
 
-        self.print()
+        self.paint()
 
     def init_invalid_cells_by_click(self):
         # 界面提示点击五个按钮
@@ -280,8 +288,8 @@ class Reversi(QWidget):
 
         bye_count = 0
 
-        while not self.game_over():
-            self.print()
+        while not self.is_game_over():
+            self.paint()
 
             print(f"当前回合为 {self.cell_name(self.current_step_cell())}")
 
@@ -681,7 +689,7 @@ class Reversi(QWidget):
 
         return valid_directions
 
-    def game_over(self) -> bool:
+    def is_game_over(self) -> bool:
         for row_index in range_from_one(board_size):
             for col_index in range_from_one(board_size):
                 cell = self.board[row_index][col_index]
@@ -689,6 +697,18 @@ class Reversi(QWidget):
                     return False
 
         return True
+
+    def game_over(self):
+        print(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
+        self.notify('游戏结束')
+
+        restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
+        if restart:
+            print("重新开始游戏")
+
+            self.init_logic()
+            self.paint()
+            self.init_invalid_cells()
 
     def show_game_result(self):
         # 数子
@@ -710,11 +730,11 @@ class Reversi(QWidget):
         print(f"{self.cell_name(cell_red)}={red}")
         print(color("bold_yellow") + f"胜方为{winner}")
 
-    def print(self, show_cui_detail=False):
+    def paint(self, show_cui_detail=False):
         print('-'*20)
         blue_score = self.with_color(f"蓝方：{self.score(cell_blue)}", "blue")
         red_score = self.with_color(f"红方：{self.score(cell_red)}", "red")
-        print(f"{blue_score}\t{red_score}")
+        print(f"{datetime.now().strftime('%H:%M:%S')}: {blue_score}\t{red_score}")
 
         if show_cui_detail:
             print(' '.join(['  ', *[str(col_idx + 1) for col_idx in range(board_size)]]))
@@ -795,7 +815,8 @@ class Reversi(QWidget):
 
             if not self.has_any_valid_cell():
                 print("本轮无任何可行落子，将轮空")
-                self.notify(self.cell_name(self.current_step_cell(), with_color=False) + '轮空，请点击任意位置结束本轮')
+                if len(self.ai_cells) < 2:
+                    self.notify(self.cell_name(self.current_step_cell(), with_color=False) + '轮空，请点击任意位置结束本轮')
 
         self.label_blue_score.setText(str(self.score(cell_blue)))
         self.label_red_score.setText(str(self.score(cell_red)))

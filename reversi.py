@@ -80,6 +80,10 @@ class Reversi(QWidget):
         ai_min_decision_seconds = 0.5
         self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", ai_min_decision_seconds)
 
+        ai_max_decision_seconds = 26
+        ai_max_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最大等待时间（秒）（避免超出30秒）", ai_max_decision_seconds)
+        self.ai_max_decision_time = timedelta(seconds=ai_max_decision_seconds)
+
         logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
 
         self.last_step = (1, 1)
@@ -370,6 +374,7 @@ class Reversi(QWidget):
         beta = 0x7fffffff
 
         self.ai_start_time = datetime.now()
+        self.last_update_time = datetime.now()
 
         res = self.ai_min_max_dfs(0, valid_cells, self.step_cell, alpha, beta)
 
@@ -380,6 +385,12 @@ class Reversi(QWidget):
         return res[0]
 
     def ai_min_max_dfs(self, depth, valid_cells: List[Tuple[int, int]], ai_step_cell, alpha, beta) -> Tuple[Optional[Tuple[int, int]], int]:
+        if datetime.now() - self.last_update_time >= timedelta(seconds=0.1):
+            since_start = datetime.now() - self.ai_start_time
+            remaining_time = (self.ai_max_decision_time - since_start)
+            self.label_turn.setText(f"{remaining_time.total_seconds():.1f}秒")
+            self.last_update_time = datetime.now()
+
         if depth == self.ai_dfs_max_depth:
             return (None, self.evaluate(ai_step_cell))
 
@@ -402,10 +413,8 @@ class Reversi(QWidget):
             # 按照权重先排个序
             valid_cells = sorted(valid_cells, key=lambda v: weight_map[v[0] - 1][v[1] - 1], reverse=need_reverse_weights)
             for next_move_row_index, next_move_col_index in valid_cells:
-                # 设置一个最大搜索时间（预留4秒给人反应）
-                max_wait_time = timedelta(seconds=26)
                 since_start = datetime.now() - self.ai_start_time
-                if since_start >= max_wait_time:
+                if since_start >= self.ai_max_decision_time:
                     logger.info(f"等待时间已达到{since_start}，将强制停止搜索")
                     break
 

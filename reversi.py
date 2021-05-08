@@ -143,9 +143,9 @@ class Reversi(QWidget):
         self.label_blue_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
         self.label_blue_score.setGeometry(180, 60, 40, 30)
 
-        self.label_blue_name = QLabel('大师南瓜球', self)
-        self.label_blue_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_blue_name.setGeometry(540, 40, 120, 20)
+        self.label_red_name = QLabel('大师南瓜球', self)
+        self.label_red_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
+        self.label_red_name.setGeometry(540, 40, 120, 20)
 
         self.label_red_score = QLabel('2', self)
         self.label_red_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")

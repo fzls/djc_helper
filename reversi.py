@@ -902,8 +902,7 @@ class AiThread(QThread):
         min_decision_seconds = timedelta(seconds=self.reversi.ai_min_decision_seconds)
         if ut < min_decision_seconds:
             wt = (min_decision_seconds - ut).total_seconds()
-            if self.reversi.debug:
-                logger.info(f"耗时低于{min_decision_seconds}，等待至{min_decision_seconds}再落子")
+            logger.debug(f"耗时低于{min_decision_seconds}，等待至{min_decision_seconds}再落子")
             time.sleep(wt)
 
         self.signal_move.emit(row, col)

@@ -1,3 +1,14 @@
+# 更新器不启用文件日志
+
+import logging
+
+from log import logger, fileHandler, new_file_handler
+
+logger.name = "reversi"
+logger.removeHandler(fileHandler)
+logger.addHandler(new_file_handler())
+logger.setLevel(logging.INFO)
+
 import copy
 import random
 import sys
@@ -43,7 +54,7 @@ class Reversi(QWidget):
         self.init_invalid_cells()
 
     def init_logic(self):
-        print(f"初始化逻辑数据")
+        logger.info(f"初始化逻辑数据")
 
         self.loop_index = 1
         self.invalid_cell_count = 0
@@ -58,7 +69,6 @@ class Reversi(QWidget):
 
         self.game_start_time = datetime.now()
 
-        self.debug = False
         if QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes:
             self.set_ai(cell_blue, self.ai_min_max)
         if QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes:
@@ -70,7 +80,7 @@ class Reversi(QWidget):
         ai_min_decision_seconds = 0.5
         self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", ai_min_decision_seconds)
 
-        print(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
+        logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
 
         self.last_step = (1, 1)
 
@@ -150,18 +160,17 @@ class Reversi(QWidget):
 
                 def cb(ri, ci):
                     def _cb():
-                        if self.debug:
-                            print(f"clicked row={ri}, col={ci}")
+                        logger.debug(f"clicked row={ri}, col={ci}")
 
                         # 初始化无效格子
                         if self.invalid_cell_count < invalid_cell_count:
                             if self.board[ri][ci] != cell_empty:
-                                print("该格子不为空，不能设置为无效格子")
+                                logger.info("该格子不为空，不能设置为无效格子")
                                 return
 
                             self.board[ri][ci] = cell_invalid
                             self.invalid_cell_count = self.invalid_cell_count + 1
-                            print(f"设置第{self.invalid_cell_count}个无效位置")
+                            logger.info(f"设置第{self.invalid_cell_count}个无效位置")
                             self.paint()
 
                             if self.invalid_cell_count == invalid_cell_count:
@@ -170,7 +179,7 @@ class Reversi(QWidget):
                             return
 
                         if self.current_step_cell() in self.ai_cells and not self.ai_moving:
-                            print("当前回合由机器人托管，将无视该点击")
+                            logger.info("当前回合由机器人托管，将无视该点击")
                             return
                         self.ai_moving = False
 
@@ -180,10 +189,10 @@ class Reversi(QWidget):
                             return
 
                         if not self.has_any_valid_cell():
-                            print("本轮无任何可行落子，将轮空")
+                            logger.info("本轮无任何可行落子，将轮空")
                             self.next_turn()
                             if not self.has_any_valid_cell():
-                                print("双方均不可再落子，游戏结束")
+                                logger.info("双方均不可再落子，游戏结束")
                                 self.game_over()
                                 return
 
@@ -211,7 +220,7 @@ class Reversi(QWidget):
 
     def ai_try_put_cell(self):
         if self.invalid_cell_count < invalid_cell_count:
-            print("棋盘无效位置未初始化，ai暂不操作")
+            logger.info("棋盘无效位置未初始化，ai暂不操作")
             return
 
         if self.current_step_cell() in self.ai_cells:
@@ -220,7 +229,7 @@ class Reversi(QWidget):
             worker.start()
 
     def on_ai_move(self, row, col):
-        print(f"{self.cell_name(self.current_step_cell(), False)}ai执行操作为 {chr(ord('a') + row - 1)}行{col}列")
+        logger.info(f"{self.cell_name(self.current_step_cell(), False)}ai执行操作为 {chr(ord('a') + row - 1)}行{col}列")
 
         # 机器人落子
         self.ai_moving = True
@@ -264,7 +273,7 @@ class Reversi(QWidget):
 
         re_arguments = r'([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8])'
         while re.match(re_arguments, raw_input) is None:
-            print("格式有误")
+            logger.info("格式有误")
             raw_input = input(prompt)
 
         row_cols = re.match(re_arguments, raw_input).groups()
@@ -282,7 +291,7 @@ class Reversi(QWidget):
 
     def set_ai(self, cell_color, ai_algorithm_fn):
         self.ai_cells[cell_color] = ai_algorithm_fn
-        print(self.cell_name(cell_color) + color("bold_green") + f"将被ai托管，算法为{ai_algorithm_fn}")
+        logger.info(self.cell_name(cell_color) + color("bold_green") + f"将被ai托管，算法为{ai_algorithm_fn}")
 
     def play_with_cgi(self):
         # self.set_ai(cell_red, self.ai_random)
@@ -293,16 +302,16 @@ class Reversi(QWidget):
         while not self.is_game_over():
             self.paint()
 
-            print(f"当前回合为 {self.cell_name(self.current_step_cell())}")
+            logger.info(f"当前回合为 {self.cell_name(self.current_step_cell())}")
 
             if not self.has_any_valid_cell():
                 bye_count += 1
                 if bye_count < 2:
-                    print("本轮无任何可行落子，将轮空")
+                    logger.info("本轮无任何可行落子，将轮空")
                     self.next_turn()
                     continue
                 else:
-                    print("双方均不可再落子，游戏结束")
+                    logger.info("双方均不可再落子，游戏结束")
                     break
 
             if self.current_step_cell() not in self.ai_cells:
@@ -314,7 +323,7 @@ class Reversi(QWidget):
                 row, col = self.next_move_by_ai()
 
                 wait_time = 0.01
-                print(f"ai执行操作为 {chr(ord('a') + row - 1)}行{col}列，并等待{wait_time}秒")
+                logger.info(f"ai执行操作为 {chr(ord('a') + row - 1)}行{col}列，并等待{wait_time}秒")
                 time.sleep(wait_time)
             self.put_cell(row, col)
 
@@ -397,7 +406,7 @@ class Reversi(QWidget):
                 max_wait_time = timedelta(seconds=26)
                 since_start = datetime.now() - self.ai_start_time
                 if since_start >= max_wait_time:
-                    print(f"等待时间已达到{since_start}，将强制停止搜索")
+                    logger.info(f"等待时间已达到{since_start}，将强制停止搜索")
                     break
 
                 revoke_op = self.put_cell(next_move_row_index, next_move_col_index, ai_probe=True)
@@ -428,8 +437,7 @@ class Reversi(QWidget):
 
                 # 剪枝
                 if alpha >= beta:
-                    if self.debug:
-                        print(f"剪枝 alpha={alpha}, beta={beta}")
+                    logger.debug(f"剪枝 alpha={alpha}, beta={beta}")
                     break
         else:
             # 本方无可行下子，跳过本轮
@@ -452,8 +460,7 @@ class Reversi(QWidget):
             f"alpha={alpha}, beta={beta}",
         ])
 
-        if self.debug:
-            print(debug)
+        logger.debug(debug)
         return best_next_move
 
     def evaluate(self, ai_step_cell) -> int:
@@ -614,7 +621,7 @@ class Reversi(QWidget):
 
         if len(valid_directions) == 0:
             if not ai_probe:
-                print(color("bold_yellow") + f"无效的下子(row={row_index}, col={col_index}, color={self.cell_name(self.step_cell)})，请重新操作" + asciiReset)
+                logger.info(color("bold_yellow") + f"无效的下子(row={row_index}, col={col_index}, color={self.cell_name(self.step_cell)})，请重新操作" + asciiReset)
                 return None
 
             # 换手
@@ -630,7 +637,7 @@ class Reversi(QWidget):
         self.last_step = (row_index, col_index)
 
         if not ai_probe and self.current_step_cell() not in self.ai_cells:
-            print(f"第{self.loop_index}轮人类执行操作为 {chr(ord('a') + row_index - 1)}行{col_index}列")
+            logger.info(f"第{self.loop_index}轮人类执行操作为 {chr(ord('a') + row_index - 1)}行{col_index}列")
 
         # 执行翻转
         undo_indexes = []
@@ -710,12 +717,12 @@ class Reversi(QWidget):
         return True
 
     def game_over(self):
-        print(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
+        logger.info(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
         self.notify('游戏结束')
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
         if restart:
-            print("重新开始游戏")
+            logger.info("重新开始游戏")
 
             self.init_logic()
             self.paint()
@@ -737,18 +744,18 @@ class Reversi(QWidget):
         else:
             winner = self.cell_name(cell_red)
 
-        print(f"{self.cell_name(cell_blue)}={blue}")
-        print(f"{self.cell_name(cell_red)}={red}")
-        print(color("bold_yellow") + f"胜方为{winner}")
+        logger.info(f"{self.cell_name(cell_blue)}={blue}")
+        logger.info(f"{self.cell_name(cell_red)}={red}")
+        logger.info(color("bold_yellow") + f"胜方为{winner}")
 
     def paint(self, show_cui_detail=False):
-        print('-' * 20)
+        logger.info('-' * 20)
         blue_score = self.with_color(f"蓝方：{self.score(cell_blue)}", "blue")
         red_score = self.with_color(f"红方：{self.score(cell_red)}", "red")
-        print(f"{datetime.now().strftime('%H:%M:%S')}: {blue_score}\t{red_score}")
+        logger.info(f"{datetime.now().strftime('%H:%M:%S')}: {blue_score}\t{red_score}")
 
         if show_cui_detail:
-            print(' '.join(['  ', *[str(col_idx + 1) for col_idx in range(board_size)]]))
+            logger.info(' '.join(['  ', *[str(col_idx + 1) for col_idx in range(board_size)]]))
             for row_index in range_from_one(board_size):
 
                 state = [f'{chr(ord("a") + row_index - 1)} ']
@@ -777,10 +784,10 @@ class Reversi(QWidget):
                         state.append(self.with_color('X', 'bold_white'))
 
                 state.append('')
-                print('|'.join(state))
+                logger.info('|'.join(state))
 
             if not self.has_any_valid_cell():
-                print("本轮无任何可行落子，将轮空")
+                logger.info("本轮无任何可行落子，将轮空")
 
         # gui
         # 绘制格子
@@ -825,7 +832,7 @@ class Reversi(QWidget):
                 self.label_turn.setStyleSheet(f"color: red; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
 
             if not self.has_any_valid_cell():
-                print("本轮无任何可行落子，将轮空")
+                logger.info("本轮无任何可行落子，将轮空")
                 if len(self.ai_cells) < 2:
                     self.notify(self.cell_name(self.current_step_cell(), with_color=False) + '轮空，请点击任意位置结束本轮')
 
@@ -881,13 +888,13 @@ class AiThread(QThread):
         row, col = self.reversi.next_move_by_ai()
 
         ut = datetime.now() - self.time_start
-        print(f"第{self.reversi.loop_index}轮决策共耗时{ut.total_seconds():.1f}秒")
+        logger.info(f"第{self.reversi.loop_index}轮决策共耗时{ut.total_seconds():.1f}秒")
 
         min_decision_seconds = timedelta(seconds=self.reversi.ai_min_decision_seconds)
         if ut < min_decision_seconds:
             wt = (min_decision_seconds - ut).total_seconds()
             if self.reversi.debug:
-                print(f"耗时低于{min_decision_seconds}，等待至{min_decision_seconds}再落子")
+                logger.info(f"耗时低于{min_decision_seconds}，等待至{min_decision_seconds}再落子")
             time.sleep(wt)
 
         self.signal_move.emit(row, col)

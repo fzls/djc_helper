@@ -108,6 +108,16 @@ class Reversi(QWidget):
         self.init_board_without_invalid_cells()
 
     def init_invalid_cells(self):
+        # 设置玩家名称
+        if cell_blue in self.ai_cells:
+            self.label_blue_name.setText("蓝方-AI托管")
+        else:
+            self.label_blue_name.setText("蓝方")
+        if cell_red in self.ai_cells:
+            self.label_red_name.setText("大师南瓜球-AI托管")
+        else:
+            self.label_red_name.setText("大师南瓜球")
+
         if len(self.ai_cells) < 2:
             # self.init_invalid_cells_randomly()
             self.init_invalid_cells_by_click()
@@ -135,9 +145,9 @@ class Reversi(QWidget):
         self.label_turn.setStyleSheet(f"color: blue; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
         self.label_turn.setGeometry(350, 60, 500, 40)
 
-        self.label_blue_name = QLabel('蓝方（ai）', self)
+        self.label_blue_name = QLabel('蓝方-AI托管', self)
         self.label_blue_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_blue_name.setGeometry(150, 40, 120, 20)
+        self.label_blue_name.setGeometry(150, 40, 180, 20)
 
         self.label_blue_score = QLabel('2', self)
         self.label_blue_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
@@ -145,7 +155,7 @@ class Reversi(QWidget):
 
         self.label_red_name = QLabel('大师南瓜球', self)
         self.label_red_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_red_name.setGeometry(540, 40, 120, 20)
+        self.label_red_name.setGeometry(520, 40, 180, 20)
 
         self.label_red_score = QLabel('2', self)
         self.label_red_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")

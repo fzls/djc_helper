@@ -6,7 +6,7 @@ from collections import Counter
 from datetime import datetime, timedelta
 from typing import List, Tuple, Callable, Optional
 
-from PyQt5.Qt import (QWidget, QLabel, QApplication, QImage, QSize, QPalette, QBrush, QPushButton, QIcon, QMessageBox)
+from PyQt5.Qt import (QWidget, QLabel, QApplication, QImage, QSize, QPalette, QBrush, QPushButton, QIcon, QMessageBox, QInputDialog)
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
@@ -22,10 +22,7 @@ cell_invalid = 2
 
 invalid_cell_count = 5
 
-ai_dfs_max_depth = 6
-ai_min_decision_seconds = 1
-
-print(f"ai最大迭代次数为{ai_dfs_max_depth}，每次操作至少{ai_min_decision_seconds}秒")
+ai_min_decision_seconds = 0.01
 
 weight_map = [
     [500, -25, 10, 5, 5, 10, -25, 500],
@@ -67,7 +64,12 @@ class Reversi(QWidget):
         if QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes:
             self.set_ai(cell_blue, self.ai_min_max)
         if QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes:
-            self.set_ai(cell_red, self.ai_min_max)
+            self.set_ai(cell_red, self.ai_random)
+
+        ai_dfs_max_depth = 4
+        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai智能程度", f"ai最大搜索层数（越大越强，速度越慢，默认为{ai_dfs_max_depth}）", ai_dfs_max_depth)
+
+        print(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{ai_min_decision_seconds}秒")
 
         self.last_step = (1, 1)
 
@@ -82,7 +84,6 @@ class Reversi(QWidget):
             self.init_invalid_cells_randomly()
 
         self.ai_try_put_cell()
-
 
     def init_ui(self):
         width = 800
@@ -218,7 +219,7 @@ class Reversi(QWidget):
             worker.start()
 
     def on_ai_move(self, row, col):
-        print(f"ai执行操作为 {chr(ord('a') + row - 1)}行{col}列")
+        print(f"{self.cell_name(self.current_step_cell(), False)}ai执行操作为 {chr(ord('a') + row - 1)}行{col}列")
 
         # 机器人落子
         self.ai_moving = True
@@ -367,7 +368,7 @@ class Reversi(QWidget):
         return res[0]
 
     def ai_min_max_dfs(self, depth, valid_cells: List[Tuple[int, int]], ai_step_cell, alpha, beta) -> Tuple[Optional[Tuple[int, int]], int]:
-        if depth == ai_dfs_max_depth:
+        if depth == self.ai_dfs_max_depth:
             return (None, self.evaluate(ai_step_cell))
 
         debug = [depth]
@@ -731,7 +732,7 @@ class Reversi(QWidget):
         print(color("bold_yellow") + f"胜方为{winner}")
 
     def paint(self, show_cui_detail=False):
-        print('-'*20)
+        print('-' * 20)
         blue_score = self.with_color(f"蓝方：{self.score(cell_blue)}", "blue")
         red_score = self.with_color(f"红方：{self.score(cell_red)}", "red")
         print(f"{datetime.now().strftime('%H:%M:%S')}: {blue_score}\t{red_score}")

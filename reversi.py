@@ -360,6 +360,8 @@ class Reversi(QWidget):
         alpha = -0x7fffffff
         beta = 0x7fffffff
 
+        self.ai_start_time = datetime.now()
+
         res = self.ai_min_max_dfs(0, valid_cells, self.step_cell, alpha, beta)
 
         # resume
@@ -391,6 +393,13 @@ class Reversi(QWidget):
             # 按照权重先排个序
             valid_cells = sorted(valid_cells, key=lambda v: weight_map[v[0] - 1][v[1] - 1], reverse=need_reverse_weights)
             for next_move_row_index, next_move_col_index in valid_cells:
+                # 设置一个最大搜索时间（预留4秒给人反应）
+                max_wait_time = timedelta(seconds=26)
+                since_start = datetime.now() - self.ai_start_time
+                if since_start >= max_wait_time:
+                    print(f"等待时间已达到{since_start}，将强制停止搜索")
+                    break
+
                 revoke_op = self.put_cell(next_move_row_index, next_move_col_index, ai_probe=True)
 
                 next_depth_best_move = self.ai_min_max_dfs(depth + 1, self.get_valid_cells(self.current_step_cell()), ai_step_cell, alpha, beta)

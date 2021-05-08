@@ -15,7 +15,7 @@ import sys
 import time
 from collections import Counter
 from datetime import datetime, timedelta
-from typing import List, Tuple, Callable, Optional
+from typing import List, Tuple, Callable, Optional, Dict
 
 from PyQt5.Qt import (QWidget, QLabel, QApplication, QImage, QSize, QPalette, QBrush, QPushButton, QIcon, QMessageBox, QInputDialog)
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -45,6 +45,22 @@ weight_map = [
 ]
 
 
+class AvgStat:
+    def __init__(self):
+        self.count = 0
+        self.total = 0.0
+
+    def add(self, val):
+        self.count += 1
+        self.total += val
+
+    def avg(self):
+        if self.count == 0:
+            return 0.0
+
+        return self.total / self.count
+
+
 class Reversi(QWidget):
     def __init__(self):
         super().__init__()
@@ -64,6 +80,7 @@ class Reversi(QWidget):
 
         # ai托管，默认不托管
         self.ai_cells = {}
+        self.ai_to_avg_stat = {}  # type: Dict[int, AvgStat]
 
         self.ai_moving = False
 
@@ -295,6 +312,7 @@ class Reversi(QWidget):
 
     def set_ai(self, cell_color, ai_algorithm_fn):
         self.ai_cells[cell_color] = ai_algorithm_fn
+        self.ai_to_avg_stat[cell_color] = AvgStat()
         logger.info(self.cell_name(cell_color) + color("bold_green") + f"将被ai托管，算法为{ai_algorithm_fn}")
 
     def play_with_cgi(self):
@@ -378,6 +396,9 @@ class Reversi(QWidget):
 
         res = self.ai_min_max_dfs(0, valid_cells, self.step_cell, alpha, beta)
 
+        used_time = datetime.now() - self.ai_start_time
+        self.ai_to_avg_stat[self.step_cell].add(used_time.total_seconds())
+
         # resume
         self.board = backup_board
         self.step_cell = backup_step_cell
@@ -385,10 +406,13 @@ class Reversi(QWidget):
         return res[0]
 
     def ai_min_max_dfs(self, depth, valid_cells: List[Tuple[int, int]], ai_step_cell, alpha, beta) -> Tuple[Optional[Tuple[int, int]], int]:
-        if datetime.now() - self.last_update_time >= timedelta(seconds=0.1):
+        if datetime.now() - self.last_update_time >= timedelta(seconds=1 / 60):
             since_start = datetime.now() - self.ai_start_time
             remaining_time = (self.ai_max_decision_time - since_start)
-            self.label_turn.setText(f"{remaining_time.total_seconds():.1f}秒")
+
+            avg_used_time = self.ai_to_avg_stat[ai_step_cell].avg()
+
+            self.label_turn.setText(f"{remaining_time.total_seconds():.1f}(平均{avg_used_time:.1f})")
             self.last_update_time = datetime.now()
 
         if depth == self.ai_dfs_max_depth:

@@ -22,8 +22,6 @@ cell_invalid = 2
 
 invalid_cell_count = 5
 
-ai_min_decision_seconds = 0.01
-
 weight_map = [
     [500, -25, 10, 5, 5, 10, -25, 500],
     [-25, -45, 1, 1, 1, 1, -45, -25],
@@ -67,9 +65,12 @@ class Reversi(QWidget):
             self.set_ai(cell_red, self.ai_random)
 
         ai_dfs_max_depth = 4
-        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai智能程度", f"ai最大搜索层数（越大越强，速度越慢，默认为{ai_dfs_max_depth}）", ai_dfs_max_depth)
+        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{ai_dfs_max_depth}）", ai_dfs_max_depth)
 
-        print(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{ai_min_decision_seconds}秒")
+        ai_min_decision_seconds = 0.5
+        self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", ai_min_decision_seconds)
+
+        print(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
 
         self.last_step = (1, 1)
 
@@ -873,7 +874,7 @@ class AiThread(QThread):
         ut = datetime.now() - self.time_start
         print(f"第{self.reversi.loop_index}轮决策共耗时{ut.total_seconds():.1f}秒")
 
-        min_decision_seconds = timedelta(seconds=ai_min_decision_seconds)
+        min_decision_seconds = timedelta(seconds=self.reversi.ai_min_decision_seconds)
         if ut < min_decision_seconds:
             wt = (min_decision_seconds - ut).total_seconds()
             if self.reversi.debug:

@@ -86,11 +86,6 @@ class Reversi(QWidget):
 
         self.game_start_time = datetime.now()
 
-        if QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes:
-            self.set_ai(cell_blue, self.ai_min_max)
-        if QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes:
-            self.set_ai(cell_red, self.ai_min_max)
-
         ai_dfs_max_depth = 4
         self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{ai_dfs_max_depth}）", ai_dfs_max_depth)
 
@@ -102,6 +97,11 @@ class Reversi(QWidget):
         self.ai_max_decision_time = timedelta(seconds=ai_max_decision_seconds)
 
         logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
+
+        if QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes:
+            self.set_ai(cell_blue, self.ai_min_max)
+        if QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes:
+            self.set_ai(cell_red, self.ai_min_max)
 
         self.last_step = (1, 1)
 

@@ -109,7 +109,7 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
         qq2index[qq] = idx
 
 
-def do_check_all_skey_and_pskey(idx: int, window_index:int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
+def do_check_all_skey_and_pskey(idx: int, window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
     if not account_config.is_enabled():
         # 未启用的账户的账户不走该流程
         return None
@@ -649,7 +649,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
     if user_buy_info.total_buy_month != 0:
         if user_buy_info.is_active():
             rt = user_buy_info.remaining_time()
-            monthly_pay_info = f"按月付费剩余时长为 {rt.days}天{rt.seconds//3600}小时"
+            monthly_pay_info = f"按月付费剩余时长为 {rt.days}天{rt.seconds // 3600}小时"
         else:
             monthly_pay_info = "按月付费已过期"
     change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size())
@@ -679,7 +679,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
         async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION)
 
 
-def show_buy_info_sync(ctx):
+def show_buy_info_sync(ctx, force_message_box=False):
     usedDays = get_count(my_usage_counter_name, "all")
     message = (
         f"{ctx}\n"
@@ -701,7 +701,7 @@ def show_buy_info_sync(ctx):
         "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)
-    if not use_by_myself():
+    if not use_by_myself() or force_message_box:
         win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
     os.popen("支持一下.png")
 
@@ -1143,3 +1143,5 @@ if __name__ == '__main__':
 
     # _test_main()
     test_pay_info()
+
+    # show_buy_info_sync("test", True)

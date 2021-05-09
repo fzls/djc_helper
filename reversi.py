@@ -86,22 +86,25 @@ class Reversi(QWidget):
 
         self.game_start_time = datetime.now()
 
-        ai_dfs_max_depth = 4
-        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{ai_dfs_max_depth}）", ai_dfs_max_depth)
+        self.ai_dfs_max_depth = 4
+        self.ai_min_decision_seconds = 0.5
+        self.ai_max_decision_time = timedelta(seconds=26)
+        blue_set_ai = True
+        red_set_ai = True
 
-        ai_min_decision_seconds = 0.5
-        self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", ai_min_decision_seconds)
+        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{self.ai_dfs_max_depth}）", self.ai_dfs_max_depth)
+        self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds)
+        ai_max_decision_time, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最大等待时间（秒）（避免超出30秒）", self.ai_max_decision_time.total_seconds())
+        self.ai_max_decision_time = timedelta(seconds=ai_max_decision_time)
+        blue_set_ai = QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes
+        red_set_ai = QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes
 
-        ai_max_decision_seconds = 26
-        ai_max_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最大等待时间（秒）（避免超出30秒）", ai_max_decision_seconds)
-        self.ai_max_decision_time = timedelta(seconds=ai_max_decision_seconds)
-
-        logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒")
-
-        if QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes:
+        if blue_set_ai:
             self.set_ai(cell_blue, self.ai_min_max)
-        if QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes:
+        if red_set_ai:
             self.set_ai(cell_red, self.ai_min_max)
+
+        logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒，最大等待时间为{self.ai_max_decision_time}秒")
 
         self.last_step = (1, 1)
 

@@ -911,12 +911,18 @@ class Reversi(QWidget):
             self.label_turn.setText(f"请继续点击{invalid_cell_count - self.invalid_cell_count}个格子，设置为无效格子")
             self.label_turn.setStyleSheet(f"color: cyan; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
         else:
+            turn_name = ""
             if self.current_step_cell() == cell_blue:
-                self.label_turn.setText("蓝方回合")
+                turn_name = "蓝方回合"
                 self.label_turn.setStyleSheet(f"color: blue; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
             else:
-                self.label_turn.setText("红方回合")
+                turn_name = "红方回合"
                 self.label_turn.setStyleSheet(f"color: red; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
+
+            if self.current_step_cell() in self.ai_cells:
+                turn_name += "-AI托管"
+
+            self.label_turn.setText(turn_name)
 
             if not self.has_any_valid_cell():
                 logger.info("本轮无任何可行落子，将轮空")

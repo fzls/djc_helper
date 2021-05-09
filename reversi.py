@@ -170,8 +170,13 @@ class Reversi(QWidget):
 
         self.btn_manunal_bye = QPushButton('手动轮空', self)
         self.btn_manunal_bye.setStyleSheet(f"color: #cf8160; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei; background-color: #89090a")
-        self.btn_manunal_bye.setGeometry(680, 460, 80, 30)
+        self.btn_manunal_bye.setGeometry(685, 460, 80, 30)
         self.btn_manunal_bye.clicked.connect(self.manunal_bye)
+
+        self.btn_restart = QPushButton('重新开始', self)
+        self.btn_restart.setStyleSheet(f"color: #cf8160; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei; background-color: #89090a")
+        self.btn_restart.setGeometry(685, 505, 80, 30)
+        self.btn_restart.clicked.connect(self.restart)
 
         # 180 120
         # 445 -> 480 (row 1 -> 8 top )
@@ -266,6 +271,14 @@ class Reversi(QWidget):
         self.label_count_down.setText(self.cell_name(self.step_cell, False) + "主动轮空")
         self.next_turn()
         self.paint()
+
+    def restart(self):
+        logger.info("重新开始游戏")
+        self.label_count_down.setText("重新开始")
+
+        self.init_logic()
+        self.paint()
+        self.init_invalid_cells()
 
     def ai_try_put_cell(self):
         if self.invalid_cell_count < invalid_cell_count:
@@ -784,11 +797,7 @@ class Reversi(QWidget):
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
         if restart:
-            logger.info("重新开始游戏")
-
-            self.init_logic()
-            self.paint()
-            self.init_invalid_cells()
+            self.restart()
 
     def show_game_result(self):
         # 数子

@@ -85,6 +85,7 @@ class Reversi(QWidget):
         self.ai_moving = False
 
         self.game_start_time = datetime.now()
+        self.game_restarted = False
 
         self.ai_dfs_max_depth = 4
         self.ai_min_decision_seconds = 0.5
@@ -272,9 +273,14 @@ class Reversi(QWidget):
         self.next_turn()
         self.paint()
 
-    def restart(self):
+    def restart(self, clicked=True, manual=True):
         logger.info("重新开始游戏")
         self.label_count_down.setText("重新开始")
+
+        self.game_restarted = True
+        if manual:
+            logger.info("等待一秒，确保AI停止")
+            time.sleep(1)
 
         self.init_logic()
         self.paint()
@@ -513,6 +519,11 @@ class Reversi(QWidget):
                 since_start = datetime.now() - self.ai_start_time
                 if since_start >= self.ai_max_decision_time:
                     logger.info(f"等待时间已达到{since_start}，将强制停止搜索")
+                    break
+
+                # 如果重开了，停止处理
+                if self.game_restarted:
+                    logger.info(f"游戏重开，将强制停止搜索")
                     break
         else:
             # 本方无可行下子，跳过本轮
@@ -797,7 +808,7 @@ class Reversi(QWidget):
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
         if restart:
-            self.restart()
+            self.restart(manual=False)
 
     def show_game_result(self):
         # 数子

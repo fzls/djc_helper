@@ -357,7 +357,8 @@ class Reversi(QWidget):
 
     def init_invalid_cells_by_click(self):
         # 界面提示点击五个按钮
-        self.notify("请点击五个格子，设置为无效格子")
+        if invalid_cell_count > 0:
+            self.notify(f"请点击{invalid_cell_count}个格子，设置为无效格子")
 
     def set_ai(self, cell_color, ai_algorithm_fn):
         self.ai_cells[cell_color] = ai_algorithm_fn

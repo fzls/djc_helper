@@ -273,6 +273,8 @@ class Reversi(QWidget):
         self.next_turn()
         self.paint()
 
+        self.ai_try_put_cell()
+
     def restart(self, clicked=True, manual=True):
         logger.info("重新开始游戏")
         self.label_count_down.setText("重新开始")

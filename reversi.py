@@ -141,6 +141,10 @@ class Reversi(QWidget):
         self.setPalette(palette)
 
         # 初始化棋盘元素
+        self.label_count_down = QLabel('', self)
+        self.label_count_down.setStyleSheet(f"color: orange; font-size: 30px; font-weight: bold; font-family: Microsoft YaHei")
+        self.label_count_down.setGeometry(350, 0, 500, 60)
+
         self.label_turn = QLabel('蓝方回合', self)
         self.label_turn.setStyleSheet(f"color: blue; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
         self.label_turn.setGeometry(350, 60, 500, 40)
@@ -422,7 +426,7 @@ class Reversi(QWidget):
 
             avg_used_time = self.ai_to_avg_stat[ai_step_cell].avg()
 
-            self.label_turn.setText(f"{remaining_time.total_seconds():.1f}(平均{avg_used_time:.1f})")
+            self.label_count_down.setText(f"{remaining_time.total_seconds():.1f}(平均{avg_used_time:.1f})")
             self.last_update_time = datetime.now()
 
         if depth == self.ai_dfs_max_depth:

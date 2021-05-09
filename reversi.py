@@ -168,6 +168,11 @@ class Reversi(QWidget):
         self.label_red_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
         self.label_red_score.setGeometry(570, 60, 40, 30)
 
+        self.btn_manunal_bye = QPushButton('手动轮空', self)
+        self.btn_manunal_bye.setStyleSheet(f"color: #cf8160; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei; background-color: #89090a")
+        self.btn_manunal_bye.setGeometry(680, 460, 80, 30)
+        self.btn_manunal_bye.clicked.connect(self.manunal_bye)
+
         # 180 120
         # 445 -> 480 (row 1 -> 8 top )
         mid_top_x, mid_top_y = 400, 120
@@ -255,6 +260,12 @@ class Reversi(QWidget):
         self.paint()
 
         self.show()
+
+    def manunal_bye(self):
+        logger.info("手动点击轮空，跳过本轮")
+        self.label_count_down.setText(self.cell_name(self.step_cell, False) + "主动轮空")
+        self.next_turn()
+        self.paint()
 
     def ai_try_put_cell(self):
         if self.invalid_cell_count < invalid_cell_count:

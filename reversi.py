@@ -843,7 +843,7 @@ class Reversi(QWidget):
         return True
 
     def game_over(self):
-        logger.info(color("bold_cyan") + f"游戏已经结束，共耗时：{datetime.now() - self.game_start_time}")
+        self.show_game_result()
         self.notify('游戏结束')
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
@@ -868,7 +868,7 @@ class Reversi(QWidget):
 
         logger.info(f"{self.cell_name(cell_blue)}={blue}")
         logger.info(f"{self.cell_name(cell_red)}={red}")
-        logger.info(color("bold_yellow") + f"胜方为{winner}")
+        logger.info(color("bold_yellow") + f"游戏已经结束，胜方为{winner}，共耗时：{datetime.now() - self.game_start_time}")
 
     def paint(self, show_cui_detail=False):
         logger.info('-' * 20)

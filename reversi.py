@@ -15,7 +15,7 @@ import sys
 import time
 from collections import Counter
 from datetime import datetime, timedelta
-from typing import List, Tuple, Callable, Optional, Dict
+from typing import Tuple, Callable, Optional, Dict
 
 from PyQt5.Qt import (QLabel, QApplication, QImage, QSize, QPalette, QBrush, QIcon, QMessageBox, QDialog, QDialogButtonBox)
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -586,9 +586,9 @@ class Reversi(QWidget):
                 return best_next_move
 
             need_presearch = self.enable_presearch and \
-                not presearch and \
-                len(valid_cells) > self.ai_dfs_max_choice_per_depth and \
-                depth + self.ai_dfs_presearch_depth < self.ai_dfs_max_depth
+                             not presearch and \
+                             len(valid_cells) > self.ai_dfs_max_choice_per_depth and \
+                             depth + self.ai_dfs_presearch_depth < self.ai_dfs_max_depth
 
             if need_presearch:
                 # 预计算若干层得到各落子的评分，按照该评分排序

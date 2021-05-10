@@ -1025,7 +1025,9 @@ class AiThread(QThread):
         row, col = self.reversi.next_move_by_ai()
 
         ut = datetime.now() - self.time_start
-        logger.info(f"第{self.reversi.loop_index}轮决策共耗时{ut.total_seconds():.1f}秒")
+        cell_name = self.reversi.cell_name_without_color(self.reversi.step_cell)
+        avg = self.reversi.ai_to_avg_stat[self.reversi.step_cell].avg()
+        logger.info(f"第{self.reversi.loop_index}轮决策 {cell_name} 共耗时{ut.total_seconds():.1f}秒，平均耗时为{avg:.1f}秒")
 
         min_decision_seconds = self.reversi.ai_min_decision_seconds
         if ut < min_decision_seconds:

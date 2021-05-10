@@ -250,11 +250,20 @@ class Reversi(QWidget):
                                 self.game_over()
                                 return
 
-                        # 落子
+                        # 记录下当前方
                         current_step_cell = self.current_step_cell()
+
+                        # 落子
                         self.put_cell(ri, ci)
                         self.loop_index += 1
-                        logger.info(f"落子后当前{self.cell_name_without_color(current_step_cell)}局面分为{self.evaluate(current_step_cell)}")
+
+                        # 计算落子后当前方局面分
+                        current_score = self.evaluate(current_step_cell)
+                        if current_score >= 0:
+                            cr = "bold_red"
+                        else:
+                            cr = "bold_green"
+                        logger.info(color(cr) + f"落子后当前{self.cell_name_without_color(current_step_cell)}局面分为{current_score}")
 
                         # 重绘界面
                         self.paint()

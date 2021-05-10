@@ -874,7 +874,7 @@ class Reversi(QWidget):
         logger.info('-' * 20)
         blue_score = self.with_color(f"蓝方：{self.score(cell_blue)}", "blue")
         red_score = self.with_color(f"红方：{self.score(cell_red)}", "red")
-        logger.info(f"{datetime.now().strftime('%H:%M:%S')}: {blue_score}\t{red_score}")
+        logger.info(f"{blue_score}\t{red_score}")
 
         if show_cui_detail:
             logger.info(' '.join(['  ', *[str(col_idx + 1) for col_idx in range(board_size)]]))

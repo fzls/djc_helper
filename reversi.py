@@ -189,7 +189,7 @@ class Reversi(QWidget):
 
         self.label_turn = QLabel('蓝方回合', self)
         self.label_turn.setStyleSheet(f"color: blue; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_turn.setGeometry(350, 60, 500, 40)
+        self.label_turn.setGeometry(320, 60, 500, 40)
 
         self.label_blue_name = QLabel('蓝方-AI托管', self)
         self.label_blue_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
@@ -999,7 +999,7 @@ class Reversi(QWidget):
             if self.current_step_cell() in self.ai_cells:
                 turn_name += "-AI托管"
 
-            self.label_turn.setText(turn_name)
+            self.label_turn.setText(f"{self.loop_index}-{turn_name}")
 
             if not self.has_any_valid_cell():
                 logger.info("本轮无任何可行落子，将轮空")

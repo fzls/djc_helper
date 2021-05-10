@@ -197,7 +197,7 @@ class Reversi(QWidget):
 
         self.label_blue_score = QLabel('2', self)
         self.label_blue_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_blue_score.setGeometry(180, 60, 40, 30)
+        self.label_blue_score.setGeometry(180, 60, 120, 30)
 
         self.label_red_name = QLabel('大师南瓜球', self)
         self.label_red_name.setStyleSheet(f"color: gray; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei")
@@ -205,7 +205,7 @@ class Reversi(QWidget):
 
         self.label_red_score = QLabel('2', self)
         self.label_red_score.setStyleSheet(f"color: yellow; font-size: 24px; font-weight: bold; font-family: Microsoft YaHei")
-        self.label_red_score.setGeometry(570, 60, 40, 30)
+        self.label_red_score.setGeometry(570, 60, 120, 30)
 
         self.btn_manunal_bye = QPushButton('手动轮空', self)
         self.btn_manunal_bye.setStyleSheet(f"color: #cf8160; font-size: 18px; font-weight: bold; font-family: Microsoft YaHei; background-color: #89090a")
@@ -1006,8 +1006,10 @@ class Reversi(QWidget):
                 if len(self.ai_cells) < 2:
                     self.notify(self.cell_name(self.current_step_cell(), with_color=False) + '轮空，请点击任意位置结束本轮')
 
-        self.label_blue_score.setText(str(self.score(cell_blue)))
-        self.label_red_score.setText(str(self.score(cell_red)))
+        blue_evaluted_score = self.evaluate(cell_blue)
+        red_evaluted_score = -blue_evaluted_score
+        self.label_blue_score.setText(f"{self.score(cell_blue)}({blue_evaluted_score})")
+        self.label_red_score.setText(f"{self.score(cell_red)}({red_evaluted_score})")
 
         self.update()
 

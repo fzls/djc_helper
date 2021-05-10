@@ -278,6 +278,7 @@ class Reversi(QWidget):
                         if not self.has_any_valid_cell():
                             logger.info("本轮无任何可行落子，将轮空")
                             self.next_turn()
+                            self.loop_index += 1
                             if not self.has_any_valid_cell():
                                 logger.info("双方均不可再落子，游戏结束")
                                 self.game_over()
@@ -287,8 +288,9 @@ class Reversi(QWidget):
                         current_step_cell = self.current_step_cell()
 
                         # 落子
-                        self.put_cell(ri, ci)
-                        self.loop_index += 1
+                        is_valid = self.put_cell(ri, ci) is not None
+                        if is_valid:
+                            self.loop_index += 1
 
                         # 计算落子后当前方局面分
                         current_score = self.evaluate(current_step_cell)

@@ -956,12 +956,15 @@ class Reversi(QWidget):
 
         winner_name = self.cell_name(winner)
         winner_evaluated_score = self.evaluate(winner, ignore_game_over=True)
-        winner_avg = self.ai_to_avg_stat[winner].avg()
+        winner_avg = self.ai_to_avg_stat.get(winner, AvgStat()).avg()
 
         winner_counter[winner] += 1
 
-        logger.info(f"{self.cell_name(cell_blue)}={blue}, 胜利次数为{winner_counter[cell_blue]}，平均落子时间为{self.ai_to_avg_stat[cell_blue].avg():.1f}")
-        logger.info(f"{self.cell_name(cell_red)}={red}, 胜利次数为{winner_counter[cell_red]}，平均落子时间为{self.ai_to_avg_stat[cell_red].avg():.1f}")
+        avg_blue = self.ai_to_avg_stat.get(cell_blue, AvgStat()).avg()
+        avg_red = self.ai_to_avg_stat.get(cell_red, AvgStat()).avg()
+
+        logger.info(f"{self.cell_name(cell_blue)}={blue}, 胜利次数为{winner_counter[cell_blue]}，平均落子时间为{avg_blue:.1f}")
+        logger.info(f"{self.cell_name(cell_red)}={red}, 胜利次数为{winner_counter[cell_red]}，平均落子时间为{avg_red:.1f}")
         logger.info(color("bold_yellow") + f"游戏已经结束，胜方为{winner_name}，局面分为{winner_evaluated_score}，胜方平均落子时间为{winner_avg:.1f}，共耗时：{datetime.now() - self.game_start_time}")
 
     def get_current_winner_info(self) -> Tuple[int, int, int]:

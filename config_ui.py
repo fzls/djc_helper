@@ -4,14 +4,15 @@ logger.name = "config_ui"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
-import typing
+from typing import Tuple
 import subprocess
 from PyQt5.QtWidgets import (
-    QApplication, QFormLayout, QVBoxLayout, QHBoxLayout, QLineEdit, QCheckBox, QWidget, QTabWidget, QComboBox, QStyleFactory,
-    QDoubleSpinBox, QSpinBox, QFrame, QMessageBox, QPushButton, QInputDialog, QScrollArea, QLayout, QLabel, )
-from PyQt5.QtGui import QValidator, QIcon, QWheelEvent
-from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
+    QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
+    QMessageBox, QInputDialog, QLabel)
+from PyQt5.QtGui import QIcon, QValidator
+from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
 
+from qt_wrapper import *
 from config import *
 from setting import *
 from game_info import name_2_mobile_game_info_map
@@ -44,132 +45,10 @@ class PayResponse(ConfigInterface):
         self.msg = "ok"
 
 
-class QHLine(QFrame):
-    def __init__(self):
-        super(QHLine, self).__init__()
-        self.setFrameShape(QFrame.HLine)
-        self.setFrameShadow(QFrame.Sunken)
-
-
-class QVLine(QFrame):
-    def __init__(self):
-        super(QVLine, self).__init__()
-        self.setFrameShape(QFrame.VLine)
-        self.setFrameShadow(QFrame.Sunken)
-
-
-class MySpinbox(QSpinBox):
-    def __init__(self, parent=None):
-        super(MySpinbox, self).__init__(parent)
-
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event: QWheelEvent) -> None:
-        if self.hasFocus():
-            super(MySpinbox, self).wheelEvent(event)
-        else:
-            event.ignore()
-
-
-class MyDoubleSpinbox(QDoubleSpinBox):
-    def __init__(self, parent=None):
-        super(MyDoubleSpinbox, self).__init__(parent)
-
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event: QWheelEvent) -> None:
-        if self.hasFocus():
-            super(MyDoubleSpinbox, self).wheelEvent(event)
-        else:
-            event.ignore()
-
-
-class MyComboBox(QComboBox):
-    def wheelEvent(self, event: QWheelEvent) -> None:
-        if self.hasFocus():
-            super(MyComboBox, self).wheelEvent(event)
-        else:
-            event.ignore()
-
-
 class BiDict():
     def __init__(self, original_dict: dict):
         self.key_to_val = dict({k: v for k, v in original_dict.items()})
         self.val_to_key = dict({v: k for k, v in original_dict.items()})
-
-
-def create_pushbutton(text, color="", tooltip="") -> QPushButton:
-    btn = QPushButton(text)
-    btn.setStyleSheet(f"background-color: {color}; font-weight: bold; font-family: Microsoft YaHei")
-    btn.setToolTip(tooltip)
-
-    return btn
-
-
-def create_checkbox(val=False, name="") -> QCheckBox:
-    checkbox = QCheckBox(name)
-
-    checkbox.setChecked(val)
-
-    return checkbox
-
-
-def create_spin_box(value: int, maximum: int = 99999, minimum: int = 0) -> MySpinbox:
-    spinbox = MySpinbox()
-    spinbox.setMaximum(maximum)
-    spinbox.setMinimum(minimum)
-
-    spinbox.setValue(value)
-
-    return spinbox
-
-
-def create_double_spin_box(value: float, maximum: float = 1.0, minimum: float = 0.0) -> MyDoubleSpinbox:
-    spinbox = MyDoubleSpinbox()
-    spinbox.setMaximum(maximum)
-    spinbox.setMinimum(minimum)
-
-    spinbox.setValue(value)
-
-    return spinbox
-
-
-def create_combobox(current_val: str, values: List[str] = None) -> MyComboBox:
-    combobox = MyComboBox()
-
-    combobox.setFocusPolicy(Qt.StrongFocus)
-
-    if values is not None:
-        combobox.addItems(values)
-    combobox.setCurrentText(current_val)
-
-    return combobox
-
-
-def create_lineedit(current_text: str, placeholder_text="") -> QLineEdit:
-    lineedit = QLineEdit(current_text)
-
-    lineedit.setPlaceholderText(placeholder_text)
-
-    return lineedit
-
-
-def add_form_seperator(form_layout: QFormLayout, title: str):
-    form_layout.addRow(f"=== {title} ===", QHLine())
-
-
-def make_scroll_layout(inner_layout: QLayout):
-    widget = QWidget()
-    widget.setLayout(inner_layout)
-
-    scroll = QScrollArea()
-    scroll.setWidgetResizable(True)
-    scroll.setWidget(widget)
-
-    scroll_layout = QVBoxLayout()
-    scroll_layout.addWidget(scroll)
-
-    return scroll_layout
 
 
 def list_to_str(vlist: List[str]):
@@ -185,7 +64,7 @@ def str_to_list(str_list: str):
 
 
 class QQListValidator(QValidator):
-    def validate(self, text: str, pos: int) -> typing.Tuple['QValidator.State', str, int]:
+    def validate(self, text: str, pos: int) -> Tuple['QValidator.State', str, int]:
         sl = str_to_list(text)
 
         for qq in sl:

@@ -906,15 +906,18 @@ class Reversi(QWidget):
 
         blue, red = counter[cell_blue], counter[cell_red]
         if blue > red:
-            winner = self.cell_name(cell_blue)
-            winner_evaluated_score =self.evaluate(cell_blue)
+            winner = cell_blue
         else:
-            winner = self.cell_name(cell_red)
-            winner_evaluated_score =self.evaluate(cell_red)
+            winner = cell_red
+        winner_name = self.cell_name(winner)
+        winner_evaluated_score = self.evaluate(winner)
+        winner_avg = self.ai_to_avg_stat[winner].avg()
 
-        logger.info(f"{self.cell_name(cell_blue)}={blue}")
-        logger.info(f"{self.cell_name(cell_red)}={red}")
-        logger.info(color("bold_yellow") + f"游戏已经结束，胜方为{winner}，局面分为{winner_evaluated_score}，共耗时：{datetime.now() - self.game_start_time}")
+        winner_counter[winner]+=1
+
+        logger.info(f"{self.cell_name(cell_blue)}={blue}, 胜利次数为{winner_counter[blue]}，平均落子时间为{self.ai_to_avg_stat[cell_blue].avg():.1f}")
+        logger.info(f"{self.cell_name(cell_red)}={red}, 胜利次数为{winner_counter[red]}，平均落子时间为{self.ai_to_avg_stat[cell_red].avg():.1f}")
+        logger.info(color("bold_yellow") + f"游戏已经结束，胜方为{winner_name}，局面分为{winner_evaluated_score}，胜方平均落子时间为{winner_avg:.1f}，共耗时：{datetime.now() - self.game_start_time}")
 
     def paint(self, show_cui_detail=False):
         logger.info('-' * 20)

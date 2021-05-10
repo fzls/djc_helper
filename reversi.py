@@ -500,10 +500,42 @@ class Reversi(QWidget):
         self.ai_start_time = datetime.now()
         self.last_update_time = datetime.now()
 
+        # # re: 调试用代码
+        # self.iter_count = 0
+        # self.avg_choice = AvgStat()
+        #
+        # self.ai_min_decision_seconds = timedelta(seconds=0.01)
+        # # 为方便测试，单独设置双方AI的参数
+        # if self.step_cell == cell_blue:
+        #     self.enable_presearch = True
+        #     self.ai_dfs_max_depth = 7
+        #     self.ai_dfs_presearch_depth = 2
+        #     self.ai_dfs_max_choice_per_depth = 5
+        #     # 红方算力：4层搜索，无预搜索
+        #     # 层数 预搜索 最大子节点 平均耗时 蓝方局面分
+        #     # 6     2       6       1.3     2067
+        #     #
+        #     # 7     2       5       3.4     2471/1523/1034/2037
+        #     #
+        #     # 8     2       5       9.5     2223
+        # else:
+        #     self.enable_presearch = False
+        #     self.ai_dfs_max_depth = 4
+        #
+        # logger.info(
+        #     self.cell_name(self.step_cell) + f"ai参数：max_depth={self.ai_dfs_max_depth}, enable_presearch={self.enable_presearch}, max_choice_per_depth={self.ai_dfs_max_choice_per_depth}, presearch_depth={self.ai_dfs_presearch_depth}")
+
         res = self.ai_min_max_dfs(0, valid_cells, self.step_cell, alpha, beta)
 
         used_time = datetime.now() - self.ai_start_time
         self.ai_to_avg_stat[self.step_cell].add(used_time.total_seconds())
+
+        # if self.step_cell == cell_blue:
+        #     logfunc = logger.warning
+        # else:
+        #     logfunc = logger.info
+        #
+        # logfunc(f"本地调试日志：count={self.iter_count}, avg_choice={self.avg_choice.avg()}, expected_score={res[1]}")
 
         # resume
         self.board = backup_board
@@ -512,6 +544,10 @@ class Reversi(QWidget):
         return res[0]
 
     def ai_min_max_dfs(self, depth, valid_cells: List[Tuple[int, int]], ai_step_cell, alpha, beta, presearch=False) -> Tuple[Optional[Tuple[int, int]], int]:
+        # self.iter_count += 1
+        # if len(valid_cells) != 0:
+        #     self.avg_choice.add(len(valid_cells))
+
         if datetime.now() - self.last_update_time >= timedelta(seconds=1 / 60):
             since_start = datetime.now() - self.ai_start_time
             remaining_time = (self.ai_max_decision_time - since_start)

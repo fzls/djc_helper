@@ -17,10 +17,11 @@ from collections import Counter
 from datetime import datetime, timedelta
 from typing import List, Tuple, Callable, Optional, Dict
 
-from PyQt5.Qt import (QWidget, QLabel, QApplication, QImage, QSize, QPalette, QBrush, QPushButton, QIcon, QMessageBox, QInputDialog)
+from PyQt5.Qt import (QLabel, QApplication, QImage, QSize, QPalette, QBrush, QIcon, QMessageBox, QDialog, QDialogButtonBox)
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
+from qt_wrapper import *
 from log import color, asciiReset
 from util import range_from_one
 
@@ -61,6 +62,44 @@ class AvgStat:
         return self.total / self.count
 
 
+class ConfigDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle("ai参数设置")
+
+        # 组件
+        self.blue_set_ai = create_checkbox(True)
+        self.red_set_ai = create_checkbox(False)
+        self.ai_dfs_max_depth = create_spin_box(4)
+        self.ai_min_decision_seconds = create_double_spin_box(0.5)
+        self.ai_max_decision_time = create_double_spin_box(26)
+        self.enable_presearch = create_checkbox(True)
+        self.ai_dfs_max_choice_per_depth = create_spin_box(5)
+        self.ai_dfs_presearch_depth = create_spin_box(2)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok, self)
+
+        # 拼接
+        layout = QFormLayout(self)
+        layout.addRow("蓝方是否启用AI？", self.blue_set_ai)
+        layout.addRow("红方是否启用AI？", self.red_set_ai)
+        add_form_seperator(layout, "算力强度配置（以下配置基本可以使用默认值）")
+        layout.addRow("ai最大搜索层数（越大越强，速度越慢）", self.ai_dfs_max_depth)
+        layout.addRow("ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds)
+        layout.addRow("ai每步最大等待时间（秒）（避免超出30秒）", self.ai_max_decision_time)
+        layout.addRow("是否启用预搜索（加快搜索速度）", self.enable_presearch)
+        layout.addRow("预搜索后实际最多搜索子节点数（越小速度越快，精度越小）", self.ai_dfs_max_choice_per_depth)
+        layout.addRow("预搜索层数（越大速度越慢，精度越高）", self.ai_dfs_presearch_depth)
+        layout.addWidget(buttonBox)
+
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+    def getInputs(self):
+        return (self.first.text(), self.second.value())
+
+
 class Reversi(QWidget):
     def __init__(self):
         super().__init__()
@@ -87,23 +126,17 @@ class Reversi(QWidget):
         self.game_start_time = datetime.now()
         self.game_restarted = False
 
-        self.enable_presearch = True
-        self.ai_dfs_max_choice_per_depth = 5
-        self.ai_dfs_presearch_depth = 2
+        cd = ConfigDialog()
+        cd.exec()
 
-        self.ai_dfs_max_depth = 4
-        self.ai_min_decision_seconds = timedelta(seconds=0.5)
-        self.ai_max_decision_time = timedelta(seconds=26)
-        blue_set_ai = True
-        red_set_ai = True
-
-        self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{self.ai_dfs_max_depth}）", self.ai_dfs_max_depth)
-        ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds.total_seconds())
-        self.ai_min_decision_seconds = timedelta(seconds=ai_min_decision_seconds)
-        ai_max_decision_time, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最大等待时间（秒）（避免超出30秒）", self.ai_max_decision_time.total_seconds())
-        self.ai_max_decision_time = timedelta(seconds=ai_max_decision_time)
-        blue_set_ai = QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes
-        red_set_ai = QMessageBox.question(self, "AI配置", "红方是否启用AI？") == QMessageBox.Yes
+        self.ai_dfs_max_depth = cd.ai_dfs_max_depth.value()
+        self.ai_min_decision_seconds = timedelta(seconds=cd.ai_min_decision_seconds.value())
+        self.ai_max_decision_time = timedelta(seconds=cd.ai_max_decision_time.value())
+        blue_set_ai = cd.blue_set_ai.isChecked()
+        red_set_ai = cd.red_set_ai.isChecked()
+        self.enable_presearch = cd.enable_presearch.isChecked()
+        self.ai_dfs_max_choice_per_depth = cd.ai_dfs_max_choice_per_depth.value()
+        self.ai_dfs_presearch_depth = cd.ai_dfs_presearch_depth.value()
 
         if blue_set_ai:
             self.set_ai(cell_blue, self.ai_min_max)

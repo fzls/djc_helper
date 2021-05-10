@@ -469,18 +469,14 @@ class Reversi(QWidget):
         if depth == self.ai_dfs_max_depth:
             return (None, self.evaluate(ai_step_cell))
 
-        debug = [depth]
-
         if self.step_cell == ai_step_cell:
             min_max = max
             alpha = -0x7fffffff
             need_reverse_weights = True
-            debug.append("max")
         else:
             min_max = min
             beta = 0x7fffffff
             need_reverse_weights = False
-            debug.append("min")
 
         best_next_move = None
 
@@ -504,7 +500,6 @@ class Reversi(QWidget):
                 else:
                     best_next_move = min_max(best_next_move, next_move, key=lambda v: v[1])
 
-                debug.append(next_move)
 
                 revoke_op()
 
@@ -543,16 +538,8 @@ class Reversi(QWidget):
                 next_move = ((0, 0), next_depth_min_max_score)
                 best_next_move = next_move
 
-                debug.append(next_move)
-
             self.step_cell = old_step_cell
 
-        debug.extend([
-            f"best_next_move={best_next_move}",
-            f"alpha={alpha}, beta={beta}",
-        ])
-
-        logger.debug(debug)
         return best_next_move
 
     def evaluate(self, ai_step_cell) -> int:

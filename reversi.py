@@ -73,12 +73,12 @@ class ConfigDialog(QDialog):
         # 组件
         self.blue_set_ai = create_checkbox(True)
         self.red_set_ai = create_checkbox(False)
-        self.ai_dfs_max_depth = create_spin_box(4)
+        self.ai_dfs_max_depth = create_spin_box(7)
         self.ai_min_decision_seconds = create_double_spin_box(0.5, maximum=99999)
         self.ai_max_decision_time = create_double_spin_box(26, maximum=99999)
         self.enable_presearch = create_checkbox(True)
-        self.ai_dfs_max_choice_per_depth = create_spin_box(5)
         self.ai_dfs_presearch_depth = create_spin_box(2)
+        self.ai_dfs_max_choice_per_depth = create_spin_box(5)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok, self)
 
@@ -91,8 +91,8 @@ class ConfigDialog(QDialog):
         layout.addRow("ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds)
         layout.addRow("ai每步最大等待时间（秒）（避免超出30秒）", self.ai_max_decision_time)
         layout.addRow("是否启用预搜索（加快搜索速度）", self.enable_presearch)
-        layout.addRow("预搜索后实际最多搜索子节点数（越小速度越快，精度越小）", self.ai_dfs_max_choice_per_depth)
         layout.addRow("预搜索层数（越大速度越慢，精度越高）", self.ai_dfs_presearch_depth)
+        layout.addRow("预搜索后实际最多搜索子节点数（越小速度越快，精度越小）", self.ai_dfs_max_choice_per_depth)
         layout.addWidget(buttonBox)
 
         buttonBox.accepted.connect(self.accept)

@@ -251,8 +251,10 @@ class Reversi(QWidget):
                                 return
 
                         # 落子
+                        current_step_cell = self.current_step_cell()
                         self.put_cell(ri, ci)
                         self.loop_index += 1
+                        logger.info(f"落子后当前{self.cell_name_without_color(current_step_cell)}局面分为{self.evaluate(current_step_cell)}")
 
                         # 重绘界面
                         self.paint()
@@ -407,6 +409,9 @@ class Reversi(QWidget):
             bye_count = 0
 
         self.show_game_result()
+
+    def cell_name_without_color(self, cell_color):
+        return self.cell_name(cell_color, False)
 
     def cell_name(self, cell_color, with_color=True):
         color_fn = self.with_color

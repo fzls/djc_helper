@@ -584,26 +584,26 @@ class Reversi(QWidget):
 
         return best_next_move
 
-    def evaluate(self, ai_step_cell) -> int:
+    def evaluate(self, current_step_cell) -> int:
         # ai方与另一方的行动力之差（越大越好）
-        moves_delta = self.move_delta(ai_step_cell)
+        moves_delta = self.move_delta(current_step_cell)
 
         # ai方与另一方的当前棋盘落子权重之差，越大越好
-        weights = self.weight_sum(ai_step_cell)
+        weights = self.weight_sum(current_step_cell)
 
         # ai方与另一方的 稳定子（角、边、八方均无空格（均被占用）） 之差
-        stable_score = self.stable_score(ai_step_cell)
+        stable_score = self.stable_score(current_step_cell)
 
         # re: 看看其他的策略里有没有比较好实现的
         #  https://zhuanlan.zhihu.com/p/35121997
 
         return weights + 15 * moves_delta + 10 * stable_score
 
-    def move_delta(self, ai_step_cell) -> int:
-        other_step_cell = self.other_step_cell(ai_step_cell)
-        return len(self.get_valid_cells(ai_step_cell)) - len(self.get_valid_cells(other_step_cell))
+    def move_delta(self, current_step_cell) -> int:
+        other_step_cell = self.other_step_cell(current_step_cell)
+        return len(self.get_valid_cells(current_step_cell)) - len(self.get_valid_cells(other_step_cell))
 
-    def weight_sum(self, ai_step_cell) -> int:
+    def weight_sum(self, current_step_cell) -> int:
         weights = 0
 
         for row_index in range_from_one(board_size):
@@ -613,9 +613,9 @@ class Reversi(QWidget):
 
                 weights += weight_map[row_index - 1][col_index - 1] * self.board[row_index][col_index]
 
-        return ai_step_cell * weights
+        return current_step_cell * weights
 
-    def stable_score(self, ai_step_cell) -> int:
+    def stable_score(self, current_step_cell) -> int:
         # 一些辅助函数
         def add(cell_position, direction):
             return tuple(v + delta for v, delta in zip(cell_position, direction))
@@ -660,7 +660,7 @@ class Reversi(QWidget):
         for row, col in corner_cell_positions:
             cell = self.board[row][col]
             if cell in [cell_blue, cell_red]:
-                corner += ai_step_cell * cell
+                corner += current_step_cell * cell
 
         # 计算边
         edge_cell_positions = [
@@ -690,7 +690,7 @@ class Reversi(QWidget):
                 index = 2 + idx
                 if (index <= lu and get_cell(lower) != cell_empty) or \
                         (index >= board_size - ul + 1 and get_cell(upper) != cell_empty):
-                    edge += ai_step_cell * cell
+                    edge += current_step_cell * cell
 
         # 计算其他位置（八个方向都无空位）
 
@@ -731,7 +731,7 @@ class Reversi(QWidget):
                         col in not_empty_cols and \
                         upper_diagonal in not_empty_upper_diagonal and \
                         lower_diagonal in not_empty_lower_diagonal:
-                    other += cell * ai_step_cell
+                    other += cell * current_step_cell
 
         return corner + edge + other
 

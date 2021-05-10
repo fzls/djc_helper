@@ -486,7 +486,7 @@ class Reversi(QWidget):
 
         if len(valid_cells) != 0:
             # 子搜索流程（实际搜索和预搜索将共用该逻辑）
-            def subsearch(valid_cells, alpha, beta, next_depth, presearch=False, subresult_cb=None):
+            def subsearch(valid_cells, alpha, beta, current_depth, presearch=False, subresult_cb=None):
                 best_next_move = None
 
                 for idx, next_move_index in enumerate(valid_cells):
@@ -494,7 +494,7 @@ class Reversi(QWidget):
 
                     revoke_op = self.put_cell(next_move_row_index, next_move_col_index, ai_probe=True)
 
-                    next_depth_best_move = self.ai_min_max_dfs(next_depth, self.get_valid_cells(self.current_step_cell()), ai_step_cell, alpha, beta, presearch)
+                    next_depth_best_move = self.ai_min_max_dfs(current_depth + 1, self.get_valid_cells(self.current_step_cell()), ai_step_cell, alpha, beta, presearch)
                     if next_depth_best_move is None:
                         continue
 
@@ -547,13 +547,13 @@ class Reversi(QWidget):
                 # 预计算若干层得到各落子的评分，按照该评分排序
                 # 预搜索时本层实际不需要剪枝，因为目的是为了计算出各个子节点的排序权重
                 presearch_alpha, presearch_beta = -0x7fffffff, 0x7fffffff
-                presearch_depth = self.ai_dfs_max_depth - self.ai_dfs_presearch_depth
+                presearch_current_depth = self.ai_dfs_max_depth - self.ai_dfs_presearch_depth
                 valid_cells_weights = [0 for cell in valid_cells]
 
                 def subresult_cb(child_idx, next_depth_min_max_score):
                     valid_cells_weights[child_idx] = next_depth_min_max_score
 
-                subsearch(valid_cells, presearch_alpha, presearch_beta, presearch_depth, presearch=True, subresult_cb=subresult_cb)
+                subsearch(valid_cells, presearch_alpha, presearch_beta, presearch_current_depth, presearch=True, subresult_cb=subresult_cb)
 
                 # 根据计算出的权重进行排序
                 valid_cells = [cell for weight, cell in sorted(zip(valid_cells_weights, valid_cells), reverse=need_reverse_weights)]
@@ -567,7 +567,7 @@ class Reversi(QWidget):
                 valid_cells = sorted(valid_cells, key=lambda v: weight_map[v[0] - 1][v[1] - 1], reverse=need_reverse_weights)
 
             # 正式开始搜索
-            best_next_move = subsearch(valid_cells, alpha, beta, depth+1)
+            best_next_move = subsearch(valid_cells, alpha, beta, depth)
         else:
             # 本方无可行下子，跳过本轮
             old_step_cell = self.step_cell

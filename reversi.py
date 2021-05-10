@@ -938,7 +938,7 @@ class Reversi(QWidget):
         return True
 
     def game_over(self):
-        self.paint()
+        self.paint(game_overd=True)
         self.show_game_result()
         self.notify('游戏结束')
 
@@ -982,7 +982,7 @@ class Reversi(QWidget):
 
         return (blue, red, winner)
 
-    def paint(self, show_cui_detail=False):
+    def paint(self, show_cui_detail=False, game_overd=False):
         logger.info('-' * 20)
         blue_score = self.with_color(f"蓝方：{self.score(cell_blue)}", "blue")
         red_score = self.with_color(f"红方：{self.score(cell_red)}", "red")
@@ -1076,7 +1076,7 @@ class Reversi(QWidget):
                 if len(self.ai_cells) < 2:
                     self.notify(self.cell_name(self.current_step_cell(), with_color=False) + '轮空，请点击任意位置结束本轮')
 
-        blue_evaluted_score = self.evaluate(cell_blue)
+        blue_evaluted_score = self.evaluate(cell_blue, ignore_game_over=game_overd)
         red_evaluted_score = -blue_evaluted_score
         self.label_blue_score.setText(f"{self.score(cell_blue)}({blue_evaluted_score})")
         self.label_red_score.setText(f"{self.score(cell_red)}({red_evaluted_score})")

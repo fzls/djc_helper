@@ -635,8 +635,8 @@ class Reversi(QWidget):
 
         return best_next_move
 
-    def evaluate(self, current_step_cell) -> int:
-        if self.is_game_over():
+    def evaluate(self, current_step_cell, ignore_game_over=False) -> int:
+        if self.is_game_over() and not ignore_game_over:
             # 如果已经能判定胜负，则取极大的权重分
             blue, red, winner = self.get_current_winner_info()
             return current_step_cell * winner * 0x7FFFFFFF
@@ -902,8 +902,8 @@ class Reversi(QWidget):
         return True
 
     def game_over(self):
-        self.show_game_result()
         self.paint()
+        self.show_game_result()
         self.notify('游戏结束')
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes
@@ -911,10 +911,15 @@ class Reversi(QWidget):
             self.restart(manual=False)
 
     def show_game_result(self):
+        blue_evaluted_score = self.evaluate(cell_blue, ignore_game_over=True)
+        red_evaluted_score = -blue_evaluted_score
+        self.label_blue_score.setText(f"{self.score(cell_blue)}({blue_evaluted_score})")
+        self.label_red_score.setText(f"{self.score(cell_red)}({red_evaluted_score})")
+
         blue, red, winner = self.get_current_winner_info()
 
         winner_name = self.cell_name(winner)
-        winner_evaluated_score = self.evaluate(winner)
+        winner_evaluated_score = self.evaluate(winner, ignore_game_over=True)
         winner_avg = self.ai_to_avg_stat[winner].avg()
 
         winner_counter[winner] += 1

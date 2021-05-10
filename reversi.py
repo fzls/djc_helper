@@ -636,6 +636,11 @@ class Reversi(QWidget):
         return best_next_move
 
     def evaluate(self, current_step_cell) -> int:
+        if self.is_game_over():
+            # 如果已经能判定胜负，则取极大的权重分
+            blue, red, winner = self.get_current_winner_info()
+            return current_step_cell * winner * 0x7FFFFFFF
+
         # ai方与另一方的行动力之差（越大越好）
         moves_delta = self.move_delta(current_step_cell)
 
@@ -840,9 +845,12 @@ class Reversi(QWidget):
         return len(self.valid_directions(row_index, col_index, current_step_cell)) != 0
 
     def has_any_valid_cell(self) -> bool:
+        return self.has_any_valid_cell_for(self.current_step_cell())
+
+    def has_any_valid_cell_for(self, cell_color) -> bool:
         for row_index in range_from_one(board_size):
             for col_index in range_from_one(board_size):
-                if self.is_valid_cell(row_index, col_index, self.current_step_cell()):
+                if self.is_valid_cell(row_index, col_index, cell_color):
                     return True
 
         return False
@@ -880,6 +888,11 @@ class Reversi(QWidget):
         return valid_directions
 
     def is_game_over(self) -> bool:
+        if not self.has_any_valid_cell_for(self.step_cell) and \
+                not self.has_any_valid_cell_for(self.other_step_cell(self.step_cell)):
+            # 游戏已经结束
+            return True
+
         for row_index in range_from_one(board_size):
             for col_index in range_from_one(board_size):
                 cell = self.board[row_index][col_index]
@@ -890,6 +903,7 @@ class Reversi(QWidget):
 
     def game_over(self):
         self.show_game_result()
+        self.paint()
         self.notify('游戏结束')
 
         restart = QMessageBox.question(self, "游戏结束", "是否重新开始？") == QMessageBox.Yes

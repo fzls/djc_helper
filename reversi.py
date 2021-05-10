@@ -88,13 +88,14 @@ class Reversi(QWidget):
         self.game_restarted = False
 
         self.ai_dfs_max_depth = 4
-        self.ai_min_decision_seconds = 0.5
+        self.ai_min_decision_seconds = timedelta(seconds=0.5)
         self.ai_max_decision_time = timedelta(seconds=26)
         blue_set_ai = True
         red_set_ai = True
 
         self.ai_dfs_max_depth, _ = QInputDialog.getInt(self, "ai参数设置", f"ai最大搜索层数（越大越强，速度越慢，默认为{self.ai_dfs_max_depth}）", self.ai_dfs_max_depth)
-        self.ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds)
+        ai_min_decision_seconds, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最小等待时间（秒）（太小可能会看不清手动方的落子位置-。-）", self.ai_min_decision_seconds.total_seconds())
+        self.ai_min_decision_seconds = timedelta(seconds=ai_min_decision_seconds)
         ai_max_decision_time, _ = QInputDialog.getDouble(self, "ai参数设置", f"ai每步最大等待时间（秒）（避免超出30秒）", self.ai_max_decision_time.total_seconds())
         self.ai_max_decision_time = timedelta(seconds=ai_max_decision_time)
         blue_set_ai = QMessageBox.question(self, "AI配置", "蓝方是否启用AI？") == QMessageBox.Yes
@@ -105,7 +106,7 @@ class Reversi(QWidget):
         if red_set_ai:
             self.set_ai(cell_red, self.ai_min_max)
 
-        logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}秒，最大等待时间为{self.ai_max_decision_time}秒")
+        logger.info(f"ai最大迭代次数为{self.ai_dfs_max_depth}，每次操作至少{self.ai_min_decision_seconds}，最大等待时间为{self.ai_max_decision_time}")
 
         self.last_step = (1, 1)
 
@@ -983,7 +984,7 @@ class AiThread(QThread):
         ut = datetime.now() - self.time_start
         logger.info(f"第{self.reversi.loop_index}轮决策共耗时{ut.total_seconds():.1f}秒")
 
-        min_decision_seconds = timedelta(seconds=self.reversi.ai_min_decision_seconds)
+        min_decision_seconds = self.reversi.ai_min_decision_seconds
         if ut < min_decision_seconds:
             wt = (min_decision_seconds - ut).total_seconds()
             logger.debug(f"耗时低于{min_decision_seconds}，等待至{min_decision_seconds}再落子")

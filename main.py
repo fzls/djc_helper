@@ -78,6 +78,8 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
+    show_notices()
+
     if cfg.common.allow_only_one_instance:
         logger.info("当前仅允许单个实例运行，将尝试干掉其他实例~")
         async_call(kill_other_instance_on_start)
@@ -89,8 +91,6 @@ def main():
     change_title(multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)
-
-    show_notices()
 
     account_names = []
     for account_cfg in cfg.account_configs:

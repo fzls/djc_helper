@@ -51,10 +51,14 @@ class Uploader:
         # 仅上传需要登录
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath:str, target_folder:Folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+    def upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
         if not self.login_ok:
             logger.info("未登录，不能上传文件")
             return False
+
+        if history_file_prefix == "":
+            # 未设置历史文件前缀，默认为当前文件名
+            history_file_prefix = os.path.basename(filepath)
 
         if not only_upload_compressed_version:
             ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
@@ -77,7 +81,11 @@ class Uploader:
 
         return True
 
-    def _upload_to_lanzouyun(self, filepath:str, target_folder:Folder, history_file_prefix="") -> bool:
+    def _upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix) -> bool:
+        if history_file_prefix == "":
+            logger.error("未设置history_file_prefix")
+            return False
+
         filename = os.path.basename(filepath)
         logger.warning(f"开始上传 {filename} 到 {target_folder.name}")
         run_start_time = datetime.now()
@@ -88,17 +96,13 @@ class Uploader:
 
             logger.info(f"上传完成，fid={fid}")
 
-            prefix = history_file_prefix
-            if prefix == "":
-                prefix = self.history_version_prefix
-
             folder_history_files = self.folder_history_files
             if target_folder.id == self.folder_online_files.id:
                 folder_history_files = self.folder_online_files_history_files
 
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
-                if file.name.startswith(prefix):
+                if file.name.startswith(history_file_prefix):
                     self.lzy.move_file(file.id, folder_history_files.id)
                     logger.info(f"将{file.name}移动到目录({folder_history_files.name})")
 
@@ -181,7 +185,7 @@ class Uploader:
 
         raise FileNotFoundError("latest patches not found")
 
-    def download_file_in_folder(self, folder: Folder, name:str, download_dir:str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
+    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """

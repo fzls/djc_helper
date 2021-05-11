@@ -378,19 +378,20 @@ def async_call(cb, *args, **params):
 
 
 def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
-    def cb():
-        if print_log:
-            logger.warning(color("bold_cyan") + msg)
+    async_call(message_box, msg, title, print_log, icon, open_url)
 
-        if is_run_in_github_action():
-            return
 
-        win32api.MessageBox(0, msg, title, icon)
+def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
+    if print_log:
+        logger.warning(color("bold_cyan") + msg)
 
-        if open_url != "":
-            webbrowser.open(open_url)
+    if is_run_in_github_action():
+        return
 
-    async_call(cb)
+    win32api.MessageBox(0, msg, title, icon)
+
+    if open_url != "":
+        webbrowser.open(open_url)
 
 
 def human_readable_size(num, suffix='B'):
@@ -511,8 +512,10 @@ def parse_unicode_escape_string(filename: str):
 def remove_none_from_list(l: list) -> list:
     return list(filter(lambda x: x is not None, l))
 
+
 _root_caches_key = "caches"
 cache_name_download = "download_cache"
+
 
 def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600):
     """

@@ -90,6 +90,8 @@ def main():
 
     show_multiprocessing_info(cfg)
 
+    show_notices()
+
     account_names = []
     for account_cfg in cfg.account_configs:
         account_names.append(account_cfg.name)

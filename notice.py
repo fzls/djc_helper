@@ -119,7 +119,7 @@ class NoticeManager:
 
         for old_notice in self.notices:
             if old_notice.title == title and old_notice.message == message and old_notice.sender == sender:
-                logger.warning(f"发现内容完全一致的公告，请确定是否是误操作，若非误操作请去文本直接修改。\n{old_notice}")
+                logger.error(f"发现内容完全一致的公告，请确定是否是误操作，若非误操作请去文本直接修改。\n{old_notice}")
                 return
 
         notice = Notice()
@@ -139,7 +139,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    nm.add_notice("测试公告功能2", "这是一条测试消息，可以无视哈哈，为日后特殊情况下发公告先测试一下", open_url="http://www.baidu.com", show_type=NOTICE_SHOW_TYPE_ALWAYS)
+    title = "测试公告功能"
+    message = """这是一条测试消息，可以无视哈哈，为日后特殊情况下发公告先测试一下"""
+    nm.add_notice(title, message,
+                  send_at=format_now(),
+                  show_type=NOTICE_SHOW_TYPE_ONCE, open_url="")
 
     nm.save()
 

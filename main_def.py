@@ -6,6 +6,7 @@ from typing import Dict
 from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper
+from notice import NoticeManager
 from pool import get_pool, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
@@ -1071,6 +1072,21 @@ def show_multiprocessing_info(cfg: Config):
         logger.info(color("bold_yellow") + f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}")
 
 
+def show_notices():
+    def _cb():
+        # 初始化
+        nm = NoticeManager()
+        # 展示公告
+        nm.show_notices()
+
+    async_call(_cb)
+
+
+def test_show_notices():
+    show_notices()
+    input("等待公告下载完毕，测试完毕点击任何键即可退出....\n")
+
+
 def _test_main():
     need_check_bind_and_skey = True
     # need_check_bind_and_skey = False
@@ -1143,5 +1159,6 @@ if __name__ == '__main__':
 
     # _test_main()
     test_pay_info()
+    # test_show_notices()
 
     # show_buy_info_sync("test", True)

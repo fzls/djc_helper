@@ -796,6 +796,20 @@ class OrderInfo(ConfigInterface):
         self.buy_month = 1
 
 
+class CardSecret(ConfigInterface):
+    def __init__(self):
+        self.card = "auto_update-20210310174054-00001"
+        self.secret = "cUtsSx0CwVF1p1VurbKuiI4WHQuKP3uz"
+
+
+class CardSecretUseDetail(ConfigInterface):
+    def __init__(self):
+        self.card_secret = CardSecret()  # 卡密信息
+        self.qq = ""  # 使用QQ
+        self.game_qqs = ""  # 附属游戏QQ
+        self.use_at = "2020-03-13 12:30:15"  # 使用时间点
+
+
 class AmsActInfo(ConfigInterface):
     def __init__(self):
         self.iActivityId = "354870"
@@ -935,10 +949,12 @@ class RetryData(ConfigInterface):
         self.recommended_first_retry_timeout = 0.0
         self.history_success_timeouts = []
 
+
 class DnfHelperInfo(ConfigInterface):
     def __init__(self):
         self.unlocked_maps = set()
         self.remaining_play_times = 0
+
 
 class DnfHelperGameInfo(ConfigInterface):
     def __init__(self):
@@ -958,6 +974,7 @@ class DnfHelperGameInfo(ConfigInterface):
         self.bindStatus = False
         self.bindTime = 1619576495
         self.bindLastTime = 0
+
 
 if __name__ == '__main__':
     a = BuyInfo()

@@ -168,6 +168,10 @@ def get_now_unix():
     return int(time.time())
 
 
+def get_current():
+    return get_now().strftime("%Y%m%d%H%M%S")
+
+
 def get_today():
     return get_now().strftime("%Y%m%d")
 

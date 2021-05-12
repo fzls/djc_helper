@@ -11,12 +11,11 @@ from pool import get_pool, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
-from show_usage import get_count, my_usage_counter_name
+from show_usage import *
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
 from urls import Urls, get_not_ams_act_desc
-from util import *
-from version import *
+from usage_count import *
 
 
 def has_any_account_in_normal_run(cfg):
@@ -557,6 +556,9 @@ def run(cfg: Config):
     user_buy_info = get_user_buy_info(cfg)
     show_buy_info(user_buy_info, cfg)
 
+    # 上报付费使用情况
+    try_report_pay_info(cfg, user_buy_info)
+
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
@@ -574,6 +576,21 @@ def run(cfg: Config):
 
     used_time = datetime.datetime.now() - start_time
     _show_head_line(f"处理总计{len(cfg.account_configs)}个账户 共耗时 {used_time}")
+
+
+def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
+    if run_from_src():
+        logger.debug("源码运行不参与统计")
+        return
+
+    if is_daily_first_run("pay_report"):
+        logger.info("今日首次运行，尝试上报付费统计~")
+        if has_buy_auto_updater_dlc(cfg):
+            increase_counter(my_auto_updater_usage_counter_name)
+        if user_buy_info.is_active():
+            increase_counter(my_active_monthly_pay_usage_counter_name)
+    else:
+        logger.info("今日已运行过，不再尝试上报付费统计")
 
 
 def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
@@ -1087,6 +1104,24 @@ def test_show_notices():
     input("等待公告下载完毕，测试完毕点击任何键即可退出....\n")
 
 
+def test_try_report_pay_info():
+    # 读取配置信息
+    load_config("config.toml")
+    cfg = config()
+
+    cfg.account_configs[0].account_info.uin = "o" + "1054073896"
+
+    # cfg.common.log_level = "debug"
+    # from config import to_raw_type
+    # cfg.common.on_config_update(to_raw_type(cfg.common))
+
+    logger.info("尝试获取按月付费信息")
+    user_buy_info = get_user_buy_info(cfg)
+
+    try_report_pay_info(cfg, user_buy_info)
+    input("等待几秒，确保上传完毕后再点击enter键")
+
+
 def _test_main():
     need_check_bind_and_skey = True
     # need_check_bind_and_skey = False
@@ -1159,6 +1194,8 @@ if __name__ == '__main__':
 
     # _test_main()
     test_pay_info()
+
     # test_show_notices()
+    # test_try_report_pay_info()
 
     # show_buy_info_sync("test", True)

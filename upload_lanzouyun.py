@@ -4,9 +4,10 @@ import os
 import re
 from collections import namedtuple
 from datetime import datetime
+from typing import List
 
 from lanzou.api import LanZouCloud
-from lanzou.api.types import FileInFolder
+from lanzou.api.types import FileInFolder, FolderDetail
 
 from log import logger, color
 from util import make_sure_dir_exists, with_cache, human_readable_size, cache_name_download
@@ -148,7 +149,7 @@ class Uploader:
         """
         查找最新版本，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        folder_info = self.lzy.get_folder_info_by_url(self.folder_djc_helper.url)
+        folder_info = self.get_folder_info_by_url(self.folder_djc_helper.url)
         for file in folder_info.files:
             if file.name.startswith(self.history_version_prefix):
                 return file
@@ -179,7 +180,7 @@ class Uploader:
         """
         查找最新版本的补丁，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        folder_info = self.lzy.get_folder_info_by_url(self.folder_djc_helper.url)
+        folder_info = self.get_folder_info_by_url(self.folder_djc_helper.url)
         for file in folder_info.files:
             if file.name.startswith(self.history_patches_prefix):
                 return file
@@ -223,7 +224,7 @@ class Uploader:
         """
         在对应目录查找指定名称的文件，如找到，返回lanzouyun提供的file信息，否则抛出异常
         """
-        folder_info = self.lzy.get_folder_info_by_url(folder.url, folder.password)
+        folder_info = self.get_folder_info_by_url(folder.url, folder.password)
         for file in folder_info.files:
             if file.name == name:
                 return file
@@ -248,7 +249,7 @@ class Uploader:
         if show_log: logger.info(f"即将开始下载 {target_path}")
         callback = None
         if show_log: callback = self.show_progress
-        retCode = self.lzy.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
+        retCode = self.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
         if retCode != LanZouCloud.SUCCESS:
             if show_log: logger.error(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
@@ -278,6 +279,48 @@ class Uploader:
         print(f'\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ', end='')
         if total_size == now_size:
             print('')  # 下载完成换行
+
+    def get_folder_info_by_url(self, share_url, dir_pwd='') -> FolderDetail:
+        for possiable_url in self.all_possiable_urls(share_url):
+            folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd)
+            if folder_info.code != LanZouCloud.SUCCESS:
+                logger.debug(f"请求{possiable_url}失败，将尝试下一个")
+                continue
+
+            return folder_info
+
+        return FolderDetail(LanZouCloud.FAILED)
+
+    def down_file_by_url(self, share_url, pwd='', save_path='./Download', *, callback=None, overwrite=False,
+                         downloaded_handler=None) -> int:
+        for possiable_url in self.all_possiable_urls(share_url):
+            retCode = self.lzy.down_file_by_url(possiable_url, pwd, save_path, callback=callback, overwrite=overwrite, downloaded_handler=downloaded_handler)
+            if retCode != LanZouCloud.SUCCESS:
+                logger.debug(f"请求{possiable_url}失败，将尝试下一个")
+                continue
+
+            return retCode
+
+        return LanZouCloud.FAILED
+
+    def all_possiable_urls(self, lanzouyun_url: str) -> List[str]:
+        old_domain = 'fzls.lanzous'
+        return [
+            lanzouyun_url,
+
+            lanzouyun_url.replace(old_domain, 'up.lanzoui'),
+
+            lanzouyun_url.replace(old_domain, 'fzls.lanzoux'),
+            lanzouyun_url.replace(old_domain, 'wwx.lanzoux'),
+            lanzouyun_url.replace(old_domain, 'wws.lanzoux'),
+            lanzouyun_url.replace(old_domain, 'pan.lanzoux'),
+            lanzouyun_url.replace(old_domain, 'www.lanzoux'),
+
+            lanzouyun_url.replace(old_domain, 'wwx.lanzous'),
+            lanzouyun_url.replace(old_domain, 'wws.lanzous'),
+            lanzouyun_url.replace(old_domain, 'pan.lanzous'),
+            lanzouyun_url.replace(old_domain, 'www.lanzous'),
+        ]
 
 
 if __name__ == '__main__':

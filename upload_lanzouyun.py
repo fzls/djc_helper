@@ -36,6 +36,7 @@ class Uploader:
     user_monthly_pay_info_filename = "user_monthly_pay_info.txt"
 
     # 卡密操作的付费信息
+    cs_used_card_secrets = "_used_card_secrets.txt"
     cs_buy_auto_updater_users_filename = "cs_buy_auto_updater_users.txt"
     cs_user_monthly_pay_info_filename = "cs_user_monthly_pay_info.txt"
 

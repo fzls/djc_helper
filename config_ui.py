@@ -950,18 +950,27 @@ class AccountConfigUi(QWidget):
             delattr(cfg, attr)
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
+        all_item_ids = set()
+        for item in cfg.exchange_items:
+            all_item_ids.add(item.iGoodsId)
+
         # 特殊处理下道聚城兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
-        if len(cfg.exchange_items) == 0:
-            default_items = [
-                ("753", "装备品级调整箱（5个）"),
-                ("755", "魔界抗疲劳秘药（10点）")
-            ]
-            for iGoodsId, sGoodsName in default_items:
-                item = ExchangeItemConfig()
-                item.iGoodsId = iGoodsId
-                item.sGoodsName = sGoodsName
-                item.count = 0
-                cfg.exchange_items.append(item)
+        default_items = [
+            ("753", "装备品级调整箱（5个）"),
+            ("755", "魔界抗疲劳秘药（10点）"),
+            ("107", "达人之契约（3天）"),
+            ("110", "成长之契约（3天）"),
+            ("382", "晶之契约（3天）"),
+        ]
+        for iGoodsId, sGoodsName in default_items:
+            if iGoodsId in all_item_ids:
+                continue
+
+            item = ExchangeItemConfig()
+            item.iGoodsId = iGoodsId
+            item.sGoodsName = sGoodsName
+            item.count = 0
+            cfg.exchange_items.append(item)
 
     def on_login_mode_change(self, text):
         self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])

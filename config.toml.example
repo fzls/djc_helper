@@ -757,7 +757,7 @@ chronicle_lottery = false
 #
 #[[account_configs.dnf_helper_info.chronicle_exchange_items]]
 #sLbcode = "ex_0005"
-#sName = "本职业神器护石随机礼盒*1"
+#sName = "高级装扮兑换券礼盒*1"
 ## 表示领取几次这个奖励
 #count = 1
 #

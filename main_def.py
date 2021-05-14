@@ -1012,13 +1012,22 @@ def _get_user_buy_info(cfg: Config):
                     continue
 
                 buy_users = {}  # type: Dict[str, BuyInfo]
+                def update_if_longer(qq:str, info:BuyInfo):
+                    if qq not in buy_users:
+                        buy_users[qq] = info
+                    else:
+                        # 如果已经在其他地方已经出现过这个QQ，则仅当新的付费信息过期时间较晚时才覆盖
+                        old_info = buy_users[qq]
+                        if time_less(old_info.expire_at, info.expire_at):
+                            buy_users[qq] = info
+
                 with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
                     raw_infos = json.load(data_file)
                     for qq, raw_info in raw_infos.items():
                         info = BuyInfo().auto_update_config(raw_info)
-                        buy_users[qq] = info
+                        update_if_longer(qq, info)
                         for game_qq in info.game_qqs:
-                            buy_users[game_qq] = info
+                            update_if_longer(game_qq, info)
 
                 if len(buy_users) != 0:
                     has_no_users = False

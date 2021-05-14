@@ -7,5 +7,6 @@ selenium
 colorlog
 psutil
 leancloud
+werkzeug<=1.0.1
 lanzou-api
 PyQt5

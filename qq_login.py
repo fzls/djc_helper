@@ -561,7 +561,7 @@ class QQLogin():
         max_try = 10
 
         short_login_retry_key = "short_login_retry_key"
-        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try - 1, self.cfg.login.login_timeout)
+        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try, self.cfg.login.login_timeout)
 
         for idx in range_from_one(max_try):
             try:

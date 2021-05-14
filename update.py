@@ -55,7 +55,7 @@ def check_update_on_start(config: CommonConfig):
                 latest_version = get_version_from_gitee()
                 ui = UpdateInfo()
                 ui.latest_version = latest_version
-                ui.netdisk_link = "https://fzls.lanzous.com/s/djc-helper"
+                ui.netdisk_link = "https://fzls.lanzoui.com/s/djc-helper"
                 ui.netdisk_passcode = "fzls"
                 ui.update_message = "当前无法访问github，暂时无法获取更新内容，若欲知更新内容，请浏览gitee主页进行查看哦~\n\nhttps://gitee.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
 
@@ -73,7 +73,7 @@ def check_update_on_start(config: CommonConfig):
                 logger.info(color("bold_green") + msg)
                 if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
                     win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
-                    webbrowser.open("https://fzls.lanzous.com/s/djc-helper")
+                    webbrowser.open("https://fzls.lanzoui.com/s/djc-helper")
 
 
 def try_manaual_update(ui: UpdateInfo) -> bool:
@@ -198,7 +198,7 @@ def get_netdisk_addr(config):
         ui = get_update_info(config)
         return ui.netdisk_link
     except:
-        return "https://fzls.lanzous.com/s/djc-helper"
+        return "https://fzls.lanzoui.com/s/djc-helper"
 
 
 # 备选方案：从gitee获取最新版本号（但不解析具体版本内容，作为github的fallback）

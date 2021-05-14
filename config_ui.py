@@ -244,7 +244,7 @@ class ConfigUi(QFrame):
             if not try_manaual_update(ui):
                 show_message("无需更新", "当前已经是最新版本~")
         except Exception as err:
-            netdisk_addr = "https://fzls.lanzous.com/s/djc-helper"
+            netdisk_addr = "https://fzls.lanzoui.com/s/djc-helper"
 
             # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
             time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")

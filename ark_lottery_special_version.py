@@ -124,7 +124,7 @@ if __name__ == '__main__':
         msg = f"ver {now_version} 运行过程中出现未捕获的异常，请加群743671885反馈或自行解决。" + check_some_exception(e)
         logger.exception(color("fg_bold_red") + msg, exc_info=e)
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
-        logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+        logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzoui.com/s/djc-helper")
     finally:
         close_pool()
         # 暂停一下，方便看结果

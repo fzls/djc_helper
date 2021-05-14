@@ -148,7 +148,7 @@ class QQLogin():
                     "\n"
                     "------- 如果这样还有人进群问，将直接踢出群聊 -------\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z()), installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
-                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzous.com/s/djc-tools")
+                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
                 os.system("PAUSE")
                 exit(-1)
 
@@ -652,7 +652,7 @@ class QQLogin():
             msg = f"ver {now_version} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群743671885反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
-            logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+            logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzoui.com/s/djc-helper")
 
     def _try_auto_resolve_captcha(self):
         if not self.cfg.login.auto_resolve_captcha:

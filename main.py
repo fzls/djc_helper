@@ -164,7 +164,7 @@ if __name__ == '__main__':
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
         logger.warning(color("fg_bold_yellow") + "不要自动无视上面这三句话哦，写出来是让你看的呀<_<不知道出啥问题的时候就按提示去看看是否有新版本哇，而不是不管三七二十一就来群里问嗷")
-        logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzous.com/s/djc-helper")
+        logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzoui.com/s/djc-helper")
         # 如果在github action，则继续抛出异常
         if is_run_in_github_action():
             raise e

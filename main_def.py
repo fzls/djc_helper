@@ -813,7 +813,7 @@ def show_tips(cfg):
 
     tips = [
         (
-            "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzous.com/s/djc-tools"
+            "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzoui.com/s/djc-tools"
         ),
         (
             "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
@@ -933,7 +933,7 @@ def has_buy_auto_updater_dlc(cfg: Config):
 
 
 def get_user_buy_info(cfg: Config):
-    logger.info("如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：https://fzls.lanzous.com/s/djc-helper")
+    logger.info("如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：https://fzls.lanzoui.com/s/djc-helper")
     user_buy_info = _get_user_buy_info(cfg)
     # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
     if has_buy_auto_updater_dlc(cfg):

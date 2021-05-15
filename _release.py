@@ -92,7 +92,7 @@ push_github(version)
 
 # ---------------结束
 logger.info('+' * 40)
-logger.info(f"发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
+logger.info(f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
 logger.info('+' * 40)
 
 os.system("PAUSE")

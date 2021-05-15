@@ -206,6 +206,10 @@ def get_netdisk_addr(config):
 def get_version_from_gitee() -> str:
     api = "https://gitee.com/api/v5/repos/fzls/djc_helper/tags"
     res = requests.get(api, timeout=10).json()
+
+    reg_version = r'v\d+(\.\d+)*'
+    res = filter(lambda tag_info: re.match(reg_version, tag_info['name']) is not None, res)
+
     latest_version_info = max(res, key=lambda x: version_to_version_int_list(x['name'][1:]))
 
     return latest_version_info['name'][1:]

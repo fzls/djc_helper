@@ -7,7 +7,6 @@ debug.log
 test/
 test.py
 
-start.bat
 start_config_ui.bat
 *.lnk
 

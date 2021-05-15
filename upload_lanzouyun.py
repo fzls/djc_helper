@@ -16,6 +16,10 @@ Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 
 # 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
 
+# 如果日后蓝奏云仍出现多次问题，可以考虑增加一个fallback选项
+# 在gitee新建一个仓库，通过git add操作更新文件，通过访问raw链接来下载文件
+# 如：https://gitee.com/fzls/djc_helper/raw/master/CHANGELOG.MD
+
 class Uploader:
     default_sub_domain = "fzls"
     default_main_domain = "lanzoui"

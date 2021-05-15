@@ -4,63 +4,20 @@ import os
 import shutil
 import subprocess
 
+from init_venv_and_requirements import init_venv_and_requirements
 from log import logger
 from util import human_readable_size
 
 
 def build(disable_douban=False):
-    venv_path = ".venv"
-
     # 初始化相关路径变量
-    pyscript_path = os.path.join(venv_path, "Scripts")
-    py_path = os.path.join(pyscript_path, "python")
-    pip_path = os.path.join(pyscript_path, "pip")
-    pyinstaller_path = os.path.join(pyscript_path, "pyinstaller")
+    venv_path = ".venv"
+    pyinstaller_path = os.path.join(venv_path, "Scripts", "pyinstaller")
 
-    logger.info("尝试初始化venv环境")
-    subprocess.call([
-        "python",
-        "-m",
-        "venv",
-        venv_path,
-    ])
+    # 初始化venv和依赖
+    init_venv_and_requirements(".venv", disable_douban)
 
     logger.info("将使用.venv环境进行编译")
-
-    logger.info("尝试更新pip setuptools wheel")
-    douban_op = ["-i", "https://pypi.doubanio.com/simple"]
-    if disable_douban:
-        douban_op = []
-    subprocess.call([
-        py_path,
-        "-m",
-        "pip",
-        "install",
-        *douban_op,
-        "--upgrade",
-        "pip",
-        "setuptools",
-        "wheel",
-    ])
-
-    logger.info("尝试安装依赖库和pyinstaller")
-    subprocess.call([
-        pip_path,
-        "install",
-        *douban_op,
-        "-r",
-        "requirements.txt",
-        "--upgrade",
-        "wheel",
-        "pyinstaller",
-    ])
-
-    logger.info("安装pywin32_postinstall")
-    subprocess.call([
-        py_path,
-        os.path.join(pyscript_path, "pywin32_postinstall.py"),
-        "-install",
-    ])
 
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),

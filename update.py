@@ -205,7 +205,7 @@ def get_netdisk_addr(config):
 @try_except(return_val_on_except="1.0.0")
 def get_version_from_gitee() -> str:
     api = "https://gitee.com/api/v5/repos/fzls/djc_helper/tags"
-    res = requests.get(api).json()
+    res = requests.get(api, timeout=10).json()
     latest_version_info = max(res, key=lambda x: version_to_version_int_list(x['name'][1:]))
 
     return latest_version_info['name'][1:]

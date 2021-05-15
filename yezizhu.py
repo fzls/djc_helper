@@ -50,14 +50,14 @@ def try_exchange():
 
 def query_user_info():
     url = f"http://dnf.api.yzz.cn/activity/userInfo?mobile={mobile}"
-    res = requests.get(url, headers=headers).json()
+    res = requests.get(url, headers=headers, timeout=10).json()
 
     return "账号({mobile}) 当前积分为{point_amount}，已使用{point_used}，已领取的奖励为：{prize_jfcj} {prize_jfdh}(查询于{ts})。".format(**res["data"], ts=datetime.now())
 
 
 def query_info():
     url = "http://dnf.api.yzz.cn/activity/getExchangeList"
-    res = requests.get(url, headers=headers).json()
+    res = requests.get(url, headers=headers, timeout=10).json()
 
     heads = ["id", "名称", "积分", "启用", "库存", "已发放", "总计"]
     colSizes = [3, 25, 6, 6, 6, 6, 6]
@@ -123,7 +123,7 @@ def exchange(startTime, endTime):
 def do_exchange(index=0):
     url = "http://dnf.api.yzz.cn/activity/exchange"
 
-    res = requests.post(url, data=f"mobile={mobile}&prize_name={prize_name}", headers=post_headers)
+    res = requests.post(url, data=f"mobile={mobile}&prize_name={prize_name}", headers=post_headers, timeout=10)
     logger.info(f"请求序号{index:5d}: {res.json()}")
     return res.json()
 

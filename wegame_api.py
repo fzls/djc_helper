@@ -89,7 +89,7 @@ class WegameApi:
             "referer": "https://www.wegame.com.cn/middle/login/third_callback.html",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
         }
-        res = requests.post(self.login_url, json=data, headers=headers)
+        res = requests.post(self.login_url, json=data, headers=headers, timeout=10)
         tgp_id, tgp_ticket = int(res.cookies.get('tgp_id')), res.cookies.get('tgp_ticket')
         self.set_tgp_info(tgp_id, tgp_ticket)
 
@@ -200,7 +200,7 @@ class WegameApi:
         }
         if json_data is None:
             json_data = {}
-        res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers)
+        res = requests.post(self.common_url_prefix + api_name, json={**base_json_data, **json_data}, headers=self.common_headers, timeout=10)
 
         if print_res:
             pd = json.dumps(res.json(), ensure_ascii=False, indent=2)

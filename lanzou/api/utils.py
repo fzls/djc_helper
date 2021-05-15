@@ -86,7 +86,7 @@ def is_file_url(share_url: str) -> bool:
         return True
     else:  # VIP 用户的 URL 很随意
         try:
-            html = requests.get(share_url, headers=headers).text
+            html = requests.get(share_url, headers=headers, timeout=15).text
             html = remove_notes(html)
             return True if re.search(r'class="fileinfo"|id="file"|文件描述', html) else False
         except (requests.RequestException, Exception):
@@ -103,7 +103,7 @@ def is_folder_url(share_url: str) -> bool:
         return True
     else:  # VIP 用户的 URL 很随意
         try:
-            html = requests.get(share_url, headers=headers).text
+            html = requests.get(share_url, headers=headers, timeout=15).text
             html = remove_notes(html)
             return True if re.search(r'id="infos"', html) else False
         except (requests.RequestException, Exception):

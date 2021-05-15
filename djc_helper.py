@@ -800,7 +800,7 @@ class DjcHelper:
 
     def open_mobile_game_server_list(self):
         game_info = self.get_mobile_game_info()
-        res = requests.get(self.urls.query_game_server_list.format(bizcode=game_info.bizCode))
+        res = requests.get(self.urls.query_game_server_list.format(bizcode=game_info.bizCode), timeout=10)
         server_list_file = f"reference_data/server_list_{game_info.bizName}.js"
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
@@ -1198,7 +1198,7 @@ class DjcHelper:
         }
 
         for op in self.cfg.xinyue_app_operations:
-            res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers)
+            res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers, timeout=10)
             logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content}")
 
         logger.info(color("bold_yellow") + f"当前心悦app相关操作处于测试阶段，请前往心悦app自行确认是否兑换成功~")
@@ -3953,7 +3953,7 @@ class DjcHelper:
                         "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
                     }
 
-                    res = requests.post(url, headers=headers)
+                    res = requests.post(url, headers=headers, timeout=10)
                     html_text = res.text
 
                     prefixes = [
@@ -4072,10 +4072,10 @@ class DjcHelper:
             "x-requested-with": "XMLHttpRequest",
             "cookie": self.cfg.colg_cookie,
         }
-        signin_res = requests.post(self.urls.colg_sign_in_url, data="task_id=84", headers=headers)
+        signin_res = requests.post(self.urls.colg_sign_in_url, data="task_id=84", headers=headers, timeout=10)
         logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
 
-        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers)
+        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers, timeout=10)
         logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
         # {'code': 100000, 'data': {'user_credits': 295, 'task_credits': '15'}, 'msg': ''}
         resJson = take_credits_res.json()

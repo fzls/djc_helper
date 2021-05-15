@@ -8,7 +8,6 @@ from typing import List
 
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
-
 from log import logger, color
 from util import make_sure_dir_exists, with_cache, human_readable_size, cache_name_download
 
@@ -18,11 +17,15 @@ Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 # 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
 
 class Uploader:
-    folder_dnf_calc = Folder("魔改计算器", "1810329", "https://fzls.lanzous.com/s/dnf-calc", "")
-    folder_djc_helper = Folder("蚊子腿小助手", "2290618", "https://fzls.lanzous.com/s/djc-helper", "")
-    folder_history_files = Folder("历史版本", "2303716", "https://fzls.lanzous.com/b01bp17zg", "")
-    folder_online_files = Folder("在线文件存储", "2866929", "https://fzls.lanzous.com/s/myfiles", "6tnk")
-    folder_online_files_history_files = Folder("历史版本", "2867307", "https://fzls.lanzous.com/b01c143ah", "5r75")
+    default_sub_domain = "fzls"
+    default_main_domain = "lanzoui"
+    default_domain = f"{default_sub_domain}.{default_main_domain}.com"
+
+    folder_dnf_calc = Folder("魔改计算器", "1810329", f"https://{default_domain}/s/dnf-calc", "")
+    folder_djc_helper = Folder("蚊子腿小助手", "2290618", f"https://{default_domain}/s/djc-helper", "")
+    folder_history_files = Folder("历史版本", "2303716", f"https://{default_domain}/b01bp17zg", "")
+    folder_online_files = Folder("在线文件存储", "2866929", f"https://{default_domain}/s/myfiles", "6tnk")
+    folder_online_files_history_files = Folder("历史版本", "2867307", f"https://{default_domain}/b01c143ah", "5r75")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
@@ -304,33 +307,14 @@ class Uploader:
         return LanZouCloud.FAILED
 
     def all_possiable_urls(self, lanzouyun_url: str) -> List[str]:
-        old_domain = 'fzls.lanzous'
+        if self.default_main_domain not in lanzouyun_url:
+            return [lanzouyun_url]
+
         return [
-            # 首先尝试传入的url
-            lanzouyun_url,
-
             # 目前网盘默认分享链接是这个，后面可以根据经验，哪个最靠谱，调整先后顺序
-            lanzouyun_url.replace(old_domain, 'wwx.lanzoui'),
-
-            # 本地测试当前可用的域名，后续可以调整
-            lanzouyun_url.replace(old_domain, 'pan.lanzoui'),
-            lanzouyun_url.replace(old_domain, 'up.lanzoui'),
-            lanzouyun_url.replace(old_domain, 'wws.lanzoui'),
-            lanzouyun_url.replace(old_domain, 'www.lanzoui'),
-
-            lanzouyun_url.replace(old_domain, 'pan.lanzoux'),
-            lanzouyun_url.replace(old_domain, 'up.lanzoux'),
-            lanzouyun_url.replace(old_domain, 'wws.lanzoux'),
-            lanzouyun_url.replace(old_domain, 'www.lanzoux'),
-            lanzouyun_url.replace(old_domain, 'wwx.lanzoux'),
-
-            lanzouyun_url.replace(old_domain, 'wwx.lanzous'),
-
-            # 其余备用的域名，测试时暂时不可用
-            lanzouyun_url.replace(old_domain, 'pan.lanzous'),
-            lanzouyun_url.replace(old_domain, 'up.lanzous'),
-            lanzouyun_url.replace(old_domain, 'wws.lanzous'),
-            lanzouyun_url.replace(old_domain, 'www.lanzous'),
+            lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),
+            lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),
+            lanzouyun_url.replace(self.default_main_domain, 'lanzous'),
         ]
 
 

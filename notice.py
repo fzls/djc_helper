@@ -139,8 +139,15 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "测试公告功能"
-    message = """这是一条测试消息，可以无视哈哈，为日后特殊情况下发公告先测试一下"""
+    title = "助手token简易获取方式"
+    message = """现在有个很方便获取token的方式，各位如果还未获取，可以按照下面的流程试试
+
+1. dnf助手内点击活动页面，在限时活动下找到【腾讯视频专区集卡再临】
+2. 点击右上角自己的头像
+3. 在微信图标右边点击【点击复制】，得到形如下面的链接（无关部分用*代替）
+3.1 https://m.film.qq.com/magic-act/112317/index.html?******&serverId=11&token=bjb5MMzP&isMainRole=0&******
+4. 从上面的链接中搜索token，可以得知它的值为bjb5MMzP（在 token= 和 之后最近的一个& 之间的内容就是token的值）
+"""
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NOTICE_SHOW_TYPE_ONCE, open_url="")

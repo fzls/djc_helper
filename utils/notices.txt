@@ -6,5 +6,13 @@
     "send_at": "2021-05-11 18:24:22",
     "show_type": "once",
     "open_url": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "助手token简易获取方式",
+    "message": "现在有个很方便获取token的方式，各位如果还未获取，可以按照下面的流程试试\n\n1. dnf助手内点击活动页面，在限时活动下找到【腾讯视频专区集卡再临】\n2. 点击右上角自己的头像\n3. 在微信图标右边点击【点击复制】，得到形如下面的链接（无关部分用*代替）\n3.1 https://m.film.qq.com/magic-act/112317/index.html?******&serverId=11&token=bjb5MMzP&isMainRole=0&******\n4. 从上面的链接中搜索token，可以得知它的值为bjb5MMzP（在 token= 和 之后最近的一个& 之间的内容就是token的值）\n",
+    "send_at": "2021-05-15 21:32:36",
+    "show_type": "once",
+    "open_url": ""
   }
 ]

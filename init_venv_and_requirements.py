@@ -1,0 +1,70 @@
+# 初始化依赖脚本
+import argparse
+import os
+import subprocess
+
+from log import logger
+
+
+def init_venv_and_requirements(venv_path=".venv", disable_douban=False):
+    # 初始化相关路径变量
+    pyscript_path = os.path.join(venv_path, "Scripts")
+    py_path = os.path.join(pyscript_path, "python")
+    pip_path = os.path.join(pyscript_path, "pip")
+
+    logger.info("尝试初始化venv环境")
+    subprocess.call([
+        "python",
+        "-m",
+        "venv",
+        venv_path,
+    ])
+
+    logger.info("尝试更新pip setuptools wheel")
+    douban_op = ["-i", "https://pypi.doubanio.com/simple"]
+    if disable_douban:
+        douban_op = []
+    subprocess.call([
+        py_path,
+        "-m",
+        "pip",
+        "install",
+        *douban_op,
+        "--upgrade",
+        "pip",
+        "setuptools",
+        "wheel",
+    ])
+
+    logger.info("尝试安装依赖库和pyinstaller")
+    subprocess.call([
+        pip_path,
+        "install",
+        *douban_op,
+        "-r",
+        "requirements.txt",
+        "--upgrade",
+        "wheel",
+        "pyinstaller",
+    ])
+
+    logger.info("安装pywin32_postinstall")
+    subprocess.call([
+        py_path,
+        os.path.join(pyscript_path, "pywin32_postinstall.py"),
+        "-install",
+    ])
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--disable_douban", action='store_true')
+    parser.add_argument("--venv_path", default=".venv")
+    args = parser.parse_args()
+
+    return args
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    init_venv_and_requirements(args.venv_path, args.disable_douban)

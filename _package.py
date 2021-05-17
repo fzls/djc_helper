@@ -55,7 +55,11 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             shutil.copyfile(source, destination)
 
     logger.info("清除utils目录下的一些内容")
-    for filename in ["logs", ".db", "auto_updater.exe", "buy_auto_updater_users.txt"]:
+    for filename in [
+        "auto_updater.exe",
+        "logs", ".db", ".cached", ".first_run", ".log.filename",
+        "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
+    ]:
         filepath = os.path.join(dir_current_release, f"utils/{filename}")
         if not os.path.exists(filepath):
             continue

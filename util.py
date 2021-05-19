@@ -693,6 +693,10 @@ def show_unexpected_exception_message(e: Exception):
     logger.warning(color("fg_bold_cyan") + "链接：https://fzls.lanzoui.com/s/djc-helper")
 
 
+def get_pay_server_addr() -> str:
+    return "http://139.198.179.81:8438"
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

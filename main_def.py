@@ -1,7 +1,7 @@
 import subprocess
 from multiprocessing import freeze_support
 from sys import exit
-from typing import Dict
+from typing import Dict, Tuple
 
 from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
@@ -930,9 +930,13 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
     return True
 
 
-def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
+def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> BuyInfo:
     logger.info("如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：https://fzls.lanzoui.com/s/djc-helper")
-    user_buy_info = _get_user_buy_info(qq_accounts, max_retry_count, retry_wait_time, show_log)
+    user_buy_info, query_ok = _get_user_buy_info(qq_accounts, max_retry_count, retry_wait_time, show_log)
+    if not query_ok:
+        logger.info("从网盘查询失败，尝试由服务器代理查询付费信息，请稍候片刻~")
+        return get_user_buy_info_from_server(qq_accounts)
+
     # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
     if has_buy_auto_updater_dlc(qq_accounts, max_retry_count, retry_wait_time, show_log):
         max_present_times = datetime.timedelta(days=2 * 31)
@@ -985,7 +989,7 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
     return user_buy_info
 
 
-def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
+def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> Tuple[BuyInfo, bool]:
     default_user_buy_info = BuyInfo()
     for try_idx in range(max_retry_count):
         try:
@@ -1048,7 +1052,7 @@ def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_tim
             if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
                 default_user_buy_info.expire_at = "2120-01-01 00:00:00"
-                return default_user_buy_info
+                return default_user_buy_info, True
 
             merged_user_buy_info = copy.deepcopy(default_user_buy_info)
             for user_buy_info in user_buy_info_list:
@@ -1060,7 +1064,7 @@ def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_tim
                 else:
                     merged_user_buy_info.merge(user_buy_info)
 
-            return merged_user_buy_info
+            return merged_user_buy_info, True
         except Exception as e:
             logFunc = logger.debug
             if use_by_myself():
@@ -1068,7 +1072,22 @@ def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_tim
             logFunc(f"第{try_idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
             time.sleep(retry_wait_time)
 
-    return default_user_buy_info
+    return default_user_buy_info, False
+
+
+def get_user_buy_info_from_server(qq_accounts: List[str]) -> BuyInfo:
+    buyInfo = BuyInfo()
+
+    try:
+        if len(qq_accounts) != 0:
+            server_addr = get_pay_server_addr()
+            raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
+            if raw_res.status_code == 200:
+                buyInfo.auto_update_config(raw_res.json())
+    except Exception as e:
+        logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
+
+    return buyInfo
 
 
 def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0):

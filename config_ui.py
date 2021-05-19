@@ -100,10 +100,10 @@ class GetBuyInfoThread(QThread):
         self.check_all_skey_and_pskey()
 
         self.update_progress("2/3 开始尝试获取自动更新DLC的信息")
-        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(self.cfg)
+        has_buy_auto_update_dlc = has_buy_auto_updater_dlc(self.cfg.get_qq_accounts())
 
         self.update_progress("3/3 开始尝试获取按月付费的信息")
-        user_buy_info = get_user_buy_info(self.cfg)
+        user_buy_info = get_user_buy_info(self.cfg.get_qq_accounts())
 
         dlc_info = "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引.docx\n"
         if has_buy_auto_update_dlc:

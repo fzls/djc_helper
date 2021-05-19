@@ -531,7 +531,7 @@ class ConfigUi(QFrame):
             return False
 
     def get_pay_server_addr(self) -> str:
-        return "http://139.198.179.81:8438"
+        return get_pay_server_addr()
 
     def create_others_tab(self, cfg: Config):
         top_layout = QVBoxLayout()

@@ -444,7 +444,7 @@ def show_extra_infos(cfg):
 def show_pay_info(cfg):
     logger.info("")
     _show_head_line("付费相关信息")
-    user_buy_info = get_user_buy_info(cfg)
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
     show_buy_info(user_buy_info, cfg)
 
 
@@ -553,7 +553,7 @@ def run(cfg: Config):
     _show_head_line("开始核心逻辑")
 
     logger.warning("开始查询付费信息，请稍候~")
-    user_buy_info = get_user_buy_info(cfg)
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
     show_buy_info(user_buy_info, cfg)
 
     # 上报付费使用情况
@@ -585,7 +585,7 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
 
     if is_daily_first_run("pay_report"):
         logger.info("今日首次运行，尝试上报付费统计~")
-        if has_buy_auto_updater_dlc(cfg):
+        if has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
             increase_counter(my_auto_updater_usage_counter_name)
         if user_buy_info.is_active():
             increase_counter(my_active_monthly_pay_usage_counter_name)
@@ -852,7 +852,7 @@ def try_auto_update(cfg):
             logger.warning(color("bold_cyan") + "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
             return
 
-        if not has_buy_auto_updater_dlc(cfg):
+        if not has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
             msg = (
                 "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
                 "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
@@ -885,15 +885,14 @@ def try_auto_update(cfg):
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
-def has_buy_auto_updater_dlc(cfg: Config):
-    retrtCfg = cfg.common.retry
-    for idx in range(retrtCfg.max_retry_count):
+def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
+    for idx in range(max_retry_count):
         try:
             uploader = Uploader()
             has_no_users = True
             for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
                 try:
-                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=cfg.common.log_level == "debug", try_compressed_version_first=True)
+                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=show_log, try_compressed_version_first=True)
                 except FileNotFoundError as e:
                     # 如果网盘没有这个文件，就跳过
                     continue
@@ -905,15 +904,14 @@ def has_buy_auto_updater_dlc(cfg: Config):
                 if len(buy_users) != 0:
                     has_no_users = False
 
-                for account_cfg in cfg.account_configs:
-                    qq = uin2qq(account_cfg.account_info.uin)
+                for qq in qq_accounts:
                     if qq in buy_users:
                         return True
 
                 logger.debug((
                     "DLC购买调试日志：\n"
                     f"remote_filename={remote_filename}\n"
-                    f"账号列表={[uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs]}\n"
+                    f"账号列表={qq_accounts}\n"
                     f"用户列表={buy_users}\n"
                 ))
 
@@ -927,16 +925,16 @@ def has_buy_auto_updater_dlc(cfg: Config):
             if use_by_myself():
                 logFunc = logger.error
             logFunc(f"第{idx + 1}次检查是否购买DLC时出错了，稍后重试", exc_info=e)
-            time.sleep(retrtCfg.retry_wait_time)
+            time.sleep(retry_wait_time)
 
     return True
 
 
-def get_user_buy_info(cfg: Config):
+def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
     logger.info("如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：https://fzls.lanzoui.com/s/djc-helper")
-    user_buy_info = _get_user_buy_info(cfg)
+    user_buy_info = _get_user_buy_info(qq_accounts, max_retry_count, retry_wait_time, show_log)
     # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
-    if has_buy_auto_updater_dlc(cfg):
+    if has_buy_auto_updater_dlc(qq_accounts, max_retry_count, retry_wait_time, show_log):
         max_present_times = datetime.timedelta(days=2 * 31)
 
         free_start_time = parse_time("2021-02-08 00:00:00")
@@ -987,13 +985,12 @@ def get_user_buy_info(cfg: Config):
     return user_buy_info
 
 
-def _get_user_buy_info(cfg: Config):
-    retrtCfg = cfg.common.retry
+def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
     default_user_buy_info = BuyInfo()
-    for try_idx in range(retrtCfg.max_retry_count):
+    for try_idx in range(max_retry_count):
         try:
             # 默认设置首个qq为购买信息
-            default_user_buy_info.qq = uin2qq(cfg.account_configs[0].account_info.uin)
+            default_user_buy_info.qq = qq_accounts[0]
 
             uploader = Uploader()
             has_no_users = True
@@ -1006,13 +1003,14 @@ def _get_user_buy_info(cfg: Config):
                 user_buy_info = user_buy_info_list[idx]
 
                 try:
-                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=cfg.common.log_level == "debug", try_compressed_version_first=True)
+                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=show_log, try_compressed_version_first=True)
                 except FileNotFoundError as e:
                     # 如果网盘没有这个文件，就跳过
                     continue
 
                 buy_users = {}  # type: Dict[str, BuyInfo]
-                def update_if_longer(qq:str, info:BuyInfo):
+
+                def update_if_longer(qq: str, info: BuyInfo):
                     if qq not in buy_users:
                         buy_users[qq] = info
                     else:
@@ -1032,7 +1030,7 @@ def _get_user_buy_info(cfg: Config):
                 if len(buy_users) != 0:
                     has_no_users = False
 
-                qqs_to_check = list([uin2qq(account_cfg.account_info.uin) for account_cfg in cfg.account_configs])
+                qqs_to_check = list(qq for qq in qq_accounts)
                 for i in range(idx):
                     other_way_user_buy_info = user_buy_info_list[i]
                     append_if_not_in(qqs_to_check, other_way_user_buy_info.qq)
@@ -1068,7 +1066,7 @@ def _get_user_buy_info(cfg: Config):
             if use_by_myself():
                 logFunc = logger.error
             logFunc(f"第{try_idx + 1}次检查是否付费时出错了，稍后重试", exc_info=e)
-            time.sleep(retrtCfg.retry_wait_time)
+            time.sleep(retry_wait_time)
 
     return default_user_buy_info
 
@@ -1125,7 +1123,7 @@ def test_try_report_pay_info():
     # cfg.common.on_config_update(to_raw_type(cfg.common))
 
     logger.info("尝试获取按月付费信息")
-    user_buy_info = get_user_buy_info(cfg)
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
 
     try_report_pay_info(cfg, user_buy_info)
     input("等待几秒，确保上传完毕后再点击enter键")
@@ -1184,9 +1182,9 @@ def test_pay_info():
     # cfg.common.on_config_update(to_raw_type(cfg.common))
 
     logger.info("尝试获取DLC信息")
-    has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg)
+    has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg.get_qq_accounts())
     logger.info("尝试获取按月付费信息")
-    user_buy_info = get_user_buy_info(cfg)
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
 
     if has_buy_auto_update_dlc:
         dlc_info = "当前某一个账号已购买自动更新DLC(若对自动更新送的两月有疑义，请看付费指引的常见问题章节)"

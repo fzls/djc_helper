@@ -3750,7 +3750,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
-        # https://dnf.qq.com/cp/a20210412care/indexm.html
+        # https://dnf.qq.com/cp/a20210512caregh/index.html
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
 
@@ -3761,30 +3761,30 @@ class DjcHelper:
         self.check_majieluo()
 
         # 马杰洛的见面礼
-        self.majieluo_op("验证是否幸运用户", "756182")
-        self.majieluo_op("领取见面礼", "755065")
+        self.majieluo_op("验证是否幸运用户", "761785")
+        self.majieluo_op("领取见面礼", "761771")
 
         # 马杰洛的特殊任务
-        self.majieluo_op("登录游戏 石头*5", "755067")
-        self.majieluo_op("通关副本 石头*5", "755073")
-        self.majieluo_op("连续登录7天额外领取100个时间引导石", "755093")
+        self.majieluo_op("登录游戏 石头*5", "761772")
+        self.majieluo_op("通关副本 石头*5", "761774")
+        self.majieluo_op("连续登录7天额外领取100个时间引导石", "761781")
 
         ## https://dnf.qq.com/cp/a20210412care/index.html?iCode=63370&iPartion=6
         # share_pskey=self.fetch_share_p_skey("发送猜拳邀请")
-        # self.majieluo_op("发送猜拳邀请", "755291", iReceiveUin="3428842367", extra_cookies=f"p_skey={share_pskey}")
-        # self.majieluo_op("接受猜拳邀请", "755733", iCode="63370", iPartion="6")
-        # self.majieluo_op("猜拳大挑战累计成(30次)", "756226")
-        logger.info(color("bold_cyan") + "猜拳请自行完成~")
+        # self.majieluo_op("发送猜拳邀请", "761782", iReceiveUin="3428842367", extra_cookies=f"p_skey={share_pskey}")
+        # self.majieluo_op("接受猜拳邀请", "761784", iCode="63370", iPartion="6")
+        # self.majieluo_op("猜拳大挑战累计成(30次)", "761786")
+        logger.info(color("bold_cyan") + "猜拳不能绑定固定人，所以请自行完成~")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
-        endTime = "20210521"
+        endTime = "20210616"
 
         takeStone = False
-        takeStoneActId = "755076"
+        takeStoneActId = "761775"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
@@ -3798,22 +3798,22 @@ class DjcHelper:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利", "755084")
+            self.majieluo_op("提取福利", "761777")
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "755089", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "761778", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
     def check_majieluo(self):
-        self.check_bind_account("DNF马杰洛的规划", "https://dnf.qq.com/cp/a20210412care/indexm.html",
-                                activity_op_func=self.majieluo_op, query_bind_flowid="755062", commit_bind_flowid="755061")
+        self.check_bind_account("DNF马杰洛的规划", "https://dnf.qq.com/cp/a20210512caregh/index.html",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="761768", commit_bind_flowid="761767")
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210412care/indexm.html",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210512caregh/",
                                    cardType=cardType, inviteId=inviteId, sendName=sendName, receiveUin=receiveUin,
                                    receiver=receiver, receiverName=receiverName, receiverUrl=receiverUrl, giftNum=giftNum,
                                    **extra_params)
@@ -4972,9 +4972,9 @@ if __name__ == '__main__':
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
         # djcHelper.qq_video()
-        # djcHelper.majieluo()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.guanjia()
-        djcHelper.dnf_strong()
+        # djcHelper.dnf_strong()
+        djcHelper.majieluo()

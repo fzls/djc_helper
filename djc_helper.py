@@ -440,11 +440,9 @@ class DjcHelper:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("dnf助手编年史活动", self.dnf_helper_chronicle),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF心悦51", self.dnf_xinyue_51),
-            ("qq视频活动", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
@@ -507,6 +505,8 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("会员关怀", self.vip_mentor),
             ("colg每日签到", self.colg_signin),
+            ("DNF福利中心兑换", self.dnf_welfare),
+            ("qq视频活动", self.qq_video),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

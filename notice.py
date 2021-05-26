@@ -103,12 +103,12 @@ class NoticeManager:
 
     @try_except()
     def show_notices(self):
-        for notice in self.notices:
-            if not notice.need_show():
-                continue
+        valid_notices = list(filter(lambda notice: notice.need_show(), self.notices))
 
+        logger.info(f"发现 {len(valid_notices)} 个新公告")
+        for idx, notice in enumerate(valid_notices):
             # 展示公告
-            message_box(notice.message, f"公告-{notice.title}", icon=win32con.MB_ICONINFORMATION, open_url=notice.open_url)
+            message_box(notice.message, f"公告({idx+1}/{len(valid_notices)}) - {notice.title}", icon=win32con.MB_ICONINFORMATION, open_url=notice.open_url)
 
         logger.info("所有需要展示的公告均已展示完毕")
 

@@ -251,25 +251,30 @@ def search_act(actId):
 
 def get_act_desc_js(actId):
     actId = str(actId)
-    last_three = str(actId[-3:])
 
+    a_week_seconds = 7 * 24 * 3600
+
+    act_cache_file = with_cache("act_desc", actId, cache_max_seconds=a_week_seconds, cache_miss_func=lambda: download_act_desc_js(actId))
+
+    if not os.path.exists(act_cache_file):
+        return ""
+
+    with open(act_cache_file, 'r', encoding="utf-8") as f:
+        return f.read()
+
+
+def download_act_desc_js(actId: str) -> str:
+    last_three = str(actId[-3:])
     act_cache_dir = f"{cached_dir}/actDesc/{last_three}/{actId}"
     act_cache_file = f"{act_cache_dir}/act.desc.js"
 
-    # 先尝试从本地缓存获取
-    if os.path.exists(act_cache_file):
-        with open(act_cache_file, 'r', encoding="utf-8") as f:
-            return f.read()
-
     # 然后从服务器获取活动信息
     actUrls = [
-        'https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
-        'https://apps.game.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
-        'https://apps.game.qq.com/comm-htdocs/js/ams/v0.2R02/act/{actId}/act.desc.js',
+        f'https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
+        f'https://apps.game.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js',
+        f'https://apps.game.qq.com/comm-htdocs/js/ams/v0.2R02/act/{actId}/act.desc.js',
     ]
-    for idx in range(len(actUrls)):
-        url = actUrls[idx].format(actId=actId, last_three=str(actId[-3:]))
-
+    for url in actUrls:
         res = requests.get(url, timeout=1)
         if res.status_code != 200:
             continue
@@ -278,7 +283,7 @@ def get_act_desc_js(actId):
         with open(act_cache_file, 'w', encoding="utf-8") as f:
             f.write(res.text)
 
-        return res.text
+        return act_cache_file
 
     return ""
 

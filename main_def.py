@@ -822,12 +822,6 @@ def show_tips(cfg):
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
         ),
-        (
-            "3.19 DNF微信公众号又出了答题活动，鉴于之前说明过的缘由，无法在小助手中集成。目前已在autojs版本小助手中添加该功能，欢迎大家下载使用：https://github.com/fzls/autojs"
-        ),
-        (
-            "现已添加多进程支持，有兴趣可打开多进程开关进行体验。请注意，多进程运行时日志会混杂<_<"
-        ),
     ]
 
     for idx, tip in enumerate(tips):

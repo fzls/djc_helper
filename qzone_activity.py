@@ -382,13 +382,21 @@ class QzoneActivity:
         def check_fn(response: requests.Response):
             return data_prefix not in response.text
 
-        res = try_request(request_fn, self.djc_helper.common_cfg.retry)
-        page_html = res.text
+        retry_cfg = self.djc_helper.common_cfg.retry
+        for i in range(retry_cfg.max_retry_count):
+            try:
+                res = try_request(request_fn, self.djc_helper.common_cfg.retry)
+                page_html = res.text
 
-        prefix_idx = page_html.index(data_prefix) + len(data_prefix)
-        suffix_idx = page_html.index(data_suffix, prefix_idx)
+                prefix_idx = page_html.index(data_prefix) + len(data_prefix)
+                suffix_idx = page_html.index(data_suffix, prefix_idx)
 
-        return json.loads(page_html[prefix_idx:suffix_idx])
+                return json.loads(page_html[prefix_idx:suffix_idx])
+            except Exception as e:
+                logger.debug("出错了", exc_info=e)
+                time.sleep(retry_cfg.retry_wait_time)
+
+        raise Exception("无法正常获取QQ空间活动数据")
 
     def do_qzone_activity(self, actid, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
         url = self.urls.qzone_activity.format(

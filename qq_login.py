@@ -134,7 +134,7 @@ class QQLogin():
 
             # 先尝试从网盘下载合适版本的便携版chrome
             if not os.path.isfile(self.chrome_binary_7z()):
-                logger.info(f"尝试自动从网盘下载 {zip_name}")
+                logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}")
                 uploader = Uploader()
                 uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
 

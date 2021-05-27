@@ -28,6 +28,7 @@ class Uploader:
     folder_dnf_calc = Folder("魔改计算器", "1810329", f"https://{default_domain}/s/dnf-calc", "")
     folder_djc_helper = Folder("蚊子腿小助手", "2290618", f"https://{default_domain}/s/djc-helper", "")
     folder_history_files = Folder("历史版本", "2303716", f"https://{default_domain}/b01bp17zg", "")
+    folder_djc_helper_tools = Folder("蚊子腿小助手相关工具", "2291287", f"https://{default_domain}/s/djc-tools", "")
     folder_online_files = Folder("在线文件存储", "2866929", f"https://{default_domain}/s/myfiles", "6tnk")
     folder_online_files_history_files = Folder("历史版本", "2867307", f"https://{default_domain}/b01c143ah", "5r75")
 

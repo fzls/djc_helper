@@ -821,7 +821,7 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RUN_PARALLEL = True
+    RUN_PARALLEL = False
     cfg.common.force_use_portable_chrome = True
     cfg.common.run_in_headless_mode = False
 

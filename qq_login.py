@@ -74,7 +74,7 @@ class QQLogin():
     #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
     #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
     #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手根目录，并更新入库
-    chrome_major_version = 89
+    chrome_major_version = 91
 
     default_window_width = 390
     default_window_height = 360

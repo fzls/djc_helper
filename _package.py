@@ -6,6 +6,7 @@ import subprocess
 
 from log import logger
 from version import now_version
+from qq_login import QQLogin
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
@@ -26,7 +27,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "清除登录信息_误登录其他账号后请点击这个.bat",
         "bandizip_portable",
         "reference_data",
-        "chromedriver_89.exe",
+        f"chromedriver_{QQLogin.chrome_major_version}.exe",
         "public_key.der",
         "使用教程",
         "npp_portable",

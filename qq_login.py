@@ -133,7 +133,7 @@ class QQLogin():
             if not os.path.isfile(self.chrome_binary_7z()):
                 msg = (
                     "================ 这一段是问题描述 ================\n"
-                    "当前电脑未发现{version}版本chrome浏览器版本，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
+                    "当前电脑未发现{version}版本的chrome浏览器，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
                     "\n"
                     "================ 这一段是解决方法 ================\n"
                     "如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
@@ -146,7 +146,9 @@ class QQLogin():
                     "2.1 系统安装的chrome自动升级到新版本了，当前小助手使用的驱动不支持该版本。解决办法：下载当前版本小助手对应版本的便携版chrome\n"
                     "2.2 新版小助手升级了驱动，当前系统安装的chrome或便携版chrome的版本太低了。解决办法：升级新版本chrome或下载新版本的便携版chrome\n"
                     "\n"
-                    "------- 如果这样还有人进群问，将直接踢出群聊 -------\n"
+                    "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
+                    "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
+                    "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                 ).format(zip_name=os.path.basename(self.chrome_binary_7z()), installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
                 async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
                 os.system("PAUSE")

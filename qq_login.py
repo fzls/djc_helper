@@ -17,6 +17,7 @@ from config import *
 from log import logger, color
 from util import async_message_box, get_screen_size
 from version import now_version
+from upload_lanzouyun import Uploader
 
 
 # 在github action环境下登录异常
@@ -129,7 +130,15 @@ class QQLogin():
 
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome
-            # 先判定本地是否有便携版压缩包，若无则提示去网盘下载
+            zip_name = os.path.basename(self.chrome_binary_7z())
+
+            # 先尝试从网盘下载合适版本的便携版chrome
+            if not os.path.isfile(self.chrome_binary_7z()):
+                logger.info(f"尝试自动从网盘下载 {zip_name}")
+                uploader = Uploader()
+                uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
+
+            # 判定本地是否有便携版压缩包，若无则说明自动下载失败，提示去网盘手动下载
             if not os.path.isfile(self.chrome_binary_7z()):
                 msg = (
                     "================ 这一段是问题描述 ================\n"
@@ -149,7 +158,7 @@ class QQLogin():
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
-                ).format(zip_name=os.path.basename(self.chrome_binary_7z()), installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
+                ).format(zip_name=zip_name, installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
                 async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
                 os.system("PAUSE")
                 exit(-1)

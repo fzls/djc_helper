@@ -117,14 +117,6 @@ class QQLogin():
             else:
                 logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
-        # 判断对应版本的chrome_driver是否存在，若不存在则先下载（主要用于处理强制设置版本时没有driver的问题）
-        if not os.path.isfile(self.chrome_driver_executable_path()):
-            chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
-
-            logger.info(color("bold_yellow") + f"未在小助手目录发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
-            uploader = Uploader()
-            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
-
         inited = False
 
         try:
@@ -139,12 +131,6 @@ class QQLogin():
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome
             zip_name = os.path.basename(self.chrome_binary_7z())
-
-            # 先尝试从网盘下载合适版本的便携版chrome
-            if not os.path.isfile(self.chrome_binary_7z()):
-                logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
-                uploader = Uploader()
-                uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
 
             # 判定本地是否有便携版压缩包，若无则说明自动下载失败，提示去网盘手动下载
             if not os.path.isfile(self.chrome_binary_7z()):
@@ -172,11 +158,6 @@ class QQLogin():
                 async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
                 os.system("PAUSE")
                 exit(-1)
-
-            # 先判断便携版chrome是否已解压
-            if not os.path.isdir(self.chrome_binary_directory()):
-                logger.info(f"{self.name} 自动解压便携版chrome到当前目录")
-                subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
             # 然后使用本地的chrome来初始化driver对象
             options.binary_location = self.chrome_binary_location()

@@ -305,7 +305,7 @@ class QQLogin():
                 self.login_mode_guanjia: (
                     self._login_guanjia,
                     "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）",
-                    "http://guanjia.qq.com/act/cop/20210127dnf/pc/",
+                    "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
                 ),
                 self.login_mode_wegame: (
                     self._login_wegame,
@@ -437,7 +437,7 @@ class QQLogin():
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start("http://guanjia.qq.com/act/cop/20210127dnf/pc/")
+                self.open_url_on_start("https://guanjia.qq.com/act/cop/20210425dnf/pc/")
 
             self.set_window_size()
 

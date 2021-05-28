@@ -2557,6 +2557,7 @@ class DjcHelper:
     # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
     # note: 6. 调整urls中管家蚊子腿的起止时间
     # note: 7. 调整config_ui中管家开关
+    # note: 8. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
 
     @try_except()
     def guanjia(self):

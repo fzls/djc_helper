@@ -217,9 +217,9 @@ class QQLogin():
 
         # 检查系统自带的chrome是否可用
         options = Options()
+        options.headless = True
         try:
             if not self.cfg.force_use_portable_chrome:
-                options.headless = True
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
                 self.driver.quit()
                 return
@@ -236,7 +236,7 @@ class QQLogin():
 
         # 尝试解压
         if not os.path.isdir(self.chrome_binary_directory()):
-            logger.info(f"{self.name} 自动解压便携版chrome到当前目录")
+            logger.info(f"自动解压便携版chrome到当前目录")
             subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
         # 检查便携版chrome是否有效
@@ -246,17 +246,20 @@ class QQLogin():
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
-            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
+            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
             self.driver.quit()
             return
         except:
             pass
 
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
-        logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载")
+        logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
         uploader = Uploader()
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".", cache_max_seconds=0)
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".", cache_max_seconds=0)
+
+        shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
+        subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")

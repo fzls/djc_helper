@@ -33,6 +33,9 @@ version = 'v' + version
 run_start_time = datetime.now()
 logger.info(f"开始发布版本 {version}")
 
+set_title_cmd = f"title 发布 {version}"
+os.system(set_title_cmd)
+
 # 先声明一些需要用到的目录的地址
 dir_src = os.path.realpath('.')
 dir_all_release = os.path.realpath(os.path.join("releases"))

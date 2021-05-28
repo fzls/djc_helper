@@ -200,15 +200,63 @@ class QQLogin():
         urllib_logger = logging.getLogger('urllib3.connectionpool')
         urllib_logger.setLevel(logger.level)
 
-    def extract_portable_chrome_ahead(self):
+    def check_and_download_chrome_ahead(self):
         """
-        若存在便携版压缩包，且未解压，则预先解压缩
-        主要用于处理多进程模式下，可能多个进程同时尝试解压导致的问题
+        尝试预先下载解压缩chrome的driver和便携版
+        主要用于处理多进程模式下，可能多个进程同时尝试该操作导致的问题
         :return:
         """
-        if os.path.isfile(self.chrome_binary_7z()) and not os.path.isdir(self.chrome_binary_directory()):
-            logger.info("预先在主进程自动解压便携版chrome到当前目录，避免后续多进程同时尝试解压")
+        chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
+        zip_name = os.path.basename(self.chrome_binary_7z())
+
+        # 检查driver是否存在
+        if not os.path.isfile(self.chrome_driver_executable_path()):
+            logger.info(color("bold_yellow") + f"未在小助手目录发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
+            uploader = Uploader()
+            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
+
+        # 检查系统自带的chrome是否可用
+        options = Options()
+        try:
+            if not self.cfg.force_use_portable_chrome:
+                options.headless = True
+                self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
+                self.driver.quit()
+                return
+        except:
+            pass
+
+        # 走到这里说明系统自带的chrome不可用
+
+        # 尝试从网盘下载合适版本的便携版chrome
+        if not os.path.isfile(self.chrome_binary_7z()):
+            logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
+            uploader = Uploader()
+            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
+
+        # 尝试解压
+        if not os.path.isdir(self.chrome_binary_directory()):
+            logger.info(f"{self.name} 自动解压便携版chrome到当前目录")
             subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
+
+        # 检查便携版chrome是否有效
+        try:
+            options.binary_location = self.chrome_binary_location()
+            # you may need some other options
+            options.add_argument('--no-sandbox')
+            options.add_argument('--no-default-browser-check')
+            options.add_argument('--no-first-run')
+            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
+            self.driver.quit()
+            return
+        except:
+            pass
+
+        # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
+        logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载")
+        uploader = Uploader()
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")
@@ -837,6 +885,9 @@ if __name__ == '__main__':
     RUN_PARALLEL = False
     cfg.common.force_use_portable_chrome = True
     cfg.common.run_in_headless_mode = False
+
+    # 预先尝试下载解压缩
+    QQLogin(cfg.common).check_and_download_chrome_ahead()
 
     if RUN_PARALLEL:
         from multiprocessing import Pool, cpu_count, freeze_support

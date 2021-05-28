@@ -1459,12 +1459,10 @@ class DjcHelper:
             return True
 
         lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
-        qa = QzoneActivity(self, lr)
+        al = QzoneActivity(self, lr)
 
         # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
-        # 由于活动过期的判定会优先于pskey判定，需要需要保证下面调用的是最新的活动~
-        qa.fetch_dnf_warriors_call_data()
-        res = qa.do_dnf_warriors_call("fcg_receive_reward", "测试pskey是否过期", qa.zz().actbossRule.buyVipPrize, gameid=qa.zz().gameid, print_res=False)
+        res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
         return res['code'] == -3000 and res['subcode'] == -4001
 
     def save_uin_pskey(self, uin, pskey, skey, vuserid):

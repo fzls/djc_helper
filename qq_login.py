@@ -216,18 +216,19 @@ class QQLogin():
             uploader = Uploader()
             uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
 
-        logger.info("检查系统自带的chrome是否可用")
         options = Options()
         options.headless = True
-        try:
-            if not self.cfg.force_use_portable_chrome:
+        if not self.cfg.force_use_portable_chrome:
+            try:
+                logger.info("检查系统自带的chrome是否可用")
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
                 self.driver.quit()
                 return
-        except:
-            pass
-
-        logger.info("走到这里说明系统自带的chrome不可用")
+            except:
+                logger.info("走到这里说明系统自带的chrome不可用")
+                pass
+        else:
+            logger.info("当前配置为强制使用便携版chrome")
 
         # 尝试从网盘下载合适版本的便携版chrome
         if not os.path.isfile(self.chrome_binary_7z()):

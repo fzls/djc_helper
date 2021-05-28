@@ -206,16 +206,17 @@ class QQLogin():
         主要用于处理多进程模式下，可能多个进程同时尝试该操作导致的问题
         :return:
         """
+        logger.info("检查chrome相关内容是否ok")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
 
-        # 检查driver是否存在
+        logger.info("检查driver是否存在")
         if not os.path.isfile(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手目录发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
             uploader = Uploader()
             uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
 
-        # 检查系统自带的chrome是否可用
+        logger.info("检查系统自带的chrome是否可用")
         options = Options()
         options.headless = True
         try:
@@ -226,7 +227,7 @@ class QQLogin():
         except:
             pass
 
-        # 走到这里说明系统自带的chrome不可用
+        logger.info("走到这里说明系统自带的chrome不可用")
 
         # 尝试从网盘下载合适版本的便携版chrome
         if not os.path.isfile(self.chrome_binary_7z()):
@@ -239,7 +240,7 @@ class QQLogin():
             logger.info(f"自动解压便携版chrome到当前目录")
             subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
 
-        # 检查便携版chrome是否有效
+        logger.info("检查便携版chrome是否有效")
         try:
             options.binary_location = self.chrome_binary_location()
             # you may need some other options

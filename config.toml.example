@@ -232,12 +232,12 @@ iGoodsId = "753"
 sGoodsName = "装备品级调整箱（5个）"
 count = 2
 
-[[account_configs.exchange_items]]
-# 兑换一次疲劳药
-iGoodsId = "755"
-sGoodsName = "魔界抗疲劳秘药（10点）"
-# 下面的1表示领取一次，改成0并保存就是不领取。如果任何人在任何场所问我这个疲劳药怎么取消，我将直接踢出群聊并拉入本工具的黑名单，不论语气如何。
-count = 1
+#[[account_configs.exchange_items]]
+## 兑换一次疲劳药
+#iGoodsId = "755"
+#sGoodsName = "魔界抗疲劳秘药（10点）"
+## 下面的1表示领取一次，改成0并保存就是不领取。如果任何人在任何场所问我这个疲劳药怎么取消，我将直接踢出群聊并拉入本工具的黑名单，不论语气如何。
+#count = 1
 
 # 各功能开关，true表示开启，false表示关闭
 # 示例如下：

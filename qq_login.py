@@ -15,9 +15,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from config import *
 from log import logger, color
+from upload_lanzouyun import Uploader
 from util import async_message_box, get_screen_size
 from version import now_version
-from upload_lanzouyun import Uploader
 
 
 # 在github action环境下登录异常
@@ -116,6 +116,14 @@ class QQLogin():
                 options.headless = True
             else:
                 logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
+
+        # 判断对应版本的chrome_driver是否存在，若不存在则先下载（主要用于处理强制设置版本时没有driver的问题）
+        if not os.path.isfile(self.chrome_driver_executable_path()):
+            chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
+
+            logger.info(color("bold_yellow") + f"未在小助手目录发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
+            uploader = Uploader()
+            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
 
         inited = False
 

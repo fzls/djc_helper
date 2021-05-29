@@ -1,13 +1,14 @@
 import json
 import os.path
 from typing import List
+from datetime import timedelta
 
 import win32con
 
 from data_struct import ConfigInterface, to_raw_type
 from log import logger
 from upload_lanzouyun import Uploader
-from util import format_now, parse_time, try_except, is_first_run, is_daily_first_run, is_weekly_first_run, is_monthly_first_run, message_box
+from util import *
 
 NOTICE_SHOW_TYPE_ONCE = "once"
 NOTICE_SHOW_TYPE_DAILY = "daily"
@@ -27,6 +28,7 @@ class Notice(ConfigInterface):
         self.send_at = "2021-05-11 00:00:00"
         self.show_type = NOTICE_SHOW_TYPE_ONCE
         self.open_url = ""  # 若填入，在展示对应公告时会弹出该网页
+        self.expire_at = "2121-05-11 00:00:00"
 
     def __lt__(self, other):
         return parse_time(self.send_at) < parse_time(other.send_at)
@@ -34,6 +36,11 @@ class Notice(ConfigInterface):
     def need_show(self) -> bool:
         key = f"notice_need_show_{self.title}_{self.send_at}"
 
+        # 判断是否过期
+        if get_now() > parse_time(self.expire_at):
+            return False
+
+        # 根据显示类型判断
         if self.show_type == NOTICE_SHOW_TYPE_ONCE:
             return is_first_run(key)
         elif self.show_type == NOTICE_SHOW_TYPE_DAILY:
@@ -112,7 +119,7 @@ class NoticeManager:
 
         logger.info("所有需要展示的公告均已展示完毕")
 
-    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NOTICE_SHOW_TYPE_ONCE, open_url=""):
+    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NOTICE_SHOW_TYPE_ONCE, open_url="", valid_duration=timedelta(days=7)):
         if show_type not in valid_notice_show_type:
             logger.error(f"无效的show_type={show_type}，有效值为{valid_notice_show_type}")
             return
@@ -129,6 +136,7 @@ class NoticeManager:
         notice.send_at = send_at
         notice.show_type = show_type
         notice.open_url = open_url
+        notice.expire_at = format_time(get_now() + valid_duration)
 
         self.notices.append(notice)
         logger.info(f"添加公告：{notice}")
@@ -147,7 +155,7 @@ def main():
 """
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NOTICE_SHOW_TYPE_ONCE, open_url="")
+                  show_type=NOTICE_SHOW_TYPE_ONCE, open_url="", valid_duration=timedelta(days=7))
 
     nm.save()
 

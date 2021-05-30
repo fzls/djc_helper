@@ -389,7 +389,7 @@ class QQLogin():
                     if idx < lc.max_retry_count:
                         # 每次等待时长线性递增
                         wait_time = retry_timeouts[idx - 1]
-                        msg += f"，等待{wait_time}秒后重试"
+                        msg += f"，等待{wait_time}秒后重试(v{now_version})"
                         msg += f"\n\t当前登录重试等待时间序列：{retry_timeouts}"
                         msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data.recommended_first_retry_timeout}"
                         if use_by_myself():
@@ -406,7 +406,7 @@ class QQLogin():
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (
-            f"已经尝试登录 {self.name} {self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题\n"
+            f"已经尝试登录 {self.name} {self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题(v{now_version})\n"
             "建议依次尝试下列措施\n"
             "1. 重新打开程序\n"
             "2. 重启电脑\n"

@@ -566,7 +566,7 @@ def run(cfg: Config):
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
-        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
+        _show_head_line(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
         get_pool().starmap(do_run, [(_idx + 1, account_config, cfg.common, user_buy_info)
                                     for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
     else:

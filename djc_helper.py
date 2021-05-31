@@ -454,7 +454,6 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia),
         ]
 
-    # -- 已过期的一些活动
     def expired_activities(self):
         return [
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),

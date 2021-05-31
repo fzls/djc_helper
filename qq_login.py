@@ -199,6 +199,7 @@ class QQLogin():
 
         options = Options()
         options.headless = True
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if not self.cfg.force_use_portable_chrome:
             try:
                 logger.info("检查系统自带的chrome是否可用")

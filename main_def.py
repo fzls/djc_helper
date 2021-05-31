@@ -115,6 +115,9 @@ def do_check_all_skey_and_pskey(idx: int, window_index: int, account_config: Acc
         # 未启用的账户的账户不走该流程
         return None
 
+    # 等待随机一段短时间，避免多个进程输出混在一起
+    time.sleep(1 * random.random())
+
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.fetch_pskey(window_index=window_index)
@@ -602,6 +605,9 @@ def show_activities_summary(cfg: Config, user_buy_info: BuyInfo):
 
 
 def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
+    # 等待随机一段短时间，避免多个进程输出混在一起
+    time.sleep(1 * random.random())
+
     _show_head_line(f"开始处理第{idx}个账户({account_config.name})")
 
     start_time = datetime.datetime.now()

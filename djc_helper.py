@@ -380,9 +380,6 @@ class DjcHelper:
         # 获取dnf和手游的绑定信息
         self.get_bind_role_list()
 
-        # 展示活动概览
-        self.show_activities_summary(user_buy_info)
-
         # 运行活动
         activity_funcs_to_run = []
         activity_funcs_to_run.extend(self.free_activities())

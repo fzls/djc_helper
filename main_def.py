@@ -560,6 +560,9 @@ def run(cfg: Config):
     # 上报付费使用情况
     try_report_pay_info(cfg, user_buy_info)
 
+    # 展示活动概览
+    show_activities_summary(cfg, user_buy_info)
+
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
@@ -592,6 +595,10 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
             increase_counter(my_active_monthly_pay_usage_counter_name)
     else:
         logger.info("今日已运行过，不再尝试上报付费统计")
+
+
+def show_activities_summary(cfg: Config, user_buy_info: BuyInfo):
+    DjcHelper(cfg.account_configs[0], cfg.common).show_activities_summary(user_buy_info)
 
 
 def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):

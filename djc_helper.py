@@ -452,7 +452,6 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
-            ("DNF强者之路", self.dnf_strong),
         ]
 
     # -- 已过期的一些活动
@@ -513,6 +512,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("qq视频活动", self.qq_video),
+            ("DNF强者之路", self.dnf_strong),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

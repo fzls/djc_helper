@@ -380,18 +380,22 @@ class DjcHelper:
         # 获取dnf和手游的绑定信息
         self.get_bind_role_list()
 
+        # 展示活动概览
+        self.show_activities_summary(user_buy_info)
+
+        # 运行活动
+        activity_funcs_to_run = []
+        activity_funcs_to_run.extend(self.free_activities())
+        if user_buy_info.is_active():
+            # 付费期间将付费活动也加入到执行列表中
+            activity_funcs_to_run.extend(self.paied_activities())
+
+        for act_name, activity_func in activity_funcs_to_run:
+            activity_func()
+
+    def show_activities_summary(self, user_buy_info: BuyInfo):
         # 需要运行的活动
-        activity_funcs_to_run = [
-            ("执行道聚城相关操作", self.djc_operations),
-            ("DNF地下城与勇士心悦特权专区", self.xinyue_operations),
-            ("心悦app相关操作", self.xinyue_app_operations),
-            ("黑钻礼包", self.get_heizuan_gift),
-            ("腾讯游戏信用相关礼包", self.get_credit_xinyue_gift),
-            ("心悦app理财礼卡", self.xinyue_financing),
-            ("心悦猫咪", self.xinyue_cat),
-            ("心悦app周礼包", self.xinyue_weekly_gift),
-            ("dnf论坛签到", self.dnf_bbs_signin),
-        ]
+        free_activities = self.free_activities()
         paied_activities = self.paied_activities()
 
         # 展示活动的信息
@@ -407,7 +411,7 @@ class DjcHelper:
             return activities_summary
 
         # 免费活动信息
-        free_activities_summary = get_activities_summary("长期免费", activity_funcs_to_run)
+        free_activities_summary = get_activities_summary("长期免费", free_activities)
         show_head_line("以下为免费的长期活动", msg_color=color("bold_cyan"))
         logger.info(free_activities_summary)
 
@@ -428,13 +432,18 @@ class DjcHelper:
 
             logger.warning(color("bold_yellow") + msg)
 
-        # 运行活动
-        if user_buy_info.is_active():
-            # 付费期间将付费活动也加入到执行列表中
-            activity_funcs_to_run.extend(paied_activities)
-
-        for act_name, activity_func in activity_funcs_to_run:
-            activity_func()
+    def free_activities(self):
+        return [
+            ("执行道聚城相关操作", self.djc_operations),
+            ("DNF地下城与勇士心悦特权专区", self.xinyue_operations),
+            ("心悦app相关操作", self.xinyue_app_operations),
+            ("黑钻礼包", self.get_heizuan_gift),
+            ("腾讯游戏信用相关礼包", self.get_credit_xinyue_gift),
+            ("心悦app理财礼卡", self.xinyue_financing),
+            ("心悦猫咪", self.xinyue_cat),
+            ("心悦app周礼包", self.xinyue_weekly_gift),
+            ("dnf论坛签到", self.dnf_bbs_signin),
+        ]
 
     def paied_activities(self):
         # re: 更新新的活动时记得更新urls.py的not_ams_activities

@@ -385,7 +385,7 @@ class DjcHelper:
         activity_funcs_to_run.extend(self.free_activities())
         if user_buy_info.is_active():
             # 付费期间将付费活动也加入到执行列表中
-            activity_funcs_to_run.extend(self.paied_activities())
+            activity_funcs_to_run.extend(self.payed_activities())
 
         for act_name, activity_func in activity_funcs_to_run:
             activity_func()
@@ -393,7 +393,7 @@ class DjcHelper:
     def show_activities_summary(self, user_buy_info: BuyInfo):
         # 需要运行的活动
         free_activities = self.free_activities()
-        paied_activities = self.paied_activities()
+        paied_activities = self.payed_activities()
 
         # 展示活动的信息
         def get_activities_summary(categray: str, activities: list) -> str:
@@ -442,7 +442,7 @@ class DjcHelper:
             ("dnf论坛签到", self.dnf_bbs_signin),
         ]
 
-    def paied_activities(self):
+    def payed_activities(self):
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("dnf助手编年史活动", self.dnf_helper_chronicle),

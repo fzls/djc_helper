@@ -4916,15 +4916,14 @@ if __name__ == '__main__':
 
         djcHelper = DjcHelper(account_config, cfg.common)
 
-        # from main_def import get_user_buy_info, show_buy_info
-        #
-        # user_buy_info = get_user_buy_info(cfg)
-        # show_buy_info(user_buy_info)
-        # djcHelper.run(user_buy_info)
-
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
+        #
+        # from main_def import get_user_buy_info
+        #
+        # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+        # djcHelper.run(user_buy_info)
 
         # djcHelper.query_all_extra_info()
         # djcHelper.exchange_items()

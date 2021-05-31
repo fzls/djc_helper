@@ -456,52 +456,22 @@ class DjcHelper:
 
     # -- 已过期的一些活动
     def expired_activities(self):
-        # wegame国庆活动【秋风送爽关怀常伴】
-        self.wegame_guoqing()
-
-        # 微信签到
-        self.wx_checkin()
-
-        # 10月女法师三觉
-        self.dnf_female_mage_awaken()
-
-        # dnf助手排行榜
-        self.dnf_rank()
-
-        # 2020DNF嘉年华页面主页面签到
-        self.dnf_carnival()
-
-        # DNF进击吧赛利亚
-        self.xinyue_sailiyam()
-
-        # 阿拉德勇士征集令
-        self.dnf_warriors_call()
-
-        # dnf漂流瓶
-        self.dnf_drift()
-
-        # 暖冬好礼活动
-        self.warm_winter()
-
-        # DNF共创投票
-        self.dnf_dianzan()
-
-        # 史诗之路来袭活动合集
-        self.dnf_1224()
-
-        # DNF闪光杯第三期
-        self.dnf_shanguang()
-
-        # 新春福袋大作战
-        self.spring_fudai()
-
-        # 燃放爆竹活动
-        self.firecrackers()
-
-        # qq视频-看江湖有翡
-        self.youfei()
-
         return [
+            ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
+            ("微信签到", self.wx_checkin),
+            ("10月女法师三觉", self.dnf_female_mage_awaken),
+            ("dnf助手排行榜", self.dnf_rank),
+            ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
+            ("DNF进击吧赛利亚", self.xinyue_sailiyam),
+            ("阿拉德勇士征集令", self.dnf_warriors_call),
+            ("dnf漂流瓶", self.dnf_drift),
+            ("暖冬好礼活动", self.warm_winter),
+            ("DNF共创投票", self.dnf_dianzan),
+            ("史诗之路来袭活动合集", self.dnf_1224),
+            ("DNF闪光杯第三期", self.dnf_shanguang),
+            ("新春福袋大作战", self.spring_fudai),
+            ("燃放爆竹活动", self.firecrackers),
+            ("qq视频-看江湖有翡", self.youfei),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
             ("WeGame活动", self.dnf_wegame),

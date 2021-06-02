@@ -707,7 +707,7 @@ def disable_quick_edit_mode():
         kernel32 = ctypes.windll.kernel32
         kernel32.SetConsoleMode(kernel32.GetStdHandle(win32api.STD_INPUT_HANDLE), ENABLE_EXTENDED_FLAGS)
 
-    async_call(_cb())
+    async_call(_cb)
 
 
 if __name__ == '__main__':

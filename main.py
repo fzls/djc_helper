@@ -78,6 +78,9 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
+    if cfg.common.disable_cmd_quick_edit:
+        disable_quick_edit_mode()
+
     show_notices()
 
     if cfg.common.allow_only_one_instance:

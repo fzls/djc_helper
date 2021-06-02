@@ -1,3 +1,4 @@
+import ctypes
 import pathlib
 import platform
 import random
@@ -695,6 +696,18 @@ def show_unexpected_exception_message(e: Exception):
 
 def get_pay_server_addr() -> str:
     return "http://139.198.179.81:8438"
+
+
+def disable_quick_edit_mode():
+    # https://docs.microsoft.com/en-us/windows/console/setconsolemode
+    def _cb():
+        ENABLE_EXTENDED_FLAGS = 0x0080
+
+        logger.info(color("bold_green") + "将禁用命令行的快速编辑模式，避免鼠标误触时程序暂停，若需启用，请去配置文件取消禁用快速编辑模式~")
+        kernel32 = ctypes.windll.kernel32
+        kernel32.SetConsoleMode(kernel32.GetStdHandle(win32api.STD_INPUT_HANDLE), ENABLE_EXTENDED_FLAGS)
+
+    async_call(_cb())
 
 
 if __name__ == '__main__':

@@ -2,6 +2,9 @@
 
 # 所有账号共用的配置
 [common]
+# 是否禁用cmd命令行的快速编辑模式，从而鼠标点选时不会暂停，避免误触而不知所措
+disable_cmd_quick_edit = true
+
 # 是否启用多进程功能
 enable_multiprocessing = true
 # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数

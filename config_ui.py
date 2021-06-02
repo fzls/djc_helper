@@ -645,6 +645,9 @@ class CommonConfigUi(QFrame):
     def from_config(self, cfg: CommonConfig):
         form_layout = QFormLayout()
 
+        self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
+        form_layout.addRow("是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
+
         self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
         form_layout.addRow("是否启用多进程功能", self.checkbox_enable_multiprocessing)
 
@@ -707,6 +710,7 @@ class CommonConfigUi(QFrame):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()
         cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
+        cfg.disable_cmd_quick_edit = self.checkbox_disable_cmd_quick_edit.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()

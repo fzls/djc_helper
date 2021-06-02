@@ -5,8 +5,8 @@ import shutil
 import subprocess
 
 from log import logger
-from version import now_version
 from qq_login import QQLogin
+from version import now_version
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
@@ -55,22 +55,29 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             logger.info(f"拷贝文件 {filename}")
             shutil.copyfile(source, destination)
 
-    logger.info("清除utils目录下的一些内容")
-    for filename in [
-        "auto_updater.exe",
-        "logs", ".db", ".cached", ".first_run", ".log.filename",
-        "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
-    ]:
-        filepath = os.path.join(dir_current_release, f"utils/{filename}")
-        if not os.path.exists(filepath):
-            continue
+    logger.info("清除一些无需发布的内容")
+    dir_to_filenames_need_remove = {
+        ".": [
+            "requirements.txt",
+        ],
+        "utils": [
+            "auto_updater.exe",
+            "logs", ".db", ".cached", ".first_run", ".log.filename",
+            "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
+        ],
+    }
+    for dir_path, filenames in dir_to_filenames_need_remove.items():
+        for filename in filenames:
+            filepath = os.path.join(dir_current_release, f"{dir_path}/{filename}")
+            if not os.path.exists(filepath):
+                continue
 
-        if os.path.isdir(filepath):
-            logger.info(f"移除目录 {filepath}")
-            shutil.rmtree(filepath, ignore_errors=True)
-        else:
-            logger.info(f"移除文件 {filepath}")
-            os.remove(filepath)
+            if os.path.isdir(filepath):
+                logger.info(f"移除目录 {filepath}")
+                shutil.rmtree(filepath, ignore_errors=True)
+            else:
+                logger.info(f"移除文件 {filepath}")
+                os.remove(filepath)
 
     # 压缩打包
     os.chdir(dir_all_release)

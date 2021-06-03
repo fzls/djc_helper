@@ -25,7 +25,7 @@ not_ams_activities = [
     newAmsActInfo("管家蚊子腿", "2021-04-25 00:00:00", "2021-05-30 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-04-22 00:00:00", "2021-05-21 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
-    newAmsActInfo("集卡", "2021-03-25 00:00:00", "2021-04-30 23:59:59"),
+    newAmsActInfo("集卡", "2021-06-03 00:00:00", "2021-07-10 23:59:59"),
     newAmsActInfo("DNF助手编年史", "2021-05-01 00:00:00", "2021-05-31 23:59:59"),
     newAmsActInfo("colg每日签到", "2021-03-31 00:00:00", "2021-04-30 23:59:59"),
 ]
@@ -152,7 +152,7 @@ class Urls:
         self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}&countid={countid}"
 
         # 抽卡相关
-        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=7&verifyid=qq2021dnf12"
+        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13"
         # 查询次数信息：参数：to_qq, actName
         self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq, actName

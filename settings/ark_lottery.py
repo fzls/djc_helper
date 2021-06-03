@@ -2,16 +2,32 @@ setting = {
     "cssBase": "//qzonestyle.gtimg.cn",
     "actCount": {
         "rule": {
-            "31230": {
+            "31555": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120705,
+                        "countid": 120986,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "至尊礼包中间资格1_复制_复制_复制_复制",
+                        "name": "抽奖资格_复制_复制_复制_复制_复制",
+                        "rekey": "conf",
+                        "used": 0,
+                        "user": "1054073896"
+                    }
+                ]
+            },
+            "31556": {
+                "count": [
+                    {
+                        "add": 0,
+                        "budget": 0,
+                        "countid": 120991,
+                        "err_msg": "抱歉，您没有获得活动资格",
+                        "left": 0,
+                        "modid": "platform",
+                        "name": "至尊礼包中间资格1_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -19,11 +35,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120704,
+                        "countid": 120990,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "至尊礼包中间资格2_复制_复制_复制_复制",
+                        "name": "至尊礼包中间资格2_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -31,146 +47,130 @@ setting = {
                     {
                         "add": 0,
                         "budget": 10,
-                        "countid": 120706,
+                        "countid": 120992,
                         "left": 10,
                         "modid": "platform",
-                        "name": "至尊礼包限制_复制_复制_复制_复制",
+                        "name": "至尊礼包限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31231": {
-                "count": [
-                    {
-                        "add": 0,
-                        "budget": 0,
-                        "countid": 120700,
-                        "err_msg": "抱歉，您没有获得活动资格",
-                        "left": 0,
-                        "modid": "platform",
-                        "name": "抽奖资格_复制_复制_复制_复制",
-                        "rekey": "conf",
-                        "used": 0,
-                        "user": "1054073896"
-                    }
-                ]
-            },
-            "31232": {
+            "31557": {
                 "count": [
                     {
                         "add": 3,
                         "budget": 1,
-                        "countid": 120713,
+                        "countid": 120999,
                         "left": 4,
                         "modid": "platform",
-                        "name": "抽卡资格_复制_复制_复制_复制",
+                        "name": "抽卡资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31233": {
+            "31558": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31234": {
+            "31559": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31235": {
+            "31560": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31236": {
+            "31561": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31237": {
+            "31562": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31238": {
+            "31563": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 20,
-                        "countid": 120702,
+                        "countid": 120988,
                         "left": 20,
                         "modid": "platform",
-                        "name": "补发资格_复制_复制_复制_复制",
+                        "name": "补发资格_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31239": {
+            "31564": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120709,
+                        "countid": 120995,
                         "left": 1,
                         "modid": "platform",
-                        "name": "礼包组1限制_复制_复制_复制_复制",
+                        "name": "礼包组1限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -178,11 +178,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120698,
+                        "countid": 120984,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-多人配合新挑战_复制_复制_复制",
+                        "name": "卡片-多人配合新挑战_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -190,11 +190,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120697,
+                        "countid": 120983,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-丰富机制闯难关_复制_复制_复制",
+                        "name": "卡片-丰富机制闯难关_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -202,11 +202,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120696,
+                        "countid": 120982,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-新剧情视听盛宴_复制_复制_复制",
+                        "name": "卡片-新剧情视听盛宴_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -214,26 +214,26 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120695,
+                        "countid": 120981,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人成团战不停_复制_复制_复制",
+                        "name": "卡片-单人成团战不停_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31240": {
+            "31565": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120708,
+                        "countid": 120994,
                         "left": 1,
                         "modid": "platform",
-                        "name": "礼包组2限制_复制_复制_复制_复制",
+                        "name": "礼包组2限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -241,11 +241,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120694,
+                        "countid": 120980,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-回归奖励大升级_复制_复制_复制",
+                        "name": "卡片-回归奖励大升级_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -253,11 +253,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120693,
+                        "countid": 120979,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制",
+                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -265,11 +265,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120692,
+                        "countid": 120978,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-灿烂自选回归领_复制_复制_复制",
+                        "name": "卡片-灿烂自选回归领_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -277,26 +277,26 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120691,
+                        "countid": 120977,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-告别酱油变大佬_复制_复制_复制",
+                        "name": "卡片-告别酱油变大佬_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31241": {
+            "31566": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120707,
+                        "countid": 120993,
                         "left": 1,
                         "modid": "platform",
-                        "name": "礼包组3限制_复制_复制_复制_复制",
+                        "name": "礼包组3限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -304,11 +304,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120690,
+                        "countid": 120976,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人爽刷新玩法_复制_复制_复制",
+                        "name": "卡片-单人爽刷新玩法_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -316,11 +316,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120689,
+                        "countid": 120975,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-独立成团打副本_复制_复制_复制",
+                        "name": "卡片-独立成团打副本_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -328,11 +328,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120688,
+                        "countid": 120974,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-海量福利金秋享_复制_复制_复制",
+                        "name": "卡片-海量福利金秋享_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -340,26 +340,26 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120687,
+                        "countid": 120973,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-超强奖励等你拿_复制_复制_复制",
+                        "name": "卡片-超强奖励等你拿_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31242": {
+            "31567": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120709,
+                        "countid": 120995,
                         "left": 1,
                         "modid": "platform",
-                        "name": "礼包组1限制_复制_复制_复制_复制",
+                        "name": "礼包组1限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -367,11 +367,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120695,
+                        "countid": 120981,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人成团战不停_复制_复制_复制",
+                        "name": "卡片-单人成团战不停_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -379,11 +379,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120696,
+                        "countid": 120982,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-新剧情视听盛宴_复制_复制_复制",
+                        "name": "卡片-新剧情视听盛宴_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -391,11 +391,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120697,
+                        "countid": 120983,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-丰富机制闯难关_复制_复制_复制",
+                        "name": "卡片-丰富机制闯难关_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -403,235 +403,235 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120698,
+                        "countid": 120984,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-多人配合新挑战_复制_复制_复制",
+                        "name": "卡片-多人配合新挑战_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31243": {
+            "31568": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120711,
+                        "countid": 120997,
                         "err_msg": "抱歉，您的资格已经耗尽",
                         "left": 0,
                         "modid": "platform",
-                        "name": "每日分享限制_复制_复制_复制_复制",
+                        "name": "每日分享限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 1,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31244": {
+            "31569": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120687,
+                        "countid": 120973,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-超强奖励等你拿_复制_复制_复制",
+                        "name": "卡片-超强奖励等你拿_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31245": {
+            "31570": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120688,
+                        "countid": 120974,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-海量福利金秋享_复制_复制_复制",
+                        "name": "卡片-海量福利金秋享_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31246": {
+            "31571": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120689,
+                        "countid": 120975,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-独立成团打副本_复制_复制_复制",
+                        "name": "卡片-独立成团打副本_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31247": {
+            "31572": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120690,
+                        "countid": 120976,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人爽刷新玩法_复制_复制_复制",
+                        "name": "卡片-单人爽刷新玩法_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31248": {
+            "31573": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120691,
+                        "countid": 120977,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-告别酱油变大佬_复制_复制_复制",
+                        "name": "卡片-告别酱油变大佬_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31249": {
+            "31574": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120692,
+                        "countid": 120978,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-灿烂自选回归领_复制_复制_复制",
+                        "name": "卡片-灿烂自选回归领_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31250": {
+            "31575": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120693,
+                        "countid": 120979,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制",
+                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31251": {
+            "31576": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120694,
+                        "countid": 120980,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-回归奖励大升级_复制_复制_复制",
+                        "name": "卡片-回归奖励大升级_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31252": {
+            "31577": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120695,
+                        "countid": 120981,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人成团战不停_复制_复制_复制",
+                        "name": "卡片-单人成团战不停_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31253": {
+            "31578": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120696,
+                        "countid": 120982,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-新剧情视听盛宴_复制_复制_复制",
+                        "name": "卡片-新剧情视听盛宴_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31254": {
+            "31579": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120697,
+                        "countid": 120983,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-丰富机制闯难关_复制_复制_复制",
+                        "name": "卡片-丰富机制闯难关_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31255": {
+            "31580": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120698,
+                        "countid": 120984,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-多人配合新挑战_复制_复制_复制",
+                        "name": "卡片-多人配合新挑战_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31256": {
+            "31581": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120692,
+                        "countid": 120978,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-灿烂自选回归领_复制_复制_复制",
+                        "name": "卡片-灿烂自选回归领_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -639,11 +639,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120691,
+                        "countid": 120977,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-告别酱油变大佬_复制_复制_复制",
+                        "name": "卡片-告别酱油变大佬_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -651,11 +651,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120690,
+                        "countid": 120976,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人爽刷新玩法_复制_复制_复制",
+                        "name": "卡片-单人爽刷新玩法_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -663,11 +663,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120689,
+                        "countid": 120975,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-独立成团打副本_复制_复制_复制",
+                        "name": "卡片-独立成团打副本_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -675,11 +675,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120688,
+                        "countid": 120974,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-海量福利金秋享_复制_复制_复制",
+                        "name": "卡片-海量福利金秋享_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -687,27 +687,27 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120687,
+                        "countid": 120973,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-超强奖励等你拿_复制_复制_复制",
+                        "name": "卡片-超强奖励等你拿_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31257": {
+            "31582": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120698,
+                        "countid": 120984,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-多人配合新挑战_复制_复制_复制",
+                        "name": "卡片-多人配合新挑战_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -715,11 +715,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120697,
+                        "countid": 120983,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-丰富机制闯难关_复制_复制_复制",
+                        "name": "卡片-丰富机制闯难关_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -727,11 +727,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120696,
+                        "countid": 120982,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-新剧情视听盛宴_复制_复制_复制",
+                        "name": "卡片-新剧情视听盛宴_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -739,11 +739,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120695,
+                        "countid": 120981,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-单人成团战不停_复制_复制_复制",
+                        "name": "卡片-单人成团战不停_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -751,11 +751,11 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120694,
+                        "countid": 120980,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-回归奖励大升级_复制_复制_复制",
+                        "name": "卡片-回归奖励大升级_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -763,89 +763,89 @@ setting = {
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120693,
+                        "countid": 120979,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制",
+                        "name": "卡片-秒升Lv96刷深渊_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31258": {
+            "31583": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120704,
+                        "countid": 120990,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "至尊礼包中间资格2_复制_复制_复制_复制",
+                        "name": "至尊礼包中间资格2_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31259": {
+            "31584": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120705,
+                        "countid": 120991,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "至尊礼包中间资格1_复制_复制_复制_复制",
+                        "name": "至尊礼包中间资格1_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31260": {
+            "31585": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120712,
+                        "countid": 120998,
                         "left": 1,
                         "modid": "platform",
-                        "name": "每日登陆游戏限制_复制_复制_复制_复制",
+                        "name": "每日登陆游戏限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31261": {
+            "31586": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 1,
-                        "countid": 120701,
+                        "countid": 120987,
                         "left": 1,
                         "modid": "platform",
-                        "name": "回流用户进入页面限制_复制_复制_复制_复制",
+                        "name": "回流用户进入页面限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
                     }
                 ]
             },
-            "31262": {
+            "31587": {
                 "count": [
                     {
                         "add": 0,
                         "budget": 0,
-                        "countid": 120699,
+                        "countid": 120985,
                         "err_msg": "抱歉，您没有获得活动资格",
                         "left": 0,
                         "modid": "platform",
-                        "name": "每日登陆页面限制_复制_复制_复制_复制",
+                        "name": "每日登陆页面限制_复制_复制_复制_复制_复制",
                         "rekey": "conf",
                         "used": 0,
                         "user": "1054073896"
@@ -855,70 +855,70 @@ setting = {
         }
     },
     "chargeRuleInfo": {
-        "now_time": 1616657187,
+        "now_time": 1622725467,
         "rule": {
-            "31230": {
-                "budget": {
-                    "budget": 2100000,
-                    "left": 2099998,
-                    "used": 2
-                },
-                "daily_budget": {
-                    "budget": -1,
-                    "left": 99999999
-                },
-                "day_begin_second": 0,
-                "day_end_second": 86399,
-                "endtm": 1619798399,
-                "limit": [
-                    {
-                        "countid": 120705,
-                        "type": 1
-                    },
-                    {
-                        "countid": 120704,
-                        "type": 1
-                    },
-                    {
-                        "countid": 120706,
-                        "type": 1
-                    }
-                ],
-                "name": "抽取至尊礼包_复制_复制_复制_复制",
-                "pay_type": 0,
-                "refer": "-1",
-                "starttm": 1616256000,
-                "type": 10
-            },
-            "31231": {
+            "31555": {
                 "budget": {
                     "budget": 2000000000,
-                    "left": 1999997747,
-                    "used": 2253
+                    "left": 1999987946,
+                    "used": 12054
                 },
                 "daily_budget": {
                     "budget": 2000000000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120700,
+                        "countid": 120986,
                         "type": 1
                     }
                 ],
-                "name": "抽奖池_复制_复制_复制_复制",
+                "name": "抽奖池_复制_复制_复制_复制_复制",
                 "pay_type": 0,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 10
             },
-            "31232": {
+            "31556": {
+                "budget": {
+                    "budget": 2100000,
+                    "left": 2099984,
+                    "used": 16
+                },
+                "daily_budget": {
+                    "budget": -1,
+                    "left": 99999999
+                },
+                "day_begin_second": 0,
+                "day_end_second": 86399,
+                "endtm": 1625932799,
+                "limit": [
+                    {
+                        "countid": 120991,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120990,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120992,
+                        "type": 1
+                    }
+                ],
+                "name": "抽取至尊礼包_复制_复制_复制_复制_复制",
+                "pay_type": 0,
+                "refer": "-1",
+                "starttm": 1622476800,
+                "type": 10
+            },
+            "31557": {
                 "budget": {
                     "budget": 1800000000,
-                    "left": 1799942651,
-                    "used": 57349
+                    "left": 1799573297,
+                    "used": 426703
                 },
                 "daily_budget": {
                     "budget": -1,
@@ -926,20 +926,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120713,
+                        "countid": 120999,
                         "type": 1
                     }
                 ],
-                "name": "抽卡_复制_复制_复制_复制",
+                "name": "抽卡_复制_复制_复制_复制_复制",
                 "pay_type": 0,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 10
             },
-            "31233": {
+            "31558": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -951,20 +951,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发至尊礼包-B_复制_复制_复制",
+                "name": "补发至尊礼包-B_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31234": {
+            "31559": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -976,20 +976,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发云上长安礼包_复制_复制_复制",
+                "name": "补发云上长安礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31235": {
+            "31560": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -1001,20 +1001,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发至尊礼包-A_复制_复制_复制",
+                "name": "补发至尊礼包-A_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31236": {
+            "31561": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -1026,20 +1026,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发武道归元礼包_复制_复制_复制",
+                "name": "补发武道归元礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31237": {
+            "31562": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -1050,20 +1050,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发勇士集结礼包_复制_复制_复制",
+                "name": "补发勇士集结礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31238": {
+            "31563": {
                 "budget": {
                     "budget": 10000,
                     "left": 10000,
@@ -1075,204 +1075,204 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120702,
+                        "countid": 120988,
                         "type": 1
                     }
                 ],
-                "name": "补发勇士归来礼包_复制_复制_复制",
+                "name": "补发勇士归来礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31239": {
+            "31564": {
                 "budget": {
                     "budget": 2900000,
-                    "left": 2899914,
-                    "used": 86
+                    "left": 2899266,
+                    "used": 734
                 },
                 "daily_budget": {
                     "budget": 2900000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120709,
+                        "countid": 120995,
                         "type": 1
                     },
                     {
-                        "countid": 120698,
+                        "countid": 120984,
                         "type": 1
                     },
                     {
-                        "countid": 120697,
+                        "countid": 120983,
                         "type": 1
                     },
                     {
-                        "countid": 120696,
+                        "countid": 120982,
                         "type": 1
                     },
                     {
-                        "countid": 120695,
+                        "countid": 120981,
                         "type": 1
                     }
                 ],
-                "name": "兑换勇士集结礼包_复制_复制_复制",
+                "name": "兑换勇士集结礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31240": {
+            "31565": {
                 "budget": {
                     "budget": 2900000,
-                    "left": 2899886,
-                    "used": 114
+                    "left": 2899294,
+                    "used": 706
                 },
                 "daily_budget": {
                     "budget": 2900000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120708,
+                        "countid": 120994,
                         "type": 1
                     },
                     {
-                        "countid": 120694,
+                        "countid": 120980,
                         "type": 1
                     },
                     {
-                        "countid": 120693,
+                        "countid": 120979,
                         "type": 1
                     },
                     {
-                        "countid": 120692,
+                        "countid": 120978,
                         "type": 1
                     },
                     {
-                        "countid": 120691,
+                        "countid": 120977,
                         "type": 1
                     }
                 ],
-                "name": "兑换武道归元礼包_复制_复制_复制",
+                "name": "兑换武道归元礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31241": {
+            "31566": {
                 "budget": {
                     "budget": 2900000,
-                    "left": 2899857,
-                    "used": 143
+                    "left": 2899365,
+                    "used": 635
                 },
                 "daily_budget": {
                     "budget": 2900000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120707,
+                        "countid": 120993,
                         "type": 1
                     },
                     {
-                        "countid": 120690,
+                        "countid": 120976,
                         "type": 1
                     },
                     {
-                        "countid": 120689,
+                        "countid": 120975,
                         "type": 1
                     },
                     {
-                        "countid": 120688,
+                        "countid": 120974,
                         "type": 1
                     },
                     {
-                        "countid": 120687,
+                        "countid": 120973,
                         "type": 1
                     }
                 ],
-                "name": "兑换云上长安礼包_复制_复制_复制",
+                "name": "兑换云上长安礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31242": {
+            "31567": {
                 "budget": {
                     "budget": 970000,
-                    "left": 969948,
-                    "used": 52
+                    "left": 969469,
+                    "used": 531
                 },
                 "daily_budget": {
                     "budget": 970000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120709,
+                        "countid": 120995,
                         "type": 1
                     },
                     {
-                        "countid": 120695,
+                        "countid": 120981,
                         "type": 1
                     },
                     {
-                        "countid": 120696,
+                        "countid": 120982,
                         "type": 1
                     },
                     {
-                        "countid": 120697,
+                        "countid": 120983,
                         "type": 1
                     },
                     {
-                        "countid": 120698,
+                        "countid": 120984,
                         "type": 1
                     }
                 ],
-                "name": "兑换勇士归来礼包_复制_复制_复制",
+                "name": "兑换勇士归来礼包_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31243": {
+            "31568": {
                 "budget": {
                     "budget": 100000000,
-                    "left": 99990160,
-                    "used": 9840
+                    "left": 99932839,
+                    "used": 67161
                 },
                 "daily_budget": {
                     "budget": 50000000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120711,
+                        "countid": 120997,
                         "type": 1
                     }
                 ],
-                "name": "每日分享得抽卡资格_复制_复制_复制_复制",
+                "name": "每日分享得抽卡资格_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31244": {
+            "31569": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1283,20 +1283,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120687,
+                        "countid": 120973,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-百级摸金新圣地_复制_复制_复制_复制",
+                "name": "抽奖资格转换-百级摸金新圣地_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31245": {
+            "31570": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1307,20 +1307,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120688,
+                        "countid": 120974,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-摸金闪光赚不停_复制_复制_复制_复制",
+                "name": "抽奖资格转换-摸金闪光赚不停_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31246": {
+            "31571": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1331,20 +1331,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120689,
+                        "countid": 120975,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-随机副本新体验_复制_复制_复制_复制",
+                "name": "抽奖资格转换-随机副本新体验_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31247": {
+            "31572": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1355,20 +1355,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120690,
+                        "countid": 120976,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-全新免费毕业本_复制_复制_复制_复制",
+                "name": "抽奖资格转换-全新免费毕业本_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31248": {
+            "31573": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1379,20 +1379,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120691,
+                        "countid": 120977,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-福利狂撒阿拉德_复制_复制_复制_复制",
+                "name": "抽奖资格转换-福利狂撒阿拉德_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31249": {
+            "31574": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1403,20 +1403,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120692,
+                        "countid": 120978,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-史诗代币登录送_复制_复制_复制_复制",
+                "name": "抽奖资格转换-史诗代币登录送_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31250": {
+            "31575": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1427,20 +1427,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120693,
+                        "countid": 120979,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-全屏炸裂真格斗_复制_复制_复制_复制",
+                "name": "抽奖资格转换-全屏炸裂真格斗_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31251": {
+            "31576": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1451,20 +1451,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120694,
+                        "countid": 120980,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-归元·男格斗三觉_复制_复制_复制_复制",
+                "name": "抽奖资格转换-归元·男格斗三觉_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31252": {
+            "31577": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1475,20 +1475,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120695,
+                        "countid": 120981,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-12武器强化券_复制_复制_复制_复制",
+                "name": "抽奖资格转换-12武器强化券_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31253": {
+            "31578": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1499,20 +1499,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120696,
+                        "countid": 120982,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-7777低保代币_复制_复制_复制_复制",
+                "name": "抽奖资格转换-7777低保代币_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31254": {
+            "31579": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1523,20 +1523,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120697,
+                        "countid": 120983,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-史诗天空免费领_复制_复制_复制_复制",
+                "name": "抽奖资格转换-史诗天空免费领_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31255": {
+            "31580": {
                 "budget": {
                     "budget": -1,
                     "left": 99999999
@@ -1547,64 +1547,108 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120698,
+                        "countid": 120984,
                         "type": 1
                     }
                 ],
-                "name": "抽奖资格转换-极速保送100级_复制_复制_复制_复制",
+                "name": "抽奖资格转换-极速保送100级_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31257": {
+            "31581": {
                 "budget": {
                     "budget": 4000000,
-                    "left": 3999998,
-                    "used": 2
+                    "left": 3999984,
+                    "used": 16
                 },
                 "daily_budget": {
                     "budget": 2000000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120698,
+                        "countid": 120978,
                         "type": 1
                     },
                     {
-                        "countid": 120697,
+                        "countid": 120977,
                         "type": 1
                     },
                     {
-                        "countid": 120696,
+                        "countid": 120976,
                         "type": 1
                     },
                     {
-                        "countid": 120695,
+                        "countid": 120975,
                         "type": 1
                     },
                     {
-                        "countid": 120694,
+                        "countid": 120974,
                         "type": 1
                     },
                     {
-                        "countid": 120693,
+                        "countid": 120973,
                         "type": 1
                     }
                 ],
-                "name": "兑换至尊中间资格1_复制_复制_复制_复制",
+                "name": "兑换至尊中间资格2_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31258": {
+            "31582": {
+                "budget": {
+                    "budget": 4000000,
+                    "left": 3999984,
+                    "used": 16
+                },
+                "daily_budget": {
+                    "budget": 2000000
+                },
+                "day_begin_second": 0,
+                "day_end_second": 86399,
+                "endtm": 1625932799,
+                "limit": [
+                    {
+                        "countid": 120984,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120983,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120982,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120981,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120980,
+                        "type": 1
+                    },
+                    {
+                        "countid": 120979,
+                        "type": 1
+                    }
+                ],
+                "name": "兑换至尊中间资格1_复制_复制_复制_复制_复制",
+                "pay_type": -1,
+                "refer": "-1",
+                "starttm": 1622476800,
+                "type": 3
+            },
+            "31583": {
                 "budget": {
                     "budget": 40000000,
                     "left": 40000000,
@@ -1615,20 +1659,20 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120704,
+                        "countid": 120990,
                         "type": 1
                     }
                 ],
-                "name": "兑换至尊失败回滚后6张卡_复制_复制_复制_复制",
+                "name": "兑换至尊失败回滚后6张卡_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31259": {
+            "31584": {
                 "budget": {
                     "budget": 40000000,
                     "left": 40000000,
@@ -1639,68 +1683,68 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120705,
+                        "countid": 120991,
                         "type": 1
                     }
                 ],
-                "name": "兑换至尊失败回滚前6张卡_复制_复制_复制_复制",
+                "name": "兑换至尊失败回滚前6张卡_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             },
-            "31260": {
+            "31585": {
                 "budget": {
                     "budget": 100000000,
-                    "left": 99994007,
-                    "used": 5993
+                    "left": 99955770,
+                    "used": 44230
                 },
                 "daily_budget": {
                     "budget": 50000000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120712,
+                        "countid": 120998,
                         "type": 1
                     }
                 ],
-                "name": "每日登录游戏得抽卡资格_复制_复制_复制_复制",
+                "name": "每日登录游戏得抽卡资格_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31261": {
+            "31586": {
                 "budget": {
                     "budget": 100000000,
-                    "left": 99996687,
-                    "used": 3313
+                    "left": 99972912,
+                    "used": 27088
                 },
                 "daily_budget": {
                     "budget": 50000000
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120701,
+                        "countid": 120987,
                         "type": 1
                     }
                 ],
-                "name": "回流用户进入页面得抽卡资格_复制_复制_复制_复制",
+                "name": "回流用户进入页面得抽卡资格_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 100
             },
-            "31262": {
+            "31587": {
                 "budget": {
                     "budget": 100000000,
                     "left": 100000000,
@@ -1711,17 +1755,17 @@ setting = {
                 },
                 "day_begin_second": 0,
                 "day_end_second": 86399,
-                "endtm": 1619798399,
+                "endtm": 1625932799,
                 "limit": [
                     {
-                        "countid": 120699,
+                        "countid": 120985,
                         "type": 1
                     }
                 ],
-                "name": "每日登陆页面得抽卡资格_复制_复制_复制_复制",
+                "name": "每日登陆页面得抽卡资格_复制_复制_复制_复制_复制",
                 "pay_type": -1,
                 "refer": "-1",
-                "starttm": 1616256000,
+                "starttm": 1622476800,
                 "type": 3
             }
         }
@@ -1731,29 +1775,29 @@ setting = {
         "avatar": "//q.qlogo.cn/openurl/1054073896/1054073896/100?rf=qz_hybrid&c=cXpfaHliacmlkQDEwNTQwNzM4OTY"
     },
     "zzconfig": {
-        "title": "集卡赢战灵天舞套!",
-        "arkId": "1392_66",
-        "loginActId": "act_dnf_ark12",
-        "backActId": "act_dnf_xinyun6",
+        "title": "DNF周年庆集卡来袭，年度最强奖励大放送",
+        "arkId": "1392_75",
+        "loginActId": "act_dnf_ark13",
+        "backActId": "act_dnf_xinyun7",
         "titleList": {
             "desc1": "",
             "desc2": ""
         },
-        "actid": 4437,
-        "actName": "dnf-ark12",
+        "actid": 4473,
+        "actName": "dnf-ark13",
         "gameid": "dnf",
-        "verifyid": "qq2021dnf12",
+        "verifyid": "qq2021dnf13",
         "filterLogic": {
             "isFilter": False,
             "number": [
                 838879942,
-                11052035,
-                296694314,
-                370354028,
+                13526840,
+                731175612,
                 3025744415,
-                276329706,
-                3025744415,
-                66370578,
+                729269235,
+                550749801,
+                524999552,
+                842569108,
                 59658504,
                 71236942,
                 1570176098,
@@ -1762,14 +1806,15 @@ setting = {
                 2952017472,
                 615189082,
                 615189083,
-                281779857,
-                0
+                524999552,
+                3149634761,
+                2654406000
             ]
         },
         "isMobileGame": False,
-        "report": "dnfv12",
+        "report": "dnfv13",
         "backgroundColor": "",
-        "backgroundImage": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318145920_34f529.jpg",
+        "backgroundImage": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210603103806_2e387c.jpg",
         "backTip": "你不是幸运用户",
         "gameInfo": {
             "isMobile": 2,
@@ -1780,195 +1825,199 @@ setting = {
         },
         "btnGroups": [
             {
-                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318145947_e09591.png",
+                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171610_a4164d.png",
                 "btnMsg": ".",
                 "num": 3,
                 "jumpUrl": ""
             },
             {
-                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318145959_802a41.png",
+                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171614_0d6890.png",
                 "btnMsg": ".",
                 "num": 2,
                 "jumpUrl": ""
             },
             {
-                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150004_2686e9.png",
+                "btnBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171620_2686e9.png",
                 "btnMsg": ".",
                 "num": 2,
                 "jumpUrl": ""
             }
         ],
         "btnTextList": [],
-        "lootBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150020_08fe96.png",
-        "suoquBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150024_c447ce.png",
-        "zengBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150033_0d49c7.png",
-        "lotteryBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150036_8d5e1c.png",
+        "lootBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171633_08fe96.png",
+        "suoquBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171636_c447ce.png",
+        "zengBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171637_0d49c7.png",
+        "lotteryBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171648_8d5e1c.png",
         "cardGroups": {
             "group1": {
-                "title": "黑鸦之境",
-                "banner": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150154_56a2d9.png",
+                "title": "欢庆周年",
+                "banner": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171730_df586a.png",
                 "cardList": [
                     {
-                        "name": "神话闪光新途径",
-                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150237_08de86.png",
-                        "id": 120698,
-                        "prizeId": 48173,
-                        "lotterySwitchId": 31255
+                        "name": "周年福利拿不停",
+                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601171822_5ca249.png",
+                        "id": 120984,
+                        "prizeId": 48605,
+                        "lotterySwitchId": 31580
                     },
                     {
-                        "name": "角色成长新环境",
-                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150336_15f2e4.png",
-                        "id": 120697,
-                        "prizeId": 48172,
-                        "lotterySwitchId": 31254
+                        "name": "每日登录有惊喜",
+                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601172007_112867.png",
+                        "id": 120983,
+                        "prizeId": 48604,
+                        "lotterySwitchId": 31579
                     },
                     {
-                        "name": "战力挑战新副本",
-                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150505_431379.png",
-                        "id": 120696,
-                        "prizeId": 48171,
-                        "lotterySwitchId": 31253
+                        "name": "花样活动喜参与",
+                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601172026_4fb42d.png",
+                        "id": 120982,
+                        "prizeId": 48603,
+                        "lotterySwitchId": 31578
                     },
                     {
-                        "name": "收益摸金新圣地",
-                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318150537_59a228.png",
-                        "id": 120695,
-                        "prizeId": 48170,
-                        "lotterySwitchId": 31252
+                        "name": "大佬竟是我自己",
+                        "image": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601172046_5c5580.png",
+                        "id": 120981,
+                        "prizeId": 48602,
+                        "lotterySwitchId": 31577
                     }
                 ]
             },
             "group2": {
-                "title": "副本收益",
-                "banner": "https://sola.gtimg.cn/aoi/sola/20210318150709_P8OspcM7sp.png",
+                "title": "全新团本",
+                "banner": "https://tianshu.gtimg.cn/tianshu/1622539452056.png",
                 "cardList": [
                     {
-                        "name": "黑鸦之境大提升",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_FwmHCysSjz.png",
-                        "id": 120694,
-                        "prizeId": 48169,
-                        "lotterySwitchId": 31251
+                        "name": "神秘使徒再降临",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539455881.png",
+                        "id": 120980,
+                        "prizeId": 48601,
+                        "lotterySwitchId": 31576
                     },
                     {
-                        "name": "史诗装备可补齐",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_U6jb91HGsm.png",
-                        "id": 120693,
-                        "prizeId": 48168,
-                        "lotterySwitchId": 31250
+                        "name": "全新系统来挑战",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539458555.png",
+                        "id": 120979,
+                        "prizeId": 48600,
+                        "lotterySwitchId": 31575
                     },
                     {
-                        "name": "装备词条由你搭",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_YHSmOeHtDl.png",
-                        "id": 120692,
-                        "prizeId": 48167,
-                        "lotterySwitchId": 31249
+                        "name": "装备保底早毕业",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539461139.png",
+                        "id": 120978,
+                        "prizeId": 48599,
+                        "lotterySwitchId": 31574
                     },
                     {
-                        "name": "智慧产物能升级",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_KPidWlgLjo.png",
-                        "id": 120691,
-                        "prizeId": 48166,
-                        "lotterySwitchId": 31248
+                        "name": "团本金牌任意翻",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539464306.png",
+                        "id": 120977,
+                        "prizeId": 48598,
+                        "lotterySwitchId": 31573
                     }
                 ]
             },
             "group3": {
-                "title": "三觉来袭",
-                "banner": "https://sola.gtimg.cn/aoi/sola/20210318150709_JwxLzSMrwf.png",
+                "title": "神话降临",
+                "banner": "https://tianshu.gtimg.cn/tianshu/1622539452056.png",
                 "cardList": [
                     {
-                        "name": "守护者三觉·启",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_3bB5nWBkgq.png",
-                        "id": 120690,
-                        "prizeId": 48165,
-                        "lotterySwitchId": 31247
+                        "name": "神话装备把把拿",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539584225.png",
+                        "id": 120976,
+                        "prizeId": 48597,
+                        "lotterySwitchId": 31572
                     },
                     {
-                        "name": "狂拽酷炫美炸天",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_DD85XcjT5k.png",
-                        "id": 120689,
-                        "prizeId": 48164,
-                        "lotterySwitchId": 31246
+                        "name": "智慧引导随心刷",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539588514.png",
+                        "id": 120975,
+                        "prizeId": 48596,
+                        "lotterySwitchId": 31571
                     },
                     {
-                        "name": "三觉挑战等你接",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_mpum0OWGLh.png",
-                        "id": 120688,
-                        "prizeId": 48163,
-                        "lotterySwitchId": 31245
+                        "name": "签到惊喜任你选",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539591726.png",
+                        "id": 120974,
+                        "prizeId": 48595,
+                        "lotterySwitchId": 31570
                     },
                     {
-                        "name": "签到好礼不停歇",
-                        "image": "https://sola.gtimg.cn/aoi/sola/20210318150816_xcy3cZvjIT.png",
-                        "id": 120687,
-                        "prizeId": 48162,
-                        "lotterySwitchId": 31244
+                        "name": "早日毕业变主C",
+                        "image": "https://tianshu.gtimg.cn/tianshu/1622539595631.png",
+                        "id": 120973,
+                        "prizeId": 48594,
+                        "lotterySwitchId": 31569
                     }
                 ]
             }
         },
         "prizeGroups": {
             "group1": {
-                "title": "黑鸦之境礼包",
-                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210322172204_9c12f1.png",
-                "rule": 31239,
-                "qual": 120709,
-                "backName": "act_dnf_huiliu6",
-                "backRule": 31242,
-                "backQual": 120709,
-                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318151904_56a2d9.png"
+                "title": "欢庆周年礼包",
+                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210602153926_9c12f1.png",
+                "rule": 31564,
+                "qual": 120995,
+                "backName": "act_dnf_huiliu7",
+                "backRule": 31567,
+                "backQual": 120995,
+                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210603110621_82d267.png"
             },
             "group2": {
-                "title": "副本收益礼包",
-                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210322172208_9c12f1.png",
-                "rule": 31240,
-                "qual": 120708,
+                "title": "全新团本礼包",
+                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210602153922_9c12f1.png",
+                "rule": 31565,
+                "qual": 120994,
                 "backName": "",
                 "backRule": 0,
                 "backQual": 0,
-                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318152334_b6f23c.png"
+                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601173105_2545c5.png"
             },
             "group3": {
-                "title": "三觉来袭礼包",
-                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210322172217_9c12f1.png",
-                "rule": 31241,
-                "qual": 120707,
+                "title": "神话降临礼包",
+                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210602153917_9c12f1.png",
+                "rule": 31566,
+                "qual": 120993,
                 "backName": "",
                 "backRule": "",
                 "backQual": 0,
-                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318152411_d16242.png"
+                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210601173137_2640a0.png"
             },
             "group4": {
                 "title": "幸运礼包二得一",
-                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210322172607_9c12f1.png",
-                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210318152431_831922.png",
-                "rule": 31230,
-                "qual": 120706
+                "btnback": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210602153913_9c12f1.png",
+                "prizeBackground": "http://qzonestyle.gtimg.cn/qzone/qzactStatics/imgs/20210602171428_c9ac31.png",
+                "rule": 31556,
+                "qual": 120992
             }
         },
         "quals": {
-            "lottery": 120713,
-            "login": 120712,
-            "share": 120711,
-            "imback": 120701,
+            "lottery": 120999,
+            "login": 120998,
+            "share": 120997,
+            "imback": 120987,
             "video": 0,
-            "mid1id": 120705,
-            "mid2id": 120704
+            "mid1id": 120991,
+            "mid2id": 120990
         },
         "rules": {
-            "lottery": 31232,
-            "login": 31260,
-            "share": 31243,
-            "imback": 31261,
+            "lottery": 31557,
+            "login": 31585,
+            "share": 31568,
+            "imback": 31586,
             "video": 0,
-            "loginPage": 31262,
-            "lotteryByCard": 31231,
-            "midRule1": 31257,
-            "midRule2": 31256,
-            "midBack1": 31259,
-            "midBack2": 31258
+            "loginPage": 31587,
+            "lotteryByCard": 31555,
+            "midRule1": 31582,
+            "midRule2": 31581,
+            "midBack1": 31584,
+            "midBack2": 31583
         },
         "infoList": [
+            {
+                "title": ".",
+                "itemList": []
+            },
             {
                 "title": ".",
                 "itemList": []
@@ -2064,19 +2113,19 @@ setting = {
         ],
         "lotteryRewardDesc": {
             "title": "奖品列表",
-            "noRewardId": 48175,
+            "noRewardId": 48607,
             "desc": [
-                "追忆之稀有装扮套装礼盒 (战灵天舞)*1",
-                "+11装备增幅券*1",
-                "魂灭结晶礼盒 (300个)*1",
-                "升级券（Lv95-99）*1",
+                "神圣稀有克隆装扮套装礼盒*1",
+                "远古的黄金增幅书*1",
+                "灿烂徽章自选礼盒*1",
+                "升级券 (Lv50-99)*1",
                 "装备提升礼盒*1",
-                "智慧的引导通行证*2",
-                "复活币*1",
-                "闪亮的雷米援助*1",
+                "时间引导石礼盒 (20个)*20",
+                "抗疲劳秘药 (5点)(lv50-100)*1",
+                "闪亮的雷米援助礼盒 (10个)*1",
                 "谢谢参与"
             ]
         },
-        "zZConfigerUpdateTime": 1616578728
+        "zZConfigerUpdateTime": 1622719623
     }
 }

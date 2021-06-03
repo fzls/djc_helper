@@ -452,6 +452,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
+            ("QQ空间集卡", self.ark_lottery),
         ]
 
     def expired_activities(self):
@@ -474,7 +475,6 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
             ("WeGame活动", self.dnf_wegame),
-            ("QQ空间集卡", self.ark_lottery),
             ("DNF黑鸦竞速", self.dnf_heiya),
             ("DNF集合站", self.dnf_collection),
             ("会员关怀", self.vip_mentor),
@@ -4931,7 +4931,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
         # djcHelper.dnf_luodiye()
-        # djcHelper.ark_lottery()
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
         # djcHelper.dnf_collection()
@@ -4950,4 +4949,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs_signin()
         # djcHelper.guanjia()
         # djcHelper.dnf_strong()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
+        djcHelper.ark_lottery()

@@ -303,11 +303,14 @@ class DjcHelper:
         self.normal_run(user_buy_info)
 
     def check_first_run(self):
-        self.show_tip_on_first_run_config_ui()
-        self.show_tip_on_first_run_promot()
-        self.show_tip_on_first_run_any()
-        self.show_tip_on_first_run_document()
-        self.show_tip_on_first_run_use_old_config()
+        def _cb():
+            self.show_tip_on_first_run_config_ui()
+            self.show_tip_on_first_run_promot()
+            self.show_tip_on_first_run_any()
+            self.show_tip_on_first_run_document()
+            self.show_tip_on_first_run_use_old_config()
+
+        async_call(_cb)
 
     # 预处理阶段
     def check_djc_role_binding(self) -> bool:

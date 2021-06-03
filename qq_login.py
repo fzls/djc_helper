@@ -123,7 +123,7 @@ class QQLogin():
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
-                logger.info(f"{self.name} 使用自带chrome")
+                logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
                 inited = True
         except:
             pass
@@ -166,7 +166,7 @@ class QQLogin():
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
-            logger.info(f"{self.name} 使用便携版chrome")
+            logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
         self.cookies = self.driver.get_cookies()
 

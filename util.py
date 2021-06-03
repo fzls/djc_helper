@@ -48,6 +48,10 @@ def maximize_console_sync():
         logger.info("不启用最大化窗口")
         return
 
+    if is_run_in_pycharm():
+        logger.info("当前运行在pycharm中，不尝试最大化窗口~")
+        return
+
     current_pid = os.getpid()
     parents = get_parents(current_pid)
 

@@ -304,8 +304,8 @@ get_majieluo = true
 get_dnf_helper = true
 # 是否领取暖冬好礼活动
 get_warm_winter = true
-# 是否领取qq视频-看江湖有翡
-get_youfei = true
+# 是否领取qq视频-AME活动
+get_qq_video_amesvr = true
 # 是否进行dnf论坛签到
 get_dnf_bbs_signin = true
 # 是否领取 DNF落地页 活动

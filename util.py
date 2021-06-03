@@ -710,6 +710,10 @@ def disable_quick_edit_mode():
     async_call(_cb)
 
 
+def is_run_in_pycharm() -> bool:
+    return os.getenv('PYCHARM_HOSTED') == '1'
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

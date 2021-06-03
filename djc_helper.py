@@ -455,6 +455,7 @@ class DjcHelper:
             ("QQ空间集卡", self.ark_lottery),
             ("DNF集合站", self.dnf_collection),
             ("qq视频-AME活动", self.qq_video_amesvr),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self):
@@ -475,7 +476,6 @@ class DjcHelper:
             ("燃放爆竹活动", self.firecrackers),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF黑鸦竞速", self.dnf_heiya),
             ("会员关怀", self.vip_mentor),
             ("colg每日签到", self.colg_signin),
@@ -4119,7 +4119,7 @@ class DjcHelper:
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame(self):
-        # https://dnf.qq.com/lbact/a20210325lbpzwegame/index.html
+        # https://dnf.qq.com/lbact/a20210603lbavs9i/index.html
         show_head_line("WeGame活动")
         self.show_amesvr_act_info(self.dnf_wegame_op)
 
@@ -4130,7 +4130,7 @@ class DjcHelper:
         self.check_dnf_wegame()
 
         def query_signin_days():
-            res = self.dnf_wegame_op("查询签到天数-condOutput", "750498", print_res=False)
+            res = self.dnf_wegame_op("查询签到天数-condOutput", "770457", print_res=False)
             info = parse_amesvr_common_info(res)
             # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
             parts = info.sOutValue1.split('|')[0].split(':')
@@ -4138,7 +4138,7 @@ class DjcHelper:
             return days
 
         def query_lottery_times():
-            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "750497", print_res=False)
+            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "771279", print_res=False)
             info = parse_amesvr_common_info(res)
             # "sOutValue1": "239:16:4|240:8:1",
             parts = info.sOutValue1.split('|')[0].split(':')
@@ -4146,36 +4146,37 @@ class DjcHelper:
             return total, remaining
 
         # 阿拉德盲盒限时抽
-        self.dnf_wegame_op("黑鸦之境通关获得盲盒", "750487")
-        self.dnf_wegame_op("页面签到获得盲盒", "750488")
-        self.dnf_wegame_op("在线30min获得盲盒", "750489")
+        self.dnf_wegame_op("分享获得盲盒", "771271")
+        self.dnf_wegame_op("页面签到获得盲盒", "770447")
+        self.dnf_wegame_op("在线30min获得盲盒", "770448")
         totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
-            self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "750476")
+            self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "770435")
 
         # 升级
-        self.dnf_wegame_op("升级礼包-96级", "750482")
-        self.dnf_wegame_op("升级礼包-97级", "750483")
-        self.dnf_wegame_op("升级礼包-98级", "750484")
-        self.dnf_wegame_op("升级礼包-99级", "750485")
-        self.dnf_wegame_op("升级礼包-100级", "750486")
+        self.dnf_wegame_op("升级礼包-96级", "770440")
+        self.dnf_wegame_op("升级礼包-97级", "771274")
+        self.dnf_wegame_op("升级礼包-98级", "771275")
+        self.dnf_wegame_op("升级礼包-99级", "771276")
+        self.dnf_wegame_op("升级礼包-100级", "771277")
 
         # 勇士齐聚阿拉德
-        self.dnf_wegame_op("在线30min签到", "750658")
-        self.dnf_wegame_op("领取签到礼包", "750658")
+        self.dnf_wegame_op("在线30min签到", "770449")
+        self.dnf_wegame_op("领取签到礼包", "770449")
         logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
-        self.dnf_wegame_op("签到3天礼包", "750478")
-        self.dnf_wegame_op("签到7天礼包", "750479")
-        self.dnf_wegame_op("签到15天礼包", "750480")
+        self.dnf_wegame_op("签到3天礼包", "770437")
+        self.dnf_wegame_op("签到7天礼包", "770438")
+        self.dnf_wegame_op("签到10天礼包", "771272")
+        self.dnf_wegame_op("签到15天礼包", "771272")
 
     def check_dnf_wegame(self):
-        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210325lbpzwegame/index.html",
-                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="750472", commit_bind_flowid="750471")
+        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210603lbavs9i/index.html",
+                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="770432", commit_bind_flowid="770431")
 
     def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_wegame
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210325lbpzwegame/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210603lbavs9i/",
                                    **extra_params)
 
     # --------------------------------------------新春福袋大作战--------------------------------------------
@@ -4936,7 +4937,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
-        # djcHelper.dnf_wegame()
         # djcHelper.vip_mentor()
         # djcHelper.hello_voice()
         # djcHelper.xinyue_operations()
@@ -4954,4 +4954,5 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_collection()
-        djcHelper.qq_video_amesvr()
+        # djcHelper.qq_video_amesvr()
+        djcHelper.dnf_wegame()

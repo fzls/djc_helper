@@ -114,7 +114,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "379977"  # qq视频-AME活动
         self.iActivityId_dnf_bbs = "374698"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "363886"  # DNF落地页活动需求
-        self.iActivityId_dnf_wegame = "369022"  # WeGame活动
+        self.iActivityId_dnf_wegame = "382711"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_dnf_collection = "382255"  # DNF集合站

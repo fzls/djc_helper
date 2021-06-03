@@ -1328,7 +1328,7 @@ class DjcHelper:
         #   1.3 重新启用代码
         #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
         #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
-        #   1.3.3 在config.toml/example 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
+        #   1.3.3 在 config.toml.example 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
         #   1.3.4 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #

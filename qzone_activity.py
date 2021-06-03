@@ -91,7 +91,7 @@ class QzoneActivity:
 
     def draw_ark_lottery(self):
         count = self.remaining_lottery_times()
-        logger.info(f"上述操作完毕后，最新抽卡次数为{count}，将全部用来抽卡")
+        logger.info(f"上述操作完毕后，最新抽卡次数为{count}，并开始抽卡~")
         for idx in range(count):
             self.do_ark_lottery("fcg_qzact_lottery", f"抽卡-第{idx + 1}次", self.zzconfig.rules.lottery)
 

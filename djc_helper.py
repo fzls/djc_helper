@@ -1324,19 +1324,19 @@ class DjcHelper:
         # note: 启用和废弃抽卡活动的流程如下
         #   1. 启用
         #   1.1 获取新配置   手机登录抽卡活动页面，然后抓包获得页面代码，从中搜索【window.syncData】找到逻辑数据和配置，将其值复制到【setting/ark_lottery.py】中，作为setting变量的值
-        #   1.2 填写新链接   在urls.py中，替换self.ark_lottery_page的值为新版抽卡活动的链接（理论上应该只有zz和verifyid参数的值会变动，而且大概率是+1）
+        #   1.2 填写新链接   在 urls.py 中，替换self.ark_lottery_page 的值为新版抽卡活动的链接（理论上应该只有 zz 和 verifyid 参数的值会变动，而且大概率是+1）
         #   1.3 重新启用代码
-        #   1.3.1 在djc_helper.py中将ark_lottery的调用处从expired_activities移到normal_run
-        #   1.3.2 在main.py中将main函数中将enable_card_lottery设置为true
-        #   1.3.3 在config.toml/example中act_id_to_cost_all_cards_and_do_lottery中增加新集卡活动的默认开关
-        #   1.3.4 在djc_helper.py中将fetch_pskey的p_skey的判断条件取消注释
+        #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
+        #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
+        #   1.3.3 在config.toml/example 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
+        #   1.3.4 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #
         # hack:
         #   2. 废弃
-        #   2.1 在djc_helper.py中将ark_lottery的调用处从normal_run移到expired_activities
-        #   2.2 在main.py中将main函数中将enable_card_lottery设置为false
-        #   2.3 在djc_helper.py中将fetch_pskey的p_skey的判断条件注释
+        #   2.1 在 djc_helper.py 中将 ark_lottery 的调用处从 normal_run 移到 expired_activities
+        #   2.2 在 main.py 中将main函数中将 enable_card_lottery 设置为 false
+        #   2.3 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件注释
 
         # https://act.qzone.qq.com/vip/2019/xcardv3?zz=7&verifyid=qq2021dnf12
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")

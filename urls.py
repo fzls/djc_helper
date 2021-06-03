@@ -111,7 +111,7 @@ class Urls:
         self.iActivityId_majieluo = "377022"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "370589"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
-        self.iActivityId_youfei = "350668"  # qq视频-看江湖有翡
+        self.iActivityId_qq_video_amesvr = "379977"  # qq视频-AME活动
         self.iActivityId_dnf_bbs = "374698"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "363886"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "369022"  # WeGame活动

@@ -245,8 +245,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_helper = True
         # 是否领取暖冬好礼活动
         self.get_warm_winter = True
-        # 是否领取qq视频-看江湖有翡
-        self.get_youfei = True
+        # 是否领取qq视频-AME活动
+        self.get_qq_video_amesvr = True
         # 是否进行dnf论坛签到
         self.get_dnf_bbs_signin = True
         # 是否领取 DNF落地页 活动

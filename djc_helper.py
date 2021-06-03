@@ -454,6 +454,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia),
             ("QQ空间集卡", self.ark_lottery),
             ("DNF集合站", self.dnf_collection),
+            ("qq视频-AME活动", self.qq_video_amesvr),
         ]
 
     def expired_activities(self):
@@ -472,7 +473,6 @@ class DjcHelper:
             ("DNF闪光杯第三期", self.dnf_shanguang),
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
-            ("qq视频-看江湖有翡", self.youfei),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
             ("WeGame活动", self.dnf_wegame),
@@ -3849,42 +3849,45 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20200911lbz3dns/",
                                    **extra_params)
 
-    # --------------------------------------------qq视频-看江湖有翡--------------------------------------------
+    # --------------------------------------------qq视频-AME活动--------------------------------------------
     @try_except()
-    def youfei(self):
-        # https://dnf.qq.com/cp/a20201227youfeim/index.html
-        show_head_line("qq视频-看江湖有翡")
-        self.show_amesvr_act_info(self.youfei_op)
+    def qq_video_amesvr(self):
+        # https://dnf.qq.com/cp/a20210519video/index.html
+        show_head_line("qq视频-AME活动")
+        self.show_amesvr_act_info(self.qq_video_amesvr_op)
 
-        if not self.cfg.function_switches.get_youfei or self.disable_most_activities():
-            logger.warning("未启用领取qq视频-看江湖有翡活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_qq_video_amesvr or self.disable_most_activities():
+            logger.warning("未启用领取qq视频-AME活动活动合集功能，将跳过")
             return
 
-        self.check_youfei()
+        self.check_qq_video_amesvr()
 
         def query_signin_days():
-            res = self.youfei_op("查询签到状态", "728501", print_res=False)
+            res = self.qq_video_amesvr_op("查询签到状态", "767552", print_res=False)
             info = parse_amesvr_common_info(res)
-            return int(info.sOutValue1)
+            return int(info.sOutValue3)
 
-        self.youfei_op("幸运用户礼包", "728407")
-        self.youfei_op("勇士见面礼包", "731400")
-        self.youfei_op("分享领取", "730006")
+        self.qq_video_amesvr_op("验证幸运用户", "767315")
+        self.qq_video_amesvr_op("幸运用户礼包", "766796")
+        self.qq_video_amesvr_op("勇士见面礼包", "767594")
+        self.qq_video_amesvr_op("分享领取", "767168")
 
-        self.youfei_op("在线30分钟礼包", "728419")
+        self.qq_video_amesvr_op("在线30分钟礼包", "766800")
         logger.warning(color("bold_yellow") + f"累计已签到{query_signin_days()}天")
-        self.youfei_op("签到3天礼包", "728420")
-        self.youfei_op("签到7天礼包", "728450")
-        self.youfei_op("签到15天礼包", "728451")
+        self.qq_video_amesvr_op("签到3天礼包", "766801")
+        self.qq_video_amesvr_op("签到7天礼包", "766804")
+        self.qq_video_amesvr_op("签到10天礼包", "768009")
+        self.qq_video_amesvr_op("签到15天礼包", "766817")
+        self.qq_video_amesvr_op("签到21天礼包", "766818")
 
-    def check_youfei(self):
-        self.check_bind_account("qq视频-看江湖有翡", "https://dnf.qq.com/cp/a20201227youfeim/index.html",
-                                activity_op_func=self.youfei_op, query_bind_flowid="727498", commit_bind_flowid="727497")
+    def check_qq_video_amesvr(self):
+        self.check_bind_account("qq视频-AME活动", "https://dnf.qq.com/cp/a20210519video/index.html",
+                                activity_op_func=self.qq_video_amesvr_op, query_bind_flowid="766781", commit_bind_flowid="766780")
 
-    def youfei_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_youfei
+    def qq_video_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_qq_video_amesvr
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20201227youfeim/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210519video/",
                                    **extra_params)
 
     # --------------------------------------------dnf论坛签到--------------------------------------------
@@ -4925,7 +4928,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_shanguang()
         # djcHelper.warm_winter()
         # djcHelper.dnf_1224()
-        # djcHelper.youfei()
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
         # djcHelper.xinyue_weekly_gift()
@@ -4951,4 +4953,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_strong()
         # djcHelper.majieluo()
         # djcHelper.ark_lottery()
-        djcHelper.dnf_collection()
+        # djcHelper.dnf_collection()
+        djcHelper.qq_video_amesvr()

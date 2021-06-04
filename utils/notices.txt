@@ -43,5 +43,14 @@
     "show_type": "once",
     "open_url": "",
     "expire_at": "2021-06-06 03:35:27"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "新的获取token的简易方法",
+    "message": "现在有一个比较简单的方法，介绍如下\n1. 助手在活动列表中找到腾讯视频的活动，点进去\n2. 右下角会发现一个叫vConsole的绿色按钮\n3. 戳一下这个按钮，会出来一个面板，点击最上面tab的Storage标签\n4. 在默认的Cookies Tab往下翻，会发现一个叫tokenParams的cookie，把右侧的内容复制出来，通过QQ等发送到电脑上\n5. 在复制出来的这一串中按照下面的额外说明，从中找出token的值\n\n额外说明：\n链接中形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4,\n而如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个\n",
+    "send_at": "2021-06-04 10:38:29",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-06-11 10:38:29"
   }
 ]

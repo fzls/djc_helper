@@ -147,11 +147,17 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "版本不兼容通知"
-    message = """如果你的当前版本是10.2.3，且本地只配置了一个账号，如果登录时提示了WebDriverException，请尝试手动下载新版本~
-    
-详细说明：
-10.2.3移除了登录时的chrome相关内容检查，移到了登录前统一处理。但是因为没考虑全，只处理了开启多进程且账号多余一个的情况=、=新版本已修复。
+    title = "新的获取token的简易方法"
+    message = """现在有一个比较简单的方法，介绍如下
+1. 助手在活动列表中找到腾讯视频的活动，点进去
+2. 右下角会发现一个叫vConsole的绿色按钮
+3. 戳一下这个按钮，会出来一个面板，点击最上面tab的Storage标签
+4. 在默认的Cookies Tab往下翻，会发现一个叫tokenParams的cookie，把右侧的内容复制出来，通过QQ等发送到电脑上
+5. 在复制出来的这一串中按照下面的额外说明，从中找出token的值
+
+额外说明：
+链接中形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4,
+而如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个
 """
     nm.add_notice(title, message,
                   send_at=format_now(),

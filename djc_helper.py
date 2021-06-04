@@ -1148,7 +1148,7 @@ class DjcHelper:
             return
 
         if len(self.cfg.xinyue_app_operations) == 0:
-            logger.warning("未配置心悦app相关操作，将跳过")
+            logger.warning("未配置心悦app相关操作，将跳过。如需使用，请打开config.toml.example搜索 心悦app相关操作 查看示例配置和说明，然后手动填写到config.toml中对应位置(如果搞不来，就请手动操作~)")
             return
 
         lr = self.fetch_xinyue_login_info("心悦app")

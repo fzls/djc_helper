@@ -456,6 +456,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self):
@@ -479,7 +480,6 @@ class DjcHelper:
             ("DNF黑鸦竞速", self.dnf_heiya),
             ("会员关怀", self.vip_mentor),
             ("colg每日签到", self.colg_signin),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("qq视频活动", self.qq_video),
             ("DNF强者之路", self.dnf_strong),
         ]
@@ -3059,7 +3059,7 @@ class DjcHelper:
             except Exception as e:
                 pass
 
-        @try_except(return_val_on_except="19")
+        @try_except(return_val_on_except="19", show_exception_info=False)
         def query_siActivityId():
             res = self.dnf_welfare_op(f"查询我的分享码状态", "649261", print_res=False)
             return res["modRet"]["jData"]["siActivityId"]
@@ -3070,9 +3070,8 @@ class DjcHelper:
         shareCodeList = db.get(key_shareCodes, [])
 
         sContents = [
-            "dnf123",
-            "dnf666",
-            "dnf888",
+            "DNFPVE",
+            "DNFQZZL",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -4946,7 +4945,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
         # djcHelper.qq_video()
-        # djcHelper.dnf_welfare()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.guanjia()
@@ -4955,4 +4953,5 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.dnf_collection()
         # djcHelper.qq_video_amesvr()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.dnf_welfare()

@@ -342,7 +342,7 @@ def check_some_exception(e, show_last_process_result=True) -> str:
         msg += format_msg((
             "权限错误一般是以下原因造成的\n"
             "1. 该文件被占用，比如打开了多个小助手实例或者其他应用占用了这些文件，可以尝试重启电脑后再运行\n"
-            "2. 开启了VPN，请尝试关闭VPN后再运行"
+            "2. 开启了VPN，请尝试关闭VPN后再运行（看上去毫不相关，但确实会这样- -）"
         ))
 
     from network import last_process_result

@@ -9,6 +9,7 @@ from main_def import check_all_skey_and_pskey
 from qzone_activity import QzoneActivity
 from setting import zzconfig, parse_card_group_info_map
 from util import show_head_line
+from pool import init_pool
 
 CARD_PLACEHOLDER = "XXXXXXXXXXX"
 
@@ -139,6 +140,7 @@ def run_local():
 def run_remote(args):
     cfg = config()
 
+    init_pool(cfg.get_pool_size())
     check_all_skey_and_pskey(cfg, check_skey_only=True)
 
     if args.query:

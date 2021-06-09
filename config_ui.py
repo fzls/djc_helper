@@ -1320,6 +1320,12 @@ class FirecrackersConfigUi(QWidget):
 
 
 def main():
+    # # 取消注释下面这几行就可以启用高DPI模式
+    # from PyQt5 import QtWidgets
+    # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    # QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    # QtWidgets.QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+
     app = QApplication([])
 
     app.setStyle(QStyleFactory.create("fusion"))

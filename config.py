@@ -513,6 +513,14 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_start = True
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+        # 自动更新dlc购买地址
+        self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.net/purchasing?link=auto-updater"
+        # 按月付费购买地址
+        self.pay_by_month_purchase_url = "https://www.kuaifaka.net/purchasing?link=pay-by-month"
+        # 网盘地址
+        self.netdisk_link = "https://fzls.lanzoui.com/s/djc-helper"
+        # QQ群
+        self.qq_group = 743671885
         # 是否启用自动更新功能
         self.auto_update_on_start = True
         # 是否仅允许单个运行实例
@@ -572,9 +580,23 @@ class CommonConfig(ConfigInterface):
         self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
         self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
 
+        url_config_filepath = "utils/url.toml"
+        if os.path.isfile(url_config_filepath):
+            try:
+                with open(url_config_filepath, 'r', encoding='utf-8-sig') as url_config_file:
+                    url_config = toml.load(url_config_file)
+                    if 'pay_by_month_purchase_url' in url_config:
+                        self.pay_by_month_purchase_url = url_config['pay_by_month_purchase_url']
+                    if 'netdisk_link' in url_config:
+                        self.netdisk_link = url_config['netdisk_link']
+            except:
+                pass
+
 
 class Config(ConfigInterface):
     def __init__(self):
+        # 是否已经从配置文件中加载
+        self.loaded = False
         # 所有账号共用的配置
         self.common = CommonConfig()
         # 兑换道具信息
@@ -697,6 +719,9 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         raw_config = toml.loads(get_config_from_env())
         g_config.auto_update_config(raw_config)
 
+    # 标记为已经初始化完毕
+    g_config.loaded = True
+
 
 def gen_config_for_github_action():
     # 读取配置
@@ -784,6 +809,10 @@ def save_config(cfg: Config, config_path="config.toml"):
 
 
 def config():
+    if not g_config.loaded:
+        logger.info("配置尚未加载，需要初始化")
+        load_config("config.toml", "config.toml.local")
+
     return g_config
 
 
@@ -792,6 +821,10 @@ if __name__ == '__main__':
     logger.info(config().common.account_count)
 
     cfg = config()
+    print(cfg.common.auto_updater_dlc_purchase_url)
+    print(cfg.common.pay_by_month_purchase_url)
+    print(cfg.common.netdisk_link)
+    print(cfg.common.qq_group)
 
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)

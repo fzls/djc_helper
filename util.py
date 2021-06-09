@@ -726,6 +726,28 @@ def is_run_in_pycharm() -> bool:
     return os.getenv('PYCHARM_HOSTED') == '1'
 
 
+def remove_file(file_path):
+    if not os.path.isfile(file_path):
+        logger.warning(f"文件 {file_path} 不存在")
+        return
+
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        logger.error(f"删除文件 {file_path} 失败", exc_info=e)
+
+
+def remove_directory(directory_path):
+    if not os.path.isdir(directory_path):
+        logger.warning(f"目录 {directory_path} 不存在")
+        return
+
+    try:
+        shutil.rmtree(directory_path)
+    except Exception as e:
+        logger.error(f"删除目录 {directory_path} 失败", exc_info=e)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

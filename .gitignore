@@ -25,9 +25,13 @@ DNF蚊子腿小助手配置工具.exe
 DNF蚊子腿小助手_集卡特别版.exe
 
 releases/
-utils/auto_updater.exe
-utils/buy_auto_updater_users.txt
-utils/user_monthly_pay_info.txt
+
+utils/
+!utils/auto_updater_changelog.MD
+!utils/hdiffz.exe
+!utils/hpatchz.exe
+!utils/notices.txt
+
 _update_temp_dir/
 
 chrome_portable_*/

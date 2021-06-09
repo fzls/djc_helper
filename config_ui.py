@@ -167,8 +167,14 @@ class ConfigUi(QFrame):
 
         logger.info("已读取成功，请按需调整配置，调整完记得点下保存~")
 
-    def notify_reopen(self, checked=False):
-        show_message("请重新打开", "目前因为不知道如何清除pyqt的已有组件然后再添加新的组件，暂时没有实现重新读取配置的功能，请直接右上角关掉重新打开-。-")
+    def reopen_to_load(self, checked=False):
+        if run_from_src():
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
+        else:
+            os.startfile(sys.argv[0])
+
+        kill_process(os.getpid())
 
     def save(self, checked=False, show_message_box=True):
         self.save_config(self.to_config())

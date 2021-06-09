@@ -244,7 +244,7 @@ class ConfigUi(QFrame):
             if not try_manaual_update(ui):
                 show_message("无需更新", "当前已经是最新版本~")
         except Exception as err:
-            netdisk_addr = "https://fzls.lanzoui.com/s/djc-helper"
+            netdisk_addr = self.load_config().common.netdisk_link
 
             # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
             time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
@@ -430,13 +430,13 @@ class ConfigUi(QFrame):
             logger.info("取消购买")
             return
 
-        webbrowser.open("https://www.kuaifaka.net/purchasing?link=auto-updater")
+        webbrowser.open(self.load_config().common.auto_updater_dlc_purchase_url)
 
     def pay_by_month(self, checked=False):
         if not self.check_pay_server():
             return
 
-        webbrowser.open("https://www.kuaifaka.net/purchasing?link=pay-by-month")
+        webbrowser.open(self.load_config().common.pay_by_month_purchase_url)
 
     def pay_by_card_and_secret(self, checked=False):
         card = self.lineedit_card.text().strip()

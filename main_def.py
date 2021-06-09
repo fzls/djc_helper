@@ -944,7 +944,7 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
 
 
 def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> BuyInfo:
-    logger.info("如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：https://fzls.lanzoui.com/s/djc-helper")
+    logger.info(f"如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：{config().common.netdisk_link}")
     user_buy_info, query_ok = _get_user_buy_info(qq_accounts, max_retry_count, retry_wait_time, show_log)
     if not query_ok:
         logger.info("从网盘查询失败，尝试由服务器代理查询付费信息，请稍候片刻~")

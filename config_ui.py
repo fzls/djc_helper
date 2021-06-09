@@ -167,7 +167,10 @@ class ConfigUi(QFrame):
 
         logger.info("已读取成功，请按需调整配置，调整完记得点下保存~")
 
-    def reopen_to_load(self, checked=False):
+    def restart_to_load(self, checked=False):
+        self.restart()
+
+    def restart(self):
         if run_from_src():
             python = sys.executable
             os.execl(python, python, *sys.argv)
@@ -206,7 +209,7 @@ class ConfigUi(QFrame):
         btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
 
-        btn_load.clicked.connect(self.notify_reopen)
+        btn_load.clicked.connect(self.restart_to_load)
         btn_save.clicked.connect(self.save)
 
         layout = QHBoxLayout()

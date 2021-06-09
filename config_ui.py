@@ -6,11 +6,10 @@ logger.addHandler(new_file_handler())
 
 from typing import Tuple
 import subprocess
-from PyQt5.QtWidgets import (
-    QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
-    QMessageBox, QInputDialog, QLabel)
-from PyQt5.QtGui import QIcon, QValidator
-from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
+from PyQt5.Qt import (
+    QApplication, QHBoxLayout, QTabWidget, QStyleFactory, QMessageBox, QInputDialog, QLabel, QIcon, QValidator,
+    QCoreApplication, QThread, pyqtSignal, QFileDialog,
+)
 
 from qt_wrapper import *
 from config import *
@@ -167,6 +166,66 @@ class ConfigUi(QFrame):
 
         logger.info("已读取成功，请按需调整配置，调整完记得点下保存~")
 
+    def load_old_version(self):
+        # 弹窗提示选择旧版本的小助手exe所在目录
+        msg = "打开旧版本的【DNF蚊子腿小助手.exe】所在的目录，形如【DNF蚊子腿小助手_v10.5.0_by风之凌殇】"
+        # show_message("操作指引", msg)
+        old_version_dir = QFileDialog.getExistingDirectory(self, msg,
+                                                           os.path.realpath(".."),
+                                                           QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
+        if old_version_dir == '':
+            logger.info("未选择任何目录")
+            return
+
+        # 通过判断目录中是否存在【DNF蚊子腿小助手.exe】来判定选择的目录是否是正确的目录
+        djc_helper_exe = 'DNF蚊子腿小助手.exe'
+        if not os.path.isfile(os.path.join(old_version_dir, djc_helper_exe)):
+            show_message("出错啦", f"未在选中的目录 {old_version_dir} 中发现 {djc_helper_exe} ，请重新点击按钮进行选择~")
+            return
+
+        # 将特定文件和目录复制过来覆盖新版本的目录
+        files_to_copy = [
+            # 配置文件
+            "config.toml",
+            "config.toml.local",
+
+            # 特定功能的开关
+            ".disable_pause_after_run",
+            ".min_console",
+            ".no_max_console",
+            ".use_by_myself",
+            "不查询活动.txt",
+
+            # 缓存文件所在目录
+            ".cached",
+            ".db",
+            ".first_run",
+
+            # 自动更新DLC
+            "utils/auto_updater.exe"
+        ]
+        new_version_dir = os.getcwd()
+        logger.info(f"将以下内容从{old_version_dir} 复制并覆盖到 {new_version_dir}")
+        for filename in files_to_copy:
+            source = os.path.join(old_version_dir, filename)
+            destination = os.path.join(new_version_dir, filename)
+
+            if not os.path.exists(source):
+                logger.warning(f"旧版本目录未发现 {filename}，将跳过")
+                continue
+
+            if os.path.isdir(filename):
+                logger.info(f"覆盖目录 {filename}")
+                remove_directory(destination)
+                shutil.copytree(source, destination)
+            else:
+                logger.info(f"覆盖文件 {filename}")
+                remove_file(destination)
+                shutil.copyfile(source, destination)
+
+        logger.info("继承旧版本配置完成，将重启配置工具以使改动生效")
+        self.restart()
+
     def restart_to_load(self, checked=False):
         self.restart()
 
@@ -205,14 +264,16 @@ class ConfigUi(QFrame):
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
-        #         DarkCyan
+        btn_load_old_version = create_pushbutton("继承旧版本配置", "LawnGreen")
         btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
 
+        btn_load_old_version.clicked.connect(self.load_old_version)
         btn_load.clicked.connect(self.restart_to_load)
         btn_save.clicked.connect(self.save)
 
         layout = QHBoxLayout()
+        layout.addWidget(btn_load_old_version)
         layout.addWidget(btn_load)
         layout.addWidget(btn_save)
         top_layout.addLayout(layout)

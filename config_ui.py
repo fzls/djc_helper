@@ -148,7 +148,7 @@ class ConfigUi(QFrame):
     def __init__(self, parent=None):
         super(ConfigUi, self).__init__(parent)
 
-        self.resize(1080, 720)
+        self.resize(1080, 780)
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 
@@ -297,10 +297,35 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
+        # re: 修改颜色 @2021-06-10 12:50:38 By Chen Ji
+        btn_open_pay_guide = create_pushbutton("查看付费指引", "SpringGreen")
+        btn_open_usage_guide = create_pushbutton("查看使用教程（文字版）", "SpringGreen")
+        btn_open_usage_video = create_pushbutton("查看使用教程（视频版）", "SpringGreen")
+
+        btn_open_pay_guide.clicked.connect(self.open_pay_guide)
+        btn_open_usage_guide.clicked.connect(self.open_usage_guide)
+        btn_open_usage_video.clicked.connect(self.open_usage_video)
+
+        layout = QHBoxLayout()
+        layout.addWidget(btn_open_pay_guide)
+        layout.addWidget(btn_open_usage_guide)
+        layout.addWidget(btn_open_usage_video)
+        top_layout.addLayout(layout)
+        top_layout.addWidget(QHLine())
+
         self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
         top_layout.addWidget(QHLine())
+
+    def open_pay_guide(self):
+        webbrowser.open(os.path.realpath("付费指引.docx"))
+
+    def open_usage_guide(self):
+        webbrowser.open(os.path.realpath("使用教程/使用文档.docx"))
+
+    def open_usage_video(self):
+        webbrowser.open(os.path.realpath("使用教程/道聚城自动化助手使用视频教程.url"))
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")

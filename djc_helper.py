@@ -448,7 +448,6 @@ class DjcHelper:
             ("dnf助手编年史活动", self.dnf_helper_chronicle),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
-            ("DNF心悦51", self.dnf_xinyue_51),
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
@@ -482,6 +481,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("qq视频活动", self.qq_video),
             ("DNF强者之路", self.dnf_strong),
+            ("DNF心悦51", self.dnf_xinyue_51),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

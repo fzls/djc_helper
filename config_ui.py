@@ -740,6 +740,9 @@ class CommonConfigUi(QFrame):
     def from_config(self, cfg: CommonConfig):
         form_layout = QFormLayout()
 
+        self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
+        form_layout.addRow("是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
+
         self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
         form_layout.addRow("是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
@@ -805,6 +808,7 @@ class CommonConfigUi(QFrame):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()
         cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
+        cfg.config_ui_enable_high_dpi = self.checkbox_config_ui_enable_high_dpi.isChecked()
         cfg.disable_cmd_quick_edit = self.checkbox_disable_cmd_quick_edit.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
@@ -1419,11 +1423,12 @@ class FirecrackersConfigUi(QWidget):
 
 
 def main():
-    # # 取消注释下面这几行就可以启用高DPI模式
-    # from PyQt5 import QtWidgets
-    # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-    # QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-    # QtWidgets.QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+    if config().common.config_ui_enable_high_dpi:
+        logger.info("已启用高DPI模式")
+        from PyQt5 import QtWidgets
+        os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+        QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+        QtWidgets.QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
     app = QApplication([])
 

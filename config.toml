@@ -636,6 +636,9 @@ nickName = ""
 #     2.5 https://juejin.im/post/6844903831579394055
 #     ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功
 token = ""
+# 唯一角色ID，与token的获取方式完全一致，只是要找的参数从token变成了uniqueRoleId
+# 需要确保助手里配置的编年史领奖角色和道聚城里的一致，否则这个值会对不上
+uniqueRoleId = ""
 
 # dnf助手编年史是否开启抽奖
 chronicle_lottery = false

@@ -154,6 +154,9 @@ class DnfHelperInfoConfig(ConfigInterface):
         # ps: 如果有多个账号需要领取这个，请不要在手机上依次登入登出执行上述步骤来获取token，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了
         #       有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开
         self.token = ""
+        # 唯一角色ID，与token的获取方式完全一致，只是要找的参数从token变成了uniqueRoleId
+        # 需要确保助手里配置的编年史领奖角色和道聚城里的一致，否则这个值会对不上
+        self.uniqueRoleId = ""
 
         # dnf助手编年史是否开启抽奖
         self.chronicle_lottery = False

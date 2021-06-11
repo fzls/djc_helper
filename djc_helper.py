@@ -2353,6 +2353,9 @@ class DjcHelper:
             "sPartition": partition,
             "sRoleId": roleid,
             "print_res": False,
+            "uin": uin2qq(self.cfg.account_info.uin),
+            "token": dnf_helper_info.token,
+            "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
 
         # ------ 查询各种信息 ------
@@ -2487,7 +2490,7 @@ class DjcHelper:
                 side = "队友"
             res = self.get("领取基础奖励", url_wang, api="send/basic", **common_params,
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
-            logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', '出错啦')}")
+            logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', f'出错啦-{res}')}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_awards():
@@ -2553,8 +2556,8 @@ class DjcHelper:
         # ------ 实际逻辑 ------
 
         # 检查一下userid是否真实存在
-        if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
-            extra_msg = f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]（本活动只需要这个，不需要token），无法进行dnf助手编年史活动，请按照下列流程进行配置"
+        if self.cfg.dnf_helper_info.userId == "" or self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "" or len(_getUserTaskList().get("data", {})) == 0:
+            extra_msg = f"dnf助手的userId/token/uniqueRoleId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]，无法进行dnf助手编年史活动，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
 
@@ -5023,7 +5026,6 @@ if __name__ == '__main__':
         # djcHelper.spring_fudai()
         # djcHelper.firecrackers()
         # djcHelper.xinyue_weekly_gift()
-        # djcHelper.dnf_helper_chronicle()
         # djcHelper.xinyue_cat()
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_fuqian()
@@ -5048,4 +5050,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_comic()
-        djcHelper.dnf_13()
+        # djcHelper.dnf_13()
+        djcHelper.dnf_helper_chronicle()

@@ -1385,6 +1385,9 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         form_layout.addRow("登陆票据", self.lineedit_token)
 
+        self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
+        form_layout.addRow("唯一角色ID", self.lineedit_uniqueRoleId)
+
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
         form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)
 
@@ -1392,6 +1395,7 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.userId = self.lineedit_userId.text()
         cfg.nickName = self.lineedit_nickName.text()
         cfg.token = self.lineedit_token.text()
+        cfg.uniqueRoleId = self.lineedit_uniqueRoleId.text()
 
         cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
 

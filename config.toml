@@ -110,6 +110,9 @@ cannot_bind_dnf = false
 # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
 drift_send_qq_list = []
 
+# dnf13周年邀请列表，最多可填3个（不会实际发消息）
+dnf_13_send_qq_list = []
+
 # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
 enable_firecrackers_invite_friend = false
 

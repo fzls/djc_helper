@@ -455,6 +455,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
+            ("DNF十三周年庆活动", self.dnf_13),
         ]
 
     def expired_activities(self):
@@ -1647,6 +1648,51 @@ class DjcHelper:
     def dnf_comic_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_comic
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210611comic/",
+                                   **extra_params)
+
+    # --------------------------------------------DNF十三周年庆活动--------------------------------------------
+    @try_except()
+    def dnf_13(self):
+        # https://dnf.qq.com/cp/a20210524fete/index.html
+        show_head_line("DNF十三周年庆活动")
+        self.show_amesvr_act_info(self.dnf_13_op)
+
+        if not self.cfg.function_switches.get_dnf_13 or self.disable_most_activities():
+            logger.warning("未启用领取DNF十三周年庆活动功能，将跳过")
+            return
+
+        self.check_dnf_13()
+
+        def query_lottery_count():
+            res = self.dnf_13_op("查询剩余抽奖次数", "772683")
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue1)
+
+        for idx in range_from_one(5):
+            self.dnf_13_op(f"点击第{idx}个icon，领取抽奖机会", "769465", index=idx)
+
+        send_list = self.cfg.dnf_13_send_qq_list
+        if len(send_list) == 0:
+            logger.info("在配置工具中添加13周年赠送QQ列表（最多三个），可额外领取抽奖次数")
+        elif len(send_list) > 3:
+            send_list = self.cfg.dnf_13_send_qq_list[:3]
+
+        for qq in send_list:
+            self.dnf_13_op(f"发送分享消息，额外增加抽奖机会-{qq}", "771230", receiveUin=qq)
+
+        lc = query_lottery_count()
+        logger.info(f"当前剩余抽奖次数为{lc}次")
+        for idx in range_from_one(lc):
+            self.dnf_13_op(f"第{idx}/{lc}次抽奖", "771234")
+
+    def check_dnf_13(self):
+        self.check_bind_account("qq视频-DNF十三周年庆活动", "https://dnf.qq.com/cp/a20210524fete/index.html",
+                                activity_op_func=self.dnf_13_op, query_bind_flowid="768385", commit_bind_flowid="768384")
+
+    def dnf_13_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_13
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210524fete",
                                    **extra_params)
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
@@ -5001,4 +5047,5 @@ if __name__ == '__main__':
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_comic()
+        # djcHelper.dnf_comic()
+        djcHelper.dnf_13()

@@ -6,10 +6,11 @@ logger.addHandler(new_file_handler())
 
 from typing import Tuple
 import subprocess
-from PyQt5.Qt import (
-    QApplication, QHBoxLayout, QTabWidget, QStyleFactory, QMessageBox, QInputDialog, QLabel, QIcon, QValidator,
-    QCoreApplication, QThread, pyqtSignal, QFileDialog,
-)
+from PyQt5.QtWidgets import (
+    QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
+    QMessageBox, QInputDialog, QLabel, QFileDialog)
+from PyQt5.QtGui import QIcon, QValidator
+from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
 
 from qt_wrapper import *
 from config import *
@@ -1425,10 +1426,9 @@ class FirecrackersConfigUi(QWidget):
 def main():
     if config().common.config_ui_enable_high_dpi:
         logger.info("已启用高DPI模式")
-        from PyQt5 import QtWidgets
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-        QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        QtWidgets.QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
     app = QApplication([])
 

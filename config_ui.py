@@ -997,6 +997,10 @@ class AccountConfigUi(QWidget):
         self.lineedit_drift_send_qq_list.setValidator(QQListValidator())
         form_layout.addRow("漂流瓶每日邀请列表（不会实际发消息）", self.lineedit_drift_send_qq_list)
 
+        self.lineedit_dnf_13_send_qq_list = create_lineedit(list_to_str(cfg.dnf_13_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_dnf_13_send_qq_list.setValidator(QQListValidator())
+        form_layout.addRow("dnf13周年邀请列表（不会实际发消息）", self.lineedit_dnf_13_send_qq_list)
+
         self.lineedit_spring_fudai_receiver_qq_list = create_lineedit(list_to_str(cfg.spring_fudai_receiver_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_spring_fudai_receiver_qq_list.setValidator(QQListValidator())
         form_layout.addRow("新春福袋大作战邀请列表（会实际发消息）", self.lineedit_spring_fudai_receiver_qq_list)
@@ -1027,6 +1031,7 @@ class AccountConfigUi(QWidget):
         cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
 
         cfg.drift_send_qq_list = str_to_list(self.lineedit_drift_send_qq_list.text())
+        cfg.dnf_13_send_qq_list = str_to_list(self.lineedit_dnf_13_send_qq_list.text())
         cfg.spring_fudai_receiver_qq_list = str_to_list(self.lineedit_spring_fudai_receiver_qq_list.text())
         cfg.enable_firecrackers_invite_friend = self.checkbox_enable_firecrackers_invite_friend.isChecked()
         cfg.enable_majieluo_invite_friend = self.checkbox_enable_majieluo_invite_friend.isChecked()

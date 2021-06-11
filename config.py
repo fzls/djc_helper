@@ -275,6 +275,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_strong = True
         # 是否领取 DNF漫画 活动
         self.get_dnf_comic = True
+        # 是否领取 DNF十三周年庆 活动
+        self.get_dnf_13 = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能
@@ -308,6 +310,8 @@ class AccountConfig(ConfigInterface):
         self.cannot_bind_dnf = False
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
         self.drift_send_qq_list = []  # type: List[str]
+        # dnf13周年邀请列表，最多可填3个（不会实际发消息）
+        self.dnf_13_send_qq_list = []  # type: List[str]
         # 新春福袋大作战邀请列表（会实际发消息）
         self.spring_fudai_receiver_qq_list = []  # type: List[str]
         # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
@@ -372,6 +376,7 @@ class AccountConfig(ConfigInterface):
         self.updateUinSkey(self.account_info.uin, self.account_info.skey)
 
         self.drift_send_qq_list = [str(qq) for qq in self.drift_send_qq_list]
+        self.dnf_13_send_qq_list = [str(qq) for qq in self.dnf_13_send_qq_list]
         self.spring_fudai_receiver_qq_list = [str(qq) for qq in self.spring_fudai_receiver_qq_list]
 
     def updateUinSkey(self, uin, skey):

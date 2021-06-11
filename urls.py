@@ -124,6 +124,7 @@ class Urls:
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue_51 = "373457"  # DNF心悦51
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
+        self.iActivityId_dnf_comic = "385458"  # DNF&腾讯动漫周年庆合作活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

@@ -456,6 +456,7 @@ class DjcHelper:
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("WeGame活动", self.dnf_wegame),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("DNF漫画预约活动", self.dnf_comic),
         ]
 
     def expired_activities(self):
@@ -1601,6 +1602,51 @@ class DjcHelper:
     def dnf_1224_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_1224
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20201224aggregate/",
+                                   **extra_params)
+
+    # --------------------------------------------DNF漫画预约活动--------------------------------------------
+    @try_except()
+    def dnf_comic(self):
+        # http://dnf.qq.com/lbact/a20210611comic/
+        show_head_line("DNF漫画预约活动")
+        self.show_amesvr_act_info(self.dnf_comic_op)
+
+        if not self.cfg.function_switches.get_dnf_comic or self.disable_most_activities():
+            logger.warning("未启用领取DNF漫画预约活动功能，将跳过")
+            return
+
+        self.check_dnf_comic()
+
+        if get_now() < parse_time("2021-06-17 00:00:00"):
+            logger.info("当前是预约阶段")
+            self.dnf_comic_op("预约资格领取", "773860")
+        else:
+            logger.info("当前是观看和领取阶段")
+            self.dnf_comic_op("领取预约奖励", "773862")
+
+        logger.warning(color("bold_yellow") + "页面上后续活动内容将在活动开启后再添加~")
+        logger.info((
+            "后续内容包括："
+            "\n1. 看漫画，拿星星 "
+            "\n2. 看漫画，领奖励 "
+            "\n3. 13抽一 "
+            "\n4. 在线奖励 "
+            "\n5. 星星兑换奖励 "
+            "\n6. 星星抽奖（建议先自选兑换）"
+        ))
+        # self.dnf_comic_op("观看资格领取", "773864")
+        # self.dnf_comic_op("兑换-升级券", "773863")
+        # self.dnf_comic_op("兑换-灿烂的徽章神秘礼盒", "773865")
+        # self.dnf_comic_op("qualOutput", "773866")
+        # self.dnf_comic_op("jifenOutput", "773868")
+
+    def check_dnf_comic(self):
+        self.check_bind_account("qq视频-DNF漫画预约活动", "http://dnf.qq.com/lbact/a20210611comic/",
+                                activity_op_func=self.dnf_comic_op, query_bind_flowid="773857", commit_bind_flowid="773856")
+
+    def dnf_comic_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_comic
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210611comic/",
                                    **extra_params)
 
     # --------------------------------------------DNF闪光杯第三期--------------------------------------------
@@ -4954,4 +5000,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection()
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_wegame()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.dnf_comic()

@@ -273,6 +273,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_xinyue_51 = True
         # 是否领取 DNF强者之路 活动
         self.get_dnf_strong = True
+        # 是否领取 DNF漫画 活动
+        self.get_dnf_comic = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

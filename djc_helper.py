@@ -2556,10 +2556,16 @@ class DjcHelper:
         # ------ 实际逻辑 ------
 
         # 检查一下userid是否真实存在
-        if self.cfg.dnf_helper_info.userId == "" or self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "" or len(_getUserTaskList().get("data", {})) == 0:
-            extra_msg = f"dnf助手的userId/token/uniqueRoleId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]，无法进行dnf助手编年史活动，请按照下列流程进行配置"
+        if self.cfg.dnf_helper_info.userId == "" or len(_getUserTaskList().get("data", {})) == 0:
+            extra_msg = f"dnf助手的userId未配置或配置有误，当前值为[{self.cfg.dnf_helper_info.userId}]，无法进行dnf助手编年史活动，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             return
+
+        # 检查领奖额外需要的参数
+        if self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "":
+            extra_msg = f"dnf助手的token/uniqueRoleId未配置，将无法领取等级奖励（其他似乎不受影响）。若想要自动领奖，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
+            # 不通过也继续走，只是领奖会失败而已
 
         # 提示做任务
         msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"

@@ -168,6 +168,10 @@ class DnfHelperInfoConfig(ConfigInterface):
             ('chronicle_exchange_items', DnfHelperChronicleExchangeItemConfig),
         ]
 
+    def on_config_update(self, raw_config: dict):
+        if len(self.token) != 0 and len(self.token) != 8:
+            async_message_box(f"{self.nickName} 对应的token({self.token}) 必定是错误的，因为token的长度只可能是8位，而你填的token长度为{len(self.token)}", "token长度不对")
+
 
 class HelloVoiceInfoConfig(ConfigInterface):
     def __init__(self):

@@ -1167,7 +1167,7 @@ class FunctionSwitchesConfigUi(QWidget):
         form_layout.addRow("qq视频-AME活动", self.checkbox_get_qq_video_amesvr)
 
         self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
-        form_layout.addRow("dnf助手编年史（需配置助手userId）", self.checkbox_get_dnf_helper_chronicle)
+        form_layout.addRow("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", self.checkbox_get_dnf_helper_chronicle)
 
         self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
         form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)

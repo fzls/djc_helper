@@ -1377,16 +1377,16 @@ class DnfHelperInfoConfigUi(QWidget):
         add_form_seperator(form_layout, f"dnf助手信息")
 
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
-        form_layout.addRow("社区ID", self.lineedit_userId)
+        form_layout.addRow("社区ID(userId)", self.lineedit_userId)
 
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
-        form_layout.addRow("昵称", self.lineedit_nickName)
+        form_layout.addRow("昵称(nickName)", self.lineedit_nickName)
 
         self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
-        form_layout.addRow("登陆票据", self.lineedit_token)
+        form_layout.addRow("登陆票据(token)", self.lineedit_token)
 
         self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
-        form_layout.addRow("唯一角色ID", self.lineedit_uniqueRoleId)
+        form_layout.addRow("唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
         form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)

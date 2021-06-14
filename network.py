@@ -82,8 +82,7 @@ def try_request(request_fn, retryCfg, check_fn=None):
 
 
 # 每次处理完备份一次最后的报错，方便出错时打印出来~
-last_process_result = None
-last_receive_response = None
+last_response_info = None
 
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
@@ -91,9 +90,13 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         # 某些特殊编码不要转，否则会显示乱码
         res.encoding = 'utf-8'
 
-    global last_receive_response
     if res is not None:
-        last_receive_response = res.text
+        global last_receive_response
+        last_response_info = {
+            "status_code": res.status_code,
+            "reason": res.reason,
+            "text": res.text,
+        }
 
     if is_jsonp:
         data = jsonp2json(res.text, is_normal_jsonp, need_unquote)

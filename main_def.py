@@ -598,6 +598,10 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
         logger.info("今日已运行过，不再尝试上报付费统计")
 
 
+def get_activity_funcs_to_run(cfg: Config, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:
+    return DjcHelper(cfg.account_configs[0], cfg.common).get_activity_funcs_to_run(user_buy_info)
+
+
 def show_activities_summary(cfg: Config, user_buy_info: BuyInfo):
     DjcHelper(cfg.account_configs[0], cfg.common).show_activities_summary(user_buy_info)
 

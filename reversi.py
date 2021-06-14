@@ -535,7 +535,7 @@ class Reversi(QWidget):
         # else:
         #     logfunc = logger.info
         #
-        # logfunc(f"本地调试日志：count={self.iter_count}, avg_choice={self.avg_choice.avg()}, expected_score={res[1]}")
+        # logfunc(f"count={self.iter_count}, avg_choice={self.avg_choice.avg()}, expected_score={res[1]}")
 
         # resume
         self.board = backup_board

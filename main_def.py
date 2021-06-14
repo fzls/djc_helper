@@ -578,8 +578,8 @@ def run(cfg: Config):
             logger.info(color("bold_cyan") + f"已启用超快速模式，将使用{cfg.get_pool_size()}个进程并发运行各个账号的各个活动，日志将完全不可阅读~")
             activity_funcs_to_run = get_activity_funcs_to_run(cfg, user_buy_info)
             get_pool().starmap(run_act, [(account_config, cfg.common, act_name, act_func.__name__)
-                                         for account_config in cfg.account_configs if account_config.is_enabled()
                                          for act_name, act_func in activity_funcs_to_run
+                                         for account_config in cfg.account_configs if account_config.is_enabled()
                                          ])
     else:
         for idx, account_config in enumerate(cfg.account_configs):

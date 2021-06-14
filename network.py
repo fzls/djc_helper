@@ -63,6 +63,7 @@ def try_request(request_fn, retryCfg, check_fn=None):
     for i in range(retryCfg.max_retry_count):
         try:
             response = request_fn()  # type: requests.Response
+            fix_encoding(response)
 
             if check_fn is not None:
                 if not check_fn(response):
@@ -86,9 +87,7 @@ last_response_info = None
 
 
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
-    if res.encoding not in ['gbk']:
-        # 某些特殊编码不要转，否则会显示乱码
-        res.encoding = 'utf-8'
+    fix_encoding(res)
 
     if res is not None:
         global last_receive_response
@@ -125,6 +124,12 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
     last_process_result = data
 
     return data
+
+
+def fix_encoding(res: requests.Response):
+    if res.encoding not in ['gbk']:
+        # 某些特殊编码不要转，否则会显示乱码
+        res.encoding = 'utf-8'
 
 
 def pre_process_data(data):

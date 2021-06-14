@@ -348,11 +348,9 @@ def check_some_exception(e, show_last_process_result=True) -> str:
         ))
 
     if show_last_process_result:
-        from network import last_process_result, last_receive_response
-        if last_process_result is not None:
-            msg += format_msg(f"最近一次处理成功的请求结果为：{last_process_result}", "bold_green")
-        if last_receive_response is not None:
-            msg += format_msg(f"最近一次收到的请求结果为：{last_receive_response}", "bold_cyan")
+        from network import last_response_info
+        if last_response_info is not None:
+            msg += format_msg(f"最近一次收到的请求结果为：{last_response_info}", "bold_cyan")
 
     return msg
 

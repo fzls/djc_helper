@@ -2,6 +2,7 @@ import math
 import string
 import subprocess
 from urllib.parse import quote_plus
+from multiprocessing import Pool
 from typing import Tuple, Callable
 
 import pyperclip
@@ -390,6 +391,14 @@ class DjcHelper:
 
         for act_name, activity_func in activity_funcs_to_run:
             activity_func()
+
+        # # 以下为并行执行各个活动的调用方式
+        # # 由于下列原因，该方式基本确定不会再使用
+        # # 1. amesvr活动服务器会限制调用频率，如果短时间内请求过快，会返回401，并提示请求过快
+        # #    而多进程处理活动的时候，会非常频繁的触发这种情况，感觉收益不大。另外频繁触发这个警报，感觉也有可能会被腾讯风控，到时候就得不偿失了
+        # # 2. python的multiprocessing.pool.Pool不支持在子进程中再创建新的子进程
+        # #    因此在不同账号已经在不同的进程下运行的前提下，子进程下不能再创建新的子进程了
+        # async_run_all_act(self.cfg, self.common_cfg, activity_funcs_to_run)
 
     def show_activities_summary(self, user_buy_info: BuyInfo):
         # 需要运行的活动
@@ -4948,6 +4957,24 @@ class DjcHelper:
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name)
 
         return lr
+
+
+def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):
+    pool_size = len(activity_funcs_to_run)
+    logger.warning(color("bold_yellow") + f"本地调试日志：将使用{pool_size}个进程并行运行{len(activity_funcs_to_run)}个活动")
+    act_pool = Pool(pool_size)
+    act_pool.starmap(run_act, [(_idx + 1, account_config, common_config, act_info_tuple[0], act_info_tuple[1].__name__) for _idx, act_info_tuple in enumerate(activity_funcs_to_run)])
+
+
+def run_act(idx: int, account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
+    wait_a_while(idx)
+
+    djcHelper = DjcHelper(account_config, common_config)
+    djcHelper.fetch_pskey()
+    djcHelper.check_skey_expired()
+    djcHelper.get_bind_role_list()
+
+    getattr(djcHelper, act_func_name)()
 
 
 def watch_live():

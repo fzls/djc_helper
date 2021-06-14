@@ -1013,7 +1013,7 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning(f"本地调试日志：本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是两个有效的qq号")
+                logger.warning(f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是两个有效的qq号")
                 continue
 
             fixed_team = team
@@ -4966,7 +4966,7 @@ class DjcHelper:
 
 def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):
     pool_size = len(activity_funcs_to_run)
-    logger.warning(color("bold_yellow") + f"本地调试日志：将使用{pool_size}个进程并行运行{len(activity_funcs_to_run)}个活动")
+    logger.warning(color("bold_yellow") + f"将使用{pool_size}个进程并行运行{len(activity_funcs_to_run)}个活动")
     act_pool = Pool(pool_size)
     act_pool.starmap(run_act, [(_idx + 1, account_config, common_config, act_info_tuple[0], act_info_tuple[1].__name__) for _idx, act_info_tuple in enumerate(activity_funcs_to_run)])
 

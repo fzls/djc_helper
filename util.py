@@ -751,6 +751,11 @@ def remove_directory(directory_path):
         logger.error(f"删除目录 {directory_path} 失败", exc_info=e)
 
 
+def wait_a_while(idx: int):
+    # 各进程按顺序依次等待对应时长，避免多个进程输出混在一起
+    time.sleep(0.1 * idx)
+
+
 if __name__ == '__main__':
     print(get_now_unix())
     print(get_this_week_monday())

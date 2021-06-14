@@ -616,11 +616,6 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig,
     _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")
 
 
-def wait_a_while(idx: int):
-    # 各进程按顺序依次等待对应时长，避免多个进程输出混在一起
-    time.sleep(0.1 * idx)
-
-
 @try_except()
 def try_take_xinyue_team_award(cfg: Config):
     if not has_any_account_in_normal_run(cfg):

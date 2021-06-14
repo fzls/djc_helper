@@ -4827,10 +4827,31 @@ class DjcHelper:
                            sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),
                            iActivityId=iActivityId, iFlowId=iFlowId, **data_extra_params)
 
+        def _check(response: requests.Response) -> Optional[Exception]:
+            if response.status_code == 401 and '您的速度过快或参数非法，请重试哦' in response.text:
+                # res.status=401, Unauthorized <Response [401]>
+                #
+                # <html>
+                # <head><title>Tencent Game 401</title></head>
+                # <meta charset="utf-8" />
+                # <body bgcolor="white">
+                # <center><h1>Welcome Tencent Game 401</h1></center>
+                # <center><h1>您的速度过快或参数非法，请重试哦</h1></center>
+                # <hr><center>Welcome Tencent Game</center>
+                # </body>
+                # </html>
+                #
+                wait_seconds = 0.1 + random.random()
+                logger.warning(f"请求过快，等待{wait_seconds:.2f}秒后重试")
+                time.sleep(wait_seconds)
+                return Exception("请求过快")
+
+            return None
+
         return self.post(ctx, self.urls.amesvr, data,
                          amesvr_host=amesvr_host, sServiceDepartment=sServiceDepartment, sServiceType=sServiceType,
                          iActivityId=iActivityId, sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
-                         print_res=print_res, extra_cookies=extra_cookies)
+                         print_res=print_res, extra_cookies=extra_cookies, check_fn=_check)
 
     def show_ams_act_info(self, iActivityId):
         logger.info(color("bold_green") + get_ams_act_desc(iActivityId))

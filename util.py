@@ -12,6 +12,7 @@ import traceback
 import uuid
 import webbrowser
 from typing import Callable, Any, Optional
+from functools import wraps
 
 import psutil
 import requests.exceptions
@@ -302,6 +303,7 @@ def use_by_myself():
 
 def try_except(show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None):
     def decorator(fun):
+        @wraps(fun)
         def wrapper(*args, **kwargs):
             try:
                 return fun(*args, **kwargs)

@@ -383,7 +383,7 @@ class DjcHelper:
         self.get_bind_role_list()
 
         # 运行活动
-        activity_funcs_to_run = self.get_activity_list(user_buy_info)
+        activity_funcs_to_run = self.get_activity_funcs_to_run(user_buy_info)
 
         for act_name, activity_func in activity_funcs_to_run:
             activity_func()
@@ -396,7 +396,7 @@ class DjcHelper:
         # #    因此在不同账号已经在不同的进程下运行的前提下，子进程下不能再创建新的子进程了
         # async_run_all_act(self.cfg, self.common_cfg, activity_funcs_to_run)
 
-    def get_activity_list(self, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:
+    def get_activity_funcs_to_run(self, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:
         activity_funcs_to_run = []
         activity_funcs_to_run.extend(self.free_activities())
         if user_buy_info.is_active():

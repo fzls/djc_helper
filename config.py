@@ -386,6 +386,10 @@ class AccountConfig(ConfigInterface):
         self.dnf_13_send_qq_list = [str(qq) for qq in self.dnf_13_send_qq_list]
         self.spring_fudai_receiver_qq_list = [str(qq) for qq in self.spring_fudai_receiver_qq_list]
 
+        if len(self.ark_lottery.lucky_dnf_role_id) != 0 and not self.ark_lottery.lucky_dnf_role_id.isdigit():
+            async_message_box(f"账号 {self.name} 的集卡幸运角色ID似乎填的是昵称（{self.ark_lottery.lucky_dnf_role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请按照配置工具的字段提示去操作", "配置有误")
+            self.ark_lottery.lucky_dnf_role_id = ""
+
     def updateUinSkey(self, uin, skey):
         self.account_info.uin = uin
         self.account_info.skey = skey

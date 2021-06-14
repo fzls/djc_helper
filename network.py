@@ -30,7 +30,7 @@ class Network:
             "Cookie": self.base_cookies,
         }
 
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], bool] = None):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
@@ -41,7 +41,7 @@ class Network:
         res = try_request(request_fn, self.common_cfg.retry, check_fn)
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], bool] = None):
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             post_headers = {**self.base_headers, **{
@@ -55,7 +55,7 @@ class Network:
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
 
-def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], bool] = None):
+def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], Optional[Exception]] = None):
     """
     :param check_fn: func(requests.Response) -> bool
     :type retryCfg: RetryConfig
@@ -66,8 +66,9 @@ def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], bo
             fix_encoding(response)
 
             if check_fn is not None:
-                if not check_fn(response):
-                    raise Exception("check failed")
+                check_exception = check_fn(response)
+                if check_exception is not None:
+                    raise check_exception
 
             return response
         except Exception as exc:

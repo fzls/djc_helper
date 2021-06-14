@@ -4968,12 +4968,10 @@ def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig
     pool_size = len(activity_funcs_to_run)
     logger.warning(color("bold_yellow") + f"将使用{pool_size}个进程并行运行{len(activity_funcs_to_run)}个活动")
     act_pool = Pool(pool_size)
-    act_pool.starmap(run_act, [(_idx + 1, account_config, common_config, act_info_tuple[0], act_info_tuple[1].__name__) for _idx, act_info_tuple in enumerate(activity_funcs_to_run)])
+    act_pool.starmap(run_act, [(account_config, common_config, act_name, act_func.__name__) for act_name, act_func in activity_funcs_to_run])
 
 
-def run_act(idx: int, account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
-    wait_a_while(idx)
-
+def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.fetch_pskey()
     djcHelper.check_skey_expired()

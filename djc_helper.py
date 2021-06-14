@@ -2,6 +2,7 @@ import math
 import string
 import subprocess
 from urllib.parse import quote_plus
+from typing import Tuple, Callable
 
 import pyperclip
 
@@ -429,7 +430,7 @@ class DjcHelper:
 
             logger.warning(color("bold_yellow") + msg)
 
-    def free_activities(self):
+    def free_activities(self) -> List[Tuple[str, Callable]]:
         return [
             ("执行道聚城相关操作", self.djc_operations),
             ("DNF地下城与勇士心悦特权专区", self.xinyue_operations),
@@ -442,7 +443,7 @@ class DjcHelper:
             ("dnf论坛签到", self.dnf_bbs_signin),
         ]
 
-    def payed_activities(self):
+    def payed_activities(self) -> List[Tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("dnf助手编年史活动", self.dnf_helper_chronicle),
@@ -458,7 +459,7 @@ class DjcHelper:
             ("DNF十三周年庆活动", self.dnf_13),
         ]
 
-    def expired_activities(self):
+    def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
             ("微信签到", self.wx_checkin),

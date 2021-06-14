@@ -1323,7 +1323,7 @@ class ArkLotteryConfigUi(QWidget):
         self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 
-        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID，形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
         form_layout.addRow("幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
@@ -1357,7 +1357,7 @@ class VipMentorConfigUi(QWidget):
         self.combobox_guanhuai_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
 
-        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID，形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
         form_layout.addRow("关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
     def update_config(self, cfg: VipMentorConfig):

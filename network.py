@@ -30,7 +30,7 @@ class Network:
             "Cookie": self.base_cookies,
         }
 
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies=""):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], bool] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
@@ -38,10 +38,10 @@ class Network:
             }}
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
-        res = try_request(request_fn, self.common_cfg.retry)
+        res = try_request(request_fn, self.common_cfg.retry, check_fn)
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies=""):
+    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], bool] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             post_headers = {**self.base_headers, **{
@@ -50,12 +50,12 @@ class Network:
             }}
             return requests.post(url, data=data, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
-        res = try_request(request_fn, self.common_cfg.retry)
+        res = try_request(request_fn, self.common_cfg.retry, check_fn)
         logger.debug(f"{data}")
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
 
-def try_request(request_fn, retryCfg, check_fn=None):
+def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], bool] = None):
     """
     :param check_fn: func(requests.Response) -> bool
     :type retryCfg: RetryConfig

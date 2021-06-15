@@ -520,7 +520,9 @@ class CommonConfig(ConfigInterface):
         self.disable_cmd_quick_edit = True
         # 是否启用多进程功能
         self.enable_multiprocessing = True
-        # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
+        # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用时生效。
+        self.enable_super_fast_mode = False
+        # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
         self.multiprocessing_pool_size = -1
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False

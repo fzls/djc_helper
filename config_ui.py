@@ -750,6 +750,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
         form_layout.addRow("是否启用多进程功能", self.checkbox_enable_multiprocessing)
 
+        self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
+        form_layout.addRow("是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
+
         self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
         form_layout.addRow("进程池大小(0=cpu核心数,-1=当前账号数,其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
@@ -812,6 +815,7 @@ class CommonConfigUi(QFrame):
         cfg.config_ui_enable_high_dpi = self.checkbox_config_ui_enable_high_dpi.isChecked()
         cfg.disable_cmd_quick_edit = self.checkbox_disable_cmd_quick_edit.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
+        cfg.enable_super_fast_mode = self.checkbox_enable_super_fast_mode.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()

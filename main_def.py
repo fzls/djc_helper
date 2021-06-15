@@ -569,9 +569,8 @@ def run(cfg: Config):
     if cfg.common.enable_multiprocessing:
         _show_head_line(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
 
-        super_fast_mode = False
-
-        if not super_fast_mode:
+        if not cfg.common.enable_super_fast_mode:
+            logger.info("当前未开启超快速模式~将并行运行各个账号")
             get_pool().starmap(do_run, [(_idx + 1, account_config, cfg.common, user_buy_info)
                                         for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
         else:

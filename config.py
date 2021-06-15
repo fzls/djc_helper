@@ -1,6 +1,7 @@
 import re
 from multiprocessing import cpu_count
 from typing import List, Dict
+import platform
 
 import toml
 
@@ -693,18 +694,29 @@ class Config(ConfigInterface):
         if not self.common.enable_multiprocessing:
             return 0
 
+        final_pool_size = 0
+
         pool_size = self.common.multiprocessing_pool_size
         if pool_size == 0:
             # 若为0，则默认为当前cpu核心数
-            return cpu_count()
+            final_pool_size = cpu_count()
         elif pool_size == -1:
             # 若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
             if self.common.enable_super_fast_mode:
-                return 4 * cpu_count()
+                final_pool_size = 4 * cpu_count()
             else:
-                return len(self.account_configs)
+                final_pool_size = len(self.account_configs)
         else:
-            return pool_size
+            final_pool_size = pool_size
+
+        if platform.system() == "Windows":
+            # https://bugs.python.org/issue26903
+            # windows下有限制，最多只能设置pool为60
+            max_pool_size_in_windows = 60
+            if final_pool_size > max_pool_size_in_windows:
+                final_pool_size = max_pool_size_in_windows
+
+        return final_pool_size
 
     def get_account_config_by_name(self, name: str) -> Optional[AccountConfig]:
         for account_config in self.account_configs:

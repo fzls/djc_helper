@@ -5,6 +5,8 @@ disable_cmd_quick_edit = true
 
 # 是否启用多进程功能
 enable_multiprocessing = true
+# 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用时生效。
+enable_super_fast_mode = false
 # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
 multiprocessing_pool_size = -1
 

@@ -1134,8 +1134,17 @@ def auto_updater_path():
 
 
 def show_multiprocessing_info(cfg: Config):
+    msg = ""
     if cfg.common.enable_multiprocessing:
-        logger.info(color("bold_yellow") + f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}")
+        msg += f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}"
+        if cfg.common.enable_super_fast_mode:
+            msg += ", 超快速模式已开启，将并行运行各个账号的各个活动~"
+        else:
+            msg += ", 超快速模式未开启，将并行运行各个账号。如需同时运行各个活动，可开启该模式~"
+    else:
+        msg += f"未开启多进程模式，如需开启，可前往配置工具开启"
+
+    logger.info(color("bold_yellow") + msg)
 
 
 def show_notices():

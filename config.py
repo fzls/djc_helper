@@ -698,8 +698,11 @@ class Config(ConfigInterface):
             # 若为0，则默认为当前cpu核心数
             return cpu_count()
         elif pool_size == -1:
-            # 若为-1，则默认为当前账号数
-            return len(self.account_configs)
+            # 若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
+            if self.common.enable_super_fast_mode:
+                return 4 * cpu_count()
+            else:
+                return len(self.account_configs)
         else:
             return pool_size
 

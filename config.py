@@ -395,7 +395,7 @@ class AccountConfig(ConfigInterface):
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():
-            async_message_box(f"账号 {self.name} 的{ctx}幸运角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请按照配置工具的字段提示去操作", "配置有误")
+            async_message_box(f"账号 {self.name} 的{ctx}幸运角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作", "配置有误")
             return False
 
         return True

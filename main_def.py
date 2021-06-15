@@ -695,7 +695,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
             monthly_pay_info = f"按月付费剩余时长为 {rt.days}天{rt.seconds // 3600}小时"
         else:
             monthly_pay_info = "按月付费已过期"
-    change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size())
+    change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size(), enable_super_fast_mode=cfg.common.enable_super_fast_mode)
 
     expired = not user_buy_info.is_active()
     will_expired_soon = user_buy_info.will_expire_in_days(cfg.common.notify_pay_expired_in_days)
@@ -1111,13 +1111,15 @@ def get_user_buy_info_from_server(qq_accounts: List[str]) -> BuyInfo:
     return buyInfo
 
 
-def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0):
+def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False):
     if dlc_info == "" and exists_auto_updater_dlc():
         dlc_info = " 自动更新豪华升级版"
 
     pool_info = ""
     if multiprocessing_pool_size != 0:
         pool_info = f"火力全开版本({multiprocessing_pool_size})"
+        if enable_super_fast_mode:
+            pool_info = "超级" + pool_info
 
     set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
     os.system(set_title_cmd)

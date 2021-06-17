@@ -851,7 +851,8 @@ def show_tips(cfg):
     ]
 
     for idx, tip in enumerate(tips):
-        logger.warning(color("fg_bold_yellow") + f"{idx + 1}. {tip}\n ")
+        msg = f"{idx + 1}. {tip}\n "
+        async_message_box(msg, "一些小提示", show_once=True)
 
 
 def try_auto_update(cfg):

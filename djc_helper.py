@@ -471,6 +471,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF十三周年庆活动", self.dnf_13),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -489,7 +490,6 @@ class DjcHelper:
             ("DNF闪光杯第三期", self.dnf_shanguang),
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF福签大作战", self.dnf_fuqian),
             ("DNF黑鸦竞速", self.dnf_heiya),
             ("会员关怀", self.vip_mentor),
@@ -4241,7 +4241,7 @@ class DjcHelper:
     # --------------------------------------------DNF落地页活动--------------------------------------------
     @try_except()
     def dnf_luodiye(self):
-        # https://dnf.qq.com/cp/a20210325index/
+        # https://dnf.qq.com/cp/a20210618index/
         show_head_line("DNF落地页活动")
         self.show_amesvr_act_info(self.dnf_luodiye_op)
 
@@ -4249,26 +4249,37 @@ class DjcHelper:
             logger.warning("未启用领取DNF落地页活动功能，将跳过")
             return
 
-        res = self.dnf_luodiye_op("领取分享奖励", "746279")
-        if res["ret"] == "700" and res["flowRet"]["sMsg"] == "请先将活动页面分享给好友~":
-            self.dnf_luodiye_op("发送分享消息给自己", "746282", receiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        self.check_dnf_luodiye()
 
-            self.dnf_luodiye_op("分享后再尝试领取分享奖励", "746279")
+        self.dnf_luodiye_op("登陆领取积分", "770771")
+        self.dnf_luodiye_op("分享", "770783", iReceiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        self.dnf_luodiye_op("登陆活动页送积分", "770812")
+
+        for i in range(4):
+            res = self.dnf_luodiye_op("领取自选道具-装备提升礼盒*2", "770042", itemIndex="8")
+            if int(res["ret"]) != 0:
+                break
+            time.sleep(1)
+
+    def check_dnf_luodiye(self):
+        self.check_bind_account("DNF落地页活动", "https://dnf.qq.com/lbact/a20210603lbavs9i/index.html",
+                                activity_op_func=self.dnf_luodiye_op, query_bind_flowid="769490", commit_bind_flowid="769489")
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_luodiye
 
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        checkInfo = self.get_dnf_roleinfo()
+        # roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        # checkInfo = self.get_dnf_roleinfo()
+        #
+        # checkparam = quote_plus(quote_plus(checkInfo.checkparam))
 
-        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
-
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210325index/",
-                                   sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
-                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210618index/",
+                                   # sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                                   # sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                                   # md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
                                    **extra_params,
-                                   extra_cookies=f"p_skey={p_skey}")
+                                   extra_cookies=f"p_skey={p_skey}"
+                                   )
 
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
@@ -4844,6 +4855,7 @@ class DjcHelper:
             "qd",
             "iReceiveUin",
             "map1", "map2", "len",
+            "itemIndex",
         ]}
 
         # 整合得到所有默认值
@@ -5124,7 +5136,6 @@ if __name__ == '__main__':
         # djcHelper.firecrackers()
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.xinyue_cat()
-        # djcHelper.dnf_luodiye()
         # djcHelper.dnf_fuqian()
         # djcHelper.dnf_heiya()
         # djcHelper.vip_mentor()
@@ -5148,4 +5159,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
-        djcHelper.dnf_comic()
+        # djcHelper.dnf_comic()
+        djcHelper.dnf_luodiye()

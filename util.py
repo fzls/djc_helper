@@ -11,8 +11,8 @@ import time
 import traceback
 import uuid
 import webbrowser
-from typing import Callable, Any, Optional
 from functools import wraps
+from typing import Callable, Any, Optional
 
 import psutil
 import requests.exceptions
@@ -396,18 +396,19 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
-    async_call(message_box, msg, title, print_log, icon, open_url)
+def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False):
+    async_call(message_box, msg, title, print_log, icon, open_url, show_once)
 
 
-def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url=""):
+def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False):
     if print_log:
         logger.warning(color("bold_cyan") + msg)
 
     if is_run_in_github_action():
         return
 
-    win32api.MessageBox(0, msg, title, icon)
+    if not show_once or is_first_run(f"message_box_{title}"):
+        win32api.MessageBox(0, msg, title, icon)
 
     if open_url != "":
         webbrowser.open(open_url)

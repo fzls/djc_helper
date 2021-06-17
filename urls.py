@@ -127,6 +127,7 @@ class Urls:
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
         self.iActivityId_dnf_my_story = "382161"  # 我的dnf13周年活动
+        self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

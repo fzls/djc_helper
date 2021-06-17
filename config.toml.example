@@ -343,6 +343,8 @@ get_dnf_comic = true
 get_dnf_13 = true
 # 是否领取 我的dnf13周年活动 活动
 get_dnf_my_story = true
+# 是否领取 刃影预约活动 活动
+get_dnf_reserve = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用集卡功能

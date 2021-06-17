@@ -49,6 +49,8 @@ class LoginResult(ConfigInterface):
         self.xinyue_openid = xinyue_openid
         self.xinyue_access_token = xinyue_access_token
 
+        self.guanjia_skey_version = 0
+
     @try_except(show_exception_info=False, return_val_on_except="")
     def qc_nickname(self):
         return parse_qs(unquote_plus(self.qc_IED_LOG_INFO2)).get('nickname', '')[0]

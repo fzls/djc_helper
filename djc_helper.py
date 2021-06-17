@@ -1,9 +1,9 @@
 import math
 import string
 import subprocess
-from urllib.parse import quote_plus
 from multiprocessing import Pool
-from typing import Tuple, Callable
+from typing import Tuple
+from urllib.parse import quote_plus
 
 import pyperclip
 
@@ -1623,7 +1623,7 @@ class DjcHelper:
     # --------------------------------------------DNF漫画预约活动--------------------------------------------
     @try_except()
     def dnf_comic(self):
-        # http://dnf.qq.com/lbact/a20210611comic/
+        # https://dnf.qq.com/lbact/a20210617comic/
         show_head_line("DNF漫画预约活动")
         self.show_amesvr_act_info(self.dnf_comic_op)
 
@@ -1633,36 +1633,75 @@ class DjcHelper:
 
         self.check_dnf_comic()
 
-        if get_now() < parse_time("2021-06-17 00:00:00"):
-            logger.info("当前是预约阶段")
-            self.dnf_comic_op("预约资格领取", "773860")
-        else:
-            logger.info("当前是观看和领取阶段")
-            self.dnf_comic_op("领取预约奖励", "773862")
+        def query_star_count():
+            res = self.dnf_comic_op("查询星星数目", "774820", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-        logger.warning(color("bold_yellow") + "页面上后续活动内容将在活动开启后再添加~")
-        logger.info((
-            "后续内容包括："
-            "\n1. 看漫画，拿星星 "
-            "\n2. 看漫画，领奖励 "
-            "\n3. 13抽一 "
-            "\n4. 在线奖励 "
-            "\n5. 星星兑换奖励 "
-            "\n6. 星星抽奖（建议先自选兑换）"
-        ))
-        # self.dnf_comic_op("观看资格领取", "773864")
-        # self.dnf_comic_op("兑换-升级券", "773863")
-        # self.dnf_comic_op("兑换-灿烂的徽章神秘礼盒", "773865")
-        # self.dnf_comic_op("qualOutput", "773866")
-        # self.dnf_comic_op("jifenOutput", "773868")
+            for info in raw_info.sOutValue1.split('|'):
+                count_id, total_get, current = info.split(':')
+                if int(count_id) == 324:
+                    return int(total_get), int(current)
+
+            return 0, 0
+
+        self.dnf_comic_op("预约资格领取", "774765")
+        self.dnf_comic_op("预约资格消耗", "774768")
+
+        self.dnf_comic_op("13件福利任你抽", "774817")
+
+        watch_comic_flowids = [
+            "774769", "774770", "774771", "774772", "774773", "774774", "774775", "774776", "774777", "774778",
+            "774779", "774780", "774781", "774782", "774783", "774784", "774785", "774786", "774787", "774788",
+            "774789", "774790", "774791", "774792", "774793", "774794", "774795", "774796", "774797", "774798",
+            "774799", "774800",
+        ]
+        # note: 当前更新至（定期刷新这个值）
+        current_updated = 3
+        for _idx, flowid in enumerate(watch_comic_flowids):
+            idx = _idx + 1
+            if idx > current_updated:
+                logger.info(color("bold_yellow") + f"当前活动页面更新至第{current_updated}，不执行后续部分，避免被钓鱼<_<")
+                break
+
+            if is_first_run(f"comic_watch_{self.cfg.account_info.uin}_{idx}"):
+                self.dnf_comic_op(f"观看资格领取_第{idx}话", flowid)
+
+        self.dnf_comic_op("观看礼包资格消耗", "775253")
+
+        self.dnf_comic_op("每日在线好礼", "774826")
+
+        total_get, star_count = query_star_count()
+        msg = f"当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥~ https://dnf.qq.com/lbact/a20210617comic/"
+        logger.info(color("bold_yellow") + msg)
+        if is_weekly_first_run("提示领道具"):
+            async_message_box(msg, "漫画活动提示", open_url="https://dnf.qq.com/lbact/a20210617comic/")
+
+        if use_by_myself():
+            # 我自己进行兑换~
+            self.dnf_comic_op("兑换-装备提升礼盒", "774806")
+            self.dnf_comic_op("兑换-灿烂的徽章神秘礼盒", "774803")
+
+            # self.dnf_comic_op("兑换-升级券", "774802")
+            # self.dnf_comic_op("兑换-黑钻15天", "774805")
+            # self.dnf_comic_op("兑换-黑钻7天", "774807")
+            # self.dnf_comic_op("兑换-抗疲劳秘药 (20点)(lv50-100)", "774808")
+            # self.dnf_comic_op("兑换-华丽的徽章神秘礼盒", "774809")
+            # self.dnf_comic_op("兑换-诺斯匹斯的文书礼盒 (150个)", "774811")
+            # self.dnf_comic_op("兑换-[期限]时间引导石礼盒 (10个)", "774812")
+            # self.dnf_comic_op("兑换-抗疲劳秘药 (10点)(lv50-100)", "774813")
+            # self.dnf_comic_op("兑换-黑钻3天", "774814")
+            # self.dnf_comic_op("兑换-成长胶囊 (10百分比)(lv50-99)", "774815")
+            # self.dnf_comic_op("兑换-宠物饲料礼袋 (20个)", "774816")
+
+            # self.dnf_comic_op("星星夺宝", "774818")
 
     def check_dnf_comic(self):
-        self.check_bind_account("qq视频-DNF漫画预约活动", "http://dnf.qq.com/lbact/a20210611comic/",
-                                activity_op_func=self.dnf_comic_op, query_bind_flowid="773857", commit_bind_flowid="773856")
+        self.check_bind_account("qq视频-DNF漫画预约活动", "https://dnf.qq.com/lbact/a20210617comic/",
+                                activity_op_func=self.dnf_comic_op, query_bind_flowid="774762", commit_bind_flowid="774761")
 
     def dnf_comic_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_comic
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210611comic/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617comic/",
                                    **extra_params)
 
     # --------------------------------------------DNF十三周年庆活动--------------------------------------------
@@ -1679,7 +1718,7 @@ class DjcHelper:
         self.check_dnf_13()
 
         def query_lottery_count():
-            res = self.dnf_13_op("查询剩余抽奖次数", "772683")
+            res = self.dnf_13_op("查询剩余抽奖次数", "772683", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
             return int(raw_info.sOutValue1)
@@ -3813,7 +3852,7 @@ class DjcHelper:
         self.dnf_drift_op("分享领取礼包", "726345")
 
     def query_dnf_drift_points(self):
-        res = self.dnf_drift_op("查询基础信息", "726353")
+        res = self.dnf_drift_op("查询基础信息", "726353", print_res=False)
         info = parse_amesvr_common_info(res)
         total, remaining = int(info.sOutValue2), int(info.sOutValue2) - int(info.sOutValue1) * 4
         return total, remaining
@@ -5107,6 +5146,6 @@ if __name__ == '__main__':
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_welfare()
-        # djcHelper.dnf_comic()
         # djcHelper.dnf_13()
-        djcHelper.dnf_helper_chronicle()
+        # djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_comic()

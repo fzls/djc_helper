@@ -837,27 +837,27 @@ def show_tips(cfg):
         return
     _show_head_line("一些小提示")
 
-    tips = [
-        (
+    tips = {
+        "工具下载": (
             "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzoui.com/s/djc-tools"
         ),
-        (
+        "配置工具": (
             "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
         ),
-        (
+        "心悦app": (
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
         ),
-        (
+        "手动活动617": (
             "以下活动请自行完成\n"
             "1. 斗鱼 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
             "2. 合成三觉小游戏 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
         ),
-    ]
+    }
 
-    for idx, tip in enumerate(tips):
-        msg = f"{idx + 1}. {tip}\n "
-        async_message_box(msg, "一些小提示", show_once=True)
+    for title, tip in tips.items():
+        msg = f"{title}: {tip}\n "
+        message_box(msg, f"一些小提示_{title}", show_once=True)
 
 
 def try_auto_update(cfg):

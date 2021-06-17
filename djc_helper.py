@@ -4889,8 +4889,8 @@ class DjcHelper:
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, **params):
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn)
 
-    def post(self, ctx, url, data, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, **params):
-        return self.network.post(ctx, self.format(url, **params), data, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn)
+    def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, **params):
+        return self.network.post(ctx, self.format(url, **params), data, json, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn)
 
     def format(self, url, **params):
         endTime = datetime.datetime.now()

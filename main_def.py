@@ -848,6 +848,11 @@ def show_tips(cfg):
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
         ),
+        (
+            "以下活动请自行完成\n"
+            "1. 斗鱼 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
+            "2. 合成三觉小游戏 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
+        ),
     ]
 
     for idx, tip in enumerate(tips):

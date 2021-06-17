@@ -119,7 +119,7 @@ class Urls:
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_dnf_collection = "382255"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
-        self.iActivityId_dnf_heiya = "365524"  # 黑鸦竞速
+        self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "366492"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue_51 = "373457"  # DNF心悦51

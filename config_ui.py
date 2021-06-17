@@ -1209,8 +1209,8 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_fuqian = create_checkbox(cfg.get_dnf_fuqian)
         form_layout.addRow("DNF福签大作战", self.checkbox_get_dnf_fuqian)
 
-        self.checkbox_get_dnf_heiya = create_checkbox(cfg.get_dnf_heiya)
-        form_layout.addRow("DNF黑鸦竞速", self.checkbox_get_dnf_heiya)
+        self.checkbox_get_dnf_ozma = create_checkbox(cfg.get_dnf_ozma)
+        form_layout.addRow("DNF奥兹玛竞速", self.checkbox_get_dnf_ozma)
 
         self.checkbox_get_colg_signin = create_checkbox(cfg.get_colg_signin)
         form_layout.addRow("colg每日签到和积分领取", self.checkbox_get_colg_signin)
@@ -1281,7 +1281,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_wegame = self.checkbox_get_dnf_wegame.isChecked()
         cfg.get_dnf_collection = self.checkbox_get_dnf_collection.isChecked()
         cfg.get_dnf_fuqian = self.checkbox_get_dnf_fuqian.isChecked()
-        cfg.get_dnf_heiya = self.checkbox_get_dnf_heiya.isChecked()
+        cfg.get_dnf_ozma = self.checkbox_get_dnf_ozma.isChecked()
         cfg.get_colg_signin = self.checkbox_get_colg_signin.isChecked()
         cfg.get_xinyue_app = self.checkbox_get_xinyue_app.isChecked()
         cfg.get_dnf_pk = self.checkbox_get_dnf_pk.isChecked()

@@ -473,6 +473,7 @@ class DjcHelper:
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
+            ("刃影预约活动", self.dnf_reserve),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4366,6 +4367,35 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210604history/",
                                    **extra_params)
 
+    # --------------------------------------------刃影预约活动--------------------------------------------
+    @try_except()
+    def dnf_reserve(self):
+        # https://dnf.qq.com/cp/a20210618reserve/index.html
+        show_head_line("刃影预约活动")
+        self.show_amesvr_act_info(self.dnf_reserve_op)
+
+        if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
+            logger.warning("未启用领取刃影预约活动功能，将跳过")
+            return
+
+        self.dnf_reserve_op("预约领奖", "773111")
+
+    def dnf_reserve_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_reserve
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        checkInfo = self.get_dnf_roleinfo()
+
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210618reserve/index.html",
+                                   sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                                   md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
+                                   **extra_params,
+                                   extra_cookies=f"p_skey={p_skey}"
+                                   )
+
     # --------------------------------------------新春福袋大作战--------------------------------------------
     @try_except()
     def spring_fudai(self):
@@ -5184,4 +5214,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_luodiye()
-        djcHelper.dnf_my_story()
+        # djcHelper.dnf_my_story()
+        djcHelper.dnf_reserve()

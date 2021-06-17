@@ -285,6 +285,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_comic = True
         # 是否领取 DNF十三周年庆 活动
         self.get_dnf_13 = True
+        # 是否领取 我的dnf13周年活动 活动
+        self.get_dnf_my_story = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用集卡功能

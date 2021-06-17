@@ -472,6 +472,7 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("我的dnf13周年活动", self.dnf_my_story),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4344,6 +4345,27 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210603lbavs9i/",
                                    **extra_params)
 
+    # --------------------------------------------我的dnf13周年活动--------------------------------------------
+    @try_except()
+    def dnf_my_story(self):
+        # https://dnf.qq.com/cp/a20210604history/index.html
+        show_head_line("我的dnf13周年活动")
+        self.show_amesvr_act_info(self.dnf_my_story_op)
+
+        if not self.cfg.function_switches.get_dnf_my_story or self.disable_most_activities():
+            logger.warning("未启用领取我的dnf13周年活动功能，将跳过")
+            return
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        self.dnf_my_story_op("查询历史回顾数据", "769681", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
+        self.dnf_my_story_op("领取奖励（854922）", "770900", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
+
+    def dnf_my_story_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_my_story
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210604history/",
+                                   **extra_params)
+
     # --------------------------------------------新春福袋大作战--------------------------------------------
     @try_except()
     def spring_fudai(self):
@@ -4856,6 +4878,7 @@ class DjcHelper:
             "iReceiveUin",
             "map1", "map2", "len",
             "itemIndex",
+            "sRole",
         ]}
 
         # 整合得到所有默认值
@@ -5160,4 +5183,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.dnf_comic()
-        djcHelper.dnf_luodiye()
+        # djcHelper.dnf_luodiye()
+        djcHelper.dnf_my_story()

@@ -475,6 +475,7 @@ class DjcHelper:
             ("我的dnf13周年活动", self.dnf_my_story),
             ("刃影预约活动", self.dnf_reserve),
             ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF奥兹玛竞速", self.dnf_ozma),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -494,7 +495,6 @@ class DjcHelper:
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
-            ("DNF黑鸦竞速", self.dnf_heiya),
             ("会员关怀", self.vip_mentor),
             ("colg每日签到", self.colg_signin),
             ("qq视频活动", self.qq_video),
@@ -1816,21 +1816,21 @@ class DjcHelper:
                                    weekDay=weekDay,
                                    **extra_params)
 
-    # --------------------------------------------DNF黑鸦竞速--------------------------------------------
+    # --------------------------------------------DNF奥兹玛竞速--------------------------------------------
     @try_except()
-    def dnf_heiya(self):
-        # http://xinyue.qq.com/act/a20201221sgbpc/index.html
-        show_head_line("DNF黑鸦竞速")
-        self.show_amesvr_act_info(self.dnf_heiya_op)
+    def dnf_ozma(self):
+        # https://xinyue.qq.com/act/a20210526znqhd/index.html
+        show_head_line("DNF奥兹玛竞速")
+        self.show_amesvr_act_info(self.dnf_ozma_op)
 
-        if not self.cfg.function_switches.get_dnf_heiya or self.disable_most_activities():
-            logger.warning("未启用领取DNF黑鸦竞速活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_ozma or self.disable_most_activities():
+            logger.warning("未启用领取DNF奥兹玛竞速活动合集功能，将跳过")
             return
 
-        self.check_dnf_heiya()
+        self.check_dnf_ozma()
 
         def query_info():
-            res = self.dnf_heiya_op("查询信息", "746293", print_res=False)
+            res = self.dnf_ozma_op("查询信息", "770021", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
             info = DnfHeiyaInfo()
@@ -1839,24 +1839,27 @@ class DjcHelper:
 
             return info
 
+        self.dnf_ozma_op("周年庆登录礼包", "770194")
+        self.dnf_ozma_op("周年庆130元充值礼", "770201")
+
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         checkInfo = self.get_dnf_roleinfo()
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
-        self.dnf_heiya_op("报名礼包", "746289",
+        self.dnf_ozma_op("报名礼包", "770017",
                           sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                           sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                           md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam, )
 
-        self.dnf_heiya_op("通关黑鸦之境赠送抽奖券", "746448")
+        self.dnf_ozma_op("通关奥兹玛赠送抽奖券", "770026")
         info = query_info()
         logger.info(f"当前有{info.lottery_count}张抽奖券")
         for idx in range(info.lottery_count):
-            self.dnf_heiya_op(f"第{idx + 1}次抽奖", "746449")
+            self.dnf_ozma_op(f"第{idx + 1}次抽奖", "770027")
 
-        self.dnf_heiya_op("每日登录游戏送开箱积分", "746451")
-        self.dnf_heiya_op("每日登录心悦APP送开箱积分", "746453")
-        self.dnf_heiya_op("每日网吧登录送开箱积分", "746458")
-        endTime = "20210430"
+        self.dnf_ozma_op("每日登录游戏送开箱积分", "770028")
+        self.dnf_ozma_op("每日登录心悦APP送开箱积分", "770029")
+        self.dnf_ozma_op("每日网吧登录送开箱积分", "770030")
+        endTime = "20210721"
         info = query_info()
         logger.info(f"当前开箱积分为{info.box_score}")
         # 不确定是否跟勇者征集令一样宝箱互斥，保底期间，最后一天再全领，在这之前则是先只尝试领取第五个
@@ -1866,36 +1869,23 @@ class DjcHelper:
         # 钻石宝箱 45-59分
         # 泰拉宝箱 60分
         if info.box_score >= 60:
-            self.dnf_heiya_op(f"开启宝箱-level=5", "746459", level=5)
+            self.dnf_ozma_op(f"开启宝箱-level=5", "770031", level=5)
         if get_today() == endTime:
             logger.info("已到活动最后一天，尝试从高到低领取每个宝箱")
             for level in range(5, 0, -1):
-                self.dnf_heiya_op(f"开启宝箱-level={level}", "746459", level=level)
+                self.dnf_ozma_op(f"开启宝箱-level={level}", "770031", level=level)
 
-        self.dnf_heiya_op("登录心悦APP送礼包", "746471")
+        self.dnf_ozma_op("登录心悦APP送礼包", "770032")
 
-        # <option value="1">跨1</option>
-        # <option value="2">跨2</option>
-        # <option value="3">跨3A</option>
-        # <option value="4">跨3B</option>
-        # <option value="5">跨4</option>
-        # <option value="6">跨5</option>
-        # <option value="7">跨6</option>
-        # <option value="8">跨7A</option>
-        # <option value="9">跨7B</option>
-        # <option value="10">跨8</option>
-        # self.dnf_heiya_op("绑定对应跨区", "746474", kuaqu="7")
-        logger.info(color("bold_yellow") + "请自行前往活动页面绑定跨区~")
-        self.dnf_heiya_op("第一跨区奖励礼包", "746472")
 
-    def check_dnf_heiya(self):
-        self.check_bind_account("DNF黑鸦竞速", "http://xinyue.qq.com/act/a20210310dnf/m/index.html",
-                                activity_op_func=self.dnf_heiya_op, query_bind_flowid="746292", commit_bind_flowid="746291")
+    def check_dnf_ozma(self):
+        self.check_bind_account("DNF奥兹玛竞速", "https://xinyue.qq.com/act/a20210526znqhd/index.html",
+                                activity_op_func=self.dnf_ozma_op, query_bind_flowid="770020", commit_bind_flowid="770019")
 
-    def dnf_heiya_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_heiya
+    def dnf_ozma_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_ozma
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210310dnf/m/",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20210526znqhd/index.html",
                                    **extra_params)
 
     # --------------------------------------------qq视频活动--------------------------------------------
@@ -5237,7 +5227,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_weekly_gift()
         # djcHelper.xinyue_cat()
         # djcHelper.dnf_fuqian()
-        # djcHelper.dnf_heiya()
         # djcHelper.vip_mentor()
         # djcHelper.hello_voice()
         # djcHelper.xinyue_operations()
@@ -5263,4 +5252,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_my_story()
         # djcHelper.dnf_reserve()
         # djcHelper.dnf_anniversary()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.dnf_ozma()

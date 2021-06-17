@@ -2712,18 +2712,6 @@ class DjcHelper:
                 break
             time.sleep(self.common_cfg.retry.request_wait_time)
 
-    def is_guanjia_openid_expired(self, cached_guanjia_openid):
-        if cached_guanjia_openid is None:
-            return True
-
-        lr = LoginResult(qc_openid=cached_guanjia_openid["qc_openid"], qc_k=cached_guanjia_openid["qc_k"])
-        self.guanjia_lr = lr
-
-        # {"code": 7005, "msg": "获取accToken失败", "result": []}
-        # {"code": 29, "msg": "请求包参数错误", "result": []}
-        res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
-        return res["code"] in [7005, 29]
-
     def guanjia_common_gifts_op(self, ctx, giftId="", print_res=True):
         return self.guanjia_op(ctx, "comjoin", self.guanjia_common_gifts_act_id, giftId=giftId, print_res=print_res)
 
@@ -2759,8 +2747,8 @@ class DjcHelper:
             if print_warning: logger.warning("目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
             return None
 
-        cached_guanjia_openid = self.load_guanjia_openid()
-        need_update = self.is_guanjia_openid_expired(cached_guanjia_openid)
+        cached_guanjia_login_result = self.load_guanjia_login_result()
+        need_update = cached_guanjia_login_result is None or self.is_guanjia_openid_expired(cached_guanjia_login_result) or cached_guanjia_login_result.guanjia_skey_version != guanjia_skey_version
 
         if need_update:
             logger.warning("管家openid需要更新，将尝试重新登录电脑管家网页获取并保存到本地")
@@ -2774,33 +2762,42 @@ class DjcHelper:
                 # 自动登录
                 lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_guanjia, name=self.cfg.name)
             # 保存
-            self.save_guanjia_openid(lr.qc_openid, lr.qc_k)
+            self.save_guanjia_login_result(lr)
         else:
-            lr = LoginResult(qc_openid=cached_guanjia_openid["qc_openid"], qc_k=cached_guanjia_openid["qc_k"])
+            lr = cached_guanjia_login_result
 
         return lr
 
-    def save_guanjia_openid(self, qc_openid, qc_k):
+    def is_guanjia_openid_expired(self, cached_guanjia_login_result: LoginResult):
+        if cached_guanjia_login_result is None:
+            return True
+
+        self.guanjia_lr = cached_guanjia_login_result
+
+        # {"code": 7005, "msg": "获取accToken失败", "result": []}
+        # {"code": 29, "msg": "请求包参数错误", "result": []}
+        res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
+        return res["code"] in [7005, 29]
+
+    def save_guanjia_login_result(self, lr: LoginResult):
         # 本地缓存
         with open(self.get_local_saved_guanjia_openid_file(), "w", encoding="utf-8") as sf:
-            loginResult = {
-                "qc_openid": str(qc_openid),
-                "qc_k": str(qc_k),
-            }
-            json.dump(loginResult, sf)
-            logger.debug(f"本地保存管家openid信息，具体内容如下：{loginResult}")
+            lr.guanjia_skey_version = guanjia_skey_version
+            json.dump(to_raw_type(lr), sf)
+            logger.debug(f"本地保存管家openid信息，具体内容如下：{lr}")
 
-    def load_guanjia_openid(self):
+    def load_guanjia_login_result(self) -> Optional[LoginResult]:
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
-            return
+            return None
 
         # 若未有缓存文件，则跳过
         if not os.path.isfile(self.get_local_saved_guanjia_openid_file()):
-            return
+            return None
 
         with open(self.get_local_saved_guanjia_openid_file(), "r", encoding="utf-8") as f:
-            loginResult = json.load(f)
+            raw_loginResult = json.load(f)
+            loginResult = LoginResult().auto_update_config(raw_loginResult)
             logger.debug(f"读取本地缓存的管家openid信息，具体内容如下：{loginResult}")
             return loginResult
 

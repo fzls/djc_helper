@@ -1230,6 +1230,12 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_comic = create_checkbox(cfg.get_dnf_comic)
         form_layout.addRow("DNF漫画", self.checkbox_get_dnf_comic)
 
+        self.checkbox_get_dnf_13 = create_checkbox(cfg.get_dnf_13)
+        form_layout.addRow("DNF十三周年庆", self.checkbox_get_dnf_13)
+
+        self.checkbox_get_dnf_my_story = create_checkbox(cfg.get_dnf_my_story)
+        form_layout.addRow("我的dnf13周年活动", self.checkbox_get_dnf_my_story)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1276,6 +1282,8 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_xinyue_51 = self.checkbox_get_dnf_xinyue_51.isChecked()
         cfg.get_dnf_strong = self.checkbox_get_dnf_strong.isChecked()
         cfg.get_dnf_comic = self.checkbox_get_dnf_comic.isChecked()
+        cfg.get_dnf_13 = self.checkbox_get_dnf_13.isChecked()
+        cfg.get_dnf_my_story = self.checkbox_get_dnf_my_story.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

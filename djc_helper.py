@@ -476,6 +476,7 @@ class DjcHelper:
             ("刃影预约活动", self.dnf_reserve),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF奥兹玛竞速", self.dnf_ozma),
+            ("新管家蚊子腿", self.guanjia_new),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1846,9 +1847,9 @@ class DjcHelper:
         checkInfo = self.get_dnf_roleinfo()
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
         self.dnf_ozma_op("报名礼包", "770017",
-                          sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
-                          sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-                          md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam, )
+                         sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+                         sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+                         md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam, )
 
         self.dnf_ozma_op("通关奥兹玛赠送抽奖券", "770026")
         info = query_info()
@@ -1876,7 +1877,6 @@ class DjcHelper:
                 self.dnf_ozma_op(f"开启宝箱-level={level}", "770031", level=level)
 
         self.dnf_ozma_op("登录心悦APP送礼包", "770032")
-
 
     def check_dnf_ozma(self):
         self.check_bind_account("DNF奥兹玛竞速", "https://xinyue.qq.com/act/a20210526znqhd/index.html",
@@ -2724,6 +2724,98 @@ class DjcHelper:
         extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"
         return self.get(ctx, self.urls.guanjia, api=api, giftId=giftId, area_id=roleinfo.serviceID, charac_no=roleinfo.roleCode, charac_name=quote_plus(roleinfo.roleName),
                         extra_cookies=extra_cookies, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
+
+    # --------------------------------------------新管家蚊子腿--------------------------------------------
+    # note: 新管家活动接入流程：
+    #   1. 打开新活动的页面 https://sdi.3g.qq.com/v/2021061115132511816
+    #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
+    #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
+    guanjia_new_act_id = "2021061115132511816"  # 活动ID
+    # note: 4. 按照下面的顺序依次点击对应活动按钮，最后按顺序将请求中的lid复制出来
+    guanjia_new_gift_id_special_rights = "224"  # 电脑管家特权礼包
+    guanjia_new_gift_id_sign_in_2_days = "222"  # 连续签到2天礼包
+    guanjia_new_gift_id_return_user = "220"  # 幸运勇士礼包
+    guanjia_new_gift_id_download_and_login_this_version_guanjia = "223"  # 下载登录管家任务
+    guanjia_new_gift_id_game_online_30_minutes = "225"  # 每日游戏在线30分钟任务
+    guanjia_new_gift_id_sign_in = "226"  # 每日签到任务
+    # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
+    guanjia_new_lottery_gifts_act_id = "176"  # 抽奖活动ID
+
+    # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
+    # note: 6. 调整urls中管家蚊子腿的起止时间
+    # note: 7. 调整config_ui中管家开关
+    # note: 8. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
+    @try_except()
+    def guanjia_new(self):
+        show_head_line("管家蚊子腿")
+        self.show_not_ams_act_info("管家蚊子腿")
+
+        if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
+            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            return
+
+        lr = self.fetch_guanjia_openid()
+        if lr is None:
+            return
+        self.guanjia_lr = lr
+        # 等一会，避免报错
+        time.sleep(self.common_cfg.retry.request_wait_time)
+
+        def receive(ctx, lid):
+            return self.guanjia_new_op(ctx, "pc_sdi_receive/receive", lid)
+
+        def add_draw_pool(ctx, lid):
+            return self.guanjia_new_op(ctx, "pc_sdi_receive/add_draw_pool", lid)
+
+        def lottery(ctx):
+            return self.guanjia_new_op(ctx, "sdi_lottery/lottery", self.guanjia_new_lottery_gifts_act_id)
+
+        receive("电脑管家特权礼包", self.guanjia_new_gift_id_special_rights)
+        receive("连续签到2天礼包", self.guanjia_new_gift_id_sign_in_2_days)
+        receive("幸运勇士礼包", self.guanjia_new_gift_id_return_user)
+
+        add_draw_pool("下载安装并登录电脑管家", self.guanjia_new_gift_id_download_and_login_this_version_guanjia)
+
+        add_draw_pool("每日游戏在线30分钟", self.guanjia_new_gift_id_game_online_30_minutes)
+        add_draw_pool("每日签到任务", self.guanjia_new_gift_id_sign_in)
+
+        for i in range(10):
+            res = lottery("抽奖")
+            # {"message": "", "success": -11}
+            if res["success"] != 0:
+                break
+            time.sleep(self.common_cfg.retry.request_wait_time)
+
+    def guanjia_new_op(self, ctx, api_name, lid, print_res=True):
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        # re: 从cookie IED_LOG_INFO2 中解析nickname @2021-06-17 10:13:40 By Chen Ji
+        # userUin%3D1054073896%26uin%3D1054073896%26nickName%3D%2525E9%2525A3%25258E%2525E4%2525B9%25258B%2525E5%252587%25258C%2525E6%2525AE%252587%26nickname%3D%25E9%25A3%258E%25E4%25B9%258B%25E5%2587%258C%25E6%25AE%2587%26userLoginTime%3D1623932229%26logtype%3Dqq%26loginType%3Dqq
+
+        act_id = self.guanjia_new_act_id
+        openid = self.guanjia_lr.qc_openid
+        nickname = self.guanjia_lr.qc_nickname()
+        key = self.guanjia_lr.qc_access_token
+
+        extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"
+
+        body = {
+            "aid": act_id,
+            "bid": act_id,
+            "lid": lid,
+            "openid": openid,
+            "nickname": nickname,
+            "account": openid,
+            "key": key,
+            "accountType": "QQ",
+            "loginType": "qq",
+            "outVeri": 1,
+            "roleArea": str(roleinfo.serviceID),
+            "roleid": str(roleinfo.roleCode),
+            "check": 0,
+        }
+
+        return self.post(ctx, self.urls.guanjia_new, api=api_name, json=body,
+                         extra_cookies=extra_cookies, print_res=print_res)
 
     def fetch_guanjia_openid(self, print_warning=True):
         # 检查是否启用管家相关活动
@@ -5250,4 +5342,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_reserve()
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_ozma()
+        # djcHelper.dnf_ozma()
+        djcHelper.guanjia_new()

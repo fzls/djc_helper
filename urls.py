@@ -22,7 +22,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-04-25 00:00:00", "2021-05-30 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2021-06-17 00:00:00", "2021-07-17 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-04-22 00:00:00", "2021-05-21 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-06-03 00:00:00", "2021-07-10 23:59:59"),
@@ -170,7 +170,8 @@ class Urls:
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}&is_prepublish={is_prepublish}"
 
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
-        self.guanjia = url = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
+        self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
+        self.guanjia_new = "https://sdi.m.qq.com/{api}"
 
         # 助手排行榜活动
         # 查询，额外参数：uin(qq)、userId/token

@@ -474,6 +474,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("刃影预约活动", self.dnf_reserve),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4396,6 +4397,50 @@ class DjcHelper:
                                    extra_cookies=f"p_skey={p_skey}"
                                    )
 
+    # --------------------------------------------DNF周年庆登录活动--------------------------------------------
+    @try_except()
+    def dnf_anniversary(self):
+        # https://dnf.qq.com/cp/a20210618anniversary/index.html
+        show_head_line("DNF周年庆登录活动")
+        self.show_amesvr_act_info(self.dnf_anniversary_op)
+
+        if self.disable_most_activities():
+            logger.warning("未启用领取DNF周年庆登录活动功能，将跳过")
+            return
+
+        if not self.cfg.function_switches.get_dnf_anniversary:
+            async_message_box((
+                "为了保持仪式感，默认不领取DNF周年庆登录活动功能，将跳过，如需自动领取，请打开该开关~\n"
+                "另外请不要忘记在2021年6月19日06:00~2021年6月21日05:59期间至少登录一次游戏，否则将无法领取奖励~"
+            ), "周年庆提示", show_once=True)
+            input("test")
+            return
+
+        self.check_dnf_anniversary()
+
+        gifts = [
+            ("第一弹", "769503", "2021-06-24 16:00:00"),
+            ("第二弹", "769700", "2021-06-25 00:00:00"),
+            ("第三弹", "769718", "2021-06-26 00:00:00"),
+            ("第四弹", "769719", "2021-06-27 00:00:00"),
+        ]
+
+        now = get_now()
+        for name, flowid, can_take_time in gifts:
+            if now >= parse_time(can_take_time):
+                self.dnf_anniversary_op(name, flowid)
+            else:
+                logger.warning(f"当前未到{can_take_time}，无法领取{name}")
+
+    def check_dnf_anniversary(self):
+        self.check_bind_account("DNF周年庆登录活动", "https://dnf.qq.com/cp/a20210618anniversary/index.html",
+                                activity_op_func=self.dnf_anniversary_op, query_bind_flowid="769502", commit_bind_flowid="769501")
+
+    def dnf_anniversary_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_anniversary
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210618anniversary/",
+                                   **extra_params)
+
     # --------------------------------------------新春福袋大作战--------------------------------------------
     @try_except()
     def spring_fudai(self):
@@ -5215,4 +5260,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_comic()
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_my_story()
-        djcHelper.dnf_reserve()
+        # djcHelper.dnf_reserve()
+        djcHelper.dnf_anniversary()

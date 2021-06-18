@@ -202,7 +202,7 @@ class Urls:
 
         # colg
         self.colg_sign_in_url = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=passUserSign"
-        self.colg_take_sign_in_credits = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid=3&task_id=84"
+        self.colg_take_sign_in_credits = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
 
     def show_current_valid_act_infos(self):
         acts = []

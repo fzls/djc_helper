@@ -477,6 +477,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("新管家蚊子腿", self.guanjia_new),
+            ("WeGame活动New", self.dnf_wegame_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4428,6 +4429,73 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210603lbavs9i/",
                                    **extra_params)
 
+    # --------------------------------------------WeGame活动--------------------------------------------
+    @try_except()
+    def dnf_wegame_dup(self):
+        # https://dnf.qq.com/lbact/a20210617lbw4msr/index.html
+        show_head_line("WeGame活动")
+        self.show_amesvr_act_info(self.dnf_wegame_dup_op)
+
+        if not self.cfg.function_switches.get_dnf_wegame or self.disable_most_activities():
+            logger.warning("未启用领取WeGame活动功能，将跳过")
+            return
+
+        self.check_dnf_wegame_dup()
+
+        def query_signin_days():
+            res = self.dnf_wegame_dup_op("查询签到天数-condOutput", "772148", print_res=False)
+            info = parse_amesvr_common_info(res)
+            # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
+            parts = info.sOutValue1.split('|')[0].split(':')
+            days = int(parts[2])
+            return days
+
+        def query_lottery_times(count_id:int):
+            res = self.dnf_wegame_dup_op("查询抽奖次数-jifenOutput", "774234", print_res=False)
+            info = parse_amesvr_common_info(res)
+            # "sOutValue1": "239:16:4|240:8:1",
+            # re: 下班继续弄 @2021-06-18 10:33:51 By Chen Ji
+            for count_info in info.sOutValue1.split('|'):
+                cid, total, remaining = count_info.split(':')
+                if int(cid) == count_id:
+                    return int(total), int(remaining)
+
+            return 0, 0
+
+        self.dnf_wegame_dup_op("通关奥兹玛副本获得吹蜡烛次数", "772139")
+        self.dnf_wegame_dup_op("页面签到获得吹蜡烛次数", "772140")
+        self.dnf_wegame_dup_op("通关智慧的引导副本获得吹蜡烛次数", "772141")
+        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(326)
+        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次吹蜡烛次数，目前剩余{remainingLotteryTimes}次吹蜡烛次数")
+        for i in range(remainingLotteryTimes):
+            self.dnf_wegame_dup_op(f"第{i + 1}次吹蜡烛抽蛋糕-4礼包抽奖", "772128")
+
+        # 升级
+        self.dnf_wegame_dup_op("幸运勇士获得抽奖次数", "774231")
+        self.dnf_wegame_dup_op("每日登录游戏获得抽奖", "774230")
+        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(327)
+        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        for i in range(remainingLotteryTimes):
+            self.dnf_wegame_dup_op(f"第{i + 1}次每日抽奖", "774232")
+
+        # 勇士齐聚阿拉德
+        self.dnf_wegame_dup_op("在线30min签到", "772142")
+        self.dnf_wegame_dup_op("领取签到礼包", "772142")
+        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
+        self.dnf_wegame_dup_op("签到3天礼包", "772131")
+        self.dnf_wegame_dup_op("签到7天礼包", "772132")
+        self.dnf_wegame_dup_op("签到10天礼包", "774229")
+        self.dnf_wegame_dup_op("签到15天礼包", "772133")
+
+    def check_dnf_wegame_dup(self):
+        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
+                                activity_op_func=self.dnf_wegame_dup_op, query_bind_flowid="772123", commit_bind_flowid="772122")
+
+    def dnf_wegame_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_wegame_dup
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617lbw4msr/",
+                                   **extra_params)
+
     # --------------------------------------------我的dnf13周年活动--------------------------------------------
     @try_except()
     def dnf_my_story(self):
@@ -5343,4 +5411,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_ozma()
-        djcHelper.guanjia_new()
+        # djcHelper.guanjia_new()
+        djcHelper.dnf_wegame_dup()

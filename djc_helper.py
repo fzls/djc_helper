@@ -4606,7 +4606,6 @@ class DjcHelper:
                 "为了保持仪式感，默认不领取DNF周年庆登录活动功能，将跳过，如需自动领取，请打开该开关~\n"
                 "另外请不要忘记在2021年6月19日06:00~2021年6月21日05:59期间至少登录一次游戏，否则将无法领取奖励~"
             ), "周年庆提示", show_once=True)
-            input("test")
             return
 
         self.check_dnf_anniversary()

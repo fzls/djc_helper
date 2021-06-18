@@ -1,7 +1,6 @@
 import re
 from multiprocessing import cpu_count
 from typing import List, Dict
-import platform
 
 import toml
 
@@ -527,7 +526,7 @@ class CommonConfig(ConfigInterface):
         self.disable_cmd_quick_edit = True
         # 是否启用多进程功能
         self.enable_multiprocessing = True
-        # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用时生效。
+        # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。
         self.enable_super_fast_mode = False
         # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
         self.multiprocessing_pool_size = -1
@@ -655,9 +654,19 @@ class Config(ConfigInterface):
             self.account_configs = self.account_configs[:1]
 
         self.common.account_count = len(self.account_configs)
-        if len(self.account_configs) == 1 and self.common.enable_multiprocessing and not os.path.isfile("config.toml.local"):
-            logger.info(color("bold_green") + "当前仅有一个账号，没必要开启多进程模式，将关闭多进程模式~")
-            self.common.enable_multiprocessing = False
+        if len(self.account_configs) == 1:
+            if self.common.enable_super_fast_mode:
+                # 单角色时，当启用了超快速模式，则强制开启多进程模式
+                self.common.enable_multiprocessing = True
+                logger.info(color("bold_green") + "当前仅有一个账号，因为已经开启超快速模式，将强制开启多进程模式~")
+            elif self.common.enable_multiprocessing and not os.path.isfile("config.toml.local"):
+                # 当同时满足以下条件时，强制关闭多进程功能
+                #   1. 仅有一个账号
+                #   2. 启用了多进程功能
+                #   3. 未启用超快速模式
+                #   4. 不存在config.toml.local文件
+                logger.info(color("bold_green") + "当前仅有一个账号，没必要开启多进程模式，且未开启超快速模式，将关闭多进程模式~")
+                self.common.enable_multiprocessing = False
 
     def check(self) -> bool:
         name2index = {}

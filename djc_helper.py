@@ -477,7 +477,8 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("新管家蚊子腿", self.guanjia_new),
-            ("WeGame活动New", self.dnf_wegame_dup),
+            ("WeGame活动周年庆", self.dnf_wegame_dup),
+            ("DNF集合站周年庆", self.dnf_collection_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4758,6 +4759,44 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210603lbniyox/",
                                    **extra_params)
 
+    # --------------------------------------------DNF集合站--------------------------------------------
+    @try_except()
+    def dnf_collection_dup(self):
+        # https://dnf.qq.com/lbact/a20210617lbpqopr/index.html
+        show_head_line("DNF集合站")
+        self.show_amesvr_act_info(self.dnf_collection_dup_op)
+
+        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
+            logger.warning("未启用领取DNF集合站功能，将跳过")
+            return
+
+        self.check_dnf_collection_dup()
+
+        def query_signin_days():
+            res = self.dnf_collection_dup_op("查询", "773668", print_res=False)
+            info = AmesvrSigninInfo().auto_update_config(res["modRet"])
+            return int(info.total)
+
+        self.dnf_collection_dup_op("勇士礼包", "773660")
+        self.dnf_collection_dup_op("全民参与礼包", "773665")
+
+        self.dnf_collection_dup_op("30分签到礼包", "773661")
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+        self.dnf_collection_dup_op("3日礼包", "773658")
+        self.dnf_collection_dup_op("7日礼包", "773662")
+        self.dnf_collection_dup_op("10日礼包", "773666")
+        self.dnf_collection_dup_op("15日礼包", "773663")
+        self.dnf_collection_dup_op("21日礼包", "773667")
+
+    def check_dnf_collection_dup(self):
+        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
+                                activity_op_func=self.dnf_collection_dup_op, query_bind_flowid="773655", commit_bind_flowid="773654")
+
+    def dnf_collection_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_collection_dup
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617lbpqopr/",
+                                   **extra_params)
+
     # --------------------------------------------DNF福签大作战--------------------------------------------
     @try_except()
     def dnf_fuqian(self):
@@ -5412,4 +5451,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
-        djcHelper.dnf_wegame_dup()
+        # djcHelper.dnf_wegame_dup()
+        djcHelper.dnf_collection_dup()

@@ -852,6 +852,7 @@ def show_tips(cfg):
             "以下活动请自行完成\n"
             "1. 斗鱼 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
             "2. 合成三觉小游戏 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
+            "3. 生日礼 https://pay.qq.com/m/active/activity_dispatcher.php?id=3099 \n"
         ),
     }
 

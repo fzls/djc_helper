@@ -479,6 +479,7 @@ class DjcHelper:
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF马杰洛的规划", self.majieluo),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -499,7 +500,6 @@ class DjcHelper:
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
             ("会员关怀", self.vip_mentor),
-            ("colg每日签到", self.colg_signin),
             ("qq视频活动", self.qq_video),
             ("DNF强者之路", self.dnf_strong),
             ("DNF心悦51", self.dnf_xinyue_51),
@@ -4331,18 +4331,31 @@ class DjcHelper:
             "x-requested-with": "XMLHttpRequest",
             "cookie": self.cfg.colg_cookie,
         }
-        signin_res = requests.post(self.urls.colg_sign_in_url, data="task_id=84", headers=headers, timeout=10)
+
+        # 当前战令活动id
+        aid = "4"
+        # 每日签到任务id
+        signin_task_id = "96"
+        # 每周登录5次任务id
+        login_five_weekly_task_id = "99"
+
+        signin_res = requests.post(self.urls.colg_sign_in_url, data=f"task_id={signin_task_id}", headers=headers, timeout=10)
         logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
 
-        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits, headers=headers, timeout=10)
+        login_weekly_res = requests.get(self.urls.colg_take_sign_in_credits.format(aid=aid, task_id=login_five_weekly_task_id), headers=headers, timeout=10)
+        logger.info(color("bold_green") + f"领取 每周登录5天 积分 {login_weekly_res.json()}")
+
+        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits.format(aid=aid, task_id=signin_task_id), headers=headers, timeout=10)
         logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
         # {'code': 100000, 'data': {'user_credits': 295, 'task_credits': '15'}, 'msg': ''}
         resJson = take_credits_res.json()
         if resJson['code'] == 100000 and resJson['data']['user_credits'] >= 650 and is_weekly_first_run("colg_领取灿烂"):
             msg = "Colg活跃值已经达到650了咯，记得去Colg领取灿烂哦"
-            async_message_box(msg, "可以领灿烂啦", open_url="https://bbs.colg.cn/forum-171-1.html")
+            async_message_box(msg, "可以领灿烂啦", open_url="https://bbs.colg.cn/forum-171-1.html", show_once=True)
 
         logger.info(color("bold_cyan") + "其他积分的领取，以及各个奖励的领取，请自己前往colg进行嗷")
+
+        logger.info(color("bold_cyan") + "colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品")
 
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()
@@ -5469,7 +5482,6 @@ if __name__ == '__main__':
         # djcHelper.hello_voice()
         # djcHelper.xinyue_operations()
         # djcHelper.try_join_fixed_xinyue_team()
-        # djcHelper.colg_signin()
         # djcHelper.xinyue_app_operations()
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
@@ -5495,4 +5507,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
         # djcHelper.dnf_bbs_signin()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
+        djcHelper.colg_signin()

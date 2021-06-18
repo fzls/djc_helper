@@ -4390,7 +4390,7 @@ class DjcHelper:
             time.sleep(1)
 
     def check_dnf_luodiye(self):
-        self.check_bind_account("DNF落地页活动", "https://dnf.qq.com/lbact/a20210603lbavs9i/index.html",
+        self.check_bind_account("DNF落地页活动", "https://dnf.qq.com/cp/a20210618index/",
                                 activity_op_func=self.dnf_luodiye_op, query_bind_flowid="769490", commit_bind_flowid="769489")
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):

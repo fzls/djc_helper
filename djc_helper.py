@@ -4393,7 +4393,8 @@ class DjcHelper:
         self.check_dnf_luodiye()
 
         self.dnf_luodiye_op("登陆领取积分", "770771")
-        self.dnf_luodiye_op("分享", "770783", iReceiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        if is_first_run("dnf_luodiye_分享"):
+            self.dnf_luodiye_op("分享", "770783", iReceiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
         self.dnf_luodiye_op("登陆活动页送积分", "770812")
 
         for i in range(4):

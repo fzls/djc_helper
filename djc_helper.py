@@ -5372,6 +5372,32 @@ class DjcHelper:
 
         return lr
 
+    def parse_condOutput(self, res: dict, cond_id: str) -> int:
+        """
+        解析并返回对应的数目
+        """
+        info = parse_amesvr_common_info(res)
+        # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
+        for cond_info in info.sOutValue1.split('|'):
+            cid, name, val = cond_info.split(':')
+            if cid == cond_id:
+                return int(val)
+
+        return 0
+
+    def parse_jifenOutput(self, res: dict, count_id: str) -> Tuple[int, int]:
+        """
+        解析并返回对应的总数和剩余值
+        """
+        info = parse_amesvr_common_info(res)
+        # "sOutValue1": "239:16:4|240:8:1",
+        for count_info in info.sOutValue1.split('|'):
+            cid, total, remaining = count_info.split(':')
+            if cid == count_id:
+                return int(total), int(remaining)
+
+        return 0, 0
+
 
 def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):
     pool_size = len(activity_funcs_to_run)

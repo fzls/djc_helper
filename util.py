@@ -171,6 +171,18 @@ def get_now():
     return datetime.datetime.now()
 
 
+def now_before(t="2000-01-01 00:00:00"):
+    return get_now() < parse_time(t)
+
+
+def now_after(t="2000-01-01 00:00:00"):
+    return get_now() >= parse_time(t)
+
+
+def now_in_range(left="2000-01-01 00:00:00", right="3000-01-01 00:00:00"):
+    return now_after(left) and now_before(right)
+
+
 def get_now_unix():
     return int(time.time())
 

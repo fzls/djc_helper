@@ -480,6 +480,7 @@ class DjcHelper:
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF马杰洛的规划", self.majieluo),
             ("colg每日签到", self.colg_signin),
+            ("KOL", self.dnf_kol),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4517,7 +4518,6 @@ class DjcHelper:
             res = self.dnf_wegame_dup_op("查询抽奖次数-jifenOutput", "774234", print_res=False)
             info = parse_amesvr_common_info(res)
             # "sOutValue1": "239:16:4|240:8:1",
-            # re: 下班继续弄 @2021-06-18 10:33:51 By Chen Ji
             for count_info in info.sOutValue1.split('|'):
                 cid, total, remaining = count_info.split(':')
                 if int(cid) == count_id:
@@ -4866,6 +4866,42 @@ class DjcHelper:
     def dnf_collection_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection_dup
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617lbpqopr/",
+                                   **extra_params)
+
+    # --------------------------------------------KOL--------------------------------------------
+    @try_except()
+    def dnf_kol(self):
+        # https://dnf.qq.com/lbact/a20210610kol/zzx.html
+        show_head_line("KOL")
+        self.show_amesvr_act_info(self.dnf_kol_op)
+
+        if not self.cfg.function_switches.get_dnf_kol or self.disable_most_activities():
+            logger.warning("未启用领取KOL功能，将跳过")
+            return
+
+        self.check_dnf_kol()
+
+        def query_lottery_times():
+            res = self.dnf_kol_op("jifenOutput", "776073", print_res=False)
+            return self.parse_jifenOutput(res, "329")
+
+        self.dnf_kol_op("点亮助力", "776067")
+        self.dnf_kol_op("领取助力礼包", "776071")
+
+        self.dnf_kol_op("分享计数", "776069")
+
+        total, remaining = query_lottery_times()
+        logger.info(f"当前剩余抽奖次数为{remaining}，累积获得{total}")
+        for idx in range_from_one(remaining):
+            self.dnf_kol_op(f"第{idx}次抽奖", "776070")
+
+    def check_dnf_kol(self):
+        self.check_bind_account("KOL", "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
+                                activity_op_func=self.dnf_kol_op, query_bind_flowid="776064", commit_bind_flowid="776063")
+
+    def dnf_kol_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_kol
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210610kol/",
                                    **extra_params)
 
     # --------------------------------------------DNF福签大作战--------------------------------------------
@@ -5551,4 +5587,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection_dup()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.majieluo()
-        djcHelper.colg_signin()
+        # djcHelper.colg_signin()
+        djcHelper.dnf_kol()

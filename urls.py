@@ -132,6 +132,7 @@ class Urls:
         self.iActivityId_dnf_my_story = "382161"  # 我的dnf13周年活动
         self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
+        self.iActivityId_dnf_kol = "387039"  # DNF KOL
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

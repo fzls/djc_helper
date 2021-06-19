@@ -1242,6 +1242,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_anniversary = create_checkbox(cfg.get_dnf_anniversary)
         form_layout.addRow("DNF周年庆登录活动", self.checkbox_get_dnf_anniversary)
 
+        self.checkbox_get_dnf_kol = create_checkbox(cfg.get_dnf_kol)
+        form_layout.addRow("KOL", self.checkbox_get_dnf_kol)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1292,6 +1295,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_my_story = self.checkbox_get_dnf_my_story.isChecked()
         cfg.get_dnf_reserve = self.checkbox_get_dnf_reserve.isChecked()
         cfg.get_dnf_anniversary = self.checkbox_get_dnf_anniversary.isChecked()
+        cfg.get_dnf_kol = self.checkbox_get_dnf_kol.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

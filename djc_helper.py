@@ -4616,6 +4616,9 @@ class DjcHelper:
         show_head_line("DNF周年庆登录活动")
         self.show_amesvr_act_info(self.dnf_anniversary_op)
 
+        if now_in_range("2021-06-19 06:00:00", "2021-06-21 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示登录"):
+            async_message_box("周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~", "周年庆登录")
+
         if self.disable_most_activities():
             logger.warning("未启用领取DNF周年庆登录活动功能，将跳过")
             return
@@ -4625,7 +4628,14 @@ class DjcHelper:
                 "为了保持仪式感，默认不领取DNF周年庆登录活动功能，将跳过，如需自动领取，请打开该开关~\n"
                 "另外请不要忘记在2021年6月19日06:00~2021年6月21日05:59期间至少登录一次游戏，否则将无法领取奖励~"
             ), "周年庆提示", show_once=True)
+
+            if now_in_range("2021-06-24 06:00:00", "2021-07-01 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示领奖"):
+                async_message_box("今天是否去周年庆网页领奖了吗~，不要忘记哦~", "提示领奖", open_url="https://dnf.qq.com/cp/a20210618anniversary/index.html")
+
             return
+
+        if now_in_range("2021-06-24 16:00:00", "2021-07-01 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示自己检查是否领取OK"):
+            async_message_box("去页面看看领取逻辑是否正常运行了~", "提示检查领取是否OK", open_url="https://dnf.qq.com/cp/a20210618anniversary/index.html")
 
         self.check_dnf_anniversary()
 

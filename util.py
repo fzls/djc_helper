@@ -1,4 +1,5 @@
 import ctypes
+import math
 import pathlib
 import platform
 import random
@@ -76,6 +77,18 @@ def maximize_console_sync():
         op = win32con.SW_MINIMIZE
         logger.info("已启用最小化模式")
     win32gui.ShowWindow(current_hwnd, op)
+
+    if op == win32con.SW_MAXIMIZE and platform.system() == "Windows" and platform.release() == "7":
+        # win7下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
+        base_width = 1920
+        base_cols = 240
+
+        width, height = get_screen_size()
+        cols = math.floor(width / base_width * base_cols)
+        lines = 9999
+
+        os.system(f"mode con:cols={cols} lines={lines}")
+        logger.info(color("bold_cyan") + f"当前是win7系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列")
 
 
 def get_parents(child):
@@ -503,6 +516,9 @@ def clear_login_status():
 
 
 def get_screen_size():
+    """
+    :return: 屏幕宽度和高度
+    """
     width, height = win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
     return width, height
 

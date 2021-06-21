@@ -73,8 +73,8 @@ def query_card_info():
     # 读取配置信息
     cfg = config()
 
-    init_pool(cfg.get_pool_size())
-    check_all_skey_and_pskey(cfg, check_skey_only=True)
+    # init_pool(cfg.get_pool_size())
+    # check_all_skey_and_pskey(cfg, check_skey_only=True)
 
     # 12.30 送卡片次数（re:好像送给别人没有上限？）
     indexes = list(range(len(cfg.account_configs), 0, -1))

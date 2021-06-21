@@ -559,7 +559,7 @@ class CommonConfig(ConfigInterface):
         # 网盘地址
         self.netdisk_link = "https://fzls.lanzoui.com/s/djc-helper"
         # QQ群
-        self.qq_group = 743671885
+        self.qq_group = 545316504
         # 是否启用自动更新功能
         self.auto_update_on_start = True
         # 是否仅允许单个运行实例

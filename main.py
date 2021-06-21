@@ -31,6 +31,12 @@ def parse_args():
 def main():
     args = parse_args()
 
+    # 最大化窗口
+    logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
+
+    if not args.no_max_console:
+        maximize_console()
+
     if args.wait_for_pid_exit != 0:
         logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
 
@@ -61,12 +67,6 @@ def main():
         increase_counter(my_usage_counter_name)
     else:
         logger.info("今日已运行过，不再尝试上报使用统计")
-
-    # 最大化窗口
-    logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-
-    if not args.no_max_console:
-        maximize_console()
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

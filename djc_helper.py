@@ -1663,7 +1663,7 @@ class DjcHelper:
             "774799", "774800",
         ]
         # note: 当前更新至（定期刷新这个值）
-        current_updated = 3
+        current_updated = 9
         for _idx, flowid in enumerate(watch_comic_flowids):
             idx = _idx + 1
             if idx > current_updated:
@@ -5575,7 +5575,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
-        # djcHelper.dnf_comic()
         # djcHelper.dnf_luodiye()
         # djcHelper.dnf_my_story()
         # djcHelper.dnf_reserve()
@@ -5588,4 +5587,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs_signin()
         # djcHelper.majieluo()
         # djcHelper.colg_signin()
-        djcHelper.dnf_kol()
+        # djcHelper.dnf_kol()
+        djcHelper.dnf_comic()

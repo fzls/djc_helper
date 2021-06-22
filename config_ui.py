@@ -1358,8 +1358,6 @@ class ArkLotteryConfigUi(QWidget):
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
 
-        self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
-
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: ArkLotteryConfig):
@@ -1371,11 +1369,8 @@ class ArkLotteryConfigUi(QWidget):
         self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
         form_layout.addRow("幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
-        msg = "点我查询角色，可能会卡一会"
-        self.combobox_lucky_dnf_role_name = create_combobox(msg, [msg])
-        self.combobox_lucky_dnf_role_name.clicked.connect(self.on_role_name_clicked)
-        self.combobox_lucky_dnf_role_name.activated.connect(self.on_role_name_select)
-        form_layout.addRow("查询角色（需要登录）", self.combobox_lucky_dnf_role_name)
+        self.role_selector = RoleSelector("幸运勇士", self.combobox_lucky_dnf_server_name, self.lineedit_lucky_dnf_role_id, self.account_cfg, self.common_cfg)
+        form_layout.addRow("查询角色（需要登录）", self.role_selector.combobox_role_name)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
         form_layout.addRow("领取礼包", self.checkbox_need_take_awards)
@@ -1385,58 +1380,13 @@ class ArkLotteryConfigUi(QWidget):
         form_layout.addRow("是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
     def update_config(self, cfg: ArkLotteryConfig):
-        cfg.lucky_dnf_server_id = self.get_lucky_dnf_server_id()
+        cfg.lucky_dnf_server_id = dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
         cfg.lucky_dnf_role_id = self.lineedit_lucky_dnf_role_id.text()
 
         cfg.need_take_awards = self.checkbox_need_take_awards.isChecked()
 
         cfg.act_id_to_cost_all_cards_and_do_lottery[zzconfig().actid] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
 
-    def on_role_name_clicked(self):
-        server_id = self.get_lucky_dnf_server_id()
-        if server_id == "":
-            show_message("出错了", "请先选择幸运角色服务器")
-            return
-
-        if len(self.get_roles()) == 0:
-            logger.info("需要查询角色信息")
-
-            djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
-            djcHelper.fetch_pskey()
-            djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list()
-
-            self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
-
-            self.combobox_lucky_dnf_role_name.clear()
-            self.combobox_lucky_dnf_role_name.addItems([role.rolename for role in self.get_roles()])
-
-    def on_role_name_select(self, index: int):
-        roles = self.get_roles()
-        if len(roles) == 0:
-            return
-
-        role = roles[index]
-        logging.info(f"选择的幸运角色为{role}，将更新到角色id框中")
-
-        self.lineedit_lucky_dnf_role_id.setText(role.roleid)
-
-    def get_lucky_dnf_server_id(self) -> str:
-        return dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
-
-    def rolename_to_roleid(self, role_name) -> str:
-        for role in self.get_roles():
-            if role.rolename == role_name:
-                return role.roleid
-
-        return ""
-
-    def get_roles(self) -> List[DnfRoleInfo]:
-        server_id = self.get_lucky_dnf_server_id()
-        if server_id not in self.server_id_to_roles:
-            return []
-
-        return self.server_id_to_roles[server_id]
 
 class VipMentorConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: VipMentorConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
@@ -1444,8 +1394,6 @@ class VipMentorConfigUi(QWidget):
 
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
-
-        self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
 
         self.from_config(form_layout, cfg)
 
@@ -1461,63 +1409,14 @@ class VipMentorConfigUi(QWidget):
         self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
         form_layout.addRow("关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
-        msg = "点我查询角色，可能会卡一会"
-        self.combobox_guanhuai_dnf_role_name = create_combobox(msg, [msg])
-        self.combobox_guanhuai_dnf_role_name.clicked.connect(self.on_role_name_clicked)
-        self.combobox_guanhuai_dnf_role_name.activated.connect(self.on_role_name_select)
-        form_layout.addRow("查询角色（需要登录）", self.combobox_guanhuai_dnf_role_name)
+        self.role_selector = RoleSelector("会员关怀", self.combobox_guanhuai_dnf_server_name, self.lineedit_guanhuai_dnf_role_id, self.account_cfg, self.common_cfg)
+        form_layout.addRow("查询角色（需要登录）", self.role_selector.combobox_role_name)
 
     def update_config(self, cfg: VipMentorConfig):
         cfg.take_index = self.spinbox_take_index.value()
 
         cfg.guanhuai_dnf_server_id = dnf_server_name_to_id(self.combobox_guanhuai_dnf_server_name.currentText())
         cfg.guanhuai_dnf_role_id = self.lineedit_guanhuai_dnf_role_id.text()
-
-    def on_role_name_clicked(self):
-        server_id = self.get_guanhuai_dnf_server_id()
-        if server_id == "":
-            show_message("出错了", "请先选择幸运角色服务器")
-            return
-
-        if len(self.get_roles()) == 0:
-            logger.info("需要查询角色信息")
-
-            djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
-            djcHelper.fetch_pskey()
-            djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list()
-
-            self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
-
-            self.combobox_guanhuai_dnf_role_name.clear()
-            self.combobox_guanhuai_dnf_role_name.addItems([role.rolename for role in self.get_roles()])
-
-    def on_role_name_select(self, index: int):
-        roles = self.get_roles()
-        if len(roles) == 0:
-            return
-
-        role = roles[index]
-        logging.info(f"选择的幸运角色为{role}，将更新到角色id框中")
-
-        self.lineedit_guanhuai_dnf_role_id.setText(role.roleid)
-
-    def get_guanhuai_dnf_server_id(self) -> str:
-        return dnf_server_name_to_id(self.combobox_guanhuai_dnf_server_name.currentText())
-
-    def rolename_to_roleid(self, role_name) -> str:
-        for role in self.get_roles():
-            if role.rolename == role_name:
-                return role.roleid
-
-        return ""
-
-    def get_roles(self) -> List[DnfRoleInfo]:
-        server_id = self.get_guanhuai_dnf_server_id()
-        if server_id not in self.server_id_to_roles:
-            return []
-
-        return self.server_id_to_roles[server_id]
 
 
 class RoleSelector(QWidget):

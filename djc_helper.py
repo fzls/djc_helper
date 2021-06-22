@@ -481,6 +481,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("KOL", self.dnf_kol),
             ("超级会员", self.dnf_super_vip),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1533,17 +1534,42 @@ class DjcHelper:
             return
         self.lr = lr
 
-        self.dnf_super_vip_op("幸运勇士礼包", "5353_75244d03")
-        self.dnf_super_vip_op("勇士见面礼", "5419_2c0ff022")
-        self.dnf_super_vip_op("分享给自己", "5500_e8b39ea3", act_req_data={
+        self.qzone_act_op("幸运勇士礼包", "5353_75244d03")
+        self.qzone_act_op("勇士见面礼", "5419_2c0ff022")
+        self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
             "receivers": [
                 uin2qq(self.cfg.account_info.uin),
             ]
         })
-        self.dnf_super_vip_op("分享领取礼包", "5501_c70d8e0f")
+        self.qzone_act_op("分享领取礼包", "5501_c70d8e0f")
 
-    def dnf_super_vip_op(self, ctx, sub_act_id, act_req_data=None):
-        return self.qzone_act_op(ctx, sub_act_id, act_req_data)
+    # --------------------------------------------QQ空间黄钻--------------------------------------------
+    def dnf_yellow_diamond(self):
+        # https://act.qzone.qq.com/v2/vip/tx/p/1442_36d9b930
+        show_head_line("QQ空间黄钻")
+
+        if not self.cfg.function_switches.get_dnf_yellow_diamond or self.disable_most_activities():
+            logger.warning("未启用领取QQ空间黄钻功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+        self.lr = lr
+
+        self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d")
+        self.qzone_act_op("勇士见面礼", "5418_9f4ec626")
+        self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
+            "receivers": [
+                uin2qq(self.cfg.account_info.uin),
+            ]
+        })
+        self.qzone_act_op("分享领取礼包", "5499_4574810b")
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None):
         if act_req_data is None:
@@ -5659,4 +5685,5 @@ if __name__ == '__main__':
         # djcHelper.colg_signin()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
-        djcHelper.dnf_super_vip()
+        # djcHelper.dnf_super_vip()
+        djcHelper.dnf_yellow_diamond()

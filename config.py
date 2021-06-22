@@ -294,17 +294,19 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_kol = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
-        # 是否启用集卡功能
+        # 是否启用 集卡 功能
         self.get_ark_lottery = True
-        # 是否启用阿拉德勇士征集令活动
+        # 是否启用 阿拉德勇士征集令 活动
         self.get_dnf_warriors_call = True
-        # 是否启用会员关怀活动
+        # 是否启用 会员关怀 活动
         self.get_vip_mentor = True
-        # 是否启用超级会员活动
+        # 是否启用 超级会员 活动
         self.get_dnf_super_vip = True
+        # 是否启用 黄钻 活动
+        self.get_dnf_yellow_diamond = True
 
         # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
-        # 是否领取管家蚊子腿活动
+        # 是否领取 管家蚊子腿 活动
         self.get_guanjia = True
 
 

@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (
     QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
     QMessageBox, QInputDialog, QLabel, QFileDialog)
 from PyQt5.QtGui import QIcon, QValidator
-from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
+from PyQt5.QtCore import QCoreApplication, QThread
 
 from qt_wrapper import *
 from config import *
@@ -19,7 +19,7 @@ from game_info import name_2_mobile_game_info_map
 from update import *
 from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
 from djc_helper import DjcHelper
-from dao import CardSecret
+from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
 
 # 客户端错误码
@@ -408,7 +408,7 @@ class ConfigUi(QFrame):
 
             account_config = AccountConfig()
             account_config.name = account_name
-            account_ui = AccountConfigUi(account_config)
+            account_ui = AccountConfigUi(account_config, self.to_config().common)
             self.accounts.append(account_ui)
             self.tabs.addTab(account_ui, account_name)
             self.tabs.setCurrentWidget(account_ui)
@@ -686,7 +686,7 @@ class ConfigUi(QFrame):
     def create_account_tabs(self, cfg: Config):
         self.accounts = []  # type: List[AccountConfigUi]
         for account in cfg.account_configs:
-            account_ui = AccountConfigUi(account)
+            account_ui = AccountConfigUi(account, self.to_config().common)
             self.accounts.append(account_ui)
             self.tabs.addTab(account_ui, account.name)
 
@@ -961,8 +961,10 @@ class AccountConfigUi(QWidget):
         "账号密码自动登录": "auto_login",
     })
 
-    def __init__(self, cfg: AccountConfig, parent=None):
+    def __init__(self, cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
         super(AccountConfigUi, self).__init__(parent)
+
+        self.common_cfg = common_cfg
 
         self.from_config(cfg)
 
@@ -993,7 +995,7 @@ class AccountConfigUi(QWidget):
         for exchange_item in cfg.exchange_items:
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
 
-        self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery)
+        self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
@@ -1348,8 +1350,13 @@ class ExchangeItemConfigUi(QWidget):
 
 
 class ArkLotteryConfigUi(QWidget):
-    def __init__(self, form_layout: QFormLayout, cfg: ArkLotteryConfig, parent=None):
+    def __init__(self, form_layout: QFormLayout, cfg: ArkLotteryConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
         super(ArkLotteryConfigUi, self).__init__(parent)
+
+        self.account_cfg = account_cfg
+        self.common_cfg = common_cfg
+
+        self.roles = []  # type: List[DnfRoleInfo]
 
         self.from_config(form_layout, cfg)
 
@@ -1359,8 +1366,14 @@ class ArkLotteryConfigUi(QWidget):
         self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 
-        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
         form_layout.addRow("幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
+
+        msg = "点我查询角色，可能会卡一会"
+        self.combobox_lucky_dnf_role_name = create_combobox(msg, [msg])
+        self.combobox_lucky_dnf_role_name.clicked.connect(self.on_role_name_clicked)
+        self.combobox_lucky_dnf_role_name.activated.connect(self.on_role_name_select)
+        form_layout.addRow("查询角色（需要登录）", self.combobox_lucky_dnf_role_name)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
         form_layout.addRow("领取礼包", self.checkbox_need_take_awards)
@@ -1370,12 +1383,50 @@ class ArkLotteryConfigUi(QWidget):
         form_layout.addRow("是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
     def update_config(self, cfg: ArkLotteryConfig):
-        cfg.lucky_dnf_server_id = dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
+        cfg.lucky_dnf_server_id = self.get_lucky_dnf_server_id()
         cfg.lucky_dnf_role_id = self.lineedit_lucky_dnf_role_id.text()
 
         cfg.need_take_awards = self.checkbox_need_take_awards.isChecked()
 
         cfg.act_id_to_cost_all_cards_and_do_lottery[zzconfig().actid] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
+
+    def on_role_name_clicked(self):
+        server_id = self.get_lucky_dnf_server_id()
+        if server_id == "":
+            show_message("出错了", "请先选择幸运角色服务器")
+            return
+
+        if len(self.roles) == 0:
+            logger.info("需要查询角色信息")
+
+            djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list()
+
+            self.roles = djcHelper.query_dnf_rolelist(server_id)
+
+            self.combobox_lucky_dnf_role_name.clear()
+            self.combobox_lucky_dnf_role_name.addItems([role.rolename for role in self.roles])
+
+    def on_role_name_select(self, index: int):
+        if len(self.roles) == 0:
+            return
+
+        role = self.roles[index]
+        logging.info(f"选择的幸运角色为{role}，将更新到角色id框中")
+
+        self.lineedit_lucky_dnf_role_id.setText(role.roleid)
+
+    def get_lucky_dnf_server_id(self) -> str:
+        return dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
+
+    def rolename_to_roleid(self, role_name) -> str:
+        for role in self.roles:
+            if role.rolename == role_name:
+                return role.roleid
+
+        return ""
 
 
 class VipMentorConfigUi(QWidget):

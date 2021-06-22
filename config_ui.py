@@ -777,6 +777,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
         form_layout.addRow("尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
 
+        self.checkbox_force_sync_bind_with_djc = create_checkbox(cfg.force_sync_bind_with_djc)
+        form_layout.addRow("是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
+
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         form_layout.addRow("马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
 
@@ -821,6 +824,7 @@ class CommonConfigUi(QFrame):
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
         cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
+        cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()
 
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()

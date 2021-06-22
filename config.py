@@ -566,6 +566,9 @@ class CommonConfig(ConfigInterface):
         self.allow_only_one_instance = True
         # 是否尝试自动绑定新活动
         self.try_auto_bind_new_activity = True
+        # 是否强制与道聚城的绑定角色同步，也就是说当活动角色与道聚城绑定角色不一致时，将强制修改为道聚城绑定的角色。
+        # 开启后可以实现在道聚城修改绑定角色后，所有其他自动绑定的活动也将同步修改为该角色
+        self.force_sync_bind_with_djc = True
         # 提前多少天提示付费过期
         self.notify_pay_expired_in_days = 7
         # 马杰洛新春版本赠送卡片目标QQ

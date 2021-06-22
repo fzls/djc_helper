@@ -52,7 +52,7 @@ class DjcHelper:
     # --------------------------------------------一些辅助函数--------------------------------------------
 
     def init_network(self):
-        self.network = Network(self.cfg.sDeviceID, self.cfg.account_info.uin, self.cfg.account_info.skey, self.common_cfg)
+        self.network = Network(self.cfg.sDeviceID, self.uin(), self.cfg.account_info.skey, self.common_cfg)
 
     def show_tip_on_first_run_any(self):
         filename = self.first_run_flag_file
@@ -169,7 +169,7 @@ class DjcHelper:
             self.update_skey(query_data, window_index=window_index)
 
         # skey获取完毕后，检查是否在黑名单内
-        check_in_black_list(self.cfg.account_info.uin)
+        check_in_black_list(self.uin())
 
     def update_skey(self, query_data, window_index=1):
         login_mode_dict = {
@@ -623,7 +623,7 @@ class DjcHelper:
         propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
 
         # 查询许愿列表
-        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=uin2qq(self.cfg.account_info.uin))
+        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq())
 
         # 删除已经许愿的列表，确保许愿成功
         for wish_info in wish_list_res["data"]["list"]:
@@ -1013,7 +1013,7 @@ class DjcHelper:
         """
         :rtype: FixedTeamConfig|None
         """
-        qq_number = uin2qq(self.cfg.account_info.uin)
+        qq_number = self.qq()
         fixed_team = None
         for team in self.common_cfg.fixed_teams:
             if not team.enable:
@@ -1214,7 +1214,7 @@ class DjcHelper:
             time.sleep(5)
 
         for dzid in self.common_cfg.sailiyam_visit_target_qqs:
-            if dzid == uin2qq(self.cfg.account_info.uin):
+            if dzid == self.qq():
                 continue
             self.xinyue_sailiyam_op(f"拜访好友-{dzid}", "714307", dzid=dzid)
             sleep_to_avoid_ban()
@@ -1387,7 +1387,7 @@ class DjcHelper:
         return res['13320']['data']['uPoint']
 
     def send_card(self, card_name, cardId, to_qq, print_res=False):
-        from_qq = uin2qq(self.cfg.account_info.uin)
+        from_qq = self.qq()
 
         ctx = f"{from_qq} 赠送卡片 {card_name}({cardId}) 给 {to_qq}"
         return self.get(ctx, self.urls.ark_lottery_send_card, cardId=cardId, from_qq=from_qq, to_qq=to_qq, actName=self.zzconfig.actName, print_res=print_res)
@@ -1536,10 +1536,10 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5353_75244d03")
         self.qzone_act_op("勇士见面礼", "5419_2c0ff022")
-        if is_first_run(f"dnf_super_vip_分享_{self.cfg.account_info.uin}"):
+        if is_first_run(f"dnf_super_vip_分享_{self.uin()}"):
             self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
                 "receivers": [
-                    uin2qq(self.cfg.account_info.uin),
+                    self.qq(),
                 ]
             })
         self.qzone_act_op("分享领取礼包", "5501_c70d8e0f")
@@ -1565,10 +1565,10 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d")
         self.qzone_act_op("勇士见面礼", "5418_9f4ec626")
-        if is_first_run(f"dnf_yellow_diamond_分享_{self.cfg.account_info.uin}"):
+        if is_first_run(f"dnf_yellow_diamond_分享_{self.uin()}"):
             self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
                 "receivers": [
-                    uin2qq(self.cfg.account_info.uin),
+                    self.qq(),
                 ]
             })
         self.qzone_act_op("分享领取礼包", "5499_4574810b")
@@ -1751,7 +1751,7 @@ class DjcHelper:
                 logger.info(color("bold_yellow") + f"当前活动页面更新至第{current_updated}，不执行后续部分，避免被钓鱼<_<")
                 break
 
-            if is_first_run(f"comic_watch_{self.cfg.account_info.uin}_{idx}"):
+            if is_first_run(f"comic_watch_{self.uin()}_{idx}"):
                 self.dnf_comic_op(f"观看资格领取_第{idx}话", flowid)
 
         self.dnf_comic_op("观看礼包资格消耗", "775253")
@@ -2152,7 +2152,7 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        qq = uin2qq(self.cfg.account_info.uin)
+        qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
         res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "http://mwegame.qq.com/act/dnf/mageawaken/index1/",
@@ -2273,7 +2273,7 @@ class DjcHelper:
         iFlowId = "723192"
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        qq = uin2qq(self.cfg.account_info.uin)
+        qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
         res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, "https://mwegame.qq.com/dnf/rankv2/index.html/",
@@ -2284,7 +2284,7 @@ class DjcHelper:
                                   **extra_params)
 
     def dnf_rank_op(self, ctx, url, **params):
-        qq = uin2qq(self.cfg.account_info.uin)
+        qq = self.qq()
         info = self.cfg.dnf_helper_info
         return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
@@ -2323,7 +2323,7 @@ class DjcHelper:
             return info
 
         def query_game_info():
-            qq = uin2qq(self.cfg.account_info.uin)
+            qq = self.qq()
             url = f"https://mwegame.qq.com/act/dnf/Time2021/ajax/init?uin={qq}"
             res = self.post("查询小游戏信息", url, {}, print_res=False)
 
@@ -2435,7 +2435,7 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_helper
 
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        qq = uin2qq(self.cfg.account_info.uin)
+        qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
         res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, "https://mwegame.qq.com/act/dnf/Time2021/index",
@@ -2484,7 +2484,7 @@ class DjcHelper:
             "sPartition": partition,
             "sRoleId": roleid,
             "print_res": False,
-            "uin": uin2qq(self.cfg.account_info.uin),
+            "uin": self.qq(),
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
@@ -4481,8 +4481,8 @@ class DjcHelper:
         self.check_dnf_luodiye()
 
         self.dnf_luodiye_op("登陆领取积分", "770771")
-        if is_first_run(f"dnf_luodiye_分享_{self.cfg.account_info.uin}"):
-            self.dnf_luodiye_op("分享", "770783", iReceiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        if is_first_run(f"dnf_luodiye_分享_{self.uin()}"):
+            self.dnf_luodiye_op("分享", "770783", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
         self.dnf_luodiye_op("登陆活动页送积分", "770812")
 
         for i in range(4):
@@ -5400,7 +5400,7 @@ class DjcHelper:
         logger.info(color("bold_green") + get_not_ams_act_desc(act_name))
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
-        return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.cfg.account_info.uin}-{getMillSecondsUnix()}-{self.rand6()}"
+        return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.uin()}-{getMillSecondsUnix()}-{self.rand6()}"
 
     def rand6(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=6))
@@ -5531,6 +5531,12 @@ class DjcHelper:
                 return int(total), int(remaining)
 
         return 0, 0
+
+    def uin(self) -> str:
+        return self.cfg.account_info.uin
+
+    def qq(self) -> str:
+        return uin2qq(self.uin())
 
 
 def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):

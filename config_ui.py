@@ -1356,7 +1356,7 @@ class ArkLotteryConfigUi(QWidget):
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
 
-        self.roles = []  # type: List[DnfRoleInfo]
+        self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
 
         self.from_config(form_layout, cfg)
 
@@ -1396,7 +1396,7 @@ class ArkLotteryConfigUi(QWidget):
             show_message("出错了", "请先选择幸运角色服务器")
             return
 
-        if len(self.roles) == 0:
+        if len(self.get_roles()) == 0:
             logger.info("需要查询角色信息")
 
             djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
@@ -1404,16 +1404,17 @@ class ArkLotteryConfigUi(QWidget):
             djcHelper.check_skey_expired()
             djcHelper.get_bind_role_list()
 
-            self.roles = djcHelper.query_dnf_rolelist(server_id)
+            self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
 
             self.combobox_lucky_dnf_role_name.clear()
-            self.combobox_lucky_dnf_role_name.addItems([role.rolename for role in self.roles])
+            self.combobox_lucky_dnf_role_name.addItems([role.rolename for role in self.get_roles()])
 
     def on_role_name_select(self, index: int):
-        if len(self.roles) == 0:
+        roles = self.get_roles()
+        if len(roles) == 0:
             return
 
-        role = self.roles[index]
+        role = roles[index]
         logging.info(f"选择的幸运角色为{role}，将更新到角色id框中")
 
         self.lineedit_lucky_dnf_role_id.setText(role.roleid)
@@ -1422,12 +1423,18 @@ class ArkLotteryConfigUi(QWidget):
         return dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
 
     def rolename_to_roleid(self, role_name) -> str:
-        for role in self.roles:
+        for role in self.get_roles():
             if role.rolename == role_name:
                 return role.roleid
 
         return ""
 
+    def get_roles(self) -> List[DnfRoleInfo]:
+        server_id = self.get_lucky_dnf_server_id()
+        if server_id not in self.server_id_to_roles:
+            return []
+
+        return self.server_id_to_roles[server_id]
 
 class VipMentorConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: VipMentorConfig, parent=None):

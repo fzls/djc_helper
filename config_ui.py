@@ -1435,7 +1435,7 @@ class RoleSelector(QWidget):
 
         self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
 
-        msg = "点我查询角色，可能会卡一会"
+        msg = f"点我查询当前服务器的角色列表，可能会卡一会"
         self.combobox_role_name = create_combobox(msg, [msg])
         self.combobox_role_name.clicked.connect(self.on_role_name_clicked)
         self.combobox_role_name.activated.connect(self.on_role_name_select)

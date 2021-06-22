@@ -1555,7 +1555,7 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5353_75244d03")
         self.qzone_act_op("勇士见面礼", "5419_2c0ff022")
-        if is_first_run(f"dnf_super_vip_分享_{self.uin()}"):
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_分享_{self.uin()}"):
             self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
                 "receivers": [
                     self.qq(),
@@ -1584,7 +1584,7 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d")
         self.qzone_act_op("勇士见面礼", "5418_9f4ec626")
-        if is_first_run(f"dnf_yellow_diamond_分享_{self.uin()}"):
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_yellow_diamond_分享_{self.uin()}"):
             self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
                 "receivers": [
                     self.qq(),
@@ -1839,8 +1839,9 @@ class DjcHelper:
         elif len(send_list) > 3:
             send_list = self.cfg.dnf_13_send_qq_list[:3]
 
-        for qq in send_list:
-            self.dnf_13_op(f"发送分享消息，额外增加抽奖机会-{qq}", "771230", receiveUin=qq)
+        if not self.cfg.function_switches.disable_share:
+            for qq in send_list:
+                self.dnf_13_op(f"发送分享消息，额外增加抽奖机会-{qq}", "771230", receiveUin=qq)
 
         lc = query_lottery_count()
         logger.info(f"当前剩余抽奖次数为{lc}次")
@@ -4529,7 +4530,7 @@ class DjcHelper:
         self.check_dnf_luodiye()
 
         self.dnf_luodiye_op("登陆领取积分", "770771")
-        if is_first_run(f"dnf_luodiye_分享_{self.uin()}"):
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_luodiye_分享_{self.uin()}"):
             self.dnf_luodiye_op("分享", "770783", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
         self.dnf_luodiye_op("登陆活动页送积分", "770812")
 

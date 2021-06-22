@@ -403,6 +403,10 @@ class ConfigUi(QFrame):
         if ok:
             logger.info(f"尝试添加账号 {account_name} ...")
 
+            if account_name == "":
+                show_message("添加失败", f"未填写账号名称，请重新操作~")
+                return
+
             for account in self.accounts:
                 if account.lineedit_name.text() == account_name:
                     show_message("添加失败", f"已存在名称为 {account_name} 的账号，请重新操作~")

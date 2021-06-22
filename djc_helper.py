@@ -749,7 +749,7 @@ class DjcHelper:
         # self.query_dnf_gifts()
 
     def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> List[DnfRoleInfo]:
-        ctx = f"获取账号({self.cfg.name})的dnf角色列表"
+        ctx = f"获取账号({self.cfg.name})在服务器({dnf_server_id_to_name(dnfServerId)})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
         roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)

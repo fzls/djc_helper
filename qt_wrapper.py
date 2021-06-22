@@ -1,6 +1,6 @@
 from typing import List
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QWheelEvent
 from PyQt5.QtWidgets import (
     QFormLayout, QVBoxLayout, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
@@ -47,6 +47,12 @@ class MyDoubleSpinbox(QDoubleSpinBox):
 
 
 class MyComboBox(QComboBox):
+    clicked = pyqtSignal()
+
+    def showPopup(self):
+        self.clicked.emit()
+        super(MyComboBox, self).showPopup()
+
     def wheelEvent(self, event: QWheelEvent) -> None:
         if self.hasFocus():
             super(MyComboBox, self).wheelEvent(event)

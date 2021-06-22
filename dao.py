@@ -152,7 +152,7 @@ class GoodsCategoryInfo(ConfigInterface):
 
 class DnfRoleInfo(DaoObject):
     def __init__(self, roleid, rolename, forceid, level):
-        self.roleid = int(roleid)
+        self.roleid = str(roleid)
         self.rolename = str(rolename)
         # 已知：0-男鬼剑，3-女魔法师，13-男枪士，14-女圣职者
         self.forceid = int(forceid)

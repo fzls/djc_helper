@@ -319,7 +319,7 @@ class AccountConfig(ConfigInterface):
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
         # 账号名称，仅用于区分不同账号
-        self.name = "默认账号_请修改这个名称_并确保不同账号取不同名字"
+        self.name = "默认账号名-1"
         # 登录模式
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作

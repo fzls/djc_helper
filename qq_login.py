@@ -730,7 +730,6 @@ class QQLogin():
                 break
             time.sleep(1)
 
-
     def try_auto_resolve_captcha(self):
         try:
             self._try_auto_resolve_captcha()

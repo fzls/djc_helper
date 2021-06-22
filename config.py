@@ -300,6 +300,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_warriors_call = True
         # 是否启用会员关怀活动
         self.get_vip_mentor = True
+        # 是否启用超级会员活动
+        self.get_dnf_super_vip = True
 
         # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
         # 是否领取管家蚊子腿活动

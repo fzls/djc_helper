@@ -1258,6 +1258,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
         form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
 
+        self.checkbox_get_dnf_super_vip = create_checkbox(cfg.get_dnf_super_vip)
+        form_layout.addRow("超级会员", self.checkbox_get_dnf_super_vip)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "安全管家pskey")
 
@@ -1303,6 +1306,7 @@ class FunctionSwitchesConfigUi(QWidget):
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
+        cfg.get_dnf_super_vip = self.checkbox_get_dnf_super_vip.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 

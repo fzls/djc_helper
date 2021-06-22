@@ -851,8 +851,11 @@ def show_tips(cfg):
         "手动活动617": (
             "以下活动请自行完成\n"
             "1. 斗鱼 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
-            "2. 合成三觉小游戏 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
+            "2. 合成三觉小游戏 https://dnf.qq.com/m/skill/wasm/index.html \n"
             "3. 生日礼 https://pay.qq.com/m/active/activity_dispatcher.php?id=3099 \n"
+            "4. 微信翻牌 DNF的微信公众号中回复 翻牌 即可 \n"
+            "5. 充值活跃礼包 https://pay.qq.com/store/experience/index.shtml?store_config_env=1pf=__mds_act_birth_gift_giftcenter#/taskCenter/74/biz/95?pf=2199 \n"
+            "6. Colg活跃活动 除签到外的流程 \n"
         ),
     }
 

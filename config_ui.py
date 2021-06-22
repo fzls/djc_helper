@@ -5,6 +5,8 @@ logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
 from typing import Tuple
+from io import StringIO
+from traceback import print_tb
 import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
@@ -1584,6 +1586,17 @@ class FirecrackersConfigUi(QWidget):
 
 
 def main():
+    def catch_exceptions(t, val, tb):
+        result = StringIO()
+        v3 = print_tb(tb, file=result)
+        msg = f"{t} {val}:\n{result.getvalue()}"
+        logger.error(msg)
+        QMessageBox.critical(None, "出错了", msg)
+        old_hook(t, val, tb)
+
+    old_hook = sys.excepthook
+    sys.excepthook = catch_exceptions
+
     if config().common.config_ui_enable_high_dpi:
         logger.info("已启用高DPI模式")
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"

@@ -354,17 +354,19 @@ get_dnf_anniversary = false
 get_dnf_kol = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
-# 是否启用集卡功能
+# 是否启用 集卡 功能
 get_ark_lottery = true
-# 是否启用阿拉德勇士征集令活动
+# 是否启用 阿拉德勇士征集令 活动
 get_dnf_warriors_call = true
-# 是否启用会员关怀活动
+# 是否启用 会员关怀 活动
 get_vip_mentor = true
-# 是否启用超级会员活动
+# 是否启用 超级会员 活动
 get_dnf_super_vip = true
+# 是否启用 黄钻 活动
+get_dnf_yellow_diamond = true
 
 # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
-# 是否领取管家蚊子腿活动
+# 是否领取 管家蚊子腿 活动
 get_guanjia = true
 
 # 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt

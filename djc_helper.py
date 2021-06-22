@@ -1536,11 +1536,12 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5353_75244d03")
         self.qzone_act_op("勇士见面礼", "5419_2c0ff022")
-        self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
-            "receivers": [
-                uin2qq(self.cfg.account_info.uin),
-            ]
-        })
+        if is_first_run(f"dnf_super_vip_分享_{self.cfg.account_info.uin}"):
+            self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
+                "receivers": [
+                    uin2qq(self.cfg.account_info.uin),
+                ]
+            })
         self.qzone_act_op("分享领取礼包", "5501_c70d8e0f")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
@@ -1564,11 +1565,12 @@ class DjcHelper:
 
         self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d")
         self.qzone_act_op("勇士见面礼", "5418_9f4ec626")
-        self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
-            "receivers": [
-                uin2qq(self.cfg.account_info.uin),
-            ]
-        })
+        if is_first_run(f"dnf_yellow_diamond_分享_{self.cfg.account_info.uin}"):
+            self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
+                "receivers": [
+                    uin2qq(self.cfg.account_info.uin),
+                ]
+            })
         self.qzone_act_op("分享领取礼包", "5499_4574810b")
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None):
@@ -4479,7 +4481,7 @@ class DjcHelper:
         self.check_dnf_luodiye()
 
         self.dnf_luodiye_op("登陆领取积分", "770771")
-        if is_first_run("dnf_luodiye_分享"):
+        if is_first_run(f"dnf_luodiye_分享_{self.cfg.account_info.uin}"):
             self.dnf_luodiye_op("分享", "770783", iReceiveUin=uin2qq(self.cfg.account_info.uin), p_skey=self.fetch_share_p_skey("领取分享奖励"))
         self.dnf_luodiye_op("登陆活动页送积分", "770812")
 

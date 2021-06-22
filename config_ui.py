@@ -1520,6 +1520,79 @@ class VipMentorConfigUi(QWidget):
         return self.server_id_to_roles[server_id]
 
 
+class RoleSelector(QWidget):
+    def __init__(self, ctx, combobox_server_name: MyComboBox, lineedit_role_id: QLineEdit, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
+        super(RoleSelector, self).__init__(parent)
+
+        self.ctx = ctx
+        self.combobox_server_name = combobox_server_name
+        self.lineedit_role_id = lineedit_role_id
+        self.account_cfg = account_cfg
+        self.common_cfg = common_cfg
+
+        self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
+
+        msg = "点我查询角色，可能会卡一会"
+        self.combobox_role_name = create_combobox(msg, [msg])
+        self.combobox_role_name.clicked.connect(self.on_role_name_clicked)
+        self.combobox_role_name.activated.connect(self.on_role_name_select)
+
+        self.combobox_server_name.activated.connect(self.on_server_select)
+
+    def on_role_name_clicked(self):
+        server_id = self.get_server_id()
+        if server_id == "":
+            show_message("出错了", f"请先选择{self.ctx}服务器")
+            return
+
+        if len(self.get_roles()) == 0:
+            logger.info("需要查询角色信息")
+
+            djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list()
+
+            self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
+
+            self.update_role_names()
+
+    def on_role_name_select(self, index: int):
+        roles = self.get_roles()
+        if len(roles) == 0:
+            return
+
+        role = roles[index]
+        logging.info(f"选择的幸运角色为{role}，将更新到角色id框中")
+
+        self.lineedit_role_id.setText(role.roleid)
+
+    def on_server_select(self, index):
+        self.lineedit_role_id.clear()
+        self.update_role_names()
+
+    def update_role_names(self):
+        self.combobox_role_name.clear()
+        self.combobox_role_name.addItems([role.rolename for role in self.get_roles()])
+
+    def get_server_id(self) -> str:
+        return dnf_server_name_to_id(self.combobox_server_name.currentText())
+
+    def rolename_to_roleid(self, role_name) -> str:
+        for role in self.get_roles():
+            if role.rolename == role_name:
+                return role.roleid
+
+        return ""
+
+    def get_roles(self) -> List[DnfRoleInfo]:
+        server_id = self.get_server_id()
+        if server_id not in self.server_id_to_roles:
+            return []
+
+        return self.server_id_to_roles[server_id]
+
+
 class DnfHelperInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: DnfHelperInfoConfig, parent=None):
         super(DnfHelperInfoConfigUi, self).__init__(parent)

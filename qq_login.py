@@ -326,7 +326,7 @@ class QQLogin():
         self.window_title = f"请扫码 {name} - {login_mode}"
 
         def login_with_qr_code():
-            logger.info(color("bold_yellow") + f"请在{self.cfg.login.login_timeout}s内完成扫码登录操作或快捷登录操作")
+            logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
@@ -630,7 +630,7 @@ class QQLogin():
         max_try = 10
 
         short_login_retry_key = "short_login_retry_key"
-        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try, self.cfg.login.login_timeout)
+        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try, self.get_login_timeout(self.login_type_qr_login in login_type))
 
         for idx in range_from_one(max_try):
             try:
@@ -681,6 +681,13 @@ class QQLogin():
             self.wait_for_IED_LOG_INFO2_QC()
 
         return
+
+    def get_login_timeout(self, is_qr_mode=False):
+        if not is_qr_mode:
+            return self.cfg.login.login_timeout
+        else:
+            # 扫码模式保底需要等待600秒
+            return max(self.cfg.login.login_timeout, 600)
 
     def fetch_qq_video_vuserid(self):
         logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")

@@ -20,6 +20,9 @@ allow_only_one_instance = true
 
 # 是否尝试自动绑定新活动
 try_auto_bind_new_activity = true
+# 是否强制与道聚城的绑定角色同步，也就是说当活动角色与道聚城绑定角色不一致时，将强制修改为道聚城绑定的角色。
+# 开启后可以实现在道聚城修改绑定角色后，所有其他自动绑定的活动也将同步修改为该角色
+force_sync_bind_with_djc = true
 
 # 提前多少天提示付费过期
 notify_pay_expired_in_days = 7

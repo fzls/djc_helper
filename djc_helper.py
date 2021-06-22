@@ -1,4 +1,3 @@
-import math
 import string
 import subprocess
 from multiprocessing import Pool
@@ -5331,14 +5330,31 @@ class DjcHelper:
         while True:
             res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
             # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
+            need_bind = False
+            bind_reason = ""
             if len(res["modRet"]["jData"]) == 0:
+                # 未绑定角色
+                need_bind = True
+                bind_reason = "未绑定角色"
+            elif self.common_cfg.force_sync_bind_with_djc:
+                roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+                bindinfo = AmesvrUserBindInfo().auto_update_config(res["modRet"]["jData"]["data"])
+
+                if roleinfo.serviceID != bindinfo.Farea or roleinfo.roleCode != bindinfo.FroleId:
+                    current_account = f"{unquote_plus(bindinfo.FareaName)}-{unquote_plus(bindinfo.FroleName)}-{bindinfo.FroleId}"
+                    djc_account = f"{roleinfo.serviceName}-{roleinfo.roleName}-{roleinfo.roleCode}"
+
+                    need_bind = True
+                    bind_reason = f"当前绑定账号({current_account})与道聚城绑定账号({djc_account})不一致"
+
+            if need_bind:
                 self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
-                                           query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind)
+                                           query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind, bind_reason=bind_reason)
             else:
                 # 已经绑定
                 break
 
-    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False):
+    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False, bind_reason="未绑定角色"):
         if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
             if 'dnf' in self.bizcode_2_bind_role_map:
                 # 若道聚城已绑定dnf角色，则尝试绑定这个角色
@@ -5348,19 +5364,19 @@ class DjcHelper:
                 def double_quote(strToQuote):
                     return quote_plus(quote_plus(strToQuote))
 
-                logger.warning(color("bold_yellow") + f"活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({roleinfo.serviceName}-{roleinfo.roleName})")
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({roleinfo.serviceName}-{roleinfo.roleName})")
                 activity_op_func("提交绑定大区", commit_bind_flowid, True,
                                  user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
                                  user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
                                  user_checkparam=double_quote(checkInfo.checkparam), user_md5str=checkInfo.md5str, user_sex="", user_platId="")
             else:
-                logger.warning(color("bold_yellow") + f"活动【{activity_name}】未绑定角色，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
             self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)
         else:
             msg = (
-                f"当前账号【{self.cfg.name}】未在活动页面绑定角色，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
+                f"当前账号【{self.cfg.name}】{bind_reason}，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
                 "若无需该功能，可关闭工具，然后前往配置文件自行关闭该功能\n"
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
                 f"{activity_url}\n"

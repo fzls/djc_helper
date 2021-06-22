@@ -736,7 +736,7 @@ class DjcHelper:
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         return self.get(ctx, self.urls.exchangeItems, iGoodsSeqId=iGoodsSeqId, rolename=quote_plus(roleinfo.roleName), lRoleId=roleinfo.roleCode, iZone=roleinfo.serviceID)
 
-    def query_all_extra_info(self, dnfServerId):
+    def query_all_extra_info(self, dnfServerId: str):
         """
         已废弃，不再需要手动查询该信息
         """
@@ -748,7 +748,7 @@ class DjcHelper:
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
 
-    def query_dnf_rolelist(self, dnfServerId, need_print=True) -> List[DnfRoleInfo]:
+    def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> List[DnfRoleInfo]:
         ctx = f"获取账号({self.cfg.name})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
         roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
@@ -1928,6 +1928,32 @@ class DjcHelper:
 
             return info
 
+        def take_lottery_counts():
+            if not (self.common_cfg.try_auto_bind_new_activity and self.common_cfg.force_sync_bind_with_djc):
+                logger.info("未开启自动绑定活动和强制同步功能，将不尝试切换角色来领取抽奖券")
+                self.dnf_ozma_op("领取通关奥兹玛赠送抽奖券", "770026")
+                return
+
+            logger.info(color("bold_green") + "尝试使用当前区服的所有100级角色来领取抽奖次数")
+            djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
+            for role in roles:
+                if role.level < 100:
+                    # 未到100级必定不可能通关奥兹玛
+                    continue
+
+                # 临时更新绑定角色为该角色
+                djc_roleinfo.roleCode = role.roleid
+                djc_roleinfo.roleName = role.rolename
+                self.check_dnf_ozma()
+
+                # 领奖
+                self.dnf_ozma_op(f"领取 {role.rolename} 通关奥兹玛赠送抽奖券", "770026")
+
+            # 切换回原有绑定角色
+            self.get_bind_role_list()
+            self.check_dnf_ozma()
+
         self.dnf_ozma_op("周年庆登录礼包", "770194")
         self.dnf_ozma_op("周年庆130元充值礼", "770201")
 
@@ -1939,7 +1965,8 @@ class DjcHelper:
                          sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                          md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam, )
 
-        self.dnf_ozma_op("通关奥兹玛赠送抽奖券", "770026")
+        take_lottery_counts()
+
         info = query_info()
         logger.info(f"当前有{info.lottery_count}张抽奖券")
         for idx in range(info.lottery_count):
@@ -5690,7 +5717,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_reserve()
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_welfare()
-        # djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
@@ -5700,4 +5726,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
-        djcHelper.dnf_yellow_diamond()
+        # djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_ozma()

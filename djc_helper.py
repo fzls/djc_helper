@@ -748,25 +748,29 @@ class DjcHelper:
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
 
-    def query_dnf_rolelist(self, dnfServerId):
+    def query_dnf_rolelist(self, dnfServerId, need_print=True) -> List[DnfRoleInfo]:
         ctx = f"获取账号({self.cfg.name})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
         roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
         roleLists = json_parser.parse_role_list(roleListJsonRes)
-        lines = []
-        lines.append("")
-        lines.append("+" * 40)
-        lines.append(ctx)
-        if len(roleLists) != 0:
-            for idx, role in enumerate(roleLists):
-                lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid}\t 名字 = {role.rolename}")
-        else:
-            lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
-            lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
-            lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-            subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
-        lines.append("+" * 40)
-        logger.info("\n".join(lines))
+
+        if need_print:
+            lines = []
+            lines.append("")
+            lines.append("+" * 40)
+            lines.append(ctx)
+            if len(roleLists) != 0:
+                for idx, role in enumerate(roleLists):
+                    lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid}\t 名字 = {role.rolename}")
+            else:
+                lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
+                lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
+                lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
+                subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
+            lines.append("+" * 40)
+            logger.info("\n".join(lines))
+
+        return roleLists
 
     def query_mobile_game_rolelist(self):
         """

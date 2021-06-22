@@ -160,6 +160,9 @@ class Urls:
         self.qzone_activity = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"
         self.qzone_activity_raw_data = "gameid={gameid}&actid={actid}&ruleid={ruleid}&area={area}&partition={partition}&roleid={roleid}&platform=pc&query={query}&act_name={act_name}&format=json&uin={uin}&countid={countid}"
 
+        # 新的qq空间接口
+        self.qzone_activity_new = "https://act.qzone.qq.com/v2/vip/tx/trpc/subact/ExecAct"
+
         # 抽卡相关
         self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13"
         # 查询次数信息：参数：to_qq, actName

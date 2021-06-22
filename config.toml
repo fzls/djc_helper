@@ -292,6 +292,8 @@ get_ark_lottery = true
 get_dnf_warriors_call = true
 # 是否启用会员关怀活动
 get_vip_mentor = true
+# 是否启用超级会员活动
+get_dnf_super_vip = true
 
 # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
 # 是否领取管家蚊子腿活动

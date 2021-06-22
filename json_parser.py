@@ -1,9 +1,10 @@
 import re
+from typing import List
 
 from dao import DnfRoleInfo, MobileGameRoleInfo
 
 
-def parse_role_list(jsonRes):
+def parse_role_list(jsonRes) -> List[DnfRoleInfo]:
     role_reg = r"\d+ [^ ]+ \d+ \d+"
     rolemap = {}
 

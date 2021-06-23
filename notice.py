@@ -147,12 +147,18 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于更新说明"
-    message = """如果不喜欢频繁更新，请打开配置工具，关闭【公共配置】/【检查更新】按钮即可。
-我不喜欢被人说：【是不是专搞没买自动更新的】
-如果这么想的话，我建议不要用这个工具了。如果想退款，随时可以退。我应该还不至于要被这样贬低
-可以选择不更新，没有强制要求更新，你完全可以选择每周手动去更新一次的
-至于我想不想做一些改动，加一些新活动啥的，我觉得应该不需要征求他人的意见才能进行吧？
+    title = "dlc无法使用的问题"
+    message = """dlc无法正常使用的问题已经定位到，请出问题的朋友在稍后的10.15.3版本出来后，手动下载下本体-。-
+    
+具体原因如下：
+多进程检查skey后，缓存文件中保存到是有效的skey信息。但是并不会更新到外侧的cfg变量中
+之前的实现中，由于cfg始终是g_config，所以在check_djc_role_binding中通过djcHelper.check_djc_role_binding()间接调用了检查skey的函数后，
+g_config被刷入了缓存的skey信息，而cfg就是g_config，所以同步刷新了
+但是强制重置后，cfg和g_config不是同一个实例了(cfg指向的是g_config之前的实例），因此不能写入skey了，就导致检查dlc的时候，由于没有登录信息，所以出问题了
+
+修正方案
+1. 仅配置工具中强制重置
+2. 并行登录完毕后，串行加载缓存的登录信息到cfg变量中
 """
     nm.add_notice(title, message,
                   send_at=format_now(),

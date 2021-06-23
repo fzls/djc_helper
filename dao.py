@@ -51,14 +51,14 @@ class RoleInfo(ConfigInterface):
         self.systemKey = ""
         self.type = "0"
 
-        # # 手游
+        # 手游
         # self.accountId = "2814890506666666666"
         # self.areaID = "20001"
         # self.areaName = "梦江南"
         # self.bizCode = "jx3"
-        # self.channelID = "2"
-        # self.channelKey = "qq"
-        # self.channelName = "手Q"
+        self.channelID = "2"
+        self.channelKey = "qq"
+        self.channelName = "手Q"
         # self.ext_param = ""
         # self.gameName = "剑网3:指尖江湖"
         # self.isHasService = "0"

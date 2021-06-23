@@ -1964,7 +1964,12 @@ class DjcHelper:
                 self.check_dnf_ozma()
 
                 # 领奖
-                self.dnf_ozma_op(f"领取 {role.rolename} 通关奥兹玛赠送抽奖券", "770026")
+                idx = 0
+                while True:
+                    idx += 1
+                    res = self.dnf_ozma_op(f"领取 {role.rolename} 本周第{idx}次 通关奥兹玛赠送抽奖券", "770026")
+                    if int(res["ret"]) != 0:
+                        break
 
             # 切换回原有绑定角色
             self.get_bind_role_list()

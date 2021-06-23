@@ -1155,6 +1155,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
         form_layout.addRow("禁用绝大部分活动", self.checkbox_disable_most_activities)
 
+        self.checkbox_disable_share = create_checkbox(cfg.disable_share)
+        form_layout.addRow("禁用分享功能", self.checkbox_disable_share)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "普通skey")
 
@@ -1280,6 +1283,7 @@ class FunctionSwitchesConfigUi(QWidget):
 
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
+        cfg.disable_share = self.checkbox_disable_share.isChecked()
 
         cfg.get_djc = self.checkbox_get_djc.isChecked()
         cfg.make_wish = self.checkbox_make_wish.isChecked()

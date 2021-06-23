@@ -72,7 +72,7 @@ def check_djc_role_binding():
             cfg = config()
 
 
-def check_all_skey_and_pskey(cfg, check_skey_only=False):
+def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
@@ -80,33 +80,36 @@ def check_all_skey_and_pskey(cfg, check_skey_only=False):
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
+        # 并行登陆
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, _idx + 1, account_config, cfg.common, check_skey_only)
                                                          for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
 
-        logger.info("全部账号检查完毕")
-        return
+        logger.info("并行登陆完毕，串行加载缓存的登录信息到cfg变量中")
+        check_all_skey_and_pskey_silently_sync(cfg)
+    else:
+        # 串行登录
+        qq2index = {}
 
-    # 串行登录
-    qq2index = {}
+        for _idx, account_config in enumerate(cfg.account_configs):
+            idx = _idx + 1
 
-    for _idx, account_config in enumerate(cfg.account_configs):
-        idx = _idx + 1
+            djcHelper = do_check_all_skey_and_pskey(idx, 1, account_config, cfg.common, check_skey_only)
+            if djcHelper is None:
+                continue
 
-        djcHelper = do_check_all_skey_and_pskey(idx, 1, account_config, cfg.common, check_skey_only)
-        if djcHelper is None:
-            continue
+            qq = uin2qq(djcHelper.cfg.account_info.uin)
+            if qq in qq2index:
+                msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
+                logger.error(color("fg_bold_red") + msg)
+                win32api.MessageBox(0, msg, "重复登录", win32con.MB_ICONINFORMATION)
+                clear_login_status()
+                sys.exit(-1)
 
-        qq = uin2qq(djcHelper.cfg.account_info.uin)
-        if qq in qq2index:
-            msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
-            logger.error(color("fg_bold_red") + msg)
-            win32api.MessageBox(0, msg, "重复登录", win32con.MB_ICONINFORMATION)
-            clear_login_status()
-            sys.exit(-1)
+            qq2index[qq] = idx
 
-        qq2index[qq] = idx
+    logger.info("全部账号检查完毕")
 
 
 def do_check_all_skey_and_pskey(idx: int, window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
@@ -117,6 +120,16 @@ def do_check_all_skey_and_pskey(idx: int, window_index: int, account_config: Acc
     wait_a_while(idx)
 
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
+
+    return _do_check_all_skey_and_pskey(window_index, account_config, common_config, check_skey_only)
+
+
+def check_all_skey_and_pskey_silently_sync(cfg: Config):
+    for account_config in cfg.account_configs:
+        _do_check_all_skey_and_pskey(1, account_config, cfg.common, False)
+
+
+def _do_check_all_skey_and_pskey(window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.fetch_pskey(window_index=window_index)
     djcHelper.check_skey_expired(window_index=window_index)

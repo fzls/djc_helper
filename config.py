@@ -760,11 +760,12 @@ g_config = Config()
 
 
 # 读取程序config
-def load_config(config_path="config.toml", local_config_path="config.toml.local"):
+def load_config(config_path="config.toml", local_config_path="config.toml.local", reset_before_load=False):
     global g_config
 
-    # 先重置
-    g_config = Config()
+    if reset_before_load:
+        # 先重置
+        g_config = Config()
 
     # 首先尝试读取config.toml（受版本管理系统控制）
     try:

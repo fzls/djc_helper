@@ -263,6 +263,9 @@ count = 2
 # 如果想要单独设置各个活动的开关，请不要设置这个配置项，否则各个新活动都会被禁用
 disable_most_activities = false
 
+# 是否禁用分享功能
+disable_share = false
+
 # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
 # 是否领取道聚城
 get_djc = true

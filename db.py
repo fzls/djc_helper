@@ -77,7 +77,7 @@ def set_account_to_db(accountName, db, accountDb):
 def init_db():
     save_db({
         "created_at": datetime.datetime.now().timestamp(),
-        "created_at_str": datetime.datetime.now(),
+        "created_at_str": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     })
     logger.info(color("bold_green") + "数据库已初始化完毕")
 

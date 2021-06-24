@@ -16,6 +16,7 @@ from show_usage import *
 from usage_count import *
 import psutil
 from pool import init_pool, close_pool
+from first_run import check_first_run_async
 
 
 def parse_args():
@@ -107,6 +108,9 @@ def main():
     check_all_skey_and_pskey(cfg)
 
     check_djc_role_binding()
+
+    # 确保道聚城绑定OK后在活动运行同时进行异步的弹窗提示
+    check_first_run_async(cfg)
 
     # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
     check_update(cfg)

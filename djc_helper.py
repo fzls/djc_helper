@@ -4617,7 +4617,7 @@ class DjcHelper:
         self.dnf_wegame_op("签到3天礼包", "770437")
         self.dnf_wegame_op("签到7天礼包", "770438")
         self.dnf_wegame_op("签到10天礼包", "771272")
-        self.dnf_wegame_op("签到15天礼包", "771272")
+        self.dnf_wegame_op("签到15天礼包", "770439")
 
     def check_dnf_wegame(self):
         self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210603lbavs9i/index.html",
@@ -5730,7 +5730,6 @@ if __name__ == '__main__':
         # djcHelper.ark_lottery()
         # djcHelper.dnf_collection()
         # djcHelper.qq_video_amesvr()
-        # djcHelper.dnf_wegame()
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
         # djcHelper.dnf_luodiye()
@@ -5748,4 +5747,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_ozma()
+        # djcHelper.dnf_ozma()
+        djcHelper.dnf_wegame()

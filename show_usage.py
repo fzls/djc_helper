@@ -31,7 +31,7 @@ def show_usage():
         # ["所有版本总计使用数", *[get_count(global_usage_counter_name, period) for period in extra_time_periods]],
         # ["当前版本活跃用户数", *[get_record_count_name_start_with(this_version_user_usage_prefix, period) for period in extra_time_periods]],
         ["活跃用户数", *[get_record_count_name_start_with(user_usage_counter_name_prefix, period) for period in extra_time_periods]],
-        ["DLC用户数", *[get_record_count_name_start_with(auto_updater_usage_counter_name_prefix, period) for period in extra_time_periods]],
+        # ["DLC用户数", *[get_record_count_name_start_with(auto_updater_usage_counter_name_prefix, period) for period in extra_time_periods]],
         ["按月付费用户数", *[get_record_count_name_start_with(active_monthly_pay_user_usage_counter_name_prefix, period) for period in extra_time_periods]],
     ]
 

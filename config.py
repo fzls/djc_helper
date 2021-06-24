@@ -555,8 +555,10 @@ class CommonConfig(ConfigInterface):
         self.max_logs_size = 1024
         # 日志目录保留大小（单位为Mib），每次清理时将按时间顺序清理日志，直至剩余日志大小不超过该值
         self.keep_logs_size = 512
-        # 是否检查更新
+        # 是否在程序启动时手动检查更新
         self.check_update_on_start = True
+        # 是否在程序结束时手动检查更新
+        self.check_update_on_end = False
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         # 自动更新dlc购买地址
@@ -831,6 +833,7 @@ def gen_config_for_github_action():
     cfg.common.log_level = "debug"
     # 不必检查更新，必定是最新版本
     cfg.common.check_update_on_start = False
+    cfg.common.check_update_on_end = False
     # 不必自动更新，同理
     cfg.common.auto_update_on_start = False
 

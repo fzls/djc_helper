@@ -772,7 +772,10 @@ class CommonConfigUi(QFrame):
         form_layout.addRow("进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
-        form_layout.addRow("检查更新", self.checkbox_check_update_on_start)
+        form_layout.addRow("启动时检查更新", self.checkbox_check_update_on_start)
+
+        self.checkbox_check_update_on_end = create_checkbox(cfg.check_update_on_end)
+        form_layout.addRow("结束前检查更新", self.checkbox_check_update_on_end)
 
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
         form_layout.addRow("自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
@@ -836,6 +839,7 @@ class CommonConfigUi(QFrame):
         cfg.enable_super_fast_mode = self.checkbox_enable_super_fast_mode.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
+        cfg.check_update_on_end = self.checkbox_check_update_on_end.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
         cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()

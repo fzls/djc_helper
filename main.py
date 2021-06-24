@@ -113,7 +113,8 @@ def main():
     check_first_run_async(cfg)
 
     # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
-    check_update(cfg)
+    if cfg.common.check_update_on_start:
+        check_update(cfg)
 
     # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
     try_auto_update(cfg)
@@ -152,6 +153,10 @@ def main():
 
     # 运行结束展示下多进程信息
     show_multiprocessing_info(cfg)
+
+    # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
+    if cfg.common.check_update_on_end:
+        check_update(cfg)
 
 
 if __name__ == '__main__':

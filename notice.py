@@ -147,18 +147,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "dlc无法使用的问题"
-    message = """dlc无法正常使用的问题已经定位到，请出问题的朋友在稍后的10.15.3版本出来后，手动下载下本体-。-
+    title = "关于超快速模式的额外说明"
+    message = """超快速模式下可能会经常弹窗提示，这个问题是已知的，目前不太好解决。如果无法接受这个，请关闭超快速模式~
     
-具体原因如下：
-多进程检查skey后，缓存文件中保存到是有效的skey信息。但是并不会更新到外侧的cfg变量中
-之前的实现中，由于cfg始终是g_config，所以在check_djc_role_binding中通过djcHelper.check_djc_role_binding()间接调用了检查skey的函数后，
-g_config被刷入了缓存的skey信息，而cfg就是g_config，所以同步刷新了
-但是强制重置后，cfg和g_config不是同一个实例了(cfg指向的是g_config之前的实例），因此不能写入skey了，就导致检查dlc的时候，由于没有登录信息，所以出问题了
-
-修正方案
-1. 仅配置工具中强制重置
-2. 并行登录完毕后，串行加载缓存的登录信息到cfg变量中
+原因说明如下
+目前判断是否需要弹窗的数据是存到.db/db.json文件中，弹窗功能的次数和时机按预期表现依赖于这个文件是正常的。
+由于目前的本地数据的读写是线程不安全的，而在超快速模式下，默认进程数是4*cpu，很容易出现同时读写导致数据文件损坏而重置的情况。
+因此在这种情况下，之后再查询这个数据文件时，相关弹窗的数据都会丢失，因此会再次弹出-。-
 """
     nm.add_notice(title, message,
                   send_at=format_now(),

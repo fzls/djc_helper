@@ -113,10 +113,6 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
 
 
 def do_check_all_skey_and_pskey(idx: int, window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
-    if not account_config.is_enabled():
-        # 未启用的账户的账户不走该流程
-        return None
-
     wait_a_while(idx)
 
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
@@ -130,6 +126,10 @@ def check_all_skey_and_pskey_silently_sync(cfg: Config):
 
 
 def _do_check_all_skey_and_pskey(window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool) -> Optional[DjcHelper]:
+    if not account_config.is_enabled():
+        # 未启用的账户的账户不走该流程
+        return None
+
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.fetch_pskey(window_index=window_index)
     djcHelper.check_skey_expired(window_index=window_index)

@@ -717,6 +717,13 @@ class Config(ConfigInterface):
 
         return True
 
+    def has_any_account_auto_login(self) -> bool:
+        for account in self.account_configs:
+            if account.login_mode == "auto_login":
+                return True
+
+        return False
+
     def get_pool_size(self) -> int:
         if not self.common.enable_multiprocessing:
             return 0

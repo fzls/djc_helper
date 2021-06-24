@@ -32,18 +32,19 @@ def get_update_desc(config: CommonConfig):
 
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
+    check_update = config.check_update_on_start or config.check_update_on_end
     try:
         if is_run_in_github_action():
             logger.info("当前在github action环境下运行，无需检查更新")
             return
 
-        if not config.check_update_on_start and not config.auto_update_on_start:
+        if not check_update and not config.auto_update_on_start:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
             return
 
         ui = get_update_info(config)
 
-        if config.check_update_on_start:
+        if check_update:
             try_manaual_update(ui)
 
         if config.auto_update_on_start:
@@ -51,7 +52,7 @@ def check_update_on_start(config: CommonConfig):
     except Exception as err:
         try:
             # 到这里一般是无法访问github，这时候试试gitee的方案
-            if config.check_update_on_start:
+            if check_update:
                 latest_version = get_version_from_gitee()
                 ui = UpdateInfo()
                 ui.latest_version = latest_version
@@ -110,7 +111,7 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
                 )
                 win32api.MessageBox(0, message, "不好啦", win32con.MB_ICONERROR)
         else:
-            message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start的值设为false即可"
+            message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start和check_update_on_end的值设为false即可"
             win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
     else:
         logger.info(f"当前版本{now_version}已是最新版本，无需更新")

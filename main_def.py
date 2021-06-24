@@ -569,7 +569,7 @@ def run(cfg: Config):
 
     logger.warning("开始查询付费信息，请稍候~")
     user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
-    show_buy_info(user_buy_info, cfg)
+    show_buy_info(user_buy_info, cfg, need_show_message_box=False)
 
     # 上报付费使用情况
     try_report_pay_info(cfg, user_buy_info)
@@ -699,7 +699,7 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
 
 
-def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
+def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=True):
     logger.info(color("bold_cyan") + user_buy_info.description())
 
     monthly_pay_info = "按月付费未激活"
@@ -711,29 +711,31 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config):
             monthly_pay_info = "按月付费已过期"
     change_title(monthly_pay_info=monthly_pay_info, multiprocessing_pool_size=cfg.get_pool_size(), enable_super_fast_mode=cfg.common.enable_super_fast_mode)
 
-    expired = not user_buy_info.is_active()
-    will_expired_soon = user_buy_info.will_expire_in_days(cfg.common.notify_pay_expired_in_days)
-    if (expired or will_expired_soon) and is_weekly_first_run("show_buy_info"):
-        ctx = ""
-        if expired:
-            ctx = "按月付费已过期"
-        elif will_expired_soon:
-            ctx = "按月付费即将过期"
-        threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
-        wait_seconds = 15
-        logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
-        time.sleep(wait_seconds)
+    if need_show_message_box:
+        # 仅在运行结束时的那次展示付费信息的时候尝试进行下列弹窗~
+        expired = not user_buy_info.is_active()
+        will_expired_soon = user_buy_info.will_expire_in_days(cfg.common.notify_pay_expired_in_days)
+        if (expired or will_expired_soon) and is_weekly_first_run("show_buy_info"):
+            ctx = ""
+            if expired:
+                ctx = "按月付费已过期"
+            elif will_expired_soon:
+                ctx = "按月付费即将过期"
+            threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
+            wait_seconds = 15
+            logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
+            time.sleep(wait_seconds)
 
-    has_use_card_secret = False
-    for record in user_buy_info.buy_records:
-        if "卡密" in record.reason:
-            has_use_card_secret = True
-            break
+        has_use_card_secret = False
+        for record in user_buy_info.buy_records:
+            if "卡密" in record.reason:
+                has_use_card_secret = True
+                break
 
-    if is_first_run("卡密付费方案提示v2") or (not use_by_myself() and user_buy_info.total_buy_month > 0 and not has_use_card_secret and is_weekly_first_run("每周提示一次已付费用户续费可使用卡密自助操作")):
-        msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能（自动更新或按月付费）。\n如果想要付费或者续费可以选择这个方案~ 详情请看 【付费指引.docx】"
-        title = "新增卡密付费"
-        async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION)
+        if is_first_run("卡密付费方案提示v2") or (not use_by_myself() and user_buy_info.total_buy_month > 0 and not has_use_card_secret and is_weekly_first_run("每周提示一次已付费用户续费可使用卡密自助操作")):
+            msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能（自动更新或按月付费）。\n如果想要付费或者续费可以选择这个方案~ 详情请看 【付费指引.docx】"
+            title = "新增卡密付费"
+            async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION)
 
 
 def show_buy_info_sync(ctx, force_message_box=False):

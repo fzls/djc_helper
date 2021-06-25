@@ -6,7 +6,8 @@
     "send_at": "2021-05-15 21:32:36",
     "show_type": "deprecated",
     "open_url": "",
-    "expire_at": "2121-05-11 00:00:00"
+    "expire_at": "2121-05-11 00:00:00",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -15,7 +16,8 @@
     "send_at": "2021-05-18 11:13:44",
     "show_type": "deprecated",
     "open_url": "",
-    "expire_at": "2121-05-11 00:00:00"
+    "expire_at": "2121-05-11 00:00:00",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -24,7 +26,8 @@
     "send_at": "2021-05-26 16:50:06",
     "show_type": "deprecated",
     "open_url": "",
-    "expire_at": "2121-05-11 00:00:00"
+    "expire_at": "2121-05-11 00:00:00",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -33,7 +36,8 @@
     "send_at": "2021-05-29 01:23:14",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2121-05-11 00:00:00"
+    "expire_at": "2121-05-11 00:00:00",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -42,7 +46,8 @@
     "send_at": "2021-05-30 03:35:27",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-06 03:35:27"
+    "expire_at": "2021-06-06 03:35:27",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -51,7 +56,8 @@
     "send_at": "2021-06-04 10:38:29",
     "show_type": "deprecated",
     "open_url": "",
-    "expire_at": "2021-06-11 10:38:29"
+    "expire_at": "2021-06-11 10:38:29",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -60,7 +66,8 @@
     "send_at": "2021-06-12 16:47:13",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-19 16:47:13"
+    "expire_at": "2021-06-19 16:47:13",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -69,7 +76,8 @@
     "send_at": "2021-06-14 22:48:06",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-21 22:48:06"
+    "expire_at": "2021-06-21 22:48:06",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -78,7 +86,8 @@
     "send_at": "2021-06-21 19:42:49",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-28 19:42:49"
+    "expire_at": "2021-06-28 19:42:49",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -87,7 +96,8 @@
     "send_at": "2021-06-22 17:18:53",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-29 17:18:53"
+    "expire_at": "2021-06-29 17:18:53",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -96,7 +106,8 @@
     "send_at": "2021-06-23 10:07:32",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-30 10:07:32"
+    "expire_at": "2021-06-30 10:07:32",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -105,7 +116,8 @@
     "send_at": "2021-06-23 12:06:26",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-06-30 12:06:26"
+    "expire_at": "2021-06-30 12:06:26",
+    "show_only_before_version": "10.15.6"
   },
   {
     "sender": "风之凌殇",
@@ -114,6 +126,7 @@
     "send_at": "2021-06-25 04:00:37",
     "show_type": "once",
     "open_url": "",
-    "expire_at": "2021-07-02 04:00:37"
+    "expire_at": "2021-07-02 04:00:37",
+    "show_only_before_version": "10.15.6"
   }
 ]

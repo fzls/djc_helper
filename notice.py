@@ -3,6 +3,7 @@ from datetime import timedelta
 from typing import List
 
 from first_run import *
+from update import version_less
 from upload_lanzouyun import Uploader
 
 
@@ -15,7 +16,7 @@ class NoticeShowType:
     DEPRECATED = "deprecated"
 
 
-valid_notice_show_type = set(attr for attr in NoticeShowType.__dict__.keys() if not attr.startswith("__"))
+valid_notice_show_type = set(val for attr, val in NoticeShowType.__dict__.items() if not attr.startswith("__"))
 
 
 class Notice(ConfigInterface):
@@ -27,6 +28,7 @@ class Notice(ConfigInterface):
         self.show_type = NoticeShowType.ONCE
         self.open_url = ""  # 若填入，在展示对应公告时会弹出该网页
         self.expire_at = "2121-05-11 00:00:00"
+        self.show_only_before_version = now_version  # 若填入，则仅在对应版本前才会展示
 
     def __lt__(self, other):
         return parse_time(self.send_at) < parse_time(other.send_at)
@@ -36,6 +38,10 @@ class Notice(ConfigInterface):
 
         # 判断是否过期
         if get_now() > parse_time(self.expire_at):
+            return False
+
+        # 判断是否满足版本需求
+        if self.show_only_before_version != "" and not version_less(now_version, self.show_only_before_version):
             return False
 
         # 根据显示类型判断
@@ -117,7 +123,7 @@ class NoticeManager:
 
         logger.info("所有需要展示的公告均已展示完毕")
 
-    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7)):
+    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7), show_only_before_version=""):
         if show_type not in valid_notice_show_type:
             logger.error(f"无效的show_type={show_type}，有效值为{valid_notice_show_type}")
             return
@@ -135,6 +141,7 @@ class NoticeManager:
         notice.show_type = show_type
         notice.open_url = open_url
         notice.expire_at = format_time(get_now() + valid_duration)
+        notice.show_only_before_version = show_only_before_version
 
         self.notices.append(notice)
         logger.info(f"添加公告：{notice}")
@@ -155,10 +162,19 @@ def main():
 """
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7))
+                  show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7),
+                  show_only_before_version=now_version,
+                  # show_only_before_version="",
+                  )
 
     nm.save()
 
 
+def test():
+    nm = NoticeManager(load_from_remote=False)
+    nm.show_notices()
+
+
 if __name__ == '__main__':
     main()
+    # test()

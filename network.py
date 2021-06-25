@@ -78,7 +78,7 @@ def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], Op
         except Exception as exc:
             def get_log_func(log_func):
                 if str(exc) == "请求过快":
-                    return logger.log
+                    return logger.debug
                 else:
                     return log_func
 

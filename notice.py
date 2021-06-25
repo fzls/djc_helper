@@ -1,14 +1,9 @@
-import json
 import os.path
-from typing import List
 from datetime import timedelta
+from typing import List
 
-import win32con
-
-from data_struct import ConfigInterface, to_raw_type
-from log import logger
+from first_run import *
 from upload_lanzouyun import Uploader
-from util import *
 
 NOTICE_SHOW_TYPE_ONCE = "once"
 NOTICE_SHOW_TYPE_DAILY = "daily"
@@ -115,7 +110,7 @@ class NoticeManager:
         logger.info(f"发现 {len(valid_notices)} 个新公告")
         for idx, notice in enumerate(valid_notices):
             # 展示公告
-            message_box(notice.message, f"公告({idx+1}/{len(valid_notices)}) - {notice.title}", icon=win32con.MB_ICONINFORMATION, open_url=notice.open_url)
+            message_box(notice.message, f"公告({idx + 1}/{len(valid_notices)}) - {notice.title}", icon=win32con.MB_ICONINFORMATION, open_url=notice.open_url)
 
         logger.info("所有需要展示的公告均已展示完毕")
 

@@ -25,7 +25,7 @@ class DjcHelper:
     local_saved_pskey_file = os.path.join(cached_dir, ".saved_pskey.{}.json")
     local_saved_guanjia_openid_file = os.path.join(cached_dir, ".saved_guanjia_openid.{}.json")
 
-    local_saved_teamid_file = os.path.join(db_dir, ".teamid_new.{}.json")
+    local_saved_teamid_file = os.path.join(cached_dir, ".teamid_new.{}.json")
 
     def __init__(self, account_config, common_config):
         self.cfg = account_config  # type: AccountConfig

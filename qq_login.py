@@ -53,7 +53,7 @@ class LoginResult(ConfigInterface):
 
     @try_except(show_exception_info=False, return_val_on_except="")
     def qc_nickname(self):
-        return parse_qs(unquote_plus(self.qc_IED_LOG_INFO2)).get('nickname', '')[0]
+        return parse_qs(unquote_plus(self.qc_IED_LOG_INFO2)).get('nickname', ['未找到'])[0]
 
 
 class QQLogin():

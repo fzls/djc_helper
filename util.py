@@ -12,6 +12,7 @@ import time
 import traceback
 import uuid
 import webbrowser
+import hashlib
 from functools import wraps
 from typing import Callable, Any, Optional
 
@@ -200,24 +201,28 @@ def get_now_unix():
     return int(time.time())
 
 
-def get_current():
-    return get_now().strftime("%Y%m%d%H%M%S")
+def get_current(t=get_now()):
+    return t.strftime("%Y%m%d%H%M%S")
 
 
-def get_today():
-    return get_now().strftime("%Y%m%d")
+def get_today(t=get_now()):
+    return t.strftime("%Y%m%d")
 
 
 def get_last_n_days(n):
     return [(get_now() - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
-def get_week():
-    return get_now().strftime("%Y-week-%W")
+def get_week(t=get_now()):
+    return t.strftime("%Y-week-%W")
 
 
-def get_month():
-    return get_now().strftime("%Y%m")
+def get_month(t=get_now()):
+    return t.strftime("%Y%m")
+
+
+def get_year(t=get_now()):
+    return t.strftime("%Y")
 
 
 def is_daily_first_run(key=""):
@@ -272,10 +277,6 @@ def is_first_run(key):
 
     save_db(db)
     return not hasRun
-
-
-def get_year():
-    return get_now().strftime("%Y")
 
 
 def filter_unused_params(urlRendered):
@@ -785,6 +786,9 @@ def wait_a_while(idx: int):
     # 各进程按顺序依次等待对应时长，避免多个进程输出混在一起
     time.sleep(0.1 * idx)
 
+def md5(val:str) -> str:
+    return hashlib.md5(val.encode()).hexdigest()
+
 
 if __name__ == '__main__':
     print(get_now_unix())
@@ -798,4 +802,5 @@ if __name__ == '__main__':
     print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
     print(remove_none_from_list([None, 1, 2, 3, None]))
     print(get_screen_size())
-    kill_other_instance_on_start()
+    # kill_other_instance_on_start()
+    print(md5(""))

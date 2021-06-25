@@ -854,7 +854,7 @@ class DjcHelper:
                 time.sleep(wait_time)
                 break
 
-    @try_except()
+    @try_except(show_exception_info=False)
     def try_join_fixed_xinyue_team(self):
         # 检查是否有固定队伍
         fixed_team = self.get_fixed_team()

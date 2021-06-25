@@ -76,11 +76,17 @@ def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], Op
 
             return response
         except Exception as exc:
+            def get_log_func(log_func):
+                if str(e) == "请求过快":
+                    return logger.log
+                else:
+                    return log_func
+
             extra_info = check_some_exception(exc)
-            logger.exception("request failed, detail as below:" + extra_info, exc_info=exc)
+            get_log_func(logger.exception)("request failed, detail as below:" + extra_info, exc_info=exc)
             stack_info = color("bold_black") + ''.join(traceback.format_stack())
-            logger.error(f"full call stack=\n{stack_info}")
-            logger.warning(color("thin_yellow") + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s。异常补充说明如下：{extra_info}")
+            get_log_func(logger.error)(f"full call stack=\n{stack_info}")
+            get_log_func(logger.warning)(color("thin_yellow") + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s。异常补充说明如下：{extra_info}")
             if i + 1 != retryCfg.max_retry_count:
                 time.sleep(retryCfg.retry_wait_time)
 

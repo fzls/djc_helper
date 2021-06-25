@@ -1,11 +1,5 @@
 from config import *
-
-first_run_flag_file = os.path.join(first_run_dir, "init")
-first_run_auto_login_mode_flag_file = os.path.join(first_run_dir, "auto_login_mode")
-first_run_promot_flag_file = os.path.join(first_run_dir, "promot")
-first_run_document_flag_file = os.path.join(first_run_dir, "document")
-first_run_use_old_config_flag_file = os.path.join(first_run_dir, "use_old_config")
-first_run_config_ui_flag_file = os.path.join(first_run_dir, "config_ui")
+from util import is_first_run
 
 
 def check_first_run_async(cfg: Config):
@@ -24,18 +18,16 @@ def check_first_run(cfg: Config):
 
 
 def show_tip_on_first_run_config_ui():
-    filename = first_run_config_ui_flag_file
     title = "配置工具"
     tips = """
     现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~
             """
     loginfo = "首次运行弹出配置工具提示"
 
-    show_tip_on_first_run(filename, title, tips, loginfo)
+    show_tip_on_first_run("config_ui", title, tips, loginfo)
 
 
 def show_tip_on_first_run_promot():
-    filename = first_run_promot_flag_file
     title = "宣传"
     tips = """
     如果觉得好用的话，可否帮忙宣传一下哈(*^▽^*)
@@ -43,11 +35,10 @@ def show_tip_on_first_run_promot():
             """
     loginfo = "首次运行弹出宣传弹窗"
 
-    show_tip_on_first_run(filename, title, tips, loginfo)
+    show_tip_on_first_run("promot", title, tips, loginfo)
 
 
 def show_tip_on_first_run_any():
-    filename = first_run_flag_file
     title = "使用须知"
     tips = """# 『重要』与个人隐私有关的skey相关说明
     1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估
@@ -57,11 +48,10 @@ def show_tip_on_first_run_any():
             """
     loginfo = "首次运行，弹出使用须知"
 
-    show_tip_on_first_run(filename, title, tips, loginfo)
+    show_tip_on_first_run("init", title, tips, loginfo)
 
 
 def show_tip_on_first_run_document():
-    filename = first_run_document_flag_file
     title = "引导查看相关教程"
     tips = """
     如果使用过程中有任何疑惑，或者相关功能想要调整，都请先好好看看以下现有资源后再来提问~（如不想完整查看对应文档，请善用搜索功能，查找可能的关键词）
@@ -72,11 +62,10 @@ def show_tip_on_first_run_document():
             """
     loginfo = "首次运行弹出提示查看教程"
 
-    show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
+    show_tip_on_first_run("document", title, tips, loginfo, show_count=3)
 
 
 def show_tip_on_first_run_use_old_config():
-    filename = first_run_use_old_config_flag_file
     title = "继承配置"
     tips = """
     如果是从旧版本升级过来的，则不需要再完整走一遍配置流程，直接将旧版本目录中的config.toml文件复制过来，替换新版本的这个文件就行。
@@ -85,11 +74,10 @@ def show_tip_on_first_run_use_old_config():
             """
     loginfo = "首次运行弹出提示继承以前配置"
 
-    show_tip_on_first_run(filename, title, tips, loginfo)
+    show_tip_on_first_run("use_old_config", title, tips, loginfo)
 
 
 def show_tip_on_first_run_auto_login_mode():
-    filename = first_run_auto_login_mode_flag_file
     title = "自动登录须知"
     tips = """自动登录需要在本地配置文件明文保存账号和密码，利弊如下，请仔细权衡后再决定是否适用
     弊：
@@ -103,11 +91,12 @@ def show_tip_on_first_run_auto_login_mode():
             """
     loginfo = "首次运行自动登录模式，弹出利弊分析"
 
-    show_tip_on_first_run(filename, title, tips, loginfo, show_count=3)
+    show_tip_on_first_run("auto_login_mode", title, tips, loginfo, show_count=3)
 
 
-def show_tip_on_first_run(filename, title, tips, loginfo, show_count=1):
-    if os.path.isfile(filename):
+def show_tip_on_first_run(first_run_tip_name, title, tips, loginfo, show_count=1):
+    if not is_first_run(f"show_tip_{first_run_tip_name}"):
+        logger.debug(f"{first_run_tip_name} 已经提示过，不再展示")
         return
 
     # 仅在window系统下检查
@@ -118,7 +107,7 @@ def show_tip_on_first_run(filename, title, tips, loginfo, show_count=1):
     if is_run_in_github_action():
         return
 
-    # 若不存在该文件，则说明是首次运行，提示相关信息
+    # 若是首次运行，提示相关信息
     logger.info(loginfo)
 
     for i in range(show_count):
@@ -126,10 +115,6 @@ def show_tip_on_first_run(filename, title, tips, loginfo, show_count=1):
         if show_count != 1:
             _title = f"第{i + 1}/{show_count}次提示 {title}"
         win32api.MessageBox(0, tips, _title, win32con.MB_ICONWARNING)
-
-    # 创建该文件，从而避免再次弹出错误
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write("ok")
 
 
 if __name__ == '__main__':

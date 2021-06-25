@@ -1,17 +1,17 @@
-from db_def import DbInterface
+from db_def import DBInterface
 from util import parse_time
 
 
 # ----------------- 数据定义 -----------------
 
-class TestDb(DbInterface):
+class TestDB(DBInterface):
     def __init__(self):
         super().__init__()
         self.int_val = 1
         self.bool_val = True
 
 
-class FirstRunData(DbInterface):
+class FirstRunDB(DBInterface):
     def __init__(self):
         super().__init__()
 
@@ -20,5 +20,5 @@ class FirstRunData(DbInterface):
 
 
 if __name__ == '__main__':
-    print(DbInterface())
-    print(TestDb())
+    print(DBInterface())
+    print(TestDB())

@@ -1,5 +1,4 @@
-from const import first_run_dir
-from data_struct import ConfigInterface
+from db_def import FirstRunData
 from util import *
 
 
@@ -24,15 +23,6 @@ duration_func_map = {
 }
 
 
-class FirstRunData(ConfigInterface):
-    def __init__(self):
-        self.key = "first_run_key"
-        self.update_at = "2021-06-25 11:11:54"
-
-    def get_update_at(self):
-        return parse_time(self.update_at)
-
-
 def is_first_run(key):
     return _is_first_run(FirstRunType.ONCE, key)
 
@@ -53,48 +43,31 @@ def is_yearly_first_run(key=""):
     return _is_first_run(FirstRunType.YEARLY, key)
 
 
+@try_except(return_val_on_except=True)
 def _is_first_run(first_run_type: str, key="") -> bool:
-    """
-    逻辑说明
-    假设key的md5为md5
-    本地缓存文件路径为.first_run/md5{0:2}/md5{2:4}/md5.json
-    文件内容为FirstRunData的json序列化结果
-    :return: 是否是首次运行
-    """
-    key_md5 = md5(key)
+    def cb(first_run_data: FirstRunData) -> bool:
+        # 检查是否是首次运行
+        first_run = True
 
-    cache_dir = os.path.join(first_run_dir, key_md5[0:2], key_md5[2:4])
-    cache_file = os.path.join(cache_dir, key_md5)
-
-    make_sure_dir_exists(cache_dir)
-
-    first_run_data = FirstRunData()
-
-    # 检查是否是首次运行
-    first_run = True
-    if os.path.isfile(cache_file):
-        if first_run_type == FirstRunType.ONCE:
-            first_run = False
-        else:
-            try:
-                first_run_data.load_from_json_file(cache_file)
-
+        if first_run_data.file_created:
+            # 仅当文件已经存在时，才有可能不是首次运行
+            if first_run_type == FirstRunType.ONCE:
+                first_run = False
+            else:
                 duration_func = duration_func_map[first_run_type]
                 first_run = duration_func() != duration_func(first_run_data.get_update_at())
-            except Exception as e:
-                logger.error(f"检查首次运行出错了 type={first_run_type} key={key}", exc_info=e)
-                first_run = True
 
-    # 如果是，则更新缓存文件
-    if first_run:
-        first_run_data.update_at = format_now()
-        first_run_data.key = key
+        # 如果是，则更新缓存文件
+        if first_run:
+            first_run_data.update_at = format_now()
+            first_run_data.key = key
 
-        first_run_data.save_to_json_file(cache_file)
+        logger.debug(f"{first_run_type:7s} {first_run_data.get_db_filename()} first_run={first_run} first_run_data={first_run_data}")
+        logger.warning(f"{first_run_type:7s} {first_run_data.get_db_filename()} first_run={first_run} first_run_data={first_run_data}")
 
-    logger.debug(f"{first_run_type:7s} {key_md5} first_run={first_run} first_run_data={first_run_data}")
+        return first_run
 
-    return first_run
+    return FirstRunData().with_context(key).update_db(cb)
 
 
 if __name__ == '__main__':

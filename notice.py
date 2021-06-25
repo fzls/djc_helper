@@ -5,14 +5,17 @@ from typing import List
 from first_run import *
 from upload_lanzouyun import Uploader
 
-NOTICE_SHOW_TYPE_ONCE = "once"
-NOTICE_SHOW_TYPE_DAILY = "daily"
-NOTICE_SHOW_TYPE_WEEKLY = "weekly"
-NOTICE_SHOW_TYPE_MONTHLY = "monthly"
-NOTICE_SHOW_TYPE_ALWAYS = "always"
-NOTICE_SHOW_TYPE_DEPRECATED = "deprecated"
 
-valid_notice_show_type = set(v for k, v in locals().items() if k.startswith("NOTICE_SHOW_TYPE_"))
+class NoticeShowType:
+    ONCE = "once"
+    DAILY = "daily"
+    WEEKLY = "weekly"
+    MONTHLY = "monthly"
+    ALWAYS = "always"
+    DEPRECATED = "deprecated"
+
+
+valid_notice_show_type = set(attr for attr in NoticeShowType.__dict__.keys() if not attr.startswith("__"))
 
 
 class Notice(ConfigInterface):
@@ -21,7 +24,7 @@ class Notice(ConfigInterface):
         self.title = "测试消息标题"
         self.message = "测试消息内容"
         self.send_at = "2021-05-11 00:00:00"
-        self.show_type = NOTICE_SHOW_TYPE_ONCE
+        self.show_type = NoticeShowType.ONCE
         self.open_url = ""  # 若填入，在展示对应公告时会弹出该网页
         self.expire_at = "2121-05-11 00:00:00"
 
@@ -36,17 +39,17 @@ class Notice(ConfigInterface):
             return False
 
         # 根据显示类型判断
-        if self.show_type == NOTICE_SHOW_TYPE_ONCE:
+        if self.show_type == NoticeShowType.ONCE:
             return is_first_run(key)
-        elif self.show_type == NOTICE_SHOW_TYPE_DAILY:
+        elif self.show_type == NoticeShowType.DAILY:
             return is_daily_first_run(key)
-        elif self.show_type == NOTICE_SHOW_TYPE_WEEKLY:
+        elif self.show_type == NoticeShowType.WEEKLY:
             return is_weekly_first_run(key)
-        elif self.show_type == NOTICE_SHOW_TYPE_MONTHLY:
+        elif self.show_type == NoticeShowType.MONTHLY:
             return is_monthly_first_run(key)
-        elif self.show_type == NOTICE_SHOW_TYPE_ALWAYS:
+        elif self.show_type == NoticeShowType.ALWAYS:
             return True
-        elif self.show_type == NOTICE_SHOW_TYPE_DEPRECATED:
+        elif self.show_type == NoticeShowType.DEPRECATED:
             return False
         else:
             return False
@@ -114,7 +117,7 @@ class NoticeManager:
 
         logger.info("所有需要展示的公告均已展示完毕")
 
-    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NOTICE_SHOW_TYPE_ONCE, open_url="", valid_duration=timedelta(days=7)):
+    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7)):
         if show_type not in valid_notice_show_type:
             logger.error(f"无效的show_type={show_type}，有效值为{valid_notice_show_type}")
             return
@@ -152,7 +155,7 @@ def main():
 """
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NOTICE_SHOW_TYPE_ONCE, open_url="", valid_duration=timedelta(days=7))
+                  show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7))
 
     nm.save()
 

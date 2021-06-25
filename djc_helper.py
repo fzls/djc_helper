@@ -9,6 +9,7 @@ import pyperclip
 import json_parser
 from black_list import check_in_black_list
 from dao import *
+from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
 from qq_login import QQLogin, LoginResult, GithubActionLoginException
@@ -16,7 +17,6 @@ from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
 from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act
-from util import show_head_line, get_this_week_monday
 
 
 # DNF蚊子腿小助手

@@ -6,6 +6,7 @@ from typing import Dict, Tuple
 from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper, run_act
+from first_run import *
 from notice import NoticeManager
 from pool import get_pool, init_pool
 from qq_login import QQLogin

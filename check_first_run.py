@@ -1,5 +1,5 @@
 from config import *
-from util import is_first_run
+from first_run import is_first_run
 
 
 def check_first_run_async(cfg: Config):

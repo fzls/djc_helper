@@ -1,4 +1,5 @@
 import ctypes
+import hashlib
 import math
 import pathlib
 import platform
@@ -12,7 +13,6 @@ import time
 import traceback
 import uuid
 import webbrowser
-import hashlib
 from functools import wraps
 from typing import Callable, Any, Optional
 
@@ -225,60 +225,6 @@ def get_year(t=get_now()):
     return t.strftime("%Y")
 
 
-def is_daily_first_run(key=""):
-    db = load_db()
-
-    today = get_today()
-    daily_run_key = f'last_run_at_{key}'
-    last_run_at = db.get(daily_run_key, "")
-
-    db[daily_run_key] = today
-
-    save_db(db)
-    return last_run_at != today
-
-
-def is_weekly_first_run(key=""):
-    db = load_db()
-
-    week = get_week()
-    weekly_run_key = f'last_run_at_week_{key}'
-    last_run_at_week = db.get(weekly_run_key, "")
-
-    db[weekly_run_key] = week
-
-    save_db(db)
-    return last_run_at_week != week
-
-
-def is_monthly_first_run(key=""):
-    db = load_db()
-
-    month = get_month()
-    monthly_run_key = f'last_run_at_month_{key}'
-    last_run_at_month = db.get(monthly_run_key, "")
-
-    db[monthly_run_key] = month
-
-    save_db(db)
-    return last_run_at_month != month
-
-
-def is_first_run(key):
-    db = load_db()
-
-    cfr = 'custom_first_run'
-    if cfr not in db:
-        db[cfr] = {}
-
-    hasRun = db[cfr].get(key, False)
-
-    db[cfr][key] = True
-
-    save_db(db)
-    return not hasRun
-
-
 def filter_unused_params(urlRendered):
     originalUrl = urlRendered
     try:
@@ -433,6 +379,7 @@ def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_u
     if is_run_in_github_action():
         return
 
+    from first_run import is_first_run
     if not show_once or is_first_run(f"message_box_{title}"):
         win32api.MessageBox(0, msg, title, icon)
 
@@ -786,7 +733,8 @@ def wait_a_while(idx: int):
     # 各进程按顺序依次等待对应时长，避免多个进程输出混在一起
     time.sleep(0.1 * idx)
 
-def md5(val:str) -> str:
+
+def md5(val: str) -> str:
     return hashlib.md5(val.encode()).hexdigest()
 
 

@@ -2,6 +2,7 @@ import os.path
 from datetime import timedelta
 from typing import List
 
+from data_struct import ConfigInterface
 from first_run import *
 from update import version_less
 from upload_lanzouyun import Uploader

@@ -67,7 +67,7 @@ def _is_first_run(first_run_type: str, key="") -> bool:
 
         return first_run
 
-    return FirstRunDB().with_context(key).update_db(cb)
+    return FirstRunDB().with_context(key).update(cb)
 
 
 if __name__ == '__main__':

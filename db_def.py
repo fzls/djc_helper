@@ -23,7 +23,7 @@ class DBInterface(ConfigInterface):
 
         return self
 
-    def load_db(self) -> DBInterface:
+    def load(self) -> DBInterface:
         db_file = self.prepare_env_and_get_db_filepath()
 
         # 若文件存在则加载到内存中
@@ -32,7 +32,7 @@ class DBInterface(ConfigInterface):
                 self.load_from_json_file(db_file)
             except Exception as e:
                 logger.error(f"读取数据库失败，将重置该数据库 context={self.context} db_type_name={self.db_type_name} db_file={db_file}", exc_info=e)
-                self.save_db()
+                self.save()
 
                 with open(db_file, 'r', encoding='utf-8') as f:
                     old_content = f.read()
@@ -40,7 +40,7 @@ class DBInterface(ConfigInterface):
 
         return self
 
-    def save_db(self):
+    def save(self):
         db_file = self.prepare_env_and_get_db_filepath()
         try:
             if not os.path.isfile(db_file):
@@ -52,13 +52,13 @@ class DBInterface(ConfigInterface):
         except Exception as e:
             logger.error(f"保存数据库失败，db_to_save={self}")
 
-    def update_db(self, op: Callable[[Any], Any]) -> Any:
+    def update(self, op: Callable[[Any], Any]) -> Any:
         # 加载配置
-        self.load_db()
+        self.load()
         # 回调
         res = op(self)
         # 保存修改后的配置
-        self.save_db()
+        self.save()
 
         # 返回回调结果
         return res
@@ -96,7 +96,7 @@ def test():
 
         # save
         db.int_val += save_inc
-        db.save_db()
+        db.save()
 
         assert_load_same(db, 1 + save_inc)
 
@@ -104,12 +104,12 @@ def test():
             val.int_val += update_inc
             return val.int_val
 
-        db.update_db(_cb)
+        db.update(_cb)
 
         assert_load_same(db, 1 + save_inc + update_inc)
 
     def assert_load_same(db: TestDB, expect: int):
-        load_db = TestDB().with_context(db.context).load_db()
+        load_db = TestDB().with_context(db.context).load()
         assert load_db.int_val == expect
 
     # 测试全局

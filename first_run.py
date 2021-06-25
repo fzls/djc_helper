@@ -1,4 +1,4 @@
-from db_def import FirstRunData
+from db_new import FirstRunData
 from util import *
 
 

@@ -70,6 +70,20 @@ class ConfigInterface(metaclass=ABCMeta):
         # 最终返回自己，方便链式调用
         return self
 
+    def load_from_json_file(self, filepath: str):
+        with open(filepath, 'r', encoding='utf-8') as f:
+            raw_config = json.load(f)
+
+        if type(raw_config) != dict:
+            logger.warning(f"raw_config={raw_config} load from {filepath} is not dict")
+            return
+
+        return self.auto_update_config(raw_config)
+
+    def save_to_json_file(self, filepath: str, ensure_ascii=False, indent=2):
+        with open(filepath, 'w', encoding='utf-8') as save_file:
+            json.dump(to_raw_type(self), save_file, ensure_ascii=ensure_ascii, indent=indent)
+
     def fill_array_fields(self, raw_config: dict, fields_to_fill):
         for field_name, field_type in fields_to_fill:
             if field_name in raw_config:

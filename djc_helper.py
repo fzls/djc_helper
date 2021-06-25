@@ -349,7 +349,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("DNF十三周年庆活动", self.dnf_13),
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("刃影预约活动", self.dnf_reserve),
@@ -388,6 +387,7 @@ class DjcHelper:
             ("DNF心悦51", self.dnf_xinyue_51),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
+            ("DNF十三周年庆活动", self.dnf_13),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

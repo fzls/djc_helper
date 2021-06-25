@@ -4587,11 +4587,12 @@ class DjcHelper:
     def dnf_reserve(self):
         # https://dnf.qq.com/cp/a20210618reserve/index.html
         show_head_line("刃影预约活动")
-        self.show_amesvr_act_info(self.dnf_reserve_op)
 
         if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
             logger.warning("未启用领取刃影预约活动功能，将跳过")
             return
+
+        self.show_amesvr_act_info(self.dnf_reserve_op)
 
         self.dnf_reserve_op("预约领奖", "773111")
 

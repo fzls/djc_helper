@@ -2897,10 +2897,9 @@ class DjcHelper:
 
     def save_guanjia_login_result(self, lr: LoginResult):
         # 本地缓存
-        with open(self.get_local_saved_guanjia_openid_file(), "w", encoding="utf-8") as sf:
-            lr.guanjia_skey_version = guanjia_skey_version
-            json.dump(to_raw_type(lr), sf)
-            logger.debug(f"本地保存管家openid信息，具体内容如下：{lr}")
+        lr.guanjia_skey_version = guanjia_skey_version
+        lr.save_to_json_file(self.get_local_saved_guanjia_openid_file())
+        logger.debug(f"本地保存管家openid信息，具体内容如下：{lr}")
 
     def load_guanjia_login_result(self) -> Optional[LoginResult]:
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息

@@ -77,9 +77,7 @@ def _is_first_run(first_run_type: str, key="") -> bool:
             first_run = False
         else:
             try:
-                with open(cache_file, 'r', encoding='utf-8') as f:
-                    raw_data = json.load(f)
-                    first_run_data.auto_update_config(raw_data)
+                first_run_data.load_from_json_file(cache_file)
 
                 duration_func = duration_func_map[first_run_type]
                 first_run = duration_func() != duration_func(first_run_data.get_update_at())
@@ -92,8 +90,7 @@ def _is_first_run(first_run_type: str, key="") -> bool:
         first_run_data.update_at = format_now()
         first_run_data.key = key
 
-        with open(cache_file, 'w', encoding='utf-8') as f:
-            json.dump(to_raw_type(first_run_data), f, ensure_ascii=False, indent=2)
+        first_run_data.save_to_json_file(cache_file)
 
     logger.debug(f"{first_run_type:7s} {key_md5} first_run={first_run} first_run_data={first_run_data}")
 

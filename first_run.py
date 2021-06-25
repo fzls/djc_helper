@@ -1,4 +1,4 @@
-from db_new import FirstRunData
+from db_new import FirstRunDB
 from util import *
 
 
@@ -45,7 +45,7 @@ def is_yearly_first_run(key=""):
 
 @try_except(return_val_on_except=True)
 def _is_first_run(first_run_type: str, key="") -> bool:
-    def cb(first_run_data: FirstRunData) -> bool:
+    def cb(first_run_data: FirstRunDB) -> bool:
         # 检查是否是首次运行
         first_run = True
 
@@ -67,7 +67,7 @@ def _is_first_run(first_run_type: str, key="") -> bool:
 
         return first_run
 
-    return FirstRunData().with_context(key).update_db(cb)
+    return FirstRunDB().with_context(key).update_db(cb)
 
 
 if __name__ == '__main__':

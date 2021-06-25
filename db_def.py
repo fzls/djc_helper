@@ -5,7 +5,7 @@ from data_struct import ConfigInterface
 from util import *
 
 
-class DbInterface(ConfigInterface):
+class DBInterface(ConfigInterface):
     # ----------------- 通用字段定义 -----------------
     def __init__(self):
         self.context = "global"
@@ -15,7 +15,7 @@ class DbInterface(ConfigInterface):
         self.file_created = False
 
     # ----------------- 数据库读写操作 -----------------
-    def with_context(self, context: str) -> DbInterface:
+    def with_context(self, context: str) -> DBInterface:
         """
         设置context，默认为global，修改后保存的key将变更
         """
@@ -23,7 +23,7 @@ class DbInterface(ConfigInterface):
 
         return self
 
-    def load_db(self) -> DbInterface:
+    def load_db(self) -> DBInterface:
         db_file = self.prepare_env_and_get_db_filepath()
 
         # 若文件存在则加载到内存中
@@ -88,9 +88,9 @@ class DbInterface(ConfigInterface):
 
 
 def test():
-    from db_new import TestDb
+    from db_new import TestDB
 
-    def _test(db: TestDb, save_inc: int, update_inc: int):
+    def _test(db: TestDB, save_inc: int, update_inc: int):
         # init
         db.int_val = 1
 
@@ -100,7 +100,7 @@ def test():
 
         assert_load_same(db, 1 + save_inc)
 
-        def _cb(val: TestDb) -> Any:
+        def _cb(val: TestDB) -> Any:
             val.int_val += update_inc
             return val.int_val
 
@@ -108,15 +108,15 @@ def test():
 
         assert_load_same(db, 1 + save_inc + update_inc)
 
-    def assert_load_same(db: TestDb, expect: int):
-        load_db = TestDb().with_context(db.context).load_db()
+    def assert_load_same(db: TestDB, expect: int):
+        load_db = TestDB().with_context(db.context).load_db()
         assert load_db.int_val == expect
 
     # 测试全局
-    _test(TestDb(), 1, 10)
+    _test(TestDB(), 1, 10)
 
     # 测试设置context
-    _test(TestDb().with_context("test"), 2, 20)
+    _test(TestDB().with_context("test"), 2, 20)
 
 
 if __name__ == '__main__':

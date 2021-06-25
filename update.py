@@ -175,7 +175,11 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
 
 
 # 是否需要更新
-def need_update(current_version, latest_version):
+def need_update(current_version, latest_version) -> bool:
+    return version_less(current_version, latest_version)
+
+
+def version_less(current_version="1.0.0", latest_version="1.0.1") -> bool:
     return version_to_version_int_list(current_version) < version_to_version_int_list(latest_version)
 
 

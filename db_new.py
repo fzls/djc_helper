@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 from db_def import DBInterface
 from util import parse_time
 
@@ -17,6 +19,14 @@ class FirstRunDB(DBInterface):
 
     def get_update_at(self):
         return parse_time(self.update_at)
+
+
+class WelfareDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.share_code_list = [] # type: List[str]
+        self.exchanged_dict = {} # type: Dict[str, bool]
 
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ import pyperclip
 import json_parser
 from black_list import check_in_black_list
 from dao import *
+from db_new import *
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -3275,13 +3276,12 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        key_shareCodes = "shareCodes_v3"
-        key_dnf_welfare_exchange_package = "dnf_welfare_exchange_package_v3"
+        db = WelfareDB().with_context("v3").load()
+        account_db = WelfareDB().with_context(f"v3/{self.cfg.name}").load()
 
-        def exchange_package(sContent):
+        def exchange_package(sContent: str):
             # 检查是否已经兑换过
-            account_db = load_db_for(self.cfg.name)
-            if key_dnf_welfare_exchange_package in account_db and account_db[key_dnf_welfare_exchange_package].get(sContent, False):
+            if sContent in account_db.exchanged_dict:
                 logger.warning(f"已经兑换过【{sContent}】，不再尝试兑换")
                 return
 
@@ -3295,27 +3295,19 @@ class DjcHelper:
                 return
 
             # 本地标记已经兑换过
-            def callback(account_db):
-                if key_dnf_welfare_exchange_package not in account_db:
-                    account_db[key_dnf_welfare_exchange_package] = {}
+            def callback(val: WelfareDB):
+                val.exchanged_dict[sContent] = True
 
-                account_db[key_dnf_welfare_exchange_package][sContent] = True
-
-            update_db_for(self.cfg.name, callback)
+            account_db.update(callback)
 
             try:
                 shareCode = res["modRet"]["jData"]["shareCode"]
                 if shareCode != "":
-                    db = load_db()
+                    def callback(val: WelfareDB):
+                        if shareCode not in val.share_code_list:
+                            val.share_code_list.append(shareCode)
 
-                    if key_shareCodes not in db:
-                        db[key_shareCodes] = []
-                    shareCodeList = db[key_shareCodes]
-
-                    if shareCode not in shareCodeList:
-                        shareCodeList.append(shareCode)
-
-                    save_db(db)
+                    db.update(callback)
             except Exception as e:
                 pass
 
@@ -3325,13 +3317,9 @@ class DjcHelper:
             return res["modRet"]["jData"]["siActivityId"]
 
         # 正式逻辑
-
-        db = load_db()
-        shareCodeList = db.get(key_shareCodes, [])
+        shareCodeList = db.share_code_list
 
         sContents = [
-            "DNFPVE",
-            "DNFQZZL",
             "DNF520",
             "DNF1314",
         ]
@@ -5615,7 +5603,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_my_story()
         # djcHelper.dnf_reserve()
         # djcHelper.dnf_anniversary()
-        # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
@@ -5627,4 +5614,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_ozma()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.dnf_welfare()

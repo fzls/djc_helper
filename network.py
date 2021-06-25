@@ -95,7 +95,7 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
     fix_encoding(res)
 
     if res is not None:
-        global last_receive_response
+        global last_response_info
         last_response_info = {
             "status_code": res.status_code,
             "reason": res.reason,

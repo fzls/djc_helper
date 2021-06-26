@@ -29,6 +29,15 @@ class WelfareDB(DBInterface):
         self.exchanged_dict = {} # type: Dict[str, bool]
 
 
+class DianzanDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.day_to_dianzan_count = {} # type: Dict[str, int]
+        self.used_content_ids = [] # type: List[str]
+        self.content_ids = [] # type: List[str]
+
+
 if __name__ == '__main__':
     print(DBInterface())
     print(TestDB())

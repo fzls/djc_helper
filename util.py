@@ -592,49 +592,6 @@ def range_from_one(stop: int):
     return range(1, stop + 1)
 
 
-def get_retry_data(retry_key: str, max_retry_count: int, max_retry_wait_time: int):
-    from dao import RetryData
-
-    # 结合历史数据和配置，计算各轮重试等待的时间
-    db = load_db()
-    raw_login_retry_data = db.get(retry_key, {})
-    login_retry_data = RetryData().auto_update_config(raw_login_retry_data)
-
-    retry_timeouts = []
-    if max_retry_count == 1:
-        retry_timeouts = [max_retry_wait_time]
-    elif max_retry_count > 1:
-        # 默认重试时间为按时长等分递增
-        retry_timeouts = list([idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)])
-        if login_retry_data.recommended_first_retry_timeout != 0:
-            # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
-            retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
-            remaining_retry_count = max_retry_count - 1
-            retry_timeouts.extend(list([idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)]))
-
-    return login_retry_data, retry_timeouts
-
-
-def update_retry_data(retry_key: str, success_timeout: int, recommended_retry_wait_time_change_rate=0.125, debug_ctx=""):
-    from dao import RetryData
-
-    # 重新读取数据，避免其他进程已经更新过数据
-    db = load_db()
-    raw_login_retry_data = db.get(retry_key, {})
-    login_retry_data = RetryData().auto_update_config(raw_login_retry_data)
-
-    # 第idx-1次的重试成功了，尝试更新历史数据
-    cr = recommended_retry_wait_time_change_rate
-    login_retry_data.recommended_first_retry_timeout = (1 - cr) * login_retry_data.recommended_first_retry_timeout + cr * success_timeout
-    login_retry_data.history_success_timeouts.append(success_timeout)
-
-    db[retry_key] = to_raw_type(login_retry_data)
-    save_db(db)
-
-    if use_by_myself():
-        logger.info(color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
-
-
 def kill_process(pid: int, wait_time=5):
     logger.info(f"尝试干掉原进程={pid}")
     try:

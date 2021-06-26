@@ -18,7 +18,7 @@ from log import logger, color
 from upload_lanzouyun import Uploader
 from util import async_message_box, get_screen_size
 from version import now_version
-from db_new import CaptchaDB
+from db_new import CaptchaDB, LoginRetryDB
 
 
 # 在github action环境下登录异常
@@ -333,7 +333,7 @@ class QQLogin():
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
         login_retry_key = "login_retry_key"
-        login_retry_data, retry_timeouts = get_retry_data(login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time)
+        login_retry_data, retry_timeouts = self.get_retry_data(login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time)
 
         for idx in range_from_one(self.cfg.login.max_retry_count):
             self.login_mode = login_mode
@@ -413,7 +413,7 @@ class QQLogin():
                     # 登陆成功
                     if idx > 1:
                         # 第idx-1次的重试成功了，尝试更新历史数据
-                        update_retry_data(login_retry_key, retry_timeouts[idx - 2], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
+                        self.update_retry_data(login_retry_key, retry_timeouts[idx - 2], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
 
         # 能走到这里说明登录失败了，大概率是网络不行
         logger.warning(color("bold_yellow") + (
@@ -631,7 +631,7 @@ class QQLogin():
         max_try = 10
 
         short_login_retry_key = "short_login_retry_key"
-        login_retry_data, retry_timeouts = get_retry_data(short_login_retry_key, max_try, self.get_login_timeout(self.login_type_qr_login in login_type))
+        login_retry_data, retry_timeouts = self.get_retry_data(short_login_retry_key, max_try, self.get_login_timeout(self.login_type_qr_login in login_type))
 
         for idx in range_from_one(max_try):
             try:
@@ -649,7 +649,7 @@ class QQLogin():
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据
-                    update_retry_data(short_login_retry_key, retry_timeouts[idx - 1 - 1], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
+                    self.update_retry_data(short_login_retry_key, retry_timeouts[idx - 1 - 1], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
                 break
             except Exception as e:
                 logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +
@@ -684,6 +684,36 @@ class QQLogin():
         self.print_cookie()
 
         return
+
+    def get_retry_data(self, retry_key: str, max_retry_count: int, max_retry_wait_time: int):
+        # 结合历史数据和配置，计算各轮重试等待的时间
+        login_retry_data = LoginRetryDB().with_context(retry_key).load()
+
+        retry_timeouts = []
+        if max_retry_count == 1:
+            retry_timeouts = [max_retry_wait_time]
+        elif max_retry_count > 1:
+            # 默认重试时间为按时长等分递增
+            retry_timeouts = list([idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)])
+            if login_retry_data.recommended_first_retry_timeout != 0:
+                # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
+                retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
+                remaining_retry_count = max_retry_count - 1
+                retry_timeouts.extend(list([idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)]))
+
+        return login_retry_data, retry_timeouts
+
+    def update_retry_data(self, retry_key: str, success_timeout: int, recommended_retry_wait_time_change_rate=0.125, debug_ctx=""):
+        def cb(login_retry_data: LoginRetryDB):
+            # 第idx-1次的重试成功了，尝试更新历史数据
+            cr = recommended_retry_wait_time_change_rate
+            login_retry_data.recommended_first_retry_timeout = (1 - cr) * login_retry_data.recommended_first_retry_timeout + cr * success_timeout
+            login_retry_data.history_success_timeouts.append(success_timeout)
+
+            if use_by_myself():
+                logger.info(color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
+
+        LoginRetryDB().with_context(retry_key).update(cb)
 
     def get_login_timeout(self, is_qr_mode=False):
         if not is_qr_mode:

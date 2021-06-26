@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from db_new import FirstRunDB
 from util import *
 
@@ -5,6 +7,10 @@ from util import *
 class FirstRunType:
     # 单次运行
     ONCE = "once"
+
+    # 时间段内首次运行
+    DURATION = "duration"
+
     # 每日首次运行
     DAILY = "daily"
     # 每周首次运行
@@ -23,28 +29,32 @@ duration_func_map = {
 }
 
 
-def is_first_run(key):
+def is_first_run(key) -> bool:
     return _is_first_run(FirstRunType.ONCE, key)
 
 
-def is_daily_first_run(key=""):
+def is_first_run_in(key="", duration=timedelta(days=1)) -> bool:
+    return _is_first_run(FirstRunType.DURATION, key, duration=duration)
+
+
+def is_daily_first_run(key="") -> bool:
     return _is_first_run(FirstRunType.DAILY, key)
 
 
-def is_weekly_first_run(key=""):
+def is_weekly_first_run(key="") -> bool:
     return _is_first_run(FirstRunType.WEEKLY, key)
 
 
-def is_monthly_first_run(key=""):
+def is_monthly_first_run(key="") -> bool:
     return _is_first_run(FirstRunType.MONTHLY, key)
 
 
-def is_yearly_first_run(key=""):
+def is_yearly_first_run(key="") -> bool:
     return _is_first_run(FirstRunType.YEARLY, key)
 
 
 @try_except(return_val_on_except=True)
-def _is_first_run(first_run_type: str, key="") -> bool:
+def _is_first_run(first_run_type: str, key="", duration=timedelta(days=1)) -> bool:
     def cb(first_run_data: FirstRunDB) -> bool:
         # 检查是否是首次运行
         first_run = True
@@ -53,6 +63,8 @@ def _is_first_run(first_run_type: str, key="") -> bool:
             # 仅当文件已经存在时，才有可能不是首次运行
             if first_run_type == FirstRunType.ONCE:
                 first_run = False
+            elif first_run_type == FirstRunType.DURATION:
+                first_run = first_run_data.get_update_at() + duration < get_now()
             else:
                 duration_func = duration_func_map[first_run_type]
                 first_run = duration_func() != duration_func(first_run_data.get_update_at())
@@ -71,6 +83,7 @@ def _is_first_run(first_run_type: str, key="") -> bool:
 
 if __name__ == '__main__':
     print(is_first_run("first_run"))
+    print(is_first_run_in("test_duration", timedelta(minutes=1)))
     print(is_daily_first_run("first_run_daily"))
     print(is_weekly_first_run("first_run_weekly"))
     print(is_monthly_first_run("first_run_monthly"))

@@ -937,17 +937,17 @@ if __name__ == '__main__':
 
         total = 10
         for idx in range_from_one(total):
-            logger.info(color("bold_yellow") + f"第{idx}/{total}次测试")
+            show_head_line(f"第{idx}/{total}次测试", color("bold_yellow"))
             with Pool(len(cfg.account_configs)) as pool:
                 pool.starmap(do_login, [(idx + 1, cfg.common, account) for idx, account in enumerate(cfg.account_configs)])
 
-                logger.info("全部账号登录完毕")
+                show_head_line(f"全部账号登录完毕", color("bold_green"))
     else:
         ql = QQLogin(cfg.common)
         idx = 1
         account = cfg.account_configs[idx - 1]
         acc = account.account_info
-        logger.warning(f"测试账号 {account.name} 的登录情况")
+        show_head_line(f"测试账号 {account.name} 的登录情况", color("bold_green"))
 
 
         def run_test(mode):
@@ -962,9 +962,9 @@ if __name__ == '__main__':
             run_test(ql.login_mode_normal)
         else:
             all_modes = [getattr(ql, attr) for attr in dir(ql) if attr.startswith("login_mode_")]
-            logger.warning(color("bold_green") + f"将开始测试以下{len(all_modes)}个登录模式：{all_modes}")
+            show_head_line(f"将开始测试以下{len(all_modes)}个登录模式：{all_modes}", color("bold_green"))
 
             for idx, mode in enumerate(all_modes):
-                logger.warning(color("bold_yellow") + f"[{idx + 1}/{len(all_modes)}] 开始测试登录模式 {mode}")
+                show_head_line(f"[{idx + 1}/{len(all_modes)}] 开始测试登录模式 {mode}", color("bold_yellow"))
 
                 run_test(mode)

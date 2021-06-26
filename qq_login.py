@@ -18,6 +18,7 @@ from log import logger, color
 from upload_lanzouyun import Uploader
 from util import async_message_box, get_screen_size
 from version import now_version
+from db_new import CaptchaDB
 
 
 # 在github action环境下登录异常
@@ -752,9 +753,8 @@ class QQLogin():
 
         captcha_try_count = 0
         success_xoffset = 0
-        history_key = 'history_captcha_succes_data'
-        db = load_db()
-        history_captcha_succes_data = db.get(history_key, {})
+
+        account_db = CaptchaDB().with_context(self.name).load()
         try:
             WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe")))
             tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
@@ -778,9 +778,9 @@ class QQLogin():
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []
             init_offset = drag_tarck_width - drag_block_width - delta_width
-            if len(history_captcha_succes_data) != 0:
+            if len(account_db.offset_to_history_succes_count) != 0:
                 # 若有则取其中最频繁的前几个作为优先尝试项
-                mostCommon = Counter(history_captcha_succes_data).most_common()
+                mostCommon = Counter(account_db.offset_to_history_succes_count).most_common()
                 logger.info(f"{self.name} 根据本地记录数据，过去运行中成功解锁次数最多的偏移值为：{mostCommon}，将首先尝试他们")
                 for xoffset, success_count in mostCommon:
                     xoffsets.append(int(xoffset))
@@ -827,12 +827,8 @@ class QQLogin():
         except StaleElementReferenceException as e:
             logger.info(f"{self.name} 成功完成了拖拽验证码操作，总计尝试次数为{captcha_try_count}")
             # 更新历史数据
-            success_key = str(success_xoffset)  # 因为json只支持str作为key，所以需要强转一下，使用时再转回int
-            if success_key not in history_captcha_succes_data:
-                history_captcha_succes_data[success_key] = 0
-            history_captcha_succes_data[success_key] += 1
-            db[history_key] = history_captcha_succes_data
-            save_db(db)
+            account_db.increse_success_count(success_xoffset)
+            account_db.save()
         except TimeoutException as e:
             logger.info(f"{self.name} 看上去没有出现验证码")
 

@@ -38,6 +38,19 @@ class DianzanDB(DBInterface):
         self.content_ids = [] # type: List[str]
 
 
+class CaptchaDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.offset_to_history_succes_count = {} # type: Dict[str, int]
+
+    def increse_success_count(self, offset:int):
+        success_key = str(offset)  # 因为json只支持str作为key，所以需要强转一下，使用时再转回int
+        if success_key not in self.offset_to_history_succes_count:
+            self.offset_to_history_succes_count[success_key] = 0
+
+        self.offset_to_history_succes_count[success_key] += 1
+
 if __name__ == '__main__':
     print(DBInterface())
     print(TestDB())

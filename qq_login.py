@@ -976,8 +976,10 @@ def test():
         # 并行测试
         from multiprocessing import Pool, cpu_count, freeze_support
         freeze_support()
-
-        with Pool(cfg.get_pool_size()) as pool:
+        
+        pool_size = min(cpu_count(), len(test_cases))
+        with Pool(pool_size) as pool:
+            logger.info(color("bold_cyan") + f"进程池已初始化完毕，大小为 {pool_size}")
             pool.starmap(do_login, test_cases)
 
     show_head_line(f"全部{total}个测试运行完毕", color("bold_green"))

@@ -51,6 +51,14 @@ class CaptchaDB(DBInterface):
 
         self.offset_to_history_succes_count[success_key] += 1
 
+
+class LoginRetryDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.recommended_first_retry_timeout = 0.0 # type: float
+        self.history_success_timeouts = [] # type: List[float]
+
 if __name__ == '__main__':
     print(DBInterface())
     print(TestDB())

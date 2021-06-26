@@ -945,17 +945,12 @@ def test():
     total = len(login_types) * len(login_modes) * len(login_accounts) * TEST_SWITCH_RUN_COUNT
 
     window_index = 0
-    for login_type in login_types:
-        for login_mode in login_modes:
-            for login_account in login_accounts:
-                window_index += 1
-                test_cases.append((login_mode, login_type, window_index, total, cfg.common, login_account))
-
-    if TEST_SWITCH_RUN_COUNT > 1:
-        one_test_set = [v for v in test_cases]
-        extra_run_count = TEST_SWITCH_RUN_COUNT - 1
-        for idx in range(extra_run_count):
-            test_cases.extend(one_test_set)
+    for loop_index in range(TEST_SWITCH_RUN_COUNT):
+        for login_type in login_types:
+            for login_mode in login_modes:
+                for login_account in login_accounts:
+                    window_index += 1
+                    test_cases.append((login_mode, login_type, window_index, total, cfg.common, login_account))
 
     # 预先尝试下载解压缩
     QQLogin(cfg.common).check_and_download_chrome_ahead()
@@ -976,7 +971,7 @@ def test():
         # 并行测试
         from multiprocessing import Pool, cpu_count, freeze_support
         freeze_support()
-        
+
         pool_size = min(cpu_count(), len(test_cases))
         with Pool(pool_size) as pool:
             logger.info(color("bold_cyan") + f"进程池已初始化完毕，大小为 {pool_size}")

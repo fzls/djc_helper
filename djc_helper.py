@@ -3375,46 +3375,36 @@ class DjcHelper:
 
         self.check_dnf_dianzan()
 
-        db_key = "dnf_dianzan"
-        pagesize = 10
+        db = DianzanDB().load()
+        account_db = DianzanDB().with_context(self.cfg.name).load()
 
         # 投票
         def today_dianzan():
-            account_db = load_db_for(self.cfg.name)
             today = get_today()
 
-            if db_key not in account_db:
-                account_db[db_key] = {}
-            if today not in account_db[db_key]:
-                account_db[db_key][today] = 0
-            if "usedContentIds" not in account_db[db_key]:
-                account_db[db_key]["usedContentIds"] = []
+            if today not in account_db.day_to_dianzan_count:
+                account_db.day_to_dianzan_count[today] = 0
 
-            dianzanSuccessCount = account_db[db_key][today]
+            dianzanSuccessCount = account_db.day_to_dianzan_count[today]
             if dianzanSuccessCount >= 20:
                 logger.info("今日之前的运行中，已经完成20次点赞了，本次将不执行")
                 return
 
             for contentId in get_dianzan_contents_with_cache():
                 # 不论投票是否成功，都标记为使用过的内容
-                account_db[db_key]["usedContentIds"].append(contentId)
+                account_db.used_content_ids.append(contentId)
                 if dianzan(dianzanSuccessCount + 1, contentId):
                     dianzanSuccessCount += 1
                     if dianzanSuccessCount >= 20:
                         logger.info("今日已经累计点赞20个，将停止点赞")
                         break
 
-            account_db[db_key][today] = dianzanSuccessCount
+            account_db.day_to_dianzan_count[today] = dianzanSuccessCount
 
-            save_db_for(self.cfg.name, account_db)
+            account_db.save()
 
         def get_dianzan_contents_with_cache():
-            db = load_db()
-            account_db = load_db_for(self.cfg.name)
-
-            usedContentIds = []
-            if db_key in account_db:
-                usedContentIds = account_db[db_key].get("usedContentIds", [])
+            usedContentIds = account_db.used_content_ids
 
             def filter_used_contents(contentIds):
                 validContentIds = []
@@ -3426,14 +3416,13 @@ class DjcHelper:
 
                 return validContentIds
 
-            if db_key in db:
-                contentIds = db[db_key]["contentIds"]
+            contentIds = db.content_ids
 
-                validContentIds = filter_used_contents(contentIds)
+            validContentIds = filter_used_contents(contentIds)
 
-                if len(validContentIds) >= 20:
-                    # 本地仍有不少于20个内容可供点赞，直接使用本地内容
-                    return validContentIds
+            if len(validContentIds) >= 20:
+                # 本地仍有不少于20个内容可供点赞，直接使用本地内容
+                return validContentIds
 
             return filter_used_contents(get_dianzan_contents())
 
@@ -3453,19 +3442,16 @@ class DjcHelper:
 
             logger.info(f"获取所有内容ID共计{len(contentIds)}个，将保存到本地，具体如下：{contentIds}")
 
-            def _update_db(db):
-                if db_key not in db:
-                    db[db_key] = {}
+            def _update_db(var: DianzanDB):
+                var.content_ids = contentIds
 
-                db[db_key]["contentIds"] = contentIds
-
-            update_db(_update_db)
+            db.update(_update_db)
 
             return contentIds
 
         def getWorksData(iCategory2, page):
             ctx = f"查询点赞内容-{iCategory2}-{page}"
-            res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=pagesize, is_jsonp=True, is_normal_jsonp=True)
+            res = self.get(ctx, self.urls.query_dianzan_contents, iCategory1=20, iCategory2=iCategory2, page=page, pagesize=10, is_jsonp=True, is_normal_jsonp=True)
             return [v["iContentId"] for v in res["jData"]["data"]], int(res["jData"]["total"])
 
         def dianzan(idx, iContentId) -> bool:

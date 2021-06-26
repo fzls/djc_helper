@@ -680,6 +680,8 @@ class QQLogin():
         if self.login_mode in [self.login_mode_guanjia]:
             self.wait_for_IED_LOG_INFO2_QC()
 
+        self.print_cookie()
+
         return
 
     def get_login_timeout(self, is_qr_mode=False):
@@ -863,7 +865,7 @@ class QQLogin():
     def print_cookie(self):
         for cookie in self.cookies:
             domain, name, value = cookie['domain'], cookie['name'], cookie['value']
-            print(f"{domain:20s} {name:20s} {cookie}")
+            logger.debug(f"{domain:20s} {name:20s} {cookie}")
 
     def open_url_on_start(self, url):
         chrome_default_url = 'data:,'

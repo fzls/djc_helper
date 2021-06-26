@@ -151,7 +151,7 @@ def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
     return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
-def show_head_line(msg, msg_color=None):
+def show_head_line(msg, msg_color=color("fg_bold_green")):
     char = "+"
     line_length = 80
 
@@ -159,8 +159,6 @@ def show_head_line(msg, msg_color=None):
     # +++++++++++
     # +  test   +
     # +++++++++++
-    if msg_color is None:
-        msg_color = color("fg_bold_green")
     logger.warning(char * line_length)
     logger.warning(char + msg_color + padLeftRight(msg, line_length - 2) + color("WARNING") + char)
     logger.warning(char * line_length)

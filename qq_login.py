@@ -961,10 +961,11 @@ def test():
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
     # 展示测试概览
-    show_head_line(f"将开始测试以下{total}个用例", color("bold_green"))
-    logger.info(color("bold_green") + f"login_accounts={[account.name for account in login_accounts]}")
-    logger.info(color("bold_green") + f"login_types={login_types}")
-    logger.info(color("bold_green") + f"login_modes={login_modes}")
+    show_head_line(f"将开始测试以下{total}个用例，并行模式={TEST_SWITCH_RUN_PARALLEL}", color("bold_green"))
+    logger.info(color("bold_green") + f"循环次数={TEST_SWITCH_RUN_COUNT}")
+    logger.info(color("bold_green") + f"账号列表={[account.name for account in login_accounts]}")
+    logger.info(color("bold_green") + f"登陆类型={login_types}")
+    logger.info(color("bold_green") + f"登录模式={login_modes}")
 
     # 实际测试内容
     if not TEST_SWITCH_RUN_PARALLEL:
@@ -983,7 +984,7 @@ def test():
 
 
 def do_login(login_mode: str, login_type: str, window_index: int, total, common_cfg: CommonConfig, account: AccountConfig):
-    show_head_line(f"用例({window_index / total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode}", color("bold_green"))
+    show_head_line(f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode}", color("bold_green"))
     acc = account.account_info
     ql = QQLogin(common_cfg, window_index=window_index)
 
@@ -992,7 +993,7 @@ def do_login(login_mode: str, login_type: str, window_index: int, total, common_
     else:
         lr = ql.qr_login(login_mode=login_mode, name=account.name)
 
-    logger.info(color("bold_green") + f"{account.name}登录结果为： {lr}")
+    logger.info(color("bold_green") + f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode} 的结果为： {lr}")
 
 
 if __name__ == '__main__':

@@ -961,13 +961,10 @@ if __name__ == '__main__':
         if not test_all:
             run_test(ql.login_mode_normal)
         else:
-            for attr in dir(ql):
-                if not attr.startswith("login_mode_"):
-                    continue
+            all_modes = [getattr(ql, attr) for attr in dir(ql) if attr.startswith("login_mode_")]
+            logger.warning(color("bold_green") + f"将开始测试以下{len(all_modes)}个登录模式：{all_modes}")
 
-                mode = getattr(ql, attr)
-
-                logger.info(f"开始测试登录模式 {mode}，请按任意键开始测试")
-                input()
+            for idx, mode in enumerate(all_modes):
+                logger.warning(color("bold_yellow") + f"[{idx + 1}/{len(all_modes)}] 开始测试登录模式 {mode}")
 
                 run_test(mode)

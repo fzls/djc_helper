@@ -74,7 +74,7 @@ def _is_first_run(first_run_type: str, key="", duration=timedelta(days=1)) -> bo
             first_run_data.update_at = format_now()
             first_run_data.key = key
 
-        logger.debug(f"{first_run_type:7s} {first_run_data.get_db_filename()} first_run={first_run} first_run_data={first_run_data}")
+        logger.debug(f"{first_run_type:7s} {first_run_data.get_db_filename()} first_run={first_run}")
 
         return first_run
 

@@ -38,6 +38,8 @@ class DBInterface(ConfigInterface):
                     old_content = f.read()
                 logger.debug(f"old_content={old_content}")
 
+        logger.debug(f"读取数据库完毕 context={self.context} db_type_name={self.db_type_name} db_file={db_file}")
+
         return self
 
     def save(self):
@@ -51,6 +53,8 @@ class DBInterface(ConfigInterface):
             self.save_to_json_file(db_file)
         except Exception as e:
             logger.error(f"保存数据库失败，db_to_save={self}")
+
+        logger.debug(f"保存数据库完毕 context={self.context} db_type_name={self.db_type_name} db_file={db_file}")
 
     def update(self, op: Callable[[Any], Any]) -> Any:
         # 加载配置

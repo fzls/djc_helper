@@ -909,62 +909,91 @@ class QQLogin():
         return self.login_type_auto_login in login_type and self.cfg.run_in_headless_mode
 
 
-def do_login(window_index, common_cfg, account: AccountConfig):
-    acc = account.account_info
-    ql = QQLogin(common_cfg, window_index=window_index)
-
-    lr = ql.login(acc.account, acc.password, login_mode=ql.login_mode_normal, name=account.name)
-    # lr = ql.qr_login(login_mode=mode, name=account.name)
-    logger.info(color("bold_green") + f"{account.name}登录结果为： {lr}")
-
-
-if __name__ == '__main__':
+def test():
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
-    RUN_PARALLEL = False
     cfg.common.force_use_portable_chrome = True
     cfg.common.run_in_headless_mode = False
+
+    # 获取登录相关信息
+    all_login_types = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_type_")]
+    all_login_modes = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_mode_")]
+
+    # 测试开关
+    TEST_SWITCH_RUN_COUNT = 1
+    TEST_SWITCH_RUN_PARALLEL = False
+    TEST_SWITCH_TEST_ALL_ACCOUNTS = False
+    TEST_SWITCH_TEST_ALL_LOGIN_TYPES = False
+    TEST_SWITCH_TEST_ALL_LOGIN_MODES = False
+
+    # 需要运行的测试维度：账号、登录类别、登录模式
+    login_accounts = [cfg.account_configs[0]]
+    login_types = [QQLogin.login_type_auto_login]
+    login_modes = [QQLogin.login_mode_normal]
+
+    if TEST_SWITCH_TEST_ALL_ACCOUNTS:
+        login_accounts = [account for account in cfg.account_configs]
+    if TEST_SWITCH_TEST_ALL_LOGIN_TYPES:
+        login_types = all_login_types
+    if TEST_SWITCH_TEST_ALL_LOGIN_MODES:
+        login_modes = all_login_modes
+
+    # 根据设定的维度组合出所有需要测试的用例
+    test_cases = []
+    total = len(login_types) * len(login_modes) * len(login_accounts) * TEST_SWITCH_RUN_COUNT
+
+    window_index = 0
+    for login_type in login_types:
+        for login_mode in login_modes:
+            for login_account in login_accounts:
+                window_index += 1
+                test_cases.append((login_mode, login_type, window_index, total, cfg.common, login_account))
+
+    if TEST_SWITCH_RUN_COUNT > 1:
+        one_test_set = [v for v in test_cases]
+        extra_run_count = TEST_SWITCH_RUN_COUNT - 1
+        for idx in range(extra_run_count):
+            test_cases.extend(one_test_set)
 
     # 预先尝试下载解压缩
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
-    if RUN_PARALLEL:
-        from multiprocessing import Pool, cpu_count, freeze_support
+    # 展示测试概览
+    show_head_line(f"将开始测试以下{total}个用例", color("bold_green"))
+    logger.info(color("bold_green") + f"login_accounts={[account.name for account in login_accounts]}")
+    logger.info(color("bold_green") + f"login_types={login_types}")
+    logger.info(color("bold_green") + f"login_modes={login_modes}")
 
+    # 实际测试内容
+    if not TEST_SWITCH_RUN_PARALLEL:
+        # 串行测试
+        for test_case in test_cases:
+            do_login(*test_case)
+    else:
+        # 并行测试
+        from multiprocessing import Pool, cpu_count, freeze_support
         freeze_support()
 
-        total = 10
-        for idx in range_from_one(total):
-            show_head_line(f"第{idx}/{total}次测试", color("bold_yellow"))
-            with Pool(len(cfg.account_configs)) as pool:
-                pool.starmap(do_login, [(idx + 1, cfg.common, account) for idx, account in enumerate(cfg.account_configs)])
+        with Pool(cfg.get_pool_size()) as pool:
+            pool.starmap(do_login, test_cases)
 
-                show_head_line(f"全部账号登录完毕", color("bold_green"))
+    show_head_line(f"全部{total}个测试运行完毕", color("bold_green"))
+
+
+def do_login(login_mode: str, login_type: str, window_index: int, total, common_cfg: CommonConfig, account: AccountConfig):
+    show_head_line(f"用例({window_index / total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode}", color("bold_green"))
+    acc = account.account_info
+    ql = QQLogin(common_cfg, window_index=window_index)
+
+    if login_type == ql.login_type_auto_login:
+        lr = ql.login(acc.account, acc.password, login_mode=login_mode, name=account.name)
     else:
-        ql = QQLogin(cfg.common)
-        idx = 1
-        account = cfg.account_configs[idx - 1]
-        acc = account.account_info
-        show_head_line(f"测试账号 {account.name} 的登录情况", color("bold_green"))
+        lr = ql.qr_login(login_mode=login_mode, name=account.name)
+
+    logger.info(color("bold_green") + f"{account.name}登录结果为： {lr}")
 
 
-        def run_test(mode):
-            lr = ql.login(acc.account, acc.password, login_mode=mode, name=account.name)
-            # lr = ql.qr_login(login_mode=mode, name=account.name)
-            logger.info(color("bold_green") + f"{lr}")
-
-
-        test_all = False
-
-        if not test_all:
-            run_test(ql.login_mode_normal)
-        else:
-            all_modes = [getattr(ql, attr) for attr in dir(ql) if attr.startswith("login_mode_")]
-            show_head_line(f"将开始测试以下{len(all_modes)}个登录模式：{all_modes}", color("bold_green"))
-
-            for idx, mode in enumerate(all_modes):
-                show_head_line(f"[{idx + 1}/{len(all_modes)}] 开始测试登录模式 {mode}", color("bold_yellow"))
-
-                run_test(mode)
+if __name__ == '__main__':
+    test()

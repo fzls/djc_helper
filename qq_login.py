@@ -18,7 +18,7 @@ from log import logger, color
 from upload_lanzouyun import Uploader
 from util import async_message_box, get_screen_size
 from version import now_version
-from db_new import CaptchaDB, LoginRetryDB
+from db import CaptchaDB, LoginRetryDB
 
 
 # 在github action环境下登录异常

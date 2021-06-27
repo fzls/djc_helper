@@ -519,7 +519,7 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     :param cache_max_seconds: 缓存时限（秒），默认600s
     :return: 缓存中获取的数据（若未过期），或最新获取的数据
     """
-    from db_new import CacheDB, CacheInfo
+    from db import CacheDB, CacheInfo
 
     db = CacheDB().with_context(cache_category).load()
 
@@ -546,7 +546,7 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
 
 
 def reset_cache(cache_category: str):
-    from db_new import CacheDB
+    from db import CacheDB
 
     def _reset(db: CacheDB):
         db.cache = {}

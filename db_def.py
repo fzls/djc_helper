@@ -92,7 +92,7 @@ class DBInterface(ConfigInterface):
 
 
 def test():
-    from db_new import TestDB
+    from db import TestDB
 
     def _test(db: TestDB, save_inc: int, update_inc: int):
         # init

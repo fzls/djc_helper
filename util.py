@@ -521,51 +521,40 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     :param cache_max_seconds: 缓存时限（秒），默认600s
     :return: 缓存中获取的数据（若未过期），或最新获取的数据
     """
-    db = load_db()
+    from db_new import CacheDB, CacheInfo
 
-    if _root_caches_key not in db:
-        db[_root_caches_key] = {}
-    cache = db[_root_caches_key]
+    db = CacheDB().with_context(cache_category).load()
 
     # 尝试使用缓存内容
-    if cache_category in cache and cache_key in cache[cache_category]:
-        cache_info = cache[cache_category][cache_key]
-        if parse_time(cache_info["last_update_at"]) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
-            cached_value = cache_info["value"]
-            if cache_validate_func is None or cache_validate_func(cached_value):
+    if cache_key in db.cache:
+        cache_info = db.cache[cache_key]
+        if parse_time(cache_info.update_at) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
+            if cache_validate_func is None or cache_validate_func(cache_info.value):
                 logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
-                return cached_value
+                return cache_info.value
 
     # 调用回调获取最新结果，并保存
     latest_value = cache_miss_func()
 
-    if cache_category not in cache:
-        cache[cache_category] = {}
-    cache[cache_category][cache_key] = {
-        "last_update_at": format_now(),
-        "value": latest_value,
-    }
+    cache_info = CacheInfo()
+    cache_info.value = latest_value
+    cache_info.update_at = format_now()
 
-    save_db(db)
+    db.cache[cache_key] = cache_info
+
+    db.save()
 
     return latest_value
 
 
 def reset_cache(cache_category: str):
-    db = load_db()
+    from db_new import CacheDB
 
-    if _root_caches_key not in db:
-        db[_root_caches_key] = {}
-    cache = db[_root_caches_key]
+    def _reset(db: CacheDB):
+        db.cache = {}
+        logger.debug(f"清空cache={cache_category}")
 
-    # 清空cache
-    cache[cache_category] = {}
-
-    save_db(db)
-
-    logger.debug(f"清空cache={cache_category}")
-
-    return
+    CacheDB().with_context(cache_category).update(_reset)
 
 
 def count_down(ctx: str, seconds: int, update_interval=0.1):

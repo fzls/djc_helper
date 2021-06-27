@@ -1,7 +1,7 @@
+import json
 import subprocess
 from multiprocessing import freeze_support
 from sys import exit
-from typing import Dict, Tuple
 
 from config import load_config, config, Config, AccountConfig, CommonConfig
 from dao import BuyInfo, BuyRecord

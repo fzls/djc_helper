@@ -1,6 +1,5 @@
 from usage_count import *
 from util import *
-from version import *
 
 user_usage_counter_name_prefix = "user_count"
 auto_updater_usage_counter_name_prefix = "auto_updater"
@@ -10,6 +9,7 @@ active_monthly_pay_user_usage_counter_name_prefix = "active_monthly_pay"
 my_usage_counter_name = f"{user_usage_counter_name_prefix}/{get_uuid()}"
 my_auto_updater_usage_counter_name = f"{auto_updater_usage_counter_name_prefix}/{get_uuid()}"
 my_active_monthly_pay_usage_counter_name = f"{active_monthly_pay_user_usage_counter_name_prefix}/{get_uuid()}"
+
 
 # this_version_global_usage_counter_name = f"version/ver{now_version} {ver_time}"
 # this_version_user_usage_prefix = f"version_user_usage/{now_version}"

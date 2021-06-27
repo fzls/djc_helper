@@ -68,7 +68,7 @@ class DjcHelper:
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
             "auto_login": self.update_skey_auto_login,
-        }
+        }  # type: Dict[str, Callable[[Dict, int], None]]
         login_mode_dict[self.cfg.login_mode](query_data, window_index)
 
     def update_skey_by_hand(self, query_data, window_index=1):

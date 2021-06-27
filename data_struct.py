@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 from abc import ABCMeta
+from typing import List, Dict, Tuple, Type
 
 from Crypto.Cipher import AES
 
@@ -62,7 +65,10 @@ class ConfigInterface(metaclass=ABCMeta):
         # 尝试填充一些数组元素
         self.fill_array_fields(raw_config, self.fields_to_fill())
 
-        # re: 以后有需求的时候再增加处理dict、set、tuple等
+        # 尝试填充一些字典元素
+        self.fill_dict_fields(raw_config, self.dict_fields_to_fill())
+
+        # re: 以后有需求的时候再增加处理set、tuple等
 
         # 调用可能存在的回调
         self.on_config_update(raw_config)
@@ -84,15 +90,28 @@ class ConfigInterface(metaclass=ABCMeta):
         with open(filepath, 'w', encoding='utf-8') as save_file:
             json.dump(to_raw_type(self), save_file, ensure_ascii=ensure_ascii, indent=indent)
 
-    def fill_array_fields(self, raw_config: dict, fields_to_fill):
+    def fill_array_fields(self, raw_config: dict, fields_to_fill: List[Tuple[str, Type[ConfigInterface]]]):
         for field_name, field_type in fields_to_fill:
             if field_name in raw_config:
                 if raw_config[field_name] is None:
                     setattr(self, field_name, [])
                     continue
-                setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
+                if type(raw_config[field_name]) is list:
+                    setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
 
-    def fields_to_fill(self):
+    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        return []
+
+    def fill_dict_fields(self, raw_config: dict, fields_to_fill: List[Tuple[str, Type[ConfigInterface]]]):
+        for field_name, field_type in fields_to_fill:
+            if field_name in raw_config:
+                if raw_config[field_name] is None:
+                    setattr(self, field_name, {})
+                    continue
+                if type(raw_config[field_name]) is dict:
+                    setattr(self, field_name, {key: field_type().auto_update_config(val) for key, val in raw_config[field_name].items()})
+
+    def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
         return []
 
     def on_config_update(self, raw_config: dict):

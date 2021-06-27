@@ -1,7 +1,6 @@
 from typing import List, Dict, Any, Type, Tuple
 
 from db_def import DBInterface, ConfigInterface
-from util import parse_time
 
 
 # ----------------- 数据定义 -----------------
@@ -18,6 +17,7 @@ class FirstRunDB(DBInterface):
         super().__init__()
 
     def get_update_at(self):
+        from util import parse_time
         return parse_time(self.update_at)
 
 

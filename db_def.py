@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import os
+from typing import Callable, Any
+
 from const import db_top_dir
 from data_struct import ConfigInterface
-from util import *
+from log import logger
 
 
 class DBInterface(ConfigInterface):
     # ----------------- 通用字段定义 -----------------
     def __init__(self):
+        from util import format_now
+
         self.context = "global"
         self.db_type_name = self.__class__.__name__
         self.create_at = format_now()
@@ -43,6 +48,8 @@ class DBInterface(ConfigInterface):
         return self
 
     def save(self):
+        from util import format_now
+
         db_file = self.prepare_env_and_get_db_filepath()
         try:
             if not os.path.isfile(db_file):
@@ -77,6 +84,8 @@ class DBInterface(ConfigInterface):
         文件内容为val_type的实例的json序列化结果
         :return: 是否是首次运行
         """
+        from util import make_sure_dir_exists
+
         key_md5 = self.get_db_filename()
 
         db_dir = os.path.join(db_top_dir, key_md5[0:3])
@@ -87,6 +96,8 @@ class DBInterface(ConfigInterface):
         return db_file
 
     def get_db_filename(self) -> str:
+        from util import md5
+
         key = f"{self.context}/{self.db_type_name}"
         return md5(key)
 

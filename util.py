@@ -30,6 +30,7 @@ import win32process
 from const import cached_dir
 from log import logger, color, asciiReset
 from version import now_version, ver_time
+from db import *
 
 
 def uin2qq(uin):
@@ -521,8 +522,6 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     :param cache_max_seconds: 缓存时限（秒），默认600s
     :return: 缓存中获取的数据（若未过期），或最新获取的数据
     """
-    from db import CacheDB, CacheInfo
-
     db = CacheDB().with_context(cache_category).load()
 
     # 尝试使用缓存内容
@@ -548,8 +547,6 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
 
 
 def reset_cache(cache_category: str):
-    from db import CacheDB
-
     def _reset(db: CacheDB):
         db.cache = {}
         logger.debug(f"清空cache={cache_category}")

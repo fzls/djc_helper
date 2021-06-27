@@ -26,8 +26,6 @@ import win32gui
 import win32process
 
 from const import cached_dir
-from data_struct import to_raw_type
-from db import *
 from log import logger, color, asciiReset
 from version import now_version, ver_time
 

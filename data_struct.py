@@ -134,3 +134,60 @@ def to_raw_type(v):
         return {sk: to_raw_type(sv) for sk, sv in v.items()}
     else:
         return v
+
+
+def test():
+    class TestSubConfig(ConfigInterface):
+        def __init__(self):
+            self.val = 0
+
+    class TestConfig(ConfigInterface):
+        def __init__(self):
+            self.int_val = 0
+            self.str_val = ""
+            self.bool_val = False
+            self.list_int = []  # type: List[int]
+            self.list_sub_config = []  # type: List[TestSubConfig]
+            self.dict_str_str = {}  # type: Dict[str, str]
+            self.dict_str_sub_config = {}  # type: Dict[str, TestSubConfig]
+
+        def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+            return [
+                ('list_sub_config', TestSubConfig)
+            ]
+
+        def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+            return [
+                ('dict_str_sub_config', TestSubConfig)
+            ]
+
+    test_raw_config = {
+        "int_val": 1,
+        "str_val": "test",
+        "bool_val": True,
+        "list_int": [1, 2, 3],
+        "list_sub_config": [
+            {"val": 1},
+            {"val": 2},
+            {"val": 3},
+        ],
+        "dict_str_str": {
+            "1": "2",
+            "2": "4",
+            "3": "6",
+        },
+        "dict_str_sub_config": {
+            "1": {"val": 1},
+            "2": {"val": 2},
+            "3": {"val": 3},
+        }
+    }
+
+    test_config = TestConfig().auto_update_config(test_raw_config)
+
+    print(test_raw_config)
+    print(test_config)
+
+
+if __name__ == '__main__':
+    test()

@@ -79,6 +79,13 @@ class CacheInfo(DBInterface):
         self.value = None  # type: Any
 
 
+class FireCrackersDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.friend_qqs = []  # type: List[str]
+
+
 if __name__ == '__main__':
     print(DBInterface())
     print(TestDB())

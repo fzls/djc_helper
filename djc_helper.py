@@ -5062,11 +5062,9 @@ class DjcHelper:
 
             return invited_friends
 
-        friend_db_key = "friendQQs"
+        account_db = FireCrackersDB().with_context(self.cfg.name).load()
 
         def qeury_not_invited_friends_with_cache():
-            account_db = load_db_for(self.cfg.name)
-
             invited_friends = query_invited_friends()
 
             def filter_not_invited_friends(friendQQs):
@@ -5077,13 +5075,12 @@ class DjcHelper:
 
                 return validFriendQQs
 
-            if friend_db_key in account_db:
-                friendQQs = account_db[friend_db_key]
+            friendQQs = account_db.friend_qqs
 
-                validFriendQQs = filter_not_invited_friends(friendQQs)
+            validFriendQQs = filter_not_invited_friends(friendQQs)
 
-                if len(validFriendQQs) > 0:
-                    return validFriendQQs
+            if len(validFriendQQs) > 0:
+                return validFriendQQs
 
             return filter_not_invited_friends(qeury_not_invited_friends())
 
@@ -5105,10 +5102,10 @@ class DjcHelper:
 
             logger.info(f"获取好友名单共计{len(friendQQs)}个，将保存到本地，具体如下：{friendQQs}")
 
-            def _update_db(udb):
-                udb[friend_db_key] = friendQQs
+            def _update_db(db: FireCrackersDB):
+                db.friend_qqs = friendQQs
 
-            update_db_for(self.cfg.name, _update_db)
+            account_db.update(_update_db)
 
             return friendQQs
 

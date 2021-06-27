@@ -211,6 +211,7 @@ class DjcHelper:
 
             if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
                 logger.warning(color("fg_bold_green") + "！！！请注意，我说的是手游，不是DNF！！！")
+                logger.warning(color("fg_bold_green") + "如果不需要做道聚城的手游任务和许愿任务（不做会少豆子），可以在配置工具里将手游名称设为无")
                 binded = False
 
         if binded:

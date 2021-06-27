@@ -987,6 +987,117 @@ class DnfHelperGameInfo(ConfigInterface):
         self.bindLastTime = 0
 
 
+class GuanjiaNewRequest(ConfigInterface):
+    def __init__(self):
+        self.aid = "2021061115132511816"
+        self.bid = "2021061115132511816"
+        self.lid = "220"
+        self.openid = "992EAAA8B47EA71D469EF9F6A09B6666"
+        self.nickname = "风之凌殇"
+        self.account = "992EAAA8B47EA71D469EF9F6A09B6666"
+        self.key = "5B18A7C95B9502523D8CFDE667BDABCD"
+        self.accountType = "QQ"
+        self.loginType = "qq"
+        self.outVeri = 1
+        self.roleArea = "11"
+        self.roleid = "71676666"
+        self.check = 0
+
+        self.drawLogId = 2262427132
+        self.area = "11"
+        self.accessToken = "5B18A7C95B9502523D8CFDE667BDABCD"
+        self.gjid = "992EAAA8B47EA71D469EF9F6A09B6666"
+        self.token = "5B18A7C95B9502523D8CFDE667BDABCD"
+
+        self.pageIndex = 1
+        self.pageSize = 1000
+
+
+class GuanjiaNewQueryLotteryInfo(ConfigInterface):
+    def __init__(self):
+        self.success = 0
+        self.message = ""
+        self._id = ""
+        self.result = []  # type: List[GuanjiaNewQueryLotteryResult]
+
+    def fields_to_fill(self):
+        return [
+            ('result', GuanjiaNewQueryLotteryResult),
+        ]
+
+
+class GuanjiaNewQueryLotteryResult(ConfigInterface):
+    def __init__(self):
+        self.expireTime = ""
+        self.string5 = ""
+        self.simpleCardId = ""
+        self.string2 = ""
+        self.string1 = ""
+        self.string4 = ""
+        self.string3 = ""
+        self.state = 3
+        self.subcomment = ""
+        self.type = "yxlb"
+        self.receiverAddress = ""
+        self.wxNum = "992EAAA8B47EA71D469EF9F6A09B5786"
+        self.drawLogId = 2262427132
+        self.activityId = "61705"
+        self.presentId = "IEGAMS-385698-412372"
+        self.receiverName = ""
+        self.qq = ""
+        self.receiverPhone = ""
+        self.issueTime = "2021-06-27 18:01:06.0"
+        self.image = "https://webcdn.m.qq.com/shuidi/bonus/61705/1623658802936.png"
+        self.seqId = "2021062718010579b670423368425b9272805903e08482"
+        self.pkgname = "none_dnf"
+        self.jump = ""
+        self.bonusId = "230"
+        self.ruleId = "1646112"
+        self.extInfo = ""
+        self.autoIssue = 0
+        self.tips = ""
+        self.spaBonus = ""
+        self.comment = "抗疲劳秘药(5点)（LV80-100)*1"
+        self.mobile = ""
+
+    def has_taken(self) -> bool:
+        return self.issueTime != ""
+
+
+class GuanjiaNewLotteryResult(ConfigInterface):
+    def __init__(self):
+        self.success = 0
+        self.message = ""
+        self.data = GuanjiaNewLotteryResultData()
+
+
+class GuanjiaNewLotteryResultData(ConfigInterface):
+    def __init__(self):
+        self.expireTime = ""
+        self.string5 = ""
+        self.string2 = ""
+        self.string1 = ""
+        self.string4 = ""
+        self.string3 = ""
+        self.state = -1
+        self.issueTime = ""
+        self.subcomment = ""
+        self.image = "https://webcdn.m.qq.com/shuidi/bonus/61705/1623658802936.png"
+        self.type = "yxlb"
+        self.seqId = "202106271200354d8c4f1d1a6c4e3cb2b135c7828629f9"
+        self.pkgname = "none_dnf"
+        self.drawLogId = 2262368993
+        self.jump = ""
+        self.bonusId = "230"
+        self.presentId = "IEGAMS-385698-412372"
+        self.ruleId = "1646112"
+        self.extInfo = ""
+        self.autoIssue = 0
+        self.tips = ""
+        self.spaBonus = ""
+        self.comment = "抗疲劳秘药(5点)（LV80-100)*1"
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

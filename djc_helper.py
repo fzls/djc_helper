@@ -2774,6 +2774,8 @@ class DjcHelper:
             logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
             return
 
+        logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
+
         lr = self.fetch_guanjia_openid()
         if lr is None:
             return

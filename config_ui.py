@@ -4,7 +4,6 @@ logger.name = "config_ui"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
-from typing import Tuple
 from io import StringIO
 from traceback import print_tb
 import subprocess
@@ -399,7 +398,7 @@ class ConfigUi(QFrame):
         self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
 
     def add_account(self, checked=False):
-        account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts)+1}")
+        account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts) + 1}")
         if ok:
             logger.info(f"尝试添加账号 {account_name} ...")
 

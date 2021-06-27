@@ -1,11 +1,11 @@
+import json
 import re
 from multiprocessing import cpu_count
-from typing import List, Dict
 
 import toml
 
 from const import *
-from data_struct import ConfigInterface
+from data_struct import to_raw_type
 from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import *

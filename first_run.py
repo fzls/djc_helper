@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from db import FirstRunDB
 from util import *
 
 

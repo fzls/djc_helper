@@ -1,7 +1,7 @@
+import json
 import string
 import subprocess
 from multiprocessing import Pool
-from typing import Tuple
 from urllib.parse import quote_plus
 
 import pyperclip
@@ -9,7 +9,7 @@ import pyperclip
 import json_parser
 from black_list import check_in_black_list
 from dao import *
-from db import *
+from data_struct import to_raw_type
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *

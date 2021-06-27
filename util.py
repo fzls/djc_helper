@@ -1,14 +1,14 @@
-import datetime
 import ctypes
+import datetime
 import hashlib
 import math
+import os
 import pathlib
 import platform
 import random
 import shutil
 import signal
 import socket
-import os
 import sys
 import threading
 import time
@@ -16,7 +16,7 @@ import traceback
 import uuid
 import webbrowser
 from functools import wraps
-from typing import Callable, Any, Optional
+from typing import Callable, Optional
 
 import psutil
 import requests.exceptions
@@ -28,9 +28,9 @@ import win32gui
 import win32process
 
 from const import cached_dir
+from db import *
 from log import logger, color, asciiReset
 from version import now_version, ver_time
-from db import *
 
 
 def uin2qq(uin):

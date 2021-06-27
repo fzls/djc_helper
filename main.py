@@ -17,6 +17,7 @@ from usage_count import *
 import psutil
 from pool import init_pool, close_pool
 from check_first_run import check_first_run_async
+from version import *
 
 
 def parse_args():

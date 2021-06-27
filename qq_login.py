@@ -91,7 +91,7 @@ class QQLogin():
 
     def __init__(self, common_config, window_index=1):
         self.cfg = common_config  # type: CommonConfig
-        self.driver = None  # type: WebDriver
+        self.driver = None  # type: Optional[WebDriver]
         self.window_title = ""
         self.time_start_login = datetime.datetime.now()
 

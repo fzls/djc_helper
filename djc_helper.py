@@ -2786,8 +2786,28 @@ class DjcHelper:
         def add_draw_pool(ctx, lid):
             return self.guanjia_new_op(ctx, "pc_sdi_receive/add_draw_pool", lid)
 
-        def lottery(ctx):
-            return self.guanjia_new_op(ctx, "sdi_lottery/lottery", self.guanjia_new_lottery_gifts_act_id)
+        def take_unclaimed_awards():
+            raw_res = self.guanjia_new_op(f"查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
+            info = GuanjiaNewQueryLotteryInfo().auto_update_config(raw_res)
+            for lr in info.result:
+                if lr.has_taken():
+                    continue
+
+                # 之前抽奖了，但未领奖
+                _take_lottery_award(f"补领取奖励-{lr.drawLogId}-{lr.presentId}-{lr.comment}", lr.drawLogId)
+
+        def lottery(ctx) -> bool:
+            lottrey_raw_res = self.guanjia_new_op(f"{ctx}-抽奖阶段", "sdi_lottery/lottery", self.guanjia_new_lottery_gifts_act_id)
+            lottery_res = GuanjiaNewLotteryResult().auto_update_config(lottrey_raw_res)
+            success = lottery_res.success == 0
+            if success:
+                data = lottery_res.data
+                _take_lottery_award(f"{ctx}-领奖阶段-{data.drawLogId}-{data.presentId}-{data.comment}", data.drawLogId)
+
+            return success
+
+        def _take_lottery_award(ctx: str, draw_log_id: int):
+            self.guanjia_new_op(ctx, "lottery.do?method=take", self.guanjia_new_lottery_gifts_act_id, draw_log_id=draw_log_id, domain_name="sdi.3g.qq.com")
 
         receive("电脑管家特权礼包", self.guanjia_new_gift_id_special_rights)
         receive("连续签到2天礼包", self.guanjia_new_gift_id_sign_in_2_days)
@@ -2799,16 +2819,16 @@ class DjcHelper:
         add_draw_pool("每日签到任务", self.guanjia_new_gift_id_sign_in)
 
         for i in range(10):
-            res = lottery("抽奖")
-            # {"message": "", "success": -11}
-            if res["success"] != 0:
+            success = lottery("抽奖")
+            if not success:
                 break
             time.sleep(self.common_cfg.retry.request_wait_time)
 
-    def guanjia_new_op(self, ctx, api_name, lid, print_res=True):
+        # 补领取之前未领取的奖励
+        take_unclaimed_awards()
+
+    def guanjia_new_op(self, ctx: str, api_name: str, lid: str, draw_log_id=0, page_index=1, page_size=1000, domain_name="sdi.m.qq.com", print_res=True):
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        # re: 从cookie IED_LOG_INFO2 中解析nickname @2021-06-17 10:13:40 By Chen Ji
-        # userUin%3D1054073896%26uin%3D1054073896%26nickName%3D%2525E9%2525A3%25258E%2525E4%2525B9%25258B%2525E5%252587%25258C%2525E6%2525AE%252587%26nickname%3D%25E9%25A3%258E%25E4%25B9%258B%25E5%2587%258C%25E6%25AE%2587%26userLoginTime%3D1623932229%26logtype%3Dqq%26loginType%3Dqq
 
         act_id = self.guanjia_new_act_id
         openid = self.guanjia_lr.qc_openid
@@ -2817,23 +2837,23 @@ class DjcHelper:
 
         extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"
 
-        body = {
-            "aid": act_id,
-            "bid": act_id,
-            "lid": lid,
-            "openid": openid,
-            "nickname": nickname,
-            "account": openid,
-            "key": key,
-            "accountType": "QQ",
-            "loginType": "qq",
-            "outVeri": 1,
-            "roleArea": str(roleinfo.serviceID),
-            "roleid": str(roleinfo.roleCode),
-            "check": 0,
-        }
+        req = GuanjiaNewRequest()
+        req.aid = req.bid = act_id
+        req.lid = lid
+        req.openid = req.account = req.gjid = openid
+        req.nickname = nickname
+        req.key = req.accessToken = req.token = key
+        req.accessToken = "QQ"
+        req.loginType = "qq"
+        req.outVeri = 1
+        req.roleArea = req.area = str(roleinfo.serviceID)
+        req.roleid = str(roleinfo.roleCode)
+        req.check = 0
+        req.drawLogId = draw_log_id
+        req.pageIndex = page_index
+        req.pageSize = page_size
 
-        return self.post(ctx, self.urls.guanjia_new, api=api_name, json=body,
+        return self.post(ctx, self.urls.guanjia_new, domain_name=domain_name, api=api_name, json=to_raw_type(req),
                          extra_cookies=extra_cookies, print_res=print_res)
 
     def fetch_guanjia_openid(self, print_warning=True):
@@ -5590,7 +5610,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_my_story()
         # djcHelper.dnf_reserve()
         # djcHelper.dnf_anniversary()
-        # djcHelper.guanjia_new()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
         # djcHelper.dnf_bbs_signin()
@@ -5602,4 +5621,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_ozma()
         # djcHelper.dnf_wegame()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.guanjia_new()

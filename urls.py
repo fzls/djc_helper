@@ -178,7 +178,7 @@ class Urls:
 
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
         self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
-        self.guanjia_new = "https://sdi.m.qq.com/{api}"
+        self.guanjia_new = "https://{domain_name}/{api}"
 
         # 助手排行榜活动
         # 查询，额外参数：uin(qq)、userId/token

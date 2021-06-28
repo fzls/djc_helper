@@ -561,6 +561,7 @@ def try_join_xinyue_team(cfg):
 
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
         # 尝试加入固定心悦队伍
         djcHelper.try_join_fixed_xinyue_team()
 
@@ -666,6 +667,8 @@ def try_take_xinyue_team_award(cfg: Config):
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
         djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
 
 
@@ -684,6 +687,8 @@ def try_xinyue_sailiyam_start_work(cfg):
         logger.warning(color("fg_bold_green") + f"------------开始处理第{idx}个账户({account_config.name})的赛利亚的打工和领工资~------------")
 
         djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
         if account_config.function_switches.get_xinyue_sailiyam or account_config.function_switches.disable_most_activities:
             # 先尝试领工资
             djcHelper.show_xinyue_sailiyam_work_log()

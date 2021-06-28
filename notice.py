@@ -152,13 +152,6 @@ class NoticeManager:
         self.notices.append(notice)
         logger.info(f"添加公告：{notice}")
 
-    def reset_all_notices_for_test(self):
-        for notice in self.notices:
-            notice.reset_first_run()
-
-        logger.info("测试环境已重置完毕，所有公告都已改为未展示状态")
-
-
 def main():
     # 初始化
     nm = NoticeManager(load_from_remote=False)
@@ -184,7 +177,13 @@ def main():
 
 def test():
     nm = NoticeManager(load_from_remote=False)
-    nm.reset_all_notices_for_test()
+
+    for notice in nm.notices:
+        notice.reset_first_run()
+        notice.show_only_before_version = ""
+
+    logger.info("测试环境已重置完毕，所有公告都已改为未展示状态，且关闭版本限制")
+
     nm.show_notices()
 
     os.system("PAUSE")

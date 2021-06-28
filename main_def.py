@@ -1262,7 +1262,7 @@ def test_pay_info():
     load_config("config.toml")
     cfg = config()
 
-    cfg.account_configs[0].account_info.uin = "o" + "1359250314"
+    cfg.account_configs[0].account_info.uin = "o" + "1054073896"
 
     # cfg.common.log_level = "debug"
     # from config import to_raw_type

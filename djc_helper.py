@@ -4646,9 +4646,6 @@ class DjcHelper:
 
             return
 
-        if now_in_range("2021-06-24 16:00:00", "2021-07-01 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示自己检查是否领取OK"):
-            async_message_box("去页面看看领取逻辑是否正常运行了~", "提示检查领取是否OK", open_url="https://dnf.qq.com/cp/a20210618anniversary/index.html")
-
         self.check_dnf_anniversary()
 
         gifts = [

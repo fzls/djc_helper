@@ -1426,7 +1426,7 @@ class VipMentorConfigUi(QWidget):
         self.combobox_guanhuai_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
 
-        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，不知道时可以选择区服名称，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息")
+        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
         form_layout.addRow("关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
         self.role_selector = RoleSelector("会员关怀", self.combobox_guanhuai_dnf_server_name, self.lineedit_guanhuai_dnf_role_id, self.account_cfg, self.common_cfg)

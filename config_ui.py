@@ -779,6 +779,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
         form_layout.addRow("自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
+        self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
+        form_layout.addRow("提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
+
         self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
         form_layout.addRow("是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
@@ -840,6 +843,7 @@ class CommonConfigUi(QFrame):
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.check_update_on_end = self.checkbox_check_update_on_end.isChecked()
         cfg.auto_update_on_start = self.checkbox_auto_update_on_start.isChecked()
+        cfg.notify_pay_expired_in_days = self.spinbox_notify_pay_expired_in_days.value()
         cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
         cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()

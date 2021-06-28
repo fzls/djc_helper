@@ -161,6 +161,7 @@ def show_head_line(msg, msg_color=color("fg_bold_green")):
     # +++++++++++
     # +  test   +
     # +++++++++++
+    logger.info(get_meaningful_call_point_for_log())
     logger.warning(char * line_length)
     logger.warning(char + msg_color + padLeftRight(msg, line_length - 2) + color("WARNING") + char)
     logger.warning(char * line_length)
@@ -690,6 +691,7 @@ ignore_caller_names = {
     'is_guanjia_openid_expired',
     'fetch_guanjia_openid',
     'wrapper',
+    'show_head_line',
 }
 
 ignore_prefixes = [

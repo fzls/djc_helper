@@ -1,6 +1,7 @@
 import ctypes
 import datetime
 import hashlib
+import inspect
 import math
 import os
 import pathlib
@@ -677,6 +678,64 @@ def wait_a_while(idx: int):
 
 def md5(val: str) -> str:
     return hashlib.md5(val.encode()).hexdigest()
+
+
+# 以下函数必定不是我们感兴趣的调用处
+ignore_caller_names = {
+    'process_result',
+    'get',
+    'post',
+    'amesvr_request',
+    'check_bind_account',
+    'is_guanjia_openid_expired',
+    'fetch_guanjia_openid',
+    'wrapper',
+}
+
+ignore_prefixes = [
+    'check_',
+    'do_',
+    'query_',
+    '_',
+]
+ignore_suffixes = [
+    '_op',
+]
+
+
+def get_meaningful_call_point_for_log() -> str:
+    """
+    获取实际有意义的调用处，比如这个日志是在通用的回包处记录的，默认会打印回包的地方，但我们实际感兴趣的是外部调用这个请求的地方
+    """
+    # 获取除自身外的其他调用处
+    stack_except_this = inspect.stack()[1:]
+
+    for caller_info in stack_except_this:
+        if caller_info.function in ignore_caller_names \
+                or startswith_any(caller_info.function, ignore_prefixes) \
+                or endswith(caller_info.function, ignore_suffixes):
+            continue
+
+        call_at = f"{caller_info.function}:{caller_info.lineno} "
+        return call_at
+
+    return ""
+
+
+def startswith_any(string: str, prefixes: List[str]) -> bool:
+    for prefix in prefixes:
+        if string.startswith(prefix):
+            return True
+
+    return False
+
+
+def endswith(string: str, suffixes: List[str]) -> bool:
+    for suffix in suffixes:
+        if string.endswith(suffix):
+            return True
+
+    return False
 
 
 if __name__ == '__main__':

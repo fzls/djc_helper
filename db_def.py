@@ -74,6 +74,13 @@ class DBInterface(ConfigInterface):
         # 返回回调结果
         return res
 
+    def reset(self):
+        db_file = self.prepare_env_and_get_db_filepath()
+        if os.path.isfile(db_file):
+            os.remove(db_file)
+
+        logger.debug(f"重置数据库完毕 context={self.context} db_type_name={self.db_type_name} db_file={db_file}")
+
     # ----------------- 辅助函数 -----------------
 
     def prepare_env_and_get_db_filepath(self) -> str:

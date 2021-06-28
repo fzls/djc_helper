@@ -1295,3 +1295,9 @@ if __name__ == '__main__':
     # test_try_report_pay_info()
 
     # show_buy_info_sync("test", True)
+
+    # user_buy_info = BuyInfo()
+    # user_buy_info.total_buy_month = 1
+    # user_buy_info.expire_at = "2021-07-01 00:00:00"
+    # show_buy_info(user_buy_info, config())
+    # os.system("PAUSE")

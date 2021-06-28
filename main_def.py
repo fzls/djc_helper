@@ -724,9 +724,9 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
         if (expired and is_weekly_first_run("show_buy_info_expired")) or (will_expired_soon and is_daily_first_run("show_buy_info_will_expired_soon")):
             ctx = ""
             if expired:
-                ctx = "按月付费已过期"
+                ctx = monthly_pay_info
             elif will_expired_soon:
-                ctx = f"按月付费即将过期({user_buy_info.expire_at})"
+                ctx = f"按月付费即将在{user_buy_info.remaining_time().days}天后过期({user_buy_info.expire_at})"
             threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
             wait_seconds = 15
             logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
@@ -763,7 +763,9 @@ def show_buy_info_sync(ctx, force_message_box=False):
         "\n"
         "目前定价为5元每月（31天）\n"
         "购买方式可查看目录中的【付费指引.docx】\n"
-        "（若未购买，则这个消息每周会弹出一次ヾ(=･ω･=)o）\n"
+        "（若未购买，则这个消息每周会弹出一次）\n"
+        "（若当前剩余付费时长在配置的提前提醒天数内，则这个消息每天会弹出一次）\n"
+        "（ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)
     if not use_by_myself() or force_message_box:

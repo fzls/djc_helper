@@ -381,7 +381,14 @@ def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_u
         return
 
     from first_run import is_first_run
-    if not show_once or is_first_run(f"message_box_{title}"):
+
+    show_message_box = True
+    if show_once and not is_first_run(f"message_box_{title}"):
+        show_message_box = False
+    if os.path.isfile('.no_message_box'):
+        show_message_box = False
+
+    if show_message_box:
         win32api.MessageBox(0, msg, title, icon)
 
     if open_url != "":

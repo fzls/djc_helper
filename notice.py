@@ -176,5 +176,9 @@ def test():
 
 
 if __name__ == '__main__':
-    main()
-    # test()
+    TEST = True
+
+    if not TEST:
+        main()
+    else:
+        test()

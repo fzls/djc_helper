@@ -80,6 +80,11 @@ def _is_first_run(first_run_type: str, key="", duration=timedelta(days=1)) -> bo
     return FirstRunDB().with_context(key).update(cb)
 
 
+def reset_first_run(key=""):
+    # 初始化为初始状态
+    FirstRunDB().with_context(key).reset()
+
+
 if __name__ == '__main__':
     print(is_first_run("first_run"))
     print(is_first_run_in("test_duration", timedelta(minutes=1)))

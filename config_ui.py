@@ -1440,6 +1440,8 @@ class VipMentorConfigUi(QWidget):
 
 
 class RoleSelector(QWidget):
+    combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会"
+
     def __init__(self, ctx, combobox_server_name: MyComboBox, lineedit_role_id: QLineEdit, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
         super(RoleSelector, self).__init__(parent)
 
@@ -1451,8 +1453,7 @@ class RoleSelector(QWidget):
 
         self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
 
-        msg = f"点我查询当前服务器的角色列表，可能会卡一会"
-        self.combobox_role_name = create_combobox(msg, [msg])
+        self.combobox_role_name = create_combobox(self.combobox_role_name_placeholder, [self.combobox_role_name_placeholder])
         self.combobox_role_name.clicked.connect(self.on_role_name_clicked)
         self.combobox_role_name.activated.connect(self.on_role_name_select)
 
@@ -1492,7 +1493,11 @@ class RoleSelector(QWidget):
 
     def update_role_names(self):
         self.combobox_role_name.clear()
-        self.combobox_role_name.addItems([role.rolename for role in self.get_roles()])
+        roles = self.get_roles()
+        if len(roles) != 0:
+            self.combobox_role_name.addItems([role.rolename for role in roles])
+        else:
+            self.combobox_role_name.addItems([self.combobox_role_name_placeholder])
 
     def get_server_id(self) -> str:
         return dnf_server_name_to_id(self.combobox_server_name.currentText())

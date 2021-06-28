@@ -123,6 +123,9 @@ def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_no
         # 不打印的时候改为使用debug级别，而不是连文件也不输出，这样方便排查问题
         logFunc = logger.debug
 
+    # log增加记录实际调用处
+    ctx = get_meaningful_call_point_for_log() + ctx
+
     processed_data = pre_process_data(data)
     if processed_data is None:
         logFunc(f"{ctx}\t{pretty_json(data, pretty)}")

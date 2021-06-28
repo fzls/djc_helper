@@ -721,12 +721,12 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
         # 仅在运行结束时的那次展示付费信息的时候尝试进行下列弹窗~
         expired = not user_buy_info.is_active()
         will_expired_soon = user_buy_info.will_expire_in_days(cfg.common.notify_pay_expired_in_days)
-        if (expired or will_expired_soon) and is_weekly_first_run("show_buy_info"):
+        if (expired and is_weekly_first_run("show_buy_info_expired")) or (will_expired_soon and is_daily_first_run("show_buy_info_will_expired_soon")):
             ctx = ""
             if expired:
                 ctx = "按月付费已过期"
             elif will_expired_soon:
-                ctx = "按月付费即将过期"
+                ctx = f"按月付费即将过期({user_buy_info.expire_at})"
             threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
             wait_seconds = 15
             logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")

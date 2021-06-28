@@ -34,7 +34,7 @@ class Notice(ConfigInterface):
         return parse_time(self.send_at) < parse_time(other.send_at)
 
     def need_show(self) -> bool:
-        key = f"notice_need_show_{self.title}_{self.send_at}"
+        key = self.get_first_run_key()
 
         # 判断是否过期
         if get_now() > parse_time(self.expire_at):
@@ -59,6 +59,12 @@ class Notice(ConfigInterface):
             return False
         else:
             return False
+
+    def reset_first_run(self):
+        reset_first_run(self.get_first_run_key())
+
+    def get_first_run_key(self) -> str:
+        return f"notice_need_show_{self.title}_{self.send_at}"
 
 
 class NoticeManager:
@@ -146,6 +152,12 @@ class NoticeManager:
         self.notices.append(notice)
         logger.info(f"添加公告：{notice}")
 
+    def reset_all_notices_for_test(self):
+        for notice in self.notices:
+            notice.reset_first_run()
+
+        logger.info("测试环境已重置完毕，所有公告都已改为未展示状态")
+
 
 def main():
     # 初始化
@@ -172,7 +184,10 @@ def main():
 
 def test():
     nm = NoticeManager(load_from_remote=False)
+    nm.reset_all_notices_for_test()
     nm.show_notices()
+
+    os.system("PAUSE")
 
 
 if __name__ == '__main__':

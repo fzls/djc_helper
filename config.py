@@ -291,8 +291,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_my_story = True
         # 是否领取 刃影预约活动 活动
         self.get_dnf_reserve = True
-        # 是否领取 DNF周年庆登录活动 活动（为了保持仪式感，默认关闭，需要自动领取请自行开启开关~）
-        self.get_dnf_anniversary = False
+        # 是否领取 DNF周年庆登录活动 活动
+        self.get_dnf_anniversary = True
         # 是否领取 KOL 活动
         self.get_dnf_kol = True
 

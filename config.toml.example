@@ -353,8 +353,8 @@ get_dnf_13 = true
 get_dnf_my_story = true
 # 是否领取 刃影预约活动 活动
 get_dnf_reserve = true
-# 是否领取 DNF周年庆登录活动 活动（为了保持仪式感，默认关闭，需要自动领取请自行开启开关~）
-get_dnf_anniversary = false
+# 是否领取 DNF周年庆登录活动 活动
+get_dnf_anniversary = true
 # 是否领取 KOL 活动
 get_dnf_kol = true
 

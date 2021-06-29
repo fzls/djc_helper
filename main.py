@@ -113,12 +113,12 @@ def main():
     # 确保道聚城绑定OK后在活动运行同时进行异步的弹窗提示
     check_first_run_async(cfg)
 
+    # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
+    try_auto_update(cfg)
+
     # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
     if cfg.common.check_update_on_start:
         check_update(cfg)
-
-    # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
-    try_auto_update(cfg)
 
     show_accounts_status(cfg, "启动时展示账号概览")
 

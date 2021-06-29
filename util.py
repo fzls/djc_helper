@@ -2,6 +2,7 @@ import ctypes
 import datetime
 import hashlib
 import inspect
+import json
 import math
 import os
 import pathlib
@@ -747,17 +748,41 @@ def endswith(string: str, suffixes: List[str]) -> bool:
     return False
 
 
+def extract_between(html: str, prefix: str, suffix: str, typ: Type) -> Any:
+    prefix_idx = html.index(prefix) + len(prefix)
+    suffix_idx = html.index(suffix, prefix_idx)
+
+    return typ(html[prefix_idx:suffix_idx])
+
+
+def test_extract_between():
+    html = open('test/test_extract_between.html', encoding='utf-8').read()
+
+    activity_id = extract_between(html, "var activity_id = '", "';", str)
+    lv_score = extract_between(html, "var lvScore = ", ";", int)
+    tasks = json.loads(extract_between(html, "var tasks = ", ";", str))['list']
+    rewards = json.loads(extract_between(html, "var rewardListData = ", ";", str))
+
+    print(activity_id)
+    print(lv_score)
+    print(tasks)
+    print(rewards)
+
+
 if __name__ == '__main__':
-    print(get_now_unix())
-    print(get_this_week_monday())
-    print(get_last_week_monday())
-    print(get_uuid())
-    print(run_from_src())
-    print(use_by_myself())
-    print(show_end_time("2021-02-23 00:00:00"))
-    print(truncate("风之凌殇风之凌殇", 12))
-    print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
-    print(remove_none_from_list([None, 1, 2, 3, None]))
-    print(get_screen_size())
+    # print(get_now_unix())
+    # print(get_this_week_monday())
+    # print(get_last_week_monday())
+    # print(get_uuid())
+    # print(run_from_src())
+    # print(use_by_myself())
+    # print(show_end_time("2021-02-23 00:00:00"))
+    # print(truncate("风之凌殇风之凌殇", 12))
+    # print(parse_time("2021-02-10 18:55:35") + datetime.timedelta(days=10 * 31))
+    # print(remove_none_from_list([None, 1, 2, 3, None]))
+    # print(get_screen_size())
     # kill_other_instance_on_start()
-    print(md5(""))
+    # print(md5(""))
+
+    test_extract_between()
+    pass

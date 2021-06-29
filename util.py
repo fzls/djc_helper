@@ -11,6 +11,7 @@ import random
 import shutil
 import signal
 import socket
+import subprocess
 import sys
 import threading
 import time
@@ -775,6 +776,23 @@ def test_extract_between():
     print(lv_score)
     print(tasks)
     print(rewards)
+
+
+def popen(args, cwd="."):
+    if type(args) is list:
+        args = [str(arg) for arg in args]
+
+    subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
+                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def start_djc_helper(exe_path: str):
+    popen([
+        exe_path,
+        "--wait_for_pid_exit", os.getpid(),
+        "--max_wait_time", 5,
+    ])
+    logger.info(f"{exe_path} 已经启动~")
 
 
 if __name__ == '__main__':

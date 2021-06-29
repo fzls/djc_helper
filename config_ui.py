@@ -362,13 +362,7 @@ class ConfigUi(QFrame):
         self.save(show_message_box=False)
 
         exe_path = self.get_djc_helper_path()
-        self.popen([
-            exe_path,
-            "--wait_for_pid_exit", os.getpid(),
-            "--max_wait_time", 5,
-        ])
-
-        logger.info(f"{exe_path} 已经启动~")
+        start_djc_helper(exe_path)
 
         if self.common.checkbox_auto_update_on_start.isChecked():
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")

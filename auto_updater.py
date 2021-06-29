@@ -12,7 +12,7 @@ import subprocess
 from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
-from util import kill_process, show_unexpected_exception_message
+from util import kill_process, show_unexpected_exception_message, start_djc_helper
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -168,8 +168,12 @@ def kill_original_process(pid):
 
 def start_new_version(args):
     target_exe = os.path.join(args.cwd, args.exe_name)
-    logger.info(f"更新完毕，重新启动程序 {target_exe}")
-    subprocess.call([target_exe])
+    logger.info(f"更新完毕，重新启动程序 {target_exe}，并退出自动更新工具")
+
+    start_djc_helper(target_exe)
+
+    logger.info("退出配置工具")
+    kill_process(os.getpid())
 
 
 if __name__ == '__main__':

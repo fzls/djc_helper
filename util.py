@@ -689,6 +689,14 @@ def md5(val: str) -> str:
     return hashlib.md5(val.encode()).hexdigest()
 
 
+def md5_file(filepath: str) -> str:
+    hash_md5 = hashlib.md5()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+
 # 以下函数必定不是我们感兴趣的调用处
 ignore_caller_names = {
     'process_result',

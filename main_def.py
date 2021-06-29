@@ -931,17 +931,20 @@ def try_auto_update(cfg):
         if os.path.isfile(auto_updater_latest_path()):
             # 如果存在auto_updater_latest.exe，且与auto_updater.exe不同，则覆盖更新
             need_copy = False
+            reason = ""
             if not exists_auto_updater_dlc():
                 # 不存在dlc，直接复制
                 need_copy = True
+                reason = "当前不存在dlc，但存在最新版dlc，将复制使用该dlc"
             else:
                 # 存在dlc，判断版本是否不同
                 latest_md5 = md5_file(auto_updater_latest_path())
                 current_md5 = md5_file(auto_updater_path())
                 need_copy = latest_md5 != current_md5
+                reason = "当前存在dlc，但存在版本不一样的最新版dlc，将覆盖替换"
 
             if need_copy:
-                logger.info(color("bold_green") + f"将复制{auto_updater_latest_path()}到{auto_updater_path()}")
+                logger.info(color("bold_green") + f"{reason}，将复制{auto_updater_latest_path()}到{auto_updater_path()}")
                 shutil.copyfile(auto_updater_latest_path(), auto_updater_path())
         else:
             if not exists_auto_updater_dlc():

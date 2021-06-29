@@ -1,4 +1,3 @@
-import json
 import string
 import subprocess
 from multiprocessing import Pool
@@ -9,7 +8,6 @@ import pyperclip
 import json_parser
 from black_list import check_in_black_list
 from dao import *
-from data_struct import to_raw_type
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -4350,28 +4348,67 @@ class DjcHelper:
             "cookie": self.cfg.colg_cookie,
         }
 
-        # 当前战令活动id
-        aid = "4"
-        # 每日签到任务id
-        signin_task_id = "96"
-        # 每周登录5次任务id
-        login_five_weekly_task_id = "99"
+        session = requests.session()
+        session.headers = headers
 
-        signin_res = requests.post(self.urls.colg_sign_in_url, data=f"task_id={signin_task_id}", headers=headers, timeout=10)
-        logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
+        def query_info() -> ColgBattlePassInfo:
+            res = session.get(self.urls.colg_url, timeout=10)
+            html = res.text
 
-        login_weekly_res = requests.get(self.urls.colg_take_sign_in_credits.format(aid=aid, task_id=login_five_weekly_task_id), headers=headers, timeout=10)
-        logger.info(color("bold_green") + f"领取 每周登录5天 积分 {login_weekly_res.json()}")
+            activity_id = extract_between(html, "var activity_id = '", "';", str)
+            lv_score = extract_between(html, "var lvScore = ", ";", int)
+            tasks = json.loads(extract_between(html, "var tasks = ", ";", str))['list']
+            rewards = json.loads(extract_between(html, "var rewardListData = ", ";", str))
 
-        take_credits_res = requests.get(self.urls.colg_take_sign_in_credits.format(aid=aid, task_id=signin_task_id), headers=headers, timeout=10)
-        logger.info(color("bold_green") + f"领取签到积分 {take_credits_res.json()}")
-        # {'code': 100000, 'data': {'user_credits': 295, 'task_credits': '15'}, 'msg': ''}
-        resJson = take_credits_res.json()
-        if resJson['code'] == 100000 and resJson['data']['user_credits'] >= 650 and is_weekly_first_run("colg_领取灿烂"):
-            msg = "Colg活跃值已经达到650了咯，记得去Colg领取灿烂哦"
-            async_message_box(msg, "可以领灿烂啦", open_url="https://bbs.colg.cn/forum-171-1.html", show_once=True)
+            info = ColgBattlePassInfo().auto_update_config({
+                'activity_id': activity_id,
+                'lv_score': lv_score,
+                'tasks': tasks,
+                'rewards': rewards,
+            })
 
-        logger.info(color("bold_cyan") + "其他积分的领取，以及各个奖励的领取，请自己前往colg进行嗷")
+            return info
+
+        info = query_info()
+
+        for task in info.tasks:
+            if not task.status:
+                logger.info(f"任务 {task.task_name} 暂未开始，将跳过")
+                continue
+
+            if not task.is_finish:
+                if task.sub_type == "1":
+                    # 如果是签到任务，额外签到
+                    signin_res = session.post(self.urls.colg_sign_in_url, data=f"task_id={task.id}", timeout=10)
+                    logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
+                    task.is_finish = True
+                else:
+                    # 如果任务未完成，则跳过
+                    logger.warning(f"任务 {task.task_name} 条件尚未完成，请自行前往colg进行完成")
+                    continue
+
+            # 如果任务已领取，则跳过
+            if task.is_get:
+                logger.info(f"任务 {task.task_name} 的 积分奖励({task.task_reward}) 已经领取过，将跳过")
+                continue
+
+            # 尝试领取任务奖励
+            res = session.get(self.urls.colg_take_sign_in_credits.format(aid=info.activity_id, task_id=task.id), timeout=10)
+            logger.info(color("bold_green") + f"领取 {task.task_name} 的 积分奖励({task.task_reward})， 结果={res.json()}")
+
+        info = query_info()
+        untaken_awards = info.untaken_rewards()
+        msg = f"Colg活跃值已经达到{info.lv_score}了咯"
+        if len(untaken_awards) > 0:
+            msg += f"，目前有以下奖励可以领取，记得去Colg领取哦\n{untaken_awards}"
+        else:
+            msg += "，目前暂无未领取的奖励"
+        logger.info(color("bold_green") + msg)
+
+        if len(untaken_awards) > 0 and is_weekly_first_run("colg_领取奖励_每周提醒"):
+            async_message_box(msg, "可以领奖励啦", open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
+
+        logger.info(color("bold_cyan") + "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷")
 
         logger.info(color("bold_cyan") + "colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品")
 
@@ -5611,7 +5648,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection_dup()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.majieluo()
-        # djcHelper.colg_signin()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
@@ -5619,4 +5655,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_ozma()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_welfare()
-        djcHelper.guanjia_new()
+        # djcHelper.guanjia_new()
+        djcHelper.colg_signin()

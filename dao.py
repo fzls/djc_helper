@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Tuple, Type
 
 from data_struct import ConfigInterface
 from util import parse_time, run_from_src, format_time, get_today
@@ -1096,6 +1096,62 @@ class GuanjiaNewLotteryResultData(ConfigInterface):
         self.tips = ""
         self.spaBonus = ""
         self.comment = "抗疲劳秘药(5点)（LV80-100)*1"
+
+
+class ColgBattlePassInfo(ConfigInterface):
+    def __init__(self):
+        self.activity_id = '4'
+        self.lv_score = 0
+        self.tasks = []  # type: List[ColgBattlePassTaskInfo]
+        self.rewards = []  # type: List[ColgBattlePassRewardInfo]
+
+    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        return [
+            ("tasks", ColgBattlePassTaskInfo),
+            ("rewards", ColgBattlePassRewardInfo),
+        ]
+
+    def untaken_rewards(self) -> List[str]:
+        untaken_rewards = []
+
+        for reward in self.rewards:
+            if reward.is_finish and not reward.is_get:
+                untaken_rewards.append(reward.reward_name)
+
+        return untaken_rewards
+
+
+class ColgBattlePassTaskInfo(ConfigInterface):
+    def __init__(self):
+        self.id = "96"
+        self.task_name = "登入论坛"
+        self.task_reward = "15"
+        self.task_url = ""
+        self.credits_type = "0"
+        self.sub_type = "1"
+        self.task_qid = 0
+        self.is_finish = False
+        self.is_get = False
+        self.status = False
+        self.remark = "<p>1、登入APP同样可以完成该任务哦！</p>\n<p>2、任务完成后记得点击领取来获得活跃值</p>"
+        self.task_msg = ""
+        self.exchange_credits = 0
+        self.sort_id = 1
+        self.is_highlight = "0"
+
+
+class ColgBattlePassRewardInfo(ConfigInterface):
+    def __init__(self):
+        self.lv = "51"
+        self.reward_img = "https://img-cos.colg.cn/uploads/images/202106/202106091826325699.png/ori_png"
+        self.reward_pic = "https://img-cos.colg.cn/uploads/images/202106/202106171733228771.png/ori_png"
+        self.reward_name = "+10装备强化券"
+        self.reward_count = "750"
+        self.is_get = False
+        self.is_finish = False
+        self.is_display = "1"
+        self.is_clog = False
+        self.sort_id = 12
 
 
 if __name__ == '__main__':

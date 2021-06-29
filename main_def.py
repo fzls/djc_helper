@@ -1,4 +1,3 @@
-import json
 import subprocess
 from multiprocessing import freeze_support
 from sys import exit
@@ -906,24 +905,55 @@ def try_auto_update(cfg):
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
+        has_buy_dlc = has_buy_auto_updater_dlc(cfg.get_qq_accounts())
+
+        if not has_buy_dlc:
+            if exists_auto_updater_dlc():
+                msg = (
+                    "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
+                    "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
+                    "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
+                    "\n"
+                    "请对照下列列表，确认是否属于以下情况\n"
+                    "1. 游戏账号和加群的QQ不一样，导致使用游戏账号登录时被判定为未购买。对策：请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
+                    "2. 未购买，也没有从别人那边拿过来。对策：直接将utils目录下的auto_updater.exe删除即可\n"
+                    "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
+                )
+                logger.warning(color("bold_yellow") + msg)
+                win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
+            else:
+                logger.warning(color("bold_cyan") + "当前未购买自动更新DLC，将跳过自动更新流程~")
+
+            return
+
+        # 已购买dlc的流程
+
+        if os.path.isfile(auto_updater_latest_path()):
+            # 如果存在auto_updater_latest.exe，且与auto_updater.exe不同，则覆盖更新
+            need_copy = False
+            if not exists_auto_updater_dlc():
+                # 不存在dlc，直接复制
+                need_copy = True
+            else:
+                # 存在dlc，判断版本是否不同
+                latest_md5 = md5_file(auto_updater_latest_path())
+                current_md5 = md5_file(auto_updater_path())
+                need_copy = latest_md5 != current_md5
+
+            if need_copy:
+                logger.info(color("bold_green") + f"将复制{auto_updater_latest_path()}到{auto_updater_path()}")
+                shutil.copyfile(auto_updater_latest_path(), auto_updater_path())
+        else:
+            if not exists_auto_updater_dlc():
+                # 未发现dlc和最新版dlc，尝试从网盘下载
+                logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
+                uploader = Uploader()
+                uploader.download_file_in_folder(uploader.folder_djc_helper_tools, os.path.basename(auto_updater_path()), os.path.dirname(auto_updater_path()))
+
+        # 保底，如果前面的流程都失败了，提示用户自行下载
         if not exists_auto_updater_dlc():
             logger.warning(color("bold_cyan") + "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
             logger.warning(color("bold_green") + "如果已经购买过DLC，请先打开目录中的[付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可")
-            return
-
-        if not has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
-            msg = (
-                "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
-                "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
-                "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
-                "\n"
-                "请对照下列列表，确认是否属于以下情况\n"
-                "1. 游戏账号和加群的QQ不一样，导致使用游戏账号登录时被判定为未购买。对策：请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
-                "2. 未购买，也没有从别人那边拿过来。对策：直接将utils目录下的auto_updater.exe删除即可\n"
-                "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
-            )
-            logger.warning(color("bold_yellow") + msg)
-            win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
             return
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
@@ -1164,11 +1194,15 @@ def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, 
 
 
 def exists_auto_updater_dlc():
-    return os.path.exists(auto_updater_path())
+    return os.path.isfile(auto_updater_path())
 
 
 def auto_updater_path():
     return os.path.realpath("utils/auto_updater.exe")
+
+
+def auto_updater_latest_path():
+    return os.path.realpath("utils/auto_updater_latest.exe")
 
 
 def show_multiprocessing_info(cfg: Config):

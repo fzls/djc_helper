@@ -55,6 +55,10 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             logger.info(f"拷贝文件 {filename}")
             shutil.copyfile(source, destination)
 
+    logger.info("复制auto_updater.exe为auto_updater_latest.exe，供小助手更新dlc用")
+    dlc_release_dir = os.path.join(dir_current_release, "utils")
+    shutil.copyfile(os.path.join(dlc_release_dir, "auto_updater.exe"), os.path.join(dlc_release_dir, "auto_updater_latest.exe"))
+
     logger.info("清除一些无需发布的内容")
     dir_to_filenames_need_remove = {
         ".": [

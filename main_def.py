@@ -948,7 +948,7 @@ def try_auto_update(cfg):
                 # 未发现dlc和最新版dlc，尝试从网盘下载
                 logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
                 uploader = Uploader()
-                uploader.download_file_in_folder(uploader.folder_djc_helper_tools, os.path.basename(auto_updater_path()), os.path.dirname(auto_updater_path()))
+                uploader.download_file_in_folder(uploader.folder_djc_helper, os.path.basename(auto_updater_path()), os.path.dirname(auto_updater_path()))
 
         # 保底，如果前面的流程都失败了，提示用户自行下载
         if not exists_auto_updater_dlc():

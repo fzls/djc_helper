@@ -575,6 +575,7 @@ def try_join_xinyue_team(cfg):
 def run(cfg: Config):
     _show_head_line("开始核心逻辑")
 
+    _show_head_line("查询付费信息")
     logger.warning("开始查询付费信息，请稍候~")
     user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
     show_buy_info(user_buy_info, cfg, need_show_message_box=False)

@@ -474,7 +474,7 @@ def show_activity_info(cfg: Config):
     logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
     Urls().show_current_valid_act_infos()
 
-    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts(), show_dlc_info=False)
     show_activities_summary(cfg, user_buy_info)
 
 

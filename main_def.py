@@ -1,4 +1,3 @@
-import subprocess
 from multiprocessing import freeze_support
 from sys import exit
 
@@ -454,8 +453,8 @@ def count_with_color(card_count, show_color, show_width=3):
 
 
 @try_except()
-def show_extra_infos(cfg):
-    show_activity_info()
+def show_extra_infos(cfg: Config):
+    show_activity_info(cfg)
 
     show_tips(cfg)
 
@@ -469,11 +468,14 @@ def show_pay_info(cfg):
 
 
 @try_except()
-def show_activity_info():
+def show_activity_info(cfg: Config):
     logger.info("")
     _show_head_line("部分活动信息")
     logger.warning("如果一直卡在这一步，请在小助手目录下创建一个空文件：不查询活动.txt")
     Urls().show_current_valid_act_infos()
+
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+    show_activities_summary(cfg, user_buy_info)
 
 
 @try_except()

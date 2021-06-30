@@ -308,20 +308,20 @@ class DjcHelper:
 
         # 付费活动信息
         paied_activities_summary = get_activities_summary("短期付费", paied_activities)
-        if user_buy_info.is_active():
-            show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
-            logger.info(paied_activities_summary)
-        else:
+        show_head_line("以下为付费期间才会运行的短期活动", msg_color=color("bold_cyan"))
+
+        if not user_buy_info.is_active():
             if user_buy_info.total_buy_month != 0:
                 msg = f"账号{user_buy_info.qq}的付费内容已到期，到期时间点为{user_buy_info.expire_at}。"
             else:
                 msg = f"账号{user_buy_info.qq}未购买付费内容。"
             msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可查看目录中的【付费指引.docx】，目前定价为5元每月。"
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
-
-            msg += paied_activities_summary
+            msg += "\n具体受影响的活动内容如下"
 
             logger.warning(color("bold_yellow") + msg)
+
+        logger.info(paied_activities_summary)
 
     def free_activities(self) -> List[Tuple[str, Callable]]:
         return [

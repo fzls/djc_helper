@@ -98,6 +98,12 @@ if uploader.login_ok:
         ])
     ]
 
+    logger.info(color("bold_green") + f"具体上传列表如下：")
+    for upload_folder, upload_list in upload_info_list:
+        logger.info(f"\t{upload_folder}")
+        for local_filepath, history_file_prefix in reversed(upload_list):
+            logger.info(f"\t\t{local_filepath}")
+
     for upload_folder, upload_list in upload_info_list:
         for local_filepath, history_file_prefix in reversed(upload_list):
             # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方

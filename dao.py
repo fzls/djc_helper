@@ -158,6 +158,30 @@ class DnfRoleInfo(DaoObject):
         self.forceid = int(forceid)
         self.level = int(level)
 
+    def get_force_name(self) -> str:
+        force_id_to_name = {
+            0: "鬼剑士（男）",
+            1: "格斗家（女）",
+            2: "神枪手（男）",
+            3: "魔法师（女）",
+            4: "圣职者（男）",
+            5: "神枪手（女）",
+            6: "暗夜使者",
+            7: "格斗家（男）",
+            8: "魔法师（男）",
+            9: "黑暗武士",
+            10: "缔造者",
+            11: "鬼剑士（女）",
+            12: "守护者",
+            13: "魔枪士",
+            14: "圣职者（女）",
+            15: "枪剑士",
+        }
+        if self.forceid not in force_id_to_name:
+            return str(self.forceid)
+
+        return force_id_to_name[self.forceid]
+
 
 class MobileGameRoleInfo(DaoObject):
     def __init__(self, roleid, rolename):

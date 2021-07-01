@@ -1250,9 +1250,10 @@ def try_save_configs_to_user_data_dir():
     appdata_dir = get_appdata_dir()
 
     logger.info(f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir}")
-    sync_configs(cwd, appdata_dir)
+    sync_configs(cwd, appdata_dir, print_not_found_logs=False)
 
     # 为了方便排查问题，在备份目录写入备份信息
+    make_sure_dir_exists(appdata_dir)
     with open(os.path.join(appdata_dir, '__backup_info.json'), 'w', encoding='utf-8') as f:
         json.dump({
             "app_version": now_version,
@@ -1289,7 +1290,7 @@ def try_load_old_version_configs_from_user_data_dir():
         return
 
     logger.info("符合同步条件，将开始同步流程~")
-    sync_configs(appdata_dir, cwd)
+    sync_configs(appdata_dir, cwd, print_not_found_logs=False)
 
 
 def get_appdata_dir() -> str:

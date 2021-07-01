@@ -79,14 +79,29 @@ uploader = Uploader()
 uploader.login(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt")), uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(patch_file_name, uploader.folder_djc_helper, history_file_prefix=uploader.history_patches_prefix)
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "付费指引.docx")), uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "使用教程/视频教程.txt")), uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "使用教程/使用文档.docx")), uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/auto_updater.exe")), uploader.folder_djc_helper)
-    uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper, history_file_prefix=uploader.history_version_prefix)
-    uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc, history_file_prefix=uploader.history_version_prefix)
+
+    def path_in_src(filepath_relative_to_src:str)->str:
+        return os.path.realpath(os.path.join(dir_src, filepath_relative_to_src))
+
+    upload_info_list = [
+        (uploader.folder_djc_helper, [
+            (release_7z_name, uploader.history_version_prefix),
+            (path_in_src("utils/auto_updater.exe"), ""),
+            (path_in_src("使用教程/使用文档.docx"), ""),
+            (path_in_src("使用教程/视频教程.txt"), ""),
+            (path_in_src("付费指引.docx"), ""),
+            (patch_file_name, uploader.history_patches_prefix),
+            (path_in_src("utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt"), ""),
+        ]),
+        (uploader.folder_dnf_calc, [
+            (release_7z_name, uploader.history_version_prefix),
+        ])
+    ]
+
+    for upload_folder, upload_list in upload_info_list:
+        for local_filepath, history_file_prefix in reversed(upload_list):
+            # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
+            uploader.upload_to_lanzouyun(local_filepath, upload_folder, history_file_prefix=history_file_prefix)
 else:
     logger.error("蓝奏云登录失败")
 

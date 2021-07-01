@@ -31,6 +31,9 @@ def parse_args():
 
 
 def main():
+    # 启动时检查是否需要同步本机数据目录备份的旧版本配置
+    try_load_old_version_configs_from_user_data_dir()
+
     args = parse_args()
 
     # 最大化窗口

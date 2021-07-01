@@ -62,7 +62,10 @@ package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_
 os.chdir(dir_all_release)
 create_patch_for_latest_n_version = 3
 logger.info(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁")
-patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
+# 制作补丁
+create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
+# 获取补丁地址（分开方便调试）
+patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=True)
 
 # ---------------标记新版本
 logger.info("提交版本和版本变更说明，并同步到docs目录，用于生成github pages")

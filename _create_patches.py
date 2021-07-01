@@ -31,12 +31,12 @@ class VersionInfo:
         return str(self.__dict__)
 
 
-def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact) -> str:
+def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=False) -> str:
     latest_version = now_version
 
     old_cwd = os.getcwd()
     os.chdir(dir_all_release)
-    logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
+    if not get_final_patch_path_only: logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
 
     version_dir_regex = r"DNF蚊子腿小助手_v(.*)_by风之凌殇"
 
@@ -62,13 +62,19 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
         create_patch_for_latest_n_version = len(old_version_infos)
 
     old_version_infos = sorted(old_version_infos)[-create_patch_for_latest_n_version:]
-    logger.info(f"将为【{old_version_infos}】版本制作补丁包")
 
     # 创建patch目录
     patch_oldest_version = old_version_infos[0].version
     patch_newest_version = old_version_infos[-1].version
     patches_dir = f"DNF蚊子腿小助手_增量更新文件_v{patch_oldest_version}_to_v{patch_newest_version}"
     temp_dir = "patches_temp"
+
+    patch_7z_file = f"{patches_dir}.7z"
+    if get_final_patch_path_only:
+        return patch_7z_file
+
+    # --------------------------- 实际只做补丁包 ---------------------------
+    logger.info(f"将为【{old_version_infos}】版本制作补丁包")
 
     shutil.rmtree(patches_dir, ignore_errors=True)
     os.mkdir(patches_dir)
@@ -117,7 +123,6 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     shutil.rmtree(temp_dir, ignore_errors=True)
 
     # 压缩打包
-    patch_7z_file = f"{patches_dir}.7z"
     path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
 

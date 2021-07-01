@@ -1,5 +1,4 @@
 import string
-import subprocess
 from multiprocessing import Pool
 from urllib.parse import quote_plus
 
@@ -1832,17 +1831,17 @@ class DjcHelper:
 
             logger.info(color("bold_green") + "尝试使用当前区服的所有100级角色来领取抽奖次数")
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-            roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
-            for role in roles:
-                if role.level < 100:
-                    # 未到100级必定不可能通关奥兹玛
-                    continue
 
+            # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
+            take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
+            valid_roles = query_level_100_roles()
+            for idx, role in enumerate(valid_roles):
                 # 临时更新绑定角色为该角色
-                logger.info(color("bold_green") + f"尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
-                djc_roleinfo.roleCode = role.roleid
-                djc_roleinfo.roleName = role.rolename
-                self.check_dnf_ozma()
+                logger.info("")
+                logger.info(color("bold_cyan") + f"[{idx+1}/{len(valid_roles)}] 尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
+                take_lottery_count_role_info.roleCode = role.roleid
+                take_lottery_count_role_info.roleName = role.rolename
+                self.check_dnf_ozma(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
                 # 领奖
                 idx = 0
@@ -1853,8 +1852,24 @@ class DjcHelper:
                         break
 
             # 切换回原有绑定角色
-            self.get_bind_role_list()
+            logger.info(color("bold_green") + "所有符合条件的角色尝试领取抽奖次数完毕，切换为原有绑定角色")
             self.check_dnf_ozma()
+
+        def query_level_100_roles() -> List[DnfRoleInfo]:
+            djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+            valid_roles = []
+
+            roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
+            for role in roles:
+                if role.level < 100:
+                    # 未到100级必定不可能通关奥兹玛
+                    continue
+
+                valid_roles.append(role)
+
+            return valid_roles
+
 
         self.dnf_ozma_op("周年庆登录礼包", "770194")
         self.dnf_ozma_op("周年庆130元充值礼", "770201")
@@ -1897,9 +1912,10 @@ class DjcHelper:
 
         self.dnf_ozma_op("登录心悦APP送礼包", "770032")
 
-    def check_dnf_ozma(self):
+    def check_dnf_ozma(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account("DNF奥兹玛竞速", "https://xinyue.qq.com/act/a20210526znqhd/index.html",
-                                activity_op_func=self.dnf_ozma_op, query_bind_flowid="770020", commit_bind_flowid="770019")
+                                activity_op_func=self.dnf_ozma_op, query_bind_flowid="770020", commit_bind_flowid="770019",
+                                roleinfo=roleinfo, roleinfo_source=roleinfo_source)
 
     def dnf_ozma_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_ozma
@@ -5371,7 +5387,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo:RoleInfo=None, bind_detail_reason=""):
+    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo: RoleInfo = None, roleinfo_source="道聚城所绑定的角色"):
         while True:
             res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
             # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
@@ -5392,20 +5408,16 @@ class DjcHelper:
                     djc_account = f"{roleinfo.serviceName}-{roleinfo.roleName}-{roleinfo.roleCode}"
 
                     need_bind = True
-                    bind_reason = f"当前绑定账号({current_account})与道聚城绑定账号({djc_account})不一致"
-
-            if bind_detail_reason != "":
-                # 如果外部传入了详细绑定原因，则使用外部的。如奥兹玛切换角色领取抽奖次数
-                bind_reason = bind_detail_reason
+                    bind_reason = f"当前绑定账号({current_account})与{roleinfo_source}({djc_account})不一致"
 
             if need_bind:
                 self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,
-                                           query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind, bind_reason=bind_reason)
+                                           query_bind_flowid=query_bind_flowid, commit_bind_flowid=commit_bind_flowid, try_auto_bind=try_auto_bind, bind_reason=bind_reason, roleinfo=roleinfo, roleinfo_source=roleinfo_source)
             else:
                 # 已经绑定
                 break
 
-    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False, bind_reason="未绑定角色", roleinfo:RoleInfo=None):
+    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False, bind_reason="未绑定角色", roleinfo: RoleInfo = None, roleinfo_source="道聚城所绑定的角色"):
         if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
             if 'dnf' in self.bizcode_2_bind_role_map:
                 # 若道聚城已绑定dnf角色，则尝试绑定这个角色
@@ -5417,7 +5429,7 @@ class DjcHelper:
                 def double_quote(strToQuote):
                     return quote_plus(quote_plus(strToQuote))
 
-                logger.warning(color("bold_yellow") + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，将尝试绑定为道聚城所绑定的角色({roleinfo.serviceName}-{roleinfo.roleName})")
+                logger.warning(color("bold_yellow") + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，将尝试绑定为{roleinfo_source}({roleinfo.serviceName}-{roleinfo.roleName})")
                 activity_op_func("提交绑定大区", commit_bind_flowid, True,
                                  user_area=roleinfo.serviceID, user_partition=roleinfo.serviceID, user_areaName=double_quote(roleinfo.serviceName),
                                  user_roleId=roleinfo.roleCode, user_roleName=double_quote(roleinfo.roleName), user_roleLevel="100",
@@ -5426,7 +5438,7 @@ class DjcHelper:
                 logger.warning(color("bold_yellow") + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，但道聚城未绑定角色，因此无法应用自动绑定，将使用手动绑定方案")
 
             # 绑定完毕，再次检测，这次如果检测仍未绑定，则不再尝试自动绑定
-            self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False)
+            self.check_bind_account(activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=False, roleinfo=roleinfo, roleinfo_source=roleinfo_source)
         else:
             msg = (
                 f"当前账号【{self.cfg.name}】{bind_reason}，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
@@ -5661,8 +5673,8 @@ if __name__ == '__main__':
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
-        # djcHelper.dnf_ozma()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
-        djcHelper.colg_signin()
+        # djcHelper.colg_signin()
+        djcHelper.dnf_ozma()

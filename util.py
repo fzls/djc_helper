@@ -810,6 +810,7 @@ def sync_configs(source_dir: str, target_dir: str):
         ".no_max_console",
         ".use_by_myself",
         "不查询活动.txt",
+        ".no_message_box",
 
         # 缓存文件所在目录
         ".cached",

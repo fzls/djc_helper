@@ -1833,7 +1833,7 @@ class DjcHelper:
 
             ignore_rolename_list = self.cfg.ozma_ignored_rolename_list
 
-            logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}")
+            logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项")
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
             # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动

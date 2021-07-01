@@ -88,7 +88,7 @@ def maximize_console_sync():
 
 
 def ensure_cmd_window_buffer_size_for_win7():
-    if not os.path.exists(".no_max_console") and platform.system() == "Windows" and platform.release() == "7":
+    if platform.system() == "Windows" and platform.release() == "7":
         # win7下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
         base_width = 1920
         base_cols = 240

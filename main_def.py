@@ -1265,7 +1265,7 @@ def try_save_configs_to_user_data_dir():
             "app_version": now_version,
             "app_time": ver_time,
             "backup_time": format_now(),
-        }, f)
+        }, f, indent=4, ensure_ascii=False)
 
 
 @try_except()

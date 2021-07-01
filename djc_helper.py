@@ -640,7 +640,9 @@ class DjcHelper:
             lines.append(ctx)
             if len(roleLists) != 0:
                 for idx, role in enumerate(roleLists):
-                    lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid}\t 名字 = {role.rolename}")
+                    formatted_force_name = padLeftRight(role.get_force_name(), 10, mode='left')
+                    formatted_role_name = padLeftRight(role.rolename, 20, mode='left')
+                    lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid:10s} \t名字 = {formatted_role_name} \t职业 = {formatted_force_name} \t等级 = {role.level:3d}")
             else:
                 lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
                 lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")

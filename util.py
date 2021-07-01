@@ -45,6 +45,9 @@ def is_valid_qq(qq: str) -> bool:
 
 
 def maximize_console():
+    # 如果是win7的话，先同步设置cmd属性
+    ensure_cmd_window_buffer_size_for_win7()
+
     threading.Thread(target=maximize_console_sync, daemon=True).start()
 
 
@@ -83,7 +86,9 @@ def maximize_console_sync():
         logger.info("已启用最小化模式")
     win32gui.ShowWindow(current_hwnd, op)
 
-    if op == win32con.SW_MAXIMIZE and platform.system() == "Windows" and platform.release() == "7":
+
+def ensure_cmd_window_buffer_size_for_win7():
+    if not os.path.exists(".no_max_console") and platform.system() == "Windows" and platform.release() == "7":
         # win7下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
         base_width = 1920
         base_cols = 240

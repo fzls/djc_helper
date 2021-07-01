@@ -1839,6 +1839,7 @@ class DjcHelper:
                     continue
 
                 # 临时更新绑定角色为该角色
+                logger.info(color("bold_green") + f"尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
                 djc_roleinfo.roleCode = role.roleid
                 djc_roleinfo.roleName = role.rolename
                 self.check_dnf_ozma()

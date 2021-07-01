@@ -369,6 +369,8 @@ class ConfigUi(QFrame):
                     return
 
             account_config = AccountConfig()
+            # 调用下这个函数，确保读取配置时的回调的一些参数能够生成，避免刚创建账号时执行一些操作会报错
+            account_config.auto_update_config({})
             account_config.name = account_name
             account_ui = AccountConfigUi(account_config, self.to_config().common)
             self.accounts.append(account_ui)

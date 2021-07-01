@@ -1829,7 +1829,9 @@ class DjcHelper:
                 self.dnf_ozma_op("领取通关奥兹玛赠送抽奖券", "770026")
                 return
 
-            logger.info(color("bold_green") + "尝试使用当前区服的所有100级角色来领取抽奖次数")
+            ignore_rolename_list = self.cfg.ozma_ignored_rolename_list
+
+            logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}")
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
             # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
@@ -1839,6 +1841,12 @@ class DjcHelper:
                 # 临时更新绑定角色为该角色
                 logger.info("")
                 logger.info(color("bold_cyan") + f"[{idx+1}/{len(valid_roles)}] 尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
+
+                # 如果在忽略名单里，则直接跳过
+                if role.rolename in ignore_rolename_list:
+                    logger.info(color("bold_green") + f"{role.rolename} 在忽略名单里，将直接跳过~")
+                    continue
+
                 take_lottery_count_role_info.roleCode = role.roleid
                 take_lottery_count_role_info.roleName = role.rolename
                 self.check_dnf_ozma(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")

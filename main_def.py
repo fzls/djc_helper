@@ -1256,7 +1256,7 @@ def try_save_configs_to_user_data_dir():
     appdata_dir = get_appdata_dir()
 
     logger.info(f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir}")
-    sync_configs(cwd, appdata_dir, print_not_found_logs=False)
+    sync_configs(cwd, appdata_dir)
 
     # 为了方便排查问题，在备份目录写入备份信息
     make_sure_dir_exists(appdata_dir)
@@ -1297,7 +1297,7 @@ def try_load_old_version_configs_from_user_data_dir():
         return
 
     logger.info("符合同步条件，将开始同步流程~")
-    sync_configs(appdata_dir, cwd, print_not_found_logs=False)
+    sync_configs(appdata_dir, cwd)
 
 
 def get_appdata_dir() -> str:

@@ -795,7 +795,7 @@ def start_djc_helper(exe_path: str):
     logger.info(f"{exe_path} 已经启动~")
 
 
-def sync_configs(source_dir: str, target_dir: str, print_not_found_logs=True):
+def sync_configs(source_dir: str, target_dir: str):
     """
     将指定的配置相关文件从 源目录 覆盖到 目标目录
     """
@@ -821,25 +821,25 @@ def sync_configs(source_dir: str, target_dir: str, print_not_found_logs=True):
         "utils/auto_updater.exe"
     ]
 
-    logger.info(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
+    logger.debug(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
 
     for filename in sync_config_list:
         source = os.path.join(source_dir, filename)
         destination = os.path.join(target_dir, filename)
 
         if not os.path.exists(source):
-            if print_not_found_logs: logger.warning(f"旧版本目录未发现 {filename}，将跳过")
+            logger.debug(f"旧版本目录未发现 {filename}，将跳过")
             continue
 
         # 确保要复制的目标文件所在目录存在
         make_sure_dir_exists(os.path.dirname(destination))
 
         if os.path.isdir(filename):
-            logger.info(f"覆盖目录 {filename}")
+            logger.debug(f"覆盖目录 {filename}")
             remove_directory(destination, print_not_found_logs=print_not_found_logs)
             shutil.copytree(source, destination)
         else:
-            logger.info(f"覆盖文件 {filename}")
+            logger.debug(f"覆盖文件 {filename}")
             remove_file(destination, print_not_found_logs=print_not_found_logs)
             shutil.copyfile(source, destination)
 

@@ -1838,16 +1838,11 @@ class DjcHelper:
 
             # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
             take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
-            valid_roles = query_level_100_roles()
+            valid_roles = query_level_100_roles(ignore_rolename_list)
             for idx, role in enumerate(valid_roles):
                 # 临时更新绑定角色为该角色
                 logger.info("")
-                logger.info(color("bold_cyan") + f"[{idx+1}/{len(valid_roles)}] 尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
-
-                # 如果在忽略名单里，则直接跳过
-                if role.rolename in ignore_rolename_list:
-                    logger.info(color("bold_green") + f"{role.rolename} 在忽略名单里，将直接跳过~")
-                    continue
+                logger.info(color("bold_cyan") + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
 
                 take_lottery_count_role_info.roleCode = role.roleid
                 take_lottery_count_role_info.roleName = role.rolename
@@ -1865,7 +1860,7 @@ class DjcHelper:
             logger.info(color("bold_green") + "所有符合条件的角色尝试领取抽奖次数完毕，切换为原有绑定角色")
             self.check_dnf_ozma()
 
-        def query_level_100_roles() -> List[DnfRoleInfo]:
+        def query_level_100_roles(ignore_rolename_list: List[str]) -> List[DnfRoleInfo]:
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
             valid_roles = []
@@ -1876,10 +1871,13 @@ class DjcHelper:
                     # 未到100级必定不可能通关奥兹玛
                     continue
 
+                if role.rolename in ignore_rolename_list:
+                    # 设置为忽略的也跳过
+                    continue
+
                 valid_roles.append(role)
 
             return valid_roles
-
 
         self.dnf_ozma_op("周年庆登录礼包", "770194")
         self.dnf_ozma_op("周年庆130元充值礼", "770201")

@@ -174,7 +174,23 @@ if __name__ == '__main__':
     try:
         run_start_time = datetime.datetime.now()
         main()
-        logger.warning(color("fg_bold_yellow") + f"运行完成，共用时{datetime.datetime.now() - run_start_time}")
+        total_used_time = datetime.datetime.now() - run_start_time
+        logger.warning(color("fg_bold_yellow") + f"运行完成，共用时{total_used_time}")
+
+        # 如果总用时太高的情况时，尝试提示开启多进程和超快速模式
+        cfg = config()
+        if total_used_time > datetime.timedelta(minutes=10) \
+                and (not cfg.common.enable_multiprocessing or not cfg.common.enable_super_fast_mode):
+            msg = (
+                f"当前累计用时似乎很久({total_used_time})，是否要尝试多进程和超快速模式？\n"
+                "多进程模式下，将开启多个进程并行运行不同账号的领取流程\n"
+                "额外开启超快速模式，会进一步将不同账号的不同活动都异步领取，进一步加快领取速度\n"
+                "\n"
+                "如果需要开启，请打开配置工具，在【公共配置】tab中勾选【是否启用多进程功能】和【是否启用超快速模式（并行活动）】"
+            )
+            logger.warning(color("bold_cyan") + msg)
+            if is_weekly_first_run("用时过久提示"):
+                async_message_box(msg, "用时过久", print_log=False)
     except Exception as e:
         show_unexpected_exception_message(e)
         # 如果在github action，则继续抛出异常

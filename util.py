@@ -844,6 +844,26 @@ def sync_configs(source_dir: str, target_dir: str, print_not_found_logs=True):
             shutil.copyfile(source, destination)
 
 
+def start_and_end_date_of_a_month(date:datetime.datetime):
+    """
+    返回对应时间所在月的起始和结束时间点，形如 2021-07-01 00:00:00 和 2021-07-31 23:59:59
+    """
+    this_mon_start_date = date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    month = this_mon_start_date.month
+    year = this_mon_start_date.year
+    if month == 12:
+        month = 1
+        year += 1
+    else:
+        month += 1
+    next_month_start_date = this_mon_start_date.replace(month=month, year=year)
+
+    this_month_end_date = (next_month_start_date - datetime.timedelta(days=1)).replace(hour=23, minute=59, second=59, microsecond=0)
+
+    return this_mon_start_date, this_month_end_date
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())
@@ -859,5 +879,7 @@ if __name__ == '__main__':
     # kill_other_instance_on_start()
     # print(md5(""))
 
-    test_extract_between()
+    # test_extract_between()
+
+    print(start_and_end_date_of_a_month(get_now()))
     pass

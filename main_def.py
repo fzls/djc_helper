@@ -1,3 +1,4 @@
+import os
 from multiprocessing import freeze_support
 from sys import exit
 
@@ -1240,6 +1241,41 @@ def show_notices():
         nm.show_notices()
 
     async_call(_cb)
+
+
+def try_load_old_version_configs_from_user_data_dir():
+    """
+    若是首次运行，尝试从%APPDATA%/djc_helper同步配置到当前目录
+    """
+    cwd = os.getcwd()
+    appdata_dir = get_appdata_dir()
+    disable_flag_file = ".no_sync_configs"
+
+    logger.info(f"已开启首次运行时自动同步配置本机配置功能，将尝试从 {appdata_dir} 同步配置到 {cwd}")
+    logger.info(f"如果不需要该功能，可在当前目录创建 {disable_flag_file} 文件")
+
+    if os.path.exists(disable_flag_file):
+        logger.info(f"当前目录存在 {disable_flag_file}，故而不尝试同步配置")
+        return
+
+    if run_from_src():
+        logger.info(f"当前使用源码运行，无需同步配置")
+        return
+
+    if not is_first_run("sync_config"):
+        logger.info(f"当前不是首次运行，无需同步配置")
+        return
+
+    if not os.path.isdir(appdata_dir):
+        logger.info(f"当前没有备份的旧版本配置，无需同步配置")
+        return
+
+    logger.info("符合同步条件，将开始同步流程~")
+    sync_configs(appdata_dir, cwd)
+
+
+def get_appdata_dir() -> str:
+    return os.path.join(os.path.expandvars("%APPDATA%"), 'djc_helper')
 
 
 def test_show_notices():

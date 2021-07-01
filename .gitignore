@@ -31,6 +31,7 @@ utils/
 !utils/hdiffz.exe
 !utils/hpatchz.exe
 !utils/notices.txt
+!utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt
 
 _update_temp_dir/
 

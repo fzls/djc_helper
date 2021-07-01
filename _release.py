@@ -79,8 +79,9 @@ uploader = Uploader()
 uploader.login(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")
-    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/auto_updater.exe")), uploader.folder_djc_helper)
+    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt")), uploader.folder_djc_helper)
     uploader.upload_to_lanzouyun(patch_file_name, uploader.folder_djc_helper, history_file_prefix=uploader.history_patches_prefix)
+    uploader.upload_to_lanzouyun(os.path.realpath(os.path.join(dir_src, "utils/auto_updater.exe")), uploader.folder_djc_helper)
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_djc_helper, history_file_prefix=uploader.history_version_prefix)
     uploader.upload_to_lanzouyun(release_7z_name, uploader.folder_dnf_calc, history_file_prefix=uploader.history_version_prefix)
 else:

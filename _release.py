@@ -10,7 +10,7 @@ from _commit_new_version import commit_new_version
 from _create_patches import create_patch
 from _package import package
 from _push_github import push_github
-from log import logger
+from log import logger, color
 from upload_lanzouyun import Uploader
 from util import maximize_console, make_sure_dir_exists
 from version import now_version

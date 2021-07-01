@@ -6,7 +6,6 @@ logger.addHandler(new_file_handler())
 
 from io import StringIO
 from traceback import print_tb
-import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
     QMessageBox, QInputDialog, QLabel, QFileDialog)
@@ -186,44 +185,8 @@ class ConfigUi(QFrame):
             return
 
         # 将特定文件和目录复制过来覆盖新版本的目录
-        files_to_copy = [
-            # 配置文件
-            "config.toml",
-            "config.toml.local",
-
-            # 特定功能的开关
-            ".disable_pause_after_run",
-            ".min_console",
-            ".no_max_console",
-            ".use_by_myself",
-            "不查询活动.txt",
-
-            # 缓存文件所在目录
-            ".cached",
-            ".db",
-            ".first_run",
-
-            # 自动更新DLC
-            "utils/auto_updater.exe"
-        ]
         new_version_dir = os.getcwd()
-        logger.info(f"将以下内容从{old_version_dir} 复制并覆盖到 {new_version_dir}")
-        for filename in files_to_copy:
-            source = os.path.join(old_version_dir, filename)
-            destination = os.path.join(new_version_dir, filename)
-
-            if not os.path.exists(source):
-                logger.warning(f"旧版本目录未发现 {filename}，将跳过")
-                continue
-
-            if os.path.isdir(filename):
-                logger.info(f"覆盖目录 {filename}")
-                remove_directory(destination)
-                shutil.copytree(source, destination)
-            else:
-                logger.info(f"覆盖文件 {filename}")
-                remove_file(destination)
-                shutil.copyfile(source, destination)
+        sync_configs(old_version_dir, new_version_dir)
 
         logger.info("继承旧版本配置完成，将重启配置工具以使改动生效")
         self.restart()

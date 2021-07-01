@@ -1242,6 +1242,7 @@ def show_notices():
     async_call(_cb)
 
 
+@try_except()
 def try_save_configs_to_user_data_dir():
     """
     运行完毕，尝试从当前目录同步配置到%APPDATA%/djc_helper
@@ -1262,6 +1263,7 @@ def try_save_configs_to_user_data_dir():
         }, f)
 
 
+@try_except()
 def try_load_old_version_configs_from_user_data_dir():
     """
     若是首次运行，尝试从%APPDATA%/djc_helper同步配置到当前目录

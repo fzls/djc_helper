@@ -837,6 +837,9 @@ def sync_configs(source_dir: str, target_dir: str):
             logger.warning(f"旧版本目录未发现 {filename}，将跳过")
             continue
 
+        # 确保要复制的目标文件所在目录存在
+        make_sure_dir_exists(os.path.dirname(destination))
+
         if os.path.isdir(filename):
             logger.info(f"覆盖目录 {filename}")
             remove_directory(destination)

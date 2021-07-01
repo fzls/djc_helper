@@ -795,6 +795,51 @@ def start_djc_helper(exe_path: str):
     logger.info(f"{exe_path} 已经启动~")
 
 
+def sync_configs(source_dir: str, target_dir: str):
+    """
+    将指定的配置相关文件从 源目录 覆盖到 目标目录
+    """
+    sync_config_list = [
+        # 配置文件
+        "config.toml",
+        "config.toml.local",
+
+        # 特定功能的开关
+        ".disable_pause_after_run",
+        ".min_console",
+        ".no_max_console",
+        ".use_by_myself",
+        "不查询活动.txt",
+
+        # 缓存文件所在目录
+        ".cached",
+        ".db",
+        ".first_run",
+
+        # 自动更新DLC
+        "utils/auto_updater.exe"
+    ]
+
+    logger.info(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
+
+    for filename in sync_config_list:
+        source = os.path.join(source_dir, filename)
+        destination = os.path.join(target_dir, filename)
+
+        if not os.path.exists(source):
+            logger.warning(f"旧版本目录未发现 {filename}，将跳过")
+            continue
+
+        if os.path.isdir(filename):
+            logger.info(f"覆盖目录 {filename}")
+            remove_directory(destination)
+            shutil.copytree(source, destination)
+        else:
+            logger.info(f"覆盖文件 {filename}")
+            remove_file(destination)
+            shutil.copyfile(source, destination)
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

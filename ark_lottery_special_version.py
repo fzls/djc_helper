@@ -3,6 +3,7 @@ from main_def import _show_head_line
 from pool import init_pool, get_pool, close_pool
 from show_usage import *
 from usage_count import *
+from version import author
 
 
 def check_all_skey_and_pskey(cfg):

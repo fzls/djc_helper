@@ -19,6 +19,8 @@ def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
 not_know_start_time = "2000-01-01 00:00:00"
 not_know_end_time = "2099-01-01 00:00:00"
 
+month_start_day, month_end_day = start_and_end_date_of_a_month(get_now())
+
 not_ams_activities = [
     newAmsActInfo("道聚城", not_know_start_time, not_know_end_time),
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
@@ -28,7 +30,7 @@ not_ams_activities = [
     newAmsActInfo("qq视频蚊子腿", "2021-04-22 00:00:00", "2021-05-21 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("集卡", "2021-06-03 00:00:00", "2021-07-10 23:59:59"),
-    newAmsActInfo("DNF助手编年史", "2021-05-01 00:00:00", "2021-05-31 23:59:59"),
+    newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
 ]
 

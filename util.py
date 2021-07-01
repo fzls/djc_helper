@@ -822,6 +822,12 @@ def sync_configs(source_dir: str, target_dir: str):
     ]
 
     logger.info(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
+    if not os.path.isdir(source_dir):
+        logger.error(f"源目录 {source_dir} 不存在")
+        return
+    if not os.path.isdir(target_dir):
+        logger.error(f"目标目录 {target_dir} 不存在")
+        return
 
     for filename in sync_config_list:
         source = os.path.join(source_dir, filename)

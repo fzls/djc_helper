@@ -162,6 +162,9 @@ def main():
     if cfg.common.check_update_on_end:
         check_update(cfg)
 
+    # 运行完毕备份配置到本机数据目录
+    try_save_configs_to_user_data_dir()
+
 
 if __name__ == '__main__':
     freeze_support()

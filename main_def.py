@@ -1,4 +1,3 @@
-import os
 from multiprocessing import freeze_support
 from sys import exit
 
@@ -1241,6 +1240,17 @@ def show_notices():
         nm.show_notices()
 
     async_call(_cb)
+
+
+def try_save_configs_to_user_data_dir():
+    """
+    运行完毕，尝试从当前目录同步配置到%APPDATA%/djc_helper
+    """
+    cwd = os.getcwd()
+    appdata_dir = get_appdata_dir()
+
+    logger.info(f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir}")
+    sync_configs(cwd, appdata_dir)
 
 
 def try_load_old_version_configs_from_user_data_dir():

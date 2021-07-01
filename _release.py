@@ -85,29 +85,35 @@ uploader.login(cookie)
 if uploader.login_ok:
     logger.info("蓝奏云登录成功，开始上传压缩包")
 
-    def path_in_src(filepath_relative_to_src:str)->str:
+
+    def path_in_src(filepath_relative_to_src: str) -> str:
         return os.path.realpath(os.path.join(dir_src, filepath_relative_to_src))
+
+
+    realpath = os.path.realpath
 
     upload_info_list = [
         (uploader.folder_djc_helper, [
-            (release_7z_name, uploader.history_version_prefix),
+            (realpath(release_7z_name), uploader.history_version_prefix),
             (path_in_src("utils/auto_updater.exe"), ""),
             (path_in_src("使用教程/使用文档.docx"), ""),
             (path_in_src("使用教程/视频教程.txt"), ""),
             (path_in_src("付费指引.docx"), ""),
-            (patch_file_name, uploader.history_patches_prefix),
+            (realpath(patch_file_name), uploader.history_patches_prefix),
             (path_in_src("utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt"), ""),
         ]),
         (uploader.folder_dnf_calc, [
-            (release_7z_name, uploader.history_version_prefix),
+            (realpath(release_7z_name), uploader.history_version_prefix),
         ])
     ]
 
     logger.info(color("bold_green") + f"具体上传列表如下：")
     for upload_folder, upload_list in upload_info_list:
-        logger.info(f"\t{upload_folder}")
-        for local_filepath, history_file_prefix in reversed(upload_list):
+        logger.info(color("bold_cyan") + f"\t{upload_folder.name}：")
+        for local_filepath, history_file_prefix in upload_list:
             logger.info(f"\t\t{local_filepath}")
+
+        logger.info('\n')
 
     for upload_folder, upload_list in upload_info_list:
         for local_filepath, history_file_prefix in reversed(upload_list):

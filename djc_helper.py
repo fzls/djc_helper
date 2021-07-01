@@ -5371,7 +5371,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True):
+    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo:RoleInfo=None):
         while True:
             res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
             # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
@@ -5382,7 +5382,9 @@ class DjcHelper:
                 need_bind = True
                 bind_reason = "未绑定角色"
             elif self.common_cfg.force_sync_bind_with_djc:
-                roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+                if roleinfo is None:
+                    # 若未从外部传入roleinfo，则使用道聚城绑定的信息
+                    roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
                 bindinfo = AmesvrUserBindInfo().auto_update_config(res["modRet"]["jData"]["data"])
 
                 if roleinfo.serviceID != bindinfo.Farea or roleinfo.roleCode != bindinfo.FroleId:
@@ -5399,11 +5401,13 @@ class DjcHelper:
                 # 已经绑定
                 break
 
-    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False, bind_reason="未绑定角色"):
+    def guide_to_bind_account(self, activity_name, activity_url, activity_op_func=None, query_bind_flowid="", commit_bind_flowid="", try_auto_bind=False, bind_reason="未绑定角色", roleinfo:RoleInfo=None):
         if try_auto_bind and self.common_cfg.try_auto_bind_new_activity and activity_op_func is not None and commit_bind_flowid != "":
             if 'dnf' in self.bizcode_2_bind_role_map:
                 # 若道聚城已绑定dnf角色，则尝试绑定这个角色
-                roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+                if roleinfo is None:
+                    # 若未从外部传入roleinfo，则使用道聚城绑定的信息
+                    roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
                 checkInfo = self.get_dnf_roleinfo()
 
                 def double_quote(strToQuote):

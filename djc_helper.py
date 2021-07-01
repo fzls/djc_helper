@@ -5371,7 +5371,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo:RoleInfo=None):
+    def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo:RoleInfo=None, bind_detail_reason=""):
         while True:
             res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
             # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "modRet": {"iRet": 0, "sMsg": "ok", "jData": [], "sAMSSerial": "AMS-DNF-1212213814-q4VCJQ-346329-722055", "commitId": "722054"}, "ret": "0", "msg": ""}
@@ -5393,6 +5393,10 @@ class DjcHelper:
 
                     need_bind = True
                     bind_reason = f"当前绑定账号({current_account})与道聚城绑定账号({djc_account})不一致"
+
+            if bind_detail_reason != "":
+                # 如果外部传入了详细绑定原因，则使用外部的。如奥兹玛切换角色领取抽奖次数
+                bind_reason = bind_detail_reason
 
             if need_bind:
                 self.guide_to_bind_account(activity_name, activity_url, activity_op_func=activity_op_func,

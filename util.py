@@ -659,9 +659,9 @@ def is_run_in_pycharm() -> bool:
     return os.getenv('PYCHARM_HOSTED') == '1'
 
 
-def remove_file(file_path):
+def remove_file(file_path, print_not_found_logs=True):
     if not os.path.isfile(file_path):
-        logger.warning(f"文件 {file_path} 不存在")
+        if print_not_found_logs: logger.warning(f"文件 {file_path} 不存在")
         return
 
     try:
@@ -670,9 +670,9 @@ def remove_file(file_path):
         logger.error(f"删除文件 {file_path} 失败", exc_info=e)
 
 
-def remove_directory(directory_path):
+def remove_directory(directory_path, print_not_found_logs=True):
     if not os.path.isdir(directory_path):
-        logger.warning(f"目录 {directory_path} 不存在")
+        if print_not_found_logs: logger.warning(f"目录 {directory_path} 不存在")
         return
 
     try:
@@ -795,7 +795,7 @@ def start_djc_helper(exe_path: str):
     logger.info(f"{exe_path} 已经启动~")
 
 
-def sync_configs(source_dir: str, target_dir: str):
+def sync_configs(source_dir: str, target_dir: str, print_not_found_logs=True):
     """
     将指定的配置相关文件从 源目录 覆盖到 目标目录
     """
@@ -822,19 +822,13 @@ def sync_configs(source_dir: str, target_dir: str):
     ]
 
     logger.info(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
-    if not os.path.isdir(source_dir):
-        logger.error(f"源目录 {source_dir} 不存在")
-        return
-    if not os.path.isdir(target_dir):
-        logger.error(f"目标目录 {target_dir} 不存在")
-        return
 
     for filename in sync_config_list:
         source = os.path.join(source_dir, filename)
         destination = os.path.join(target_dir, filename)
 
         if not os.path.exists(source):
-            logger.warning(f"旧版本目录未发现 {filename}，将跳过")
+            if print_not_found_logs: logger.warning(f"旧版本目录未发现 {filename}，将跳过")
             continue
 
         # 确保要复制的目标文件所在目录存在
@@ -842,11 +836,11 @@ def sync_configs(source_dir: str, target_dir: str):
 
         if os.path.isdir(filename):
             logger.info(f"覆盖目录 {filename}")
-            remove_directory(destination)
+            remove_directory(destination, print_not_found_logs=print_not_found_logs)
             shutil.copytree(source, destination)
         else:
             logger.info(f"覆盖文件 {filename}")
-            remove_file(destination)
+            remove_file(destination, print_not_found_logs=print_not_found_logs)
             shutil.copyfile(source, destination)
 
 

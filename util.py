@@ -659,9 +659,9 @@ def is_run_in_pycharm() -> bool:
     return os.getenv('PYCHARM_HOSTED') == '1'
 
 
-def remove_file(file_path, print_not_found_logs=True):
+def remove_file(file_path):
     if not os.path.isfile(file_path):
-        if print_not_found_logs: logger.warning(f"文件 {file_path} 不存在")
+        logger.debug(f"文件 {file_path} 不存在")
         return
 
     try:
@@ -670,9 +670,9 @@ def remove_file(file_path, print_not_found_logs=True):
         logger.error(f"删除文件 {file_path} 失败", exc_info=e)
 
 
-def remove_directory(directory_path, print_not_found_logs=True):
+def remove_directory(directory_path):
     if not os.path.isdir(directory_path):
-        if print_not_found_logs: logger.warning(f"目录 {directory_path} 不存在")
+        logger.debug(f"目录 {directory_path} 不存在")
         return
 
     try:
@@ -836,15 +836,15 @@ def sync_configs(source_dir: str, target_dir: str):
 
         if os.path.isdir(filename):
             logger.debug(f"覆盖目录 {filename}")
-            remove_directory(destination, print_not_found_logs=print_not_found_logs)
+            remove_directory(destination)
             shutil.copytree(source, destination)
         else:
             logger.debug(f"覆盖文件 {filename}")
-            remove_file(destination, print_not_found_logs=print_not_found_logs)
+            remove_file(destination)
             shutil.copyfile(source, destination)
 
 
-def start_and_end_date_of_a_month(date:datetime.datetime):
+def start_and_end_date_of_a_month(date: datetime.datetime):
     """
     返回对应时间所在月的起始和结束时间点，形如 2021-07-01 00:00:00 和 2021-07-31 23:59:59
     """

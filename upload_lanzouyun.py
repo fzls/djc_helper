@@ -138,14 +138,20 @@ class Uploader:
         返回形如"1.0.0"的最新版本信息
         """
         latest_version_file = self.find_latest_version()
-        # DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z
-        match = re.search(self.regex_version, latest_version_file.name)
-        if match is not None:
-            latest_version = match.group(1)
-            return latest_version
 
-        # 保底返回1.0.0
-        return "1.0.0"
+        return self.parse_version_from_djc_helper_file_name(latest_version_file.name)
+
+    def parse_version_from_djc_helper_file_name(self, filename: str) -> str:
+        """
+        从小助手压缩包文件名中提取版本信息
+        DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z => v4.6.6
+        """
+        match = re.search(self.regex_version, filename)
+        if match is None:
+            # 保底返回1.0.0
+            return "1.0.0"
+
+        return match.group(1)
 
     def download_latest_version(self, download_dir) -> str:
         """

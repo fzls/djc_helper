@@ -85,6 +85,11 @@ def reset_first_run(key=""):
     FirstRunDB().with_context(key).reset()
 
 
+def get_first_run_cache_filename(key) -> str:
+    # 获取对应cache文件的名称，方便临时修改内容
+    return FirstRunDB().with_context(key).get_db_filename()
+
+
 if __name__ == '__main__':
     print(is_first_run("first_run"))
     print(is_first_run_in("test_duration", timedelta(minutes=1)))

@@ -1346,25 +1346,55 @@ class DjcHelper:
 
         lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
 
+        # QQ空间集卡系活动
         # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
         # 由于活动过期的判定会优先于pskey判定，需要需要保证下面调用的是最新的活动~
 
-        try:
-            # 默认选择集卡来判定
+        def check_by_ark_lottery() -> bool:
             al = QzoneActivity(self, lr)
             res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
-        except Exception as e:
-            # 如果集卡挂了，就尝试会员关怀活动
-            logFunc = logger.debug
-            if use_by_myself():
-                logFunc = logger.warning
-            logFunc(f"集卡活动似乎挂了，尝试使用会员关怀来判定，异常为 {e}")
+            return res['code'] == -3000 and res['subcode'] == -4001
 
+        def check_by_warriors_call() -> bool:
             qa = QzoneActivity(self, lr)
             qa.fetch_dnf_warriors_call_data()
             res = qa.do_dnf_warriors_call("fcg_receive_reward", "测试pskey是否过期", qa.zz().actbossRule.buyVipPrize, gameid=qa.zz().gameid, print_res=False)
+            return res['code'] == -3000 and res['subcode'] == -4001
 
-        return res['code'] == -3000 and res['subcode'] == -4001
+        ## QQ空间新版活动
+        # pskey过期提示：分享领取礼包	{"code": -3000, "message": "未登录"}
+        # 这个活动优先判定pskey
+
+        def check_by_super_vip() -> bool:
+            self.lr = lr
+            res = self.qzone_act_op("幸运勇士礼包", "5353_75244d03", print_res=False)
+            return res.get('code', 0) == -3000
+
+        def check_by_yellow_diamond() -> bool:
+            self.lr = lr
+            res = self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d", print_res=False)
+            return res.get('code', 0) == -3000
+
+        # 用于按顺序检测p_skey是否过期的函数列表
+        check_p_skey_expired_func_list = [
+            check_by_super_vip,
+            check_by_yellow_diamond,
+            check_by_warriors_call,
+            check_by_ark_lottery,
+        ]
+
+        for check_func in check_p_skey_expired_func_list:
+            try:
+                is_expired = check_func()
+                return is_expired
+            except Exception as e:
+                # 如果这个活动挂了，就打印日志后，尝试下一个
+                logFunc = logger.debug
+                if use_by_myself():
+                    logFunc = logger.warning
+                logFunc(f"{check_func.__name__} 活动似乎挂了，将尝试使用下一个活动来判定，异常为 {e}")
+
+        return True
 
     def save_uin_pskey(self, uin, pskey, skey, vuserid):
         # 本地缓存
@@ -1474,9 +1504,14 @@ class DjcHelper:
             })
         self.qzone_act_op("分享领取礼包", "5499_4574810b")
 
-    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None):
+    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, print_res=True):
         if act_req_data is None:
-            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            roleinfo = RoleInfo()
+            roleinfo.roleCode = "123456"
+            try:
+                roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            except:
+                pass
             act_req_data = {
                 "role_info": {
                     "area": roleinfo.serviceID,
@@ -1494,7 +1529,7 @@ class DjcHelper:
         }
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
-        return self.post(ctx, self.urls.qzone_activity_new, json=body, extra_cookies=extra_cookies)
+        return self.post(ctx, self.urls.qzone_activity_new, json=body, extra_cookies=extra_cookies, print_res=print_res)
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):

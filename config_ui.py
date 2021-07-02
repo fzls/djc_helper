@@ -1491,7 +1491,7 @@ class DnfHelperInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: DnfHelperInfoConfig):
-        add_form_seperator(form_layout, f"dnf助手信息")
+        add_form_seperator(form_layout, f"dnf助手鉴权信息")
 
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
         form_layout.addRow("社区ID(userId)", self.lineedit_userId)

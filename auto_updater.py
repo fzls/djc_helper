@@ -13,6 +13,7 @@ from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
 from util import kill_process, show_unexpected_exception_message, start_djc_helper
+from main_def import change_title
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -26,6 +27,8 @@ auto_updater_version = "1.0.5"
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
     args = parse_args()
+
+    change_title("自动更新DLC")
 
     logger.info(f"更新器的进程为{os.getpid()}, 版本为{auto_updater_version}(主代码版本为{now_version})，主进程为{args.pid}, 版本为{args.version}")
 

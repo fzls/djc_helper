@@ -25,6 +25,7 @@ try:
                 name_2_mobile_game_info_map[game_data["bizName"]] = gameInfo
 except FileNotFoundError as e:
     logger.error((
+        f"当前工作目录为 {os.getcwd()}\n"
         "未找到djc配置文件，是否是下述两种情况之一\n"
         "   1. 直接在压缩包中运行exe\n"
         "   2. 未在解压缩出的目录中运行exe\n"

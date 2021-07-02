@@ -288,9 +288,9 @@ class Uploader:
         if total_size == now_size:
             print('')  # 下载完成换行
 
-    def get_folder_info_by_url(self, share_url, dir_pwd='') -> FolderDetail:
+    def get_folder_info_by_url(self, share_url, dir_pwd='', get_this_page=0) -> FolderDetail:
         for possiable_url in self.all_possiable_urls(share_url):
-            folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd)
+            folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd, get_this_page=get_this_page)
             if folder_info.code != LanZouCloud.SUCCESS:
                 logger.debug(f"请求{possiable_url}失败，将尝试下一个")
                 continue

@@ -21,8 +21,6 @@ tmp_dir = "_update_temp_dir"
 # note: 作为cwd的默认值，用于检测是否直接双击自动更新工具
 invalid_cwd = "./invalid_cwd"
 
-auto_updater_version = "1.0.5"
-
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
@@ -30,7 +28,8 @@ def auto_update():
 
     change_title("自动更新DLC")
 
-    logger.info(f"更新器的进程为{os.getpid()}, 版本为{auto_updater_version}(主代码版本为{now_version})，主进程为{args.pid}, 版本为{args.version}")
+    logger.info(color("bold_yellow") + f"更新器的进程为{os.getpid()}, 代码版本为{now_version}")
+    logger.info(color("bold_yellow") + f"需要检查更新的小助手主进程为{args.pid}, 版本为{args.version}")
 
     # note: 工作目录预期为小助手的exe所在目录
     if args.cwd == invalid_cwd:

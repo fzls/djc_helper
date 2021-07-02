@@ -12,6 +12,7 @@ import shutil
 import subprocess
 from typing import List, Optional
 
+from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from log import logger
 from update import version_less
 from upload_lanzouyun import Uploader, FileInFolder
@@ -109,7 +110,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
             uploader.download_file(info.fileinfo, dir_all_release)
 
         logger.info(f"尝试解压 {info.fileinfo.name} 到 {local_folder_path}")
-        subprocess.call([path_bz, "x", "-target:auto", local_7z_path])
+        decompress_dir_with_bandizip(local_7z_path, dir_src)
 
     # --------------------------- 实际只做补丁包 ---------------------------
     logger.info(f"将为【{old_version_infos}】版本制作补丁包")
@@ -161,7 +162,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     shutil.rmtree(temp_dir, ignore_errors=True)
 
     # 压缩打包
-    subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
+    compress_dir_with_bandizip(patches_dir, patch_7z_file, dir_src)
 
     # 额外备份一份最新的供github action 使用
     shutil.copyfile(patch_7z_file, os.path.join(dir_github_action_artifact, 'djc_helper_patches.7z'))

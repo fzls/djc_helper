@@ -12,6 +12,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
+from compress import decompress_dir_with_bandizip
 from config import *
 from db import CaptchaDB, LoginRetryDB
 from log import logger, color
@@ -230,7 +231,7 @@ class QQLogin():
         # 尝试解压
         if not os.path.isdir(self.chrome_binary_directory()):
             logger.info(f"自动解压便携版chrome到当前目录")
-            subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
+            decompress_dir_with_bandizip(self.chrome_binary_7z())
 
         logger.info("检查便携版chrome是否有效")
         try:
@@ -252,7 +253,7 @@ class QQLogin():
         uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".", cache_max_seconds=0)
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
-        subprocess.call([self.bandizip_executable_path, "x", "-target:auto", self.chrome_binary_7z()])
+        decompress_dir_with_bandizip(self.chrome_binary_7z())
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")

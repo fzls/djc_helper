@@ -15,6 +15,7 @@ from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
 from urls import Urls, get_not_ams_act_desc
 from usage_count import *
+from version import author
 
 
 def has_any_account_in_normal_run(cfg):
@@ -1195,32 +1196,6 @@ def get_user_buy_info_from_server(qq_accounts: List[str]) -> BuyInfo:
         logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
 
     return buyInfo
-
-
-def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False):
-    if dlc_info == "" and exists_auto_updater_dlc():
-        dlc_info = " 自动更新豪华升级版"
-
-    pool_info = ""
-    if multiprocessing_pool_size != 0:
-        pool_info = f"火力全开版本({multiprocessing_pool_size})"
-        if enable_super_fast_mode:
-            pool_info = "超级" + pool_info
-
-    set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
-    os.system(set_title_cmd)
-
-
-def exists_auto_updater_dlc():
-    return os.path.isfile(auto_updater_path())
-
-
-def auto_updater_path():
-    return os.path.realpath("utils/auto_updater.exe")
-
-
-def auto_updater_latest_path():
-    return os.path.realpath("utils/auto_updater_latest.exe")
 
 
 def show_multiprocessing_info(cfg: Config):

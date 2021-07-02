@@ -12,8 +12,7 @@ import subprocess
 from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
-from util import kill_process, show_unexpected_exception_message, start_djc_helper
-from main_def import change_title
+from util import kill_process, show_unexpected_exception_message, start_djc_helper, change_title
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"

@@ -883,6 +883,32 @@ def get_path_in_onedrive(relative_path: str) -> str:
     return os.path.realpath(os.path.join(get_user_dir(), "OneDrive", relative_path))
 
 
+def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False):
+    if dlc_info == "" and exists_auto_updater_dlc():
+        dlc_info = " 自动更新豪华升级版"
+
+    pool_info = ""
+    if multiprocessing_pool_size != 0:
+        pool_info = f"火力全开版本({multiprocessing_pool_size})"
+        if enable_super_fast_mode:
+            pool_info = "超级" + pool_info
+
+    set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
+    os.system(set_title_cmd)
+
+
+def exists_auto_updater_dlc():
+    return os.path.isfile(auto_updater_path())
+
+
+def auto_updater_path():
+    return os.path.realpath("utils/auto_updater.exe")
+
+
+def auto_updater_latest_path():
+    return os.path.realpath("utils/auto_updater_latest.exe")
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

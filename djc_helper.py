@@ -1904,7 +1904,7 @@ class DjcHelper:
         self.dnf_ozma_op("每日网吧登录送开箱积分", "770030")
         endTime = "20210721"
         info = query_info()
-        logger.info(f"当前开箱积分为{info.box_score}")
+        logger.info(f"当前开箱积分为{info.box_score}。PS：最高级宝箱需要60分~")
         # 不确定是否跟勇者征集令一样宝箱互斥，保底期间，最后一天再全领，在这之前则是先只尝试领取第五个
         # 青铜宝箱 4-19分
         # 白银宝箱 20-29分

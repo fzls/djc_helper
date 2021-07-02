@@ -13,6 +13,7 @@ from distutils import dir_util
 from upload_lanzouyun import Uploader
 from update import need_update
 from util import kill_process, show_unexpected_exception_message, start_djc_helper, change_title
+from compress import decompress_dir_with_bandizip
 
 bandizip_executable_path = "./bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -160,7 +161,7 @@ def remove_temp_dir(msg):
 
 
 def decompress(filepath, target_dir):
-    subprocess.call([os.path.realpath(bandizip_executable_path), "x", "-target:auto", filepath, target_dir])
+    decompress_dir_with_bandizip(filepath, ".", target_dir)
 
 
 def kill_original_process(pid):

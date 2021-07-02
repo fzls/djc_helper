@@ -46,7 +46,7 @@ def is_valid_qq(qq: str) -> bool:
 
 def maximize_console():
     # 如果是win7的话，先同步设置cmd属性
-    ensure_cmd_window_buffer_size_for_win7()
+    ensure_cmd_window_buffer_size_for_windows()
 
     threading.Thread(target=maximize_console_sync, daemon=True).start()
 
@@ -87,9 +87,9 @@ def maximize_console_sync():
     win32gui.ShowWindow(current_hwnd, op)
 
 
-def ensure_cmd_window_buffer_size_for_win7():
-    if platform.system() == "Windows" and platform.release() == "7":
-        # win7下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
+def ensure_cmd_window_buffer_size_for_windows():
+    if platform.system() == "Windows":
+        # windows下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
         base_width = 1920
         base_cols = 240
 
@@ -98,7 +98,7 @@ def ensure_cmd_window_buffer_size_for_win7():
         lines = 9999
 
         os.system(f"mode con:cols={cols} lines={lines}")
-        logger.info(color("bold_cyan") + f"当前是win7系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列")
+        logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断")
 
 
 def get_parents(child):

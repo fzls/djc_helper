@@ -138,5 +138,15 @@
     "open_url": "",
     "expire_at": "2021-07-05 22:41:09",
     "show_only_before_version": "10.16.0"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "bug说明",
+    "message": "请更新到11.1.0版本的朋友们手动下载一下最新版本本体。\n    \n原因：\n该版本dlc有个bug，会导致会无法生效，加上现在本体会附带把dlc给更新掉，所以一但更新到该版本后，dlc就会废掉-。-\n\nPS：\n目前支持自动备份配置，所以在运行过的电脑上直接下载新版本解压运行即可。\n",
+    "send_at": "2021-07-03 05:59:07",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-07-10 05:59:07",
+    "show_only_before_version": "11.2.0"
   }
 ]

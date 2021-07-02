@@ -1339,7 +1339,8 @@ class DjcHelper:
 
         return lr
 
-    def is_pskey_expired(self, cached_pskey):
+    @try_except(extra_msg="检查p_skey是否过期失败，视为已过期", return_val_on_except=True)
+    def is_pskey_expired(self, cached_pskey) -> bool:
         if cached_pskey is None:
             return True
 

@@ -868,6 +868,7 @@ def start_and_end_date_of_a_month(date: datetime.datetime):
 
     return this_mon_start_date, this_month_end_date
 
+
 # 常见系统变量：https://docs.microsoft.com/en-us/windows/deployment/usmt/usmt-recognized-environment-variables
 
 def get_appdata_dir() -> str:
@@ -876,6 +877,10 @@ def get_appdata_dir() -> str:
 
 def get_user_dir() -> str:
     return os.path.expandvars("%USERPROFILE%")
+
+
+def get_path_in_onedrive(relative_path: str) -> str:
+    return os.path.realpath(os.path.join(get_user_dir(), "OneDrive", relative_path))
 
 
 if __name__ == '__main__':

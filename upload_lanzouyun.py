@@ -1,11 +1,11 @@
 import json
-import lzma
 import os
 import re
 from collections import namedtuple
 from datetime import datetime
 from typing import List
 
+from compress import compress_file_with_lzma, decompress_file_with_lzma
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
 from log import logger, color
@@ -83,9 +83,7 @@ class Uploader:
 
             logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")
             # 创建压缩版本
-            with open(f"{filepath}", "rb") as file_in:
-                with lzma.open(f"{compressed_filepath}", "wb") as file_out:
-                    file_out.writelines(file_in)
+            compress_file_with_lzma(filepath, compressed_filepath)
             # 上传
             return self._upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix)
 
@@ -223,9 +221,7 @@ class Uploader:
                 # 解压缩
                 dirname = os.path.dirname(compressed_filepath)
                 target_path = os.path.join(dirname, name)
-                with lzma.open(f"{compressed_filepath}", "rb") as file_in:
-                    with open(f"{target_path}", "wb") as file_out:
-                        file_out.writelines(file_in)
+                decompress_file_with_lzma(compressed_filepath, target_path)
                 # 返回解压缩的文件路径
                 return target_path
             except Exception as e:

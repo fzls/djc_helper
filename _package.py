@@ -2,8 +2,8 @@
 import os
 import re
 import shutil
-import subprocess
 
+from compress import compress_dir_with_bandizip
 from log import logger
 from qq_login import QQLogin
 from version import now_version
@@ -86,8 +86,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     # 压缩打包
     os.chdir(dir_all_release)
     logger.info("开始压缩打包")
-    path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
-    subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', release_7z_name, release_dir_name])
+    compress_dir_with_bandizip(release_dir_name, release_7z_name, dir_src)
 
     # 额外备份一份最新的供github action 使用
     shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))

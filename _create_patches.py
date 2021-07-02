@@ -10,7 +10,7 @@ import multiprocessing
 import os
 import shutil
 import subprocess
-from typing import List, Optional
+from typing import List
 
 from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from log import logger
@@ -43,11 +43,18 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     os.chdir(dir_all_release)
     if not get_final_patch_path_only: logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
 
+    uploader = Uploader()
+
     logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
-    latest_version_info = None  # type: Optional[HistoryVersionFileInfo]
     old_version_infos = []  # type: List[HistoryVersionFileInfo]
 
-    uploader = Uploader()
+    # 获取当前网盘的最新版本，若比当前发布版本低，也加入
+    netdisk_latest_version_fileinfo = uploader.find_latest_version()
+    netdisk_latest_version = uploader.parse_version_from_djc_helper_file_name(netdisk_latest_version_fileinfo.name)
+    if version_less(netdisk_latest_version, latest_version):
+        old_version_infos.append(HistoryVersionFileInfo(netdisk_latest_version_fileinfo, netdisk_latest_version))
+
+    # 从历史版本网盘中查找旧版本
     for page in range_from_one(100):
         folder_info = uploader.get_folder_info_by_url(uploader.folder_history_files.url, get_this_page=page)
         for file in folder_info.files:
@@ -61,10 +68,6 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
             info = HistoryVersionFileInfo(file, file_version)
 
             if not version_less(file_version, latest_version):
-                # 跳过不比这个版本早的版本
-                if file_version == latest_version:
-                    # 如果已经存在最新版，则顺带下载过来，用以应对单纯为网盘里已有的最新版本制作补丁包的情况
-                    latest_version_info = info
                 continue
 
             if info in old_version_infos:

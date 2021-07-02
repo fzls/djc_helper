@@ -8,62 +8,80 @@
 # -------------------------------
 import multiprocessing
 import os
-import re
 import shutil
 import subprocess
-from typing import List
+from typing import List, Optional
 
 from log import logger
-from update import need_update
-from util import human_readable_size
+from update import version_less
+from upload_lanzouyun import Uploader, FileInFolder
+from util import human_readable_size, range_from_one
 from version import now_version
 
 
-class VersionInfo:
-    def __init__(self, version: str, dirpath: str):
+class HistoryVersionFileInfo:
+    def __init__(self, fileinfo: FileInFolder, version: str):
+        self.fileinfo = fileinfo
         self.version = version
-        self.dirpath = dirpath
 
     def __lt__(self, other):
-        return need_update(self.version, other.version)
+        return version_less(self.version, other.version)
+
+    def __eq__(self, other):
+        return self.version == other.version
 
     def __repr__(self):
-        return str(self.__dict__)
+        return self.version
 
 
 def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=False) -> str:
     latest_version = now_version
+    path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
 
     old_cwd = os.getcwd()
     os.chdir(dir_all_release)
     if not get_final_patch_path_only: logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
 
-    version_dir_regex = r"DNF蚊子腿小助手_v(.*)_by风之凌殇"
+    logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
+    latest_version_info = None  # type: Optional[HistoryVersionFileInfo]
+    old_version_infos = []  # type: List[HistoryVersionFileInfo]
 
-    # 获取最新的几个版本的信息
-    old_version_infos = []  # type: List[VersionInfo]
-    for dirpath in os.listdir("."):
-        if not os.path.isdir(dirpath):
-            continue
+    uploader = Uploader()
+    for page in range_from_one(100):
+        folder_info = uploader.get_folder_info_by_url(uploader.folder_history_files.url, get_this_page=page)
+        for file in folder_info.files:
+            filename = file.name  # type: str
 
-        # DNF蚊子腿小助手_v4.6.6_by风之凌殇.7z
-        match = re.search(version_dir_regex, dirpath)
-        if match is None:
-            continue
+            if not filename.startswith(uploader.history_version_prefix):
+                # 跳过非历史版本的文件
+                continue
 
-        version = match.group(1)
+            file_version = uploader.parse_version_from_djc_helper_file_name(filename)
+            info = HistoryVersionFileInfo(file, file_version)
 
-        if not need_update(version, latest_version):
-            continue
+            if not version_less(file_version, latest_version):
+                # 跳过不比这个版本早的版本
+                if file_version == latest_version:
+                    # 如果已经存在最新版，则顺带下载过来，用以应对单纯为网盘里已有的最新版本制作补丁包的情况
+                    latest_version_info = info
+                continue
 
-        old_version_infos.append(VersionInfo(version, dirpath))
+            if info in old_version_infos:
+                # 已经加入过（可能重复）
+                continue
+
+            old_version_infos.append(info)
+
+        if len(old_version_infos) >= create_patch_for_latest_n_version + 2:
+            # 已经找到超过前n+2个版本，因为网盘返回的必定是按上传顺序排列的，不过为了保险起见，多考虑一些
+            break
 
     if create_patch_for_latest_n_version > len(old_version_infos):
         create_patch_for_latest_n_version = len(old_version_infos)
 
     old_version_infos = sorted(old_version_infos)[-create_patch_for_latest_n_version:]
 
-    # 创建patch目录
+    # 确认最终文件名
     patch_oldest_version = old_version_infos[0].version
     patch_newest_version = old_version_infos[-1].version
     patches_dir = f"DNF蚊子腿小助手_增量更新文件_v{patch_oldest_version}_to_v{patch_newest_version}"
@@ -72,6 +90,26 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     patch_7z_file = f"{patches_dir}.7z"
     if get_final_patch_path_only:
         return patch_7z_file
+
+    logger.info(f"需要制作补丁包的版本为{old_version_infos}")
+
+    # 确保版本都在本地
+    logger.info(f"确保以上版本均已下载并解压到本地~")
+    for info in old_version_infos:
+        local_folder_path = os.path.join(dir_all_release, f"DNF蚊子腿小助手_v{info.version}_by风之凌殇")
+        local_7z_path = local_folder_path + ".7z"
+
+        if os.path.isdir(local_folder_path):
+            # 本地已存在对应版本，跳过
+            continue
+
+        logger.info(f"本地发布目录不存在 {local_folder_path}")
+        if not os.path.isfile(local_7z_path):
+            logger.info(f"本地不存在{info.fileinfo.name}的7z文件，将从网盘下载")
+            uploader.download_file(info.fileinfo, dir_all_release)
+
+        logger.info(f"尝试解压 {info.fileinfo.name} 到 {local_folder_path}")
+        subprocess.call([path_bz, "x", "-target:auto", local_7z_path])
 
     # --------------------------- 实际只做补丁包 ---------------------------
     logger.info(f"将为【{old_version_infos}】版本制作补丁包")
@@ -123,7 +161,6 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     shutil.rmtree(temp_dir, ignore_errors=True)
 
     # 压缩打包
-    path_bz = os.path.join(dir_src, "bandizip_portable", "bz.exe")
     subprocess.call([path_bz, 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', patch_7z_file, patches_dir])
 
     # 额外备份一份最新的供github action 使用

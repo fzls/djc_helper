@@ -1248,7 +1248,7 @@ class DjcHelper:
         #   2.2 在 main.py 中将main函数中将 enable_card_lottery 设置为 false
         #   2.3 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件注释
 
-        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=7&verifyid=qq2021dnf12
+        # https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
         self.show_not_ams_act_info("集卡")
 

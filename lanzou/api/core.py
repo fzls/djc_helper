@@ -1077,7 +1077,7 @@ class LanZouCloud(object):
         return self.down_file_by_url(info.url, info.pwd, save_path, callback=callback, overwrite=overwrite,
                                      downloaded_handler=downloaded_handler)
 
-    def get_folder_info_by_url(self, share_url, dir_pwd='') -> FolderDetail:
+    def get_folder_info_by_url(self, share_url, dir_pwd='', get_this_page=0) -> FolderDetail:
         """获取文件夹里所有文件的信息"""
         if is_file_url(share_url):
             return FolderDetail(LanZouCloud.URL_INVALID)
@@ -1131,9 +1131,12 @@ class LanZouCloud(object):
 
         # 提取改文件夹下全部文件
         page = 1
+        if get_this_page > 0:
+            # 若外部设定仅获取某页，则初始参数为该页
+            page = get_this_page
         files = FileList()
         while True:
-            if page >= 2:  # 连续的请求需要稍等一下
+            if page >= 2 and get_this_page == 0:  # 连续的请求需要稍等一下
                 sleep(0.6)
             try:
                 logger.debug(f"Parse page {page}...")
@@ -1151,6 +1154,11 @@ class LanZouCloud(object):
                         url=self._host_url + "/" + f["id"]  # 文件分享链接
                     ))
                 page += 1  # 下一页
+
+                if get_this_page > 0:
+                    # 若外部设定仅获取某页，则请求完该页就结束
+                    break
+
                 continue
             elif resp['zt'] == 2:  # 已经拿到全部的文件信息
                 break

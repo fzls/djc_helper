@@ -869,6 +869,10 @@ def start_and_end_date_of_a_month(date: datetime.datetime):
     return this_mon_start_date, this_month_end_date
 
 
+def get_appdata_dir() -> str:
+    return os.path.expandvars("%APPDATA%")
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

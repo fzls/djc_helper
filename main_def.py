@@ -1253,7 +1253,7 @@ def try_save_configs_to_user_data_dir():
     运行完毕，尝试从当前目录同步配置到%APPDATA%/djc_helper
     """
     cwd = os.getcwd()
-    appdata_dir = get_appdata_dir()
+    appdata_dir = get_appdata_save_dir()
 
     logger.info(f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir}")
     sync_configs(cwd, appdata_dir)
@@ -1274,7 +1274,7 @@ def try_load_old_version_configs_from_user_data_dir():
     若是首次运行，尝试从%APPDATA%/djc_helper同步配置到当前目录
     """
     cwd = os.getcwd()
-    appdata_dir = get_appdata_dir()
+    appdata_dir = get_appdata_save_dir()
     disable_flag_file = ".no_sync_configs"
 
     logger.info(color("bold_green") + f"已开启首次运行时自动同步配置本机配置功能，将尝试从 {appdata_dir} 同步配置到 {cwd}")
@@ -1300,8 +1300,8 @@ def try_load_old_version_configs_from_user_data_dir():
     sync_configs(appdata_dir, cwd)
 
 
-def get_appdata_dir() -> str:
-    return os.path.join(os.path.expandvars("%APPDATA%"), 'djc_helper')
+def get_appdata_save_dir() -> str:
+    return os.path.join(get_appdata_dir(), 'djc_helper')
 
 
 def test_show_notices():

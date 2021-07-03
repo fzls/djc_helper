@@ -47,18 +47,28 @@ def name_format(name: str) -> str:
 
 
 def time_format(time_str: str) -> str:
-    """输出格式化时间 %Y-%m-%d"""
-    if '秒前' in time_str or '分钟前' in time_str or '小时前' in time_str:
-        return datetime.today().strftime('%Y-%m-%d')
+    """输出格式化时间 %Y-%m-%d %H:%M:%S"""
+    now = datetime.now()
+    if '秒前' in time_str:
+        seconds = time_str.replace(' 秒前', '')
+        delta = timedelta(seconds=int(seconds))
+    elif '分钟前' in time_str:
+        minutes = time_str.replace(' 分钟前', '')
+        delta = timedelta(minutes=int(minutes))
+    elif '小时前' in time_str:
+        hours = time_str.replace(' 小时前', '')
+        delta = timedelta(hours=int(hours))
     elif '昨天' in time_str:
-        return (datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+        delta = timedelta(days=1)
     elif '前天' in time_str:
-        return (datetime.today() - timedelta(days=2)).strftime('%Y-%m-%d')
+        delta = timedelta(days=2)
     elif '天前' in time_str:
         days = time_str.replace(' 天前', '')
-        return (datetime.today() - timedelta(days=int(days))).strftime('%Y-%m-%d')
+        delta = timedelta(days=int(days))
     else:
         return time_str
+
+    return (now - delta).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def is_name_valid(filename: str) -> bool:

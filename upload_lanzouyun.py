@@ -34,6 +34,7 @@ class Uploader:
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
+    history_dlc_version_prefix = "auto_updater.exe"
 
     regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
     regex_patches = r'DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z'
@@ -198,6 +199,23 @@ class Uploader:
                 return file
 
         raise FileNotFoundError("latest patches not found")
+
+    def download_latest_dlc_version(self, download_dir) -> str:
+        """
+        下载最新版本dlc压缩包到指定目录，并返回最终压缩包的完整路径
+        """
+        return self.download_file(self.find_latest_dlc_version(), download_dir)
+
+    def find_latest_dlc_version(self) -> FileInFolder:
+        """
+        查找最新版本dlc，如找到，返回lanzouyun提供的file信息，否则抛出异常
+        """
+        folder_info = self.get_folder_info_by_url(self.folder_djc_helper.url)
+        for file in folder_info.files:
+            if file.name.startswith(self.history_dlc_version_prefix):
+                return file
+
+        raise FileNotFoundError("latest version not found")
 
     def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
         """

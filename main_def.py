@@ -959,7 +959,7 @@ def try_auto_update(cfg):
 
             if need_copy:
                 logger.info(color("bold_green") + f"{reason}，将复制{auto_updater_latest_path()}到{auto_updater_path()}")
-                shutil.copyfile(auto_updater_latest_path(), auto_updater_path())
+                shutil.copy2(auto_updater_latest_path(), auto_updater_path())
         else:
             if not exists_auto_updater_dlc():
                 # 未发现dlc和最新版dlc，尝试从网盘下载

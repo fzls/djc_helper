@@ -1,4 +1,6 @@
 # 更新器不启用文件日志
+import sys
+
 from log import logger, fileHandler, new_file_handler, color
 from version import now_version
 
@@ -187,6 +189,7 @@ if __name__ == '__main__':
 
         logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~")
         os.system("PAUSE")
+        sys.exit(1)
 
 # 示例用法
 # import subprocess

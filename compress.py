@@ -6,6 +6,10 @@ from os.path import realpath
 
 from log import logger
 
+logger_func = logger.debug
+if os.path.exists(".use_by_myself"):
+    logger_func = logger.info
+
 
 def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", dir_src_path: str = ""):
     """
@@ -18,7 +22,7 @@ def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", d
     dirpath = realpath(dirpath)
 
     # 压缩打包
-    logger.info(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
+    logger_func(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
     subprocess.call([get_bz_path(dir_src_path), 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', compressed_7z_filepath, dirpath])
 
 
@@ -29,7 +33,7 @@ def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str 
     dst_parent_folder = realpath(dst_parent_folder)
 
     # 尝试解压
-    logger.info(f"开始解压缩 目录 {compressed_7z_filepath} 到 目录 {dst_parent_folder} 下面")
+    logger_func(f"开始解压缩 目录 {compressed_7z_filepath} 到 目录 {dst_parent_folder} 下面")
     subprocess.call([get_bz_path(dir_src_path), "x", f"-o:{dst_parent_folder}", "-aoa", "-target:auto", realpath(compressed_7z_filepath)])
 
 
@@ -49,7 +53,7 @@ def compress_file_with_lzma(filepath: str, compressed_7z_filepath: str = ""):
     compressed_7z_filepath = realpath(compressed_7z_filepath)
 
     # 创建压缩版本
-    logger.info(f"开始压缩 文件 {filepath} 为 {compressed_7z_filepath}")
+    logger_func(f"开始压缩 文件 {filepath} 为 {compressed_7z_filepath}")
     with open(f"{filepath}", "rb") as file_in:
         with lzma.open(f"{compressed_7z_filepath}", "wb") as file_out:
             file_out.writelines(file_in)
@@ -63,7 +67,7 @@ def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
     filepath = realpath(filepath)
 
     # 解压缩
-    logger.info(f"开始解压缩 {compressed_7z_filepath} 为 文件 {filepath}")
+    logger_func(f"开始解压缩 {compressed_7z_filepath} 为 文件 {filepath}")
     with lzma.open(f"{compressed_7z_filepath}", "rb") as file_in:
         with open(f"{filepath}", "wb") as file_out:
             file_out.writelines(file_in)

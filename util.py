@@ -360,8 +360,12 @@ def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
     return left_time < right_time
 
 
-def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
+def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S") -> datetime.datetime:
     return datetime.datetime.strptime(time_str, time_fmt)
+
+
+def parse_timestamp(ts: float) -> datetime.datetime:
+    return datetime.datetime.fromtimestamp(ts)
 
 
 def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
@@ -370,6 +374,10 @@ def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
 
 def format_now(time_fmt="%Y-%m-%d %H:%M:%S"):
     return format_time(datetime.datetime.now(), time_fmt=time_fmt)
+
+
+def format_timestamp(ts: float):
+    return format_time(parse_timestamp(ts))
 
 
 def async_call(cb, *args, **params):

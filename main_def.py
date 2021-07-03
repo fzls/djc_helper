@@ -953,9 +953,16 @@ def try_auto_update(cfg):
             else:
                 # 存在dlc，判断版本是否不同
                 latest_md5 = md5_file(auto_updater_latest_path())
+                latest_mtime = parse_timestamp(os.stat(auto_updater_latest_path()).st_mtime)
+
                 current_md5 = md5_file(auto_updater_path())
-                need_copy = latest_md5 != current_md5
-                reason = "当前存在dlc，但存在版本不一样的最新版dlc，将覆盖替换"
+                current_mtime = parse_timestamp(os.stat(auto_updater_path()).st_mtime)
+
+                logger.debug(f"latest_md5={latest_md5}, latest_mtime={latest_mtime}")
+                logger.debug(f"current_md5={current_md5}, current_mtime={current_mtime}")
+
+                need_copy = latest_md5 != current_md5 and latest_mtime > current_mtime
+                reason = f"当前存在dlc({current_mtime})，但存在更新版本的最新版dlc({latest_mtime})，将覆盖替换"
 
             if need_copy:
                 logger.info(color("bold_green") + f"{reason}，将复制{auto_updater_latest_path()}到{auto_updater_path()}")

@@ -53,6 +53,8 @@ def maximize_console():
 
 def maximize_console_sync():
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件。若想最小化，则可创建 .min_console 文件。")
+    logger.info(color("bold_yellow") + "注意是整个文件名（包含后缀）叫这个，因此请确保取消隐藏后缀名（具体百度）。")
+    logger.info(color("bold_yellow") + "具体操作不会的话，就百度【windows创建仅后缀的文件】")
 
     if os.path.exists(".no_max_console"):
         logger.info("不启用最大化窗口")

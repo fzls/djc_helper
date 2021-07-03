@@ -1002,7 +1002,7 @@ def try_auto_update(cfg):
 
             # 异常退出时，看看网盘是否有更新的版本
             last_modify_time = parse_timestamp(os.stat(dlc_path).st_mtime)
-            logger.error(f"第{idx}次尝试DLC出错了，错误码为{p.returncode}，DLC最后一次修改时间为{last_modify_time}")
+            logger.error(color("bold_yellow") + f"第{idx}次尝试DLC出错了，错误码为{p.returncode}，DLC最后一次修改时间为{last_modify_time}")
 
             uploader = Uploader()
             netdisk_latest_dlc_info = uploader.find_latest_dlc_version()
@@ -1014,7 +1014,7 @@ def try_auto_update(cfg):
                 break
 
             # 更新新版本，然后重试
-            logger.info(f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本之后，有可能已经修复dlc的该问题，将尝试更新dlc为最新版本")
+            logger.info(color("bold_green") + f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本之后，有可能已经修复dlc的该问题，将尝试更新dlc为最新版本")
             uploader.download_file(netdisk_latest_dlc_info, os.path.dirname(dlc_path))
 
         logger.info(color("bold_yellow") + "当前版本为最新版本，不需要更新~")

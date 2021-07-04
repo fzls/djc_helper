@@ -227,7 +227,7 @@ class Urls:
                 continue
 
             # 部分电脑上可能会在这一步卡住，因此加一个标志项，允许不启用活动
-            if os.path.exists("不查询活动.txt"):
+            if exists_flag_file("不查询活动.txt"):
                 continue
 
             act = search_act(act_id)

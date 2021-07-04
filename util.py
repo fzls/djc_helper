@@ -59,7 +59,7 @@ def ensure_cmd_window_buffer_size_for_windows():
     if platform.system() != "Windows":
         return
 
-    if os.path.exists(".no_change_cmd_buffer"):
+    if exists_flag_file(".no_change_cmd_buffer"):
         logger.info(color("bold_yellow") + "当前存在 .no_change_cmd_buffer 文件或目录，将不尝试修改命令行缓存大小，运行日志有可能被截断~")
         return
 
@@ -87,12 +87,12 @@ def try_set_console_window_mode(show_mode: int, mode_name: str, flag_file_name: 
     调用win32gui.ShowWindow设置当前cmd所在窗口的显示模式，可选值为[win32con.SW_MAXIMIZE, win32con.SW_MINIMIZE]
     """
     file_exists_msg = "存在"
-    if not os.path.exists(flag_file_name):
+    if not exists_flag_file(flag_file_name):
         file_exists_msg = "不存在"
 
     # 判断是否需要尝试修改为对应窗口模式
-    if (os.path.exists(flag_file_name) and not expect_flag_file_exists) or \
-            (not os.path.exists(flag_file_name) and expect_flag_file_exists):
+    if (exists_flag_file(flag_file_name) and not expect_flag_file_exists) or \
+            (not exists_flag_file(flag_file_name) and expect_flag_file_exists):
         logger.info(color("bold_cyan") + f"当前{file_exists_msg} {flag_file_name} 文件或目录，将不尝试{mode_name}")
         return
 
@@ -119,6 +119,10 @@ def try_set_console_window_mode(show_mode: int, mode_name: str, flag_file_name: 
     current_hwnd = candidates_index_to_hwnd[indexes[0]]
 
     win32gui.ShowWindow(current_hwnd, show_mode)
+
+
+def exists_flag_file(flag_file_name: str) -> bool:
+    return os.path.exists(flag_file_name)
 
 
 def get_parents(child):
@@ -298,7 +302,7 @@ def get_uuid():
 
 
 def use_by_myself():
-    return os.path.exists(".use_by_myself")
+    return exists_flag_file(".use_by_myself")
 
 
 def try_except(show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None):
@@ -420,7 +424,7 @@ def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_u
     show_message_box = True
     if show_once and not is_first_run(f"message_box_{title}"):
         show_message_box = False
-    if os.path.isfile('.no_message_box'):
+    if exists_flag_file('.no_message_box'):
         show_message_box = False
 
     if show_message_box:
@@ -528,7 +532,7 @@ def get_config_from_env():
 
 
 def disable_pause_after_run() -> bool:
-    return os.path.exists(".disable_pause_after_run")
+    return exists_flag_file(".disable_pause_after_run")
 
 
 # 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
@@ -844,6 +848,7 @@ def sync_configs(source_dir: str, target_dir: str):
         ".use_by_myself",
         "不查询活动.txt",
         ".no_message_box",
+        ".no_change_cmd_buffer",
 
         # 缓存文件所在目录
         ".cached",

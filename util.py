@@ -408,11 +408,11 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False):
-    async_call(message_box, msg, title, print_log, icon, open_url, show_once)
+def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False, follow_flag_file=True):
+    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file)
 
 
-def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False):
+def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False, follow_flag_file=True):
     if print_log:
         logger.warning(color("bold_cyan") + msg)
 
@@ -424,7 +424,7 @@ def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_u
     show_message_box = True
     if show_once and not is_first_run(f"message_box_{title}"):
         show_message_box = False
-    if exists_flag_file('.no_message_box'):
+    if follow_flag_file and exists_flag_file('.no_message_box'):
         show_message_box = False
 
     if show_message_box:

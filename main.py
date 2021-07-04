@@ -58,8 +58,6 @@ def main():
     # 启动时检查是否需要同步本机数据目录备份的旧版本配置
     try_load_old_version_configs_from_user_data_dir()
 
-    input("测试修改内容")
-
     change_title()
     show_ask_message_box_only_once()
 

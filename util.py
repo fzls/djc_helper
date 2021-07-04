@@ -45,24 +45,59 @@ def is_valid_qq(qq: str) -> bool:
 
 
 def maximize_console():
+    if is_run_in_pycharm():
+        logger.info("当前运行在pycharm中，不尝试调整窗口大小~")
+        return
+
     # 如果是win7的话，先同步设置cmd属性
     ensure_cmd_window_buffer_size_for_windows()
 
     threading.Thread(target=maximize_console_sync, daemon=True).start()
 
 
+def ensure_cmd_window_buffer_size_for_windows():
+    if platform.system() != "Windows":
+        return
+
+    if os.path.exists(".no_change_cmd_buffer"):
+        logger.info(color("bold_yellow") + "当前存在 .no_change_cmd_buffer 文件或目录，将不尝试修改命令行缓存大小，运行日志有可能被截断~")
+        return
+
+    # windows下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
+    base_width = 1920
+    base_cols = 240
+
+    width, height = get_screen_size()
+    cols = math.floor(width / base_width * base_cols)
+    lines = 9999
+
+    os.system(f"mode con:cols={cols} lines={lines}")
+    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请创建 .no_change_cmd_buffer 文件或目录")
+
+
 def maximize_console_sync():
-    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件。若想最小化，则可创建 .min_console 文件。")
-    logger.info(color("bold_yellow") + "注意是整个文件名（包含后缀）叫这个，因此请确保取消隐藏后缀名（具体百度）。")
-    logger.info(color("bold_yellow") + "具体操作不会的话，就百度【windows创建仅后缀的文件】")
+    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件或目录。若想最小化，则可创建 .min_console 文件或目录。")
 
-    if os.path.exists(".no_max_console"):
-        logger.info("不启用最大化窗口")
+    try_set_cmd_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".no_max_console", False)
+    try_set_cmd_window_mode(win32con.SW_MINIMIZE, "最小化窗口", ".min_console", True)
+
+
+def try_set_cmd_window_mode(show_mode: int, mode_name: str, flag_file_name: str, expect_flag_file_exists: bool):
+    """
+    调用win32gui.ShowWindow设置当前cmd所在窗口的显示模式，可选值为[win32con.SW_MAXIMIZE, win32con.SW_MINIMIZE]
+    """
+    file_exists_msg = "存在"
+    if not os.path.exists(flag_file_name):
+        file_exists_msg = "不存在"
+
+    # 判断是否需要尝试修改为对应窗口模式
+    if (os.path.exists(flag_file_name) and not expect_flag_file_exists) or \
+            (not os.path.exists(flag_file_name) and expect_flag_file_exists):
+        logger.info(color("bold_cyan") + f"当前{file_exists_msg} {flag_file_name} 文件或目录，将不尝试{mode_name}")
         return
 
-    if is_run_in_pycharm():
-        logger.info("当前运行在pycharm中，不尝试最大化窗口~")
-        return
+    # 开始设置
+    logger.info(color("bold_cyan") + f"当前{file_exists_msg} {flag_file_name} 文件或目录，将尝试{mode_name}")
 
     current_pid = os.getpid()
     parents = get_parents(current_pid)
@@ -82,25 +117,8 @@ def maximize_console_sync():
     # 排序，从而找到最接近的那个，就是我们所需的当前窗口
     indexes = sorted(list(candidates_index_to_hwnd.keys()))
     current_hwnd = candidates_index_to_hwnd[indexes[0]]
-    op = win32con.SW_MAXIMIZE
-    if os.path.exists(".min_console"):
-        op = win32con.SW_MINIMIZE
-        logger.info("已启用最小化模式")
-    win32gui.ShowWindow(current_hwnd, op)
 
-
-def ensure_cmd_window_buffer_size_for_windows():
-    if platform.system() == "Windows":
-        # windows下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
-        base_width = 1920
-        base_cols = 240
-
-        width, height = get_screen_size()
-        cols = math.floor(width / base_width * base_cols)
-        lines = 9999
-
-        os.system(f"mode con:cols={cols} lines={lines}")
-        logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断")
+    win32gui.ShowWindow(current_hwnd, show_mode)
 
 
 def get_parents(child):

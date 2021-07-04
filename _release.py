@@ -12,7 +12,7 @@ from _package import package
 from _push_github import push_github
 from log import logger, color
 from upload_lanzouyun import Uploader
-from util import maximize_console, make_sure_dir_exists
+from util import change_console_window_mode_async, make_sure_dir_exists
 from version import now_version
 
 # ---------------准备工作
@@ -26,7 +26,7 @@ if re.match(version_reg, version) is None:
     exit(-1)
 
 # 最大化窗口
-maximize_console()
+change_console_window_mode_async()
 
 version = 'v' + version
 

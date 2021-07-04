@@ -81,8 +81,8 @@ def main():
     change_title("集卡特别版")
 
     # 最大化窗口
-    logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-    maximize_console()
+    logger.info("尝试调整窗口显示模式，打包exe可能会运行的比较慢")
+    change_console_window_mode_async()
 
     logger.warning(f"开始运行DNF蚊子腿小助手 集卡特别版，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

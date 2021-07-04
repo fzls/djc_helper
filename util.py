@@ -44,7 +44,7 @@ def is_valid_qq(qq: str) -> bool:
     return qq.isnumeric()
 
 
-def maximize_console():
+def change_console_window_mode_async():
     if is_run_in_pycharm():
         logger.info("当前运行在pycharm中，不尝试调整窗口大小~")
         return
@@ -52,7 +52,7 @@ def maximize_console():
     # 如果是win7的话，先同步设置cmd属性
     ensure_cmd_window_buffer_size_for_windows()
 
-    threading.Thread(target=maximize_console_sync, daemon=True).start()
+    threading.Thread(target=change_console_window_mode, daemon=True).start()
 
 
 def ensure_cmd_window_buffer_size_for_windows():
@@ -75,14 +75,14 @@ def ensure_cmd_window_buffer_size_for_windows():
     logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请创建 .no_change_cmd_buffer 文件或目录")
 
 
-def maximize_console_sync():
+def change_console_window_mode():
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件或目录。若想最小化，则可创建 .min_console 文件或目录。")
 
-    try_set_cmd_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".no_max_console", False)
-    try_set_cmd_window_mode(win32con.SW_MINIMIZE, "最小化窗口", ".min_console", True)
+    try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".no_max_console", False)
+    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", ".min_console", True)
 
 
-def try_set_cmd_window_mode(show_mode: int, mode_name: str, flag_file_name: str, expect_flag_file_exists: bool):
+def try_set_console_window_mode(show_mode: int, mode_name: str, flag_file_name: str, expect_flag_file_exists: bool):
     """
     调用win32gui.ShowWindow设置当前cmd所在窗口的显示模式，可选值为[win32con.SW_MAXIMIZE, win32con.SW_MINIMIZE]
     """

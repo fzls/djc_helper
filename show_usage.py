@@ -41,6 +41,6 @@ def show_usage():
 
 
 if __name__ == '__main__':
-    maximize_console()
+    change_console_window_mode_async()
     show_usage()
     os.system("PAUSE")

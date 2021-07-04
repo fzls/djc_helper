@@ -35,8 +35,8 @@ def prepare_env():
 
     # 最大化窗口
     if not args.no_max_console:
-        logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
-        maximize_console()
+        logger.info("尝试调整窗口显示模式，打包exe可能会运行的比较慢")
+        change_console_window_mode_async()
 
     if args.wait_for_pid_exit != 0:
         logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
@@ -57,6 +57,8 @@ def main():
 
     # 启动时检查是否需要同步本机数据目录备份的旧版本配置
     try_load_old_version_configs_from_user_data_dir()
+
+    input("测试修改内容")
 
     change_title()
     show_ask_message_box_only_once()

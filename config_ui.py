@@ -13,6 +13,7 @@ from PyQt5.QtGui import QIcon, QValidator
 from PyQt5.QtCore import QCoreApplication, QThread
 
 from qt_wrapper import *
+from qt_collapsible_box import CollapsibleBox
 from config import *
 from setting import *
 from game_info import name_2_mobile_game_info_map
@@ -970,10 +971,15 @@ class AccountConfigUi(QWidget):
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
+        collapsible_box = CollapsibleBox("兑换数目/次数，0表示不兑换(点击展开/折叠)")
+        form_layout.addRow("道聚城兑换道具", collapsible_box)
+
+        form_layout_items = QFormLayout()
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = []
         for exchange_item in cfg.exchange_items:
-            self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
+            self.exchange_items.append(ExchangeItemConfigUi(form_layout_items, exchange_item))
+        collapsible_box.setContentLayout(form_layout_items)
 
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
@@ -1328,10 +1334,8 @@ class ExchangeItemConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: ExchangeItemConfig):
-        add_form_seperator(form_layout, f"道聚城兑换道具 - {cfg.sGoodsName}")
-
         self.spinbox_count = create_spin_box(cfg.count, 10)
-        form_layout.addRow("兑换数目/次数（0表示不兑换）", self.spinbox_count)
+        form_layout.addRow(f"{cfg.sGoodsName}", self.spinbox_count)
 
     def update_config(self, cfg: ExchangeItemConfig):
         cfg.count = self.spinbox_count.value()

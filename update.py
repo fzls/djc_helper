@@ -51,31 +51,8 @@ def check_update_on_start(config: CommonConfig):
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
     except Exception as err:
-        try:
-            # 到这里一般是无法访问github，这时候试试gitee的方案
-            if check_update:
-                latest_version = get_version_from_gitee()
-                ui = UpdateInfo()
-                ui.latest_version = latest_version
-                ui.netdisk_link = config.netdisk_link
-                ui.netdisk_passcode = "fzls"
-                ui.update_message = "当前无法访问github，暂时无法获取更新内容，若欲知更新内容，请浏览gitee主页进行查看哦~\n\nhttps://gitee.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
-
-                try_manaual_update(ui)
-        except Exception as err:
-            logger.error(
-                f"手动检查版本更新失败（这个跟自动更新没有任何关系）,大概率是访问不了github和gitee导致的，可自行前往网盘查看是否有更新, 错误为{err}"
-                + color("bold_green") + f"\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
-            )
-
-            # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
-            if time_since_last_update.days >= 7:
-                msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
-                logger.info(color("bold_green") + msg)
-                if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-                    win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
-                    webbrowser.open(config.netdisk_link)
+        if check_update:
+            update_fallback(config)
 
 
 def try_manaual_update(ui: UpdateInfo) -> bool:
@@ -119,6 +96,33 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
 
     has_new_version = need_update(now_version, ui.latest_version)
     return has_new_version
+
+
+def update_fallback(config:CommonConfig):
+    try:
+        # 到这里一般是无法访问github，这时候试试gitee的方案
+        latest_version = get_version_from_gitee()
+        ui = UpdateInfo()
+        ui.latest_version = latest_version
+        ui.netdisk_link = config.netdisk_link
+        ui.netdisk_passcode = "fzls"
+        ui.update_message = "当前无法访问github，暂时无法获取更新内容，若欲知更新内容，请浏览gitee主页进行查看哦~\n\nhttps://gitee.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+
+        try_manaual_update(ui)
+    except Exception as err:
+        logger.error(
+            f"手动检查版本更新失败（这个跟自动更新没有任何关系）,大概率是访问不了github和gitee导致的，可自行前往网盘查看是否有更新, 错误为{err}"
+            + color("bold_green") + f"\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
+        )
+
+        # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
+        time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
+        if time_since_last_update.days >= 7:
+            msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
+            logger.info(color("bold_green") + msg)
+            if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
+                win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
+                webbrowser.open(config.netdisk_link)
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):

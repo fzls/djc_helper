@@ -304,15 +304,7 @@ class ConfigUi(QFrame):
             if not try_manaual_update(ui):
                 show_message("无需更新", "当前已经是最新版本~")
         except Exception as err:
-            netdisk_addr = self.load_config().common.netdisk_link
-
-            # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-            time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
-            if time_since_last_update.days >= 7:
-                msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]({netdisk_addr})看看是否有新版本，或者购买自动更新DLC省去手动更新的操作"
-                show_message("检查更新失败", msg)
-            else:
-                show_message("检查更新失败", f"检查版本更新失败,大概率是访问不了github导致的，可自行前往网盘({netdisk_addr})查看是否有更新, 错误为{err}")
+            update_fallback(cfg)
 
     def on_click_auto_update(self, checked=False):
         if checked:

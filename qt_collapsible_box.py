@@ -6,9 +6,10 @@ class CollapsibleBox(QtWidgets.QWidget):
     def __init__(self, title="", parent=None):
         super(CollapsibleBox, self).__init__(parent)
 
-        self.toggle_button = QtWidgets.QToolButton(
-            text=title, checkable=True, checked=False
-        )
+        self.toggle_button = QtWidgets.QToolButton(self)
+        self.toggle_button.setText(title)
+        self.toggle_button.setCheckable(True)
+        self.toggle_button.setChecked(False)
         self.toggle_button.setStyleSheet("QToolButton { border: none; }")
         self.toggle_button.setToolButtonStyle(
             QtCore.Qt.ToolButtonTextBesideIcon
@@ -18,9 +19,9 @@ class CollapsibleBox(QtWidgets.QWidget):
 
         self.toggle_animation = QtCore.QParallelAnimationGroup(self)
 
-        self.content_area = QtWidgets.QScrollArea(
-            maximumHeight=0, minimumHeight=0
-        )
+        self.content_area = QtWidgets.QScrollArea(self)
+        self.content_area.setMaximumHeight(0)
+        self.content_area.setMinimumHeight(0)
         self.content_area.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )

@@ -580,7 +580,7 @@ class ConfigUi(QFrame):
 
             # 自动更新购买完成后提示去网盘下载
             if card.startswith("auto_update"):
-                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引.docx】")
+                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:

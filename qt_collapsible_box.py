@@ -3,8 +3,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 # copy from https://stackoverflow.com/a/52617714/5251903
 class CollapsibleBox(QtWidgets.QWidget):
-    def __init__(self, title="", parent=None):
+    def __init__(self, title="", animation_duration_millseconds=250, parent=None):
         super(CollapsibleBox, self).__init__(parent)
+
+        self.animation_duration_millseconds = animation_duration_millseconds
 
         self.toggle_button = QtWidgets.QToolButton(self)
         self.toggle_button.setText(title)
@@ -66,14 +68,14 @@ class CollapsibleBox(QtWidgets.QWidget):
         content_height = layout.sizeHint().height()
         for i in range(self.toggle_animation.animationCount()):
             animation = self.toggle_animation.animationAt(i)
-            animation.setDuration(500)
+            animation.setDuration(self.animation_duration_millseconds)
             animation.setStartValue(collapsed_height)
             animation.setEndValue(collapsed_height + content_height)
 
         content_animation = self.toggle_animation.animationAt(
             self.toggle_animation.animationCount() - 1
         )
-        content_animation.setDuration(500)
+        content_animation.setDuration(self.animation_duration_millseconds)
         content_animation.setStartValue(0)
         content_animation.setEndValue(content_height)
 

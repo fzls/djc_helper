@@ -506,8 +506,11 @@ def get_random_face():
 
 
 def clear_login_status():
-    shutil.rmtree(cached_dir, ignore_errors=True)
-    os.mkdir(cached_dir)
+    # 获取全部日志文件，并按照时间升序排列
+    saved_login_cache_files = list(pathlib.Path(cached_dir).glob('.saved_*'))
+    for cache_file in saved_login_cache_files:
+        os.remove(cache_file)
+        logger.info(f"移除缓存的登录信息：{cache_file}")
 
 
 def get_screen_size():
@@ -959,5 +962,8 @@ if __name__ == '__main__':
 
     # test_extract_between()
 
-    print(start_and_end_date_of_a_month(get_now()))
+    # print(start_and_end_date_of_a_month(get_now()))
+
+    clear_login_status()
+
     pass

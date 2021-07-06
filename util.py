@@ -854,7 +854,6 @@ def sync_configs(source_dir: str, target_dir: str):
         ".no_change_cmd_buffer",
 
         # 缓存文件所在目录
-        ".cached",
         ".db",
         ".first_run",
 

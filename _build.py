@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 
-from init_venv_and_requirements import init_venv_and_requirements
+from _init_venv_and_requirements import init_venv_and_requirements
 from log import logger
 from util import human_readable_size
 

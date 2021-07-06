@@ -262,7 +262,6 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        # re: 修改颜色 @2021-06-10 12:50:38 By Chen Ji
         btn_open_pay_guide = create_pushbutton("查看付费指引", "SpringGreen")
         btn_open_usage_guide = create_pushbutton("查看使用教程（文字版）", "SpringGreen")
         btn_open_usage_video = create_pushbutton("查看使用教程（视频版）", "SpringGreen")

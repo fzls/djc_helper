@@ -666,17 +666,22 @@ def wait_for(msg: str, seconds):
 
 
 def show_unexpected_exception_message(e: Exception):
-    from config import config
+    from config import Config, config
 
     time_since_release = get_now() - parse_time(ver_time, "%Y.%m.%d")
-    msg = f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群{config().common.qq_group}反馈或自行解决。" + check_some_exception(e)
+    cfg = Config()
+    try:
+        cfg = config()
+    except:
+        pass
+    msg = f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群{cfg.common.qq_group}反馈或自行解决。" + check_some_exception(e)
     logger.exception(color("fg_bold_yellow") + msg, exc_info=e)
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_green") + "如果要反馈，请把整个窗口都截图下来- -不要只截一部分")
     logger.warning(color("fg_bold_yellow") + "不要自动无视上面这三句话哦，写出来是让你看的呀<_<不知道出啥问题的时候就按提示去看看是否有新版本哇，而不是不管三七二十一就来群里问嗷")
-    logger.warning(color("fg_bold_cyan") + f"链接：{config().common.netdisk_link}")
+    logger.warning(color("fg_bold_cyan") + f"链接：{cfg.common.netdisk_link}")
 
 
 def get_pay_server_addr() -> str:

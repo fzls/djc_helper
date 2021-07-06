@@ -872,6 +872,10 @@ def sync_configs(source_dir: str, target_dir: str):
             logger.debug(f"旧版本目录未发现 {filename}，将跳过")
             continue
 
+        if 'config.toml' in filename and os.stat(source).st_size == 0:
+            logger.warning(f"旧版本中的配置文件是空文件，可能意外损坏了，将不覆盖到本地")
+            continue
+
         # 确保要复制的目标文件所在目录存在
         make_sure_dir_exists(os.path.dirname(destination))
 

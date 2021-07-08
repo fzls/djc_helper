@@ -125,7 +125,7 @@ class Urls:
         self.iActivityId_dnf_wegame_dup = "384137"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
-        self.iActivityId_dnf_collection = "382255"  # DNF集合站
+        self.iActivityId_dnf_collection = "390227"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "385269"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速

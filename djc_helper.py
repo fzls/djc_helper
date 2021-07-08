@@ -361,7 +361,6 @@ class DjcHelper:
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
             ("集卡", self.ark_lottery),
-            ("DNF集合站", self.dnf_collection),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF落地页活动", self.dnf_luodiye),
@@ -378,6 +377,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4934,7 +4934,7 @@ class DjcHelper:
     # --------------------------------------------DNF集合站--------------------------------------------
     @try_except()
     def dnf_collection(self):
-        # https://dnf.qq.com/lbact/a20210603lbniyox/index.html
+        # https://dnf.qq.com/lbact/a20210708album/index.html
         show_head_line("DNF集合站")
         self.show_amesvr_act_info(self.dnf_collection_op)
 
@@ -4945,26 +4945,28 @@ class DjcHelper:
         self.check_dnf_collection()
 
         def query_signin_days():
-            res = self.dnf_collection_op("查询", "769802", print_res=False)
+            res = self.dnf_collection_op("查询", "779650", print_res=False)
             info = AmesvrSigninInfo().auto_update_config(res["modRet"])
             return int(info.total)
 
-        self.dnf_collection_op("勇士礼包", "769796")
-        self.dnf_collection_op("全民参与礼包", "769801")
+        self.dnf_collection_op("勇士礼包", "779642")
+        self.dnf_collection_op("全民参与礼包", "779647")
 
-        self.dnf_collection_op("30分签到礼包", "769798")
+        self.dnf_collection_op("30分签到礼包", "779643")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_op("3日礼包", "769794")
-        self.dnf_collection_op("7日礼包", "769799")
-        self.dnf_collection_op("10日礼包", "769800")
+        self.dnf_collection_op("3日礼包", "779640")
+        self.dnf_collection_op("7日礼包", "779644")
+        self.dnf_collection_op("10日礼包", "779648")
+        self.dnf_collection_op("15日礼包", "779645")
+        self.dnf_collection_op("21日礼包", "779649")
 
     def check_dnf_collection(self):
-        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210603lbniyox/index.html",
-                                activity_op_func=self.dnf_collection_op, query_bind_flowid="769791", commit_bind_flowid="769790")
+        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210708album/index.html",
+                                activity_op_func=self.dnf_collection_op, query_bind_flowid="779637", commit_bind_flowid="779636")
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20210603lbniyox/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210708album/index.html",
                                    **extra_params)
 
     # --------------------------------------------DNF集合站--------------------------------------------
@@ -5733,7 +5735,6 @@ if __name__ == '__main__':
         # djcHelper.guanjia()
         # djcHelper.dnf_strong()
         # djcHelper.ark_lottery()
-        # djcHelper.dnf_collection()
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
@@ -5752,4 +5753,5 @@ if __name__ == '__main__':
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.dnf_collection()

@@ -306,23 +306,28 @@ def download_act_desc_js(actId: str) -> str:
     return ""
 
 
-def get_ams_act_desc(actId):
-    act = search_act(actId)
+def get_ams_act_desc(actId: str) -> str:
+    act = get_ams_act(actId)
     if act is None:
         return ""
 
     return format_act(act)
 
 
-def get_not_ams_act_desc(act_name):
-    for act in not_ams_activities:
-        if act.sActivityName == act_name:
-            return format_act(act)
-
-    return f"未找到活动 {act_name} 的相关信息"
+def get_ams_act(actId: str) -> Optional[AmsActInfo]:
+    act = search_act(actId)
+    return act
 
 
-def get_not_ams_act(act_name):
+def get_not_ams_act_desc(act_name: str) -> str:
+    act = get_not_ams_act(act_name)
+    if act is None:
+        return f"未找到活动 {act_name} 的相关信息"
+
+    return format_act(act)
+
+
+def get_not_ams_act(act_name: str) -> Optional[AmsActInfo]:
     for act in not_ams_activities:
         if act.sActivityName == act_name:
             return act

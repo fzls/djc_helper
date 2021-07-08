@@ -347,8 +347,8 @@ get_colg_signin = true
 get_xinyue_app = true
 # 是否领取 DNF格斗大赛 活动
 get_dnf_pk = true
-# 是否领取 心悦51 活动
-get_dnf_xinyue_51 = true
+# 是否领取 心悦 活动
+get_dnf_xinyue = true
 # 是否领取 DNF强者之路 活动
 get_dnf_strong = true
 # 是否领取 DNF漫画 活动

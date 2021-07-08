@@ -378,6 +378,7 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -399,7 +400,6 @@ class DjcHelper:
             ("DNF福签大作战", self.dnf_fuqian),
             ("会员关怀", self.vip_mentor),
             ("DNF强者之路", self.dnf_strong),
-            ("DNF心悦51", self.dnf_xinyue_51),
             ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
@@ -3198,57 +3198,47 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210312strong/",
                                    **extra_params)
 
-    # --------------------------------------------DNF心悦51--------------------------------------------
+    # --------------------------------------------DNF心悦--------------------------------------------
     @try_except()
-    def dnf_xinyue_51(self):
-        # https://xinyue.qq.com/act/a20210413ldjm/index_zs.html
-        show_head_line("DNF心悦51")
-        self.show_amesvr_act_info(self.dnf_xinyue_51_op)
+    def dnf_xinyue(self):
+        logger.warning(f"本地调试日志：暂未正式接入DNF心悦活动，先屏蔽")
+        return
 
-        if not self.cfg.function_switches.get_dnf_xinyue_51 or self.disable_most_activities():
-            logger.warning("未启用领取DNF心悦51活动合集功能，将跳过")
+        # https://xinyue.qq.com/act/a20210413ldjm/index_zs.html
+        show_head_line("DNF心悦")
+        self.show_amesvr_act_info(self.dnf_xinyue_op)
+
+        if not self.cfg.function_switches.get_dnf_xinyue or self.disable_most_activities():
+            logger.warning("未启用领取DNF心悦活动合集功能，将跳过")
             return
 
-        self.check_dnf_xinyue_51()
+        self.check_dnf_xinyue()
 
-        self.dnf_xinyue_51_op("查询信息", "756145")
+        # re: 等拿到具体活动链接后再细化下面的请求
 
-        xinyue_info = self.query_xinyue_info("查询心悦信息", print_res=False)
-        if xinyue_info.xytype < 5:
-            self.dnf_xinyue_51_op("特邀充值礼", "756071")
-        else:
-            self.dnf_xinyue_51_op("VIP充值礼", "756146", cz=xinyue_info.xytype)
+        self.dnf_collection_op("登录礼", "778244")
+        self.dnf_collection_op("充值礼包", "778253")
+        self.dnf_collection_op("转职礼包", "778254")
+        self.dnf_collection_op("转职礼包&等级", "778255")
+        self.dnf_collection_op("1万人", "778261")
+        self.dnf_collection_op("5万人", "778266")
+        self.dnf_collection_op("10万人", "778267")
 
-        self.dnf_xinyue_51_op("抽奖", "756160")
+        self.dnf_collection_op("输出抽奖次数", "778729")
+        self.dnf_collection_op("抽奖", "778269")
 
-        self.dnf_xinyue_51_op("全员礼包1", "756175")
-        self.dnf_xinyue_51_op("全员礼包2", "756183")
-        self.dnf_xinyue_51_op("全员礼包3", "756184")
+        self.dnf_collection_op("输出", "778276")
+        self.dnf_collection_op("成就点", "778367")
 
-        logger.info("可以用260/220去兑换一个宠物，有兴趣的可以自行去心悦app兑换")
-        # self.dnf_xinyue_51_op("特邀兑换", "756195")
-        # self.dnf_xinyue_51_op("VIP兑换", "756196")
-
-        self.dnf_xinyue_51_op("签到", "756204")
-        self.dnf_xinyue_51_op("累计签到礼-3天", "756207", qd="3")
-        time.sleep(5)
-        self.dnf_xinyue_51_op("累计签到礼-7天", "756207", qd="7")
-        time.sleep(5)
-        self.dnf_xinyue_51_op("累计签到礼-10天", "756207", qd="10")
-        time.sleep(5)
-        self.dnf_xinyue_51_op("累计签到礼-15天", "756207", qd="15")
-        time.sleep(5)
-        self.dnf_xinyue_51_op("累计签到礼-21天", "756207", qd="21")
-
-        # self.dnf_xinyue_51_op("app专属礼", "756223")
+        self.dnf_collection_op("心悦app礼包", "778270")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
 
-    def check_dnf_xinyue_51(self):
-        self.check_bind_account("DNF心悦51", "https://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
-                                activity_op_func=self.dnf_xinyue_51_op, query_bind_flowid="756075", commit_bind_flowid="756074")
+    def check_dnf_xinyue(self):
+        self.check_bind_account("DNF心悦", "https://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
+                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="778273", commit_bind_flowid="778272")
 
-    def dnf_xinyue_51_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_xinyue_51
+    def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_xinyue
 
         return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
                                    **extra_params)
@@ -5413,7 +5403,7 @@ class DjcHelper:
     def show_amesvr_act_info(self, activity_op_func):
         activity_op_func("查询活动信息", "", show_info_only=True)
 
-    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url:str, extra_cookies="",
+    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url: str, extra_cookies="",
                        show_info_only=False, get_ams_act_info_only=False, **data_extra_params):
         if show_info_only:
             self.show_ams_act_info(iActivityId)
@@ -5729,7 +5719,6 @@ if __name__ == '__main__':
         # djcHelper.try_join_fixed_xinyue_team()
         # djcHelper.xinyue_app_operations()
         # djcHelper.dnf_pk()
-        # djcHelper.dnf_xinyue_51()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_bbs()
         # djcHelper.guanjia()
@@ -5754,4 +5743,5 @@ if __name__ == '__main__':
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
         # djcHelper.dnf_wegame()
-        djcHelper.dnf_collection()
+        # djcHelper.dnf_collection()
+        djcHelper.dnf_xinyue()

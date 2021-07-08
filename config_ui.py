@@ -1212,8 +1212,8 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_pk = create_checkbox(cfg.get_dnf_pk)
         form_layout.addRow("DNF格斗大赛", self.checkbox_get_dnf_pk)
 
-        self.checkbox_get_dnf_xinyue_51 = create_checkbox(cfg.get_dnf_xinyue_51)
-        form_layout.addRow("心悦51", self.checkbox_get_dnf_xinyue_51)
+        self.checkbox_get_dnf_xinyue = create_checkbox(cfg.get_dnf_xinyue)
+        form_layout.addRow("心悦", self.checkbox_get_dnf_xinyue)
 
         self.checkbox_get_dnf_strong = create_checkbox(cfg.get_dnf_strong)
         form_layout.addRow("DNF强者之路", self.checkbox_get_dnf_strong)
@@ -1286,7 +1286,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_colg_signin = self.checkbox_get_colg_signin.isChecked()
         cfg.get_xinyue_app = self.checkbox_get_xinyue_app.isChecked()
         cfg.get_dnf_pk = self.checkbox_get_dnf_pk.isChecked()
-        cfg.get_dnf_xinyue_51 = self.checkbox_get_dnf_xinyue_51.isChecked()
+        cfg.get_dnf_xinyue = self.checkbox_get_dnf_xinyue.isChecked()
         cfg.get_dnf_strong = self.checkbox_get_dnf_strong.isChecked()
         cfg.get_dnf_comic = self.checkbox_get_dnf_comic.isChecked()
         cfg.get_dnf_13 = self.checkbox_get_dnf_13.isChecked()

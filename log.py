@@ -130,6 +130,10 @@ def color(color_name):
     return consoleLogFormatter.color(consoleLogFormatter.log_colors, color_name)
 
 
+def with_color(color_name: str, value) -> str:
+    return color(color_name) + str(value) + asciiReset
+
+
 if __name__ == '__main__':
     consoleHandler.setLevel(logging.DEBUG)
     logger.debug("debug")

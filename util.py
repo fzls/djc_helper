@@ -354,7 +354,9 @@ def check_some_exception(e, show_last_process_result=True) -> str:
     if show_last_process_result:
         from network import last_response_info
         if last_response_info is not None:
-            msg += format_msg(f"最近一次收到的请求结果为：{last_response_info}", "bold_cyan")
+            lr = last_response_info
+            text = parse_unicode_escape_string(lr.text)
+            msg += format_msg(f"最近一次收到的请求结果为：status_code={lr.status_code} reason={lr.reason} \n{text}", "bold_cyan")
 
     return msg
 
@@ -539,7 +541,7 @@ def disable_pause_after_run() -> bool:
 
 
 # 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
-def parse_unicode_escape_string(filename: str):
+def remove_invalid_unicode_escape_string_in_file(filename: str):
     with open(filename, 'r', encoding='utf-8') as f:
         lines = f.read()
 
@@ -552,7 +554,11 @@ def parse_unicode_escape_string(filename: str):
         for char in invalid_chars:
             lines = lines.replace(f"u{char}", f"_u{char}")
 
-        print(lines.encode().decode("unicode-escape"))
+        print(parse_unicode_escape_string(lines))
+
+
+def parse_unicode_escape_string(escaped_string: str) -> str:
+    return escaped_string.encode().decode("unicode-escape")
 
 
 def remove_none_from_list(l: list) -> list:

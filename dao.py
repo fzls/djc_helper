@@ -1178,6 +1178,13 @@ class ColgBattlePassRewardInfo(ConfigInterface):
         self.sort_id = 12
 
 
+class ResponseInfo(ConfigInterface):
+    def __init__(self):
+        self.status_code = 200
+        self.reason = "ok"
+        self.text = ""
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

@@ -959,6 +959,12 @@ def auto_updater_latest_path():
     return os.path.realpath("utils/auto_updater_latest.exe")
 
 
+def remove_suffix(input_string: str, suffix: str) -> str:
+    if suffix and input_string.endswith(suffix):
+        return input_string[:-len(suffix)]
+    return input_string
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

@@ -324,24 +324,24 @@ class DjcHelper:
 
     def free_activities(self) -> List[Tuple[str, Callable]]:
         return [
-            ("执行道聚城相关操作", self.djc_operations),
-            ("DNF地下城与勇士心悦特权专区", self.xinyue_operations),
-            ("心悦app相关操作", self.xinyue_app_operations),
+            ("道聚城", self.djc_operations),
+            ("DNF地下城与勇士心悦特权专区", self.xinyue_battle_ground),
+            ("心悦app", self.xinyue_app_operations),
             ("黑钻礼包", self.get_heizuan_gift),
-            ("腾讯游戏信用相关礼包", self.get_credit_xinyue_gift),
+            ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("心悦猫咪", self.xinyue_cat),
             ("心悦app周礼包", self.xinyue_weekly_gift),
-            ("dnf论坛签到", self.dnf_bbs_signin),
+            ("dnf论坛签到", self.dnf_bbs),
         ]
 
     def payed_activities(self) -> List[Tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
-            ("dnf助手编年史活动", self.dnf_helper_chronicle),
+            ("DNF助手编年史", self.dnf_helper_chronicle),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
-            ("QQ空间集卡", self.ark_lottery),
+            ("集卡", self.ark_lottery),
             ("DNF集合站", self.dnf_collection),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
@@ -349,7 +349,7 @@ class DjcHelper:
             ("我的dnf13周年活动", self.dnf_my_story),
             ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
-            ("新管家蚊子腿", self.guanjia_new),
+            ("管家蚊子腿", self.guanjia_new),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF马杰洛的规划", self.majieluo),
@@ -357,7 +357,7 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
-            ("qq视频活动", self.qq_video),
+            ("qq视频蚊子腿", self.qq_video),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -733,7 +733,7 @@ class DjcHelper:
 
     # --------------------------------------------心悦dnf游戏特权--------------------------------------------
     @try_except()
-    def xinyue_operations(self):
+    def xinyue_battle_ground(self):
         """
         https://xinyue.qq.com/act/a20210317dnf/index_pc.html
         根据配置进行心悦相关操作
@@ -1450,6 +1450,7 @@ class DjcHelper:
     def dnf_super_vip(self):
         # https://act.qzone.qq.com/v2/vip/tx/p/1443_dc5df0f6
         show_head_line("QQ空间超级会员")
+        self.show_not_ams_act_info("超级会员")
 
         if not self.cfg.function_switches.get_dnf_super_vip or self.disable_most_activities():
             logger.warning("未启用领取QQ空间超级会员功能，将跳过")
@@ -1479,6 +1480,7 @@ class DjcHelper:
     def dnf_yellow_diamond(self):
         # https://act.qzone.qq.com/v2/vip/tx/p/1442_36d9b930
         show_head_line("QQ空间黄钻")
+        self.show_not_ams_act_info("黄钻")
 
         if not self.cfg.function_switches.get_dnf_yellow_diamond or self.disable_most_activities():
             logger.warning("未启用领取QQ空间黄钻功能，将跳过")
@@ -4211,7 +4213,7 @@ class DjcHelper:
 
     # --------------------------------------------dnf论坛签到--------------------------------------------
     @try_except()
-    def dnf_bbs_signin(self):
+    def dnf_bbs(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf官方论坛签到")
         self.show_amesvr_act_info(self.dnf_bbs_op)
@@ -5700,7 +5702,7 @@ if __name__ == '__main__':
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
         # djcHelper.dnf_helper()
-        # djcHelper.dnf_bbs_signin()
+        # djcHelper.dnf_bbs()
         # djcHelper.guanjia()
         # djcHelper.dnf_strong()
         # djcHelper.ark_lottery()
@@ -5714,7 +5716,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
-        # djcHelper.dnf_bbs_signin()
         # djcHelper.majieluo()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()

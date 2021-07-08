@@ -357,6 +357,7 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("qq视频活动", self.qq_video),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -377,7 +378,6 @@ class DjcHelper:
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
             ("会员关怀", self.vip_mentor),
-            ("qq视频活动", self.qq_video),
             ("DNF强者之路", self.dnf_strong),
             ("DNF心悦51", self.dnf_xinyue_51),
             ("dnf助手活动", self.dnf_helper),
@@ -1970,28 +1970,29 @@ class DjcHelper:
     # --------------------------------------------qq视频活动--------------------------------------------
     # note: 接入新qq视频活动的流程如下
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
-    #   2. 打开活动页面 https://m.film.qq.com/magic-act/112317/index.html
+    #   2. 打开活动页面 https://m.film.qq.com/magic-act/113645/1_index_index.html
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
-    qq_video_act_id = "112317"
+    qq_video_act_id = "113645"
     #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
-    qq_video_module_id_lucky_user = "136534"  # 幸运勇士礼包
+    qq_video_module_id_lucky_user = "140786"  # 幸运勇士礼包
     # qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
     # qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
-    qq_video_module_id_lottery = "136527"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
-    qq_video_module_id_online_30_minutes = "136519"  # 在线30分钟
-    qq_video_module_id_online_3_days = "136522"  # 累积3天
-    qq_video_module_id_online_7_days = "136523"  # 累积7天
-    qq_video_module_id_online_15_days = "136526"  # 累积15天
+    qq_video_module_id_lottery = "140779"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "140771"  # 在线30分钟
+    qq_video_module_id_online_3_days = "140774"  # 累积3天
+    qq_video_module_id_online_7_days = "140775"  # 累积7天
+    qq_video_module_id_online_15_days = "140778"  # 累积15天
 
-    qq_video_module_id_query_card_info = "136515"  # 查询卡片信息
+    qq_video_module_id_card_gift_1 = "140780"  # 使用1张卡兑换奖励
+    qq_video_module_id_card_gift_2 = "140783"  # 使用2张卡兑换奖励
+    qq_video_module_id_card_gift_3 = "140784"  # 使用3张卡兑换奖励
+    qq_video_module_id_card_gift_4 = "140785"  # 使用4张卡兑换奖励
 
-    qq_video_module_id_enter_page = "136517"  # 首次进入页面
-    qq_video_module_id_take_enter_page_card = "136518"  # 领取进入页面的卡片
+    #   note:5. 以下的请求则是根据现有的代码中对应参数，刷新页面过滤出对应请求
+    qq_video_module_id_query_card_info = "140767"  # 查询卡片信息
 
-    qq_video_module_id_card_gift_1 = "136528"  # 使用1张卡兑换奖励
-    qq_video_module_id_card_gift_2 = "136531"  # 使用2张卡兑换奖励
-    qq_video_module_id_card_gift_3 = "136532"  # 使用3张卡兑换奖励
-    qq_video_module_id_card_gift_4 = "136533"  # 使用4张卡兑换奖励
+    qq_video_module_id_enter_page = "140769"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "140770"  # 领取进入页面的卡片
 
     @try_except()
     def qq_video(self):
@@ -5698,7 +5699,6 @@ if __name__ == '__main__':
         # djcHelper.xinyue_app_operations()
         # djcHelper.dnf_pk()
         # djcHelper.dnf_xinyue_51()
-        # djcHelper.qq_video()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_bbs_signin()
         # djcHelper.guanjia()
@@ -5724,4 +5724,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
-        djcHelper.dnf_ozma()
+        djcHelper.qq_video()

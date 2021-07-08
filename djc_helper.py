@@ -3201,10 +3201,7 @@ class DjcHelper:
     # --------------------------------------------DNF心悦--------------------------------------------
     @try_except()
     def dnf_xinyue(self):
-        logger.warning(f"本地调试日志：暂未正式接入DNF心悦活动，先屏蔽")
-        return
-
-        # https://xinyue.qq.com/act/a20210413ldjm/index_zs.html
+        # https://xinyue.qq.com/act/a20210625dnf/index_new.html
         show_head_line("DNF心悦")
         self.show_amesvr_act_info(self.dnf_xinyue_op)
 
@@ -3214,33 +3211,36 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        # re: 等拿到具体活动链接后再细化下面的请求
+        def query_lottery_count() -> int:
+            res = self.dnf_xinyue_op("查询抽奖次数", "778729", print_res=False)
+            info = parse_amesvr_common_info(res)
 
-        self.dnf_collection_op("登录礼", "778244")
-        self.dnf_collection_op("充值礼包", "778253")
-        self.dnf_collection_op("转职礼包", "778254")
-        self.dnf_collection_op("转职礼包&等级", "778255")
-        self.dnf_collection_op("1万人", "778261")
-        self.dnf_collection_op("5万人", "778266")
-        self.dnf_collection_op("10万人", "778267")
+            return int(info.sOutValue1) // 50 - int(info.sOutValue2)
 
-        self.dnf_collection_op("输出抽奖次数", "778729")
-        self.dnf_collection_op("抽奖", "778269")
+        self.dnf_xinyue_op("登录礼", "778244")
+        self.dnf_xinyue_op("充值礼包(150元)", "778253")
+        self.dnf_xinyue_op("转职礼包", "778254")
+        self.dnf_xinyue_op("刃影90级", "778255")
+        self.dnf_xinyue_op("1万人", "778261")
+        self.dnf_xinyue_op("5万人", "778266")
+        self.dnf_xinyue_op("10万人", "778267")
 
-        self.dnf_collection_op("输出", "778276")
-        self.dnf_collection_op("成就点", "778367")
+        remaining = query_lottery_count()
+        logger.info(f"当前剩余抽奖次数为{remaining}")
+        for idx in range_from_one(remaining):
+            self.dnf_xinyue_op(f"第{idx}次抽奖", "778269")
 
-        self.dnf_collection_op("心悦app礼包", "778270")
+        self.dnf_xinyue_op("心悦app礼包", "778270")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
 
     def check_dnf_xinyue(self):
-        self.check_bind_account("DNF心悦", "https://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
+        self.check_bind_account("DNF心悦", "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
                                 activity_op_func=self.dnf_xinyue_op, query_bind_flowid="778273", commit_bind_flowid="778272")
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_xinyue
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20210413ldjm/index_zs.html",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
                                    **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------

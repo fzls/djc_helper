@@ -1387,6 +1387,16 @@ def test_show_buy_info():
     os.system("PAUSE")
 
 
+def test_show_activities_summary():
+    # 读取配置信息
+    load_config("config.toml")
+    cfg = config()
+
+    user_buy_info = BuyInfo()
+    user_buy_info.expire_at = "2120-01-01 00:00:00"
+    show_activities_summary(cfg, user_buy_info)
+
+
 def test_pay_info():
     # 读取配置信息
     load_config("config.toml")
@@ -1411,16 +1421,6 @@ def test_pay_info():
 
     logger.info(dlc_info)
     logger.info(color("bold_cyan") + monthly_pay_info)
-
-
-def test_show_activities_summary():
-    # 读取配置信息
-    load_config("config.toml")
-    cfg = config()
-
-    user_buy_info = BuyInfo()
-    user_buy_info.expire_at = "2120-01-01 00:00:00"
-    show_activities_summary(cfg, user_buy_info)
 
 
 if __name__ == '__main__':

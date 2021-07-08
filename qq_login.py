@@ -753,8 +753,12 @@ class QQLogin():
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
         for i in range(5):
-            openid = self.driver.get_cookie('openid')
-            access_token = self.driver.get_cookie('access_token')
+            openid, access_token = None, None
+            try:
+                openid = self.driver.get_cookie('openid')
+                access_token = self.driver.get_cookie('access_token')
+            except:
+                pass
             if openid is not None and access_token is not None:
                 break
             time.sleep(1)

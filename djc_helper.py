@@ -5387,10 +5387,13 @@ class DjcHelper:
     def show_amesvr_act_info(self, activity_op_func):
         activity_op_func("查询活动信息", "", show_info_only=True)
 
-    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="", show_info_only=False, **data_extra_params):
+    def amesvr_request(self, ctx, amesvr_host, sServiceDepartment, sServiceType, iActivityId, iFlowId, print_res, eas_url, extra_cookies="",
+                       show_info_only=False, get_ams_act_info_only=False, **data_extra_params):
         if show_info_only:
             self.show_ams_act_info(iActivityId)
             return
+        if get_ams_act_info_only:
+            return get_ams_act(iActivityId)
 
         data = self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),

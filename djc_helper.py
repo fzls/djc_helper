@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, get_ams_act
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, not_know_start_time, get_ams_act
 
 
 # DNF蚊子腿小助手
@@ -298,17 +298,22 @@ class DjcHelper:
 
                     op_func_name = act_func.__name__ + '_op'
 
-                    endtime = not_know_end_time
+                    start_time = not_know_start_time
+                    end_time = not_know_end_time
                     # 可能是非ams活动
                     act_info = get_not_ams_act(act_name)
                     if act_info is None and hasattr(self, op_func_name):
                         # 可能是ams活动
                         act_info = getattr(self, op_func_name)("获取活动信息", "", get_ams_act_info_only=True)
 
+                    line_color = "bold_green"
                     if act_info is not None:
-                        endtime = act_info.dtEndTime
+                        start_time = format_time(parse_time(act_info.dtBeginTime), "%Y-%m-%d")
+                        end_time = format_time(parse_time(act_info.dtEndTime), "%Y-%m-%d")
+                        if is_act_expired(act_info.dtEndTime):
+                            line_color = "bold_black"
 
-                    activities_summary += f'\n    {idx + 1:2d}. {endtime} {act_name}'
+                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {start_time} {end_time} {act_name}')
             else:
                 activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 

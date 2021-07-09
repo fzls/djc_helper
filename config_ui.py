@@ -342,8 +342,8 @@ class ConfigUi(QFrame):
         show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
 
     def add_group(self, checked=False):
-        # note: 如果群 545316504 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
-        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=-8eY8yyskuXT3uoZKF85w7cJ3BuJ6FY7&jump_from=webapi")
+        # note: 如果群 444193814 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
+        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=vSEAVsoTbqJOKqp4bVpxnExEYOahOjcZ&jump_from=webapi")
         self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
 
     def add_account(self, checked=False):

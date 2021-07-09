@@ -283,6 +283,7 @@ class DjcHelper:
 
         return activity_funcs_to_run
 
+    @try_except()
     def show_activities_summary(self, user_buy_info: BuyInfo):
         # 需要运行的活动
         free_activities = self.free_activities()
@@ -301,10 +302,14 @@ class DjcHelper:
                     start_time = not_know_start_time
                     end_time = not_know_end_time
                     # 可能是非ams活动
-                    act_info = get_not_ams_act(act_name)
-                    if act_info is None and hasattr(self, op_func_name):
-                        # 可能是ams活动
-                        act_info = getattr(self, op_func_name)("获取活动信息", "", get_ams_act_info_only=True)
+                    act_info = None
+                    try:
+                        act_info = get_not_ams_act(act_name)
+                        if act_info is None and hasattr(self, op_func_name):
+                            # 可能是ams活动
+                            act_info = getattr(self, op_func_name)("获取活动信息", "", get_ams_act_info_only=True)
+                    except Exception as e:
+                        logger.debug(f"请求{act_name} 出错了", exc_info=e)
 
                     line_color = "bold_green"
                     if act_info is not None:

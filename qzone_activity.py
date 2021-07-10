@@ -162,14 +162,21 @@ class QzoneActivity:
 
         card_counts = {}
 
-        count_map = self.lottery_data["actCount"]["rule"]
+        count_map = {}
+        if "rule" in self.lottery_data["actCount"]:
+            count_map = self.lottery_data["actCount"]["rule"]
+
         for group_name, group_info in self.lottery_data["zzconfig"]["cardGroups"].items():
             for cardinfo in group_info["cardList"]:
-                ruleid = cardinfo["lotterySwitchId"]
-                count_id = cardinfo["id"]
-                for count_info in count_map[str(ruleid)]["count"]:
+                ruleid, count_id, name = str(cardinfo["lotterySwitchId"]), cardinfo["id"], cardinfo["name"]
+
+                card_counts[name] = 0
+                if ruleid not in count_map:
+                    continue
+
+                for count_info in count_map[ruleid]["count"]:
                     if count_info["countid"] == count_id:
-                        name, left = cardinfo["name"], count_info["left"]
+                        left = count_info["left"]
                         card_counts[name] = left
 
         return card_counts
@@ -179,13 +186,20 @@ class QzoneActivity:
 
         prize_counts = {}
 
-        count_map = self.lottery_data["actCount"]["rule"]
+        count_map = {}
+        if "rule" in self.lottery_data["actCount"]:
+            count_map = self.lottery_data["actCount"]["rule"]
+
         for group_name, group_info in self.lottery_data["zzconfig"]["prizeGroups"].items():
-            ruleid = group_info["rule"]
-            count_id = group_info["qual"]
-            for count_info in count_map[str(ruleid)]["count"]:
+            ruleid, count_id, name = str(group_info["rule"]), group_info["qual"], group_info["title"]
+
+            prize_counts[name] = 0
+            if ruleid not in count_map:
+                continue
+
+            for count_info in count_map[ruleid]["count"]:
                 if count_info["countid"] == count_id:
-                    name, left = group_info["title"], count_info["left"]
+                    left = count_info["left"]
                     prize_counts[name] = left
 
         return prize_counts

@@ -16,7 +16,7 @@ git pull origin master
 
 ECHO.
 ECHO 尝试初始化venv
-python init_venv_and_requirements.py
+python _init_venv_and_requirements.py
 
 ECHO.
 ECHO 从venv启动小助手

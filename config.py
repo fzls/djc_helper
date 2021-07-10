@@ -343,7 +343,7 @@ class AccountConfig(ConfigInterface):
         self.enable_majieluo_invite_friend = False
         # 不参与奥兹玛竞速活动切换角色的角色名列表（如果某些号确定不打奥兹玛的，可以把名字加到这里，从而跳过尝试这个角色）
         # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
-        self.ozma_ignored_rolename_list = [] # type: List[str]
+        self.ozma_ignored_rolename_list = []  # type: List[str]
         # dnf论坛签到formhash
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie
@@ -769,6 +769,13 @@ class Config(ConfigInterface):
 
     def get_qq_accounts(self) -> List[str]:
         return list([uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs])
+
+    def get_any_enabled_account(self) -> Optional[AccountConfig]:
+        for account_config in self.account_configs:
+            if account_config.is_enabled():
+                return account_config
+
+        return None
 
 
 g_config = Config()

@@ -637,7 +637,7 @@ def get_activity_funcs_to_run(cfg: Config, user_buy_info: BuyInfo) -> List[Tuple
 
 
 def show_activities_summary(cfg: Config, user_buy_info: BuyInfo):
-    djcHelper = DjcHelper(cfg.account_configs[0], cfg.common)
+    djcHelper = DjcHelper(cfg.get_any_enabled_account(), cfg.common)
     djcHelper.fetch_pskey()
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list()

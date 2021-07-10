@@ -283,7 +283,7 @@ class DjcHelper:
 
         return activity_funcs_to_run
 
-    @try_except()
+    @try_except(show_exception_info=False)
     def show_activities_summary(self, user_buy_info: BuyInfo):
         # 需要运行的活动
         free_activities = self.free_activities()

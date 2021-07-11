@@ -999,23 +999,6 @@ class AccountConfigUi(QWidget):
 
         add_form_seperator(form_layout, "其他")
 
-        self.lineedit_drift_send_qq_list = create_lineedit(list_to_str(cfg.drift_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
-        self.lineedit_drift_send_qq_list.setValidator(QQListValidator())
-        add_row(form_layout, "漂流瓶每日邀请列表（不会实际发消息）", self.lineedit_drift_send_qq_list)
-
-        self.lineedit_dnf_13_send_qq_list = create_lineedit(list_to_str(cfg.dnf_13_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
-        self.lineedit_dnf_13_send_qq_list.setValidator(QQListValidator())
-        add_row(form_layout, "dnf13周年邀请列表（不会实际发消息）", self.lineedit_dnf_13_send_qq_list)
-
-        self.lineedit_spring_fudai_receiver_qq_list = create_lineedit(list_to_str(cfg.spring_fudai_receiver_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
-        self.lineedit_spring_fudai_receiver_qq_list.setValidator(QQListValidator())
-        add_row(form_layout, "新春福袋大作战邀请列表（会实际发消息）", self.lineedit_spring_fudai_receiver_qq_list)
-
-        self.checkbox_enable_firecrackers_invite_friend = create_checkbox(cfg.enable_firecrackers_invite_friend)
-        add_row(form_layout, "燃放爆竹活动是否尝试邀请好友（不会实际发消息）", self.checkbox_enable_firecrackers_invite_friend)
-
-        self.checkbox_enable_majieluo_invite_friend = create_checkbox(cfg.enable_majieluo_invite_friend)
-        add_row(form_layout, "马杰洛活动是否尝试黑钻送好友（不会实际发消息）", self.checkbox_enable_majieluo_invite_friend)
 
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
         add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)

@@ -1,9 +1,11 @@
-from typing import List
+from typing import List, Tuple
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QWheelEvent
 from PyQt5.QtWidgets import (
     QFormLayout, QVBoxLayout, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
+
+from qt_collapsible_box import CollapsibleBox
 
 
 class QHLine(QFrame):
@@ -132,3 +134,12 @@ def make_scroll_layout(inner_layout: QLayout):
     scroll_layout.addWidget(scroll)
 
     return scroll_layout
+
+
+def create_collapsible_box_with_sub_form_layout(title: str) -> Tuple[CollapsibleBox, QFormLayout]:
+    collapsible_box = CollapsibleBox("道聚城兑换")
+
+    form_layout = QFormLayout()
+    collapsible_box.setContentLayout(form_layout)
+
+    return collapsible_box, form_layout

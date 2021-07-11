@@ -1,5 +1,3 @@
-import json
-import os
 import re
 from multiprocessing import cpu_count
 
@@ -65,6 +63,9 @@ class XinYueOperationConfig(ConfigInterface):
         self.package_id = ""  # 仅礼包兑换需要这个参数，如兑换【勇者宝库】的【装备提升礼盒】的package_id为702218
         self.sFlowName = "输出我的任务积分"
         self.count = 1
+
+    def unique_key(self) -> str:
+        return f"{self.iFlowId}_{self.package_id}"
 
 
 class XinYueAppOperationConfig(ConfigInterface):
@@ -446,6 +447,13 @@ class AccountConfig(ConfigInterface):
     def get_exchange_item_by_iGoodsId(self, iGoodsId: str) -> Optional[ExchangeItemConfig]:
         for exchange_item in self.exchange_items:
             if exchange_item.iGoodsId == iGoodsId:
+                return exchange_item
+
+        return None
+
+    def get_xinyue_exchange_item_by_unique_key(self, unique_key: str) -> Optional[XinYueOperationConfig]:
+        for exchange_item in self.xinyue_operations:
+            if exchange_item.unique_key() == unique_key:
                 return exchange_item
 
         return None

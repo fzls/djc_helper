@@ -761,17 +761,20 @@ class CommonConfigUi(QFrame):
 
         self.login = LoginConfigUi(form_layout, cfg.login)
 
-        self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
-        add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
-
-        self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
-        add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
+        # -------------- 区域：角色绑定与同步 --------------
+        self.collapsible_box_role_binding_sync, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("角色绑定与同步", top_layout)
 
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
         add_row(form_layout, "尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
 
         self.checkbox_force_sync_bind_with_djc = create_checkbox(cfg.force_sync_bind_with_djc)
         add_row(form_layout, "是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
+
+        self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
+        add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
+
+        self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
+        add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)

@@ -735,6 +735,9 @@ class CommonConfigUi(QFrame):
         self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
         add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
+        # -------------- 区域：更新 --------------
+        self.collapsible_box_update, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("更新", top_layout)
+
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
         add_row(form_layout, "启动时检查更新", self.checkbox_check_update_on_start)
 

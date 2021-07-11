@@ -7,8 +7,8 @@ logger.addHandler(new_file_handler())
 from io import StringIO
 from traceback import print_tb
 from PyQt5.QtWidgets import (
-    QApplication, QHBoxLayout, QTabWidget, QStyleFactory,
-    QMessageBox, QInputDialog, QLabel, QFileDialog)
+    QApplication, QTabWidget, QStyleFactory,
+    QMessageBox, QInputDialog, QFileDialog)
 from PyQt5.QtGui import QIcon, QValidator
 from PyQt5.QtCore import QCoreApplication, QThread
 
@@ -712,7 +712,10 @@ class CommonConfigUi(QFrame):
         self.from_config(cfg)
 
     def from_config(self, cfg: CommonConfig):
+        top_layout = QVBoxLayout()
+
         form_layout = QFormLayout()
+        top_layout.addLayout(form_layout)
 
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
         add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
@@ -788,7 +791,7 @@ class CommonConfigUi(QFrame):
         self.login = LoginConfigUi(form_layout, cfg.login)
         self.retry = RetryConfigUi(form_layout, cfg.retry)
 
-        self.setLayout(make_scroll_layout(form_layout))
+        self.setLayout(make_scroll_layout(top_layout))
 
     def update_config(self, cfg: CommonConfig):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()

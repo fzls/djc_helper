@@ -970,12 +970,12 @@ class AccountConfigUi(QWidget):
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         # -------------- 区域 3：道聚城 --------------
-        collapsible_box = CollapsibleBox("道聚城")
-        top_layout.addWidget(collapsible_box)
+        self.collapsible_box_djc = CollapsibleBox("道聚城")
+        top_layout.addWidget(self.collapsible_box_djc)
 
         form_layout = QFormLayout()
-        collapsible_box.setContentLayout(form_layout)
-        collapsible_box.set_fold(False)
+        self.collapsible_box_djc.setContentLayout(form_layout)
+        self.collapsible_box_djc.set_fold(False)
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
         form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)

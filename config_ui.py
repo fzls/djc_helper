@@ -997,11 +997,8 @@ class AccountConfigUi(QWidget):
         self.collapsible_box_hello_voice, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
 
-        # -------------- 区域：其他 --------------
-        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
-
-        self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
-        add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
+        # -------------- 区域：dnf论坛 --------------
+        self.collapsible_box_dnf_bbs, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
         self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_formhash字段的说明")
         add_row(form_layout, "dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
@@ -1011,6 +1008,12 @@ class AccountConfigUi(QWidget):
 
         self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中colg_cookie字段的说明")
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
+
+        # -------------- 区域：其他 --------------
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
+
+        self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
+        add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 

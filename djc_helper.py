@@ -4596,11 +4596,36 @@ class DjcHelper:
             self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "779692")
 
         # 升级
-        self.dnf_wegame_op("创角礼包", "780919")
-        self.dnf_wegame_op("升级礼包-1-50级", "780920")
-        self.dnf_wegame_op("升级礼包-51-75级", "780921")
-        self.dnf_wegame_op("升级礼包-76-99", "780922")
-        self.dnf_wegame_op("满级礼包-100级", "780923")
+        logger.info(color("bold_green") + f"尝试寻找当前绑定区服中的刃影角色来进行领取升级活动奖励")
+        djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
+        take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
+
+        valid_roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
+        for idx, role in enumerate(valid_roles):
+            if role.forceid != 11:
+                # 跳过不是女鬼剑的角色
+                continue
+
+            # 临时更新绑定角色为该角色
+            logger.info("")
+            logger.info(color("bold_cyan") + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 女鬼剑 {role.rolename} 来尝试领取刃影wegame创角和升级奖励")
+
+            take_lottery_count_role_info.roleCode = role.roleid
+            take_lottery_count_role_info.roleName = role.rolename
+            self.check_dnf_wegame(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
+
+            # 领奖
+            self.dnf_wegame_op("创角礼包-1", "780926")
+            self.dnf_wegame_op("创角礼包-2", "781025")
+            self.dnf_wegame_op("升级礼包-1-50级", "780920")
+            self.dnf_wegame_op("升级礼包-51-75级", "780921")
+            self.dnf_wegame_op("升级礼包-76-99", "780922")
+            self.dnf_wegame_op("满级礼包-100级", "780923")
+
+        # 切换回原有绑定角色
+        logger.info(color("bold_green") + "所有符合条件的角色尝试领取升级奖励完毕，切换为原有绑定角色")
+        self.check_dnf_wegame()
 
         # 勇士齐聚阿拉德
         check_in_flow_id = "779702"
@@ -4620,9 +4645,10 @@ class DjcHelper:
 
         self.dnf_wegame_op("每日抽奖", "779699")
 
-    def check_dnf_wegame(self):
+    def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210708WG/index.html",
-                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="779689", commit_bind_flowid="779688")
+                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="779689", commit_bind_flowid="779688",
+                                roleinfo=roleinfo, roleinfo_source=roleinfo_source)
 
     def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_wegame
@@ -5749,6 +5775,6 @@ if __name__ == '__main__':
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
-        # djcHelper.dnf_wegame()
+        djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
-        djcHelper.dnf_xinyue()
+        # djcHelper.dnf_xinyue()

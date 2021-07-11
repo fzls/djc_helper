@@ -162,3 +162,13 @@ def create_collapsible_box_add_to_parent_layout(title: str, parent_layout: QLayo
     collapsible_box.set_fold(fold)
 
     return collapsible_box
+
+
+def init_collapsible_box_size(parent_widget: QWidget):
+    # 尝试更新各个折叠区域的大小
+    for attr_name in dir(parent_widget):
+        if not attr_name.startswith("collapsible_box_"):
+            continue
+
+        collapsible_box = getattr(parent_widget, attr_name)  # type: CollapsibleBox
+        collapsible_box.try_adjust_size()

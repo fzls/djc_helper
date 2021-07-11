@@ -16,6 +16,12 @@ class CollapsibleBox(QtWidgets.QWidget):
 
         self.toggle_button = QtWidgets.QToolButton(self)
         self.toggle_button.setText(title)
+
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        self.toggle_button.setSizePolicy(sizePolicy)
+        
         self.toggle_button.setCheckable(True)
         self.toggle_button.setChecked(False)
         self.toggle_button.setStyleSheet("QToolButton { border: none; font-weight: bold;}")

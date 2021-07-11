@@ -957,8 +957,9 @@ class AccountConfigUi(QWidget):
         self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
         form_layout.addRow("登录模式", self.combobox_login_mode)
 
-        self.collapsible_box_account_password = CollapsibleBox()
-        form_layout.addRow("账号密码", self.collapsible_box_account_password)
+        # -------------- 区域 2：QQ信息 --------------
+        self.collapsible_box_account_password = CollapsibleBox("账号密码")
+        top_layout.addWidget(self.collapsible_box_account_password)
 
         form_layout_account = QFormLayout()
         self.account_info = AccountInfoConfigUi(form_layout_account, cfg.account_info)
@@ -1086,6 +1087,7 @@ class AccountConfigUi(QWidget):
     def on_login_mode_change(self, text):
         disable = text != self.login_mode_bidict.val_to_key['auto_login']
 
+        self.collapsible_box_account_password.setHidden(disable)
         self.collapsible_box_account_password.set_fold(disable)
         self.account_info.setDisabled(disable)
 
@@ -1097,8 +1099,6 @@ class AccountInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: AccountInfoConfig):
-        add_form_seperator(form_layout, f"若使用账号密码自动登录，请配置下列信息")
-
         self.lineedit_account = create_lineedit(cfg.account)
         form_layout.addRow("QQ账号", self.lineedit_account)
 

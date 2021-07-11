@@ -6,6 +6,8 @@ class CollapsibleBox(QtWidgets.QWidget):
     def __init__(self, title="", tool_tip="点击展开/折叠", animation_duration_millseconds=250, parent=None):
         super(CollapsibleBox, self).__init__(parent)
 
+        self.title = title
+
         self.setToolTip(tool_tip)
 
         self.animation_duration_millseconds = animation_duration_millseconds
@@ -86,7 +88,7 @@ class CollapsibleBox(QtWidgets.QWidget):
     def try_adjust_size(self):
         collapsed_height = self.get_collapsed_height()
         content_height = self.content_area.layout().sizeHint().height()
-        # print("本地调试", self.sizeHint().height(), self.content_area.maximumHeight(), collapsed_height, content_height)
+        # print("本地调试", self.title, self.sizeHint().height(), self.content_area.maximumHeight(), collapsed_height, content_height)
         for i in range(self.toggle_animation.animationCount()):
             animation = self.toggle_animation.animationAt(i)
             animation.setDuration(self.animation_duration_millseconds)

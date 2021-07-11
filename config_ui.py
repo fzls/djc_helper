@@ -961,10 +961,10 @@ class AccountConfigUi(QWidget):
         self.collapsible_box_account_password = CollapsibleBox("账号密码")
         top_layout.addWidget(self.collapsible_box_account_password)
 
-        form_layout_account = QFormLayout()
-        self.collapsible_box_account_password.setContentLayout(form_layout_account)
+        form_layout = QFormLayout()
+        self.collapsible_box_account_password.setContentLayout(form_layout)
 
-        self.account_info = AccountInfoConfigUi(form_layout_account, cfg.account_info)
+        self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
         self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)
         self.on_login_mode_change(self.combobox_login_mode.currentText())

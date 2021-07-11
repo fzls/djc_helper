@@ -717,45 +717,6 @@ class CommonConfigUi(QFrame):
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 
-
-        # -------------- 区域：多进程 --------------
-        self.collapsible_box_multiprocessing, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
-
-        self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
-        add_row(form_layout, "是否启用多进程功能", self.checkbox_enable_multiprocessing)
-
-        self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
-        add_row(form_layout, "是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
-
-        self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
-        add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
-
-        # -------------- 区域：更新 --------------
-        self.collapsible_box_update, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("更新", top_layout)
-
-        self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
-        add_row(form_layout, "启动时检查更新", self.checkbox_check_update_on_start)
-
-        self.checkbox_check_update_on_end = create_checkbox(cfg.check_update_on_end)
-        add_row(form_layout, "结束前检查更新", self.checkbox_check_update_on_end)
-
-        self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
-        add_row(form_layout, "自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
-
-        # -------------- 区域：登录 --------------
-        self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("登录", top_layout)
-
-        self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
-        add_row(form_layout, "强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
-
-        self.spinbox_force_use_chrome_major_version = create_spin_box(cfg.force_use_chrome_major_version)
-        add_row(form_layout, "强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
-
-        self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
-        add_row(form_layout, "自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
-
-        self.login = LoginConfigUi(form_layout, cfg.login)
-
         # -------------- 区域：角色绑定与同步 --------------
         self.collapsible_box_role_binding_sync, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("角色绑定与同步", top_layout)
 
@@ -778,6 +739,44 @@ class CommonConfigUi(QFrame):
         self.fixed_teams = []
         for team in cfg.fixed_teams:
             self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
+
+        # -------------- 区域：更新 --------------
+        self.collapsible_box_update, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("更新", top_layout)
+
+        self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
+        add_row(form_layout, "启动时检查更新", self.checkbox_check_update_on_start)
+
+        self.checkbox_check_update_on_end = create_checkbox(cfg.check_update_on_end)
+        add_row(form_layout, "结束前检查更新", self.checkbox_check_update_on_end)
+
+        self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
+        add_row(form_layout, "自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
+
+        # -------------- 区域：多进程 --------------
+        self.collapsible_box_multiprocessing, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
+
+        self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
+        add_row(form_layout, "是否启用多进程功能", self.checkbox_enable_multiprocessing)
+
+        self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
+        add_row(form_layout, "是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
+
+        self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
+        add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
+
+        # -------------- 区域：登录 --------------
+        self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("登录", top_layout)
+
+        self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
+        add_row(form_layout, "强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
+
+        self.spinbox_force_use_chrome_major_version = create_spin_box(cfg.force_use_chrome_major_version)
+        add_row(form_layout, "强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
+
+        self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
+        add_row(form_layout, "自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
+
+        self.login = LoginConfigUi(form_layout, cfg.login)
 
         # -------------- 区域：其他 --------------
         self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)

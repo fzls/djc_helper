@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
     QFormLayout, QVBoxLayout, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
 
 from qt_collapsible_box import CollapsibleBox
+from util import padLeftRight
 
 
 class QHLine(QFrame):
@@ -119,7 +120,13 @@ def create_lineedit(current_text: str, placeholder_text="") -> QLineEdit:
 
 
 def add_form_seperator(form_layout: QFormLayout, title: str):
-    form_layout.addRow(f"=== {title} ===", QHLine())
+    add_row(form_layout, f"=== {title} ===", QHLine())
+
+
+def add_row(form_layout: QFormLayout, row_name: str, row_widget: QWidget, minium_row_name_size=0):
+    if minium_row_name_size > 0:
+        row_name = padLeftRight(row_name, minium_row_name_size, mode="left")
+    form_layout.addRow(row_name, row_widget)
 
 
 def make_scroll_layout(inner_layout: QLayout):

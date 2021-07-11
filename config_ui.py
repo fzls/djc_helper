@@ -723,6 +723,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
         add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
+        # -------------- 区域：多进程 --------------
+        self.collapsible_box_multiprocessing, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
+
         self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
         add_row(form_layout, "是否启用多进程功能", self.checkbox_enable_multiprocessing)
 
@@ -792,6 +795,8 @@ class CommonConfigUi(QFrame):
         self.retry = RetryConfigUi(form_layout, cfg.retry)
 
         self.setLayout(make_scroll_layout(top_layout))
+
+        init_collapsible_box_size(self)
 
     def update_config(self, cfg: CommonConfig):
         cfg.force_use_portable_chrome = self.checkbox_force_use_portable_chrome.isChecked()

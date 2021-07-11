@@ -776,6 +776,17 @@ class CommonConfigUi(QFrame):
         self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
         add_row(form_layout, "自动赠送卡片的目标QQ数组(这些QQ将接收来自其他QQ赠送的卡片)", self.lineedit_auto_send_card_target_qqs)
+
+        # -------------- 区域：心悦 --------------
+        self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦", top_layout)
+
+        self.fixed_teams = []
+        for team in cfg.fixed_teams:
+            self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
+
+        # -------------- 区域：其他 --------------
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout, fold=False)
+
         self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
         add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
 
@@ -784,11 +795,6 @@ class CommonConfigUi(QFrame):
 
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
-
-        self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
-        self.fixed_teams = []
-        for team in cfg.fixed_teams:
-            self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
 
         add_form_seperator(form_layout, "其他")
 
@@ -834,7 +840,6 @@ class CommonConfigUi(QFrame):
 
         self.login.update_config(cfg.login)
         self.retry.update_config(cfg.retry)
-        self.xinyue.update_config(cfg.xinyue)
         for idx, team in enumerate(self.fixed_teams):
             team.update_config(cfg.fixed_teams[idx])
 
@@ -912,22 +917,6 @@ class RetryConfigUi(QWidget):
         cfg.request_wait_time = self.spinbox_request_wait_time.value()
         cfg.max_retry_count = self.spinbox_max_retry_count.value()
         cfg.retry_wait_time = self.spinbox_retry_wait_time.value()
-
-
-class XinYueConfigUi(QWidget):
-    def __init__(self, form_layout: QFormLayout, cfg: XinYueConfig, parent=None):
-        super(XinYueConfigUi, self).__init__(parent)
-
-        self.from_config(form_layout, cfg)
-
-    def from_config(self, form_layout: QFormLayout, cfg: XinYueConfig):
-        add_form_seperator(form_layout, "心悦相关配置")
-
-        self.combobox_submit_task_after = create_combobox(str(cfg.submit_task_after), [str(hour) for hour in range(24)])
-        add_row(form_layout, "心悦操作最早处理时间", self.combobox_submit_task_after)
-
-    def update_config(self, cfg: XinYueConfig):
-        cfg.submit_task_after = int(self.combobox_submit_task_after.currentText())
 
 
 class FixedTeamConfigUi(QWidget):

@@ -942,7 +942,10 @@ class AccountConfigUi(QWidget):
         self.from_config(cfg)
 
     def from_config(self, cfg: AccountConfig):
+        top_layout = QVBoxLayout()
+
         form_layout = QFormLayout()
+        top_layout.addLayout(form_layout)
 
         self.checkbox_enable = create_checkbox(cfg.enable)
         form_layout.addRow("启用该账号", self.checkbox_enable)
@@ -1018,7 +1021,7 @@ class AccountConfigUi(QWidget):
 
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 
-        self.setLayout(make_scroll_layout(form_layout))
+        self.setLayout(make_scroll_layout(top_layout))
 
     def update_config(self, cfg: AccountConfig):
         cfg.enable = self.checkbox_enable.isChecked()

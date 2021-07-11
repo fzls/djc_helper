@@ -988,6 +988,9 @@ class AccountConfigUi(QWidget):
         # -------------- 区域 6：会员关怀 --------------
         self.collapsible_box_vip_mentor, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
+
+        # -------------- 区域 6：dnf助手 --------------
+        self.collapsible_box_dnf_helper_info, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
         self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
@@ -1503,7 +1506,8 @@ class DnfHelperInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: DnfHelperInfoConfig):
-        add_form_seperator(form_layout, f"dnf助手鉴权信息")
+        self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
+        form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)
 
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
         form_layout.addRow("社区ID(userId)", self.lineedit_userId)
@@ -1516,9 +1520,6 @@ class DnfHelperInfoConfigUi(QWidget):
 
         self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         form_layout.addRow("唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
-
-        self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
-        form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)
 
     def update_config(self, cfg: DnfHelperInfoConfig):
         cfg.userId = self.lineedit_userId.text()

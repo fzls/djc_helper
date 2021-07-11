@@ -1048,11 +1048,6 @@ class AccountConfigUi(QWidget):
         cfg.login_mode = self.login_mode_bidict.key_to_val[self.combobox_login_mode.currentText()]
         cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
 
-        cfg.drift_send_qq_list = str_to_list(self.lineedit_drift_send_qq_list.text())
-        cfg.dnf_13_send_qq_list = str_to_list(self.lineedit_dnf_13_send_qq_list.text())
-        cfg.spring_fudai_receiver_qq_list = str_to_list(self.lineedit_spring_fudai_receiver_qq_list.text())
-        cfg.enable_firecrackers_invite_friend = self.checkbox_enable_firecrackers_invite_friend.isChecked()
-        cfg.enable_majieluo_invite_friend = self.checkbox_enable_majieluo_invite_friend.isChecked()
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
@@ -1069,7 +1064,6 @@ class AccountConfigUi(QWidget):
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         self.hello_voice.update_config(cfg.hello_voice)
-        self.firecrackers.update_config(cfg.firecrackers)
 
         # 这些是动态生成的，不需要保存到配置表中
         for attr in ["sDjcSign"]:

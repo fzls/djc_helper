@@ -12,6 +12,8 @@ class CollapsibleBox(QtWidgets.QWidget):
 
         self.animation_duration_millseconds = animation_duration_millseconds
 
+        self.collapsed_height = 19
+
         self.toggle_button = QtWidgets.QToolButton(self)
         self.toggle_button.setText(title)
         self.toggle_button.setCheckable(True)
@@ -49,7 +51,7 @@ class CollapsibleBox(QtWidgets.QWidget):
             QtCore.QPropertyAnimation(self.content_area, b"maximumHeight")
         )
 
-    def set_fold(self, fold:bool):
+    def set_fold(self, fold: bool):
         if self.toggle_button.isChecked() != fold:
             # 已经达到预期状态，无需额外操作
             return
@@ -84,10 +86,9 @@ class CollapsibleBox(QtWidgets.QWidget):
         self.try_adjust_size()
 
     def try_adjust_size(self):
-        collapsed_height = (
-                self.sizeHint().height() - self.content_area.maximumHeight()
-        )
+        collapsed_height = self.get_collapsed_height()
         content_height = self.content_area.layout().sizeHint().height()
+        print(self.sizeHint().height(), self.content_area.maximumHeight(), collapsed_height, content_height)
         for i in range(self.toggle_animation.animationCount()):
             animation = self.toggle_animation.animationAt(i)
             animation.setDuration(self.animation_duration_millseconds)
@@ -100,6 +101,15 @@ class CollapsibleBox(QtWidgets.QWidget):
         content_animation.setDuration(self.animation_duration_millseconds)
         content_animation.setStartValue(0)
         content_animation.setEndValue(content_height)
+
+    def get_collapsed_height(self):
+        collapsed_height = (
+                self.sizeHint().height() - self.content_area.maximumHeight()
+        )
+        if collapsed_height > 0:
+            self.collapsed_height = collapsed_height
+
+        return self.collapsed_height
 
 
 def test_CollapsibleBox():

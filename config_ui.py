@@ -996,7 +996,6 @@ class AccountConfigUi(QWidget):
         # -------------- 区域：hello语音 --------------
         self.collapsible_box_hello_voice, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
-        self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
 
         add_form_seperator(form_layout, "其他")
 
@@ -1545,22 +1544,6 @@ class HelloVoiceInfoConfigUi(QWidget):
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
         cfg.hello_id = self.lineedit_hello_id.text()
-
-
-class FirecrackersConfigUi(QWidget):
-    def __init__(self, form_layout: QFormLayout, cfg: FirecrackersConfig, parent=None):
-        super(FirecrackersConfigUi, self).__init__(parent)
-
-        self.from_config(form_layout, cfg)
-
-    def from_config(self, form_layout: QFormLayout, cfg: FirecrackersConfig):
-        add_form_seperator(form_layout, f"燃放爆竹")
-
-        self.checkbox_enable_lottery = create_checkbox(cfg.enable_lottery)
-        add_row(form_layout, "开启抽奖", self.checkbox_enable_lottery)
-
-    def update_config(self, cfg: FirecrackersConfig):
-        cfg.enable_lottery = self.checkbox_enable_lottery.isChecked()
 
 
 def main():

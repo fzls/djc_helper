@@ -717,11 +717,6 @@ class CommonConfigUi(QFrame):
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 
-        self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
-        add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
-
-        self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
-        add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
         # -------------- 区域：多进程 --------------
         self.collapsible_box_multiprocessing, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
@@ -785,7 +780,13 @@ class CommonConfigUi(QFrame):
             self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
 
         # -------------- 区域：其他 --------------
-        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout, fold=False)
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
+
+        self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
+        add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
+
+        self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
+        add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
         self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
         add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
@@ -795,8 +796,6 @@ class CommonConfigUi(QFrame):
 
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
-
-        add_form_seperator(form_layout, "其他")
 
         self.combobox_log_level = create_combobox(cfg.log_level, [
             "debug",
@@ -902,8 +901,6 @@ class RetryConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: RetryConfig):
-        add_form_seperator(form_layout, "通用重试配置")
-
         self.spinbox_request_wait_time = create_spin_box(cfg.request_wait_time)
         add_row(form_layout, "请求间隔时间", self.spinbox_request_wait_time)
 

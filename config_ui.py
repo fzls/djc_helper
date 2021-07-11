@@ -16,7 +16,7 @@ from qt_wrapper import *
 from qt_collapsible_box import CollapsibleBox
 from config import *
 from setting import *
-from game_info import name_2_mobile_game_info_map
+from game_info import get_name_2_mobile_game_info_map
 from update import *
 from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
 from djc_helper import DjcHelper
@@ -1333,8 +1333,8 @@ class MobileGameRoleInfoConfigUi(QWidget):
     def from_config(self, form_layout: QFormLayout, cfg: MobileGameRoleInfoConfig):
         add_form_seperator(form_layout, f"完成《礼包达人》任务所需的手游的名称信息")
 
-        self.combobox_game_name = create_combobox(cfg.game_name, ['无', '任意手游', *sorted(name_2_mobile_game_info_map.keys())])
-        form_layout.addRow("手游名称", self.combobox_game_name)
+        self.combobox_game_name = create_combobox(cfg.game_name, ['无', '任意手游', *sorted(get_name_2_mobile_game_info_map().keys())])
+        form_layout.addRow("完成礼包达人任务的手游名称", self.combobox_game_name)
 
     def update_config(self, cfg: MobileGameRoleInfoConfig):
         cfg.game_name = self.combobox_game_name.currentText()

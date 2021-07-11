@@ -997,6 +997,14 @@ class AccountConfigUi(QWidget):
         for exchange_item in cfg.exchange_items:
             self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
 
+        # -------------- 区域：心悦特权专区兑换 --------------
+        self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
+
+        self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
+        self.xinyue_exchange_items = {}
+        for exchange_item in cfg.xinyue_operations:
+            self.xinyue_exchange_items[exchange_item.unique_key()] = XinyueOperationConfigUi(form_layout, exchange_item)
+
         # -------------- 区域：集卡 --------------
         self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
@@ -1064,6 +1072,14 @@ class AccountConfigUi(QWidget):
 
             exchange_item.update_config(item_cfg)
 
+        self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
+        for unique_key, exchange_item in self.xinyue_exchange_items.items():
+            item_cfg = cfg.get_xinyue_exchange_item_by_unique_key(unique_key)
+            if item_cfg is None:
+                continue
+
+            exchange_item.update_config(item_cfg)
+
         self.ark_lottery.update_config(cfg.ark_lottery)
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
@@ -1098,6 +1114,28 @@ class AccountConfigUi(QWidget):
             item.sGoodsName = sGoodsName
             item.count = 0
             cfg.exchange_items.append(item)
+
+    def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig):
+        all_item_keys = set()
+        for item in cfg.xinyue_operations:
+            all_item_keys.add(item.unique_key())
+
+        # 特殊处理下心悦兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
+        default_items = [
+            ("747693", "1537766", "装备提升礼盒(需10点成就点)"),
+            ("747759", "1537690", "装备提升礼盒(需30点勇士币)(每日20次)"),
+        ]
+        for iFlowId, package_id, sFlowName in default_items:
+            item = XinYueOperationConfig()
+            item.iFlowId = iFlowId
+            item.package_id = package_id
+            item.sFlowName = sFlowName
+            item.count = 0
+
+            if item.unique_key() in all_item_keys:
+                continue
+
+            cfg.xinyue_operations.append(item)
 
     def on_login_mode_change(self, text):
         disable = text != self.login_mode_bidict.val_to_key['auto_login']
@@ -1355,6 +1393,20 @@ class ExchangeItemConfigUi(QWidget):
         add_row(form_layout, f"{cfg.sGoodsName}", self.spinbox_count)
 
     def update_config(self, cfg: ExchangeItemConfig):
+        cfg.count = self.spinbox_count.value()
+
+
+class XinyueOperationConfigUi(QWidget):
+    def __init__(self, form_layout: QFormLayout, cfg: XinYueOperationConfig, parent=None):
+        super(XinyueOperationConfigUi, self).__init__(parent)
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: XinYueOperationConfig):
+        self.spinbox_count = create_spin_box(cfg.count, 99)
+        add_row(form_layout, f"{cfg.sFlowName}", self.spinbox_count)
+
+    def update_config(self, cfg: XinYueOperationConfig):
         cfg.count = self.spinbox_count.value()
 
 

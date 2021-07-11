@@ -452,9 +452,9 @@ class ConfigUi(QFrame):
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
 
         # -------------- 区域：查询信息 --------------
-        self.collapsible_box_query_info = create_collapsible_box_add_to_parent_layout("查询信息", top_layout)
+        add_vbox_seperator(top_layout, "查询信息")
         vbox_layout = QVBoxLayout()
-        self.collapsible_box_query_info.setContentLayout(vbox_layout)
+        top_layout.addLayout(vbox_layout)
 
         # 显示付费相关内容
         self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，可能需要较长时间，请耐心等候)")

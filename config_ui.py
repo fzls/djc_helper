@@ -975,7 +975,6 @@ class AccountConfigUi(QWidget):
 
         form_layout = QFormLayout()
         self.collapsible_box_djc.setContentLayout(form_layout)
-        self.collapsible_box_djc.set_fold(False)
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
         form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)

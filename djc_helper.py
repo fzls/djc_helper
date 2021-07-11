@@ -4091,7 +4091,8 @@ class DjcHelper:
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         now = datetime.datetime.now()
-        endTime = "20210616"
+        act_info = self.majieluo_op("获取活动信息", "", get_ams_act_info_only=True)
+        endTime = get_today(parse_time(act_info.dtEndTime))
 
         takeStone = False
         takeStoneActId = "768194"
@@ -5766,7 +5767,7 @@ if __name__ == '__main__':
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
-        # djcHelper.majieluo()
+        djcHelper.majieluo()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
@@ -5775,6 +5776,6 @@ if __name__ == '__main__':
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()

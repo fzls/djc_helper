@@ -46,8 +46,16 @@ class CollapsibleBox(QtWidgets.QWidget):
         )
 
     def set_fold(self, fold:bool):
-        self.toggle_button.setChecked(fold)
+        if self.toggle_button.isChecked() != fold:
+            # 已经达到预期状态，无需额外操作
+            return
+
+        # 折叠状态(fold=True)：checked为False
+        # 展开状态(fold=False)：checked为True
+
+        # 状态变化：先处理on_pressed，之后再变更checked为 not fold，因此on_pressed中读取的是之前状态的checked状态
         self.on_pressed()
+        self.toggle_button.setChecked(not fold)
 
     @QtCore.pyqtSlot()
     def on_pressed(self):

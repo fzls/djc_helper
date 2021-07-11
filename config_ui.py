@@ -974,13 +974,7 @@ class AccountConfigUi(QWidget):
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         # -------------- 区域：选填和必填分割线 --------------
-        hbox = QHBoxLayout()
-        hbox.addStretch(1)
-        hbox.addWidget(QLabel("以下内容为选填内容，不填仍可正常运行，不过部分活动将无法领取"))
-        hbox.addStretch(1)
-        top_layout.addWidget(QHLine())
-        top_layout.addLayout(hbox)
-        top_layout.addWidget(QHLine())
+        add_vbox_seperator(top_layout, "以下内容为选填内容，不填仍可正常运行，不过部分活动将无法领取")
 
         # -------------- 区域：道聚城 --------------
         self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城", top_layout)

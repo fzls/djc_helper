@@ -1026,6 +1026,14 @@ class AccountConfigUi(QWidget):
 
         self.setLayout(make_scroll_layout(top_layout))
 
+        # 尝试更新各个折叠区域的大小
+        for attr_name in dir(self):
+            if not attr_name.startswith("collapsible_box_"):
+                continue
+
+            collapsible_box = getattr(self, attr_name) # type: CollapsibleBox
+            collapsible_box.try_adjust_size()
+
     def update_config(self, cfg: AccountConfig):
         cfg.enable = self.checkbox_enable.isChecked()
         cfg.name = self.lineedit_name.text()

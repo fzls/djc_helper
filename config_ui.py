@@ -969,6 +969,14 @@ class AccountConfigUi(QWidget):
         self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
+        # -------------- 区域 3：道聚城 --------------
+        collapsible_box = CollapsibleBox("道聚城")
+        top_layout.addWidget(collapsible_box)
+
+        form_layout = QFormLayout()
+        collapsible_box.setContentLayout(form_layout)
+        collapsible_box.set_fold(False)
+
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
         form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
 
@@ -1331,8 +1339,6 @@ class MobileGameRoleInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: MobileGameRoleInfoConfig):
-        add_form_seperator(form_layout, f"完成《礼包达人》任务所需的手游的名称信息")
-
         self.combobox_game_name = create_combobox(cfg.game_name, ['无', '任意手游', *sorted(get_name_2_mobile_game_info_map().keys())])
         form_layout.addRow("完成礼包达人任务的手游名称", self.combobox_game_name)
 

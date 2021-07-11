@@ -155,11 +155,9 @@ def create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(title: 
     return collapsible_box, form_layout
 
 
-def create_collapsible_box_add_to_parent_layout(title: str, parent_layout: QLayout, fold: bool = True) -> CollapsibleBox:
+def create_collapsible_box_add_to_parent_layout(title: str, parent_layout: QLayout) -> CollapsibleBox:
     collapsible_box = CollapsibleBox(title)
     parent_layout.addWidget(collapsible_box)
-
-    collapsible_box.set_fold(fold)
 
     return collapsible_box
 

@@ -981,15 +981,17 @@ class AccountConfigUi(QWidget):
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
-        collapsible_box = CollapsibleBox("兑换数目/次数，0表示不兑换")
-        form_layout.addRow("道聚城兑换道具", collapsible_box)
+        # -------------- 区域 4：道聚城兑换 --------------
+        self.collapsible_box_djc_exchange = CollapsibleBox("道聚城兑换")
+        top_layout.addWidget(self.collapsible_box_djc_exchange)
 
-        form_layout_items = QFormLayout()
+        form_layout = QFormLayout()
+        self.collapsible_box_djc_exchange.setContentLayout(form_layout)
+
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = []
         for exchange_item in cfg.exchange_items:
-            self.exchange_items.append(ExchangeItemConfigUi(form_layout_items, exchange_item))
-        collapsible_box.setContentLayout(form_layout_items)
+            self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
 
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)

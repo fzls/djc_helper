@@ -86,7 +86,7 @@ class CollapsibleBox(QtWidgets.QWidget):
     def try_adjust_size(self):
         collapsed_height = self.get_collapsed_height()
         content_height = self.content_area.layout().sizeHint().height()
-
+        # print("本地调试", self.sizeHint().height(), self.content_area.maximumHeight(), collapsed_height, content_height)
         for i in range(self.toggle_animation.animationCount()):
             animation = self.toggle_animation.animationAt(i)
             animation.setDuration(self.animation_duration_millseconds)
@@ -104,7 +104,8 @@ class CollapsibleBox(QtWidgets.QWidget):
         collapsed_height = (
                 self.sizeHint().height() - self.content_area.maximumHeight()
         )
-        if collapsed_height > 0:
+        if collapsed_height >= self.collapsed_height:
+            # 只允许变大
             self.collapsed_height = collapsed_height
 
         return self.collapsed_height

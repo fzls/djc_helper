@@ -984,6 +984,9 @@ class AccountConfigUi(QWidget):
         for exchange_item in cfg.exchange_items:
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
 
+        # -------------- 区域 5：集卡 --------------
+        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout("集卡")
+        top_layout.addWidget(self.collapsible_box_ark_lottery)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
@@ -1031,7 +1034,7 @@ class AccountConfigUi(QWidget):
             if not attr_name.startswith("collapsible_box_"):
                 continue
 
-            collapsible_box = getattr(self, attr_name) # type: CollapsibleBox
+            collapsible_box = getattr(self, attr_name)  # type: CollapsibleBox
             collapsible_box.try_adjust_size()
 
     def update_config(self, cfg: AccountConfig):
@@ -1362,8 +1365,6 @@ class ArkLotteryConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: ArkLotteryConfig):
-        add_form_seperator(form_layout, f"集卡")
-
         self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
         form_layout.addRow("幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 

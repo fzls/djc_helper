@@ -944,6 +944,7 @@ class AccountConfigUi(QWidget):
     def from_config(self, cfg: AccountConfig):
         top_layout = QVBoxLayout()
 
+        # -------------- 区域 1：账号信息 --------------
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 

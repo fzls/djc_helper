@@ -707,56 +707,56 @@ class CommonConfigUi(QFrame):
         form_layout = QFormLayout()
 
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
-        form_layout.addRow("是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
+        add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
 
         self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
-        form_layout.addRow("是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
+        add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
         self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
-        form_layout.addRow("是否启用多进程功能", self.checkbox_enable_multiprocessing)
+        add_row(form_layout, "是否启用多进程功能", self.checkbox_enable_multiprocessing)
 
         self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
-        form_layout.addRow("是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
+        add_row(form_layout, "是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
 
         self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
-        form_layout.addRow("进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
+        add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
-        form_layout.addRow("启动时检查更新", self.checkbox_check_update_on_start)
+        add_row(form_layout, "启动时检查更新", self.checkbox_check_update_on_start)
 
         self.checkbox_check_update_on_end = create_checkbox(cfg.check_update_on_end)
-        form_layout.addRow("结束前检查更新", self.checkbox_check_update_on_end)
+        add_row(form_layout, "结束前检查更新", self.checkbox_check_update_on_end)
 
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
-        form_layout.addRow("自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
+        add_row(form_layout, "自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
         self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
-        form_layout.addRow("提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
+        add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
 
         self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
-        form_layout.addRow("是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
+        add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
-        form_layout.addRow("强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
+        add_row(form_layout, "强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
 
         self.spinbox_force_use_chrome_major_version = create_spin_box(cfg.force_use_chrome_major_version)
-        form_layout.addRow("强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
+        add_row(form_layout, "强制使用特定大版本的chrome（0表示默认版本）", self.spinbox_force_use_chrome_major_version)
 
         self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
-        form_layout.addRow("自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
+        add_row(form_layout, "自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
 
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
-        form_layout.addRow("尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
+        add_row(form_layout, "尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
 
         self.checkbox_force_sync_bind_with_djc = create_checkbox(cfg.force_sync_bind_with_djc)
-        form_layout.addRow("是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
+        add_row(form_layout, "是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
 
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
-        form_layout.addRow("马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
+        add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
 
         self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
-        form_layout.addRow("自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
+        add_row(form_layout, "自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
 
         self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
         self.fixed_teams = []
@@ -772,10 +772,10 @@ class CommonConfigUi(QFrame):
             "error",
             "critical",
         ])
-        form_layout.addRow("日志级别", self.combobox_log_level)
+        add_row(form_layout, "日志级别", self.combobox_log_level)
 
         self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
-        form_layout.addRow("HTTP超时（秒）", self.spinbox_http_timeout)
+        add_row(form_layout, "HTTP超时（秒）", self.spinbox_http_timeout)
 
         self.login = LoginConfigUi(form_layout, cfg.login)
         self.retry = RetryConfigUi(form_layout, cfg.retry)
@@ -821,34 +821,34 @@ class LoginConfigUi(QWidget):
         add_form_seperator(form_layout, "登录阶段超时(秒)")
 
         self.spinbox_max_retry_count = create_spin_box(cfg.max_retry_count)
-        form_layout.addRow("重试次数", self.spinbox_max_retry_count)
+        add_row(form_layout, "重试次数", self.spinbox_max_retry_count)
 
         self.spinbox_retry_wait_time = create_spin_box(cfg.retry_wait_time)
-        form_layout.addRow("重试间隔时间", self.spinbox_retry_wait_time)
+        add_row(form_layout, "重试间隔时间", self.spinbox_retry_wait_time)
 
         self.spinbox_open_url_wait_time = create_spin_box(cfg.open_url_wait_time)
-        form_layout.addRow("打开网页后等待时长", self.spinbox_open_url_wait_time)
+        add_row(form_layout, "打开网页后等待时长", self.spinbox_open_url_wait_time)
 
         self.spinbox_load_page_timeout = create_spin_box(cfg.load_page_timeout)
-        form_layout.addRow("加载页面的超时时间", self.spinbox_load_page_timeout)
+        add_row(form_layout, "加载页面的超时时间", self.spinbox_load_page_timeout)
 
         self.spinbox_load_login_iframe_timeout = create_spin_box(cfg.load_login_iframe_timeout)
-        form_layout.addRow("点击登录按钮后的超时时间", self.spinbox_load_login_iframe_timeout)
+        add_row(form_layout, "点击登录按钮后的超时时间", self.spinbox_load_login_iframe_timeout)
 
         self.spinbox_login_timeout = create_spin_box(cfg.login_timeout)
-        form_layout.addRow("登录的超时时间", self.spinbox_login_timeout)
+        add_row(form_layout, "登录的超时时间", self.spinbox_login_timeout)
 
         self.spinbox_login_finished_timeout = create_spin_box(cfg.login_finished_timeout)
-        form_layout.addRow("等待登录完成的超时时间", self.spinbox_login_finished_timeout)
+        add_row(form_layout, "等待登录完成的超时时间", self.spinbox_login_finished_timeout)
 
         add_form_seperator(form_layout, "自动处理滑动验证码")
 
         self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
-        form_layout.addRow("启用", self.checkbox_auto_resolve_captcha)
+        add_row(form_layout, "启用", self.checkbox_auto_resolve_captcha)
 
         self.doublespinbox_move_captcha_delta_width_rate = create_double_spin_box(cfg.move_captcha_delta_width_rate)
         self.doublespinbox_move_captcha_delta_width_rate.setSingleStep(0.01)
-        form_layout.addRow("每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
+        add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
 
     def update_config(self, cfg: LoginConfig):
         cfg.max_retry_count = self.spinbox_max_retry_count.value()
@@ -872,13 +872,13 @@ class RetryConfigUi(QWidget):
         add_form_seperator(form_layout, "通用重试配置")
 
         self.spinbox_request_wait_time = create_spin_box(cfg.request_wait_time)
-        form_layout.addRow("请求间隔时间", self.spinbox_request_wait_time)
+        add_row(form_layout, "请求间隔时间", self.spinbox_request_wait_time)
 
         self.spinbox_max_retry_count = create_spin_box(cfg.max_retry_count)
-        form_layout.addRow("最大重试次数", self.spinbox_max_retry_count)
+        add_row(form_layout, "最大重试次数", self.spinbox_max_retry_count)
 
         self.spinbox_retry_wait_time = create_spin_box(cfg.retry_wait_time)
-        form_layout.addRow("重试间隔时间", self.spinbox_retry_wait_time)
+        add_row(form_layout, "重试间隔时间", self.spinbox_retry_wait_time)
 
     def update_config(self, cfg: RetryConfig):
         cfg.request_wait_time = self.spinbox_request_wait_time.value()
@@ -896,7 +896,7 @@ class XinYueConfigUi(QWidget):
         add_form_seperator(form_layout, "心悦相关配置")
 
         self.combobox_submit_task_after = create_combobox(str(cfg.submit_task_after), [str(hour) for hour in range(24)])
-        form_layout.addRow("心悦操作最早处理时间", self.combobox_submit_task_after)
+        add_row(form_layout, "心悦操作最早处理时间", self.combobox_submit_task_after)
 
     def update_config(self, cfg: XinYueConfig):
         cfg.submit_task_after = int(self.combobox_submit_task_after.currentText())
@@ -912,14 +912,14 @@ class FixedTeamConfigUi(QWidget):
         add_form_seperator(form_layout, f"心悦战场固定队 - {cfg.id}")
 
         self.checkbox_enable = create_checkbox(cfg.enable)
-        form_layout.addRow("启用", self.checkbox_enable)
+        add_row(form_layout, "启用", self.checkbox_enable)
 
         self.lineedit_id = create_lineedit(cfg.id, "固定队伍id，仅用于本地区分用")
-        form_layout.addRow("队伍id", self.lineedit_id)
+        add_row(form_layout, "队伍id", self.lineedit_id)
 
         self.lineedit_members = create_lineedit(list_to_str(cfg.members), "固定队成员，必须是两个，则必须都配置在本地的账号列表中了，否则将报错，不生效")
         self.lineedit_members.setValidator(QQListValidator())
-        form_layout.addRow("成员", self.lineedit_members)
+        add_row(form_layout, "成员", self.lineedit_members)
 
     def update_config(self, cfg: FixedTeamConfig):
         cfg.enable = self.checkbox_enable.isChecked()
@@ -949,13 +949,13 @@ class AccountConfigUi(QWidget):
         top_layout.addLayout(form_layout)
 
         self.checkbox_enable = create_checkbox(cfg.enable)
-        form_layout.addRow("启用该账号", self.checkbox_enable)
+        add_row(form_layout, "启用该账号", self.checkbox_enable)
 
         self.lineedit_name = create_lineedit(cfg.name, "账号名称，仅用于区分不同账号，请确保不同账号名称不一样")
-        form_layout.addRow("账号名称", self.lineedit_name)
+        add_row(form_layout, "账号名称", self.lineedit_name)
 
         self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
-        form_layout.addRow("登录模式", self.combobox_login_mode)
+        add_row(form_layout, "登录模式", self.combobox_login_mode)
 
         # -------------- 区域：QQ信息 --------------
         self.collapsible_box_account_password, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("账号密码", top_layout)
@@ -969,7 +969,7 @@ class AccountConfigUi(QWidget):
         self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城", top_layout)
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
-        form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
+        add_row(form_layout, "无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
@@ -1002,33 +1002,33 @@ class AccountConfigUi(QWidget):
 
         self.lineedit_drift_send_qq_list = create_lineedit(list_to_str(cfg.drift_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_drift_send_qq_list.setValidator(QQListValidator())
-        form_layout.addRow("漂流瓶每日邀请列表（不会实际发消息）", self.lineedit_drift_send_qq_list)
+        add_row(form_layout, "漂流瓶每日邀请列表（不会实际发消息）", self.lineedit_drift_send_qq_list)
 
         self.lineedit_dnf_13_send_qq_list = create_lineedit(list_to_str(cfg.dnf_13_send_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_dnf_13_send_qq_list.setValidator(QQListValidator())
-        form_layout.addRow("dnf13周年邀请列表（不会实际发消息）", self.lineedit_dnf_13_send_qq_list)
+        add_row(form_layout, "dnf13周年邀请列表（不会实际发消息）", self.lineedit_dnf_13_send_qq_list)
 
         self.lineedit_spring_fudai_receiver_qq_list = create_lineedit(list_to_str(cfg.spring_fudai_receiver_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789")
         self.lineedit_spring_fudai_receiver_qq_list.setValidator(QQListValidator())
-        form_layout.addRow("新春福袋大作战邀请列表（会实际发消息）", self.lineedit_spring_fudai_receiver_qq_list)
+        add_row(form_layout, "新春福袋大作战邀请列表（会实际发消息）", self.lineedit_spring_fudai_receiver_qq_list)
 
         self.checkbox_enable_firecrackers_invite_friend = create_checkbox(cfg.enable_firecrackers_invite_friend)
-        form_layout.addRow("燃放爆竹活动是否尝试邀请好友（不会实际发消息）", self.checkbox_enable_firecrackers_invite_friend)
+        add_row(form_layout, "燃放爆竹活动是否尝试邀请好友（不会实际发消息）", self.checkbox_enable_firecrackers_invite_friend)
 
         self.checkbox_enable_majieluo_invite_friend = create_checkbox(cfg.enable_majieluo_invite_friend)
-        form_layout.addRow("马杰洛活动是否尝试黑钻送好友（不会实际发消息）", self.checkbox_enable_majieluo_invite_friend)
+        add_row(form_layout, "马杰洛活动是否尝试黑钻送好友（不会实际发消息）", self.checkbox_enable_majieluo_invite_friend)
 
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
-        form_layout.addRow("不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
+        add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
         self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_formhash字段的说明")
-        form_layout.addRow("dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
+        add_row(form_layout, "dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
 
         self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_cookie字段的说明")
-        form_layout.addRow("dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
+        add_row(form_layout, "dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
         self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中colg_cookie字段的说明")
-        form_layout.addRow("colg cookie", self.lineedit_colg_cookie)
+        add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 
@@ -1117,7 +1117,7 @@ class AccountInfoConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: AccountInfoConfig):
         self.lineedit_account = create_lineedit(cfg.account)
-        form_layout.addRow("QQ账号", self.lineedit_account)
+        add_row(form_layout, "QQ账号", self.lineedit_account)
 
         self.lineedit_password = create_lineedit(cfg.password, "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用")
         self.lineedit_password.setEchoMode(QLineEdit.Password)
@@ -1129,7 +1129,7 @@ class AccountInfoConfigUi(QWidget):
         layout = QHBoxLayout()
         layout.addWidget(self.lineedit_password)
         layout.addWidget(btn_show_password)
-        form_layout.addRow("QQ密码", layout)
+        add_row(form_layout, "QQ密码", layout)
 
     def show_password(self):
         self.lineedit_password.setEchoMode(QLineEdit.Normal)
@@ -1158,133 +1158,133 @@ class FunctionSwitchesConfigUi(QWidget):
         add_form_seperator(form_layout, f"各功能开关")
 
         self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
-        form_layout.addRow("禁用绝大部分活动", self.checkbox_disable_most_activities)
+        add_row(form_layout, "禁用绝大部分活动", self.checkbox_disable_most_activities)
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
-        form_layout.addRow("禁用分享功能", self.checkbox_disable_share)
+        add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "普通skey")
 
         self.checkbox_get_djc = create_checkbox(cfg.get_djc)
-        form_layout.addRow("领取道聚城", self.checkbox_get_djc)
+        add_row(form_layout, "领取道聚城", self.checkbox_get_djc)
 
         self.checkbox_make_wish = create_checkbox(cfg.make_wish)
-        form_layout.addRow("道聚城许愿", self.checkbox_make_wish)
+        add_row(form_layout, "道聚城许愿", self.checkbox_make_wish)
 
         self.checkbox_get_xinyue = create_checkbox(cfg.get_xinyue)
-        form_layout.addRow("心悦特权专区", self.checkbox_get_xinyue)
+        add_row(form_layout, "心悦特权专区", self.checkbox_get_xinyue)
 
         self.checkbox_get_credit_xinyue_gift = create_checkbox(cfg.get_credit_xinyue_gift)
-        form_layout.addRow("腾讯游戏信用相关礼包", self.checkbox_get_credit_xinyue_gift)
+        add_row(form_layout, "腾讯游戏信用相关礼包", self.checkbox_get_credit_xinyue_gift)
 
         self.checkbox_get_heizuan_gift = create_checkbox(cfg.get_heizuan_gift)
-        form_layout.addRow("每月黑钻等级礼包", self.checkbox_get_heizuan_gift)
+        add_row(form_layout, "每月黑钻等级礼包", self.checkbox_get_heizuan_gift)
 
         # self.checkbox_get_dnf_shanguang = create_checkbox(cfg.get_dnf_shanguang)
-        # form_layout.addRow("DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
+        # add_row(form_layout, "DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
 
         self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
-        form_layout.addRow("qq视频活动", self.checkbox_get_qq_video)
+        add_row(form_layout, "qq视频活动", self.checkbox_get_qq_video)
 
         self.checkbox_get_qq_video_amesvr = create_checkbox(cfg.get_qq_video_amesvr)
-        form_layout.addRow("qq视频-AME活动", self.checkbox_get_qq_video_amesvr)
+        add_row(form_layout, "qq视频-AME活动", self.checkbox_get_qq_video_amesvr)
 
         self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
-        form_layout.addRow("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", self.checkbox_get_dnf_helper_chronicle)
+        add_row(form_layout, "dnf助手编年史（需配置助手userId和token和uniqueRoleId）", self.checkbox_get_dnf_helper_chronicle)
 
         self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
-        form_layout.addRow("dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
+        add_row(form_layout, "dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
 
         self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
-        form_layout.addRow("hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
+        add_row(form_layout, "hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
 
         self.checkbox_get_dnf_welfare = create_checkbox(cfg.get_dnf_welfare)
-        form_layout.addRow("DNF福利中心兑换", self.checkbox_get_dnf_welfare)
+        add_row(form_layout, "DNF福利中心兑换", self.checkbox_get_dnf_welfare)
 
         self.checkbox_get_xinyue_financing = create_checkbox(cfg.get_xinyue_financing)
-        form_layout.addRow("心悦app理财礼卡", self.checkbox_get_xinyue_financing)
+        add_row(form_layout, "心悦app理财礼卡", self.checkbox_get_xinyue_financing)
 
         self.checkbox_get_xinyue_cat = create_checkbox(cfg.get_xinyue_cat)
-        form_layout.addRow("心悦猫咪", self.checkbox_get_xinyue_cat)
+        add_row(form_layout, "心悦猫咪", self.checkbox_get_xinyue_cat)
 
         self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
-        form_layout.addRow("心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
+        add_row(form_layout, "心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
 
         self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
-        form_layout.addRow("DNF马杰洛的规划", self.checkbox_get_majieluo)
+        add_row(form_layout, "DNF马杰洛的规划", self.checkbox_get_majieluo)
 
         self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
-        form_layout.addRow("dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
+        add_row(form_layout, "dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
 
         self.checkbox_get_dnf_luodiye = create_checkbox(cfg.get_dnf_luodiye)
-        form_layout.addRow("DNF落地页", self.checkbox_get_dnf_luodiye)
+        add_row(form_layout, "DNF落地页", self.checkbox_get_dnf_luodiye)
 
         self.checkbox_get_dnf_wegame = create_checkbox(cfg.get_dnf_wegame)
-        form_layout.addRow("WeGame", self.checkbox_get_dnf_wegame)
+        add_row(form_layout, "WeGame", self.checkbox_get_dnf_wegame)
 
         self.checkbox_get_dnf_collection = create_checkbox(cfg.get_dnf_collection)
-        form_layout.addRow("DNF集合站", self.checkbox_get_dnf_collection)
+        add_row(form_layout, "DNF集合站", self.checkbox_get_dnf_collection)
 
         self.checkbox_get_dnf_fuqian = create_checkbox(cfg.get_dnf_fuqian)
-        form_layout.addRow("DNF福签大作战", self.checkbox_get_dnf_fuqian)
+        add_row(form_layout, "DNF福签大作战", self.checkbox_get_dnf_fuqian)
 
         self.checkbox_get_dnf_ozma = create_checkbox(cfg.get_dnf_ozma)
-        form_layout.addRow("DNF奥兹玛竞速", self.checkbox_get_dnf_ozma)
+        add_row(form_layout, "DNF奥兹玛竞速", self.checkbox_get_dnf_ozma)
 
         self.checkbox_get_colg_signin = create_checkbox(cfg.get_colg_signin)
-        form_layout.addRow("colg每日签到和积分领取", self.checkbox_get_colg_signin)
+        add_row(form_layout, "colg每日签到和积分领取", self.checkbox_get_colg_signin)
 
         self.checkbox_get_xinyue_app = create_checkbox(cfg.get_xinyue_app)
-        form_layout.addRow("心悦app兑换", self.checkbox_get_xinyue_app)
+        add_row(form_layout, "心悦app兑换", self.checkbox_get_xinyue_app)
 
         self.checkbox_get_dnf_pk = create_checkbox(cfg.get_dnf_pk)
-        form_layout.addRow("DNF格斗大赛", self.checkbox_get_dnf_pk)
+        add_row(form_layout, "DNF格斗大赛", self.checkbox_get_dnf_pk)
 
         self.checkbox_get_dnf_xinyue = create_checkbox(cfg.get_dnf_xinyue)
-        form_layout.addRow("心悦", self.checkbox_get_dnf_xinyue)
+        add_row(form_layout, "心悦", self.checkbox_get_dnf_xinyue)
 
         self.checkbox_get_dnf_strong = create_checkbox(cfg.get_dnf_strong)
-        form_layout.addRow("DNF强者之路", self.checkbox_get_dnf_strong)
+        add_row(form_layout, "DNF强者之路", self.checkbox_get_dnf_strong)
 
         self.checkbox_get_dnf_comic = create_checkbox(cfg.get_dnf_comic)
-        form_layout.addRow("DNF漫画", self.checkbox_get_dnf_comic)
+        add_row(form_layout, "DNF漫画", self.checkbox_get_dnf_comic)
 
         self.checkbox_get_dnf_13 = create_checkbox(cfg.get_dnf_13)
-        form_layout.addRow("DNF十三周年庆", self.checkbox_get_dnf_13)
+        add_row(form_layout, "DNF十三周年庆", self.checkbox_get_dnf_13)
 
         self.checkbox_get_dnf_my_story = create_checkbox(cfg.get_dnf_my_story)
-        form_layout.addRow("我的dnf13周年活动", self.checkbox_get_dnf_my_story)
+        add_row(form_layout, "我的dnf13周年活动", self.checkbox_get_dnf_my_story)
 
         self.checkbox_get_dnf_reserve = create_checkbox(cfg.get_dnf_reserve)
-        form_layout.addRow("刃影预约活动", self.checkbox_get_dnf_reserve)
+        add_row(form_layout, "刃影预约活动", self.checkbox_get_dnf_reserve)
 
         self.checkbox_get_dnf_anniversary = create_checkbox(cfg.get_dnf_anniversary)
-        form_layout.addRow("DNF周年庆登录活动", self.checkbox_get_dnf_anniversary)
+        add_row(form_layout, "DNF周年庆登录活动", self.checkbox_get_dnf_anniversary)
 
         self.checkbox_get_dnf_kol = create_checkbox(cfg.get_dnf_kol)
-        form_layout.addRow("KOL", self.checkbox_get_dnf_kol)
+        add_row(form_layout, "KOL", self.checkbox_get_dnf_kol)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
         self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
-        form_layout.addRow("集卡", self.checkbox_get_ark_lottery)
+        add_row(form_layout, "集卡", self.checkbox_get_ark_lottery)
 
         self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
-        form_layout.addRow("会员关怀", self.checkbox_get_vip_mentor)
+        add_row(form_layout, "会员关怀", self.checkbox_get_vip_mentor)
 
         self.checkbox_get_dnf_super_vip = create_checkbox(cfg.get_dnf_super_vip)
-        form_layout.addRow("超级会员", self.checkbox_get_dnf_super_vip)
+        add_row(form_layout, "超级会员", self.checkbox_get_dnf_super_vip)
 
         self.checkbox_get_dnf_yellow_diamond = create_checkbox(cfg.get_dnf_yellow_diamond)
-        form_layout.addRow("黄钻", self.checkbox_get_dnf_yellow_diamond)
+        add_row(form_layout, "黄钻", self.checkbox_get_dnf_yellow_diamond)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "安全管家pskey")
 
         self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
-        form_layout.addRow("管家蚊子腿", self.checkbox_get_guanjia)
+        add_row(form_layout, "管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
@@ -1340,7 +1340,7 @@ class MobileGameRoleInfoConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: MobileGameRoleInfoConfig):
         self.combobox_game_name = create_combobox(cfg.game_name, ['无', '任意手游', *sorted(get_name_2_mobile_game_info_map().keys())])
-        form_layout.addRow("完成礼包达人任务的手游名称", self.combobox_game_name)
+        add_row(form_layout, "完成礼包达人任务的手游名称", self.combobox_game_name)
 
     def update_config(self, cfg: MobileGameRoleInfoConfig):
         cfg.game_name = self.combobox_game_name.currentText()
@@ -1354,7 +1354,7 @@ class ExchangeItemConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: ExchangeItemConfig):
         self.spinbox_count = create_spin_box(cfg.count, 10)
-        form_layout.addRow(f"{cfg.sGoodsName}", self.spinbox_count)
+        add_row(form_layout, f"{cfg.sGoodsName}", self.spinbox_count)
 
     def update_config(self, cfg: ExchangeItemConfig):
         cfg.count = self.spinbox_count.value()
@@ -1371,20 +1371,20 @@ class ArkLotteryConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: ArkLotteryConfig):
         self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
-        form_layout.addRow("幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
+        add_row(form_layout, "幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 
         self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
-        form_layout.addRow("幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
+        add_row(form_layout, "幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
         self.role_selector = RoleSelector("幸运勇士", self.combobox_lucky_dnf_server_name, self.lineedit_lucky_dnf_role_id, self.account_cfg, self.common_cfg)
-        form_layout.addRow("查询角色（需要登录）", self.role_selector.combobox_role_name)
+        add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
-        form_layout.addRow("领取礼包", self.checkbox_need_take_awards)
+        add_row(form_layout, "领取礼包", self.checkbox_need_take_awards)
 
         cost_all_cards_and_do_lottery = cfg.act_id_to_cost_all_cards_and_do_lottery.get(zzconfig().actid, False)
         self.checkbox_cost_all_cards_and_do_lottery = create_checkbox(cost_all_cards_and_do_lottery)
-        form_layout.addRow("是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
+        add_row(form_layout, "是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
     def update_config(self, cfg: ArkLotteryConfig):
         cfg.lucky_dnf_server_id = dnf_server_name_to_id(self.combobox_lucky_dnf_server_name.currentText())
@@ -1406,16 +1406,16 @@ class VipMentorConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: VipMentorConfig):
         self.spinbox_take_index = create_spin_box(cfg.take_index, 3, 1)
-        form_layout.addRow("兑换数目", self.spinbox_take_index)
+        add_row(form_layout, "兑换数目", self.spinbox_take_index)
 
         self.combobox_guanhuai_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list())
-        form_layout.addRow("关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
+        add_row(form_layout, "关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
 
         self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
-        form_layout.addRow("关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
+        add_row(form_layout, "关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
         self.role_selector = RoleSelector("会员关怀", self.combobox_guanhuai_dnf_server_name, self.lineedit_guanhuai_dnf_role_id, self.account_cfg, self.common_cfg)
-        form_layout.addRow("查询角色（需要登录）", self.role_selector.combobox_role_name)
+        add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
     def update_config(self, cfg: VipMentorConfig):
         cfg.take_index = self.spinbox_take_index.value()
@@ -1510,19 +1510,19 @@ class DnfHelperInfoConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: DnfHelperInfoConfig):
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
-        form_layout.addRow("编年史开启抽奖", self.checkbox_chronicle_lottery)
+        add_row(form_layout, "编年史开启抽奖", self.checkbox_chronicle_lottery)
 
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
-        form_layout.addRow("社区ID(userId)", self.lineedit_userId)
+        add_row(form_layout, "社区ID(userId)", self.lineedit_userId)
 
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
-        form_layout.addRow("昵称(nickName)", self.lineedit_nickName)
+        add_row(form_layout, "昵称(nickName)", self.lineedit_nickName)
 
         self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
-        form_layout.addRow("登陆票据(token)", self.lineedit_token)
+        add_row(form_layout, "登陆票据(token)", self.lineedit_token)
 
         self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
-        form_layout.addRow("唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
+        add_row(form_layout, "唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 
     def update_config(self, cfg: DnfHelperInfoConfig):
         cfg.userId = self.lineedit_userId.text()
@@ -1541,7 +1541,7 @@ class HelloVoiceInfoConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: HelloVoiceInfoConfig):
         self.lineedit_hello_id = create_lineedit(cfg.hello_id, "hello语音->我的->头像右侧，昵称下方的【ID：XXXXXX】中的XXX那部分")
-        form_layout.addRow("hello语音的用户ID", self.lineedit_hello_id)
+        add_row(form_layout, "hello语音的用户ID", self.lineedit_hello_id)
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
         cfg.hello_id = self.lineedit_hello_id.text()
@@ -1557,7 +1557,7 @@ class FirecrackersConfigUi(QWidget):
         add_form_seperator(form_layout, f"燃放爆竹")
 
         self.checkbox_enable_lottery = create_checkbox(cfg.enable_lottery)
-        form_layout.addRow("开启抽奖", self.checkbox_enable_lottery)
+        add_row(form_layout, "开启抽奖", self.checkbox_enable_lottery)
 
     def update_config(self, cfg: FirecrackersConfig):
         cfg.enable_lottery = self.checkbox_enable_lottery.isChecked()

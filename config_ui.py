@@ -963,6 +963,7 @@ class AccountConfigUi(QWidget):
 
         form_layout_account = QFormLayout()
         self.collapsible_box_account_password.setContentLayout(form_layout_account)
+
         self.account_info = AccountInfoConfigUi(form_layout_account, cfg.account_info)
 
         self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)

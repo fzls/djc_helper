@@ -770,6 +770,12 @@ class CommonConfigUi(QFrame):
         self.checkbox_force_sync_bind_with_djc = create_checkbox(cfg.force_sync_bind_with_djc)
         add_row(form_layout, "是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
 
+        # -------------- 区域：集卡 --------------
+        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
+
+        self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
+        add_row(form_layout, "自动赠送卡片的目标QQ数组(这些QQ将接收来自其他QQ赠送的卡片)", self.lineedit_auto_send_card_target_qqs)
         self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
         add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
 
@@ -778,10 +784,6 @@ class CommonConfigUi(QFrame):
 
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
-
-        self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789")
-        self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
-        add_row(form_layout, "自动赠送卡片的目标QQ数组", self.lineedit_auto_send_card_target_qqs)
 
         self.xinyue = XinYueConfigUi(form_layout, cfg.xinyue)
         self.fixed_teams = []

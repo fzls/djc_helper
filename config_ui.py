@@ -992,6 +992,9 @@ class AccountConfigUi(QWidget):
         # -------------- 区域：dnf助手 --------------
         self.collapsible_box_dnf_helper_info, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
+
+        # -------------- 区域：hello语音 --------------
+        self.collapsible_box_hello_voice, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
         self.firecrackers = FirecrackersConfigUi(form_layout, cfg.firecrackers)
 
@@ -1537,8 +1540,6 @@ class HelloVoiceInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: HelloVoiceInfoConfig):
-        add_form_seperator(form_layout, f"hello语音相关信息")
-
         self.lineedit_hello_id = create_lineedit(cfg.hello_id, "hello语音->我的->头像右侧，昵称下方的【ID：XXXXXX】中的XXX那部分")
         form_layout.addRow("hello语音的用户ID", self.lineedit_hello_id)
 

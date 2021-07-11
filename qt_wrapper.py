@@ -137,7 +137,7 @@ def make_scroll_layout(inner_layout: QLayout):
 
 
 def create_collapsible_box_with_sub_form_layout(title: str) -> Tuple[CollapsibleBox, QFormLayout]:
-    collapsible_box = CollapsibleBox("道聚城兑换")
+    collapsible_box = CollapsibleBox(title)
 
     form_layout = QFormLayout()
     collapsible_box.setContentLayout(form_layout)

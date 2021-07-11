@@ -3,7 +3,7 @@ from typing import List, Tuple
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QWheelEvent
 from PyQt5.QtWidgets import (
-    QFormLayout, QVBoxLayout, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
+    QFormLayout, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
 
 from qt_collapsible_box import CollapsibleBox
 from util import padLeftRight
@@ -121,6 +121,18 @@ def create_lineedit(current_text: str, placeholder_text="") -> QLineEdit:
 
 def add_form_seperator(form_layout: QFormLayout, title: str):
     add_row(form_layout, f"=== {title} ===", QHLine())
+
+
+def add_vbox_seperator(vbox_layout: QVBoxLayout, title: str):
+    hbox = QHBoxLayout()
+
+    hbox.addStretch(1)
+    hbox.addWidget(QLabel(title))
+    hbox.addStretch(1)
+
+    vbox_layout.addWidget(QHLine())
+    vbox_layout.addLayout(hbox)
+    vbox_layout.addWidget(QHLine())
 
 
 def add_row(form_layout: QFormLayout, row_name: str, row_widget: QWidget, minium_row_name_size=0):

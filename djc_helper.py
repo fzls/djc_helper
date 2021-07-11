@@ -365,12 +365,10 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
-            ("集卡", self.ark_lottery),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
-            ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("管家蚊子腿", self.guanjia_new),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
@@ -410,6 +408,8 @@ class DjcHelper:
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("qq视频-AME活动", self.qq_video_amesvr),
+            ("集卡", self.ark_lottery),
+            ("刃影预约活动", self.dnf_reserve),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

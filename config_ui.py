@@ -956,7 +956,12 @@ class AccountConfigUi(QWidget):
         self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
         form_layout.addRow("登录模式", self.combobox_login_mode)
 
-        self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
+        self.collapsible_box_account_password = CollapsibleBox()
+        form_layout.addRow("账号密码", self.collapsible_box_account_password)
+
+        form_layout_account = QFormLayout()
+        self.account_info = AccountInfoConfigUi(form_layout_account, cfg.account_info)
+        self.collapsible_box_account_password.setContentLayout(form_layout_account)
 
         self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)
         self.on_login_mode_change(self.combobox_login_mode.currentText())
@@ -1075,7 +1080,10 @@ class AccountConfigUi(QWidget):
             cfg.exchange_items.append(item)
 
     def on_login_mode_change(self, text):
-        self.account_info.setDisabled(text != self.login_mode_bidict.val_to_key['auto_login'])
+        disable = text != self.login_mode_bidict.val_to_key['auto_login']
+
+        self.collapsible_box_account_password.set_fold(disable)
+        self.account_info.setDisabled(disable)
 
 
 class AccountInfoConfigUi(QWidget):

@@ -443,6 +443,13 @@ class AccountConfig(ConfigInterface):
 
         return sDeviceID
 
+    def get_exchange_item_by_iGoodsId(self, iGoodsId: str) -> Optional[ExchangeItemConfig]:
+        for exchange_item in self.exchange_items:
+            if exchange_item.iGoodsId == iGoodsId:
+                return exchange_item
+
+        return None
+
 
 class LoginConfig(ConfigInterface):
     def __init__(self):

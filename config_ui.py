@@ -993,9 +993,9 @@ class AccountConfigUi(QWidget):
         self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换", top_layout)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
-        self.exchange_items = []
+        self.exchange_items = {}
         for exchange_item in cfg.exchange_items:
-            self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
+            self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
 
         # -------------- 区域：集卡 --------------
         self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
@@ -1055,9 +1055,15 @@ class AccountConfigUi(QWidget):
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)
         self.mobile_game_role_info.update_config(cfg.mobile_game_role_info)
+
         self.try_set_default_exchange_items_for_cfg(cfg)
-        for idx, exchange_item in enumerate(self.exchange_items):
-            exchange_item.update_config(cfg.exchange_items[idx])
+        for iGoodsId, exchange_item in self.exchange_items.items():
+            item_cfg = cfg.get_exchange_item_by_iGoodsId(iGoodsId)
+            if item_cfg is None:
+                continue
+
+            exchange_item.update_config(item_cfg)
+
         self.ark_lottery.update_config(cfg.ark_lottery)
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)

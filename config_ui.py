@@ -747,11 +747,8 @@ class CommonConfigUi(QFrame):
         self.checkbox_auto_update_on_start = create_checkbox(cfg.auto_update_on_start)
         add_row(form_layout, "自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
-        self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
-        add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
-
-        self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
-        add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
+        # -------------- 区域：登录 --------------
+        self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("登录", top_layout)
 
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
         add_row(form_layout, "强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
@@ -761,6 +758,14 @@ class CommonConfigUi(QFrame):
 
         self.checkbox_run_in_headless_mode = create_checkbox(cfg.run_in_headless_mode)
         add_row(form_layout, "自动登录模式不显示浏览器界面", self.checkbox_run_in_headless_mode)
+
+        self.login = LoginConfigUi(form_layout, cfg.login)
+
+        self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
+        add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
+
+        self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
+        add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
         add_row(form_layout, "尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
@@ -794,7 +799,6 @@ class CommonConfigUi(QFrame):
         self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
         add_row(form_layout, "HTTP超时（秒）", self.spinbox_http_timeout)
 
-        self.login = LoginConfigUi(form_layout, cfg.login)
         self.retry = RetryConfigUi(form_layout, cfg.retry)
 
         self.setLayout(make_scroll_layout(top_layout))
@@ -837,7 +841,7 @@ class LoginConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: LoginConfig):
-        add_form_seperator(form_layout, "登录阶段超时(秒)")
+        add_form_seperator(form_layout, "超时时长(秒)")
 
         self.spinbox_max_retry_count = create_spin_box(cfg.max_retry_count)
         add_row(form_layout, "重试次数", self.spinbox_max_retry_count)

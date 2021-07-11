@@ -929,7 +929,7 @@ class FixedTeamConfigUi(QWidget):
 
 class AccountConfigUi(QWidget):
     login_mode_bidict = BiDict({
-        "手动登录": "by_hand",
+        # "手动登录": "by_hand",
         "扫码/点击头像登录": "qr_login",
         "账号密码自动登录": "auto_login",
     })

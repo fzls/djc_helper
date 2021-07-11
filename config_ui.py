@@ -400,6 +400,9 @@ class ConfigUi(QFrame):
 
         # 设置默认页
         self.tabs.setCurrentWidget(self.common)
+        if len(self.accounts) != 0:
+            # 如果有账号信息，则默认启动时聚焦首个账号配置
+            self.tabs.setCurrentWidget(self.accounts[0])
 
         top_layout.addWidget(self.tabs)
 

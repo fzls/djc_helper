@@ -968,7 +968,7 @@ class AccountConfigUi(QWidget):
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
-        collapsible_box = CollapsibleBox("兑换数目/次数，0表示不兑换(点击展开/折叠)")
+        collapsible_box = CollapsibleBox("兑换数目/次数，0表示不兑换")
         form_layout.addRow("道聚城兑换道具", collapsible_box)
 
         form_layout_items = QFormLayout()

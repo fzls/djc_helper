@@ -997,8 +997,8 @@ class AccountConfigUi(QWidget):
         self.collapsible_box_hello_voice, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
 
-        add_form_seperator(form_layout, "其他")
-
+        # -------------- 区域：其他 --------------
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
 
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
         add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)

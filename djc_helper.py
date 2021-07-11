@@ -481,13 +481,13 @@ class DjcHelper:
             # 完成《礼包达人》
             self.take_mobile_game_gift()
         else:
-            logger.info("未启用自动完成《礼包达人》任务功能")
+            logger.info("未启用自动完成《礼包达人》任务功能，如需启用，请配置道聚城的手游名称")
 
         if self.cfg.function_switches.make_wish:
             # 完成《有理想》
             self.make_wish()
         else:
-            logger.info("未启用自动完成《有理想》任务功能")
+            logger.info("未启用自动完成《有理想》任务功能，如需启用，请打开道聚城许愿功能")
 
     def take_mobile_game_gift(self):
         game_info = self.get_mobile_game_info()

@@ -958,8 +958,7 @@ class AccountConfigUi(QWidget):
         form_layout.addRow("登录模式", self.combobox_login_mode)
 
         # -------------- 区域 2：QQ信息 --------------
-        self.collapsible_box_account_password, form_layout = create_collapsible_box_with_sub_form_layout("账号密码")
-        top_layout.addWidget(self.collapsible_box_account_password)
+        self.collapsible_box_account_password, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("账号密码", top_layout)
 
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
@@ -967,8 +966,7 @@ class AccountConfigUi(QWidget):
         self.on_login_mode_change(self.combobox_login_mode.currentText())
 
         # -------------- 区域 3：道聚城 --------------
-        self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout("道聚城")
-        top_layout.addWidget(self.collapsible_box_djc)
+        self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城", top_layout)
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
         form_layout.addRow("无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
@@ -976,8 +974,7 @@ class AccountConfigUi(QWidget):
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
         # -------------- 区域 4：道聚城兑换 --------------
-        self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout("道聚城兑换")
-        top_layout.addWidget(self.collapsible_box_djc_exchange)
+        self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换", top_layout)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = []
@@ -985,8 +982,7 @@ class AccountConfigUi(QWidget):
             self.exchange_items.append(ExchangeItemConfigUi(form_layout, exchange_item))
 
         # -------------- 区域 5：集卡 --------------
-        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout("集卡")
-        top_layout.addWidget(self.collapsible_box_ark_lottery)
+        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)

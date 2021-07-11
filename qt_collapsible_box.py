@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 # copy from https://stackoverflow.com/a/52617714/5251903
 class CollapsibleBox(QtWidgets.QWidget):
-    def __init__(self, title="", animation_duration_millseconds=250, parent=None):
+    def __init__(self, title="(点击展开/折叠)", animation_duration_millseconds=250, parent=None):
         super(CollapsibleBox, self).__init__(parent)
 
         self.animation_duration_millseconds = animation_duration_millseconds

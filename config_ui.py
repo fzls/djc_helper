@@ -13,7 +13,6 @@ from PyQt5.QtGui import QIcon, QValidator
 from PyQt5.QtCore import QCoreApplication, QThread
 
 from qt_wrapper import *
-from qt_collapsible_box import CollapsibleBox
 from config import *
 from setting import *
 from game_info import get_name_2_mobile_game_info_map
@@ -409,13 +408,13 @@ class ConfigUi(QFrame):
     def create_userinfo_tab(self, cfg: Config):
         tab = QFrame()
         tab.setStyleSheet("font-size: 18px; font-weight: bold;")
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignCenter)
+        top_layout = QVBoxLayout()
+        top_layout.setAlignment(Qt.AlignCenter)
 
-        # 卡密相关内容
-        layout_cs = QVBoxLayout()
-
-        tmp_layout = QHBoxLayout()
+        # -------------- 区域：购买卡密 --------------
+        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密", top_layout)
+        hbox_layout = QHBoxLayout()
+        self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 
         btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC的卡密", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
         btn_pay_by_month = create_pushbutton("购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
@@ -423,54 +422,60 @@ class ConfigUi(QFrame):
         btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
         btn_pay_by_month.clicked.connect(self.pay_by_month)
 
-        tmp_layout.addWidget(btn_buy_auto_updater_dlc)
-        tmp_layout.addWidget(btn_pay_by_month)
+        hbox_layout.addWidget(btn_buy_auto_updater_dlc)
+        hbox_layout.addWidget(btn_pay_by_month)
 
-        layout_cs.addLayout(tmp_layout)
+        # -------------- 区域：使用卡密 --------------
+        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密", top_layout)
+        vbox_layout = QVBoxLayout()
+        self.collapsible_box_use_card_secret.setContentLayout(vbox_layout)
 
-        layout_form = QFormLayout()
+        form_layout = QFormLayout()
+        vbox_layout.addLayout(form_layout)
 
         self.lineedit_card = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的卡号，形如 auto_update-20210313133230-00001")
-        layout_form.addRow("卡号", self.lineedit_card)
+        form_layout.addRow("卡号", self.lineedit_card)
 
         self.lineedit_secret = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的密码，形如 BF8h0y1Zcb8ukY6rsn5YFhkh0Nbe9hit")
-        layout_form.addRow("卡密", self.lineedit_secret)
+        form_layout.addRow("卡密", self.lineedit_secret)
 
         self.lineedit_qq = create_lineedit("", placeholder_text="形如 1234567")
-        layout_form.addRow("主QQ", self.lineedit_qq)
+        form_layout.addRow("主QQ", self.lineedit_qq)
 
         self.lineedit_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
         self.lineedit_game_qqs.setValidator(QQListValidator())
-        layout_form.addRow("其他要使用的QQ", self.lineedit_game_qqs)
-
-        layout_cs.addLayout(layout_form)
+        form_layout.addRow("其他要使用的QQ", self.lineedit_game_qqs)
 
         btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务", "MediumSpringGreen")
-        layout_cs.addWidget(btn_pay_by_card_and_secret)
+        vbox_layout.addWidget(btn_pay_by_card_and_secret)
 
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
 
-        layout.addLayout(layout_cs)
-
-        layout.addWidget(QHLine())
+        # -------------- 区域：查询信息 --------------
+        self.collapsible_box_query_info = create_collapsible_box_add_to_parent_layout("查询信息", top_layout)
+        vbox_layout = QVBoxLayout()
+        self.collapsible_box_query_info.setContentLayout(vbox_layout)
 
         # 显示付费相关内容
         self.btn_show_buy_info = create_pushbutton("显示付费相关信息(点击后将登录所有账户，可能需要较长时间，请耐心等候)")
         self.btn_show_buy_info.clicked.connect(self.show_buy_info)
-        layout.addWidget(self.btn_show_buy_info)
+        vbox_layout.addWidget(self.btn_show_buy_info)
 
         self.label_auto_udpate_info = QLabel("点击登录按钮后可显示是否购买自动更新DLC")
         self.label_auto_udpate_info.setVisible(False)
         self.label_auto_udpate_info.setStyleSheet("color : DarkSlateGray; ")
-        layout.addWidget(self.label_auto_udpate_info)
+        vbox_layout.addWidget(self.label_auto_udpate_info)
 
         self.label_monthly_pay_info = QLabel("点击登录按钮后可显示按月付费信息")
         self.label_monthly_pay_info.setVisible(False)
         self.label_monthly_pay_info.setStyleSheet("color : DarkCyan; ")
-        layout.addWidget(self.label_monthly_pay_info)
+        vbox_layout.addWidget(self.label_monthly_pay_info)
 
-        tab.setLayout(make_scroll_layout(layout))
+        # -------------- 区域代码结束 --------------
+        tab.setLayout(make_scroll_layout(top_layout))
         self.tabs.addTab(tab, "付费相关")
+
+        init_collapsible_box_size(self)
 
     def buy_auto_updater_dlc(self, checked=False):
         if not self.check_pay_server():

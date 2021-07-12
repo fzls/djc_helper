@@ -1432,6 +1432,7 @@ class DjcHelper:
             json.dump(loginResult, sf)
             logger.debug(f"本地保存pskey信息，具体内容如下：{loginResult}")
 
+    @try_except()
     def load_uin_pskey(self):
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:

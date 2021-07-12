@@ -976,7 +976,7 @@ class AccountConfigUi(QWidget):
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
         self.combobox_login_mode.currentTextChanged.connect(self.on_login_mode_change)
-        self.on_login_mode_change(self.combobox_login_mode.currentText())
+        self.on_login_mode_change(self.combobox_login_mode.currentText(), in_init_step=True)
 
         # -------------- 区域：选填和必填分割线 --------------
         add_vbox_seperator(top_layout, "以下内容为选填内容，不填仍可正常运行，不过部分活动将无法领取")
@@ -1137,10 +1137,16 @@ class AccountConfigUi(QWidget):
 
             cfg.xinyue_operations.append(item)
 
-    def on_login_mode_change(self, text):
+    def on_login_mode_change(self, text, in_init_step=False):
         disable = text != self.login_mode_bidict.val_to_key['auto_login']
 
-        self.collapsible_box_account_password.setHidden(disable)
+        # 需要排除一个特例：
+        # 启动时界面还未显示时，所有组件都是hidden状态
+        # 此时如果是自动登录模式，不需要特别调用setHidden(False)，因为组件在gui初始化完毕后都默认是启用的
+        # 此时如果调用了，会出现在主窗口弹出来之前，快速显示并消失各个账号的账号密码登录窗口，看上去很奇怪
+        need_set_hidden = not (in_init_step and not disable)
+        if need_set_hidden:
+            self.collapsible_box_account_password.setHidden(disable)
         self.collapsible_box_account_password.set_fold(disable)
         self.account_info.setDisabled(disable)
 

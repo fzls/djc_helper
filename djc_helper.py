@@ -1714,7 +1714,7 @@ class DjcHelper:
                 logger.info(color("bold_yellow") + f"当前活动页面更新至第{current_updated}，不执行后续部分，避免被钓鱼<_<")
                 break
 
-            if is_first_run(f"comic_watch_{self.uin()}_{idx}"):
+            if is_weekly_first_run(f"comic_watch_{self.uin()}_{idx}"):
                 self.dnf_comic_op(f"观看资格领取_第{idx}话", flowid)
 
         self.dnf_comic_op("观看礼包资格消耗", "775253")

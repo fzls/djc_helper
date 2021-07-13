@@ -118,14 +118,15 @@ if uploader.login_ok:
     for upload_folder, upload_list in upload_info_list:
         for local_filepath, history_file_prefix in reversed(upload_list):
             # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
-            total_try_count = 3
+            total_try_count = 1
             for try_index in range_from_one(total_try_count):
                 upload_ok = uploader.upload_to_lanzouyun(local_filepath, upload_folder, history_file_prefix=history_file_prefix)
                 if upload_ok:
                     break
 
                 logger.warning(f"第{try_index}/{total_try_count}次尝试上传{local_filepath}失败，等待一会后重试")
-                count_down("上传到网盘", 5 * try_index)
+                if try_index < total_try_count:
+                    count_down("上传到网盘", 5 * try_index)
 
 else:
     logger.error("蓝奏云登录失败")

@@ -17,7 +17,8 @@ def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
 
 
 not_know_start_time = "2000-01-01 00:00:00"
-not_know_end_time = "2099-01-01 00:00:00"
+# 不知道时间的统一把时间设定为后年年初-。-
+not_know_end_time = format_time(get_now().replace(year=get_now().year + 2, month=1, day=1, hour=0, second=0, microsecond=0))
 
 month_start_day, month_end_day = start_and_end_date_of_a_month(get_now())
 

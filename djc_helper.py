@@ -298,7 +298,7 @@ class DjcHelper:
                 heads = ["序号", "活动名称", "结束于", "剩余天数", "活动链接为"]
                 colSizes = [4, 24, 12, 8, 50]
 
-                activities_summary += "\n" + tableify(heads, colSizes)
+                activities_summary += "\n" + color("bold_green") + tableify(heads, colSizes)
                 for idx, name_and_func in enumerate(activities):
                     act_name, act_func = name_and_func
 

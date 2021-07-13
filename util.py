@@ -365,6 +365,10 @@ def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
 
+def will_act_expired_in(end_time:str, duration:datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
+    return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now() + duration
+
+
 def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()
 

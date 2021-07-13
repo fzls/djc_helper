@@ -13,7 +13,7 @@ from setting import *
 from show_usage import *
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
-from urls import Urls, get_not_ams_act_desc
+from urls import Urls, get_not_ams_act_desc, get_act_url
 from usage_count import *
 from version import author
 
@@ -893,8 +893,8 @@ def show_tips(cfg):
             "4. 微信翻牌 DNF的微信公众号中回复 翻牌 即可 \n"
             "5. 充值活跃礼包 https://pay.qq.com/store/experience/index.shtml?store_config_env=1pf=__mds_act_birth_gift_giftcenter#/taskCenter/74/biz/95?pf=2199 \n"
             "6. Colg活跃活动 除签到外的流程 \n"
-            "7. 超级会员(三个单次性的礼包） https://act.qzone.qq.com/v2/vip/tx/p/1443_dc5df0f6 \n"
-            "8. 黄钻(三个单次性的礼包） https://act.qzone.qq.com/v2/vip/tx/p/1442_36d9b930 \n"
+            f"7. 超级会员(三个单次性的礼包） {get_act_url('超级会员')} \n"
+            f"8. 黄钻(三个单次性的礼包） {get_act_url('黄钻')} \n"
         ),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"

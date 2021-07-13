@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, not_know_start_time, get_ams_act
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, not_know_start_time, get_ams_act, get_act_url
 
 
 # DNF蚊子腿小助手
@@ -319,8 +319,9 @@ class DjcHelper:
                     end_time_str = format_time(end_time, "%Y-%m-%d")
                     remaining_days = (end_time - get_now()).days
                     print_act_name = padLeftRight(act_name, 24, mode="left", need_truncate=True)
+                    act_url = get_act_url(act_name)
 
-                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:2d} 天)')
+                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:3d} 天)，活动链接为：{act_url}')
             else:
                 activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 

@@ -299,8 +299,7 @@ class DjcHelper:
 
                     op_func_name = act_func.__name__ + '_op'
 
-                    start_time = not_know_start_time
-                    end_time = not_know_end_time
+                    end_time = parse_time(not_know_end_time)
                     # 可能是非ams活动
                     act_info = None
                     try:
@@ -313,12 +312,15 @@ class DjcHelper:
 
                     line_color = "bold_green"
                     if act_info is not None:
-                        start_time = format_time(parse_time(act_info.dtBeginTime), "%Y-%m-%d")
-                        end_time = format_time(parse_time(act_info.dtEndTime), "%Y-%m-%d")
+                        end_time = parse_time(act_info.dtEndTime)
                         if is_act_expired(act_info.dtEndTime):
                             line_color = "bold_black"
 
-                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {start_time} {end_time} {act_name}')
+                    end_time_str = format_time(end_time, "%Y-%m-%d")
+                    remaining_days = (end_time - get_now()).days
+                    print_act_name = padLeftRight(act_name, 24, mode="left", need_truncate=True)
+
+                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:2d} 天)')
             else:
                 activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 

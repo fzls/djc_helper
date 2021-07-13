@@ -5460,8 +5460,11 @@ class DjcHelper:
         if get_ams_act_info_only:
             return get_ams_act(iActivityId)
 
+        eas_url = remove_suffix(eas_url, 'index.html')
+        eas_url = remove_suffix(eas_url, 'index_pc.html')
+
         data = self.format(self.urls.amesvr_raw_data,
-                           sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(remove_suffix(eas_url, 'index.html')),
+                           sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),
                            iActivityId=iActivityId, iFlowId=iFlowId, **data_extra_params)
 
         def _check(response: requests.Response) -> Optional[Exception]:

@@ -783,7 +783,8 @@ def show_buy_info_sync(ctx, force_message_box=False):
     logger.warning(color("fg_bold_cyan") + message)
     if not use_by_myself() or force_message_box:
         win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
-    os.popen("支持一下.png")
+    # os.popen("支持一下.png")
+    os.popen("付费指引.docx")
 
 
 def check_update(cfg):

@@ -941,6 +941,7 @@ def try_auto_update(cfg):
                     "1. 游戏账号和加群的QQ不一样，导致使用游戏账号登录时被判定为未购买。对策：请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
                     "2. 未购买，也没有从别人那边拿过来。对策：直接将utils目录下的auto_updater.exe删除即可\n"
                     "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
+                    "4. 已购买按月付费。对策：自动更新dlc与按月付费不是同一个东西，具体区别请阅读[付费指引.docx]进行了解。如果无需该功能，直接将utils目录下的auto_updater.exe删除即可\n"
                 )
                 logger.warning(color("bold_yellow") + msg)
                 win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)

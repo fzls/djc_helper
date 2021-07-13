@@ -294,6 +294,11 @@ class DjcHelper:
             activities_summary = ""
             if len(activities) != 0:
                 activities_summary += f"\n目前的{categray}活动如下："
+
+                heads = ["序号", "活动名称", "结束于", "剩余天数", "活动链接为"]
+                colSizes = [4, 24, 12, 8, 50]
+
+                activities_summary += "\n" + tableify(heads, colSizes)
                 for idx, name_and_func in enumerate(activities):
                     act_name, act_func = name_and_func
 
@@ -319,10 +324,11 @@ class DjcHelper:
 
                     end_time_str = format_time(end_time, "%Y-%m-%d")
                     remaining_days = (end_time - get_now()).days
-                    print_act_name = padLeftRight(act_name, 24, mode="left", need_truncate=True)
-                    act_url = get_act_url(act_name)
+                    print_act_name = padLeftRight(act_name, colSizes[1], mode="left", need_truncate=True)
+                    act_url = padLeftRight(get_act_url(act_name), colSizes[-1], mode="left")
 
-                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:3d} 天)，活动链接为： {act_url}')
+                    # activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:3d} 天)，活动链接为： {act_url}')
+                    activities_summary += "\n" + color(line_color) + tableify([idx+1, print_act_name, end_time_str, remaining_days, act_url], colSizes, need_truncate=False)
             else:
                 activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 

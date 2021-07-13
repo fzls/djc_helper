@@ -315,10 +315,10 @@ class DjcHelper:
                     except Exception as e:
                         logger.debug(f"请求{act_name} 出错了", exc_info=e)
 
-                    line_color = "bold_green"
                     if act_info is not None:
                         end_time = parse_time(act_info.dtEndTime)
 
+                    line_color = "bold_green"
                     if is_act_expired(format_time(end_time)):
                         line_color = "bold_black"
 

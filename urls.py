@@ -310,7 +310,7 @@ class Urls:
         acts.sort(key=lambda act: act.dtEndTime)
 
         heads = ["序号", "活动名称", "活动ID", "开始时间", "结束时间", "剩余时间"]
-        colSizes = [4, 44, 8, 20, 20, 26]
+        colSizes = [4, 44, 8, 20, 20, 14]
 
         table = ""
         table += "\n" + tableify(heads, colSizes)
@@ -320,9 +320,10 @@ class Urls:
                 line_color = "bold_black"
 
             print_act_name = padLeftRight(act.sActivityName, colSizes[1], mode="left", need_truncate=True)
-            remaining_days = parse_time(act.dtEndTime) - get_now()
+            remaining_times = parse_time(act.dtEndTime) - get_now()
+            remaining_times = f"{remaining_times.days:3d} 天 {remaining_times.seconds // 3600} 小时"
 
-            table += "\n" + color(line_color) + tableify([idx + 1, print_act_name, act.iActivityId, act.dtBeginTime, act.dtEndTime, remaining_days], colSizes, need_truncate=False)
+            table += "\n" + color(line_color) + tableify([idx + 1, print_act_name, act.iActivityId, act.dtBeginTime, act.dtEndTime, remaining_times], colSizes, need_truncate=False)
 
         logger.info(table)
 

@@ -309,8 +309,22 @@ class Urls:
 
         acts.sort(key=lambda act: act.dtEndTime)
 
-        act_infos = [f"{idx + 1:2d} {format_act(act, needPadding=True)}" for idx, act in enumerate(acts)]
-        logger.info(color("bold_green") + '\n' + '\n'.join(act_infos))
+        heads = ["序号", "活动名称", "活动ID", "开始时间", "结束时间", "剩余时间"]
+        colSizes = [4, 44, 8, 20, 20, 26]
+
+        table = ""
+        table += "\n" + tableify(heads, colSizes)
+        for idx, act in enumerate(acts):
+            line_color = "bold_green"
+            if is_act_expired(act.dtEndTime):
+                line_color = "bold_black"
+
+            print_act_name = padLeftRight(act.sActivityName, colSizes[1], mode="left", need_truncate=True)
+            remaining_days = parse_time(act.dtEndTime) - get_now()
+
+            table += "\n" + color(line_color) + tableify([idx + 1, print_act_name, act.iActivityId, act.dtBeginTime, act.dtEndTime, remaining_days], colSizes, need_truncate=False)
+
+        logger.info(table)
 
 
 @try_except()

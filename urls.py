@@ -53,7 +53,7 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210312hello/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
-    "DNF福利中心兑换": "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210618index/",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",

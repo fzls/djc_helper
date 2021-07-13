@@ -236,7 +236,7 @@ class Urls:
         self.qzone_activity_new = "https://act.qzone.qq.com/v2/vip/tx/trpc/subact/ExecAct"
 
         # 抽卡相关
-        self.ark_lottery_page = "https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13"
+        self.ark_lottery_page = get_act_url("集卡")
         # 查询次数信息：参数：to_qq, actName
         self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq, actName

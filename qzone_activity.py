@@ -303,7 +303,7 @@ class QzoneActivity:
         # 当过期的时候，可以去找找看是不是有新的出来了
         #
         # note: 会员关怀接入方式：
-        #   1. 浏览器打开活动页面 https://act.qzone.qq.com/vip/meteor/blockly/p/6865x93954
+        #   1. 浏览器打开活动页面 get_act_url("会员关怀")
         #   2. Sources 中找到 https://qzonestyle.gtimg.cn/qzone/qzact/act/xcube/6865x93954/index.js
 
         # note: 2.1 搜索 gameAward 定位 j_widget_4/5/6的onclick 领取回归礼包的ruleid和actname

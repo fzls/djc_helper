@@ -313,8 +313,9 @@ class DjcHelper:
                     line_color = "bold_green"
                     if act_info is not None:
                         end_time = parse_time(act_info.dtEndTime)
-                        if is_act_expired(act_info.dtEndTime):
-                            line_color = "bold_black"
+
+                    if is_act_expired(format_time(end_time)):
+                        line_color = "bold_black"
 
                     end_time_str = format_time(end_time, "%Y-%m-%d")
                     remaining_days = (end_time - get_now()).days

@@ -274,7 +274,8 @@ def get_act_desc_js(actId):
 
     a_week_seconds = 7 * 24 * 3600
 
-    act_cache_file = with_cache("act_desc", actId, cache_max_seconds=a_week_seconds, cache_miss_func=lambda: download_act_desc_js(actId))
+    act_cache_file = with_cache("act_desc", actId, cache_max_seconds=a_week_seconds, cache_miss_func=lambda: download_act_desc_js(actId),
+                                cache_validate_func=lambda filepath: os.path.isfile(filepath))
 
     if not os.path.exists(act_cache_file):
         return ""

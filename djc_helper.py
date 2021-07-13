@@ -773,7 +773,6 @@ class DjcHelper:
     @try_except()
     def xinyue_battle_ground(self):
         """
-        https://xinyue.qq.com/act/a20210317dnf/index_pc.html
         根据配置进行心悦相关操作
         具体活动信息可以查阅reference_data/心悦活动备注.txt
         """
@@ -1067,7 +1066,7 @@ class DjcHelper:
         return info
 
     def check_xinyue_battle_ground(self):
-        self.check_bind_account("心悦战场", "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
+        self.check_bind_account("心悦战场", get_act_url("DNF地下城与勇士心悦特权专区"),
                                 activity_op_func=self.xinyue_battle_ground_op, query_bind_flowid="748044", commit_bind_flowid="748043")
 
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
@@ -1078,7 +1077,7 @@ class DjcHelper:
         if lqlevel < 5:
             lqlevel = 1
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "xinyue", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20181101rights/",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "xinyue", iActivityId, iFlowId, print_res, get_act_url("DNF地下城与勇士心悦特权专区"),
                                    package_id=package_id, lqlevel=lqlevel, teamid=teamid,
                                    **extra_params)
 
@@ -1229,7 +1228,6 @@ class DjcHelper:
     # --------------------------------------------黑钻--------------------------------------------
     @try_except()
     def get_heizuan_gift(self):
-        # https://dnf.qq.com/act/blackDiamond/gift.shtml
         show_head_line("黑钻礼包")
         self.show_not_ams_act_info("黑钻礼包")
 
@@ -1241,7 +1239,7 @@ class DjcHelper:
             res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
             # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
             if res["iRet"] == -50014:
-                self.guide_to_bind_account("每月黑钻等级礼包", "https://dnf.qq.com/act/blackDiamond/gift.shtml", activity_op_func=None)
+                self.guide_to_bind_account("每月黑钻等级礼包", get_act_url("黑钻礼包"), activity_op_func=None)
                 continue
 
             return res
@@ -1258,7 +1256,6 @@ class DjcHelper:
 
         self.get("每月信用星级礼包", self.urls.credit_gift)
         try:
-            # https://gamecredit.qq.com/static/web/index.html#/gift-pack
             self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
             # 等待一会
             time.sleep(self.common_cfg.retry.request_wait_time)
@@ -1487,7 +1484,7 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
     def dnf_super_vip(self):
-        # https://act.qzone.qq.com/v2/vip/tx/p/1443_dc5df0f6
+        act_url = get_act_url("超级会员")
         show_head_line("QQ空间超级会员")
         self.show_not_ams_act_info("超级会员")
 
@@ -1517,7 +1514,7 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     def dnf_yellow_diamond(self):
-        # https://act.qzone.qq.com/v2/vip/tx/p/1442_36d9b930
+        act_url = get_act_url("黄钻")
         show_head_line("QQ空间黄钻")
         self.show_not_ams_act_info("黄钻")
 
@@ -1688,7 +1685,6 @@ class DjcHelper:
     # --------------------------------------------DNF漫画预约活动--------------------------------------------
     @try_except()
     def dnf_comic(self):
-        # https://dnf.qq.com/lbact/a20210617comic/
         show_head_line("DNF漫画预约活动")
         self.show_amesvr_act_info(self.dnf_comic_op)
 
@@ -1736,10 +1732,10 @@ class DjcHelper:
         self.dnf_comic_op("每日在线好礼", "774826")
 
         total_get, star_count = query_star_count()
-        msg = f"当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥~ https://dnf.qq.com/lbact/a20210617comic/"
+        msg = f"当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥~ {get_act_url('DNF漫画预约活动')}"
         logger.info(color("bold_yellow") + msg)
         if is_weekly_first_run("提示领道具"):
-            async_message_box(msg, "漫画活动提示", open_url="https://dnf.qq.com/lbact/a20210617comic/")
+            async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
 
         if use_by_myself():
             # 我自己进行兑换~
@@ -1761,12 +1757,12 @@ class DjcHelper:
             # self.dnf_comic_op("星星夺宝", "774818")
 
     def check_dnf_comic(self):
-        self.check_bind_account("qq视频-DNF漫画预约活动", "https://dnf.qq.com/lbact/a20210617comic/",
+        self.check_bind_account("qq视频-DNF漫画预约活动", get_act_url("DNF漫画预约活动"),
                                 activity_op_func=self.dnf_comic_op, query_bind_flowid="774762", commit_bind_flowid="774761")
 
     def dnf_comic_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_comic
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617comic/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF漫画预约活动"),
                                    **extra_params)
 
     # --------------------------------------------DNF十三周年庆活动--------------------------------------------
@@ -1882,7 +1878,6 @@ class DjcHelper:
     # --------------------------------------------DNF奥兹玛竞速--------------------------------------------
     @try_except()
     def dnf_ozma(self):
-        # https://xinyue.qq.com/act/a20210526znqhd/index.html
         show_head_line("DNF奥兹玛竞速")
         self.show_amesvr_act_info(self.dnf_ozma_op)
 
@@ -1998,20 +1993,20 @@ class DjcHelper:
         self.dnf_ozma_op("登录心悦APP送礼包", "770032")
 
     def check_dnf_ozma(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
-        self.check_bind_account("DNF奥兹玛竞速", "https://xinyue.qq.com/act/a20210526znqhd/index.html",
+        self.check_bind_account("DNF奥兹玛竞速", get_act_url("DNF奥兹玛竞速"),
                                 activity_op_func=self.dnf_ozma_op, query_bind_flowid="770020", commit_bind_flowid="770019",
                                 roleinfo=roleinfo, roleinfo_source=roleinfo_source)
 
     def dnf_ozma_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_ozma
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20210526znqhd/index.html",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, get_act_url("DNF奥兹玛竞速"),
                                    **extra_params)
 
     # --------------------------------------------qq视频活动--------------------------------------------
     # note: 接入新qq视频活动的流程如下
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
-    #   2. 打开活动页面 https://m.film.qq.com/magic-act/113645/1_index_index.html
+    #   2. 打开活动页面 get_act_url("qq视频蚊子腿")
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
     qq_video_act_id = "113645"
     #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
@@ -2851,7 +2846,7 @@ class DjcHelper:
 
     # --------------------------------------------新管家蚊子腿--------------------------------------------
     # note: 新管家活动接入流程：
-    #   1. 打开新活动的页面 https://sdi.3g.qq.com/v/2021061115132511816
+    #   1. 打开新活动的页面 get_act_url("管家蚊子腿")
     #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
     #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
     guanjia_new_act_id = "2021061115132511816"  # 活动ID
@@ -3050,7 +3045,7 @@ class DjcHelper:
     # --------------------------------------------hello语音奖励兑换--------------------------------------------
     @try_except()
     def hello_voice(self):
-        # https://dnf.qq.com/cp/a20210312hello/index.html  （从hello语音app中兑换奖励页点开网页）
+        #（从hello语音app中兑换奖励页点开网页）
         show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
         self.show_amesvr_act_info(self.hello_voice_op)
 
@@ -3117,7 +3112,7 @@ class DjcHelper:
         logger.info(color("bold_cyan") + "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷")
 
     def check_hello_voice(self):
-        self.check_bind_account("hello语音奖励兑换", "https://dnf.qq.com/cp/a20210312hello/index.html",
+        self.check_bind_account("hello语音奖励兑换", get_act_url("hello语音网页礼包兑换"),
                                 activity_op_func=self.hello_voice_op, query_bind_flowid="748063", commit_bind_flowid="748062")
 
     def hello_voice_op(self, ctx, iFlowId, prize="", print_res=True, **extra_params):
@@ -3130,7 +3125,6 @@ class DjcHelper:
     # --------------------------------------------DNF格斗大赛--------------------------------------------
     @try_except()
     def dnf_pk(self):
-        # https://dnf.qq.com/cp/a20210405pk/
         show_head_line("DNF格斗大赛功能")
         self.show_amesvr_act_info(self.dnf_pk_op)
 
@@ -3163,13 +3157,13 @@ class DjcHelper:
         self.dnf_pk_op("决赛冠军奖励（828714）", "752678")
 
     def check_dnf_pk(self):
-        self.check_bind_account("DNF格斗大赛", "https://dnf.qq.com/cp/a20210405pk/",
+        self.check_bind_account("DNF格斗大赛", get_act_url("DNF格斗大赛"),
                                 activity_op_func=self.dnf_pk_op, query_bind_flowid="752161", commit_bind_flowid="752160")
 
     def dnf_pk_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_pk
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210405pk/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF格斗大赛"),
                                    **extra_params)
 
     # --------------------------------------------DNF强者之路--------------------------------------------
@@ -3221,7 +3215,6 @@ class DjcHelper:
     # --------------------------------------------DNF心悦--------------------------------------------
     @try_except()
     def dnf_xinyue(self):
-        # https://xinyue.qq.com/act/a20210625dnf/index_new.html
         show_head_line("DNF心悦")
         self.show_amesvr_act_info(self.dnf_xinyue_op)
 
@@ -3254,13 +3247,13 @@ class DjcHelper:
         logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
 
     def check_dnf_xinyue(self):
-        self.check_bind_account("DNF心悦", "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
+        self.check_bind_account("DNF心悦", get_act_url("DNF心悦"),
                                 activity_op_func=self.dnf_xinyue_op, query_bind_flowid="778273", commit_bind_flowid="778272")
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_xinyue
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, get_act_url("DNF心悦"),
                                    **extra_params)
 
     # --------------------------------------------微信签到--------------------------------------------
@@ -3380,7 +3373,6 @@ class DjcHelper:
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
     @try_except()
     def dnf_welfare(self):
-        # http://dnf.qq.com/cp/a20190312welfare/index.htm
         show_head_line("DNF福利中心兑换")
         self.show_amesvr_act_info(self.dnf_welfare_op)
 
@@ -3454,13 +3446,13 @@ class DjcHelper:
         self.dnf_welfare_login_gifts_op("分享奖励领取", "773406", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
-        self.check_bind_account("DNF福利中心兑换", "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+        self.check_bind_account("DNF福利中心兑换", get_act_url("DNF福利中心兑换"),
                                 activity_op_func=self.dnf_welfare_op, query_bind_flowid="558227", commit_bind_flowid="558226")
 
     def dnf_welfare_op(self, ctx, iFlowId, siActivityId="", sContent="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_welfare
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF福利中心兑换"),
                                    siActivityId=siActivityId, sContent=sContent,
                                    **extra_params)
 
@@ -3472,7 +3464,7 @@ class DjcHelper:
 
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20190312welfare/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF福利中心兑换"),
                                    sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                                    sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                                    md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
@@ -3611,7 +3603,6 @@ class DjcHelper:
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     @try_except()
     def xinyue_financing(self):
-        # https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml
         show_head_line("心悦app理财礼卡")
         self.show_amesvr_act_info(self.xinyue_financing_op)
 
@@ -3752,14 +3743,13 @@ class DjcHelper:
         plat = 3  # app
         extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x27"')
 
-        return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
+        return self.amesvr_request(ctx, "comm.ams.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, get_act_url("心悦app理财礼卡"),
                                    plat=plat, extraStr=extraStr,
                                    **extra_params)
 
     # --------------------------------------------心悦猫咪--------------------------------------------
     @try_except()
     def xinyue_cat(self):
-        # https://xinyue.qq.com/act/a20180912tgclubcat/index.html
         show_head_line("心悦猫咪")
         self.show_amesvr_act_info(self.xinyue_cat_op)
 
@@ -3899,14 +3889,13 @@ class DjcHelper:
 
         extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x42"')
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20180912tgclubcat/",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, get_act_url("心悦猫咪"),
                                    extraStr=extraStr,
                                    **extra_params)
 
     # --------------------------------------------心悦app周礼包--------------------------------------------
     @try_except()
     def xinyue_weekly_gift(self):
-        # https://xinyue.qq.com/act/a20180906gifts/index.html
         show_head_line("心悦app周礼包")
         self.show_amesvr_act_info(self.xinyue_weekly_gift_op)
 
@@ -3968,7 +3957,7 @@ class DjcHelper:
 
         extraStr = quote_plus('"mod1":"1","mod2":"4","mod3":"x48"')
 
-        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, "http://xinyue.qq.com/act/a20180906gifts/",
+        return self.amesvr_request(ctx, "act.game.qq.com", "xinyue", "tgclub", iActivityId, iFlowId, print_res, get_act_url("心悦app周礼包"),
                                    extraStr=extraStr,
                                    **extra_params)
 
@@ -4078,7 +4067,6 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
-        # https://dnf.qq.com/cp/a20210525care/index.html
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
 
@@ -4134,13 +4122,13 @@ class DjcHelper:
         return int(info.sOutValue1)
 
     def check_majieluo(self):
-        self.check_bind_account("DNF马杰洛的规划", "https://dnf.qq.com/cp/a20210525care/index.html",
+        self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
                                 activity_op_func=self.majieluo_op, query_bind_flowid="768187", commit_bind_flowid="768186")
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210525care/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF马杰洛的规划"),
                                    cardType=cardType, inviteId=inviteId, sendName=sendName, receiveUin=receiveUin,
                                    receiver=receiver, receiverName=receiverName, receiverUrl=receiverUrl, giftNum=giftNum,
                                    **extra_params)
@@ -4536,7 +4524,6 @@ class DjcHelper:
     # --------------------------------------------DNF落地页活动--------------------------------------------
     @try_except()
     def dnf_luodiye(self):
-        # https://dnf.qq.com/cp/a20210618index/
         show_head_line("DNF落地页活动")
         self.show_amesvr_act_info(self.dnf_luodiye_op)
 
@@ -4558,7 +4545,7 @@ class DjcHelper:
             time.sleep(1)
 
     def check_dnf_luodiye(self):
-        self.check_bind_account("DNF落地页活动", "https://dnf.qq.com/cp/a20210618index/",
+        self.check_bind_account("DNF落地页活动", get_act_url("DNF落地页活动"),
                                 activity_op_func=self.dnf_luodiye_op, query_bind_flowid="769490", commit_bind_flowid="769489")
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -4569,7 +4556,7 @@ class DjcHelper:
         #
         # checkparam = quote_plus(quote_plus(checkInfo.checkparam))
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210618index/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF落地页活动"),
                                    # sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
                                    # sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
                                    # md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
@@ -4580,7 +4567,6 @@ class DjcHelper:
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame(self):
-        # https://dnf.qq.com/lbact/a20210708WG/index.html
         show_head_line("WeGame活动")
         self.show_amesvr_act_info(self.dnf_wegame_op)
 
@@ -4662,19 +4648,18 @@ class DjcHelper:
         self.dnf_wegame_op("每日抽奖", "779699")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
-        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210708WG/index.html",
+        self.check_bind_account("WeGame活动", get_act_url("WeGame活动"),
                                 activity_op_func=self.dnf_wegame_op, query_bind_flowid="779689", commit_bind_flowid="779688",
                                 roleinfo=roleinfo, roleinfo_source=roleinfo_source)
 
     def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_wegame
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210708WG/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("WeGame活动"),
                                    **extra_params)
 
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame_dup(self):
-        # https://dnf.qq.com/lbact/a20210617lbw4msr/index.html
         show_head_line("WeGame活动")
         self.show_amesvr_act_info(self.dnf_wegame_dup_op)
 
@@ -4729,18 +4714,17 @@ class DjcHelper:
         self.dnf_wegame_dup_op("签到15天礼包", "772133")
 
     def check_dnf_wegame_dup(self):
-        self.check_bind_account("WeGame活动", "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
+        self.check_bind_account("WeGame活动", get_act_url("WeGame活动周年庆"),
                                 activity_op_func=self.dnf_wegame_dup_op, query_bind_flowid="772123", commit_bind_flowid="772122")
 
     def dnf_wegame_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_wegame_dup
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617lbw4msr/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("WeGame活动周年庆"),
                                    **extra_params)
 
     # --------------------------------------------我的dnf13周年活动--------------------------------------------
     @try_except()
     def dnf_my_story(self):
-        # https://dnf.qq.com/cp/a20210604history/index.html
         show_head_line("我的dnf13周年活动")
         self.show_amesvr_act_info(self.dnf_my_story_op)
 
@@ -4755,7 +4739,7 @@ class DjcHelper:
 
     def dnf_my_story_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_my_story
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/cp/a20210604history/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("我的dnf13周年活动"),
                                    **extra_params)
 
     # --------------------------------------------刃影预约活动--------------------------------------------
@@ -4973,7 +4957,6 @@ class DjcHelper:
     # --------------------------------------------DNF集合站--------------------------------------------
     @try_except()
     def dnf_collection(self):
-        # https://dnf.qq.com/lbact/a20210708album/index.html
         show_head_line("DNF集合站")
         self.show_amesvr_act_info(self.dnf_collection_op)
 
@@ -5000,18 +4983,17 @@ class DjcHelper:
         self.dnf_collection_op("21日礼包", "779649")
 
     def check_dnf_collection(self):
-        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210708album/index.html",
+        self.check_bind_account("DNF集合站", get_act_url("DNF集合站"),
                                 activity_op_func=self.dnf_collection_op, query_bind_flowid="779637", commit_bind_flowid="779636")
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210708album/index.html",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF集合站"),
                                    **extra_params)
 
     # --------------------------------------------DNF集合站--------------------------------------------
     @try_except()
     def dnf_collection_dup(self):
-        # https://dnf.qq.com/lbact/a20210617lbpqopr/index.html
         show_head_line("DNF集合站")
         self.show_amesvr_act_info(self.dnf_collection_dup_op)
 
@@ -5038,18 +5020,17 @@ class DjcHelper:
         self.dnf_collection_dup_op("21日礼包", "773667")
 
     def check_dnf_collection_dup(self):
-        self.check_bind_account("DNF集合站", "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
+        self.check_bind_account("DNF集合站", get_act_url("DNF集合站周年庆"),
                                 activity_op_func=self.dnf_collection_dup_op, query_bind_flowid="773655", commit_bind_flowid="773654")
 
     def dnf_collection_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection_dup
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210617lbpqopr/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF集合站周年庆"),
                                    **extra_params)
 
     # --------------------------------------------KOL--------------------------------------------
     @try_except()
     def dnf_kol(self):
-        # https://dnf.qq.com/lbact/a20210610kol/zzx.html
         show_head_line("KOL")
         self.show_amesvr_act_info(self.dnf_kol_op)
 
@@ -5074,12 +5055,12 @@ class DjcHelper:
             self.dnf_kol_op(f"第{idx}次抽奖", "776070")
 
     def check_dnf_kol(self):
-        self.check_bind_account("KOL", "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
+        self.check_bind_account("KOL", get_act_url("KOL"),
                                 activity_op_func=self.dnf_kol_op, query_bind_flowid="776064", commit_bind_flowid="776063")
 
     def dnf_kol_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_kol
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/lbact/a20210610kol/",
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("KOL"),
                                    **extra_params)
 
     # --------------------------------------------DNF福签大作战--------------------------------------------
@@ -5462,6 +5443,9 @@ class DjcHelper:
 
         eas_url = remove_suffix(eas_url, 'index.html')
         eas_url = remove_suffix(eas_url, 'index_pc.html')
+        eas_url = remove_suffix(eas_url, 'index_new.html')
+        eas_url = remove_suffix(eas_url, 'index.htm')
+        eas_url = remove_suffix(eas_url, 'zzx.html')
 
         data = self.format(self.urls.amesvr_raw_data,
                            sServiceDepartment=sServiceDepartment, sServiceType=sServiceType, eas_url=quote_plus(eas_url),

@@ -19,6 +19,7 @@ from log import logger, color
 from upload_lanzouyun import Uploader
 from util import async_message_box, get_screen_size
 from version import now_version
+from urls import get_act_url
 
 
 # 在github action环境下登录异常
@@ -348,7 +349,7 @@ class QQLogin():
                 self.login_mode_xinyue: (
                     self._login_xinyue_real,
                     "心悦",
-                    "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
+                    get_act_url("DNF地下城与勇士心悦特权专区"),
                 ),
                 self.login_mode_qzone: (
                     self._login_qzone,
@@ -556,7 +557,7 @@ class QQLogin():
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start("https://xinyue.qq.com/act/a20210317dnf/index_pc.html")
+                self.open_url_on_start(get_act_url("DNF地下城与勇士心悦特权专区"))
 
             self.set_window_size()
 

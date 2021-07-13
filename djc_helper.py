@@ -321,11 +321,15 @@ class DjcHelper:
                     print_act_name = padLeftRight(act_name, 24, mode="left", need_truncate=True)
                     act_url = get_act_url(act_name)
 
-                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:3d} 天)，活动链接为：{act_url}')
+                    activities_summary += with_color(line_color, f'\n    {idx + 1:2d}. {print_act_name} 将结束于{end_time_str}(剩余 {remaining_days:3d} 天)，活动链接为： {act_url}')
             else:
                 activities_summary += f"\n目前尚无{categray}活动，当新的{categray}活动出现时会及时加入~"
 
             return activities_summary
+
+        # 提示如何复制
+        if self.common_cfg.disable_cmd_quick_edit:
+            show_quick_edit_mode_tip()
 
         # 免费活动信息
         free_activities_summary = get_activities_summary("长期免费", free_activities)

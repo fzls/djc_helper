@@ -700,10 +700,15 @@ def disable_quick_edit_mode():
         ENABLE_EXTENDED_FLAGS = 0x0080
 
         logger.info(color("bold_green") + "将禁用命令行的快速编辑模式，避免鼠标误触时程序暂停，若需启用，请去配置文件取消禁用快速编辑模式~")
+        show_quick_edit_mode_tip()
         kernel32 = ctypes.windll.kernel32
         kernel32.SetConsoleMode(kernel32.GetStdHandle(win32api.STD_INPUT_HANDLE), ENABLE_EXTENDED_FLAGS)
 
     async_call(_cb)
+
+
+def show_quick_edit_mode_tip():
+    logger.info(color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制")
 
 
 def is_run_in_pycharm() -> bool:

@@ -36,6 +36,71 @@ not_ams_activities = [
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
 ]
 
+act_name_to_url = {
+    # 长期免费活动
+    "道聚城": "https://daoju.qq.com/mall/ 下载app",
+    "DNF地下城与勇士心悦特权专区": "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
+    "心悦app": "https://xinyue.qq.com/beta/#/download",
+    "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
+    "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
+    "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
+    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",
+    "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
+    "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
+
+    # 短期付费活动
+    "DNF助手编年史": "dnf助手左侧栏",
+    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210312hello/index.html",
+    "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
+    "DNF福利中心兑换": "http://dnf.qq.com/cp/a20190312welfare/index.htm",
+    "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20210618index/",
+    "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
+    "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021061115132511816",
+    "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
+    "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210525care/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "KOL": "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/1443_dc5df0f6",
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/1442_36d9b930",
+    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
+    "WeGame活动": "https://dnf.qq.com/lbact/a20210708WG/index.html",
+    "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
+
+    # 已过期活动
+    "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
+    "微信签到": "微信DNF公众号",
+    "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
+    "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
+    "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
+    "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
+    "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
+    "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
+    "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
+    "DNF共创投票": "https://dnf.qq.com/cp/a20201126version/index.shtml",
+    "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
+    "DNF闪光杯第三期": "http://xinyue.qq.com/act/a20201221sgbpc/index.html",
+    "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
+    "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
+    "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
+    "会员关怀": "https://act.qzone.qq.com/vip/meteor/blockly/p/6865x93954",
+    "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/Time2021/index",
+    "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
+    "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
+    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
+    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210519video/index.html",
+    "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13",
+    "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
+}
+
+
+def get_act_url(act_name: str) -> str:
+    return act_name_to_url.get(act_name, "未找到活动链接，请自行百度")
+
 
 class Urls:
     def __init__(self):

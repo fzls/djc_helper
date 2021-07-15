@@ -42,6 +42,13 @@ def increase_counter_sync_lean_cloud(name: str):
 def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category: str):
     logger.debug(f"report to google analytics, name = {name}")
     if ga_type == GA_REPORT_TYPE_EVENT:
+        if ga_category == "":
+            # 如果ga_category为空，则尝试从name中解析，假设name中以/分隔的第一个部分作为ga_category
+            parts = name.split('/', 1)
+            if len(parts) == 2:
+                ga_category, name = parts
+            else:
+                ga_category = "counter"
         track_event(ga_category, name)
     elif ga_type == GA_REPORT_TYPE_PAGE_VIEW:
         track_page(name)

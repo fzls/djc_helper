@@ -59,8 +59,8 @@ def ensure_cmd_window_buffer_size_for_windows():
     if platform.system() != "Windows":
         return
 
-    if exists_flag_file(".no_change_cmd_buffer"):
-        logger.info(color("bold_yellow") + "当前存在 .no_change_cmd_buffer 文件或目录，将不尝试修改命令行缓存大小，运行日志有可能被截断~")
+    if not exists_flag_file(".change_cmd_buffer"):
+        logger.info(color("bold_yellow") + "当前不存在 .change_cmd_buffer 文件或目录，将不尝试修改命令行缓存大小，运行日志有可能被截断~")
         return
 
     # windows下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
@@ -72,13 +72,13 @@ def ensure_cmd_window_buffer_size_for_windows():
     lines = 9999
 
     os.system(f"mode con:cols={cols} lines={lines}")
-    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请创建 .no_change_cmd_buffer 文件或目录")
+    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请移除 .change_cmd_buffer 文件或目录")
 
 
 def change_console_window_mode():
-    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若不想最大化，可在小助手目录创建 .no_max_console 文件或目录。若想最小化，则可创建 .min_console 文件或目录。")
+    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想最大化，可在小助手目录创建 .max_console 文件或目录。若想最小化，则可创建 .min_console 文件或目录。")
 
-    try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".no_max_console", False)
+    try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".max_console", True)
     try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", ".min_console", True)
 
 

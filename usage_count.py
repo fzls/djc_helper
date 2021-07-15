@@ -7,6 +7,7 @@ import leancloud.object_
 
 import util
 from log import logger
+from ga import track_event
 
 LEAN_CLOUD_SERVER_ADDR = "https://d02na0oe.lc-cn-n1-shared.com"
 LEAN_CLOUD_APP_ID = "D02NA0OEBGXu0YqwpVQYUNl3-gzGzoHsz"
@@ -20,13 +21,27 @@ def increase_counter(name):
 
 
 def increase_counter_sync(name):
+    increase_counter_sync_lean_cloud(name)
+    increase_counter_sync_google_analytics(name)
+    # UNDONE: 增加自建的计数器上报
+
+
+def increase_counter_sync_lean_cloud(name):
     try:
         logger.debug(f"update counter {name}")
         for counter in get_counters(name):
             counter.increment('count')
             counter.save()
     except Exception as exc:
-        logger.debug(f"increase_counter {name} failedexc_info={exc}")
+        logger.debug(f"increase_counter {name} failed", exc_info=exc)
+
+
+def increase_counter_sync_google_analytics(name):
+    try:
+        logger.debug(f"ga hit {name}")
+        track_event("counter", name)
+    except Exception as exc:
+        logger.debug(f"ga hit {name} failed", exc_info=exc)
 
 
 time_periods = ["all", util.get_today()]
@@ -87,5 +102,8 @@ def leancloud_api(api):
     return f"{LEAN_CLOUD_SERVER_ADDR}/1.1/{api}"
 
 
+def test():
+    increase_counter_sync("测试上报")
+
 if __name__ == '__main__':
-    pass
+    test()

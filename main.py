@@ -68,18 +68,13 @@ def main():
 
     print_update_message_on_first_run_new_version()
 
-    if is_daily_first_run():
-        logger.info("今日首次运行，尝试上报使用统计~")
-        # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）
-        # 整体使用次数
-        increase_counter(this_version_global_usage_counter_name)
-        increase_counter(global_usage_counter_name)
+    # 整体使用次数
+    increase_counter(this_version_global_usage_counter_name)
+    increase_counter(global_usage_counter_name)
 
-        # 当前用户使用次数
-        increase_counter(this_version_my_usage_counter_name)
-        increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
-    else:
-        logger.info("今日已运行过，不再尝试上报使用统计")
+    # 当前用户使用次数
+    increase_counter(this_version_my_usage_counter_name)
+    increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")

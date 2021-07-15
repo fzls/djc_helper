@@ -67,11 +67,11 @@ def main():
         logger.info("今日首次运行，尝试上报使用统计~")
         # 在每日首次使用的时候，上报一下（因为api限额只有3w次，尽可能减少调用）
         # 整体使用次数
-        # increase_counter(this_version_global_usage_counter_name)
-        # increase_counter(global_usage_counter_name)
+        increase_counter(this_version_global_usage_counter_name)
+        increase_counter(global_usage_counter_name)
 
         # 当前用户使用次数
-        # increase_counter(this_version_my_usage_counter_name)
+        increase_counter(this_version_my_usage_counter_name)
         increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
     else:
         logger.info("今日已运行过，不再尝试上报使用统计")

@@ -623,9 +623,8 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
 
     if is_daily_first_run("pay_report"):
         logger.info("今日首次运行，尝试上报付费统计~")
-        # 达到30k上限了，先干掉这个-。-
-        # if has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
-        #     increase_counter(my_auto_updater_usage_counter_name)
+        if has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
+            increase_counter(my_auto_updater_usage_counter_name)
         if user_buy_info.is_active():
             increase_counter(my_active_monthly_pay_usage_counter_name, report_to_lean_cloud=True)
     else:

@@ -39,6 +39,8 @@ def prepare_env():
         change_console_window_mode_async()
 
     if args.wait_for_pid_exit != 0:
+        # 通过配置工具打开
+        increase_counter("config_tool", ga_category="open_by")
         logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
 
         wait_time = 0
@@ -50,6 +52,9 @@ def prepare_env():
 
             time.sleep(retry_time)
             wait_time += retry_time
+    else:
+        # 直接打开
+        increase_counter("directly", ga_category="open_by")
 
 
 def main():

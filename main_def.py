@@ -1294,7 +1294,7 @@ def try_load_old_version_configs_from_user_data_dir():
     disable_flag_file = ".no_sync_configs"
 
     logger.info(color("bold_green") + f"已开启首次运行时自动同步配置本机配置功能，将尝试从 {appdata_dir} 同步配置到 {cwd}")
-    logger.info(color("bold_cyan") + f"如果不需要该功能，可在当前目录创建 {disable_flag_file} 文件")
+    logger.info(color("bold_yellow") + f"如果不需要同步配置，可在当前目录创建 {disable_flag_file} 文件")
 
     if os.path.exists(disable_flag_file):
         logger.info(f"当前目录存在 {disable_flag_file}，故而不尝试同步配置")

@@ -4,6 +4,7 @@ import os
 import leancloud
 import leancloud.object_
 
+from first_run import is_daily_first_run
 from ga import *
 from log import logger
 from util import get_today, try_except, async_call
@@ -15,9 +16,10 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category="count"):
+def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category=""):
     def _cb():
-        if report_to_lean_cloud:
+        if report_to_lean_cloud and is_daily_first_run(name):
+            # lean_cloud的计数器每日最多上报一次
             increase_counter_sync_lean_cloud(name)
 
         if report_to_google_analytics:

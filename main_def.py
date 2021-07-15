@@ -616,6 +616,7 @@ def run(cfg: Config):
     _show_head_line(f"处理总计{len(cfg.account_configs)}个账户 共耗时 {used_time}")
 
 
+@try_except(show_exception_info=False)
 def try_report_usage_info(cfg: Config):
     # 整体使用次数
     increase_counter(this_version_global_usage_counter_name)
@@ -626,6 +627,7 @@ def try_report_usage_info(cfg: Config):
     increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
 
 
+@try_except(show_exception_info=False)
 def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
     if not run_from_src():
         # 仅打包版本尝试上报付费信息

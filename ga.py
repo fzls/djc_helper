@@ -40,7 +40,10 @@ common_data = {
 
 
 @try_except(show_exception_info=False)
-def track_event(category: str, action: str, label=None, value=0):
+def track_event(category: str, action: str, label=None, value=0, ga_misc_params: dict = None):
+    if ga_misc_params is None:
+        ga_misc_params = {}
+
     data = {
         **common_data,
 
@@ -49,6 +52,8 @@ def track_event(category: str, action: str, label=None, value=0):
         'ea': action,  # Event action.
         'el': label,  # Event label.
         'ev': value,  # Event value, must be an integer
+
+        **ga_misc_params,  # 透传的一些额外参数
     }
 
     res = requests.post('https://www.google-analytics.com/collect', data=data, headers=headers, timeout=10)
@@ -56,7 +61,10 @@ def track_event(category: str, action: str, label=None, value=0):
 
 
 @try_except(show_exception_info=False)
-def track_page(page: str):
+def track_page(page: str, ga_misc_params: dict = None):
+    if ga_misc_params is None:
+        ga_misc_params = {}
+
     page = quote_plus(page)
     data = {
         **common_data,
@@ -65,6 +73,8 @@ def track_page(page: str):
         'dh': "djc-helper.com",  # Document hostname.
         'dp': page,  # Page.
         'dt': "",  # Title.
+
+        **ga_misc_params,  # 透传的一些额外参数
     }
 
     res = requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)

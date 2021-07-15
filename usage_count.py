@@ -5,7 +5,7 @@ import threading
 import leancloud
 import leancloud.object_
 
-from ga import track_event
+from ga import *
 from log import logger
 from util import get_today, try_except
 
@@ -16,16 +16,16 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True):
-    threading.Thread(target=increase_counter_sync, args=(name, report_to_lean_cloud, report_to_google_analytics), daemon=True).start()
+def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT):
+    threading.Thread(target=increase_counter_sync, args=(name, report_to_lean_cloud, report_to_google_analytics, ga_type), daemon=True).start()
 
 
-def increase_counter_sync(name: str, report_to_lean_cloud: bool, report_to_google_analytics: bool):
+def increase_counter_sync(name: str, report_to_lean_cloud: bool, report_to_google_analytics: bool, ga_type: str):
     if report_to_lean_cloud:
         increase_counter_sync_lean_cloud(name)
 
     if report_to_google_analytics:
-        increase_counter_sync_google_analytics(name)
+        increase_counter_sync_google_analytics(name, ga_type)
 
     # UNDONE: 增加自建的计数器上报
 
@@ -39,9 +39,14 @@ def increase_counter_sync_lean_cloud(name):
 
 
 @try_except(show_exception_info=False)
-def increase_counter_sync_google_analytics(name):
+def increase_counter_sync_google_analytics(name: str, ga_type: str):
     logger.debug(f"report to google analytics, name = {name}")
-    track_event("counter", name)
+    if ga_type == GA_REPORT_TYPE_EVENT:
+        track_event("counter", name)
+    elif ga_type == GA_REPORT_TYPE_PAGE_VIEW:
+        track_page(name)
+    else:
+        logger.error(f"unknow ga_type={ga_type}")
 
 
 time_periods = ["all", get_today()]
@@ -97,7 +102,7 @@ def leancloud_api(api):
 
 
 def test():
-    increase_counter_sync("test_report", False, True)
+    increase_counter_sync("test_report", False, True, GA_REPORT_TYPE_EVENT)
 
 
 if __name__ == '__main__':

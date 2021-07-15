@@ -9,6 +9,9 @@ from log import logger
 from util import try_except
 from version import now_version
 
+GA_REPORT_TYPE_EVENT = "event"
+GA_REPORT_TYPE_PAGE_VIEW = "page_view"
+
 # note: 查看数据地址 https://analytics.google.com/analytics/web/#/
 # note: 当发现上报失败时，可以将打印的post body复制到 https://ga-dev-tools.web.app/hit-builder/ 进行校验，看是否缺了参数，或者有参数不符合格式
 # note: 参数文档 https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
@@ -20,7 +23,7 @@ headers = {
 
 
 @try_except(show_exception_info=False)
-def track_event(category, action, label=None, value=0):
+def track_event(category: str, action: str, label=None, value=0):
     data = {
         'v': '1',  # API Version.
         'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
@@ -42,7 +45,7 @@ def track_event(category, action, label=None, value=0):
 
 
 @try_except(show_exception_info=False)
-def track_page(page):
+def track_page(page: str):
     page = quote_plus(page)
     data = {
         'v': '1',  # API Version.

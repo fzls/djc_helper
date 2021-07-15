@@ -1,13 +1,12 @@
 # 使用次数统计脚本
 import os
-import threading
 
 import leancloud
 import leancloud.object_
 
 from ga import *
 from log import logger
-from util import get_today, try_except
+from util import get_today, try_except, async_call
 
 LEAN_CLOUD_SERVER_ADDR = "https://d02na0oe.lc-cn-n1-shared.com"
 LEAN_CLOUD_APP_ID = "D02NA0OEBGXu0YqwpVQYUNl3-gzGzoHsz"
@@ -16,18 +15,17 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: str, report_to_lean_cloud: bool = False, report_to_google_analytics: bool = True, ga_type: str = GA_REPORT_TYPE_EVENT, ga_category: str = "count"):
-    threading.Thread(target=increase_counter_sync, args=(name, report_to_lean_cloud, report_to_google_analytics, ga_type, ga_category), daemon=True).start()
+def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category="count"):
+    def _cb():
+        if report_to_lean_cloud:
+            increase_counter_sync_lean_cloud(name)
 
+        if report_to_google_analytics:
+            increase_counter_sync_google_analytics(name, ga_type, ga_category)
 
-def increase_counter_sync(name: str, report_to_lean_cloud: bool = False, report_to_google_analytics: bool = True, ga_type: str = GA_REPORT_TYPE_EVENT, ga_category: str = "count"):
-    if report_to_lean_cloud:
-        increase_counter_sync_lean_cloud(name)
+        # UNDONE: 增加自建的计数器上报
 
-    if report_to_google_analytics:
-        increase_counter_sync_google_analytics(name, ga_type, ga_category)
-
-    # UNDONE: 增加自建的计数器上报
+    async_call(_cb)
 
 
 @try_except(show_exception_info=False)
@@ -39,7 +37,7 @@ def increase_counter_sync_lean_cloud(name: str):
 
 
 @try_except(show_exception_info=False)
-def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category="count"):
+def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category: str):
     logger.debug(f"report to google analytics, name = {name}")
     if ga_type == GA_REPORT_TYPE_EVENT:
         track_event(ga_category, name)
@@ -102,8 +100,8 @@ def leancloud_api(api):
 
 
 def test():
-    increase_counter_sync("test_event", False, True, GA_REPORT_TYPE_EVENT)
-    increase_counter_sync("test_page_view", False, True, GA_REPORT_TYPE_PAGE_VIEW)
+    increase_counter("test_event", False, True, GA_REPORT_TYPE_EVENT)
+    increase_counter("test_page_view", False, True, GA_REPORT_TYPE_PAGE_VIEW)
 
     os.system("PAUSE")
 

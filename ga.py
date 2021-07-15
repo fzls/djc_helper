@@ -9,6 +9,11 @@ from log import logger
 from util import try_except
 from version import now_version
 
+
+def get_cid():
+    return "{}-{}".format(platform.node(), uuid.getnode())
+
+
 GA_REPORT_TYPE_EVENT = "event"
 GA_REPORT_TYPE_PAGE_VIEW = "page_view"
 
@@ -21,17 +26,23 @@ headers = {
     "user-agent": "djc_helper",
 }
 
+common_data = {
+    'v': '1',  # API Version.
+    'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
+    'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
+    'ua': 'djc_helper',
+
+    'an': "djc_helper",
+    'av': now_version,
+
+    'ds': 'app',
+}
+
 
 @try_except(show_exception_info=False)
 def track_event(category: str, action: str, label=None, value=0):
     data = {
-        'v': '1',  # API Version.
-        'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-        'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-        'ua': 'djc_helper',
-
-        'an': "djc_helper",
-        'av': now_version,
+        **common_data,
 
         't': 'event',  # Event hit type.
         'ec': category,  # Event category.
@@ -48,13 +59,7 @@ def track_event(category: str, action: str, label=None, value=0):
 def track_page(page: str):
     page = quote_plus(page)
     data = {
-        'v': '1',  # API Version.
-        'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-        'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-        'ua': 'requests',
-
-        'an': "djc_helper",
-        'av': now_version,
+        **common_data,
 
         't': 'pageview',  # Event hit type.
         'dh': "djc-helper.com",  # Document hostname.
@@ -64,10 +69,6 @@ def track_page(page: str):
 
     res = requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
     logger.debug(f"request body = {res.request.body}")
-
-
-def get_cid():
-    return "{}-{}".format(platform.node(), uuid.getnode())
 
 
 if __name__ == '__main__':

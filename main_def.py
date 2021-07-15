@@ -1,4 +1,4 @@
-from multiprocessing import freeze_support
+from multiprocessing import freeze_support, cpu_count
 from sys import exit
 
 from config import load_config, config, Config, AccountConfig, CommonConfig
@@ -1273,6 +1273,14 @@ def show_multiprocessing_info(cfg: Config):
         msg += f"未开启多进程模式，如需开启，可前往配置工具开启"
 
     logger.info(color("bold_yellow") + msg)
+
+    # 上报多进程相关功能的使用情况
+    increase_counter(ga_category="enable_multiprocessing", name=cfg.common.enable_multiprocessing)
+    increase_counter(ga_category="enable_super_fast_mode", name=cfg.common.enable_super_fast_mode)
+    if cfg.common.enable_multiprocessing:
+        increase_counter(ga_category="cpu_count", name=cpu_count())
+        increase_counter(ga_category="raw_pool_size", name=cfg.common.multiprocessing_pool_size)
+        increase_counter(ga_category="final_pool_size", name=cfg.get_pool_size())
 
 
 def show_notices():

@@ -6,12 +6,17 @@ from urllib.parse import quote_plus
 import requests
 
 from log import logger
-from util import try_except
+from util import try_except, get_screen_size
 from version import now_version
 
 
 def get_cid():
     return "{}-{}".format(platform.node(), uuid.getnode())
+
+
+def get_resolution() -> str:
+    width, height = get_screen_size()
+    return f"{width}x{height}"
 
 
 GA_REPORT_TYPE_EVENT = "event"
@@ -36,6 +41,7 @@ common_data = {
     'av': now_version,
 
     'ds': 'app',
+    'sr': get_resolution(),
 }
 
 

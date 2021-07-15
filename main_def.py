@@ -626,6 +626,9 @@ def try_report_usage_info(cfg: Config):
     increase_counter(this_version_my_usage_counter_name)
     increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
 
+    # 是否启用了自动备份功能
+    increase_counter(ga_category="enable_auto_sync_config", name=str(not os.path.exists(disable_flag_file)))
+
 
 @try_except(show_exception_info=False)
 def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
@@ -1289,6 +1292,9 @@ def try_save_configs_to_user_data_dir():
         }, f, indent=4, ensure_ascii=False)
 
 
+disable_flag_file = ".no_sync_configs"
+
+
 @try_except()
 def try_load_old_version_configs_from_user_data_dir():
     """
@@ -1296,7 +1302,6 @@ def try_load_old_version_configs_from_user_data_dir():
     """
     cwd = os.getcwd()
     appdata_dir = get_appdata_save_dir()
-    disable_flag_file = ".no_sync_configs"
 
     logger.info(color("bold_green") + f"已开启首次运行时自动同步配置本机配置功能，将尝试从 {appdata_dir} 同步配置到 {cwd}")
     logger.info(color("bold_yellow") + f"如果不需要同步配置，可在当前目录创建 {disable_flag_file} 文件")

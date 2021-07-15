@@ -190,10 +190,12 @@ class ConfigUi(QFrame):
         sync_configs(old_version_dir, new_version_dir)
 
         logger.info("继承旧版本配置完成，将重启配置工具以使改动生效")
+        report_click_event("load_old_version")
         self.restart()
 
     def restart_to_load(self, checked=False):
         self.restart()
+        report_click_event("load_config")
 
     def restart(self):
         if run_from_src():
@@ -208,6 +210,8 @@ class ConfigUi(QFrame):
         self.save_config(self.to_config())
         if show_message_box:
             show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.toml.example查看注释")
+
+        report_click_event("save_config")
 
     def load_config(self) -> Config:
         load_config(local_config_path="", reset_before_load=True)
@@ -286,16 +290,21 @@ class ConfigUi(QFrame):
 
     def open_pay_guide(self):
         webbrowser.open(os.path.realpath("付费指引.docx"))
+        report_click_event("open_pay_guide")
 
     def open_usage_guide(self):
         webbrowser.open(os.path.realpath("使用教程/使用文档.docx"))
+        report_click_event("open_usage_guide")
 
     def open_usage_video(self):
         webbrowser.open(os.path.realpath("使用教程/道聚城自动化助手使用视频教程.url"))
+        report_click_event("open_usage_video")
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
         self.popen("支持一下.png")
+
+        report_click_event("support")
 
     def check_update(self, checked=False):
         cfg = self.to_config().common
@@ -306,6 +315,8 @@ class ConfigUi(QFrame):
                 show_message("无需更新", "当前已经是最新版本~")
         except Exception as err:
             update_fallback(cfg)
+
+        report_click_event("check_update")
 
     def on_click_auto_update(self, checked=False):
         if checked:
@@ -324,6 +335,8 @@ class ConfigUi(QFrame):
             logger.info("当前已启用自动更新功能，为确保自动更新时配置工具不被占用，将退出配置工具")
             QCoreApplication.exit()
 
+        report_click_event("run_djc_helper")
+
     def get_djc_helper_path(self):
         exe_path = "DNF蚊子腿小助手.exe"
         if run_from_src():
@@ -341,11 +354,13 @@ class ConfigUi(QFrame):
         clear_login_status()
 
         show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
+        report_click_event("clear_login_status")
 
     def add_group(self, checked=False):
         # note: 如果群 444193814 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=vSEAVsoTbqJOKqp4bVpxnExEYOahOjcZ&jump_from=webapi")
         self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
+        report_click_event("add_group")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts) + 1}")
@@ -372,6 +387,8 @@ class ConfigUi(QFrame):
 
             show_message("添加成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
 
+            report_click_event("add_account")
+
     def del_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "删除账号", "要删除的账号名称", QLineEdit.Normal, "")
         if ok:
@@ -390,6 +407,7 @@ class ConfigUi(QFrame):
             self.accounts.remove(account_to_delete)
             self.tabs.removeTab(self.tabs.indexOf(account_to_delete))
             show_message("删除成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
+        report_click_event("del_account")
 
     def create_tabs(self, cfg: Config, top_layout: QVBoxLayout):
         self.tabs = QTabWidget()
@@ -653,6 +671,8 @@ class ConfigUi(QFrame):
         ])
         show_message("设置完毕", "已设置为开机自动启动~\n若想定时运行，请打开【使用教程/使用文档.docx】，参照【定时自动运行】章节（目前在第21页）设置")
 
+        report_click_event("auto_run_on_login")
+
     def stop_auto_run_on_login(self):
         self.popen([
             "reg",
@@ -661,6 +681,8 @@ class ConfigUi(QFrame):
             "/f",
         ])
         show_message("设置完毕", "已取消开机自动启动~")
+
+        report_click_event("stop_auto_run_on_login")
 
     def create_common_tab(self, cfg: Config):
         self.common = CommonConfigUi(cfg.common)
@@ -679,6 +701,8 @@ class ConfigUi(QFrame):
         worker = GetBuyInfoThread(self, cfg)
         worker.signal_results.connect(self.on_get_buy_info)
         worker.start()
+
+        report_click_event("show_buy_info")
 
     def on_get_buy_info(self, progress_message: str, dlc_info: str, monthly_pay_info: str):
         if progress_message != "":
@@ -1626,6 +1650,10 @@ class HelloVoiceInfoConfigUi(QWidget):
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
         cfg.hello_id = self.lineedit_hello_id.text()
+
+
+def report_click_event(event: str):
+    increase_counter(ga_category="click_in_config_ui", name=event)
 
 
 def main():

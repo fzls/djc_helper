@@ -32,7 +32,7 @@ def increase_counter_sync(name: str, report_to_lean_cloud: bool, report_to_googl
 
 @try_except(show_exception_info=False)
 def increase_counter_sync_lean_cloud(name):
-    logger.debug(f"update counter {name}")
+    logger.debug(f"report to lean cloud, name = {name}")
     for counter in get_counters(name):
         counter.increment('count')
         counter.save()
@@ -40,7 +40,7 @@ def increase_counter_sync_lean_cloud(name):
 
 @try_except(show_exception_info=False)
 def increase_counter_sync_google_analytics(name):
-    logger.debug(f"ga hit {name}")
+    logger.debug(f"report to google analytics, name = {name}")
     track_event("counter", name)
 
 

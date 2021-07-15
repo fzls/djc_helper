@@ -645,6 +645,8 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
         # 仅打包版本尝试上报付费信息
         if has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
             increase_counter(my_auto_updater_usage_counter_name)
+
+        increase_counter(ga_category="pay_or_not", name=user_buy_info.is_active())
         if user_buy_info.is_active():
             increase_counter(my_active_monthly_pay_usage_counter_name, report_to_lean_cloud=True)
             increase_counter(ga_category="buy_times", name=len(user_buy_info.buy_records))

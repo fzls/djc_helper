@@ -616,6 +616,16 @@ def run(cfg: Config):
     _show_head_line(f"处理总计{len(cfg.account_configs)}个账户 共耗时 {used_time}")
 
 
+def try_report_usage_info(cfg: Config):
+    # 整体使用次数
+    increase_counter(this_version_global_usage_counter_name)
+    increase_counter(global_usage_counter_name)
+
+    # 当前用户使用次数
+    increase_counter(this_version_my_usage_counter_name)
+    increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
+
+
 def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
     if run_from_src():
         logger.debug("源码运行不参与统计")

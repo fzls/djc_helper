@@ -68,13 +68,6 @@ def main():
 
     print_update_message_on_first_run_new_version()
 
-    # 整体使用次数
-    increase_counter(this_version_global_usage_counter_name)
-    increase_counter(global_usage_counter_name)
-
-    # 当前用户使用次数
-    increase_counter(this_version_my_usage_counter_name)
-    increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
@@ -85,6 +78,8 @@ def main():
 
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
+
+    try_report_usage_info(cfg)
 
     if cfg.common.disable_cmd_quick_edit:
         disable_quick_edit_mode()

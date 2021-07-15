@@ -1304,7 +1304,7 @@ def try_save_configs_to_user_data_dir():
     if os.path.exists(disable_flag_file):
         logger.info(f"当前目录存在 {disable_flag_file}，故而不尝试同步配置")
         return
-    
+
     cwd = os.getcwd()
     appdata_dir = get_appdata_save_dir()
 

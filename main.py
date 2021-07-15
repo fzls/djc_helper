@@ -188,6 +188,10 @@ if __name__ == '__main__':
             logger.warning(color("bold_cyan") + msg)
             if is_weekly_first_run("用时过久提示"):
                 async_message_box(msg, "用时过久", print_log=False)
+
+        # 按照分钟级别来统计使用时长
+        total_minutes = int(total_used_time.total_seconds()) // 60
+        increase_counter(ga_category="run_used_time_minutes", name=total_minutes)
     except Exception as e:
         show_unexpected_exception_message(e)
         # 如果在github action，则继续抛出异常

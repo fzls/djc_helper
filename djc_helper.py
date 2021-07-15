@@ -50,7 +50,7 @@ class DjcHelper:
         if str(query_data['ret']) == "0":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
             account_info = self.cfg.account_info
-            self.save_uin_skey(account_info.uin, account_info.skey, self.vuserid)
+            self.save_uin_skey(account_info.uin, account_info.skey, self.get_vuserid())
         else:
             # 已过期，更新skey
             logger.info("")
@@ -120,7 +120,7 @@ class DjcHelper:
 
     def local_save_uin_skey(self, uin, skey, vuserid):
         # 本地缓存
-        self.vuserid = vuserid
+        self.set_vuserid(vuserid)
         with open(self.get_local_saved_skey_file(), "w", encoding="utf-8") as sf:
             loginResult = {
                 "uin": str(uin),
@@ -147,7 +147,7 @@ class DjcHelper:
                 return
 
             self.memory_save_uin_skey(loginResult["uin"], loginResult["skey"])
-            self.vuserid = loginResult.get("vuserid", "")
+            self.set_vuserid(loginResult.get("vuserid", ""))
             logger.debug(f"读取本地缓存的skey信息，具体内容如下：{loginResult}")
 
     def get_local_saved_skey_file(self):
@@ -159,6 +159,12 @@ class DjcHelper:
 
         # uin, skey更新后重新初始化网络相关
         self.init_network()
+
+    def set_vuserid(self, vuserid: str):
+        self.vuserid = vuserid
+
+    def get_vuserid(self) -> str:
+        return getattr(self, 'vuserid', '')
 
     # --------------------------------------------获取角色信息和游戏信息--------------------------------------------
 
@@ -1369,7 +1375,7 @@ class DjcHelper:
 
         if lr.skey != "" and lr.vuserid != "":
             self.memory_save_uin_skey(lr.uin, lr.skey)
-            self.vuserid = lr.vuserid
+            self.set_vuserid(lr.vuserid)
 
         return lr
 
@@ -2121,7 +2127,7 @@ class DjcHelper:
             "",
             "appid=3000501",
             "main_login=qq",
-            f"vuserid={self.vuserid}",
+            f"vuserid={self.get_vuserid()}",
         ])
         return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id, task=task, is_prepublish=is_prepublish,
                         print_res=print_res, extra_cookies=extra_cookies)

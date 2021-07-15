@@ -103,7 +103,8 @@ def leancloud_api(api):
 
 
 def test():
-    increase_counter_sync("测试上报")
+    increase_counter_sync("test_report")
+
 
 if __name__ == '__main__':
     test()

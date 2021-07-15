@@ -17,7 +17,7 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category=""):
+def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category="", ga_misc_params: dict = None):
     name = str(name)
 
     if name == "":
@@ -29,7 +29,7 @@ def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_googl
             increase_counter_sync_lean_cloud(name)
 
         if report_to_google_analytics:
-            increase_counter_sync_google_analytics(name, ga_type, ga_category)
+            increase_counter_sync_google_analytics(name, ga_type, ga_category, ga_misc_params)
 
         # UNDONE: 增加自建的计数器上报
 
@@ -45,7 +45,7 @@ def increase_counter_sync_lean_cloud(name: str):
 
 
 @try_except(show_exception_info=False)
-def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category: str):
+def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category: str, ga_misc_params: dict):
     logger.debug(f"report to google analytics, name = {name}")
     if ga_type == GA_REPORT_TYPE_EVENT:
         if ga_category == "":
@@ -55,9 +55,9 @@ def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category:
                 ga_category, name = parts
             else:
                 ga_category = "counter"
-        track_event(ga_category, name)
+        track_event(ga_category, name, ga_misc_params)
     elif ga_type == GA_REPORT_TYPE_PAGE_VIEW:
-        track_page(name)
+        track_page(name, ga_misc_params)
     else:
         logger.error(f"unknow ga_type={ga_type}")
 

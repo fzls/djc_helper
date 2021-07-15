@@ -629,6 +629,15 @@ def try_report_usage_info(cfg: Config):
     # 是否启用了自动备份功能
     increase_counter(ga_category="enable_auto_sync_config", name=str(not os.path.exists(disable_flag_file)))
 
+    # 上报账号相关的一些信息（如账号数、使用的登录模式，不包含任何敏感信息）
+    increase_counter(ga_category="account_count", name=str(len(cfg.account_configs)))
+    for account_config in cfg.account_configs:
+        if not account_config.is_enabled():
+            # 不启用的账户不统计
+            continue
+
+        increase_counter(ga_category="login_mode", name=account_config.login_mode)
+
 
 @try_except(show_exception_info=False)
 def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):

@@ -1,5 +1,6 @@
 # 使用次数统计脚本
 import os
+from typing import Any
 
 import leancloud
 import leancloud.object_
@@ -16,7 +17,9 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name="", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category=""):
+def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category=""):
+    name = str(name)
+
     if name == "":
         raise AssertionError("increase_counter name not set")
 

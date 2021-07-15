@@ -1293,11 +1293,18 @@ def show_notices():
     async_call(_cb)
 
 
+disable_flag_file = ".no_sync_configs"
+
+
 @try_except()
 def try_save_configs_to_user_data_dir():
     """
     运行完毕，尝试从当前目录同步配置到%APPDATA%/djc_helper
     """
+    if os.path.exists(disable_flag_file):
+        logger.info(f"当前目录存在 {disable_flag_file}，故而不尝试同步配置")
+        return
+    
     cwd = os.getcwd()
     appdata_dir = get_appdata_save_dir()
 
@@ -1312,9 +1319,6 @@ def try_save_configs_to_user_data_dir():
             "app_time": ver_time,
             "backup_time": format_now(),
         }, f, indent=4, ensure_ascii=False)
-
-
-disable_flag_file = ".no_sync_configs"
 
 
 @try_except()

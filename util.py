@@ -49,18 +49,26 @@ def change_console_window_mode_async():
         logger.info("当前运行在pycharm中，不尝试调整窗口大小~")
         return
 
-    # 如果是win7的话，先同步设置cmd属性
-    ensure_cmd_window_buffer_size_for_windows()
+    from config import Config, config
 
-    threading.Thread(target=change_console_window_mode, daemon=True).start()
+    cfg = Config()
+    try:
+        cfg = config()
+    except Exception as e:
+        logger.error(f"读取配置失败", exc_info=e)
+
+    # 如果是windows系统的话，先尝试同步设置cmd属性
+    ensure_cmd_window_buffer_size_for_windows(cfg)
+
+    threading.Thread(target=change_console_window_mode, args=(cfg,), daemon=True).start()
 
 
-def ensure_cmd_window_buffer_size_for_windows():
+def ensure_cmd_window_buffer_size_for_windows(cfg):
     if platform.system() != "Windows":
         return
 
-    if not exists_flag_file(".change_cmd_buffer"):
-        logger.info(color("bold_yellow") + "当前不存在 .change_cmd_buffer 文件或目录，将不尝试修改命令行缓存大小，运行日志有可能被截断~")
+    if not cfg.common.enable_change_cmd_buffer:
+        logger.info(color("bold_yellow") + "当前配置为不尝试修改命令行缓存大小，运行日志有可能被截断~")
         return
 
     # windows下需要强制修改缓存区到足够大，这样点最大化时才能铺满全屏幕
@@ -72,32 +80,27 @@ def ensure_cmd_window_buffer_size_for_windows():
     lines = 9999
 
     os.system(f"mode con:cols={cols} lines={lines}")
-    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请移除 .change_cmd_buffer 文件或目录")
+    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请关闭【修改命令行缓存大小】开关")
 
 
-def change_console_window_mode():
-    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想最大化，可在小助手目录创建 .max_console 文件或目录。若想最小化，则可创建 .min_console 文件或目录。")
+def change_console_window_mode(cfg):
+    logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")
 
-    try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", ".max_console", True)
-    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", ".min_console", True)
+    try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", cfg.common.enable_max_console)
+    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", cfg.common.enable_min_console)
 
 
-def try_set_console_window_mode(show_mode: int, mode_name: str, flag_file_name: str, expect_flag_file_exists: bool):
+def try_set_console_window_mode(show_mode: int, mode_name: str, mode_enabled: bool):
     """
     调用win32gui.ShowWindow设置当前cmd所在窗口的显示模式，可选值为[win32con.SW_MAXIMIZE, win32con.SW_MINIMIZE]
     """
-    file_exists_msg = "存在"
-    if not exists_flag_file(flag_file_name):
-        file_exists_msg = "不存在"
-
     # 判断是否需要尝试修改为对应窗口模式
-    if (exists_flag_file(flag_file_name) and not expect_flag_file_exists) or \
-            (not exists_flag_file(flag_file_name) and expect_flag_file_exists):
-        logger.info(color("bold_cyan") + f"当前{file_exists_msg} {flag_file_name} 文件或目录，将不尝试{mode_name}")
+    if not mode_enabled:
+        logger.info(color("bold_cyan") + f"当前未开启 {mode_name} 配置，将不尝试{mode_name}")
         return
 
     # 开始设置
-    logger.info(color("bold_cyan") + f"当前{file_exists_msg} {flag_file_name} 文件或目录，将尝试{mode_name}")
+    logger.info(color("bold_cyan") + f"当前已开启 {mode_name} 配置，将尝试{mode_name}")
 
     current_pid = os.getpid()
     parents = get_parents(current_pid)
@@ -365,7 +368,7 @@ def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
 
-def will_act_expired_in(end_time:str, duration:datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
+def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
     return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now() + duration
 
 
@@ -866,12 +869,9 @@ def sync_configs(source_dir: str, target_dir: str):
 
         # 特定功能的开关
         ".disable_pause_after_run",
-        ".min_console",
-        ".no_max_console",
         ".use_by_myself",
         "不查询活动.txt",
         ".no_message_box",
-        ".no_change_cmd_buffer",
 
         # 缓存文件所在目录
         ".db",

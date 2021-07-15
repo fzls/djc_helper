@@ -649,6 +649,7 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
             increase_counter(my_active_monthly_pay_usage_counter_name, report_to_lean_cloud=True)
             increase_counter(ga_category="buy_times", name=len(user_buy_info.buy_records))
             increase_counter(ga_category="buy_month", name=user_buy_info.total_buy_month)
+            increase_counter(ga_category="game_qq_count", name=len(user_buy_info.game_qqs))
 
 
 def get_activity_funcs_to_run(cfg: Config, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:

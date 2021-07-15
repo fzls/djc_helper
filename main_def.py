@@ -629,6 +629,9 @@ def try_report_usage_info(cfg: Config):
     # 是否启用了自动备份功能
     increase_counter(ga_category="enable_auto_sync_config", name=not os.path.exists(disable_flag_file))
 
+    # 是否使用源码运行
+    increase_counter(ga_category="run_from_src", name=run_from_src())
+
     # 上报账号相关的一些信息（如账号数、使用的登录模式，不包含任何敏感信息）
     increase_counter(ga_category="account_count", name=len(cfg.account_configs))
     for account_config in cfg.account_configs:

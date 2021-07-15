@@ -5,9 +5,9 @@ import threading
 import leancloud
 import leancloud.object_
 
-import util
 from ga import track_event
 from log import logger
+from util import get_today, try_except
 
 LEAN_CLOUD_SERVER_ADDR = "https://d02na0oe.lc-cn-n1-shared.com"
 LEAN_CLOUD_APP_ID = "D02NA0OEBGXu0YqwpVQYUNl3-gzGzoHsz"
@@ -30,25 +30,21 @@ def increase_counter_sync(name: str, report_to_lean_cloud: bool, report_to_googl
     # UNDONE: 增加自建的计数器上报
 
 
+@try_except(show_exception_info=False)
 def increase_counter_sync_lean_cloud(name):
-    try:
-        logger.debug(f"update counter {name}")
-        for counter in get_counters(name):
-            counter.increment('count')
-            counter.save()
-    except Exception as exc:
-        logger.debug(f"increase_counter {name} failed", exc_info=exc)
+    logger.debug(f"update counter {name}")
+    for counter in get_counters(name):
+        counter.increment('count')
+        counter.save()
 
 
+@try_except(show_exception_info=False)
 def increase_counter_sync_google_analytics(name):
-    try:
-        logger.debug(f"ga hit {name}")
-        track_event("counter", name)
-    except Exception as exc:
-        logger.debug(f"ga hit {name} failed", exc_info=exc)
+    logger.debug(f"ga hit {name}")
+    track_event("counter", name)
 
 
-time_periods = ["all", util.get_today()]
+time_periods = ["all", get_today()]
 time_periods_desc = ["累积", "今日"]
 
 
@@ -60,24 +56,18 @@ def get_counters(name):
     return res
 
 
+@try_except(show_exception_info=False, return_val_on_except=0)
 def get_count(name, time_period):
-    try:
-        return get_counter(name, time_period).get('count', 0)
-    except Exception as e:
-        logger.debug(f"get_count failed name={name}, time_period={time_period} e={e}")
-        return 0
+    return get_counter(name, time_period).get('count', 0)
 
 
+@try_except(show_exception_info=False, return_val_on_except=0)
 def get_record_count_name_start_with(name_start_with, time_period):
-    try:
-        CounterClass = leancloud.Object.extend("CounterClass")
-        query = CounterClass.query
-        query.startswith('name', name_start_with)
-        query.equal_to('time_period', time_period)
-        return query.count()
-    except Exception as e:
-        logger.debug(f"get_record_count_name_start_with failed name_start_with={name_start_with}, time_period={time_period} e={e}")
-        return 0
+    CounterClass = leancloud.Object.extend("CounterClass")
+    query = CounterClass.query
+    query.startswith('name', name_start_with)
+    query.equal_to('time_period', time_period)
+    return query.count()
 
 
 def get_counter(name, time_period):

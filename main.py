@@ -40,7 +40,7 @@ def prepare_env():
 
     if args.wait_for_pid_exit != 0:
         # 通过配置工具打开
-        increase_counter(ga_category="open_by", name="config_tool")
+        increase_counter(ga_category="open_by", name="config_tool", ga_misc_params={"dr": "config_tool"})
         logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
 
         wait_time = 0
@@ -54,7 +54,7 @@ def prepare_env():
             wait_time += retry_time
     else:
         # 直接打开
-        increase_counter(ga_category="open_by", name="directly")
+        increase_counter(ga_category="open_by", name="directly", ga_misc_params={"dr": "directly"})
 
 
 def main():

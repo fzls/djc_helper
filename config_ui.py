@@ -21,6 +21,7 @@ from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_aut
 from djc_helper import DjcHelper
 from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
+from usage_count import increase_counter
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"
@@ -501,12 +502,14 @@ class ConfigUi(QFrame):
             return
 
         webbrowser.open(self.load_config().common.auto_updater_dlc_purchase_url)
+        increase_counter(ga_category="open_pay_webpage", name="auto_updater_dlc")
 
     def pay_by_month(self, checked=False):
         if not self.check_pay_server():
             return
 
         webbrowser.open(self.load_config().common.pay_by_month_purchase_url)
+        increase_counter(ga_category="open_pay_webpage", name="pay_buy_month")
 
     def pay_by_card_and_secret(self, checked=False):
         card = self.lineedit_card.text().strip()
@@ -582,6 +585,12 @@ class ConfigUi(QFrame):
             # 自动更新购买完成后提示去网盘下载
             if card.startswith("auto_update"):
                 show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
+
+            self.report_use_card_secret(card)
+
+    @try_except(return_val_on_except=False)
+    def report_use_card_secret(self, card: str):
+        increase_counter(ga_category="use_card_secret", name=card.split('-')[0])
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:

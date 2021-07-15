@@ -779,6 +779,18 @@ class CommonConfigUi(QFrame):
 
         self.login = LoginConfigUi(form_layout, cfg.login)
 
+        # -------------- 区域：窗口大小调整 --------------
+        self.collapsible_box_window_size, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("窗口大小调整", top_layout)
+
+        self.checkbox_enable_change_cmd_buffer = create_checkbox(cfg.enable_change_cmd_buffer)
+        add_row(form_layout, "是否修改命令行缓存大小，以避免运行日志被截断", self.checkbox_enable_change_cmd_buffer)
+
+        self.checkbox_enable_max_console = create_checkbox(cfg.enable_max_console)
+        add_row(form_layout, "是否最大化窗口", self.checkbox_enable_max_console)
+
+        self.checkbox_enable_min_console = create_checkbox(cfg.enable_min_console)
+        add_row(form_layout, "是否最小化窗口", self.checkbox_enable_min_console)
+
         # -------------- 区域：其他 --------------
         self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
 
@@ -821,6 +833,9 @@ class CommonConfigUi(QFrame):
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
         cfg.config_ui_enable_high_dpi = self.checkbox_config_ui_enable_high_dpi.isChecked()
         cfg.disable_cmd_quick_edit = self.checkbox_disable_cmd_quick_edit.isChecked()
+        cfg.enable_change_cmd_buffer = self.checkbox_enable_change_cmd_buffer.isChecked()
+        cfg.enable_max_console = self.checkbox_enable_max_console.isChecked()
+        cfg.enable_min_console = self.checkbox_enable_min_console.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
         cfg.enable_super_fast_mode = self.checkbox_enable_super_fast_mode.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()

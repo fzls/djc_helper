@@ -552,6 +552,12 @@ class CommonConfig(ConfigInterface):
         self.config_ui_enable_high_dpi = False
         # 是否禁用cmd命令行的快速编辑模式，从而鼠标点选时不会暂停，避免误触而不知所措
         self.disable_cmd_quick_edit = True
+        # 是否修改命令行缓存大小，以避免运行日志被截断
+        self.enable_change_cmd_buffer = False
+        # 是否最大化窗口
+        self.enable_max_console = False
+        # 是否最小化窗口
+        self.enable_min_console = False
         # 是否启用多进程功能
         self.enable_multiprocessing = True
         # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。

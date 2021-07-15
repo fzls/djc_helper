@@ -6,6 +6,7 @@ from urllib.parse import quote_plus
 import requests
 
 from log import logger
+from util import try_except
 from version import now_version
 
 # note: 查看数据地址 https://analytics.google.com/analytics/web/#/
@@ -18,52 +19,48 @@ headers = {
 }
 
 
+@try_except(show_exception_info=False)
 def track_event(category, action, label=None, value=0):
-    try:
-        data = {
-            'v': '1',  # API Version.
-            'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-            'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-            'ua': 'djc_helper',
+    data = {
+        'v': '1',  # API Version.
+        'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
+        'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
+        'ua': 'djc_helper',
 
-            'an': "djc_helper",
-            'av': now_version,
+        'an': "djc_helper",
+        'av': now_version,
 
-            't': 'event',  # Event hit type.
-            'ec': category,  # Event category.
-            'ea': action,  # Event action.
-            'el': label,  # Event label.
-            'ev': value,  # Event value, must be an integer
-        }
+        't': 'event',  # Event hit type.
+        'ec': category,  # Event category.
+        'ea': action,  # Event action.
+        'el': label,  # Event label.
+        'ev': value,  # Event value, must be an integer
+    }
 
-        res = requests.post('https://www.google-analytics.com/collect', data=data, headers=headers, timeout=10)
-        logger.debug(f"request body = {res.request.body}")
-    except BaseException as exc:
-        logger.debug("track_event failed, category={}, action={}, label={}, value={} exc_info={}".format(category, action, label, value, exc))
+    res = requests.post('https://www.google-analytics.com/collect', data=data, headers=headers, timeout=10)
+    logger.debug(f"request body = {res.request.body}")
 
 
+@try_except(show_exception_info=False)
 def track_page(page):
-    try:
-        page = quote_plus(page)
-        data = {
-            'v': '1',  # API Version.
-            'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-            'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-            'ua': 'requests',
+    page = quote_plus(page)
+    data = {
+        'v': '1',  # API Version.
+        'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
+        'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
+        'ua': 'requests',
 
-            'an': "djc_helper",
-            'av': now_version,
+        'an': "djc_helper",
+        'av': now_version,
 
-            't': 'pageview',  # Event hit type.
-            'dh': "djc-helper.com",  # Document hostname.
-            'dp': page,  # Page.
-            'dt': "",  # Title.
-        }
+        't': 'pageview',  # Event hit type.
+        'dh': "djc-helper.com",  # Document hostname.
+        'dp': page,  # Page.
+        'dt': "",  # Title.
+    }
 
-        res = requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
-        logger.debug(f"request body = {res.request.body}")
-    except BaseException as exc:
-        logger.debug("track_page failed, page={} exc_info={}".format(page, exc))
+    res = requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
+    logger.debug(f"request body = {res.request.body}")
 
 
 def get_cid():

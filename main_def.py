@@ -627,7 +627,7 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
         # if has_buy_auto_updater_dlc(cfg.get_qq_accounts()):
         #     increase_counter(my_auto_updater_usage_counter_name)
         if user_buy_info.is_active():
-            increase_counter(my_active_monthly_pay_usage_counter_name)
+            increase_counter(my_active_monthly_pay_usage_counter_name, report_to_lean_cloud=True)
     else:
         logger.info("今日已运行过，不再尝试上报付费统计")
 

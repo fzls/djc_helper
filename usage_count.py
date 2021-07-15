@@ -6,8 +6,8 @@ import leancloud
 import leancloud.object_
 
 import util
-from log import logger
 from ga import track_event
+from log import logger
 
 LEAN_CLOUD_SERVER_ADDR = "https://d02na0oe.lc-cn-n1-shared.com"
 LEAN_CLOUD_APP_ID = "D02NA0OEBGXu0YqwpVQYUNl3-gzGzoHsz"
@@ -16,13 +16,17 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name):
-    threading.Thread(target=increase_counter_sync, args=(name,), daemon=True).start()
+def increase_counter(name: str, report_to_lean_cloud=False, report_to_google_analytics=True):
+    threading.Thread(target=increase_counter_sync, args=(name, report_to_lean_cloud, report_to_google_analytics), daemon=True).start()
 
 
-def increase_counter_sync(name):
-    increase_counter_sync_lean_cloud(name)
-    increase_counter_sync_google_analytics(name)
+def increase_counter_sync(name: str, report_to_lean_cloud: bool, report_to_google_analytics: bool):
+    if report_to_lean_cloud:
+        increase_counter_sync_lean_cloud(name)
+
+    if report_to_google_analytics:
+        increase_counter_sync_google_analytics(name)
+
     # UNDONE: 增加自建的计数器上报
 
 
@@ -103,7 +107,7 @@ def leancloud_api(api):
 
 
 def test():
-    increase_counter_sync("test_report")
+    increase_counter_sync("test_report", False, True)
 
 
 if __name__ == '__main__':

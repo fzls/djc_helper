@@ -72,7 +72,7 @@ def main():
 
         # 当前用户使用次数
         # increase_counter(this_version_my_usage_counter_name)
-        increase_counter(my_usage_counter_name)
+        increase_counter(my_usage_counter_name, report_to_lean_cloud=True)
     else:
         logger.info("今日已运行过，不再尝试上报使用统计")
 

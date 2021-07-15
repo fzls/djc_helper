@@ -8,7 +8,14 @@ import requests
 from log import logger
 from version import now_version
 
+# note: 查看数据地址 https://analytics.google.com/analytics/web/#/
+# note: 当发现上报失败时，可以将打印的post body复制到 https://ga-dev-tools.web.app/hit-builder/ 进行校验，看是否缺了参数，或者有参数不符合格式
+# note: 参数文档 https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
 GA_TRACKING_ID = "UA-179595405-1"
+
+headers = {
+    "user-agent": "djc_helper",
+}
 
 
 def track_event(category, action, label=None, value=0):
@@ -17,7 +24,9 @@ def track_event(category, action, label=None, value=0):
             'v': '1',  # API Version.
             'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
             'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-            'ua': 'requests',
+            'ua': 'djc_helper',
+
+            'an': "djc_helper",
             'av': now_version,
 
             't': 'event',  # Event hit type.
@@ -27,7 +36,8 @@ def track_event(category, action, label=None, value=0):
             'ev': value,  # Event value, must be an integer
         }
 
-        requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
+        res = requests.post('https://www.google-analytics.com/collect', data=data, headers=headers, timeout=10)
+        logger.debug(f"request body = {res.request.body}")
     except BaseException as exc:
         logger.debug("track_event failed, category={}, action={}, label={}, value={} exc_info={}".format(category, action, label, value, exc))
 
@@ -40,6 +50,8 @@ def track_page(page):
             'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
             'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
             'ua': 'requests',
+
+            'an': "djc_helper",
             'av': now_version,
 
             't': 'pageview',  # Event hit type.
@@ -48,7 +60,8 @@ def track_page(page):
             'dt': "",  # Title.
         }
 
-        requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
+        res = requests.post('https://www.google-analytics.com/collect', data=data, timeout=10)
+        logger.debug(f"request body = {res.request.body}")
     except BaseException as exc:
         logger.debug("track_page failed, page={} exc_info={}".format(page, exc))
 

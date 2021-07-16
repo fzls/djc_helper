@@ -10,5 +10,4 @@ psutil
 leancloud
 werkzeug<=1.0.1
 PyQt5
-# 用于ide提示
 PyQt5-stubs

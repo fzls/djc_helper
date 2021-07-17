@@ -5522,7 +5522,7 @@ class DjcHelper:
                 if roleinfo is None:
                     # 若未从外部传入roleinfo，则使用道聚城绑定的信息
                     roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-                checkInfo = self.get_dnf_roleinfo()
+                checkInfo = self.get_dnf_roleinfo(roleinfo)
 
                 def double_quote(strToQuote):
                     return quote_plus(quote_plus(strToQuote))
@@ -5553,8 +5553,9 @@ class DjcHelper:
     def disable_most_activities(self):
         return self.cfg.function_switches.disable_most_activities
 
-    def get_dnf_roleinfo(self):
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+    def get_dnf_roleinfo(self, roleinfo: RoleInfo = None):
+        if roleinfo is None:
+            roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
         res = self.get("查询角色信息", self.urls.get_game_role_list, game="dnf", area=roleinfo.serviceID, sAMSTargetAppId="", platid="", partition="", print_res=False, is_jsonp=True, need_unquote=False)
         return AmesvrQueryRole().auto_update_config(res)

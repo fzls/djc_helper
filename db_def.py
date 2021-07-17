@@ -87,7 +87,7 @@ class DBInterface(ConfigInterface):
         """
         逻辑说明
         假设key的md5为md5
-        本地缓存文件路径为.first_run/md5{0:3}/md5.json
+        本地缓存文件路径为.db/md5{0:3}/md5.json
         文件内容为val_type的实例的json序列化结果
         :return: 是否是首次运行
         """

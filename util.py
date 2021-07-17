@@ -875,7 +875,6 @@ def sync_configs(source_dir: str, target_dir: str):
 
         # 缓存文件所在目录
         ".db",
-        ".first_run",
 
         # 自动更新DLC
         "utils/auto_updater.exe"

@@ -148,5 +148,15 @@
     "open_url": "",
     "expire_at": "2021-07-10 05:59:07",
     "show_only_before_version": "11.2.0"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "马杰洛赠送",
+    "message": "第八期马杰洛活动累积赠送宝箱30次可以领取一个【原初职业白金徽章礼盒】，因为深渊礼盒不能绑定固定人，所以不能自动完成~\n    \n如果想要领这个的，请每天自行在网页上点赠送按钮（会发送qq消息到对应人）\n\n链接： https://dnf.qq.com/cp/a20210705care/index.html\n",
+    "send_at": "2021-07-17 20:49:18",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-07-24 20:49:18",
+    "show_only_before_version": "13.0.0"
   }
 ]

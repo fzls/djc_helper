@@ -157,14 +157,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "bug说明"
-    message = """请更新到11.1.0版本的朋友们手动下载一下最新版本本体。
+    title = "马杰洛赠送"
+    message = """第八期马杰洛活动累积赠送宝箱30次可以领取一个【原初职业白金徽章礼盒】，因为深渊礼盒不能绑定固定人，所以不能自动完成~
     
-原因：
-该版本dlc有个bug，会导致会无法生效，加上现在本体会附带把dlc给更新掉，所以一但更新到该版本后，dlc就会废掉-。-
+如果想要领这个的，请每天自行在网页上点赠送按钮（会发送qq消息到对应人）
 
-PS：
-目前支持自动备份配置，所以在运行过的电脑上直接下载新版本解压运行即可。
+链接： https://dnf.qq.com/cp/a20210705care/index.html
 """
     nm.add_notice(title, message,
                   send_at=format_now(),

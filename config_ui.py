@@ -1,3 +1,5 @@
+import os
+
 from log import logger, fileHandler, new_file_handler
 
 logger.name = "config_ui"
@@ -106,7 +108,7 @@ class GetBuyInfoThread(QThread):
         self.update_progress("3/3 开始尝试获取按月付费的信息")
         user_buy_info = get_user_buy_info(self.cfg.get_qq_accounts())
 
-        dlc_info = "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引.docx\n"
+        dlc_info = "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx\n"
         if has_buy_auto_update_dlc:
             dlc_info += "已购买自动更新DLC" \
                         "\n\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利" \
@@ -289,7 +291,7 @@ class ConfigUi(QFrame):
         top_layout.addWidget(QHLine())
 
     def open_pay_guide(self):
-        webbrowser.open(os.path.realpath("付费指引.docx"))
+        webbrowser.open(os.path.realpath("付费指引/付费指引.docx"))
         report_click_event("open_pay_guide")
 
     def open_usage_guide(self):
@@ -302,7 +304,7 @@ class ConfigUi(QFrame):
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        self.popen("支持一下.png")
+        self.popen(os.path.realpath("付费指引/支持一下.png"))
 
         report_click_event("support")
 
@@ -436,8 +438,8 @@ class ConfigUi(QFrame):
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 
-        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC的卡密", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引.docx")
-        btn_pay_by_month = create_pushbutton("购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引.docx")
+        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC的卡密", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引/付费指引.docx")
+        btn_pay_by_month = create_pushbutton("购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引/付费指引.docx")
 
         btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
         btn_pay_by_month.clicked.connect(self.pay_by_month)
@@ -602,7 +604,7 @@ class ConfigUi(QFrame):
 
             # 自动更新购买完成后提示去网盘下载
             if card.startswith("auto_update"):
-                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
+                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引/付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
 
             self.report_use_card_secret(card)
 
@@ -612,7 +614,7 @@ class ConfigUi(QFrame):
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:
-        server_not_online_message = "无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引.docx】"
+        server_not_online_message = "无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引/付费指引.docx】"
         try:
             res = requests.get(self.get_pay_server_addr(), timeout=3)
             if res.status_code == 200:

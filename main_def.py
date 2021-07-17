@@ -777,7 +777,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
                 break
 
         if is_first_run("卡密付费方案提示v2") or (not use_by_myself() and user_buy_info.total_buy_month > 0 and not has_use_card_secret and is_weekly_first_run("每周提示一次已付费用户续费可使用卡密自助操作")):
-            msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能（自动更新或按月付费）。\n如果想要付费或者续费可以选择这个方案~ 详情请看 【付费指引.docx】"
+            msg = "现已添加基于卡密的付费方案，可在一分钟内自助完成付费和激活对应功能（自动更新或按月付费）。\n如果想要付费或者续费可以选择这个方案~ 详情请看 【付费指引/付费指引.docx】"
             title = "新增卡密付费"
             async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION, follow_flag_file=False)
 
@@ -800,7 +800,7 @@ def show_buy_info_sync(ctx, force_message_box=False):
         "(重要的话说三遍)\n"
         "\n"
         "目前定价为5元每月（31天）\n"
-        "购买方式可查看目录中的【付费指引.docx】\n"
+        "购买方式可查看目录中的【付费指引/付费指引.docx】\n"
         "（若未购买，则这个消息每周会弹出一次）\n"
         "（若当前剩余付费时长在配置的提前提醒天数内，则这个消息每天会弹出一次）\n"
         "（ヾ(=･ω･=)o）\n"
@@ -808,8 +808,8 @@ def show_buy_info_sync(ctx, force_message_box=False):
     logger.warning(color("fg_bold_cyan") + message)
     if not use_by_myself() or force_message_box:
         win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
-    # os.popen("支持一下.png")
-    os.popen("付费指引.docx")
+    # os.popen("付费指引/支持一下.png")
+    os.popen("付费指引/付费指引.docx")
 
 
 def check_update(cfg):
@@ -824,7 +824,7 @@ def check_update(cfg):
 
     logger.warning(color("bold_cyan") + (
         "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），因此自动更新功能没有激活，需要根据检查更新结果手动进行更新操作~\n"
-        "如果已经购买过DLC，请先打开目录中的[付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可\n"
+        "如果已经购买过DLC，请先打开目录中的[付费指引/付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可\n"
         "-----------------\n"
         "以下为广告时间0-0\n"
         "花了两天多时间，给小助手加入了目前(指2021.1.6)唯一一个付费DLC功能：自动更新（支持增量更新和全量更新）\n"
@@ -834,7 +834,7 @@ def check_update(cfg):
         "由于这个功能并不影响实际领蚊子腿的功能，且花费了我不少时间来倒腾这东西，所以目前决定该功能需要付费获取，暂定价为10.24元。\n"
         "想要摆脱每次有新蚊子腿更新或bugfix时，都要手动下载并转移配置文件这种无聊操作的小伙伴如果觉得这个价格值的话，可以按下面的方式购买0-0\n"
         "价格：10.24元\n"
-        "购买方式和使用方式可查看目录中的【付费指引.docx】\n"
+        "购买方式和使用方式可查看目录中的【付费指引/付费指引.docx】\n"
         "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
     ))
 
@@ -966,7 +966,7 @@ def try_auto_update(cfg):
                     "1. 游戏账号和加群的QQ不一样，导致使用游戏账号登录时被判定为未购买。对策：请把实际使用的QQ号私聊发我，我看到后会加入名单~\n"
                     "2. 未购买，也没有从别人那边拿过来。对策：直接将utils目录下的auto_updater.exe删除即可\n"
                     "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
-                    "4. 已购买按月付费。对策：自动更新dlc与按月付费不是同一个东西，具体区别请阅读[付费指引.docx]进行了解。如果无需该功能，直接将utils目录下的auto_updater.exe删除即可\n"
+                    "4. 已购买按月付费。对策：自动更新dlc与按月付费不是同一个东西，具体区别请阅读[付费指引/付费指引.docx]进行了解。如果无需该功能，直接将utils目录下的auto_updater.exe删除即可\n"
                 )
                 logger.warning(color("bold_yellow") + msg)
                 win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
@@ -1012,7 +1012,7 @@ def try_auto_update(cfg):
         # 保底，如果前面的流程都失败了，提示用户自行下载
         if not exists_auto_updater_dlc():
             logger.warning(color("bold_cyan") + "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
-            logger.warning(color("bold_green") + "如果已经购买过DLC，请先打开目录中的[付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可")
+            logger.warning(color("bold_green") + "如果已经购买过DLC，请先打开目录中的[付费指引/付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可")
             return
 
         logger.info("开始尝试调用自动更新工具进行自动更新~ 当前处于测试模式，很有可能有很多意料之外的情况，如果真的出现很多问题，可以自行关闭该功能的配置")
@@ -1152,7 +1152,7 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
         }))
 
         if show_dlc_info:
-            logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引.docx")
+            logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx")
             logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n" +
                         color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
                                               f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
@@ -1391,7 +1391,7 @@ def _test_main():
     # maximize_console()
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
-    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开支持一下.png，扫码打赏哦~")
+    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

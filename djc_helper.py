@@ -4593,7 +4593,7 @@ class DjcHelper:
         if self.common_cfg.enable_super_fast_mode:
             wait_seconds = 60
             logger.warning(f"当前已开启超快速模式，因为wegame与其他活动，如集合站，共享绑定关系，因此超快速模式并行运行单个账号的不同活动时可能会搅乱该账号其他活动的领取角色，导致出现提示手动绑定的异常状况，因此这里强行等待{wait_seconds}秒，确保其他活动已经运行完毕")
-            time.sleep(wait_seconds)
+            count_down(f"等待{wait_seconds}秒，确保与wegame女鬼剑活动共享绑定角色的活动已运行完", wait_seconds, 6)
 
         djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动

@@ -20,10 +20,10 @@ def build(disable_douban=False):
     logger.info("将使用.venv环境进行编译")
 
     build_configs = [
-        ("main.py", "DNF蚊子腿小助手.exe", "icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
+        ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
-        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "icons/ark_lottery_special_version.ico", ".", ["PyQt5"], []),
-        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "icons/config_ui.ico", ".", [], ["--noconsole"]),
+        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "utils/icons/ark_lottery_special_version.ico", ".", ["PyQt5"], []),
+        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "utils/icons/config_ui.ico", ".", [], ["--noconsole"]),
     ]
 
     for idx, config in enumerate(build_configs):

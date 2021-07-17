@@ -155,7 +155,7 @@ class ConfigUi(QFrame):
         self.setWindowTitle(title)
 
         self.setStyleSheet(f"font-family: Microsoft YaHei")
-        self.setWindowIcon(QIcon("icons/config_ui.ico"))
+        self.setWindowIcon(QIcon("utils/icons/config_ui.ico"))
 
         self.setWhatsThis("简易配置工具")
 

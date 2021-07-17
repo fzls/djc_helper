@@ -1971,7 +1971,7 @@ class DjcHelper:
         self.dnf_ozma_op("每日登录游戏送开箱积分", "770028")
         self.dnf_ozma_op("每日登录心悦APP送开箱积分", "770029")
         self.dnf_ozma_op("每日网吧登录送开箱积分", "770030")
-        endTime = "20210721"
+
         info = query_info()
         logger.info(color("bold_cyan") + f"当前开箱积分为{info.box_score}。PS：最高级宝箱需要60分~")
         # 不确定是否跟勇者征集令一样宝箱互斥，保底期间，最后一天再全领，在这之前则是先只尝试领取第五个
@@ -1980,12 +1980,19 @@ class DjcHelper:
         # 黄金宝箱 30-44分
         # 钻石宝箱 45-59分
         # 泰拉宝箱 60分
-        if info.box_score >= 60:
-            self.dnf_ozma_op(f"开启宝箱-level=5", "770031", level=5)
+        act_info = self.dnf_ozma_op("获取活动信息", "", get_ams_act_info_only=True)
+        endTime = get_today(parse_time(act_info.dtEndTime))
+
+        need_take = info.box_score >= 60
         if get_today() == endTime:
+            need_take = True
             logger.info("已到活动最后一天，尝试从高到低领取每个宝箱")
+
+        if need_take:
             for level in range(5, 0, -1):
                 self.dnf_ozma_op(f"开启宝箱-level={level}", "770031", level=level)
+                if level != 1:
+                    time.sleep(5)
 
         self.dnf_ozma_op("登录心悦APP送礼包", "770032")
 
@@ -5403,6 +5410,7 @@ class DjcHelper:
             "itemIndex",
             "sRole",
             "loginNum",
+            "level",
         ]}
 
         # 整合得到所有默认值
@@ -5797,10 +5805,11 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
+        djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()

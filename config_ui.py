@@ -283,7 +283,7 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        self.btn_run_djc_helper = create_pushbutton("运行小助手并退出配置工具", "cyan")
+        self.btn_run_djc_helper = create_pushbutton("保存配置，然后运行小助手并退出配置工具", "cyan")
         self.btn_run_djc_helper.clicked.connect(self.run_djc_helper)
         top_layout.addWidget(self.btn_run_djc_helper)
         top_layout.addWidget(QHLine())
@@ -320,9 +320,9 @@ class ConfigUi(QFrame):
 
     def on_click_auto_update(self, checked=False):
         if checked:
-            self.btn_run_djc_helper.setText("运行小助手并退出配置工具")
+            self.btn_run_djc_helper.setText("保存配置，然后运行小助手并退出配置工具")
         else:
-            self.btn_run_djc_helper.setText("运行小助手")
+            self.btn_run_djc_helper.setText("保存配置，然后运行小助手")
 
     def run_djc_helper(self, checked=False):
         logger.info("运行小助手前自动保存配置")

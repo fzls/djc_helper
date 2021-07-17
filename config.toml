@@ -315,7 +315,7 @@ get_dnf_yellow_diamond = true
 # 是否领取 管家蚊子腿 活动
 get_guanjia = true
 
-# 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt
+# 心悦相关操作信息
 # note: 周期礼包目前在代码中根据心悦级别和白名单信息来自动判定该领取哪一类，无需手动操作，若发现有问题，也可以手动取消注释下列内容来手动启用对应礼包
 ## ++++++++++周期礼包++++++++++++
 #[[account_configs.xinyue_operations]]
@@ -596,7 +596,7 @@ take_index = 2
 guanhuai_dnf_server_id = ""  # 区服id可查阅reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
 guanhuai_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
 
-# wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
+# wegame国庆活动兑换道具
 #[[account_configs.wegame_guoqing_exchange_items]]
 #iFlowId = "703514"
 #sGoodsName = "强化器-4分"

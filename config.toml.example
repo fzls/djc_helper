@@ -387,7 +387,7 @@ get_dnf_yellow_diamond = true
 # 是否领取 管家蚊子腿 活动
 get_guanjia = true
 
-# 心悦相关操作信息，其他心悦相关信息可查阅reference_data/心悦活动备注.txt
+# 心悦相关操作信息
 # note: 周期礼包目前在代码中根据心悦级别和白名单信息来自动判定该领取哪一类，无需手动操作，若发现有问题，也可以手动取消注释下列内容来手动启用对应礼包
 ## ++++++++++周期礼包++++++++++++
 #[[account_configs.xinyue_operations]]

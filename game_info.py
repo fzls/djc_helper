@@ -22,7 +22,7 @@ def lazy_load():
 
     global name_2_game_info_map, code_2_game_info_map, name_2_mobile_game_info_map
     try:
-        with open("reference_data/djc_biz_list.json", "r", encoding="utf-8") as f:
+        with open("utils/reference_data/djc_biz_list.json", "r", encoding="utf-8") as f:
             raw_data = json.load(f)
             for game_data in raw_data["data"]:
                 gameInfo = GameInfo(game_data)
@@ -51,7 +51,7 @@ def get_game_info(name):
     lazy_load()
     if name not in name_2_game_info_map:
         win32api.MessageBox(0, f"未找到游戏【{name}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字", "游戏名不正确", win32con.MB_ICONWARNING)
-        subprocess.call(["utils/npp_portable/notepad++.exe", "reference_data/djc_biz_list.json"])
+        subprocess.call(["utils/npp_portable/notepad++.exe", "utils/reference_data/djc_biz_list.json"])
         exit(-1)
 
     return name_2_game_info_map[name]

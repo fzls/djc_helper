@@ -14,7 +14,7 @@ from qq_login import QQLogin, LoginResult, GithubActionLoginException
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, not_know_start_time, get_ams_act, get_act_url
+from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, get_ams_act, get_act_url
 
 
 # DNF蚊子腿小助手
@@ -689,9 +689,9 @@ class DjcHelper:
                     lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid:10s} \t名字 = {formatted_role_name} \t职业 = {formatted_force_name} \t等级 = {role.level:3d}")
             else:
                 lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
-                lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
-                lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-                subprocess.Popen("utils/npp_portable/notepad++.exe reference_data/dnf_server_list.js")
+                lines.append("\t区服id可查看稍后打开的utils/reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
+                lines.append("\t区服(partition)的id可运行程序在自动打开的utils/reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
+                subprocess.Popen("utils/npp_portable/notepad++.exe utils/reference_data/dnf_server_list.js")
             lines.append("+" * 40)
             logger.info("\n".join(lines))
 
@@ -720,9 +720,9 @@ class DjcHelper:
         else:
             lines.append(f"\t未查到{cfg.game_name} 平台={cfg.platid} 渠道={cfg.area} 区服={cfg.partition}上的角色信息，请确认这些信息已填写正确或者在对应区服已创建角色")
             lines.append(f"\t上述id的列表可查阅稍后自动打开的server_list_{game_info.bizName}.js，详情参见config.toml的对应注释")
-            lines.append(f"\t渠道(area)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v")
-            lines.append(f"\t平台(platid)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v")
-            lines.append(f"\t区服(partition)的id可运行程序在自动打开的reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_DATA中对应区服的v")
+            lines.append(f"\t渠道(area)的id可运行程序在自动打开的utils/reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_CHANNEL_DATA中对应渠道的v")
+            lines.append(f"\t平台(platid)的id可运行程序在自动打开的utils/reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_SYSTEM_DATA中对应平台的v")
+            lines.append(f"\t区服(partition)的id可运行程序在自动打开的utils/reference_data/server_list_{game_info.bizName}.js或手动打开这个文件， 查看 STD_DATA中对应区服的v")
             self.open_mobile_game_server_list()
         lines.append("+" * 40)
         logger.info("\n".join(lines))
@@ -730,7 +730,7 @@ class DjcHelper:
     def open_mobile_game_server_list(self):
         game_info = self.get_mobile_game_info()
         res = requests.get(self.urls.query_game_server_list.format(bizcode=game_info.bizCode), timeout=10)
-        server_list_file = f"reference_data/server_list_{game_info.bizName}.js"
+        server_list_file = f"utils/reference_data/server_list_{game_info.bizName}.js"
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
         subprocess.Popen(f"utils/npp_portable/notepad++.exe {server_list_file}")
@@ -2666,7 +2666,7 @@ class DjcHelper:
                 all_exchanged = True
                 for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
                     if ei.sLbcode not in exchangeGiftMap:
-                        logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考reference_data/dnf助手编年史活动_可兑换奖励列表.json")
+                        logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json")
                         continue
 
                     gift = exchangeGiftMap[ei.sLbcode]

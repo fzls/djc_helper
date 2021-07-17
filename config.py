@@ -398,7 +398,7 @@ class AccountConfig(ConfigInterface):
     def on_config_update(self, raw_config: dict):
         self.sDeviceID = self.getSDeviceID()
         self.aes_key = "84e6c6dc0f9p4a56"
-        self.rsa_public_key_file = "public_key.der"
+        self.rsa_public_key_file = "utils/reference_data/public_key.der"
 
         self.updateUinSkey(self.account_info.uin, self.account_info.skey)
 

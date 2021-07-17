@@ -4083,29 +4083,10 @@ class DjcHelper:
             self.majieluo_op("领取见面礼", "780398")
 
         if self.cfg.ark_lottery.lucky_dnf_role_id != "":
-            logger.warning("当前配置了集卡的幸运角色，先尝试切换为对应角色来进行领取见面礼")
-            # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
-            take_lottery_count_role_info = self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
-
-            server_id = self.cfg.ark_lottery.lucky_dnf_server_id
-            role_id = self.cfg.ark_lottery.lucky_dnf_role_id
-
-            role_info = self.query_dnf_role_info_by_serverid_and_roleid(server_id, role_id)
-            area_info = dnf_server_id_to_area_info(server_id)
-
-            take_lottery_count_role_info.roleCode = role_info.roleid
-            take_lottery_count_role_info.roleName = role_info.rolename
-            take_lottery_count_role_info.serviceID = self.cfg.ark_lottery.lucky_dnf_server_id
-            take_lottery_count_role_info.serviceName = dnf_server_id_to_name(self.cfg.ark_lottery.lucky_dnf_server_id)
-            take_lottery_count_role_info.areaID = area_info.v
-            take_lottery_count_role_info.areaName = area_info.t
-
-            self.check_majieluo(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
-
-            take_gift()
-
-            logger.info("操作完毕，切换为原有角色")
-            self.check_majieluo()
+            change_bind_role = TemporaryChangeBindRoleInfo()
+            change_bind_role.serviceID = self.cfg.ark_lottery.lucky_dnf_server_id
+            change_bind_role.roleCode = self.cfg.ark_lottery.lucky_dnf_role_id
+            self.temporary_change_bind_and_do("领取马杰洛见面礼", [change_bind_role], self.check_majieluo, take_gift)
 
         # 保底尝试普通角色领取
         take_gift()
@@ -5521,6 +5502,31 @@ class DjcHelper:
 
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
+
+    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func):
+        for change_bind_role_info in change_bind_role_infos:
+            server_id, role_id = change_bind_role_info.serviceID, change_bind_role_info.roleCode
+
+            role_info = self.query_dnf_role_info_by_serverid_and_roleid(server_id, role_id)
+            server_name = dnf_server_id_to_name(server_id)
+            area_info = dnf_server_id_to_area_info(server_id)
+
+            # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
+            take_lottery_count_role_info = self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
+            take_lottery_count_role_info.roleCode = role_id
+            take_lottery_count_role_info.roleName = role_info.rolename
+            take_lottery_count_role_info.serviceID = server_id
+            take_lottery_count_role_info.serviceName = server_name
+            take_lottery_count_role_info.areaID = area_info.v
+            take_lottery_count_role_info.areaName = area_info.t
+
+            logger.warning(f"尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
+            check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
+
+            callback_func()
+
+        logger.info("操作完毕，切换为原有角色")
+        check_func()
 
     def check_bind_account(self, activity_name, activity_url, activity_op_func, query_bind_flowid, commit_bind_flowid, try_auto_bind=True, roleinfo: RoleInfo = None, roleinfo_source="道聚城所绑定的角色"):
         while True:

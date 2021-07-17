@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from typing import List, Tuple, Type
 
-from data_struct import ConfigInterface
+from data_struct import ConfigInterface, to_raw_type
 from util import parse_time, run_from_src, format_time, get_today
 
 
@@ -69,6 +71,9 @@ class RoleInfo(ConfigInterface):
         # self.systemID = "1"
         # self.systemKey = "android"
         # self.type = "1"
+
+    def clone(self) -> RoleInfo:
+        return RoleInfo().auto_update_config(to_raw_type(self))
 
 
 class GoodsInfo(ConfigInterface):

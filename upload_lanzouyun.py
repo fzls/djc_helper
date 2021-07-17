@@ -365,7 +365,7 @@ if __name__ == '__main__':
             cookie = json.load(fp)
         uploader.login(cookie)
         if uploader.login_ok:
-            # file = r"D:\_codes\Python\djc_helper_public\bandizip_portable\bz.exe"
+            # file = r"D:\_codes\Python\djc_helper_public\utils\bandizip_portable\bz.exe"
             # uploader.upload_to_lanzouyun(file, uploader.folder_djc_helper)
             # uploader.upload_to_lanzouyun(file, uploader.folder_dnf_calc)
             pass

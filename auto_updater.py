@@ -17,7 +17,7 @@ from update import need_update
 from util import kill_process, show_unexpected_exception_message, start_djc_helper, change_title
 from compress import decompress_dir_with_bandizip
 
-bandizip_executable_path = "./bandizip_portable/bz.exe"
+bandizip_executable_path = "./utils/bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
 
 # note: 作为cwd的默认值，用于检测是否直接双击自动更新工具

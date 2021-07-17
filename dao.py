@@ -76,6 +76,12 @@ class RoleInfo(ConfigInterface):
         return RoleInfo().auto_update_config(to_raw_type(self))
 
 
+class TemporaryChangeBindRoleInfo(ConfigInterface):
+    def __init__(self):
+        self.roleCode = "71672841"
+        self.serviceID = "11"
+
+
 class GoodsInfo(ConfigInterface):
     def __init__(self):
         self.type = "3"

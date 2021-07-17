@@ -19,4 +19,4 @@ echo 请确保已阅读上述内容，然后点击任意键，即可打开配置
 
 PAUSE
 
-start npp_portable/notepad++.exe config.toml
+start utils/npp_portable/notepad++.exe config.toml

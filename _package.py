@@ -29,7 +29,6 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         f"chromedriver_{QQLogin.chrome_major_version}.exe",
         "public_key.der",
         "使用教程",
-        "npp_portable",
         "utils",
     ])
     files_to_copy = sorted(files_to_copy)

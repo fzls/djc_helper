@@ -93,7 +93,7 @@ class DjcHelper:
         localCfgFile = "./config.toml.local"
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
-        subprocess.Popen(f"npp_portable/notepad++.exe -n53 {cfgFile}")
+        subprocess.Popen(f"utils/npp_portable/notepad++.exe -n53 {cfgFile}")
         # 复制js代码到剪贴板，方便复制
         pyperclip.copy(js_code)
         # 打开活动界面
@@ -691,7 +691,7 @@ class DjcHelper:
                 lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
                 lines.append("\t区服id可查看稍后打开的reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
                 lines.append("\t区服(partition)的id可运行程序在自动打开的reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-                subprocess.Popen("npp_portable/notepad++.exe reference_data/dnf_server_list.js")
+                subprocess.Popen("utils/npp_portable/notepad++.exe reference_data/dnf_server_list.js")
             lines.append("+" * 40)
             logger.info("\n".join(lines))
 
@@ -733,7 +733,7 @@ class DjcHelper:
         server_list_file = f"reference_data/server_list_{game_info.bizName}.js"
         with open(server_list_file, 'w', encoding='utf-8') as f:
             f.write(res.text)
-        subprocess.Popen(f"npp_portable/notepad++.exe {server_list_file}")
+        subprocess.Popen(f"utils/npp_portable/notepad++.exe {server_list_file}")
 
     def query_dnf_gifts(self):
         self.get("查询可兑换道具列表", self.urls.show_exchange_item_list)

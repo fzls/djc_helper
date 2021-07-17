@@ -38,6 +38,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
     shutil.rmtree(dir_current_release, ignore_errors=True)
     os.mkdir(dir_current_release)
+
     # 复制文件与目录过去
     logger.info(f"将以下内容从{dir_src}复制到{dir_current_release}")
     for filename in files_to_copy:
@@ -50,9 +51,18 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             logger.info(f"拷贝文件 {filename}")
             shutil.copyfile(source, destination)
 
-    logger.info("复制auto_updater.exe为auto_updater_latest.exe，供小助手更新dlc用")
-    dlc_release_dir = os.path.join(dir_current_release, "utils")
-    shutil.copyfile(os.path.join(dlc_release_dir, "auto_updater.exe"), os.path.join(dlc_release_dir, "auto_updater_latest.exe"))
+    logger.info("移动部分文件的位置和名称")
+    files_to_move = [
+        ("utils/auto_updater.exe", "utils/auto_updater_latest.exe"),
+        ("CHANGELOG.MD", "相关信息/CHANGELOG.MD"),
+        ("README.MD", "相关信息/README.MD"),
+    ]
+    for src_file, dst_file in files_to_move:
+        src_file = os.path.join(dir_current_release, src_file)
+        dst_file = os.path.join(dir_current_release, dst_file)
+
+        logger.info(f"移动{src_file}到{dst_file}")
+        shutil.move(src_file, dst_file)
 
     logger.info("清除一些无需发布的内容")
     dir_to_filenames_need_remove = {
@@ -60,7 +70,6 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             "requirements.txt",
         ],
         "utils": [
-            "auto_updater.exe",
             "logs", ".db", ".cached", ".first_run", ".log.filename",
             "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
             f"chrome_portable_{QQLogin.chrome_major_version}.7z",

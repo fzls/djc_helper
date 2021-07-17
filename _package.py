@@ -35,9 +35,10 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "DNF蚊子腿小助手.exe",
         "DNF蚊子腿小助手配置工具.exe",
         "DNF蚊子腿小助手配置文件.bat",
-        "清除登录信息_误登录其他账号后请点击这个.bat",
-        "public_key.der",
+
         "使用教程",
+        "付费指引",
+        "相关信息",
         "utils",
     ])
     # 按顺序复制

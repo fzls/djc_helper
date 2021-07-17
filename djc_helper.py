@@ -358,7 +358,7 @@ class DjcHelper:
                 msg = f"账号{user_buy_info.qq}的付费内容已到期，到期时间点为{user_buy_info.expire_at}。"
             else:
                 msg = f"账号{user_buy_info.qq}未购买付费内容。"
-            msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可查看目录中的【付费指引.docx】，目前定价为5元每月。"
+            msg += "\n因此2021-02-06之后添加的短期新活动将被跳过，如果想要启用该部分内容，可查看目录中的【付费指引/付费指引.docx】，目前定价为5元每月。"
             msg += "\n2021-02-06之前添加的所有活动不受影响，仍可继续使用。"
             msg += "\n具体受影响的活动内容如下"
 
@@ -3723,7 +3723,7 @@ class DjcHelper:
 
         show_financing_info()
 
-        logger.warning(color("fg_bold_yellow") + f"这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引.docx")
+        logger.warning(color("fg_bold_yellow") + f"这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引/付费指引.docx")
 
     @try_except(return_val_on_except=0)
     def query_gpoints(self):

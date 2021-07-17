@@ -98,7 +98,7 @@ if uploader.login_ok:
             (path_in_src("utils/auto_updater.exe"), ""),
             (path_in_src("使用教程/使用文档.docx"), ""),
             (path_in_src("使用教程/视频教程.txt"), ""),
-            (path_in_src("付费指引.docx"), ""),
+            (path_in_src("付费指引/付费指引.docx"), ""),
             (path_in_src("utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt"), ""),
             (realpath(patch_file_name), uploader.history_patches_prefix),
         ]),

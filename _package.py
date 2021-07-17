@@ -34,7 +34,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         files_to_copy.append(file)
     # 额外补充一些文件和目录
     files_to_copy.extend([
-        "config.toml.example",
+        "config.example.toml",
         "DNF蚊子腿小助手.exe",
         "DNF蚊子腿小助手配置工具.exe",
         "DNF蚊子腿小助手配置文件.bat",

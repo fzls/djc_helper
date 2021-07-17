@@ -57,7 +57,7 @@ def show_tip_on_first_run_document():
     如果使用过程中有任何疑惑，或者相关功能想要调整，都请先好好看看以下现有资源后再来提问~（如不想完整查看对应文档，请善用搜索功能，查找可能的关键词）
         1. 使用教程/使用文档.docx
         2. 使用教程/道聚城自动化助手使用视频教程.url
-        3. config.toml以及config.toml.example中各个配置项说明
+        3. config.toml以及config.example.toml中各个配置项说明
         4. DNF蚊子腿小助手配置工具.exe
             """
     loginfo = "首次运行弹出提示查看教程"

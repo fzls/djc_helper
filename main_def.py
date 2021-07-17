@@ -865,7 +865,7 @@ def print_update_message_on_first_run_new_version():
                 f"{ui.update_message}"
                 "\n"
                 "若未购买自动更新dlc，可无视下一句\n"
-                "PS：自动更新会更新示例配置config.toml.example，但不会更新config.toml。不过由于基本所有活动的默认配置都是开启的，所以除非你想要关闭特定活动，或者调整活动配置，其实没必要修改config.toml\n"
+                "PS：自动更新会更新示例配置config.example.toml，但不会更新config.toml。不过由于基本所有活动的默认配置都是开启的，所以除非你想要关闭特定活动，或者调整活动配置，其实没必要修改config.toml\n"
             )
             logger.warning(color("bold_yellow") + message)
         except Exception as e:

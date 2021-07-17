@@ -10,8 +10,4 @@ db_top_dir = ".db"
 if not os.path.isdir(db_top_dir):
     os.mkdir(db_top_dir)
 
-first_run_dir = ".first_run"
-if not os.path.isdir(first_run_dir):
-    os.mkdir(first_run_dir)
-
 guanjia_skey_version = 2

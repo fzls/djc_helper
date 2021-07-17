@@ -1967,7 +1967,7 @@ class DjcHelper:
         info = query_info()
         logger.info(f"当前有{info.lottery_count}张抽奖券")
         for idx in range(info.lottery_count):
-            self.dnf_ozma_op(f"第{idx + 1}次抽奖", "770027")
+            self.dnf_ozma_op(f"第{idx + 1}/{info.lottery_count}次抽奖", "770027")
             if idx != info.lottery_count:
                 time.sleep(5)
 

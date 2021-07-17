@@ -12,13 +12,24 @@ from version import now_version
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
     old_cwd = os.getcwd()
 
+    # 确保发布根目录存在
+    if not os.path.isdir(dir_all_release):
+        os.mkdir(dir_all_release)
+    # 并清空当前的发布版本目录
+    dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
+    shutil.rmtree(dir_current_release, ignore_errors=True)
+    os.mkdir(dir_current_release)
+
+    logger.info(f"将部分内容从{dir_src}复制到{dir_current_release}")
     # 需要复制的文件与目录
     files_to_copy = []
+    # 基于正则确定初始复制范围
     reg_wantted_file = r'.*\.(toml|md|txt|png|jpg|docx|url)$'
     for file in os.listdir('.'):
         if not re.search(reg_wantted_file, file, flags=re.IGNORECASE):
             continue
         files_to_copy.append(file)
+    # 额外补充一些文件和目录
     files_to_copy.extend([
         "config.toml.example",
         "DNF蚊子腿小助手.exe",
@@ -29,18 +40,9 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "使用教程",
         "utils",
     ])
+    # 按顺序复制
     files_to_copy = sorted(files_to_copy)
-
-    # 确保发布根目录存在
-    if not os.path.isdir(dir_all_release):
-        os.mkdir(dir_all_release)
-    # 并清空当前的发布版本目录
-    dir_current_release = os.path.realpath(os.path.join(dir_all_release, release_dir_name))
-    shutil.rmtree(dir_current_release, ignore_errors=True)
-    os.mkdir(dir_current_release)
-
     # 复制文件与目录过去
-    logger.info(f"将以下内容从{dir_src}复制到{dir_current_release}")
     for filename in files_to_copy:
         source = os.path.join(dir_src, filename)
         destination = os.path.join(dir_current_release, filename)

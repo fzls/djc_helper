@@ -4078,8 +4078,37 @@ class DjcHelper:
         self.check_majieluo()
 
         # 马杰洛的见面礼
-        # self.majieluo_op("验证是否幸运用户", "768204")
-        self.majieluo_op("领取见面礼", "780398")
+        def take_gift():
+            # self.majieluo_op("验证是否幸运用户", "768204")
+            self.majieluo_op("领取见面礼", "780398")
+
+        if self.cfg.ark_lottery.lucky_dnf_role_id != "":
+            logger.warning("当前配置了集卡的幸运角色，先尝试切换为对应角色来进行领取见面礼")
+            # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
+            take_lottery_count_role_info = self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
+
+            server_id = self.cfg.ark_lottery.lucky_dnf_server_id
+            role_id = self.cfg.ark_lottery.lucky_dnf_role_id
+
+            role_info = self.query_dnf_role_info_by_serverid_and_roleid(server_id, role_id)
+            area_info = dnf_server_id_to_area_info(server_id)
+
+            take_lottery_count_role_info.roleCode = role_info.roleid
+            take_lottery_count_role_info.roleName = role_info.rolename
+            take_lottery_count_role_info.serviceID = self.cfg.ark_lottery.lucky_dnf_server_id
+            take_lottery_count_role_info.serviceName = dnf_server_id_to_name(self.cfg.ark_lottery.lucky_dnf_server_id)
+            take_lottery_count_role_info.areaID = area_info.v
+            take_lottery_count_role_info.areaName = area_info.t
+
+            self.check_majieluo(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
+
+            take_gift()
+
+            logger.info("操作完毕，切换为原有角色")
+            self.check_majieluo()
+
+        # 保底尝试普通角色领取
+        take_gift()
 
         # 马杰洛的特殊任务
         self.majieluo_op("登录游戏 石头*5", "780400")
@@ -4124,9 +4153,10 @@ class DjcHelper:
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
-    def check_majieluo(self):
+    def check_majieluo(self, **extra_params):
         self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="780397", commit_bind_flowid="780396")
+                                activity_op_func=self.majieluo_op, query_bind_flowid="780397", commit_bind_flowid="780396",
+                                **extra_params)
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo

@@ -1912,35 +1912,21 @@ class DjcHelper:
                 return
 
             ignore_rolename_list = self.cfg.ozma_ignored_rolename_list
+            valid_roles = query_level_100_roles(ignore_rolename_list)
 
             logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项")
-            djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            self.temporary_change_bind_and_do(f"领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op)
 
-            # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
-            take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
-            valid_roles = query_level_100_roles(ignore_rolename_list)
-            for idx, role in enumerate(valid_roles):
-                # 临时更新绑定角色为该角色
-                logger.info("")
-                logger.info(color("bold_cyan") + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 {role.rolename} 来领取本周通关奥兹玛可获取的抽奖次数")
+        def take_lottery_count_op():
+            # 领奖
+            idx = 0
+            while True:
+                idx += 1
+                res = self.dnf_ozma_op(f"当前临时切换角色 本周第{idx}次 通关奥兹玛赠送抽奖券", "770026")
+                if int(res["ret"]) != 0:
+                    break
 
-                take_lottery_count_role_info.roleCode = role.roleid
-                take_lottery_count_role_info.roleName = role.rolename
-                self.check_dnf_ozma(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
-
-                # 领奖
-                idx = 0
-                while True:
-                    idx += 1
-                    res = self.dnf_ozma_op(f"领取 {role.rolename} 本周第{idx}次 通关奥兹玛赠送抽奖券", "770026")
-                    if int(res["ret"]) != 0:
-                        break
-
-            # 切换回原有绑定角色
-            logger.info(color("bold_green") + "所有符合条件的角色尝试领取抽奖次数完毕，切换为原有绑定角色")
-            self.check_dnf_ozma()
-
-        def query_level_100_roles(ignore_rolename_list: List[str]) -> List[DnfRoleInfo]:
+        def query_level_100_roles(ignore_rolename_list: List[str]) -> List[TemporaryChangeBindRoleInfo]:
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
             valid_roles = []
@@ -1955,7 +1941,10 @@ class DjcHelper:
                     # 设置为忽略的也跳过
                     continue
 
-                valid_roles.append(role)
+                change_bind_role = TemporaryChangeBindRoleInfo()
+                change_bind_role.serviceID = djc_roleinfo.serviceID
+                change_bind_role.roleCode = role.roleid
+                valid_roles.append(change_bind_role)
 
             return valid_roles
 

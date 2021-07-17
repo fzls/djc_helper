@@ -22,6 +22,7 @@ from djc_helper import DjcHelper
 from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
 from usage_count import increase_counter
+from ga import GA_REPORT_TYPE_PAGE_VIEW
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"
@@ -1681,6 +1682,8 @@ def report_click_event(event: str):
 
 
 def main():
+    increase_counter(name="config_ui", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
+
     def catch_exceptions(t, val, tb):
         result = StringIO()
         v3 = print_tb(tb, file=result)

@@ -1,5 +1,3 @@
-import os
-
 from log import logger, fileHandler, new_file_handler
 
 logger.name = "config_ui"
@@ -19,7 +17,7 @@ from config import *
 from setting import *
 from game_info import get_name_2_mobile_game_info_map
 from update import *
-from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info
+from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info, disable_flag_file
 from djc_helper import DjcHelper
 from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
@@ -835,6 +833,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
         add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
+        self.checkbox_disable_sync_configs = create_checkbox(os.path.exists(disable_flag_file))
+        add_row(form_layout, "是否禁用在本机自动备份还原配置功能", self.checkbox_disable_sync_configs)
+
         self.spinbox_notify_pay_expired_in_days = create_spin_box(cfg.notify_pay_expired_in_days, minimum=0)
         add_row(form_layout, "提前多少天提示付费过期", self.spinbox_notify_pay_expired_in_days)
 
@@ -891,6 +892,18 @@ class CommonConfigUi(QFrame):
         self.retry.update_config(cfg.retry)
         for idx, team in enumerate(self.fixed_teams):
             team.update_config(cfg.fixed_teams[idx])
+
+        # 特殊处理基于标记文件的开关
+        if self.checkbox_disable_sync_configs.isChecked():
+            if not os.path.exists(disable_flag_file):
+                with open(disable_flag_file, 'w', encoding='utf-8') as f:
+                    f.write('ok')
+        else:
+            if os.path.exists(disable_flag_file):
+                if os.path.isfile(disable_flag_file):
+                    os.remove(disable_flag_file)
+                else:
+                    shutil.rmtree(disable_flag_file, ignore_errors=True)
 
 
 class LoginConfigUi(QWidget):

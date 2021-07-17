@@ -25,7 +25,6 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "DNF蚊子腿小助手配置工具.exe",
         "双击打开配置文件.bat",
         "清除登录信息_误登录其他账号后请点击这个.bat",
-        f"chromedriver_{QQLogin.chrome_major_version}.exe",
         "public_key.der",
         "使用教程",
         "utils",
@@ -64,6 +63,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             "auto_updater.exe",
             "logs", ".db", ".cached", ".first_run", ".log.filename",
             "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
+            f"chrome_portable_{QQLogin.chrome_major_version}.7z",
+            f"chrome_portable_{QQLogin.chrome_major_version}",
         ],
     }
     for dir_path, filenames in dir_to_filenames_need_remove.items():

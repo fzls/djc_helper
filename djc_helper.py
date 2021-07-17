@@ -393,7 +393,6 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
-            ("DNF马杰洛的规划", self.majieluo),
             ("colg每日签到", self.colg_signin),
             ("KOL", self.dnf_kol),
             ("超级会员", self.dnf_super_vip),
@@ -402,6 +401,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("DNF心悦", self.dnf_xinyue),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4060,6 +4060,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
+        # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
 
@@ -4070,17 +4071,19 @@ class DjcHelper:
         self.check_majieluo()
 
         # 马杰洛的见面礼
-        self.majieluo_op("验证是否幸运用户", "768204")
-        self.majieluo_op("领取见面礼", "768190")
+        # self.majieluo_op("验证是否幸运用户", "768204")
+        self.majieluo_op("领取见面礼", "780398")
 
         # 马杰洛的特殊任务
-        self.majieluo_op("登录游戏 石头*5", "768191")
-        self.majieluo_op("通关副本 石头*5", "768193")
-        for day in [7, 14, 21]:
-            self.majieluo_op(f"连续完成任务一(登录游戏){day}次奖励", "768200", loginNum=str(day))
+        self.majieluo_op("登录游戏 石头*5", "780400")
+        self.majieluo_op("通关副本 石头*5", "780401")
+        # for day in [7, 14, 21]:
+        #     self.majieluo_op(f"连续完成任务一(登录游戏){day}次奖励", "768200", loginNum=str(day))
+        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "780402")
+        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "780403")
 
         logger.info(color("bold_cyan") + "深渊礼盒不能绑定固定人，所以请自行完成~")
-        self.majieluo_op("累计赠送好友成功领取礼包", "770884")
+        self.majieluo_op("累计赠送好友成功领取礼包", "780404")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
@@ -4091,7 +4094,7 @@ class DjcHelper:
         endTime = get_today(parse_time(act_info.dtEndTime))
 
         takeStone = False
-        takeStoneActId = "768194"
+        takeStoneActId = "780719"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
@@ -4105,18 +4108,18 @@ class DjcHelper:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利", "768196")
+            self.majieluo_op("提取福利", "780718")
             self.majieluo_op("分享得好礼", "769008")
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "768197", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "781023", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
     def check_majieluo(self):
         self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="768187", commit_bind_flowid="768186")
+                                activity_op_func=self.majieluo_op, query_bind_flowid="780397", commit_bind_flowid="780396")
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
@@ -5760,9 +5763,8 @@ if __name__ == '__main__':
         # djcHelper.dnf_anniversary()
         # djcHelper.dnf_wegame_dup()
         # djcHelper.dnf_collection_dup()
-        # djcHelper.majieluo()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_comic()
+        # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
@@ -5772,3 +5774,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
+        djcHelper.majieluo()

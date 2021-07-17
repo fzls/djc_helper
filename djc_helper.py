@@ -697,6 +697,13 @@ class DjcHelper:
 
         return roleLists
 
+    def query_dnf_role_info_by_serverid_and_roleid(self, server_id: str, role_id: str) -> Optional[DnfRoleInfo]:
+        for role in self.query_dnf_rolelist(server_id, False):
+            if role.roleid == role_id:
+                return role
+
+        return None
+
     def query_mobile_game_rolelist(self):
         """
         已废弃，不再需要手动查询该信息

@@ -780,7 +780,7 @@ class DjcHelper:
     def xinyue_battle_ground(self):
         """
         根据配置进行心悦相关操作
-        具体活动信息可以查阅reference_data/心悦活动备注.txt
+        具体活动信息可以查阅config.toml.example中xinyue_operations
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
         self.show_amesvr_act_info(self.xinyue_battle_ground_op)

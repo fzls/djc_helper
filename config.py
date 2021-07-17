@@ -367,7 +367,7 @@ class AccountConfig(ConfigInterface):
         self.ark_lottery = ArkLotteryConfig()
         # 会员关怀相关配置
         self.vip_mentor = VipMentorConfig()
-        # wegame国庆活动兑换道具，具体道具的iFlowId和描述可参考reference_data/wegame国庆活动.json
+        # wegame国庆活动兑换道具
         self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
         # dnf助手信息
         self.dnf_helper_info = DnfHelperInfoConfig()

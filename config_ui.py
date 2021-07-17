@@ -235,6 +235,8 @@ class ConfigUi(QFrame):
         self.setLayout(top_layout)
 
     def create_buttons(self, top_layout: QVBoxLayout):
+        # note: 配色可参考 https://www.computerhope.com/htmcolor.htm
+
         btn_load_old_version = create_pushbutton("继承旧版本配置", "LawnGreen")
         btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
@@ -271,15 +273,18 @@ class ConfigUi(QFrame):
         btn_open_pay_guide = create_pushbutton("查看付费指引", "SpringGreen")
         btn_open_usage_guide = create_pushbutton("查看使用教程（文字版）", "SpringGreen")
         btn_open_usage_video = create_pushbutton("查看使用教程（视频版）", "SpringGreen")
+        btn_open_autojs = create_pushbutton("查看autojs版", "PaleGreen")
 
         btn_open_pay_guide.clicked.connect(self.open_pay_guide)
         btn_open_usage_guide.clicked.connect(self.open_usage_guide)
         btn_open_usage_video.clicked.connect(self.open_usage_video)
+        btn_open_autojs.clicked.connect(self.open_autojs)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_open_pay_guide)
         layout.addWidget(btn_open_usage_guide)
         layout.addWidget(btn_open_usage_video)
+        layout.addWidget(btn_open_autojs)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
@@ -299,6 +304,10 @@ class ConfigUi(QFrame):
     def open_usage_video(self):
         webbrowser.open(os.path.realpath("使用教程/视频教程_合集.url"))
         report_click_event("open_usage_video")
+
+    def open_autojs(self):
+        webbrowser.open("https://github.com/fzls/autojs")
+        report_click_event("open_autojs")
 
     def support(self, checked=False):
         show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")

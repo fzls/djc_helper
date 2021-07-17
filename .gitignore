@@ -2,7 +2,7 @@
 __pycache__/
 logs/
 debug.log
-.venv
+.venv/
 
 test/
 test.py
@@ -10,10 +10,10 @@ test.py
 start_config_ui.bat
 *.lnk
 
-.first_run/
-.cached/
-.db/
-.log.filename
+**/.first_run/
+**/.cached/
+**/.db/
+**/.log.filename
 
 config.toml.local
 config.toml.github_action
@@ -26,12 +26,7 @@ DNF蚊子腿小助手_集卡特别版.exe
 
 releases/
 
-utils/
-!utils/auto_updater_changelog.MD
-!utils/hdiffz.exe
-!utils/hpatchz.exe
-!utils/notices.txt
-!utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt
+utils/auto_updater.exe
 
 _update_temp_dir/
 

@@ -42,7 +42,7 @@ def get_bz_path(dir_src_path: str = "") -> str:
         # 未传入参数，则默认当前目录为源代码根目录
         dir_src_path = os.getcwd()
 
-    return realpath(os.path.join(dir_src_path, "bandizip_portable", "bz.exe"))
+    return realpath(os.path.join(dir_src_path, "utils/bandizip_portable", "bz.exe"))
 
 
 def compress_file_with_lzma(filepath: str, compressed_7z_filepath: str = ""):

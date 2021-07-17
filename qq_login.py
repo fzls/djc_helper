@@ -68,7 +68,7 @@ class QQLogin():
     login_mode_guanjia = "guanjia"
     login_mode_wegame = "wegame"
 
-    bandizip_executable_path = os.path.realpath("./bandizip_portable/bz.exe")
+    bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
 
     # note: chrome版本升级流程
     #  1. 下载新版本chrome driver => chromedriver_{ver}.exe

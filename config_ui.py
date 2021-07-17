@@ -299,7 +299,7 @@ class ConfigUi(QFrame):
         report_click_event("open_usage_guide")
 
     def open_usage_video(self):
-        webbrowser.open(os.path.realpath("使用教程/道聚城自动化助手使用视频教程.url"))
+        webbrowser.open(os.path.realpath("使用教程/视频教程_合集.url"))
         report_click_event("open_usage_video")
 
     def support(self, checked=False):

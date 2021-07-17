@@ -4,13 +4,16 @@ import re
 import shutil
 
 from compress import compress_dir_with_bandizip
-from log import logger
+from log import logger, color
 from qq_login import QQLogin
+from util import show_head_line
 from version import now_version
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
     old_cwd = os.getcwd()
+
+    show_head_line(f"开始打包 {release_dir_name} 所需内容", color("bold_yellow"))
 
     # 确保发布根目录存在
     if not os.path.isdir(dir_all_release):
@@ -20,7 +23,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     shutil.rmtree(dir_current_release, ignore_errors=True)
     os.mkdir(dir_current_release)
 
-    logger.info(f"将部分内容从{dir_src}复制到{dir_current_release}")
+    logger.info(color("bold_yellow") + f"将部分内容从 {dir_src} 复制到 {dir_current_release} ")
     # 需要复制的文件与目录
     files_to_copy = []
     # 基于正则确定初始复制范围
@@ -54,7 +57,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             logger.info(f"拷贝文件 {filename}")
             shutil.copyfile(source, destination)
 
-    logger.info("移动部分文件的位置和名称")
+    logger.info(color("bold_yellow") + "移动部分文件的位置和名称")
     files_to_move = [
         ("utils/auto_updater.exe", "utils/auto_updater_latest.exe"),
         ("CHANGELOG.MD", "相关信息/CHANGELOG.MD"),
@@ -67,7 +70,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         logger.info(f"移动{src_file}到{dst_file}")
         shutil.move(src_file, dst_file)
 
-    logger.info("清除一些无需发布的内容")
+    logger.info(color("bold_yellow") + "清除一些无需发布的内容")
     dir_to_filenames_need_remove = {
         ".": [
             "requirements.txt",
@@ -94,7 +97,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 
     # 压缩打包
     os.chdir(dir_all_release)
-    logger.info("开始压缩打包")
+    logger.info(color("bold_yellow") + "开始压缩打包")
     compress_dir_with_bandizip(release_dir_name, release_7z_name, dir_src)
 
     # 额外备份一份最新的供github action 使用

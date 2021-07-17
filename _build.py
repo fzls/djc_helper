@@ -5,8 +5,8 @@ import shutil
 import subprocess
 
 from _init_venv_and_requirements import init_venv_and_requirements
-from log import logger
-from util import human_readable_size
+from log import logger, color
+from util import human_readable_size, show_head_line
 
 
 def build(disable_douban=False):
@@ -17,7 +17,7 @@ def build(disable_douban=False):
     # 初始化venv和依赖
     init_venv_and_requirements(".venv", disable_douban)
 
-    logger.info("将使用.venv环境进行编译")
+    show_head_line(f"将使用.venv环境进行编译", color("bold_yellow"))
 
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
@@ -30,7 +30,7 @@ def build(disable_douban=False):
         prefix = f"{idx + 1}/{len(build_configs)}"
 
         src_path, exe_name, icon_path, target_dir, exclude_modules, extra_args = config
-        logger.info(f"{prefix} 开始编译 {exe_name}")
+        logger.info(color("bold_yellow") + f"{prefix} 开始编译 {exe_name}")
 
         cmd_build = [
             pyinstaller_path,
@@ -63,7 +63,7 @@ def build(disable_douban=False):
         os.remove(f"{exe_name}.spec")
 
         filesize = os.path.getsize(target_path)
-        logger.info(f"{prefix} 编译{exe_name}结束，最终大小为{human_readable_size(filesize)}")
+        logger.info(color("bold_green") + f"{prefix} 编译{exe_name}结束，最终大小为{human_readable_size(filesize)}")
 
     logger.info("done")
 

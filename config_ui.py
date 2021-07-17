@@ -441,7 +441,7 @@ class ConfigUi(QFrame):
         top_layout.setAlignment(Qt.AlignCenter)
 
         # -------------- 区域：购买卡密 --------------
-        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密", top_layout)
+        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(不会操作可点击左上方的【查看付费指引】按钮)", top_layout)
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 

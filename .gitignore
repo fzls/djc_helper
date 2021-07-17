@@ -30,7 +30,7 @@ utils/auto_updater.exe
 
 _update_temp_dir/
 
-chrome_portable_*/
+**/chrome_portable_*/
 
 .use_by_myself
 

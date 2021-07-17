@@ -17,9 +17,9 @@ from config import *
 from db import CaptchaDB, LoginRetryDB
 from log import logger, color
 from upload_lanzouyun import Uploader
+from urls import get_act_url
 from util import async_message_box, get_screen_size
 from version import now_version
-from urls import get_act_url
 
 
 # 在github action环境下登录异常
@@ -84,7 +84,7 @@ class QQLogin():
     #           2.1.2.2 下载内容形如90.0.4430.93_chrome_installer.exe，使用bandizip打开然后解压得到chrome.7z，即可进行下一步
     #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
     #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
-    #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手根目录，并更新入库
+    #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手 utils 目录下，并更新入库
     chrome_major_version = 91
 
     default_window_width = 390
@@ -145,14 +145,19 @@ class QQLogin():
 
             # 判定本地是否有便携版压缩包，若无则说明自动下载失败，提示去网盘手动下载
             if not os.path.isfile(self.chrome_binary_7z()):
+                zip_name = zip_name
+                installer_name = self.chrome_installer_name()
+                version = self.get_chrome_major_version()
+                chrome_root_directory = self.chrome_root_directory()
+
                 msg = (
                     "================ 这一段是问题描述 ================\n"
-                    "当前电脑未发现{version}版本的chrome浏览器，且当前目录无便携版chrome浏览器的压缩包({zip_name})\n"
+                    f"当前电脑未发现{version}版本的chrome浏览器，且{chrome_root_directory}目录下无便携版chrome浏览器的压缩包({zip_name})\n"
                     "\n"
                     "================ 这一段是解决方法 ================\n"
-                    "如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到小助手的exe所在目录（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
+                    f"如果不想影响系统浏览器，请在稍后打开的网盘页面中下载[{zip_name}]，并放到{chrome_root_directory}目录里（注意：是把这个压缩包原原本本地放到这个目录里，而不是解压后再放过来！！！），然后重新打开程序~\n"
                     "\n"
-                    "如果愿意装一个浏览器，请在稍后打开的网盘页面中下载{installer_name}，下载完成后双击安装即可\n"
+                    f"如果愿意装一个浏览器，请在稍后打开的网盘页面中下载{installer_name}，下载完成后双击安装即可\n"
                     "\n"
                     "(一定要看清版本，如果发现网盘里的便携版和安装版版本都比提示里的高（比如这里提示87，网盘里显示89），建议直接下个最新的小助手压缩包，解压后把配置文件复制过去~)\n"
                     "\n"
@@ -165,7 +170,7 @@ class QQLogin():
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
-                ).format(zip_name=zip_name, installer_name=self.chrome_installer_name(), version=self.get_chrome_major_version())
+                )
                 async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
                 os.system("PAUSE")
                 exit(-1)
@@ -201,12 +206,13 @@ class QQLogin():
         logger.info("检查chrome相关内容是否ok")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
+        chrome_root_directory = self.chrome_root_directory()
 
         logger.info("检查driver是否存在")
         if not os.path.isfile(self.chrome_driver_executable_path()):
-            logger.info(color("bold_yellow") + f"未在小助手目录发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
+            logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
             uploader = Uploader()
-            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".")
+            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory)
 
         options = Options()
         options.headless = True
@@ -227,12 +233,12 @@ class QQLogin():
         if not os.path.isfile(self.chrome_binary_7z()):
             logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
             uploader = Uploader()
-            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".")
+            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory)
 
         # 尝试解压
         if not os.path.isdir(self.chrome_binary_directory()):
             logger.info(f"自动解压便携版chrome到当前目录")
-            decompress_dir_with_bandizip(self.chrome_binary_7z())
+            decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
 
         logger.info("检查便携版chrome是否有效")
         try:
@@ -250,26 +256,29 @@ class QQLogin():
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
         uploader = Uploader()
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, ".", cache_max_seconds=0)
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, ".", cache_max_seconds=0)
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory, cache_max_seconds=0)
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory, cache_max_seconds=0)
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
-        decompress_dir_with_bandizip(self.chrome_binary_7z())
+        decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
 
     def chrome_driver_executable_path(self):
-        return os.path.realpath(f"./chromedriver_{self.get_chrome_major_version()}.exe")
+        return os.path.realpath(f"{self.chrome_root_directory()}/chromedriver_{self.get_chrome_major_version()}.exe")
 
     def chrome_binary_7z(self):
-        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}.7z")
+        return os.path.realpath(f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}.7z")
 
     def chrome_binary_directory(self):
-        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}")
+        return os.path.realpath(f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}")
 
     def chrome_binary_location(self):
-        return os.path.realpath(f"./chrome_portable_{self.get_chrome_major_version()}/chrome.exe")
+        return os.path.realpath(f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}/chrome.exe")
 
     def chrome_installer_name(self):
         return f"Chrome_{self.get_chrome_major_version()}.(小版本号)_普通安装包_非便携版.exe"
+
+    def chrome_root_directory(self):
+        return os.path.realpath("./utils")
 
     def get_chrome_major_version(self):
         if self.cfg is None or self.cfg.force_use_chrome_major_version == 0:

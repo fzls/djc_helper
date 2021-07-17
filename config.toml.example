@@ -23,7 +23,7 @@ multiprocessing_pool_size = -1
 force_use_portable_chrome = false
 
 # 强制使用特定大版本的chrome，默认为0，表示使用小助手默认设定的版本。
-# 示例：如果想要强制使用89.0.4389.72版本的chrome，则填写其主版本号89即可，并确保对应版本的chromedriver、安装版chrome或便携版已存在
+# 示例：如果想要强制使用89.0.4389.72版本的chrome，则填写其主版本号89即可，并确保对应版本的chromedriver、安装版chrome或便携版已存在于utils目录下
 force_use_chrome_major_version = 0
 
 # 自动登录模式是否不显示浏览器界面

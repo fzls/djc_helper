@@ -45,7 +45,7 @@ def parse_prize_list(cfg: ArkLotteryZzConfig):
     return prize_list
 
 
-def dnf_area_server_list_config():
+def dnf_area_server_list_config() -> List[DnfAreaServerListConfig]:
     area_servers = []  # type: List[DnfAreaServerListConfig]
     for area_server_setting in dnf_server_list.setting:
         area_servers.append(DnfAreaServerListConfig().auto_update_config(area_server_setting))
@@ -81,6 +81,15 @@ def dnf_server_id_to_name(id):
             return server.t
 
     return ""
+
+
+def dnf_server_id_to_area_info(id: str) -> DnfAreaServerListConfig:
+    for area in dnf_area_server_list_config():
+        for server in area.opt_data_array:
+            if server.v == id:
+                return area
+
+    return DnfAreaServerListConfig()
 
 
 if __name__ == '__main__':

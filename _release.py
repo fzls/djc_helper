@@ -12,7 +12,7 @@ from _package import package
 from _push_github import push_github
 from log import logger, color
 from upload_lanzouyun import Uploader
-from util import change_console_window_mode_async, make_sure_dir_exists, range_from_one, count_down
+from util import change_console_window_mode_async, make_sure_dir_exists, range_from_one, count_down, show_head_line
 from version import now_version
 
 # ---------------准备工作
@@ -31,7 +31,7 @@ change_console_window_mode_async()
 version = 'v' + version
 
 run_start_time = datetime.now()
-logger.info(f"开始发布版本 {version}")
+show_head_line(f"开始发布版本 {version}", color("bold_yellow"))
 
 set_title_cmd = f"title 发布 {version}"
 os.system(set_title_cmd)
@@ -62,7 +62,7 @@ create_patch_for_latest_n_version = 3
 
 # ---------------构建增量包
 os.chdir(dir_all_release)
-logger.info(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁")
+show_head_line(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁", color("bold_yellow"))
 create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
 
 # ---------------获取补丁地址（分开方便调试）
@@ -70,12 +70,12 @@ os.chdir(dir_all_release)
 patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=True)
 
 # ---------------标记新版本
-logger.info("提交版本和版本变更说明，并同步到docs目录，用于生成github pages")
+show_head_line(f"提交版本和版本变更说明，并同步到docs目录，用于生成github pages", color("bold_yellow"))
 os.chdir(dir_src)
 commit_new_version()
 
 # ---------------上传到蓝奏云
-logger.info("开始上传到蓝奏云")
+show_head_line(f"开始上传到蓝奏云", color("bold_yellow"))
 os.chdir(dir_src)
 with open("upload_cookie.json") as fp:
     cookie = json.load(fp)
@@ -134,12 +134,12 @@ else:
 # ---------------推送版本到github
 # 打包完成后git添加标签
 os.chdir(dir_src)
-logger.info("开始推送到github")
+show_head_line(f"开始推送到github", color("bold_yellow"))
 push_github(version)
 
 # ---------------结束
 logger.info('+' * 40)
-logger.info(f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
+logger.info(color("bold_yellow") + f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
 logger.info('+' * 40)
 
 os.system("PAUSE")

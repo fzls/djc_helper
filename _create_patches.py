@@ -13,7 +13,7 @@ import subprocess
 from typing import List
 
 from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
-from log import logger
+from log import logger, color
 from update import version_less
 from upload_lanzouyun import Uploader, FileInFolder
 from util import human_readable_size, range_from_one
@@ -45,7 +45,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
 
     uploader = Uploader()
 
-    logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
+    if not get_final_patch_path_only: logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
     old_version_infos = []  # type: List[HistoryVersionFileInfo]
 
     # 获取当前网盘的最新版本，若比当前发布版本低，也加入
@@ -116,7 +116,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
         decompress_dir_with_bandizip(local_7z_path, dir_src)
 
     # --------------------------- 实际只做补丁包 ---------------------------
-    logger.info(f"将为【{old_version_infos}】版本制作补丁包")
+    logger.info(color("bold_yellow") + f"将为【{old_version_infos}】版本制作补丁包")
 
     shutil.rmtree(patches_dir, ignore_errors=True)
     os.mkdir(patches_dir)
@@ -143,7 +143,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
         patch_file = f"{patches_dir}/{version}.patch"
 
         logger.info("-" * 80)
-        logger.info(f"[{idx + 1}/{len(old_version_infos)}] 创建从v{version}升级到v{latest_version}的补丁{patch_file}")
+        logger.info(color("bold_yellow") + f"[{idx + 1}/{len(old_version_infos)}] 创建从v{version}升级到v{latest_version}的补丁{patch_file}")
 
         version_dir = f"DNF蚊子腿小助手_v{version}_by风之凌殇"
 

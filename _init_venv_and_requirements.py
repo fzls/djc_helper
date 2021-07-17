@@ -3,7 +3,8 @@ import argparse
 import os
 import subprocess
 
-from log import logger
+from log import logger, color
+from util import show_head_line
 
 
 def init_venv_and_requirements(venv_path=".venv", disable_douban=False):
@@ -12,7 +13,8 @@ def init_venv_and_requirements(venv_path=".venv", disable_douban=False):
     py_path = os.path.join(pyscript_path, "python")
     pip_path = os.path.join(pyscript_path, "pip")
 
-    logger.info("尝试初始化venv环境")
+    show_head_line(f"尝试初始化venv环境", color("bold_yellow"))
+
     subprocess.call([
         "python",
         "-m",

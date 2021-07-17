@@ -340,13 +340,13 @@ def check_some_exception(e, show_last_process_result=True) -> str:
 
     # 特判一些错误
     if type(e) is KeyError and e.args[0] == 'modRet':
-        msg += format_msg("大概率是这个活动过期了，或者放鸽子到点了还没开放，若影响正常运行流程，可先自行关闭这个活动开关(若config.toml中没有，请去config.toml.example找到对应开关名称)，或等待新版本（日常加班，有时候可能会很久才发布新版本）")
+        msg += format_msg("大概率是这个活动过期了，或者放鸽子到点了还没开放，若影响正常运行流程，可先自行关闭这个活动开关(若config.toml中没有，请去config.example.toml找到对应开关名称)，或等待新版本（日常加班，有时候可能会很久才发布新版本）")
     elif type(e) in [socket.timeout,
                      urllib3.exceptions.ConnectTimeoutError, urllib3.exceptions.MaxRetryError, urllib3.exceptions.ReadTimeoutError,
                      requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout, ]:
         msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<")
     elif type(e) in [selenium.common.exceptions.TimeoutException, ]:
-        msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.toml.example将登录超时相关配置加到config.toml中，并调大超时时间")
+        msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间")
     elif type(e) in [PermissionError, ]:
         msg += format_msg((
             "权限错误一般是以下原因造成的\n"

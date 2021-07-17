@@ -209,7 +209,7 @@ class ConfigUi(QFrame):
     def save(self, checked=False, show_message_box=True):
         self.save_config(self.to_config())
         if show_message_box:
-            show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.toml.example查看注释")
+            show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.example.toml查看注释")
 
         report_click_event("save_config")
 
@@ -1080,13 +1080,13 @@ class AccountConfigUi(QWidget):
         # -------------- 区域：dnf论坛 --------------
         self.collapsible_box_dnf_bbs, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
-        self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_formhash字段的说明")
+        self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_formhash字段的说明")
         add_row(form_layout, "dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
 
-        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中dnf_bbs_cookie字段的说明")
+        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_cookie字段的说明")
         add_row(form_layout, "dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
-        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.toml.example示例配置文件中colg_cookie字段的说明")
+        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明")
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
         # -------------- 区域：会员关怀 --------------

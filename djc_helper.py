@@ -780,7 +780,7 @@ class DjcHelper:
     def xinyue_battle_ground(self):
         """
         根据配置进行心悦相关操作
-        具体活动信息可以查阅config.toml.example中xinyue_operations
+        具体活动信息可以查阅config.example.toml中xinyue_operations
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
         self.show_amesvr_act_info(self.xinyue_battle_ground_op)
@@ -1101,7 +1101,7 @@ class DjcHelper:
             return
 
         if len(self.cfg.xinyue_app_operations) == 0:
-            logger.warning("未配置心悦app相关操作，将跳过。如需使用，请打开config.toml.example搜索 心悦app相关操作 查看示例配置和说明，然后手动填写到config.toml中对应位置(如果搞不来，就请手动操作~)")
+            logger.warning("未配置心悦app相关操作，将跳过。如需使用，请打开config.example.toml搜索 心悦app相关操作 查看示例配置和说明，然后手动填写到config.toml中对应位置(如果搞不来，就请手动操作~)")
             return
 
         lr = self.fetch_xinyue_login_info("心悦app")
@@ -1278,7 +1278,7 @@ class DjcHelper:
         #   1.3 重新启用代码
         #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
         #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
-        #   1.3.3 在 config.toml.example 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
+        #   1.3.3 在 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
         #   1.3.4 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #

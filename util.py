@@ -44,7 +44,7 @@ def is_valid_qq(qq: str) -> bool:
     return qq.isnumeric()
 
 
-def change_console_window_mode_async():
+def change_console_window_mode_async(disable_min_console=False):
     if is_run_in_pycharm():
         logger.info("当前运行在pycharm中，不尝试调整窗口大小~")
         return
@@ -60,7 +60,7 @@ def change_console_window_mode_async():
     # 如果是windows系统的话，先尝试同步设置cmd属性
     ensure_cmd_window_buffer_size_for_windows(cfg)
 
-    threading.Thread(target=change_console_window_mode, args=(cfg,), daemon=True).start()
+    threading.Thread(target=change_console_window_mode, args=(cfg, disable_min_console), daemon=True).start()
 
 
 def ensure_cmd_window_buffer_size_for_windows(cfg):
@@ -83,11 +83,11 @@ def ensure_cmd_window_buffer_size_for_windows(cfg):
     logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请关闭【修改命令行缓存大小】开关")
 
 
-def change_console_window_mode(cfg):
+def change_console_window_mode(cfg, disable_min_console=False):
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")
 
     try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", cfg.common.enable_max_console)
-    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", cfg.common.enable_min_console)
+    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", cfg.common.enable_min_console and not disable_min_console)
 
 
 def try_set_console_window_mode(show_mode: int, mode_name: str, mode_enabled: bool):

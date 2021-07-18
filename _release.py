@@ -26,7 +26,7 @@ if re.match(version_reg, version) is None:
     exit(-1)
 
 # 最大化窗口
-change_console_window_mode_async()
+change_console_window_mode_async(disable_min_console=True)
 
 version = 'v' + version
 

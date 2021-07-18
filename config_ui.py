@@ -855,6 +855,9 @@ class CommonConfigUi(QFrame):
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
 
+        self.lineedit_majieluo_invite_uin_list = create_lineedit(list_to_str(cfg.majieluo_invite_uin_list), "填写马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知，使用英文逗号分开，示例：a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b")
+        add_row(form_layout, "马杰洛赠送礼包inviteUin列表", self.lineedit_majieluo_invite_uin_list)
+
         self.combobox_log_level = create_combobox(cfg.log_level, [
             "debug",
             "info",
@@ -897,6 +900,7 @@ class CommonConfigUi(QFrame):
         cfg.log_level = self.combobox_log_level.currentText()
         cfg.majieluo_send_card_target_qq = self.lineedit_majieluo_send_card_target_qq.text()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
+        cfg.majieluo_invite_uin_list = str_to_list(self.lineedit_majieluo_invite_uin_list.text())
 
         self.login.update_config(cfg.login)
         self.retry.update_config(cfg.retry)

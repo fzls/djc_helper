@@ -4098,7 +4098,16 @@ class DjcHelper:
         self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "780402")
         self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "780403")
 
-        logger.info(color("bold_cyan") + "深渊礼盒不能绑定固定人，所以请自行完成~")
+        invite_uins = self.common_cfg.majieluo_invite_uin_list
+        if len(invite_uins) != 0:
+            # 假设第一个填写的QQ是主QQ，尝试每个号都先领取这个，其余的则是小号，随机顺序，确保其他qq有同等机会
+            main_qq, others = invite_uins[0], invite_uins[1:]
+            random.shuffle(others)
+            invite_uins = [main_qq, *others]
+            for uin in invite_uins:
+                self.majieluo_op(f"接受好友赠送礼盒 - {uin}", "780720", inviteUin=uin)
+        else:
+            logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
         self.majieluo_op("累计赠送好友成功领取礼包", "780404")
 
         # 提取得福利
@@ -5425,7 +5434,7 @@ class DjcHelper:
             "plat", "extraStr",
             "sContent", "sPartition", "sAreaName", "md5str", "ams_checkparam", "checkparam",
             "type", "moduleId", "giftId", "acceptId", "sendQQ",
-            "cardType", "giftNum", "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl",
+            "cardType", "giftNum", "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl", "inviteUin",
             "user_area", "user_partition", "user_areaName", "user_roleId", "user_roleName",
             "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId",
             "cz", "dj",
@@ -5846,5 +5855,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
-        # djcHelper.majieluo()
-        djcHelper.maoxian()
+        djcHelper.majieluo()
+        # djcHelper.maoxian()

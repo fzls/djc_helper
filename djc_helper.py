@@ -3242,7 +3242,9 @@ class DjcHelper:
         remaining = query_lottery_count()
         logger.info(f"当前剩余抽奖次数为{remaining}")
         for idx in range_from_one(remaining):
-            self.dnf_xinyue_op(f"第{idx}次抽奖", "778269")
+            self.dnf_xinyue_op(f"第{idx}/{remaining}次抽奖", "778269")
+            if idx != remaining:
+                time.sleep(5)
 
         self.dnf_xinyue_op("心悦app礼包", "778270")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")

@@ -108,6 +108,15 @@ scode_list_accept_give = []
 #]
 scode_list_accept_ask = []
 
+# 接受马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知
+# 示例
+# majieluo_invite_uin_list = [
+#    "a34354ec3f37f2d8accd5766f549c36b",
+#    "a34354ec3f37f2d8accd5766f549c36c",
+#    "a34354ec3f37f2d8accd5766f549c36d",
+#]
+majieluo_invite_uin_list = []
+
 # 调整日志等级对应颜色，颜色表可以运行log.py获取
 [common.log_colors]
 # 调试

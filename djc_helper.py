@@ -402,6 +402,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF马杰洛的规划", self.majieluo),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4751,6 +4752,37 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("我的dnf13周年活动"),
                                    **extra_params)
 
+    # --------------------------------------------勇士的冒险补给--------------------------------------------
+    @try_except()
+    def maoxian(self):
+        show_head_line("勇士的冒险补给")
+        self.show_amesvr_act_info(self.maoxian_op)
+
+        if not self.cfg.function_switches.get_maoxian or self.disable_most_activities():
+            logger.warning("未启用领取勇士的冒险补给功能，将跳过")
+            return
+
+        self.maoxian_op("第一天-时间引导石(20个)", "782145")
+        self.maoxian_op("第二天-时间引导石(20个)", "782147")
+        self.maoxian_op("第三天-升级券", "782148")
+        self.maoxian_op("第四天-升级券", "782149")
+        self.maoxian_op("第五天-高级材料礼盒", "782150")
+        self.maoxian_op("第六天-高级材料礼盒", "782151")
+        self.maoxian_op("第七天-时间引导石(100个)", "782152")
+        self.maoxian_op("在线30分钟-胜武器自选", "782154")
+        if get_now().hour >= 23:
+            self.maoxian_op("登录游戏-黑钻7天", "782153")
+            self.maoxian_op("通关副本-高级材料*2", "782155")
+
+    def check_maoxian(self):
+        self.check_bind_account("勇士的冒险补给", get_act_url("勇士的冒险补给"),
+                                activity_op_func=self.maoxian_op, query_bind_flowid="782142", commit_bind_flowid="782141")
+
+    def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_maoxian
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("勇士的冒险补给"),
+                                   **extra_params)
+
     # --------------------------------------------刃影预约活动--------------------------------------------
     @try_except()
     def dnf_reserve(self):
@@ -5805,7 +5837,7 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_ozma()
+        # djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
@@ -5813,3 +5845,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
         # djcHelper.majieluo()
+        djcHelper.maoxian()

@@ -70,6 +70,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210705care/index.html",
+    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -205,6 +206,7 @@ class Urls:
         self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "387039"  # DNF KOL
+        self.iActivityId_maoxian = "392494" # 勇士的冒险补给
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

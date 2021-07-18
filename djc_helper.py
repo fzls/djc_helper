@@ -4076,6 +4076,11 @@ class DjcHelper:
 
         self.check_majieluo()
 
+        def query_invite_count() -> int:
+            res = self.majieluo_op("查询信息", "780667", print_res=False)
+            info = parse_amesvr_common_info(res)
+            return int(info.sOutValue7)
+
         # 马杰洛的见面礼
         def take_gift():
             # self.majieluo_op("验证是否幸运用户", "768204")
@@ -4108,6 +4113,8 @@ class DjcHelper:
                 self.majieluo_op(f"接受好友赠送礼盒 - {uin}", "780720", inviteUin=uin)
         else:
             logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
+
+        logger.info(color("bold_green") + f"当前已累计赠送{query_invite_count()}次，总共需要30次~")
         self.majieluo_op("累计赠送好友成功领取礼包", "780404")
 
         # 提取得福利

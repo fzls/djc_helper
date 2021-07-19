@@ -396,7 +396,6 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("KOL", self.dnf_kol),
             ("超级会员", self.dnf_super_vip),
-            ("黄钻", self.dnf_yellow_diamond),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
@@ -404,6 +403,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.ark_lottery),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1497,6 +1497,7 @@ class DjcHelper:
         qa.dnf_warriors_call()
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
+    # note：对接流程与下方黄钻完全一致，参照其流程即可
     def dnf_super_vip(self):
         act_url = get_act_url("超级会员")
         show_head_line("QQ空间超级会员")
@@ -1527,6 +1528,12 @@ class DjcHelper:
         self.qzone_act_op("分享领取礼包", "5501_c70d8e0f")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
+    # note: 适配流程如下
+    #   0. 电脑chrome中设置Network conditions中的User agent为手机QQ的： Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440
+    #   1. 获取子活动id   chrome设置为手机qq UA后，登录活动页面 get_act_url("黄钻") ，然后在幸运勇士、勇士见面礼等按钮上右键Inspect，然后在Sources中搜索其vt-itemid(如xcubeItem_4)，
+    #       在结果中双击main.bundle.js结果，点击格式化后搜索【c.default.methods.xcubeItem_4 =】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
+    #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("黄钻")的值为新的网页链接，并把活动时间改为最新
+    #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
     def dnf_yellow_diamond(self):
         act_url = get_act_url("黄钻")
         show_head_line("QQ空间黄钻")
@@ -1546,15 +1553,15 @@ class DjcHelper:
             return
         self.lr = lr
 
-        self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d")
-        self.qzone_act_op("勇士见面礼", "5418_9f4ec626")
-        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_yellow_diamond_分享_{self.uin()}"):
-            self.qzone_act_op("分享给自己", "5497_319e33c3", act_req_data={
+        self.qzone_act_op("幸运勇士礼包", "7472_986df1f7")
+        self.qzone_act_op("勇士见面礼", "7473_bccc062d")
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_yellow_diamond_v2_分享_{self.uin()}"):
+            self.qzone_act_op("分享给自己", "7474_42e94587", act_req_data={
                 "receivers": [
                     self.qq(),
                 ]
             })
-        self.qzone_act_op("分享领取礼包", "5499_4574810b")
+        self.qzone_act_op("分享领取礼包", "7475_2d9f8ae6")
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, print_res=True):
         if act_req_data is None:
@@ -5832,7 +5839,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
-        # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
@@ -5843,4 +5849,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_xinyue()
         # djcHelper.majieluo()
         # djcHelper.maoxian()
-        djcHelper.ark_lottery()
+        # djcHelper.ark_lottery()
+        djcHelper.dnf_yellow_diamond()

@@ -389,7 +389,6 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("DNF奥兹玛竞速", self.dnf_ozma),
-            ("管家蚊子腿", self.guanjia_new),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("colg每日签到", self.colg_signin),
@@ -404,6 +403,7 @@ class DjcHelper:
             ("集卡", self.ark_lottery),
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("管家蚊子腿", self.guanjia_new),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -2838,19 +2838,19 @@ class DjcHelper:
     #   1. 打开新活动的页面 get_act_url("管家蚊子腿")
     #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
     #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
-    guanjia_new_act_id = "2021061115132511816"  # 活动ID
+    guanjia_new_act_id = "2021070614491911111"  # 活动ID
     # note: 4. 按照下面的顺序依次点击对应活动按钮，最后按顺序将请求中的lid复制出来
-    guanjia_new_gift_id_special_rights = "224"  # 电脑管家特权礼包
-    guanjia_new_gift_id_sign_in_2_days = "222"  # 连续签到2天礼包
-    guanjia_new_gift_id_return_user = "220"  # 幸运勇士礼包
-    guanjia_new_gift_id_download_and_login_this_version_guanjia = "223"  # 下载登录管家任务
-    guanjia_new_gift_id_game_online_30_minutes = "225"  # 每日游戏在线30分钟任务
-    guanjia_new_gift_id_sign_in = "226"  # 每日签到任务
+    guanjia_new_gift_id_special_rights = "48"  # 电脑管家特权礼包
+    guanjia_new_gift_id_sign_in_2_days = "50"  # 连续签到2天礼包
+    guanjia_new_gift_id_return_user = "16"  # 幸运勇士礼包
+    guanjia_new_gift_id_download_and_login_this_version_guanjia = "60"  # 下载登录管家任务
+    guanjia_new_gift_id_game_online_30_minutes = "58"  # 每日游戏在线30分钟任务
+    guanjia_new_gift_id_sign_in = "59"  # 每日签到任务
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
-    guanjia_new_lottery_gifts_act_id = "176"  # 抽奖活动ID
+    guanjia_new_lottery_gifts_act_id = "75"  # 抽奖活动ID
 
-    # note: 5. 启用时取消注释fetch_guanjia_openid中开关，废弃时则注释掉
-    # note: 6. 调整urls中管家蚊子腿的起止时间
+    # note: 5. 启用时取消注释 fetch_guanjia_openid 中开关，废弃时则注释掉
+    # note: 6. 调整urls中 管家蚊子腿 的起止时间
     # note: 7. 调整config_ui中管家开关
     # note: 8. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
     @try_except()
@@ -5841,7 +5841,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_ozma()
-        # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
         # djcHelper.dnf_wegame()
@@ -5851,4 +5850,5 @@ if __name__ == '__main__':
         # djcHelper.maoxian()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.guanjia_new()

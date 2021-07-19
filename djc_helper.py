@@ -385,7 +385,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF格斗大赛", self.dnf_pk),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF落地页活动", self.dnf_luodiye),
             ("我的dnf13周年活动", self.dnf_my_story),
@@ -404,6 +403,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.ark_lottery),
             ("黄钻", self.dnf_yellow_diamond),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -3419,6 +3419,7 @@ class DjcHelper:
         sContents = [
             "DNF520",
             "DNF1314",
+            "JBLQ50",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -5839,7 +5840,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_kol()
         # djcHelper.dnf_comic()
         # djcHelper.dnf_super_vip()
-        # djcHelper.dnf_welfare()
         # djcHelper.dnf_ozma()
         # djcHelper.guanjia_new()
         # djcHelper.colg_signin()
@@ -5850,4 +5850,5 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.maoxian()
         # djcHelper.ark_lottery()
-        djcHelper.dnf_yellow_diamond()
+        # djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_welfare()

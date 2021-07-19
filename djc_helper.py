@@ -2209,41 +2209,19 @@ class DjcHelper:
         if extra_msg != "":
             logger.warning(color("fg_bold_green") + extra_msg)
 
-        tips_from_url = '\n'.join([
-            "1. 打开dnf助手并确保已登录账户，点击活动，找到【艾丽丝的密室，塔罗牌游戏】并点开，点击右上角分享，选择QQ好友，发送给【我的电脑】",
-            "2. 在我的电脑聊天框中的链接中找到请求中的token（形如&serverId=11&token=6C6bNrA4&isMainRole=0&subGameId=10014，因为&是参数分隔符，所以token部分为token=6C6bNrA4，所以token为6C6bNrA4, ps: 如果参数形如&serverId=&token=&isMainRole=&subGameId=，那么token部分参数为token=，说明这个活动助手没有把token放到链接里，需要尝试下一个），将其进行更新到配置文件中【dnf助手信息】配置中",
-            "ps: nickName/userId的获取方式为，点开dnf助手中点开右下角的【我的】，然后点击右上角的【编辑】按钮，则昵称即为nickname，社区ID即为userId，如我的这俩值为风之凌殇、504051073",
-            "如果你刚刚按照上述步骤操作过，但这次运行还是提示你过期了，很大概率是你想要多个账号一起用这个功能，然后在手机上依次登陆登出这些账号，按照上述操作获取token。实际上这样是无效的，因为你在登陆下一个账号的时候，之前的账号的token就因为登出而失效了",
-            "有这个需求的话，请使用安卓模拟器的多开功能来多开dnf助手去登陆各个账号。如果手机支持多开app，也可以使用对应功能。具体多开流程请自行百度搜索： 手机 app 多开",
-        ])
-
-        tips_from_zhuabao = '\n'.join([
+        tips = '\n'.join([
+            extra_msg,
             "",
-            "如果上面这个活动在助手里找不到了，可以试试看其他的活动",
-            "如果所有活动的转发链接里都找不到token，那么只能手动抓包，从请求的cookie或post data中获取token信息了，具体可以百度 安卓 https 抓包",
-            "下面给出几种推荐的方案",
-            "1. 安卓下使用HttpCanary来实现对dnf助手抓包（开启http canary抓包后，打开助手，点击任意一个活动页面，然后去链接或cookie中查找token），可参考",
-            "    1.1 https://httpcanary.com/zh-hans/",
-            "    1.2 抓包流程可参考我录制的操作视频 https://www.bilibili.com/video/BV1az4y1k7bH",
-            "2. 安卓下 VirtualXposed+JustTrustMe，然后在这里面安装dnf助手和qq，之后挂fiddler的vpn来完成抓包操作，可参考",
-            "    2.1 https://www.jianshu.com/p/a818a0d0aa9f",
-            "    2.2 https://testerhome.com/articles/18609",
-            "    2.3 https://juejin.im/post/6844903602209685517",
-            "    2.4 https://blog.csdn.net/hebbely/article/details/79248077",
-            "    2.5 https://juejin.im/post/6844903831579394055",
-            "    ps：简单说明下，fiddler用于抓https包，由于助手对网络请求做了证书校验，所以需要安装VirtualXposed+JustTrustMe，并在VirtualXposed中去安装运行助手，从而使其校验失效，能够让请求成功",
-
+            f"助手token已过期或者未填写，请到群里({self.common_cfg.qq_group})发【助手token】，机器人会自动回复最新的获取token的方式"
         ])
 
         logger.warning(
             '\n' +
-            color("fg_bold_yellow") + tips_from_url +
-            '\n' +
-            color("fg_bold_green") + tips_from_zhuabao
+            color("fg_bold_yellow") + tips
         )
         # 首次在对应场景时弹窗
         if always_show_message_box or (show_message_box_once_key != "" and is_first_run(f"show_dnf_helper_info_guide_{show_message_box_once_key}")):
-            async_message_box(tips_from_url + '\n' + tips_from_zhuabao, "助手信息获取指引", print_log=False)
+            async_message_box(tips, "助手信息获取指引", print_log=False)
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):

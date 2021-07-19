@@ -641,6 +641,10 @@ def try_report_usage_info(cfg: Config):
 
         increase_counter(ga_category="login_mode", name=account_config.login_mode)
 
+    # 上报网盘地址，用于区分分发渠道
+    if not run_from_src():
+        increase_counter(ga_category="netdisk_link", name=cfg.common.netdisk_link)
+
 
 @try_except(show_exception_info=False)
 def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):

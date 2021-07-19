@@ -403,6 +403,7 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
+            ("集卡", self.ark_lottery),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -429,7 +430,6 @@ class DjcHelper:
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("qq视频-AME活动", self.qq_video_amesvr),
-            ("集卡", self.ark_lottery),
             ("刃影预约活动", self.dnf_reserve),
         ]
 
@@ -1281,14 +1281,16 @@ class DjcHelper:
     def ark_lottery(self):
         # note: 启用和废弃抽卡活动的流程如下
         #   1. 启用
-        #   1.1 获取新配置   手机登录抽卡活动页面，然后抓包获得页面代码，从中搜索【window.syncData】找到逻辑数据和配置，将其值复制到【setting/ark_lottery.py】中，作为setting变量的值
+        #   1.0 电脑chrome中设置Network conditions中的User agent为手机QQ的： Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440
+        #   1.1 获取新配置   chrome设置为手机qq UA后，登录抽卡活动页面 get_act_url("集卡") ，然后打开主页源代码，从中搜索【window.syncData】找到逻辑数据和配置，将其值复制到【setting/ark_lottery.py】中，作为setting变量的值
         #   1.2 填写新链接   在 urls.py 中，替换self.ark_lottery_page 的值为新版抽卡活动的链接（理论上应该只有 zz 和 verifyid 参数的值会变动，而且大概率是+1）
         #   1.3 重新启用代码
         #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
         #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
-        #   1.3.3 在 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
+        #   1.3.3 在 config.toml 和 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
         #   1.3.4 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
+        #   1.5 发布版本后同时上传集卡特别版
         #
         # hack:
         #   2. 废弃
@@ -5818,7 +5820,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs()
         # djcHelper.guanjia()
         # djcHelper.dnf_strong()
-        # djcHelper.ark_lottery()
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_13()
         # djcHelper.dnf_helper_chronicle()
@@ -5840,5 +5841,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
-        djcHelper.majieluo()
+        # djcHelper.majieluo()
         # djcHelper.maoxian()
+        djcHelper.ark_lottery()

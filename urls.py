@@ -32,7 +32,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-03-31 00:00:00", "2021-07-17 23:59:59"),
     newAmsActInfo("黄钻", "2021-03-31 00:00:00", "2021-07-17 23:59:59"),
-    newAmsActInfo("集卡", "2021-06-03 00:00:00", "2021-07-10 23:59:59"),
+    newAmsActInfo("集卡", "2021-07-20 00:00:00", "2021-08-08 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
 ]
@@ -71,6 +71,7 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210705care/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
+    "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -95,7 +96,6 @@ act_name_to_url = {
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210519video/index.html",
-    "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=8&verifyid=qq2021dnf13",
     "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
 }
 

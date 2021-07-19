@@ -3420,6 +3420,7 @@ class DjcHelper:
             "DNF520",
             "DNF1314",
             "JBLQ50",
+            "SW888",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -5802,5 +5803,5 @@ if __name__ == '__main__':
         # djcHelper.maoxian()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_yellow_diamond()
-        # djcHelper.dnf_welfare()
-        djcHelper.guanjia_new()
+        djcHelper.dnf_welfare()
+        # djcHelper.guanjia_new()

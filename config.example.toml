@@ -699,6 +699,8 @@ show_color = ""
 4437 = false
 # 2021.6.3 DNF周年送福利
 4473 = false
+# 2021.7.20 DNF女鬼剑新职业刃影闪亮登场，超萌表情包集卡赢好礼
+4495 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

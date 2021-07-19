@@ -596,8 +596,12 @@ need_take_awards = false
 4166 = false
 # 2021.1.15 超萌雪人送祝福
 4261 = false
-# 2021.1.15 集卡赢战灵天舞套!
+# 2021.3.25 集卡赢战灵天舞套!
 4437 = false
+# 2021.6.3 DNF周年送福利
+4473 = false
+# 2021.7.20 DNF女鬼剑新职业刃影闪亮登场，超萌表情包集卡赢好礼
+4495 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

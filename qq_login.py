@@ -197,6 +197,7 @@ class QQLogin():
         urllib_logger = logging.getLogger('urllib3.connectionpool')
         urllib_logger.setLevel(logger.level)
 
+    @try_except(extra_msg="自动下载缺失的dlc失败，请根据上面打印的提示日志去操作~")
     def check_and_download_chrome_ahead(self):
         """
         尝试预先下载解压缩chrome的driver和便携版

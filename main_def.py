@@ -371,7 +371,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
             accounts_that_should_enable_cost_card_to_lottery.append(row[1])
 
     # 给每一行上色
-    for row in rows[:-1]:
+    for row in rows:
         idx = row[0]
         name = row[1]
 

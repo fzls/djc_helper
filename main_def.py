@@ -1388,7 +1388,9 @@ def test_try_report_pay_info():
 
 def _test_main():
     need_check_bind_and_skey = True
+    enable_multiprocessing = True
     # need_check_bind_and_skey = False
+    # enable_multiprocessing = False
 
     # # 最大化窗口
     # logger.info("尝试最大化窗口，打包exe可能会运行的比较慢")
@@ -1404,7 +1406,12 @@ def _test_main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
-    init_pool(cfg.get_pool_size())
+    if enable_multiprocessing:
+        init_pool(cfg.get_pool_size())
+    else:
+        init_pool(0)
+        cfg.common.enable_multiprocessing = False
+        cfg.common.enable_super_fast_mode = False
 
     if need_check_bind_and_skey:
         check_all_skey_and_pskey(cfg)

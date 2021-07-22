@@ -393,7 +393,6 @@ class DjcHelper:
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("colg每日签到", self.colg_signin),
             ("KOL", self.dnf_kol),
-            ("超级会员", self.dnf_super_vip),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
@@ -404,6 +403,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("管家蚊子腿", self.guanjia_new),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1517,15 +1517,15 @@ class DjcHelper:
             return
         self.lr = lr
 
-        self.qzone_act_op("幸运勇士礼包", "5353_75244d03")
-        self.qzone_act_op("勇士见面礼", "5419_2c0ff022")
-        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_分享_{self.uin()}"):
-            self.qzone_act_op("分享给自己", "5500_e8b39ea3", act_req_data={
+        self.qzone_act_op("幸运勇士礼包", "7504_fabec561")
+        self.qzone_act_op("勇士见面礼", "7505_c239f3d0")
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_v2_分享_{self.uin()}"):
+            self.qzone_act_op("分享给自己", "7506_dc942803", act_req_data={
                 "receivers": [
                     self.qq(),
                 ]
             })
-        self.qzone_act_op("分享领取礼包", "5501_c70d8e0f")
+        self.qzone_act_op("分享领取礼包", "7507_6ce917a9")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下
@@ -5792,7 +5792,6 @@ if __name__ == '__main__':
 
         # djcHelper.query_all_extra_info()
         # djcHelper.dnf_comic()
-        # djcHelper.dnf_super_vip()
         # djcHelper.dnf_ozma()
         # djcHelper.colg_signin()
         # djcHelper.qq_video()
@@ -5803,5 +5802,6 @@ if __name__ == '__main__':
         # djcHelper.maoxian()
         # djcHelper.ark_lottery()
         # djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
+        djcHelper.dnf_super_vip()

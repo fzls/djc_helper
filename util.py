@@ -50,10 +50,11 @@ def change_console_window_mode_async(disable_min_console=False):
         return
 
     from config import Config, config
+    from copy import deepcopy
 
     cfg = Config()
     try:
-        cfg = config()
+        cfg = deepcopy(config())
     except Exception as e:
         logger.error(f"读取配置失败", exc_info=e)
 

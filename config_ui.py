@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from log import logger, fileHandler, new_file_handler
 
 logger.name = "config_ui"
@@ -391,8 +393,7 @@ class ConfigUi(QFrame):
             account_config.auto_update_config({})
             account_config.name = account_name
             account_ui = AccountConfigUi(account_config, self.to_config().common)
-            self.accounts.append(account_ui)
-            self.tabs.addTab(account_ui, account_name)
+            self.add_account_tab(account_ui)
             self.tabs.setCurrentWidget(account_ui)
 
             show_message("添加成功", "请继续进行其他操作~ 全部操作完成后记得保存~")
@@ -702,8 +703,24 @@ class ConfigUi(QFrame):
         self.accounts = []  # type: List[AccountConfigUi]
         for account in cfg.account_configs:
             account_ui = AccountConfigUi(account, self.to_config().common)
-            self.accounts.append(account_ui)
-            self.tabs.addTab(account_ui, account.name)
+            self.add_account_tab(account_ui)
+
+    def add_account_tab(self, account_ui: AccountConfigUi):
+        self.accounts.append(account_ui)
+        self.tabs.addTab(account_ui, account_ui.lineedit_name.text())
+
+        # 记录当前账号名，用于同步修改tab名称
+        account_ui.old_name = account_ui.lineedit_name.text()
+
+        # 当修改账号名时，根据之前的账号名，定位并同步修改tab名称
+        def update_tab_name(new_account_name: str):
+            for tab_index in range(self.tabs.count()):
+                if self.tabs.tabText(tab_index) == account_ui.old_name:
+                    self.tabs.setTabText(tab_index, new_account_name)
+                    account_ui.old_name = new_account_name
+                    break
+
+        account_ui.lineedit_name.textChanged.connect(update_tab_name)
 
     def show_buy_info(self, clicked=False):
         cfg = self.to_config()
@@ -855,7 +872,8 @@ class CommonConfigUi(QFrame):
         self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
         add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
 
-        self.lineedit_majieluo_invite_uin_list = create_lineedit(list_to_str(cfg.majieluo_invite_uin_list), "填写马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知，使用英文逗号分开，示例：a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b")
+        self.lineedit_majieluo_invite_uin_list = create_lineedit(list_to_str(cfg.majieluo_invite_uin_list),
+                                                                 "填写马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知，使用英文逗号分开，示例：a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b")
         add_row(form_layout, "马杰洛赠送礼包inviteUin列表", self.lineedit_majieluo_invite_uin_list)
 
         self.combobox_log_level = create_combobox(cfg.log_level, [

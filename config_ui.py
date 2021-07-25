@@ -240,7 +240,7 @@ class ConfigUi(QFrame):
     def create_buttons(self, top_layout: QVBoxLayout):
         # note: 配色可参考 https://www.computerhope.com/htmcolor.htm
 
-        btn_load_old_version = create_pushbutton("继承旧版本配置", "LawnGreen")
+        btn_load_old_version = create_pushbutton("继承旧版本配置", "Aquamarine")
         btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
 
@@ -255,7 +255,7 @@ class ConfigUi(QFrame):
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
-        btn_add_account = create_pushbutton("添加账号", "lightgreen")
+        btn_add_account = create_pushbutton("添加账号", "Chartreuse")
         btn_del_account = create_pushbutton("删除账号", "lightgreen")
         btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan", "登录错账户，或者想要登录其他账户时，点击这个即可清除登录状态")
         btn_add_group = create_pushbutton("加群反馈问题/交流", "Orange")

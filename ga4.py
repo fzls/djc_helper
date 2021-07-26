@@ -19,39 +19,21 @@ headers = {
     "user-agent": "djc_helper",
 }
 
-common_data = {
-    "client_id": get_cid(),
-    "user_id": get_cid(),
-
-    # 'v': '1',  # API Version.
-    # 'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-    # 'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-    # 'ua': 'djc_helper',
-    #
-    # 'an': "djc_helper",
-    # 'av': now_version,
-    #
-    # 'ds': 'app',
-    # 'sr': get_resolution(),
-}
-
 
 @try_except(show_exception_info=False)
-def track_event(category: str, action: str, label=None, value=0, ga_misc_params: dict = None):
-    if ga_misc_params is None:
-        ga_misc_params = {}
-
+def track_event(category: str, event_name: str):
     json_data = {
-        **common_data,
+        "client_id": get_cid(),
+        "user_id": get_cid(),
 
         "events": [
             {
-                "name": action,
-                "params": {},
+                "name": category,
+                "params": {
+                    event_name: 0,
+                },
             }
         ],
-
-        **ga_misc_params,  # 透传的一些额外参数
     }
 
     res = requests.post(GA_API_URL, json=json_data, headers=headers, timeout=10)
@@ -59,4 +41,5 @@ def track_event(category: str, action: str, label=None, value=0, ga_misc_params:
 
 
 if __name__ == '__main__':
-    track_event("ga4_example", "tutorial_begin")
+    track_event("test_category", "test_event_name_1")
+    track_event("test_category", "test_event_name_2")

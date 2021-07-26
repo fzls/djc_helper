@@ -32,7 +32,7 @@ def track_event(category: str, event_name: str):
             {
                 "name": category,
                 "params": {
-                    event_name: 0,
+                    "event_name": event_name,
                 },
             }
         ],

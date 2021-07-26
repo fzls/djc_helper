@@ -974,6 +974,15 @@ def remove_suffix(input_string: str, suffix: str) -> str:
     return input_string
 
 
+def get_cid():
+    return "{}-{}".format(platform.node(), uuid.getnode())
+
+
+def get_resolution() -> str:
+    width, height = get_screen_size()
+    return f"{width}x{height}"
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

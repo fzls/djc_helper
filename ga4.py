@@ -37,7 +37,14 @@ def track_event(category: str, event_name: str):
     }
 
     res = requests.post(GA_API_URL, json=json_data, headers=headers, timeout=10)
-    logger.warning(f"request info: body = {res.request.body} res = {res.text}")
+
+    # 打印日志，方便调试
+    debug_msg = f"request info: body = {res.request.body}"
+    logFunc = logger.debug
+    if "debug" in GA_API_BASE_URL:
+        debug_msg += f" res = {res.text}"
+        logFunc = logger.warning
+    logFunc(debug_msg)
 
 
 if __name__ == '__main__':

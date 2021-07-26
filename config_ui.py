@@ -213,8 +213,7 @@ class ConfigUi(QFrame):
         self.save_config(self.to_config())
         if show_message_box:
             show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.example.toml查看注释")
-
-        report_click_event("save_config")
+            report_click_event("save_config")
 
     def load_config(self) -> Config:
         load_config(local_config_path="", reset_before_load=True)

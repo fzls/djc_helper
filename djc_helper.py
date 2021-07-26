@@ -404,6 +404,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("管家蚊子腿", self.guanjia_new),
             ("超级会员", self.dnf_super_vip),
+            ("会员关怀", self.dnf_vip_mentor),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1562,6 +1563,67 @@ class DjcHelper:
                 ]
             })
         self.qzone_act_op("分享领取礼包", "7475_2d9f8ae6")
+
+    # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
+    # note：对接流程与上方黄钻完全一致，参照其流程即可
+    def dnf_vip_mentor(self):
+        act_url = get_act_url("会员关怀")
+        show_head_line("QQ空间会员关怀")
+        self.show_not_ams_act_info("会员关怀")
+
+        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
+            logger.warning("未启用领取QQ空间会员关怀功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+        self.lr = lr
+
+        def try_make_lucky_user_req_data():
+            cfg = self.cfg.vip_mentor
+
+            # 确认使用的角色
+            server_id, roleid = "", ""
+            if cfg.guanhuai_dnf_server_id == "":
+                logger.warning("未配置会员关怀礼包的区服和角色信息，将使用道聚城绑定的角色信息")
+                logger.warning(color("bold_cyan") + "如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的关怀活动和集卡活动都可以拿这个来获取回归相关的领取资格")
+            else:
+                if cfg.guanhuai_dnf_role_id == "":
+                    logger.warning(f"配置了会员关怀礼包的区服ID为{cfg.guanhuai_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
+                    self.query_dnf_rolelist(cfg.guanhuai_dnf_server_id)
+                else:
+                    logger.info("使用配置的区服和角色信息来进行领取会员关怀礼包")
+                    server_id, roleid = cfg.guanhuai_dnf_server_id, cfg.guanhuai_dnf_role_id
+
+            # 如果设置了幸运角色，则构建幸运角色请求数据
+            lucky_req_data = None
+            if server_id != "" and roleid != "":
+                # 如果配置了幸运角色，则使用配置的幸运角色来领取
+                lucky_req_data = {
+                    "role_info": {
+                        "area": server_id,
+                        "partition": server_id,
+                        "role": roleid,
+                        "clientPlat": 3,
+                        "game_id": "dnf"
+                    }
+                }
+
+            return lucky_req_data
+
+        self.qzone_act_op("关怀礼包", "7310_13a6f4de", act_req_data=try_make_lucky_user_req_data())
+
+        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "7314_241a75f5")
+        for idx in range_from_one(10):
+            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "7315_84b2b743")
+            if res.get('Data', '') == "":
+                break
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, print_res=True):
         if act_req_data is None:
@@ -5804,4 +5866,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
-        djcHelper.dnf_super_vip()
+        # djcHelper.dnf_super_vip()
+        djcHelper.dnf_vip_mentor()

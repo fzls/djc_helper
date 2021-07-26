@@ -22,6 +22,8 @@ headers = {
 
 @try_except(show_exception_info=False)
 def track_event(category: str, event_name: str):
+    event_name = event_name.replace('/', '_')
+
     json_data = {
         "client_id": get_cid(),
         "user_id": get_cid(),
@@ -48,5 +50,5 @@ def track_event(category: str, event_name: str):
 
 
 if __name__ == '__main__':
-    track_event("test_category", "test_event_name_1")
+    track_event("test_category", "test_event/name_1")
     track_event("test_category", "test_event_name_2")

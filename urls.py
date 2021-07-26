@@ -72,6 +72,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021070614491911111",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/1669_61b21754",
+    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -89,7 +90,6 @@ act_name_to_url = {
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
-    "会员关怀": "https://act.qzone.qq.com/vip/meteor/blockly/p/6865x93954",
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/Time2021/index",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",

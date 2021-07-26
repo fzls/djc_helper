@@ -1815,8 +1815,6 @@ class DjcHelper:
         total_get, star_count = query_star_count()
         msg = f"当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
         logger.info(color("bold_yellow") + msg)
-        if is_weekly_first_run("提示领道具"):
-            async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
 
         if use_by_myself():
             # 我自己进行兑换~
@@ -1837,6 +1835,9 @@ class DjcHelper:
 
             for idx in range_from_one(star_count):
                 self.dnf_comic_op(f"第{idx}/{star_count}次星星夺宝", "774818")
+
+        if star_count > 0 and is_weekly_first_run("提示领道具"):
+            async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
 
     def check_dnf_comic(self):
         self.check_bind_account("qq视频-DNF漫画预约活动", get_act_url("DNF漫画预约活动"),

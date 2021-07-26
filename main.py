@@ -58,7 +58,7 @@ def prepare_env():
 
 
 def main():
-    increase_counter(name="run/begin", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
+    increase_counter(name="run/begin", ga_type=ga.GA_REPORT_TYPE_PAGE_VIEW)
 
     prepare_env()
 
@@ -164,7 +164,7 @@ def main():
     # 运行完毕备份配置到本机数据目录
     try_save_configs_to_user_data_dir()
 
-    increase_counter(name="run/end", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
+    increase_counter(name="run/end", ga_type=ga.GA_REPORT_TYPE_PAGE_VIEW)
 
 
 if __name__ == '__main__':

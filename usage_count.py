@@ -5,8 +5,9 @@ from typing import Any
 import leancloud
 import leancloud.object_
 
+import ga
+import ga4
 from first_run import is_daily_first_run
-from ga import *
 from log import logger
 from util import get_today, try_except, async_call
 
@@ -17,7 +18,7 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=GA_REPORT_TYPE_EVENT, ga_category="", ga_misc_params: dict = None):
+def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=ga.GA_REPORT_TYPE_EVENT, ga_category="", ga_misc_params: dict = None):
     name = str(name)
 
     if name == "":
@@ -46,8 +47,10 @@ def increase_counter_sync_lean_cloud(name: str):
 
 @try_except(show_exception_info=False)
 def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category: str, ga_misc_params: dict):
-    logger.debug(f"report to google analytics, name = {name}")
-    if ga_type == GA_REPORT_TYPE_EVENT:
+    #  上报谷歌分析（v3和v4同时上报）
+    logger.debug(f"report to google analytics(v3 and v4), name = {name}")
+
+    if ga_type == ga.GA_REPORT_TYPE_EVENT:
         if ga_category == "":
             # 如果ga_category为空，则尝试从name中解析，假设name中以/分隔的第一个部分作为ga_category
             parts = name.split('/', 1)
@@ -55,9 +58,11 @@ def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category:
                 ga_category, name = parts
             else:
                 ga_category = "counter"
-        track_event(ga_category, name, ga_misc_params)
-    elif ga_type == GA_REPORT_TYPE_PAGE_VIEW:
-        track_page(name, ga_misc_params)
+        ga.track_event(ga_category, name, ga_misc_params)
+        ga4.track_event(ga_category, name)
+    elif ga_type == ga.GA_REPORT_TYPE_PAGE_VIEW:
+        ga.track_page(name, ga_misc_params)
+        ga4.track_event("page_view", name)
     else:
         logger.error(f"unknow ga_type={ga_type}")
 
@@ -115,8 +120,8 @@ def leancloud_api(api):
 
 
 def test():
-    increase_counter("test_event", False, True, GA_REPORT_TYPE_EVENT)
-    increase_counter("test_page_view", False, True, GA_REPORT_TYPE_PAGE_VIEW)
+    increase_counter("test_event", False, True, ga.GA_REPORT_TYPE_EVENT)
+    increase_counter("test_page_view", False, True, ga.GA_REPORT_TYPE_PAGE_VIEW)
 
     os.system("PAUSE")
 

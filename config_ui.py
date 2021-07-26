@@ -1134,6 +1134,9 @@ class AccountConfigUi(QWidget):
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
         add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
+        self.checkbox_comic_lottery = create_checkbox(cfg.comic_lottery)
+        add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_comic_lottery)
+
         # -------------- 区域：活动开关 --------------
         self.collapsible_box_function_switches, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("活动开关", top_layout)
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
@@ -1150,6 +1153,7 @@ class AccountConfigUi(QWidget):
         cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
 
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
+        cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()

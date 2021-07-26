@@ -353,6 +353,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_cookie = ""
         # colg cookie
         self.colg_cookie = ""
+        # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）
+        self.comic_lottery = False
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

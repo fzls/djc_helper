@@ -6,8 +6,8 @@ from log import logger
 from util import try_except, get_cid
 
 # note: 查看数据地址 https://analytics.google.com/analytics/web/#/
-# note: 当发现上报失败时，可以将打印的post body复制到 https://ga-dev-tools.web.app/hit-builder/ 进行校验，看是否缺了参数，或者有参数不符合格式
-# note: 参数文档 https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
+# note: 当发现上报失败时，可以将打印的post body复制到 https://ga-dev-tools.web.app/ga4/event-builder/ 进行校验，看是否缺了参数，或者有参数不符合格式
+# note: 参数文档 https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference?client_type=gtag#payload_query_parameters
 GA_API_BASE_URL = "https://www.google-analytics.com/mp/collect"
 # GA_API_BASE_URL = "https://www.google-analytics.com/debug/mp/collect"
 GA_API_SECRET = "Hyn3f-XnQIygfii6xju6Hg"

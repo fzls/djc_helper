@@ -391,7 +391,6 @@ class DjcHelper:
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
-            ("colg每日签到", self.colg_signin),
             ("KOL", self.dnf_kol),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
@@ -432,6 +431,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("刃影预约活动", self.dnf_reserve),
+            ("colg每日签到", self.colg_signin),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -5839,4 +5839,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
         # djcHelper.dnf_super_vip()
-        djcHelper.dnf_bbs()
+        # djcHelper.dnf_bbs()
+        djcHelper.colg_signin()

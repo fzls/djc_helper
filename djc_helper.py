@@ -4317,7 +4317,7 @@ class DjcHelper:
     def dnf_bbs(self):
         # https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
         show_head_line("dnf官方论坛签到")
-        self.show_amesvr_act_info(self.dnf_bbs_op)
+        self.show_amesvr_act_info(self.dnf_bbs_dup_op)
 
         if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
             logger.warning("未启用领取dnf官方论坛签到活动合集功能，将跳过")
@@ -4327,7 +4327,6 @@ class DjcHelper:
             logger.warning("未配置dnf官方论坛的cookie或formhash，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
-        self.check_dnf_bbs()
         self.check_dnf_bbs_dup()
 
         def signin():
@@ -4383,22 +4382,8 @@ class DjcHelper:
             return int(info.sOutValue1)
 
         # 可能有多个活动并行
-        # https://dnf.qq.com/act/a20210420act/index.html
         # https://dnf.qq.com/act/a20210611act/index.html
         def query_remaining_quota():
-            res = self.dnf_bbs_op("查询礼包剩余量", "758279", print_res=False)
-            info = parse_amesvr_common_info(res)
-
-            logger.info('\n'.join([
-                "当前礼包全局剩余量如下",
-                f"\t装备提升礼盒: {info.sOutValue1}",
-                f"\t抗疲劳秘药: {info.sOutValue2}",
-                f"\t时间引导石礼盒: {info.sOutValue3}",
-                f"\t暗魂水晶礼盒: {info.sOutValue4}",
-                f"\t华丽的徽章自选礼盒: {info.sOutValue5}",
-                f"\t灿烂的徽章自选礼盒: {info.sOutValue6}",
-            ]))
-
             res = self.dnf_bbs_dup_op("查询礼包剩余量 1-8", "774037", print_res=False)
             info = parse_amesvr_common_info(res)
             res = self.dnf_bbs_dup_op("查询礼包剩余量 9-10", "774235", print_res=False)
@@ -4421,10 +4406,8 @@ class DjcHelper:
         def try_exchange():
             operations = [
                 (self.dnf_bbs_dup_op, "灿烂的徽章自选礼盒【50代币券】", "774055", 1),
-                (self.dnf_bbs_op, "灿烂的徽章自选礼盒<官方论坛活动>【100代币券】", "758258", 1),
                 (self.dnf_bbs_dup_op, "+10 装备强化券【25代币券】", "774053", 1),
                 (self.dnf_bbs_dup_op, "装备提升礼盒【2代币券】", "774049", 5),
-                (self.dnf_bbs_op, "装备提升礼盒<官方论坛活动>【2代币券】", "758113", 5),
                 (self.dnf_bbs_dup_op, "一次性继承装置【2代币券】", "774048", 5),
                 (self.dnf_bbs_dup_op, "宠物饲料礼袋 (20个)【2代币券】", "774047", 2),
                 (self.dnf_bbs_dup_op, "灿烂的徽章神秘礼盒【25代币券】", "774054", 1),
@@ -4432,10 +4415,6 @@ class DjcHelper:
                 (self.dnf_bbs_dup_op, "Lv100传说装备自选礼盒【12代币券】", "774052", 1),
                 (self.dnf_bbs_dup_op, "华丽的徽章神秘礼盒【12代币券】", "774050", 2),
                 (self.dnf_bbs_dup_op, "抗疲劳秘药 (10点)【5代币券】", "774033", 5),
-                (self.dnf_bbs_op, "抗疲劳秘药 (20点)<官方论坛活动>【20代币券】", "758253", 1),
-                (self.dnf_bbs_op, "华丽的徽章自选礼盒<官方论坛活动>【25代币券】", "758257", 1),
-                (self.dnf_bbs_op, "[期限]时间引导石礼盒 (10个)<官方论坛活动>【5代币券】", "758254", 2),
-                (self.dnf_bbs_op, "暗魂水晶礼盒 (100个)<官方论坛活动>【15代币券】", "758255", 2),
             ]
 
             for op_func, name, flowid, count in operations:
@@ -4468,16 +4447,6 @@ class DjcHelper:
 
         after_exchange_dbq = query_dbq()
         logger.warning(color("bold_yellow") + f"账号 {self.cfg.name} 本次论坛签到获得 {after_sign_dbq - old_dbq} 个代币券，兑换道具消耗了 {after_exchange_dbq - after_sign_dbq} 个代币券，余额：{old_dbq} => {after_exchange_dbq}")
-
-    def check_dnf_bbs(self):
-        self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20210420act/index.html",
-                                activity_op_func=self.dnf_bbs_op, query_bind_flowid="758117", commit_bind_flowid="758116")
-
-    def dnf_bbs_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_bbs
-
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/act/a20210420act/",
-                                   **extra_params)
 
     def check_dnf_bbs_dup(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20210611act/index.html",
@@ -5870,4 +5839,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.guanjia_new()
         # djcHelper.dnf_super_vip()
-        djcHelper.dnf_vip_mentor()
+        djcHelper.dnf_bbs()

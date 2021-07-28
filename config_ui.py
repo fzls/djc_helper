@@ -443,7 +443,7 @@ class ConfigUi(QFrame):
         top_layout.setAlignment(Qt.AlignCenter)
 
         # -------------- 区域：购买卡密 --------------
-        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse")
+        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse")
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 
@@ -457,7 +457,7 @@ class ConfigUi(QFrame):
         hbox_layout.addWidget(btn_pay_by_month)
 
         # -------------- 区域：使用卡密 --------------
-        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密", top_layout, title_backgroup_color="MediumSpringGreen")
+        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密(点击展开)", top_layout, title_backgroup_color="MediumSpringGreen")
         vbox_layout = QVBoxLayout()
         self.collapsible_box_use_card_secret.setContentLayout(vbox_layout)
 

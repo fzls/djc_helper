@@ -155,8 +155,8 @@ def make_scroll_layout(inner_layout: QLayout):
     return scroll_layout
 
 
-def create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(title: str, parent_layout: QLayout, fold: bool = True) -> Tuple[CollapsibleBox, QFormLayout]:
-    collapsible_box = CollapsibleBox(title)
+def create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(title: str, parent_layout: QLayout, fold: bool = True, title_backgroup_color="") -> Tuple[CollapsibleBox, QFormLayout]:
+    collapsible_box = CollapsibleBox(title, title_backgroup_color=title_backgroup_color)
     parent_layout.addWidget(collapsible_box)
 
     form_layout = QFormLayout()
@@ -167,8 +167,8 @@ def create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(title: 
     return collapsible_box, form_layout
 
 
-def create_collapsible_box_add_to_parent_layout(title: str, parent_layout: QLayout) -> CollapsibleBox:
-    collapsible_box = CollapsibleBox(title)
+def create_collapsible_box_add_to_parent_layout(title: str, parent_layout: QLayout, title_backgroup_color="") -> CollapsibleBox:
+    collapsible_box = CollapsibleBox(title, title_backgroup_color=title_backgroup_color)
     parent_layout.addWidget(collapsible_box)
 
     return collapsible_box

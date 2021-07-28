@@ -238,6 +238,7 @@ class ConfigUi(QFrame):
 
     def create_buttons(self, top_layout: QVBoxLayout):
         # note: 配色可参考 https://www.computerhope.com/htmcolor.htm
+        #   https://www.computerhope.com/jargon/w/w3c-color-names.htm
 
         btn_load_old_version = create_pushbutton("继承旧版本配置", "Aquamarine")
         btn_load = create_pushbutton("读取配置", "Aquamarine")
@@ -442,7 +443,7 @@ class ConfigUi(QFrame):
         top_layout.setAlignment(Qt.AlignCenter)
 
         # -------------- 区域：购买卡密 --------------
-        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(不会操作可点击左上方的【查看付费指引】按钮)", top_layout)
+        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse")
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 
@@ -456,7 +457,7 @@ class ConfigUi(QFrame):
         hbox_layout.addWidget(btn_pay_by_month)
 
         # -------------- 区域：使用卡密 --------------
-        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密", top_layout)
+        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密", top_layout, title_backgroup_color="MediumSpringGreen")
         vbox_layout = QVBoxLayout()
         self.collapsible_box_use_card_secret.setContentLayout(vbox_layout)
 

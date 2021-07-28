@@ -68,10 +68,12 @@ class QzoneActivity:
         self.try_lottery_using_cards()
 
     def add_ark_lottery_times(self):
-        # self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面（本次似乎没启用这个，所以会提示没资格）", self.zzconfig.rules.loginPage)
+        if self.zzconfig.rules.loginPage != 0:
+            self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", self.zzconfig.rules.loginPage)
         self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", self.zzconfig.rules.login, query="0", act_name=self.zzconfig.loginActId)
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", self.zzconfig.rules.share)
-        # self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日观看直播", self.zzconfig.rules.video)
+        if self.zzconfig.rules.video != 0:
+            self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日观看直播", self.zzconfig.rules.video)
 
         # 幸运勇士
         server_id, roleid = "", ""

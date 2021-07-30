@@ -1392,8 +1392,9 @@ def test_try_report_pay_info():
 
 def _test_main():
     need_check_bind_and_skey = True
-    enable_multiprocessing = True
     # need_check_bind_and_skey = False
+
+    enable_multiprocessing = True
     # enable_multiprocessing = False
 
     # # 最大化窗口

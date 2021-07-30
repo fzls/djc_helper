@@ -1070,6 +1070,8 @@ class DjcHelper:
         else:
             info.xytype_str = f"心悦VIP{info.xytype - 4}"
         info.is_special_member = int(raw_info.sOutValue2) == 1
+        if info.is_special_member:
+            info.xytype_str = "特邀会员"
         info.ysb, info.score, info.ticket = [int(val) for val in raw_info.sOutValue3.split('|')]
         info.username, info.usericon = raw_info.sOutValue4.split('|')
         info.username = unquote_plus(info.username)

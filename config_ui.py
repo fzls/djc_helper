@@ -1224,6 +1224,9 @@ class AccountConfigUi(QWidget):
         default_items = [
             ("747693", "1537766", "装备提升礼盒(需10点成就点)"),
             ("747759", "1537690", "装备提升礼盒(需30点勇士币)(每日20次)"),
+            ("747672", "", "复活币*3礼袋(日限10)(需8成就点)"),
+            ("747718", "", "复活币*1(日限100)(需1点勇士币)"),
+            ("749075", "", "高级装扮兑换券(需400点勇士币)（每月1次）"),
         ]
         for iFlowId, package_id, sFlowName in default_items:
             item = XinYueOperationConfig()

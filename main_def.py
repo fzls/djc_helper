@@ -1496,6 +1496,8 @@ def test_pay_info():
     # from config import to_raw_type
     # cfg.common.on_config_update(to_raw_type(cfg.common))
 
+    # reset_cache(cache_name_user_buy_info)
+
     logger.info("尝试获取DLC信息")
     has_buy_auto_update_dlc = has_buy_auto_updater_dlc(cfg.get_qq_accounts())
     logger.info("尝试获取按月付费信息")

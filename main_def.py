@@ -1066,6 +1066,12 @@ def try_auto_update(cfg):
 
 
 def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
+    logger.debug("尝试由服务器代理查询购买DLC信息，请稍候片刻~")
+    user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
+    if query_ok:
+        return infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info)
+
+    logger.debug("服务器查询DLC信息失败，尝试直接从网盘查询~")
     for idx in range(max_retry_count):
         try:
             uploader = Uploader()
@@ -1110,13 +1116,23 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
     return True
 
 
+def infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info: BuyInfo) -> bool:
+    if len(user_buy_info.buy_records) == 0:
+        return False
+
+    return user_buy_info.buy_records[0].reason.startswith("自动更新DLC赠送")
+
+
 def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False, show_dlc_info=True) -> BuyInfo:
     logger.info(f"如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：{config().common.netdisk_link}")
-    user_buy_info, query_ok = _get_user_buy_info(qq_accounts, max_retry_count, retry_wait_time, show_log)
-    if not query_ok:
-        logger.info("从网盘查询失败，尝试由服务器代理查询付费信息，请稍候片刻~")
-        return get_user_buy_info_from_server(qq_accounts)
 
+    logger.debug("尝试由服务器代理查询付费信息，请稍候片刻~")
+    user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
+    if query_ok:
+        return user_buy_info
+
+    logger.debug("服务器查询失败，尝试直接从网盘查询~")
+    user_buy_info, _ = get_user_buy_info_from_netdisk(qq_accounts, max_retry_count, retry_wait_time, show_log)
     # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
     if has_buy_auto_updater_dlc(qq_accounts, max_retry_count, retry_wait_time, show_log):
         max_present_times = datetime.timedelta(days=2 * 31)
@@ -1171,7 +1187,7 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
     return user_buy_info
 
 
-def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> Tuple[BuyInfo, bool]:
+def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> Tuple[BuyInfo, bool]:
     default_user_buy_info = BuyInfo()
     for try_idx in range(max_retry_count):
         try:
@@ -1257,19 +1273,31 @@ def _get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_tim
     return default_user_buy_info, False
 
 
-def get_user_buy_info_from_server(qq_accounts: List[str]) -> BuyInfo:
+def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool]:
     buyInfo = BuyInfo()
+    ok = True
 
     try:
         if len(qq_accounts) != 0:
-            server_addr = get_pay_server_addr()
-            raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
-            if raw_res.status_code == 200:
-                buyInfo.auto_update_config(raw_res.json())
+            def fetch_query_info_from_server() -> str:
+                server_addr = get_pay_server_addr()
+                raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
+
+                if raw_res.status_code == 200:
+                    return raw_res.text
+                else:
+                    return ""
+
+            raw_res_text = with_cache("user_buy_info", json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
+                                      cache_validate_func=None)
+            if raw_res_text != "":
+                buyInfo.auto_update_config(json.loads(raw_res_text))
+
     except Exception as e:
+        ok = False
         logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
 
-    return buyInfo
+    return buyInfo, ok
 
 
 def show_multiprocessing_info(cfg: Config):

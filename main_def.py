@@ -1171,7 +1171,7 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
         user_buy_info.expire_at = format_time(expire_at_time)
         user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
             "buy_month": 2,
-            "buy_at": free_start_time,
+            "buy_at": format_time(free_start_time),
             "reason": "自动更新DLC赠送(自2.8至今最多累积未付费时长两个月***注意不是从购买日开始计算***)"
         }))
 

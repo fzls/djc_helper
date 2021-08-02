@@ -1288,7 +1288,7 @@ def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool
                 else:
                     return ""
 
-            raw_res_text = with_cache("user_buy_info", json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
+            raw_res_text = with_cache(cache_name_user_buy_info, json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
                                       cache_validate_func=None)
             if raw_res_text != "":
                 buyInfo.auto_update_config(json.loads(raw_res_text))

@@ -575,6 +575,7 @@ def remove_none_from_list(l: list) -> list:
 
 _root_caches_key = "caches"
 cache_name_download = "download_cache"
+cache_name_user_buy_info = "user_buy_info"
 
 
 def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600):

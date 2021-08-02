@@ -574,6 +574,7 @@ class ConfigUi(QFrame):
 
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)
+        reset_cache(cache_name_user_buy_info)
 
     def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: List[str]) -> str:
         if len(card.split('-')) != 3:

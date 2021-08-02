@@ -369,8 +369,8 @@ class ConfigUi(QFrame):
         report_click_event("clear_login_status")
 
     def add_group(self, checked=False):
-        # note: 如果群 444193814 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
-        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=vSEAVsoTbqJOKqp4bVpxnExEYOahOjcZ&jump_from=webapi")
+        # note: 如果群 553925117 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03 By Chen Ji
+        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=sPZykRpi-_SU6C7B-eIUQH-1_hCmbBHB&jump_from=webapi")
         self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
         report_click_event("add_group")
 

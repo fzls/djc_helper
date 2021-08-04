@@ -1,3 +1,11 @@
 -r requirements.txt
 
 pytest
+pytest-cov
+bandit
+codespell
+flake8
+isort
+mypy
+pyupgrade
+safety

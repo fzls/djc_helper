@@ -770,7 +770,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
                 ctx = monthly_pay_info
             elif will_expired_soon:
                 ctx = f"按月付费即将在{user_buy_info.remaining_time().days}天后过期({user_buy_info.expire_at})"
-            threading.Thread(target=show_buy_info_sync, args=(ctx,), daemon=True).start()
+            threading.Thread(target=show_buy_info_sync, args=(ctx, cfg), daemon=True).start()
             wait_seconds = 15
             logger.info(color("bold_green") + f"等待{wait_seconds}秒，确保看完这段话~")
             time.sleep(wait_seconds)
@@ -787,12 +787,14 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
             async_message_box(msg, title, icon=win32con.MB_ICONINFORMATION, follow_flag_file=False)
 
 
-def show_buy_info_sync(ctx, force_message_box=False):
+def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
     usedDays = get_count(my_usage_counter_name, "all")
     message = (
         f"{ctx}\n"
         "\n"
         f"Hello~ 你已经累积使用小助手{usedDays}天，希望小助手为你节省了些许时间和精力(●—●)\n"
+        "\n"
+        f"目前已登录的账号列表为：{cfg.get_qq_accounts()}，这些QQ当前均无按月付费或已过期\n"
         "\n"
         "2.2号添加了一个付费弹窗，但是截至2.6晚上六点，仅有不到百分之一的使用者进行了付费。\n"
         "考虑到近日来花在维护小助手上的时间比较久，因此本人决定，自2021-02-06 00:00:00之后添加的所有短期活动都将只能在付费生效期间使用，此前已有的功能（如道聚城、心悦）或之后出的长期功能都将继续免费使用。\n"

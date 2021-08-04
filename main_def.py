@@ -1396,12 +1396,12 @@ def get_appdata_save_dir() -> str:
     return os.path.join(get_appdata_dir(), 'djc_helper')
 
 
-def test_show_notices():
+def demo_show_notices():
     show_notices()
     input("等待公告下载完毕，测试完毕点击任何键即可退出....\n")
 
 
-def test_try_report_pay_info():
+def demo_try_report_pay_info():
     # 读取配置信息
     load_config("config.toml")
     cfg = config()
@@ -1419,7 +1419,7 @@ def test_try_report_pay_info():
     input("等待几秒，确保上传完毕后再点击enter键")
 
 
-def _test_main():
+def demo_main():
     need_check_bind_and_skey = True
     # need_check_bind_and_skey = False
 
@@ -1468,7 +1468,7 @@ def _test_main():
     # check_update(cfg)
 
 
-def test_show_buy_info():
+def demo_show_buy_info():
     user_buy_info = BuyInfo()
     user_buy_info.total_buy_month = 1
     user_buy_info.expire_at = "2021-07-01 00:00:00"
@@ -1476,7 +1476,7 @@ def test_show_buy_info():
     os.system("PAUSE")
 
 
-def test_show_activities_summary():
+def demo_show_activities_summary():
     # 读取配置信息
     load_config("config.toml")
     cfg = config()
@@ -1486,7 +1486,7 @@ def test_show_activities_summary():
     show_activities_summary(cfg, user_buy_info)
 
 
-def test_pay_info():
+def demo_pay_info():
     # 读取配置信息
     load_config("config.toml")
     cfg = config()
@@ -1517,9 +1517,9 @@ def test_pay_info():
 if __name__ == '__main__':
     freeze_support()
 
-    # _test_main()
-    test_pay_info()
+    # demo_main()
+    demo_pay_info()
 
-    # test_show_notices()
+    # demo_show_notices()
 
-    # test_show_activities_summary()
+    # demo_show_activities_summary()

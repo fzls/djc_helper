@@ -110,9 +110,9 @@ class DBInterface(ConfigInterface):
 
 
 def test():
-    from db import TestDB
+    from db import DemoDB
 
-    def _test(db: TestDB, save_inc: int, update_inc: int):
+    def _test(db: DemoDB, save_inc: int, update_inc: int):
         # init
         db.int_val = 1
 
@@ -122,7 +122,7 @@ def test():
 
         assert_load_same(db, 1 + save_inc)
 
-        def _cb(val: TestDB) -> Any:
+        def _cb(val: DemoDB) -> Any:
             val.int_val += update_inc
             return val.int_val
 
@@ -130,15 +130,15 @@ def test():
 
         assert_load_same(db, 1 + save_inc + update_inc)
 
-    def assert_load_same(db: TestDB, expect: int):
-        load_db = TestDB().with_context(db.context).load()
+    def assert_load_same(db: DemoDB, expect: int):
+        load_db = DemoDB().with_context(db.context).load()
         assert load_db.int_val == expect
 
     # 测试全局
-    _test(TestDB(), 1, 10)
+    _test(DemoDB(), 1, 10)
 
     # 测试设置context
-    _test(TestDB().with_context("test"), 2, 20)
+    _test(DemoDB().with_context("test"), 2, 20)
 
 
 if __name__ == '__main__':

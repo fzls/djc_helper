@@ -5,7 +5,7 @@ from db_def import DBInterface, ConfigInterface
 
 # ----------------- 数据定义 -----------------
 
-class TestDB(DBInterface):
+class DemoDB(DBInterface):
     def __init__(self):
         super().__init__()
         self.int_val = 1
@@ -88,4 +88,4 @@ class FireCrackersDB(DBInterface):
 
 if __name__ == '__main__':
     print(DBInterface())
-    print(TestDB())
+    print(DemoDB())

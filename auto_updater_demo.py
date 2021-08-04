@@ -2,7 +2,7 @@ from upload_lanzouyun import Uploader
 from util import *
 
 
-def test():
+def demo():
     logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
 
     dlc_path = os.path.realpath("auto_updater.py")
@@ -31,4 +31,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    demo()

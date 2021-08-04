@@ -1,4 +1,5 @@
 [run]
+source=djc_helper
 omit =
     .venv_dev/*
     .venv/*

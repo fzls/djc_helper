@@ -383,16 +383,10 @@ class DjcHelper:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("我的dnf13周年活动", self.dnf_my_story),
-            ("WeGame活动周年庆", self.dnf_wegame_dup),
-            ("DNF集合站周年庆", self.dnf_collection_dup),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
-            ("DNF心悦", self.dnf_xinyue),
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.ark_lottery),
@@ -432,6 +426,12 @@ class DjcHelper:
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("KOL", self.dnf_kol),
+            ("hello语音网页礼包兑换", self.hello_voice),
+            ("我的dnf13周年活动", self.dnf_my_story),
+            ("WeGame活动周年庆", self.dnf_wegame_dup),
+            ("DNF集合站周年庆", self.dnf_collection_dup),
+            ("DNF心悦", self.dnf_xinyue),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

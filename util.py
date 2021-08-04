@@ -829,20 +829,6 @@ def extract_between(html: str, prefix: str, suffix: str, typ: Type) -> Any:
     return typ(html[prefix_idx:suffix_idx])
 
 
-def test_extract_between():
-    html = open('test/test_extract_between.html', encoding='utf-8').read()
-
-    activity_id = extract_between(html, "var activity_id = '", "';", str)
-    lv_score = extract_between(html, "var lvScore = ", ";", int)
-    tasks = json.loads(extract_between(html, "var tasks = ", ";", str))['list']
-    rewards = json.loads(extract_between(html, "var rewardListData = ", ";", str))
-
-    print(activity_id)
-    print(lv_score)
-    print(tasks)
-    print(rewards)
-
-
 def popen(args, cwd="."):
     if type(args) is list:
         args = [str(arg) for arg in args]

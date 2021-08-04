@@ -52,4 +52,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-          verbose: true
+#          verbose: true

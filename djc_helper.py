@@ -4626,11 +4626,7 @@ class DjcHelper:
             self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "779692")
 
         # 升级
-        logger.info(color("bold_green") + f"尝试寻找当前绑定区服中的刃影角色来进行领取升级活动奖励")
-        if self.common_cfg.enable_super_fast_mode:
-            wait_seconds = 60
-            logger.warning(f"当前已开启超快速模式，因为wegame与其他活动，如集合站，共享绑定关系，因此超快速模式并行运行单个账号的不同活动时可能会搅乱该账号其他活动的领取角色，导致出现提示手动绑定的异常状况，因此这里强行等待{wait_seconds}秒，确保其他活动已经运行完毕")
-            count_down(f"等待{wait_seconds}秒，确保与wegame女鬼剑活动共享绑定角色的活动已运行完", wait_seconds, 6)
+        logger.info(color("bold_green") + f"尝试领取刃影角色的升级活动奖励，若绑定的不是刃影，请自行去活动页面领取")
 
         def take_level_up_gifts():
             # 领奖
@@ -4641,22 +4637,23 @@ class DjcHelper:
             self.dnf_wegame_op("升级礼包-76-99", "780922")
             self.dnf_wegame_op("满级礼包-100级", "780923")
 
-        # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
-        djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
-        roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
-
-        change_bind_roles = []
-        for role in roles:
-            if role.forceid != 11:
-                # 跳过不是女鬼剑的角色
-                continue
-
-            cbr = TemporaryChangeBindRoleInfo()
-            cbr.roleCode = role.roleid
-            cbr.serviceID = djc_roleinfo.serviceID
-            change_bind_roles.append(cbr)
-
-        self.temporary_change_bind_and_do(f"领取刃影wegame创角和升级奖励", change_bind_roles, self.check_dnf_wegame, take_level_up_gifts)
+        # # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
+        # djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
+        # roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
+        #
+        # change_bind_roles = []
+        # for role in roles:
+        #     if role.forceid != 11:
+        #         # 跳过不是女鬼剑的角色
+        #         continue
+        #
+        #     cbr = TemporaryChangeBindRoleInfo()
+        #     cbr.roleCode = role.roleid
+        #     cbr.serviceID = djc_roleinfo.serviceID
+        #     change_bind_roles.append(cbr)
+        #
+        # self.temporary_change_bind_and_do(f"领取刃影wegame创角和升级奖励", change_bind_roles, self.check_dnf_wegame, take_level_up_gifts)
+        take_level_up_gifts()
 
         # 勇士齐聚阿拉德
         check_in_flow_id = "779702"

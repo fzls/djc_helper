@@ -145,7 +145,7 @@ def get_parents(child):
 
 
 def printed_width(msg):
-    return sum([1 if ord(c) < 128 else 2 for c in msg]) + 1
+    return sum([1 if ord(c) < 128 else 2 for c in msg])
 
 
 def truncate(msg, expect_width) -> str:

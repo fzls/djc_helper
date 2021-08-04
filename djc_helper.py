@@ -958,7 +958,7 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning(f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是两个有效的qq号")
+                logger.warning(f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是队伍成员数目为2，且均是有效的qq号（心悦专区改版后队伍成员数目不再是3个，而是2个）")
                 continue
 
             fixed_team = team

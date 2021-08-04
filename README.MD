@@ -30,7 +30,10 @@
     <img src="https://codecov.io/gh/fzls/djc_helper/branch/master/graph/badge.svg?token=2QY73AMZAK" alt="Codecov" />
   </a>
   <a href="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml">
-    <img src="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml/badge.svg" alt="Lint And Test" />
+    <img src="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml/badge.svg" alt="Test" />
+  </a>
+  <a href="https://github.com/fzls/djc_helper/actions/workflows/package.yml">
+    <img src="https://github.com/fzls/djc_helper/actions/workflows/package.yml/badge.svg" alt="Build" />
   </a>
 </div>
 

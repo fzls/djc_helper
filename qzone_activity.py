@@ -17,11 +17,10 @@ from util import uin2qq, parse_time, format_time, format_now
 
 
 class QzoneActivity:
-    def __init__(self, djc_helper, lr):
+    def __init__(self, djc_helper, lr: LoginResult):
         """
         :type djc_helper: DjcHelper
         :type lr: LoginResult
-        :type roleinfo: RoleInfo
         """
         # 即使没绑定dnf角色，也放行，方便领取分享奖励
         roleinfo = None
@@ -30,7 +29,7 @@ class QzoneActivity:
                 roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
         except:
             pass
-        self.roleinfo = roleinfo
+        self.roleinfo = roleinfo  # type: RoleInfo
 
         self.djc_helper = djc_helper
         self.lr = lr

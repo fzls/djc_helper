@@ -27,7 +27,7 @@ logger.name = "djc_helper"
 log_directory = "logs"
 try:
     pathlib.Path(log_directory).mkdir(parents=True, exist_ok=True)
-except PermissionError as err:
+except PermissionError:
     print("创建日志目录logs失败，请确认是否限制了基础的运行权限")
     os.system("PAUSE")
     exit(-1)

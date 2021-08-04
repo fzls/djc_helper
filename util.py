@@ -2,7 +2,6 @@ import ctypes
 import datetime
 import hashlib
 import inspect
-import json
 import math
 import os
 import pathlib
@@ -296,7 +295,7 @@ def filter_unused_params(urlRendered):
 
 def run_from_src():
     exe_path = sys.argv[0]
-    dirpath, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
+    _, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
 
     return filename.endswith(".py")
 
@@ -569,8 +568,8 @@ def parse_unicode_escape_string(escaped_string: str) -> str:
     return escaped_string.encode().decode("unicode-escape")
 
 
-def remove_none_from_list(l: list) -> list:
-    return list(filter(lambda x: x is not None, l))
+def remove_none_from_list(vlist: list) -> list:
+    return list(filter(lambda x: x is not None, vlist))
 
 
 _root_caches_key = "caches"
@@ -670,9 +669,9 @@ def kill_other_instance_on_start():
     logger.info(f"当前pid为{current_pid}")
 
 
-def append_if_not_in(l: list, v: Any):
-    if v not in l:
-        l.append(v)
+def append_if_not_in(vlist: list, val: Any):
+    if val not in vlist:
+        vlist.append(val)
 
 
 def wait_for(msg: str, seconds):

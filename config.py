@@ -1,3 +1,4 @@
+import json
 import re
 from multiprocessing import cpu_count
 
@@ -837,7 +838,7 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         if local_config_path != "":
             raw_config = toml.load(local_config_path)
             g_config.auto_update_config(raw_config)
-    except Exception as e:
+    except Exception:
         pass
 
     # 最后尝试从环境变量获取配置，主要用于github action自动运行

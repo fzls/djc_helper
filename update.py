@@ -50,7 +50,7 @@ def check_update_on_start(config: CommonConfig):
 
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
-    except Exception as err:
+    except Exception:
         if check_update:
             update_fallback(config)
 
@@ -98,7 +98,7 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
     return has_new_version
 
 
-def update_fallback(config:CommonConfig):
+def update_fallback(config: CommonConfig):
     try:
         # 到这里一般是无法访问github，这时候试试gitee的方案
         latest_version = get_version_from_gitee()
@@ -148,15 +148,15 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
     readme_html_text = requests.get(config.readme_page, timeout=timeout).text
 
     # 从更新日志中提取所有版本信息
-    versions = re.findall("(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_html_text)
+    versions = re.findall(r"(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_html_text)
     # 找出其中最新的那个版本号
     update_info.latest_version = version_int_list_to_version(max(version_to_version_int_list(ver) for ver in versions))
 
     # 从readme中提取最新网盘信息
-    netdisk_address_matches = re.findall('链接: <a[\s\S]+?rel="nofollow">(?P<link>.+?)<\/a> 提取码: (?P<passcode>[a-zA-Z0-9]+)', readme_html_text, re.MULTILINE)
+    netdisk_address_matches = re.findall(r'链接: <a[\s\S]+?rel="nofollow">(?P<link>.+?)<\/a> 提取码: (?P<passcode>[a-zA-Z0-9]+)', readme_html_text, re.MULTILINE)
     # 先选取首个网盘链接作为默认值
-    netdisk_link = netdisk_address_matches[0][0]
-    netdisk_passcode = netdisk_address_matches[0][1]
+    update_info.netdisk_link = netdisk_address_matches[0][0]
+    update_info.netdisk_passcode = netdisk_address_matches[0][1]
     # 然后随机从仍有效的网盘链接中随机一个作为最终结果
     random.seed(datetime.now())
     random.shuffle(netdisk_address_matches)
@@ -167,7 +167,7 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
             break
 
     # 尝试提取更新信息
-    update_message_list_match_groupdict = re.search("(?<=更新公告</h1>)\s*<ol>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE).groupdict()
+    update_message_list_match_groupdict = re.search(r"(?<=更新公告</h1>)\s*<ol>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE).groupdict()
     if "update_message_list" in update_message_list_match_groupdict:
         update_message_list_str = update_message_list_match_groupdict["update_message_list"]
         update_messages = re.findall("<li>(?P<update_message>.+?)</li>", update_message_list_str, re.MULTILINE)

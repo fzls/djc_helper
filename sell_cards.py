@@ -5,11 +5,9 @@ from typing import List
 from config import load_config, config
 from djc_helper import DjcHelper
 from log import color, logger
-from main_def import check_all_skey_and_pskey
 from qzone_activity import QzoneActivity
 from setting import zzconfig, parse_card_group_info_map
 from util import show_head_line
-from pool import init_pool
 
 CARD_PLACEHOLDER = "XXXXXXXXXXX"
 
@@ -38,7 +36,7 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
-        lr = djcHelper.fetch_pskey()
+        djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
 
@@ -145,8 +143,6 @@ def run_local():
 
 
 def run_remote(args):
-    cfg = config()
-
     if args.query:
         msg = query_card_info()
     else:

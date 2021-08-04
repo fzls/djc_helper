@@ -142,7 +142,7 @@ class DjcHelper:
         with open(self.get_local_saved_skey_file(), "r", encoding="utf-8") as f:
             try:
                 loginResult = json.load(f)
-            except json.decoder.JSONDecodeError as e:
+            except json.decoder.JSONDecodeError:
                 logger.error(f"账号 {self.cfg.name} 的skey缓存已损坏，将视为已过期")
                 return
 
@@ -890,17 +890,11 @@ class DjcHelper:
         retryCfg = self.common_cfg.retry
         # 最少等待5秒
         wait_time = max(retryCfg.request_wait_time, 5)
-        now = datetime.datetime.now()
-        current_hour = now.hour
         for i in range(op.count):
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
 
             for try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
-                # if int(res.get('ret', '0')) == -9905:
-                #     logger.warning(f"兑换 {op.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})")
-                #     time.sleep(retryCfg.retry_wait_time)
-                #     continue
+                self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
 
                 logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
                 time.sleep(wait_time)
@@ -991,7 +985,7 @@ class DjcHelper:
 
     def create_xinyue_team(self):
         # 748052	创建小队
-        data = self.xinyue_battle_ground_op("尝试创建小队", "748052")
+        self.xinyue_battle_ground_op("尝试创建小队", "748052")
 
         return self.query_xinyue_teaminfo()
 
@@ -1003,7 +997,6 @@ class DjcHelper:
             teamInfo.id = jdata.get("code", "")  # 根据code查询时从这获取
 
             # 解析队伍信息
-            team_list = jdata["team_list"]
             for member_json_str in jdata["team_list"]:
                 member = XinYueTeamMember().auto_update_config(json.loads(member_json_str))
                 teamInfo.members.append(member)
@@ -1020,7 +1013,7 @@ class DjcHelper:
             award_summarys = []
             for member in teamInfo.members:
                 # 尚未有奖励时将会是false
-                if member.pak == "" or member.pak == False:
+                if member.pak == "" or member.pak is False:
                     continue
 
                 award_names = []
@@ -1374,7 +1367,7 @@ class DjcHelper:
                 else:
                     # 自动登录
                     lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=ql.login_mode_qzone, name=self.cfg.name)
-            except GithubActionLoginException as e:
+            except GithubActionLoginException:
                 logger.error("在github action环境下qq空间登录失败了，很大可能是因为该网络环境与日常环境不一致导致的（qq空间检查的很严），只能将qq空间相关配置禁用咯")
                 self.cfg.function_switches.get_ark_lottery = False
                 self.cfg.function_switches.get_dnf_warriors_call = False
@@ -1414,7 +1407,7 @@ class DjcHelper:
             res = qa.do_dnf_warriors_call("fcg_receive_reward", "测试pskey是否过期", qa.zz().actbossRule.buyVipPrize, gameid=qa.zz().gameid, print_res=False)
             return res['code'] == -3000 and res['subcode'] == -4001
 
-        ## QQ空间新版活动
+        # QQ空间新版活动
         # pskey过期提示：分享领取礼包	{"code": -3000, "message": "未登录"}
         # 这个活动优先判定pskey
 
@@ -1502,7 +1495,7 @@ class DjcHelper:
     # --------------------------------------------QQ空间超级会员--------------------------------------------
     # note：对接流程与下方黄钻完全一致，参照其流程即可
     def dnf_super_vip(self):
-        act_url = get_act_url("超级会员")
+        get_act_url("超级会员")
         show_head_line("QQ空间超级会员")
         self.show_not_ams_act_info("超级会员")
 
@@ -1538,7 +1531,7 @@ class DjcHelper:
     #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("黄钻")的值为新的网页链接，并把活动时间改为最新
     #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
     def dnf_yellow_diamond(self):
-        act_url = get_act_url("黄钻")
+        get_act_url("黄钻")
         show_head_line("QQ空间黄钻")
         self.show_not_ams_act_info("黄钻")
 
@@ -1569,7 +1562,7 @@ class DjcHelper:
     # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
     # note：对接流程与上方黄钻完全一致，参照其流程即可
     def dnf_vip_mentor(self):
-        act_url = get_act_url("会员关怀")
+        get_act_url("会员关怀")
         show_head_line("QQ空间会员关怀")
         self.show_not_ams_act_info("会员关怀")
 
@@ -2187,7 +2180,6 @@ class DjcHelper:
     def check_qq_video(self):
         while True:
             res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112", print_res=False)
-            # {"frame_resp": {"failed_condition": {"condition_op": 3, "cur_value": 0, "data_type": 2, "exp_value": 0, "type": 100418}, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}, "act_id": 108810, "data": {"button_txt": "关闭", "cdkey": "", "custom_list": [], "end_timestamp": -1, "ext_url": "", "give_type": 0, "is_mask_cdkey": 0, "is_pop_jump": 0, "item_share_desc": "", "item_share_title": "", "item_share_url": "", "item_sponsor_title": "", "item_sponsor_url": "", "item_tips": "", "jump_url": "", "jump_url_web": "", "lottery_item_id": "1601827185657s2238078729s192396s1", "lottery_level": 0, "lottery_name": "", "lottery_num": 0, "lottery_result": 0, "lottery_txt": "您当前还未绑定游戏帐号，请先绑定哦~", "lottery_url": "", "lottery_url_ext": "", "lottery_url_ext1": "", "lottery_url_ext2": "", "msg_title": "告诉我怎么寄给你", "need_bind": 0, "next_type": 2, "pop_jump_btn_title": "", "pop_jump_url": "", "prize_give_info": {"prize_give_status": 0}, "property_detail_code": 0, "property_detail_msg": "", "property_type": 0, "share_txt": "", "share_url": "", "source": 0, "sys_code": -904, "url_lottery": "", "user_info": {"addr": "", "name": "", "tel": "", "uin": ""}}, "module_id": 125890, "msg": "", "ret": 0, "security_verify": {"iRet": 0, "iUserType": 0, "sAppId": "", "sBusinessId": "", "sInnerMsg": "", "sUserMsg": ""}}
             if int(res["data"]["sys_code"]) == -904 and extract_qq_video_message(res) == "您当前还未绑定游戏帐号，请先绑定哦~":
                 self.guide_to_bind_account("qq视频活动", "https://m.film.qq.com/magic-act/110254/index.html", activity_op_func=None)
                 continue
@@ -2227,9 +2219,6 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        # checkin_days = self.query_dnf_female_mage_awaken_info()
-        # logger.warning(color("fg_bold_cyan") + f"已累计签到 {checkin_days} 天")
-
         if self.cfg.dnf_helper_info.token == "":
             extra_msg = "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken")
@@ -2250,15 +2239,6 @@ class DjcHelper:
         self.dnf_female_mage_awaken_op("娃娃机抽奖", "712623")
 
         self.dnf_female_mage_awaken_op("回归礼包", "710474")
-
-    def query_dnf_female_mage_awaken_info(self):
-        res = self.dnf_female_mage_awaken_op("查询", "712497")
-        sOutValue1, sOutValue2, sOutValue3 = res["modRet"]["sOutValue1"], res["modRet"]["sOutValue2"], res["modRet"]["sOutValue3"]
-
-        # _, checkin_days = sOutValue1.split(';')
-        # can_checkin_7, can_checkin_14, can_checkin_21, can_checkin_28 = sOutValue2.split(';')
-        #
-        # return checkin_days
 
     def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
@@ -2365,12 +2345,12 @@ class DjcHelper:
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
-        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, get_act_url("dnf助手排行榜"),
-                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
-                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
-                                  uin=qq, skey=self.cfg.account_info.skey,
-                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
-                                  **extra_params)
+        return self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, True, get_act_url("dnf助手排行榜"),
+                                   sArea=roleinfo.serviceID, serverId=roleinfo.serviceID, areaId=roleinfo.serviceID,
+                                   sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                   uin=qq, skey=self.cfg.account_info.skey,
+                                   nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
+                                   **extra_params)
 
     def dnf_rank_op(self, ctx, url, **params):
         qq = self.qq()
@@ -2491,7 +2471,7 @@ class DjcHelper:
         # self.dnf_helper_op("决战天界游戏模式(组队)", "754086")
         # self.dnf_helper_op("决战天空之城游戏模式(组队)", "754139")
         #
-        ## self.dnf_helper_op("提前结束游戏_from755483", "755485")
+        # self.dnf_helper_op("提前结束游戏_from755483", "755485")
 
         self.dnf_helper_op("最终奖励", "756324")
 
@@ -2563,7 +2543,6 @@ class DjcHelper:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        area = roleinfo.serviceID
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
@@ -2822,7 +2801,6 @@ class DjcHelper:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        area = roleinfo.serviceID
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
@@ -3017,7 +2995,7 @@ class DjcHelper:
     def fetch_guanjia_openid(self, print_warning=True):
         # 检查当前是否管家活动在生效中
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
-        if not self.guanjia in enabled_payed_act_funcs and not self.guanjia_new in enabled_payed_act_funcs:
+        if self.guanjia not in enabled_payed_act_funcs and self.guanjia_new not in enabled_payed_act_funcs:
             logger.debug("管家活动当前未生效，无需尝试更新p_skey")
             return
 
@@ -3472,7 +3450,7 @@ class DjcHelper:
                             val.share_code_list.append(shareCode)
 
                     db.update(callback)
-            except Exception as e:
+            except Exception:
                 pass
 
         @try_except(return_val_on_except="19", show_exception_info=False)
@@ -3746,7 +3724,7 @@ class DjcHelper:
         # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
         # ps：推荐购买体验版月卡和升级版月卡
         financingCardsToBuyAndMap = {
-            ## 名称   购买价格   购买FlowId    领取FlowId
+            # 名称   购买价格   购买FlowId    领取FlowId
             "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
             "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
             "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
@@ -4058,7 +4036,6 @@ class DjcHelper:
                         logger.warning("似乎已达到今日上限，停止领取")
                         return
                     if takeRes["modRet"]["iRet"] != 0:
-                        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267"}, "modRet": {"all_item_list": [], "bHasSendFailItem": "0", "bRealSendSucc": 1, "dTimeNow": "2020-12-30 00:26:52", "iActivityId": "381537", "iDbPackageAutoIncId": 0, "iLastMpResultCode": 2037540212, "iPackageGroupId": "", "iPackageId": "", "iPackageIdCnt": "", "iPackageNum": "1", "iReentry": 0, "iRet": 100002, "iWecatCardResultCode": 0, "isCmemReEntryOpen": "yes", "jData": {"iPackageId": "0", "sPackageName": ""}, "jExtend": "", "sAmsSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267", "sItemMsg": null, "sMidasCouponRes": "null\n", "sMidasPresentRes": "null\n", "sMsg": "非常抱歉，您此次活动领取次数已达最大，不能领取！", "sPackageCDkey": "", "sPackageLimitCheckCode": "2227289:70008,", "sPackageName": "", "sPackageRealFlag": "0", "sVersion": "V1.0.1752b92.00a0875.20201210155534"}, "ret": "0", "msg": ""}
                         logger.warning("出错了，停止领取，具体原因请看上一行的sMsg")
                         return
 
@@ -4177,7 +4154,6 @@ class DjcHelper:
         stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
-        now = datetime.datetime.now()
         act_info = self.majieluo_op("获取活动信息", "", get_ams_act_info_only=True)
         endTime = get_today(parse_time(act_info.dtEndTime))
 
@@ -4980,7 +4956,6 @@ class DjcHelper:
                         logger.warning("似乎已达到今日上限，停止领取")
                         return
                     if takeRes["modRet"]["iRet"] != 0:
-                        # {"flowRet": {"iRet": "0", "sMsg": "MODULE OK", "iAlertSerial": "0", "sLogSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267"}, "modRet": {"all_item_list": [], "bHasSendFailItem": "0", "bRealSendSucc": 1, "dTimeNow": "2020-12-30 00:26:52", "iActivityId": "381537", "iDbPackageAutoIncId": 0, "iLastMpResultCode": 2037540212, "iPackageGroupId": "", "iPackageId": "", "iPackageIdCnt": "", "iPackageNum": "1", "iReentry": 0, "iRet": 100002, "iWecatCardResultCode": 0, "isCmemReEntryOpen": "yes", "jData": {"iPackageId": "0", "sPackageName": ""}, "jExtend": "", "sAmsSerialNum": "AMS-DNF-1230002652-mtPJXE-348890-726267", "sItemMsg": null, "sMidasCouponRes": "null\n", "sMidasPresentRes": "null\n", "sMsg": "非常抱歉，您此次活动领取次数已达最大，不能领取！", "sPackageCDkey": "", "sPackageLimitCheckCode": "2227289:70008,", "sPackageName": "", "sPackageRealFlag": "0", "sVersion": "V1.0.1752b92.00a0875.20201210155534"}, "ret": "0", "msg": ""}
                         logger.warning("出错了，停止领取，具体原因请看上一行的sMsg")
                         return
 

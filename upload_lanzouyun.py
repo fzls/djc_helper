@@ -271,7 +271,6 @@ class Uploader:
 
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
-            target_path = file_name
             if show_log: logger.info(f"最终下载文件路径为 {file_name}")
 
         if show_log: logger.info(f"即将开始下载 {target_path}")

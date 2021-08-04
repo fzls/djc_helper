@@ -152,6 +152,7 @@ class NoticeManager:
         self.notices.append(notice)
         logger.info(f"添加公告：{notice}")
 
+
 def main():
     # 初始化
     nm = NoticeManager(load_from_remote=False)

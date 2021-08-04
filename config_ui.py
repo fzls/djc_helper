@@ -325,7 +325,7 @@ class ConfigUi(QFrame):
             ui = get_update_info(cfg)
             if not try_manaual_update(ui):
                 show_message("无需更新", "当前已经是最新版本~")
-        except Exception as err:
+        except Exception:
             update_fallback(cfg)
 
         report_click_event("check_update")
@@ -635,7 +635,7 @@ class ConfigUi(QFrame):
             else:
                 show_message("出错了", server_not_online_message)
                 return False
-        except Exception as e:
+        except Exception:
             show_message("出错了", server_not_online_message)
             return False
 
@@ -675,7 +675,7 @@ class ConfigUi(QFrame):
     def auto_run_on_login(self):
         self.popen([
             "reg",
-            "add", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "add", "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
             "/v", "DNF蚊子腿小助手",
             "/t", "reg_sz",
             "/d", self.get_djc_helper_path(),
@@ -688,7 +688,7 @@ class ConfigUi(QFrame):
     def stop_auto_run_on_login(self):
         self.popen([
             "reg",
-            "delete", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+            "delete", 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
             "/v", "DNF蚊子腿小助手",
             "/f",
         ])
@@ -1720,7 +1720,7 @@ def main():
 
     def catch_exceptions(t, val, tb):
         result = StringIO()
-        v3 = print_tb(tb, file=result)
+        print_tb(tb, file=result)
         msg = f"{t} {val}:\n{result.getvalue()}"
         logger.error(msg)
         QMessageBox.critical(None, "出错了", msg)

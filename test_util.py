@@ -31,3 +31,17 @@ def test_extract_between():
 
     assert activity_id == "1"
     assert lv_score == 66
+
+
+def test_printed_width():
+    assert printed_width("test") == 4
+    assert printed_width("测试内容") == 8
+    assert printed_width("123") == 3
+    assert printed_width("测试内容123test") == 15
+
+
+def test_truncate():
+    assert truncate("测试内容123test", 20) == "测试内容123test"
+    assert truncate("测试内容123test", 11) == "测试内容..."
+    assert truncate("测试内容123test", 8) == "测试..."
+    assert truncate("测试内容123test", 4) == "..."

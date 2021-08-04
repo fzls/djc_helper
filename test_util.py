@@ -18,3 +18,16 @@ def test_is_valid_qq():
     assert is_valid_qq("123456789")
     assert not is_valid_qq("a123456789")
     assert not is_valid_qq("")
+
+
+def test_extract_between():
+    text = """
+    var activity_id = '1';
+    var lvScore = 66;
+    """
+
+    activity_id = extract_between(text, "var activity_id = '", "';", str)
+    lv_score = extract_between(text, "var lvScore = ", ";", int)
+
+    assert activity_id == "1"
+    assert lv_score == 66

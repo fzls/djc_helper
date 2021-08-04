@@ -3,6 +3,7 @@ __pycache__/
 logs/
 debug.log
 .venv/
+.venv_dev/
 
 test/
 test.py

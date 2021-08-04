@@ -58,7 +58,7 @@ class DBInterface(ConfigInterface):
             self.update_at = format_now()
 
             self.save_to_json_file(db_file)
-        except Exception as e:
+        except Exception:
             logger.error(f"保存数据库失败，db_to_save={self}")
 
         logger.debug(f"保存数据库完毕 context={self.context} db_type_name={self.db_type_name} db_file={db_file}")

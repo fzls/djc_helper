@@ -37,7 +37,6 @@ class HistoryVersionFileInfo:
 
 def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=False) -> str:
     latest_version = now_version
-    path_bz = os.path.join(dir_src, "utils/bandizip_portable", "bz.exe")
 
     old_cwd = os.getcwd()
     os.chdir(dir_all_release)

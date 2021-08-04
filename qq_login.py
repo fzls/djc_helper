@@ -14,8 +14,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
 from config import *
-from db import CaptchaDB, LoginRetryDB
-from log import logger, color
 from upload_lanzouyun import Uploader
 from urls import get_act_url
 from util import async_message_box, get_screen_size
@@ -875,12 +873,12 @@ class QQLogin():
                 time.sleep(wait_time)
 
             self.driver.switch_to.parent_frame()
-        except StaleElementReferenceException as e:
+        except StaleElementReferenceException:
             logger.info(f"{self.name} 成功完成了拖拽验证码操作，总计尝试次数为{captcha_try_count}")
             # 更新历史数据
             account_db.increse_success_count(success_xoffset)
             account_db.save()
-        except TimeoutException as e:
+        except TimeoutException:
             logger.info(f"{self.name} 看上去没有出现验证码")
 
     def set_window_size(self):
@@ -912,7 +910,7 @@ class QQLogin():
     def print_cookie(self):
         for cookie in self.cookies:
             domain, name, value = cookie['domain'], cookie['name'], cookie['value']
-            logger.debug(f"{domain:20s} {name:20s} {cookie}")
+            logger.debug(f"{domain:20s} {name:20s} {value:20s} {cookie}")
 
     def open_url_on_start(self, url):
         chrome_default_url = 'data:,'

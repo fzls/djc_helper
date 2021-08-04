@@ -974,12 +974,6 @@ class XinyueCatMatchResult(ConfigInterface):
         self.matchVitality = 300
 
 
-class CardSecret(ConfigInterface):
-    def __init__(self):
-        self.card = "auto_update-20210310274059-00001"
-        self.secret = "cUtsSx0CwVF1p1VurbKuiI3WHQuKP3uz"
-
-
 class DnfCollectionInfo(ConfigInterface):
     def __init__(self):
         self.has_init = False

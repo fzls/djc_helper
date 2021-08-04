@@ -31,8 +31,8 @@ def show_tip_on_first_run_promot():
     title = "宣传"
     tips = """
     如果觉得好用的话，可否帮忙宣传一下哈(*^▽^*)
-    或者扫描二维码打赏一下也是极好的φ(>ω<*) 
-            """
+    或者扫描二维码打赏一下也是极好的φ(>ω<*)
+    """
     loginfo = "首次运行弹出宣传弹窗"
 
     show_tip_on_first_run("promot", title, tips, loginfo)

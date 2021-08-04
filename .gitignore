@@ -5,6 +5,7 @@ debug.log
 .venv/
 .venv_dev/
 .coverage
+coverage.xml
 
 test/
 test.py

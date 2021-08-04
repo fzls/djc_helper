@@ -51,16 +51,10 @@ act_name_to_url = {
 
     # 短期付费活动
     "DNF助手编年史": "dnf助手左侧栏",
-    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210312hello/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20210618index/",
-    "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
-    "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
-    "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210708WG/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210705care/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
@@ -97,6 +91,12 @@ act_name_to_url = {
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "KOL": "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
+    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210312hello/index.html",
+    "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
+    "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
+    "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20210618index/",
 }
 
 

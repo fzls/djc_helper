@@ -45,11 +45,10 @@ jobs:
 
       - name: Test
         run: |
-          pytest --cov=. --junitxml=.cached/test-results.xml
+          pytest --cov=./ --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: .cached/test-results.xml
           verbose: true

@@ -15,7 +15,7 @@ def build(disable_douban=False):
     pyinstaller_path = os.path.join(venv_path, "Scripts", "pyinstaller")
 
     # 初始化venv和依赖
-    init_venv_and_requirements(".venv", disable_douban)
+    init_venv_and_requirements(".venv", "requirements.txt", disable_douban)
 
     show_head_line(f"将使用.venv环境进行编译", color("bold_yellow"))
 

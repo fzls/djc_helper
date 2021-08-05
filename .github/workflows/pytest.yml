@@ -3,11 +3,13 @@ name: Lint And Test
 on:
   workflow_dispatch:
   push:
+  release:
+    types: [ published ]
   pull_request:
     types: [ opened, synchronize ]
 
 jobs:
-  test:
+  lint:
     runs-on: windows-latest
 
     steps:
@@ -42,6 +44,38 @@ jobs:
       - name: Lint
         run: |
           flake8 --ignore=E127,E402,E501,E701,E722,E731,F403,F405,W503,W504,F541 --max-complexity=60 --max-line-length=555 --show-source --statistics --exclude .cached,.db,.mypy_cache,.pytest_cache,.venv,.venv_dev,logs,releases,test,lanzou,reversi.py,qt_collapsible_box.py
+
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Requirements
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements_dev.txt wheel
+
+      - name: Set time zone
+        run: tzutil /s "China Standard Time"
 
       - name: Test
         run: |

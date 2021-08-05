@@ -344,7 +344,7 @@ class Uploader:
         ]
 
 
-if __name__ == '__main__':
+def demo():
     uploader = Uploader()
 
     # 不需要登录的接口
@@ -356,6 +356,7 @@ if __name__ == '__main__':
     uploader.download_latest_patches(".cached")
 
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, ".cached", try_compressed_version_first=True)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
 
     # 需要登录才能使用的接口
     test_login_functions = False
@@ -370,3 +371,13 @@ if __name__ == '__main__':
             pass
         else:
             logger.error("登录失败")
+
+
+def demo_downloads():
+    uploader = Uploader()
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
+
+
+if __name__ == '__main__':
+    # demo()
+    demo_downloads()

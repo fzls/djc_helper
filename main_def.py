@@ -207,7 +207,7 @@ def auto_send_cards(cfg: Config):
                 qa.try_lottery_using_cards(print_warning=False)
 
 
-def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> (Dict[str, int], Dict[str, int], DjcHelper):
+def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> Tuple[Dict[str, int], Dict[str, int], DjcHelper]:
     djcHelper = DjcHelper(account_config, common_config)
     lr = djcHelper.fetch_pskey()
     if lr is None:

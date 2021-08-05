@@ -71,7 +71,6 @@ def _is_first_run(first_run_type: str, key="", duration=timedelta(days=1)) -> bo
         # 如果是，则更新缓存文件
         if first_run:
             first_run_data.update_at = format_now()
-            first_run_data.key = key
 
         logger.debug(f"{first_run_type:7s} {first_run_data.prepare_env_and_get_db_filepath()} first_run={first_run}, data={first_run_data}")
 

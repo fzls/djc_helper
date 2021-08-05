@@ -4,6 +4,7 @@ from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
 
+
 class DemoDB(DBInterface):
     def __init__(self):
         super().__init__()

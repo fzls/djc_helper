@@ -1,8 +1,8 @@
 import json
-from multiprocessing import freeze_support, cpu_count
+from multiprocessing import cpu_count, freeze_support
 from sys import exit
 
-from config import load_config, config, Config, AccountConfig, CommonConfig
+from config import AccountConfig, CommonConfig, Config, config, load_config
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper, run_act
 from first_run import *
@@ -14,7 +14,7 @@ from setting import *
 from show_usage import *
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
-from urls import Urls, get_not_ams_act_desc, get_act_url
+from urls import Urls, get_act_url, get_not_ams_act_desc
 from usage_count import *
 from version import author
 
@@ -1202,6 +1202,7 @@ def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, re
 
             remote_filenames = [uploader.user_monthly_pay_info_filename, uploader.cs_user_monthly_pay_info_filename]
             import copy
+
             # 单种渠道内选择付费结束时间最晚的，手动和卡密间则叠加
             user_buy_info_list = [copy.deepcopy(default_user_buy_info) for v in remote_filenames]
             for idx, remote_filename in enumerate(remote_filenames):

@@ -31,7 +31,7 @@ import win32process
 
 from const import cached_dir
 from db import *
-from log import logger, color, asciiReset
+from log import asciiReset, color, logger
 from version import now_version, ver_time
 
 
@@ -48,8 +48,9 @@ def change_console_window_mode_async(disable_min_console=False):
         logger.info("当前运行在pycharm中，不尝试调整窗口大小~")
         return
 
-    from config import Config, config
     from copy import deepcopy
+
+    from config import Config, config
 
     cfg = Config()
     try:

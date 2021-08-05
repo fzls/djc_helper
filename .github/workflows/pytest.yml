@@ -47,7 +47,7 @@ jobs:
 
       - name: Isort
         run: |
-          isort --check --skip-gitignore .
+          isort --check --skip-gitignore --skip lanzou .
 
   test:
     runs-on: windows-latest

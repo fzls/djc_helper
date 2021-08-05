@@ -5,7 +5,7 @@ import shutil
 import subprocess
 
 from _init_venv_and_requirements import init_venv_and_requirements
-from log import logger, color
+from log import color, logger
 from util import human_readable_size, show_head_line
 
 

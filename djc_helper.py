@@ -10,11 +10,13 @@ from dao import *
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from qq_login import QQLogin, LoginResult, GithubActionLoginException
+from qq_login import GithubActionLoginException, LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix
-from urls import Urls, get_ams_act_desc, get_not_ams_act_desc, get_not_ams_act, search_act, not_know_end_time, get_ams_act, get_act_url
+from urls import (Urls, get_act_url, get_ams_act, get_ams_act_desc,
+                  get_not_ams_act, get_not_ams_act_desc, not_know_end_time,
+                  search_act)
 
 
 # DNF蚊子腿小助手

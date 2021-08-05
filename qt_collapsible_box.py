@@ -120,8 +120,8 @@ class CollapsibleBox(QtWidgets.QWidget):
 
 
 def test_CollapsibleBox():
-    import sys
     import random
+    import sys
 
     app = QtWidgets.QApplication(sys.argv)
 

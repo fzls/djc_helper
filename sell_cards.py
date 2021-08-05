@@ -2,11 +2,11 @@ import argparse
 import json
 from typing import List
 
-from config import load_config, config
+from config import config, load_config
 from djc_helper import DjcHelper
 from log import color, logger
 from qzone_activity import QzoneActivity
-from setting import zzconfig, parse_card_group_info_map
+from setting import parse_card_group_info_map, zzconfig
 from util import show_head_line
 
 CARD_PLACEHOLDER = "XXXXXXXXXXX"

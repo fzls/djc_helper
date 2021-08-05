@@ -1,7 +1,7 @@
 # 更新器不启用文件日志
 import sys
 
-from log import logger, fileHandler, new_file_handler, color
+from log import color, fileHandler, logger, new_file_handler
 from version import now_version
 
 logger.name = "auto_updater"
@@ -12,10 +12,12 @@ import argparse
 import os
 import subprocess
 from distutils import dir_util
-from upload_lanzouyun import Uploader
-from update import need_update
-from util import kill_process, show_unexpected_exception_message, start_djc_helper, change_title
+
 from compress import decompress_dir_with_bandizip
+from update import need_update
+from upload_lanzouyun import Uploader
+from util import (change_title, kill_process,
+                  show_unexpected_exception_message, start_djc_helper)
 
 bandizip_executable_path = "./utils/bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"

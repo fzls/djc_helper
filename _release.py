@@ -10,9 +10,10 @@ from _commit_new_version import commit_new_version
 from _create_patches import create_patch
 from _package import package
 from _push_github import push_github
-from log import logger, color
+from log import color, logger
 from upload_lanzouyun import Uploader
-from util import change_console_window_mode_async, make_sure_dir_exists, range_from_one, count_down, show_head_line
+from util import (change_console_window_mode_async, count_down,
+                  make_sure_dir_exists, range_from_one, show_head_line)
 from version import now_version
 
 

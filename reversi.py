@@ -2,7 +2,7 @@
 
 import logging
 
-from log import logger, fileHandler, new_file_handler
+from log import fileHandler, logger, new_file_handler
 
 logger.name = "reversi"
 logger.removeHandler(fileHandler)
@@ -15,14 +15,15 @@ import sys
 import time
 from collections import Counter
 from datetime import datetime, timedelta
-from typing import Tuple, Callable, Optional, Dict
+from typing import Callable, Dict, Optional, Tuple
 
-from PyQt5.Qt import (QLabel, QApplication, QImage, QSize, QPalette, QBrush, QIcon, QMessageBox, QDialog, QDialogButtonBox)
+from PyQt5.Qt import (QApplication, QBrush, QDialog, QDialogButtonBox, QIcon,
+                      QImage, QLabel, QMessageBox, QPalette, QSize)
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
+from log import asciiReset, color
 from qt_wrapper import *
-from log import color, asciiReset
 from util import range_from_one
 
 board_size = 8

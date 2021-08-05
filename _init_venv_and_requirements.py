@@ -3,7 +3,7 @@ import argparse
 import os
 import subprocess
 
-from log import logger, color
+from log import color, logger
 from util import show_head_line
 
 

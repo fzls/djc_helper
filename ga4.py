@@ -3,7 +3,7 @@
 import requests
 
 from log import logger
-from util import try_except, get_cid
+from util import get_cid, try_except
 
 # note: 查看数据地址 https://analytics.google.com/analytics/web/#/
 # note: 当发现上报失败时，可以将打印的post body复制到 https://ga-dev-tools.web.app/ga4/event-builder/ 进行校验，看是否缺了参数，或者有参数不符合格式

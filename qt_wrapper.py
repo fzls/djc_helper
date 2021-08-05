@@ -2,8 +2,10 @@ from typing import List, Tuple
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QWheelEvent
-from PyQt5.QtWidgets import (
-    QFormLayout, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QCheckBox, QWidget, QComboBox, QDoubleSpinBox, QSpinBox, QFrame, QPushButton, QScrollArea, QLayout, )
+from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
+                             QFrame, QHBoxLayout, QLabel, QLayout, QLineEdit,
+                             QPushButton, QScrollArea, QSpinBox, QVBoxLayout,
+                             QWidget)
 
 from qt_collapsible_box import CollapsibleBox
 from util import padLeftRight

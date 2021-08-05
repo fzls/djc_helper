@@ -4,7 +4,7 @@ import re
 import shutil
 
 from compress import compress_dir_with_bandizip
-from log import logger, color
+from log import color, logger
 from qq_login import QQLogin
 from util import show_head_line
 from version import now_version

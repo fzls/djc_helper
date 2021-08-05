@@ -3,8 +3,8 @@ from urllib.parse import unquote_plus
 import requests
 
 from config import *
-from log import logger
 from dao import ResponseInfo
+from log import logger
 
 jsonp_callback_flag = "jsonp_callback"
 

@@ -49,6 +49,10 @@ jobs:
         run: |
           isort --check --skip-gitignore --skip lanzou .
 
+      - name: Mypy
+        run: |
+          mypy .
+
   test:
     runs-on: windows-latest
 

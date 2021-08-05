@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import Callable, Any
+from typing import Any, Callable
 
 from const import db_top_dir
 from data_struct import ConfigInterface

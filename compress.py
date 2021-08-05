@@ -74,8 +74,9 @@ def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
 
 
 def test():
-    from util import make_sure_dir_exists
     import json
+
+    from util import make_sure_dir_exists
 
     dir_src = os.getcwd()
     test_root_dir = realpath("test/compress")

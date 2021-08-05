@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from log import logger, fileHandler, new_file_handler
+from log import fileHandler, logger, new_file_handler
 
 logger.name = "config_ui"
 logger.removeHandler(fileHandler)
@@ -8,23 +8,24 @@ logger.addHandler(new_file_handler())
 
 from io import StringIO
 from traceback import print_tb
-from PyQt5.QtWidgets import (
-    QApplication, QTabWidget, QStyleFactory,
-    QMessageBox, QInputDialog, QFileDialog)
-from PyQt5.QtGui import QIcon, QValidator
-from PyQt5.QtCore import QCoreApplication, QThread
 
-from qt_wrapper import *
+from PyQt5.QtCore import QCoreApplication, QThread
+from PyQt5.QtGui import QIcon, QValidator
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
+                             QMessageBox, QStyleFactory, QTabWidget)
+
 from config import *
-from setting import *
-from game_info import get_name_2_mobile_game_info_map
-from update import *
-from main_def import has_any_account_in_normal_run, _show_head_line, has_buy_auto_updater_dlc, get_user_buy_info, disable_flag_file
-from djc_helper import DjcHelper
 from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
-from usage_count import increase_counter
+from djc_helper import DjcHelper
 from ga import GA_REPORT_TYPE_PAGE_VIEW
+from game_info import get_name_2_mobile_game_info_map
+from main_def import (_show_head_line, disable_flag_file, get_user_buy_info,
+                      has_any_account_in_normal_run, has_buy_auto_updater_dlc)
+from qt_wrapper import *
+from setting import *
+from update import *
+from usage_count import increase_counter
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"

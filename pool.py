@@ -2,7 +2,7 @@ from multiprocessing import Pool
 from multiprocessing.pool import Pool as TPool
 from typing import Optional
 
-from log import logger, color
+from log import color, logger
 
 pool = None  # type: Optional[TPool]
 

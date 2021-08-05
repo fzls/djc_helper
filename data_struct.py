@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from abc import ABCMeta
-from typing import List, Dict, Tuple, Type
+from typing import Dict, List, Tuple, Type
 
 from Crypto.Cipher import AES
 

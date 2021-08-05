@@ -13,9 +13,9 @@ import subprocess
 from typing import List
 
 from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
-from log import logger, color
+from log import color, logger
 from update import version_less
-from upload_lanzouyun import Uploader, FileInFolder
+from upload_lanzouyun import FileInFolder, Uploader
 from util import human_readable_size, range_from_one
 from version import now_version
 

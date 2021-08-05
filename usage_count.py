@@ -9,7 +9,7 @@ import ga
 import ga4
 from first_run import is_daily_first_run
 from log import logger
-from util import get_today, try_except, async_call
+from util import async_call, get_today, try_except
 
 LEAN_CLOUD_SERVER_ADDR = "https://d02na0oe.lc-cn-n1-shared.com"
 LEAN_CLOUD_APP_ID = "D02NA0OEBGXu0YqwpVQYUNl3-gzGzoHsz"

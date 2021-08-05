@@ -1,6 +1,6 @@
 from main_def import *
 from main_def import _show_head_line
-from pool import init_pool, get_pool, close_pool
+from pool import close_pool, get_pool, init_pool
 from show_usage import *
 from usage_count import *
 from version import author

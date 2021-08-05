@@ -8,8 +8,9 @@ from typing import List
 from compress import compress_file_with_lzma, decompress_file_with_lzma
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
-from log import logger, color
-from util import make_sure_dir_exists, with_cache, human_readable_size, cache_name_download
+from log import color, logger
+from util import (cache_name_download, human_readable_size,
+                  make_sure_dir_exists, with_cache)
 
 Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 

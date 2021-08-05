@@ -3,7 +3,7 @@ from sys import exit
 import win32api
 import win32con
 
-from log import logger, color
+from log import color, logger
 from util import uin2qq
 
 

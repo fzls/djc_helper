@@ -11,9 +11,9 @@ import win32con
 from config import CommonConfig
 from dao import UpdateInfo
 from first_run import is_first_run
-from log import logger, color
+from log import color, logger
 from upload_lanzouyun import Uploader
-from util import use_by_myself, async_call, is_run_in_github_action, try_except
+from util import async_call, is_run_in_github_action, try_except, use_by_myself
 from version import now_version, ver_time
 
 
@@ -226,7 +226,7 @@ def get_version_from_gitee() -> str:
 
 
 if __name__ == '__main__':
-    from config import load_config, config
+    from config import config, load_config
 
     load_config()
     cfg = config()

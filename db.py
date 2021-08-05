@@ -1,7 +1,6 @@
-from typing import List, Dict, Any, Type, Tuple
+from typing import Any, Dict, List, Tuple, Type
 
-from db_def import DBInterface, ConfigInterface
-
+from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
 

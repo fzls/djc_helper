@@ -10,13 +10,14 @@ os.chdir(dirpath)
 
 import argparse
 
+import psutil
+
+from check_first_run import check_first_run_async
 from log import log_directory
 from main_def import *
+from pool import close_pool, init_pool
 from show_usage import *
 from usage_count import *
-import psutil
-from pool import init_pool, close_pool
-from check_first_run import check_first_run_async
 from version import *
 
 

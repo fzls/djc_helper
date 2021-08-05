@@ -4,7 +4,7 @@ from urllib.parse import quote_plus
 import requests
 
 from log import logger
-from util import try_except, get_cid, get_resolution
+from util import get_cid, get_resolution, try_except
 from version import now_version
 
 # note: 查看数据地址 https://analytics.google.com/analytics/web/#/

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import List, Tuple, Type
 
 from data_struct import ConfigInterface, to_raw_type
-from util import parse_time, run_from_src, format_time, get_today
+from util import format_time, get_today, parse_time, run_from_src
 
 
 class DaoObject:

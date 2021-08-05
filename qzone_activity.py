@@ -6,14 +6,14 @@ import time
 import requests
 
 from config import AccountConfig, CommonConfig
-from dao import RoleInfo, DnfWarriorsCallInfo, GuanhuaiActInfo
-from log import logger, color
+from dao import DnfWarriorsCallInfo, GuanhuaiActInfo, RoleInfo
+from log import color, logger
 from network import process_result, try_request
 from qq_login import LoginResult
 from setting import *
 from sign import getACSRFTokenForAMS
 from urls import Urls, get_not_ams_act
-from util import uin2qq, parse_time, format_time, format_now
+from util import format_now, format_time, parse_time, uin2qq
 
 
 class QzoneActivity:

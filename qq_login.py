@@ -948,7 +948,7 @@ def test():
     TEST_SWITCH_TEST_ALL_LOGIN_MODES = False
 
     # 需要运行的测试维度：账号、登录类别、登录模式
-    login_accounts = [cfg.account_configs[1 - 1]]
+    login_accounts = [cfg.account_configs[idx - 1] for idx in [1]]
     login_types = [QQLogin.login_type_auto_login]
     login_modes = [QQLogin.login_mode_normal]
 

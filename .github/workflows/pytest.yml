@@ -49,9 +49,9 @@ jobs:
         run: |
           isort --check --skip-gitignore --skip lanzou .
 
-      - name: Mypy
-        run: |
-          mypy .
+#      - name: Mypy
+#        run: |
+#          mypy --ignore-missing-imports --install-types --non-interactive .
 
   test:
     runs-on: windows-latest

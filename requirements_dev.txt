@@ -4,3 +4,4 @@ pytest
 pytest-cov
 pytest-random-order
 flake8
+isort

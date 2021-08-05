@@ -61,7 +61,8 @@ def compress_file_with_lzma(filepath: str, compressed_7z_filepath: str = ""):
 
 def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
     if filepath == "":
-        filepath = compressed_7z_filepath.removesuffix(".7z")
+        from util import remove_suffix
+        filepath = remove_suffix(compressed_7z_filepath, ".7z")
 
     compressed_7z_filepath = realpath(compressed_7z_filepath)
     filepath = realpath(filepath)

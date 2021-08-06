@@ -709,20 +709,33 @@ class ConfigUi(QFrame):
 
     def add_account_tab(self, account_ui: AccountConfigUi):
         self.accounts.append(account_ui)
-        self.tabs.addTab(account_ui, account_ui.lineedit_name.text())
+        self.tabs.addTab(account_ui, self.get_account_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked()))
 
         # 记录当前账号名，用于同步修改tab名称
         account_ui.old_name = account_ui.lineedit_name.text()
 
         # 当修改账号名时，根据之前的账号名，定位并同步修改tab名称
-        def update_tab_name(new_account_name: str):
+        def update_tab_name(_):
+            old_name_enabled = self.get_account_name(account_ui.old_name, True)
+            old_name_disabled = self.get_account_name(account_ui.old_name, False)
+
+            new_account_name = account_ui.lineedit_name.text()
+            new_name_formatted = self.get_account_name(new_account_name, account_ui.checkbox_enable.isChecked())
+
             for tab_index in range(self.tabs.count()):
-                if self.tabs.tabText(tab_index) == account_ui.old_name:
-                    self.tabs.setTabText(tab_index, new_account_name)
+                if self.tabs.tabText(tab_index) in [old_name_enabled, old_name_disabled]:
+                    self.tabs.setTabText(tab_index, new_name_formatted)
                     account_ui.old_name = new_account_name
                     break
 
         account_ui.lineedit_name.textChanged.connect(update_tab_name)
+        account_ui.checkbox_enable.stateChanged.connect(update_tab_name)
+
+    def get_account_name(self, name: str, enabled: bool) -> str:
+        if enabled:
+            return name
+        else:
+            return f"{name}（未启用）"
 
     def show_buy_info(self, clicked=False):
         cfg = self.to_config()

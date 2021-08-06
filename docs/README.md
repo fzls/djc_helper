@@ -1,7 +1,64 @@
-# DNF蚊子腿小助手
-本脚本可用于自动化DNF相关的一些蚊子腿活动，从而不必再每天在各种网页和app里点来点去，解放双手和心智。
-现已支持最近新出的几乎所有蚊子腿活动，欢迎大家体验并使用~
+<div align="center">
+  <h1>DNF蚊子腿小助手</h1>
+</div>
 
+<div align="center">
+  <strong>本脚本可用于自动化DNF相关的一些蚊子腿活动，从而不必再每天在各种网页和app里点来点去，解放双手和心智。</strong>
+</div>
+
+<div align="center">
+  现已支持最近新出的几乎所有蚊子腿活动，欢迎大家体验并使用~
+</div>
+
+<br>
+
+<div align="center">
+  相关页面: <br>
+  <a href="https://fzls.github.io/djc_helper/#/">网页</a>
+  <span> | </span>
+  <a href="https://fzls.lanzoui.com/s/djc-helper">网盘</a>
+  <span> | </span>
+  <a href="https://space.bilibili.com/1851177">B站视频教程</a>
+  <span> | </span>
+  <a href="https://fzls.lanzoui.com/s/djc-tools">小工具</a>
+</div>
+
+<br>
+
+<div align="center">
+  <a href="https://codecov.io/gh/fzls/djc_helper">
+    <img src="https://codecov.io/gh/fzls/djc_helper/branch/master/graph/badge.svg?token=2QY73AMZAK" alt="Codecov" />
+  </a>
+  <a href="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml">
+    <img src="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml/badge.svg" alt="Test" />
+  </a>
+  <a href="https://github.com/fzls/djc_helper/actions/workflows/package.yml">
+    <img src="https://github.com/fzls/djc_helper/actions/workflows/package.yml/badge.svg" alt="Build" />
+  </a>
+</div>
+
+## 目录
+
+- [概览](#概览)
+  - [拉取代码](#拉取代码)
+  - [长期支持的活动](#长期支持的活动)
+  - [支持的短期活动](#支持的短期活动)
+  - [基于auto.js支持的蚊子腿](#基于autojs支持的蚊子腿)
+- [声明](#声明)
+- [唯一发布地址](#唯一发布地址)
+- [网盘链接（更新于2020/10/21)](#网盘链接更新于20201021)
+- [视频教程](#视频教程)
+- [交流群](#交流群)
+- [『重要』与个人隐私有关的skey相关说明](#重要与个人隐私有关的skey相关说明)
+- [自动登录须知](#自动登录须知)
+  - [弊](#弊)
+  - [利](#利)
+- [提示：](#提示)
+- [使用方法](#使用方法)
+- [开机自动运行](#开机自动运行)
+- [支持一下](#支持一下)
+
+# 概览
 ## 拉取代码
 如果github clone过慢，可以使用gitee的镜像仓库，目前设定了github action，会自动同步代码到gitee该仓库
 > git clone https://gitee.com/fzls/djc_helper.git

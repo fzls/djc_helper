@@ -63,6 +63,7 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021070614491911111",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/1669_61b21754",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
+    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -91,7 +92,6 @@ act_name_to_url = {
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "KOL": "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
-    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210312hello/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
@@ -196,7 +196,7 @@ class Urls:
         self.iActivityId_dnf_collection_dup = "385269"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
-        self.iActivityId_hello_voice = "366492"  # hello语音奖励兑换
+        self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "388970"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路

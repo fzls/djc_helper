@@ -6,3 +6,4 @@ pytest-randomly
 flake8
 isort
 # mypy
+pytest-xdist[psutil]

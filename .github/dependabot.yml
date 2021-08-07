@@ -7,5 +7,3 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: werkzeug
-        versions:
-          - 1.0.1

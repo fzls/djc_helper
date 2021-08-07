@@ -8,6 +8,6 @@ selenium
 colorlog
 psutil
 leancloud
-werkzeug<=1.0.1
+werkzeug<2.0.2
 PyQt5
 PyQt5-stubs

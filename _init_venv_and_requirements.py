@@ -63,7 +63,12 @@ def parse_args():
     parser.add_argument("--disable_douban", action='store_true')
     parser.add_argument("--venv_path", default=".venv")
     parser.add_argument("--requirements_path", default="requirements.txt")
+    parser.add_argument("--dev", action='store_true')
     args = parser.parse_args()
+
+    if args.dev:
+        args.venv_path = ".venv_dev"
+        args.requirements_path = "requirements_dev.txt"
 
     return args
 

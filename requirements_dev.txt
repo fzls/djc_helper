@@ -1,9 +1,8 @@
 -r requirements.txt
 
-pytest
-pytest-cov
-pytest-randomly
-flake8
-isort
-# mypy
-pytest-xdist[psutil]
+pytest==6.2.4
+pytest-cov==2.12.1
+pytest-randomly==3.8.0
+pytest-xdist[psutil]==2.3.0
+flake8==3.9.2
+isort==5.9.3

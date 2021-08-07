@@ -2,7 +2,7 @@
 
 pytest
 pytest-cov
-pytest-random-order
+pytest-randomly
 flake8
 isort
 # mypy

@@ -63,7 +63,7 @@ class Uploader:
         # 仅上传需要登录
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix="", also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+    def upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix="", delete_history_file=False, also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
         if not self.login_ok:
             logger.info("未登录，不能上传文件")
             return False
@@ -73,7 +73,7 @@ class Uploader:
             history_file_prefix = os.path.basename(filepath)
 
         if not only_upload_compressed_version:
-            ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix)
+            ok = self._upload_to_lanzouyun(filepath, target_folder, history_file_prefix, delete_history_file)
             if not ok:
                 return False
 
@@ -87,11 +87,11 @@ class Uploader:
             # 创建压缩版本
             compress_file_with_lzma(filepath, compressed_filepath)
             # 上传
-            return self._upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix)
+            return self._upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix, delete_history_file)
 
         return True
 
-    def _upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix) -> bool:
+    def _upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix, delete_history_file=False) -> bool:
         if history_file_prefix == "":
             logger.error("未设置history_file_prefix")
             return False
@@ -113,8 +113,12 @@ class Uploader:
             files = self.lzy.get_file_list(target_folder.id)
             for file in files:
                 if file.name.startswith(history_file_prefix):
-                    self.lzy.move_file(file.id, folder_history_files.id)
-                    logger.info(f"将{file.name}移动到目录({folder_history_files.name})")
+                    if not delete_history_file:
+                        self.lzy.move_file(file.id, folder_history_files.id)
+                        logger.info(f"将{file.name}移动到目录({folder_history_files.name})")
+                    else:
+                        self.lzy.delete(file.id, True)
+                        logger.info(f"移除旧版本的{file.name}")
 
             logger.info(f"将文件移到目录({target_folder.name})中")
             self.lzy.move_file(fid, target_folder.id)

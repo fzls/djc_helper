@@ -590,16 +590,24 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     """
     db = CacheDB().with_context(cache_category).load()
 
+    cached_value = ""
+
     # 尝试使用缓存内容
     if cache_key in db.cache:
         cache_info = db.cache[cache_key]
+        cached_value = cache_info.value
         if parse_time(cache_info.update_at) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
             if cache_validate_func is None or cache_validate_func(cache_info.value):
                 logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
                 return cache_info.value
 
     # 调用回调获取最新结果，并保存
-    latest_value = cache_miss_func()
+    try:
+        latest_value = cache_miss_func()
+    except Exception as e:
+        logger.error(f"更新缓存时出错了 {cache_category} {cache_key}", exc_info=e)
+        # 无法获取最新数据时，则保底使用最后一次缓存的数据
+        latest_value = cached_value
 
     cache_info = CacheInfo()
     cache_info.value = latest_value

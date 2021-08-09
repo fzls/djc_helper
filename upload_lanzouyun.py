@@ -30,8 +30,8 @@ class Uploader:
     folder_djc_helper = Folder("蚊子腿小助手", "2290618", f"https://{default_domain}/s/djc-helper", "")
     folder_history_files = Folder("历史版本", "2303716", f"https://{default_domain}/b01bp17zg", "")
     folder_djc_helper_tools = Folder("蚊子腿小助手相关工具", "2291287", f"https://{default_domain}/s/djc-tools", "")
-    folder_online_files = Folder("在线文件存储", "2866929", f"https://{default_domain}/s/myfiles", "6tnk")
-    folder_online_files_history_files = Folder("历史版本", "2867307", f"https://{default_domain}/b01c143ah", "5r75")
+    folder_online_files = Folder("在线文件存储-v2", "3828082", f"https://{default_domain}/s/myfiles-v2", "3jte")
+    folder_online_files_history_files = Folder("历史版本-v2", "3828089", f"https://{default_domain}/myfiles-v2-history", "fwqi")
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"

@@ -1279,7 +1279,7 @@ def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, re
 
 def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool]:
     buyInfo = BuyInfo()
-    ok = True
+    ok = False
 
     try:
         if len(qq_accounts) != 0:
@@ -1295,10 +1295,10 @@ def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool
             raw_res_text = with_cache(cache_name_user_buy_info, json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
                                       cache_validate_func=None)
             if raw_res_text != "":
+                ok = True
                 buyInfo.auto_update_config(json.loads(raw_res_text))
 
     except Exception as e:
-        ok = False
         logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
 
     return buyInfo, ok

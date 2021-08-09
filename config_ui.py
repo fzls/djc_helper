@@ -610,6 +610,8 @@ class ConfigUi(QFrame):
         show_message("服务器处理结果", res.msg)
 
         if res.msg == RESULT_OK:
+            # 使用成功
+            show_message("处理成功", "卡密使用成功，目前有缓存机制，因此可能不会立即生效。一般会在15分钟生效，请耐心等候。如果30分钟后仍未生效，可以去QQ群联系我进行反馈~")
             self.lineedit_card.clear()
             self.lineedit_secret.clear()
 
@@ -618,6 +620,9 @@ class ConfigUi(QFrame):
                 show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引/付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
 
             self.report_use_card_secret(card)
+        else:
+            # 使用失败
+            show_message("使用失败，服务器处理结果", res.msg)
 
     @try_except(return_val_on_except=False)
     def report_use_card_secret(self, card: str):

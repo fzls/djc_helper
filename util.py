@@ -578,7 +578,7 @@ cache_name_download = "download_cache"
 cache_name_user_buy_info = "user_buy_info"
 
 
-def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600):
+def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600, force_update=False):
     """
 
     :param cache_category: 缓存类别，不同类别的key不冲突
@@ -596,10 +596,14 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
     if cache_key in db.cache:
         cache_info = db.cache[cache_key]
         cached_value = cache_info.value
-        if parse_time(cache_info.update_at) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
-            if cache_validate_func is None or cache_validate_func(cache_info.value):
-                logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
-                return cache_info.value
+
+        if not force_update:
+            if parse_time(cache_info.update_at) + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
+                if cache_validate_func is None or cache_validate_func(cache_info.value):
+                    logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
+                    return cache_info.value
+        else:
+            logger.debug(f"强制更新缓存 cache_category={cache_category} cache_key={cache_key}")
 
     # 调用回调获取最新结果，并保存
     try:

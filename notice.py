@@ -116,7 +116,7 @@ class NoticeManager:
         with open("upload_cookie.json") as fp:
             cookie = json.load(fp)
         uploader.login(cookie)
-        uploader.upload_to_lanzouyun(self.save_path, uploader.folder_online_files, also_upload_compressed_version=True)
+        uploader.upload_to_lanzouyun(self.save_path, uploader.folder_online_files, delete_history_file=True, also_upload_compressed_version=True)
 
     @try_except()
     def show_notices(self):

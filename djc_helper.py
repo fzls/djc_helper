@@ -1131,11 +1131,15 @@ class DjcHelper:
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         }
 
+        old_gpoints = self.query_gpoints()
+
         for op in self.cfg.xinyue_app_operations:
             res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers, timeout=10)
             logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content}")
 
-        logger.info(color("bold_yellow") + f"当前心悦app相关操作处于测试阶段，请前往心悦app自行确认是否兑换成功~")
+        new_gpoints = self.query_gpoints()
+
+        logger.info(color("bold_yellow") + f"兑换前G分为{old_gpoints}， 兑换后G分为{new_gpoints}，差值为{old_gpoints - new_gpoints}，请自行前往心悦app确认是否兑换成功")
 
     # DNF进击吧赛利亚
     def xinyue_sailiyam(self):

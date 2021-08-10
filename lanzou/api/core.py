@@ -979,8 +979,7 @@ class LanZouCloud(object):
         file_path = save_path + os.sep + info.name
         if os.path.exists(file_path):
             if overwrite:
-                logger.debug(f"Overwrite file {file_path}")
-                os.remove(file_path)  # 删除旧文件
+                logger.debug(f"Overwrite file {file_path}, will remove after download finish")
             else:  # 自动重命名文件
                 file_path = auto_rename(file_path)
                 logger.debug(f"File has already exists, auto rename to {file_path}")
@@ -1035,10 +1034,18 @@ class LanZouCloud(object):
                     if callback is not None:
                         callback(file_name, int(content_length), now_size)
 
+        # 下载完成
+        if os.path.exists(file_path):
+            # 若存在旧文件，且配置为覆盖，则先移除该文件
+            if overwrite:
+                logger.debug(f"Overwrite file {file_path}, will remove after download finish")
+                os.remove(file_path)  # 删除旧文件
+        # 改回正常文件名
+        os.rename(tmp_file_path, file_path)
+
         # 文件下载完成后, 检查文件尾部 512 字节数据
         # 绕过官方限制上传时, API 会隐藏文件真实信息到文件尾部
         # 这里尝试提取隐藏信息, 并截断文件尾部数据
-        os.rename(tmp_file_path, file_path)  # 下载完成，改回正常文件名
         if os.path.getsize(file_path) > 512:  # 文件大于 512 bytes 就检查一下
             file_info = None
             with open(file_path, 'rb') as f:

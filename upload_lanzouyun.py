@@ -285,7 +285,7 @@ class Uploader:
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试
-                if show_log: logger.info(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本之前，无需重新下载")
+                if show_log: logger.info(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本{local_version_last_modify_time}之前，无需重新下载")
                 return target_path.value
 
         def after_downloaded(file_name):

@@ -621,7 +621,7 @@ class ConfigUi(QFrame):
             self.report_use_card_secret(card)
         else:
             # 使用失败
-            show_message("使用失败，服务器处理结果", res.msg)
+            show_message("使用失败", res.msg)
 
     @try_except(return_val_on_except=False)
     def report_use_card_secret(self, card: str):

@@ -281,7 +281,7 @@ class Uploader:
             server_version_upload_time = parse_time(fileinfo.time)
             local_version_last_modify_time = parse_timestamp(os.stat(target_path.value).st_mtime)
 
-            logger.debug(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
+            if show_log: logger.info(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试

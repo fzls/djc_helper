@@ -607,7 +607,6 @@ class ConfigUi(QFrame):
             return
 
         res = PayResponse().auto_update_config(raw_res.json())
-        show_message("服务器处理结果", res.msg)
 
         if res.msg == RESULT_OK:
             # 使用成功

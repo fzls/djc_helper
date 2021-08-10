@@ -274,25 +274,26 @@ class Uploader:
             os.mkdir(download_dir)
 
         download_dir = os.path.realpath(download_dir)
-        target_path = os.path.join(download_dir, fileinfo.name)
+        target_path = StrWrapper(os.path.join(download_dir, fileinfo.name))
 
-        if download_only_if_server_version_is_newer and os.path.isfile(target_path):
+        if download_only_if_server_version_is_newer and os.path.isfile(target_path.value):
             # 仅在服务器版本比本地已有文件要新的时候才重新下载
             server_version_upload_time = parse_time(fileinfo.time)
-            local_version_last_modify_time = parse_timestamp(os.stat(target_path).st_mtime)
+            local_version_last_modify_time = parse_timestamp(os.stat(target_path.value).st_mtime)
 
             logger.debug(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试
                 if show_log: logger.info(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本之前，无需重新下载")
-                return target_path
+                return target_path.value
 
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
+            target_path.value = file_name
             if show_log: logger.info(f"最终下载文件路径为 {file_name}")
 
-        if show_log: logger.info(f"即将开始下载 {target_path}")
+        if show_log: logger.info(f"即将开始下载 {target_path.value}")
         callback = None
         if show_log: callback = self.show_progress
         retCode = self.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
@@ -312,7 +313,7 @@ class Uploader:
                 ))
             raise Exception("下载失败")
 
-        return target_path
+        return target_path.value
 
     def show_progress(self, file_name, total_size, now_size):
         """显示进度的回调函数"""
@@ -361,6 +362,11 @@ class Uploader:
             lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzous'),
         ]
+
+
+class StrWrapper:
+    def __init__(self, value: str):
+        self.value = value
 
 
 def demo():

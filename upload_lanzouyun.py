@@ -10,7 +10,8 @@ from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
 from log import color, logger
 from util import (cache_name_download, human_readable_size,
-                  make_sure_dir_exists, with_cache)
+                  make_sure_dir_exists, parse_time, parse_timestamp,
+                  with_cache)
 
 Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 
@@ -222,14 +223,15 @@ class Uploader:
 
         raise FileNotFoundError("latest version not found")
 
-    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600) -> str:
+    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600, download_only_if_server_version_is_newer=False) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
 
         def _download(fname: str) -> str:
             return with_cache(cache_name_download, os.path.join(folder.name, fname), cache_max_seconds=cache_max_seconds,
-                              cache_miss_func=lambda: self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log),
+                              cache_miss_func=lambda: self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log,
+                                                                         download_only_if_server_version_is_newer=download_only_if_server_version_is_newer),
                               cache_validate_func=lambda target_path: os.path.isfile(target_path),
                               )
 
@@ -264,7 +266,7 @@ class Uploader:
 
         raise FileNotFoundError(f"file={name} not found in folder={folder.name}")
 
-    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True) -> str:
+    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True, download_only_if_server_version_is_newer=False) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -273,6 +275,18 @@ class Uploader:
 
         download_dir = os.path.realpath(download_dir)
         target_path = os.path.join(download_dir, fileinfo.name)
+
+        if download_only_if_server_version_is_newer and os.path.isfile(target_path):
+            # 仅在服务器版本比本地已有文件要新的时候才重新下载
+            server_version_upload_time = parse_time(fileinfo.time)
+            local_version_last_modify_time = parse_timestamp(os.stat(target_path).st_mtime)
+
+            logger.debug(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
+
+            if server_version_upload_time <= local_version_last_modify_time:
+                # 暂无最新版本，无需重试
+                if show_log: logger.info(f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本之前，无需重新下载")
+                return target_path
 
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
@@ -362,6 +376,7 @@ def demo():
 
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, ".cached", try_compressed_version_first=True)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True, download_only_if_server_version_is_newer=True, cache_max_seconds=0)
 
     # 需要登录才能使用的接口
     test_login_functions = False

@@ -257,8 +257,8 @@ class QQLogin():
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
         uploader = Uploader()
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory, cache_max_seconds=0)
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory, cache_max_seconds=0)
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory, cache_max_seconds=0, download_only_if_server_version_is_newer=False)
+        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory, cache_max_seconds=0, download_only_if_server_version_is_newer=False)
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
         decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)

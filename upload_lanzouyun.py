@@ -223,7 +223,7 @@ class Uploader:
 
         raise FileNotFoundError("latest version not found")
 
-    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600, download_only_if_server_version_is_newer=False) -> str:
+    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600, download_only_if_server_version_is_newer=True) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
@@ -266,7 +266,7 @@ class Uploader:
 
         raise FileNotFoundError(f"file={name} not found in folder={folder.name}")
 
-    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True, download_only_if_server_version_is_newer=False) -> str:
+    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True, download_only_if_server_version_is_newer=True) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -285,7 +285,7 @@ class Uploader:
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试
-                if show_log: logger.info(f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本之前，无需重新下载")
+                if show_log: logger.info(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本之前，无需重新下载")
                 return target_path
 
         def after_downloaded(file_name):
@@ -375,7 +375,7 @@ def demo():
     uploader.download_latest_patches(".cached")
 
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, ".cached", try_compressed_version_first=True)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, ".cached", try_compressed_version_first=True, download_only_if_server_version_is_newer=False, cache_max_seconds=0)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True, download_only_if_server_version_is_newer=True, cache_max_seconds=0)
 
     # 需要登录才能使用的接口

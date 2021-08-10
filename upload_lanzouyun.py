@@ -240,13 +240,32 @@ class Uploader:
             compressed_filename = self.get_compressed_version_filename(name)
             try:
                 if show_log: logger.info(color("bold_green") + f"尝试优先下载压缩版本 {compressed_filename}")
+
+                # 记录下载前的最近修改时间
+                before_download_last_modify_time = None
+                old_compressed_filepath = os.path.join(download_dir, compressed_filename)
+                if os.path.isfile(old_compressed_filepath):
+                    before_download_last_modify_time = parse_timestamp(os.stat(old_compressed_filepath).st_mtime)
+
                 # 下载压缩版本
                 compressed_filepath = _download(compressed_filename)
+
+                # 记录下载完成后的最近修改时间
+                after_download_last_modify_time = parse_timestamp(os.stat(compressed_filepath).st_mtime)
 
                 # 解压缩
                 dirname = os.path.dirname(compressed_filepath)
                 target_path = os.path.join(dirname, name)
-                decompress_file_with_lzma(compressed_filepath, target_path)
+
+                need_decompress = True
+                if before_download_last_modify_time is not None and before_download_last_modify_time == after_download_last_modify_time and os.path.exists(target_path):
+                    # 如果前后修改时间没有变动，说明没有实际发生下载，比如网盘版本与当前本地版本一致，如果此时目标文件已经解压过，将不再尝试解压
+                    need_decompress = False
+
+                if need_decompress:
+                    decompress_file_with_lzma(compressed_filepath, target_path)
+                else:
+                    if show_log: logger.info(f"{compressed_filepath}未发生改变，且目标文件已存在，无需尝试解压缩")
                 # 返回解压缩的文件路径
                 return target_path
             except Exception as e:
@@ -402,6 +421,7 @@ def demo():
 def demo_downloads():
     uploader = Uploader()
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
+    # uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True, cache_max_seconds=0)
 
 
 if __name__ == '__main__':

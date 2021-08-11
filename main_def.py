@@ -3,6 +3,7 @@ from multiprocessing import cpu_count, freeze_support
 from sys import exit
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
+from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from djc_helper import DjcHelper, run_act
 from first_run import *
@@ -1081,7 +1082,7 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
             has_no_users = True
             for remote_filename in [uploader.buy_auto_updater_users_filename, uploader.cs_buy_auto_updater_users_filename]:
                 try:
-                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=show_log, try_compressed_version_first=True)
+                    user_list_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, downloads_dir, show_log=show_log, try_compressed_version_first=True)
                 except FileNotFoundError:
                     # 如果网盘没有这个文件，就跳过
                     continue
@@ -1209,7 +1210,7 @@ def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, re
                 user_buy_info = user_buy_info_list[idx]
 
                 try:
-                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, ".cached", show_log=show_log, try_compressed_version_first=True)
+                    buy_info_filepath = uploader.download_file_in_folder(uploader.folder_online_files, remote_filename, downloads_dir, show_log=show_log, try_compressed_version_first=True)
                 except FileNotFoundError:
                     # 如果网盘没有这个文件，就跳过
                     continue

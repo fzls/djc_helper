@@ -54,8 +54,9 @@ class DBInterface(ConfigInterface):
         try:
             if not os.path.isfile(db_file):
                 self.create_at = format_now()
-                self.file_created = True
+
             self.update_at = format_now()
+            self.file_created = True
 
             self.save_to_json_file(db_file)
         except Exception:

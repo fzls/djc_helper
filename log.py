@@ -5,6 +5,7 @@ import os
 import pathlib
 import time
 from sys import exit
+from typing import Callable
 
 import colorlog
 
@@ -132,6 +133,13 @@ def color(color_name):
 
 def with_color(color_name: str, value) -> str:
     return color(color_name) + str(value) + asciiReset
+
+
+def get_log_func(log_func: Callable, show_log=True) -> Callable:
+    if not show_log:
+        return logger.debug
+
+    return log_func
 
 
 if __name__ == '__main__':

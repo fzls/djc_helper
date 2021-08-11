@@ -8,7 +8,7 @@ from typing import List
 from compress import compress_file_with_lzma, decompress_file_with_lzma
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
-from log import color, logger
+from log import color, get_log_func, logger
 from util import (cache_name_download, human_readable_size,
                   make_sure_dir_exists, parse_time, parse_timestamp,
                   with_cache)
@@ -239,7 +239,7 @@ class Uploader:
             # 先尝试获取压缩版本
             compressed_filename = self.get_compressed_version_filename(name)
             try:
-                if show_log: logger.info(color("bold_green") + f"尝试优先下载压缩版本 {compressed_filename}")
+                get_log_func(logger.info, show_log)(color("bold_green") + f"尝试优先下载压缩版本 {compressed_filename}")
 
                 # 记录下载前的最近修改时间
                 before_download_last_modify_time = None
@@ -265,11 +265,11 @@ class Uploader:
                 if need_decompress:
                     decompress_file_with_lzma(compressed_filepath, target_path)
                 else:
-                    if show_log: logger.info(f"{compressed_filepath}未发生改变，且目标文件已存在，无需尝试解压缩")
+                    get_log_func(logger.info, show_log)(f"{compressed_filepath}未发生改变，且目标文件已存在，无需尝试解压缩")
                 # 返回解压缩的文件路径
                 return target_path
             except Exception as e:
-                if show_log: logger.error(f"下载压缩版本 {compressed_filename} 失败，将尝试普通版本~", exc_info=e)
+                get_log_func(logger.error, show_log)(f"下载压缩版本 {compressed_filename} 失败，将尝试普通版本~", exc_info=e)
 
         # 下载普通版本
         return _download(name)
@@ -300,26 +300,26 @@ class Uploader:
             server_version_upload_time = parse_time(fileinfo.time)
             local_version_last_modify_time = parse_timestamp(os.stat(target_path.value).st_mtime)
 
-            if show_log: logger.info(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
+            get_log_func(logger.info, show_log)(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试
-                if show_log: logger.info(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本{local_version_last_modify_time}之前，无需重新下载")
+                get_log_func(logger.info, show_log)(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本{local_version_last_modify_time}之前，无需重新下载")
                 return target_path.value
 
         def after_downloaded(file_name):
             """下载完成后的回调函数"""
             target_path.value = file_name
-            if show_log: logger.info(f"最终下载文件路径为 {file_name}")
+            get_log_func(logger.info, show_log)(f"最终下载文件路径为 {file_name}")
 
-        if show_log: logger.info(f"即将开始下载 {target_path.value}")
+        get_log_func(logger.info, show_log)(f"即将开始下载 {target_path.value}")
         callback = None
         if show_log: callback = self.show_progress
         retCode = self.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
         if retCode != LanZouCloud.SUCCESS:
-            if show_log: logger.error(f"下载失败，retCode={retCode}")
+            get_log_func(logger.error, show_log)(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
-                if show_log: logger.warning(color("bold_yellow") + (
+                get_log_func(logger.warning, show_log)(color("bold_yellow") + (
                     "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
                     "分别尝试在浏览器中访问下列两个网页，是否一个打的开一个打不开？\n"
                     "https://fzls.lanzoux.com/s/djc-helper\n"

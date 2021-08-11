@@ -31,7 +31,7 @@ import win32process
 
 from const import cached_dir
 from db import *
-from log import asciiReset, color, logger
+from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
 
 
@@ -423,8 +423,7 @@ def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, 
 
 
 def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False, follow_flag_file=True):
-    if print_log:
-        logger.warning(color("bold_cyan") + msg)
+    get_log_func(logger.warning, print_log)(color("bold_cyan") + msg)
 
     if is_run_in_github_action():
         return

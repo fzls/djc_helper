@@ -289,8 +289,7 @@ class Uploader:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
-        if not os.path.isdir(download_dir):
-            os.mkdir(download_dir)
+        make_sure_dir_exists(download_dir)
 
         download_dir = os.path.realpath(download_dir)
         target_path = StrWrapper(os.path.join(download_dir, fileinfo.name))

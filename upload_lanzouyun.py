@@ -79,9 +79,10 @@ class Uploader:
                 return False
 
         if also_upload_compressed_version:
-            make_sure_dir_exists('.cached')
+            temp_dir = '.cached/compressed'
+            make_sure_dir_exists(temp_dir)
             filename = os.path.basename(filepath)
-            compressed_filepath = os.path.join('.cached', self.get_compressed_version_filename(filename))
+            compressed_filepath = os.path.join(temp_dir, self.get_compressed_version_filename(filename))
             compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"
 
             logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")

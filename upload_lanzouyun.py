@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from compress import compress_file_with_lzma, decompress_file_with_lzma
+from const import compressed_temp_dir, downloads_dir
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
 from log import color, get_log_func, logger
@@ -79,10 +80,8 @@ class Uploader:
                 return False
 
         if also_upload_compressed_version:
-            temp_dir = '.cached/compressed'
-            make_sure_dir_exists(temp_dir)
             filename = os.path.basename(filepath)
-            compressed_filepath = os.path.join(temp_dir, self.get_compressed_version_filename(filename))
+            compressed_filepath = os.path.join(compressed_temp_dir, self.get_compressed_version_filename(filename))
             compressed_history_file_prefix = f"{self.compressed_version_prefix}{history_file_prefix}"
 
             logger.info(color("bold_green") + f"创建压缩版本并上传 {compressed_filepath}")
@@ -395,15 +394,15 @@ def demo():
 
     # 不需要登录的接口
     logger.info(f"最新版本为{uploader.latest_version()}")
-    # uploader.download_latest_version(".cached")
+    # uploader.download_latest_version(downloads_dir)
 
     logger.info(f"最新增量补丁范围为{uploader.latest_patches_range()}")
     logger.info(f"最新增量补丁为{uploader.find_latest_patches()}")
-    uploader.download_latest_patches(".cached")
+    uploader.download_latest_patches(downloads_dir)
 
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, ".cached", try_compressed_version_first=True)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, ".cached", try_compressed_version_first=True, download_only_if_server_version_is_newer=False, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True, download_only_if_server_version_is_newer=True, cache_max_seconds=0)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, downloads_dir, try_compressed_version_first=True)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, downloads_dir, try_compressed_version_first=True, download_only_if_server_version_is_newer=False, cache_max_seconds=0)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, download_only_if_server_version_is_newer=True, cache_max_seconds=0)
 
     # 需要登录才能使用的接口
     test_login_functions = False
@@ -422,8 +421,8 @@ def demo():
 
 def demo_downloads():
     uploader = Uploader()
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True)
-    # uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, ".cached", try_compressed_version_first=True, cache_max_seconds=0)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True)
+    # uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
 
 
 if __name__ == '__main__':

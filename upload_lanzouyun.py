@@ -2,7 +2,7 @@ import json
 import os
 import re
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 from compress import compress_file_with_lzma, decompress_file_with_lzma
@@ -297,7 +297,9 @@ class Uploader:
 
         if download_only_if_server_version_is_newer and os.path.isfile(target_path.value):
             # 仅在服务器版本比本地已有文件要新的时候才重新下载
-            server_version_upload_time = parse_time(fileinfo.time)
+            # 由于蓝奏云时间显示不精确，将其往前一分钟，避免同一文件下次检查时其蓝奏云时间显示为xx分钟前，解析后会有最多一分钟内的误差，而导致不必要的重新下载
+            # 比如本次是x分y秒检查并更新，下次检查时是x+6分y+10秒，此时解析蓝奏云时间得到上传时间为x分y+10秒，就会产生额外的不必要下载
+            server_version_upload_time = parse_time(fileinfo.time) - timedelta(minutes=1)
             local_version_last_modify_time = parse_timestamp(os.stat(target_path.value).st_mtime)
 
             get_log_func(logger.info, show_log)(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")

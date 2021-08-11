@@ -1,7 +1,7 @@
 import json
 import os.path
 
-from const import cached_dir
+from const import downloads_dir
 from data_struct import to_raw_type
 from first_run import *
 from update import version_less
@@ -73,7 +73,7 @@ class NoticeManager:
         self.notices = []  # type: List[Notice]
 
         self.file_name = "notices.txt"
-        self.cache_path = f"{cached_dir}/{self.file_name}"
+        self.cache_path = f"{downloads_dir}/{self.file_name}"
         self.save_path = f"utils/{self.file_name}"
 
         self.load(load_from_remote)

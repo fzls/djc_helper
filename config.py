@@ -796,7 +796,7 @@ class Config(ConfigInterface):
         return None
 
     def get_qq_accounts(self) -> List[str]:
-        return list([uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs])
+        return list([uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs if account_cfg.enable])
 
     def get_any_enabled_account(self) -> Optional[AccountConfig]:
         for account_config in self.account_configs:

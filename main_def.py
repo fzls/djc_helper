@@ -961,7 +961,7 @@ def try_auto_update(cfg):
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
-        has_buy_dlc = has_buy_auto_updater_dlc(cfg.get_qq_accounts())
+        has_buy_dlc, query_ok = has_buy_auto_updater_dlc_and_query_ok(cfg.get_qq_accounts())
 
         if not has_buy_dlc:
             if exists_auto_updater_dlc():
@@ -1015,6 +1015,10 @@ def try_auto_update(cfg):
                 shutil.copy2(auto_updater_latest_path(), auto_updater_path())
         else:
             if not exists_auto_updater_dlc():
+                if not query_ok:
+                    logger.debug(f"当前应该是查询dlc失败后全部放行的情况，这种情况下若本地没有dlc，则不尝试自动下载，避免后续查询功能恢复正常后提示没有权限，需要手动删除")
+                    return
+
                 # 未发现dlc和最新版dlc，尝试从网盘下载
                 logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
                 uploader = Uploader()

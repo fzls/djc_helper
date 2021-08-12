@@ -1068,11 +1068,19 @@ def try_auto_update(cfg):
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
-def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False):
+def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> bool:
+    has_buy, _ = has_buy_auto_updater_dlc_and_query_ok(qq_accounts, max_retry_count, retry_wait_time, show_log)
+    return has_buy
+
+
+def has_buy_auto_updater_dlc_and_query_ok(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> Tuple[bool, bool]:
+    """
+    查询是否购买过dlc，返回 [是否有资格，查询是否成功]
+    """
     logger.debug("尝试由服务器代理查询购买DLC信息，请稍候片刻~")
     user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
     if query_ok:
-        return infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info)
+        return infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info), True
 
     logger.debug("服务器查询DLC信息失败，尝试直接从网盘查询~")
     for idx in range(max_retry_count):
@@ -1095,7 +1103,7 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
 
                 for qq in qq_accounts:
                     if qq in buy_users:
-                        return True
+                        return True, True
 
                 logger.debug((
                     "DLC购买调试日志：\n"
@@ -1106,9 +1114,9 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
 
             if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
-                return True
+                return True, True
 
-            return False
+            return False, True
         except Exception as e:
             logFunc = logger.debug
             if use_by_myself():
@@ -1116,7 +1124,7 @@ def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wa
             logFunc(f"第{idx + 1}次检查是否购买DLC时出错了，稍后重试", exc_info=e)
             time.sleep(retry_wait_time)
 
-    return True
+    return True, True
 
 
 def infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info: BuyInfo) -> bool:

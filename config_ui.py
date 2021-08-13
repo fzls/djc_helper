@@ -813,6 +813,9 @@ class CommonConfigUi(QFrame):
         self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
         add_row(form_layout, "自动赠送卡片的目标QQ数组(这些QQ将接收来自其他QQ赠送的卡片)", self.lineedit_auto_send_card_target_qqs)
 
+        self.checkbox_cost_all_cards_and_do_lottery_on_last_day = create_checkbox(cfg.cost_all_cards_and_do_lottery_on_last_day)
+        add_row(form_layout, "是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）", self.checkbox_cost_all_cards_and_do_lottery_on_last_day)
+
         # -------------- 区域：心悦 --------------
         self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦", top_layout)
 
@@ -937,6 +940,7 @@ class CommonConfigUi(QFrame):
         cfg.log_level = self.combobox_log_level.currentText()
         cfg.majieluo_send_card_target_qq = self.lineedit_majieluo_send_card_target_qq.text()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
+        cfg.cost_all_cards_and_do_lottery_on_last_day = self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
         cfg.majieluo_invite_uin_list = str_to_list(self.lineedit_majieluo_invite_uin_list.text())
 
         self.login.update_config(cfg.login)

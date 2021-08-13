@@ -1479,6 +1479,7 @@ class DjcHelper:
         return self.local_saved_pskey_file.format(self.cfg.name)
 
     # --------------------------------------------阿拉德勇士征集令--------------------------------------------
+    @try_except()
     def dnf_warriors_call(self):
         show_head_line("阿拉德勇士征集令")
 
@@ -1500,6 +1501,7 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
     # note：对接流程与下方黄钻完全一致，参照其流程即可
+    @try_except()
     def dnf_super_vip(self):
         get_act_url("超级会员")
         show_head_line("QQ空间超级会员")
@@ -1536,6 +1538,7 @@ class DjcHelper:
     #       在结果中双击main.bundle.js结果，点击格式化后搜索【c.default.methods.xcubeItem_4 =】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
     #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("黄钻")的值为新的网页链接，并把活动时间改为最新
     #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
+    @try_except()
     def dnf_yellow_diamond(self):
         get_act_url("黄钻")
         show_head_line("QQ空间黄钻")
@@ -1567,6 +1570,7 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
     # note：对接流程与上方黄钻完全一致，参照其流程即可
+    @try_except()
     def dnf_vip_mentor(self):
         get_act_url("会员关怀")
         show_head_line("QQ空间会员关怀")

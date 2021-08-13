@@ -32,7 +32,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-07-20 00:00:00", "2021-08-19 23:59:59"),
     newAmsActInfo("黄钻", "2021-07-20 00:00:00", "2021-08-19 23:59:59"),
-    newAmsActInfo("集卡", "2021-07-20 00:00:00", "2021-08-08 23:59:59"),
+    newAmsActInfo("集卡", "2021-07-20 00:00:00", "2021-08-20 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
 ]

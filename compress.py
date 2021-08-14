@@ -69,9 +69,15 @@ def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
 
     # 解压缩
     logger_func(f"开始解压缩 {compressed_7z_filepath} 为 文件 {filepath}")
+
+    # 先解压缩到临时文件
+    temp_target_path = f"{filepath}.decompressed"
     with lzma.open(f"{compressed_7z_filepath}", "rb") as file_in:
-        with open(f"{filepath}", "wb") as file_out:
+        with open(f"{temp_target_path}", "wb") as file_out:
             file_out.writelines(file_in)
+
+    # 解压缩完成后再替换到目标文件，减少目标文件不可用的时长
+    os.replace(temp_target_path, filepath)
 
 
 def test():

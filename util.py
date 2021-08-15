@@ -263,8 +263,15 @@ def get_year(t=get_now()) -> str:
 def filter_unused_params(urlRendered: str) -> str:
     path = ""
     if '?' in urlRendered:
+        # https://www.example.com/index?a=1&b=2
         idx = urlRendered.index('?')
         path, urlRendered = urlRendered[:idx], urlRendered[idx + 1:]
+    elif '=' in urlRendered or '&' in urlRendered:
+        # a=1&b=2
+        path, urlRendered = "", urlRendered
+    else:
+        # https://www.example.com/index
+        path, urlRendered = urlRendered, ""
 
     parts = urlRendered.split('&')
 

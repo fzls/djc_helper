@@ -110,6 +110,7 @@ def test_get_year():
 
 
 def test_filter_unused_params():
+    assert filter_unused_params("https://www.example.com/index") == "https://www.example.com/index"
     assert filter_unused_params("https://www.example.com/index?a=1&b=2") == "https://www.example.com/index?a=1&b=2"
     assert filter_unused_params("www.example.com/index?a=1&b=2") == "www.example.com/index?a=1&b=2"
     assert filter_unused_params("index?a=1&b=2") == "index?a=1&b=2"

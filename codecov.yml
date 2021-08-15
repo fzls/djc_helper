@@ -3,3 +3,5 @@ codecov:
 ignore:
   - ".venv_dev"
   - ".venv"
+fixes:
+  - "/::./"

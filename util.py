@@ -202,19 +202,18 @@ def show_head_line(msg, msg_color=color("fg_bold_green")):
     logger.warning(char * line_length)
 
 
-def get_this_week_monday():
-    return _get_this_week_monday().strftime("%Y%m%d")
+def get_this_week_monday(now=datetime.datetime.now()) -> str:
+    return get_this_week_monday_datetime(now).strftime("%Y%m%d")
 
 
-def get_last_week_monday():
-    lastWeekMonday = _get_this_week_monday() - datetime.timedelta(days=7)
+def get_last_week_monday(now=datetime.datetime.now()) -> str:
+    lastWeekMonday = get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
     return lastWeekMonday.strftime("%Y%m%d")
 
 
-def _get_this_week_monday():
-    now = datetime.datetime.now()
+def get_this_week_monday_datetime(now=datetime.datetime.now()) -> datetime.datetime:
     monday = now - datetime.timedelta(days=now.weekday())
-    return monday
+    return monday.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def get_now():

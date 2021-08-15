@@ -4,10 +4,14 @@ import os
 import subprocess
 
 from log import color, logger
-from util import show_head_line
+from util import bypass_proxy, show_head_line
 
 
-def init_venv_and_requirements(venv_path=".venv", requirements_path="requirements.txt", disable_douban=False):
+def init_venv_and_requirements(venv_path=".venv", requirements_path="requirements.txt", disable_douban=False, enable_proxy=False):
+    if not enable_proxy:
+        logger.info("当前已无视系统代理")
+        bypass_proxy()
+
     # 初始化相关路径变量
     pyscript_path = os.path.join(venv_path, "Scripts")
     py_path = os.path.join(pyscript_path, "python")
@@ -61,6 +65,7 @@ def init_venv_and_requirements(venv_path=".venv", requirements_path="requirement
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--disable_douban", action='store_true')
+    parser.add_argument("--enable_proxy", action='store_true')
     parser.add_argument("--venv_path", default=".venv")
     parser.add_argument("--requirements_path", default="requirements.txt")
     parser.add_argument("--dev", action='store_true')
@@ -75,4 +80,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    init_venv_and_requirements(args.venv_path, args.requirements_path, args.disable_douban)
+    init_venv_and_requirements(args.venv_path, args.requirements_path, args.disable_douban, args.enable_proxy)

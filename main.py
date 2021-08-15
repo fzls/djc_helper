@@ -81,6 +81,8 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
 
+    check_proxy(cfg)
+
     try_report_usage_info(cfg)
 
     if cfg.common.disable_cmd_quick_edit:

@@ -1005,6 +1005,10 @@ def get_resolution() -> str:
     return f"{width}x{height}"
 
 
+def bypass_proxy():
+    os.environ['no_proxy'] = '*'
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

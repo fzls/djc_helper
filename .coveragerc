@@ -1,5 +1,5 @@
 [run]
-source = ./
+source = .
 omit =
     .venv_dev/*
     .venv/*

@@ -123,10 +123,6 @@ def test_filter_unused_params():
         filter_unused_params("a&b&c")
 
 
-def test_run_from_src():
-    assert run_from_src() is True
-
-
 def test_get_uuid():
     first_call_result = get_uuid()
     second_call_result = get_uuid()

@@ -92,18 +92,20 @@ jobs:
           files: ./coverage.xml
           verbose: true
 
+      - name: Upload Codecov artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: "coverage.xml"
+          path: ./coverage.xml
+
       - name: Test for Coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           coverage run -m pytest .
-          coveralls
+          coveralls --service=github
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: "coverage.xml"
-          path: ./coverage.xml

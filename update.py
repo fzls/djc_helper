@@ -13,7 +13,8 @@ from dao import UpdateInfo
 from first_run import is_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
-from util import async_call, is_run_in_github_action, try_except, use_by_myself
+from util import (async_call, bypass_proxy, is_run_in_github_action,
+                  try_except, use_by_myself, use_proxy)
 from version import now_version, ver_time
 
 
@@ -33,6 +34,10 @@ def get_update_desc(config: CommonConfig):
 
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
+    if config.bypass_proxy:
+        logger.info("检查更新前临时启用代理")
+        use_proxy()
+
     check_update = config.check_update_on_start or config.check_update_on_end
     try:
         if is_run_in_github_action():
@@ -53,6 +58,10 @@ def check_update_on_start(config: CommonConfig):
     except Exception:
         if check_update:
             update_fallback(config)
+    finally:
+        if config.bypass_proxy:
+            logger.info("检查完毕，继续无视代理")
+            bypass_proxy()
 
 
 def try_manaual_update(ui: UpdateInfo) -> bool:

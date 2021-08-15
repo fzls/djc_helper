@@ -157,3 +157,8 @@ def test_check_some_exception():
 
     set_last_response_info(200, "test", "测试内容")
     assert check_some_exception(Exception(), show_last_process_result=True) != ""
+
+
+def test_is_act_expired():
+    assert is_act_expired("2000-02-23 23:59:59", "%Y-%m-%d %H:%M:%S") is True
+    assert is_act_expired("9021-02-23 23:59:59", "%Y-%m-%d %H:%M:%S") is False

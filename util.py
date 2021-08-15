@@ -1009,6 +1009,10 @@ def bypass_proxy():
     os.environ['no_proxy'] = '*'
 
 
+def use_proxy():
+    os.environ.pop('no_proxy')
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

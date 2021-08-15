@@ -83,7 +83,7 @@ jobs:
 
       - name: Test
         run: |
-          pytest -n auto --cov=./ --cov-report=xml
+          pytest -n auto --cov=./ --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2

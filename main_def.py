@@ -1411,6 +1411,14 @@ def get_appdata_save_dir() -> str:
     return os.path.join(get_appdata_dir(), 'djc_helper')
 
 
+def check_proxy(cfg: Config):
+    if cfg.common.bypass_proxy:
+        logger.info(f"当前配置为无视系统代理，将直接访问网络。")
+        bypass_proxy()
+    else:
+        logger.info(f"当前未开启无视系统代理配置，如果使用了vpn，将优先通过vpn进行访问。如果在国内，并且经常用到vpn，建议打开该配置")
+
+
 def demo_show_notices():
     show_notices()
     input("等待公告下载完毕，测试完毕点击任何键即可退出....\n")

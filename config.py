@@ -555,6 +555,8 @@ class CommonConfig(ConfigInterface):
         self._show_usage = False
         # 配置工具是否启用高DPI模式（4k屏幕建议启用该选项）
         self.config_ui_enable_high_dpi = False
+        # 是否无视系统代理（VPN）
+        self.bypass_proxy = True
         # 是否禁用cmd命令行的快速编辑模式，从而鼠标点选时不会暂停，避免误触而不知所措
         self.disable_cmd_quick_edit = True
         # 是否修改命令行缓存大小，以避免运行日志被截断

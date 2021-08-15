@@ -879,6 +879,9 @@ class CommonConfigUi(QFrame):
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
         add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
 
+        self.checkbox_bypass_proxy = create_checkbox(cfg.bypass_proxy)
+        add_row(form_layout, "是否无视系统代理（VPN）", self.checkbox_bypass_proxy)
+
         self.checkbox_disable_cmd_quick_edit = create_checkbox(cfg.disable_cmd_quick_edit)
         add_row(form_layout, "是否禁用cmd命令行的快速编辑模式", self.checkbox_disable_cmd_quick_edit)
 
@@ -921,6 +924,7 @@ class CommonConfigUi(QFrame):
         cfg.force_use_chrome_major_version = self.spinbox_force_use_chrome_major_version.value()
         cfg.run_in_headless_mode = self.checkbox_run_in_headless_mode.isChecked()
         cfg.config_ui_enable_high_dpi = self.checkbox_config_ui_enable_high_dpi.isChecked()
+        cfg.bypass_proxy = self.checkbox_bypass_proxy.isChecked()
         cfg.disable_cmd_quick_edit = self.checkbox_disable_cmd_quick_edit.isChecked()
         cfg.enable_change_cmd_buffer = self.checkbox_enable_change_cmd_buffer.isChecked()
         cfg.enable_max_console = self.checkbox_enable_max_console.isChecked()

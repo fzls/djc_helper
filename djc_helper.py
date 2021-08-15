@@ -5775,6 +5775,9 @@ if __name__ == '__main__':
     load_config("config.toml", "config.toml.local")
     cfg = config()
 
+    from main_def import check_proxy
+    check_proxy(cfg)
+
     RunAll = False
     indexes = [1]
     if RunAll:

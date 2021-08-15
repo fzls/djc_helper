@@ -94,6 +94,8 @@ def main():
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。")
 
+    check_proxy(cfg)
+
     init_pool(cfg.get_pool_size())
 
     change_title("集卡特别版", multiprocessing_pool_size=cfg.get_pool_size())

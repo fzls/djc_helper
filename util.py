@@ -216,7 +216,7 @@ def get_this_week_monday_datetime(now=datetime.datetime.now()) -> datetime.datet
     return monday.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def get_now():
+def get_now() -> datetime:
     return datetime.datetime.now()
 
 
@@ -232,60 +232,64 @@ def now_in_range(left="2000-01-01 00:00:00", right="3000-01-01 00:00:00"):
     return now_after(left) and now_before(right)
 
 
-def get_now_unix():
-    return int(time.time())
+def get_now_unix(now=get_now()) -> int:
+    return int(now.timestamp())
 
 
-def get_current(t=get_now()):
+def get_current(t=get_now()) -> str:
     return t.strftime("%Y%m%d%H%M%S")
 
 
-def get_today(t=get_now()):
+def get_today(t=get_now()) -> str:
     return t.strftime("%Y%m%d")
 
 
-def get_last_n_days(n):
-    return [(get_now() - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
+def get_last_n_days(n, now=get_now()) -> List[str]:
+    return [(now - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
-def get_week(t=get_now()):
+def get_week(t=get_now()) -> str:
     return t.strftime("%Y-week-%W")
 
 
-def get_month(t=get_now()):
+def get_month(t=get_now()) -> str:
     return t.strftime("%Y%m")
 
 
-def get_year(t=get_now()):
+def get_year(t=get_now()) -> str:
     return t.strftime("%Y")
 
 
-def filter_unused_params(urlRendered):
+def filter_unused_params(urlRendered: str) -> str:
+    path = ""
+    if '?' in urlRendered:
+        idx = urlRendered.index('?')
+        path, urlRendered = urlRendered[:idx], urlRendered[idx + 1:]
+
+    parts = urlRendered.split('&')
+
+    validParts = []
+    for part in parts:
+        if part == "":
+            continue
+        k, v = part.split('=')
+        if v != "":
+            validParts.append(part)
+
+    newUrl = path
+    if len(validParts) != 0:
+        if len(path) != 0:
+            newUrl = path + "?" + '&'.join(validParts)
+        else:
+            newUrl = '&'.join(validParts)
+
+    return newUrl
+
+
+def filter_unused_params_catch_exception(urlRendered: str) -> str:
     originalUrl = urlRendered
     try:
-        path = ""
-        if urlRendered.startswith("http"):
-            if '?' not in urlRendered:
-                return urlRendered
-
-            idx = urlRendered.index('?')
-            path, urlRendered = urlRendered[:idx], urlRendered[idx + 1:]
-
-        parts = urlRendered.split('&')
-
-        validParts = []
-        for part in parts:
-            if part == "":
-                continue
-            k, v = part.split('=')
-            if v != "":
-                validParts.append(part)
-
-        newUrl = '&'.join(validParts)
-        if path != "":
-            newUrl = path + "?" + newUrl
-
-        return newUrl
+        return filter_unused_params(urlRendered)
     except Exception as e:
         logger.error(f"过滤参数出错了，urlRendered={originalUrl}", exc_info=e)
         stack_info = color("bold_black") + ''.join(traceback.format_stack())

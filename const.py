@@ -3,19 +3,15 @@ import os
 appVersion = 106
 
 cached_dir = ".cached"
-if not os.path.isdir(cached_dir):
-    os.mkdir(cached_dir)
+os.makedirs(cached_dir, exist_ok=True)
 
 db_top_dir = ".db"
-if not os.path.isdir(db_top_dir):
-    os.mkdir(db_top_dir)
+os.makedirs(db_top_dir, exist_ok=True)
 
 downloads_dir = f"{cached_dir}/downloads"
-if not os.path.isdir(downloads_dir):
-    os.mkdir(downloads_dir)
+os.makedirs(downloads_dir, exist_ok=True)
 
 compressed_temp_dir = f"{cached_dir}/compressed"
-if not os.path.isdir(compressed_temp_dir):
-    os.mkdir(compressed_temp_dir)
+os.makedirs(compressed_temp_dir, exist_ok=True)
 
 guanjia_skey_version = 2

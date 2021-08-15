@@ -34,3 +34,10 @@ def test_truncate():
     assert truncate("测试内容123test", 4) == "..."
 
 
+def test_pad_left_right():
+    assert padLeftRight("test", 4) == "test"
+    assert padLeftRight("test", 8) == "  test  "
+    assert padLeftRight("test", 8, pad_char="-") == "--test--"
+    assert padLeftRight("test", 8, mode="left") == "test    "
+    assert padLeftRight("test", 8, mode="right") == "    test"
+    assert padLeftRight("tests", 4, need_truncate=True) == "t..."

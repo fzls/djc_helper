@@ -90,4 +90,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-#          verbose: true
+          verbose: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: "coverage.xml"
+          path: ./coverage.xml

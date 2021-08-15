@@ -5488,7 +5488,7 @@ class DjcHelper:
         urlRendered = url.format(**merged_params)
 
         # 过滤掉没有实际赋值的参数
-        return filter_unused_params(urlRendered)
+        return filter_unused_params_catch_exception(urlRendered)
 
     def get_month(self):
         now = datetime.datetime.now()

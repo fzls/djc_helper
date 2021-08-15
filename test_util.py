@@ -6,7 +6,11 @@
 # Author    : Chen Ji
 # Email     : fzls.zju@gmail.com
 # -------------------------------
+import pytest
+
 from util import *
+
+now_for_test = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
 
 
 def test_uin2qq():
@@ -48,16 +52,71 @@ def test_tableify():
 
 
 def test_get_this_week_monday():
-    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
-    assert get_this_week_monday(now) == "20210802"
+    assert get_this_week_monday(now_for_test) == "20210802"
 
 
 def test_get_last_week_monday():
-    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
-    assert get_last_week_monday(now) == "20210726"
+    assert get_last_week_monday(now_for_test) == "20210726"
 
 
 def test_get_this_week_monday_datetime():
-    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
     monday = datetime.datetime.now().replace(2021, 8, 2, 0, 0, 0, 0)
-    assert get_this_week_monday_datetime(now) == monday
+    assert get_this_week_monday_datetime(now_for_test) == monday
+
+
+def test_get_now():
+    assert type(get_now()) is datetime.datetime
+
+
+def test_now_before():
+    assert now_before("9999-01-01 00:00:00")
+
+
+def test_now_after():
+    assert now_after("2000-01-01 00:00:00")
+
+
+def test_now_in_range():
+    assert now_in_range("2000-01-01 00:00:00", "9999-01-01 00:00:00")
+
+
+def test_get_now_unix():
+    assert get_now_unix(now_for_test) == 1628222400
+
+
+def test_get_current():
+    assert get_current(now_for_test) == "20210806120000"
+
+
+def test_get_today():
+    assert get_today(now_for_test) == "20210806"
+
+
+def test_get_last_n_days():
+    assert get_last_n_days(3, now_for_test) == ['20210805', '20210804', '20210803']
+
+
+def test_get_week():
+    assert get_week(now_for_test) == "2021-week-31"
+
+
+def test_get_month():
+    assert get_month(now_for_test) == "202108"
+
+
+def test_get_year():
+    assert get_year(now_for_test) == "2021"
+
+
+def test_filter_unused_params():
+    assert filter_unused_params("https://www.example.com/index?a=1&b=2") == "https://www.example.com/index?a=1&b=2"
+    assert filter_unused_params("www.example.com/index?a=1&b=2") == "www.example.com/index?a=1&b=2"
+    assert filter_unused_params("index?a=1&b=2") == "index?a=1&b=2"
+    assert filter_unused_params("index?a=1&b=&c=3") == "index?a=1&c=3"
+    assert filter_unused_params("index?a=&b=&c=") == "index"
+    assert filter_unused_params("index?") == "index"
+    assert filter_unused_params("a=1&b=2&c=3") == "a=1&b=2&c=3"
+    assert filter_unused_params("a=&b=&c=") == ""
+
+    with pytest.raises(Exception):
+        filter_unused_params("a&b&c")

@@ -368,7 +368,7 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     return msg
 
 
-def is_act_expired(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
+def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S"):
     return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
 
 

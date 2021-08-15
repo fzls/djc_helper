@@ -41,3 +41,23 @@ def test_pad_left_right():
     assert padLeftRight("test", 8, mode="left") == "test    "
     assert padLeftRight("test", 8, mode="right") == "    test"
     assert padLeftRight("tests", 4, need_truncate=True) == "t..."
+
+
+def test_tableify():
+    assert tableify(["test", "测试内容"], [8, 6], need_truncate=True) == "  test   测... "
+
+
+def test_get_this_week_monday():
+    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
+    assert get_this_week_monday(now) == "20210802"
+
+
+def test_get_last_week_monday():
+    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
+    assert get_last_week_monday(now) == "20210726"
+
+
+def test_get_this_week_monday_datetime():
+    now = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
+    monday = datetime.datetime.now().replace(2021, 8, 2, 0, 0, 0, 0)
+    assert get_this_week_monday_datetime(now) == monday

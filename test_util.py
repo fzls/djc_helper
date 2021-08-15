@@ -20,19 +20,6 @@ def test_is_valid_qq():
     assert not is_valid_qq("")
 
 
-def test_extract_between():
-    text = """
-    var activity_id = '1';
-    var lvScore = 66;
-    """
-
-    activity_id = extract_between(text, "var activity_id = '", "';", str)
-    lv_score = extract_between(text, "var lvScore = ", ";", int)
-
-    assert activity_id == "1"
-    assert lv_score == 66
-
-
 def test_printed_width():
     assert printed_width("test") == 4
     assert printed_width("测试内容") == 8
@@ -45,3 +32,16 @@ def test_truncate():
     assert truncate("测试内容123test", 11) == "测试内容..."
     assert truncate("测试内容123test", 8) == "测试..."
     assert truncate("测试内容123test", 4) == "..."
+
+
+def test_extract_between():
+    text = """
+    var activity_id = '1';
+    var lvScore = 66;
+    """
+
+    activity_id = extract_between(text, "var activity_id = '", "';", str)
+    lv_score = extract_between(text, "var lvScore = ", ";", int)
+
+    assert activity_id == "1"
+    assert lv_score == 66

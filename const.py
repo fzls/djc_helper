@@ -5,14 +5,12 @@ appVersion = 106
 guanjia_skey_version = 2
 
 # 定义一些目录
-cached_dir = ".cached"
-os.makedirs(cached_dir, exist_ok=True)
-
 db_top_dir = ".db"
-os.makedirs(db_top_dir, exist_ok=True)
-
+cached_dir = ".cached"
 downloads_dir = f"{cached_dir}/downloads"
-os.makedirs(downloads_dir, exist_ok=True)
-
 compressed_temp_dir = f"{cached_dir}/compressed"
-os.makedirs(compressed_temp_dir, exist_ok=True)
+
+# 确保上面定义的这些目录都存在
+directory_list = [v for k, v in locals().items() if k.endswith("_dir")]
+for directory in directory_list:
+    os.makedirs(directory, exist_ok=True)

@@ -843,6 +843,20 @@ def extract_between(html: str, prefix: str, suffix: str, typ: Type) -> Any:
     return typ(html[prefix_idx:suffix_idx])
 
 
+# re: 改到这个的时候再移过去
+def test_extract_between():
+    text = """
+    var activity_id = '1';
+    var lvScore = 66;
+    """
+
+    activity_id = extract_between(text, "var activity_id = '", "';", str)
+    lv_score = extract_between(text, "var lvScore = ", ";", int)
+
+    assert activity_id == "1"
+    assert lv_score == 66
+
+
 def popen(args, cwd="."):
     if type(args) is list:
         args = [str(arg) for arg in args]

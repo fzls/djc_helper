@@ -336,7 +336,7 @@ def try_except(show_exception_info=True, show_last_process_result=True, extra_ms
     return decorator
 
 
-def check_some_exception(e, show_last_process_result=True) -> str:
+def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     msg = ""
 
     def format_msg(msg, _color="bold_yellow"):

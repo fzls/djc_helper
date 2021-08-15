@@ -8,6 +8,7 @@
 # -------------------------------
 import pytest
 
+from network import set_last_response_info
 from util import *
 
 now_for_test = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
@@ -149,3 +150,14 @@ def test_try_except():
 
     assert raise_exception(True) == return_on_fail
     assert raise_exception(False) == return_on_ok
+
+
+def test_check_some_exception():
+    assert check_some_exception(Exception()) == ""
+    assert check_some_exception(KeyError("modRet")) != ""
+    assert check_some_exception(socket.timeout()) != ""
+    assert check_some_exception(selenium.common.exceptions.TimeoutException()) != ""
+    assert check_some_exception(PermissionError()) != ""
+
+    set_last_response_info(200, "test", "测试内容")
+    assert check_some_exception(Exception(), show_last_process_result=True) != ""

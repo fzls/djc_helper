@@ -9,13 +9,13 @@ from log import color, logger
 from util import human_readable_size, show_head_line
 
 
-def build(disable_douban=False):
+def build(disable_douban=False, enable_proxy=False):
     # 初始化相关路径变量
     venv_path = ".venv"
     pyinstaller_path = os.path.join(venv_path, "Scripts", "pyinstaller")
 
     # 初始化venv和依赖
-    init_venv_and_requirements(".venv", "requirements.txt", disable_douban)
+    init_venv_and_requirements(".venv", "requirements.txt", disable_douban, enable_proxy)
 
     show_head_line(f"将使用.venv环境进行编译", color("bold_yellow"))
 
@@ -71,6 +71,7 @@ def build(disable_douban=False):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--disable_douban", action='store_true')
+    parser.add_argument("--enable_proxy", action='store_true')
     args = parser.parse_args()
 
     return args
@@ -78,4 +79,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    build(args.disable_douban)
+    build(args.disable_douban, args.enable_proxy)

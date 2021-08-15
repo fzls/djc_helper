@@ -297,22 +297,22 @@ def filter_unused_params_catch_exception(urlRendered: str) -> str:
         return originalUrl
 
 
-def run_from_src():
+def run_from_src() -> bool:
     exe_path = sys.argv[0]
     _, filename = os.path.dirname(exe_path), os.path.basename(exe_path)
 
     return filename.endswith(".py")
 
 
-def get_uuid():
+def get_uuid() -> str:
     return f"{platform.node()}-{uuid.getnode()}"
 
 
-def use_by_myself():
+def use_by_myself() -> bool:
     return exists_flag_file(".use_by_myself")
 
 
-def try_except(show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None):
+def try_except(show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None) -> Callable:
     def decorator(fun):
         @wraps(fun)
         def wrapper(*args, **kwargs):

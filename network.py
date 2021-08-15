@@ -98,15 +98,19 @@ def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], Op
 last_response_info = None  # type: Optional[ResponseInfo]
 
 
+def set_last_response_info(status_code: int, reason: str, text: str):
+    global last_response_info
+    last_response_info = ResponseInfo()
+    last_response_info.status_code = status_code
+    last_response_info.reason = reason
+    last_response_info.text = text
+
+
 def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
     fix_encoding(res)
 
     if res is not None:
-        global last_response_info
-        last_response_info = ResponseInfo()
-        last_response_info.status_code = res.status_code
-        last_response_info.reason = res.reason
-        last_response_info.text = res.text
+        set_last_response_info(res.status_code, res.reason, res.text)
 
     if is_jsonp:
         data = jsonp2json(res.text, is_normal_jsonp, need_unquote)

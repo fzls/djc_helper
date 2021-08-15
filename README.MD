@@ -29,6 +29,9 @@
   <a href="https://codecov.io/gh/fzls/djc_helper">
     <img src="https://codecov.io/gh/fzls/djc_helper/branch/master/graph/badge.svg?token=2QY73AMZAK" alt="Codecov" />
   </a>
+  <a href="https://coveralls.io/github/fzls/djc_helper?branch=master">
+    <img src="https://coveralls.io/repos/github/fzls/djc_helper/badge.svg?branch=master" alt="Coveralls" />
+  </a>
   <a href="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml">
     <img src="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml/badge.svg" alt="Test" />
   </a>

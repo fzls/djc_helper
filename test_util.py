@@ -34,14 +34,3 @@ def test_truncate():
     assert truncate("测试内容123test", 4) == "..."
 
 
-def test_extract_between():
-    text = """
-    var activity_id = '1';
-    var lvScore = 66;
-    """
-
-    activity_id = extract_between(text, "var activity_id = '", "';", str)
-    lv_score = extract_between(text, "var lvScore = ", ";", int)
-
-    assert activity_id == "1"
-    assert lv_score == 66

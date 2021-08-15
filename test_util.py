@@ -120,3 +120,32 @@ def test_filter_unused_params():
 
     with pytest.raises(Exception):
         filter_unused_params("a&b&c")
+
+
+def test_run_from_src():
+    assert run_from_src() is True
+
+
+def test_get_uuid():
+    first_call_result = get_uuid()
+    second_call_result = get_uuid()
+    assert first_call_result == second_call_result
+
+
+def test_use_by_myself():
+    assert use_by_myself() == os.path.exists(".use_by_myself")
+
+
+def test_try_except():
+    return_on_ok = 1
+    return_on_fail = -1
+
+    @try_except(show_exception_info=False, return_val_on_except=return_on_fail)
+    def raise_exception(need_raise=True) -> int:
+        if need_raise:
+            raise Exception()
+
+        return return_on_ok
+
+    assert raise_exception(True) == return_on_fail
+    assert raise_exception(False) == return_on_ok

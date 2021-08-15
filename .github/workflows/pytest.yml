@@ -81,7 +81,7 @@ jobs:
       - name: Set time zone
         run: tzutil /s "China Standard Time"
 
-      - name: Test
+      - name: Test for CodeCov
         run: |
           pytest -n auto --cov=./ --cov-report=xml --cov-report=term
 
@@ -91,6 +91,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           verbose: true
+
+      - name: Test for Coveralls
+        run: |
+          coverage run -m pytest .
+          coveralls
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@master

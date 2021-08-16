@@ -1803,7 +1803,7 @@ class DjcHelper:
             "774799", "774800",
         ]
         # note: 当前更新至（定期刷新这个值）
-        current_updated = 15
+        current_updated = 17
         for _idx, flowid in enumerate(watch_comic_flowids):
             idx = _idx + 1
             if idx > current_updated:
@@ -5776,6 +5776,7 @@ if __name__ == '__main__':
     cfg = config()
 
     from main_def import check_proxy
+
     check_proxy(cfg)
 
     RunAll = False

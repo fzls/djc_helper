@@ -85,6 +85,12 @@ class QQLogin():
     #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
     #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
     #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手 utils 目录下，并更新入库
+    #  4. 下载新版本安装包 => Chrome_92.0.4515.131_普通安装包_非便携版.exe
+    #       4.1 https://www.iplaysoft.com/tools/chrome/
+    #  5. 上传以下内容到网盘的工具目录
+    #       5.1 chromedriver_{ver}.exe
+    #       5.1 chrome_portable_{ver}.7z
+    #       5.1 Chrome_92.0.4515.131_普通安装包_非便携版.exe
     chrome_major_version = 92
 
     default_window_width = 390

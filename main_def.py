@@ -15,7 +15,7 @@ from setting import *
 from show_usage import *
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
-from urls import Urls, get_act_url, get_not_ams_act_desc
+from urls import Urls, get_not_ams_act_desc
 from usage_count import *
 from version import author
 

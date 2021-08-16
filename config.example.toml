@@ -9,16 +9,16 @@ bypass_proxy = true
 disable_cmd_quick_edit = true
 
 # 是否修改命令行缓存大小，以避免运行日志被截断
-enable_change_cmd_buffer = false
+enable_change_cmd_buffer = true
 # 最大化窗口
-enable_max_console = false
+enable_max_console = true
 # 最小化窗口
 enable_min_console = false
 
 # 是否启用多进程功能
 enable_multiprocessing = true
 # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。
-enable_super_fast_mode = false
+enable_super_fast_mode = true
 # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
 multiprocessing_pool_size = -1
 
@@ -123,15 +123,15 @@ majieluo_invite_uin_list = []
 # 调整日志等级对应颜色，颜色表可以运行log.py获取
 [common.log_colors]
 # 调试
-DEBUG="cyan"
+DEBUG = "cyan"
 # 信息
-INFO="green"
+INFO = "green"
 # 警告
-WARNING="yellow"
+WARNING = "yellow"
 # 错误
-ERROR="fg_bold_red"
+ERROR = "fg_bold_red"
 # 致命错误
-CRITICAL="fg_bold_red"
+CRITICAL = "fg_bold_red"
 
 # 登录的一些参数配置
 [common.login]

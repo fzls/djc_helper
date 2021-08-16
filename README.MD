@@ -32,6 +32,9 @@
   <a href="https://coveralls.io/github/fzls/djc_helper?branch=master">
     <img src="https://coveralls.io/repos/github/fzls/djc_helper/badge.svg?branch=master" alt="Coveralls" />
   </a>
+  <a href="https://www.codacy.com/gh/fzls/djc_helper/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fzls/djc_helper&amp;utm_campaign=Badge_Grade">
+    <img src="https://app.codacy.com/project/badge/Grade/d846d4bc8f1b46d6af4a873acabad5f0" alt="Codacy" />
+  </a>
   <a href="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml">
     <img src="https://github.com/fzls/djc_helper/actions/workflows/pytest.yml/badge.svg" alt="Test" />
   </a>

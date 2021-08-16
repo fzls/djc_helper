@@ -919,24 +919,10 @@ def show_tips(cfg):
             "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
             "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
         ),
-        "手动活动617": (
-            "以下活动因为加起来麻烦或者只有单次，因此请自行完成\n"
-            "1. 斗鱼 https://www.douyu.com/topic/ZNQDNF?rid=9738722 \n"
-            "2. 合成三觉小游戏 https://dnf.qq.com/m/skill/wasm/index.html \n"
-            "3. 生日礼 https://pay.qq.com/m/active/activity_dispatcher.php?id=3099 \n"
-            "4. 微信翻牌 DNF的微信公众号中回复 翻牌 即可 \n"
-            "5. 充值活跃礼包 https://pay.qq.com/store/experience/index.shtml?store_config_env=1pf=__mds_act_birth_gift_giftcenter#/taskCenter/74/biz/95?pf=2199 \n"
-            "6. Colg活跃活动 除签到外的流程 \n"
-            f"7. 超级会员(三个单次性的礼包） {get_act_url('超级会员')} \n"
-            f"8. 黄钻(三个单次性的礼包） {get_act_url('黄钻')} \n"
-        ),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
-        ),
-        "DNF微信公众号": (
-            "DNF微信公众号新增了一个抽奖蚊子腿，点【福利专区】/【刃影小队】，按步骤分享即可获得一次抽奖机会\n"
         ),
     }
 

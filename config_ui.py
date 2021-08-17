@@ -954,6 +954,13 @@ class MajieluoConfigUi(QFrame):
         # -------------- 区域：选填和必填分割线 --------------
         add_vbox_seperator(top_layout, "完整使用本工具需要准备三个小号和一个大号，并确保他们是好友，且均配置在小助手的账号列表中")
 
+        btn_login_dahao_and_xiaohao = create_pushbutton("预先登录设定的大号和小号，加快后续流程速度（点击后将登录对应账号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
+        top_layout.addWidget(btn_login_dahao_and_xiaohao)
+
+        btn_login_dahao_and_xiaohao.clicked.connect(self.login_dahao_and_xiaohao)
+        top_layout.addWidget(QHLine())
+
+
         # -------------- 区域：基础配置 --------------
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
@@ -1006,6 +1013,26 @@ class MajieluoConfigUi(QFrame):
         cfg.scode_1 = self.lineedit_scode_1.text()
         cfg.scode_2 = self.lineedit_scode_2.text()
         cfg.scode_3 = self.lineedit_scode_3.text()
+
+    def login_dahao_and_xiaohao(self):
+        cfg = self.config_ui.to_config()
+
+        dahao_index = int(self.lineedit_dahao_index.text())
+        xiaohao_indexes = [int(index) for index in str_to_list(self.lineedit_xiaohao_indexes.text())]
+
+        indexes = [dahao_index, *xiaohao_indexes]
+
+        for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
+            account_config = cfg.account_configs[account_index - 1]
+
+            djcHelper = DjcHelper(account_config, cfg.common)
+
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list()
+
+        show_message("提示", f"已全部登录完成，请点击发送礼盒按钮来开始发送流程~")
+
 
     def send_box_url(self):
         cfg = self.config_ui.to_config()

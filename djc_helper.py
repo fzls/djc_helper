@@ -4193,7 +4193,7 @@ class DjcHelper:
             self.majieluo_op(f"赠送单个用户-{uin}", "789656", iGuestUin=uin, p_skey=p_skey)
 
     @try_except()
-    def majieluo_open_box(self, scode:str) -> AmesvrCommonModRet:
+    def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:
         raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "790179", sCode=scode)
         return parse_amesvr_common_info(raw_res)
 

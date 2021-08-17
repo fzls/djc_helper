@@ -119,6 +119,7 @@ def test_filter_unused_params():
     assert filter_unused_params("index?") == "index"
     assert filter_unused_params("a=1&b=2&c=3") == "a=1&b=2&c=3"
     assert filter_unused_params("a=&b=&c=") == ""
+    assert filter_unused_params("a=1=2=3&b=1") == "a=1=2=3&b=1"
 
     with pytest.raises(Exception):
         filter_unused_params("a&b&c")

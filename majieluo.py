@@ -1,6 +1,7 @@
 from djc_helper import *
 
-if __name__ == '__main__':
+
+def cui():
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
     cfg = config()
@@ -108,3 +109,7 @@ if __name__ == '__main__':
     # 第二次执行完毕提示修改send_to_xiaohao
     if not send_to_xiaohao:
         message_box("已领取完毕，请修改send_to_xiaohao为True，方便明天继续从头用", "提示")
+
+
+if __name__ == '__main__':
+    cui()

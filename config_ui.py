@@ -960,7 +960,6 @@ class MajieluoConfigUi(QFrame):
         btn_login_dahao_and_xiaohao.clicked.connect(self.login_dahao_and_xiaohao)
         top_layout.addWidget(QHLine())
 
-
         # -------------- 区域：基础配置 --------------
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
@@ -1032,7 +1031,6 @@ class MajieluoConfigUi(QFrame):
             djcHelper.get_bind_role_list()
 
         show_message("提示", f"已全部登录完成，请点击发送礼盒按钮来开始发送流程~")
-
 
     def send_box_url(self):
         cfg = self.config_ui.to_config()

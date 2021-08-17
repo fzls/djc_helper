@@ -120,6 +120,21 @@ scode_list_accept_ask = []
 #]
 majieluo_invite_uin_list = []
 
+# 马杰洛相关配置
+[common.majieluo]
+# 大号在配置中的账号序号
+dahao_index = ""
+# 小号序号列表，最多3个
+xiaohao_indexes = []
+# 小号QQ号列表，最多3个
+xiaohao_qq_list = []
+# SCode 1
+scode_1 = ""
+# SCode 2
+scode_2 = ""
+# SCode 3
+scode_3 = ""
+
 # 调整日志等级对应颜色，颜色表可以运行log.py获取
 [common.log_colors]
 # 调试

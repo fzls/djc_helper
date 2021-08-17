@@ -506,6 +506,26 @@ class XinYueConfig(ConfigInterface):
         self.submit_task_after = 0
 
 
+class MajieluoConfig(ConfigInterface):
+    def __init__(self):
+        # 大号在配置中的账号序号
+        self.dahao_index = ""
+        # 小号序号列表，最多3个
+        self.xiaohao_indexes = []
+        # 小号QQ号列表，最多3个
+        self.xiaohao_qq_list = []
+        # SCode 1
+        self.scode_1 = ""
+        # SCode 2
+        self.scode_2 = ""
+        # SCode 3
+        self.scode_3 = ""
+
+    def on_config_update(self, raw_config: dict):
+        self.xiaohao_indexes = [str(index) for index in self.xiaohao_indexes]
+        self.xiaohao_qq_list = [str(qq) for qq in self.xiaohao_qq_list]
+
+
 class FixedTeamConfig(ConfigInterface):
     reg_qq = r'\d+'
 
@@ -639,6 +659,8 @@ class CommonConfig(ConfigInterface):
         self.fixed_teams = []  # type: List[FixedTeamConfig]
         # 赛利亚活动拜访目标QQ列表
         self.sailiyam_visit_target_qqs = []  # type: List[str]
+        # 马杰洛相关配置
+        self.majieluo = MajieluoConfig()
 
     def fields_to_fill(self):
         return [

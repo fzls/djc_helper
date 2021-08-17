@@ -4191,6 +4191,17 @@ class DjcHelper:
             self.majieluo_op("提取福利", "789653")
             # self.majieluo_op("分享得好礼", "769008")
 
+    @try_except()
+    def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]):
+        p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
+        for uin in xiaohao_qq_list:
+            self.majieluo_op(f"赠送单个用户-{uin}", "789656", iGuestUin=uin, p_skey=p_skey)
+
+    @try_except()
+    def majieluo_open_box(self, scode:str) -> AmesvrCommonModRet:
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "790179", sCode=scode)
+        return parse_amesvr_common_info(raw_res)
+
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
         res = self.majieluo_op("查询当前时间引导石数量", "789579", print_res=False)

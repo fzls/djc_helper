@@ -10,9 +10,9 @@ from io import StringIO
 from traceback import print_tb
 
 from PyQt5.QtCore import QCoreApplication, QThread
-from PyQt5.QtGui import QIcon, QValidator
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
-                             QMessageBox, QStyleFactory, QTabWidget)
+                             QStyleFactory, QTabWidget)
 
 from config import *
 from dao import CardSecret, DnfRoleInfo
@@ -395,6 +395,7 @@ class ConfigUi(QFrame):
         self.create_userinfo_tab(cfg)
         self.create_others_tab(cfg)
         self.create_common_tab(cfg)
+        self.create_majieluo_tab(cfg)
         self.create_account_tabs(cfg)
 
         # 设置默认页
@@ -673,6 +674,10 @@ class ConfigUi(QFrame):
         self.common = CommonConfigUi(cfg.common)
         self.tabs.addTab(self.common, "公共配置")
 
+    def create_majieluo_tab(self, cfg: config):
+        self.majieluo = MajieluoConfigUi(cfg.common.majieluo, self)
+        self.tabs.addTab(self.majieluo, "马杰洛小工具")
+
     def create_account_tabs(self, cfg: Config):
         self.accounts = []  # type: List[AccountConfigUi]
         for account in cfg.account_configs:
@@ -736,6 +741,7 @@ class ConfigUi(QFrame):
 
         if hasattr(self, "common") and hasattr(self, "accounts"):
             self.common.update_config(cfg.common)
+            self.majieluo.update_config(cfg.common.majieluo)
 
             account_configs = []
             for idx, account in enumerate(self.accounts):
@@ -931,6 +937,164 @@ class CommonConfigUi(QFrame):
                     os.remove(disable_flag_file)
                 else:
                     shutil.rmtree(disable_flag_file, ignore_errors=True)
+
+
+class MajieluoConfigUi(QFrame):
+    def __init__(self, cfg: MajieluoConfig, config_ui: ConfigUi, parent=None):
+        super(MajieluoConfigUi, self).__init__(parent)
+
+        self.config_ui = config_ui
+
+        self.from_config(cfg)
+
+    def from_config(self, cfg: MajieluoConfig):
+        # 根据配置初始化ui
+        top_layout = QVBoxLayout()
+
+        # -------------- 区域：选填和必填分割线 --------------
+        add_vbox_seperator(top_layout, "完整使用本工具需要准备三个小号和一个大号，并确保他们是好友，且均配置在小助手的账号列表中")
+
+        # -------------- 区域：基础配置 --------------
+        form_layout = QFormLayout()
+        top_layout.addLayout(form_layout)
+
+        self.lineedit_dahao_index = create_lineedit(cfg.dahao_index, placeholder_text="大号在配置中的账号序号，从1开始计算，如 1 表示第一个账号作为大号")
+        form_layout.addRow("大号序号", self.lineedit_dahao_index)
+
+        self.lineedit_xiaohao_indexes = create_lineedit(list_to_str(cfg.xiaohao_indexes), placeholder_text="最多3个，使用英文逗号分隔，如 1,2,3 表示使用本地配置的第 1/2/3 个账号作为小号")
+        self.lineedit_xiaohao_indexes.setValidator(QQListValidator())
+        form_layout.addRow("小号序号列表", self.lineedit_xiaohao_indexes)
+
+        self.lineedit_xiaohao_qq_list = create_lineedit(list_to_str(cfg.xiaohao_qq_list), placeholder_text="最多3个，使用英文逗号分隔，如 123,456,789 表示三个小号的QQ号分别为123/456/789")
+        self.lineedit_xiaohao_qq_list.setValidator(QQListValidator())
+        form_layout.addRow("小号QQ号列表", self.lineedit_xiaohao_qq_list)
+
+        # -------------- 区域：发送礼盒链接给小号 --------------
+        top_layout.addWidget(QHLine())
+
+        btn_send_box_url = create_pushbutton("发送礼盒链接给小号（点击后将登录大号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
+        top_layout.addWidget(btn_send_box_url)
+
+        btn_send_box_url.clicked.connect(self.send_box_url)
+
+        # -------------- 区域：使用小号领取礼盒 --------------
+        form_layout = QFormLayout()
+        top_layout.addLayout(form_layout)
+
+        self.lineedit_scode_1 = create_lineedit(cfg.scode_1, placeholder_text="第1个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        form_layout.addRow("SCode 1", self.lineedit_scode_1)
+
+        self.lineedit_scode_2 = create_lineedit(cfg.scode_2, placeholder_text="第2个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        form_layout.addRow("SCode 2", self.lineedit_scode_2)
+
+        self.lineedit_scode_3 = create_lineedit(cfg.scode_3, placeholder_text="第3个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        form_layout.addRow("SCode 3", self.lineedit_scode_3)
+
+        top_layout.addWidget(QHLine())
+
+        btn_open_box = create_pushbutton("设定的小号依次领取礼盒（点击后将依次登录小号，可能界面会没反应，请耐心等待）", "cyan")
+        top_layout.addWidget(btn_open_box)
+
+        btn_open_box.clicked.connect(self.open_box)
+
+        self.setLayout(make_scroll_layout(top_layout))
+
+    def update_config(self, cfg: MajieluoConfig):
+        cfg.dahao_index = self.lineedit_dahao_index.text()
+        cfg.xiaohao_indexes = str_to_list(self.lineedit_xiaohao_indexes.text())
+        cfg.xiaohao_qq_list = str_to_list(self.lineedit_xiaohao_qq_list.text())
+        cfg.scode_1 = self.lineedit_scode_1.text()
+        cfg.scode_2 = self.lineedit_scode_2.text()
+        cfg.scode_3 = self.lineedit_scode_3.text()
+
+    def send_box_url(self):
+        cfg = self.config_ui.to_config()
+
+        account_index = int(self.lineedit_dahao_index.text())
+        xiaohao_qq_list = str_to_list(self.lineedit_xiaohao_qq_list.text())
+
+        account_config = cfg.account_configs[account_index - 1]
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+
+        djcHelper.fetch_pskey()
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
+
+        logger.info(color("bold_green") + f"发送宝箱链接给小号QQ: {xiaohao_qq_list}")
+
+        djcHelper.majieluo_send_to_xiaohao(xiaohao_qq_list)
+
+        show_message("后续流程", (
+            "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制其链接中sCode的值到各个Scode的输入框内\n"
+            "2. 输入完毕后请点击 接收宝箱 按钮"
+        ))
+
+    def open_box(self):
+        cfg = self.config_ui.to_config()
+
+        indexes = [int(index) for index in str_to_list(self.lineedit_xiaohao_indexes.text())]
+        scode_list = [
+            self.lineedit_scode_1.text(),
+            self.lineedit_scode_2.text(),
+            self.lineedit_scode_3.text(),
+        ]
+        scode_list = [v for v in scode_list if len(v) != 0]
+
+        if len(indexes) != len(scode_list):
+            show_message("配置有误", f"配置的小号数目({len(indexes)})与scode数目({len(scode_list)})不一致")
+            return
+
+        for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
+            account_config = cfg.account_configs[account_index - 1]
+
+            djcHelper = DjcHelper(account_config, cfg.common)
+
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list()
+
+            scode = scode_list[order_index]
+            logger.info(f"第{order_index + 1}个小号领取刚刚运行后填写的Scode列表中第{order_index + 1}个scode - {scode}")
+
+            res = djcHelper.majieluo_open_box(scode)
+            if res.sOutValue1 == 0:
+                show_message("提示", f"第 {order_index + 1} 个小号 {djcHelper.qq()} 领取礼盒成功")
+            else:
+                code_to_message = {
+                    "1": "无效的赠送链接",
+                    "2": "不能打开自己的礼盒~",
+                    "3": "该礼盒已经被开启",
+                    "4": "好友今天的礼盒已经被全部打开了哦~",
+                    "5": "一天只可以打开3次礼盒哦~",
+                    "6": "该礼盒已经被开启",
+                    "7": "该礼盒已经被开启",
+                }
+                message = "系统繁忙，请稍后再试~"
+                if res.sOutValue1 in code_to_message:
+                    message = code_to_message[res.sOutValue1]
+
+                show_message("出错了", f"第 {order_index + 1} 个小号 {djcHelper.qq()}：{message}")
+
+            time.sleep(1)
+
+        invite_count = self.query_invite_count()
+        show_message("提示", f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
+
+    def query_invite_count(self) -> int:
+        cfg = self.config_ui.to_config()
+
+        account_index = int(self.lineedit_dahao_index.text())
+
+        account_config = cfg.account_configs[account_index - 1]
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+
+        djcHelper.fetch_pskey()
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
+
+        return djcHelper.query_invite_count()
 
 
 class LoginConfigUi(QWidget):

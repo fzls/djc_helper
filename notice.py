@@ -159,10 +159,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于奖励突然骤减的问题"
-    message = """部分朋友可能发现这几天运行完都只有10个调整箱，这不是bug<_<
-因为刃影出的一系列活动最近都快到期了，而新的活动也没出来，青黄不接，所以就变成这样了<_<
-去年最长有两三个月的时间是啥活动都没有的，所以慢慢等新活动吧<_<
+    title = "马杰洛分享给不在活动页面列表里的好友（如小号QQ）的办法"
+    message = """分享一个直接发送马杰洛宝箱链接给好友QQ（有时候小号QQ不会刷新在列表里，就可以用到这个了）
+
+1. 电脑点开马杰洛活动 https://dnf.qq.com/cp/a20210730care/index.html
+2. 按F12，点击Console标签
+3. 在下面输入 send(小号QQ号) ，比如send(123456) ，然后按Enter就好了
 """
     nm.add_notice(title, message,
                   send_at=format_now(),

@@ -188,5 +188,15 @@
     "open_url": "",
     "expire_at": "2021-08-24 17:39:09",
     "show_only_before_version": "13.7.1"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "马杰洛分享给不在活动页面列表里的好友（如小号QQ）的办法",
+    "message": "分享一个直接发送马杰洛宝箱链接给好友QQ（有时候小号QQ不会刷新在列表里，就可以用到这个了）\n\n1. 电脑点开马杰洛活动 https://dnf.qq.com/cp/a20210730care/index.html\n2. 按F12，点击Console标签\n3. 在下面输入 send(小号QQ号) ，比如send(123456) ，然后按Enter就好了\n",
+    "send_at": "2021-08-17 23:35:20",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-08-24 23:35:20",
+    "show_only_before_version": "13.8.0"
   }
 ]

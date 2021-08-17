@@ -1,12 +1,13 @@
 from typing import List, Tuple
 
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QWheelEvent
+from PyQt5.QtGui import QValidator, QWheelEvent
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
                              QFrame, QHBoxLayout, QLabel, QLayout, QLineEdit,
-                             QPushButton, QScrollArea, QSpinBox, QVBoxLayout,
-                             QWidget)
+                             QMessageBox, QPushButton, QScrollArea, QSpinBox,
+                             QVBoxLayout, QWidget)
 
+from log import logger
 from qt_collapsible_box import CollapsibleBox
 from util import padLeftRight
 
@@ -184,3 +185,35 @@ def init_collapsible_box_size(parent_widget: QWidget):
 
         collapsible_box = getattr(parent_widget, attr_name)  # type: CollapsibleBox
         collapsible_box.try_adjust_size()
+
+
+def list_to_str(vlist: List[str]):
+    return ','.join(str(v) for v in vlist)
+
+
+def str_to_list(str_list: str):
+    str_list = str_list.strip(" ,")
+    if str_list == "":
+        return []
+
+    return [s.strip() for s in str_list.split(',')]
+
+
+class QQListValidator(QValidator):
+    def validate(self, text: str, pos: int) -> Tuple['QValidator.State', str, int]:
+        sl = str_to_list(text)
+
+        for qq in sl:
+            if not qq.isnumeric():
+                return (QValidator.Invalid, text, pos)
+
+        return (QValidator.Acceptable, text, pos)
+
+
+def show_message(title, text):
+    logger.info(f"{title} {text}")
+
+    message_box = QMessageBox()
+    message_box.setWindowTitle(title)
+    message_box.setText(text)
+    message_box.exec_()

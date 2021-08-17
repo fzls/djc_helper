@@ -74,6 +74,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     dir_to_filenames_need_remove = {
         ".": [
             "requirements.txt",
+            "requirements_dev.txt",
         ],
         "utils": [
             "logs", ".db", ".cached", ".first_run", ".log.filename",

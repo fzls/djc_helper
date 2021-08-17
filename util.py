@@ -279,7 +279,7 @@ def filter_unused_params(urlRendered: str) -> str:
     for part in parts:
         if part == "":
             continue
-        k, v = part.split('=')
+        k, v = part.split('=', maxsplit=1)
         if v != "":
             validParts.append(part)
 

@@ -4125,14 +4125,13 @@ class DjcHelper:
         self.check_majieluo()
 
         def query_invite_count() -> int:
-            res = self.majieluo_op("查询信息", "780667", print_res=False)
+            res = self.majieluo_op("查询信息", "789579", print_res=False)
             info = parse_amesvr_common_info(res)
-            return int(info.sOutValue7)
+            return int(info.sOutValue6)
 
         # 马杰洛的见面礼
         def take_gift():
-            # self.majieluo_op("验证是否幸运用户", "768204")
-            self.majieluo_op("领取见面礼", "780398")
+            self.majieluo_op("领取见面礼", "789645")
 
         if self.cfg.ark_lottery.lucky_dnf_role_id != "":
             change_bind_role = TemporaryChangeBindRoleInfo()
@@ -4144,26 +4143,28 @@ class DjcHelper:
         take_gift()
 
         # 马杰洛的特殊任务
-        self.majieluo_op("登录游戏 石头*5", "780400")
-        self.majieluo_op("通关副本 石头*5", "780401")
-        # for day in [7, 14, 21]:
-        #     self.majieluo_op(f"连续完成任务一(登录游戏){day}次奖励", "768200", loginNum=str(day))
-        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "780402")
-        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "780403")
+        self.majieluo_op("登录游戏 石头*5", "789646")
+        self.majieluo_op("通关副本 石头*5", "789647")
+        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "789648")
+        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "789649")
 
-        invite_uins = self.common_cfg.majieluo_invite_uin_list
-        if len(invite_uins) != 0:
-            # 假设第一个填写的QQ是主QQ，尝试每个号都先领取这个，其余的则是小号，随机顺序，确保其他qq有同等机会
-            main_qq, others = invite_uins[0], invite_uins[1:]
-            random.shuffle(others)
-            invite_uins = [main_qq, *others]
-            for uin in invite_uins:
-                self.majieluo_op(f"接受好友赠送礼盒 - {uin}", "780720", inviteUin=uin)
-        else:
-            logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
+        # 赠送礼盒
+        # self.majieluo_op("赠送单个用户", "789656", iGuestUin=qq_number, p_skey=djcHelper.fetch_share_p_skey("马杰洛赠送好友"))
 
+        # invite_uins = self.common_cfg.majieluo_invite_uin_list
+        # if len(invite_uins) != 0:
+        #     # 假设第一个填写的QQ是主QQ，尝试每个号都先领取这个，其余的则是小号，随机顺序，确保其他qq有同等机会
+        #     main_qq, others = invite_uins[0], invite_uins[1:]
+        #     random.shuffle(others)
+        #     invite_uins = [main_qq, *others]
+        #     for uin in invite_uins:
+        #         self.majieluo_op(f"接受好友赠送礼盒 - {uin}", "790179", sCode=uin)
+        # else:
+        #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
+
+        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成~", "提示", show_once=True)
         logger.info(color("bold_green") + f"当前已累计赠送{query_invite_count()}次，总共需要30次~")
-        self.majieluo_op("累计赠送好友成功领取礼包", "780404")
+        self.majieluo_op("累计赠送好友成功领取礼包", "789650")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
@@ -4173,7 +4174,7 @@ class DjcHelper:
         endTime = get_today(parse_time(act_info.dtEndTime))
 
         takeStone = False
-        takeStoneActId = "780719"
+        takeStoneActId = "789651"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
@@ -4187,27 +4188,28 @@ class DjcHelper:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利", "780718")
-            self.majieluo_op("分享得好礼", "769008")
+            self.majieluo_op("提取福利", "789653")
+            # self.majieluo_op("分享得好礼", "769008")
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "781023", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "789579", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
     def check_majieluo(self, **extra_params):
         self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="780397", commit_bind_flowid="780396",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="789669", commit_bind_flowid="789668",
                                 **extra_params)
 
-    def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", print_res=True, **extra_params):
+    def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_majieluo
 
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF马杰洛的规划"),
                                    cardType=cardType, inviteId=inviteId, sendName=sendName, receiveUin=receiveUin,
                                    receiver=receiver, receiverName=receiverName, receiverUrl=receiverUrl, giftNum=giftNum,
-                                   **extra_params)
+                                   **extra_params,
+                                   extra_cookies=f"p_skey={p_skey}")
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
     @try_except()
@@ -5473,6 +5475,7 @@ class DjcHelper:
             "sRole",
             "loginNum",
             "level",
+            "iGuestUin",
         ]}
 
         # 整合得到所有默认值
@@ -5825,7 +5828,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
-        # djcHelper.majieluo()
         # djcHelper.maoxian()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_welfare()
@@ -5834,4 +5836,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs()
         # djcHelper.colg_signin()
         # djcHelper.ark_lottery()
-        djcHelper.hello_voice()
+        # djcHelper.hello_voice()
+        djcHelper.majieluo()

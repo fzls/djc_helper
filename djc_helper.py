@@ -4124,11 +4124,6 @@ class DjcHelper:
 
         self.check_majieluo()
 
-        def query_invite_count() -> int:
-            res = self.majieluo_op("查询信息", "789579", print_res=False)
-            info = parse_amesvr_common_info(res)
-            return int(info.sOutValue6)
-
         # 马杰洛的见面礼
         def take_gift():
             self.majieluo_op("领取见面礼", "789645")
@@ -4163,7 +4158,7 @@ class DjcHelper:
         #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
 
         async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成~", "提示", show_once=True)
-        logger.info(color("bold_green") + f"当前已累计赠送{query_invite_count()}次，总共需要30次~")
+        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
         self.majieluo_op("累计赠送好友成功领取礼包", "789650")
 
         # 提取得福利
@@ -4201,6 +4196,12 @@ class DjcHelper:
     def majieluo_open_box(self, scode:str) -> AmesvrCommonModRet:
         raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "790179", sCode=scode)
         return parse_amesvr_common_info(raw_res)
+
+    @try_except(return_val_on_except=0, show_exception_info=False)
+    def query_invite_count(self) -> int:
+        res = self.majieluo_op("查询信息", "789579", print_res=False)
+        info = parse_amesvr_common_info(res)
+        return int(info.sOutValue6)
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):

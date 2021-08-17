@@ -56,38 +56,6 @@ class BiDict():
         self.val_to_key = dict({v: k for k, v in original_dict.items()})
 
 
-def list_to_str(vlist: List[str]):
-    return ','.join(str(v) for v in vlist)
-
-
-def str_to_list(str_list: str):
-    str_list = str_list.strip(" ,")
-    if str_list == "":
-        return []
-
-    return [s.strip() for s in str_list.split(',')]
-
-
-class QQListValidator(QValidator):
-    def validate(self, text: str, pos: int) -> Tuple['QValidator.State', str, int]:
-        sl = str_to_list(text)
-
-        for qq in sl:
-            if not qq.isnumeric():
-                return (QValidator.Invalid, text, pos)
-
-        return (QValidator.Acceptable, text, pos)
-
-
-def show_message(title, text):
-    logger.info(f"{title} {text}")
-
-    message_box = QMessageBox()
-    message_box.setWindowTitle(title)
-    message_box.setText(text)
-    message_box.exec_()
-
-
 class GetBuyInfoThread(QThread):
     signal_results = pyqtSignal(str, str, str)
 

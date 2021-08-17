@@ -34,6 +34,10 @@ def cui():
         "cXNpZTIrY2dRYk1GL2E4UjlGQzBkdUxsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=",
     ]
 
+    if len(xiaohao_qq_list) != scode_list:
+        message_box("配置的小号数目与scode数目不一致，请确保两者一致", "出错了")
+        sys.exit()
+
     # --------------- 每次只需要按流程修改上面几行 ---------------------
 
     # 登录相应账号

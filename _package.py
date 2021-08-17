@@ -1,11 +1,11 @@
 # 构建发布压缩包
 import os
+import pathlib
 import re
 import shutil
 
 from compress import compress_dir_with_bandizip
 from log import color, logger
-from qq_login import QQLogin
 from util import show_head_line
 from version import now_version
 
@@ -78,8 +78,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         "utils": [
             "logs", ".db", ".cached", ".first_run", ".log.filename",
             "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
-            f"chrome_portable_{QQLogin.chrome_major_version}.7z",
-            f"chrome_portable_{QQLogin.chrome_major_version}",
+
+            *list(path.name for path in pathlib.Path("utils").glob('chrome_portable_*')),
         ],
     }
     for dir_path, filenames in dir_to_filenames_need_remove.items():

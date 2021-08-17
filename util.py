@@ -899,8 +899,8 @@ def sync_configs(source_dir: str, target_dir: str):
         # 缓存文件所在目录
         ".db",
 
-        # 自动更新DLC
-        "utils/auto_updater.exe"
+        # # 自动更新DLC
+        # "utils/auto_updater.exe"
     ]
 
     logger.debug(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")

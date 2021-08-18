@@ -59,7 +59,7 @@ def check_djc_role_binding():
             djcHelper = DjcHelper(account_config, cfg.common)
             if not djcHelper.check_djc_role_binding():
                 all_binded = False
-                not_binded_accounts.append(account_config.name)
+                not_binded_accounts.append((account_config.name, account_config.qq()))
 
         if all_binded:
             break

@@ -1069,7 +1069,7 @@ class MajieluoConfigUi(QFrame):
                 show_message("配置有误", f"配置的小号序号({account_index}) 不对，正确范围是[1, {len(cfg.account_configs)}]")
                 return
 
-        messages = [] # type: List[str]
+        messages = []  # type: List[str]
 
         for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
             account_config = cfg.account_configs[account_index - 1]
@@ -1109,7 +1109,7 @@ class MajieluoConfigUi(QFrame):
         messages.append(f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
 
         show_message("操作结果如下", '\n'.join(messages))
-        
+
         report_click_event("majieluo_open_box")
 
     def query_invite_count(self) -> int:

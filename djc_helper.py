@@ -4157,7 +4157,7 @@ class DjcHelper:
         # else:
         #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
 
-        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成~", "提示", show_once=True)
+        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成(可以选择配置工具中的马杰洛小助手减少操作量)~", "提示", show_once=True)
         logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
         self.majieluo_op("累计赠送好友成功领取礼包", "789650")
 

@@ -55,7 +55,7 @@ def check_djc_role_binding():
                 # 未启用的账户的账户不走该流程
                 continue
 
-            logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name}-{uin2qq(account_config.account_info.uin)})------------")
+            logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name}------------")
             djcHelper = DjcHelper(account_config, cfg.common)
             if not djcHelper.check_djc_role_binding():
                 all_binded = False

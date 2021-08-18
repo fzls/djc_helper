@@ -14,14 +14,19 @@ encoding_error_str = "Found invalid character in key name: '#'. Try quoting the 
 
 
 class AccountInfoConfig(ConfigInterface):
+    default_uin = "o123456789"
+
     def __init__(self):
         # 手动登录需要设置的信息
-        self.uin = "o123456789"
+        self.uin = self.default_uin
         self.skey = "@a1b2c3d4e"
 
         # 自动登录需要设置的信息
         self.account = "123456789"
         self.password = "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用"
+
+    def has_login(self) -> bool:
+        return self.uin != self.default_uin
 
 
 class MobileGameRoleInfoConfig(ConfigInterface):

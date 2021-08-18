@@ -1069,6 +1069,8 @@ class MajieluoConfigUi(QFrame):
                 show_message("配置有误", f"配置的小号序号({account_index}) 不对，正确范围是[1, {len(cfg.account_configs)}]")
                 return
 
+        messages = [] # type: List[str]
+
         for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
             account_config = cfg.account_configs[account_index - 1]
 
@@ -1083,7 +1085,7 @@ class MajieluoConfigUi(QFrame):
 
             res = djcHelper.majieluo_open_box(scode)
             if res.sOutValue1 == "0":
-                show_message("提示", f"第 {order_index + 1} 个小号 {djcHelper.qq()} 领取礼盒成功")
+                messages.append(f"第 {order_index + 1} 个小号 {djcHelper.qq()} 领取礼盒成功")
             else:
                 code_to_message = {
                     "1": "无效的赠送链接",
@@ -1098,12 +1100,16 @@ class MajieluoConfigUi(QFrame):
                 if res.sOutValue1 in code_to_message:
                     message = code_to_message[res.sOutValue1]
 
-                show_message("出错了", f"第 {order_index + 1} 个小号 {djcHelper.qq()}：{message}")
+                messages.append(f"第 {order_index + 1} 个小号 {djcHelper.qq()}：{message}")
 
             time.sleep(1)
 
         invite_count = self.query_invite_count()
-        show_message("提示", f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
+        messages.append("")
+        messages.append(f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
+
+        show_message("操作结果如下", '\n'.join(messages))
+        
         report_click_event("majieluo_open_box")
 
     def query_invite_count(self) -> int:

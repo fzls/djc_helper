@@ -1042,6 +1042,10 @@ class MajieluoConfigUi(QFrame):
         account_index = int(self.lineedit_dahao_index.text())
         xiaohao_qq_list = str_to_list(self.lineedit_xiaohao_qq_list.text())
 
+        if account_index <= 0 or account_index > len(cfg.account_configs):
+            show_message("配置有误", f"配置的大号序号({account_index}) 不对，正确范围是[1, {len(cfg.account_configs)}]")
+            return
+
         account_config = cfg.account_configs[account_index - 1]
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -1073,6 +1077,11 @@ class MajieluoConfigUi(QFrame):
         if len(indexes) != len(scode_list):
             show_message("配置有误", f"配置的小号数目({len(indexes)})与scode数目({len(scode_list)})不一致")
             return
+
+        for account_index in indexes:
+            if account_index <= 0 or account_index > len(cfg.account_configs):
+                show_message("配置有误", f"配置的小号序号({account_index}) 不对，正确范围是[1, {len(cfg.account_configs)}]")
+                return
 
         for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
             account_config = cfg.account_configs[account_index - 1]

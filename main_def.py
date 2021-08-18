@@ -550,7 +550,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
         gpoints,
         levelInfo, chronicle_points,
-        majieluo_stone, majieluo_invite_count,
+        majieluo_stone, f"{majieluo_invite_count}/30",
     ]
 
 

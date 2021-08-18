@@ -869,13 +869,6 @@ class CommonConfigUi(QFrame):
         self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
         add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
-        self.lineedit_majieluo_send_card_target_qq = create_lineedit(cfg.majieluo_send_card_target_qq, "填写要接收卡片的qq号")
-        add_row(form_layout, "马杰洛新春版本赠送卡片目标QQ", self.lineedit_majieluo_send_card_target_qq)
-
-        self.lineedit_majieluo_invite_uin_list = create_lineedit(list_to_str(cfg.majieluo_invite_uin_list),
-                                                                 "填写马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知，使用英文逗号分开，示例：a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b, a34354ec3f37f2d8accd5766f549c36b")
-        add_row(form_layout, "马杰洛赠送礼包inviteUin列表", self.lineedit_majieluo_invite_uin_list)
-
         self.combobox_log_level = create_combobox(cfg.log_level, [
             "debug",
             "info",
@@ -917,10 +910,8 @@ class CommonConfigUi(QFrame):
 
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()
-        cfg.majieluo_send_card_target_qq = self.lineedit_majieluo_send_card_target_qq.text()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
         cfg.cost_all_cards_and_do_lottery_on_last_day = self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
-        cfg.majieluo_invite_uin_list = str_to_list(self.lineedit_majieluo_invite_uin_list.text())
 
         self.login.update_config(cfg.login)
         self.retry.update_config(cfg.retry)

@@ -1047,6 +1047,7 @@ class MajieluoConfigUi(QFrame):
             "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制其链接中sCode的值到各个Scode的输入框内\n"
             "2. 输入完毕后请点击 接收宝箱 按钮"
         ))
+        report_click_event("majieluo_send_box_url")
 
     def open_box(self):
         cfg = self.config_ui.to_config()
@@ -1103,6 +1104,7 @@ class MajieluoConfigUi(QFrame):
 
         invite_count = self.query_invite_count()
         show_message("提示", f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
+        report_click_event("majieluo_open_box")
 
     def query_invite_count(self) -> int:
         cfg = self.config_ui.to_config()

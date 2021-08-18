@@ -955,7 +955,7 @@ class MajieluoConfigUi(QFrame):
         # -------------- 区域：选填和必填分割线 --------------
         add_vbox_seperator(top_layout, "完整使用本工具需要准备三个小号和一个大号，并确保他们是好友，且均配置在小助手的账号列表中")
 
-        btn_login_dahao_and_xiaohao = create_pushbutton("预先登录设定的大号和小号，加快后续流程速度（点击后将登录对应账号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
+        btn_login_dahao_and_xiaohao = create_pushbutton("步骤0：预先登录设定的大号和小号，加快后续流程速度（点击后将登录对应账号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
         top_layout.addWidget(btn_login_dahao_and_xiaohao)
 
         btn_login_dahao_and_xiaohao.clicked.connect(self.login_dahao_and_xiaohao)
@@ -979,7 +979,7 @@ class MajieluoConfigUi(QFrame):
         # -------------- 区域：发送礼盒链接给小号 --------------
         top_layout.addWidget(QHLine())
 
-        btn_send_box_url = create_pushbutton("发送礼盒链接给小号（点击后将登录大号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
+        btn_send_box_url = create_pushbutton("步骤1：发送礼盒链接给小号（点击后将登录大号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
         top_layout.addWidget(btn_send_box_url)
 
         btn_send_box_url.clicked.connect(self.send_box_url)
@@ -1002,7 +1002,7 @@ class MajieluoConfigUi(QFrame):
 
         top_layout.addWidget(QHLine())
 
-        btn_open_box = create_pushbutton("设定的小号依次领取礼盒（点击后将依次登录小号，可能界面会没反应，请耐心等待）", "cyan")
+        btn_open_box = create_pushbutton("步骤2：设定的小号依次领取礼盒（点击后将依次登录小号，可能界面会没反应，请耐心等待）", "cyan")
         top_layout.addWidget(btn_open_box)
 
         btn_open_box.clicked.connect(self.open_box)

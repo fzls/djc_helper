@@ -468,6 +468,9 @@ class AccountConfig(ConfigInterface):
 
         return None
 
+    def qq(self) -> str:
+        return uin2qq(self.account_info.uin)
+
 
 class LoginConfig(ConfigInterface):
     def __init__(self):

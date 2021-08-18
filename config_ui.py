@@ -26,6 +26,7 @@ from qt_wrapper import *
 from setting import *
 from update import *
 from usage_count import increase_counter
+from util import parse_scode
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"
@@ -987,13 +988,16 @@ class MajieluoConfigUi(QFrame):
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 
-        self.lineedit_scode_1 = create_lineedit(cfg.scode_1, placeholder_text="第1个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_1 = create_lineedit(cfg.scode_1,
+                                                placeholder_text="第1个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
         form_layout.addRow("SCode 1", self.lineedit_scode_1)
 
-        self.lineedit_scode_2 = create_lineedit(cfg.scode_2, placeholder_text="第2个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_2 = create_lineedit(cfg.scode_2,
+                                                placeholder_text="第2个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
         form_layout.addRow("SCode 2", self.lineedit_scode_2)
 
-        self.lineedit_scode_3 = create_lineedit(cfg.scode_3, placeholder_text="第3个小号收到的礼盒链接中的SCode参数值，形如 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_3 = create_lineedit(cfg.scode_3,
+                                                placeholder_text="第3个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
         form_layout.addRow("SCode 3", self.lineedit_scode_3)
 
         top_layout.addWidget(QHLine())
@@ -1060,9 +1064,9 @@ class MajieluoConfigUi(QFrame):
 
         indexes = [int(index) for index in str_to_list(self.lineedit_xiaohao_indexes.text())]
         scode_list = [
-            self.lineedit_scode_1.text(),
-            self.lineedit_scode_2.text(),
-            self.lineedit_scode_3.text(),
+            parse_scode(self.lineedit_scode_1.text()),
+            parse_scode(self.lineedit_scode_2.text()),
+            parse_scode(self.lineedit_scode_3.text()),
         ]
         scode_list = [v for v in scode_list if len(v) != 0]
 

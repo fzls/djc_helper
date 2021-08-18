@@ -19,6 +19,7 @@ import uuid
 import webbrowser
 from functools import wraps
 from typing import Callable, Optional
+from urllib import parse
 
 import psutil
 import requests.exceptions
@@ -1011,6 +1012,17 @@ def bypass_proxy():
 
 def use_proxy():
     os.environ.pop('no_proxy')
+
+
+def parse_scode(scode_or_url: str) -> str:
+    if "a20210730care" not in scode_or_url:
+        # 是scode
+        return scode_or_url
+    else:
+        # 是url
+        # https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=
+        parsed = parse.urlparse(scode_or_url)
+        return parse.parse_qs(parsed.query)['sCode'][0]
 
 
 if __name__ == '__main__':

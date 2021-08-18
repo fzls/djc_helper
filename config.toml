@@ -5,6 +5,9 @@
 # 是否无视系统代理（VPN）
 bypass_proxy = true
 
+# 配置工具是否启用高DPI模式（4k屏幕建议启用该选项）
+config_ui_enable_high_dpi = false
+
 # 是否禁用cmd命令行的快速编辑模式，从而鼠标点选时不会暂停，避免误触而不知所措
 disable_cmd_quick_edit = true
 

@@ -1087,7 +1087,7 @@ class MajieluoConfigUi(QFrame):
             logger.info(f"第{order_index + 1}个小号领取刚刚运行后填写的Scode列表中第{order_index + 1}个scode - {scode}")
 
             res = djcHelper.majieluo_open_box(scode)
-            if res.sOutValue1 == 0:
+            if res.sOutValue1 == "0":
                 show_message("提示", f"第 {order_index + 1} 个小号 {djcHelper.qq()} 领取礼盒成功")
             else:
                 code_to_message = {

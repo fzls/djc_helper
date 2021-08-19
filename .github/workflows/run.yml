@@ -59,7 +59,7 @@ jobs:
           path: |
             google-chrome*.deb
             chromedriver
-          key: ${{ runner.os }}-chrome-${{ hashFiles('chromedriver') }}-${{ hashFiles('**/google-chrome*.deb') }}
+          key: ${{ runner.os }}-chrome-${{ hashFiles('_download_chrome_and_driver.sh') }}
           restore-keys: |
             ${{ runner.os }}-chrome-
 

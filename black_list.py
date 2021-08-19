@@ -1,6 +1,5 @@
 from sys import exit
 
-from log import color, logger
 from util import message_box, uin2qq
 
 

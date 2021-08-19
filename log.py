@@ -3,6 +3,7 @@ import logging
 import multiprocessing
 import os
 import pathlib
+import platform
 import time
 from sys import exit
 from typing import Callable
@@ -30,7 +31,8 @@ try:
     pathlib.Path(log_directory).mkdir(parents=True, exist_ok=True)
 except PermissionError:
     print("创建日志目录logs失败，请确认是否限制了基础的运行权限")
-    os.system("PAUSE")
+    if platform.system() == "Windows":
+        os.system("PAUSE")
     exit(-1)
 
 process_name = multiprocessing.current_process().name

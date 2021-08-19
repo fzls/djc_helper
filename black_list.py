@@ -1,10 +1,7 @@
 from sys import exit
 
-import win32api
-import win32con
-
 from log import color, logger
-from util import uin2qq
+from util import message_box, uin2qq
 
 
 class BlackListInfo:
@@ -40,8 +37,7 @@ def check_in_black_list(uin):
             "黑名单相关信息如下：\n"
             f"{black_list[qq]}"
         )
-        logger.warning(color("fg_bold_cyan") + message)
-        win32api.MessageBox(0, message, "禁止使用", win32con.MB_OK)
+        message_box(message, "禁止使用")
         exit(0)
 
 

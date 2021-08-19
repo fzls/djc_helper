@@ -25,15 +25,22 @@ import psutil
 import requests.exceptions
 import selenium.common.exceptions
 import urllib3.exceptions
-import win32api
-import win32con
-import win32gui
-import win32process
 
 from const import cached_dir
 from db import *
 from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
+
+
+def is_windows() -> bool:
+    return platform.system() == "Windows"
+
+
+if is_windows():
+    import win32api
+    import win32con
+    import win32gui
+    import win32process
 
 
 def uin2qq(uin):
@@ -67,6 +74,7 @@ def change_console_window_mode_async(disable_min_console=False):
 
 def ensure_cmd_window_buffer_size_for_windows(cfg):
     if platform.system() != "Windows":
+        logger.info(f"当前运行的系统是{platform.system()}，将不尝试 修改cmd缓存")
         return
 
     if not cfg.common.enable_change_cmd_buffer:
@@ -86,6 +94,10 @@ def ensure_cmd_window_buffer_size_for_windows(cfg):
 
 
 def change_console_window_mode(cfg, disable_min_console=False):
+    if platform.system() != "Windows":
+        logger.info(f"当前运行的系统是{platform.system()}，将不尝试 修改窗口大小")
+        return
+
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")
 
     try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", cfg.common.enable_max_console)
@@ -429,12 +441,12 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False, follow_flag_file=True):
-    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file)
+def async_message_box(msg, title, print_log=True, icon=48, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
+    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file, color_name)
 
 
-def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_url="", show_once=False, follow_flag_file=True):
-    get_log_func(logger.warning, print_log)(color("bold_cyan") + msg)
+def message_box(msg, title, print_log=True, icon=48, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
+    get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
     if is_run_in_github_action():
         return
@@ -447,7 +459,7 @@ def message_box(msg, title, print_log=True, icon=win32con.MB_ICONWARNING, open_u
     if follow_flag_file and exists_flag_file('.no_message_box'):
         show_message_box = False
 
-    if show_message_box:
+    if show_message_box and is_windows():
         win32api.MessageBox(0, msg, title, icon)
 
     if open_url != "":
@@ -533,10 +545,13 @@ def clear_login_status():
         logger.info(f"移除缓存的登录信息：{cache_file}")
 
 
-def get_screen_size():
+def get_screen_size() -> Tuple[int, int]:
     """
     :return: 屏幕宽度和高度
     """
+    if not is_windows():
+        return 1920, 1080
+
     width, height = win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
     return width, height
 
@@ -726,6 +741,9 @@ def get_pay_server_addr() -> str:
 
 
 def disable_quick_edit_mode():
+    if not is_windows():
+        return
+
     # https://docs.microsoft.com/en-us/windows/console/setconsolemode
     def _cb():
         ENABLE_EXTENDED_FLAGS = 0x0080
@@ -869,8 +887,12 @@ def popen(args, cwd="."):
     if type(args) is list:
         args = [str(arg) for arg in args]
 
-    subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
-                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if is_windows():
+        subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+        subprocess.Popen(args, cwd=cwd, shell=True,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 def start_djc_helper(exe_path: str):
@@ -954,11 +976,17 @@ def start_and_end_date_of_a_month(date: datetime.datetime):
 # 常见系统变量：https://docs.microsoft.com/en-us/windows/deployment/usmt/usmt-recognized-environment-variables
 
 def get_appdata_dir() -> str:
-    return os.path.expandvars("%APPDATA%")
+    if is_windows():
+        return os.path.expandvars("%APPDATA%")
+    else:
+        return os.path.expandvars("$HOME/AppData")
 
 
 def get_user_dir() -> str:
-    return os.path.expandvars("%USERPROFILE%")
+    if is_windows():
+        return os.path.expandvars("%USERPROFILE%")
+    else:
+        return os.path.expandvars("$HOME")
 
 
 def get_path_in_onedrive(relative_path: str) -> str:
@@ -976,7 +1004,10 @@ def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, 
             pool_info = "超级" + pool_info
 
     set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
-    os.system(set_title_cmd)
+    if is_windows():
+        os.system(set_title_cmd)
+    else:
+        logger.info(color("bold_yellow") + set_title_cmd)
 
 
 def exists_auto_updater_dlc():
@@ -1023,6 +1054,14 @@ def parse_scode(scode_or_url: str) -> str:
         # https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=
         parsed = parse.urlparse(scode_or_url)
         return parse.parse_qs(parsed.query)['sCode'][0]
+
+
+def pause():
+    if is_windows():
+        pause_cmd = 'PAUSE'
+    else:
+        pause_cmd = 'read -r -p "Press Enter to continue..." key'
+    os.system(pause_cmd)
 
 
 if __name__ == '__main__':

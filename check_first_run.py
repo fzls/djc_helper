@@ -1,5 +1,6 @@
 from config import *
 from first_run import is_first_run
+from util import message_box
 
 
 def check_first_run_async(cfg: Config):
@@ -114,7 +115,7 @@ def show_tip_on_first_run(first_run_tip_name, title, tips, loginfo, show_count=1
         _title = title
         if show_count != 1:
             _title = f"第{i + 1}/{show_count}次提示 {title}"
-        win32api.MessageBox(0, tips, _title, win32con.MB_ICONWARNING)
+        message_box(tips, _title)
 
 
 if __name__ == '__main__':

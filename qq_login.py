@@ -134,8 +134,15 @@ class QQLogin():
             else:
                 logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
-        inited = False
+        if is_windows():
+            self.prepare_chrome_windows(caps, options)
+        else:
+            self.prepare_chrome_linux(caps, options)
 
+        self.cookies = self.driver.get_cookies()
+
+    def prepare_chrome_windows(self, caps: Dict[str, str], options: Options):
+        inited = False
         try:
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
@@ -144,7 +151,6 @@ class QQLogin():
                 inited = True
         except:
             pass
-
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome
             zip_name = os.path.basename(self.chrome_binary_7z())
@@ -190,13 +196,21 @@ class QQLogin():
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
-        self.cookies = self.driver.get_cookies()
+    def prepare_chrome_linux(self, caps: Dict[str, str], options: Options):
+        # linux下只尝试使用系统安装的chrome
+        options.binary_location = self.chrome_binary_location_linux()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--no-default-browser-check')
+        options.add_argument('--no-first-run')
+        self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path_linux(), desired_capabilities=caps, options=options)
+        logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
 
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")
         if self.driver is not None:
             # 最小化网页
-            self.driver.minimize_window()
+            if is_windows():
+                self.driver.minimize_window()
             threading.Thread(target=self.driver.quit, daemon=True).start()
 
         # 使用Selenium结束将日志级别改回去
@@ -211,6 +225,13 @@ class QQLogin():
         :return:
         """
         logger.info("检查chrome相关内容是否ok")
+
+        if is_windows():
+            self.check_and_download_chrome_ahead_windows()
+        else:
+            self.check_and_download_chrome_ahead_linux()
+
+    def check_and_download_chrome_ahead_windows(self):
         logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzoui.com/s/djc-tools")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
@@ -270,6 +291,31 @@ class QQLogin():
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
         decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
 
+    def check_and_download_chrome_ahead_linux(self):
+        ok = True
+
+        if not os.path.exists(self.chrome_binary_location_linux()):
+            ok = False
+            logger.info(color("bold_red") + (
+                f"未在发现chrome，请按照下面这个推文的步骤去下载安装最新稳定版本chrome到该位置\n"
+                f"预期位置: {self.chrome_binary_location_linux()}\n"
+                f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
+            ))
+
+        if not os.path.exists(self.chrome_driver_executable_path_linux()):
+            ok = False
+            logger.info(color("bold_red") + (
+                f"未在发现chromedriver，请按照下面这个推文的步骤去下载安装最新稳定版本chromedriver到该位置（需要确保与安装的chrome版本匹配）\n"
+                f"预期位置: {self.chrome_driver_executable_path_linux()}\n"
+                f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
+            ))
+
+        if not ok:
+            logger.info(color("bold_yellow") + (
+                "当前运行在非windows的环境，检测到chrome和对应driver未全部安装，请按照上述提示完成安装后重新运行~\n"
+            ))
+            exit(-1)
+
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"{self.chrome_root_directory()}/chromedriver_{self.get_chrome_major_version()}.exe")
 
@@ -284,6 +330,12 @@ class QQLogin():
 
     def chrome_installer_name(self):
         return f"Chrome_{self.get_chrome_major_version()}.(小版本号)_普通安装包_非便携版.exe"
+
+    def chrome_driver_executable_path_linux(self):
+        return "/usr/local/bin/chromedriver"
+
+    def chrome_binary_location_linux(self):
+        return "/usr/bin/google-chrome"
 
     def chrome_root_directory(self):
         return os.path.realpath("./utils")

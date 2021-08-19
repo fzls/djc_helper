@@ -129,4 +129,4 @@ if __name__ == '__main__':
     finally:
         close_pool()
         # 暂停一下，方便看结果
-        os.system("PAUSE")
+        pause()

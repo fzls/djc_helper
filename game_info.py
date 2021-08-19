@@ -3,11 +3,9 @@ import os
 import subprocess
 from sys import exit
 
-import win32api
-import win32con
-
 from dao import GameInfo
 from log import logger
+from util import message_box, pause
 
 _loaded = False
 name_2_game_info_map = {}
@@ -43,14 +41,14 @@ def lazy_load():
             "\n"
             "请按照上述提示调整后重试\n"
         ), exc_info=e)
-        os.system("PAUSE")
+        pause()
         exit(-1)
 
 
 def get_game_info(name):
     lazy_load()
     if name not in name_2_game_info_map:
-        win32api.MessageBox(0, f"未找到游戏【{name}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字", "游戏名不正确", win32con.MB_ICONWARNING)
+        message_box(f"未找到游戏【{name}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字", "游戏名不正确")
         subprocess.call(["utils/npp_portable/notepad++.exe", "utils/reference_data/djc_biz_list.json"])
         exit(-1)
 

@@ -5,17 +5,20 @@ import webbrowser
 from datetime import datetime
 
 import requests
-import win32api
-import win32con
 
 from config import CommonConfig
 from dao import UpdateInfo
 from first_run import is_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
-from util import (async_call, bypass_proxy, is_run_in_github_action,
-                  try_except, use_by_myself, use_proxy)
+from util import (async_call, async_message_box, bypass_proxy,
+                  is_run_in_github_action, is_windows, message_box, try_except,
+                  use_by_myself, use_proxy)
 from version import now_version, ver_time
+
+if is_windows():
+    import win32api
+    import win32con
 
 
 def get_update_desc(config: CommonConfig):
@@ -65,6 +68,10 @@ def check_update_on_start(config: CommonConfig):
 
 
 def try_manaual_update(ui: UpdateInfo) -> bool:
+    if not is_windows():
+        logger.info("当前不是在windows下运行，不尝试检查更新")
+        return False
+
     if need_update(now_version, ui.latest_version):
         logger.info(f"当前版本为{now_version}，已有最新版本{ui.latest_version}，更新内容为{ui.update_message}")
 
@@ -108,6 +115,9 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
 
 
 def update_fallback(config: CommonConfig):
+    if not is_windows():
+        return
+
     try:
         # 到这里一般是无法访问github，这时候试试gitee的方案
         latest_version = get_version_from_gitee()
@@ -141,10 +151,7 @@ def show_update_info_on_first_run(ui: UpdateInfo):
             f"{ui.update_message}"
         )
 
-        def cb():
-            win32api.MessageBox(0, message, "更新", win32con.MB_OK)
-
-        async_call(cb)
+        async_message_box(message, "更新")
 
 
 # 获取最新版本号与下载网盘地址

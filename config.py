@@ -748,6 +748,11 @@ class Config(ConfigInterface):
                 logger.info(color("bold_green") + "当前仅有一个账号，没必要开启多进程模式，且未开启超快速模式，将关闭多进程模式~")
                 self.common.enable_multiprocessing = False
 
+        if not is_windows():
+            logger.info(color("bold_black") + f"目前linux（以wsl为例）下小助手多进程会卡住，暂时未定位到原因，先强制关闭多进程和超快速功能")
+            self.common.enable_multiprocessing = False
+            self.common.enable_super_fast_mode = False
+
     def check(self) -> bool:
         name2index = {}
         for _idx, account in enumerate(self.account_configs):

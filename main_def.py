@@ -40,7 +40,7 @@ def check_djc_role_binding():
 
     if not has_any_account_in_normal_run(cfg):
         logger.warning("未发现任何有效的账户配置，请检查配置文件")
-        os.system("PAUSE")
+        pause()
         exit(-1)
 
     _show_head_line("启动时检查各账号是否在道聚城绑定了dnf账号和任意手游账号")
@@ -72,7 +72,7 @@ def check_djc_role_binding():
             ))
             logger.warning(color("green") + "如果本账号不需要道聚城相关操作，可以打开配置表，将该账号的cannot_bind_dnf设为true，game_name设为无，即可跳过道聚城相关操作")
             logger.warning(color("fg_bold_cyan") + "操作完成后点击任意键即可再次进行检查流程...")
-            os.system("PAUSE")
+            pause()
 
             # 这时候重新读取一遍用户修改过后的配置文件（比如把手游设为了 无 ）
             load_config("config.toml", "config.toml.local")
@@ -109,8 +109,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
             qq = uin2qq(djcHelper.cfg.account_info.uin)
             if qq in qq2index:
                 msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
-                logger.error(color("fg_bold_red") + msg)
-                win32api.MessageBox(0, msg, "重复登录", win32con.MB_ICONINFORMATION)
+                message_box(msg, "重复登录", color_name="fg_bold_red")
                 clear_login_status()
                 sys.exit(-1)
 
@@ -635,6 +634,9 @@ def try_report_usage_info(cfg: Config):
     # 是否使用源码运行
     increase_counter(ga_category="run_from_src", name=run_from_src())
 
+    # 运行的系统(windows/linux)
+    increase_counter(ga_category="run_system", name=platform.system())
+
     # 上报账号相关的一些信息（如账号数、使用的登录模式，不包含任何敏感信息）
     increase_counter(ga_category="account_count", name=len(cfg.account_configs))
     for account_config in cfg.account_configs:
@@ -815,10 +817,11 @@ def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
         "（ヾ(=･ω･=)o）\n"
     )
     logger.warning(color("fg_bold_cyan") + message)
-    if not use_by_myself() or force_message_box:
-        win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
-    # os.popen("付费指引/支持一下.png")
-    os.popen("付费指引/付费指引.docx")
+    if is_windows():
+        if not use_by_myself() or force_message_box:
+            win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
+        # os.popen("付费指引/支持一下.png")
+        os.popen("付费指引/付费指引.docx")
 
 
 def check_update(cfg):
@@ -886,6 +889,9 @@ def show_ask_message_box_only_once():
 
 
 def show_ask_message_box_only_once_sync():
+    if not is_windows():
+        return
+
     return
     # 临时加一个请求帮忙弄下白嫖活动的逻辑
     if is_first_run("守护者卡牌"):
@@ -948,6 +954,10 @@ def try_auto_update(cfg):
             logger.info("当前为源码模式运行，自动更新功能将不启用~请自行定期git pull更新代码")
             return
 
+        if not is_windows():
+            logger.info("当前在非windows系统运行，自动更新功能将不启用~请自行定期自行更新")
+            return
+
         has_buy_dlc, query_ok = has_buy_auto_updater_dlc_and_query_ok(cfg.get_qq_accounts())
 
         if not has_buy_dlc:
@@ -966,8 +976,7 @@ def try_auto_update(cfg):
                     "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
                     "4. 已购买按月付费。对策：自动更新dlc与按月付费不是同一个东西，具体区别请阅读[付费指引/付费指引.docx]进行了解。如果无需该功能，直接将utils目录下的auto_updater.exe删除即可\n"
                 )
-                logger.warning(color("bold_yellow") + msg)
-                win32api.MessageBox(0, msg, "未购买自动更新DLC", win32con.MB_ICONWARNING)
+                message_box(msg, "未购买自动更新DLC", color_name="bold_yellow")
             else:
                 logger.warning(color("bold_cyan") + "当前未购买自动更新DLC，将跳过自动更新流程~")
 

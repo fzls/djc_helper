@@ -82,7 +82,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/${{ env.requirements_name }}') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/' + env.requirements_name) }}
           restore-keys: |
             ${{ runner.os }}-pip-
 

@@ -51,6 +51,12 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements_linux.txt wheel
 
+      - name: Install Chrome And Driver Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          chmod +x _install_chrome_and_driver.sh
+          ./_install_chrome_and_driver.sh
+
       - name: Set time zone
         uses: szenius/set-timezone@v1.0
         with:

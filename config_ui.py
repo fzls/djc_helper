@@ -1035,7 +1035,7 @@ class MajieluoConfigUi(QFrame):
         djcHelper.majieluo_send_to_xiaohao(xiaohao_qq_list)
 
         show_message("后续流程", (
-            "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制其链接中sCode的值到各个Scode的输入框内\n"
+            "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制整个链接到各个Scode的输入框内\n"
             "2. 输入完毕后请点击 接收宝箱 按钮"
         ))
         report_click_event("majieluo_send_box_url")

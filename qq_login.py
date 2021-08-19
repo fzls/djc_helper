@@ -313,7 +313,9 @@ class QQLogin():
         if not ok:
             logger.info(color("bold_yellow") + (
                 "当前运行在非windows的环境，检测到chrome和对应driver未全部安装，请按照上述提示完成安装后重新运行~\n"
-                "或者直接使用 _install_and_download_chrome_and_driver.sh 来完成一键下载安装"
+                "或者根据你的系统直接使用或参考以下脚本之一来完成一键下载安装\n"
+                "1. _ubuntu_download_and_install_chrome_and_driver.sh \n"
+                "2. _centos_download_and_install_chrome_and_driver.sh \n"
             ))
             exit(-1)
 

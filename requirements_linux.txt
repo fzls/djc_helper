@@ -1,3 +1,2 @@
 -r requirements_z_base.txt
 
-pywin32==301

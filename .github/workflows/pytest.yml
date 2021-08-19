@@ -63,12 +63,12 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Set the Env On Windows
+      - name: Operations On Windows
         if: startsWith(matrix.os, 'windows')
         run: |
           echo "requirements_name=requirements_dev.txt" >> $GITHUB_ENV
 
-      - name: Set the Env on ubuntu
+      - name: Operations On Ubuntu
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           echo "requirements_name=requirements_linux_dev.txt" >> $GITHUB_ENV
@@ -92,7 +92,11 @@ jobs:
           pip install -r ${{ env.requirements_name }} wheel
 
       - name: Set time zone
-        run: tzutil /s "China Standard Time"
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Shanghai"
+          timezoneMacos: "Asia/Shanghai"
+          timezoneWindows: "China Standard Time"
 
       - name: Test for CodeCov
         run: |

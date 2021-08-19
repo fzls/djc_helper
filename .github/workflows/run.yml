@@ -51,11 +51,26 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements_linux.txt wheel
 
-      - name: Install Chrome And Driver Ubuntu
+      - name: Chrome And Driver Cache On Ubuntu
+        id: chrome-cache
         if: startsWith(matrix.os, 'ubuntu')
+        uses: actions/cache@v2
+        with:
+          path: |
+            google-chrome*.deb
+            chromedriver
+          key: ${{ runner.os }}-chrome-${{ hashFiles('chromedriver') }}-${{ hashFiles('**/google-chrome*.deb') }}
+          restore-keys: |
+            ${{ runner.os }}-chrome-
+
+      - name: Download Chrome And Driver Ubuntu
+        if: startsWith(matrix.os, 'ubuntu') && steps.chrome-cache.outputs.cache-hit != 'true'
         run: |
-          chmod +x _install_chrome_and_driver.sh
-          ./_install_chrome_and_driver.sh
+          bash _download_chrome_and_driver.sh
+
+      - name: Install Chrome And Driver Ubuntu
+        run: |
+          bash _install_chrome_and_driver.sh
 
       - name: Set time zone
         uses: szenius/set-timezone@v1.0

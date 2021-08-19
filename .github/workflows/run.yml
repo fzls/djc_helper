@@ -59,18 +59,18 @@ jobs:
           path: |
             google-chrome*.deb
             chromedriver
-          key: ${{ runner.os }}-chrome-${{ hashFiles('_download_chrome_and_driver.sh') }}
+          key: ${{ runner.os }}-chrome-${{ hashFiles('_ubuntu_download_chrome_and_driver.sh') }}
           restore-keys: |
             ${{ runner.os }}-chrome-
 
       - name: Download Chrome And Driver Ubuntu
         if: startsWith(matrix.os, 'ubuntu') && steps.chrome-cache.outputs.cache-hit != 'true'
         run: |
-          bash _download_chrome_and_driver.sh
+          bash _ubuntu_download_chrome_and_driver.sh
 
       - name: Install Chrome And Driver Ubuntu
         run: |
-          bash _install_chrome_and_driver.sh
+          bash _ubuntu_install_chrome_and_driver.sh
 
       - name: Set time zone
         uses: szenius/set-timezone@v1.0

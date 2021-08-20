@@ -37,7 +37,6 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install Requirements Windows
-        if: startsWith(matrix.os, 'windows')
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt wheel

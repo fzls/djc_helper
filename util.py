@@ -42,6 +42,11 @@ if is_windows():
     import win32gui
     import win32process
 
+if is_windows():
+    MB_ICONINFORMATION = win32con.MB_ICONINFORMATION
+else:
+    MB_ICONINFORMATION = 64
+
 
 def uin2qq(uin):
     return str(uin)[1:].lstrip('0')
@@ -441,11 +446,11 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=48, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
+def async_message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
     async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file, color_name)
 
 
-def message_box(msg, title, print_log=True, icon=48, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
+def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
     if is_run_in_github_action():

@@ -13,7 +13,7 @@ on:
 jobs:
   run:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -32,15 +32,34 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_linux.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install Requirements Windows
-        if: startsWith(matrix.os, 'windows')
+      - name: Install Requirements Ubuntu
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -r requirements.txt wheel
+          pip install -r requirements_linux.txt wheel
+
+      - name: Chrome And Driver Cache On Ubuntu
+        id: chrome-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            google-chrome*.deb
+            chromedriver
+          key: ${{ runner.os }}-chrome-${{ hashFiles('_ubuntu_download_chrome_and_driver.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-chrome-
+
+      - name: Download Chrome And Driver Ubuntu
+        if: steps.chrome-cache.outputs.cache-hit != 'true'
+        run: |
+          bash _ubuntu_download_chrome_and_driver.sh
+
+      - name: Install Chrome And Driver Ubuntu
+        run: |
+          bash _ubuntu_install_chrome_and_driver.sh
 
       - name: Set time zone
         uses: szenius/set-timezone@v1.0

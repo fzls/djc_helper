@@ -58,10 +58,10 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210705care/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
-    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/1668_d3fb6aba",
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/2074_c12d14bf",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021070614491911111",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/1669_61b21754",
+    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2076_a20b408d",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
 

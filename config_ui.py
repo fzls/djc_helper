@@ -180,7 +180,9 @@ class ConfigUi(QFrame):
         kill_process(os.getpid())
 
     def save(self, checked=False, show_message_box=True):
-        self.save_config(self.to_config())
+        cfg = self.to_config()
+        self.remove_dynamic_attrs(cfg)
+        self.save_config(cfg)
         if show_message_box:
             show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.example.toml查看注释")
             report_click_event("save_config")
@@ -758,6 +760,14 @@ class ConfigUi(QFrame):
             cfg.account_configs = account_configs
 
         return cfg
+
+    def remove_dynamic_attrs(self, cfg: Config):
+        # 这些是动态生成的，不需要保存到配置表中
+        for account_cfg in cfg.account_configs:
+            for attr in ["sDjcSign"]:
+                if not hasattr(account_cfg, attr):
+                    continue
+                delattr(account_cfg, attr)
 
 
 class CommonConfigUi(QFrame):
@@ -1391,12 +1401,6 @@ class AccountConfigUi(QWidget):
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         self.hello_voice.update_config(cfg.hello_voice)
-
-        # 这些是动态生成的，不需要保存到配置表中
-        for attr in ["sDjcSign"]:
-            if not hasattr(cfg, attr):
-                continue
-            delattr(cfg, attr)
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
         all_item_ids = set()

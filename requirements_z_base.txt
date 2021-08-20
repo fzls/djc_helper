@@ -6,7 +6,7 @@ toml==0.10.2
 selenium==3.141.0
 colorlog==5.0.1
 psutil==5.8.0
-leancloud==2.9.4
+leancloud==2.9.5
 werkzeug<2.0.0
 PyQt5==5.15.4
 PyQt5-stubs==5.15.2.0

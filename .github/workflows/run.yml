@@ -1,4 +1,4 @@
-name: Run
+name: Run On Windows
 
 on:
   workflow_dispatch:

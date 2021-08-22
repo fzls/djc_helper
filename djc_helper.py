@@ -386,18 +386,12 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("qq视频蚊子腿", self.qq_video),
-            ("WeGame活动", self.dnf_wegame),
-            ("DNF集合站", self.dnf_collection),
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
-            ("集卡", self.ark_lottery),
-            ("黄钻", self.dnf_yellow_diamond),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("管家蚊子腿", self.guanjia_new),
-            ("超级会员", self.dnf_super_vip),
-            ("会员关怀", self.dnf_vip_mentor),
             ("hello语音网页礼包兑换", self.hello_voice),
+            ("黄钻", self.dnf_yellow_diamond),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -434,6 +428,12 @@ class DjcHelper:
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("qq视频蚊子腿", self.qq_video),
+            ("WeGame活动", self.dnf_wegame),
+            ("DNF集合站", self.dnf_collection),
+            ("集卡", self.ark_lottery),
+            ("管家蚊子腿", self.guanjia_new),
+            ("会员关怀", self.dnf_vip_mentor),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

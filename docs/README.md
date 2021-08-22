@@ -53,6 +53,7 @@
 ## 目录
 
 - [概览](#概览)
+  - [支持的系统](#支持的系统)
   - [拉取代码](#拉取代码)
   - [长期支持的活动](#长期支持的活动)
   - [支持的短期活动](#支持的短期活动)
@@ -72,13 +73,18 @@
 - [支持一下](#支持一下)
 
 # 概览
+## 支持的系统
+目前已测试在以下系统可以运行
+1. Windows 7/10/11
+2. Ubuntu 21.04 桌面版和服务器版 以及windows自带的wsl
+
 ## 拉取代码
 如果github clone过慢，可以使用gitee的镜像仓库，目前设定了github action，会自动同步代码到gitee该仓库
-> git clone https://gitee.com/fzls/djc_helper.git
+> git clone --depth=1 https://gitee.com/fzls/djc_helper.git
 
 或者可以使用github的镜像加速访问，如
-> git clone https://github.com.cnpmjs.org/fzls/djc_helper.git
-> git clone https://hub.fastgit.org/fzls/djc_helper.git
+> git clone --depth=1 https://github.com.cnpmjs.org/fzls/djc_helper.git
+> git clone --depth=1 https://hub.fastgit.org/fzls/djc_helper.git
 
 ## 长期支持的活动
 - [x] 道聚城签到与领奖、任务与领奖、兑换奖励、查询信息等功能

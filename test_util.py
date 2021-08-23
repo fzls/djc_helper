@@ -230,3 +230,20 @@ def test_human_readable_size():
     assert human_readable_size(512 * ZiB) == "512.0ZiB"
     assert human_readable_size(512 * YiB) == "512.0YiB"
     assert human_readable_size(51200 * YiB) == "51200.0YiB"
+
+
+def test_get_random_face():
+    assert get_random_face() != ""
+
+
+def test_remove_invalid_unicode_escape_string():
+    escaped = "\\user\\u5982\\u679c\\u8981\\u53cd\\u9988\\uff0c\\u8bf7\\u628a\\u6574\\u4e2a\\u7a97\\u53e3\\u90fd\\u622a\\u56fe\\u4e0b\\u6765- -\\u4e0d\\u8981\\u53ea\\u622a\\u4e00\\u90e8\\u5206"
+    unescaped = " user如果要反馈，请把整个窗口都截图下来- -不要只截一部分"
+    assert remove_invalid_unicode_escape_string(escaped) == unescaped
+
+
+def test_parse_unicode_escape_string():
+    with pytest.raises(UnicodeDecodeError):
+        parse_unicode_escape_string("\\user\\u5982\\u679c")
+
+    assert parse_unicode_escape_string("\\u5982\\u679c") == "如果"

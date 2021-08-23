@@ -537,7 +537,7 @@ def get_directory_size(dir_name: str) -> int:
     return sum(f.stat().st_size for f in root_directory.glob('**/*') if f.is_file())
 
 
-def get_random_face():
+def get_random_face() -> str:
     return random.choice([
         'ヾ(◍°∇°◍)ﾉﾞ', 'ヾ(✿ﾟ▽ﾟ)ノ', 'ヾ(๑╹◡╹)ﾉ"', '٩(๑❛ᴗ❛๑)۶', '٩(๑-◡-๑)۶ ',
         'ヾ(●´∀｀●) ', '(｡◕ˇ∀ˇ◕)', '(◕ᴗ◕✿)', '✺◟(∗❛ัᴗ❛ั∗)◞✺', '(づ｡◕ᴗᴗ◕｡)づ',
@@ -585,18 +585,19 @@ def disable_pause_after_run() -> bool:
 # 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
 def remove_invalid_unicode_escape_string_in_file(filename: str):
     with open(filename, 'r', encoding='utf-8') as f:
-        lines = f.read()
+        print(remove_invalid_unicode_escape_string(f.read()))
 
-        invalid_chars = []
-        for code in range(ord('g'), ord('z') + 1):
-            invalid_chars.append(chr(code))
-        for code in range(ord('G'), ord('Z') + 1):
-            invalid_chars.append(chr(code))
-        print(invalid_chars)
-        for char in invalid_chars:
-            lines = lines.replace(f"u{char}", f"_u{char}")
 
-        print(parse_unicode_escape_string(lines))
+def remove_invalid_unicode_escape_string(contents: str) -> str:
+    invalid_chars = []
+    for code in range(ord('g'), ord('z') + 1):
+        invalid_chars.append(chr(code))
+    for code in range(ord('G'), ord('Z') + 1):
+        invalid_chars.append(chr(code))
+    for char in invalid_chars:
+        contents = contents.replace(f"u{char}", f"u0020u{char}")
+
+    return parse_unicode_escape_string(contents)
 
 
 def parse_unicode_escape_string(escaped_string: str) -> str:

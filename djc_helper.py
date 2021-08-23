@@ -1290,7 +1290,6 @@ class DjcHelper:
         #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
         #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
         #   1.3.3 在 config.toml 和 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
-        #   1.3.4 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件取消注释
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
         #   1.5 发布版本后同时上传集卡特别版
         #
@@ -1298,7 +1297,6 @@ class DjcHelper:
         #   2. 废弃
         #   2.1 在 djc_helper.py 中将 ark_lottery 的调用处从 normal_run 移到 expired_activities
         #   2.2 在 main.py 中将main函数中将 enable_card_lottery 设置为 false
-        #   2.3 在 djc_helper.py 中将 fetch_pskey 的 p_skey 的判断条件注释
 
         # get_act_url("集卡")
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")

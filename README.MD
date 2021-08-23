@@ -48,6 +48,9 @@
   <a href="https://github.com/fzls/djc_helper/actions/workflows/package.yml">
     <img src="https://github.com/fzls/djc_helper/actions/workflows/package.yml/badge.svg" alt="Build" />
   </a>
+  <a href="https://GitHub.com/fzls/djc_helper/releases/">
+    <img src="https://img.shields.io/github/release/fzls/djc_helper.svg" alt="Release" />
+  </a>
 </div>
 
 ## 目录

@@ -220,22 +220,22 @@ def show_head_line(msg, msg_color=color("fg_bold_green")):
     logger.warning(char * line_length)
 
 
-def get_this_week_monday(now=datetime.datetime.now()) -> str:
+def get_now() -> datetime:
+    return datetime.datetime.now()
+
+
+def get_this_week_monday(now=get_now()) -> str:
     return get_this_week_monday_datetime(now).strftime("%Y%m%d")
 
 
-def get_last_week_monday(now=datetime.datetime.now()) -> str:
+def get_last_week_monday(now=get_now()) -> str:
     lastWeekMonday = get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
     return lastWeekMonday.strftime("%Y%m%d")
 
 
-def get_this_week_monday_datetime(now=datetime.datetime.now()) -> datetime.datetime:
+def get_this_week_monday_datetime(now=get_now()) -> datetime.datetime:
     monday = now - datetime.timedelta(days=now.weekday())
     return monday.replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-def get_now() -> datetime:
-    return datetime.datetime.now()
 
 
 def now_before(t="2000-01-01 00:00:00"):
@@ -393,20 +393,20 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     return msg
 
 
-def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S"):
-    return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now()
+def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> bool:
+    return datetime.datetime.strptime(end_time, time_fmt) < now
 
 
-def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
-    return datetime.datetime.strptime(end_time, time_fmt) < datetime.datetime.now() + duration
+def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> bool:
+    return datetime.datetime.strptime(end_time, time_fmt) < now + duration
 
 
-def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
-    return datetime.datetime.strptime(end_time, time_fmt) - datetime.datetime.now()
+def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> datetime.timedelta:
+    return datetime.datetime.strptime(end_time, time_fmt) - now
 
 
-def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S"):
-    return datetime.datetime.now() - datetime.datetime.strptime(t, time_fmt)
+def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> datetime.timedelta:
+    return now - datetime.datetime.strptime(t, time_fmt)
 
 
 def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
@@ -415,7 +415,7 @@ def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     logger.info(color("bold_black") + f"活动的结束时间为{end_time}，剩余时间为{remaining_time}")
 
 
-def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S"):
+def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
     left_time = datetime.datetime.strptime(left_time_str, time_fmt)
     right_time = datetime.datetime.strptime(right_time_str, time_fmt)
 
@@ -434,8 +434,8 @@ def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
     return dt.strftime(time_fmt)
 
 
-def format_now(time_fmt="%Y-%m-%d %H:%M:%S"):
-    return format_time(datetime.datetime.now(), time_fmt=time_fmt)
+def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()):
+    return format_time(now, time_fmt=time_fmt)
 
 
 def format_timestamp(ts: float):
@@ -471,18 +471,22 @@ def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url=""
         webbrowser.open(open_url)
 
 
-def human_readable_size(num, suffix='B'):
+KiB = 1024
+MiB = 1024 * KiB
+GiB = 1024 * MiB
+TiB = 1024 * GiB
+PiB = 1024 * TiB
+EiB = 1024 * PiB
+ZiB = 1024 * EiB
+YiB = 1024 * ZiB
+
+
+def human_readable_size(num, suffix='B') -> str:
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
-
-
-KiB = 1024
-MiB = 1024 * KiB
-GiB = 1024 * MiB
-TiB = 1024 * GiB
 
 
 @try_except()

@@ -6,6 +6,8 @@
 # Author    : Chen Ji
 # Email     : fzls.zju@gmail.com
 # -------------------------------
+from math import pow
+
 import pytest
 
 from network import set_last_response_info
@@ -162,5 +164,69 @@ def test_check_some_exception():
 
 
 def test_is_act_expired():
-    assert is_act_expired("2000-02-23 23:59:59", "%Y-%m-%d %H:%M:%S") is True
-    assert is_act_expired("9021-02-23 23:59:59", "%Y-%m-%d %H:%M:%S") is False
+    assert is_act_expired("2021-08-05 12:00:00", now=now_for_test) is True
+    assert is_act_expired("2021-08-06 12:00:00", now=now_for_test) is False
+    assert is_act_expired("2021-08-06 12:00:01", now=now_for_test) is False
+
+
+def test_will_act_expired_in():
+    assert will_act_expired_in("2021-08-16 00:00:00", datetime.timedelta(days=10), now=now_for_test) is True
+    assert will_act_expired_in("2021-08-17 00:00:00", datetime.timedelta(days=10), now=now_for_test) is False
+
+
+def test_get_remaining_time():
+    assert get_remaining_time("2021-08-17 00:00:00", now=now_for_test) == datetime.timedelta(days=10, hours=12)
+
+
+def test_get_past_time():
+    assert get_past_time("2021-08-05 00:00:00", now=now_for_test) == datetime.timedelta(days=1, hours=12)
+
+
+def test_time_less():
+    assert time_less("2021-08-16 00:00:00", "2021-08-16 00:00:00") is False
+    assert time_less("2021-08-16 00:00:00", "2021-08-06 00:00:00") is False
+    assert time_less("2021-08-06 00:00:00", "2021-08-16 00:00:00") is True
+
+
+def test_parse_time():
+    assert parse_time("2021-08-06 12:00:00") == now_for_test
+
+
+def test_parse_timestamp():
+    assert parse_timestamp(1628222400.0) == now_for_test
+
+
+def test_format_time():
+    assert format_time(now_for_test) == "2021-08-06 12:00:00"
+
+
+def test_format_now():
+    assert format_now(now=now_for_test) == "2021-08-06 12:00:00"
+
+
+def test_format_timestamp():
+    assert format_timestamp(1628222400.0) == "2021-08-06 12:00:00"
+
+
+def test_bytes_size():
+    assert KiB == int(pow(1024, 1))
+    assert MiB == int(pow(1024, 2))
+    assert GiB == int(pow(1024, 3))
+    assert TiB == int(pow(1024, 4))
+    assert PiB == int(pow(1024, 5))
+    assert EiB == int(pow(1024, 6))
+    assert ZiB == int(pow(1024, 7))
+    assert YiB == int(pow(1024, 8))
+
+
+def test_human_readable_size():
+    assert human_readable_size(512) == "512.0B"
+    assert human_readable_size(512 * KiB) == "512.0KiB"
+    assert human_readable_size(512 * MiB) == "512.0MiB"
+    assert human_readable_size(512 * GiB) == "512.0GiB"
+    assert human_readable_size(512 * TiB) == "512.0TiB"
+    assert human_readable_size(512 * PiB) == "512.0PiB"
+    assert human_readable_size(512 * EiB) == "512.0EiB"
+    assert human_readable_size(512 * ZiB) == "512.0ZiB"
+    assert human_readable_size(512 * YiB) == "512.0YiB"
+    assert human_readable_size(51200 * YiB) == "51200.0YiB"

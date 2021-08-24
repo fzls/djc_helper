@@ -1321,6 +1321,18 @@ class AccountConfigUi(QWidget):
         for exchange_item in cfg.xinyue_operations:
             self.xinyue_exchange_items[exchange_item.unique_key()] = XinyueOperationConfigUi(form_layout, exchange_item)
 
+        # -------------- 区域：心悦app --------------
+        self.collapsible_box_xinyue_app, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦app", top_layout)
+
+        self.btn_show_xinyue_app_guide = create_pushbutton("点击查看心悦app的加密http请求体获取方式（相当复杂，建议手动打开app领取，不信邪可以点开试试-。-）", "cyan")
+        self.btn_show_xinyue_app_guide.clicked.connect(self.show_xinyue_app_guide)
+        add_row(form_layout, "", self.btn_show_xinyue_app_guide)
+
+        self.try_set_default_xinyue_app_operations_for_cfg(cfg)
+        self.xinyue_app_operations = {}
+        for operation in cfg.xinyue_app_operations:
+            self.xinyue_app_operations[operation.name] = XinYueAppOperationConfigUi(form_layout, operation)
+
         # -------------- 区域：集卡 --------------
         self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
@@ -1400,10 +1412,36 @@ class AccountConfigUi(QWidget):
 
             exchange_item.update_config(item_cfg)
 
+        self.try_set_default_xinyue_app_operations_for_cfg(cfg)
+        for name, operation in self.xinyue_app_operations.items():
+            operation_cfg = cfg.get_xinyue_app_operation_by_name(name)
+            if operation_cfg is None:
+                continue
+
+            operation.update_config(operation_cfg)
+
         self.ark_lottery.update_config(cfg.ark_lottery)
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         self.hello_voice.update_config(cfg.hello_voice)
+
+    def show_xinyue_app_guide(self):
+        report_click_event("show_xinyue_app_guide")
+        show_message("获取方式", (
+            "以下流程相当复杂，需要了解【https抓包、手机抓包、调试】等背景知识，建议手动打开心悦app领取，不信邪可以按下面流程操作试试-。-\n"
+            "\n"
+            "抓包获取http body，以下流程以fiddler为例，具体流程或其他抓包软件的操作流程请自行根据各个环节关键词去百度学习\n"
+            "\n"
+            "1. 使用fiddler抓取手机心悦app中G分兑换的所有请求\n"
+            "2. 从请求中找到请求body大小为150左右的那个请求（一般就是点击兑换后抓取到的第一个请求）\n"
+            "3. 右侧点Inspector/HexView，选中Http Body部分的字节码（未标蓝部分），右击Copy/Copy as 0x##，然后粘贴出来，将其中的bytes复制到下列对应数组位置\n"
+            "4. 对每个需要的兑换（如复活币、霸王契约）进行1/2/3步骤的操作（ps：每个兑换当天只能完成一次，如果当天抓失败了，就要第二天重试）\n"
+            "\n"
+            "5. 举例：\n"
+            "5.1 假设复制出的结果为 byte[] arrOutput = { 0x58, 0x59, 0x01, 0x00, 0x00 };\n"
+            "5.2 复制出bytes部分： 0x58, 0x59, 0x01, 0x00, 0x00\n"
+            "5.3 粘贴以上内容到配置工具对应兑换的加密请求体输入框中\n"
+        ))
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
         all_item_ids = set()
@@ -1453,6 +1491,27 @@ class AccountConfigUi(QWidget):
                 continue
 
             cfg.xinyue_operations.append(item)
+
+    def try_set_default_xinyue_app_operations_for_cfg(self, cfg: AccountConfig):
+        all_operations = set()
+        for operation in cfg.xinyue_app_operations:
+            all_operations.add(operation.name)
+
+        # 特殊处理下心悦app兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
+        default_operations = [
+            ("兑换复活币", ""),
+            ("兑换雷米", ""),
+            ("兑换霸王契约", ""),
+        ]
+        for name, encrypted_raw_http_body in default_operations:
+            operation = XinYueAppOperationConfig()
+            operation.name = name
+            operation.encrypted_raw_http_body = encrypted_raw_http_body
+
+            if operation.name in all_operations:
+                continue
+
+            cfg.xinyue_app_operations.append(operation)
 
     def on_login_mode_change(self, text, in_init_step=False):
         disable = text != self.login_mode_bidict.val_to_key['auto_login']
@@ -1735,6 +1794,20 @@ class XinyueOperationConfigUi(QWidget):
 
     def update_config(self, cfg: XinYueOperationConfig):
         cfg.count = self.spinbox_count.value()
+
+
+class XinYueAppOperationConfigUi(QWidget):
+    def __init__(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig, parent=None):
+        super(XinYueAppOperationConfigUi, self).__init__(parent)
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig):
+        self.lineedit_encrypted_raw_http_body = create_lineedit(bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00")
+        add_row(form_layout, f"{cfg.name}", self.lineedit_encrypted_raw_http_body)
+
+    def update_config(self, cfg: XinYueAppOperationConfig):
+        cfg.encrypted_raw_http_body = hex_str_to_bytes_arr(self.lineedit_encrypted_raw_http_body.text())
 
 
 class ArkLotteryConfigUi(QWidget):

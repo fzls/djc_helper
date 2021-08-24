@@ -468,6 +468,13 @@ class AccountConfig(ConfigInterface):
 
         return None
 
+    def get_xinyue_app_operation_by_name(self, name: str) -> Optional[XinYueAppOperationConfig]:
+        for operation in self.xinyue_app_operations:
+            if operation.name == name:
+                return operation
+
+        return None
+
     def qq(self) -> str:
         return uin2qq(self.account_info.uin)
 

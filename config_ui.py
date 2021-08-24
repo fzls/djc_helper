@@ -1314,7 +1314,7 @@ class AccountConfigUi(QWidget):
             self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
 
         # -------------- 区域：心悦特权专区兑换 --------------
-        self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
+        self.collapsible_box_xinyue_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
 
         self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
         self.xinyue_exchange_items = {}

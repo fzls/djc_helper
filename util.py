@@ -1074,6 +1074,20 @@ def pause():
     os.system(pause_cmd)
 
 
+def bytes_arr_to_hex_str(bytes_arr: List[int]) -> str:
+    """
+    [0x58, 0x59, 0x01, 0x00, 0x00] => "0x58, 0x59, 0x01, 0x00, 0x00"
+    """
+    return ", ".join("0x%02x" % b for b in bytes_arr)
+
+
+def hex_str_to_bytes_arr(bytes_str: str) -> List[int]:
+    """
+    "0x58, 0x59, 0x01, 0x00, 0x00" => [0x58, 0x59, 0x01, 0x00, 0x00]
+    """
+    return eval(f"[{bytes_str}]")
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

@@ -27,7 +27,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-07-09 00:00:00", "2021-08-14 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2021-08-24 00:00:00", "2021-09-24 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-07-08 00:00:00", "2021-08-09 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-08-20 00:00:00", "2021-09-19 23:59:59"),
@@ -59,6 +59,7 @@ act_name_to_url = {
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/2074_c12d14bf",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2076_a20b408d",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021081815172311351",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -96,7 +97,6 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20210708WG/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
     "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021070614491911111",
 }
 
 

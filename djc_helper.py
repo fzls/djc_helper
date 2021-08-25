@@ -392,6 +392,7 @@ class DjcHelper:
             ("hello语音网页礼包兑换", self.hello_voice),
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
+            ("管家蚊子腿", self.guanjia_new),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -432,7 +433,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("集卡", self.ark_lottery),
-            ("管家蚊子腿", self.guanjia_new),
             ("会员关怀", self.dnf_vip_mentor),
         ]
 
@@ -2891,7 +2891,7 @@ class DjcHelper:
     #   1. 打开新活动的页面 get_act_url("管家蚊子腿")
     #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
     #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
-    guanjia_new_act_id = "2021070614491911111"  # 活动ID
+    guanjia_new_act_id = "2021081815172311351"  # 活动ID
     # note: 4. 按照下面的顺序依次点击对应活动按钮，最后按顺序将请求中的lid复制出来
     guanjia_new_gift_id_special_rights = "48"  # 电脑管家特权礼包
     guanjia_new_gift_id_sign_in_2_days = "50"  # 连续签到2天礼包
@@ -2902,10 +2902,8 @@ class DjcHelper:
     # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
     guanjia_new_lottery_gifts_act_id = "75"  # 抽奖活动ID
 
-    # note: 5. 启用时取消注释 fetch_guanjia_openid 中开关，废弃时则注释掉
-    # note: 6. 调整urls中 管家蚊子腿 的起止时间
-    # note: 7. 调整config_ui中管家开关
-    # note: 8. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
+    # note: 5. 调整urls中 管家蚊子腿 的起止时间
+    # note: 6. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
     @try_except()
     def guanjia_new(self):
         show_head_line("管家蚊子腿")
@@ -5839,12 +5837,12 @@ if __name__ == '__main__':
         # djcHelper.dnf_xinyue()
         # djcHelper.maoxian()
         # djcHelper.dnf_welfare()
-        # djcHelper.guanjia_new()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_bbs()
         # djcHelper.colg_signin()
         # djcHelper.ark_lottery()
         # djcHelper.hello_voice()
         # djcHelper.majieluo()
-        djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_super_vip()
+        # djcHelper.dnf_yellow_diamond()
+        # djcHelper.dnf_super_vip()
+        djcHelper.guanjia_new()

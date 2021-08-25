@@ -73,8 +73,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     logger.info(color("bold_yellow") + "清除一些无需发布的内容")
     dir_to_filenames_need_remove = {
         ".": [
-            "requirements.txt",
-            "requirements_dev.txt",
+            *list(path.name for path in pathlib.Path(".").glob('requirements*.txt')),
         ],
         "utils": [
             "logs", ".db", ".cached", ".first_run", ".log.filename",

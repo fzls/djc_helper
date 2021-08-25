@@ -431,7 +431,7 @@ class QQLogin():
                 self.login_mode_guanjia: (
                     self._login_guanjia,
                     "电脑管家（如电脑管家蚊子腿需要用到，完整列表参见示例配置）",
-                    get_act_url("管家蚊子腿-旧版"),
+                    get_act_url("管家蚊子腿"),
                 ),
                 self.login_mode_wegame: (
                     self._login_wegame,
@@ -566,22 +566,22 @@ class QQLogin():
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start(get_act_url("管家蚊子腿-旧版"))
+                self.open_url_on_start(get_act_url("管家蚊子腿"))
 
             self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
-            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "dologin")))
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【登录】"))
 
             logger.info("等待5秒，确保加载完成")
             time.sleep(5)
 
             logger.info("点击登录按钮")
-            self.driver.find_element(By.ID, "dologin").click()
+            self.driver.find_element(By.ID, "layer72").click()
 
-            logger.info("等待#login_ifr显示出来并切换")
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "login_ifr")))
-            loginIframe = self.driver.find_element_by_id("login_ifr")
+            logger.info("等待2秒，确保#login_ifr显示出来并切换")
+            time.sleep(2)
+            loginIframe = list(filter(lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property('src'), self.driver.find_elements_by_tag_name("iframe")))[0]
             self.driver.switch_to.frame(loginIframe)
 
             logger.info("等待#login_ifr#ptlogin_iframe加载完毕并切换")
@@ -591,7 +591,7 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待#logined的div可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "logined")))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【注销】"))
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 

@@ -965,13 +965,6 @@ class MajieluoConfigUi(QFrame):
         btn_show_majieluo_usage.clicked.connect(self.show_majieluo_usage)
         top_layout.addWidget(QHLine())
 
-        if use_by_myself():
-            btn_login_dahao_and_xiaohao = create_pushbutton("步骤0：预先登录设定的大号和小号，加快后续流程速度（点击后将登录对应账号，可能界面会没反应，请耐心等待）", "DarkOrange")
-            top_layout.addWidget(btn_login_dahao_and_xiaohao)
-
-            btn_login_dahao_and_xiaohao.clicked.connect(self.login_dahao_and_xiaohao)
-            top_layout.addWidget(QHLine())
-
         # -------------- 区域：基础配置 --------------
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
@@ -1031,25 +1024,6 @@ class MajieluoConfigUi(QFrame):
     def show_majieluo_usage(self):
         webbrowser.open("https://bbs.colg.cn/thread-8255531-1-1.html")
         report_click_event("majieluo_tool")
-
-    def login_dahao_and_xiaohao(self):
-        cfg = self.config_ui.to_config()
-
-        dahao_index = int(self.lineedit_dahao_index.text())
-        xiaohao_indexes = [int(index) for index in str_to_list(self.lineedit_xiaohao_indexes.text())]
-
-        indexes = [dahao_index, *xiaohao_indexes]
-
-        for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
-            account_config = cfg.account_configs[account_index - 1]
-
-            djcHelper = DjcHelper(account_config, cfg.common)
-
-            djcHelper.fetch_pskey()
-            djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list()
-
-        show_message("提示", f"已全部登录完成，请点击发送礼盒按钮来开始发送流程~")
 
     def send_box_url(self):
         cfg = self.config_ui.to_config()

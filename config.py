@@ -478,6 +478,13 @@ class AccountConfig(ConfigInterface):
     def qq(self) -> str:
         return uin2qq(self.account_info.uin)
 
+    def is_xinyue_app_operation_not_set(self) -> bool:
+        for op in self.xinyue_app_operations:
+            if len(op.encrypted_raw_http_body) != 0:
+                return False
+
+        return True
+
 
 class LoginConfig(ConfigInterface):
     def __init__(self):

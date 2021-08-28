@@ -1190,6 +1190,67 @@ class ResponseInfo(ConfigInterface):
         self.text = ""
 
 
+class XiaojiangyouInfo(ConfigInterface):
+    def __init__(self):
+        self.source = "xy_games"
+        self.user_id = "1054073896"
+        self.game_id = "1"
+        self.acctype = "qq"
+        self.intervene_msg = XiaojiangyouInterveneMsg()
+        self.intervene_msg_count = 0
+        self.hot_question = []
+        self.user_info = XiaojiangyouUserInfo()
+        self.role_info = XiaojiangyouRoleInfo()
+        self.history_page_count = 10
+        self.certificate = "600eac0a8be98459477c30971c23f25cd63de6cc"
+        self.user_profile = {
+            "robot_use_status": 1,
+            "wx_img": ""
+        }
+
+
+class XiaojiangyouInterveneMsg(ConfigInterface):
+    def __init__(self):
+        self.answer = []
+        self.option = []
+
+
+class XiaojiangyouUserInfo(ConfigInterface):
+    def __init__(self):
+        self.headimgurl = ""
+        self.nickname = ""
+        self.level = 0
+
+
+class XiaojiangyouRoleInfo(ConfigInterface):
+    def __init__(self):
+        self.source = "xy_games"
+        self.game_id = "1"
+        self.role_id = "6b712e00f376b8b46c4db8aab2bcba19"
+        self.role_name = "风之凌殇呀"
+        self.system_id = 2
+        self.region_id = 1
+        self.area_id = 1
+        self.plat_id = 1
+        self.partition_id = "11"
+        self.acctype = ""
+
+
+class XiaojiangyouUserProfile(ConfigInterface):
+    def __init__(self):
+        self.robot_use_status = 1
+        self.wx_img = ""
+
+
+class XiaojiangyouWeeklyPackageInfo(ConfigInterface):
+    def __init__(self):
+        self.ams_id = "IEGAMS-369679-398942"
+        self.package_group_id = "1550778"
+        self.card_image = "//ossweb-img.qq.com/images/xiaoyue/pc/dnf/zhoulb.jpg"
+        self.tool_id = 1371
+        self.token = "0c316d84b848b72985eade54a57d1c31"
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

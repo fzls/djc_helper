@@ -1,15 +1,20 @@
+import datetime
 import string
 from multiprocessing import Pool
-from urllib.parse import quote_plus
+from urllib import parse
+from urllib.parse import quote, quote_plus
 
 import pyperclip
+import requests
 
 import json_parser
 from black_list import check_in_black_list
 from dao import *
+from dao import XiaojiangyouInfo, XiaojiangyouWeeklyPackageInfo
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
+from network import jsonp2json
 from qq_login import GithubActionLoginException, LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
@@ -379,6 +384,7 @@ class DjcHelper:
             ("心悦猫咪", self.xinyue_cat),
             ("心悦app周礼包", self.xinyue_weekly_gift),
             ("dnf论坛签到", self.dnf_bbs),
+            ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
 
     def payed_activities(self) -> List[Tuple[str, Callable]]:
@@ -4552,6 +4558,133 @@ class DjcHelper:
 
         logger.info(color("bold_cyan") + "colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品")
 
+    # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
+    @try_except()
+    def xiaojiangyou(self):
+        show_head_line("小酱油周礼包和生日礼包")
+        self.show_not_ams_act_info("小酱油周礼包和生日礼包")
+
+        if not self.cfg.function_switches.get_xiaojiangyou or self.disable_most_activities():
+            logger.warning("未启用小酱油周礼包和生日礼包功能，将跳过")
+            return
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        uin_skey_cookie = f"uin={self.cfg.account_info.uin}; skey={self.cfg.account_info.skey}; "
+        roleNameUnquote = roleinfo.roleName
+        partition_id = roleinfo.serviceID
+
+        roleName = quote(roleNameUnquote)
+        base_headers = {
+            "Referer": "https://tool.helper.qq.com/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.78",
+            "Cookie": f"{uin_skey_cookie}",
+        }
+
+        ts = int(datetime.datetime.now().timestamp() * 1000)
+
+        session = requests.session()
+
+        def encode_str(s: str) -> str:
+            """
+            将字符串str编码为 s${str的utf编码长度}$"{str}";
+            如 test 编码为 s$4$"test";
+            """
+            return f's${utf8len(s)}$"{s}";'
+
+        def utf8len(s: str) -> int:
+            return len(s.encode('utf-8'))
+
+        def get_role_id() -> str:
+            res = session.get(f"https://user.game.qq.com/php/helper/xychat/open/redirect/1/2?areaId={partition_id}&roleName={roleName}")
+            parsed = parse.urlparse(res.url)
+            role_id = parse.parse_qs(parsed.query)['role_id'][0]
+
+            return role_id
+
+        def query_info() -> XiaojiangyouInfo:
+            res = session.get(f"https://xyapi.game.qq.com/xiaoyue/service/async?_={ts}&callback=jQuery171004811813596127945_{ts}")
+            raw_info = jsonp2json(res.text, True, True)
+            info = XiaojiangyouInfo().auto_update_config(raw_info["result"])
+
+            return info
+
+        def init_page():
+            res = session.get(f"https://xyapi.game.qq.com/xiaoyue/service/init?_={ts}&callback=jQuery171004811813596127945_{ts}&_={ts}")
+            raw_info = jsonp2json(res.text, True, True)
+            logger.info(f"{raw_info}")
+
+        def query_activities(certificate: str):
+            question = quote("福利活动")
+            question_id = "11104840"
+            robot_type = "2"
+            res = session.get(
+                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
+            raw_info = jsonp2json(res.text, True, True)
+            logger.info(f"查询福利活动 - {raw_info}")
+
+        def take_weekly_gift(certificate: str):
+            question = quote("每周礼包")
+            question_id = "11175574"
+            robot_type = "0"
+
+            res = session.get(
+                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
+            raw_weekly_package_info = jsonp2json(res.text, True, True)
+            weekly_package_info = XiaojiangyouWeeklyPackageInfo().auto_update_config(raw_weekly_package_info["result"]["answer"][1]["content"])
+
+            pi = weekly_package_info
+            res = session.get(
+                f"https://xyapi.game.qq.com/xiaoyue/helper/package/get?_={ts}&token={pi.token}&ams_id={pi.ams_id}&package_group_id={pi.package_group_id}&tool_id={pi.tool_id}&certificate={certificate}&callback=jQuery171039455388263754454_{ts}&_={ts}")
+            raw_info = jsonp2json(res.text, True, True)
+            logger.info(f"领取每周礼包 - {raw_info}")
+
+        def take_birthday_gift(certificate: str):
+            question = quote("生日礼包")
+            question_id = "11090757"
+            robot_type = "0"
+
+            res = session.get(
+                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={info.certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
+            raw_info = jsonp2json(res.text, True, True)
+            logger.info(f"领取生日礼包 - {raw_info}")
+
+        # ------------------------- 准备阶段 -------------------------
+        # 获取roleid
+        session.headers = base_headers
+        role_id = get_role_id()
+
+        # 获取certificate
+        xychat_lumen_role = (
+            'a$10${'
+            's$6$"source";s$8$"xy_games";'
+            's$7$"game_id";s$1$"1";'
+            f's$7$"role_id";{encode_str(role_id)}'
+            f's$9$"role_name";{encode_str(roleNameUnquote)}'
+            's$9$"system_id";s$1$"2";'
+            's$9$"region_id";s$1$"1";'
+            's$7$"area_id";s$1$"1";'
+            's$7$"plat_id";s$1$"1";'
+            f's$12$"partition_id";{encode_str(partition_id)}'
+            's$7$"acctype";s$0$"";'
+            '}'
+        ).replace('$', ':')
+        headers_with_role = {
+            **base_headers,
+
+            "Cookie": f"{uin_skey_cookie}"
+                      "xychat_login_type=qq; "
+                      f"xychat_lumen_role={quote(xychat_lumen_role)}"
+                      "",
+        }
+        session.headers = headers_with_role
+        info = query_info()
+
+        # ------------------------- 正式逻辑 -------------------------
+        take_weekly_gift(info.certificate)
+
+        take_birthday_gift(info.certificate)
+
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()
     def vip_mentor(self):
@@ -5839,10 +5972,10 @@ if __name__ == '__main__':
         # djcHelper.dnf_welfare()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_bbs()
-        # djcHelper.colg_signin()
         # djcHelper.ark_lottery()
         # djcHelper.hello_voice()
         # djcHelper.majieluo()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_super_vip()
-        djcHelper.guanjia_new()
+        # djcHelper.guanjia_new()
+        djcHelper.xiaojiangyou()

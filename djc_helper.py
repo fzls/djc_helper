@@ -4565,46 +4565,7 @@ class DjcHelper:
             return
 
         # ------------------------- 准备各种参数 -------------------------
-        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-
-        uin_skey_cookie = f"uin={self.cfg.account_info.uin}; skey={self.cfg.account_info.skey}; "
-        roleNameUnquote = roleinfo.roleName
-        partition_id = roleinfo.serviceID
-
-        roleName = quote(roleNameUnquote)
-        base_headers = {
-            "Referer": "https://tool.helper.qq.com/",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.78",
-            "Cookie": f"{uin_skey_cookie}",
-        }
-
-        role_id = self.xjy_get_role_id(partition_id, roleName, base_headers)
-
-        xychat_lumen_role = (
-            'a$10${'
-            's$6$"source";s$8$"xy_games";'
-            's$7$"game_id";s$1$"1";'
-            f's$7$"role_id";{self.xjy_encode_str(role_id)}'
-            f's$9$"role_name";{self.xjy_encode_str(roleNameUnquote)}'
-            's$9$"system_id";s$1$"2";'
-            's$9$"region_id";s$1$"1";'
-            's$7$"area_id";s$1$"1";'
-            's$7$"plat_id";s$1$"1";'
-            f's$12$"partition_id";{self.xjy_encode_str(partition_id)}'
-            's$7$"acctype";s$0$"";'
-            '}'
-        ).replace('$', ':')
-
-        self.xjy_headers_with_role = {
-            **base_headers,
-
-            "Cookie": f"{uin_skey_cookie}"
-                      "xychat_login_type=qq; "
-                      f"xychat_lumen_role={quote(xychat_lumen_role)}"
-                      "",
-        }
-
-        self.xjy_info = self.xjy_query_info()
+        self.xjy_prepare_env()
 
         # ------------------------- 封装的各种操作函数 -------------------------
         def _get(ctx: str, url: str, print_res=True, **params):
@@ -4635,6 +4596,50 @@ class DjcHelper:
         # ------------------------- 正式逻辑 -------------------------
         take_weekly_gift()
         take_birthday_gift()
+
+    def xjy_prepare_env(self):
+        logger.info("准备小酱油所需的各个参数，可能会需要几秒~")
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        uin_skey_cookie = f"uin={self.cfg.account_info.uin}; skey={self.cfg.account_info.skey}; "
+        roleNameUnquote = roleinfo.roleName
+        partition_id = roleinfo.serviceID
+
+        roleName = quote(roleNameUnquote)
+        self.xjy_base_headers = {
+            "Referer": "https://tool.helper.qq.com/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.78",
+            "Cookie": f"{uin_skey_cookie}",
+        }
+
+        role_id = self.xjy_get_role_id(partition_id, roleName, self.xjy_base_headers)
+
+        xychat_lumen_role = (
+            'a$10${'
+            's$6$"source";s$8$"xy_games";'
+            's$7$"game_id";s$1$"1";'
+            f's$7$"role_id";{self.xjy_encode_str(role_id)}'
+            f's$9$"role_name";{self.xjy_encode_str(roleNameUnquote)}'
+            's$9$"system_id";s$1$"2";'
+            's$9$"region_id";s$1$"1";'
+            's$7$"area_id";s$1$"1";'
+            's$7$"plat_id";s$1$"1";'
+            f's$12$"partition_id";{self.xjy_encode_str(partition_id)}'
+            's$7$"acctype";s$0$"";'
+            '}'
+        ).replace('$', ':')
+
+        self.xjy_headers_with_role = {
+            **self.xjy_base_headers,
+
+            "Cookie": f"{uin_skey_cookie}"
+                      "xychat_login_type=qq; "
+                      f"xychat_lumen_role={quote(xychat_lumen_role)}"
+                      "",
+        }
+
+        self.xjy_info = self.xjy_query_info()
 
     def xjy_get_role_id(self, areaId: str, roleName: str, headers: dict) -> str:
         res = requests.get(self.format(self.urls.xiaojiangyou_get_role_id, areaId=areaId, roleName=roleName), headers=headers)

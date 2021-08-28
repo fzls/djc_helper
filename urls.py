@@ -35,6 +35,7 @@ not_ams_activities = [
     newAmsActInfo("集卡", "2021-07-20 00:00:00", "2021-08-20 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
+    newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
 ]
 
 act_name_to_url = {
@@ -48,6 +49,7 @@ act_name_to_url = {
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
+    "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
 
     # 短期付费活动
     "DNF助手编年史": "dnf助手左侧栏",

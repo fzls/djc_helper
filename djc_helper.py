@@ -1,11 +1,8 @@
-import datetime
 import string
 from multiprocessing import Pool
-from urllib import parse
 from urllib.parse import quote, quote_plus
 
 import pyperclip
-import requests
 
 import json_parser
 from black_list import check_in_black_list
@@ -14,7 +11,6 @@ from dao import XiaojiangyouInfo, XiaojiangyouWeeklyPackageInfo
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from network import jsonp2json
 from qq_login import GithubActionLoginException, LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
@@ -4568,6 +4564,7 @@ class DjcHelper:
             logger.warning("未启用小酱油周礼包和生日礼包功能，将跳过")
             return
 
+        # ------------------------- 准备各种参数 -------------------------
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
         uin_skey_cookie = f"uin={self.cfg.account_info.uin}; skey={self.cfg.account_info.skey}; "
@@ -4581,95 +4578,24 @@ class DjcHelper:
             "Cookie": f"{uin_skey_cookie}",
         }
 
-        ts = int(datetime.datetime.now().timestamp() * 1000)
+        role_id = self.xjy_get_role_id(partition_id, roleName, base_headers)
 
-        session = requests.session()
-
-        def encode_str(s: str) -> str:
-            """
-            将字符串str编码为 s${str的utf编码长度}$"{str}";
-            如 test 编码为 s$4$"test";
-            """
-            return f's${utf8len(s)}$"{s}";'
-
-        def utf8len(s: str) -> int:
-            return len(s.encode('utf-8'))
-
-        def get_role_id() -> str:
-            res = session.get(f"https://user.game.qq.com/php/helper/xychat/open/redirect/1/2?areaId={partition_id}&roleName={roleName}")
-            parsed = parse.urlparse(res.url)
-            role_id = parse.parse_qs(parsed.query)['role_id'][0]
-
-            return role_id
-
-        def query_info() -> XiaojiangyouInfo:
-            res = session.get(f"https://xyapi.game.qq.com/xiaoyue/service/async?_={ts}&callback=jQuery171004811813596127945_{ts}")
-            raw_info = jsonp2json(res.text, True, True)
-            info = XiaojiangyouInfo().auto_update_config(raw_info["result"])
-
-            return info
-
-        def init_page():
-            res = session.get(f"https://xyapi.game.qq.com/xiaoyue/service/init?_={ts}&callback=jQuery171004811813596127945_{ts}&_={ts}")
-            raw_info = jsonp2json(res.text, True, True)
-            logger.info(f"{raw_info}")
-
-        def query_activities(certificate: str):
-            question = quote("福利活动")
-            question_id = "11104840"
-            robot_type = "2"
-            res = session.get(
-                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
-            raw_info = jsonp2json(res.text, True, True)
-            logger.info(f"查询福利活动 - {raw_info}")
-
-        def take_weekly_gift(certificate: str):
-            question = quote("每周礼包")
-            question_id = "11175574"
-            robot_type = "0"
-
-            res = session.get(
-                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
-            raw_weekly_package_info = jsonp2json(res.text, True, True)
-            weekly_package_info = XiaojiangyouWeeklyPackageInfo().auto_update_config(raw_weekly_package_info["result"]["answer"][1]["content"])
-
-            pi = weekly_package_info
-            res = session.get(
-                f"https://xyapi.game.qq.com/xiaoyue/helper/package/get?_={ts}&token={pi.token}&ams_id={pi.ams_id}&package_group_id={pi.package_group_id}&tool_id={pi.tool_id}&certificate={certificate}&callback=jQuery171039455388263754454_{ts}&_={ts}")
-            raw_info = jsonp2json(res.text, True, True)
-            logger.info(f"领取每周礼包 - {raw_info}")
-
-        def take_birthday_gift(certificate: str):
-            question = quote("生日礼包")
-            question_id = "11090757"
-            robot_type = "0"
-
-            res = session.get(
-                f"https://xyapi.game.qq.com/xiaoyue/service/ask?_={ts}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={info.certificate}&callback=jQuery171004811813596127945_{ts}&_={ts}")
-            raw_info = jsonp2json(res.text, True, True)
-            logger.info(f"领取生日礼包 - {raw_info}")
-
-        # ------------------------- 准备阶段 -------------------------
-        # 获取roleid
-        session.headers = base_headers
-        role_id = get_role_id()
-
-        # 获取certificate
         xychat_lumen_role = (
             'a$10${'
             's$6$"source";s$8$"xy_games";'
             's$7$"game_id";s$1$"1";'
-            f's$7$"role_id";{encode_str(role_id)}'
-            f's$9$"role_name";{encode_str(roleNameUnquote)}'
+            f's$7$"role_id";{self.xjy_encode_str(role_id)}'
+            f's$9$"role_name";{self.xjy_encode_str(roleNameUnquote)}'
             's$9$"system_id";s$1$"2";'
             's$9$"region_id";s$1$"1";'
             's$7$"area_id";s$1$"1";'
             's$7$"plat_id";s$1$"1";'
-            f's$12$"partition_id";{encode_str(partition_id)}'
+            f's$12$"partition_id";{self.xjy_encode_str(partition_id)}'
             's$7$"acctype";s$0$"";'
             '}'
         ).replace('$', ':')
-        headers_with_role = {
+
+        self.xjy_headers_with_role = {
             **base_headers,
 
             "Cookie": f"{uin_skey_cookie}"
@@ -4677,13 +4603,58 @@ class DjcHelper:
                       f"xychat_lumen_role={quote(xychat_lumen_role)}"
                       "",
         }
-        session.headers = headers_with_role
-        info = query_info()
+
+        self.xjy_info = self.xjy_query_info()
+
+        # ------------------------- 封装的各种操作函数 -------------------------
+        def _get(ctx: str, url: str, print_res=True, **params):
+            return self.get(ctx, url, **params, print_res=print_res, extra_headers=self.xjy_headers_with_role, is_jsonp=True, is_normal_jsonp=True)
+
+        def init_page():
+            raw_info = _get("初始化页面", self.urls.xiaojiangyou_init_page, print_res=False)
+
+        def _ask_question(question: str, question_id: str, robot_type: str, print_res=True) -> dict:
+            question_quoted = quote(question)
+
+            raw_info = _get(question, self.urls.xiaojiangyou_ask_question, question=question_quoted, question_id=question_id, robot_type=robot_type, certificate=self.xjy_info.certificate, print_res=print_res)
+
+            return raw_info
+
+        def query_activities():
+            return _ask_question("福利活动", "11104840", "2", print_res=False)
+
+        def take_weekly_gift():
+            raw_weekly_package_info = _ask_question("每周礼包", "11175574", "0", print_res=False)
+            pi = XiaojiangyouWeeklyPackageInfo().auto_update_config(raw_weekly_package_info["result"]["answer"][1]["content"])
+
+            _get("领取每周礼包", self.urls.xiaojiangyou_get_packge, token=pi.token, ams_id=pi.ams_id, package_group_id=pi.package_group_id, tool_id=pi.tool_id, certificate=self.xjy_info.certificate)
+
+        def take_birthday_gift():
+            return _ask_question("生日礼包", "11090757", "0")
 
         # ------------------------- 正式逻辑 -------------------------
-        take_weekly_gift(info.certificate)
+        take_weekly_gift()
+        take_birthday_gift()
 
-        take_birthday_gift(info.certificate)
+    def xjy_get_role_id(self, areaId: str, roleName: str, headers: dict) -> str:
+        res = requests.get(self.format(self.urls.xiaojiangyou_get_role_id, areaId=areaId, roleName=roleName), headers=headers)
+        parsed = parse.urlparse(res.url)
+        role_id = parse.parse_qs(parsed.query)['role_id'][0]
+
+        return role_id
+
+    def xjy_query_info(self) -> XiaojiangyouInfo:
+        raw_info = self.get("获取小酱油信息", self.urls.xiaojiangyou_query_info, extra_headers=self.xjy_headers_with_role, is_jsonp=True, is_normal_jsonp=True, print_res=False)
+        info = XiaojiangyouInfo().auto_update_config(raw_info["result"])
+
+        return info
+
+    def xjy_encode_str(self, s: str) -> str:
+        """
+        将字符串str编码为 s${str的utf编码长度}$"{str}";
+        如 test 编码为 s$4$"test";
+        """
+        return f's${utf8len(s)}$"{s}";'
 
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()

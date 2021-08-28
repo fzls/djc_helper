@@ -31,18 +31,22 @@ class Network:
             "Cookie": self.base_cookies,
         }
 
-    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None):
+    def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None,
+            extra_headers: Optional[Dict[str, str]] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
                 "Cookie": cookies,
             }}
+            if extra_headers is not None:
+                get_headers = {**get_headers, **extra_headers}
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
         res = try_request(request_fn, self.common_cfg.retry, check_fn)
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
-    def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None):
+    def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None,
+             extra_headers: Optional[Dict[str, str]] = None):
         def request_fn():
             cookies = self.base_cookies + extra_cookies
             content_type = "application/x-www-form-urlencoded"
@@ -53,6 +57,8 @@ class Network:
                 "Content-Type": content_type,
                 "Cookie": cookies,
             }}
+            if extra_headers is not None:
+                post_headers = {**post_headers, **extra_headers}
             return requests.post(url, data=data, json=json, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
         res = try_request(request_fn, self.common_cfg.retry, check_fn)

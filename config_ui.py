@@ -1660,6 +1660,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_maoxian = create_checkbox(cfg.get_maoxian)
         add_row(form_layout, "勇士的冒险补给", self.checkbox_get_maoxian)
 
+        self.checkbox_get_xiaojiangyou = create_checkbox(cfg.get_xiaojiangyou)
+        add_row(form_layout, "小酱油周礼包和生日礼包", self.checkbox_get_xiaojiangyou)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1719,6 +1722,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_anniversary = self.checkbox_get_dnf_anniversary.isChecked()
         cfg.get_dnf_kol = self.checkbox_get_dnf_kol.isChecked()
         cfg.get_maoxian = self.checkbox_get_maoxian.isChecked()
+        cfg.get_xiaojiangyou = self.checkbox_get_xiaojiangyou.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

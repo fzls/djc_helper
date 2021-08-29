@@ -16,8 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fzls/djc_helper:latest
+      env:
+        DJC_HELPER_CONFIG_TOML: "$CODECOV_TOKEN"
     steps:
          - name: Run
            run: |
+             printenv
              cd /djc_helper
              python3 main.py

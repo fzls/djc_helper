@@ -4571,6 +4571,7 @@ class DjcHelper:
 
         def init_page():
             raw_info = _get("初始化页面", self.urls.xiaojiangyou_init_page, print_res=False)
+            return raw_info
 
         def _ask_question(question: str, question_id: str, robot_type: str, print_res=True) -> dict:
             question_quoted = quote(question)

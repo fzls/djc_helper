@@ -1,3 +1,4 @@
+.git/
 .venv/
 .venv_dev/
 releases/
@@ -8,6 +9,7 @@ utils/npp_portable/
 .idea/
 _update_temp_dir/
 card_secrets/
+reversi_images
 
 .coverage
 .use_by_myself
@@ -18,6 +20,7 @@ add_new_buy_auto_updater_user.py
 pay_by_month.py
 test.py
 upload_cookie.json
+reversi.py
 
 **/*.mypy_cache
 **/*.pytest_cache

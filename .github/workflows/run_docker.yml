@@ -18,3 +18,8 @@ jobs:
       image: fzls/djc_helper:latest
       env:
         DJC_HELPER_CONFIG_TOML: $DJC_HELPER_CONFIG_TOML
+    steps:
+         - name: Run
+           run: |
+             cd /djc_helper
+             python3 main.py

@@ -2,8 +2,6 @@ import string
 from multiprocessing import Pool
 from urllib.parse import quote, quote_plus
 
-import pyperclip
-
 import json_parser
 from black_list import check_in_black_list
 from dao import *
@@ -97,8 +95,8 @@ class DjcHelper:
         if os.path.isfile(localCfgFile):
             cfgFile = localCfgFile
         subprocess.Popen(f"utils/npp_portable/notepad++.exe -n53 {cfgFile}")
-        # 复制js代码到剪贴板，方便复制
-        pyperclip.copy(js_code)
+        # # 复制js代码到剪贴板，方便复制
+        # pyperclip.copy(js_code)
         # 打开活动界面
         os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
         # 提示

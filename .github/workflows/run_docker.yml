@@ -16,8 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fzls/djc_helper:latest
-      env:
-        DJC_HELPER_CONFIG_TOML: "$DJC_HELPER_CONFIG_TOML"
     steps:
          - name: Run
            run: |

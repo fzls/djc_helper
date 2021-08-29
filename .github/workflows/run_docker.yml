@@ -1,4 +1,4 @@
-name: Run On Ubuntu
+name: Run On Docker
 
 on:
   workflow_dispatch:

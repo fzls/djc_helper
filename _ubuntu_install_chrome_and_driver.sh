@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo dpkg -i google-chrome*.deb
-sudo apt-get install -f -y
+sudo apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -f -y
 sudo mv chromedriver /usr/local/bin/
 sudo chmod +x /usr/local/bin/chromedriver
 

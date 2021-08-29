@@ -1087,6 +1087,7 @@ def hex_str_to_bytes_arr(bytes_str: str) -> List[int]:
     """
     return eval(f"[{bytes_str}]")
 
+
 def utf8len(s: str) -> int:
     return len(s.encode('utf-8'))
 

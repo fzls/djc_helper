@@ -5,13 +5,13 @@ appVersion = 106
 guanjia_skey_version = 2
 
 # 特殊处理腾讯云函数
-base_dir = ""
+base_dir_prefix = ""
 if os.getenv("TENCENTCLOUD_RUNENV") is not None:
-    base_dir = "/tmp/"
+    base_dir_prefix = "/tmp/"
 
 # 定义一些目录
-db_top_dir = base_dir + ".db"
-cached_dir = base_dir + ".cached"
+db_top_dir = base_dir_prefix + ".db"
+cached_dir = base_dir_prefix + ".cached"
 
 downloads_dir = f"{cached_dir}/downloads"
 compressed_temp_dir = f"{cached_dir}/compressed"

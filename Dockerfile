@@ -3,14 +3,18 @@
 FROM ubuntu:20.04
 
 # 安装python3.8
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apt-get update \
+    && apt-get install -y python3 python3-pip \
+    && rm -rf /var/lib/apt/lists/*
 
 # 复制源码
 WORKDIR /djc_helper
 COPY . .
 
 ## 下载chrome和driver
-RUN apt-get update && apt-get install -y sudo
+RUN apt-get update \
+    && apt-get install -y sudo \
+    && rm -rf /var/lib/apt/lists/*
 RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖

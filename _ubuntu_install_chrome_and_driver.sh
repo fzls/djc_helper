@@ -8,5 +8,5 @@ sudo chmod +x /usr/local/bin/chromedriver
 google-chrome --version
 chromedriver --version
 
-rm -rf google-chrome*.deb
-rm -rf chromedriver_linux64.zip
+rm -rf ./google-chrome*.deb
+rm -rf ./chromedriver_linux64.zip

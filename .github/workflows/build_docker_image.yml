@@ -12,14 +12,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      packages: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v2
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: fzls/djc_helper
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -46,6 +44,15 @@ jobs:
           registry: ccr.ccs.tencentyun.com
           username: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_USERNAME }}
           password: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ${{ github.repository }}
+            ghcr.io/${{ github.repository }}
+            ccr.ccs.tencentyun.com/${{ github.repository }}
 
       - name: Build and push
         id: docker_build

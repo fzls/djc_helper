@@ -52,7 +52,7 @@ act_name_to_url = {
     # 短期付费活动
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210705care/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210730care/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",

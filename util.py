@@ -1,7 +1,9 @@
+import base64
 import ctypes
 import datetime
 import hashlib
 import inspect
+import json
 import math
 import os
 import pathlib
@@ -24,6 +26,7 @@ from urllib import parse
 import psutil
 import requests.exceptions
 import selenium.common.exceptions
+import toml
 import urllib3.exceptions
 
 from const import cached_dir
@@ -574,8 +577,38 @@ def is_run_in_github_action():
     return get_config_from_env() != ""
 
 
-def get_config_from_env():
-    return os.environ.get("DJC_HELPER_CONFIG_TOML", "")
+def get_config_from_env() -> str:
+    # 先尝试第一个环境变量，直接获取toml_str
+    toml_str = os.environ.get("DJC_HELPER_CONFIG_TOML")
+    if toml_str is not None:
+        return toml_str
+
+    # 如果对应运行环境不方便设置多行的环境变量，则分别尝试可以单行的编码格式
+    # 1. base64
+    base64_str = os.environ.get("DJC_HELPER_CONFIG_BASE64")
+    if base64_str is not None:
+        return base64_to_toml(base64_str)
+
+    # 2. json
+    json_str = os.environ.get("DJC_HELPER_CONFIG_JSON")
+    if json_str is not None:
+        return json_to_toml(json_str)
+
+    return ""
+
+
+def gen_config_for_github_action_base64(github_action_config_path='config.toml.github_action'):
+    with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
+        with open(f"{github_action_config_path}.base64", 'w', encoding='utf-8') as save_file:
+            save_file.write(base64.standard_b64encode(toml_file.read().encode()).decode())
+
+
+def base64_to_toml(github_action_config_base64: str) -> str:
+    return base64.standard_b64decode(github_action_config_base64.encode()).decode()
+
+
+def json_to_toml(github_action_config_json: str) -> str:
+    return toml.dumps(json.loads(github_action_config_json))
 
 
 def disable_pause_after_run() -> bool:

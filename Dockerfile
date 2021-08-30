@@ -38,4 +38,4 @@ ENV DJC_HELPER_CONFIG_TOML=""
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
 # docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master
 
-CMD [ "python3", "main.py"]
+CMD [ "python3", "-u", "main.py"]

@@ -18,8 +18,8 @@ RUN apt-get update \
 RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖
-RUN python3 -m pip install -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
-RUN pip3 install -i https://pypi.doubanio.com/simple -r requirements_linux.txt
+RUN python3 -m pip install --no-cache-dir -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
+RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
 
 # 可通过以下两种方式传入配置
 # 1. 环境变量（正式环境推荐该方式）

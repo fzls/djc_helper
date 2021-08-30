@@ -2,9 +2,14 @@ name: Build And Push Docker Image
 
 on:
   push:
+    branches:
+      - 'master'
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request:
+    branches:
+      - 'master'
   workflow_dispatch:
 
 jobs:
@@ -47,6 +52,14 @@ jobs:
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
             ccr.ccs.tencentyun.com/${{ github.repository }}
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule,pattern=nightly             # nightly
+            type=ref,event=branch                     # master
+            type=ref,event=pr                         # pr-2
+            type=semver,pattern={{version}}           # 1.2.3
+            type=semver,pattern={{major}}.{{minor}}   # 1.2
+            type=semver,pattern={{major}}             # 1
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

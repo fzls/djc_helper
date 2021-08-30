@@ -4124,14 +4124,7 @@ class DjcHelper:
         def take_gift():
             self.majieluo_op("领取见面礼", "789645")
 
-        if self.cfg.ark_lottery.lucky_dnf_role_id != "":
-            change_bind_role = TemporaryChangeBindRoleInfo()
-            change_bind_role.serviceID = self.cfg.ark_lottery.lucky_dnf_server_id
-            change_bind_role.roleCode = self.cfg.ark_lottery.lucky_dnf_role_id
-            self.temporary_change_bind_and_do("领取马杰洛见面礼", [change_bind_role], self.check_majieluo, take_gift)
-
-        # 保底尝试普通角色领取
-        take_gift()
+        self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
 
         # 马杰洛的特殊任务
         self.majieluo_op("登录游戏 石头*5", "789646")
@@ -5838,6 +5831,19 @@ class DjcHelper:
 
     def qq(self) -> str:
         return uin2qq(self.uin())
+
+    def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable):
+        check_role_func()
+
+        if self.cfg.ark_lottery.lucky_dnf_role_id != "":
+            # 尝试使用配置的幸运角色
+            change_bind_role = TemporaryChangeBindRoleInfo()
+            change_bind_role.serviceID = self.cfg.ark_lottery.lucky_dnf_server_id
+            change_bind_role.roleCode = self.cfg.ark_lottery.lucky_dnf_role_id
+            self.temporary_change_bind_and_do(ctx, [change_bind_role], check_role_func, action_callback)
+
+        # 保底尝试普通角色领取
+        action_callback()
 
 
 def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):

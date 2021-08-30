@@ -7,17 +7,18 @@ RUN apt-get update \
     && apt-get install -y python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制源码
+# 设置工作目录
 WORKDIR /djc_helper
-COPY . .
 
 ## 下载chrome和driver
+COPY _ubuntu_download_and_install_chrome_and_driver.sh _ubuntu_download_chrome_and_driver.sh _ubuntu_install_chrome_and_driver.sh ./
 RUN apt-get update \
     && apt-get install -y sudo \
     && rm -rf /var/lib/apt/lists/*
 RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖
+COPY requirements_docker.txt requirements_z_base.txt ./
 RUN python3 -m pip install --no-cache-dir -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
 RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
 
@@ -37,5 +38,8 @@ ENV DJC_HELPER_CONFIG_TOML=""
 
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
 # docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master
+
+# 复制源码
+COPY . .
 
 CMD [ "python3", "-u", "main.py"]

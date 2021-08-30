@@ -3,7 +3,7 @@ requests-toolbelt==0.9.1
 pycryptodome==3.10.1
 toml==0.10.2
 selenium==3.141.0
-colorlog==5.0.1
+colorlog==6.4.1
 psutil==5.8.0
 leancloud==2.9.5
 werkzeug<2.0.0

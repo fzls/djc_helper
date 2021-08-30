@@ -8,12 +8,12 @@ import time
 from sys import exit
 from typing import Callable
 
-import colorlog
+import colorlog.escape_codes
 
 ###########################################################
 #                         logging                         #
 ###########################################################
-asciiReset = colorlog.escape_codes['reset']
+asciiReset = colorlog.escape_codes.escape_codes['reset']
 
 fileFmtStr = "%(asctime)s %(filename)s:%(lineno)d %(funcName)s %(levelname)-5.5s: %(message)s [%(name)s] [%(processName)s(%(process)d)]"
 consoleFmtStr = "{}%(asctime)s{} {}%(funcName)s:%(lineno)-3d{} {}%(levelname)-5.5s: %(message)s{}".format(
@@ -130,7 +130,7 @@ except Exception:
 
 
 def color(color_name):
-    return consoleLogFormatter.color(consoleLogFormatter.log_colors, color_name)
+    return consoleLogFormatter._get_escape_code(consoleLogFormatter.log_colors, color_name)
 
 
 def with_color(color_name: str, value) -> str:

@@ -10,8 +10,6 @@ os.chdir(dirpath)
 
 import argparse
 
-import psutil
-
 from check_first_run import check_first_run_async
 from log import log_directory
 from main_def import *
@@ -170,7 +168,7 @@ def main():
     increase_counter(name="run/end", ga_type=ga.GA_REPORT_TYPE_PAGE_VIEW)
 
 
-if __name__ == '__main__':
+def main_wrapper():
     freeze_support()
 
     logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
@@ -209,3 +207,7 @@ if __name__ == '__main__':
         # 暂停一下，方便看结果
         if not disable_pause_after_run() and not is_run_in_github_action():
             pause()
+
+
+if __name__ == '__main__':
+    main_wrapper()

@@ -191,7 +191,7 @@ class QQLogin():
         self.append_common_options(options, login_type, login_url)
 
         self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path_linux(), desired_capabilities=caps, options=options)
-        logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
+        logger.info(color("bold_yellow") + f"{self.name} Linux环境下使用自带chrome")
 
     def append_common_options(self, options: Options, login_type: str, login_url: str):
         options.add_argument(f"window-position={self.window_position_x},{self.window_position_y}")

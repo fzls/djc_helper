@@ -56,6 +56,7 @@ jobs:
           #   nightly, master, pr-2, 1.2.3, 1.2, 1
           tags: |
             type=schedule,pattern=nightly
+            type=edge
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}

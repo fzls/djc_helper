@@ -393,6 +393,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
+            ("qq视频-AME活动", self.qq_video_amesvr),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -418,7 +419,6 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("qq视频-AME活动", self.qq_video_amesvr),
             ("刃影预约活动", self.dnf_reserve),
             ("colg每日签到", self.colg_signin),
             ("DNF格斗大赛", self.dnf_pk),
@@ -4281,26 +4281,24 @@ class DjcHelper:
         self.check_qq_video_amesvr()
 
         def query_signin_days():
-            res = self.qq_video_amesvr_op("查询签到状态", "767552", print_res=False)
+            res = self.qq_video_amesvr_op("查询签到状态", "789433", print_res=False)
             info = parse_amesvr_common_info(res)
-            return int(info.sOutValue3)
+            return int(info.sOutValue1)
 
-        self.qq_video_amesvr_op("验证幸运用户", "767315")
-        self.qq_video_amesvr_op("幸运用户礼包", "766796")
-        self.qq_video_amesvr_op("勇士见面礼包", "767594")
-        self.qq_video_amesvr_op("分享领取", "767168")
+        self.qq_video_amesvr_op("验证幸运用户", "789422")
+        self.qq_video_amesvr_op("幸运用户礼包", "789425")
+        self.qq_video_amesvr_op("勇士见面礼包", "789439")
+        self.qq_video_amesvr_op("分享领取", "789437")
 
-        self.qq_video_amesvr_op("在线30分钟礼包", "766800")
+        self.qq_video_amesvr_op("在线30分钟礼包", "789429")
         logger.warning(color("bold_yellow") + f"累计已签到{query_signin_days()}天")
-        self.qq_video_amesvr_op("签到3天礼包", "766801")
-        self.qq_video_amesvr_op("签到7天礼包", "766804")
-        self.qq_video_amesvr_op("签到10天礼包", "768009")
-        self.qq_video_amesvr_op("签到15天礼包", "766817")
-        self.qq_video_amesvr_op("签到21天礼包", "766818")
+        self.qq_video_amesvr_op("签到3天礼包", "789430")
+        self.qq_video_amesvr_op("签到7天礼包", "789431")
+        self.qq_video_amesvr_op("签到15天礼包", "789432")
 
     def check_qq_video_amesvr(self):
         self.check_bind_account("qq视频-AME活动", get_act_url("qq视频-AME活动"),
-                                activity_op_func=self.qq_video_amesvr_op, query_bind_flowid="766781", commit_bind_flowid="766780")
+                                activity_op_func=self.qq_video_amesvr_op, query_bind_flowid="789417", commit_bind_flowid="789416")
 
     def qq_video_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_qq_video_amesvr
@@ -5943,22 +5941,6 @@ if __name__ == '__main__':
         # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
         # djcHelper.run(user_buy_info)
 
-        # djcHelper.query_all_extra_info()
-        # djcHelper.dnf_comic()
-        # djcHelper.dnf_ozma()
-        # djcHelper.colg_signin()
-        # djcHelper.qq_video()
-        # djcHelper.dnf_wegame()
-        # djcHelper.dnf_collection()
-        # djcHelper.dnf_xinyue()
-        # djcHelper.maoxian()
-        # djcHelper.dnf_welfare()
-        # djcHelper.dnf_super_vip()
-        # djcHelper.dnf_bbs()
-        # djcHelper.ark_lottery()
-        # djcHelper.hello_voice()
-        # djcHelper.majieluo()
-        # djcHelper.dnf_yellow_diamond()
-        # djcHelper.dnf_super_vip()
         # djcHelper.guanjia_new()
-        djcHelper.xiaojiangyou()
+        # djcHelper.xiaojiangyou()
+        djcHelper.qq_video_amesvr()

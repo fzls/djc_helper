@@ -52,25 +52,19 @@ jobs:
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
             ccr.ccs.tencentyun.com/${{ github.repository }}
-          # generate Docker tags based on the following events/attributes
+            # generate Docker tags based on the following events/attributes
+            #   nightly
+            #   master
+            #   pr-2
+            #   1.2.3
+            #   1.2
+            #   1
           tags: |
-
-            # nightly
             type=schedule,pattern=nightly
-
-            # master
             type=ref,event=branch
-
-            # pr-2
             type=ref,event=pr
-
-            # 1.2.3
             type=semver,pattern={{version}}
-
-            # 1.2
             type=semver,pattern={{major}}.{{minor}}
-
-            # 1
             type=semver,pattern={{major}}
 
       - name: Set up QEMU

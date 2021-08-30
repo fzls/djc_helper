@@ -35,7 +35,7 @@ ENV DJC_HELPER_CONFIG_JSON=""
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
 # docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master
 
-# 复制源码
+# 复制源码（最常改动的内容放到最后，确保修改代码后仅这部分内容会变动，其他层不变）
 COPY . .
 
 CMD [ "python3", "-u", "main.py"]

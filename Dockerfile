@@ -21,7 +21,8 @@ RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 RUN python3 -m pip install -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
 RUN pip3 install -i https://pypi.doubanio.com/simple -r requirements_linux.txt
 
-# 可通过该环境变量传入配置信息
+# 可通过以下两种方式传入配置
+# 1. 环境变量（正式环境推荐该方式）
 ## 设置配置文件信息到环境变量
 #read -r -d '' DJC_HELPER_CONFIG_TOML << EOF
 #
@@ -33,5 +34,8 @@ RUN pip3 install -i https://pypi.doubanio.com/simple -r requirements_linux.txt
 #docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" djc_helper
 ARG DJC_HELPER_CONFIG_TOML
 ENV DJC_HELPER_CONFIG_TOML=""
+
+# 2. 映射本地配置文件到容器中（调试时可以使用这个）
+# docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master
 
 CMD [ "python3", "main.py"]

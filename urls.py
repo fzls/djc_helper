@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 from dao import AmsActInfo
@@ -62,6 +60,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/2074_c12d14bf",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2076_a20b408d",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021081815172311351",
+    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -84,7 +83,6 @@ act_name_to_url = {
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
-    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210519video/index.html",
     "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
@@ -186,7 +184,7 @@ class Urls:
         self.iActivityId_majieluo = "398425"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "370589"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
-        self.iActivityId_qq_video_amesvr = "379977"  # qq视频-AME活动
+        self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs = "374698"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_dup = "384854"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "382067"  # DNF落地页活动需求

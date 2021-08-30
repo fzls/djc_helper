@@ -40,7 +40,7 @@ except PermissionError:
 process_name = multiprocessing.current_process().name
 log_filename = ""
 
-log_filename_file = ".log.filename"
+log_filename_file = get_final_dir_path(".log.filename")
 if "MainProcess" in process_name:
     # 为了兼容多进程模式，仅主进程确定日志文件名并存盘，后续其他进程则读取该文件内容作为写日志的目标地址，比如出现很多日志文件
     time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')

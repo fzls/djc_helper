@@ -107,45 +107,27 @@ class QQLogin():
         self.window_position_x = self.default_window_width * ((window_index - 1) % col_size)
         self.window_position_y = self.default_window_height * (((window_index - 1) // col_size) % row_size)
 
-    def prepare_chrome(self, ctx, login_type, login_url):
+    def prepare_chrome(self, ctx: str, login_type: str, login_url: str):
         logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
                                             f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
 
-        options = Options()
-        options.add_argument(f"window-position={self.window_position_x},{self.window_position_y}")
-        options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
-        options.add_argument(f"app={login_url}")
-        # 设置静音
-        options.add_argument("--mute-audio")
-        if not self.cfg._debug_show_chrome_logs:
-            options.add_experimental_option("excludeSwitches", ["enable-logging"])
-            selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
-            selenium_logger.setLevel(logging.WARNING)
-            # 使用Selenium期间将urllib的日志关闭
-            urllib_logger = logging.getLogger('urllib3.connectionpool')
-            urllib_logger.setLevel(logging.WARNING)
-        if self.cfg.run_in_headless_mode:
-            if login_type == self.login_type_auto_login:
-                logger.warning(f"{self.name} 已配置在自动登录模式时使用headless模式运行chrome")
-                options.headless = True
-            else:
-                logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
-
         if is_windows():
-            self.prepare_chrome_windows(caps, options)
+            self.prepare_chrome_windows(caps, login_type, login_url)
         else:
-            self.prepare_chrome_linux(caps, options)
+            self.prepare_chrome_linux(caps, login_type, login_url)
 
         self.cookies = self.driver.get_cookies()
 
-    def prepare_chrome_windows(self, caps: Dict[str, str], options: Options):
+    def prepare_chrome_windows(self, caps: Dict[str, str], login_type: str, login_url: str):
         inited = False
         try:
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
+                options = Options()
+                self.append_common_options(options, login_type, login_url)
                 self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
                 logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
                 inited = True
@@ -188,22 +170,48 @@ class QQLogin():
                 exit(-1)
 
             # 然后使用本地的chrome来初始化driver对象
+            options = Options()
             options.binary_location = self.chrome_binary_location()
-            # you may need some other options
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
+            self.append_common_options(options, login_type, login_url)
+
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
-    def prepare_chrome_linux(self, caps: Dict[str, str], options: Options):
+    def prepare_chrome_linux(self, caps: Dict[str, str], login_type: str, login_url: str):
         # linux下只尝试使用系统安装的chrome
+        options = Options()
         options.binary_location = self.chrome_binary_location_linux()
         options.add_argument('--no-sandbox')
         options.add_argument('--no-default-browser-check')
         options.add_argument('--no-first-run')
+        options.add_argument('--disable-dev-shm-usage')
+        self.append_common_options(options, login_type, login_url)
+
         self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path_linux(), desired_capabilities=caps, options=options)
         logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
+
+    def append_common_options(self, options: Options, login_type: str, login_url: str):
+        options.add_argument(f"window-position={self.window_position_x},{self.window_position_y}")
+        options.add_argument(f"window-size={self.default_window_width},{self.default_window_height}")
+        options.add_argument(f"app={login_url}")
+        # 设置静音
+        options.add_argument("--mute-audio")
+        if not self.cfg._debug_show_chrome_logs:
+            options.add_experimental_option("excludeSwitches", ["enable-logging"])
+            selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+            selenium_logger.setLevel(logging.WARNING)
+            # 使用Selenium期间将urllib的日志关闭
+            urllib_logger = logging.getLogger('urllib3.connectionpool')
+            urllib_logger.setLevel(logging.WARNING)
+        if self.cfg.run_in_headless_mode:
+            if login_type == self.login_type_auto_login:
+                logger.warning(f"{self.name} 已配置在自动登录模式时使用headless模式运行chrome")
+                options.headless = True
+            else:
+                logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")

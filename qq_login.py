@@ -185,9 +185,9 @@ class QQLogin():
         options = Options()
         options.binary_location = self.chrome_binary_location_linux()
         options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--no-default-browser-check')
         options.add_argument('--no-first-run')
-        options.add_argument('--disable-dev-shm-usage')
         self.append_common_options(options, login_type, login_url)
 
         self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path_linux(), desired_capabilities=caps, options=options)

@@ -54,12 +54,23 @@ jobs:
             ccr.ccs.tencentyun.com/${{ github.repository }}
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=schedule,pattern=nightly             # nightly
-            type=ref,event=branch                     # master
-            type=ref,event=pr                         # pr-2
-            type=semver,pattern={{version}}           # 1.2.3
-            type=semver,pattern={{major}}.{{minor}}   # 1.2
-            type=semver,pattern={{major}}             # 1
+            # nightly
+            type=schedule,pattern=nightly
+
+            # master
+            type=ref,event=branch
+
+            # pr-2
+            type=ref,event=pr
+
+            # 1.2.3
+            type=semver,pattern={{version}}
+
+            # 1.2
+            type=semver,pattern={{major}}.{{minor}}
+
+            # 1
+            type=semver,pattern={{major}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

@@ -54,6 +54,7 @@ jobs:
             ccr.ccs.tencentyun.com/${{ github.repository }}
           # generate Docker tags based on the following events/attributes
           tags: |
+
             # nightly
             type=schedule,pattern=nightly
 

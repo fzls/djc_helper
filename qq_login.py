@@ -213,6 +213,11 @@ class QQLogin():
             else:
                 logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
+        # 特殊处理linux环境
+        if not is_windows():
+            options.headless = True
+            logger.warning(f"{self.name} 在linux环境下强制使用headless模式运行chrome")
+
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")
         if self.driver is not None:
@@ -284,8 +289,6 @@ class QQLogin():
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
-            options.add_argument('blink-settings=imagesEnabled=false')
-            options.add_argument('--disable-gpu')
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
             self.driver.quit()
             return

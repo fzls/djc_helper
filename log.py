@@ -10,6 +10,8 @@ from typing import Callable
 
 import colorlog.escape_codes
 
+from const import get_final_dir_path
+
 ###########################################################
 #                         logging                         #
 ###########################################################
@@ -26,7 +28,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.name = "djc_helper"
 
-log_directory = "logs"
+log_directory = get_final_dir_path("logs")
 try:
     pathlib.Path(log_directory).mkdir(parents=True, exist_ok=True)
 except PermissionError:

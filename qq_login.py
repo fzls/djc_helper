@@ -284,6 +284,8 @@ class QQLogin():
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
+            options.add_argument('blink-settings=imagesEnabled=false')
+            options.add_argument('--disable-gpu')
             self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
             self.driver.quit()
             return

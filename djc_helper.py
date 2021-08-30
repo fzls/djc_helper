@@ -1801,7 +1801,7 @@ class DjcHelper:
             "774799", "774800",
         ]
         # note: 当前更新至（定期刷新这个值）
-        current_updated = 18
+        current_updated = 19
         for _idx, flowid in enumerate(watch_comic_flowids):
             idx = _idx + 1
             if idx > current_updated:

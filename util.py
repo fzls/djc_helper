@@ -567,7 +567,7 @@ def get_screen_size() -> Tuple[int, int]:
 
 def make_sure_dir_exists(dir_path):
     if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+        os.makedirs(dir_path, exist_ok=True)
 
 
 def is_run_in_github_action():

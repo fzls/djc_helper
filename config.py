@@ -1,8 +1,5 @@
-import json
 import re
 from multiprocessing import cpu_count
-
-import toml
 
 from const import *
 from data_struct import to_raw_type
@@ -1007,3 +1004,4 @@ if __name__ == '__main__':
     # save_config(cfg)
 
     # gen_config_for_github_action()
+    gen_config_for_github_action_base64()

@@ -19,7 +19,7 @@ start_config_ui.bat
 **/.log.filename
 
 config.toml.local
-config.toml.github_action
+config.toml.github_action*
 upload_cookie.json
 
 道聚城助手.exe

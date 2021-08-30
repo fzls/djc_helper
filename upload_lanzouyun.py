@@ -421,9 +421,9 @@ def demo():
 
 def demo_downloads():
     uploader = Uploader()
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
 
 
 if __name__ == '__main__':

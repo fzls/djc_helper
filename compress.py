@@ -80,6 +80,14 @@ def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
     os.replace(temp_target_path, filepath)
 
 
+def compress_in_memory_with_lzma(src_bytes: bytes) -> bytes:
+    return lzma.compress(src_bytes)
+
+
+def decompress_in_memory_with_lzma(compressed_bytes: bytes) -> bytes:
+    return lzma.decompress(compressed_bytes)
+
+
 def test():
     import json
 
@@ -113,6 +121,14 @@ def test():
     decompress_dir_with_bandizip(test_compressed_folder_name, dir_src)
 
     shutil.rmtree(test_root_dir, ignore_errors=True)
+
+    # 测试内存内解压缩
+    test_text = "this is a test 测试内容 压缩前"
+    compressed_bytes = compress_in_memory_with_lzma(test_text.encode())
+    decompressed = decompress_in_memory_with_lzma(compressed_bytes).decode()
+    print(compressed_bytes)
+    print(decompressed)
+    print(test_text == decompressed)
 
 
 if __name__ == '__main__':

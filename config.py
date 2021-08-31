@@ -400,6 +400,7 @@ class AccountConfig(ConfigInterface):
 
         if is_run_in_github_action() and not self.enable_in_github_action:
             # 若当前在github action环境中运行，且设定为不在该环境中使用该QQ，则认为未启用
+            logger.warning(f"账号 {self.name} 设定为不在github action中运行，将跳过，如需启用请修改 enable_in_github_action 配置")
             return False
 
         return self.enable

@@ -607,6 +607,17 @@ def gen_config_for_github_action_base64(github_action_config_path='config.toml.g
     show_file_content_info("base64版本", pathlib.Path(target_filepath).read_text())
 
 
+def gen_config_for_github_action_json_single_line(github_action_config_path='config.toml.github_action'):
+    target_filepath = f"{github_action_config_path}.json"
+
+    with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
+        with open(target_filepath, 'w', encoding='utf-8') as save_file:
+            cfg = toml.load(toml_file)
+            json.dump(cfg, save_file)
+
+    show_file_content_info("json版本", pathlib.Path(target_filepath).read_text())
+
+
 def show_file_content_info(ctx: str, file_content: str):
     total_size = len(file_content)
     total_lines = file_content.count('\n') + 1

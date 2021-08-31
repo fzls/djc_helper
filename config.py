@@ -928,6 +928,8 @@ def gen_config_for_github_action():
     show_config_size(cfg, "精简前")
 
     # 一些字段设置为默认值
+    cfg.loaded = False
+
     dc = CommonConfig()
     cfg.common.account_count = dc.account_count
     cfg.common.test_mode = dc.test_mode
@@ -938,6 +940,7 @@ def gen_config_for_github_action():
     cfg.common.login = dc.login
     cfg.common.http_timeout = dc.http_timeout
     cfg.common.majieluo = dc.majieluo
+
     for account_cfg in cfg.account_configs:
         df = AccountConfig()
         account_cfg.drift_send_qq_list = df.drift_send_qq_list

@@ -19,7 +19,8 @@ RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖
 COPY requirements_docker.txt requirements_z_base.txt ./
-RUN python3 -m pip install --no-cache-dir -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
+## note: Ubuntu下pip需要通过apt-get来管理，不能这样升级，会提示：Not uninstalling pip at /usr/lib/python3/dist-packages, outside environment /usr
+#RUN #python3 -m pip install --no-cache-dir -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
 RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
 
 # 可通过以下两种方式传入配置

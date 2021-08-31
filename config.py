@@ -950,6 +950,17 @@ def gen_config_for_github_action():
         account_cfg.enable_majieluo_invite_friend = df.enable_majieluo_invite_friend
         account_cfg.ozma_ignored_rolename_list = df.ozma_ignored_rolename_list
 
+    # 如果账号配置为在github action中禁用，则不尝试导出
+    account_configs = []
+    for account_cfg in cfg.account_configs:
+        if not account_cfg.enable_in_github_action:
+            logger.warning(color("bold_yellow") + f"{account_cfg.name} 配置为不在github action环境中启用，将不尝试导出该账号")
+            continue
+
+        account_configs.append(account_cfg)
+    cfg.account_configs = account_configs
+    logger.info(f"将尝试导出 {len(account_configs)} 个账号：{[ac.name for ac in account_configs]}")
+
     # hack: 官方文档写secrets最多64KB，实测最多45022个字符。
     #  https://docs.github.com/en/actions/reference/encrypted-secrets#limits-for-secrets
     #  因此这里特殊处理一些账号级别开关，若配置与默认配置相同，或者是空值，则直接从配置文件中移除~

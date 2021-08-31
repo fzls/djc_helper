@@ -29,6 +29,8 @@ import selenium.common.exceptions
 import toml
 import urllib3.exceptions
 
+from compress import (compress_in_memory_with_lzma,
+                      decompress_in_memory_with_lzma)
 from const import cached_dir
 from db import *
 from log import asciiReset, color, get_log_func, logger
@@ -597,14 +599,22 @@ def get_config_from_env() -> str:
     return ""
 
 
-def gen_config_for_github_action_base64(github_action_config_path='config.toml.github_action'):
+def gen_config_for_github_action_base64(github_action_config_path='config.toml.github_action', compress_before_encode=False):
+    ctx = "base64版本"
     target_filepath = f"{github_action_config_path}.base64"
+    if compress_before_encode:
+        ctx += "(压缩后转码)"
+        target_filepath = f"{github_action_config_path}.compressed.base64"
 
     with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
         with open(target_filepath, 'w', encoding='utf-8') as save_file:
-            save_file.write(base64.standard_b64encode(toml_file.read().encode()).decode())
+            toml_bytes = toml_file.read().encode()
+            if compress_before_encode:
+                toml_bytes = compress_in_memory_with_lzma(toml_bytes)
+            base64_version = base64.standard_b64encode(toml_bytes).decode()
+            save_file.write(base64_version)
 
-    show_file_content_info("base64版本", pathlib.Path(target_filepath).read_text())
+    show_file_content_info(ctx, pathlib.Path(target_filepath).read_text())
 
 
 def gen_config_for_github_action_json_single_line(github_action_config_path='config.toml.github_action'):
@@ -624,8 +634,12 @@ def show_file_content_info(ctx: str, file_content: str):
     logger.info(f"{ctx} 生成配置文件大小为{total_size}({human_readable_size(total_size)})，总行数为{total_lines}")
 
 
-def base64_to_toml(github_action_config_base64: str) -> str:
-    return base64.standard_b64decode(github_action_config_base64.encode()).decode()
+def base64_to_toml(github_action_config_base64: str, compress_before_encode=False) -> str:
+    toml_bytes = base64.standard_b64decode(github_action_config_base64.encode())
+    if compress_before_encode:
+        toml_bytes = decompress_in_memory_with_lzma(toml_bytes)
+
+    return toml_bytes.decode()
 
 
 def json_to_toml(github_action_config_json: str) -> str:

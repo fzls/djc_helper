@@ -1037,4 +1037,5 @@ if __name__ == '__main__':
 
     gen_config_for_github_action()
     gen_config_for_github_action_base64()
+    gen_config_for_github_action_base64(compress_before_encode=True)
     gen_config_for_github_action_json_single_line()

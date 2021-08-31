@@ -24,6 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set time zone
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Shanghai"
+          timezoneMacos: "Asia/Shanghai"
+          timezoneWindows: "China Standard Time"
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:

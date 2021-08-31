@@ -20,6 +20,13 @@ jobs:
         with:
           python-version: '3.8'
 
+      - name: Set time zone
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Shanghai"
+          timezoneMacos: "Asia/Shanghai"
+          timezoneWindows: "China Standard Time"
+
       - name: Get pip cache dir
         id: pip-cache
         run: |

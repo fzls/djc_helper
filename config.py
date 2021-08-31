@@ -914,8 +914,8 @@ def gen_config_for_github_action():
     cfg.common._show_usage = False
     # 强制使用便携版（因为必定没有安装chrome）
     cfg.common.force_use_portable_chrome = True
-    # 不展示chrome调试日志
-    cfg.common._debug_show_chrome_logs = False
+    # 展示chrome调试日志
+    cfg.common._debug_show_chrome_logs = True
     # 设置日志级别为log，方便查问题
     cfg.common.log_level = "debug"
     # 不必检查更新，必定是最新版本
@@ -924,24 +924,38 @@ def gen_config_for_github_action():
     # 不必自动更新，同理
     cfg.common.auto_update_on_start = False
 
-    # 调低网络超时时间（github的网络情况比较稳定，降低时间也可以减少整体运行时长）
-    cfg.common.http_timeout = 5
-    cfg.common.login.load_page_timeout = 60
-    cfg.common.login.login_timeout = 60
-    cfg.common.login.login_finished_timeout = 60
-
     # 保存到专门配置文件
     show_config_size(cfg, "精简前")
 
+    # 一些字段设置为默认值
+    dc = CommonConfig()
+    cfg.common.account_count = dc.account_count
+    cfg.common.test_mode = dc.test_mode
+    cfg.common.config_ui_enable_high_dpi = dc.config_ui_enable_high_dpi
+    cfg.common.disable_cmd_quick_edit = dc.disable_cmd_quick_edit
+    cfg.common.enable_min_console = dc.enable_min_console
+    cfg.common.log_colors = dc.log_colors
+    cfg.common.login = dc.login
+    cfg.common.http_timeout = dc.http_timeout
+    cfg.common.majieluo = dc.majieluo
+    for account_cfg in cfg.account_configs:
+        df = AccountConfig()
+        account_cfg.drift_send_qq_list = df.drift_send_qq_list
+        account_cfg.dnf_13_send_qq_list = df.dnf_13_send_qq_list
+        account_cfg.spring_fudai_receiver_qq_list = df.spring_fudai_receiver_qq_list
+        account_cfg.enable_firecrackers_invite_friend = df.enable_firecrackers_invite_friend
+        account_cfg.enable_majieluo_invite_friend = df.enable_majieluo_invite_friend
+        account_cfg.ozma_ignored_rolename_list = df.ozma_ignored_rolename_list
+
     # hack: 官方文档写secrets最多64KB，实测最多45022个字符。
     #  https://docs.github.com/en/actions/reference/encrypted-secrets#limits-for-secrets
-    #  因此这里特殊处理一些账号级别开关，若配置与默认配置相同，则直接从配置文件中移除~
-    remove_unnecessary_configs(cfg.common, CommonConfig())
+    #  因此这里特殊处理一些账号级别开关，若配置与默认配置相同，或者是空值，则直接从配置文件中移除~
     remove_unnecessary_configs(cfg.common.login, LoginConfig())
     remove_unnecessary_configs(cfg.common.retry, RetryConfig())
     remove_unnecessary_configs(cfg.common.xinyue, XinYueConfig())
+    remove_unnecessary_configs(cfg.common.majieluo, XinYueConfig())
+    remove_unnecessary_configs(cfg.common, CommonConfig())
     for account_cfg in cfg.account_configs:
-        remove_unnecessary_configs(account_cfg, AccountConfig())
         remove_unnecessary_configs(account_cfg.account_info, AccountInfoConfig())
         remove_unnecessary_configs(account_cfg.function_switches, FunctionSwitchesConfig())
         remove_unnecessary_configs(account_cfg.mobile_game_role_info, MobileGameRoleInfoConfig())
@@ -950,6 +964,7 @@ def gen_config_for_github_action():
         remove_unnecessary_configs(account_cfg.dnf_helper_info, DnfHelperInfoConfig())
         remove_unnecessary_configs(account_cfg.hello_voice, HelloVoiceInfoConfig())
         remove_unnecessary_configs(account_cfg.firecrackers, FirecrackersConfig())
+        remove_unnecessary_configs(account_cfg, AccountConfig())
 
     show_config_size(cfg, "精简后")
 
@@ -970,7 +985,10 @@ def remove_unnecessary_configs(cfg, default_cfg):
     attrs_to_remove = []
 
     for attr, value in cfg.__dict__.items():
-        if not hasattr(default_cfg, attr) or getattr(default_cfg, attr) == value:
+        # 1. 移除动态参数
+        # 2. 移除与默认配置一致的参数
+        # 3. 移除没有任何子字段的实现配置接口的字段
+        if not hasattr(default_cfg, attr) or getattr(default_cfg, attr) == value or (isinstance(value, ConfigInterface) and value.__dict__ == {}):
             attrs_to_remove.append(attr)
 
     for attr in attrs_to_remove:
@@ -1004,5 +1022,5 @@ if __name__ == '__main__':
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
 
-    # gen_config_for_github_action()
+    gen_config_for_github_action()
     gen_config_for_github_action_base64()

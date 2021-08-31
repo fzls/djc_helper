@@ -580,19 +580,24 @@ def is_run_in_github_action():
 
 
 def get_config_from_env() -> str:
-    # 先尝试第一个环境变量，直接获取toml_str
+    # 先尝试第一个环境变量，直接获取 toml_str
     toml_str = os.environ.get("DJC_HELPER_CONFIG_TOML", "")
     if toml_str != "":
         return toml_str
 
     # 如果对应运行环境不方便设置多行的环境变量，则分别尝试可以单行的编码格式
-    # 1. base64
+    # toml 配置编码为 base64
     base64_str = os.environ.get("DJC_HELPER_CONFIG_BASE64", "")
     if base64_str != "":
         return base64_to_toml(base64_str)
 
-    # 2. json
-    json_str = os.environ.get("DJC_HELPER_CONFIG_JSON", "")
+    # toml 配置先通过 lzma 压缩，然后编码为 base64
+    compressed_base64_str = os.environ.get("DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64", "")
+    if compressed_base64_str != "":
+        return base64_to_toml(compressed_base64_str, compress_before_encode=True)
+
+    # toml 配置解析后再序列化为单行的 JSON 配置
+    json_str = os.environ.get("DJC_HELPER_CONFIG_SINGLE_LINE_JSON", "")
     if json_str != "":
         return json_to_toml(json_str)
 

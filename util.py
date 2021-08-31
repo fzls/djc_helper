@@ -598,9 +598,19 @@ def get_config_from_env() -> str:
 
 
 def gen_config_for_github_action_base64(github_action_config_path='config.toml.github_action'):
+    target_filepath = f"{github_action_config_path}.base64"
+
     with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
-        with open(f"{github_action_config_path}.base64", 'w', encoding='utf-8') as save_file:
+        with open(target_filepath, 'w', encoding='utf-8') as save_file:
             save_file.write(base64.standard_b64encode(toml_file.read().encode()).decode())
+
+    show_file_content_info("base64版本", pathlib.Path(target_filepath).read_text())
+
+
+def show_file_content_info(ctx: str, file_content: str):
+    total_size = len(file_content)
+    total_lines = file_content.count('\n') + 1
+    logger.info(f"{ctx} 生成配置文件大小为{total_size}({human_readable_size(total_size)})，总行数为{total_lines}")
 
 
 def base64_to_toml(github_action_config_base64: str) -> str:

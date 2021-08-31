@@ -990,9 +990,8 @@ def gen_config_for_github_action():
 def show_config_size(cfg: Config, ctx):
     data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
     toml_str = toml.dumps(data_to_save)
-    total_size = len(toml_str)
-    total_lines = toml_str.count('\n')
-    logger.info(f"{ctx} 生成配置文件大小为{total_size}，总行数为{total_lines}")
+
+    show_file_content_info(ctx, toml_str)
 
 
 def remove_unnecessary_configs(cfg, default_cfg):

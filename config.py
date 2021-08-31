@@ -915,7 +915,7 @@ def gen_config_for_github_action():
     # 强制使用便携版（因为必定没有安装chrome）
     cfg.common.force_use_portable_chrome = True
     # 展示chrome调试日志
-    cfg.common._debug_show_chrome_logs = True
+    cfg.common._debug_show_chrome_logs = False
     # 设置日志级别为log，方便查问题
     cfg.common.log_level = "debug"
     # 不必检查更新，必定是最新版本

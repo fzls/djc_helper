@@ -74,6 +74,9 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     dir_to_filenames_need_remove = {
         ".": [
             *list(path.name for path in pathlib.Path(".").glob('requirements*.txt')),
+
+            "config.toml.local",
+            *list(path.name for path in pathlib.Path(".").glob('config.toml.github_action*')),
         ],
         "utils": [
             "logs", ".db", ".cached", ".first_run", ".log.filename",

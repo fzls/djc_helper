@@ -24,13 +24,16 @@ RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requireme
 
 # 可通过以下两种方式传入配置
 # 1. 环境变量（正式环境推荐该方式）
-## 若对应环境支持配置多行的环境变量，可直接将toml文件的内容设置到DJC_HELPER_CONFIG_TOML
-## 否则，可以选择将toml内容转化为base64或者单行的json后再传入后面两个变量中对应的那个
-## 若同时设置，则按下面顺序取第一个非空的环境变量作为配置
-#docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" djc_helper
+#   支持通过下列环境变量来传递配置信息。若同时设置，则按下面顺序取第一个非空的环境变量作为配置
+# 示例：docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" djc_helper
+# toml配置
 ENV DJC_HELPER_CONFIG_TOML=""
+# toml配置编码为base64
 ENV DJC_HELPER_CONFIG_BASE64=""
-ENV DJC_HELPER_CONFIG_JSON=""
+# toml配置先通过lzma压缩，然后编码为base64
+ENV DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64=""
+# toml配置解析后再序列化为单行的JSON配置
+ENV DJC_HELPER_CONFIG_SINGLE_LINE_JSON=""
 
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
 # docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master

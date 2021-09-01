@@ -15,7 +15,6 @@ on:
     # note: 这里是GMT时间，北京时间减去八小时即可。如北京时间 22:30 => GMT 14:30
     # minute hour day month dayOfWeek
     - cron: '00 14 * * *' # GMT 14:00 => 北京时间 22:00
-    - cron: '45 9 * * *' # 测试GMT 北京时间 17:45
     #- cron: '30 16 * * *' # GMT 16:30（前一天） => 北京时间 00:30
   workflow_dispatch:
 

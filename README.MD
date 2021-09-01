@@ -80,10 +80,22 @@
 ## 支持的系统
 目前已测试在以下系统可以运行
 1. Windows 7/10/11
-> 拉取代码后，安装完依赖，然后运行main.py
-
 2. Ubuntu 21.04 桌面版和服务器版 以及windows自带的wsl
-> 拉取代码后，安装完依赖，然后运行main.py，根据提示操作
+
+## 拉取代码
+如果github clone过慢，可以使用gitee的镜像仓库，目前设定了github action，会自动同步代码到gitee该仓库
+> git clone --depth=1 https://gitee.com/fzls/djc_helper.git
+
+或者可以使用github的镜像加速访问，如
+> git clone --depth=1 https://github.com.cnpmjs.org/fzls/djc_helper.git
+> git clone --depth=1 https://hub.fastgit.org/fzls/djc_helper.git
+
+## 运行方式
+1. 使用打包版本
+> 直接下载蓝奏云中的二进制版本使用 https://fzls.lanzoui.com/s/djc-helper
+
+2. 使用源码版本
+> 拉取代码后，安装依赖，然后运行main.py，根据提示操作
 
 3. 使用docker运行
 ```bash
@@ -114,14 +126,6 @@ docker run -v local/path/to/config.toml:/djc_helper/config.toml fzls/djc_helper:
 # 3.6 高级配置中的环境变量设置第三种方式中提及的四个环境变量之一，推荐后面三个，因为他们可以单行填入，而云函数似乎也只支持单行的环境变量值
 # 3.7 设置触发器为自定义创建，并设置为每日定时触发，具体触发表达式语法可以看其文档
 ```
-
-## 拉取代码
-如果github clone过慢，可以使用gitee的镜像仓库，目前设定了github action，会自动同步代码到gitee该仓库
-> git clone --depth=1 https://gitee.com/fzls/djc_helper.git
-
-或者可以使用github的镜像加速访问，如
-> git clone --depth=1 https://github.com.cnpmjs.org/fzls/djc_helper.git
-> git clone --depth=1 https://hub.fastgit.org/fzls/djc_helper.git
 
 ## 长期支持的活动
 - [x] 道聚城签到与领奖、任务与领奖、兑换奖励、查询信息等功能

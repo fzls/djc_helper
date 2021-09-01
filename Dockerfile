@@ -30,7 +30,7 @@ RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖
 COPY requirements_docker.txt requirements_z_base.txt ./
-RUN #python3 -m pip install --no-cache-dir --user -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
+RUN python3 -m pip install --no-cache-dir --user -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
 RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
 
 # 可通过以下两种方式传入配置

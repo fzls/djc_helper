@@ -80,7 +80,40 @@
 ## 支持的系统
 目前已测试在以下系统可以运行
 1. Windows 7/10/11
+> 拉取代码后，安装完依赖，然后运行main.py
+
 2. Ubuntu 21.04 桌面版和服务器版 以及windows自带的wsl
+> 拉取代码后，安装完依赖，然后运行main.py，根据提示操作
+
+3. 使用docker运行
+```bash
+# 可通过以下两种方式传入配置
+# 1. 环境变量（正式环境推荐该方式）
+#   支持通过下列环境变量来传递配置信息。若同时设置，则按下面顺序取第一个非空的环境变量作为配置
+#   DJC_HELPER_CONFIG_TOML                    toml配置
+#   DJC_HELPER_CONFIG_BASE64                  toml配置编码为base64
+#   DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64  toml配置先通过lzma压缩，然后编码为base64
+#   DJC_HELPER_CONFIG_SINGLE_LINE_JSON        toml配置解析后再序列化为单行的JSON配置
+# 示例
+docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" fzls/djc_helper:latest
+
+# 2. 映射本地配置文件到容器中（调试时可以使用这个）
+docker run -v local/path/to/config.toml:/djc_helper/config.toml fzls/djc_helper:latest
+```
+
+4. 通过腾讯云函数进行使用
+```bash
+# 1. 拉取源码后本地构建镜像
+# 2. 推送到腾讯云镜像仓库（个人版），具体流程看其文档 https://console.cloud.tencent.com/tke2/registry/user
+# 3. 创建云函数
+# 3.1 选择 自定义创建
+# 3.2 部署方式选择 镜像部署
+# 3.3 选择第二步中创建的镜像仓库以及推送的镜像版本
+# 3.4 Command设置为 python3
+# 3.5 Args 设置为 -u main_scf.py
+# 3.6 高级配置中的环境变量设置第三种方式中提及的四个环境变量之一，推荐后面三个，因为他们可以单行填入，而云函数似乎也只支持单行的环境变量值
+# 3.7 设置触发器为自定义创建，并设置为每日定时触发，具体触发表达式语法可以看其文档
+```
 
 ## 拉取代码
 如果github clone过慢，可以使用gitee的镜像仓库，目前设定了github action，会自动同步代码到gitee该仓库

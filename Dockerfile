@@ -59,4 +59,15 @@ ENV DJC_HELPER_CONFIG_SINGLE_LINE_JSON=""
 # 复制源码（最常改动的内容放到最后，确保修改代码后仅这部分内容会变动，其他层不变）
 COPY . .
 
-CMD [ "python3", "-u", "main.py"]
+# 使用非root账户来调用小助手，确保在腾讯云环境下也能正常调用chrome，否则会报 selenium.common.exceptions.WebDriverException: Message: unknown error: DevToolsActivePort file doesn't exist
+RUN groupadd -r -g 999 fzls && useradd -r -g fzls -u 999 fzls
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y gosu; \
+	rm -rf /var/lib/apt/lists/*; \
+    # verify that the binary works
+	gosu nobody true
+
+RUN chown fzls:fzls /djc_helper /usr/local/bin /usr/bin
+CMD ["gosu", "fzls", "python3", "-u", "main.py"]

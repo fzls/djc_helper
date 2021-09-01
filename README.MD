@@ -74,6 +74,7 @@
 - [使用方法](#使用方法)
 - [开机自动运行](#开机自动运行)
 - [支持一下](#支持一下)
+- [历史 Star 数](#历史-star-数)
 
 # 概览
 ## 支持的系统
@@ -191,3 +192,8 @@ DNF蚊子腿小助手六群 444193814 <br>
 
 # 支持一下
 [![支持一下](https://s3.ax1x.com/2020/12/16/r1yWZT.png)](https://imgchr.com/i/r1yWZT)
+
+# 历史 Star 数
+<p align="center">
+    <a href="https://starchart.cc/fzls/djc_helper"><img src="https://starchart.cc/fzls/djc_helper.svg" alt="starchart"></a>
+</p>

@@ -43,7 +43,7 @@ RUN set -x \
 # 可通过以下两种方式传入配置
 # 1. 环境变量（正式环境推荐该方式）
 #   支持通过下列环境变量来传递配置信息。若同时设置，则按下面顺序取第一个非空的环境变量作为配置
-# 示例：docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" djc_helper
+# 示例：docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" fzls/djc_helper:latest
 # toml配置
 ENV DJC_HELPER_CONFIG_TOML=""
 # toml配置编码为base64
@@ -54,7 +54,7 @@ ENV DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64=""
 ENV DJC_HELPER_CONFIG_SINGLE_LINE_JSON=""
 
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
-# docker run -v D:\_codes\Python\djc_helper_public\config.toml:/djc_helper/config.toml fzls/djc_helper:master
+# docker run -v local/path/to/config.toml:/djc_helper/config.toml fzls/djc_helper:latest
 
 # 复制源码（最常改动的内容放到最后，确保修改代码后仅这部分内容会变动，其他层不变）
 COPY . .

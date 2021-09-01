@@ -6,7 +6,8 @@ FROM ubuntu:20.04
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 
-RUN apt update \
+RUN set -x \
+    && apt update \
     && apt install -y tzdata \
     && ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
@@ -14,7 +15,8 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 
 # 安装python3.8
-RUN apt-get update \
+RUN set -x \
+    && apt-get update \
     && apt-get install -y python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,15 +25,18 @@ WORKDIR /djc_helper
 
 ## 下载chrome和driver
 COPY _ubuntu_download_and_install_chrome_and_driver.sh _ubuntu_download_chrome_and_driver.sh _ubuntu_install_chrome_and_driver.sh ./
-RUN apt-get update \
+RUN set -x \
+    && apt-get update \
     && apt-get install -y sudo \
     && rm -rf /var/lib/apt/lists/*
 RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
 # 安装依赖
 COPY requirements_docker.txt requirements_z_base.txt ./
-RUN python3 -m pip install --no-cache-dir --user -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
-RUN pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
+RUN set -x \
+    && PATH="$PATH:$HOME/.local/bin" \
+    && python3 -m pip install --no-cache-dir --user -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel \
+    && pip3 install --no-cache-dir -i https://pypi.doubanio.com/simple -r requirements_docker.txt
 
 # 可通过以下两种方式传入配置
 # 1. 环境变量（正式环境推荐该方式）

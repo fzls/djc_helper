@@ -60,6 +60,7 @@ ENV DJC_HELPER_CONFIG_SINGLE_LINE_JSON=""
 COPY . .
 
 # 使用非root账户来调用小助手，确保在腾讯云环境下也能正常调用chrome，否则会报 selenium.common.exceptions.WebDriverException: Message: unknown error: DevToolsActivePort file doesn't exist
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r -g 999 fzls && useradd -r -g fzls -u 999 fzls
 
 RUN set -eux; \

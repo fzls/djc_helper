@@ -4366,8 +4366,7 @@ class DjcHelper:
                     logger.warning(color("bold_yellow") + "不知道为啥没有这个前缀，请去日志文件查看具体请求返回的结果是啥。将等待一会，然后重试")
                     logger.debug(f"不在预期内的签到返回内容如下：\n{html_text}")
 
-                    if is_weekly_first_run(f"dnf_bbs_{self.cfg.name}"):
-                        async_message_box(f"{self.cfg.name} 的 官方论坛cookie似乎过期了，记得更新新的cookie~", "cookie似乎过期")
+                    async_message_box(f"{self.cfg.name} 的 官方论坛cookie似乎过期了，记得更新新的cookie~。如果不想继续签到了，可以不填论坛的cookie，就不会继续弹窗提示了", "cookie似乎过期")
 
                     time.sleep(retryCfg.retry_wait_time)
                 except Exception as e:

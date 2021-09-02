@@ -146,7 +146,7 @@ def update_fallback(config: CommonConfig):
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):
-    if now_version == ui.latest_version and is_first_run(f"update_version_v{ui.latest_version}") and not use_by_myself():
+    if now_version == ui.latest_version and is_first_run(f"update_version_v{ui.latest_version}"):
         message = (
             f"新版本v{ui.latest_version}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n"
             f"{ui.update_message}"

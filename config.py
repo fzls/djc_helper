@@ -635,6 +635,7 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_end = False
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+        self.github_mirror_site = "hub.fastgit.org"
         # 自动更新dlc购买地址
         self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.net/purchasing?link=auto-updater"
         # 按月付费购买地址
@@ -720,6 +721,9 @@ class CommonConfig(ConfigInterface):
                         self.netdisk_link = url_config['netdisk_link']
             except:
                 pass
+
+    def get_github_mirror_url(self, original_url: str) -> str:
+        return original_url.replace("github.com", self.github_mirror_site)
 
 
 class Config(ConfigInterface):

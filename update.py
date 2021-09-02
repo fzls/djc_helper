@@ -156,10 +156,17 @@ def show_update_info_on_first_run(ui: UpdateInfo):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
-    return _get_update_info(config.changelog_page, config.readme_page)
+    try:
+        return _get_update_info(config.changelog_page, config.readme_page)
+    except:
+        # 尝试使用镜像来访问
+        logger.debug(f"似乎无法直接访问github，尝试使用镜像访问github来获取更新信息")
+        return _get_update_info(config.get_github_mirror_url(config.changelog_page), config.get_github_mirror_url(config.readme_page))
 
 
 def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
+    logger.info(f"尝试使用 {changelog_page} 来查询更新信息")
+
     update_info = UpdateInfo()
 
     # 获取github本项目的readme页面内容和changelog页面内容

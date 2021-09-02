@@ -54,7 +54,7 @@ ENV DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64=""
 ENV DJC_HELPER_CONFIG_SINGLE_LINE_JSON=""
 
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
-# docker run -v local/path/to/config.toml:/djc_helper/config.toml fzls/djc_helper:latest
+# docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/djc_helper/config.toml fzls/djc_helper:latest
 
 # 复制源码（最常改动的内容放到最后，确保修改代码后仅这部分内容会变动，其他层不变）
 COPY . .

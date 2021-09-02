@@ -111,7 +111,7 @@
 docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" fzls/djc_helper:latest
 
 # 2. 映射本地配置文件到容器中（调试时可以使用这个）
-docker run -v local/path/to/config.toml:/djc_helper/config.toml fzls/djc_helper:latest
+docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/djc_helper/config.toml fzls/djc_helper:latest
 ```
 
 4. 通过腾讯云函数进行使用

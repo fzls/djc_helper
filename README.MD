@@ -95,7 +95,7 @@
 1. 使用打包版本
 > * 直接下载蓝奏云中的二进制版本使用 https://fzls.lanzoui.com/s/djc-helper
 > * 下载github最新发布版本 https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z
-> * 使用镜像加速国内下载https://download.fastgit.org/fzls/djc_helper/releases/download/latest/djc_helper.7z
+> * 使用镜像加速国内下载 https://download.fastgit.org/fzls/djc_helper/releases/download/latest/djc_helper.7z
 
 2. 使用源码版本
 > 拉取代码后，安装依赖，然后运行main.py，根据提示操作

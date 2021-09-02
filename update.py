@@ -155,12 +155,16 @@ def show_update_info_on_first_run(ui: UpdateInfo):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
+    return _get_update_info(config.changelog_page, config.readme_page)
+
+
+def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
     update_info = UpdateInfo()
 
     # 获取github本项目的readme页面内容和changelog页面内容
     timeout = 3  # 由于国内网络不太好，加个超时
-    changelog_html_text = requests.get(config.changelog_page, timeout=timeout).text
-    readme_html_text = requests.get(config.readme_page, timeout=timeout).text
+    changelog_html_text = requests.get(changelog_page, timeout=timeout).text
+    readme_html_text = requests.get(readme_page, timeout=timeout).text
 
     # 从更新日志中提取所有版本信息
     versions = re.findall(r"(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_html_text)

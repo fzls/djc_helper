@@ -1125,6 +1125,9 @@ def bypass_proxy():
 
 
 def use_proxy():
+    if 'no_proxy' not in os.environ:
+        return
+
     os.environ.pop('no_proxy')
 
 

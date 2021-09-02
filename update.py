@@ -3,6 +3,7 @@ import random
 import re
 import webbrowser
 from datetime import datetime
+from typing import List, Tuple
 
 import requests
 
@@ -156,12 +157,30 @@ def show_update_info_on_first_run(ui: UpdateInfo):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
-    try:
-        return _get_update_info(config.changelog_page, config.readme_page)
-    except:
-        # 尝试使用镜像来访问
-        logger.debug(f"似乎无法直接访问github，尝试使用镜像访问github来获取更新信息")
-        return _get_update_info(config.get_github_mirror_url(config.changelog_page), config.get_github_mirror_url(config.readme_page))
+    for changelog_page, readme_page in get_urls_and_mirrors(config):
+        try:
+            return _get_update_info(changelog_page, readme_page)
+        except:
+            # 尝试使用镜像来访问
+            logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~")
+
+    raise Exception("无法获取更新信息")
+
+
+def get_urls_and_mirrors(config: CommonConfig) -> List[Tuple[str, str]]:
+    urls = [
+        (config.changelog_page, config.readme_page),
+    ]
+    for mirror_site in config.github_mirror_sites:
+        urls.append((
+            get_mirror(config.changelog_page, mirror_site),
+            get_mirror(config.readme_page, mirror_site),
+        ))
+    return urls
+
+
+def get_mirror(original_url: str, github_mirror_site: str):
+    return original_url.replace("github.com", github_mirror_site)
 
 
 def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
@@ -241,6 +260,7 @@ def get_netdisk_addr(config: CommonConfig):
 # 备选方案：从gitee获取最新版本号（但不解析具体版本内容，作为github的fallback）
 @try_except(return_val_on_except="1.0.0")
 def get_version_from_gitee() -> str:
+    logger.info("尝试从gitee获取更新信息")
     api = "https://gitee.com/api/v5/repos/fzls/djc_helper/tags"
     res = requests.get(api, timeout=10).json()
 

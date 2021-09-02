@@ -57,7 +57,8 @@ def check_update_on_start(config: CommonConfig):
 
         if config.auto_update_on_start:
             show_update_info_on_first_run(ui)
-    except Exception:
+    except Exception as e:
+        logger.debug(f"更新失败 {e}")
         if check_update:
             update_fallback(config)
     finally:
@@ -249,6 +250,7 @@ if __name__ == '__main__':
 
     load_config()
     cfg = config()
+    cfg.common.check_update_on_start = True
     check_update_on_start(cfg.common)
 
     ver = get_version_from_gitee()

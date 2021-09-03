@@ -393,6 +393,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
             ("qq视频-AME活动", self.qq_video_amesvr),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -433,7 +434,6 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("集卡", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
-            ("勇士的冒险补给", self.maoxian),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -4969,21 +4969,17 @@ class DjcHelper:
             logger.warning("未启用领取勇士的冒险补给功能，将跳过")
             return
 
-        self.maoxian_op("第一天-时间引导石(20个)", "782145")
-        self.maoxian_op("第二天-时间引导石(20个)", "782147")
-        self.maoxian_op("第三天-升级券", "782148")
-        self.maoxian_op("第四天-升级券", "782149")
-        self.maoxian_op("第五天-高级材料礼盒", "782150")
-        self.maoxian_op("第六天-高级材料礼盒", "782151")
-        self.maoxian_op("第七天-时间引导石(100个)", "782152")
-        self.maoxian_op("在线30分钟-胜武器自选", "782154")
-        if get_now().hour >= 23:
-            self.maoxian_op("登录游戏-黑钻7天", "782153")
-            self.maoxian_op("通关副本-高级材料*2", "782155")
+        self.maoxian_op("第一天-时间引导石(20个)", "798455")
+        self.maoxian_op("第二天-时间引导石(20个)", "798457")
+        self.maoxian_op("第三天-升级券", "798458")
+        self.maoxian_op("第四天-升级券", "798459")
+        self.maoxian_op("第五天-高级材料礼盒", "798460")
+        self.maoxian_op("第六天-高级材料礼盒", "798461")
+        self.maoxian_op("第七天-时间引导石(100个)", "798462")
 
     def check_maoxian(self):
         self.check_bind_account("勇士的冒险补给", get_act_url("勇士的冒险补给"),
-                                activity_op_func=self.maoxian_op, query_bind_flowid="782142", commit_bind_flowid="782141")
+                                activity_op_func=self.maoxian_op, query_bind_flowid="798452", commit_bind_flowid="798451")
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_maoxian
@@ -6011,4 +6007,5 @@ if __name__ == '__main__':
         # djcHelper.guanjia_new()
         # djcHelper.xiaojiangyou()
         # djcHelper.qq_video_amesvr()
-        djcHelper.dnf_bbs()
+        # djcHelper.dnf_bbs()
+        djcHelper.maoxian()

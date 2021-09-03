@@ -1,4 +1,3 @@
-import json
 from multiprocessing import cpu_count, freeze_support
 from sys import exit
 
@@ -504,8 +503,8 @@ def show_accounts_status(cfg, ctx):
             rows.append(get_account_status(idx, account_config, cfg.common))
 
     # 打印结果
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "赠送礼盒"]
-    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "赠送礼盒", "论坛代币券"]
+    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8, 10]
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
@@ -543,6 +542,8 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     majieluo_stone = djcHelper.query_stone_count()
     majieluo_invite_count = djcHelper.query_invite_count()
 
+    dbq = djcHelper.query_dnf_bbs_dbq()
+
     return [
         idx, account_config.name, status,
         djc_balance, djc_allin,
@@ -550,6 +551,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         gpoints,
         levelInfo, chronicle_points,
         majieluo_stone, f"{majieluo_invite_count}/30",
+        dbq,
     ]
 
 

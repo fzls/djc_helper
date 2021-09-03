@@ -4494,7 +4494,11 @@ class DjcHelper:
         after_exchange_dbq = self.query_dnf_bbs_dbq()
         logger.warning(color("bold_yellow") + f"账号 {self.cfg.name} 本次论坛签到获得 {after_sign_dbq - old_dbq} 个代币券，兑换道具消耗了 {after_exchange_dbq - after_sign_dbq} 个代币券，余额：{old_dbq} => {after_exchange_dbq}")
 
+    @try_except(show_exception_info=False, return_val_on_except=0)
     def query_dnf_bbs_dbq(self) -> int:
+        if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
+            return 0
+
         res = self.dnf_bbs_op("查询代币券", "788271", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)

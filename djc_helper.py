@@ -4374,11 +4374,6 @@ class DjcHelper:
                     logger.exception(f"第{idx + 1}次尝试论坛签到失败了，等待一会", exc_info=e)
                     time.sleep(retryCfg.retry_wait_time)
 
-        def query_dbq():
-            res = self.dnf_bbs_dup_op("查询代币券", "774036", print_res=False)
-            info = parse_amesvr_common_info(res)
-            return int(info.sOutValue1)
-
         # 可能有多个活动并行
         # https://dnf.qq.com/act/a20210611act/index.html
         # https://dnf.qq.com/act/a20210803act/index.html
@@ -4476,19 +4471,24 @@ class DjcHelper:
                             return
 
         # ================= 实际逻辑 =================
-        old_dbq = query_dbq()
+        old_dbq = self.query_dnf_bbs_dbq()
 
         # 签到
         signin()
 
-        after_sign_dbq = query_dbq()
+        after_sign_dbq = self.query_dnf_bbs_dbq()
 
         # 兑换签到奖励
         query_remaining_quota()
         try_exchange()
 
-        after_exchange_dbq = query_dbq()
+        after_exchange_dbq = self.query_dnf_bbs_dbq()
         logger.warning(color("bold_yellow") + f"账号 {self.cfg.name} 本次论坛签到获得 {after_sign_dbq - old_dbq} 个代币券，兑换道具消耗了 {after_exchange_dbq - after_sign_dbq} 个代币券，余额：{old_dbq} => {after_exchange_dbq}")
+
+    def query_dnf_bbs_dbq(self) -> int:
+        res = self.dnf_bbs_op("查询代币券", "788271", print_res=False)
+        info = parse_amesvr_common_info(res)
+        return int(info.sOutValue1)
 
     def check_dnf_bbs(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20210803act/index.html",

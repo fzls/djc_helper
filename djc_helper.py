@@ -387,7 +387,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF马杰洛的规划", self.majieluo),
-            ("勇士的冒险补给", self.maoxian),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("黄钻", self.dnf_yellow_diamond),
@@ -434,6 +433,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("集卡", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

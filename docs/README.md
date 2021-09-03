@@ -58,6 +58,7 @@
 - [概览](#概览)
   - [支持的系统](#支持的系统)
   - [拉取代码](#拉取代码)
+  - [运行方式](#运行方式)
   - [长期支持的活动](#长期支持的活动)
   - [支持的短期活动](#支持的短期活动)
   - [基于auto.js支持的蚊子腿](#基于autojs支持的蚊子腿)
@@ -74,6 +75,7 @@
 - [使用方法](#使用方法)
 - [开机自动运行](#开机自动运行)
 - [支持一下](#支持一下)
+- [历史 Star 数](#历史-star-数)
 
 # 概览
 ## 支持的系统
@@ -88,6 +90,45 @@
 或者可以使用github的镜像加速访问，如
 > git clone --depth=1 https://github.com.cnpmjs.org/fzls/djc_helper.git
 > git clone --depth=1 https://hub.fastgit.org/fzls/djc_helper.git
+
+## 运行方式
+1. 使用打包版本
+> * 直接下载蓝奏云中的二进制版本使用 https://fzls.lanzoui.com/s/djc-helper
+> * 下载github最新发布版本 https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z
+> * 使用镜像加速国内下载 https://download.fastgit.org/fzls/djc_helper/releases/download/latest/djc_helper.7z
+
+2. 使用源码版本
+> 拉取代码后，安装依赖，然后运行main.py，根据提示操作
+
+3. 使用docker运行
+```bash
+# 可通过以下两种方式传入配置
+# 1. 环境变量（正式环境推荐该方式）
+#   支持通过下列环境变量来传递配置信息。若同时设置，则按下面顺序取第一个非空的环境变量作为配置
+#   DJC_HELPER_CONFIG_TOML                    toml配置
+#   DJC_HELPER_CONFIG_BASE64                  toml配置编码为base64
+#   DJC_HELPER_CONFIG_LZMA_COMPRESSED_BASE64  toml配置先通过lzma压缩，然后编码为base64
+#   DJC_HELPER_CONFIG_SINGLE_LINE_JSON        toml配置解析后再序列化为单行的JSON配置
+# 示例
+docker run --env DJC_HELPER_CONFIG_TOML="$DJC_HELPER_CONFIG_TOML" fzls/djc_helper:latest
+
+# 2. 映射本地配置文件到容器中（调试时可以使用这个）
+docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/djc_helper/config.toml fzls/djc_helper:latest
+```
+
+4. 通过腾讯云函数进行使用
+```bash
+# 1. 拉取源码后本地构建镜像
+# 2. 推送到腾讯云镜像仓库（个人版），具体流程看其文档 https://console.cloud.tencent.com/tke2/registry/user
+# 3. 创建云函数
+# 3.1 选择 自定义创建
+# 3.2 部署方式选择 镜像部署
+# 3.3 选择第二步中创建的镜像仓库以及推送的镜像版本
+# 3.4 Command设置为 python3
+# 3.5 Args 设置为 -u main_scf.py
+# 3.6 高级配置中的环境变量设置第三种方式中提及的四个环境变量之一，推荐后面三个，因为他们可以单行填入，而云函数似乎也只支持单行的环境变量值
+# 3.7 设置触发器为自定义创建，并设置为每日定时触发，具体触发表达式语法可以看其文档
+```
 
 ## 长期支持的活动
 - [x] 道聚城签到与领奖、任务与领奖、兑换奖励、查询信息等功能
@@ -191,3 +232,8 @@ DNF蚊子腿小助手六群 444193814 <br>
 
 # 支持一下
 [![支持一下](https://s3.ax1x.com/2020/12/16/r1yWZT.png)](https://imgchr.com/i/r1yWZT)
+
+# 历史 Star 数
+<p align="center">
+    <a href="https://starchart.cc/fzls/djc_helper"><img src="https://starchart.cc/fzls/djc_helper.svg" alt="starchart"></a>
+</p>

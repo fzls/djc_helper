@@ -13,7 +13,7 @@ from first_run import is_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
 from util import (async_message_box, bypass_proxy, is_run_in_github_action,
-                  is_windows, try_except, use_by_myself, use_proxy)
+                  is_windows, try_except, use_proxy)
 from version import now_version, ver_time
 
 if is_windows():

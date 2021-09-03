@@ -60,6 +60,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2076_a20b408d",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021081815172311351",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
+    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -96,7 +97,6 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20210708WG/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
     "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
-    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
 }
 
 
@@ -206,7 +206,7 @@ class Urls:
         self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "387039"  # DNF KOL
-        self.iActivityId_maoxian = "392494"  # 勇士的冒险补给
+        self.iActivityId_maoxian = "407067"  # 勇士的冒险补给
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

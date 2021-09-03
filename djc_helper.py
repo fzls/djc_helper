@@ -1801,7 +1801,16 @@ class DjcHelper:
             "774799", "774800",
         ]
         # note: 当前更新至（定期刷新这个值）
-        current_updated = 20
+
+        base_time = parse_time("2021-09-03 00:00:00")
+        base_updated = 20
+
+        # 每周五更新一集，因此可以用一个基准时间来计算当前更新到第几集了
+        pass_days = (get_now() - base_time).days
+        newly_updated = pass_days // 7
+
+        current_updated = base_updated + newly_updated
+
         for _idx, flowid in enumerate(watch_comic_flowids):
             idx = _idx + 1
             if idx > current_updated:

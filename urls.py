@@ -185,7 +185,7 @@ class Urls:
         self.iActivityId_dnf_helper = "370589"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
-        self.iActivityId_dnf_bbs = "374698"  # DNF论坛积分兑换活动
+        self.iActivityId_dnf_bbs = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_dup = "384854"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "382067"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "390248"  # WeGame活动

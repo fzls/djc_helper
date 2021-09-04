@@ -3892,13 +3892,13 @@ class DjcHelper:
 
         # 妆容和装饰（小橘子和贤德昭仪）
         petId = queryPetId()
-        skin_id = "8"  # 贤德昭仪
-        decoration_id = "7"  # 小橘子
+        skin_id, skin_name = ("24", "粉红喵酱")
+        decoration_id, decoration_name = ("7", "小橘子")
 
         # 尝试购买
-        self.xinyue_cat_op("G分购买猫咪皮肤-贤德昭仪", "507986", petId=petId, skin_id=skin_id)
+        self.xinyue_cat_op(f"G分购买猫咪皮肤-{skin_name}", "507986", petId=petId, skin_id=skin_id)
         wait()
-        self.xinyue_cat_op("G分购买装饰-小橘子", "508072", petId=petId, decoration_id=decoration_id)
+        self.xinyue_cat_op(f"G分购买装饰-{decoration_name}", "508072", petId=petId, decoration_id=decoration_id)
         wait()
 
         # 尝试穿戴妆容和装饰
@@ -6012,4 +6012,5 @@ if __name__ == '__main__':
         # djcHelper.xiaojiangyou()
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_bbs()
-        djcHelper.maoxian()
+        # djcHelper.maoxian()
+        djcHelper.xinyue_cat()

@@ -10,6 +10,7 @@
 
 ## bugfix
 1. dlc内存占用bug修复：当蓝奏云api未关闭保持官方限制开关时，不尝试从文件末未解析额外编码的信息。否则在文件实际没有进行额外编码的情况下，进行pickle.loads可能会导致内存占用非常大，比如这个文件【DNF蚊子腿小助手_增量更新文件_v13.11.0_to_v13.13.0.7z】
+2. 对应issue https://github.com/zaxtyson/LanZouCloud-API/issues/65
 
 ## 基础设施
 1. 增加新的初始化并激活venv的脚本

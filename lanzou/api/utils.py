@@ -120,9 +120,13 @@ def is_folder_url(share_url: str) -> bool:
             return False
 
 
-def un_serialize(data: bytes):
+def un_serialize(data: bytes, _limit_mode: bool):
     """反序列化文件信息数据"""
     try:
+        if _limit_mode:
+            # 不尝试从文件末尾解析额外编码进去的信息
+            return None
+
         ret = pickle.loads(data)
         if not isinstance(ret, dict):
             return None

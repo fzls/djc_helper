@@ -41,7 +41,7 @@ class LanZouCloud(object):
 
     def __init__(self):
         self._session = requests.Session()
-        self._limit_mode = True  # 是否保持官方限制
+        self._limit_mode = True  # 是否保持官方限制，若为False，则会尝试在不支持的格式或大小时写入额外信息，并在下载时进行解析
         self._timeout = 15  # 每个请求的超时(不包含下载响应体的用时)
         self._max_size = 100  # 单个文件大小上限 MB
         self._upload_delay = (0, 0)  # 文件上传延时
@@ -1051,7 +1051,7 @@ class LanZouCloud(object):
             with open(file_path, 'rb') as f:
                 f.seek(-512, os.SEEK_END)
                 last_512_bytes = f.read()
-                file_info = un_serialize(last_512_bytes)
+                file_info = un_serialize(last_512_bytes, self._limit_mode)
 
             # 大文件的记录文件也可以反序列化出 name,但是没有 padding 字段
             if file_info is not None and 'padding' in file_info:
@@ -1205,7 +1205,7 @@ class LanZouCloud(object):
                 return None
             resp = self._get(info.durl)
             # 这里无需知道 txt 文件的 Content-Length, 全部读取即可
-            info = un_serialize(resp.content) if resp else None
+            info = un_serialize(resp.content, self._limit_mode) if resp else None
             if info is not None:  # 确认是大文件
                 name, size, *_, parts = info.values()  # 真实文件名, 文件字节大小, (其它数据),分段数据文件名(有序)
                 file_list = [file_list.find_by_name(p) for p in parts]

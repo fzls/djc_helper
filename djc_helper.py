@@ -1346,6 +1346,10 @@ class DjcHelper:
             logger.warning("未启用领取QQ空间相关的功能，将跳过尝试更新QQ空间的p_skey的流程")
             return
 
+        if self.cfg.function_switches.disable_qzone_pskey_activities:
+            logger.warning("已禁用QQ空间pskey系列活动，将跳过尝试更新流程")
+            return
+
         # 仅支持扫码登录和自动登录
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             logger.warning("抽卡功能目前仅支持扫码登录和自动登录，请修改登录方式，否则将跳过该功能")
@@ -3023,6 +3027,10 @@ class DjcHelper:
                 any_enabled = True
         if not any_enabled:
             if print_warning: logger.warning("未启用管家相关活动，将跳过尝试更新管家p_skey流程")
+            return
+
+        if self.cfg.function_switches.disable_guanjia_pskey_activities:
+            logger.warning("已禁用管家pskey系列活动，将跳过尝试更新流程")
             return
 
         # 检查是否已在道聚城绑定

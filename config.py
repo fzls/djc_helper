@@ -927,6 +927,13 @@ def gen_config_for_github_action():
     cfg.common.check_update_on_end = False
     # 不必自动更新，同理
     cfg.common.auto_update_on_start = False
+    for account_cfg in cfg.account_configs:
+        # 不尝试qq空间相关活动，因为在不常用环境登录时，会弹验证，或者需要短信验证
+        account_cfg.function_switches.get_ark_lottery = False
+        account_cfg.function_switches.get_dnf_warriors_call = False
+        account_cfg.function_switches.get_vip_mentor = False
+        account_cfg.function_switches.get_dnf_super_vip = False
+        account_cfg.function_switches.get_dnf_yellow_diamond = False
 
     # 保存到专门配置文件
     show_config_size(cfg, "精简前")

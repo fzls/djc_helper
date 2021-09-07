@@ -373,7 +373,11 @@ class ConfigUi(QFrame):
             report_click_event("add_account")
 
     def del_account(self, checked=False):
-        account_name, ok = QInputDialog.getText(self, "删除账号", "要删除的账号名称", QLineEdit.Normal, "")
+        user_names = []
+        for account in self.accounts:
+            user_names.append(account.lineedit_name.text())
+
+        account_name, ok = QInputDialog().getItem(self, "删除账号", "要删除的账号名称", user_names, 0, False)
         if ok:
             logger.info(f"尝试删除账号 {account_name} ...")
 

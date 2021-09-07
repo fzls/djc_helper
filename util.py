@@ -226,7 +226,7 @@ def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
     return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
-def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_content_width=120, min_line_printed_width=120):
+def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_content_width=80, min_line_printed_width=80):
     msg = split_line_if_too_long(msg, max_line_content_width)
     line_width = max(min_line_printed_width, get_max_line_width(msg))
 
@@ -243,7 +243,7 @@ def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_content_width
     logger.warning("└" + "─" + "─" * line_width + "┘")
 
 
-def split_line_if_too_long(msg: str, max_line_width=120) -> str:
+def split_line_if_too_long(msg: str, max_line_width) -> str:
     # 确保每行不超过指定大小，超过的行分割为若干个符合条件的行，并在末尾增加\n来标记
     padding = "\\n"
     padding_width = printed_width(padding)

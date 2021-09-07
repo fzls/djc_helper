@@ -172,6 +172,21 @@ def printed_width(msg):
     return sum([1 if ord(c) < 128 else 2 for c in msg])
 
 
+def split_by_printed_width(msg: str, expect_width: int) -> Tuple[str, str]:
+    if printed_width(msg) <= expect_width:
+        return msg, ""
+
+    index = 0
+    current_width = 0
+    for substr in msg:
+        current_width += printed_width(substr)
+        if current_width > expect_width:
+            break
+        index += len(substr)
+
+    return msg[:index], msg[index:]
+
+
 def truncate(msg, expect_width) -> str:
     if printed_width(msg) <= expect_width:
         return msg

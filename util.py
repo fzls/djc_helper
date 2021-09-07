@@ -245,11 +245,14 @@ def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_width=120):
 
 def split_line_if_too_long(msg: str, max_line_width=120) -> str:
     # 确保每行不超过指定大小，超过的行分割为若干个符合条件的行，并在末尾增加\n来标记
+    padding = "\\n"
+    padding_width = printed_width(padding)
+
     lines = []
     for line in msg.splitlines():
         while printed_width(line) > max_line_width:
-            fitted_line, line = split_by_printed_width(line, max_line_width)
-            lines.append(fitted_line + "\\n")
+            fitted_line, line = split_by_printed_width(line, max_line_width - padding_width)
+            lines.append(fitted_line + padding)
 
         lines.append(line)
 

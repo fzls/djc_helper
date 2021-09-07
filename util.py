@@ -226,18 +226,42 @@ def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
     return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
-def show_head_line(msg, msg_color=color("fg_bold_green")):
-    char = "+"
-    line_length = 80
+def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_width=120):
+    msg = split_line_if_too_long(msg, max_line_width)
+    line_length = get_max_line_width(msg)
 
     # 按照下列格式打印
-    # +++++++++++
-    # +  test   +
-    # +++++++++++
+    # ┌──────────┐
+    # │   test   │
+    # │   test   │
+    # │   test   │
+    # └──────────┘
     logger.info(get_meaningful_call_point_for_log())
-    logger.warning(char * line_length)
-    logger.warning(char + msg_color + padLeftRight(msg, line_length - 2) + color("WARNING") + char)
-    logger.warning(char * line_length)
+    logger.warning("┌" + "─" + "─" * line_length + "┐")
+    for line in msg.splitlines():
+        logger.warning("│" + " " + msg_color + padLeftRight(line, line_length) + asciiReset + color("WARNING") + "│")
+    logger.warning("└" + "─" + "─" * line_length + "┘")
+
+
+def split_line_if_too_long(msg: str, max_line_width=120) -> str:
+    # 确保每行不超过指定大小，超过的行分割为若干个符合条件的行，并在末尾增加\n来标记
+    lines = []
+    for line in msg.splitlines():
+        while printed_width(line) > max_line_width:
+            fitted_line, line = split_by_printed_width(line, max_line_width)
+            lines.append(fitted_line + "\\n")
+
+        lines.append(line)
+
+    return "\n".join(lines)
+
+
+def get_max_line_width(msg: str) -> int:
+    line_length = 0
+    for line in msg.splitlines():
+        line_length = max(line_length, printed_width(line))
+
+    return line_length
 
 
 def get_now() -> datetime:

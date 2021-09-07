@@ -226,9 +226,9 @@ def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
     return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
-def show_head_line(msg, msg_color=color("fg_bold_green"), line_width=120):
-    msg = split_line_if_too_long(msg, line_width)
-    line_width = max(line_width, get_max_line_width(msg))
+def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_content_width=120, min_line_printed_width=120):
+    msg = split_line_if_too_long(msg, max_line_content_width)
+    line_width = max(min_line_printed_width, get_max_line_width(msg))
 
     # 按照下列格式打印
     # ┌──────────┐

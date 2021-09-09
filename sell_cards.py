@@ -32,7 +32,7 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}]", color("fg_bold_yellow"))
-        if not account_config.function_switches.get_ark_lottery:
+        if not account_config.function_switches.get_ark_lottery or not account_config.is_enabled():
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -99,7 +99,7 @@ def query_card_info():
 
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
-        if not account_config.function_switches.get_ark_lottery:
+        if not account_config.function_switches.get_ark_lottery or not account_config.is_enabled():
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)

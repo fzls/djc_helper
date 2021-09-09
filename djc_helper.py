@@ -3150,8 +3150,8 @@ class DjcHelper:
         self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "786975", "1713941")
         self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "786975", "1713942")
         # self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "786975", "1713960")
-        # self.hello_voice_op("装备提升礼盒*5(800Hello贝)(月限1)", "786976", "1539257")
-        self.hello_voice_op("时间引导石*20(550Hello贝)(月限1)", "786976", "1713961")
+        self.hello_voice_op("装备提升礼盒*5(800Hello贝)(月限1)", "786976", "1539257")
+        # self.hello_voice_op("时间引导石*20(550Hello贝)(月限1)", "786976", "1713961")
         # self.hello_voice_op("升级券(lv50~99)(2000Hello贝)(月限1)", "786976", "1713964")
 
         # 活动奖励兑换

@@ -44,7 +44,7 @@ act_name_to_url = {
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",
+    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",

@@ -1,6 +1,7 @@
 .git/
 .venv/
 .venv_dev/
+.tox/
 releases/
 test/
 utils/npp_portable/

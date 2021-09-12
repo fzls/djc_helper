@@ -4,6 +4,7 @@ logs/
 debug.log
 .venv/
 .venv_dev/
+.tox/
 .coverage
 coverage.xml
 

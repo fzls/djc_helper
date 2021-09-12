@@ -1,2 +1,2 @@
 python -m pip install -i https://pypi.doubanio.com/simple --upgrade pip setuptools wheel
-pip install -i https://pypi.doubanio.com/simple --upgrade -r requirements_linux.txt wheel
+pip install -i https://pypi.doubanio.com/simple --upgrade -r requirements_linux.txt

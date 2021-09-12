@@ -36,7 +36,7 @@ jobs:
       - name: Install Requirements
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -r requirements_dev.txt wheel
+          pip install -r requirements_dev.txt
 
       - name: Set time zone
         run: tzutil /s "China Standard Time"
@@ -87,13 +87,13 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -r requirements_dev.txt wheel
+          pip install -r requirements_dev.txt
 
       - name: Install Requirements Ubuntu
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -r requirements_linux_dev.txt wheel
+          pip install -r requirements_linux_dev.txt
 
       - name: Test for CodeCov
         run: |

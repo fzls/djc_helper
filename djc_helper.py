@@ -3883,6 +3883,14 @@ class DjcHelper:
         def wait():
             time.sleep(5)
 
+        def get_skin_flowid(skin_id: str) -> str:
+            special_skin_id_to_flowid_map = {
+                "23": "732492",  # 牛气冲天
+                "24": "739668",  # 粉红喵酱
+            }
+
+            return special_skin_id_to_flowid_map.get(skin_id, "507986")
+
         # --------------- 正式逻辑 ---------------
 
         old_user_info = queryUserInfo()
@@ -3900,11 +3908,14 @@ class DjcHelper:
 
         # 妆容和装饰（小橘子和贤德昭仪）
         petId = queryPetId()
+        # re: 消息会提示 该妆容仅限领取一次 ，暂时不确定这个 粉红喵酱 是否可以多次购买，下周验证下，如果不行就换回 贤德昭仪
         skin_id, skin_name = ("24", "粉红喵酱")
+        # skin_id, skin_name = ("8", "贤德昭仪")
+
         decoration_id, decoration_name = ("7", "小橘子")
 
         # 尝试购买
-        self.xinyue_cat_op(f"G分购买猫咪皮肤-{skin_name}", "507986", petId=petId, skin_id=skin_id)
+        self.xinyue_cat_op(f"G分购买猫咪皮肤-{skin_name}", get_skin_flowid(skin_id), petId=petId, skin_id=skin_id)
         wait()
         self.xinyue_cat_op(f"G分购买装饰-{decoration_name}", "508072", petId=petId, decoration_id=decoration_id)
         wait()

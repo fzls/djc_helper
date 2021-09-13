@@ -1592,45 +1592,43 @@ class DjcHelper:
             return
         self.lr = lr
 
-        def try_make_lucky_user_req_data():
-            cfg = self.cfg.vip_mentor
-
-            # 确认使用的角色
-            server_id, roleid = "", ""
-            if cfg.guanhuai_dnf_server_id == "":
-                logger.warning("未配置会员关怀礼包的区服和角色信息，将使用道聚城绑定的角色信息")
-                logger.warning(color("bold_cyan") + "如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的关怀活动和集卡活动都可以拿这个来获取回归相关的领取资格")
-            else:
-                if cfg.guanhuai_dnf_role_id == "":
-                    logger.warning(f"配置了会员关怀礼包的区服ID为{cfg.guanhuai_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
-                    self.query_dnf_rolelist(cfg.guanhuai_dnf_server_id)
-                else:
-                    logger.info("使用配置的区服和角色信息来进行领取会员关怀礼包")
-                    server_id, roleid = cfg.guanhuai_dnf_server_id, cfg.guanhuai_dnf_role_id
-
-            # 如果设置了幸运角色，则构建幸运角色请求数据
-            lucky_req_data = None
-            if server_id != "" and roleid != "":
-                # 如果配置了幸运角色，则使用配置的幸运角色来领取
-                lucky_req_data = {
-                    "role_info": {
-                        "area": server_id,
-                        "partition": server_id,
-                        "role": roleid,
-                        "clientPlat": 3,
-                        "game_id": "dnf"
-                    }
-                }
-
-            return lucky_req_data
-
-        self.qzone_act_op("关怀礼包", "7310_13a6f4de", act_req_data=try_make_lucky_user_req_data())
+        self.qzone_act_op("关怀礼包", "7310_13a6f4de", act_req_data=self.try_make_lucky_user_req_data("关怀", self.cfg.vip_mentor.guanhuai_dnf_server_id, self.cfg.vip_mentor.guanhuai_dnf_role_id))
 
         self.qzone_act_op("每日登录游戏增加两次抽奖机会", "7314_241a75f5")
         for idx in range_from_one(10):
             res = self.qzone_act_op(f"尝试第{idx}次抽奖", "7315_84b2b743")
             if res.get('Data', '') == "":
                 break
+
+    def try_make_lucky_user_req_data(self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str) -> Optional[dict]:
+        # 确认使用的角色
+        server_id, roleid = "", ""
+        if lucky_dnf_server_id == "":
+            logger.warning(f"未配置{act_name}礼包的区服和角色信息，将使用道聚城绑定的角色信息")
+            logger.warning(color("bold_cyan") + f"如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的{act_name}活动可以拿这个来获取回归相关的领取资格")
+        else:
+            if lucky_dnf_role_id == "":
+                logger.warning(f"配置了{act_name}礼包的区服ID为{lucky_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
+                self.query_dnf_rolelist(lucky_dnf_server_id)
+            else:
+                logger.info(f"使用配置的区服和角色信息来进行领取{act_name}礼包")
+                server_id, roleid = lucky_dnf_server_id, lucky_dnf_role_id
+
+        # 如果设置了幸运角色，则构建幸运角色请求数据
+        lucky_req_data = None
+        if server_id != "" and roleid != "":
+            # 如果配置了幸运角色，则使用配置的幸运角色来领取
+            lucky_req_data = {
+                "role_info": {
+                    "area": server_id,
+                    "partition": server_id,
+                    "role": roleid,
+                    "clientPlat": 3,
+                    "game_id": "dnf"
+                }
+            }
+
+        return lucky_req_data
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, print_res=True):
         if act_req_data is None:

@@ -159,13 +159,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "新增若干配置的视频教程"
-    message = """不少功能似乎大家看不懂配置里注释的流程说明，今天恰好有空，于是录制了几个视频教程，演示了一下诸如 心悦app兑换复活币、dnf论坛配置 等功能。
-如果各位想配置其中某些功能，但因为之前看不懂注释而放弃的，可以试试看看视频<_<
+    title = "500元同时完成两个充值活动的小技巧"
+    message = """各位如果国庆只充500，可以看下下面这个小教程，同时领取两个充值活动的奖励
 """
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NoticeShowType.ONCE, open_url="https://www.bilibili.com/video/BV1LQ4y1y7QJ", valid_duration=timedelta(days=7),
+                  show_type=NoticeShowType.ONCE, open_url="https://bbs.colg.cn/thread-8284066-1-1.html", valid_duration=timedelta(days=7),
                   show_only_before_version=now_version,
                   # show_only_before_version="",
                   )

@@ -248,5 +248,15 @@
     "open_url": "https://www.bilibili.com/video/BV1LQ4y1y7QJ",
     "expire_at": "2021-09-20 22:58:32",
     "show_only_before_version": "13.13.3"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "500元同时完成两个充值活动的小技巧",
+    "message": "各位如果国庆只充500，可以看下下面这个小教程，同时领取两个充值活动的奖励\n",
+    "send_at": "2021-09-13 23:52:51",
+    "show_type": "once",
+    "open_url": "https://bbs.colg.cn/thread-8284066-1-1.html",
+    "expire_at": "2021-09-20 23:52:51",
+    "show_only_before_version": "13.13.3"
   }
 ]

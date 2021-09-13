@@ -159,16 +159,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "DLC内存占用过大"
-    message = """周六不少朋友反馈自动更新DLC突然占用很大，我本地试了下好像没啥问题，暂时没看出是啥问题-。-
-各位如果遇到了这个情况，依次试试下面的流程
-1. 从网盘下载最新版本的dlc，替换到utils目录下，试试看是否正常了
-2. 从网盘下载最新版本的本体和dlc，dlc放到utils目录下后，试试看是否正常
-3. 如果上面两个都不行，还是稳定出现内存占用过高，一直卡住的情况，在群里@我，然后远程看看是啥问题
+    title = "新增若干配置的视频教程"
+    message = """不少功能似乎大家看不懂配置里注释的流程说明，今天恰好有空，于是录制了几个视频教程，演示了一下诸如 心悦app兑换复活币、dnf论坛配置 等功能。
+如果各位想配置其中某些功能，但因为之前看不懂注释而放弃的，可以试试看看视频<_<
 """
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7),
+                  show_type=NoticeShowType.ONCE, open_url="https://www.bilibili.com/video/BV1LQ4y1y7QJ", valid_duration=timedelta(days=7),
                   show_only_before_version=now_version,
                   # show_only_before_version="",
                   )

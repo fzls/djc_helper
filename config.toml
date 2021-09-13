@@ -151,22 +151,17 @@ enable_majieluo_invite_friend = false
 ozma_ignored_rolename_list = []
 
 # 以下dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题。
-# dnf论坛签到formhash
 # 获取方式
 #   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
 #   2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
-#   3. 手动签到一次
-#   4. 在左上角筛选项中输入 operation=qiandao
+#   3. 先登录账号，然后点击右上角头像退出登录
+#   4. 在左上角筛选项中输入 action=logout&formhash=
 #   5. 在筛选出的请求中，从请求参数中找到formhash的值，将其填到下面（如果不知道到哪里位置是formhash的值，就百度 http get请求参数格式，别来问我）
+#   6. 在该请求的详情中，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
+#
+# dnf论坛签到formhash
 dnf_bbs_formhash = ""
-
 # dnf论坛cookie
-# 获取方式：
-#   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
-#   2. 按f12打开开发者工具
-#   3. 按f5刷新一遍网页
-#   4. 在左上角筛选项中输入 k_misign:sign
-#   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 dnf_bbs_cookie = ""
 
 # colg cookie

@@ -394,6 +394,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
+            ("集卡", self.dnf_ark_lottery),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -432,7 +433,7 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
-            ("集卡", self.ark_lottery),
+            ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
         ]
 
@@ -1321,7 +1322,7 @@ class DjcHelper:
             return 0
         return res['13320']['data']['uPoint']
 
-    def send_card(self, card_name, cardId, to_qq, print_res=False):
+    def send_card(self, card_name: str, cardId: str, to_qq: str, print_res=False) -> Dict:
         from_qq = self.qq()
 
         ctx = f"{from_qq} 赠送卡片 {card_name}({cardId}) 给 {to_qq}"
@@ -1600,6 +1601,163 @@ class DjcHelper:
             if res.get('Data', '') == "":
                 break
 
+    # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
+    def is_new_version_ark_lottery(self) -> bool:
+        enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
+        return self.dnf_ark_lottery in enabled_payed_act_funcs
+
+    # note：对接流程与上方黄钻完全一致，参照其流程即可
+    # hack: 除此之外有一些额外的部分，参照旧版集卡 def ark_lottery(self): 的操作指引
+    @try_except()
+    def dnf_ark_lottery(self):
+        get_act_url("集卡")
+        show_head_line("QQ空间集卡")
+        self.show_not_ams_act_info("集卡")
+
+        if not self.cfg.function_switches.get_ark_lottery:
+            logger.warning("未启用领取QQ空间集卡功能，将跳过")
+            return
+
+        lr = self.fetch_pskey()
+        if lr is None:
+            return
+        self.lr = lr
+
+        if 'dnf' not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
+
+        # 增加次数
+        self.dnf_ark_lottery_add_ark_lottery_times()
+
+        # 抽卡
+        self.dnf_ark_lottery_draw_ark_lottery()
+
+        # 领取集卡奖励
+        self.dnf_ark_lottery_take_ark_lottery_awards()
+
+        # 消耗卡片来抽奖
+        self.dnf_ark_lottery_try_lottery_using_cards()
+
+    def dnf_ark_lottery_add_ark_lottery_times(self):
+        self.qzone_act_op("增加抽卡次数-每日登陆游戏", "11673_b39cd361")
+        self.qzone_act_op("增加抽卡次数-每日活动分享", "11653_e568dda6")
+        self.qzone_act_op("增加抽卡次数-幸运勇士", "11654_9e80c944",
+                          act_req_data=self.try_make_lucky_user_req_data("集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id))
+
+    def dnf_ark_lottery_draw_ark_lottery(self):
+        left, total = self.dnf_ark_lottery_remaining_lottery_times()
+        logger.info(color("bold_green") + f"上述操作完毕后，历史累计获得次数为{total}，最新抽卡次数为{left}，并开始抽卡~")
+        for idx in range(left):
+            self.qzone_act_op(f"抽卡-第{idx + 1}次", "11655_6157a711")
+
+    def dnf_ark_lottery_take_ark_lottery_awards(self, print_warning=True):
+        if self.cfg.ark_lottery.need_take_awards:
+            self.qzone_act_op("领取奖励-第一排", "11730_e4060db7")
+            self.qzone_act_op("领取奖励-第二排", "11658_3061e59b")
+            self.qzone_act_op("领取奖励-第三排", "11659_32ca6127")
+            self.qzone_act_op("领取奖励-十二张", "11741_93eb5f92")
+        else:
+            if print_warning: logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
+
+    def dnf_ark_lottery_try_lottery_using_cards(self, print_warning=True):
+        if self.enable_cost_all_cards_and_do_lottery():
+            if print_warning: logger.warning(color("fg_bold_cyan") + f"已开启消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
+            if 'dnf' not in self.bizcode_2_bind_role_map:
+                if print_warning: logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
+                return
+
+            card_counts = self.dnf_ark_lottery_get_card_counts()
+            for card_id, count in card_counts.items():
+                self.lottery_using_cards(card_id, count)
+        else:
+            if print_warning: logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
+
+    def enable_cost_all_cards_and_do_lottery(self):
+        if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.is_last_day():
+            logger.info("已是最后一天，且配置在最后一天将全部卡片抽掉，故而将开始消耗卡片抽奖~")
+            return True
+
+        return self.cfg.ark_lottery.act_id_to_cost_all_cards_and_do_lottery.get(self.urls.pesudo_ark_lottery_act_id, False)
+
+    def is_last_day(self) -> bool:
+        act_info = get_not_ams_act("集卡")
+        day_fmt = "%Y-%m-%d"
+        return format_time(parse_time(act_info.dtEndTime), day_fmt) == format_now(day_fmt)
+
+    def lottery_using_cards(self, card_id: str, count=1):
+        if count <= 0:
+            return
+
+        logger.info(f"尝试消耗{count}张卡片【{card_id}】来进行抽奖")
+        for idx in range_from_one(count):
+            self.qzone_act_op(f"消耗卡片({card_id})来抽奖-{idx}/{count}", "11738_d562400d", extra_act_req_data={
+                "items": '[{"id":"6","num":1}]'
+            })
+
+    def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1) -> bool:
+        url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))
+        body = {
+            "packetID": "2291_61694ad3",
+            "items": [
+                {
+                    "id": card_id,
+                    "num": card_count,
+                }
+            ],
+            "uid": target_qq,
+            "uidType": 1,
+            "r": random.random(),
+        }
+
+        res = self._qzone_act_op(f"{self.cfg.name} 赠送卡片 {card_id} 给 {target_qq}", url, body)
+
+        return res.get('code', -1) == 0
+
+    def dnf_ark_lottery_remaining_lottery_times(self) -> Tuple[int, int]:
+        """
+        返回 剩余卡片数，总计获得卡片数
+        """
+        res = self.qzone_act_query_op("查询抽卡次数", "11655_6157a711", print_res=False)
+        raw_data = json.loads(res.get('data'))
+
+        info = NewArkLotteryLotteryCountInfo().auto_update_config(raw_data['check_rule']['prefer_rule_group']['coins'][0])
+
+        return info.left, info.add
+
+    def dnf_ark_lottery_get_card_counts(self) -> Dict[str, int]:
+        url = self.urls.qzone_activity_new_query_card.format(
+            packetID="2291_61694ad3",
+            g_tk=getACSRFTokenForAMS(self.lr.p_skey),
+        )
+        body = {}
+
+        res = self._qzone_act_op(f"查询卡片", url, body, print_res=False)
+
+        card_counts = {}
+        # 初始化，确保每个卡片都有值
+        for card_id in range_from_one(12):
+            card_counts[str(card_id)] = 0
+
+        # 填充实际值
+        for item in res['data'].get('items', []):
+            info = NewArkLotteryCardCountInfo().auto_update_config(item)
+
+            card_counts[info.id] = info.num
+
+        return card_counts
+
+    def dnf_ark_lottery_get_prize_counts(self) -> Dict[str, int]:
+        # 新版本集卡无法查询奖励剩余兑换次数，因此直接写死，从而可以兼容旧版本代码
+        return {
+            "第一排": 1,
+            "第二排": 1,
+            "第三排": 1,
+            "十二张": 15,
+        }
+
+    def dnf_ark_lottery_get_prize_names(self) -> List[str]:
+        return list(self.dnf_ark_lottery_get_prize_counts().keys())
+
     def try_make_lucky_user_req_data(self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str) -> Optional[dict]:
         # 确认使用的角色
         server_id, roleid = "", ""
@@ -1630,7 +1788,7 @@ class DjcHelper:
 
         return lucky_req_data
 
-    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, print_res=True):
+    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: Optional[dict] = None, print_res=True):
         if act_req_data is None:
             roleinfo = RoleInfo()
             roleinfo.roleCode = "123456"
@@ -1647,15 +1805,35 @@ class DjcHelper:
                     "game_id": "dnf"
                 }
             }
+        if extra_act_req_data is not None:
+            act_req_data = {
+                **act_req_data,
+                **extra_act_req_data,
+            }
 
         body = {
             "SubActId": sub_act_id,
             "ActReqData": json.dumps(act_req_data),
             "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
         }
+
+        return self._qzone_act_op(ctx, self.urls.qzone_activity_new, body, print_res)
+
+    def qzone_act_query_op(self, ctx: str, sub_act_id: str, print_res=True):
+        body = {
+            "Id": sub_act_id,
+            "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
+            "ExtInfo": {
+                "0": ""
+            },
+        }
+
+        return self._qzone_act_op(ctx, self.urls.qzone_activity_new_query, body, print_res)
+
+    def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True):
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
-        return self.post(ctx, self.urls.qzone_activity_new, json=body, extra_cookies=extra_cookies, print_res=print_res)
+        return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
@@ -5944,6 +6122,19 @@ def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name
     getattr(djcHelper, act_func_name)()
 
 
+def is_new_version_ark_lottery() -> bool:
+    return fake_djc_helper().is_new_version_ark_lottery()
+
+
+def get_prize_names() -> List[str]:
+    return fake_djc_helper().dnf_ark_lottery_get_prize_names()
+
+
+def fake_djc_helper() -> DjcHelper:
+    cfg = config(print_res=False)
+    return DjcHelper(cfg.account_configs[0], cfg.common)
+
+
 def watch_live():
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
@@ -6030,4 +6221,4 @@ if __name__ == '__main__':
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_bbs()
         # djcHelper.maoxian()
-        djcHelper.xinyue_cat()
+        djcHelper.dnf_ark_lottery()

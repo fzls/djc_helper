@@ -1251,6 +1251,25 @@ class XiaojiangyouWeeklyPackageInfo(ConfigInterface):
         self.token = "0c316d84b848b72985eade54a57d1c31"
 
 
+class NewArkLotteryLotteryCountInfo(ConfigInterface):
+    def __init__(self):
+        self.ID = 6792
+        self.name = "消耗"
+        self.init = 0
+        self.extra = 0
+        self.add = 6
+        self.sub = 6
+        self.left = 0
+        self.need = 1
+        self.enough = False
+
+
+class NewArkLotteryCardCountInfo(ConfigInterface):
+    def __init__(self):
+        self.id = "1"
+        self.num = 0
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

@@ -102,10 +102,6 @@ def main():
 
     show_multiprocessing_info(cfg)
 
-    # 特别版强制启用每一个账号
-    for account_config in cfg.account_configs:
-        account_config.enable = True
-
     check_all_skey_and_pskey(cfg)
 
     # 正式进行流程

@@ -3666,10 +3666,7 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNF520",
-            "DNF1314",
-            "JBLQ50",
-            "SW888",
+            "DNFQKF",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -3677,12 +3674,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("第一个 2020.06.17 - 2020.06.19 登录游戏", "773403")
-        self.dnf_welfare_login_gifts_op("第二个 2020.06.20 - 2020.06.23 登录游戏", "773404")
-        self.dnf_welfare_login_gifts_op("第三个 2020.06.24 - 2021.06.30 登录游戏", "773405")
+        self.dnf_welfare_login_gifts_op("第一个 2020.09.14 - 2020.09.16 登录游戏", "799592")
+        self.dnf_welfare_login_gifts_op("第二个 2020.09.17 - 2020.09.20 登录游戏", "799618")
+        self.dnf_welfare_login_gifts_op("第三个 2020.09.21 - 2021.09.30 登录游戏", "799622")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "773406", siActivityId=query_siActivityId())
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "799594", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account("DNF福利中心兑换", get_act_url("DNF福利中心兑换"),
@@ -6221,4 +6218,5 @@ if __name__ == '__main__':
         # djcHelper.qq_video_amesvr()
         # djcHelper.dnf_bbs()
         # djcHelper.maoxian()
-        djcHelper.dnf_ark_lottery()
+        # djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_welfare()

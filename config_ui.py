@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (QApplication, QFileDialog, QInputDialog,
 from config import *
 from dao import CardSecret, DnfRoleInfo
 from data_struct import to_raw_type
-from djc_helper import DjcHelper
+from djc_helper import DjcHelper, is_new_version_ark_lottery
 from ga import GA_REPORT_TYPE_PAGE_VIEW
 from game_info import get_name_2_mobile_game_info_map
 from main_def import (_show_head_line, disable_flag_file, get_user_buy_info,
@@ -25,6 +25,7 @@ from main_def import (_show_head_line, disable_flag_file, get_user_buy_info,
 from qt_wrapper import *
 from setting import *
 from update import *
+from urls import Urls
 from usage_count import increase_counter
 from util import parse_scode
 
@@ -1814,7 +1815,7 @@ class ArkLotteryConfigUi(QWidget):
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
         add_row(form_layout, "领取礼包", self.checkbox_need_take_awards)
 
-        cost_all_cards_and_do_lottery = cfg.act_id_to_cost_all_cards_and_do_lottery.get(zzconfig().actid, False)
+        cost_all_cards_and_do_lottery = cfg.act_id_to_cost_all_cards_and_do_lottery.get(self.get_ark_lottery_act_id(), False)
         self.checkbox_cost_all_cards_and_do_lottery = create_checkbox(cost_all_cards_and_do_lottery)
         add_row(form_layout, "是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
@@ -1824,7 +1825,13 @@ class ArkLotteryConfigUi(QWidget):
 
         cfg.need_take_awards = self.checkbox_need_take_awards.isChecked()
 
-        cfg.act_id_to_cost_all_cards_and_do_lottery[zzconfig().actid] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
+        cfg.act_id_to_cost_all_cards_and_do_lottery[self.get_ark_lottery_act_id()] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
+
+    def get_ark_lottery_act_id(self) -> int:
+        if is_new_version_ark_lottery():
+            return Urls().pesudo_ark_lottery_act_id
+        else:
+            return zzconfig().actid
 
 
 class VipMentorConfigUi(QWidget):

@@ -727,6 +727,8 @@ show_color = ""
 4473 = false
 # 2021.7.20 DNF女鬼剑新职业刃影闪亮登场，超萌表情包集卡赢好礼
 4495 = false
+# 2021.9.14 金秋阿拉德快活季
+10001 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

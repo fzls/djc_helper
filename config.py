@@ -1035,9 +1035,9 @@ def save_config(cfg: Config, config_path="config.toml"):
         toml.dump(data_to_save, save_file)
 
 
-def config():
+def config(print_res=True):
     if not g_config.loaded:
-        logger.info("配置尚未加载，需要初始化")
+        if print_res: logger.info("配置尚未加载，需要初始化")
         load_config("config.toml", "config.toml.local")
 
     return g_config

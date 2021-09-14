@@ -30,7 +30,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-08-20 00:00:00", "2021-09-19 23:59:59"),
     newAmsActInfo("黄钻", "2021-08-20 00:00:00", "2021-09-19 23:59:59"),
-    newAmsActInfo("集卡", "2021-07-20 00:00:00", "2021-08-20 23:59:59"),
+    newAmsActInfo("集卡", "2021-09-14 00:00:00", "2021-10-31 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
@@ -61,6 +61,7 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021081815172311351",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -96,7 +97,6 @@ act_name_to_url = {
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210708WG/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210708album/index.html",
-    "集卡": "https://act.qzone.qq.com/vip/2019/xcardv3?zz=9&verifyid=qq2021dnf14",
 }
 
 
@@ -246,6 +246,11 @@ class Urls:
 
         # 新的qq空间接口
         self.qzone_activity_new = "https://act.qzone.qq.com/v2/vip/tx/trpc/subact/ExecAct"
+        self.qzone_activity_new_query = "https://act.qzone.qq.com/v2/vip/tx/proxy/domain/trpc.qzone.qq.com/trpc/subact/QueryAct"
+        self.qzone_activity_new_send_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/GiftItems?g_tk={g_tk}"
+        self.qzone_activity_new_query_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/QueryItems?g_tk={g_tk}&packetID={packetID}"
+        # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
+        self.pesudo_ark_lottery_act_id = 10001
 
         # 抽卡相关
         self.ark_lottery_page = get_act_url("集卡")

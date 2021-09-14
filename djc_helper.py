@@ -386,7 +386,6 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("DNF马杰洛的规划", self.majieluo),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("黄钻", self.dnf_yellow_diamond),
@@ -396,6 +395,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -4311,6 +4311,9 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
+        logger.warning(f"本地调试日志：时间原因，暂未接入")
+        return
+
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
@@ -4401,7 +4404,7 @@ class DjcHelper:
 
     def check_majieluo(self, **extra_params):
         self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="789669", commit_bind_flowid="789668",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="799611", commit_bind_flowid="799610",
                                 **extra_params)
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", p_skey="", print_res=True, **extra_params):
@@ -6220,4 +6223,5 @@ if __name__ == '__main__':
         # djcHelper.maoxian()
         # djcHelper.dnf_ark_lottery()
         # djcHelper.dnf_welfare()
-        djcHelper.dnf_luodiye()
+        # djcHelper.dnf_luodiye()
+        djcHelper.majieluo()

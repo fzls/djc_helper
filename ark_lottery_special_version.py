@@ -71,7 +71,11 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig)
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list()
-    djcHelper.ark_lottery()
+
+    if is_new_version_ark_lottery():
+        djcHelper.dnf_ark_lottery()
+    else:
+        djcHelper.ark_lottery()
 
     used_time = datetime.datetime.now() - start_time
     _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")

@@ -1652,10 +1652,10 @@ class DjcHelper:
 
     def dnf_ark_lottery_take_ark_lottery_awards(self, print_warning=True):
         if self.cfg.ark_lottery.need_take_awards:
-            self.qzone_act_op("领取奖励-第一排", "11730_e4060db7")
-            self.qzone_act_op("领取奖励-第二排", "11658_3061e59b")
-            self.qzone_act_op("领取奖励-第三排", "11659_32ca6127")
-            self.qzone_act_op("领取奖励-十二张", "11741_93eb5f92")
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第一排", "11730_e4060db7")
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第二排", "11658_3061e59b")
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第三排", "11659_32ca6127")
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-十二张", "11741_93eb5f92")
         else:
             if print_warning: logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
 

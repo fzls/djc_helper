@@ -395,6 +395,7 @@ class DjcHelper:
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -429,7 +430,6 @@ class DjcHelper:
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
@@ -4948,20 +4948,20 @@ class DjcHelper:
 
         self.check_dnf_luodiye()
 
-        self.dnf_luodiye_op("登陆领取积分", "770771")
+        self.dnf_luodiye_op("登陆领取积分", "800206")
         if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_luodiye_分享_{self.uin()}"):
-            self.dnf_luodiye_op("分享", "770783", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
-        self.dnf_luodiye_op("登陆活动页送积分", "770812")
+            self.dnf_luodiye_op("分享", "800207", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        self.dnf_luodiye_op("登陆活动页送积分", "800208")
 
         for i in range(4):
-            res = self.dnf_luodiye_op("领取自选道具-装备提升礼盒*2", "770042", itemIndex="8")
+            res = self.dnf_luodiye_op("领取自选道具-装备提升礼盒*2", "800205", giftId="1756746")
             if int(res["ret"]) != 0:
                 break
             time.sleep(1)
 
     def check_dnf_luodiye(self):
         self.check_bind_account("DNF落地页活动", get_act_url("DNF落地页活动"),
-                                activity_op_func=self.dnf_luodiye_op, query_bind_flowid="769490", commit_bind_flowid="769489")
+                                activity_op_func=self.dnf_luodiye_op, query_bind_flowid="800203", commit_bind_flowid="800202")
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_luodiye
@@ -6219,4 +6219,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_bbs()
         # djcHelper.maoxian()
         # djcHelper.dnf_ark_lottery()
-        djcHelper.dnf_welfare()
+        # djcHelper.dnf_welfare()
+        djcHelper.dnf_luodiye()

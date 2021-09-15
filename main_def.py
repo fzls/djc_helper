@@ -990,17 +990,25 @@ def show_tips(cfg):
         "工具下载": (
             "如需下载chrome、autojs、HttpCanary、notepad++、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzoui.com/s/djc-tools"
         ),
-        "配置工具": (
-            "现已添加简易版配置工具，大家可以双击【DNF蚊子腿小助手配置工具.exe】进行体验~"
-        ),
-        "心悦app": (
-            "现已添加心悦app的G分相关活动，获取的G分可用于每日兑换复活币*5、雷米*10、霸王契约*3天。"
-            "现已添加兑换支持，只是配置流程比较晦涩，有兴趣者可打开config.toml.examle搜索 xinyue_app_operations 了解具体配置流程进行体验"
-        ),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
+        ),
+        "视频教程": (
+            "部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1"
+        ),
+        "国庆充值活动": (
+            "国庆有不少充值活动，各位如果充钱了，请自行把下列活动链接复制到手机qq上进行打开~\n"
+            "金秋礼包补给站(先领任务才可以。4个礼包+若干次抽奖)：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_jqdhjf_lottery\n"
+            "Q币消费返礼包(先充Q币，再用Q币充点券，每周一次)：https://pay.qq.com/h5/store/apple-card/task.html?offerId=1450029561&taskType=qb&\n"
+            "金秋夺宝(10次抽奖)：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_sd50d1_lottery&\n"
+            "充值天天抽好礼(每天充值满500点券可以抽一次)：https://pay.qq.com/h5/activity/dnf_sdzq5_lottery.php\n"
+        ),
+        "斗鱼虎牙活动": (
+            "斗鱼和虎牙的蚊子腿请自行完成：\n"
+            "1. https://www.douyu.com/topic/DNFJQ\n"
+            "2. https://www.huya.com/kuangren\n"
         ),
     }
 

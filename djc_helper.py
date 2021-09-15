@@ -397,6 +397,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -432,7 +433,6 @@ class DjcHelper:
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
             ("qq视频蚊子腿", self.qq_video),
-            ("DNF集合站", self.dnf_collection),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
         ]
@@ -5381,25 +5381,24 @@ class DjcHelper:
 
         self.check_dnf_collection()
 
-        def query_signin_days():
-            res = self.dnf_collection_op("查询", "779650", print_res=False)
-            info = AmesvrSigninInfo().auto_update_config(res["modRet"])
-            return int(info.total)
+        def query_signin_days() -> int:
+            res = self.dnf_wegame_op("查询签到天数-condOutput", "801238", print_res=False)
+            return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_op("勇士礼包", "779642")
-        self.dnf_collection_op("全民参与礼包", "779647")
+        self.dnf_collection_op("幸运Party礼包", "802431")
 
-        self.dnf_collection_op("30分签到礼包", "779643")
+        self.dnf_collection_op("全民参与礼包", "802430")
+
+        self.dnf_collection_op("30分签到礼包", "801723")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_op("3日礼包", "779640")
-        self.dnf_collection_op("7日礼包", "779644")
-        self.dnf_collection_op("10日礼包", "779648")
-        self.dnf_collection_op("15日礼包", "779645")
-        self.dnf_collection_op("21日礼包", "779649")
+        self.dnf_collection_op("累计签到3天按钮", "801229")
+        self.dnf_collection_op("累计签到7天按钮", "801230")
+        self.dnf_collection_op("累计签到15天按钮", "801231")
+        self.dnf_collection_op("累计签到21天按钮", "801232")
 
     def check_dnf_collection(self):
         self.check_bind_account("DNF集合站", get_act_url("DNF集合站"),
-                                activity_op_func=self.dnf_collection_op, query_bind_flowid="779637", commit_bind_flowid="779636")
+                                activity_op_func=self.dnf_collection_op, query_bind_flowid="801222", commit_bind_flowid="801221")
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection
@@ -6203,4 +6202,5 @@ if __name__ == '__main__':
         # djcHelper.majieluo()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.dnf_collection()

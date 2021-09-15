@@ -2630,7 +2630,7 @@ class DjcHelper:
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
-        
+
         self.show_amesvr_act_info(self.dnf_helper_op)
 
         if self.cfg.dnf_helper_info.token == "":

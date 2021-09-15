@@ -3667,6 +3667,8 @@ class DjcHelper:
 
         sContents = [
             "DNFQKF",
+            "DNFGFLT",
+            "DNFQJQR",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]

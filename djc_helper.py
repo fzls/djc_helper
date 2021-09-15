@@ -401,6 +401,7 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("管家蚊子腿", self.guanjia_new_dup),
             ("DNF公会活动", self.dnf_gonghui),
+            ("勇士的冒险补给", self.maoxian_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -5341,6 +5342,56 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("勇士的冒险补给"),
                                    **extra_params)
 
+    # --------------------------------------------勇士的冒险补给--------------------------------------------
+    @try_except()
+    def maoxian_dup(self):
+        show_head_line("勇士的冒险补给")
+        self.show_amesvr_act_info(self.maoxian_dup_op)
+
+        if not self.cfg.function_switches.get_maoxian or self.disable_most_activities():
+            logger.warning("未启用领取勇士的冒险补给功能，将跳过")
+            return
+
+        self.check_maoxian_dup()
+
+        self.maoxian_dup_op("邀请一位回归用户礼包", "797248")
+        self.maoxian_dup_op("邀请两位回归用户抽奖", "798383")
+        self.maoxian_dup_op("邀请三位回归用户抽奖", "798434")
+
+        self.maoxian_dup_op("回归玩家登录1次", "798441")
+        self.maoxian_dup_op("回归玩家登录2次", "798588")
+        self.maoxian_dup_op("回归玩家登录3次", "798590")
+        self.maoxian_dup_op("回归玩家登录4次", "798592")
+
+        self.maoxian_dup_op("冒险-在线15分钟", "798596")
+        self.maoxian_dup_op("冒险-在线30分钟", "798597")
+        self.maoxian_dup_op("冒险-通过地下城1次", "798598")
+
+    def check_maoxian_dup(self):
+        self.check_bind_account("勇士的冒险补给", get_act_url("勇士的冒险补给"),
+                                activity_op_func=self.maoxian_dup_op, query_bind_flowid="800024", commit_bind_flowid="800023")
+
+    def maoxian_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_maoxian_dup
+
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        qq = self.qq()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(ctx, "comm.ams.game.qq.com", "group_k", "bb", iActivityId, iFlowId, print_res, get_act_url("勇士的冒险补给"),
+                                  sArea=roleinfo.serviceID, serverId=roleinfo.serviceID,
+                                  sRoleId=roleinfo.roleCode, sRoleName=quote_plus(roleinfo.roleName),
+                                  uin=qq, skey=self.cfg.account_info.skey,
+                                  nickName=quote_plus(dnf_helper_info.nickName), userId=dnf_helper_info.userId, token=quote_plus(dnf_helper_info.token),
+                                  **extra_params)
+
+        # 1000017016: 登录态失效,请重新登录
+        if res is not None and res["flowRet"]["iRet"] == "700" and "登录态失效" in res["flowRet"]["sMsg"]:
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today())
+
+        return res
+
     # --------------------------------------------刃影预约活动--------------------------------------------
     @try_except()
     def dnf_reserve(self):
@@ -6388,4 +6439,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
         # djcHelper.guanjia_new_dup()
-        djcHelper.dnf_gonghui()
+        # djcHelper.dnf_gonghui()
+        djcHelper.maoxian_dup()

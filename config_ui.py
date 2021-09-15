@@ -2021,7 +2021,7 @@ def main():
         print_tb(tb, file=result)
         msg = f"{t} {val}:\n{result.getvalue()}"
         logger.error(msg)
-        QMessageBox.critical(None, "出错了", msg)
+        QMessageBox.critical(None, f"出错了 - v{now_version}", msg)
         old_hook(t, val, tb)
 
     old_hook = sys.excepthook

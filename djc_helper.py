@@ -6321,7 +6321,7 @@ def get_prize_names() -> List[str]:
 
 
 def fake_djc_helper() -> DjcHelper:
-    cfg = config(force_reload=True, print_res=False)
+    cfg = config(force_reload_when_no_accounts=True, print_res=False)
     return DjcHelper(cfg.account_configs[0], cfg.common)
 
 

@@ -1045,8 +1045,8 @@ def save_config(cfg: Config, config_path="config.toml"):
         toml.dump(data_to_save, save_file)
 
 
-def config(force_reload=False, print_res=True):
-    if not g_config.loaded or force_reload:
+def config(force_reload_when_no_accounts=False, print_res=True):
+    if not g_config.loaded or (force_reload_when_no_accounts and len(g_config.account_configs) == 0):
         if print_res: logger.info("配置尚未加载，需要初始化")
         load_config("config.toml", "config.toml.local")
 

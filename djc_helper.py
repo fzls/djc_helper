@@ -405,6 +405,7 @@ class DjcHelper:
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("关怀活动", self.dnf_guanhuai),
             ("轻松之路", self.dnf_relax_road),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -426,7 +427,6 @@ class DjcHelper:
             ("DNF福签大作战", self.dnf_fuqian),
             ("会员关怀", self.vip_mentor),
             ("DNF强者之路", self.dnf_strong),
-            ("dnf助手活动", self.dnf_helper),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
@@ -2637,123 +2637,36 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
-        def query_info():
-            res = self.dnf_helper_op("查询", "753432", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+        lbinfo = {
+            # 795848: ["向微信或QQ好友分享1次活动链接", "抗疲劳秘药 (5点)", "初始难度", "c-icon11.png", "pop11", 21852, 21866, 21838],
+            # 797805: ["游戏内消耗疲劳点数30点", "[期限]时间引导石礼盒(20个)", "初始难度", "c-icon9.png", "pop8", 21851, 21865, 21837],
+            # 797806: ["游戏在线60分钟", "宠物饲料礼袋(10个)*2", "初始难度", "c-icon12.png", "pop8", 21853, 21867, 21839],
+            # 797807: ["发布1条助手动态", "复活币礼盒(1个)", "初始难度", "c-icon15.png", "pop11", 21854, 21868, 21840],
+            # 797902: ["游戏在线30分钟", "神秘契约礼包(1天)", "初始难度", "c-icon13.png", "pop8", 21855, 21869, 21841],
+            # 797903: ["登录游戏", "[期限]时间引导石礼盒(10个)", "大天使的庇佑", "c-icon9.png", "pop8", 21856, 21870, 21842],
+            # 797905: ["登录助手APP", "成长胶囊(10%)", "大天使的庇佑", "c-icon7.png", "pop11", 21857, 21871, 21843],
+            # 797906: ["浏览1篇动态", "闪亮的雷米援助礼盒(5个)", "大天使的庇佑", "c-icon4.png", "pop11", 21859, 21873, 21845],
+            # 797908: ["游戏内通关1次推荐地下城", "黑钻3天", "七大原罪", "c-icon6.png", "pop8", 21861, 21875, 21847],
+            # 797910: ["游戏内通关3次推荐地下城", "成长胶囊(30百分比)", "七大原罪", "c-icon7.png", "pop8", 21862, 21876, 21848],
+            # 797911: ["点赞1条助手动态", "宠物饲料礼袋(10个)", "大天使的庇佑", "c-icon12.png", "pop11", 21858, 21872, 21844],
+            797931: ["游戏内通关7次推荐地下城", "装备提升礼盒", "七大原罪", "c-icon8.png", "pop8", 21863, 21877, 21849],
+            # 797932: ["游戏内消耗疲劳点数156点", "[期限]时间引导石礼盒(50个)*2", "七大原罪", "c-icon9.png", "pop8", 21864, 21878, 21850],
+            # 797933: ["点赞1篇助手资讯", "闪耀的徽章神秘礼盒", "大天使的庇佑", "c-icon5.png", "pop11", 21860, 21874, 21846]
+        }
 
-            info = DnfHelperInfo()
-            info.unlocked_maps.add(1)
-            for idx, v in enumerate(raw_info.sOutValue2.split(';')):
-                if int(v) > 0:
-                    info.unlocked_maps.add(idx + 2)
-            info.remaining_play_times = int(raw_info.sOutValue3)
+        for flowid, flowinfo in lbinfo.items():
+            name, award, category = flowinfo[:3]
 
-            return info
+            self.dnf_helper_op(f"{category} - {name} - {award}", flowid)
 
-        def query_game_info():
-            qq = self.qq()
-            url = f"https://mwegame.qq.com/act/dnf/Time2021/ajax/init?uin={qq}"
-            res = self.post("查询小游戏信息", url, {}, print_res=False)
-
-            info = DnfHelperGameInfo().auto_update_config(res['data'])
-
-            return info
-
-        self.dnf_helper_op("每天加游戏次数", "753415")
-
-        logger.info(color("bold_cyan") + "当前仅支持单人模式，组队模式请手动完成")
-
-        stage_infos = [
-            (6, 17, 19, "天空之城", "754337", "754138"),
-            (5, 14, 16, "天际", "759384", "753758"),
-            (4, 13, 13, "地轨", "759386", "754076"),
-            (3, 9, 12, "能源之地", "759388", "754078"),
-            (2, 6, 8, "时空之门", "759393", "754083"),
-            (1, 4, 5, "天界", "759395", "754085"),
-            (0, 0, 3, "远古", "759397", "754080"),
-        ]
-
-        remaining_play_times = query_info().remaining_play_times
-        for play_idx in range_from_one(remaining_play_times):
-            info = query_info()
-            logger.info(color("bold_green") + f"开始{play_idx}/{remaining_play_times}次小游戏，当前解锁关卡为{info.unlocked_maps}")
-            for stage_idx in range(7, 0, -1):
-                if stage_idx not in info.unlocked_maps:
-                    continue
-
-                mapIndex, oImgsIndex_min, oImgsIndex_max, stage_name, start_flowid, end_flowid = stage_infos[stage_idx - 1]
-
-                oImgsIndex = random.randrange(oImgsIndex_min, oImgsIndex_max + 1)
-                oIndex = oImgsIndex - oImgsIndex_min
-
-                stage = f"{stage_name}-{mapIndex}-{oImgsIndex}"
-
-                logger.info(color("bold_cyan") + f"开始 {stage}")
-                self.dnf_helper_op(f"开始游戏(单人)---{stage}", start_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
-                count_down(color("bold_green") + "等待小游戏完成", 8 * 60 + 1)
-                self.dnf_helper_op(f"领取奖励(单人)---{stage}", end_flowid, map1=mapIndex, map2=oImgsIndex, len=oIndex)
-
-                break
-
-        # self.dnf_helper_op("开始游戏(单人)---天空之城", "754337")
-        # self.dnf_helper_op("开始游戏(单人)---决战天际", "759384")
-        # self.dnf_helper_op("开始游戏(单人)---地轨", "759386")
-        # self.dnf_helper_op("开始游戏(单人)---能源之地", "759388")
-        # self.dnf_helper_op("开始游戏(单人)---时空之门", "759393")
-        # self.dnf_helper_op("开始游戏(单人)---天界", "759395")
-        # self.dnf_helper_op("开始游戏(单人)---远古", "759397")
-        #
-        # self.dnf_helper_op("决战天空之城游戏模式(单人)", "754138")
-        # self.dnf_helper_op("决战天际游戏模式(单人)", "753758")
-        # self.dnf_helper_op("决战地轨者游戏模式(单人)", "754076")
-        # self.dnf_helper_op("决战能源之地游戏模式(单人)", "754078")
-        # self.dnf_helper_op("决战时空之门游戏模式(单人)", "754083")
-        # self.dnf_helper_op("决战天界游戏模式(单人)", "754085")
-        # self.dnf_helper_op("决战远古游戏模式(单人)", "754080")
-
-        # self.dnf_helper_op("提前结束游戏", "755483")
-
-        # self.dnf_helper_op("邀请组队", "754338")
-        #
-        # self.dnf_helper_op("开始游戏(组队)----天空之城", "756737")
-        # self.dnf_helper_op("开始游戏(组队)----决战天际", "759385")
-        # self.dnf_helper_op("开始游戏(组队)----地轨", "759387")
-        # self.dnf_helper_op("开始游戏(组队)----能源", "759389")
-        # self.dnf_helper_op("开始游戏(组队)----时空之门", "759394")
-        # self.dnf_helper_op("开始游戏(组队)----天界", "759396")
-        # self.dnf_helper_op("开始游戏(组队)----远古", "759398")
-        #
-        # self.dnf_helper_op("决战天际游戏模式(组队)", "754075")
-        # self.dnf_helper_op("决战地轨者游戏模式(组队)", "754077")
-        # self.dnf_helper_op("决战能源之地游戏模式(组队)", "754079")
-        # self.dnf_helper_op("决战远古游戏模式(组队)", "754081")
-        # self.dnf_helper_op("决战时空之门游戏模式(组队)", "754084")
-        # self.dnf_helper_op("决战天界游戏模式(组队)", "754086")
-        # self.dnf_helper_op("决战天空之城游戏模式(组队)", "754139")
-        #
-        # self.dnf_helper_op("提前结束游戏_from755483", "755485")
-
-        self.dnf_helper_op("最终奖励", "756324")
-
-        game_times = int(query_game_info().GameTimes)
-        for need_game_times, name, flowid in [
-            (9, "解锁9次(决战天际)", "753695"),
-            (15, "解锁15次(决战地轨者)", "753749"),
-            (21, "解锁21次(决战能源之地)", "753750"),
-            (30, "解锁30次(决战时空之门)", "753751"),
-            (45, "解锁45次(决战天界)", "753752"),
-            (60, "解锁60次(决战远古)", "753753"),
-
-            (9, "解锁9次(决战天际)_from753695", "755230"),
-            (15, "解锁15次(决战地轨者)_from753749", "755232"),
-            (21, "解锁21次(决战能源之地)_from753750", "755234"),
-            (30, "解锁30次(决战时空之门)_from753751", "755235"),
-            (45, "解锁45次(决战天界)_from753752", "755236"),
-            (60, "解锁60次(决战远古)_from753753", "755237"),
-        ]:
-            if game_times < need_game_times:
-                continue
-            self.dnf_helper_op(name, flowid)
+        self.dnf_helper_op("累计1次", "797934")
+        self.dnf_helper_op("累计2次", "797936")
+        self.dnf_helper_op("累计4次", "797937")
+        self.dnf_helper_op("累计6次", "797938")
+        self.dnf_helper_op("累计9次", "797939")
+        self.dnf_helper_op("累计12次", "797940")
+        self.dnf_helper_op("累计16次", "797941")
+        self.dnf_helper_op("累计20次", "797942")
 
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
@@ -6502,4 +6415,5 @@ if __name__ == '__main__':
         # djcHelper.maoxian_dup()
         # djcHelper.dnf_mingyun_jueze() # re: 这个找到网址后再启用
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
-        djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用
+        # djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用
+        djcHelper.dnf_helper()

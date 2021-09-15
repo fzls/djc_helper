@@ -66,6 +66,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
+    "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -207,6 +208,7 @@ class Urls:
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "387039"  # DNF KOL
         self.iActivityId_maoxian = "407067"  # 勇士的冒险补给
+        self.iActivityId_dnf_gonghui = "406454"  # DNF公会活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -223,7 +225,7 @@ class Urls:
                                "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}" \
                                "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}" \
                                "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}" \
-                               "&iGuestUin={iGuestUin}&ukey={ukey}"
+                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize

@@ -2621,7 +2621,6 @@ class DjcHelper:
     @try_except()
     def dnf_helper(self):
         show_head_line("dnf助手")
-        self.show_amesvr_act_info(self.dnf_helper_op)
 
         if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
             logger.warning("未启用领取dnf助手活动功能，将跳过")
@@ -2631,6 +2630,8 @@ class DjcHelper:
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
+        
+        self.show_amesvr_act_info(self.dnf_helper_op)
 
         if self.cfg.dnf_helper_info.token == "":
             extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"

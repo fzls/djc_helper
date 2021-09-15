@@ -319,6 +319,8 @@ get_xiaojiangyou = true
 get_dnf_gonghui = true
 # 公会活动是否进行积分抽奖
 dnf_gonghui_enable_lottery = false
+# 是否领取 命运的抉择挑战赛 活动
+get_dnf_mingyun_jueze = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用 集卡 功能

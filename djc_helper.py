@@ -5594,7 +5594,7 @@ class DjcHelper:
         self.check_dnf_collection()
 
         def query_signin_days() -> int:
-            res = self.dnf_wegame_op("查询签到天数-condOutput", "801238", print_res=False)
+            res = self.dnf_collection_op("查询签到天数-condOutput", "801238", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
         self.dnf_collection_op("幸运Party礼包", "802431")

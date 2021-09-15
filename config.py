@@ -309,6 +309,10 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_maoxian = True
         # 是否领取 小酱油周礼包和生日礼包 活动
         self.get_xiaojiangyou = True
+        # 是否领取 DNF公会活动 活动
+        self.get_dnf_gonghui = True
+        # 公会活动是否进行积分抽奖
+        self.dnf_gonghui_enable_lottery = False
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

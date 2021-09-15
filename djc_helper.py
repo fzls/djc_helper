@@ -400,6 +400,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("DNF心悦", self.dnf_xinyue),
             ("管家蚊子腿", self.guanjia_new_dup),
+            ("DNF公会活动", self.dnf_gonghui),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -3494,6 +3495,91 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF格斗大赛"),
                                    **extra_params)
 
+    # --------------------------------------------DNF公会活动--------------------------------------------
+    @try_except()
+    def dnf_gonghui(self):
+        show_head_line("DNF公会活动功能")
+        self.show_amesvr_act_info(self.dnf_gonghui_op)
+
+        if not self.cfg.function_switches.get_dnf_gonghui or self.disable_most_activities():
+            logger.warning("未启用DNF公会活动功能，将跳过")
+            return
+
+        self.check_dnf_gonghui()
+
+        def query_score() -> int:
+            res = self.dnf_gonghui_op("查询数据", "800167", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue1)
+
+        self.dnf_gonghui_op("幸运验证礼包", "797851")
+
+        self.dnf_gonghui_op("活动分享", "798914")
+        self.dnf_gonghui_op("验证公会信息-是否会长-名称", "797992")
+
+        # 会长活动
+        self.dnf_gonghui_op("会长三选一", "798256", iGiftID="2")
+        self.dnf_gonghui_op("会长每日登陆", "798797")
+        self.dnf_gonghui_op("会长次日登录", "798810", iGiftID="2")
+
+        # share_pskey = self.fetch_share_p_skey("领取分享奖励")
+        # self.dnf_gonghui_op("发送邀请信息", "798757", sCode=self.qq(), extra_cookies=f"p_skey={share_pskey}")
+        self.dnf_gonghui_op("会长邀请三个用户奖励", "798826")
+
+        # 会员活动
+        self.dnf_gonghui_op("会员集结礼包", "798876")
+        self.dnf_gonghui_op("会员每日在线30分钟", "798877")
+        self.dnf_gonghui_op("会员每日通关3次推荐地下城", "798878")
+        self.dnf_gonghui_op("会员消耗疲劳156点", "798879")
+        self.dnf_gonghui_op("会员次日登录", "798880")
+        self.dnf_gonghui_op("会员分享奖励", "798881")
+
+        # 兑换奖励
+        def exchange_awards():
+            awards = [
+                ("灿烂的徽章自选礼盒-300 积分", "797914", 1),
+                ("次元玄晶碎片礼袋(5个)-180 积分", "798120", 2),
+                ("装备提升礼盒-30 积分", "798127", 10),
+                ("宠物饲料礼袋 (10个)-10 积分", "798143", 30),
+                ("一次性继承装置-80 积分", "798123", 5),
+                ("华丽的徽章自选礼盒-80 积分", "798122", 1),
+                ("华丽的徽章神秘礼盒-10 积分", "798129", 10),
+                ("复活币礼盒 (1个)-30 积分", "798128", 30),
+                ("抗疲劳秘药 (50点)-180 积分", "798121", 2),
+                ("抗疲劳秘药 (20点)-30 积分", "798124", 5),
+                ("本职业稀有符文神秘礼盒-30 积分", "798125", 8),
+                ("裂缝注视者通行证-30 积分", "798126", 10),
+            ]
+            for name, flowid, count in awards:
+                for idx in range_from_one(count):
+                    ctx = f"第{idx}/{count}次 尝试兑换 {name}"
+                    res = self.dnf_gonghui_op(ctx, flowid)
+                    msg = res["flowRet"]["sMsg"]
+                    if msg == "抱歉,你积分不够!":
+                        logger.warning(f"当前积分不足以兑换 {name}，将停止尝试后续兑换")
+                        return
+
+        exchange_awards()
+
+        total_score = query_score()
+        logger.info(color("bold_yellow") + f"当前拥有积分： {total_score}")
+        if self.cfg.function_switches.dnf_gonghui_enable_lottery:
+            for idx in range_from_one(total_score):
+                self.dnf_gonghui_op(f"第 {idx}/{total_score} 积分抽奖", "797915")
+        else:
+            logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
+
+    def check_dnf_gonghui(self):
+        self.check_bind_account("DNF公会活动", get_act_url("DNF公会活动"),
+                                activity_op_func=self.dnf_gonghui_op, query_bind_flowid="797913", commit_bind_flowid="797912")
+
+    def dnf_gonghui_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_gonghui
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF公会活动"),
+                                   **extra_params)
+
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()
     def dnf_strong(self):
@@ -5917,6 +6003,7 @@ class DjcHelper:
             "level",
             "iGuestUin",
             "ukey",
+            "iGiftID",
         ]}
 
         # 整合得到所有默认值
@@ -6300,4 +6387,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
-        djcHelper.guanjia_new_dup()
+        # djcHelper.guanjia_new_dup()
+        djcHelper.dnf_gonghui()

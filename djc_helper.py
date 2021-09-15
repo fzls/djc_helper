@@ -4313,9 +4313,6 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
-        logger.warning(f"本地调试日志：时间原因，暂未接入")
-        return
-
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
         self.show_amesvr_act_info(self.majieluo_op)
@@ -4328,15 +4325,15 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift():
-            self.majieluo_op("领取见面礼", "789645")
+            self.majieluo_op("领取见面礼", "799598")
 
         self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
 
         # 马杰洛的特殊任务
-        self.majieluo_op("登录游戏 石头*5", "789646")
-        self.majieluo_op("通关副本 石头*5", "789647")
-        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "789648")
-        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "789649")
+        self.majieluo_op("登录游戏 石头*5", "799599")
+        self.majieluo_op("通关副本 石头*5", "799600")
+        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "799601")
+        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "799602")
 
         # 赠送礼盒
         # self.majieluo_op("赠送单个用户", "789656", iGuestUin=qq_number, p_skey=djcHelper.fetch_share_p_skey("马杰洛赠送好友"))
@@ -4352,9 +4349,12 @@ class DjcHelper:
         # else:
         #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
 
-        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成(可以选择配置工具中的马杰洛小助手减少操作量)~", "提示", show_once=True)
-        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
-        self.majieluo_op("累计赠送好友成功领取礼包", "789650")
+        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成让别人浇水的流程(可以选择配置工具中的马杰洛小助手减少操作量)~", "提示", show_once=True)
+        logger.info(color("bold_green") + f"当前已累计被浇水{self.query_invite_count()}次，总共需要30次~")
+        self.majieluo_op("摇动宝树", "800190")
+        self.majieluo_op("宝树收获（一阶段）", "800211")
+        self.majieluo_op("宝树收获（二阶段）", "800215")
+        self.majieluo_op("宝树收获（三阶段）", "800219")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
@@ -4364,7 +4364,7 @@ class DjcHelper:
         endTime = get_today(parse_time(act_info.dtEndTime))
 
         takeStone = False
-        takeStoneActId = "789651"
+        takeStoneActId = "799604"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
@@ -4378,29 +4378,29 @@ class DjcHelper:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利", "789653")
+            self.majieluo_op("提取福利", "799605")
             # self.majieluo_op("分享得好礼", "769008")
 
     @try_except()
     def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]):
         p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
         for uin in xiaohao_qq_list:
-            self.majieluo_op(f"赠送单个用户-{uin}", "789656", iGuestUin=uin, p_skey=p_skey)
+            self.majieluo_op(f"赠送单个用户-{uin}", "799606", iGuestUin=uin, p_skey=p_skey)
 
     @try_except()
     def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:
-        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "790179", sCode=scode)
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "799616", sCode=scode)
         return parse_amesvr_common_info(raw_res)
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询信息", "789579", print_res=False)
+        res = self.majieluo_op("查询信息", "799597", print_res=False)
         info = parse_amesvr_common_info(res)
-        return int(info.sOutValue6)
+        return int(info.sOutValue6.split(',')[1])
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "789579", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "799597", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 

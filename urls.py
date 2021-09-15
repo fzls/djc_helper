@@ -69,6 +69,7 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "命运的抉择挑战赛": "链接暂未找到-。-",
     "关怀活动": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",  # re: 链接需要更新为实际的
+    "轻松之路": "链接暂未找到-。-",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -214,6 +215,7 @@ class Urls:
         self.iActivityId_dnf_gonghui = "406454"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "406829"  # 关怀活动
+        self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

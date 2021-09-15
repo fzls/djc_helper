@@ -4598,7 +4598,7 @@ class DjcHelper:
         # else:
         #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
 
-        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成让别人浇水的流程(可以选择配置工具中的马杰洛小助手减少操作量)~", "提示", show_once=True)
+        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成让别人浇水的流程(可以选择配置工具中的马杰洛小助手减少操作量)~（如果单个好友活动期间只能操作一次，那就只能找若干个人慢慢做了-。-）", "提示", show_once=True)
         logger.info(color("bold_green") + f"当前已累计被浇水{self.query_invite_count()}次，总共需要30次~")
         self.majieluo_op("摇动宝树", "800190")
         self.majieluo_op("宝树收获（一阶段）", "800211")

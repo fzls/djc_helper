@@ -1174,7 +1174,7 @@ def use_proxy():
 
 
 def parse_scode(scode_or_url: str) -> str:
-    if "a20210730care" not in scode_or_url:
+    if "dnf.qq.com" not in scode_or_url:
         # 是scode
         return scode_or_url
     else:

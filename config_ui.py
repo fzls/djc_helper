@@ -8,6 +8,7 @@ logger.addHandler(new_file_handler())
 
 from io import StringIO
 from traceback import print_tb
+from urllib.parse import unquote
 
 from PyQt5.QtCore import QCoreApplication, QThread
 from PyQt5.QtGui import QIcon
@@ -1108,6 +1109,8 @@ class MajieluoConfigUi(QFrame):
                 message = "系统繁忙，请稍后再试~"
                 if res.sOutValue1 in code_to_message:
                     message = code_to_message[res.sOutValue1]
+                else:
+                    message = unquote(res.sOutValue2)
 
                 messages.append(f"第 {order_index + 1} 个小号 {djcHelper.qq()}：{message}")
 

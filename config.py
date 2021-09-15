@@ -315,6 +315,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.dnf_gonghui_enable_lottery = False
         # 是否领取 命运的抉择挑战赛 活动
         self.get_dnf_mingyun_jueze = True
+        # 是否领取 关怀活动 活动
+        self.get_dnf_guanhuai = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

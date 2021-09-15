@@ -402,6 +402,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new_dup),
             ("DNF公会活动", self.dnf_gonghui),
             ("勇士的冒险补给", self.maoxian_dup),
+            ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -429,7 +430,6 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("刃影预约活动", self.dnf_reserve),
             ("colg每日签到", self.colg_signin),
-            ("DNF格斗大赛", self.dnf_pk),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("KOL", self.dnf_kol),
             ("我的dnf13周年活动", self.dnf_my_story),
@@ -3452,48 +3452,56 @@ class DjcHelper:
                                    hello_id=self.cfg.hello_voice.hello_id, prize=prize,
                                    **extra_params)
 
-    # --------------------------------------------DNF格斗大赛--------------------------------------------
+    # --------------------------------------------命运的抉择挑战赛--------------------------------------------
     @try_except()
-    def dnf_pk(self):
-        show_head_line("DNF格斗大赛功能")
-        self.show_amesvr_act_info(self.dnf_pk_op)
+    def dnf_mingyun_jueze(self):
+        show_head_line("命运的抉择挑战赛功能")
+        self.show_amesvr_act_info(self.dnf_mingyun_jueze_op)
 
-        if not self.cfg.function_switches.get_dnf_pk or self.disable_most_activities():
-            logger.warning("未启用DNF格斗大赛功能，将跳过")
+        # re: 在找到网页前，暂时先不开放，直接return @2021-09-15 03:25:22
+        if use_by_myself():
+            logger.warning(f"本地调试日志：在找到网页前，暂时先不开放，直接return")
+        return
+
+        if not self.cfg.function_switches.get_dnf_mingyun_jueze or self.disable_most_activities():
+            logger.warning("未启用命运的抉择挑战赛功能，将跳过")
             return
 
-        self.check_dnf_pk()
+        self.check_dnf_mingyun_jueze()
 
         def query_ticket_count():
-            res = self.dnf_pk_op("查询数据", "752272", print_res=False)
+            res = self.dnf_mingyun_jueze_op("查询数据", "796751", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            return int(raw_info.sOutValue3)
+            # re: 确认下这个是哪个字段 @2021-09-15 03:28:35
+            return int(raw_info.sOutValue1)
 
-        self.dnf_pk_op("每日在线30分钟（827960）", "752270")
-        self.dnf_pk_op("每日PK（828682）", "752644")
-        self.dnf_pk_op("每日特权网吧登陆（828687）", "752650")
+        self.dnf_mingyun_jueze_op("领取报名礼包", "796752")
+        self.dnf_mingyun_jueze_op("领取排行礼包", "796753")
+
+        self.dnf_mingyun_jueze_op("每日在线30分钟", "796755")
+        self.dnf_mingyun_jueze_op("每日通关", "796756")
+        self.dnf_mingyun_jueze_op("每日特权网吧登陆", "796757")
 
         ticket = query_ticket_count()
         logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
         for idx in range_from_one(ticket):
-            self.dnf_pk_op(f"[{idx}/{ticket}]幸运夺宝", "752651")
+            self.dnf_mingyun_jueze_op(f"[{idx}/{ticket}]幸运夺宝", "796754")
             if idx != ticket:
                 time.sleep(5)
 
-        self.dnf_pk_op("海选普发奖励（828715）", "752679")
-        self.dnf_pk_op("决赛普发奖励（830335）", "753784")
-        self.dnf_pk_op("周赛晋级奖励（828689）", "752652")
-        self.dnf_pk_op("决赛冠军奖励（828714）", "752678")
+        self.dnf_mingyun_jueze_op("决赛普发礼包", "796767")
+        self.dnf_mingyun_jueze_op("决赛冠军礼包", "796768")
+        self.dnf_mingyun_jueze_op("决赛普发礼包", "796769")
 
-    def check_dnf_pk(self):
-        self.check_bind_account("DNF格斗大赛", get_act_url("DNF格斗大赛"),
-                                activity_op_func=self.dnf_pk_op, query_bind_flowid="752161", commit_bind_flowid="752160")
+    def check_dnf_mingyun_jueze(self):
+        self.check_bind_account("命运的抉择挑战赛", get_act_url("命运的抉择挑战赛"),
+                                activity_op_func=self.dnf_mingyun_jueze_op, query_bind_flowid="796750", commit_bind_flowid="796749")
 
-    def dnf_pk_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_pk
+    def dnf_mingyun_jueze_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_mingyun_jueze
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF格斗大赛"),
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("命运的抉择挑战赛"),
                                    **extra_params)
 
     # --------------------------------------------DNF公会活动--------------------------------------------
@@ -6424,15 +6432,6 @@ if __name__ == '__main__':
         # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
         # djcHelper.run(user_buy_info)
 
-        # djcHelper.guanjia_new()
-        # djcHelper.xiaojiangyou()
-        # djcHelper.qq_video_amesvr()
-        # djcHelper.dnf_bbs()
-        # djcHelper.maoxian()
-        # djcHelper.dnf_ark_lottery()
-        # djcHelper.dnf_welfare()
-        # djcHelper.dnf_luodiye()
-        # djcHelper.majieluo()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_wegame()
@@ -6440,4 +6439,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_xinyue()
         # djcHelper.guanjia_new_dup()
         # djcHelper.dnf_gonghui()
-        djcHelper.maoxian_dup()
+        # djcHelper.maoxian_dup()
+        djcHelper.dnf_mingyun_jueze()

@@ -67,6 +67,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
+    "命运的抉择挑战赛": "链接暂未找到-。-",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -210,6 +211,7 @@ class Urls:
         self.iActivityId_maoxian = "407067"  # 勇士的冒险补给
         self.iActivityId_maoxian_dup = "405979"  # 勇士的冒险补给-回归玩家
         self.iActivityId_dnf_gonghui = "406454"  # DNF公会活动
+        self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

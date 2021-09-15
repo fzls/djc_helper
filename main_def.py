@@ -443,6 +443,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     logger.info(tableify(summaryCols, colSizes))
 
     if is_new_version_ark_lottery():
+        logger.info("")
         logger.info("新版集卡不再可以查询剩余领奖次数，上面右侧四个值没有实际含义，望周知")
 
     # 打印提示

@@ -65,6 +65,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2333_c6468485",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -95,7 +96,6 @@ act_name_to_url = {
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20210625dnf/index_new.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
 }
 
@@ -198,7 +198,7 @@ class Urls:
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "388970"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "399260"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点

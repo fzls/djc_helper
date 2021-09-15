@@ -398,6 +398,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -431,7 +432,6 @@ class DjcHelper:
             ("我的dnf13周年活动", self.dnf_my_story),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
-            ("DNF心悦", self.dnf_xinyue),
             ("qq视频蚊子腿", self.qq_video),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
@@ -3462,32 +3462,36 @@ class DjcHelper:
         self.check_dnf_xinyue()
 
         def query_lottery_count() -> int:
-            res = self.dnf_xinyue_op("查询抽奖次数", "778729", print_res=False)
+            res = self.dnf_xinyue_op("查询抽奖次数", "800444", print_res=False)
             info = parse_amesvr_common_info(res)
 
             return int(info.sOutValue1) // 50 - int(info.sOutValue2)
 
-        self.dnf_xinyue_op("登录礼", "778244")
-        self.dnf_xinyue_op("充值礼包(150元)", "778253")
-        self.dnf_xinyue_op("转职礼包", "778254")
-        self.dnf_xinyue_op("刃影90级", "778255")
-        self.dnf_xinyue_op("1万人", "778261")
-        self.dnf_xinyue_op("5万人", "778266")
-        self.dnf_xinyue_op("10万人", "778267")
+        self.dnf_xinyue_op("充值礼", "790815")
+        self.dnf_xinyue_op("会员身份礼", "800098")
 
-        remaining = query_lottery_count()
-        logger.info(f"当前剩余抽奖次数为{remaining}")
-        for idx in range_from_one(remaining):
-            self.dnf_xinyue_op(f"第{idx}/{remaining}次抽奖", "778269")
-            if idx != remaining:
-                time.sleep(5)
+        start_base_day = parse_time("2021-10-01 00:00:00")
+        now = get_now()
+        for delta_day in range(8):
+            day_time = start_base_day + timedelta(days=delta_day)
+            if day_time.date() != now.date():
+                continue
 
-        self.dnf_xinyue_op("心悦app礼包", "778270")
+            self.dnf_xinyue_op("签到礼", "800342", ukey=format_time(day_time, "%m%d"))
+            # self.dnf_xinyue_op("补签", "800388", ukey="1008")
+
+        self.dnf_xinyue_op("扭蛋", "800420")
+
+        self.dnf_xinyue_op("抽幸运资格", "790686")
+        self.dnf_xinyue_op("幸运登录礼", "800236")
+        self.dnf_xinyue_op("幸运10元充值礼", "800288")
+
+        self.dnf_xinyue_op("心悦app礼包", "800341")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
 
     def check_dnf_xinyue(self):
         self.check_bind_account("DNF心悦", get_act_url("DNF心悦"),
-                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="778273", commit_bind_flowid="778272")
+                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="799685", commit_bind_flowid="799684")
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_xinyue
@@ -6203,4 +6207,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_wegame()
-        djcHelper.dnf_collection()
+        # djcHelper.dnf_collection()
+        djcHelper.dnf_xinyue()

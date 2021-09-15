@@ -5916,6 +5916,7 @@ class DjcHelper:
             "loginNum",
             "level",
             "iGuestUin",
+            "ukey",
         ]}
 
         # 整合得到所有默认值

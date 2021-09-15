@@ -404,6 +404,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian_dup),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("关怀活动", self.dnf_guanhuai),
+            ("轻松之路", self.dnf_relax_road),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1975,6 +1976,37 @@ class DjcHelper:
     def dnf_guanhuai_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_guanhuai
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("关怀活动"),
+                                   **extra_params)
+
+    # --------------------------------------------轻松之路--------------------------------------------
+    @try_except()
+    def dnf_relax_road(self):
+        show_head_line("轻松之路")
+        self.show_amesvr_act_info(self.dnf_relax_road_op)
+
+        # re: 在找到网页前，暂时先不开放，直接return @2021-09-15 03:25:22
+        if use_by_myself():
+            logger.warning(f"本地调试日志：在找到网页前，暂时先不开放，直接return")
+        return
+
+        if not self.cfg.function_switches.get_dnf_relax_road or self.disable_most_activities():
+            logger.warning("未启用领取轻松之路功能，将跳过")
+            return
+
+        self.check_dnf_relax_road()
+
+        self.dnf_relax_road_op("登录送抽奖1次", "799120")
+        self.dnf_relax_road_op("分享送抽奖1次", "799121")
+        for i in range(2):
+            self.dnf_relax_road_op("抽奖", "798858")
+
+    def check_dnf_relax_road(self):
+        self.check_bind_account("轻松之路", get_act_url("轻松之路"),
+                                activity_op_func=self.dnf_relax_road_op, query_bind_flowid="799024", commit_bind_flowid="799023")
+
+    def dnf_relax_road_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_relax_road
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("轻松之路"),
                                    **extra_params)
 
     # --------------------------------------------DNF漫画预约活动--------------------------------------------
@@ -6469,4 +6501,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_gonghui()
         # djcHelper.maoxian_dup()
         # djcHelper.dnf_mingyun_jueze() # re: 这个找到网址后再启用
-        djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
+        # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
+        djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用

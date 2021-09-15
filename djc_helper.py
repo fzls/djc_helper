@@ -399,6 +399,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("DNF心悦", self.dnf_xinyue),
+            ("管家蚊子腿", self.guanjia_new_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -3158,10 +3159,99 @@ class DjcHelper:
         # 补领取之前未领取的奖励
         take_unclaimed_awards()
 
+    # note: 新管家活动接入流程：
+    #   1. 打开新活动的页面 get_act_url("管家蚊子腿")
+    #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
+    #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
+    guanjia_new_dup_act_id = "2021090614400611010"  # 活动ID
+    # note: 4. 按照下面的顺序依次点击对应活动按钮，最后按顺序将请求中的lid复制出来
+    guanjia_new_dup_gift_id_special_rights = "48"  # 电脑管家特权礼包
+    guanjia_new_dup_gift_id_sign_in_2_days = "50"  # 连续签到2天礼包
+    guanjia_new_dup_gift_id_return_user = "16"  # 幸运勇士礼包
+    guanjia_new_dup_gift_id_download_and_login_this_version_guanjia = "60"  # 下载登录管家任务
+    guanjia_new_dup_gift_id_game_online_30_minutes = "58"  # 每日游戏在线30分钟任务
+    guanjia_new_dup_gift_id_sign_in = "59"  # 每日签到任务
+    # note: 4. 在json中搜索 lotGifts，定位到抽奖的信息，并将下列变量的数值更新为新版本
+    guanjia_new_dup_lottery_gifts_act_id = "75"  # 抽奖活动ID
+
+    # note: 5. 调整urls中 管家蚊子腿 的起止时间
+    # note: 6. 修改qq_login中管家活动的url（搜索 /act/cop 即可，共两处，login函数和实际跳转处）
+    @try_except()
+    def guanjia_new_dup(self):
+        show_head_line("管家蚊子腿")
+        self.show_not_ams_act_info("管家蚊子腿")
+
+        if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
+            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            return
+
+        logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
+
+        lr = self.fetch_guanjia_openid()
+        if lr is None:
+            return
+        self.guanjia_lr = lr
+        # 等一会，避免报错
+        time.sleep(self.common_cfg.retry.request_wait_time)
+
+        def receive(ctx, lid):
+            return self.guanjia_new_dup_op(ctx, "pc_sdi_receive/receive", lid)
+
+        def add_draw_pool(ctx, lid):
+            return self.guanjia_new_dup_op(ctx, "pc_sdi_receive/add_draw_pool", lid)
+
+        def take_unclaimed_awards():
+            raw_res = self.guanjia_new_dup_op(f"查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
+            info = GuanjiaNewQueryLotteryInfo().auto_update_config(raw_res)
+            for lr in info.result:
+                if lr.has_taken():
+                    continue
+
+                # 之前抽奖了，但未领奖
+                _take_lottery_award(f"补领取奖励-{lr.drawLogId}-{lr.presentId}-{lr.comment}", lr.drawLogId)
+
+        def lottery(ctx) -> bool:
+            lottrey_raw_res = self.guanjia_new_dup_op(f"{ctx}-抽奖阶段", "sdi_lottery/lottery", self.guanjia_new_dup_lottery_gifts_act_id)
+            lottery_res = GuanjiaNewLotteryResult().auto_update_config(lottrey_raw_res)
+            success = lottery_res.success == 0
+            if success:
+                data = lottery_res.data
+                _take_lottery_award(f"{ctx}-领奖阶段-{data.drawLogId}-{data.presentId}-{data.comment}", data.drawLogId)
+
+            return success
+
+        def _take_lottery_award(ctx: str, draw_log_id: int):
+            self.guanjia_new_dup_op(ctx, "lottery.do?method=take", self.guanjia_new_dup_lottery_gifts_act_id, draw_log_id=draw_log_id, domain_name="sdi.3g.qq.com")
+
+        receive("电脑管家特权礼包", self.guanjia_new_dup_gift_id_special_rights)
+        receive("连续签到2天礼包", self.guanjia_new_dup_gift_id_sign_in_2_days)
+        receive("幸运勇士礼包", self.guanjia_new_dup_gift_id_return_user)
+
+        add_draw_pool("下载安装并登录电脑管家", self.guanjia_new_dup_gift_id_download_and_login_this_version_guanjia)
+
+        add_draw_pool("每日游戏在线30分钟", self.guanjia_new_dup_gift_id_game_online_30_minutes)
+        add_draw_pool("每日签到任务", self.guanjia_new_dup_gift_id_sign_in)
+
+        for i in range(10):
+            success = lottery("抽奖")
+            if not success:
+                break
+            time.sleep(self.common_cfg.retry.request_wait_time)
+
+        # 补领取之前未领取的奖励
+        take_unclaimed_awards()
+
     def guanjia_new_op(self, ctx: str, api_name: str, lid: str, draw_log_id=0, page_index=1, page_size=1000, domain_name="sdi.m.qq.com", print_res=True):
+        return self._guanjia_new_op(self.guanjia_new_act_id,
+                                    ctx, api_name, lid, draw_log_id, page_index, page_size, domain_name, print_res)
+
+    def guanjia_new_dup_op(self, ctx: str, api_name: str, lid: str, draw_log_id=0, page_index=1, page_size=1000, domain_name="sdi.m.qq.com", print_res=True):
+        return self._guanjia_new_op(self.guanjia_new_dup_act_id,
+                                    ctx, api_name, lid, draw_log_id, page_index, page_size, domain_name, print_res)
+
+    def _guanjia_new_op(self, act_id: str, ctx: str, api_name: str, lid: str, draw_log_id=0, page_index=1, page_size=1000, domain_name="sdi.m.qq.com", print_res=True):
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
-        act_id = self.guanjia_new_act_id
         openid = self.guanjia_lr.qc_openid
         nickname = self.guanjia_lr.qc_nickname()
         key = self.guanjia_lr.qc_access_token
@@ -6208,4 +6298,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
-        djcHelper.dnf_xinyue()
+        # djcHelper.dnf_xinyue()
+        djcHelper.guanjia_new_dup()

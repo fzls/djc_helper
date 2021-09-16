@@ -364,6 +364,8 @@ class AccountConfig(ConfigInterface):
         self.enable_firecrackers_invite_friend = False
         # 马杰洛活动是否尝试黑钻送好友（不会实际发消息）
         self.enable_majieluo_invite_friend = False
+        # 马杰洛活动是否尝试用配置的集卡回归角色领取见面礼
+        self.enable_majieluo_lucky = False
         # 不参与奥兹玛竞速活动切换角色的角色名列表（如果某些号确定不打奥兹玛的，可以把名字加到这里，从而跳过尝试这个角色）
         # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
         self.ozma_ignored_rolename_list = []  # type: List[str]

@@ -298,9 +298,8 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
                     send_ok = qq_to_djcHelper[qq].send_card(card_name, card_info_map[card_name].id, target_qq).get('ecode', -1) == 0
                     index = card_info_map[card_name].index
 
-                if send_ok:
-                    card_name_to_count[card_name] -= 1
-                    qq_to_card_name_to_counts[target_qq][card_name] += 1
+                card_name_to_count[card_name] -= 1
+                qq_to_card_name_to_counts[target_qq][card_name] += 1
 
                 name = qq_to_djcHelper[qq].cfg.name
                 target_name = qq_to_djcHelper[target_qq].cfg.name

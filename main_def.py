@@ -201,9 +201,9 @@ def auto_send_cards(cfg: Config):
             logger.warning(color("fg_bold_green") + f"第{idx + 1}/{len(target_qqs)}个赠送目标账号 {name}({target_qq}) 今日仍可被赠送 {left_times} 次卡片")
             # 最多赠送目标账号今日仍可接收的卡片数
             for send_idx in range_from_one(left_times):
-                ok = send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)
-                if not ok:
-                    logger.warning(f"第 {send_idx} 次赠送时失败了，跳过后续尝试")
+                other_account_has_card = send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)
+                if not other_account_has_card:
+                    logger.warning(f"第 {send_idx} 次赠送时其他账号已经没有任何卡片，跳过后续尝试")
                     break
 
             # 赠送卡片完毕后尝试领取奖励和抽奖
@@ -247,6 +247,10 @@ def query_account_ark_lottery_info(idx: int, total_account: int, account_config:
 
 
 def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int]], qq_to_prize_counts: Dict[str, Dict[str, int]], qq_to_djcHelper: Dict[str, DjcHelper], target_qqs: List[str]) -> bool:
+    """
+    返回 是否有其他账号有可以赠送的卡片
+    """
+
     # 检查目标账号是否有可剩余的兑换奖励次数
     has_any_left_gift = False
     for name, count in qq_to_prize_counts[target_qq].items():
@@ -301,8 +305,8 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
                 name = qq_to_djcHelper[qq].cfg.name
                 target_name = qq_to_djcHelper[target_qq].cfg.name
 
-                logger.warning(color("fg_bold_cyan") + f"账号 {name} 赠送一张 {index}({card_name}) 给 {target_name}")
-                return send_ok
+                logger.warning(color("fg_bold_cyan") + f"账号 {name} 赠送一张 {index}({card_name}) 给 {target_name}， 结果为 {send_ok}")
+                return True
 
     return False
 

@@ -5172,18 +5172,18 @@ class DjcHelper:
         # 阿拉德盲盒限时抽
         self.dnf_wegame_op("分享获得盲盒", "801297")
         self.dnf_wegame_op("页面签到获得盲盒", "801296")
-        self.dnf_wegame_op("在线30min获得盲盒", "801298")
+        self.dnf_wegame_op("消耗疲劳获得盲盒", "802773")
         totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
             self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "802468")
 
         # 挑战者大冒险
-        self.dnf_wegame_op("挑战者大冒险按钮一", "799983")
-        self.dnf_wegame_op("挑战者大冒险按钮二", "799984")
-        self.dnf_wegame_op("挑战者大冒险按钮三", "799986")
-        self.dnf_wegame_op("挑战者大冒险按钮四", "799987")
-        self.dnf_wegame_op("挑战者大冒险按钮五", "799988")
+        self.dnf_wegame_op("通关 3次推荐地下城", "799983")
+        self.dnf_wegame_op("通关 6次推荐地下城", "799984")
+        self.dnf_wegame_op("通关10次推荐地下城", "799986")
+        self.dnf_wegame_op("消耗100点疲劳值", "799987")
+        self.dnf_wegame_op("消耗156点疲劳值", "799988")
 
         # 勇士齐聚阿拉德
         check_in_flow_id = "801722"
@@ -6406,7 +6406,6 @@ if __name__ == '__main__':
 
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
-        # djcHelper.dnf_wegame()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
         # djcHelper.guanjia_new_dup()
@@ -6415,4 +6414,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
         # djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用
         # djcHelper.dnf_mingyun_jueze()
-        djcHelper.dnf_helper()
+        # djcHelper.dnf_helper()
+        djcHelper.dnf_wegame()

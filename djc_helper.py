@@ -4490,7 +4490,11 @@ class DjcHelper:
         def take_gift():
             self.majieluo_op("领取见面礼", "799598")
 
-        self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
+        logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
+        if self.cfg.enable_majieluo_lucky:
+            self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
+        else:
+            take_gift()
 
         # 马杰洛的特殊任务
         self.majieluo_op("登录游戏 石头*5", "799599")

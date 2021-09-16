@@ -212,8 +212,8 @@ def auto_send_cards(cfg: Config):
             if lr is not None:
                 logger.info("赠送完毕，尝试领取奖励和抽奖")
 
-                if is_new_version_ark_lottery():
-                    try_copy_cards(djcHelper)
+                # if is_new_version_ark_lottery():
+                #     try_copy_cards(djcHelper)
 
                 if is_new_version_ark_lottery():
                     djcHelper.dnf_ark_lottery_take_ark_lottery_awards()

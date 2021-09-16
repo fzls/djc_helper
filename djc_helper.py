@@ -32,6 +32,9 @@ class DjcHelper:
 
         self.zzconfig = zzconfig()
 
+        # 初始化部分字段
+        self.lr = None
+
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
 
@@ -1312,11 +1315,11 @@ class DjcHelper:
             logger.warning("未启用领取QQ空间集卡功能，将跳过")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
 
-        qa = QzoneActivity(self, lr)
+        qa = QzoneActivity(self, self.lr)
         qa.ark_lottery()
 
     def ark_lottery_query_left_times(self, to_qq):
@@ -1339,6 +1342,8 @@ class DjcHelper:
         return self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
 
     def fetch_pskey(self, force=False, window_index=1):
+        self.lr = None
+
         # 如果未启用qq空间相关的功能，则不需要这个
         any_enabled = False
         for activity_enabled in [
@@ -1397,6 +1402,7 @@ class DjcHelper:
             self.memory_save_uin_skey(lr.uin, lr.skey)
             self.set_vuserid(lr.vuserid)
 
+        self.lr = lr
         return lr
 
     @try_except(extra_msg="检查p_skey是否过期失败，视为已过期", return_val_on_except=True)
@@ -1500,8 +1506,8 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
 
         qa = QzoneActivity(self, lr)
@@ -1524,10 +1530,9 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
-        self.lr = lr
 
         self.qzone_act_op("幸运勇士礼包", "11949_df679412")
         self.qzone_act_op("勇士见面礼", "11950_cba6bd4e")
@@ -1561,10 +1566,9 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
-        self.lr = lr
 
         self.qzone_act_op("幸运勇士礼包", "11919_d1610c5e")
         self.qzone_act_op("勇士见面礼", "11920_ff46da4f")
@@ -1593,10 +1597,9 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
-        self.lr = lr
 
         self.qzone_act_op("关怀礼包", "7310_13a6f4de", act_req_data=self.try_make_lucky_user_req_data("关怀", self.cfg.vip_mentor.guanhuai_dnf_server_id, self.cfg.vip_mentor.guanhuai_dnf_role_id))
 
@@ -1623,10 +1626,9 @@ class DjcHelper:
             logger.warning("未启用领取QQ空间集卡功能，将跳过")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
-        self.lr = lr
 
         if 'dnf' not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
@@ -5095,8 +5097,8 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        lr = self.fetch_pskey()
-        if lr is None:
+        self.fetch_pskey()
+        if self.lr is None:
             return
 
         qa = QzoneActivity(self, lr)

@@ -67,7 +67,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
-    "命运的抉择挑战赛": "链接暂未找到-。-",
+    "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "关怀活动": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",  # re: 链接需要更新为实际的
     "轻松之路": "链接暂未找到-。-",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",

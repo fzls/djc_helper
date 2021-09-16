@@ -3432,11 +3432,6 @@ class DjcHelper:
         show_head_line("命运的抉择挑战赛功能")
         self.show_amesvr_act_info(self.dnf_mingyun_jueze_op)
 
-        # re: 在找到网页前，暂时先不开放，直接return @2021-09-15 03:25:22
-        if use_by_myself():
-            logger.warning(f"本地调试日志：在找到网页前，暂时先不开放，直接return")
-        return
-
         if not self.cfg.function_switches.get_dnf_mingyun_jueze or self.disable_most_activities():
             logger.warning("未启用命运的抉择挑战赛功能，将跳过")
             return
@@ -3447,7 +3442,6 @@ class DjcHelper:
             res = self.dnf_mingyun_jueze_op("查询数据", "796751", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            # re: 确认下这个是哪个字段 @2021-09-15 03:28:35
             return int(raw_info.sOutValue1)
 
         self.dnf_mingyun_jueze_op("领取报名礼包", "796752")
@@ -6418,7 +6412,7 @@ if __name__ == '__main__':
         # djcHelper.guanjia_new_dup()
         # djcHelper.dnf_gonghui()
         # djcHelper.maoxian_dup()
-        # djcHelper.dnf_mingyun_jueze() # re: 这个找到网址后再启用
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
         # djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用
-        djcHelper.dnf_helper()
+        # djcHelper.dnf_helper()
+        djcHelper.dnf_mingyun_jueze()  # re: 这个找到网址后再启用

@@ -1716,9 +1716,13 @@ class DjcHelper:
             "r": random.random(),
         }
 
-        res = self._qzone_act_op(f"{self.cfg.name} 赠送卡片 {card_id} 给 {target_qq}", url, body)
+        raw_res = self._qzone_act_op(f"{self.cfg.name} 赠送卡片 {card_id} 给 {target_qq}", url, body)
 
-        return res.get('code', -1) == 0
+        # {"code": 0, "message": "succ", "data": {}}
+        # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到每日单Q上限"}}
+        res = NewArkLotterySendCardResult().auto_update_config(raw_res)
+
+        return res.is_ok()
 
     def dnf_ark_lottery_remaining_lottery_times(self) -> Tuple[int, int]:
         """

@@ -1270,6 +1270,22 @@ class NewArkLotteryCardCountInfo(ConfigInterface):
         self.num = 0
 
 
+class NewArkLotterySendCardResult(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = "succ"
+        self.data = NewArkLotterySendCardResultData()
+
+    def is_ok(self) -> bool:
+        return self.code == 0 and self.data.code == 0
+
+
+class NewArkLotterySendCardResultData(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = ""
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

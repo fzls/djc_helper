@@ -287,10 +287,7 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
                 if is_new_version_ark_lottery():
                     send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(card_name, target_qq)
 
-                    card_id = int(card_name)
-                    row = (card_id + 3) // 4
-                    col = (card_id - 1) % 4 + 1
-                    index = f"{row}-{col}"
+                    index = new_ark_lottery_parse_index_from_card_id(card_name)
                 else:
                     card_info_map = parse_card_group_info_map(qq_to_djcHelper[target_qq].zzconfig)
 
@@ -308,6 +305,15 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
                 return send_ok
 
     return False
+
+
+def new_ark_lottery_parse_index_from_card_id(card_id: str) -> str:
+    card_id = int(card_id)
+    row = (card_id + 3) // 4
+    col = (card_id - 1) % 4 + 1
+    index = f"{row}-{col}"
+
+    return index
 
 
 def reverse_map(map):

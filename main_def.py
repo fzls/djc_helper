@@ -213,12 +213,55 @@ def auto_send_cards(cfg: Config):
                 logger.info("赠送完毕，尝试领取奖励和抽奖")
 
                 if is_new_version_ark_lottery():
+                    try_copy_cards(djcHelper)
+
+                if is_new_version_ark_lottery():
                     djcHelper.dnf_ark_lottery_take_ark_lottery_awards()
                     djcHelper.dnf_ark_lottery_try_lottery_using_cards()
                 else:
                     qa = QzoneActivity(djcHelper, lr)
                     qa.take_ark_lottery_awards(print_warning=False)
                     qa.try_lottery_using_cards(print_warning=False)
+
+
+def try_copy_cards(djcHelper: DjcHelper):
+    if not use_by_myself():
+        return
+    # 目前似乎可以赠送给自己，先自己测试几天
+    logger.warning(color("bold_yellow") + f"仅本号测试：尝试额外赠送给自己（复制卡片）")
+
+    card_name_to_counts = djcHelper.dnf_ark_lottery_get_card_counts()
+    logger.warning(color("bold_green") + f"尝试额外赠送给自己（复制卡片），最新卡片信息为：{card_name_to_counts}")
+
+    # 尝试复制四次
+    for copy_idx in range_from_one(4):
+        # 当前账号的卡牌按照卡牌数升序排列，取出其中为正数的部分来尝试进行复制卡片（赠送给自己）
+        owned_card_infos = get_owned_card_infos_sort_by_count(card_name_to_counts)
+        if len(owned_card_infos) == 0:
+            # 没有任何卡片，不尝试复制
+            break
+
+        # 复制拥有的卡片中最少的那张
+        least_card_info = owned_card_infos[0]
+        card_name, card_count = least_card_info
+        send_ok = djcHelper.dnf_ark_lottery_send_card(card_name, djcHelper.qq())
+
+        name = djcHelper.cfg.name
+        index = new_ark_lottery_parse_index_from_card_id(card_name)
+        logger.warning(color("thin_cyan") + f"账号 {name} 尝试复制一张 {index}({card_name})，结果为 {send_ok}")
+
+        card_name_to_counts[card_name] += 1
+
+
+def get_owned_card_infos_sort_by_count(card_name_to_counts: Dict[str, int]) -> List[Tuple[str, int]]:
+    owned_card_infos = []
+    for card_name, card_count in card_name_to_counts.items():
+        if card_count == 0:
+            continue
+        owned_card_infos.append((card_name, card_count))
+    owned_card_infos.sort(key=lambda card: card[1])
+
+    return owned_card_infos
 
 
 def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> Tuple[Dict[str, int], Dict[str, int], DjcHelper]:

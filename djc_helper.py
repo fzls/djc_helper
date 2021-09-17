@@ -5163,6 +5163,7 @@ class DjcHelper:
 
         self.check_dnf_wegame()
 
+        @try_except(show_exception_info=False, return_val_on_except=0)
         def query_signin_days():
             res = self.dnf_wegame_op("查询签到天数-condOutput", "800004", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
@@ -5185,14 +5186,14 @@ class DjcHelper:
             self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "802468")
 
         # 挑战者大冒险
-        self.dnf_wegame_op("通关 3次推荐地下城", "799983")
-        self.dnf_wegame_op("通关 6次推荐地下城", "799984")
-        self.dnf_wegame_op("通关10次推荐地下城", "799986")
-        self.dnf_wegame_op("消耗100点疲劳值", "799987")
-        self.dnf_wegame_op("消耗156点疲劳值", "799988")
+        self.dnf_wegame_op("推荐3次地下城按钮", "803265")
+        self.dnf_wegame_op("推荐6次地下城按钮", "803266")
+        self.dnf_wegame_op("推荐10次地下城按", "803267")
+        self.dnf_wegame_op("消耗100疲劳按钮", "803268")
+        self.dnf_wegame_op("消耗156疲劳按钮", "803269")
 
         # 勇士齐聚阿拉德
-        check_in_flow_id = "801722"
+        check_in_flow_id = "803263"
         self.dnf_wegame_op("在线30min签到", check_in_flow_id)
         self.dnf_wegame_op("领取签到礼包", check_in_flow_id)
 
@@ -5202,9 +5203,9 @@ class DjcHelper:
         #     self.dnf_wegame_op(f"第{i + 1}次签到抽奖", "779699")
 
         logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
-        self.dnf_wegame_op("累计签到3天按钮", "799990")
-        self.dnf_wegame_op("累计签到7天按钮", "799991")
-        self.dnf_wegame_op("累计签到15天按钮", "799992")
+        self.dnf_wegame_op("累计签到3天按钮2", "803281")
+        self.dnf_wegame_op("累计签到7天按钮2", "803282")
+        self.dnf_wegame_op("累计签到15天按钮2", "803283")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account("WeGame活动", get_act_url("WeGame活动"),

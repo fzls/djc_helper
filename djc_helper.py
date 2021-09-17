@@ -2646,56 +2646,146 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
-        lbinfo = {
-            795848: ["向微信或QQ好友分享1次活动链接", "抗疲劳秘药 (5点)", "初始难度", "c-icon11.png", "pop11", 21852, 21866, 21838],
-            797805: ["游戏内消耗疲劳点数30点", "[期限]时间引导石礼盒(20个)", "初始难度", "c-icon9.png", "pop8", 21851, 21865, 21837],
-            797806: ["游戏在线60分钟", "宠物饲料礼袋(10个)*2", "初始难度", "c-icon12.png", "pop8", 21853, 21867, 21839],
-            797807: ["发布1条助手动态", "复活币礼盒(1个)", "初始难度", "c-icon15.png", "pop11", 21854, 21868, 21840],
-            797902: ["游戏在线30分钟", "神秘契约礼包(1天)", "初始难度", "c-icon13.png", "pop8", 21855, 21869, 21841],
-            797903: ["登录游戏", "[期限]时间引导石礼盒(10个)", "大天使的庇佑", "c-icon9.png", "pop8", 21856, 21870, 21842],
-            797905: ["登录助手APP", "成长胶囊(10%)", "大天使的庇佑", "c-icon7.png", "pop11", 21857, 21871, 21843],
-            797906: ["浏览1篇动态", "闪亮的雷米援助礼盒(5个)", "大天使的庇佑", "c-icon4.png", "pop11", 21859, 21873, 21845],
-            797908: ["游戏内通关1次推荐地下城", "黑钻3天", "七大原罪", "c-icon6.png", "pop8", 21861, 21875, 21847],
-            797910: ["游戏内通关3次推荐地下城", "成长胶囊(30百分比)", "七大原罪", "c-icon7.png", "pop8", 21862, 21876, 21848],
-            797911: ["点赞1条助手动态", "宠物饲料礼袋(10个)", "大天使的庇佑", "c-icon12.png", "pop11", 21858, 21872, 21844],
+        prefered_tasks = {
             797931: ["游戏内通关7次推荐地下城", "装备提升礼盒", "七大原罪", "c-icon8.png", "pop8", 21863, 21877, 21849],
+            797908: ["游戏内通关1次推荐地下城", "黑钻3天", "七大原罪", "c-icon6.png", "pop8", 21861, 21875, 21847],
+
+            797903: ["登录游戏", "[期限]时间引导石礼盒(10个)", "大天使的庇佑", "c-icon9.png", "pop8", 21856, 21870, 21842],
+            797910: ["游戏内通关3次推荐地下城", "成长胶囊(30百分比)", "七大原罪", "c-icon7.png", "pop8", 21862, 21876, 21848],
+            797805: ["游戏内消耗疲劳点数30点", "[期限]时间引导石礼盒(20个)", "初始难度", "c-icon9.png", "pop8", 21851, 21865, 21837],
+            797902: ["游戏在线30分钟", "神秘契约礼包(1天)", "初始难度", "c-icon13.png", "pop8", 21855, 21869, 21841],
+            797806: ["游戏在线60分钟", "宠物饲料礼袋(10个)*2", "初始难度", "c-icon12.png", "pop8", 21853, 21867, 21839],
             797932: ["游戏内消耗疲劳点数156点", "[期限]时间引导石礼盒(50个)*2", "七大原罪", "c-icon9.png", "pop8", 21864, 21878, 21850],
-            797933: ["点赞1篇助手资讯", "闪耀的徽章神秘礼盒", "大天使的庇佑", "c-icon5.png", "pop11", 21860, 21874, 21846]
         }
 
-        # re: 晚上回家继续实现 @2021-09-17 05:48:08
+        lbinfo = {
+            **prefered_tasks,
+
+            797905: ["登录助手APP", "成长胶囊(10%)", "大天使的庇佑", "c-icon7.png", "pop11", 21857, 21871, 21843],
+            797906: ["浏览1篇动态", "闪亮的雷米援助礼盒(5个)", "大天使的庇佑", "c-icon4.png", "pop11", 21859, 21873, 21845],
+            797911: ["点赞1条助手动态", "宠物饲料礼袋(10个)", "大天使的庇佑", "c-icon12.png", "pop11", 21858, 21872, 21844],
+            797933: ["点赞1篇助手资讯", "闪耀的徽章神秘礼盒", "大天使的庇佑", "c-icon5.png", "pop11", 21860, 21874, 21846],
+            795848: ["向微信或QQ好友分享1次活动链接", "抗疲劳秘药 (5点)", "初始难度", "c-icon11.png", "pop11", 21852, 21866, 21838],
+            797807: ["发布1条助手动态", "复活币礼盒(1个)", "初始难度", "c-icon15.png", "pop11", 21854, 21868, 21840],
+        }
 
         # 查询状态信息
-        def query_info():
-            pass
+        def try_re_random_tasks():
+            # 如果没有一个比较容易完成的任务，就尝试随机一遍（可能已经操作过，但是不管它）
+            info = self.dnf_helper_query_info()
+            if info.taskId != 0:
+                logger.info("今日已选择过任务，不再尝试随机")
+                return
+
+            for task_id in info.inittask:
+                if task_id in prefered_tasks:
+                    logger.info(f"今日的任务列表中 {get_task_desc(task_id)} 似乎比较好做，无需随机任务")
+                    return
+
+            task_names = get_task_names(info.inittask)
+            self.post(f"当前任务列表为 {task_names}，似乎都不好做，尝试随机任务", self.dnf_helper_format_url("flushpage"), "resetnum=2")
 
         # 选择任务（若未选择）
         def select_task_by_priority():
-            pass
+            info = self.dnf_helper_query_info()
+            if info.taskId != 0:
+                # 已选择任务
+                logger.info(f"当前已经选择过任务，无需再选择。当前任务为：{get_task_desc(info.taskId)}")
+                return
+
+            # 按照优先级选择一个任务
+            tasks = info.inittask.copy()
+            task_order = list(lbinfo.keys())
+            tasks.sort(key=lambda task: task_order.index(task))
+
+            chosen_task_id = tasks[0]
+            chosen_task_desc = get_task_desc(chosen_task_id)
+
+            task_names = get_task_names(info.inittask)
+            logger.info(f"今日任务列表为 {task_names}，按照优先级选择后选择的任务为 {chosen_task_desc}")
+
+            self.post(f"选择任务 {chosen_task_desc}", self.dnf_helper_format_url("goselect"), f"taskId={chosen_task_id}")
+
+        @try_except()
+        def complete_task():
+            # 尝试调整任务列表
+            try_re_random_tasks()
+
+            # 选择任务并尝试领取任务奖励
+            select_task_by_priority()
+            info = self.dnf_helper_query_info()
+            if info.taskId != 0:
+                task_detail = lbinfo[info.taskId]
+                name, award, category = task_detail[:3]
+
+                self.dnf_helper_op(f"尝试完成选择的任务并领取奖励 {category} - {name} - {award}", info.taskId)
+            else:
+                logger.error(f"任务似乎选择失败了，请查看上面具体日志信息~")
+
+            # 打印任务状态
+            info = self.dnf_helper_query_info()
+            logger.info(color("bold_yellow") + f"今日完成任务状态为 {info.todayhastask} 当前累计完成次数为 {info.tasknums}/20")
+
+        def get_task_desc(task_id: int) -> str:
+            return f"{task_id}: {get_task_name(task_id)}"
+
+        def get_task_names(task_list: List[int]) -> List[str]:
+            return [get_task_name(tid) for tid in task_list]
+
+        def get_task_name(task_id: int) -> str:
+            task_info = lbinfo[task_id]
+            return task_info[0]
 
         # ---------------- 实际逻辑 ----------------
+        complete_task()
 
-        for flowid, flowinfo in lbinfo.items():
-            name, award, category = flowinfo[:3]
-
-            self.dnf_helper_op(f"{category} - {name} - {award}", flowid)
-
+        # 领取累计奖励
         self.dnf_helper_op("累计1次", "797934")
         self.dnf_helper_op("累计2次", "797936")
         self.dnf_helper_op("累计4次", "797937")
         self.dnf_helper_op("累计6次", "797938")
-        self.dnf_helper_op("累计9次", "797939")
+        self.dnf_helper_op("累计9次 - 装备提升礼盒*3", "797939")
         self.dnf_helper_op("累计12次", "797940")
-        self.dnf_helper_op("累计16次", "797941")
-        self.dnf_helper_op("累计20次", "797942")
+        self.dnf_helper_op("累计16次 - +7 装备增幅券", "797941")
+        self.dnf_helper_op("累计20次 - 灿烂的徽章自选礼盒", "797942")
 
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
     #                             activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
 
-    def dnf_helper_api_op(self, api: str, ctx: str, **extra_params):
-        # re: 等下实现 @2021-09-17 05:45:16
-        pass
+    @try_except(show_exception_info=False, return_val_on_except="0")
+    def dnf_helper_query_task_finish_count(self) -> str:
+        info = self.dnf_helper_query_info()
+        return f"{info.tasknums}/20"
+
+    def dnf_helper_query_info(self) -> DnfHelperQueryInfo:
+        raw_res = self.get("查询状态信息", self.dnf_helper_format_url("initpage"), print_res=False)
+        info = DnfHelperQueryInfo().auto_update_config(raw_res['data'])
+
+        return info
+
+    def dnf_helper_format_url(self, api: str) -> str:
+        dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        url = self.format(self.urls.dnf_helper, api=api,
+                          roleId=roleinfo.roleCode,
+                          uniqueRoleId=dnf_helper_info.uniqueRoleId,
+                          serverName=quote_plus(roleinfo.serviceName),
+                          toUin=self.qq(),
+                          userId=dnf_helper_info.userId,
+                          serverId=roleinfo.serviceID,
+                          token=dnf_helper_info.token,
+                          areaId=roleinfo.areaID,
+                          areaName=quote_plus(roleinfo.areaName),
+                          roleJob="",
+                          nickname=quote_plus(dnf_helper_info.nickName),
+                          roleName=quote_plus(roleinfo.roleName),
+                          uin=self.qq(),
+                          roleLevel="100",
+                          )
+
+        return url
 
     def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper

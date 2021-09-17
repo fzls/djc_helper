@@ -1286,6 +1286,15 @@ class NewArkLotterySendCardResultData(ConfigInterface):
         self.message = ""
 
 
+class DnfHelperQueryInfo(ConfigInterface):
+    def __init__(self):
+        self.hasfinish = 0
+        self.taskId = 797903
+        self.inittask = [797807, 797903, 797908]
+        self.tasknums = 2
+        self.todayhastask = 0
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

@@ -2620,6 +2620,12 @@ class DjcHelper:
         return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
+    # note: 接入流程说明
+    #   1. 助手app分享活动页面到qq，发送到电脑
+    #   2. 电脑在chrome打开链接，并将 useragent 调整为 Mozilla/5.0 (Linux; Android 9; MIX 2 Build/PKQ1.190118.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045714 Mobile Safari/537.36 GameHelper_1006/2103060508
+    #   3. 过滤栏输入 -webvitals -.png -speed? -.js -.jpg -data: -analysis -eas.php -pingd? -log? -pv? -favicon.ico -performance? -whitelist? -asynccookie
+    #   4. 在页面上按正常流程点击，然后通过右键/copy/copy as cURL(bash)来保存对应请求的信息
+    #   5. 实现自定义的部分流程（非ams的部分）
     @try_except()
     def dnf_helper(self):
         show_head_line("dnf助手")
@@ -6417,7 +6423,7 @@ if __name__ == '__main__':
         # djcHelper.maoxian_dup()
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
         # djcHelper.dnf_mingyun_jueze()
-        # djcHelper.dnf_helper()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_relax_road()
-        djcHelper.colg_signin()
+        # djcHelper.colg_signin()
+        djcHelper.dnf_helper()

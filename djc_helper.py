@@ -1990,11 +1990,6 @@ class DjcHelper:
         show_head_line("轻松之路")
         self.show_amesvr_act_info(self.dnf_relax_road_op)
 
-        # re: 在找到网页前，暂时先不开放，直接return @2021-09-15 03:25:22
-        if use_by_myself():
-            logger.warning(f"本地调试日志：在找到网页前，暂时先不开放，直接return")
-        return
-
         if not self.cfg.function_switches.get_dnf_relax_road or self.disable_most_activities():
             logger.warning("未启用领取轻松之路功能，将跳过")
             return
@@ -2002,7 +1997,8 @@ class DjcHelper:
         self.check_dnf_relax_road()
 
         self.dnf_relax_road_op("登录送抽奖1次", "799120")
-        self.dnf_relax_road_op("分享送抽奖1次", "799121")
+        for xiaohao in self.common_cfg.majieluo.xiaohao_qq_list:
+            self.dnf_relax_road_op(f"分享给 {xiaohao} 送抽奖1次", "799121", iInviter=xiaohao)
         for i in range(2):
             self.dnf_relax_road_op("抽奖", "798858")
 
@@ -6042,6 +6038,7 @@ class DjcHelper:
             "iGuestUin",
             "ukey",
             "iGiftID",
+            "iInviter",
         ]}
 
         # 整合得到所有默认值
@@ -6419,7 +6416,7 @@ if __name__ == '__main__':
         # djcHelper.dnf_gonghui()
         # djcHelper.maoxian_dup()
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
-        # djcHelper.dnf_relax_road()  # re: 这个找到网址后再启用
         # djcHelper.dnf_mingyun_jueze()
         # djcHelper.dnf_helper()
-        djcHelper.dnf_wegame()
+        # djcHelper.dnf_wegame()
+        djcHelper.dnf_relax_road()

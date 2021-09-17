@@ -69,7 +69,7 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "关怀活动": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",  # re: 链接需要更新为实际的
-    "轻松之路": "链接暂未找到-。-",
+    "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
 
     # 已过期活动
@@ -232,7 +232,7 @@ class Urls:
                                "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}" \
                                "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}" \
                                "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}" \
-                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}"
+                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize

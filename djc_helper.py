@@ -1510,7 +1510,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        qa = QzoneActivity(self, lr)
+        qa = QzoneActivity(self, self.lr)
         qa.dnf_warriors_call()
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
@@ -5123,7 +5123,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        qa = QzoneActivity(self, lr)
+        qa = QzoneActivity(self, self.lr)
         qa.vip_mentor()
 
     # --------------------------------------------DNF落地页活动--------------------------------------------

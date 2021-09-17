@@ -882,7 +882,8 @@ def disable_quick_edit_mode():
 
 
 def show_quick_edit_mode_tip():
-    logger.info(color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制")
+    logger.info(color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
+                                     "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）")
 
 
 def is_run_in_pycharm() -> bool:

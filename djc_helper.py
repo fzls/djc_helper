@@ -2663,6 +2663,18 @@ class DjcHelper:
             797933: ["点赞1篇助手资讯", "闪耀的徽章神秘礼盒", "大天使的庇佑", "c-icon5.png", "pop11", 21860, 21874, 21846]
         }
 
+        # re: 晚上回家继续实现 @2021-09-17 05:48:08
+
+        # 查询状态信息
+        def query_info():
+            pass
+
+        # 选择任务（若未选择）
+        def select_task_by_priority():
+            pass
+
+        # ---------------- 实际逻辑 ----------------
+
         for flowid, flowinfo in lbinfo.items():
             name, award, category = flowinfo[:3]
 
@@ -2680,6 +2692,10 @@ class DjcHelper:
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
     #                             activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
+
+    def dnf_helper_api_op(self, api: str, ctx: str, **extra_params):
+        # re: 等下实现 @2021-09-17 05:45:16
+        pass
 
     def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper

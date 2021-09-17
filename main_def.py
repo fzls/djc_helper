@@ -625,8 +625,8 @@ def show_accounts_status(cfg, ctx):
             rows.append(get_account_status(idx, account_config, cfg.common))
 
     # 打印结果
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "赠送礼盒", "论坛代币券"]
-    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8, 10]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "成长值", "论坛代币券", "助手次数"]
+    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8, 10, 8]
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
@@ -662,9 +662,11 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         chronicle_points = ""
 
     majieluo_stone = djcHelper.query_stone_count()
-    majieluo_invite_count = djcHelper.query_invite_count()
+    majieluo_invite_count = f"{djcHelper.query_invite_count()}/120"
 
     dbq = djcHelper.query_dnf_bbs_dbq()
+
+    dnf_helper_task_finish_count = djcHelper.dnf_helper_query_task_finish_count()
 
     return [
         idx, account_config.name, status,
@@ -672,8 +674,9 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
         gpoints,
         levelInfo, chronicle_points,
-        majieluo_stone, f"{majieluo_invite_count}/30",
+        majieluo_stone, majieluo_invite_count,
         dbq,
+        dnf_helper_task_finish_count,
     ]
 
 

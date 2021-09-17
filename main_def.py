@@ -662,6 +662,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         chronicle_points = ""
 
     majieluo_stone = djcHelper.query_stone_count()
+    time.sleep(1)  # 避免查询下面的次数时提示 速度过快
     majieluo_invite_count = f"{djcHelper.query_invite_count()}/120"
 
     dbq = djcHelper.query_dnf_bbs_dbq()

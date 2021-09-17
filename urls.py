@@ -32,7 +32,7 @@ not_ams_activities = [
     newAmsActInfo("黄钻", "2021-09-14 00:00:00", "2021-10-14 23:59:59"),
     newAmsActInfo("集卡", "2021-09-14 00:00:00", "2021-10-31 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
-    newAmsActInfo("colg每日签到", "2021-06-18 00:00:00", "2021-07-21 23:59:59"),
+    newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
 ]
 
@@ -71,6 +71,7 @@ act_name_to_url = {
     "关怀活动": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",  # re: 链接需要更新为实际的
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -93,7 +94,6 @@ act_name_to_url = {
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
     "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "KOL": "https://dnf.qq.com/lbact/a20210610kol/zzx.html",

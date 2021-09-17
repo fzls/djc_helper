@@ -409,6 +409,7 @@ class DjcHelper:
             ("关怀活动", self.dnf_guanhuai),
             ("轻松之路", self.dnf_relax_road),
             ("dnf助手活动", self.dnf_helper),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -434,7 +435,6 @@ class DjcHelper:
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("刃影预约活动", self.dnf_reserve),
-            ("colg每日签到", self.colg_signin),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("KOL", self.dnf_kol),
             ("我的dnf13周年活动", self.dnf_my_story),
@@ -4960,14 +4960,14 @@ class DjcHelper:
 
         info = query_info()
         untaken_awards = info.untaken_rewards()
-        msg = f"Colg活跃值已经达到{info.lv_score}了咯"
+        msg = f"Colg活跃值已经达到 【{info.lv_score}】 了咯"
         if len(untaken_awards) > 0:
             msg += f"，目前有以下奖励可以领取，记得去Colg领取哦\n{untaken_awards}"
         else:
             msg += "，目前暂无未领取的奖励"
         logger.info(color("bold_green") + msg)
 
-        if len(untaken_awards) > 0 and is_weekly_first_run("colg_领取奖励_每周提醒"):
+        if len(untaken_awards) > 0 and is_weekly_first_run(f"colg_{info.activity_id}2_领取奖励_每周提醒"):
             async_message_box(msg, "可以领奖励啦", open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
 
         logger.info(color("bold_cyan") + "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷")
@@ -6419,4 +6419,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_mingyun_jueze()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_wegame()
-        djcHelper.dnf_relax_road()
+        # djcHelper.dnf_relax_road()
+        djcHelper.colg_signin()

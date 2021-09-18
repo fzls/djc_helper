@@ -2271,7 +2271,7 @@ class DjcHelper:
             logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项")
             self.temporary_change_bind_and_do(f"领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op)
 
-        def take_lottery_count_op(take_lottery_count_role_info: RoleInfo):
+        def take_lottery_count_op(take_lottery_count_role_info: RoleInfo) -> bool:
             # 领奖
             idx = 0
             while True:
@@ -2279,6 +2279,8 @@ class DjcHelper:
                 res = self.dnf_ozma_op(f"当前临时切换角色 本周第{idx}次 通关奥兹玛赠送抽奖券", "770026")
                 if int(res["ret"]) != 0:
                     break
+
+            return True
 
         def query_level_100_roles(ignore_rolename_list: List[str]) -> List[TemporaryChangeBindRoleInfo]:
             djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
@@ -4617,8 +4619,9 @@ class DjcHelper:
         self.check_majieluo()
 
         # 马杰洛的见面礼
-        def take_gift(take_lottery_count_role_info: RoleInfo):
+        def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
             self.majieluo_op("领取见面礼", "799598")
+            return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
         if self.cfg.enable_majieluo_lucky:
@@ -6259,8 +6262,12 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func: Callable[[RoleInfo], Any]):
-        for change_bind_role_info in change_bind_role_infos:
+    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func: Callable[[RoleInfo], bool]):
+        """
+        callback_func: 传入参数为 将要领奖的角色信息，返回参数为 是否继续尝试下一个
+        """
+        total_index = len(change_bind_role_infos)
+        for role_index, change_bind_role_info in enumerate(change_bind_role_infos):
             server_id, role_id = change_bind_role_info.serviceID, change_bind_role_info.roleCode
 
             role_info = self.query_dnf_role_info_by_serverid_and_roleid(server_id, role_id)
@@ -6276,10 +6283,13 @@ class DjcHelper:
             take_lottery_count_role_info.areaID = area_info.v
             take_lottery_count_role_info.areaName = area_info.t
 
-            logger.warning(f"尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
+            logger.warning(f"[{role_index + 1}/{total_index}] 尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
             check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
-            callback_func(take_lottery_count_role_info)
+            continue_next = callback_func(take_lottery_count_role_info)
+            if not continue_next:
+                logger.warning("本次回调返回False，将不再继续尝试其他角色")
+                break
 
         logger.info("操作完毕，切换为原有角色")
         check_func()
@@ -6418,7 +6428,7 @@ class DjcHelper:
     def qq(self) -> str:
         return uin2qq(self.uin())
 
-    def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable[[RoleInfo], Any]):
+    def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable[[RoleInfo], bool]):
         check_role_func()
 
         if self.cfg.ark_lottery.lucky_dnf_role_id != "":

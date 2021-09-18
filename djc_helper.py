@@ -713,6 +713,25 @@ class DjcHelper:
 
         return roleLists
 
+    def query_dnf_rolelist_for_temporary_change_bind(self) -> List[TemporaryChangeBindRoleInfo]:
+        djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+
+        temp_change_bind_roles = []
+
+        roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
+        for role in roles:
+            change_bind_role = TemporaryChangeBindRoleInfo()
+            change_bind_role.serviceID = djc_roleinfo.serviceID
+            change_bind_role.roleCode = role.roleid
+
+            if role.roleid != djc_roleinfo.roleCode:
+                temp_change_bind_roles.append(change_bind_role)
+            else:
+                # 将当前绑定角色放到最前面
+                temp_change_bind_roles.insert(0, change_bind_role)
+
+        return temp_change_bind_roles
+
     def query_dnf_role_info_by_serverid_and_roleid(self, server_id: str, role_id: str) -> Optional[DnfRoleInfo]:
         for role in self.query_dnf_rolelist(server_id, False):
             if role.roleid == role_id:

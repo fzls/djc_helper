@@ -180,6 +180,9 @@ class DjcHelper:
             role_info = GameRoleInfo().auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
+    def get_dnf_bind_role_copy(self) -> RoleInfo:
+        return self.bizcode_2_bind_role_map['dnf'].sRoleInfo.clone()
+
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个
         if self.cfg.mobile_game_role_info.use_any_binded_mobile_game():

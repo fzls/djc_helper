@@ -3628,27 +3628,53 @@ class DjcHelper:
 
             return int(raw_info.sOutValue1)
 
+        def is_current_bind_character_guild_chairman() -> bool:
+            res = self.dnf_gonghui_op("验证公会信息-是否会长", "797992", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue2) == 0
+
+        def guild_chairman_operations(take_lottery_count_role_info: RoleInfo) -> bool:
+            if not is_current_bind_character_guild_chairman():
+                logger.info(f"角色 {take_lottery_count_role_info.roleName} 不是会长，尝试下一个")
+                return True
+
+            self.dnf_gonghui_op("会长三选一", "798256", iGiftID="2")
+            self.dnf_gonghui_op("会长每日登陆", "798797")
+            self.dnf_gonghui_op("会长次日登录", "798810", iGiftID="2")
+
+            # share_pskey = self.fetch_share_p_skey("领取分享奖励")
+            # self.dnf_gonghui_op("发送邀请信息", "798757", sCode=self.qq(), extra_cookies=f"p_skey={share_pskey}")
+            self.dnf_gonghui_op("会长邀请三个用户奖励", "798826")
+
+            return False
+
+        def guild_member_operations(take_lottery_count_role_info: RoleInfo) -> bool:
+            if is_current_bind_character_guild_chairman():
+                logger.info(f"角色 {take_lottery_count_role_info.roleName} 不是公会会员，尝试下一个")
+                return True
+
+            self.dnf_gonghui_op("会员集结礼包", "798876")
+            self.dnf_gonghui_op("会员每日在线30分钟", "798877")
+            self.dnf_gonghui_op("会员每日通关3次推荐地下城", "798878")
+            self.dnf_gonghui_op("会员消耗疲劳156点", "798879")
+            self.dnf_gonghui_op("会员次日登录", "798880")
+            self.dnf_gonghui_op("会员分享奖励", "798881")
+
+            return False
+
         self.dnf_gonghui_op("幸运验证礼包", "797851")
 
         self.dnf_gonghui_op("活动分享", "798914")
-        self.dnf_gonghui_op("验证公会信息-是否会长-名称", "797992")
 
         # 会长活动
-        self.dnf_gonghui_op("会长三选一", "798256", iGiftID="2")
-        self.dnf_gonghui_op("会长每日登陆", "798797")
-        self.dnf_gonghui_op("会长次日登录", "798810", iGiftID="2")
-
-        # share_pskey = self.fetch_share_p_skey("领取分享奖励")
-        # self.dnf_gonghui_op("发送邀请信息", "798757", sCode=self.qq(), extra_cookies=f"p_skey={share_pskey}")
-        self.dnf_gonghui_op("会长邀请三个用户奖励", "798826")
+        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations)
 
         # 会员活动
-        self.dnf_gonghui_op("会员集结礼包", "798876")
-        self.dnf_gonghui_op("会员每日在线30分钟", "798877")
-        self.dnf_gonghui_op("会员每日通关3次推荐地下城", "798878")
-        self.dnf_gonghui_op("会员消耗疲劳156点", "798879")
-        self.dnf_gonghui_op("会员次日登录", "798880")
-        self.dnf_gonghui_op("会员分享奖励", "798881")
+        self.temporary_change_bind_and_do(f"从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations)
+
+        # re: r @2021-09-19 01:44:24 By Chen Ji
+        return
 
         # 兑换奖励
         def exchange_awards():
@@ -3685,9 +3711,10 @@ class DjcHelper:
         else:
             logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
 
-    def check_dnf_gonghui(self):
+    def check_dnf_gonghui(self, **extra_params):
         self.check_bind_account("DNF公会活动", get_act_url("DNF公会活动"),
-                                activity_op_func=self.dnf_gonghui_op, query_bind_flowid="797913", commit_bind_flowid="797912")
+                                activity_op_func=self.dnf_gonghui_op, query_bind_flowid="797913", commit_bind_flowid="797912",
+                                **extra_params)
 
     def dnf_gonghui_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_gonghui
@@ -6557,11 +6584,11 @@ if __name__ == '__main__':
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
         # djcHelper.guanjia_new_dup()
-        # djcHelper.dnf_gonghui()
         # djcHelper.maoxian_dup()
         # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
         # djcHelper.dnf_mingyun_jueze()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_relax_road()
         # djcHelper.colg_signin()
-        djcHelper.dnf_helper()
+        # djcHelper.dnf_helper()
+        djcHelper.dnf_gonghui()

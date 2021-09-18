@@ -3647,6 +3647,10 @@ class DjcHelper:
             # self.dnf_gonghui_op("发送邀请信息", "798757", sCode=self.qq(), extra_cookies=f"p_skey={share_pskey}")
             self.dnf_gonghui_op("会长邀请三个用户奖励", "798826")
 
+            current_bind_role = self.get_dnf_bind_role_copy()
+            if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会长"):
+                async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 不是会长，因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取会长活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
+
             return False
 
         def guild_member_operations(take_lottery_count_role_info: RoleInfo) -> bool:
@@ -3660,6 +3664,10 @@ class DjcHelper:
             self.dnf_gonghui_op("会员消耗疲劳156点", "798879")
             self.dnf_gonghui_op("会员次日登录", "798880")
             self.dnf_gonghui_op("会员分享奖励", "798881")
+
+            current_bind_role = self.get_dnf_bind_role_copy()
+            if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会员"):
+                async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 不是公会会员，因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取公会会员活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
 
             return False
 

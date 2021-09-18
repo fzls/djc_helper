@@ -2271,7 +2271,7 @@ class DjcHelper:
             logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项")
             self.temporary_change_bind_and_do(f"领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op)
 
-        def take_lottery_count_op():
+        def take_lottery_count_op(take_lottery_count_role_info: RoleInfo):
             # 领奖
             idx = 0
             while True:
@@ -4617,14 +4617,14 @@ class DjcHelper:
         self.check_majieluo()
 
         # 马杰洛的见面礼
-        def take_gift():
+        def take_gift(take_lottery_count_role_info: RoleInfo):
             self.majieluo_op("领取见面礼", "799598")
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
         if self.cfg.enable_majieluo_lucky:
             self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
         else:
-            take_gift()
+            take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
         self.majieluo_op("登录游戏 石头*5", "799599")
@@ -6259,7 +6259,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func):
+    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func: Callable[[RoleInfo], Any]):
         for change_bind_role_info in change_bind_role_infos:
             server_id, role_id = change_bind_role_info.serviceID, change_bind_role_info.roleCode
 
@@ -6279,7 +6279,7 @@ class DjcHelper:
             logger.warning(f"尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
             check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
-            callback_func()
+            callback_func(take_lottery_count_role_info)
 
         logger.info("操作完毕，切换为原有角色")
         check_func()
@@ -6418,7 +6418,7 @@ class DjcHelper:
     def qq(self) -> str:
         return uin2qq(self.uin())
 
-    def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable):
+    def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable[[RoleInfo], Any]):
         check_role_func()
 
         if self.cfg.ark_lottery.lucky_dnf_role_id != "":
@@ -6429,7 +6429,7 @@ class DjcHelper:
             self.temporary_change_bind_and_do(ctx, [change_bind_role], check_role_func, action_callback)
 
         # 保底尝试普通角色领取
-        action_callback()
+        action_callback(self.get_dnf_bind_role_copy())
 
 
 def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]):

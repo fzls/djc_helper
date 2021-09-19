@@ -6,6 +6,7 @@ logger.name = "config_ui"
 logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
+import os.path
 from io import StringIO
 from traceback import print_tb
 from urllib.parse import unquote
@@ -345,7 +346,13 @@ class ConfigUi(QFrame):
     def add_group(self, checked=False):
         # note: 如果群 389786092 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=jpLIWC9GQvfN-tiK1SHB94UItFBdk6j0&jump_from=webapi")
-        self.popen("DNF蚊子腿小助手交流群群二维码.jpg")
+        for suffix in ["png", "jpg", ]:
+            img_name = f"DNF蚊子腿小助手交流群群二维码.{suffix}"
+            if not os.path.isfile(img_name):
+                continue
+
+            self.popen(img_name)
+
         report_click_event("add_group")
 
     def add_account(self, checked=False):

@@ -66,6 +66,7 @@ class QQLogin():
     login_mode_qzone = "qzone"
     login_mode_guanjia = "guanjia"
     login_mode_wegame = "wegame"
+    login_mode_club_vip = "club_vip"
 
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
 
@@ -451,6 +452,11 @@ class QQLogin():
                     "wegame（获取wegame相关api需要用到）",
                     self.get_login_url(1600001063, 733, "https://www.wegame.com.cn/"),
                 ),
+                self.login_mode_club_vip: (
+                    self._login_club_vip,
+                    "club.vip.qq.com",
+                    self.get_login_url(8000212, 18, "https://club.vip.qq.com/qqvip/acts2021/dnf"),
+                ),
             }[login_mode]
 
             ctx = f"{login_type}-{suffix}"
@@ -570,6 +576,28 @@ class QQLogin():
                            apps_p_skey=self.get_cookie("apps_p_skey"),
                            )
 
+    def _login_club_vip(self, login_type, login_action_fn=None):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+        s_url = "https://club.vip.qq.com/qqvip/acts2021/dnf"
+
+        def switch_to_login_frame_fn():
+            if self.need_reopen_url(login_type):
+                self.get_switch_to_login_frame_fn(8000212, 18, s_url)
+
+        def assert_login_finished_fn():
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
+
+        # 从cookie中获取uin和skey
+        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
+                           p_skey=self.get_cookie("p_skey"),
+                           )
+
     def _login_guanjia(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
@@ -685,6 +713,7 @@ class QQLogin():
         # 716027609     383     心悦战场            https://xinyue.qq.com/
         # 21000115      8       腾讯游戏/移动游戏    https://dnf.qq.com/
         # 532001604     ?       腾讯视频            https://film.qq.com/
+        # 8000212      18       club.vip           https://club.vip.qq.com/qqvip/acts2021/dnf
 
         # 参数：s_url
         # 登陆完毕后要跳转的网页

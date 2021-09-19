@@ -413,6 +413,7 @@ class DjcHelper:
             ("轻松之路", self.dnf_relax_road),
             ("dnf助手活动", self.dnf_helper),
             ("colg每日签到", self.colg_signin),
+            ("qq会员杯", self.dnf_club_vip),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1791,6 +1792,45 @@ class DjcHelper:
     def dnf_ark_lottery_get_prize_names(self) -> List[str]:
         return list(self.dnf_ark_lottery_get_prize_counts().keys())
 
+    # -------------------------------------------- qq会员杯 --------------------------------------------
+    # note: 适配流程如下
+    #   0. 打开对应活动页面
+    #   1. 获取子活动id   搜索 tianxuan = ，找到各个活动的id
+    #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("qq会员杯")的值为新的网页链接，并把活动时间改为最新
+    #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
+    @try_except()
+    def dnf_club_vip(self):
+        get_act_url("qq会员杯")
+        show_head_line("qq会员杯")
+        self.show_not_ams_act_info("qq会员杯")
+
+        if not self.cfg.function_switches.get_dnf_club_vip or self.disable_most_activities():
+            logger.warning("未启用领取qq会员杯功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.fetch_club_vip_p_skey()
+        if self.lr is None:
+            return
+
+        # self.club_qzone_act_op("开通会员-openSvip", "11997_5450c859")
+        # self.club_qzone_act_op("领取开通奖励-receiveRewards", "12001_a24bdb71")
+        self.club_qzone_act_op("报名并领取奖励-signUp", "12002_262a3b1d")
+        # self.club_qzone_act_op("邀请好友-invitation", "12153_257cd052")
+        # self.club_qzone_act_op("接受邀请-receiveInvitation", "12168_73c057d6")
+        self.club_qzone_act_op("通关一次命运的抉择-helpClearanceOnce", "12154_0dcd2046")
+        self.club_qzone_act_op("20分钟内通关命运的抉择-helpClearanceLimitTime", "12155_b1bae685")
+        self.club_qzone_act_op("游戏在线30分钟-gameOnline", "12004_757ee8c2")
+        self.club_qzone_act_op("通关一次【命运的抉择】-clearanceOnce", "12379_37ef2682")
+        self.club_qzone_act_op("特权网吧登录-privilegeBar", "12006_deddc48a")
+        # self.club_qzone_act_op("抽奖次数?-luckyNum", "12042_187645f2")
+        for idx in range_from_one(2):
+            self.club_qzone_act_op(f"[{idx}/2] 抽奖-lucky", "12003_404fde87")
+
     def try_make_lucky_user_req_data(self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str) -> Optional[dict]:
         # 确认使用的角色
         server_id, roleid = "", ""
@@ -1822,6 +1862,42 @@ class DjcHelper:
         return lucky_req_data
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: Optional[dict] = None, print_res=True):
+        body = {
+            "SubActId": sub_act_id,
+            "ActReqData": json.dumps(self.get_qzone_act_req_data(act_req_data, extra_act_req_data)),
+            "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
+        }
+
+        return self._qzone_act_op(ctx, self.urls.qzone_activity_new, body, print_res)
+
+    def club_qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: Optional[dict] = None, print_res=True):
+        # 另一类qq空间系活动，需要特殊处理
+        # https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk=502405433&isomorphism-args=W3siU3ViQWN0SWQiOiIxMjAwNl9kZWRkYzQ4YSIsIkFjd .......
+
+        # 首先构造普通的请求body
+        body = {
+            "SubActId": sub_act_id,
+            "ActReqData": json.dumps(self.get_qzone_act_req_data(act_req_data, extra_act_req_data), separators=(',', ':')),
+            "ClientPlat": 2,
+        }
+
+        # 然后外面套一层列表
+        list_body = [body]
+
+        # 再序列化为json（不出现空格）
+        json_str = json.dumps(list_body, separators=(',', ':'))
+
+        # 之后转化为base64编码
+        b64_str = base64_str(json_str)
+
+        # 然后进行两次URL编码，作为 isomorphism-args 参数
+        isomorphism_args = quote_plus(quote_plus(b64_str))
+
+        extra_cookies = f"p_skey={self.lr.p_skey};"
+        self.get(ctx, self.urls.qzone_activity_club_vip, g_tk=getACSRFTokenForAMS(self.lr.p_skey), isomorphism_args=isomorphism_args,
+                 extra_cookies=extra_cookies, print_res=print_res)
+
+    def get_qzone_act_req_data(self, act_req_data=None, extra_act_req_data: Optional[dict] = None) -> dict:
         if act_req_data is None:
             roleinfo = RoleInfo()
             roleinfo.roleCode = "123456"
@@ -1844,13 +1920,7 @@ class DjcHelper:
                 **extra_act_req_data,
             }
 
-        body = {
-            "SubActId": sub_act_id,
-            "ActReqData": json.dumps(act_req_data),
-            "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
-        }
-
-        return self._qzone_act_op(ctx, self.urls.qzone_activity_new, body, print_res)
+        return act_req_data
 
     def qzone_act_query_op(self, ctx: str, sub_act_id: str, print_res=True):
         body = {
@@ -1867,6 +1937,11 @@ class DjcHelper:
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
         return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)
+
+    def _qzone_act_get_op(self, ctx: str, url: str, print_res=True, **params):
+        extra_cookies = f"p_skey={self.lr.p_skey}; "
+
+        return self.get(ctx, url, extra_cookies=extra_cookies, print_res=print_res, **params)
 
     # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
     def wegame_guoqing(self):
@@ -6401,10 +6476,15 @@ class DjcHelper:
         return AmesvrQueryRole().auto_update_config(res)
 
     def fetch_share_p_skey(self, ctx) -> str:
+        return self._fetch_login_result(ctx, QQLogin.login_mode_normal).apps_p_skey
+
+    def fetch_club_vip_p_skey(self):
+        self.lr = self._fetch_login_result("club.vip", QQLogin.login_mode_club_vip)
+
+    def _fetch_login_result(self, ctx: str, login_mode: str) -> LoginResult:
         logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录活动页面来获取p_skey，请稍候~")
 
         ql = QQLogin(self.common_cfg)
-        login_mode = ql.login_mode_normal
         if self.cfg.login_mode == "qr_login":
             # 扫码登录
             lr = ql.qr_login(login_mode=login_mode, name=self.cfg.name)
@@ -6412,7 +6492,7 @@ class DjcHelper:
             # 自动登录
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name)
 
-        return lr.apps_p_skey
+        return lr
 
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
         logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录心悦页面来获取心悦相关信息，请稍候~")
@@ -6596,4 +6676,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_relax_road()
         # djcHelper.colg_signin()
         # djcHelper.dnf_helper()
-        djcHelper.dnf_gonghui()
+        # djcHelper.dnf_gonghui()
+        djcHelper.dnf_club_vip()

@@ -1712,6 +1712,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_yellow_diamond = create_checkbox(cfg.get_dnf_yellow_diamond)
         add_row(form_layout, "黄钻", self.checkbox_get_dnf_yellow_diamond)
 
+        self.checkbox_get_dnf_club_vip = create_checkbox(cfg.get_dnf_club_vip)
+        add_row(form_layout, "qq会员杯", self.checkbox_get_dnf_club_vip)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "安全管家pskey")
 
@@ -1767,6 +1770,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
         cfg.get_dnf_super_vip = self.checkbox_get_dnf_super_vip.isChecked()
         cfg.get_dnf_yellow_diamond = self.checkbox_get_dnf_yellow_diamond.isChecked()
+        cfg.get_dnf_club_vip = self.checkbox_get_dnf_club_vip.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
 

@@ -331,6 +331,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_super_vip = True
         # 是否启用 黄钻 活动
         self.get_dnf_yellow_diamond = True
+        # 是否启用 qq会员杯 活动
+        self.get_dnf_club_vip = True
 
         # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
         # 是否领取 管家蚊子腿 活动

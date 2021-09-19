@@ -431,6 +431,8 @@ get_vip_mentor = true
 get_dnf_super_vip = true
 # 是否启用 黄钻 活动
 get_dnf_yellow_diamond = true
+# 是否启用 qq会员杯 活动
+get_dnf_club_vip = true
 
 # ------------ 安全管家pskey（需要登录 安全管家 获取） ------------
 # 是否领取 管家蚊子腿 活动

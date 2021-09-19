@@ -34,6 +34,7 @@ not_ams_activities = [
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
+    newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
 ]
 
 act_name_to_url = {
@@ -72,6 +73,7 @@ act_name_to_url = {
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -260,6 +262,8 @@ class Urls:
         self.qzone_activity_new_query_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/QueryItems?g_tk={g_tk}&packetID={packetID}"
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
         self.pesudo_ark_lottery_act_id = 10001
+
+        self.qzone_activity_club_vip = "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
 
         # 抽卡相关
         self.ark_lottery_page = get_act_url("集卡")

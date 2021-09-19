@@ -278,5 +278,15 @@
     "open_url": "https://bbs.colg.cn/thread-8284066-1-1.html",
     "expire_at": "2021-09-26 23:19:15",
     "show_only_before_version": "13.14.6"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "关于付费方式",
+    "message": "鉴于私聊风险太大（大号因此被冻结好几次了-。-），以及私聊处理一般也不够及时，如果各位要购买按月付费和dlc的话，推荐使用配置工具中的购买卡密和使用卡密来自助处理。\n    \n具体的流程在【付费指引】目录中有非常详尽的图文教程，如有问题可以点开看一看。\n",
+    "send_at": "2021-09-20 02:04:19",
+    "show_type": "once",
+    "open_url": "https://bbs.colg.cn/thread-8284066-1-1.html",
+    "expire_at": "2021-09-27 02:04:19",
+    "show_only_before_version": "13.14.6"
   }
 ]

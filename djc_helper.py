@@ -5256,7 +5256,37 @@ class DjcHelper:
             _get("领取每周礼包", self.urls.xiaojiangyou_get_packge, token=pi.token, ams_id=pi.ams_id, package_group_id=pi.package_group_id, tool_id=pi.tool_id, certificate=self.xjy_info.certificate)
 
         def take_birthday_gift():
-            return _ask_question("生日礼包", "11090757", "0")
+            res = _ask_question("生日礼包", "11090757", "0")
+            text = json.dumps(res, ensure_ascii=False)
+
+            reg_birthday = r'你的生日是在(\d{4})年(\d{2})月(\d{2})日'
+
+            match = re.search(reg_birthday, text)
+            if match is not None:
+                year, month, day = [int(v) for v in match.groups()]
+                birthday = datetime.datetime(year, month, day)
+                logger.info(f"{self.cfg.name} 的 DNF生日（账号创建日期） 为 {birthday}")
+
+                now = get_now()
+                max_delta = timedelta(days=30)
+
+                # 依次判断去年、今年生日是否在今天之前30天内
+                possiable_birthdays = [
+                    birthday.replace(year=now.year - 1),
+                    birthday.replace(year=now.year),
+                ]
+
+                for try_birth_day in possiable_birthdays:
+                    if try_birth_day <= now <= try_birth_day + max_delta:
+                        act_url = "https://pay.qq.com/m/active/activity_dispatcher.php?id=3099"
+                        msg = (
+                            f"{self.cfg.name} 的 DNF生日（账号创建日期） 为 {birthday}，最近一次生日为 {try_birth_day}，在该日期的30天内可以用手机去qq的充值中心领取一个生日礼\n"
+                            f"\n"
+                            f"具体链接为 {act_url}"
+                        )
+                        logger.info(color("bold_yellow") + msg)
+                        if is_weekly_first_run(f"生日提醒_{self.cfg.name}"):
+                            async_message_box(msg, "生日提醒", open_url=act_url)
 
         # ------------------------- 正式逻辑 -------------------------
         take_weekly_gift()
@@ -6677,4 +6707,5 @@ if __name__ == '__main__':
         # djcHelper.colg_signin()
         # djcHelper.dnf_helper()
         # djcHelper.dnf_gonghui()
-        djcHelper.dnf_club_vip()
+        # djcHelper.dnf_club_vip()
+        djcHelper.xiaojiangyou()

@@ -4560,9 +4560,8 @@ class DjcHelper:
 
         # 妆容和装饰（小橘子和贤德昭仪）
         petId = queryPetId()
-        # re: 消息会提示 该妆容仅限领取一次 ，暂时不确定这个 粉红喵酱 是否可以多次购买，下周验证下，如果不行就换回 贤德昭仪
-        skin_id, skin_name = ("24", "粉红喵酱")
-        # skin_id, skin_name = ("8", "贤德昭仪")
+        # skin_id, skin_name = ("24", "粉红喵酱") # 只能领取一次，不再尝试
+        skin_id, skin_name = ("8", "贤德昭仪")
 
         decoration_id, decoration_name = ("7", "小橘子")
 

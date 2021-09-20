@@ -5064,6 +5064,7 @@ class DjcHelper:
         # 可能有多个活动并行
         # https://dnf.qq.com/act/a20210611act/index.html
         # https://dnf.qq.com/act/a20210803act/index.html
+        @try_except()
         def query_remaining_quota():
             res = self.dnf_bbs_op("查询礼包剩余量", "788271", print_res=False)
             info = parse_amesvr_common_info(res)
@@ -5181,6 +5182,7 @@ class DjcHelper:
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
+    @try_except()
     def check_dnf_bbs(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20210803act/index.html",
                                 activity_op_func=self.dnf_bbs_op, query_bind_flowid="788267", commit_bind_flowid="788266")
@@ -5191,6 +5193,7 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "https://dnf.qq.com/act/a20210803act/index.html",
                                    **extra_params)
 
+    @try_except()
     def check_dnf_bbs_dup(self):
         self.check_bind_account("DNF论坛积分兑换活动", "https://dnf.qq.com/act/a20210611act/index.html",
                                 activity_op_func=self.dnf_bbs_dup_op, query_bind_flowid="774035", commit_bind_flowid="774034")

@@ -1342,6 +1342,9 @@ class AccountConfigUi(QWidget):
         self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明")
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
+        self.lineedit_huya_cookie = create_lineedit(cfg.huya_cookie, "请填写虎牙活动页面请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中huya_cookie字段的说明")
+        add_row(form_layout, "虎牙 cookie", self.lineedit_huya_cookie)
+
         # -------------- 区域：会员关怀 --------------
         self.collapsible_box_vip_mentor, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
@@ -1384,6 +1387,7 @@ class AccountConfigUi(QWidget):
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
         cfg.colg_cookie = self.lineedit_colg_cookie.text()
+        cfg.huya_cookie = self.lineedit_huya_cookie.text()
 
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)
@@ -1697,6 +1701,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_relax_road = create_checkbox(cfg.get_dnf_relax_road)
         add_row(form_layout, "轻松之路", self.checkbox_get_dnf_relax_road)
 
+        self.checkbox_get_huya = create_checkbox(cfg.get_huya)
+        add_row(form_layout, "虎牙", self.checkbox_get_huya)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -1765,6 +1772,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_mingyun_jueze = self.checkbox_get_dnf_mingyun_jueze.isChecked()
         cfg.get_dnf_guanhuai = self.checkbox_get_dnf_guanhuai.isChecked()
         cfg.get_dnf_relax_road = self.checkbox_get_dnf_relax_road.isChecked()
+        cfg.get_huya = self.checkbox_get_huya.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

@@ -35,6 +35,7 @@ not_ams_activities = [
     newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
+    newAmsActInfo("虎牙", "2021-09-11 00:00:00", "2021-10-13 23:59:59"),
 ]
 
 act_name_to_url = {
@@ -74,6 +75,7 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
+    "虎牙": "https://www.huya.com/367967",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",

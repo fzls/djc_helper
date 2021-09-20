@@ -198,7 +198,7 @@ def is_request_ok(data):
                     if type(val) is str and not val.isnumeric():
                         success = False
                     else:
-                        success = int(val) in [0, 1]
+                        success = int(val) in [0, 1, 200]
                 else:
                     success = int(val) == 0
                 break

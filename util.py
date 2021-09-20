@@ -963,7 +963,7 @@ def get_meaningful_call_point_for_log() -> str:
     for caller_info in stack_except_this:
         if caller_info.function in ignore_caller_names \
                 or startswith_any(caller_info.function, ignore_prefixes) \
-                or endswith(caller_info.function, ignore_suffixes):
+                or endswith_any(caller_info.function, ignore_suffixes):
             continue
 
         call_at = f"{caller_info.function}:{caller_info.lineno} "
@@ -980,7 +980,7 @@ def startswith_any(string: str, prefixes: List[str]) -> bool:
     return False
 
 
-def endswith(string: str, suffixes: List[str]) -> bool:
+def endswith_any(string: str, suffixes: List[str]) -> bool:
     for suffix in suffixes:
         if string.endswith(suffix):
             return True

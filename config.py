@@ -319,6 +319,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_guanhuai = True
         # 是否领取 轻松之路 活动
         self.get_dnf_relax_road = True
+        # 是否领取 虎牙 活动
+        self.get_huya = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能
@@ -377,6 +379,8 @@ class AccountConfig(ConfigInterface):
         self.dnf_bbs_cookie = ""
         # colg cookie
         self.colg_cookie = ""
+        # 虎牙 cookie
+        self.huya_cookie = ""
         # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）
         self.comic_lottery = False
         # 腾讯系网页登录通用账号凭据与token

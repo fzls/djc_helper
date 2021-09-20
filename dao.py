@@ -1295,6 +1295,37 @@ class DnfHelperQueryInfo(ConfigInterface):
         self.todayhastask = 0
 
 
+class HuyaActTaskInfo(ConfigInterface):
+    def __init__(self):
+        self.taskId = 16234
+        self.actId = 4210
+        self.taskName = "我爱看直播"
+        self.taskAttr = 1
+        self.taskType = 2
+        self.taskFrequency = 2
+        self.taskParams = "watchId=2108&timeLimit=5"
+        self.taskTarget = "5"
+        self.taskUrl = ""
+        self.taskIcon = ""
+        self.taskDesc = "每日观看DNF专区5分钟"
+        self.isFinalTask = 0
+        self.actCount = -1
+        self.taskStartTime = 0
+        self.taskEndTime = 0
+        self.prizeList = []
+
+
+class HuyaUserTaskInfo(ConfigInterface):
+    def __init__(self):
+        self.taskId = 16234
+        self.actId = 4210
+        self.taskStatus = 1
+        self.prizeStatus = 0
+        self.taskValue = "17"
+        self.taskCount = 0
+        self.prizeCount = 0
+
+
 if __name__ == '__main__':
     a = BuyInfo()
     a.qq = "11"

@@ -414,6 +414,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("colg每日签到", self.colg_signin),
             ("qq会员杯", self.dnf_club_vip),
+            ("虎牙", self.huya),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -3924,6 +3925,80 @@ class DjcHelper:
 
         self.get("微信签到信息", 'https://gw.gzh.qq.com/awp-signin/check?id=260', extra_cookies=wx_login_cookies)
 
+    # -------------------------------------------- 虎牙 --------------------------------------------
+    @try_except()
+    def huya(self):
+        show_head_line("虎牙")
+
+        if not self.cfg.function_switches.get_huya:
+            logger.warning("未启用虎牙功能，将跳过")
+            return
+
+        if self.cfg.huya_cookie == "":
+            logger.warning("未配置虎牙的cookie，将跳过。请去虎牙活动页面绑定角色后并在小助手配置cookie后再使用（相关的配置会配置就配置，不会就不要配置，我不会回答关于这玩意如何获取的问题）")
+            return
+
+        huya_headers = {
+            "referer": "https://www.huya.com/",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36",
+            "cookie": self.cfg.huya_cookie,
+        }
+
+        def _get(ctx, url: str, print_res=True):
+            return self.get(ctx, url, extra_headers=huya_headers, is_jsonp=True, is_normal_jsonp=True, print_res=print_res)
+
+        def query_act_tasks_dict(component_id: int, act_id: int) -> Dict[int, HuyaActTaskInfo]:
+            raw_res = _get("查询活动任务信息", f"https://activityapi.huya.com/cache/acttask/getActTaskDetail?callback=getActTaskDetail_matchComponent{component_id}&actId={act_id}&platform=1", print_res=False)
+
+            task_id_to_info = {}
+            for raw_task_info in raw_res["data"]:
+                task_info = HuyaActTaskInfo().auto_update_config(raw_task_info)
+                task_id_to_info[task_info.taskId] = task_info
+
+            return task_id_to_info
+
+        def query_user_tasks_list(component_id: int, act_id: int) -> List[HuyaUserTaskInfo]:
+            raw_res = _get("查询玩家任务信息", f"https://activityapi.huya.com/acttask/getActUserTaskDetail?callback=getUserTasks_matchComponent{component_id}&actId={act_id}&platform=1&_={getMillSecondsUnix()}", print_res=False)
+
+            task_list = []
+            for raw_task_info in raw_res["data"]:
+                task_info = HuyaUserTaskInfo().auto_update_config(raw_task_info)
+                task_list.append(task_info)
+
+            return task_list
+
+        def take_award(component_id: int, act_id: int, task_id: int, task_name: str):
+            _get(f"领取奖励 - {task_name}", f"https://activityapi.huya.com/acttask/receivePrize?callback=getTaskAward_matchComponent{component_id}&taskId={task_id}&actId={act_id}&source=1199546566130&platform=1&_={getMillSecondsUnix}")
+
+        def take_awards(component_id: int, act_id: int):
+            tasks_dict = query_act_tasks_dict(component_id, act_id)
+            user_tasks_list = query_user_tasks_list(component_id, act_id)
+
+            for task_status in user_tasks_list:
+                task_info = tasks_dict.get(task_status.taskId)
+                if task_status.taskStatus == 0:
+                    logger.warning(f"任务 {task_info.taskName} 尚未完成")
+                    continue
+                if task_status.prizeStatus == 1:
+                    logger.info(f"任务 {task_info.taskName} 已经领取过")
+                    continue
+
+                take_award(component_id, act_id, task_status.taskId, task_info.taskName)
+
+        def draw_lottery(ctx, component_id: int, cid: int) -> dict:
+            return _get(ctx, f"https://activity.huya.com/randomlottery/index.php?m=Lottery&do=lottery&callback=openBox_matchComponent{component_id}&cid={cid}&platform=1&_={getMillSecondsUnix}")
+
+        # ------------- 玩家见面礼 -------------
+        take_awards(4, 4210)
+
+        # ------------- 福利宝箱 -------------
+        take_awards(5, 4208)
+
+        for idx in range_from_one(3):
+            res = draw_lottery(f"[{idx}/3] 抽奖", 5, 2499)
+            if res.get('status') != 200:
+                break
+
     # --------------------------------------------2020DNF嘉年华页面主页面签到--------------------------------------------
     def dnf_carnival(self):
         show_head_line("2020DNF嘉年华页面主页面签到")
@@ -6708,4 +6783,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_helper()
         # djcHelper.dnf_gonghui()
         # djcHelper.dnf_club_vip()
-        djcHelper.xiaojiangyou()
+        # djcHelper.xiaojiangyou()
+        djcHelper.huya()

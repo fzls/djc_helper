@@ -832,9 +832,11 @@ def kill_other_instance_on_start():
     logger.info(f"当前pid为{current_pid}")
 
 
-def append_if_not_in(vlist: list, val: Any):
+def append_if_not_in(vlist: list, val: Any) -> list:
     if val not in vlist:
         vlist.append(val)
+
+    return vlist
 
 
 def wait_for(msg: str, seconds):
@@ -995,20 +997,6 @@ def extract_between(html: str, prefix: str, suffix: str, typ: Type) -> Any:
     return typ(html[prefix_idx:suffix_idx])
 
 
-# re: 改到这个的时候再移过去
-def test_extract_between():
-    text = """
-    var activity_id = '1';
-    var lvScore = 66;
-    """
-
-    activity_id = extract_between(text, "var activity_id = '", "';", str)
-    lv_score = extract_between(text, "var lvScore = ", ";", int)
-
-    assert activity_id == "1"
-    assert lv_score == 66
-
-
 def popen(args, cwd="."):
     if type(args) is list:
         args = [str(arg) for arg in args]
@@ -1079,7 +1067,7 @@ def sync_configs(source_dir: str, target_dir: str):
             shutil.copyfile(source, destination)
 
 
-def start_and_end_date_of_a_month(date: datetime.datetime):
+def start_and_end_date_of_a_month(date: datetime.datetime) -> Tuple[datetime.datetime, datetime.datetime]:
     """
     返回对应时间所在月的起始和结束时间点，形如 2021-07-01 00:00:00 和 2021-07-31 23:59:59
     """

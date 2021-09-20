@@ -247,3 +247,103 @@ def test_parse_unicode_escape_string():
         parse_unicode_escape_string("\\user\\u5982\\u679c")
 
     assert parse_unicode_escape_string("\\u5982\\u679c") == "如果"
+
+
+def test_remove_none_from_list():
+    assert remove_none_from_list([]) == []
+    assert remove_none_from_list([None]) == []
+    assert remove_none_from_list([1, None, 2]) == [1, 2]
+
+
+def test_append_if_not_in():
+    assert append_if_not_in([], 1) == [1]
+    assert append_if_not_in([1], 1) == [1]
+    assert append_if_not_in([0], 1) == [0, 1]
+
+
+def test_md5():
+    assert md5("test") == "098f6bcd4621d373cade4e832627b4f6"
+    assert md5("") == "d41d8cd98f00b204e9800998ecf8427e"
+
+
+def test_get_meaningful_call_point_for_log():
+    caller_list = [""]
+
+    def expect_caller():
+        check_fake()
+
+    def check_fake():
+        fake_op()
+
+    def fake_op():
+        process_result()
+
+    def process_result():
+        caller_list[0] = get_meaningful_call_point_for_log()
+
+    expect_caller()
+    assert caller_list[0].startswith(expect_caller.__name__)
+
+
+def test_startswith_any():
+    assert startswith_any("test", ["123", "te"]) is True
+    assert startswith_any("test", ["123", "tttt"]) is False
+
+
+def test_endswith_any():
+    assert endswith_any("test", ["123", "st"]) is True
+    assert endswith_any("test", ["123", "tttt"]) is False
+
+
+def test_extract_between():
+    text = """
+    var activity_id = '1';
+    var lvScore = 66;
+    """
+
+    activity_id = extract_between(text, "var activity_id = '", "';", str)
+    lv_score = extract_between(text, "var lvScore = ", ";", int)
+
+    assert activity_id == "1"
+    assert lv_score == 66
+
+
+def test_start_and_end_date_of_a_month():
+    start_date, end_date = start_and_end_date_of_a_month(now_for_test)
+    assert start_date == datetime.datetime(now_for_test.year, now_for_test.month, 1, 0, 0, 0)
+    assert end_date == datetime.datetime(now_for_test.year, now_for_test.month, 31, 23, 59, 59)
+
+
+def test_remove_suffix():
+    assert remove_suffix("test_suffix", "_suffix") == "test"
+    assert remove_suffix("test_suffix", "not_exist_suffix") == "test_suffix"
+
+
+def test_get_cid():
+    assert get_cid() == get_cid()
+
+
+def test_parse_scode():
+    assert parse_scode("MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    assert parse_scode("https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    assert parse_scode("https://dnf.qq.com/cp/a20210911care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+
+
+def test_bytes_arr_to_hex_str():
+    assert bytes_arr_to_hex_str([0x58, 0x59, 0x01, 0x00, 0x00]) == "0x58, 0x59, 0x01, 0x00, 0x00"
+
+
+def test_hex_str_to_bytes_arr():
+    assert hex_str_to_bytes_arr("0x58, 0x59, 0x01, 0x00, 0x00") == [0x58, 0x59, 0x01, 0x00, 0x00]
+
+
+def test_utf8len():
+    assert utf8len("test") == 4
+    assert utf8len("测试") == 6
+    assert utf8len("test测试") == 10
+
+
+def test_base64_str():
+    assert base64_str("test") == "dGVzdA=="
+    assert base64_str("测试") == "5rWL6K+V"
+    assert base64_str("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="

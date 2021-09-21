@@ -2859,6 +2859,9 @@ class DjcHelper:
         return f"{info.tasknums}/20"
 
     def dnf_helper_query_info(self) -> DnfHelperQueryInfo:
+        if self.cfg.dnf_helper_info.token == "":
+            return DnfHelperQueryInfo()
+
         raw_res = self.get("查询状态信息", self.dnf_helper_format_url("initpage"), print_res=False)
         info = DnfHelperQueryInfo().auto_update_config(raw_res['data'])
 

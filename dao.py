@@ -1291,7 +1291,7 @@ class DnfHelperQueryInfo(ConfigInterface):
         self.hasfinish = 0
         self.taskId = 797903
         self.inittask = [797807, 797903, 797908]
-        self.tasknums = 2
+        self.tasknums = 0
         self.todayhastask = 0
 
 

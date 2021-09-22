@@ -159,14 +159,23 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于付费方式"
-    message = """鉴于私聊风险太大（大号因此被冻结好几次了-。-），以及私聊处理一般也不够及时，如果各位要购买按月付费和dlc的话，推荐使用配置工具中的购买卡密和使用卡密来自助处理。
+    title = "关于最近的盗号风波"
+    message = """最近似乎有不少人被盗号，建议各位保护好自己的账号密码。可以参考下面几个
+1. 在网吧登录，在咖啡厅、机场等地方使用wifi登录时，尽量不要手动输入账号密码，使用扫码登录或者点击头像快速登录
+2. 不要在奇怪的网页中输入密码，如点击赠送12增幅券这类
+3. 不要把账号密码交给不能拿刀上门的人，人心隔肚皮
+4. 游戏号尽量不要添加各种群，避免被盯上
+5. 安装个杀毒软件，推荐火绒，比较靠谱和安静
+6. 使用小助手时，若使用自动登录，请确保你的配置文件不会被他人获取。因此，在网吧或其他人的电脑上，请务必不要使用自动登录模式。
 
-具体的流程在【付费指引】目录中有非常详尽的图文教程，如有问题可以点开看一看。
+另外，发现部分人似乎把盗号归因到蚊子腿小助手、计算器以及其他这类开源代码的工具上，我觉得大可不必，说话要讲证据，不要随便找个东西来背锅。
+仅就小助手而言，各位如果觉得是小助手的锅，请明确指出是哪段代码会用来盗号，以及具体盗号机制。如果确定无误，我立刻关闭此项目，并赔礼道歉。
+如果你不懂代码，但仍觉得是小助手的锅，也很简单，请你立刻停止使用小助手，这样就绝不会受到你所认为的小助手的潜在的盗号迫害了。
 """
+    open_url = ""
     nm.add_notice(title, message,
                   send_at=format_now(),
-                  show_type=NoticeShowType.ONCE, open_url="https://bbs.colg.cn/thread-8284066-1-1.html", valid_duration=timedelta(days=7),
+                  show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),
                   show_only_before_version=now_version,
                   # show_only_before_version="",
                   )

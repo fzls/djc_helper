@@ -3754,11 +3754,11 @@ class DjcHelper:
 
         self.dnf_gonghui_op("活动分享", "798914")
 
-        # 会长活动
-        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations)
-
         # 会员活动
         self.temporary_change_bind_and_do(f"从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations)
+
+        # 会长活动
+        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations)
 
         # 兑换奖励
         def exchange_awards():

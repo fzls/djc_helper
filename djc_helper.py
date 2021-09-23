@@ -489,6 +489,8 @@ class DjcHelper:
     def query_money_flow(self, ctx):
         return self.get(ctx, self.urls.money_flow)
 
+    # urls.sign签到接口偶尔会报 401 Unauthorized，因此需要加一层保护，确保不影响其他流程
+    @try_except()
     def sign_in_and_take_awards(self):
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
         self.get("2.1.1 发送imsdk登录事件", self.urls.imsdk_login)

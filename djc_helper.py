@@ -495,20 +495,30 @@ class DjcHelper:
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
         self.get("2.1.1 发送imsdk登录事件", self.urls.imsdk_login)
         self.get("2.1.2 发送app登录事件", self.urls.user_login_event)
-        # 签到
-        self.post("2.2 签到", self.urls.sign, self.sign_flow_data("96939"))
-        # 领取本日签到赠送的聚豆
-        self.post("2.3 领取签到赠送的聚豆", self.urls.sign, self.sign_flow_data("324410"))
 
-        # 尝试领取自动签到的奖励
-        # 查询本月签到的日期列表
-        signinDates = self.post("2.3.1 查询签到日期列表", self.urls.sign, self.sign_flow_data("96938"), print_res=False)
-        month_total_signed_days = len(signinDates["modRet"]["data"])
-        # 根据本月已签到数，领取符合条件的每月签到若干日的奖励（也就是聚豆页面最上面的那个横条）
-        for sign_reward_rule in self.get("2.3.2 查询连续签到奖励规则", self.urls.sign_reward_rule, print_res=False)["data"]:
-            if sign_reward_rule["iCanUse"] == 1 and month_total_signed_days >= int(sign_reward_rule["iDays"]):
-                ctx = f"2.3.3 领取连续签到{sign_reward_rule['iDays']}天奖励"
-                self.post(ctx, self.urls.sign, self.sign_flow_data(str(sign_reward_rule["iFlowId"])))
+        total_try = self.common_cfg.retry.max_retry_count
+        for try_idx in range_from_one(total_try):
+            try:
+                # 签到
+                self.post("2.2 签到", self.urls.sign, self.sign_flow_data("96939"))
+                # 领取本日签到赠送的聚豆
+                self.post("2.3 领取签到赠送的聚豆", self.urls.sign, self.sign_flow_data("324410"))
+
+                # 尝试领取自动签到的奖励
+                # 查询本月签到的日期列表
+                signinDates = self.post("2.3.1 查询签到日期列表", self.urls.sign, self.sign_flow_data("96938"), print_res=False)
+                month_total_signed_days = len(signinDates["modRet"]["data"])
+                # 根据本月已签到数，领取符合条件的每月签到若干日的奖励（也就是聚豆页面最上面的那个横条）
+                for sign_reward_rule in self.get("2.3.2 查询连续签到奖励规则", self.urls.sign_reward_rule, print_res=False)["data"]:
+                    if sign_reward_rule["iCanUse"] == 1 and month_total_signed_days >= int(sign_reward_rule["iDays"]):
+                        ctx = f"2.3.3 领取连续签到{sign_reward_rule['iDays']}天奖励"
+                        self.post(ctx, self.urls.sign, self.sign_flow_data(str(sign_reward_rule["iFlowId"])))
+
+                break
+            except json.decoder.JSONDecodeError as e:
+                logger.error(f"第 {try_idx}/{total_try} 次尝试道聚城签到相关操作失败了，等待一会重试", exc_info=e)
+                if try_idx != total_try:
+                    wait_for("道聚城签到操作失败", self.common_cfg.retry.retry_wait_time)
 
     def sign_flow_data(self, iFlowId):
         return self.format(self.urls.sign_raw_data, iFlowId=iFlowId)
@@ -6792,4 +6802,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_gonghui()
         # djcHelper.dnf_club_vip()
         # djcHelper.xiaojiangyou()
-        djcHelper.huya()
+        djcHelper.djc_operations()

@@ -159,11 +159,15 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于用到一半需要第二次扫码的问题"
-    message = """目前 qq会员杯 活动需要单独的登录获取专门的票据来实现自动化领取。
+    title = "虎牙cookie获取方式补充说明"
+    message = """
+1. 访问 https://www.huya.com/367967 （任意一个虎牙dnf在播的主播页面）
+2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
+3. 按f5刷新一遍网页
+4. 在左上角筛选项中输入 getAct
+5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 
-如果你是扫码登录，嫌中间第二次登录比较麻烦，可以去 对应账号的活动开关中将 【qq会员杯】 取消勾选（在倒数第二个）
-如果你是账号密码自动登录，则不用管它，让他自行登录即可。
+复制cookie部分可以参考dnf论坛cookie的视频教程，思路一致：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=3
 """
     open_url = ""
     nm.add_notice(title, message,

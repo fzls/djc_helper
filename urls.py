@@ -70,7 +70,7 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
-    "关怀活动": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",  # re: 链接需要更新为实际的
+    "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",

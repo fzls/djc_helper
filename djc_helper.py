@@ -2079,15 +2079,23 @@ class DjcHelper:
 
         self.check_dnf_guanhuai()
 
-        self.dnf_guanhuai_op("关怀礼包1领取", "798239")
-        self.dnf_guanhuai_op("关怀礼包2领取", "798241")
-        self.dnf_guanhuai_op("关怀礼包3领取", "798242")
-        self.dnf_guanhuai_op("领取每日抽奖次数", "798243")
-        self.dnf_guanhuai_op("关怀抽奖", "798244")
+        def take_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
+            self.dnf_guanhuai_op("关怀礼包1领取", "798239")
+            self.dnf_guanhuai_op("关怀礼包2领取", "798241")
+            self.dnf_guanhuai_op("关怀礼包3领取", "798242")
 
-    def check_dnf_guanhuai(self):
+            return True
+
+        self.try_do_with_lucky_role_and_normal_role("领取关怀礼包", self.check_dnf_guanhuai, take_gifts)
+
+        self.dnf_guanhuai_op("领取每日抽奖次数", "798243")
+        for idx in range_from_one(2):
+            self.dnf_guanhuai_op(f"{idx}/2 关怀抽奖", "798244")
+
+    def check_dnf_guanhuai(self, **extra_params):
         self.check_bind_account("关怀活动", get_act_url("关怀活动"),
-                                activity_op_func=self.dnf_guanhuai_op, query_bind_flowid="798236", commit_bind_flowid="798235")
+                                activity_op_func=self.dnf_guanhuai_op, query_bind_flowid="798236", commit_bind_flowid="798235",
+                                **extra_params)
 
     def dnf_guanhuai_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_guanhuai
@@ -6793,7 +6801,6 @@ if __name__ == '__main__':
         # djcHelper.dnf_xinyue()
         # djcHelper.guanjia_new_dup()
         # djcHelper.maoxian_dup()
-        # djcHelper.dnf_guanhuai()  # re: 链接需要更新为实际的
         # djcHelper.dnf_mingyun_jueze()
         # djcHelper.dnf_wegame()
         # djcHelper.dnf_relax_road()
@@ -6802,4 +6809,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_gonghui()
         # djcHelper.dnf_club_vip()
         # djcHelper.xiaojiangyou()
-        djcHelper.djc_operations()
+        # djcHelper.djc_operations()
+        djcHelper.dnf_guanhuai()

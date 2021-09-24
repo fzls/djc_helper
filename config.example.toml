@@ -257,13 +257,19 @@ dnf_bbs_cookie = ""
 # colg cookie
 # 获取方式：
 #   1. 访问 colg https://bbs.colg.cn/forum-171-1.html
-#   2. 按f12打开开发者工具
+#   2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
 #   3. 按f5刷新一遍网页
 #   4. 在左上角筛选项中输入 plugin.php
 #   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 colg_cookie = ""
 
-# 获取方式 与colg的流程基本一致，除了网页调整为虎牙的页面（需要先登录）
+# 虎牙 cookie
+# 获取方式：
+# 1. 访问 https://www.huya.com/367967 （任意一个虎牙dnf在播的主播页面）
+# 2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
+# 3. 按f5刷新一遍网页
+# 4. 在左上角筛选项中输入 getAct
+# 5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
 huya_cookie = ""
 
 # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）

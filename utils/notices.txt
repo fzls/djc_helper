@@ -308,5 +308,15 @@
     "open_url": "",
     "expire_at": "2021-10-02 02:27:21",
     "show_only_before_version": "13.14.8"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "虎牙cookie获取方式补充说明",
+    "message": "\n1. 访问 https://www.huya.com/367967 （任意一个虎牙dnf在播的主播页面）\n2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）\n3. 按f5刷新一遍网页\n4. 在左上角筛选项中输入 getAct\n5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）\n\n复制cookie部分可以参考dnf论坛cookie的视频教程，思路一致：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=3\n",
+    "send_at": "2021-09-25 02:38:59",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-10-02 02:38:59",
+    "show_only_before_version": "13.14.8"
   }
 ]

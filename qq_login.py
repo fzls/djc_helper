@@ -92,7 +92,7 @@ class QQLogin():
     #       5.1 chromedriver_{ver}.exe
     #       5.1 chrome_portable_{ver}.7z
     #       5.1 Chrome_92.0.4515.131_普通安装包_非便携版.exe
-    chrome_major_version = 92
+    chrome_major_version = 94
 
     default_window_width = 390
     default_window_height = 360

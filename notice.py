@@ -159,15 +159,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "虎牙cookie获取方式补充说明"
-    message = """
-1. 访问 https://www.huya.com/367967 （任意一个虎牙dnf在播的主播页面）
-2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
-3. 按f5刷新一遍网页
-4. 在左上角筛选项中输入 getAct
-5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
-
-复制cookie部分可以参考dnf论坛cookie的视频教程，思路一致：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=3
+    title = "关于提示公会角色的问题"
+    message = """部分朋友似乎没有理解公会活动为何会领到另一个角色，并弹窗提示。
+这个活动分【会长】和【会员】两部分，一个账号可以同时参加。
+但是，你绑定的角色不可能同时参与这两个活动，因为必定是【会长】、【会员】、【未参加公会】三者之一。
+因此小助手这里会尝试遍历你每一个角色（优先当前绑定角色），找到第一个符合对应身份的角色来领取该奖励。
+为了避免悄悄领取到其他角色而不知道，因此每周会在第一次将当前绑定角色对应公会身份领取不了的那部分奖励发放到其他角色时，弹窗提示，让你去邮箱收取。
 """
     open_url = ""
     nm.add_notice(title, message,

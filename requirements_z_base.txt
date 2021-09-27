@@ -1,6 +1,6 @@
 requests==2.26.0
 requests-toolbelt==0.9.1
-pycryptodome==3.10.1
+pycryptodome==3.10.4
 toml==0.10.2
 selenium==3.141.0
 colorlog==6.4.1

@@ -328,5 +328,15 @@
     "open_url": "",
     "expire_at": "2021-10-04 23:19:49",
     "show_only_before_version": "13.14.8"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "关于无限登录的问题",
+    "message": "经 【屿楠】 反馈，无限登录的问题有可能是因为开启了ipv6而导致的，可以试试 关闭网络连接的ipv6功能 （具体操作流程请自行百度前面的关键词），也许可以解决这个问题。\n",
+    "send_at": "2021-09-28 23:55:40",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-10-05 23:55:40",
+    "show_only_before_version": "13.14.8"
   }
 ]

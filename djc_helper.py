@@ -394,7 +394,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
-            ("管家蚊子腿", self.guanjia_new),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
             ("集卡", self.dnf_ark_lottery),
@@ -448,6 +447,7 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
+            ("管家蚊子腿", self.guanjia_new),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -3493,7 +3493,9 @@ class DjcHelper:
     def fetch_guanjia_openid(self, print_warning=True):
         # 检查当前是否管家活动在生效中
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
-        if self.guanjia not in enabled_payed_act_funcs and self.guanjia_new not in enabled_payed_act_funcs:
+        if self.guanjia not in enabled_payed_act_funcs \
+                and self.guanjia_new not in enabled_payed_act_funcs \
+                and self.guanjia_new_dup not in enabled_payed_act_funcs:
             logger.debug("管家活动当前未生效，无需尝试更新p_skey")
             return
 

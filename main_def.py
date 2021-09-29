@@ -193,7 +193,7 @@ def auto_send_cards(cfg: Config):
             left_times: int
             if is_new_version_ark_lottery():
                 # 新版本里似乎没有查询接口，先随便写一个固定值
-                left_times = 10
+                left_times = 4 * len(cfg.account_configs)
             else:
                 left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
 

@@ -1242,7 +1242,7 @@ class XiaojiangyouUserProfile(ConfigInterface):
         self.wx_img = ""
 
 
-class XiaojiangyouWeeklyPackageInfo(ConfigInterface):
+class XiaojiangyouPackageInfo(ConfigInterface):
     def __init__(self):
         self.ams_id = "IEGAMS-369679-398942"
         self.package_group_id = "1550778"

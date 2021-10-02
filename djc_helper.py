@@ -5,7 +5,7 @@ from urllib.parse import quote, quote_plus
 import json_parser
 from black_list import check_in_black_list
 from dao import *
-from dao import XiaojiangyouInfo, XiaojiangyouWeeklyPackageInfo
+from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -5354,13 +5354,20 @@ class DjcHelper:
 
         def take_weekly_gift():
             raw_weekly_package_info = _ask_question("每周礼包", "11175574", "0", print_res=False)
-            pi = XiaojiangyouWeeklyPackageInfo().auto_update_config(raw_weekly_package_info["result"]["answer"][1]["content"])
+            pi = XiaojiangyouPackageInfo().auto_update_config(raw_weekly_package_info["result"]["answer"][1]["content"])
 
             _get("领取每周礼包", self.urls.xiaojiangyou_get_packge, token=pi.token, ams_id=pi.ams_id, package_group_id=pi.package_group_id, tool_id=pi.tool_id, certificate=self.xjy_info.certificate)
 
         def take_birthday_gift():
-            res = _ask_question("生日礼包", "11090757", "0")
-            text = json.dumps(res, ensure_ascii=False)
+            raw_birthday_package_info = _ask_question("生日礼包", "11090757", "0", print_res=False)
+            pi = XiaojiangyouPackageInfo().auto_update_config(raw_birthday_package_info["result"]["answer"][0]["content"])
+
+            _get("领取生日礼包", self.urls.xiaojiangyou_get_packge, token=pi.token, ams_id=pi.ams_id, package_group_id=pi.package_group_id, tool_id=pi.tool_id, certificate=self.xjy_info.certificate)
+
+            notify_birthday(raw_birthday_package_info)
+
+        def notify_birthday(raw_birthday_package_info: dict):
+            text = json.dumps(raw_birthday_package_info, ensure_ascii=False)
 
             reg_birthday = r'你的生日是在(\d{4})年(\d{2})月(\d{2})日'
 
@@ -6812,4 +6819,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_club_vip()
         # djcHelper.xiaojiangyou()
         # djcHelper.djc_operations()
-        djcHelper.dnf_guanhuai()
+        djcHelper.xiaojiangyou()

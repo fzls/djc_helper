@@ -1890,7 +1890,7 @@ class DjcHelper:
         # 首先构造普通的请求body
         body = {
             "SubActId": sub_act_id,
-            "ActReqData": json.dumps(self.get_qzone_act_req_data(act_req_data, extra_act_req_data), separators=(',', ':')),
+            "ActReqData": json_compact(self.get_qzone_act_req_data(act_req_data, extra_act_req_data)),
             "ClientPlat": 2,
         }
 

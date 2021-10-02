@@ -1203,6 +1203,10 @@ def base64_str(text: str) -> str:
     return base64.standard_b64encode(text.encode()).decode()
 
 
+def json_compact(val) -> str:
+    return json.dumps(val, separators=(',', ':'))
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

@@ -1734,7 +1734,12 @@ class DjcHelper:
         logger.info(f"尝试消耗{count}张卡片【{card_id}】来进行抽奖")
         for idx in range_from_one(count):
             self.qzone_act_op(f"消耗卡片({card_id})来抽奖-{idx}/{count}", "11738_d562400d", extra_act_req_data={
-                "items": '[{"id":"6","num":1}]'
+                "items": json_compact([
+                    {
+                        "id": f"{card_id}",
+                        "num": 1,
+                    }
+                ]),
             })
 
     def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1) -> bool:

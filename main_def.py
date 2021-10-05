@@ -1216,7 +1216,7 @@ def has_buy_auto_updater_dlc_and_query_ok(qq_accounts: List[str], max_retry_coun
     logger.debug("尝试由服务器代理查询购买DLC信息，请稍候片刻~")
     user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
     if query_ok:
-        return infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info), True
+        return user_buy_info.infer_has_buy_dlc(), True
 
     logger.debug("服务器查询DLC信息失败，尝试直接从网盘查询~")
     for idx in range(max_retry_count):
@@ -1263,13 +1263,6 @@ def has_buy_auto_updater_dlc_and_query_ok(qq_accounts: List[str], max_retry_coun
     return True, True
 
 
-def infer_has_buy_auto_updater_dlc_from_server_buy_info(user_buy_info: BuyInfo) -> bool:
-    if len(user_buy_info.buy_records) == 0:
-        return False
-
-    return user_buy_info.buy_records[0].reason.startswith("自动更新DLC赠送")
-
-
 def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False, show_dlc_info=True) -> BuyInfo:
     logger.info(f"如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：{config().common.netdisk_link}")
 
@@ -1282,6 +1275,8 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
         has_buy_dlc = has_buy_auto_updater_dlc(qq_accounts, max_retry_count, retry_wait_time, show_log)
 
         try_add_extra_times(user_buy_info, has_buy_dlc, show_dlc_info)
+
+    try_notify_new_pay_info(qq_accounts, user_buy_info)
 
     return user_buy_info
 
@@ -1458,6 +1453,44 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
         logger.info(color("bold_black") + "若对自动更新送的两月有疑义，请看付费指引的常见问题章节\n"
                                           "\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利\n"
                                           "\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月")
+
+
+def try_notify_new_pay_info(qq_accounts: List[str], latest_user_buy_info: BuyInfo) -> Tuple[bool, List[BuyRecord]]:
+    new_buy_dlc = False
+    new_buy_monthly_pay_records: List[BuyRecord] = []
+
+    # 获取上次保存的付费信息，对比是否产生了新的付费
+    db = UserBuyInfoDB().with_context(str(qq_accounts)).load()
+
+    # 在有上次保存信息的时候才尝试对比
+    if db.file_created:
+        # 检查dlc
+        if not db.buy_info.infer_has_buy_dlc() and latest_user_buy_info.infer_has_buy_dlc():
+            new_buy_dlc = True
+            async_message_box("新购买的自动更新dlc已到账，请按 付费指引 中的使用说明进行使用~", "到账提醒")
+            pass
+
+        # 检查是否有新的按月付费
+        if latest_user_buy_info.total_buy_month > db.buy_info.total_buy_month:
+            # 计算新增的按月付费。
+            # 基础假设：新增的付费时间靠后，因此只需要计算出比之前计算的按月付费条数多出来的即可。
+            old_buy_records = db.buy_info.get_normal_buy_records()
+            latest_buy_records = latest_user_buy_info.get_normal_buy_records()
+
+            new_months = latest_user_buy_info.total_buy_month - db.buy_info.total_buy_month
+            new_buy_monthly_pay_records = latest_buy_records[len(old_buy_records):]
+            msg = f"新购买的 {new_months} 月 按月付费已到账，详情如下"
+            msg += "\n购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in new_buy_monthly_pay_records)
+
+            async_message_box(msg, "到账提醒")
+
+    # 保存新的付费信息
+    if new_buy_dlc or len(new_buy_monthly_pay_records) != 0 or not db.file_created:
+        logger.info("有新的付费记录，更新本地付费记录，用于下次运行时进行对比")
+        db.buy_info = latest_user_buy_info
+        db.save()
+
+    return new_buy_dlc, new_buy_monthly_pay_records
 
 
 def show_multiprocessing_info(cfg: Config):

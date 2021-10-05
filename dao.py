@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from typing import List, Tuple, Type
 
 from data_struct import ConfigInterface, to_raw_type
-from util import format_time, get_today, parse_time, run_from_src
 
 
 class DaoObject:
@@ -765,6 +764,8 @@ class BuyInfo(ConfigInterface):
         ]
 
     def merge(self, other):
+        from util import format_time, parse_time
+
         if other.total_buy_month == 0:
             return
 
@@ -800,6 +801,8 @@ class BuyInfo(ConfigInterface):
         return not self.will_expire_in_days(0)
 
     def will_expire_in_days(self, days: int) -> bool:
+        from util import parse_time, run_from_src
+
         if run_from_src():
             # 使用源码运行不受限制
             return False
@@ -807,6 +810,8 @@ class BuyInfo(ConfigInterface):
         return datetime.now() + timedelta(days=days) > parse_time(self.expire_at)
 
     def remaining_time(self):
+        from util import parse_time
+
         now = datetime.now()
         expire_at = parse_time(self.expire_at)
 
@@ -832,6 +837,12 @@ class BuyInfo(ConfigInterface):
         msg += "\n私聊或卡密购买后请10到20分钟左右后再查询，目前有缓存机制，可能不能及时刷新最新信息~"
 
         return msg
+
+    def infer_has_buy_dlc(self) -> bool:
+        if len(self.buy_records) == 0:
+            return False
+
+        return self.buy_records[0].reason.startswith("自动更新DLC赠送")
 
 
 class BuyRecord(ConfigInterface):
@@ -895,6 +906,8 @@ class AmsActInfo(ConfigInterface):
         self.flows = {}
 
     def is_last_day(self):
+        from util import format_time, get_today, parse_time
+
         return format_time(parse_time(self.dtEndTime), "%Y%m%d") == get_today()
 
 
@@ -1327,6 +1340,8 @@ class HuyaUserTaskInfo(ConfigInterface):
 
 
 if __name__ == '__main__':
+    from util import format_time, parse_time
+
     a = BuyInfo()
     a.qq = "11"
     a.game_qqs = ["12", "13"]

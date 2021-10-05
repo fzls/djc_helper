@@ -1286,64 +1286,31 @@ def get_user_buy_info(qq_accounts: List[str], max_retry_count=3, retry_wait_time
     return user_buy_info
 
 
-def try_add_extra_times(user_buy_info: BuyInfo, has_buy_dlc: bool, show_dlc_info: bool):
-    if has_buy_dlc:
-        add_extra_times_for_dlc(user_buy_info, show_dlc_info)
+def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool]:
+    buyInfo = BuyInfo()
+    ok = False
 
-    # 根据需要可以在这里添加额外的赠送时长逻辑
-    # ...
+    try:
+        if len(qq_accounts) != 0:
+            def fetch_query_info_from_server() -> str:
+                server_addr = get_pay_server_addr()
+                raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
 
+                if raw_res.status_code == 200:
+                    return raw_res.text
+                else:
+                    return ""
 
-def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
-    # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
-    max_present_times = datetime.timedelta(days=2 * 31)
+            raw_res_text = with_cache(cache_name_user_buy_info, json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
+                                      cache_validate_func=None)
+            if raw_res_text != "":
+                ok = True
+                buyInfo.auto_update_config(json.loads(raw_res_text))
 
-    free_start_time = parse_time("2021-02-08 00:00:00")
-    free_end_time = free_start_time + max_present_times
+    except Exception as e:
+        logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
 
-    not_paied_times = datetime.timedelta()
-    fixup_times = max_present_times
-
-    if user_buy_info.total_buy_month == 0:
-        # 如果从未购买过，过期时间改为DLC免费赠送结束时间
-        expire_at_time = free_end_time
-    else:
-        # 计算与免费时长重叠的时长，补偿这段时间
-        user_buy_info.buy_records = sorted(user_buy_info.buy_records, key=lambda record: parse_time(record.buy_at))
-        last_end = min(free_start_time, parse_time(user_buy_info.buy_records[0].buy_at))
-        for record in user_buy_info.buy_records:
-            buy_at = parse_time(record.buy_at)
-
-            if buy_at > last_end:
-                # 累加未付费区间
-                not_paied_times += buy_at - last_end
-
-                # 从新的位置开始计算结束时间
-                last_end = buy_at + datetime.timedelta(days=record.buy_month * 31)
-            else:
-                # 从当前结束时间叠加时长（未产生未付费区间）
-                last_end = last_end + datetime.timedelta(days=record.buy_month * 31)
-
-        fixup_times = max(max_present_times - not_paied_times, datetime.timedelta())
-
-        expire_at_time = parse_time(user_buy_info.expire_at) + fixup_times
-
-    old_expire_at = user_buy_info.expire_at
-    user_buy_info.expire_at = format_time(expire_at_time)
-    user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
-        "buy_month": 2,
-        "buy_at": format_time(free_start_time),
-        "reason": "自动更新DLC赠送(自2.8至今最多累积未付费时长两个月***注意不是从购买日开始计算***)"
-    }))
-
-    if show_dlc_info:
-        logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx")
-        logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n" +
-                    color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
-                                          f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
-        logger.info(color("bold_black") + "若对自动更新送的两月有疑义，请看付费指引的常见问题章节\n"
-                                          "\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利\n"
-                                          "\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月")
+    return buyInfo, ok
 
 
 def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> Tuple[BuyInfo, bool]:
@@ -1433,31 +1400,64 @@ def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, re
     return default_user_buy_info, False
 
 
-def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool]:
-    buyInfo = BuyInfo()
-    ok = False
+def try_add_extra_times(user_buy_info: BuyInfo, has_buy_dlc: bool, show_dlc_info: bool):
+    if has_buy_dlc:
+        add_extra_times_for_dlc(user_buy_info, show_dlc_info)
 
-    try:
-        if len(qq_accounts) != 0:
-            def fetch_query_info_from_server() -> str:
-                server_addr = get_pay_server_addr()
-                raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
+    # 根据需要可以在这里添加额外的赠送时长逻辑
+    # ...
 
-                if raw_res.status_code == 200:
-                    return raw_res.text
-                else:
-                    return ""
 
-            raw_res_text = with_cache(cache_name_user_buy_info, json.dumps(qq_accounts), cache_max_seconds=600, cache_miss_func=fetch_query_info_from_server,
-                                      cache_validate_func=None)
-            if raw_res_text != "":
-                ok = True
-                buyInfo.auto_update_config(json.loads(raw_res_text))
+def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
+    # 购买过dlc的用户可以获得两个月免费使用付费功能的时长
+    max_present_times = datetime.timedelta(days=2 * 31)
 
-    except Exception as e:
-        logger.debug("出错了", f"请求出现异常，报错如下:\n{e}")
+    free_start_time = parse_time("2021-02-08 00:00:00")
+    free_end_time = free_start_time + max_present_times
 
-    return buyInfo, ok
+    not_paied_times = datetime.timedelta()
+    fixup_times = max_present_times
+
+    if user_buy_info.total_buy_month == 0:
+        # 如果从未购买过，过期时间改为DLC免费赠送结束时间
+        expire_at_time = free_end_time
+    else:
+        # 计算与免费时长重叠的时长，补偿这段时间
+        user_buy_info.buy_records = sorted(user_buy_info.buy_records, key=lambda record: parse_time(record.buy_at))
+        last_end = min(free_start_time, parse_time(user_buy_info.buy_records[0].buy_at))
+        for record in user_buy_info.buy_records:
+            buy_at = parse_time(record.buy_at)
+
+            if buy_at > last_end:
+                # 累加未付费区间
+                not_paied_times += buy_at - last_end
+
+                # 从新的位置开始计算结束时间
+                last_end = buy_at + datetime.timedelta(days=record.buy_month * 31)
+            else:
+                # 从当前结束时间叠加时长（未产生未付费区间）
+                last_end = last_end + datetime.timedelta(days=record.buy_month * 31)
+
+        fixup_times = max(max_present_times - not_paied_times, datetime.timedelta())
+
+        expire_at_time = parse_time(user_buy_info.expire_at) + fixup_times
+
+    old_expire_at = user_buy_info.expire_at
+    user_buy_info.expire_at = format_time(expire_at_time)
+    user_buy_info.buy_records.insert(0, BuyRecord().auto_update_config({
+        "buy_month": 2,
+        "buy_at": format_time(free_start_time),
+        "reason": "自动更新DLC赠送(自2.8至今最多累积未付费时长两个月***注意不是从购买日开始计算***)"
+    }))
+
+    if show_dlc_info:
+        logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx")
+        logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n" +
+                    color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
+                                          f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
+        logger.info(color("bold_black") + "若对自动更新送的两月有疑义，请看付费指引的常见问题章节\n"
+                                          "\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利\n"
+                                          "\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月")
 
 
 def show_multiprocessing_info(cfg: Config):

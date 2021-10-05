@@ -233,18 +233,21 @@ class ConfigUi(QFrame):
         btn_add_account = create_pushbutton("添加账号", "Chartreuse")
         btn_del_account = create_pushbutton("删除账号", "lightgreen")
         btn_clear_login_status = create_pushbutton("清除登录状态", "DarkCyan", "登录错账户，或者想要登录其他账户时，点击这个即可清除登录状态")
-        btn_add_group = create_pushbutton("加群反馈问题/交流", "Orange")
+        btn_join_group = create_pushbutton("加群反馈问题/交流", "Orange")
+        btn_add_telegram = create_pushbutton("加入Telegram群", "LightBlue")
 
         btn_add_account.clicked.connect(self.add_account)
         btn_del_account.clicked.connect(self.del_account)
         btn_clear_login_status.clicked.connect(self.clear_login_status)
-        btn_add_group.clicked.connect(self.add_group)
+        btn_join_group.clicked.connect(self.join_group)
+        btn_add_telegram.clicked.connect(self.join_telegram)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_add_account)
         layout.addWidget(btn_del_account)
         layout.addWidget(btn_clear_login_status)
-        layout.addWidget(btn_add_group)
+        layout.addWidget(btn_join_group)
+        layout.addWidget(btn_add_telegram)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
@@ -343,7 +346,7 @@ class ConfigUi(QFrame):
         show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
         report_click_event("clear_login_status")
 
-    def add_group(self, checked=False):
+    def join_group(self, checked=False):
         # note: 如果群 552940664 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=3sM-vsK3EvoFbIo1FWYTCziMZxKMy4tW&jump_from=webapi")
         for suffix in ["png", "jpg", ]:
@@ -353,7 +356,12 @@ class ConfigUi(QFrame):
 
             self.popen(img_name)
 
-        report_click_event("add_group")
+        report_click_event("join_group")
+
+    def join_telegram(self, checked=False):
+        # note: 如果群 552940664 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
+        webbrowser.open("https://t.me/djc_helper")
+        report_click_event("join_telegram")
 
     def add_account(self, checked=False):
         account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts) + 1}")

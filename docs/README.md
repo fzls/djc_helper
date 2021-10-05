@@ -192,6 +192,8 @@ docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/d
 https://space.bilibili.com/1851177
 
 # 交流群
+telegram群组       https://t.me/djc_helper
+telegram频道       https://t.me/djc_helper_notice
 DNF蚊子腿小助手     553925117 <br>
 DNF蚊子腿小助手二群 966403777 <br>
 DNF蚊子腿小助手三群 1041823293 <br>

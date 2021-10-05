@@ -348,5 +348,15 @@
     "open_url": "",
     "expire_at": "2021-10-07 18:37:57",
     "show_only_before_version": "13.14.9"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "新增Telegram群",
+    "message": "由于QQ群容易出现封禁、冻结等状态，为了避免出现这种情况的时候无法联系。现在新增一个Telegram群，作为备选方案。（需要科学上网）\n\ntelegram群组       https://t.me/djc_helper\ntelegram频道       https://t.me/djc_helper_notice\n",
+    "send_at": "2021-10-06 03:16:58",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2021-10-13 03:16:58",
+    "show_only_before_version": "13.14.10"
   }
 ]

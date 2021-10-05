@@ -159,14 +159,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "放假通知"
-    message = """国庆节开始了，开始进入放假模式，任何私聊不保证回复时效性，可能几天看一次私聊，甚至有概率节后才回复。
-因此如遇到任何问题，请尽量尝试从以下渠道获取信息来自行解决
-1. 付费指引.docx
-2. 使用教程目录下的文档和视频
-3. 百度
-4. Google
-5. 群友
+    title = "新增Telegram群"
+    message = """由于QQ群容易出现封禁、冻结等状态，为了避免出现这种情况的时候无法联系。现在新增一个Telegram群，作为备选方案。（需要科学上网）
+
+telegram群组       https://t.me/djc_helper
+telegram频道       https://t.me/djc_helper_notice
 """
     open_url = ""
     nm.add_notice(title, message,

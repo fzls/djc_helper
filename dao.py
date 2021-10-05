@@ -763,7 +763,7 @@ class BuyInfo(ConfigInterface):
             ('buy_records', BuyRecord),
         ]
 
-    def merge(self, other):
+    def merge(self, other: BuyInfo):
         from util import format_time, parse_time
 
         if other.total_buy_month == 0:
@@ -796,6 +796,18 @@ class BuyInfo(ConfigInterface):
 
         self.expire_at = format_time(expired_at)
         self.buy_records = records
+
+    def append_records_and_recompute(self, new_records: List[BuyRecord]):
+        other = BuyInfo()
+        other.qq = self.qq
+        other.buy_records = new_records
+        for record in other.buy_records:
+            if record.is_dlc_reward():
+                continue
+            other.total_buy_month += record.buy_month
+
+        # 复用merge函数
+        self.merge(other)
 
     def is_active(self):
         return not self.will_expire_in_days(0)
@@ -842,7 +854,13 @@ class BuyInfo(ConfigInterface):
         if len(self.buy_records) == 0:
             return False
 
-        return self.buy_records[0].reason.startswith("自动更新DLC赠送")
+        return self.buy_records[0].is_dlc_reward()
+
+    def get_normal_buy_records(self) -> List[BuyRecord]:
+        if self.infer_has_buy_dlc():
+            return self.buy_records[1:]
+
+        return self.buy_records
 
 
 class BuyRecord(ConfigInterface):
@@ -850,6 +868,9 @@ class BuyRecord(ConfigInterface):
         self.buy_month = 1
         self.buy_at = "2020-02-06 12:30:15"
         self.reason = "购买"
+
+    def is_dlc_reward(self) -> bool:
+        return self.reason.startswith("自动更新DLC赠送")
 
 
 class OrderInfo(ConfigInterface):

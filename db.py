@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Tuple, Type
 
+from dao import BuyInfo
 from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
@@ -84,6 +85,13 @@ class FireCrackersDB(DBInterface):
         super().__init__()
 
         self.friend_qqs = []  # type: List[str]
+
+
+class UserBuyInfoDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.buy_info = BuyInfo()
 
 
 if __name__ == '__main__':

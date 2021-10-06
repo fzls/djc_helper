@@ -206,6 +206,7 @@ def test():
 
 if __name__ == '__main__':
     TEST = False
+    bypass_proxy()
 
     if not TEST:
         main()

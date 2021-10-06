@@ -929,6 +929,7 @@ class DjcHelper:
         else:
             logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
+    @try_except()
     def do_xinyue_op(self, xytype, op):
         """
         执行具体的心悦操作
@@ -941,7 +942,11 @@ class DjcHelper:
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
 
             for try_index in range(retryCfg.max_retry_count):
-                self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
+                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
+                if op.count > 1:
+                    if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
+                        logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
+                        return
 
                 logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
                 time.sleep(wait_time)

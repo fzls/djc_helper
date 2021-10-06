@@ -3762,7 +3762,9 @@ class DjcHelper:
             if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会长"):
                 async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 是普通会员（或未加入公会），不是会长（只有会长角色可以领取这部分奖励，普通会员角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取会长活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
 
-            return False
+            # 如果这个领取的角色不是道聚城设定的绑定角色，则继续尝试其他的，从而确保所有非绑定角色中符合条件的都会被尝试，这样只要随便从中挑一个来完成对应条件即可
+            need_continue = take_lottery_count_role_info.roleCode != current_bind_role.roleCode
+            return need_continue
 
         def guild_member_operations(take_lottery_count_role_info: RoleInfo) -> bool:
             if is_current_bind_character_guild_chairman():
@@ -3780,7 +3782,9 @@ class DjcHelper:
             if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会员"):
                 async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 是会长（或未加入公会），不是公会会员（只有普通会员角色可以领取这部分奖励，会长角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取公会会员活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
 
-            return False
+            # 如果这个领取的角色不是道聚城设定的绑定角色，则继续尝试其他的，从而确保所有非绑定角色中符合条件的都会被尝试，这样只要随便从中挑一个来完成对应条件即可
+            need_continue = take_lottery_count_role_info.roleCode != current_bind_role.roleCode
+            return need_continue
 
         self.dnf_gonghui_op("幸运验证礼包", "797851")
 
@@ -6829,4 +6833,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_club_vip()
         # djcHelper.xiaojiangyou()
         # djcHelper.djc_operations()
-        djcHelper.xiaojiangyou()
+        djcHelper.dnf_gonghui()

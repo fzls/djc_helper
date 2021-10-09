@@ -373,6 +373,10 @@ class AccountConfig(ConfigInterface):
         # 不参与奥兹玛竞速活动切换角色的角色名列表（如果某些号确定不打奥兹玛的，可以把名字加到这里，从而跳过尝试这个角色）
         # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
         self.ozma_ignored_rolename_list = []  # type: List[str]
+        # 公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
+        self.gonghui_rolename_huizhang = ""
+        # 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
+        self.gonghui_rolename_huiyuan = ""
         # dnf论坛签到formhash
         self.dnf_bbs_formhash = ""
         # dnf论坛cookie

@@ -152,6 +152,11 @@ enable_majieluo_lucky = false
 # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
 ozma_ignored_rolename_list = []
 
+# 公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
+gonghui_rolename_huizhang = ""
+# 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
+gonghui_rolename_huiyuan = ""
+
 # 以下dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题。
 # 获取方式
 #   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign

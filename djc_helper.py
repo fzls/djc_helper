@@ -6509,10 +6509,10 @@ class DjcHelper:
                          print_res=print_res, extra_cookies=extra_cookies, check_fn=_check)
 
     def show_ams_act_info(self, iActivityId):
-        logger.info(color("bold_green") + get_ams_act_desc(iActivityId))
+        logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_ams_act_desc(iActivityId))
 
     def show_not_ams_act_info(self, act_name):
-        logger.info(color("bold_green") + get_not_ams_act_desc(act_name))
+        logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_not_ams_act_desc(act_name))
 
     def make_s_milo_tag(self, iActivityId, iFlowId):
         return f"AMS-MILO-{iActivityId}-{iFlowId}-{self.uin()}-{getMillSecondsUnix()}-{self.rand6()}"

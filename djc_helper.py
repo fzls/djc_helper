@@ -410,7 +410,6 @@ class DjcHelper:
             ("轻松之路", self.dnf_relax_road),
             ("dnf助手活动", self.dnf_helper),
             ("colg每日签到", self.colg_signin),
-            ("qq会员杯", self.dnf_club_vip),
             ("虎牙", self.huya),
         ]
 
@@ -448,6 +447,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
+            ("qq会员杯", self.dnf_club_vip),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

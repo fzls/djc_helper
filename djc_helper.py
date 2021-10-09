@@ -394,8 +394,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
-            ("qq视频-AME活动", self.qq_video_amesvr),
-            ("勇士的冒险补给", self.maoxian),
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF马杰洛的规划", self.majieluo),
@@ -448,6 +446,8 @@ class DjcHelper:
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
             ("管家蚊子腿", self.guanjia_new),
+            ("qq视频-AME活动", self.qq_video_amesvr),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------

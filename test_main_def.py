@@ -42,3 +42,10 @@ def test_try_notify_new_pay_info():
     # 确保未发生变化
     assert new_buy_dlc is False
     assert len(new_buy_monthly_pay_records) == 0
+
+
+def test_new_ark_lottery_parse_index_from_card_id():
+    assert new_ark_lottery_parse_index_from_card_id("1") == "1-1"
+    assert new_ark_lottery_parse_index_from_card_id("4") == "1-4"
+    assert new_ark_lottery_parse_index_from_card_id("7") == "2-3"
+    assert new_ark_lottery_parse_index_from_card_id("12") == "3-4"

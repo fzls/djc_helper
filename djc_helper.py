@@ -1718,7 +1718,9 @@ class DjcHelper:
             for card_id, count in card_counts.items():
                 self.lottery_using_cards(card_id, count)
         else:
-            if print_warning: logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
+            if print_warning:
+                logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
+                logger.warning(color("fg_bold_cyan") + f"也可以选择开启最后一天自动抽奖功能（配置工具：公共配置/集卡/最后一天消耗全部卡片抽奖）。目前开关状态为：{self.common_cfg.cost_all_cards_and_do_lottery_on_last_day}")
 
     def enable_cost_all_cards_and_do_lottery(self):
         if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.is_last_day():

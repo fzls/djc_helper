@@ -58,8 +58,6 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021090614400611010",
-    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
-    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210913care/",
@@ -74,7 +72,6 @@ act_name_to_url = {
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
     "虎牙": "https://www.huya.com/367967",
 
     # 已过期活动
@@ -105,6 +102,9 @@ act_name_to_url = {
     "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
+    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
+    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
+    "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
 
 

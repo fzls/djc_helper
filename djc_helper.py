@@ -723,7 +723,7 @@ class DjcHelper:
                 lines.append("\t区服(partition)的id可运行程序在自动打开的utils/reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
                 subprocess.Popen("utils/npp_portable/notepad++.exe utils/reference_data/dnf_server_list.js")
             lines.append("+" * 40)
-            logger.info("\n".join(lines))
+            logger.info(get_meaningful_call_point_for_log() + "\n".join(lines))
 
         return roleLists
 
@@ -6546,7 +6546,7 @@ class DjcHelper:
             take_lottery_count_role_info.areaID = area_info.v
             take_lottery_count_role_info.areaName = area_info.t
 
-            logger.warning(f"[{role_index + 1}/{total_index}] 尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
+            logger.warning(get_meaningful_call_point_for_log() + f"[{role_index + 1}/{total_index}] 尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
             check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
             continue_next = callback_func(take_lottery_count_role_info)

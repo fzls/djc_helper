@@ -3793,10 +3793,24 @@ class DjcHelper:
         self.dnf_gonghui_op("活动分享", "798914")
 
         # 会员活动
-        self.temporary_change_bind_and_do(f"从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations)
+        def need_try_huiyuan_role(take_lottery_count_role_info: RoleInfo) -> bool:
+            if self.cfg.gonghui_rolename_huiyuan == "":
+                return True
+
+            # 如果设置了指定角色，则仅尝试这个角色
+            return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huiyuan
+
+        self.temporary_change_bind_and_do(f"从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations, need_try_func=need_try_huiyuan_role)
 
         # 会长活动
-        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations)
+        def need_try_huizhang_role(take_lottery_count_role_info: RoleInfo) -> bool:
+            if self.cfg.gonghui_rolename_huizhang == "":
+                return True
+
+            # 如果设置了指定角色，则仅尝试这个角色
+            return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huizhang
+
+        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations, need_try_func=need_try_huizhang_role)
 
         # 兑换奖励
         def exchange_awards():

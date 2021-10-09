@@ -1367,6 +1367,12 @@ class AccountConfigUi(QWidget):
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
         add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
+        self.lineedit_gonghui_rolename_huizhang = create_lineedit(cfg.gonghui_rolename_huizhang, "公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）")
+        add_row(form_layout, "公会活动-会长角色名称", self.lineedit_gonghui_rolename_huizhang)
+
+        self.lineedit_gonghui_rolename_huiyuan = create_lineedit(cfg.gonghui_rolename_huiyuan, "公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）")
+        add_row(form_layout, "公会活动-会员角色名称", self.lineedit_gonghui_rolename_huiyuan)
+
         self.checkbox_comic_lottery = create_checkbox(cfg.comic_lottery)
         add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_comic_lottery)
 

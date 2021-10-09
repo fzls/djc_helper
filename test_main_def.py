@@ -49,3 +49,10 @@ def test_new_ark_lottery_parse_index_from_card_id():
     assert new_ark_lottery_parse_index_from_card_id("4") == "1-4"
     assert new_ark_lottery_parse_index_from_card_id("7") == "2-3"
     assert new_ark_lottery_parse_index_from_card_id("12") == "3-4"
+
+
+def test_new_ark_lottery_parse_card_id_from_index():
+    assert new_ark_lottery_parse_card_id_from_index("1-1") == "1"
+    assert new_ark_lottery_parse_card_id_from_index("1-4") == "4"
+    assert new_ark_lottery_parse_card_id_from_index("2-3") == "7"
+    assert new_ark_lottery_parse_card_id_from_index("3-4") == "12"

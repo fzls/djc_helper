@@ -365,6 +365,14 @@ def new_ark_lottery_parse_index_from_card_id(card_id: str) -> str:
     return index
 
 
+def new_ark_lottery_parse_card_id_from_index(index: str) -> str:
+    """
+    将 坐标 转换为 卡片id，如 2-3 -> 7
+    """
+    row, col = index.split('-')
+    return str(4 * (int(row) - 1) + int(col))
+
+
 def reverse_map(map):
     kvs = list(map.items())
     kvs.reverse()

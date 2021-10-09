@@ -1,13 +1,15 @@
 import argparse
 import json
-from typing import List
+from typing import Dict, List
 
 from config import config, load_config
-from djc_helper import DjcHelper
+from djc_helper import DjcHelper, get_prize_names, is_new_version_ark_lottery
 from log import color, logger
+from main_def import (make_ark_lottery_card_and_award_info,
+                      new_ark_lottery_parse_card_id_from_index)
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
-from util import show_head_line
+from util import range_from_one, show_head_line
 
 CARD_PLACEHOLDER = "XXXXXXXXXXX"
 
@@ -22,10 +24,11 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     # 12.30 送卡片次数（re:好像送给别人没有上限？）
     indexes = list(range(len(cfg.account_configs), 0, -1))
 
-    card_info_map = parse_card_group_info_map(zzconfig())
-    for name in cards_to_send:
-        if name not in card_info_map:
-            return f"{name}不是本期卡片名称，有效的卡片名称为： {list(card_info_map.keys())}"
+    if not is_new_version_ark_lottery():
+        card_info_map = parse_card_group_info_map(zzconfig())
+        for name in cards_to_send:
+            if name not in card_info_map:
+                return f"{name}不是本期卡片名称，有效的卡片名称为： {list(card_info_map.keys())}"
 
     success_send_list = []
 
@@ -42,16 +45,25 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
 
         remaining_cards = []
         for name in cards_to_send:
-            res = djcHelper.send_card_by_name(name, targetQQ)
-            retCode = int(res["13333"]["ret"])
-            if retCode == 0:
+            send_ok = False
+
+            if is_new_version_ark_lottery():
+                send_ok = djcHelper.dnf_ark_lottery_send_card(name, targetQQ)
+            else:
+                res = djcHelper.send_card_by_name(name, targetQQ)
+                retCode = int(res["13333"]["ret"])
+
+                if retCode == 0:
+                    send_ok = True
+                else:
+                    if len(original_cards) == 1:
+                        if retCode == 10017:
+                            return "该账号今日已被赠送过四次"
+
+            if send_ok:
                 success_send_list.append(name)
             else:
                 remaining_cards.append(name)
-
-                if len(original_cards) == 1:
-                    if retCode == 10017:
-                        return "该账号今日已被赠送过四次"
 
         cards_to_send = remaining_cards
         if len(cards_to_send) == 0:
@@ -79,13 +91,7 @@ def query_card_info():
     # 12.30 送卡片次数（re:好像送给别人没有上限？）
     indexes = list(range(len(cfg.account_configs), 0, -1))
 
-    # 展示卡仓信息
-    lottery_zzconfig = zzconfig()
-    card_info_map = parse_card_group_info_map(lottery_zzconfig)
-    order_map = {}
-    # 卡片编码 => 名称
-    for name, card_info in card_info_map.items():
-        order_map[card_info.index] = name
+    order_map, _ = make_ark_lottery_card_and_award_info()
 
     heads = []
     colSizes = []
@@ -108,7 +114,15 @@ def query_card_info():
         djcHelper.get_bind_role_list()
         qa = QzoneActivity(djcHelper, lr)
 
-        card_counts = qa.get_card_counts()
+        # 获取卡片和奖励数目，其中新版本卡片为 id=>count ，旧版本卡片为 name=>count
+        card_counts: Dict[str, int]
+
+        if is_new_version_ark_lottery():
+            card_counts = djcHelper.dnf_ark_lottery_get_card_counts()
+        else:
+            qa = QzoneActivity(djcHelper, lr)
+
+            card_counts = qa.get_card_counts()
 
         # 处理各个卡片数目
         for card_position, card_index in enumerate(card_indexes):
@@ -133,11 +147,20 @@ def query_card_info():
 def run_local():
     # re: 先填QQ undone: 然后填写卡片
     targetQQ = "1054073896"
-    cards_to_send = ["智慧产物能升级",
-                     CARD_PLACEHOLDER,
-                     CARD_PLACEHOLDER,
-                     CARD_PLACEHOLDER,
-                     ]
+    cards_to_send: List[str]
+    if is_new_version_ark_lottery():
+        # 新版集卡中名称为 1/2/3/4/.../10/11/12
+        cards_to_send = ["8",
+                         CARD_PLACEHOLDER,
+                         CARD_PLACEHOLDER,
+                         CARD_PLACEHOLDER,
+                         ]
+    else:
+        cards_to_send = ["智慧产物能升级",
+                         CARD_PLACEHOLDER,
+                         CARD_PLACEHOLDER,
+                         CARD_PLACEHOLDER,
+                         ]
     msg = sell_card(targetQQ, cards_to_send)
     logger.info(msg)
 
@@ -146,8 +169,14 @@ def run_remote(args):
     if args.query:
         msg = query_card_info()
     else:
-        card_info_map = parse_card_group_info_map(zzconfig())
-        card_name_list = [card_name for card_name, card_info in card_info_map.items() if card_info.index == args.card_index]
+        card_name_list: List[str]
+        if is_new_version_ark_lottery():
+            # 新版集卡中名称为 1/2/3/4/.../10/11/12
+            card_name_list = [new_ark_lottery_parse_card_id_from_index(args.card_index)]
+        else:
+            card_info_map = parse_card_group_info_map(zzconfig())
+            card_name_list = [card_name for card_name, card_info in card_info_map.items() if card_info.index == args.card_index]
+
         msg = sell_card(args.target_qq, card_name_list)
     print(json.dumps(msg))
 

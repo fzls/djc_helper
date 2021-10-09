@@ -354,6 +354,9 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
 
 
 def new_ark_lottery_parse_index_from_card_id(card_id: str) -> str:
+    """
+    将 卡片id 转换为 坐标，如 7 -> 2-3
+    """
     card_id = int(card_id)
     row = (card_id + 3) // 4
     col = (card_id - 1) % 4 + 1

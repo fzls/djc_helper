@@ -387,45 +387,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
 
     logger.info(get_not_ams_act_desc("集卡"))
 
-    # 构建各个卡片和奖励名称的映射关系
-    # card index => name(旧版), id(新版)
-    order_map = {}
-    # 奖励名称列表
-    prizeDisplayTitles = []
-
-    if is_new_version_ark_lottery():
-        for row in range_from_one(3):
-            for col in range_from_one(4):
-                index = f"{row}-{col}"
-                card_id = str(4 * (row - 1) + col)
-
-                order_map[index] = card_id
-
-        for title in get_prize_names():
-            order_map[title] = title
-            prizeDisplayTitles.append(title)
-    else:
-        lottery_zzconfig = zzconfig()
-        card_info_map = parse_card_group_info_map(lottery_zzconfig)
-        # 卡片编码 => 名称
-        for name, card_info in card_info_map.items():
-            order_map[card_info.index] = name
-
-        # 奖励展示名称 => 实际名称
-        groups = [
-            lottery_zzconfig.prizeGroups.group1,
-            lottery_zzconfig.prizeGroups.group2,
-            lottery_zzconfig.prizeGroups.group3,
-            lottery_zzconfig.prizeGroups.group4,
-        ]
-        for group in groups:
-            displayTitle = group.title
-            if len(displayTitle) > 4 and "礼包" in displayTitle:
-                # 将 全民竞速礼包 这种名称替换为 全民竞速
-                displayTitle = displayTitle.replace("礼包", "")
-
-            order_map[displayTitle] = group.title
-            prizeDisplayTitles.append(displayTitle)
+    order_map, prizeDisplayTitles = make_ark_lottery_card_and_award_info()
 
     # 定义表格标题栏
     heads = []
@@ -514,6 +476,48 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
         accounts = ', '.join(accounts_that_should_enable_cost_card_to_lottery)
         msg = f"账户({accounts})仍有剩余卡片，但已无任何可领取礼包，建议开启消耗卡片来抽奖的功能"
         logger.warning(color("fg_bold_yellow") + msg)
+
+
+def make_ark_lottery_card_and_award_info():
+    # 构建各个卡片和奖励名称的映射关系
+    # card index => name(旧版), id(新版)
+    order_map = {}
+    # 奖励名称列表
+    prizeDisplayTitles = []
+    if is_new_version_ark_lottery():
+        for row in range_from_one(3):
+            for col in range_from_one(4):
+                index = f"{row}-{col}"
+                card_id = str(4 * (row - 1) + col)
+
+                order_map[index] = card_id
+
+        for title in get_prize_names():
+            order_map[title] = title
+            prizeDisplayTitles.append(title)
+    else:
+        lottery_zzconfig = zzconfig()
+        card_info_map = parse_card_group_info_map(lottery_zzconfig)
+        # 卡片编码 => 名称
+        for name, card_info in card_info_map.items():
+            order_map[card_info.index] = name
+
+        # 奖励展示名称 => 实际名称
+        groups = [
+            lottery_zzconfig.prizeGroups.group1,
+            lottery_zzconfig.prizeGroups.group2,
+            lottery_zzconfig.prizeGroups.group3,
+            lottery_zzconfig.prizeGroups.group4,
+        ]
+        for group in groups:
+            displayTitle = group.title
+            if len(displayTitle) > 4 and "礼包" in displayTitle:
+                # 将 全民竞速礼包 这种名称替换为 全民竞速
+                displayTitle = displayTitle.replace("礼包", "")
+
+            order_map[displayTitle] = group.title
+            prizeDisplayTitles.append(displayTitle)
+    return order_map, prizeDisplayTitles
 
 
 def query_lottery_status(idx: int, account_config: AccountConfig, common_config: CommonConfig, card_indexes: List[str], prize_indexes: List[str], order_map: Dict[str, str]) -> Optional[List]:

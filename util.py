@@ -942,6 +942,9 @@ ignore_caller_names = {
     'fetch_guanjia_openid',
     'wrapper',
     'show_head_line',
+    'show_ams_act_info',
+    'show_amesvr_act_info',
+    'show_not_ams_act_info',
 }
 
 ignore_prefixes = [

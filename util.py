@@ -945,6 +945,9 @@ ignore_caller_names = {
     'show_ams_act_info',
     'show_amesvr_act_info',
     'show_not_ams_act_info',
+    'query_dnf_rolelist',
+    'temporary_change_bind_and_do',
+    'try_do_with_lucky_role_and_normal_role',
 }
 
 ignore_prefixes = [

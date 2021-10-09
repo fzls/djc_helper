@@ -6525,7 +6525,7 @@ class DjcHelper:
     def make_cookie(self, map: dict):
         return '; '.join([f'{k}={v}' for k, v in map.items()])
 
-    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func, callback_func: Callable[[RoleInfo], bool]):
+    def temporary_change_bind_and_do(self, ctx: str, change_bind_role_infos: List[TemporaryChangeBindRoleInfo], check_func: Callable, callback_func: Callable[[RoleInfo], bool], need_try_func: Callable[[RoleInfo], bool] = None):
         """
         callback_func: 传入参数为 将要领奖的角色信息，返回参数为 是否继续尝试下一个
         """
@@ -6547,6 +6547,11 @@ class DjcHelper:
             take_lottery_count_role_info.areaName = area_info.t
 
             logger.warning(get_meaningful_call_point_for_log() + f"[{role_index + 1}/{total_index}] 尝试临时切换为 {server_name} 的 {role_info.rolename} 来进行 {ctx}")
+
+            if need_try_func is not None and not need_try_func(take_lottery_count_role_info):
+                logger.warning(color("bold_cyan") + f"设置了快速鉴别流程，判定不需要尝试 {role_info.rolename}，将跳过该角色，以加快处理")
+                continue
+
             check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
             continue_next = callback_func(take_lottery_count_role_info)

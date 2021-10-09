@@ -1373,6 +1373,9 @@ class AccountConfigUi(QWidget):
         self.checkbox_enable_majieluo_lucky = create_checkbox(cfg.enable_majieluo_lucky)
         add_row(form_layout, "马杰洛活动是否尝试用配置的集卡回归角色领取见面礼", self.checkbox_enable_majieluo_lucky)
 
+        self.checkbox_dnf_gonghui_enable_lottery = create_checkbox(cfg.function_switches.dnf_gonghui_enable_lottery)
+        add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
+
         # -------------- 区域：活动开关 --------------
         self.collapsible_box_function_switches, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("活动开关", top_layout)
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
@@ -1391,6 +1394,7 @@ class AccountConfigUi(QWidget):
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
         cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
         cfg.enable_majieluo_lucky = self.checkbox_enable_majieluo_lucky.isChecked()
+        cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
@@ -1697,9 +1701,6 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_gonghui = create_checkbox(cfg.get_dnf_gonghui)
         add_row(form_layout, "DNF公会活动", self.checkbox_get_dnf_gonghui)
 
-        self.checkbox_dnf_gonghui_enable_lottery = create_checkbox(cfg.dnf_gonghui_enable_lottery)
-        add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
-
         self.checkbox_get_dnf_mingyun_jueze = create_checkbox(cfg.get_dnf_mingyun_jueze)
         add_row(form_layout, "命运的抉择挑战赛", self.checkbox_get_dnf_mingyun_jueze)
 
@@ -1776,7 +1777,6 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_maoxian = self.checkbox_get_maoxian.isChecked()
         cfg.get_xiaojiangyou = self.checkbox_get_xiaojiangyou.isChecked()
         cfg.get_dnf_gonghui = self.checkbox_get_dnf_gonghui.isChecked()
-        cfg.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
         cfg.get_dnf_mingyun_jueze = self.checkbox_get_dnf_mingyun_jueze.isChecked()
         cfg.get_dnf_guanhuai = self.checkbox_get_dnf_guanhuai.isChecked()
         cfg.get_dnf_relax_road = self.checkbox_get_dnf_relax_road.isChecked()

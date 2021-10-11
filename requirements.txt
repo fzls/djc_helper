@@ -2,4 +2,4 @@
 
 PyQt5==5.15.4
 PyQt5-stubs==5.15.2.0
-pywin32==301
+pywin32==302

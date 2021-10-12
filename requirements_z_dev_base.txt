@@ -2,7 +2,7 @@ pytest==6.2.5
 pytest-cov==3.0.0
 pytest-randomly==3.10.1
 pytest-xdist[psutil]==2.4.0
-flake8==4.0.0
+flake8==4.0.1
 isort==5.9.3
 coverage==5.5
 coveralls==3.2.0

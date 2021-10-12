@@ -976,6 +976,7 @@ ignore_caller_names = {
     'query_dnf_rolelist',
     'temporary_change_bind_and_do',
     'try_do_with_lucky_role_and_normal_role',
+    'try_request',
 }
 
 ignore_prefixes = [

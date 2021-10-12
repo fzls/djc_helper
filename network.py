@@ -32,8 +32,8 @@ class Network:
         }
 
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-            extra_headers: Optional[Dict[str, str]] = None):
-        def request_fn():
+            extra_headers: Optional[Dict[str, str]] = None) -> dict:
+        def request_fn() -> requests.Response:
             cookies = self.base_cookies + extra_cookies
             get_headers = {**self.base_headers, **{
                 "Cookie": cookies,
@@ -46,8 +46,8 @@ class Network:
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
     def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-             extra_headers: Optional[Dict[str, str]] = None):
-        def request_fn():
+             extra_headers: Optional[Dict[str, str]] = None) -> dict:
+        def request_fn() -> requests.Response:
             cookies = self.base_cookies + extra_cookies
             content_type = "application/x-www-form-urlencoded"
             if data is None and json is not None:
@@ -66,7 +66,7 @@ class Network:
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
 
-def try_request(request_fn, retryCfg, check_fn: Callable[[requests.Response], Optional[Exception]] = None):
+def try_request(request_fn: Callable[[], requests.Response], retryCfg: RetryConfig, check_fn: Callable[[requests.Response], Optional[Exception]] = None) -> Optional[requests.Response]:
     """
     :param check_fn: func(requests.Response) -> bool
     :type retryCfg: RetryConfig
@@ -112,7 +112,7 @@ def set_last_response_info(status_code: int, reason: str, text: str):
     last_response_info.text = text
 
 
-def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True):
+def process_result(ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True) -> dict:
     fix_encoding(res)
 
     if res is not None:
@@ -156,7 +156,7 @@ def fix_encoding(res: requests.Response):
         res.encoding = 'utf-8'
 
 
-def pre_process_data(data):
+def pre_process_data(data) -> Optional[dict]:
     # 特殊处理一些数据
     if type(data) is dict:
         if 'frame_resp' in data and 'data' in data:
@@ -170,7 +170,7 @@ def pre_process_data(data):
     return None
 
 
-def extract_qq_video_message(res):
+def extract_qq_video_message(res) -> str:
     data = res['data']
     if 'lottery_txt' in data:
         return data['lottery_txt']
@@ -180,7 +180,7 @@ def extract_qq_video_message(res):
         return res['msg']
 
 
-def is_request_ok(data):
+def is_request_ok(data) -> bool:
     success = True
     try:
         returnCodeKeys = [
@@ -217,7 +217,7 @@ def is_request_ok(data):
     return success
 
 
-def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True):
+def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True) -> dict:
     if is_normal_jsonp:
         left_idx = jsonpStr.index("(")
         right_idx = jsonpStr.rindex(")")
@@ -245,7 +245,7 @@ def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True):
     return jsonRes
 
 
-def pretty_json(data, pretty=False, need_unquote=True):
+def pretty_json(data, pretty=False, need_unquote=True) -> str:
     if pretty:
         jsonStr = json.dumps(data, ensure_ascii=False, indent=2)
     else:

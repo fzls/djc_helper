@@ -5346,8 +5346,20 @@ class DjcHelper:
             msg += "，目前暂无未领取的奖励"
         logger.info(color("bold_green") + msg)
 
-        if len(untaken_awards) > 0 and is_weekly_first_run(f"colg_{info.activity_id}2_领取奖励_每周提醒"):
-            async_message_box(msg, "可以领奖励啦", open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
+        if len(untaken_awards) > 0:
+            need_show_message_box = False
+
+            # 如果有剩余奖励
+            act_config = get_not_ams_act("colg每日签到")
+            if act_config is not None and will_act_expired_in(act_config.dtEndTime, timedelta(days=5)):
+                # 活动即将过期时，则每天提示一次
+                need_show_message_box = is_daily_first_run(f"colg_{info.activity_id}2_领取奖励_活动即将结束时_每日提醒")
+            else:
+                # 否则，每周提示一次
+                need_show_message_box = is_weekly_first_run(f"colg_{info.activity_id}2_领取奖励_每周提醒")
+
+            if need_show_message_box:
+                async_message_box(msg, "可以领奖励啦", open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
 
         logger.info(color("bold_cyan") + "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷")
 

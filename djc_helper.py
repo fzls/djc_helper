@@ -6528,7 +6528,7 @@ class DjcHelper:
                 # </html>
                 #
                 wait_seconds = 0.1 + random.random()
-                logger.warning(f"请求过快，等待{wait_seconds:.2f}秒后重试")
+                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
                 time.sleep(wait_seconds)
                 return Exception("请求过快")
 

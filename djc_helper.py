@@ -172,6 +172,7 @@ class DjcHelper:
 
     # --------------------------------------------获取角色信息和游戏信息--------------------------------------------
 
+    @with_retry(max_retry_count=3)
     def get_bind_role_list(self, print_warning=True):
         # 查询全部绑定角色信息
         res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False)

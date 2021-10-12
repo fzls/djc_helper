@@ -408,6 +408,34 @@ def try_except(show_exception_info=True, show_last_process_result=True, extra_ms
     return decorator
 
 
+def with_retry(max_retry_count=3, retry_wait_time=5, show_exception_info=True) -> Callable:
+    def decorator(fun):
+        @wraps(fun)
+        def wrapper(*args, **kwargs):
+            for i in range(max_retry_count):
+                try:
+                    return fun(*args, **kwargs)
+                except Exception as exc:
+                    msg = f"第 {i + 1}/{max_retry_count} 次 尝试执行{fun.__name__}({args}, {kwargs})出错了"
+                    msg += check_some_exception(exc, True)
+                    logFunc = logger.error
+                    if not show_exception_info:
+                        logFunc = logger.debug
+
+                    logFunc(msg, exc_info=exc)
+                    if i + 1 != max_retry_count:
+                        logFunc(f"等待 {retry_wait_time} 秒后重试")
+                        time.sleep(retry_wait_time)
+
+            exc_msg = f"重试{max_retry_count}次后仍失败"
+            logger.error(exc_msg)
+            raise Exception(exc_msg)
+
+        return wrapper
+
+    return decorator
+
+
 def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     msg = ""
 

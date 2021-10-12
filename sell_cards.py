@@ -3,13 +3,13 @@ import json
 from typing import Dict, List
 
 from config import config, load_config
-from djc_helper import DjcHelper, get_prize_names, is_new_version_ark_lottery
+from djc_helper import DjcHelper, is_new_version_ark_lottery
 from log import color, logger
 from main_def import (make_ark_lottery_card_and_award_info,
                       new_ark_lottery_parse_card_id_from_index)
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
-from util import range_from_one, show_head_line
+from util import show_head_line
 
 CARD_PLACEHOLDER = "XXXXXXXXXXX"
 

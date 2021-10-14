@@ -412,6 +412,7 @@ class DjcHelper:
             ("虎牙", self.huya),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("KOL", self.dnf_kol),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -438,7 +439,6 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
-            ("KOL", self.dnf_kol),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
@@ -6107,26 +6107,36 @@ class DjcHelper:
         self.check_dnf_kol()
 
         def query_lottery_times():
-            res = self.dnf_kol_op("jifenOutput", "776073", print_res=False)
-            return self.parse_jifenOutput(res, "329")
+            res = self.dnf_kol_op("jifenOutput", "808590", print_res=False)
+            return self.parse_jifenOutput(res, "364")
 
-        self.dnf_kol_op("点亮助力", "776067")
-        self.dnf_kol_op("领取助力礼包", "776071")
+        self.dnf_kol_op("点击助力按钮", "808574")
+        self.dnf_kol_op("点击领取按钮", "808576")
 
-        self.dnf_kol_op("分享计数", "776069")
+        self.dnf_kol_op("助力任务-登录30分钟按钮", "808577")
+        self.dnf_kol_op("助力任务-裂缝注视者副本按钮", "808578")
+        self.dnf_kol_op("助力任务-消耗30疲劳按钮", "808579")
+
+        self.dnf_kol_op("YYDS任务-通关命运抉择按钮", "808580")
 
         total, remaining = query_lottery_times()
         logger.info(f"当前剩余抽奖次数为{remaining}，累积获得{total}")
         for idx in range_from_one(remaining):
-            self.dnf_kol_op(f"第{idx}次抽奖", "776070")
+            self.dnf_kol_op(f"第{idx}次抽奖", "808581")
+
+        self.dnf_kol_op("签到助力-每日签到按钮", "808582")
+        self.dnf_kol_op("签到助力-累计3天按钮", "808583")
+        self.dnf_kol_op("签到助力-累计7天按钮", "808584")
+        self.dnf_kol_op("签到助力-累计10天按钮", "808585")
+        self.dnf_kol_op("签到助力-累计15天按钮", "808586")
 
     def check_dnf_kol(self):
         self.check_bind_account("KOL", get_act_url("KOL"),
-                                activity_op_func=self.dnf_kol_op, query_bind_flowid="776064", commit_bind_flowid="776063")
+                                activity_op_func=self.dnf_kol_op, query_bind_flowid="808571", commit_bind_flowid="808570")
 
     def dnf_kol_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_kol
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("KOL"),
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/lbact/a20211014kol2/zzx.html",
                                    **extra_params)
 
     # --------------------------------------------DNF福签大作战--------------------------------------------
@@ -6878,4 +6888,5 @@ if __name__ == '__main__':
         # djcHelper.djc_operations()
         # djcHelper.dnf_gonghui()
         # djcHelper.dnf_super_vip()
-        djcHelper.dnf_yellow_diamond()
+        # djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_kol()

@@ -1070,17 +1070,16 @@ def show_tips(cfg):
         "视频教程": (
             "部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1"
         ),
-        "国庆充值活动": (
-            "国庆有不少充值活动，各位如果充钱了，请自行把下列活动链接复制到手机qq上进行打开~\n"
-            "金秋礼包补给站(先领任务才可以。4个礼包+若干次抽奖)：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_jqdhjf_lottery\n"
-            "Q币消费返礼包(先充Q币，再用Q币充点券，每周一次)：https://pay.qq.com/h5/store/apple-card/task.html?offerId=1450029561&taskType=qb&\n"
-            "金秋夺宝(10次抽奖)：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_sd50d1_lottery&\n"
-            "充值天天抽好礼(每天充值满500点券可以抽一次)：https://pay.qq.com/h5/activity/dnf_sdzq5_lottery.php\n"
-        ),
         "斗鱼虎牙活动": (
             "斗鱼和虎牙的蚊子腿请自行完成：\n"
             "1. https://www.douyu.com/topic/DNFJQ\n"
             "2. https://www.huya.com/kuangren\n"
+        ),
+        "部分新出的活动": (
+            "以下活动请自行完成~\n"
+            "\n"
+            "充值夺宝第三期：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_sd50ds3_lottery&pf=__mds_dnf_share\n"
+            "微信DNF公众号签到：在 地下城与勇士 公众号 输入 金秋签到 即可，20天可以领一个自选灿烂\n"
         ),
     }
 

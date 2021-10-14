@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.common.exceptions import (StaleElementReferenceException,
                                         TimeoutException)
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -129,7 +130,7 @@ class QQLogin():
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
                 options = Options()
                 self.append_common_options(options, login_type, login_url)
-                self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
+                self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), desired_capabilities=caps, options=options)
                 logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
                 inited = True
         except:
@@ -178,7 +179,7 @@ class QQLogin():
             options.add_argument('--no-first-run')
             self.append_common_options(options, login_type, login_url)
 
-            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), desired_capabilities=caps, options=options)
+            self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), desired_capabilities=caps, options=options)
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
     def prepare_chrome_linux(self, caps: Dict[str, str], login_type: str, login_url: str):
@@ -191,7 +192,7 @@ class QQLogin():
         options.add_argument('--no-first-run')
         self.append_common_options(options, login_type, login_url)
 
-        self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path_linux(), desired_capabilities=caps, options=options)
+        self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path_linux()), desired_capabilities=caps, options=options)
         logger.info(color("bold_yellow") + f"{self.name} Linux环境下使用自带chrome")
 
     def append_common_options(self, options: Options, login_type: str, login_url: str):
@@ -263,7 +264,7 @@ class QQLogin():
         if not self.cfg.force_use_portable_chrome:
             try:
                 logger.info("检查系统自带的chrome是否可用")
-                self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
+                self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
                 self.driver.quit()
                 return
             except:
@@ -290,7 +291,7 @@ class QQLogin():
             options.add_argument('--no-sandbox')
             options.add_argument('--no-default-browser-check')
             options.add_argument('--no-first-run')
-            self.driver = webdriver.Chrome(executable_path=self.chrome_driver_executable_path(), options=options)
+            self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
             self.driver.quit()
             return
         except:

@@ -5,5 +5,5 @@ toml==0.10.2
 selenium==3.141.0
 colorlog==6.5.0
 psutil==5.8.0
-leancloud==2.9.6
+leancloud==2.9.7
 werkzeug<2.0.0

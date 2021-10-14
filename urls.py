@@ -73,6 +73,7 @@ act_name_to_url = {
     "虎牙": "https://www.huya.com/367967",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
+    "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -97,7 +98,6 @@ act_name_to_url = {
     "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
-    "KOL": "https://dnf.qq.com/lbact/a20210610kol/zzx.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "WeGame活动周年庆": "https://dnf.qq.com/lbact/a20210617lbw4msr/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
@@ -213,7 +213,7 @@ class Urls:
         self.iActivityId_dnf_my_story = "382161"  # 我的dnf13周年活动
         self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
-        self.iActivityId_dnf_kol = "387039"  # DNF KOL
+        self.iActivityId_dnf_kol = "416057"  # DNF KOL
         self.iActivityId_maoxian = "407067"  # 勇士的冒险补给
         self.iActivityId_maoxian_dup = "405979"  # 勇士的冒险补给-回归玩家
         self.iActivityId_dnf_gonghui = "406454"  # DNF公会活动

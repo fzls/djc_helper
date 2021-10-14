@@ -1398,6 +1398,8 @@ class AccountConfigUi(QWidget):
         cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
 
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
+        cfg.gonghui_rolename_huizhang = self.lineedit_gonghui_rolename_huizhang.text()
+        cfg.gonghui_rolename_huiyuan = self.lineedit_gonghui_rolename_huiyuan.text()
         cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
         cfg.enable_majieluo_lucky = self.checkbox_enable_majieluo_lucky.isChecked()
         cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()

@@ -1454,6 +1454,10 @@ class DjcHelper:
 
         lr = LoginResult(uin=cached_pskey["p_uin"], p_skey=cached_pskey["p_skey"])
 
+        # 特判一些可以直接判定为过期的情况
+        if lr.uin == "" or lr.p_skey == "":
+            return True
+
         # QQ空间集卡系活动
         # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
         # 由于活动过期的判定会优先于pskey判定，需要需要保证下面调用的是最新的活动~
@@ -1476,12 +1480,12 @@ class DjcHelper:
         def check_by_super_vip() -> bool:
             self.lr = lr
             res = self.qzone_act_op("幸运勇士礼包", "5353_75244d03", print_res=False)
-            return res.get('code', 0) == -3000
+            return res.get('code', 0) in [-3000, 403]
 
         def check_by_yellow_diamond() -> bool:
             self.lr = lr
             res = self.qzone_act_op("幸运勇士礼包", "5328_63fbbb7d", print_res=False)
-            return res.get('code', 0) == -3000
+            return res.get('code', 0) in [-3000, 403]
 
         # 用于按顺序检测p_skey是否过期的函数列表
         check_p_skey_expired_func_list = [

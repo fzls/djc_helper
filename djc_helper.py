@@ -1965,7 +1965,7 @@ class DjcHelper:
 
         return self._qzone_act_op(ctx, self.urls.qzone_activity_new_query, body, print_res)
 
-    def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True):
+    def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True) -> dict:
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
         return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)

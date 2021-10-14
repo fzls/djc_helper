@@ -398,7 +398,6 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF马杰洛的规划", self.majieluo),
-            ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
@@ -412,6 +411,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("colg每日签到", self.colg_signin),
             ("虎牙", self.huya),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1580,15 +1580,15 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        self.qzone_act_op("幸运勇士礼包", "11949_df679412")
-        self.qzone_act_op("勇士见面礼", "11950_cba6bd4e")
+        self.qzone_act_op("幸运勇士礼包", "13620_0b518959")
+        self.qzone_act_op("勇士见面礼", "13621_82d8e16f")
         if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"):
-            self.qzone_act_op("分享给自己", "11951_816283ed", act_req_data={
+            self.qzone_act_op("分享给自己", "13622_c8a431ae", act_req_data={
                 "receivers": [
                     self.qq(),
                 ]
             })
-        self.qzone_act_op("分享领取礼包", "11952_ca86334f")
+        self.qzone_act_op("分享领取礼包", "13623_4efae295")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下
@@ -6863,7 +6863,6 @@ if __name__ == '__main__':
         # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
         # djcHelper.run(user_buy_info)
 
-        # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_collection()
         # djcHelper.dnf_xinyue()
@@ -6878,4 +6877,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_club_vip()
         # djcHelper.xiaojiangyou()
         # djcHelper.djc_operations()
-        djcHelper.dnf_gonghui()
+        # djcHelper.dnf_gonghui()
+        djcHelper.dnf_super_vip()

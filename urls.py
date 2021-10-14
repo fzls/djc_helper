@@ -28,7 +28,7 @@ not_ams_activities = [
     newAmsActInfo("管家蚊子腿", "2021-09-14 00:00:00", "2021-10-17 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-07-08 00:00:00", "2021-08-09 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
-    newAmsActInfo("超级会员", "2021-09-14 00:00:00", "2021-10-14 23:59:59"),
+    newAmsActInfo("超级会员", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
     newAmsActInfo("黄钻", "2021-09-14 00:00:00", "2021-10-14 23:59:59"),
     newAmsActInfo("集卡", "2021-09-14 00:00:00", "2021-10-31 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
@@ -61,7 +61,6 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210913care/",
-    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2335_1d9bf645",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2333_c6468485",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
@@ -73,6 +72,7 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "虎牙": "https://www.huya.com/367967",
+    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
 
     # 已过期活动
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",

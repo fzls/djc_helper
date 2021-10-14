@@ -1777,6 +1777,7 @@ class DjcHelper:
 
         return res.is_ok()
 
+    @try_except(return_val_on_except=(0, 0))
     def dnf_ark_lottery_remaining_lottery_times(self) -> Tuple[int, int]:
         """
         返回 剩余卡片数，总计获得卡片数
@@ -1788,6 +1789,7 @@ class DjcHelper:
 
         return info.left, info.add
 
+    @try_except(return_val_on_except={})
     def dnf_ark_lottery_get_card_counts(self) -> Dict[str, int]:
         url = self.urls.qzone_activity_new_query_card.format(
             packetID="2291_61694ad3",

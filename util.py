@@ -521,11 +521,11 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
-    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file, color_name)
+def async_message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan", open_image=""):
+    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file, color_name, open_image)
 
 
-def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan"):
+def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan", open_image=""):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
     if is_run_in_github_action():
@@ -544,6 +544,9 @@ def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url=""
 
     if open_url != "":
         webbrowser.open(open_url)
+
+    if open_image != "":
+        os.popen(os.path.realpath(open_image))
 
 
 KiB = 1024

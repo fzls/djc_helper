@@ -413,6 +413,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("KOL", self.dnf_kol),
+            ("WeGameDup", self.dnf_wegame_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -440,7 +441,6 @@ class DjcHelper:
             ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
-            ("WeGame活动周年庆", self.dnf_wegame_dup),
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("qq视频蚊子腿", self.qq_video),
             ("集卡_旧版", self.ark_lottery),
@@ -5654,7 +5654,7 @@ class DjcHelper:
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame_dup(self):
-        show_head_line("WeGame活动")
+        show_head_line("WeGameDup")
         self.show_amesvr_act_info(self.dnf_wegame_dup_op)
 
         if not self.cfg.function_switches.get_dnf_wegame or self.disable_most_activities():
@@ -5663,57 +5663,67 @@ class DjcHelper:
 
         self.check_dnf_wegame_dup()
 
-        def query_signin_days():
-            res = self.dnf_wegame_dup_op("查询签到天数-condOutput", "772148", print_res=False)
-            info = parse_amesvr_common_info(res)
-            # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
-            parts = info.sOutValue1.split('|')[0].split(':')
-            days = int(parts[2])
-            return days
+        # def query_signin_days():
+        #     res = self.dnf_wegame_dup_op("查询签到天数-condOutput", "808092", print_res=False)
+        #     info = parse_amesvr_common_info(res)
+        #     # "sOutValue1": "e0c747b4b51392caf0c99162e69125d8:iRet:0|b1ecb3ecd311175835723e484f2d8d88:iRet:0",
+        #     parts = info.sOutValue1.split('|')[0].split(':')
+        #     days = int(parts[2])
+        #     return days
 
         def query_lottery_times(count_id: int):
-            res = self.dnf_wegame_dup_op("查询抽奖次数-jifenOutput", "774234", print_res=False)
-            info = parse_amesvr_common_info(res)
-            # "sOutValue1": "239:16:4|240:8:1",
-            for count_info in info.sOutValue1.split('|'):
-                cid, total, remaining = count_info.split(':')
-                if int(cid) == count_id:
-                    return int(total), int(remaining)
+            res = self.dnf_wegame_dup_op("查询抽奖次数-jifenOutput", "808091", print_res=False)
+            return self.parse_jifenOutput(res, str(count_id))
 
-            return 0, 0
+        self.dnf_wegame_dup_op("惊喜见面礼", "808069")
 
-        self.dnf_wegame_dup_op("通关奥兹玛副本获得吹蜡烛次数", "772139")
-        self.dnf_wegame_dup_op("页面签到获得吹蜡烛次数", "772140")
-        self.dnf_wegame_dup_op("通关智慧的引导副本获得吹蜡烛次数", "772141")
-        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(326)
+        self.dnf_wegame_dup_op("页面签到获取盲盒", "808073")
+        self.dnf_wegame_dup_op("在线30分钟获得盲盒", "808074")
+        self.dnf_wegame_dup_op("通关奥兹玛团本获得盲盒", "808075")
+        self.dnf_wegame_dup_op("wegame专区关注主播", "808082")
+        self.dnf_wegame_dup_op("wegame专区关注作者", "808083")
+        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(362)
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次吹蜡烛次数，目前剩余{remainingLotteryTimes}次吹蜡烛次数")
         for i in range(remainingLotteryTimes):
-            self.dnf_wegame_dup_op(f"第{i + 1}次吹蜡烛抽蛋糕-4礼包抽奖", "772128")
+            self.dnf_wegame_dup_op(f"第{i + 1}次 盲盒抽奖", "808072")
 
-        # 升级
-        self.dnf_wegame_dup_op("幸运勇士获得抽奖次数", "774231")
-        self.dnf_wegame_dup_op("每日登录游戏获得抽奖", "774230")
-        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(327)
+        self.dnf_wegame_dup_op("观看视频抽奖", "808071")
+        self.dnf_wegame_dup_op("wegame启动游戏获得抽奖券", "808079")
+        self.dnf_wegame_dup_op("通关3次裂缝副本获得抽奖券", "808080")
+        self.dnf_wegame_dup_op("通关命运抉择5-5", "808081")
+        totalLotteryTimes, remainingLotteryTimes = query_lottery_times(363)
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
-            self.dnf_wegame_dup_op(f"第{i + 1}次每日抽奖", "774232")
+            self.dnf_wegame_dup_op(f"第{i + 1}次每日抽奖(惊喜转盘)", "808084")
 
-        # 勇士齐聚阿拉德
-        self.dnf_wegame_dup_op("在线30min签到", "772142")
-        self.dnf_wegame_dup_op("领取签到礼包", "772142")
-        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
-        self.dnf_wegame_dup_op("签到3天礼包", "772131")
-        self.dnf_wegame_dup_op("签到7天礼包", "772132")
-        self.dnf_wegame_dup_op("签到10天礼包", "774229")
-        self.dnf_wegame_dup_op("签到15天礼包", "772133")
+        def take_award_with_34c(role: RoleInfo) -> bool:
+            self.dnf_wegame_dup_op("34C满级奖励", "808076")
+            self.dnf_wegame_dup_op("34C通关希洛克奖励", "808265")
+            self.dnf_wegame_dup_op("34C通关奥兹玛奖励", "808266")
 
-    def check_dnf_wegame_dup(self):
-        self.check_bind_account("WeGame活动", get_act_url("WeGame活动周年庆"),
-                                activity_op_func=self.dnf_wegame_dup_op, query_bind_flowid="772123", commit_bind_flowid="772122")
+            return True
+
+        if self.cfg.take_award_34c_server_id != "" and self.cfg.take_award_34c_role_id != "":
+            change_bind_role = TemporaryChangeBindRoleInfo()
+            change_bind_role.serviceID = self.cfg.take_award_34c_server_id
+            change_bind_role.roleCode = self.cfg.take_award_34c_role_id
+
+            self.temporary_change_bind_and_do("使用配置的34C领取奖励", [change_bind_role], self.check_dnf_wegame_dup, take_award_with_34c)
+        else:
+            logger.info("未配置34C的角色ID或区服id")
+            if is_weekly_first_run(f"配置34C_{self.cfg.name}") and not use_by_myself():
+                title = "提示"
+                msg = f"未配置34C的角色ID，将不会领取wegame活动的34C奖励。请前往配置工具的 账号配置/其他 选择34c角色信息"
+                async_message_box(msg, title)
+
+    def check_dnf_wegame_dup(self, **extra_params):
+        self.check_bind_account("WeGame活动", get_act_url("WeGameDup"),
+                                activity_op_func=self.dnf_wegame_dup_op, query_bind_flowid="808066", commit_bind_flowid="808065",
+                                **extra_params)
 
     def dnf_wegame_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_wegame_dup
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("WeGame活动周年庆"),
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("WeGameDup"),
                                    **extra_params)
 
     # --------------------------------------------我的dnf13周年活动--------------------------------------------
@@ -6873,20 +6883,7 @@ if __name__ == '__main__':
         # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
         # djcHelper.run(user_buy_info)
 
-        # djcHelper.dnf_collection()
-        # djcHelper.dnf_xinyue()
-        # djcHelper.guanjia_new_dup()
-        # djcHelper.maoxian_dup()
-        # djcHelper.dnf_mingyun_jueze()
-        # djcHelper.dnf_wegame()
-        # djcHelper.dnf_relax_road()
-        # djcHelper.colg_signin()
-        # djcHelper.dnf_helper()
-        # djcHelper.dnf_gonghui()
-        # djcHelper.dnf_club_vip()
-        # djcHelper.xiaojiangyou()
-        # djcHelper.djc_operations()
-        # djcHelper.dnf_gonghui()
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
-        djcHelper.dnf_kol()
+        # djcHelper.dnf_kol()
+        djcHelper.dnf_wegame_dup()

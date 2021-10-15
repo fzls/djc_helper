@@ -1027,29 +1027,24 @@ def print_update_message_on_first_run_new_version():
             logger.warning("新版本首次运行获取更新内容失败，请自行查看CHANGELOG.MD", exc_info=e)
 
 
-def show_ask_message_box_only_once():
-    threading.Thread(target=show_ask_message_box_only_once_sync, daemon=True).start()
+def show_ask_message_box(cfg: Config):
+    threading.Thread(target=show_ask_message_box_sync, args=(cfg,), daemon=True).start()
 
 
-def show_ask_message_box_only_once_sync():
+def show_ask_message_box_sync(cfg: Config):
     if not is_windows():
         return
 
-    return
-    # 临时加一个请求帮忙弄下白嫖活动的逻辑
-    if is_first_run("守护者卡牌"):
+    if now_before("2021-11-30 23:59:59") and cfg.common.enable_alipay_redpacket and is_daily_first_run("支付宝红包活动"):
+        title = "支付宝红包活动"
         message = (
-            "马杰洛活动中的守护者卡牌，有小伙伴有多余的守护者卡牌吗（第5个）？\n"
-            "如果有多的话，可以不可以送我一张哇0-0\n"
+            "现在支付宝有个红包活动，扫弹出来的这个二维码就可以领取一个红包，在便利店等实体店扫码就可以使用。\n"
+            "你使用后我会同时领到一个小红包，大家一起白嫖-。-\n"
             "\n"
-            "点 确定 打开赠送页面进行赠送，点 取消 拒绝-。-\n"
+            "\n"
+            "如果不想看到该弹窗，可以前往配置工具，取消勾选 公共配置/其他/是否弹出支付宝红包活动图片 即可，否则将每天运行时弹出一次0-0"
         )
-        res = win32api.MessageBox(0, message, "求送卡", win32con.MB_OKCANCEL)
-        if res == win32con.IDOK:
-            webbrowser.open("https://dnf.qq.com/cp/a20210311welfare/index.html?askforId=11820&askforUin=1054073896")
-            win32api.MessageBox(0, "打开网页后登陆后点击[确认]按钮赠送就好啦~多谢啦，嘿嘿嘿0-0", "致谢", win32con.MB_ICONINFORMATION)
-        else:
-            win32api.MessageBox(0, "嘤嘤嘤", "TAT", win32con.MB_ICONINFORMATION)
+        message_box(message, title, open_image="付费指引/支付宝红包活动.jpg")
 
 
 @try_except()

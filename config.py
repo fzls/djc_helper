@@ -702,6 +702,9 @@ class CommonConfig(ConfigInterface):
         self.scode_list_accept_ask = []
         # 马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知
         self.majieluo_invite_uin_list = []  # type: List[str]
+        # 是否弹出支付宝红包活动图片
+        self.enable_alipay_redpacket = True
+
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()
         # 各种操作的通用重试配置

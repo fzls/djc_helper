@@ -65,7 +65,6 @@ def main():
     try_load_old_version_configs_from_user_data_dir()
 
     change_title()
-    show_ask_message_box_only_once()
 
     print_update_message_on_first_run_new_version()
 
@@ -108,6 +107,8 @@ def main():
 
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
+
+    show_ask_message_box(cfg)
 
     check_all_skey_and_pskey(cfg)
 

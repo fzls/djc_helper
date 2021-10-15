@@ -93,6 +93,9 @@ scode_list_accept_ask = []
 #]
 majieluo_invite_uin_list = []
 
+# 是否弹出支付宝红包活动图片
+enable_alipay_redpacket = true
+
 # 心悦相关配置
 [common.xinyue]
 # 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。

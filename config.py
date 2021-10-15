@@ -387,6 +387,11 @@ class AccountConfig(ConfigInterface):
         self.huya_cookie = ""
         # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）
         self.comic_lottery = False
+        # wegame活动的34C角色 服务器id
+        self.take_award_34c_server_id = ""
+        # wegame活动的34C角色 id
+        self.take_award_34c_role_id = ""
+
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
         # 各功能开关

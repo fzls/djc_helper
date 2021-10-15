@@ -1386,6 +1386,15 @@ class AccountConfigUi(QWidget):
         self.checkbox_dnf_gonghui_enable_lottery = create_checkbox(cfg.function_switches.dnf_gonghui_enable_lottery)
         add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
 
+        self.combobox_take_award_34c_server_name = create_combobox(dnf_server_id_to_name(cfg.take_award_34c_server_id), dnf_server_name_list())
+        add_row(form_layout, "wegame活动的34C角色 区服名称", self.combobox_take_award_34c_server_name)
+
+        self.lineedit_take_award_34c_role_id = create_lineedit(cfg.take_award_34c_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
+        add_row(form_layout, "wegame活动的34C角色 角色ID", self.lineedit_take_award_34c_role_id)
+
+        self.role_selector = RoleSelector("幸运勇士", self.combobox_take_award_34c_server_name, self.lineedit_take_award_34c_role_id, cfg, self.common_cfg)
+        add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
+
         # -------------- 区域：活动开关 --------------
         self.collapsible_box_function_switches, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("活动开关", top_layout)
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
@@ -1412,6 +1421,9 @@ class AccountConfigUi(QWidget):
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
         cfg.colg_cookie = self.lineedit_colg_cookie.text()
         cfg.huya_cookie = self.lineedit_huya_cookie.text()
+
+        cfg.take_award_34c_server_id = dnf_server_name_to_id(self.combobox_take_award_34c_server_name.currentText())
+        cfg.take_award_34c_role_id = self.lineedit_take_award_34c_role_id.text()
 
         self.account_info.update_config(cfg.account_info)
         self.function_switches.update_config(cfg.function_switches)

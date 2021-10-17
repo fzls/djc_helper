@@ -6610,12 +6610,16 @@ class DjcHelper:
                 logger.warning(color("bold_cyan") + f"设置了快速鉴别流程，判定不需要尝试 {role_info.rolename}，将跳过该角色，以加快处理")
                 continue
 
-            check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
+            try:
+                check_func(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
 
-            continue_next = callback_func(take_lottery_count_role_info)
-            if not continue_next:
-                logger.warning("本次回调返回False，将不再继续尝试其他角色")
-                break
+                continue_next = callback_func(take_lottery_count_role_info)
+                if not continue_next:
+                    logger.warning("本次回调返回False，将不再继续尝试其他角色")
+                    break
+            except Exception as e:
+                logger.error(f"尝试 {role_info.rolename} 时出错了，报错如下", exc_info=e)
+                continue
 
         logger.info("操作完毕，切换为原有角色")
         check_func()

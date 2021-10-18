@@ -1035,7 +1035,7 @@ def show_ask_message_box_sync(cfg: Config):
     if not is_windows():
         return
 
-    if now_before("2021-11-30 23:59:59") and cfg.common.enable_alipay_redpacket and is_daily_first_run("支付宝红包活动"):
+    if now_before("2021-11-30 23:59:59") and cfg.common.enable_alipay_redpacket and is_daily_first_run("支付宝红包活动") and not use_by_myself():
         title = "支付宝红包活动"
         message = (
             "现在支付宝有个红包活动，扫弹出来的这个二维码就可以领取一个红包，在便利店等实体店扫码就可以使用。\n"

@@ -159,11 +159,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "弹出很多个登录窗口的临时解决方案"
-    message = """目前暂时不知道这个bug是怎么出现的，可以试试下面这个临时方案。
-打开配置工具，点击上方按钮区域中的【清除登录状态】后，再次运行，应该就不会无限弹窗了。
+    title = "超级会员、qq视频、qq音乐联合活动提示"
+    message = """新出了个这仨的联合活动，不过能白嫖的就只有一个分享奖励，所以各位自己手机点开来领取吧。
+如果正好要买这三个的会员，可以看看要不要在这里开通<_<
+
+点击确定后会打开活动网页
 """
-    open_url = ""
+    open_url = "https://act.qzone.qq.com//v2/vip/tx/p/2863_c09e51c5"
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

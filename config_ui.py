@@ -1354,9 +1354,6 @@ class AccountConfigUi(QWidget):
         self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明")
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
-        self.lineedit_huya_cookie = create_lineedit(cfg.huya_cookie, "请填写虎牙活动页面请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中huya_cookie字段的说明")
-        add_row(form_layout, "虎牙 cookie", self.lineedit_huya_cookie)
-
         # -------------- 区域：会员关怀 --------------
         self.collapsible_box_vip_mentor, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
@@ -1420,7 +1417,6 @@ class AccountConfigUi(QWidget):
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
         cfg.colg_cookie = self.lineedit_colg_cookie.text()
-        cfg.huya_cookie = self.lineedit_huya_cookie.text()
 
         cfg.take_award_34c_server_id = dnf_server_name_to_id(self.combobox_take_award_34c_server_name.currentText())
         cfg.take_award_34c_role_id = self.lineedit_take_award_34c_role_id.text()

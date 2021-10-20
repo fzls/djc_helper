@@ -159,13 +159,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "超级会员、qq视频、qq音乐联合活动提示"
-    message = """新出了个这仨的联合活动，不过能白嫖的就只有一个分享奖励，所以各位自己手机点开来领取吧。
-如果正好要买这三个的会员，可以看看要不要在这里开通<_<
-
-点击确定后会打开活动网页
+    title = "私聊提示"
+    message = """如果使用付费方式二私聊，或者其他方式私聊，请确保私聊的是我的小号（名称中带有 私聊这个号 的管理员账号），而不要私聊大号。
+因为之前中秋被冻结，目前大号已经设置了禁止添加好友和任何临时对话，因此你发送了，我这边也是看不到的0-0
 """
-    open_url = "https://act.qzone.qq.com//v2/vip/tx/p/2863_c09e51c5"
+    open_url = ""
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

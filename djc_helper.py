@@ -6764,8 +6764,6 @@ class DjcHelper:
         return uin2qq(self.uin())
 
     def try_do_with_lucky_role_and_normal_role(self, ctx: str, check_role_func: Callable, action_callback: Callable[[RoleInfo], bool]):
-        check_role_func()
-
         if self.cfg.ark_lottery.lucky_dnf_role_id != "":
             # 尝试使用配置的幸运角色
             change_bind_role = TemporaryChangeBindRoleInfo()
@@ -6774,6 +6772,7 @@ class DjcHelper:
             self.temporary_change_bind_and_do(ctx, [change_bind_role], check_role_func, action_callback)
 
         # 保底尝试普通角色领取
+        check_role_func()
         action_callback(self.get_dnf_bind_role_copy())
 
 

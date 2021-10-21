@@ -26,7 +26,7 @@ not_ams_activities = [
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
     newAmsActInfo("管家蚊子腿", "2021-09-14 00:00:00", "2021-10-17 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿", "2021-07-08 00:00:00", "2021-08-09 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
     newAmsActInfo("黄钻", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
@@ -72,6 +72,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
+    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
 
     # 已过期活动
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210913care/",
@@ -101,7 +102,6 @@ act_name_to_url = {
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
-    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/113645/1_index_index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",

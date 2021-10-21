@@ -2494,10 +2494,13 @@ class DjcHelper:
     qq_video_module_id_online_7_days = "140775"  # 累积7天
     qq_video_module_id_online_15_days = "140778"  # 累积15天
 
-    qq_video_module_id_card_gift_1 = "140780"  # 使用1张卡兑换奖励
-    qq_video_module_id_card_gift_2 = "140783"  # 使用2张卡兑换奖励
-    qq_video_module_id_card_gift_3 = "140784"  # 使用3张卡兑换奖励
-    qq_video_module_id_card_gift_4 = "140785"  # 使用4张卡兑换奖励
+    qq_video_module_id_card_gift_list = [
+        # ID | 描述 | 兑换次数
+        ("140785", "使用 4 张卡兑换奖励", 1),
+        ("140784", "使用 3 张卡兑换奖励", 1),
+        ("140783", "使用 2 张卡兑换奖励", 10),
+        ("140780", "使用 1 张卡兑换奖励", 10),
+    ]
 
     #   note:5. 以下的请求则是根据现有的代码中对应参数，刷新页面过滤出对应请求
     qq_video_module_id_query_card_info = "140767"  # 查询卡片信息
@@ -2548,30 +2551,19 @@ class DjcHelper:
         logger.warning("如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据")
 
         # 首先尝试按照优先级领取
-        res = self.qq_video_op("使用4张卡兑换奖励（限1次）", self.qq_video_module_id_card_gift_4)
-        if res['data']['lottery_txt'] == '您当前尚未集齐卡片哦~':
-            logger.info("尚未兑换至尊礼包，先跳过其他礼包")
-        else:
-            res = self.qq_video_op("使用3张卡兑换奖励（限1次）", self.qq_video_module_id_card_gift_3)
+        for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
+            res = self.qq_video_op(f"{gift_name}（限 {exchange_count} 次）", module_id)
             if res['data']['lottery_txt'] == '您当前尚未集齐卡片哦~':
-                logger.info("尚未兑换高级礼包，先跳过其他礼包")
-            else:
-                self.qq_video_op("使用2张卡兑换奖励（限10次）", self.qq_video_module_id_card_gift_2)
-                self.qq_video_op("使用1张卡兑换奖励（限10次）", self.qq_video_module_id_card_gift_1)
+                logger.info(f"尚未兑换 {gift_name}，先跳过其他礼包")
+                break
 
         # 如果到了最后一天，就尝试领取所有可以领取的奖励
         actInfo = get_not_ams_act("qq视频蚊子腿")
         if format_time(parse_time(actInfo.dtEndTime), "%Y%m%d") == get_today():
             logger.info("已到活动最后一天，尝试领取所有可以领取的奖励")
-            gifts = [
-                (4, self.qq_video_module_id_card_gift_4),
-                (3, self.qq_video_module_id_card_gift_3),
-                (2, self.qq_video_module_id_card_gift_2),
-                (1, self.qq_video_module_id_card_gift_1),
-            ]
-            for card_count, module_id in gifts:
-                for i in range(10):
-                    res = self.qq_video_op(f"使用{card_count}张卡兑换奖励", module_id)
+            for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
+                for idx in range_from_one(exchange_count):
+                    res = self.qq_video_op(f"[{idx}/{exchange_count}] {gift_name}", module_id)
                     if res['data']['sys_code'] != 0:
                         break
 

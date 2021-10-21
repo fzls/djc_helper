@@ -398,15 +398,11 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF集合站", self.dnf_collection),
-            ("DNF心悦", self.dnf_xinyue),
-            ("管家蚊子腿", self.guanjia_new_dup),
             ("DNF公会活动", self.dnf_gonghui),
             ("勇士的冒险补给", self.maoxian_dup),
-            ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("关怀活动", self.dnf_guanhuai),
             ("轻松之路", self.dnf_relax_road),
             ("dnf助手活动", self.dnf_helper),
-            ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("KOL", self.dnf_kol),
@@ -416,6 +412,10 @@ class DjcHelper:
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
+            ("colg每日签到", self.colg_signin),
+            ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
+            ("管家蚊子腿", self.guanjia_new_dup),
+            ("DNF心悦", self.dnf_xinyue),
             ("DNF马杰洛的规划", self.majieluo),
             ("WeGame活动", self.dnf_wegame),
             ("虎牙", self.huya),

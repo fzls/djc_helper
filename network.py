@@ -172,12 +172,17 @@ def pre_process_data(data) -> Optional[dict]:
 
 def extract_qq_video_message(res) -> str:
     data = res['data']
+
+    msg = ""
     if 'lottery_txt' in data:
-        return data['lottery_txt']
+        msg = data['lottery_txt']
     elif 'wording_info' in data:
-        return data['wording_info']['custom_words']
-    else:
-        return res['msg']
+        msg = data['wording_info']['custom_words']
+
+    if 'msg' in res:
+        msg += " | " + res['msg']
+
+    return msg
 
 
 def is_request_ok(data) -> bool:

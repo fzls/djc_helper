@@ -411,6 +411,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
+            ("qq视频蚊子腿", self.qq_video),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -442,7 +443,6 @@ class DjcHelper:
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("DNF集合站周年庆", self.dnf_collection_dup),
-            ("qq视频蚊子腿", self.qq_video),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
             ("管家蚊子腿", self.guanjia_new),
@@ -2483,30 +2483,34 @@ class DjcHelper:
     #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
     #   2. 打开活动页面 get_act_url("qq视频蚊子腿")
     #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
-    qq_video_act_id = "113645"
-    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id，如果某个请求的type参数不是21，也需要专门调整对应值
-    qq_video_module_id_lucky_user = "140786"  # 幸运勇士礼包
+    qq_video_act_id = "yauhs87ql00t63xttwkas8papl"
+
+    #   undone: 如果某个请求的type和option参数不是默认值，也需要专门调整对应值
+    qq_video_default_type = "100160"
+    qq_video_default_option = "100"
+
+    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
+    qq_video_module_id_lucky_user = "xdz8y4sjta4kui1sagp5xzr3qe"  # 幸运勇士礼包
     # qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
     # qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
-    qq_video_module_id_lottery = "140779"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
-    qq_video_module_id_online_30_minutes = "140771"  # 在线30分钟
-    qq_video_module_id_online_3_days = "140774"  # 累积3天
-    qq_video_module_id_online_7_days = "140775"  # 累积7天
-    qq_video_module_id_online_15_days = "140778"  # 累积15天
+    qq_video_module_id_lottery = "9fi2o28r621y1t78l8oyoefzr9"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "93fas34ug2wo36oce0a9el97au"  # 在线30分钟
+    qq_video_module_id_online_3_days = "wwq8suj7d9qi7ee9gcy89r3d2e"  # 累积3天
+    qq_video_module_id_online_7_days = "jsk57d87y5ap3wto879g8jpslu"  # 累积7天
+    qq_video_module_id_online_15_days = "wtckr8zcrk6egcc9iq5lygq98l"  # 累积15天
 
     qq_video_module_id_card_gift_list = [
         # ID | 描述 | 兑换次数
-        ("140785", "使用 4 张卡兑换奖励", 1),
-        ("140784", "使用 3 张卡兑换奖励", 1),
-        ("140783", "使用 2 张卡兑换奖励", 10),
-        ("140780", "使用 1 张卡兑换奖励", 10),
+        ("e9goi51gh5tgww9kkhtcw2ft21", "使用 6 张卡兑换奖励", 1),
+        ("2gu4g11pj9freyx94ad7hyi3t9", "使用 4 张卡兑换奖励", 10),
+        ("dasw19eds0fjxaew64pxc2sgt9", "使用 2 张卡兑换奖励", 10),
     ]
 
-    #   note:5. 以下的请求则是根据现有的代码中对应参数，刷新页面过滤出对应请求
-    qq_video_module_id_query_card_info = "140767"  # 查询卡片信息
+    #   note:6. 以下的请求则是根据现有的代码中对应参数，刷新页面过滤出对应请求
+    qq_video_module_id_query_card_info = "h4y1k5ggeecx9whygr72eutfle"  # 查询卡片信息
 
-    qq_video_module_id_enter_page = "140769"  # 首次进入页面
-    qq_video_module_id_take_enter_page_card = "140770"  # 领取进入页面的卡片
+    qq_video_module_id_enter_page = "f2e07oo7faaidezzgo5cs25pce"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "r9c9zkrg272f0ttsyp9groiy5u"  # 领取进入页面的卡片
 
     @try_except()
     def qq_video(self):
@@ -2533,27 +2537,30 @@ class DjcHelper:
                 logger.info(tableify(cols, colSizes))
 
         # 正式逻辑
-
         self.qq_video_op("首次进入页面", self.qq_video_module_id_enter_page, type="51", option="1", task="51")
         self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
 
         self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112")
+        logger.info(color("bold_cyan") + f"上面的这个幸运角色可以使用其他区服的回归角色进行领取，不过这样的话其实也只有黑钻可以被当前角色用到-。-所以有兴趣的就自己去页面上操作下吧，这里就不额外做了（懒。。。")
+
         # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift, type="100112")
         # self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
 
-        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery)
+        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery, type="100143")
 
         self.qq_video_op("在线30分钟", self.qq_video_module_id_online_30_minutes)
         self.qq_video_op("累积3天", self.qq_video_module_id_online_3_days)
-        self.qq_video_op("累积7天", self.qq_video_module_id_online_7_days)
-        self.qq_video_op("累积10天", self.qq_video_module_id_online_15_days)
+        self.qq_video_op("累积7天", self.qq_video_module_id_online_7_days, type="100143")
+        self.qq_video_op("累积10天", self.qq_video_module_id_online_15_days, type="100143")
 
         logger.warning("如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据")
 
         # 首先尝试按照优先级领取
         for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
             res = self.qq_video_op(f"{gift_name}（限 {exchange_count} 次）", module_id)
-            if res['data']['lottery_txt'] == '您当前尚未集齐卡片哦~':
+            # -904 条件不满足
+            # -903 已经领了没有资格再领了
+            if res['ret'] == -904:
                 logger.info(f"尚未兑换 {gift_name}，先跳过其他礼包")
                 break
 
@@ -2564,7 +2571,7 @@ class DjcHelper:
             for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
                 for idx in range_from_one(exchange_count):
                     res = self.qq_video_op(f"[{idx}/{exchange_count}] {gift_name}", module_id)
-                    if res['data']['sys_code'] != 0:
+                    if res['ret'] != 0:
                         break
 
         # 查询一遍集卡信息
@@ -2572,14 +2579,18 @@ class DjcHelper:
 
     def check_qq_video(self):
         while True:
-            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112", print_res=False)
-            if int(res["data"]["sys_code"]) == -904 and extract_qq_video_message(res) == "您当前还未绑定游戏帐号，请先绑定哦~":
-                self.guide_to_bind_account("qq视频活动", "https://m.film.qq.com/magic-act/110254/index.html", activity_op_func=None)
+            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112", print_res=True)
+            if res["ret"] == -904 and res["msg"] == "您当前还未绑定游戏帐号，请先绑定哦~":
+                self.guide_to_bind_account("qq视频蚊子腿", get_act_url("qq视频蚊子腿"), activity_op_func=None)
                 continue
 
             return res
 
-    def qq_video_op(self, ctx, module_id, option="100", type="21", task="", is_prepublish="", print_res=True):
+    def qq_video_op(self, ctx, module_id, option="", type="", task="", is_prepublish="", print_res=True):
+        # 设置下默认值
+        option = option or self.qq_video_default_option
+        type = type or self.qq_video_default_type
+
         res = self._qq_video_op(ctx, type, option, module_id, task, is_prepublish, print_res)
 
         if "data" in res and int(res["data"].get("sys_code", res['ret'])) == -1010 and extract_qq_video_message(res) == "系统错误":
@@ -6675,7 +6686,6 @@ class DjcHelper:
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
                 f"{activity_url}\n"
             )
-            logger.warning(color("bold_cyan") + msg)
             message_box(msg, "需绑定账号", open_url=activity_url)
             logger.info(color("bold_yellow") + "请在完成绑定后按任意键继续")
             pause()
@@ -6881,4 +6891,5 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame_dup()
+        # djcHelper.dnf_wegame_dup()
+        djcHelper.qq_video()

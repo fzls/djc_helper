@@ -2542,10 +2542,10 @@ class DjcHelper:
         self.qq_video_op("首次进入页面", self.qq_video_module_id_enter_page, type="51", option="1", task="51")
         self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
 
-        self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112")
+        self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user)
         logger.info(color("bold_cyan") + f"上面的这个幸运角色可以使用其他区服的回归角色进行领取，不过这样的话其实也只有黑钻可以被当前角色用到-。-所以有兴趣的就自己去页面上操作下吧，这里就不额外做了（懒。。。")
 
-        # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift, type="100112")
+        # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift)
         # self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
 
         self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery, type="100143")
@@ -2581,7 +2581,7 @@ class DjcHelper:
 
     def check_qq_video(self):
         while True:
-            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, type="100112", print_res=True)
+            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, print_res=True)
             if res["ret"] == -904 and res["msg"] == "您当前还未绑定游戏帐号，请先绑定哦~":
                 self.guide_to_bind_account("qq视频蚊子腿", get_act_url("qq视频蚊子腿"), activity_op_func=None)
                 continue

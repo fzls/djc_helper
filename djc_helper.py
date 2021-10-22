@@ -1005,7 +1005,9 @@ class DjcHelper:
             if qq_number not in team.members:
                 continue
             if not team.check():
-                logger.warning(f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是队伍成员数目为2，且均是有效的qq号（心悦专区改版后队伍成员数目不再是3个，而是2个）")
+                msg = f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是队伍成员数目为2，且均是有效的qq号（心悦专区改版后队伍成员数目不再是3个，而是2个）"
+                title = "心悦队伍配置错误"
+                async_message_box(msg, title, show_once_daily=True)
                 continue
 
             fixed_team = team

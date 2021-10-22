@@ -408,6 +408,7 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
             ("qq视频蚊子腿", self.qq_video),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -416,7 +417,6 @@ class DjcHelper:
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
             ("DNF心悦", self.dnf_xinyue),
-            ("DNF马杰洛的规划", self.majieluo),
             ("WeGame活动", self.dnf_wegame),
             ("虎牙", self.huya),
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
@@ -4874,7 +4874,7 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "799598")
+            self.majieluo_op("领取见面礼", "806877")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -4884,13 +4884,15 @@ class DjcHelper:
             take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
-        self.majieluo_op("登录游戏 石头*5", "799599")
-        self.majieluo_op("通关副本 石头*5", "799600")
-        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "799601")
-        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "799602")
+        self.majieluo_op("登录游戏 石头*5", "806878")
+        self.majieluo_op("通关副本 石头*5", "806879")
+        self.majieluo_op("马杰洛的黄金宝箱（完成7次登录游戏任务）", "806880")
+        self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "806881")
 
         # 赠送礼盒
-        # self.majieluo_op("赠送单个用户", "789656", iGuestUin=qq_number, p_skey=djcHelper.fetch_share_p_skey("马杰洛赠送好友"))
+        self.majieluo_op("更新创建用户授权信息", "809271")
+
+        # self.majieluo_op("赠送单个用户", "806885", iGuestUin=qq_number, p_skey=djcHelper.fetch_share_p_skey("马杰洛赠送好友"))
 
         # invite_uins = self.common_cfg.majieluo_invite_uin_list
         # if len(invite_uins) != 0:
@@ -4903,12 +4905,11 @@ class DjcHelper:
         # else:
         #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
 
-        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成让别人浇水的流程(可以选择配置工具中的马杰洛小助手减少操作量)~（如果单个好友活动期间只能操作一次，那就只能找若干个人慢慢做了-。-）", "提示", show_once=True)
-        logger.info(color("bold_green") + f"当前已累计被浇水{self.query_invite_count()}次，总共需要30次~")
-        self.majieluo_op("摇动宝树", "800190")
-        self.majieluo_op("宝树收获（一阶段）", "800211")
-        self.majieluo_op("宝树收获（二阶段）", "800215")
-        self.majieluo_op("宝树收获（三阶段）", "800219")
+        async_message_box("本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成赠送宝箱的流程(可以选择配置工具中的马杰洛小助手减少操作量)~（如果单个好友活动期间只能操作一次，那就只能找若干个人慢慢做了-。-）", "提示", show_once=True)
+        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
+
+        self.majieluo_op("累计赠送成功30次", "806882")
+        self.majieluo_op("邀请3位及以上回归好友参", "808781")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
@@ -4918,7 +4919,7 @@ class DjcHelper:
         endTime = get_today(parse_time(act_info.dtEndTime))
 
         takeStone = False
-        takeStoneActId = "799604"
+        takeStoneActId = "806883"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
@@ -4932,35 +4933,35 @@ class DjcHelper:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取福利", "799605")
+            self.majieluo_op("提取福利", "806884")
             # self.majieluo_op("分享得好礼", "769008")
 
     @try_except()
     def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]):
         p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
         for uin in xiaohao_qq_list:
-            self.majieluo_op(f"赠送单个用户-{uin}", "799606", iGuestUin=uin, p_skey=p_skey)
+            self.majieluo_op(f"赠送单个用户-{uin}", "806885", iGuestUin=uin, p_skey=p_skey)
 
     @try_except()
     def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:
-        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "799616", sCode=scode)
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "806895", sCode=scode)
         return parse_amesvr_common_info(raw_res)
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询信息", "799597", print_res=False)
+        res = self.majieluo_op("查询信息", "806888", print_res=False)
         info = parse_amesvr_common_info(res)
-        return int(info.sOutValue6.split(',')[1])
+        return int(info.sOutValue1)
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "799597", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "806876", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
     def check_majieluo(self, **extra_params):
         self.check_bind_account("DNF马杰洛的规划", get_act_url("DNF马杰洛的规划"),
-                                activity_op_func=self.majieluo_op, query_bind_flowid="799611", commit_bind_flowid="799610",
+                                activity_op_func=self.majieluo_op, query_bind_flowid="806890", commit_bind_flowid="806889",
                                 **extra_params)
 
     def majieluo_op(self, ctx, iFlowId, cardType="", inviteId="", sendName="", receiveUin="", receiver="", receiverName="", receiverUrl="", giftNum="", p_skey="", print_res=True, **extra_params):
@@ -6898,4 +6899,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.qq_video()
+        djcHelper.majieluo()

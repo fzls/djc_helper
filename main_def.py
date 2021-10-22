@@ -640,8 +640,8 @@ def show_accounts_status(cfg, ctx):
             rows.append(get_account_status(idx, account_config, cfg.common))
 
     # 打印结果
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "论坛代币券", "助手次数"]
-    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 10, 8]
+    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "邀请次数", "论坛代币券", "助手次数"]
+    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8, 10, 8]
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
@@ -676,6 +676,10 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         levelInfo = ""
         chronicle_points = ""
 
+    majieluo_stone = djcHelper.query_stone_count()
+    time.sleep(1)  # 避免查询下面的次数时提示 速度过快
+    majieluo_invite_count = f"{djcHelper.query_invite_count()}/30"
+
     dbq = djcHelper.query_dnf_bbs_dbq()
 
     dnf_helper_task_finish_count = djcHelper.dnf_helper_query_task_finish_count()
@@ -686,6 +690,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
         gpoints,
         levelInfo, chronicle_points,
+        majieluo_stone, majieluo_invite_count,
         dbq,
         dnf_helper_task_finish_count,
     ]
@@ -1651,14 +1656,14 @@ def demo_main():
         check_djc_role_binding()
 
     # note: 用于本地测试main的相关逻辑
-    # show_accounts_status(cfg, "启动时展示账号概览")
+    show_accounts_status(cfg, "启动时展示账号概览")
     # try_join_xinyue_team(cfg)
     # run(cfg)
     # try_take_xinyue_team_award(cfg)
     # try_xinyue_sailiyam_start_work(cfg)
     # show_lottery_status("运行完毕展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
     # auto_send_cards(cfg)
-    show_extra_infos(cfg)
+    # show_extra_infos(cfg)
     # show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg)
     # show_accounts_status(cfg, "运行完毕展示账号概览")
     # show_support_pic_monthly(cfg)

@@ -825,7 +825,7 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）", self.checkbox_cost_all_cards_and_do_lottery_on_last_day)
 
         # -------------- 区域：心悦 --------------
-        self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦", top_layout)
+        self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦固定队（限定两人）", top_layout)
 
         self.fixed_teams = []
         for team in cfg.fixed_teams:

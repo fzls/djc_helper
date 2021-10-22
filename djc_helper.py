@@ -3854,8 +3854,12 @@ class DjcHelper:
         total_score = query_score()
         logger.info(color("bold_yellow") + f"当前拥有积分： {total_score}")
         if self.cfg.function_switches.dnf_gonghui_enable_lottery:
-            for idx in range_from_one(total_score):
-                self.dnf_gonghui_op(f"第 {idx}/{total_score} 积分抽奖", "797915")
+            # 每次抽奖需要消耗的10积分
+            total_lottery_count = total_score // 10
+            logger.info(color("bold_yellow") + f"当前可抽奖次数为： {total_lottery_count}（单次需要10积分）")
+
+            for idx in range_from_one(total_lottery_count):
+                self.dnf_gonghui_op(f"第 {idx}/{total_lottery_count} 积分抽奖", "797915")
         else:
             logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
 

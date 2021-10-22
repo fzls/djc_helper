@@ -69,13 +69,13 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
 
     # 已过期活动
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021090614400611010",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20210913care/",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "虎牙": "https://www.huya.com/367967",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -189,7 +189,7 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_majieluo = "407733"  # DNF马杰洛的规划
+        self.iActivityId_majieluo = "414613"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "404886"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

@@ -505,14 +505,20 @@ class ConfigUi(QFrame):
         if not self.check_pay_server():
             return
 
-        message_box = QMessageBox()
-        message_box.setWindowTitle("友情提示")
-        message_box.setText("自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-")
-        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        ret = message_box.exec_()
-        if ret == QMessageBox.Cancel:
-            logger.info("取消购买")
-            return
+        total_confirm_time = 3
+        for show_index in range_from_one(total_confirm_time):
+            message_box = QMessageBox()
+            message_box.setWindowTitle("友情提示")
+            message_box.setText((
+                f"[{show_index}/{total_confirm_time}] 重要的事情说{total_confirm_time}遍\n"
+                "\n"
+                f"自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-"
+            ))
+            message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            ret = message_box.exec_()
+            if ret == QMessageBox.Cancel:
+                logger.info("取消购买")
+                return
 
         message_box = QMessageBox()
         message_box.setWindowTitle("友情提示")

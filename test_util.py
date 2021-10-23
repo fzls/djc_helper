@@ -203,6 +203,11 @@ def test_format_time():
 def test_format_now():
     assert format_now(now=now_for_test) == "2021-08-06 12:00:00"
 
+    nt = format_now()
+    time.sleep(1.1)
+    nt2 = format_now()
+    assert nt != nt2
+
 
 def test_format_timestamp():
     assert format_timestamp(1628222400.0) == "2021-08-06 12:00:00"

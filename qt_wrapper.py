@@ -1,6 +1,8 @@
+import datetime
+import math
 from typing import List, Tuple
 
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QValidator, QWheelEvent
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
                              QFrame, QHBoxLayout, QLabel, QLayout, QLineEdit,
@@ -9,7 +11,7 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
 
 from log import logger
 from qt_collapsible_box import CollapsibleBox
-from util import padLeftRight
+from util import get_now, now_before, padLeftRight
 
 
 class QHLine(QFrame):
@@ -217,3 +219,41 @@ def show_message(title, text):
     message_box.setWindowTitle(title)
     message_box.setText(text)
     message_box.exec_()
+
+
+# based on https://gitee.com/i_melon/DNFCalculating/blob/master/PublicReference/view/NotificationButton.py
+class ConfirmMessageBox(QMessageBox):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def set_disabled_duration(self, seconds: float, btn_indexes: List[int]):
+        self.end_time = get_now() + datetime.timedelta(seconds=seconds)
+        self.btn_indexes = btn_indexes
+
+        self.old_names = {}
+        for btn_idx in self.btn_indexes:
+            btn = self.buttons()[btn_idx]
+
+            self.old_names[btn_idx] = btn.text()
+            btn.setEnabled(False)
+
+        self.time = QTimer(self)
+        self.time.setInterval(100)
+        self.time.timeout.connect(self.Refresh)
+        self.time.start()
+
+        self.Refresh()
+
+    def Refresh(self):
+        if get_now() < self.end_time:
+            remaining_time = self.end_time - get_now()
+            for btn_idx in self.btn_indexes:
+                self.buttons()[btn_idx].setText(self.old_names[btn_idx] + f"（{math.ceil(remaining_time.total_seconds())} 秒后可以点击）")
+        else:
+            self.time.stop()
+
+            for btn_idx in self.btn_indexes:
+                btn = self.buttons()[btn_idx]
+
+                btn.setText(self.old_names[btn_idx])
+                btn.setEnabled(True)

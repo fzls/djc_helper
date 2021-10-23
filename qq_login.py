@@ -16,7 +16,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
 from config import *
-from exceptions import GithubActionLoginException
+from exceptions import (GithubActionLoginException,
+                        SameAccountTryLoginAtMultipleThreadsException)
 from first_run import is_first_run_in
 from upload_lanzouyun import Uploader
 from urls import get_act_url
@@ -417,6 +418,9 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
+        if not is_first_run_in(f"login_locker_{self.name}", duration=datetime.timedelta(seconds=10)):
+            raise SameAccountTryLoginAtMultipleThreadsException
+
         login_retry_key = "login_retry_key"
         login_retry_data, retry_timeouts = self.get_retry_data(login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time)
 

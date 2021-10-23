@@ -825,7 +825,7 @@ def reset_cache(cache_category: str):
     CacheDB().with_context(cache_category).update(_reset)
 
 
-def count_down(ctx: str, seconds: int, update_interval=0.1):
+def count_down(ctx: str, seconds: float, update_interval=0.1):
     if is_run_in_github_action():
         # 在github action环境下直接sleep
         logger.info(f"{ctx} wait for {seconds}seconds")

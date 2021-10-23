@@ -6817,7 +6817,7 @@ def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name
 
             getattr(djcHelper, act_func_name)()
             return
-        except SameAccountTryLoginAtMultipleThreadsException as e:
+        except SameAccountTryLoginAtMultipleThreadsException:
             wait_for(color("bold_yellow") + f"[{account_config.name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试", 20)
 
 

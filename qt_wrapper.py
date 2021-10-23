@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
 
 from log import logger
 from qt_collapsible_box import CollapsibleBox
-from util import get_now, now_before, padLeftRight
+from util import get_now, padLeftRight
 
 
 class QHLine(QFrame):

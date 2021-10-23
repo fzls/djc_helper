@@ -6,10 +6,11 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
+from exceptions import GithubActionLoginException
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
-from qq_login import GithubActionLoginException, LoginResult, QQLogin
+from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import *
 from sign import getMillSecondsUnix

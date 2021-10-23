@@ -16,15 +16,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
 from config import *
+from exceptions import GithubActionLoginException
+from first_run import is_first_run_in
 from upload_lanzouyun import Uploader
 from urls import get_act_url
 from util import async_message_box, get_screen_size
 from version import now_version
-
-
-# 在github action环境下登录异常
-class GithubActionLoginException(Exception):
-    pass
 
 
 class LoginResult(ConfigInterface):

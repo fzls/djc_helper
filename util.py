@@ -271,16 +271,19 @@ def get_now() -> datetime:
     return datetime.datetime.now()
 
 
-def get_this_week_monday(now=get_now()) -> str:
+def get_this_week_monday(now: Optional[datetime.datetime] = None) -> str:
+    now = now or get_now()
     return get_this_week_monday_datetime(now).strftime("%Y%m%d")
 
 
-def get_last_week_monday(now=get_now()) -> str:
+def get_last_week_monday(now: Optional[datetime.datetime] = None) -> str:
+    now = now or get_now()
     lastWeekMonday = get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
     return lastWeekMonday.strftime("%Y%m%d")
 
 
-def get_this_week_monday_datetime(now=get_now()) -> datetime.datetime:
+def get_this_week_monday_datetime(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+    now = now or get_now()
     monday = now - datetime.timedelta(days=now.weekday())
     return monday.replace(hour=0, minute=0, second=0, microsecond=0)
 
@@ -297,7 +300,8 @@ def now_in_range(left="2000-01-01 00:00:00", right="3000-01-01 00:00:00"):
     return now_after(left) and now_before(right)
 
 
-def get_now_unix(now=get_now()) -> int:
+def get_now_unix(now: Optional[datetime.datetime] = None) -> int:
+    now = now or get_now()
     return int(now.timestamp())
 
 
@@ -309,7 +313,8 @@ def get_today(t=get_now()) -> str:
     return t.strftime("%Y%m%d")
 
 
-def get_last_n_days(n, now=get_now()) -> List[str]:
+def get_last_n_days(n, now: Optional[datetime.datetime] = None) -> List[str]:
+    now = now or get_now()
     return [(now - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
@@ -468,19 +473,23 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     return msg
 
 
-def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> bool:
+def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> bool:
+    now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) < now
 
 
-def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> bool:
+def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> bool:
+    now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) < now + duration
 
 
-def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> datetime.timedelta:
+def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> datetime.timedelta:
+    now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) - now
 
 
-def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()) -> datetime.timedelta:
+def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> datetime.timedelta:
+    now = now or get_now()
     return now - datetime.datetime.strptime(t, time_fmt)
 
 
@@ -509,7 +518,8 @@ def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
     return dt.strftime(time_fmt)
 
 
-def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now=get_now()):
+def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None):
+    now = now or get_now()
     return format_time(now, time_fmt=time_fmt)
 
 

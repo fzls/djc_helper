@@ -4949,9 +4949,9 @@ class DjcHelper:
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询信息", "806888", print_res=False)
+        res = self.majieluo_op("查询信息", "806876", print_res=False)
         info = parse_amesvr_common_info(res)
-        return int(info.sOutValue1)
+        return int(info.sOutValue6)
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):

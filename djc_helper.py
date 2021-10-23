@@ -1,4 +1,5 @@
 import string
+import time
 from multiprocessing import Pool
 from urllib.parse import quote, quote_plus
 
@@ -6,7 +7,8 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
-from exceptions import GithubActionLoginException
+from exceptions import (GithubActionLoginException,
+                        SameAccountTryLoginAtMultipleThreadsException)
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -6794,12 +6796,20 @@ def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig
 
 
 def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
-    djcHelper = DjcHelper(account_config, common_config)
-    djcHelper.fetch_pskey()
-    djcHelper.check_skey_expired()
-    djcHelper.get_bind_role_list()
+    while True:
+        try:
+            # 这里故意等待随机一段时间，避免某账号skey过期时，多个进程同时走到尝试更新处，无法区分先后
+            time.sleep(random.random())
 
-    getattr(djcHelper, act_func_name)()
+            djcHelper = DjcHelper(account_config, common_config)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+            djcHelper.get_bind_role_list()
+
+            getattr(djcHelper, act_func_name)()
+            return
+        except SameAccountTryLoginAtMultipleThreadsException as e:
+            wait_for(color("bold_yellow") + f"[{account_config.name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试", 20)
 
 
 def is_new_version_ark_lottery() -> bool:

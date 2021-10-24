@@ -905,6 +905,9 @@ def show_unexpected_exception_message(e: Exception):
     logger.warning(color("fg_bold_yellow") + "不要自动无视上面这三句话哦，写出来是让你看的呀<_<不知道出啥问题的时候就按提示去看看是否有新版本哇，而不是不管三七二十一就来群里问嗷")
     logger.warning(color("fg_bold_cyan") + f"链接：{cfg.common.netdisk_link}")
 
+    if run_from_src():
+        show_head_line("目前使用的是源码版本，出现任何问题请自行调试或google解决，这是使用源码版本的前提。另外，在出问题时，建议先尝试更新依赖库，确保与依赖配置中的版本匹配。", color("bold_yellow"))
+
 
 def get_pay_server_addr() -> str:
     return "http://139.198.179.81:8438"

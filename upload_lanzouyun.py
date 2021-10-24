@@ -53,6 +53,9 @@ class Uploader:
     cs_buy_auto_updater_users_filename = "cs_buy_auto_updater_users.txt"
     cs_user_monthly_pay_info_filename = "cs_user_monthly_pay_info.txt"
 
+    # 直接充值的付费信息
+    all_jiaoyile_orders_filename = "_all_jiaoyile_orders_filepath.txt"
+
     # 压缩版本的前后缀
     compressed_version_prefix = "compressed_"
     compressed_version_suffix = ".7z"
@@ -425,6 +428,7 @@ def demo():
 def demo_downloads():
     uploader = Uploader()
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
+    uploader.download_file_in_folder(uploader.folder_online_files, uploader.all_jiaoyile_orders_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
     uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
 

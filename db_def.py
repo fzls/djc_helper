@@ -19,6 +19,9 @@ class DBInterface(ConfigInterface):
         self.update_at = format_now()
         self.file_created = False
 
+        # 如果设置了，则使用该路径，否则根据db类型和context的md5来生成路径
+        self.db_filepath = ""
+
     # ----------------- 数据库读写操作 -----------------
     def with_context(self, context: str) -> DBInterface:
         """
@@ -84,6 +87,11 @@ class DBInterface(ConfigInterface):
 
     # ----------------- 辅助函数 -----------------
 
+    def with_db_filepath(self, filepath: str) -> DBInterface:
+        self.db_filepath = os.path.realpath(filepath)
+
+        return self
+
     def prepare_env_and_get_db_filepath(self) -> str:
         """
         逻辑说明
@@ -94,10 +102,17 @@ class DBInterface(ConfigInterface):
         """
         from util import make_sure_dir_exists
 
-        key_md5 = self.get_db_filename()
+        db_dir = ""
+        db_file = ""
 
-        db_dir = os.path.join(db_top_dir, key_md5[0:3])
-        db_file = os.path.join(db_dir, key_md5)
+        if self.db_filepath != "":
+            db_dir = os.path.dirname(self.db_filepath)
+            db_file = self.db_filepath
+        else:
+            key_md5 = self.get_db_filename()
+
+            db_dir = os.path.join(db_top_dir, key_md5[0:3])
+            db_file = os.path.join(db_dir, key_md5)
 
         make_sure_dir_exists(db_dir)
 
@@ -142,5 +157,18 @@ def test():
     _test(DemoDB().with_context("test"), 2, 20)
 
 
+def test_filepath_db():
+    from db import DemoDB
+
+    # 测试指定路径
+    filepath_db = DemoDB().with_context("test_filepath").with_db_filepath("card_secrets/_local_test.txt")
+    filepath_db.load()
+    print(filepath_db.int_val)
+    filepath_db.int_val = 666
+    filepath_db.save()
+    print(filepath_db.prepare_env_and_get_db_filepath())
+
+
 if __name__ == '__main__':
-    test()
+    # test()
+    test_filepath_db()

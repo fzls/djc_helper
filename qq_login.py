@@ -16,6 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
 from config import *
+from dao import GuanJiaUserInfo
 from exceptions_def import (GithubActionLoginException,
                             SameAccountTryLoginAtMultipleThreadsException)
 from first_run import is_first_run_in
@@ -27,7 +28,7 @@ from version import now_version
 
 class LoginResult(ConfigInterface):
     def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k="",
-                 apps_p_skey="", xinyue_openid="", xinyue_access_token="", qc_access_token="", qc_IED_LOG_INFO2=""):
+                 apps_p_skey="", xinyue_openid="", xinyue_access_token="", qc_access_token="", qc_nickname=""):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
@@ -42,7 +43,7 @@ class LoginResult(ConfigInterface):
         self.qc_openid = qc_openid
         self.qc_k = qc_k
         self.qc_access_token = qc_access_token
-        self.qc_IED_LOG_INFO2 = qc_IED_LOG_INFO2
+        self.qc_nickname = qc_nickname
         # 分享用p_skey
         self.apps_p_skey = apps_p_skey
         # 心悦相关信息
@@ -50,10 +51,6 @@ class LoginResult(ConfigInterface):
         self.xinyue_access_token = xinyue_access_token
 
         self.guanjia_skey_version = 0
-
-    @try_except(show_exception_info=False, return_val_on_except="")
-    def qc_nickname(self):
-        return parse_qs(unquote_plus(self.qc_IED_LOG_INFO2)).get('nickname', ['未找到'])[0]
 
 
 class QQLogin():
@@ -638,9 +635,14 @@ class QQLogin():
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
+        # {"province":"","city":"","year":"19XX","openid":"XXXXXX","sex":1,"nickname":"XXXXXX","headimgurl":"XXXXXX","key":"XXXXXX"}
+        cookie_userinfo = unquote_plus(self.get_cookie("uInfo101478239"))
+        raw_userinfo = json.loads(cookie_userinfo)
+        user_info = GuanJiaUserInfo().auto_update_config(raw_userinfo)
+
         # 从cookie中获取uin和skey
-        return LoginResult(qc_openid=self.get_cookie("__qc__openid"), qc_k=self.get_cookie("__qc__k"),
-                           qc_access_token=self.get_cookie("access_token"), qc_IED_LOG_INFO2=self.get_cookie("IED_LOG_INFO2_QC"),
+        return LoginResult(qc_openid=user_info.openid, qc_k=user_info.key,
+                           qc_access_token=user_info.key, qc_nickname=user_info.nickname,
                            uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
 
     def _login_wegame(self, login_type, login_action_fn=None):
@@ -888,8 +890,8 @@ class QQLogin():
 
     def wait_for_IED_LOG_INFO2_QC(self):
         for i in range(5):
-            IED_LOG_INFO2_QC = self.driver.get_cookie('IED_LOG_INFO2_QC')
-            if IED_LOG_INFO2_QC is not None:
+            userinfo = self.driver.get_cookie('uInfo101478239')
+            if userinfo is not None:
                 break
             time.sleep(1)
 

@@ -855,13 +855,16 @@ class ConfigUi(QFrame):
 
         btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
         btn_check_update = create_pushbutton("检查更新", "SpringGreen")
+        self.btn_toggle_card_secret = create_pushbutton("显示原来的卡密支付界面", "Gray")
 
         btn_support.clicked.connect(self.support)
         btn_check_update.clicked.connect(self.check_update)
+        self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_support)
         layout.addWidget(btn_check_update)
+        layout.addWidget(self.btn_toggle_card_secret)
         top_layout.addLayout(layout)
 
         btn_auto_run_on_login = create_pushbutton("开机自启", "MediumTurquoise")
@@ -879,6 +882,16 @@ class ConfigUi(QFrame):
         self.others.setLayout(make_scroll_layout(top_layout))
 
         self.tabs.addTab(self.others, "其他功能")
+
+    def toggle_card_secret(self, checked=False):
+        if self.is_card_secret_hidden():
+            self.show_card_secret()
+            self.btn_toggle_card_secret.setText("隐藏原来的卡密支付界面")
+        else:
+            self.hide_card_secret()
+            self.btn_toggle_card_secret.setText("显示原来的卡密支付界面")
+
+        report_click_event("toggle_card_secret")
 
     def auto_run_on_login(self):
         self.popen([

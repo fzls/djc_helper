@@ -561,9 +561,10 @@ class ConfigUi(QFrame):
         message_box = QMessageBox()
         message_box.setWindowTitle("请确认账号信息")
         message_box.setText((
-            "请确认输入的账号信息是否无误，避免充错账号~\n\n"
-            f"主QQ：{qq}\n"
-            f"其他QQ列表：{game_qqs}\n"
+            "请确认输入的账号信息是否无误，避免充错账号~\n"
+            "\n"
+            f"主QQ：       {qq}\n"
+            f"其他QQ列表： {game_qqs}\n"
         ))
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         ret = message_box.exec_()
@@ -577,7 +578,13 @@ class ConfigUi(QFrame):
         try:
             self.do_pay_request(card, secret, qq, game_qqs)
         except Exception as e:
-            show_message("出错了", f"请求出现异常，报错如下:\n{e}")
+            show_message("出错了", (
+                f"请求出现异常，报错如下:\n"
+                "\n"
+                f"{e}\n"
+                "\n"
+                "可以试试使用付款方式二进行付款~\n"
+            ))
 
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)

@@ -7,8 +7,8 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
-from exceptions import (GithubActionLoginException,
-                        SameAccountTryLoginAtMultipleThreadsException)
+from exceptions_def import (GithubActionLoginException,
+                            SameAccountTryLoginAtMultipleThreadsException)
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *

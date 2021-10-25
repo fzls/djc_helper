@@ -624,12 +624,12 @@ class QQLogin():
 
             logger.info("等待2秒，确保#login_ifr显示出来并切换")
             time.sleep(2)
-            loginIframe = list(filter(lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property('src'), self.driver.find_elements_by_tag_name("iframe")))[0]
+            loginIframe = list(filter(lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property('src'), self.driver.find_elements(by=By.TAG_NAME, value="iframe")))[0]
             self.driver.switch_to.frame(loginIframe)
 
             logger.info("等待#login_ifr#ptlogin_iframe加载完毕并切换")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
-            ptlogin_iframe = self.driver.find_element_by_id("ptlogin_iframe")
+            ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
@@ -678,12 +678,12 @@ class QQLogin():
 
             logger.info("等待#loginframe加载完毕并切换")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))
-            login_frame = self.driver.find_element_by_class_name("loginframe")
+            login_frame = self.driver.find_element(By.CLASS_NAME, "loginframe")
             self.driver.switch_to.frame(login_frame)
 
             logger.info("等待#loginframe#ptlogin_iframe加载完毕并切换")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
-            ptlogin_iframe = self.driver.find_element_by_id("ptlogin_iframe")
+            ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
@@ -917,7 +917,7 @@ class QQLogin():
         account_db = CaptchaDB().with_context(self.name).load()
         try:
             WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe")))
-            tcaptcha_iframe = self.driver.find_element_by_id("tcaptcha_iframe")
+            tcaptcha_iframe = self.driver.find_element(By.ID, "tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
             logger.info(color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
@@ -929,11 +929,11 @@ class QQLogin():
             except Exception as e:
                 logger.warning(f"{self.name} 等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
 
-            drag_tarck_width = self.driver.find_element_by_id('slide').size['width'] or 280  # 进度条轨道宽度
-            drag_block_width = self.driver.find_element_by_id('slideBlock').size['width'] or 56  # 缺失方块宽度
+            drag_tarck_width = self.driver.find_element(By.ID, 'slide').size['width'] or 280  # 进度条轨道宽度
+            drag_block_width = self.driver.find_element(By.ID, 'slideBlock').size['width'] or 56  # 缺失方块宽度
             delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
 
-            drag_button = self.driver.find_element_by_id('tcaptcha_drag_button')  # 进度条按钮
+            drag_button = self.driver.find_element(By.ID, 'tcaptcha_drag_button')  # 进度条按钮
 
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []

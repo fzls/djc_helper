@@ -1260,6 +1260,10 @@ def json_compact(val) -> str:
     return json.dumps(val, separators=(',', ':'))
 
 
+def get_url_config_path() -> str:
+    return "utils/url.toml"
+
+
 if __name__ == '__main__':
     # print(get_now_unix())
     # print(get_this_week_monday())

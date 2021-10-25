@@ -25,7 +25,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-09-14 00:00:00", "2021-10-17 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2021-10-21 00:00:00", "2021-11-30 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
@@ -70,11 +70,11 @@ act_name_to_url = {
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
 
     # 已过期活动
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021090614400611010",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "虎牙": "https://www.huya.com/367967",

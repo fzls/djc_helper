@@ -412,6 +412,7 @@ class DjcHelper:
             ("WeGameDup", self.dnf_wegame_dup),
             ("qq视频蚊子腿", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
+            ("管家蚊子腿", self.guanjia_new),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -448,7 +449,6 @@ class DjcHelper:
             ("DNF集合站周年庆", self.dnf_collection_dup),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
-            ("管家蚊子腿", self.guanjia_new),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
             ("qq会员杯", self.dnf_club_vip),
@@ -3330,7 +3330,7 @@ class DjcHelper:
     #   1. 打开新活动的页面 get_act_url("管家蚊子腿")
     #   2. 按F12，输入过滤关键词为 -speed -pv? -cap_ -white
     #   3. 随便点个活动按钮，点开过滤出的请求，其中的aid就是活动id
-    guanjia_new_act_id = "2021081815172311351"  # 活动ID
+    guanjia_new_act_id = "2021101811193411406"  # 活动ID
     # note: 4. 按照下面的顺序依次点击对应活动按钮，最后按顺序将请求中的lid复制出来
     guanjia_new_gift_id_special_rights = "48"  # 电脑管家特权礼包
     guanjia_new_gift_id_sign_in_2_days = "50"  # 连续签到2天礼包
@@ -6919,4 +6919,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.majieluo()
+        djcHelper.guanjia_new()

@@ -503,9 +503,16 @@ class ConfigUi(QFrame):
         init_collapsible_box_size(self)
 
     def buy_auto_updater_dlc(self, checked=False):
+        if not self.confirm_buy_auto_updater():
+            return
+
         if not self.check_pay_server():
             return
 
+        webbrowser.open(self.load_config().common.auto_updater_dlc_purchase_url)
+        increase_counter(ga_category="open_pay_webpage", name="auto_updater_dlc")
+
+    def confirm_buy_auto_updater(self) -> bool:
         total_confirm_time = 3
         for show_index in range_from_one(total_confirm_time):
             message_box = ConfirmMessageBox()
@@ -520,7 +527,7 @@ class ConfigUi(QFrame):
             ret = message_box.exec_()
             if ret == QMessageBox.Cancel:
                 logger.info("取消购买")
-                return
+                return False
 
         message_box = QMessageBox()
         message_box.setWindowTitle("友情提示")
@@ -529,10 +536,9 @@ class ConfigUi(QFrame):
         ret = message_box.exec_()
         if ret == QMessageBox.Cancel:
             logger.info("取消购买")
-            return
+            return False
 
-        webbrowser.open(self.load_config().common.auto_updater_dlc_purchase_url)
-        increase_counter(ga_category="open_pay_webpage", name="auto_updater_dlc")
+        return True
 
     def pay_by_month(self, checked=False):
         if not self.check_pay_server():

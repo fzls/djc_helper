@@ -5,8 +5,9 @@ from typing import List, Tuple
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QValidator, QWheelEvent
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
-                             QFrame, QHBoxLayout, QLabel, QLayout, QLineEdit,
-                             QMessageBox, QPushButton, QScrollArea, QSpinBox,
+                             QFrame, QGridLayout, QGroupBox, QHBoxLayout,
+                             QLabel, QLayout, QLineEdit, QMessageBox,
+                             QPushButton, QRadioButton, QScrollArea, QSpinBox,
                              QVBoxLayout, QWidget)
 
 from log import logger
@@ -257,3 +258,37 @@ class ConfirmMessageBox(QMessageBox):
 
                 btn.setText(self.old_names[btn_idx])
                 btn.setEnabled(True)
+
+
+class MyRadioButtonGroup(QGroupBox):
+    def __init__(self):
+        super(MyRadioButtonGroup, self).__init__()
+
+        self.radio_buttons = []  # type: List[QRadioButton]
+
+    def get_active_radio_text(self) -> str:
+        for btn in self.radio_buttons:
+            if btn.isChecked():
+                return btn.text()
+
+        return ""
+
+
+def create_radio_button_group(items: List[str], width=3) -> MyRadioButtonGroup:
+    groupbox = MyRadioButtonGroup()
+
+    grid_layout = QGridLayout()
+
+    for idx, item in enumerate(items):
+        row = math.floor(idx / width)
+        col = idx % width
+
+        btn = QRadioButton(item)
+        if idx == 0:
+            # 默认选中第一个选项
+            btn.setChecked(True)
+        grid_layout.addWidget(btn, row, col)
+        groupbox.radio_buttons.append(btn)
+
+    groupbox.setLayout(grid_layout)
+    return groupbox

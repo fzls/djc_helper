@@ -3587,11 +3587,23 @@ class DjcHelper:
 
         self.guanjia_lr = cached_guanjia_login_result
 
+        # 这些算已过期
+        # {"code": 29, "msg": "请求包参数错误", "result": []}
         # {"code": 7004, "msg": "获取openid失败", "result": []}
         # {"code": 7005, "msg": "获取accToken失败", "result": []}
         # {"code": 29, "msg": "请求包参数错误", "result": []}
-        res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
-        return res["code"] in [7004, 7005, 29]
+        # {"message": "", "success": -100}
+
+        # 这些不算
+        # {"message": "您已领取过", "success": -110}
+        # {"message": "活动已结束", "success": -105}
+
+        # res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
+        # return res["code"] in [7004, 7005, 29]
+
+        res = self.guanjia_new_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_gift_id_sign_in)
+        # res = self.guanjia_new_dup_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_dup_gift_id_sign_in)
+        return res["success"] in [-100]
 
     def save_guanjia_login_result(self, lr: LoginResult):
         # 本地缓存

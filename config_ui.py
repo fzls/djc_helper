@@ -590,6 +590,13 @@ class ConfigUi(QFrame):
         if len(secret) != 32:
             return "无效的卡密"
 
+        msg = self.check_qqs(qq, game_qqs)
+        if msg != CHECK_RESULT_OK:
+            return msg
+
+        return CHECK_RESULT_OK
+
+    def check_qqs(self, qq: str, game_qqs: List[str]) -> str:
         for qq_to_check in [qq, *game_qqs]:
             if not is_valid_qq(qq_to_check):
                 return f"无效的QQ：{qq_to_check}"

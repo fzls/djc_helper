@@ -24,6 +24,7 @@ from ga import GA_REPORT_TYPE_PAGE_VIEW
 from game_info import get_name_2_mobile_game_info_map
 from main_def import (_show_head_line, disable_flag_file, get_user_buy_info,
                       has_any_account_in_normal_run, has_buy_auto_updater_dlc)
+from network import process_result
 from qt_wrapper import *
 from setting import *
 from update import *
@@ -601,8 +602,10 @@ class ConfigUi(QFrame):
 
         server_addr = self.get_pay_server_addr()
         raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=20)
+        logger.debug(f"req={req}")
+        process_result(f"使用卡密", raw_res)
         if raw_res.status_code != 200:
-            show_message("出错了", "服务器似乎暂时挂掉了, 请稍后再试试")
+            show_message("出错了", f"服务器似乎暂时挂掉了, 请稍后再试试, result={raw_res.text}")
             return
 
         res = PayResponse().auto_update_config(raw_res.json())

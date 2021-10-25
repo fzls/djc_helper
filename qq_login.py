@@ -16,8 +16,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
 from config import *
-from exceptions import (GithubActionLoginException,
-                        SameAccountTryLoginAtMultipleThreadsException)
+from exceptions_def import (GithubActionLoginException,
+                            SameAccountTryLoginAtMultipleThreadsException)
 from first_run import is_first_run_in
 from upload_lanzouyun import Uploader
 from urls import get_act_url

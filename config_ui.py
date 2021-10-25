@@ -524,8 +524,7 @@ class ConfigUi(QFrame):
         use_new_pay_method = not os.path.isfile(get_url_config_path())
         if use_new_pay_method:
             # 将卡密界面隐藏起来
-            self.collapsible_box_buy_card_secret.setVisible(False)
-            self.collapsible_box_use_card_secret.setVisible(False)
+            self.hide_card_secret()
 
             # 显示新版的付费界面
             self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout("购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="MediumSpringGreen")
@@ -580,6 +579,17 @@ class ConfigUi(QFrame):
         self.tabs.addTab(tab, "付费相关")
 
         init_collapsible_box_size(self)
+
+    def is_card_secret_hidden(self) -> bool:
+        return self.collapsible_box_buy_card_secret.isHidden()
+
+    def hide_card_secret(self):
+        self.collapsible_box_buy_card_secret.setVisible(False)
+        self.collapsible_box_use_card_secret.setVisible(False)
+
+    def show_card_secret(self):
+        self.collapsible_box_buy_card_secret.setVisible(True)
+        self.collapsible_box_use_card_secret.setVisible(True)
 
     def buy_auto_updater_dlc(self, checked=False):
         if not self.confirm_buy_auto_updater():
@@ -770,8 +780,7 @@ class ConfigUi(QFrame):
         try:
             self.do_pay_directly_request(item_name, pay_type, qq, game_qqs)
         except Exception as e:
-            self.collapsible_box_buy_card_secret.setVisible(True)
-            self.collapsible_box_use_card_secret.setVisible(True)
+            self.show_card_secret()
             self.collapsible_box_pay_directly.setVisible(False)
 
             show_message("出错了", (

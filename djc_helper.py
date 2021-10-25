@@ -3587,10 +3587,11 @@ class DjcHelper:
 
         self.guanjia_lr = cached_guanjia_login_result
 
+        # {"code": 7004, "msg": "获取openid失败", "result": []}
         # {"code": 7005, "msg": "获取accToken失败", "result": []}
         # {"code": 29, "msg": "请求包参数错误", "result": []}
         res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
-        return res["code"] in [7005, 29]
+        return res["code"] in [7004, 7005, 29]
 
     def save_guanjia_login_result(self, lr: LoginResult):
         # 本地缓存

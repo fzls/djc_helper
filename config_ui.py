@@ -42,6 +42,35 @@ RESULT_QQ_NOT_SET = "未设置QQ"
 RESULT_ALREADY_USED = "卡密已经使用过"
 RESULT_ALREADY_BUY = "自动更新只需购买一次"
 
+# 定义一些信息
+pay_item_item_auto_updater = "自动更新DLC"
+
+all_pay_item_names = [
+    "按月付费1个月", "按月付费2个月", "按月付费3个月",
+    "按月付费6个月", "按月付费12个月", pay_item_item_auto_updater,
+]
+
+item_name_to_money_map = {
+    pay_item_item_auto_updater: 10.24,
+
+    "按月付费1个月": 5 * 1,
+    "按月付费2个月": 5 * 2,
+    "按月付费3个月": 5 * 3,
+    "按月付费6个月": 5 * 6,
+    "按月付费12个月": 5 * 12,
+}
+
+all_pay_type_names = [
+    "支付宝", "微信支付", "QQ钱包",
+]
+
+pay_type_name_to_type = {
+    "支付宝": "alipay",
+    "QQ钱包": "qqpay",
+    "微信支付": "wxpay",
+    # "财付通": "tenpay",
+}
+
 
 class PayRequest(ConfigInterface):
     def __init__(self):
@@ -52,7 +81,22 @@ class PayRequest(ConfigInterface):
 
 class PayResponse(ConfigInterface):
     def __init__(self):
-        self.msg = "ok"
+        self.msg = RESULT_OK
+
+
+class SubmitOrderRequest(ConfigInterface):
+    def __init__(self):
+        self.qq = ""  # 使用QQ
+        self.game_qqs = []  # 附属游戏QQ
+
+        self.pay_type = "alipay"
+        self.item_name = "按月付费1个月"
+
+
+class SubmitOrderResponse(ConfigInterface):
+    def __init__(self):
+        self.msg = RESULT_OK
+        self.order_url = ""
 
 
 class BiDict():
@@ -476,6 +520,41 @@ class ConfigUi(QFrame):
 
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
 
+        # 如果不是代理
+        use_new_pay_method = not os.path.isfile(get_url_config_path())
+        if use_new_pay_method:
+            # 将卡密界面隐藏起来
+            self.collapsible_box_buy_card_secret.setVisible(False)
+            self.collapsible_box_use_card_secret.setVisible(False)
+
+            # 显示新版的付费界面
+            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout("购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="MediumSpringGreen")
+            vbox_layout = QVBoxLayout()
+            self.collapsible_box_pay_directly.setContentLayout(vbox_layout)
+
+            form_layout = QFormLayout()
+            vbox_layout.addLayout(form_layout)
+
+            self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text="形如 1234567")
+            form_layout.addRow("主QQ", self.lineedit_pay_directly_qq)
+            if len(cfg.account_configs) != 0 and cfg.account_configs[0].account_info.account != "":
+                self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
+
+            self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
+            self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
+            form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
+
+            self.groupbox_item_name = create_radio_button_group(all_pay_item_names)
+            form_layout.addRow("付费内容", self.groupbox_item_name)
+
+            self.groupbox_pay_type_name = create_radio_button_group(all_pay_type_names)
+            form_layout.addRow("付款方式", self.groupbox_pay_type_name)
+
+            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可）", "MediumSpringGreen")
+            vbox_layout.addWidget(btn_pay_directly)
+
+            btn_pay_directly.clicked.connect(self.pay_directly)
+
         # -------------- 区域：查询信息 --------------
         add_vbox_seperator(top_layout, "查询信息")
         vbox_layout = QVBoxLayout()
@@ -648,6 +727,97 @@ class ConfigUi(QFrame):
     @try_except(return_val_on_except=False)
     def report_use_card_secret(self, card: str):
         increase_counter(ga_category="use_card_secret", name=card.split('-')[0])
+
+    def pay_directly(self, checked=False):
+        qq = self.lineedit_pay_directly_qq.text().strip()
+        game_qqs = str_to_list(self.lineedit_pay_directly_game_qqs.text().strip())
+        item_name = self.groupbox_item_name.get_active_radio_text()
+        pay_type_name = self.groupbox_pay_type_name.get_active_radio_text()
+
+        pay_type = pay_type_name_to_type[pay_type_name]
+
+        msg = self.check_qqs(qq, game_qqs)
+        if msg != CHECK_RESULT_OK:
+            show_message("出错了", msg)
+            return
+
+        message_box = QMessageBox()
+        message_box.setWindowTitle("请确认购买信息")
+        message_box.setText((
+            "请确认输入的购买信息是否无误，避免充错账号~\n"
+            "\n"
+            f"主QQ：       {qq}\n"
+            f"其他QQ列表： {game_qqs}\n"
+            "\n"
+            f"付费内容：   {item_name}\n"
+            f"付款方式：   {pay_type_name}\n"
+            f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
+        ))
+        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        ret = message_box.exec_()
+        if ret == QMessageBox.Cancel:
+            logger.info("取消购买")
+            return
+
+        if item_name == pay_item_item_auto_updater and not self.confirm_buy_auto_updater():
+            return
+
+        if not self.check_pay_server():
+            return
+
+        try:
+            self.do_pay_directly_request(item_name, pay_type, qq, game_qqs)
+        except Exception as e:
+            self.collapsible_box_buy_card_secret.setVisible(True)
+            self.collapsible_box_use_card_secret.setVisible(True)
+            self.collapsible_box_pay_directly.setVisible(False)
+
+            show_message("出错了", (
+                f"直接购买出现异常，报错如下:\n"
+                "\n"
+                f"{e}\n"
+                "\n"
+                "已切换回卡密界面，可尝试卡密方案付款或者使用付款方式二直接付款\n"
+            ))
+
+        # 点击付费按钮后重置cache
+        reset_cache(cache_name_download)
+        reset_cache(cache_name_user_buy_info)
+
+    def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: List[str]):
+        req = SubmitOrderRequest()
+        req.qq = qq
+        req.game_qqs = game_qqs
+
+        req.pay_type = pay_type
+        req.item_name = item_name
+
+        server_addr = self.get_pay_server_addr()
+        raw_res = requests.post(f"{server_addr}/submit_order", json=to_raw_type(req), timeout=20)
+        logger.debug(f"req={req}")
+        process_result(f"直接购买", raw_res)
+        if raw_res.status_code != 200:
+            show_message("出错了", f"服务器似乎暂时挂掉了, 请稍后再试试, result={raw_res.text}")
+            return
+
+        res = SubmitOrderResponse().auto_update_config(raw_res.json())
+
+        if res.msg == RESULT_OK:
+            # 使用成功
+            self.lineedit_pay_directly_qq.clear()
+            self.lineedit_pay_directly_game_qqs.clear()
+
+            logging.info(f"订单链接为 {res.order_url}")
+            webbrowser.open(res.order_url)
+
+            self.report_pay_directly(item_name)
+        else:
+            # 使用失败
+            show_message("使用失败", res.msg)
+
+    @try_except(return_val_on_except=False)
+    def report_pay_directly(self, item_name: str):
+        increase_counter(ga_category="pay_directly", name=item_name)
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:

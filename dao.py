@@ -1360,6 +1360,18 @@ class HuyaUserTaskInfo(ConfigInterface):
         self.prizeCount = 0
 
 
+class GuanJiaUserInfo(ConfigInterface):
+    def __init__(self):
+        self.province = ""
+        self.city = ""
+        self.year = "19XX"
+        self.openid = "XXXXXX"
+        self.sex = 1
+        self.nickname = "XXXXXX"
+        self.headimgurl = "http://thirdqq.qlogo.cn/g?b=oidb&k=XXXXXX&s=100&t=1556477786"
+        self.key = "XXXXXX"
+
+
 if __name__ == '__main__':
     from util import format_time, parse_time
 

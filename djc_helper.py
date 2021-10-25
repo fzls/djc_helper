@@ -3502,7 +3502,7 @@ class DjcHelper:
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
 
         openid = self.guanjia_lr.qc_openid
-        nickname = self.guanjia_lr.qc_nickname()
+        nickname = self.guanjia_lr.qc_nickname
         key = self.guanjia_lr.qc_access_token
 
         extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"

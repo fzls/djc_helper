@@ -637,7 +637,7 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        message_box = QMessageBox()
+        message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认账号信息")
         message_box.setText((
             "请确认输入的账号信息是否无误，避免充错账号~\n"
@@ -646,6 +646,7 @@ class ConfigUi(QFrame):
             f"其他QQ列表： {game_qqs}\n"
         ))
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
         if ret == QMessageBox.Cancel:
             logger.info("取消使用卡密")
@@ -741,7 +742,7 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        message_box = QMessageBox()
+        message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认购买信息")
         message_box.setText((
             "请确认输入的购买信息是否无误，避免充错账号~\n"
@@ -754,6 +755,7 @@ class ConfigUi(QFrame):
             f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
         ))
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
         if ret == QMessageBox.Cancel:
             logger.info("取消购买")

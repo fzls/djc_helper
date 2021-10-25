@@ -469,7 +469,7 @@ class ConfigUi(QFrame):
 
         self.lineedit_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
         self.lineedit_game_qqs.setValidator(QQListValidator())
-        form_layout.addRow("其他要使用的QQ", self.lineedit_game_qqs)
+        form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_game_qqs)
 
         btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务", "MediumSpringGreen")
         vbox_layout.addWidget(btn_pay_by_card_and_secret)

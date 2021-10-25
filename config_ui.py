@@ -527,7 +527,7 @@ class ConfigUi(QFrame):
             self.hide_card_secret()
 
             # 显示新版的付费界面
-            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout("购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="MediumSpringGreen")
+            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout("购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan")
             vbox_layout = QVBoxLayout()
             self.collapsible_box_pay_directly.setContentLayout(vbox_layout)
 
@@ -543,13 +543,19 @@ class ConfigUi(QFrame):
             self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
             form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
 
-            self.groupbox_item_name = create_radio_button_group(all_pay_item_names)
-            form_layout.addRow("付费内容", self.groupbox_item_name)
+            form_layout.addWidget(QHLine())
 
-            self.groupbox_pay_type_name = create_radio_button_group(all_pay_type_names)
-            form_layout.addRow("付款方式", self.groupbox_pay_type_name)
+            self.push_button_grid_layout_item_name = create_push_button_grid_layout(all_pay_item_names, "Cyan")
+            form_layout.addRow("付费内容", self.push_button_grid_layout_item_name)
 
-            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可）", "MediumSpringGreen")
+            form_layout.addWidget(QHLine())
+
+            self.push_button_grid_layout_pay_type_name = create_push_button_grid_layout(all_pay_type_names, "Cyan")
+            form_layout.addRow("付款方式", self.push_button_grid_layout_pay_type_name)
+
+            form_layout.addWidget(QHLine())
+
+            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可）", "SpringGreen")
             vbox_layout.addWidget(btn_pay_directly)
 
             btn_pay_directly.clicked.connect(self.pay_directly)
@@ -742,8 +748,8 @@ class ConfigUi(QFrame):
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
         game_qqs = str_to_list(self.lineedit_pay_directly_game_qqs.text().strip())
-        item_name = self.groupbox_item_name.get_active_radio_text()
-        pay_type_name = self.groupbox_pay_type_name.get_active_radio_text()
+        item_name = self.push_button_grid_layout_item_name.get_active_radio_text()
+        pay_type_name = self.push_button_grid_layout_pay_type_name.get_active_radio_text()
 
         pay_type = pay_type_name_to_type[pay_type_name]
 

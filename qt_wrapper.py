@@ -5,10 +5,9 @@ from typing import List, Tuple
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QValidator, QWheelEvent
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
-                             QFrame, QGridLayout, QGroupBox, QHBoxLayout,
-                             QLabel, QLayout, QLineEdit, QMessageBox,
-                             QPushButton, QRadioButton, QScrollArea, QSpinBox,
-                             QVBoxLayout, QWidget)
+                             QFrame, QGridLayout, QHBoxLayout, QLabel, QLayout,
+                             QLineEdit, QMessageBox, QPushButton, QScrollArea,
+                             QSpinBox, QVBoxLayout, QWidget)
 
 from log import logger
 from qt_collapsible_box import CollapsibleBox
@@ -260,35 +259,52 @@ class ConfirmMessageBox(QMessageBox):
                 btn.setEnabled(True)
 
 
-class MyRadioButtonGroup(QGroupBox):
-    def __init__(self):
-        super(MyRadioButtonGroup, self).__init__()
+class MyPushButtonGridLayout(QGridLayout):
+    def __init__(self, color="Cyan"):
+        super(MyPushButtonGridLayout, self).__init__()
 
-        self.radio_buttons = []  # type: List[QRadioButton]
+        self.color = color
+        self.buttons = []  # type: List[QPushButton]
+
+    def add_button(self, btn: QPushButton, row: int, col: int):
+        btn.setStyleSheet(f"QPushButton::checked {{ background-color: {self.color}; }}")
+
+        btn.setCheckable(True)
+        if len(self.buttons) == 0:
+            # 默认选中第一个选项
+            btn.setChecked(True)
+
+        self.addWidget(btn, row, col)
+
+        def clicked():
+            self.on_click(btn)
+
+        btn.clicked.connect(clicked)
+
+        self.buttons.append(btn)
+
+    def on_click(self, clicked_btn: QPushButton):
+        for btn in self.buttons:
+            btn.setChecked(False)
+
+        clicked_btn.setChecked(True)
 
     def get_active_radio_text(self) -> str:
-        for btn in self.radio_buttons:
+        for btn in self.buttons:
             if btn.isChecked():
                 return btn.text()
 
         return ""
 
 
-def create_radio_button_group(items: List[str], width=3) -> MyRadioButtonGroup:
-    groupbox = MyRadioButtonGroup()
-
-    grid_layout = QGridLayout()
+def create_push_button_grid_layout(items: List[str], color="Cyan", width=3) -> MyPushButtonGridLayout:
+    grid_layout = MyPushButtonGridLayout(color)
 
     for idx, item in enumerate(items):
         row = math.floor(idx / width)
         col = idx % width
 
-        btn = QRadioButton(item)
-        if idx == 0:
-            # 默认选中第一个选项
-            btn.setChecked(True)
-        grid_layout.addWidget(btn, row, col)
-        groupbox.radio_buttons.append(btn)
+        btn = create_pushbutton(item)
+        grid_layout.add_button(btn, row, col)
 
-    groupbox.setLayout(grid_layout)
-    return groupbox
+    return grid_layout

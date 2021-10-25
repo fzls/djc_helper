@@ -748,7 +748,7 @@ class CommonConfig(ConfigInterface):
         self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
         self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
 
-        url_config_filepath = "utils/url.toml"
+        url_config_filepath = get_url_config_path()
         if os.path.isfile(url_config_filepath):
             try:
                 with open(url_config_filepath, 'r', encoding='utf-8-sig') as url_config_file:

@@ -1263,8 +1263,10 @@ def json_compact(val) -> str:
 def get_url_config_path() -> str:
     return "utils/url.toml"
 
+
 def use_new_pay_method() -> bool:
     return not os.path.isfile(get_url_config_path())
+
 
 if __name__ == '__main__':
     # print(get_now_unix())

@@ -1726,7 +1726,5 @@ if __name__ == '__main__':
     demo_pay_info()
 
     # demo_show_notices()
-
     # demo_show_activities_summary()
-
     # show_tips()

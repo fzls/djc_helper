@@ -212,12 +212,17 @@ class QQListValidator(QValidator):
         return (QValidator.Acceptable, text, pos)
 
 
-def show_message(title, text):
+def show_message(title: str, text: str, disabled_seconds=0):
     logger.info(f"{title} {text}")
 
-    message_box = QMessageBox()
+    message_box = ConfirmMessageBox()
     message_box.setWindowTitle(title)
     message_box.setText(text)
+
+    message_box.setStandardButtons(QMessageBox.Ok)
+    if disabled_seconds > 0:
+        message_box.set_disabled_duration(disabled_seconds, [0])
+
     message_box.exec_()
 
 

@@ -30,7 +30,7 @@ from setting import *
 from update import *
 from urls import Urls
 from usage_count import increase_counter
-from util import parse_scode
+from util import parse_scode, use_new_pay_method
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"
@@ -521,8 +521,7 @@ class ConfigUi(QFrame):
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
 
         # 如果不是代理
-        use_new_pay_method = not os.path.isfile(get_url_config_path())
-        if use_new_pay_method:
+        if use_new_pay_method():
             # 将卡密界面隐藏起来
             self.hide_card_secret()
 
@@ -2293,6 +2292,15 @@ def report_click_event(event: str):
     increase_counter(ga_category="click_in_config_ui", name=event)
 
 
+def show_notices():
+    if use_new_pay_method() and is_first_run("新版界面隐藏卡密提示2"):
+        show_message("付费界面调整", (
+            "目前已启用了新版的付费界面，原有的卡密界面已被隐藏，望周知。\n"
+            "\n"
+            "如新版无法正常使用，或者所选择的付费渠道在维护中，可以在【其他】tab中点击【显示原来的卡密支付界面】按钮来临时显示卡密界面\n"
+        ), disabled_seconds=5)
+
+
 def main():
     increase_counter(name="config_ui", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
 
@@ -2319,6 +2327,8 @@ def main():
 
     ui = ConfigUi()
     ui.show()
+
+    show_notices()
 
     sys.exit(app.exec())
 

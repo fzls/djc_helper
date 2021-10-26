@@ -415,7 +415,7 @@ class QQLogin():
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
-        if not is_first_run_in(f"login_locker_{self.name}", duration=datetime.timedelta(seconds=10)):
+        if not is_first_run_in(f"login_locker_{login_mode}_{self.name}", duration=datetime.timedelta(seconds=10)):
             raise SameAccountTryLoginAtMultipleThreadsException
 
         login_retry_key = "login_retry_key"

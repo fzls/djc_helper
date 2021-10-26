@@ -12,6 +12,7 @@ encoding_error_str = "Found invalid character in key name: '#'. Try quoting the 
 
 class AccountInfoConfig(ConfigInterface):
     default_uin = "o123456789"
+    default_account = "123456789"
 
     def __init__(self):
         # 手动登录需要设置的信息
@@ -19,11 +20,14 @@ class AccountInfoConfig(ConfigInterface):
         self.skey = "@a1b2c3d4e"
 
         # 自动登录需要设置的信息
-        self.account = "123456789"
+        self.account = self.default_account
         self.password = "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用"
 
     def has_login(self) -> bool:
         return self.uin != self.default_uin
+
+    def has_set_account(self) -> bool:
+        return self.account != self.default_account
 
 
 class MobileGameRoleInfoConfig(ConfigInterface):
@@ -342,6 +346,10 @@ class FunctionSwitchesConfig(ConfigInterface):
 
 
 class AccountConfig(ConfigInterface):
+    login_mode_by_hand = "by_hand"
+    login_mode_qr_login = "qr_login"
+    login_mode_auto_login = "auto_login"
+
     def __init__(self):
         # 是否启用该账号
         self.enable = True
@@ -355,7 +363,7 @@ class AccountConfig(ConfigInterface):
         # by_hand：      手动登录，在skey无效的情况下会弹出活动界面，自行登录后将cookie中uin和skey提取到下面的配置处
         # qr_login：     二维码登录，每次运行时若本地缓存的.skey文件中存储的skey过期了，则弹出登录页面，扫描二维码后将自动更新skey，进行后续操作
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
-        self.login_mode = "qr_login"
+        self.login_mode = self.login_mode_qr_login
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
         self.cannot_bind_dnf = False
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）

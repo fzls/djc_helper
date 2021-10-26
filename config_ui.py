@@ -2293,7 +2293,7 @@ def report_click_event(event: str):
 
 
 def show_notices():
-    if use_new_pay_method() and is_first_run("新版界面隐藏卡密提示2"):
+    if use_new_pay_method() and is_first_run("新版界面隐藏卡密提示"):
         show_message("付费界面调整", (
             "目前已启用了新版的付费界面，原有的卡密界面已被隐藏，望周知。\n"
             "\n"

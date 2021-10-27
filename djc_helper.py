@@ -4962,10 +4962,18 @@ class DjcHelper:
             # self.majieluo_op("分享得好礼", "769008")
 
     @try_except()
-    def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]):
+    def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]) -> List[str]:
         p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
+
+        results = []
         for uin in xiaohao_qq_list:
-            self.majieluo_op(f"赠送单个用户-{uin}", "806885", iGuestUin=uin, p_skey=p_skey)
+            res = self.majieluo_op(f"赠送单个用户-{uin}", "806885", iGuestUin=uin, p_skey=p_skey)
+            if res["ret"] == "0":
+                results.append("赠送成功")
+            else:
+                results.append(res["flowRet"]["sMsg"])
+
+        return results
 
     @try_except()
     def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:

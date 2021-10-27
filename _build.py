@@ -6,7 +6,7 @@ import subprocess
 
 from _init_venv_and_requirements import init_venv_and_requirements
 from log import color, logger
-from util import human_readable_size, show_head_line
+from util import human_readable_size, make_sure_dir_exists, show_head_line
 
 
 def build(disable_douban=False, enable_proxy=False, use_upx=True):
@@ -19,6 +19,47 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
 
     show_head_line(f"将使用.venv环境进行编译", color("bold_yellow"))
 
+    temp_remove_file_dir = os.path.join(".cached", "build_temp_remove_files")
+    site_packages_path = os.path.join(venv_path, "Lib", "site-packages")
+    dep_files_to_remove_during_build = {
+        "PyQt5/Qt5": [
+            "Translations",
+        ],
+        "PyQt5/Qt5/bin": [
+            "opengl32sw.dll",
+            "libEGL.dll",
+            "libGLESV2.dll",
+            "Qt5Svg.dll",
+            "Qt5Network.dll",
+            "Qt5Qml.dll",
+            "Qt5QmlModels.dll",
+            "Qt5Quick.dll",
+            "Qt5WebSockets.dll",
+            "d3dcompiler_47.dll",
+        ],
+        "PyQt5/Qt5/plugins": [
+            "iconengines/qsvgicon.dll",
+            "imageformats/qsvg.dll",
+            "imageformats/qwebp.dll",
+            "platforms/qwebgl.dll",
+        ]
+    }
+    logger.info(color("bold_green") + f"开始编译前先尝试移动这些确定用不到的库文件到临时目录 {temp_remove_file_dir}，从而尽可能减少最终编译的大小")
+    for parent_directory, file_or_directory_name_list in dep_files_to_remove_during_build.items():
+        for file_or_directory_name in file_or_directory_name_list:
+            path = os.path.join(site_packages_path, parent_directory, file_or_directory_name)
+            backup_path = os.path.join(temp_remove_file_dir, parent_directory, file_or_directory_name)
+
+            if not os.path.exists(path):
+                logger.warning(f"\t{path} 不存在，将跳过")
+                continue
+
+            # 将文件移动到备份目录
+            logger.info(f"\t开始移动 {path}")
+            make_sure_dir_exists(os.path.dirname(backup_path))
+            shutil.move(path, backup_path)
+
+    # 实际编译流程
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
@@ -66,6 +107,21 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
 
         filesize = os.path.getsize(target_path)
         logger.info(color("bold_green") + f"{prefix} 编译{exe_name}结束，最终大小为{human_readable_size(filesize)}")
+
+    logger.info(color("bold_green") + f"编译完毕将库文件移动回来 - {site_packages_path}")
+    for parent_directory, file_or_directory_name_list in dep_files_to_remove_during_build.items():
+        for file_or_directory_name in file_or_directory_name_list:
+            path = os.path.join(site_packages_path, parent_directory, file_or_directory_name)
+            backup_path = os.path.join(temp_remove_file_dir, parent_directory, file_or_directory_name)
+
+            if not os.path.exists(backup_path):
+                logger.warning(f"\t备份文件 {backup_path} 不存在，将跳过")
+                continue
+
+            # 将文件移动到备份目录
+            logger.info(f"开始还原备份文件/目录 {backup_path}")
+            make_sure_dir_exists(os.path.dirname(path))
+            shutil.move(backup_path, path)
 
     logger.info("done")
 

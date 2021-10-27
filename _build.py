@@ -9,7 +9,7 @@ from log import color, logger
 from util import human_readable_size, show_head_line
 
 
-def build(disable_douban=False, enable_proxy=False):
+def build(disable_douban=False, enable_proxy=False, use_upx=True):
     # 初始化相关路径变量
     venv_path = ".venv"
     pyinstaller_path = os.path.join(venv_path, "Scripts", "pyinstaller")
@@ -42,6 +42,8 @@ def build(disable_douban=False, enable_proxy=False):
             cmd_build.extend(['--icon', icon_path])
         for module in exclude_modules:
             cmd_build.extend(['--exclude-module', module])
+        if use_upx:
+            cmd_build.extend(['--upx-dir', "utils"])
         cmd_build.extend(extra_args)
 
         logger.info(f"{prefix} 开始编译 {exe_name}，命令为：{' '.join(cmd_build)}")
@@ -72,6 +74,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--disable_douban", action='store_true')
     parser.add_argument("--enable_proxy", action='store_true')
+    parser.add_argument("--disable_upx", action='store_true')
     args = parser.parse_args()
 
     return args
@@ -79,4 +82,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    build(args.disable_douban, args.enable_proxy)
+    build(args.disable_douban, args.enable_proxy, not args.disable_upx)

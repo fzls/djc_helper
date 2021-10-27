@@ -557,7 +557,7 @@ class ConfigUi(QFrame):
 
             form_layout.addWidget(QHLine())
 
-            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可）", "SpringGreen")
+            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可，二十分钟内生效）", "SpringGreen")
             vbox_layout.addWidget(btn_pay_directly)
 
             btn_pay_directly.clicked.connect(self.pay_directly)

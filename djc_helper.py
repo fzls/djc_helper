@@ -4915,7 +4915,7 @@ class DjcHelper:
         self.majieluo_op("马杰洛的神之宝箱（完成14次登录游戏任务）", "806881")
 
         # 赠送礼盒
-        self.majieluo_op("更新创建用户授权信息", "809271")
+        self.majieluo_permit_social()
 
         # self.majieluo_op("赠送单个用户", "806885", iGuestUin=qq_number, p_skey=djcHelper.fetch_share_p_skey("马杰洛赠送好友"))
 
@@ -4961,9 +4961,14 @@ class DjcHelper:
             self.majieluo_op("提取福利", "806884")
             # self.majieluo_op("分享得好礼", "769008")
 
+    def majieluo_permit_social(self):
+        self.majieluo_op("更新创建用户授权信息", "809271")
+
     @try_except()
     def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]) -> List[str]:
         p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
+
+        self.majieluo_permit_social()
 
         results = []
         for uin in xiaohao_qq_list:
@@ -4977,6 +4982,8 @@ class DjcHelper:
 
     @try_except()
     def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:
+        self.majieluo_permit_social()
+
         raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "806895", sCode=scode)
         return parse_amesvr_common_info(raw_res)
 

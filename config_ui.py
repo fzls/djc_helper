@@ -1239,7 +1239,7 @@ class MajieluoConfigUi(QFrame):
         # -------------- 区域：发送礼盒链接给小号 --------------
         top_layout.addWidget(QHLine())
 
-        btn_send_box_url = create_pushbutton("步骤1：发送礼盒链接给小号（点击后将登录大号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
+        btn_send_box_url = create_pushbutton("步骤1：发送礼盒链接给小号（需要今天先登录过游戏）（点击后将登录大号，可能界面会没反应，请耐心等待）", "MediumSpringGreen")
         top_layout.addWidget(btn_send_box_url)
 
         btn_send_box_url.clicked.connect(self.send_box_url)

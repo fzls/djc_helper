@@ -914,6 +914,10 @@ def get_pay_server_addr() -> str:
     return "http://139.198.179.81:8438"
 
 
+def get_xinyue_match_api(api_name="/") -> str:
+    return f"http://139.198.179.81:8439{api_name}"
+
+
 def disable_quick_edit_mode():
     if not is_windows():
         return

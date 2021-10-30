@@ -965,29 +965,40 @@ class DjcHelper:
                 break
 
     @try_except(show_exception_info=False)
-    def try_join_fixed_xinyue_team(self):
+    def try_join_xinyue_team(self, user_buy_info: BuyInfo):
         # 检查是否有固定队伍
-        fixed_team = self.get_fixed_team()
+        group_info = self.get_xinyue_team_group_info(user_buy_info)
 
-        if fixed_team is None:
-            logger.warning("未找到本地固定队伍信息，跳过队伍相关流程")
+        if group_info.team_name == "":
+            logger.warning("未找到本地固定队伍信息，且不符合自动匹配的条件，将跳过自动组队相关流程")
             return
 
-        logger.info(f"当前账号的本地固定队信息为{fixed_team}")
+        logger.info(f"当前账号的队伍组队配置为{group_info}")
 
+        # 检查角色绑定
         self.check_xinyue_battle_ground()
 
+        # 检查当前是否已有队伍
         teaminfo = self.query_xinyue_teaminfo(print_res=True)
         if teaminfo.id != "":
             logger.info(f"目前已有队伍={teaminfo}")
             # 本地保存一下
-            self.save_teamid(fixed_team.id, teaminfo.id)
+            self.save_teamid(group_info.team_name, teaminfo.id)
+
+            self.try_report_xinyue_remote_teamid_to_server("早已创建的队伍，但仍为单人", group_info, teaminfo)
             return
 
-        logger.info("尝试从本地查找当前固定队对应的远程队伍ID")
-        remote_teamid = self.load_teamid(fixed_team.id)
+        # 尝试从本地或者远程服务器获取一个远程队伍ID
+        remote_teamid = ""
+        if group_info.is_local:
+            logger.info(color("bold_cyan") + "当前是 本地固定队伍 模式，将尝试从本地缓存查找当前本地队伍的远程队伍ID")
+            remote_teamid = self.load_teamid(group_info.team_name)
+        else:
+            logger.info(color("bold_cyan") + "当前是 自动匹配组队 模式，将尝试从匹配服务器获取一个其他人创建的远程队伍ID")
+            remote_teamid = self.get_xinyue_remote_teamid_from_server()
+
+        # 尝试加入远程队伍
         if remote_teamid != "":
-            # 尝试加入远程队伍
             logger.info(f"尝试加入远程队伍id={remote_teamid}")
             teaminfo = self.query_xinyue_teaminfo_by_id(remote_teamid)
             # 如果队伍仍有效则加入
@@ -1001,19 +1012,21 @@ class DjcHelper:
 
         # 尝试创建小队并保存到本地
         teaminfo = self.create_xinyue_team()
-        self.save_teamid(fixed_team.id, teaminfo.id)
-        logger.info(f"创建小队并保存到本地成功，队伍信息={teaminfo}")
+        self.save_teamid(group_info.team_name, teaminfo.id)
+        logger.info(f"{self.cfg.name} 创建小队并保存到本地成功，队伍信息={teaminfo}")
 
-    def get_fixed_team(self):
-        """
-        :rtype: FixedTeamConfig|None
-        """
-        qq_number = self.qq()
-        fixed_team = None
+        self.try_report_xinyue_remote_teamid_to_server("新创建的队伍", group_info, teaminfo)
+
+    def get_xinyue_team_group_info(self, user_buy_info: BuyInfo) -> XinYueTeamGroupInfo:
+        # 初始化
+        group_info = XinYueTeamGroupInfo()
+        group_info.team_name = ""
+
+        # 先尝试获取本地固定队伍信息
         for team in self.common_cfg.fixed_teams:
             if not team.enable:
                 continue
-            if qq_number not in team.members:
+            if self.qq() not in team.members:
                 continue
             if not team.check():
                 msg = f"本地固定队伍={team.id}的队伍成员({team.members})不符合要求，请确保是队伍成员数目为2，且均是有效的qq号（心悦专区改版后队伍成员数目不再是3个，而是2个）"
@@ -1021,10 +1034,16 @@ class DjcHelper:
                 async_message_box(msg, title, show_once_daily=True)
                 continue
 
-            fixed_team = team
+            group_info.team_name = team.id
+            group_info.is_local = True
             break
 
-        return fixed_team
+        # 如果符合自动匹配条件，则替换为自动匹配的信息
+        if self.can_auto_match_xinyue_team(user_buy_info):
+            group_info.team_name = f"auto_match_{self.qq()}"
+            group_info.is_local = False
+
+        return group_info
 
     def can_auto_match_xinyue_team(self, user_buy_info: BuyInfo) -> bool:
         # 在按月付费期间
@@ -1098,7 +1117,7 @@ class DjcHelper:
         return awards
 
     @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
-    def query_xinyue_teaminfo(self, print_res=False):
+    def query_xinyue_teaminfo(self, print_res=False) -> XinYueTeamInfo:
         data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "748075", print_res=print_res)
         jdata = data["modRet"]["jData"]
 
@@ -1120,13 +1139,13 @@ class DjcHelper:
 
         return self.query_xinyue_teaminfo()
 
-    def create_xinyue_team(self):
+    def create_xinyue_team(self) -> XinYueTeamInfo:
         # 748052	创建小队
         self.xinyue_battle_ground_op("尝试创建小队", "748052")
 
         return self.query_xinyue_teaminfo()
 
-    def parse_teaminfo(self, jdata):
+    def parse_teaminfo(self, jdata) -> XinYueTeamInfo:
         teamInfo = XinYueTeamInfo()
         teamInfo.result = jdata["result"]
         if teamInfo.result == 0:
@@ -1211,6 +1230,37 @@ class DjcHelper:
         info.take_award_end_time = int(raw_info.sOutValue8 or "0")
 
         return info
+
+    def try_report_xinyue_remote_teamid_to_server(self, ctx: str, group_info: XinYueTeamGroupInfo, teaminfo: XinYueTeamInfo):
+        # 只有远程匹配模式需要尝试上报
+        if group_info.is_local:
+            return
+
+        # 如果已达到人数上限，也不需要匹配
+        if teaminfo.is_team_full():
+            return
+
+        logger.info(f"因为 {ctx}，将尝试上报 {self.cfg.name} 创建的心悦远程队伍 {teaminfo.id} 到服务器")
+
+        self.report_xinyue_remote_teamid_to_server(teaminfo.id)
+
+    def report_xinyue_remote_teamid_to_server(self, remote_team_id: str):
+        req = XinYueMatchServerAddTeamRequest()
+        req.leader_qq = self.qq()
+        req.team_id = remote_team_id
+
+        self.post("上报心悦队伍信息", get_xinyue_match_api("/add_team"), json=to_raw_type(req))
+
+    def get_xinyue_remote_teamid_from_server(self) -> str:
+        req = XinYueMatchServerRequestTeamRequest()
+        req.request_qq = self.qq()
+
+        raw_res = self.post("请求获取一个心悦队伍", get_xinyue_match_api("/req_team"), json=to_raw_type(req))
+        res = XinYueMatchServerCommonResponse()
+        res.data = XinYueMatchServerRequestTeamResponse()
+        res.auto_update_config(raw_res)
+
+        return res.data.team_id
 
     def check_xinyue_battle_ground(self):
         self.check_bind_account("心悦战场", get_act_url("DNF地下城与勇士心悦特权专区"),

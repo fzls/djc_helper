@@ -285,6 +285,9 @@ class XinYueTeamInfo(ConfigInterface):
         self.award_summary = "大大小|小中大"
         self.members = []  # type: List[XinYueTeamMember]
 
+    def is_team_full(self) -> bool:
+        return len(self.members) == 2
+
 
 class XinYueTeamMember(ConfigInterface):
     def __init__(self):
@@ -1407,6 +1410,35 @@ class XinYueTeamAwardInfo(ConfigInterface):
         self.sRolePartition = "11"
         self.sSerialNum = "AMS-TGCLUB-1029213238-N4BKmM-366480-747693"
         self.sUin = ""
+
+
+class XinYueTeamGroupInfo(ConfigInterface):
+    def __init__(self):
+        self.team_name = ""
+        self.is_local = True
+
+
+class XinYueMatchServerAddTeamRequest(ConfigInterface):
+    def __init__(self):
+        self.leader_qq = ""
+        self.team_id = ""
+
+
+class XinYueMatchServerCommonResponse(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = ""
+        self.data = None
+
+
+class XinYueMatchServerRequestTeamRequest(ConfigInterface):
+    def __init__(self):
+        self.request_qq = ""
+
+
+class XinYueMatchServerRequestTeamResponse(ConfigInterface):
+    def __init__(self):
+        self.team_id = ""
 
 
 if __name__ == '__main__':

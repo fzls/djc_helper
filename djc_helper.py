@@ -1055,27 +1055,27 @@ class DjcHelper:
 
         return group_info
 
-    def can_auto_match_xinyue_team(self, user_buy_info: BuyInfo) -> bool:
+    def can_auto_match_xinyue_team(self, user_buy_info: BuyInfo, print_waring=True) -> bool:
         # 在按月付费期间
         if not user_buy_info.is_active(bypass_run_from_src=False):
-            logger.warning(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
+            if print_waring: logger.warning(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
             return False
 
         # 当前QQ是特邀会员或者心悦会员
         xinyue_info = self.query_xinyue_info("查询心悦信息-心悦自动组队", print_res=False)
         if not xinyue_info.is_xinyue_or_special_member():
-            logger.warning(f"{self.cfg.name} 不是特邀会员或心悦会员，将不会尝试自动匹配心悦队伍")
+            if print_waring: logger.warning(f"{self.cfg.name} 不是特邀会员或心悦会员，将不会尝试自动匹配心悦队伍")
             return False
 
         # 开启了本开关
         if not self.cfg.enable_auto_match_xinyue_team:
-            async_message_box(f"{self.cfg.name} 未开启自动匹配心悦组队开关，将不会尝试自动匹配~ ", "心悦组队提示", show_once=True)
+            if print_waring: async_message_box(f"{self.cfg.name} 未开启自动匹配心悦组队开关，将不会尝试自动匹配~ ", "心悦组队提示", show_once=True)
             return False
 
         # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
         take_award_count = self.query_last_week_xinyue_team_take_award_count()
         if take_award_count < 3:
-            logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
+            if print_waring: logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
             return False
 
         return True

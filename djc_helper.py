@@ -1048,13 +1048,13 @@ class DjcHelper:
     def can_auto_match_xinyue_team(self, user_buy_info: BuyInfo) -> bool:
         # 在按月付费期间
         if not user_buy_info.is_active(bypass_run_from_src=False):
-            logger.debug(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
+            logger.warning(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
             return False
 
         # 当前QQ是特邀会员或者心悦会员
         xinyue_info = self.query_xinyue_info("查询心悦信息-心悦自动组队", print_res=False)
         if not xinyue_info.is_xinyue_or_special_member():
-            logger.debug(f"{self.cfg.name} 不是特邀会员或心悦会员，将不会尝试自动匹配心悦队伍")
+            logger.warning(f"{self.cfg.name} 不是特邀会员或心悦会员，将不会尝试自动匹配心悦队伍")
             return False
 
         # 开启了本开关
@@ -1065,7 +1065,7 @@ class DjcHelper:
         # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
         take_award_count = self.query_last_week_xinyue_team_take_award_count()
         if take_award_count < 3:
-            logger.debug(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
+            logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
             return False
 
         return True
@@ -1244,18 +1244,20 @@ class DjcHelper:
 
         self.report_xinyue_remote_teamid_to_server(teaminfo.id)
 
+    @try_except()
     def report_xinyue_remote_teamid_to_server(self, remote_team_id: str):
         req = XinYueMatchServerAddTeamRequest()
         req.leader_qq = self.qq()
         req.team_id = remote_team_id
 
-        self.post("上报心悦队伍信息", get_xinyue_match_api("/add_team"), json=to_raw_type(req))
+        self.post("上报心悦队伍信息", get_xinyue_match_api("/add_team"), json=to_raw_type(req), disable_retry=True)
 
+    @try_except(return_val_on_except="")
     def get_xinyue_remote_teamid_from_server(self) -> str:
         req = XinYueMatchServerRequestTeamRequest()
         req.request_qq = self.qq()
 
-        raw_res = self.post("请求获取一个心悦队伍", get_xinyue_match_api("/req_team"), json=to_raw_type(req))
+        raw_res = self.post("请求获取一个心悦队伍", get_xinyue_match_api("/req_team"), json=to_raw_type(req), disable_retry=True)
         res = XinYueMatchServerCommonResponse()
         res.data = XinYueMatchServerRequestTeamResponse()
         res.auto_update_config(raw_res)
@@ -6604,8 +6606,8 @@ class DjcHelper:
         return self.network.get(ctx, self.format(url, **params), pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn, extra_headers)
 
     def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True,
-             extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, extra_headers: Optional[Dict[str, str]] = None, **params) -> dict:
-        return self.network.post(ctx, self.format(url, **params), data, json, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn, extra_headers)
+             extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, extra_headers: Optional[Dict[str, str]] = None, disable_retry=False, **params) -> dict:
+        return self.network.post(ctx, self.format(url, **params), data, json, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, extra_cookies, check_fn, extra_headers, disable_retry)
 
     def format(self, url, **params):
         endTime = datetime.datetime.now()

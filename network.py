@@ -46,7 +46,7 @@ class Network:
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 
     def post(self, ctx, url, data=None, json=None, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True, extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-             extra_headers: Optional[Dict[str, str]] = None) -> dict:
+             extra_headers: Optional[Dict[str, str]] = None, disable_retry=False) -> dict:
         def request_fn() -> requests.Response:
             cookies = self.base_cookies + extra_cookies
             content_type = "application/x-www-form-urlencoded"
@@ -61,7 +61,10 @@ class Network:
                 post_headers = {**post_headers, **extra_headers}
             return requests.post(url, data=data, json=json, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
-        res = try_request(request_fn, self.common_cfg.retry, check_fn)
+        if not disable_retry:
+            res = try_request(request_fn, self.common_cfg.retry, check_fn)
+        else:
+            res = request_fn()
         logger.debug(f"{data}")
         return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
 

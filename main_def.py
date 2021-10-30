@@ -3,7 +3,7 @@ from sys import exit
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
-from dao import BuyInfo, BuyRecord
+from dao import BuyRecord
 from djc_helper import (DjcHelper, get_prize_names, is_new_version_ark_lottery,
                         run_act)
 from first_run import *
@@ -617,7 +617,7 @@ def show_activity_info(cfg: Config):
 
 
 @try_except()
-def show_accounts_status(cfg, ctx):
+def show_accounts_status(cfg, ctx, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)
@@ -626,7 +626,7 @@ def show_accounts_status(cfg, ctx):
     rows = []
     if cfg.common.enable_multiprocessing:
         logger.warning(f"已开启多进程模式({cfg.get_pool_size()})，将开始并行拉取数据，请稍后")
-        for row in get_pool().starmap(get_account_status, [(_idx + 1, account_config, cfg.common) for _idx, account_config in enumerate(cfg.account_configs)
+        for row in get_pool().starmap(get_account_status, [(_idx + 1, account_config, cfg.common, user_buy_info) for _idx, account_config in enumerate(cfg.account_configs)
                                                            if account_config.is_enabled()]):
             rows.append(row)
     else:
@@ -637,18 +637,24 @@ def show_accounts_status(cfg, ctx):
                 # 未启用的账户的账户不走该流程
                 continue
 
-            rows.append(get_account_status(idx, account_config, cfg.common))
+            rows.append(get_account_status(idx, account_config, cfg.common, user_buy_info))
 
     # 打印结果
-    heads = ["序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "心悦G分", "编年史", "年史碎片", "引导石", "邀请次数", "论坛代币券", "助手次数"]
-    colSizes = [4, 12, 8, 8, 12, 10, 6, 6, 16, 12, 8, 14, 8, 6, 8, 10, 8]
+    heads = [
+        "序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
+        "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "引导石", "邀请次数", "论坛代币券", "助手次数",
+    ]
+    colSizes = [
+        4, 12, 8, 8, 12, 10, 6, 6, 16, 12,
+        8, 8, 8, 14, 8, 6, 8, 10, 8,
+    ]
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
         logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
 
 
-def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig):
+def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
@@ -663,6 +669,13 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     team_award_summary = "无队伍"
     if teaminfo.id != "":
         team_award_summary = teaminfo.award_summary
+
+    last_week_xinyue_take_award_count = djcHelper.query_last_week_xinyue_team_take_award_count()
+    can_auto_match_xinyue_team = ""
+    if djcHelper.can_auto_match_xinyue_team(user_buy_info, print_waring=False):
+        can_auto_match_xinyue_team = "符合条件"
+    elif xinyue_info.xytype >= 5 and not account_config.enable_auto_match_xinyue_team:
+        can_auto_match_xinyue_team = "未开启"
 
     gpoints = djcHelper.query_gpoints()
 
@@ -685,6 +698,8 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         idx, account_config.name, status,
         djc_balance, djc_allin,
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
+
+        last_week_xinyue_take_award_count, can_auto_match_xinyue_team,
         gpoints,
         levelInfo, chronicle_points,
         majieluo_stone, majieluo_invite_count,
@@ -1658,7 +1673,13 @@ def demo_main():
         check_djc_role_binding()
 
     # note: 用于本地测试main的相关逻辑
-    show_accounts_status(cfg, "启动时展示账号概览")
+    # 查询付费信息供后面使用
+    show_head_line("查询付费信息")
+    logger.warning("开始查询付费信息，请稍候~")
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+    show_buy_info(user_buy_info, cfg, need_show_message_box=False)
+
+    show_accounts_status(cfg, "启动时展示账号概览", user_buy_info)
     # try_join_xinyue_team(cfg)
     # run(cfg)
     # try_take_xinyue_team_award(cfg)

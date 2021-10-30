@@ -272,20 +272,21 @@ def get_now() -> datetime:
 
 
 def get_this_week_monday(now: Optional[datetime.datetime] = None) -> str:
-    now = now or get_now()
     return get_this_week_monday_datetime(now).strftime("%Y%m%d")
 
 
 def get_last_week_monday(now: Optional[datetime.datetime] = None) -> str:
-    now = now or get_now()
-    lastWeekMonday = get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
-    return lastWeekMonday.strftime("%Y%m%d")
+    return get_last_week_monday_datetime(now).strftime("%Y%m%d")
 
 
 def get_this_week_monday_datetime(now: Optional[datetime.datetime] = None) -> datetime.datetime:
     now = now or get_now()
     monday = now - datetime.timedelta(days=now.weekday())
     return monday.replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def get_last_week_monday_datetime(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+    return get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
 
 
 def now_before(t="2000-01-01 00:00:00"):

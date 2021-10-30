@@ -67,6 +67,11 @@ def test_get_this_week_monday_datetime():
     assert get_this_week_monday_datetime(now_for_test) == monday
 
 
+def test_get_last_week_monday_datetime():
+    last_monday = datetime.datetime.now().replace(2021, 7, 26, 0, 0, 0, 0)
+    assert get_last_week_monday_datetime(now_for_test) == last_monday
+
+
 def test_get_now():
     assert type(get_now()) is datetime.datetime
 

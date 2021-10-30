@@ -663,9 +663,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     team_award_summary = "无队伍"
     if teaminfo.id != "":
         team_award_summary = teaminfo.award_summary
-        fixed_team = djcHelper.get_fixed_team()
-        if fixed_team is not None:
-            team_award_summary = f"[{fixed_team.id}]{team_award_summary}"
 
     gpoints = djcHelper.query_gpoints()
 
@@ -697,7 +694,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
 
 @try_except()
-def try_join_xinyue_team(cfg):
+def try_join_xinyue_team(cfg, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("尝试加入心悦固定队")
@@ -714,17 +711,12 @@ def try_join_xinyue_team(cfg):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
-        # 尝试加入固定心悦队伍
-        djcHelper.try_join_fixed_xinyue_team()
+        # 尝试加入心悦队伍
+        djcHelper.try_join_xinyue_team(user_buy_info)
 
 
-def run(cfg: Config):
+def run(cfg: Config, user_buy_info: BuyInfo):
     _show_head_line("开始核心逻辑")
-
-    _show_head_line("查询付费信息")
-    logger.warning("开始查询付费信息，请稍候~")
-    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
-    show_buy_info(user_buy_info, cfg, need_show_message_box=False)
 
     # 上报付费使用情况
     try_report_pay_info(cfg, user_buy_info)
@@ -837,7 +829,7 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig,
 
 
 @try_except()
-def try_take_xinyue_team_award(cfg: Config):
+def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("尝试领取心悦组队奖励")
@@ -859,6 +851,14 @@ def try_take_xinyue_team_award(cfg: Config):
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
+
+        # 如果使用了云端自动组队功能，且仍未组到队，则暂时先不尝试领取奖励
+        group_info = djcHelper.get_xinyue_team_group_info(user_buy_info)
+        teaminfo = djcHelper.query_xinyue_teaminfo()
+        if not group_info.is_local and not teaminfo.is_team_full():
+            logger.warning(color("fg_yellow") + f"当前启用了云端自动组队功能，但仍未组到队。因为组队前获取的奖励不会计入默契福利，暂时不尝试领取心悦奖励")
+            continue
+
         djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
 
 

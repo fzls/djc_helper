@@ -126,14 +126,20 @@ def main():
 
     show_accounts_status(cfg, "启动时展示账号概览")
 
+    # 查询付费信息供后面使用
+    show_head_line("查询付费信息")
+    logger.warning("开始查询付费信息，请稍候~")
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+    show_buy_info(user_buy_info, cfg, need_show_message_box=False)
+
     # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
-    try_join_xinyue_team(cfg)
+    try_join_xinyue_team(cfg, user_buy_info)
 
     # 正式进行流程
-    run(cfg)
+    run(cfg, user_buy_info)
 
     # 尝试领取心悦组队奖励
-    try_take_xinyue_team_award(cfg)
+    try_take_xinyue_team_award(cfg, user_buy_info)
 
     # # 尝试派赛利亚出去打工
     # try_xinyue_sailiyam_start_work(cfg)

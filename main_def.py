@@ -672,7 +672,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     can_auto_match_xinyue_team = ""
     if djcHelper.can_auto_match_xinyue_team(user_buy_info, print_waring=False):
         can_auto_match_xinyue_team = "符合条件"
-    elif xinyue_info.xytype >= 5 and not account_config.enable_auto_match_xinyue_team:
+    elif xinyue_info.is_xinyue_or_special_member() and not account_config.enable_auto_match_xinyue_team:
         can_auto_match_xinyue_team = "未开启"
 
     gpoints = djcHelper.query_gpoints()

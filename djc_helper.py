@@ -3723,8 +3723,8 @@ class DjcHelper:
         # res = self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in, print_res=False)
         # return res["code"] in [7004, 7005, 29]
 
-        res = self.guanjia_new_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_gift_id_sign_in)
-        # res = self.guanjia_new_dup_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_dup_gift_id_sign_in)
+        res = self.guanjia_new_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_gift_id_sign_in, print_res=False)
+        # res = self.guanjia_new_dup_op("每日签到任务", "pc_sdi_receive/add_draw_pool", self.guanjia_new_dup_gift_id_sign_in, print_res=False)
         return res["success"] in [-100]
 
     def save_guanjia_login_result(self, lr: LoginResult):

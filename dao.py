@@ -809,13 +809,13 @@ class BuyInfo(ConfigInterface):
         # 复用merge函数
         self.merge(other)
 
-    def is_active(self):
-        return not self.will_expire_in_days(0)
+    def is_active(self, bypass_run_from_src=True):
+        return not self.will_expire_in_days(0, bypass_run_from_src)
 
-    def will_expire_in_days(self, days: int) -> bool:
+    def will_expire_in_days(self, days: int, bypass_run_from_src=True) -> bool:
         from util import parse_time, run_from_src
 
-        if run_from_src():
+        if run_from_src() and bypass_run_from_src:
             # 使用源码运行不受限制
             return False
 

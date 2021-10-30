@@ -249,6 +249,9 @@ class XinYueInfo(DaoObject):
         else:
             return "打工仔搬砖中"
 
+    def is_xinyue_or_special_member(self) -> bool:
+        return self.xytype >= 5 or self.is_special_member
+
 
 class XinYueItemInfo(DaoObject):
     def __init__(self, total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh):
@@ -1370,6 +1373,40 @@ class GuanJiaUserInfo(ConfigInterface):
         self.nickname = "XXXXXX"
         self.headimgurl = "http://thirdqq.qlogo.cn/g?b=oidb&k=XXXXXX&s=100&t=1556477786"
         self.key = "XXXXXX"
+
+
+class XinYueTeamAwardInfo(ConfigInterface):
+    def __init__(self):
+        self.dtGetPackageTime = "2021-10-29 21:32:38"
+        self.iBroadcastFlag = "0"
+        self.iChildModuleId = "0"
+        self.iModuleId = "397009"
+        self.iPackageGroupId = "1537766"
+        self.iPackageId = "2374025"
+        self.iPackageNum = "1"
+        self.iPackagePrice = "5000"
+        self.iStatus = "2"
+        self.id = "69353284"
+        self.jIdipExtendReplace = ""
+        self.sAreaName = "浙江一区"
+        self.sCdkey = ""
+        self.sExtend1 = "11"
+        self.sExtend2 = ""
+        self.sExtend3 = "490022110"
+        self.sExtend4 = ""
+        self.sExtend5 = ""
+        self.sGender = "11"
+        self.sItemType = "11"
+        self.sMediacySerial = ""
+        self.sPackageName = "装备提升礼盒"
+        self.sPlatId = "0"
+        self.sRelativeIps = ""
+        self.sRoleArea = "11"
+        self.sRoleId = ""
+        self.sRoleName = ""
+        self.sRolePartition = "11"
+        self.sSerialNum = "AMS-TGCLUB-1029213238-N4BKmM-366480-747693"
+        self.sUin = ""
 
 
 if __name__ == '__main__':

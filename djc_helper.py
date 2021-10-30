@@ -1027,6 +1027,77 @@ class DjcHelper:
 
         return fixed_team
 
+    def can_auto_match_xinyue_team(self, user_buy_info: BuyInfo) -> bool:
+        # 在按月付费期间
+        if not user_buy_info.is_active(bypass_run_from_src=False):
+            logger.debug(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
+            return False
+
+        # 当前QQ是特邀会员或者心悦会员
+        xinyue_info = self.query_xinyue_info("查询心悦信息-心悦自动组队", print_res=False)
+        if not xinyue_info.is_xinyue_or_special_member():
+            logger.debug(f"{self.cfg.name} 不是特邀会员或心悦会员，将不会尝试自动匹配心悦队伍")
+            return False
+
+        # 开启了本开关
+        if not self.cfg.enable_auto_match_xinyue_team:
+            async_message_box(f"{self.cfg.name} 未开启自动匹配心悦组队开关，将不会尝试自动匹配~ ", "心悦组队提示", show_once=True)
+            return False
+
+        # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
+        take_award_count = self.query_last_week_xinyue_team_take_award_count()
+        if take_award_count < 3:
+            logger.debug(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
+            return False
+
+        return True
+
+    def query_last_week_xinyue_team_take_award_count(self) -> int:
+        last_week_awards = self.query_last_week_xinyue_team_awards()
+
+        take_count = 0
+        for award in last_week_awards:
+            # 判断领取宝箱里的成就点的次数
+            if award.iPackageGroupId == "1537727":
+                take_count += 1
+
+        return take_count
+
+    def query_last_week_xinyue_team_awards(self) -> List[XinYueTeamAwardInfo]:
+        last_monday = get_last_week_monday_datetime()
+        this_monday = get_this_week_monday_datetime()
+
+        last_week_awards = []
+        for page in range_from_one(20):
+            awards = self.query_xinyue_team_awards(page)
+            if len(awards) == 0:
+                break
+
+            for award in awards:
+                take_at = parse_time(award.dtGetPackageTime)
+                if take_at >= this_monday:
+                    # 跳过本周的
+                    continue
+                elif take_at >= last_monday:
+                    # 上周的结果
+                    last_week_awards.append(award)
+                else:
+                    # 从这开始是上周之前的，不必再额外处理，可以直接返回了
+                    return last_week_awards
+
+        return last_week_awards
+
+    @try_except(return_val_on_except=[])
+    def query_xinyue_team_awards(self, iPageNow=1, iPageSize=4) -> List[XinYueTeamAwardInfo]:
+        raw_res = self.xinyue_battle_ground_op(f"查询心悦组队奖励-{iPageNow}-{iPageSize}", "747563", iPageNow=iPageNow, iPageSize=iPageSize, print_res=False)
+
+        awards = []  # type: List[XinYueTeamAwardInfo]
+        for raw_award in raw_res["modRet"]["myGiftList"]:
+            award = XinYueTeamAwardInfo().auto_update_config(raw_award)
+            awards.append(award)
+
+        return awards
+
     @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=False):
         data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "748075", print_res=print_res)
@@ -6547,6 +6618,7 @@ class DjcHelper:
             "ukey",
             "iGiftID",
             "iInviter",
+            "iPageNow", "iPageSize",
         ]}
 
         # 整合得到所有默认值

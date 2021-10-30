@@ -1,5 +1,4 @@
 import string
-import time
 from multiprocessing import Pool
 from urllib.parse import quote, quote_plus
 

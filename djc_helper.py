@@ -18,6 +18,7 @@ from sign import getMillSecondsUnix
 from urls import (Urls, get_act_url, get_ams_act, get_ams_act_desc,
                   get_not_ams_act, get_not_ams_act_desc, not_know_end_time,
                   search_act)
+from usage_count import increase_counter
 
 
 # DNF蚊子腿小助手
@@ -986,6 +987,7 @@ class DjcHelper:
             self.save_teamid(group_info.team_name, teaminfo.id)
 
             self.try_report_xinyue_remote_teamid_to_server("早已创建的队伍，但仍为单人", group_info, teaminfo)
+            increase_counter(ga_category="xinyue_team_auto_match", name="report_again")
             return
 
         # 尝试从本地或者远程服务器获取一个远程队伍ID
@@ -1006,6 +1008,10 @@ class DjcHelper:
                 teaminfo = self.join_xinyue_team(remote_teamid)
                 if teaminfo is not None:
                     logger.info(f"成功加入远程队伍，队伍信息为{teaminfo}")
+
+                    if not group_info.is_local:
+                        increase_counter(ga_category="xinyue_team_auto_match", name="join_ok")
+
                     return
 
             logger.info(f"远程队伍={remote_teamid}已失效，应该是新的一周自动解散了，将重新创建队伍")
@@ -1016,6 +1022,7 @@ class DjcHelper:
         logger.info(f"{self.cfg.name} 创建小队并保存到本地成功，队伍信息={teaminfo}")
 
         self.try_report_xinyue_remote_teamid_to_server("新创建的队伍", group_info, teaminfo)
+        increase_counter(ga_category="xinyue_team_auto_match", name="report_first")
 
     def get_xinyue_team_group_info(self, user_buy_info: BuyInfo) -> XinYueTeamGroupInfo:
         # 初始化
@@ -1039,9 +1046,12 @@ class DjcHelper:
             break
 
         # 如果符合自动匹配条件，则替换为自动匹配的信息
-        if self.can_auto_match_xinyue_team(user_buy_info):
+        can_match = self.can_auto_match_xinyue_team(user_buy_info)
+        if can_match:
             group_info.team_name = f"auto_match_{self.qq()}"
             group_info.is_local = False
+
+        increase_counter(ga_category="xinyue_team_can_auto_match", name=can_match)
 
         return group_info
 
@@ -1261,6 +1271,9 @@ class DjcHelper:
         res = XinYueMatchServerCommonResponse()
         res.data = XinYueMatchServerRequestTeamResponse()
         res.auto_update_config(raw_res)
+
+        increase_counter(ga_category="xinyue_team_auto_match", name="request_teamid")
+        increase_counter(ga_category="xinyue_team_request_teamid", name=res.data.team_id != "")
 
         return res.data.team_id
 

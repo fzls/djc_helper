@@ -1233,8 +1233,15 @@ class MajieluoConfigUi(QFrame):
         form_layout.addRow("小号序号列表", self.lineedit_xiaohao_indexes)
 
         self.lineedit_xiaohao_qq_list = create_lineedit(list_to_str(cfg.xiaohao_qq_list), placeholder_text="最多3个，使用英文逗号分隔，如 123,456,789 表示三个小号的QQ号分别为123/456/789")
-        self.lineedit_xiaohao_qq_list.setValidator(QQListValidator())
-        form_layout.addRow("小号QQ号列表", self.lineedit_xiaohao_qq_list)
+        # self.lineedit_xiaohao_qq_list.setValidator(QQListValidator())
+        form_layout.addRow("小号在马杰洛页面的Uin列表", self.lineedit_xiaohao_qq_list)
+        form_layout.addRow("获取说明", QLabel((
+            "1. 打开马杰洛活动，找到赠送列表，一页页翻，直到找到小号\n"
+            "2. 如果找不到你的小号，那就可以放弃了，只能手动赠送给其他qq\n"
+            "3. 否则，可以在小号右侧的按钮处，右键，选择 检查元素，然后复制其中uin的值，形如（0502696b3b1e8cfe0ec987ec32be08a89）\n"
+            "\n"
+            "此外，本期一天只能送两次，需要只需要两个小号\n"
+        )))
 
         # -------------- 区域：发送礼盒链接给小号 --------------
         top_layout.addWidget(QHLine())

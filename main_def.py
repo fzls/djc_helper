@@ -641,11 +641,11 @@ def show_accounts_status(cfg, ctx, user_buy_info: BuyInfo):
 
     # 打印结果
     heads = [
-        "序号", "账号名", "启用状态", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
+        "序号", "账号名", "聚豆余额", "聚豆历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
         "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "引导石", "邀请次数", "论坛代币券", "助手次数",
     ]
     colSizes = [
-        4, 12, 8, 8, 12, 10, 6, 6, 16, 12,
+        4, 12, 8, 12, 10, 6, 6, 16, 12,
         8, 8, 8, 14, 8, 6, 8, 10, 8,
     ]
 
@@ -658,8 +658,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     djcHelper = DjcHelper(account_config, common_config)
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
-
-    status = "启用" if account_config.is_enabled() else "未启用"
 
     djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
     djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
@@ -695,7 +693,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     dnf_helper_task_finish_count = djcHelper.dnf_helper_query_task_finish_count()
 
     return [
-        idx, account_config.name, status,
+        idx, account_config.name,
         djc_balance, djc_allin,
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
 

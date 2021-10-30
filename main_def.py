@@ -781,6 +781,8 @@ def try_report_usage_info(cfg: Config):
 
         increase_counter(ga_category="login_mode", name=account_config.login_mode)
 
+        increase_counter(ga_category="enable_xinyue_team_auto_match", name=account_config.enable_auto_match_xinyue_team)
+
     # 上报网盘地址，用于区分分发渠道
     if not run_from_src():
         increase_counter(ga_category="netdisk_link", name=cfg.common.netdisk_link)

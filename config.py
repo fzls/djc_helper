@@ -399,6 +399,13 @@ class AccountConfig(ConfigInterface):
         self.take_award_34c_server_id = ""
         # wegame活动的34C角色 id
         self.take_award_34c_role_id = ""
+        # 是否启用自动匹配心悦组队功能
+        # 需要满足以下条件才会实际生效
+        #   1. 在按月付费期间
+        #   2. 开启了本开关
+        #   3. 当前QQ是特邀会员或者心悦会员
+        #   4. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
+        self.enable_auto_match_xinyue_team = False
 
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()

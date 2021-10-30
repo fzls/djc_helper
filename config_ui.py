@@ -1550,6 +1550,18 @@ class AccountConfigUi(QWidget):
         for exchange_item in cfg.exchange_items:
             self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
 
+        # -------------- 区域：心悦组队 --------------
+        self.collapsible_box_xinyue_team, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦组队", top_layout)
+
+        self.checkbox_enable_auto_match_xinyue_team = create_checkbox(cfg.enable_auto_match_xinyue_team)
+        add_row(form_layout, "是否心悦自动匹配组队", self.checkbox_enable_auto_match_xinyue_team)
+
+        add_row(form_layout, "需要满足这些条件", QLabel((
+            "1. 在付费生效期间\n"
+            "2. 当前QQ是特邀会员或者心悦会员\n"
+            "3. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次\n"
+        )))
+
         # -------------- 区域：心悦特权专区兑换 --------------
         self.collapsible_box_xinyue_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
 
@@ -1649,6 +1661,7 @@ class AccountConfigUi(QWidget):
         cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
         cfg.enable_majieluo_lucky = self.checkbox_enable_majieluo_lucky.isChecked()
         cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
+        self.enable_auto_match_xinyue_team = self.checkbox_enable_auto_match_xinyue_team.isChecked()
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()

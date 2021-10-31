@@ -1668,7 +1668,7 @@ class AccountConfigUi(QWidget):
         cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
         cfg.enable_majieluo_lucky = self.checkbox_enable_majieluo_lucky.isChecked()
         cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
-        self.enable_auto_match_xinyue_team = self.checkbox_enable_auto_match_xinyue_team.isChecked()
+        cfg.enable_auto_match_xinyue_team = self.checkbox_enable_auto_match_xinyue_team.isChecked()
 
         cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()

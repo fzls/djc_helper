@@ -94,6 +94,10 @@ def test_get_now_unix():
 
 def test_get_current():
     assert get_current(now_for_test) == "20210806120000"
+    t1 = get_current()
+    time.sleep(1)
+    t2 = get_current()
+    assert t1 != t2
 
 
 def test_get_today():

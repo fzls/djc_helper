@@ -306,11 +306,13 @@ def get_now_unix(now: Optional[datetime.datetime] = None) -> int:
     return int(now.timestamp())
 
 
-def get_current(t=get_now()) -> str:
+def get_current(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
     return t.strftime("%Y%m%d%H%M%S")
 
 
-def get_today(t=get_now()) -> str:
+def get_today(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
     return t.strftime("%Y%m%d")
 
 
@@ -319,15 +321,18 @@ def get_last_n_days(n, now: Optional[datetime.datetime] = None) -> List[str]:
     return [(now - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
-def get_week(t=get_now()) -> str:
+def get_week(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
     return t.strftime("%Y-week-%W")
 
 
-def get_month(t=get_now()) -> str:
+def get_month(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
     return t.strftime("%Y%m")
 
 
-def get_year(t=get_now()) -> str:
+def get_year(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
     return t.strftime("%Y")
 
 

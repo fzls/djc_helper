@@ -3160,10 +3160,6 @@ class DjcHelper:
             res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
-        def getOtherUserActivityTopInfo(userId: str):
-            res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **{**common_params, **{"userId": userId}})
-            return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
-
         def _getUserTaskList():
             return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
 
@@ -3397,18 +3393,21 @@ class DjcHelper:
         show_user_info(self.cfg.name, getUserActivityTopInfo())
         taskInfo = getUserTaskList()
         if taskInfo.hasPartner:
-            show_user_info("你的搭档", getOtherUserActivityTopInfo(taskInfo.pUserId))
+            show_user_info("你的搭档", self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
-    def query_dnf_helper_chronicle_info(self):
+    def query_dnf_helper_chronicle_info(self, userId=""):
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
+        if userId == "":
+            userId = dnf_helper_info.userId
+
         common_params = {
-            "userId": dnf_helper_info.userId,
+            "userId": userId,
             "sPartition": partition,
             "sRoleId": roleid,
             "print_res": False,

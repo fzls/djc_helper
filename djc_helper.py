@@ -3160,6 +3160,10 @@ class DjcHelper:
             res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
+        def getOtherUserActivityTopInfo(userId: str):
+            res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **{**common_params, **{"userId": userId}})
+            return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
+
         def _getUserTaskList():
             return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
 
@@ -3384,11 +3388,16 @@ class DjcHelper:
         # 抽奖
         lottery()
 
-        ui = getUserActivityTopInfo()
-        logger.warning(
-            color("fg_bold_yellow") +
-            f"账号 {self.cfg.name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
-        )
+        def show_user_info(name: str, ui: DnfHelperChronicleUserActivityTopInfo):
+            logger.warning(
+                color("fg_bold_yellow") +
+                f"账号 {name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
+            )
+
+        show_user_info(self.cfg.name, getUserActivityTopInfo())
+        taskInfo = getUserTaskList()
+        if taskInfo.hasPartner:
+            show_user_info("你的搭档", getOtherUserActivityTopInfo(taskInfo.pUserId))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self):

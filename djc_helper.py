@@ -6,8 +6,7 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
-from exceptions_def import (GithubActionLoginException,
-                            SameAccountTryLoginAtMultipleThreadsException)
+from exceptions_def import *
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
 from network import *
@@ -3272,7 +3271,6 @@ class DjcHelper:
             if not hasTakenAnyBasicAward:
                 logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
 
-        @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_award_op(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
                 mold = 1  # 自己
@@ -3286,8 +3284,9 @@ class DjcHelper:
             if res.get('msg', "") == '登录态异常':
                 msg = f"账号 {self.cfg.name} 的 dnf助手鉴权信息不对，将无法领取奖励。请将配置工具中dnf助手的四个参数全部填写。或者直接月末手动去dnf助手app上把等级奖励都领一遍，一分钟搞定-。-"
                 async_message_box(msg, "助手鉴权失败", show_once=True)
+                raise DnfHelperChronicleTokenExpiredOrWrongException()
 
-        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        @try_except(show_last_process_result=False, extra_msg="大概率是token不对或者过期了，导致无法领取等级奖励")
         def exchange_awards():
             exchangeList = exchange_list()
             exchangeGiftMap = {}

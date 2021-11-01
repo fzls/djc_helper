@@ -116,6 +116,10 @@ def test_get_month():
     assert get_month(now_for_test) == "202108"
 
 
+def test_get_last_month():
+    assert get_last_month(now_for_test) == "202107"
+
+
 def test_get_year():
     assert get_year(now_for_test) == "2021"
 

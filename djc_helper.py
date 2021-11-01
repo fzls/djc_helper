@@ -3139,7 +3139,8 @@ class DjcHelper:
 
         # ------ 绑定搭档 ------
         def bind_user_partner(ctx: str, isBind="1"):
-            res = self.post("绑定好友", url_mwegame, "", api="bindUserPartner", pUserId=dnf_helper_info.pUserId, isBind=isBind, **common_params)
+            ctx = f"{ctx}-{dnf_helper_info.pNickName}({dnf_helper_info.pUserId})"
+            res = self.post(ctx, url_mwegame, "", api="bindUserPartner", pUserId=dnf_helper_info.pUserId, isBind=isBind, **common_params)
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 查询各种信息 ------
@@ -3178,8 +3179,9 @@ class DjcHelper:
             taskInfo = getUserTaskList()
             # 如果未绑定搭档，且设置了固定搭档id，则先尝试自动绑定
             if not taskInfo.hasPartner and dnf_helper_info.pUserId != "":
-                logger.info(color("bold_cyan") + f"当前尚无搭档，但是配置了固定搭档id - {dnf_helper_info.pUserId}，将尝试绑定对方~")
-                bind_user_partner(f"绑定搭档 - {dnf_helper_info.pUserId}")
+                partner_str = f"{dnf_helper_info.pNickName}({dnf_helper_info.pUserId})"
+                logger.info(color("bold_cyan") + f"当前尚无搭档，但是配置了固定搭档id - {partner_str}，将尝试绑定对方~")
+                bind_user_partner(f"绑定搭档 - {partner_str}")
                 # 获取最新信息
                 taskInfo = getUserTaskList()
             # 根据是否有搭档，给予不同提示
@@ -3392,7 +3394,10 @@ class DjcHelper:
         show_user_info(self.cfg.name, getUserActivityTopInfo())
         taskInfo = getUserTaskList()
         if taskInfo.hasPartner:
-            show_user_info("你的搭档", self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
+            partner_name = "你的搭档"
+            if dnf_helper_info.pNickName != "":
+                partner_name += f"({dnf_helper_info.pNickName})"
+            show_user_info(partner_name, self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:

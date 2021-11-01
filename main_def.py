@@ -1675,10 +1675,14 @@ def demo_main():
 
     # note: 用于本地测试main的相关逻辑
     # 查询付费信息供后面使用
-    show_head_line("查询付费信息")
-    logger.warning("开始查询付费信息，请稍候~")
-    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
-    show_buy_info(user_buy_info, cfg, need_show_message_box=False)
+    user_buy_info = BuyInfo()
+    if need_check_bind_and_skey:
+        show_head_line("查询付费信息")
+        logger.warning("开始查询付费信息，请稍候~")
+        user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+        show_buy_info(user_buy_info, cfg, need_show_message_box=False)
+    else:
+        user_buy_info.expire_at = "2120-01-01 00:00:00"
 
     show_accounts_status(cfg, "启动时展示账号概览", user_buy_info)
     # try_join_xinyue_team(cfg)

@@ -3144,30 +3144,30 @@ class DjcHelper:
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 查询各种信息 ------
-        def exchange_list():
+        def exchange_list() -> DnfHelperChronicleExchangeList:
             res = self.get("可兑换道具列表", url_wang, api="list/exchange", **common_params)
             return DnfHelperChronicleExchangeList().auto_update_config(res)
 
-        def basic_award_list():
+        def basic_award_list() -> DnfHelperChronicleBasicAwardList:
             res = self.get("基础奖励与搭档奖励", url_wang, api="list/basic", **common_params)
             return DnfHelperChronicleBasicAwardList().auto_update_config(res)
 
-        def lottery_list():
+        def lottery_list() -> DnfHelperChronicleLotteryList:
             res = self.get("碎片抽奖奖励", url_wang, api="lottery/receive", **common_params)
             return DnfHelperChronicleLotteryList().auto_update_config(res)
 
-        def getUserActivityTopInfo():
+        def getUserActivityTopInfo() -> DnfHelperChronicleUserActivityTopInfo:
             res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
-        def _getUserTaskList():
+        def _getUserTaskList() -> dict:
             return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
 
-        def getUserTaskList():
+        def getUserTaskList() -> DnfHelperChronicleUserTaskList:
             res = _getUserTaskList()
             return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
-        def sign_gifts_list():
+        def sign_gifts_list() -> DnfHelperChronicleSignList:
             res = self.get("连续签到奖励列表", url_wang, api="list/sign", **common_params)
             return DnfHelperChronicleSignList().auto_update_config(res)
 
@@ -3396,7 +3396,7 @@ class DjcHelper:
             show_user_info("你的搭档", self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
-    def query_dnf_helper_chronicle_info(self, userId=""):
+    def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
@@ -3416,7 +3416,7 @@ class DjcHelper:
         return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserTaskList())
-    def query_dnf_helper_chronicle_user_task_list(self):
+    def query_dnf_helper_chronicle_user_task_list(self) -> DnfHelperChronicleUserTaskList:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo

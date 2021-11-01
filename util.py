@@ -331,6 +331,14 @@ def get_month(t: Optional[datetime.datetime] = None) -> str:
     return t.strftime("%Y%m")
 
 
+def get_last_month(t: Optional[datetime.datetime] = None) -> str:
+    t = t or get_now()
+    this_month_first_day, _ = start_and_end_date_of_a_month(t)
+    last_month_last_day = this_month_first_day - datetime.timedelta(days=1)
+
+    return last_month_last_day.strftime("%Y%m")
+
+
 def get_year(t: Optional[datetime.datetime] = None) -> str:
     t = t or get_now()
     return t.strftime("%Y")

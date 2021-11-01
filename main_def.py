@@ -1101,6 +1101,17 @@ def show_tips(cfg):
         msg = f"{title}: {tip}\n "
         async_message_box(msg, f"一些小提示_{title}", show_once=True, follow_flag_file=False)
 
+    # 尝试给自己展示一些提示
+    show_tips_for_myself()
+
+
+def show_tips_for_myself():
+    if not use_by_myself():
+        return
+
+    if is_weekly_first_run("微信支付维护提示"):
+        async_message_box("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
+
 
 def try_auto_update(cfg):
     try:

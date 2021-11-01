@@ -3385,19 +3385,30 @@ class DjcHelper:
         # 抽奖
         lottery()
 
+        # 展示进度信息
         def show_user_info(name: str, ui: DnfHelperChronicleUserActivityTopInfo):
             logger.warning(
                 color("fg_bold_yellow") +
                 f"账号 {name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
             )
 
-        show_user_info(self.cfg.name, getUserActivityTopInfo())
+        # 自己
+        userInfo = getUserActivityTopInfo()
+        show_user_info(self.cfg.name, userInfo)
+
+        # 队友
         taskInfo = getUserTaskList()
         if taskInfo.hasPartner:
             partner_name = "你的搭档"
             if dnf_helper_info.pNickName != "":
                 partner_name += f"({dnf_helper_info.pNickName})"
             show_user_info(partner_name, self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
+
+        # 更新本月的进度信息
+        # TODO: 日后如果想加编年史的自动组队的时候，可以根据保存的上个月的这个信息去决定是否有资格参与自动组队 @2021-11-01 10:40:51
+        user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(self.qq()).load()
+        user_info_db.year_month_to_user_info[get_month()] = userInfo
+        user_info_db.save()
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:

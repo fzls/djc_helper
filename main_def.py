@@ -617,7 +617,8 @@ def show_activity_info(cfg: Config):
 
 
 @try_except()
-def show_accounts_status(cfg, ctx, user_buy_info: BuyInfo):
+# show_accounts_status 展示个人概览
+def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line(ctx)
@@ -1684,7 +1685,7 @@ def demo_main():
     else:
         user_buy_info.expire_at = "2120-01-01 00:00:00"
 
-    show_accounts_status(cfg, "启动时展示账号概览", user_buy_info)
+    sas(cfg, "启动时展示账号概览", user_buy_info)
     # try_join_xinyue_team(cfg)
     # run(cfg)
     # try_take_xinyue_team_award(cfg)

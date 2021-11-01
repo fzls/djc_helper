@@ -130,7 +130,7 @@ def main():
     user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
     show_buy_info(user_buy_info, cfg, need_show_message_box=False)
 
-    show_accounts_status(cfg, "启动时展示账号概览", user_buy_info)
+    sas(cfg, "启动时展示账号概览", user_buy_info)
 
     # 预先尝试创建和加入固定队伍，从而每周第一次操作的心悦任务也能加到队伍积分中
     try_join_xinyue_team(cfg, user_buy_info)
@@ -151,7 +151,7 @@ def main():
         auto_send_cards(cfg)
 
     show_extra_infos(cfg)
-    show_accounts_status(cfg, "运行完毕展示账号概览", user_buy_info)
+    sas(cfg, "运行完毕展示账号概览", user_buy_info)
 
     if enable_card_lottery:
         show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)

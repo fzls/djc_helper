@@ -671,7 +671,10 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     last_week_xinyue_take_award_count = djcHelper.query_last_week_xinyue_team_take_award_count()
     can_auto_match_xinyue_team = ""
     if djcHelper.can_auto_match_xinyue_team(user_buy_info, print_waring=False):
-        can_auto_match_xinyue_team = "符合条件"
+        if teaminfo.is_team_full():
+            can_auto_match_xinyue_team = "匹配成功"
+        else:
+            can_auto_match_xinyue_team = "等待匹配"
     elif xinyue_info.is_xinyue_or_special_member() and not account_config.enable_auto_match_xinyue_team:
         can_auto_match_xinyue_team = "未开启"
 

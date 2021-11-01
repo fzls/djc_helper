@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Tuple, Type
 
-from dao import BuyInfo
+from dao import BuyInfo, DnfHelperChronicleUserActivityTopInfo
 from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
@@ -92,6 +92,27 @@ class UserBuyInfoDB(DBInterface):
         super().__init__()
 
         self.buy_info = BuyInfo()
+
+
+class DnfHelperChronicleUserActivityTopInfoDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.year_month_to_user_info = {}  # type: Dict[str, DnfHelperChronicleUserActivityTopInfo]
+
+    def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        return [
+            ('year_month_to_user_info', DnfHelperChronicleUserActivityTopInfo)
+        ]
+
+    def get_last_month_user_info(self) -> DnfHelperChronicleUserActivityTopInfo:
+        from util import get_last_month
+
+        last_month = get_last_month()
+        if last_month not in self.year_month_to_user_info:
+            return DnfHelperChronicleUserActivityTopInfo()
+
+        return self.year_month_to_user_info[last_month]
 
 
 if __name__ == '__main__':

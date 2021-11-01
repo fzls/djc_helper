@@ -592,6 +592,15 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
         self.levelExp = 5
         self.giftImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233235fbfbcb30af65.png"
 
+    def get_level_info_and_points_to_show(self) -> Tuple[str, str]:
+        levelInfo = f"LV{self.level}({self.currentExp}/{self.levelExp})"
+        chronicle_points = self.point
+        if self.totalExp == 0:
+            levelInfo = ""
+            chronicle_points = ""
+
+        return levelInfo, chronicle_points
+
 
 class DnfHelperChronicleUserTaskList(ConfigInterface):
     def __init__(self):

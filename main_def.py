@@ -642,11 +642,11 @@ def show_accounts_status(cfg, ctx, user_buy_info: BuyInfo):
     # 打印结果
     heads = [
         "序号", "账号名", "聚豆余额", "历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
-        "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "引导石", "邀请次数", "论坛代币券", "助手次数",
+        "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "搭档", "引导石", "邀请次数", "论坛代币券", "助手次数",
     ]
     colSizes = [
         4, 12, 8, 8, 10, 6, 6, 16, 12,
-        8, 8, 8, 14, 8, 6, 8, 10, 8,
+        8, 8, 8, 14, 8, 14, 6, 8, 10, 8,
     ]
 
     logger.info(tableify(heads, colSizes))
@@ -680,12 +680,12 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     gpoints = djcHelper.query_gpoints()
 
-    ui = djcHelper.query_dnf_helper_chronicle_info()
-    levelInfo = f"LV{ui.level}({ui.currentExp}/{ui.levelExp})"
-    chronicle_points = ui.point
-    if ui.totalExp == 0:
-        levelInfo = ""
-        chronicle_points = ""
+    levelInfo, chronicle_points = djcHelper.query_dnf_helper_chronicle_info().get_level_info_and_points_to_show()
+
+    partner_levelInfo = ""
+    user_task_info = djcHelper.query_dnf_helper_chronicle_user_task_list()
+    if user_task_info.hasPartner:
+        partner_levelInfo, _ = djcHelper.query_dnf_helper_chronicle_info(user_task_info.pUserId).get_level_info_and_points_to_show()
 
     majieluo_stone = djcHelper.query_stone_count()
     time.sleep(1)  # 避免查询下面的次数时提示 速度过快
@@ -702,7 +702,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
         last_week_xinyue_take_award_count, can_auto_match_xinyue_team,
         gpoints,
-        levelInfo, chronicle_points,
+        levelInfo, chronicle_points, partner_levelInfo,
         majieluo_stone, majieluo_invite_count,
         dbq,
         dnf_helper_task_finish_count,

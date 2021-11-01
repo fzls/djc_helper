@@ -3138,6 +3138,11 @@ class DjcHelper:
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
 
+        # ------ 绑定搭档 ------
+        def bind_user_partner(ctx: str, isBind="1"):
+            res = self.post("绑定好友", url_mwegame, "", api="bindUserPartner", pUserId=dnf_helper_info.pUserId, isBind=isBind, **common_params)
+            logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
+
         # ------ 查询各种信息 ------
         def exchange_list():
             res = self.get("可兑换道具列表", url_wang, api="list/exchange", **common_params)
@@ -3172,10 +3177,17 @@ class DjcHelper:
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAwards():
             taskInfo = getUserTaskList()
+            # 如果未绑定搭档，且设置了固定搭档id，则先尝试自动绑定
+            if not taskInfo.hasPartner and dnf_helper_info.pUserId != "":
+                logger.info(color("bold_cyan") + f"当前尚无搭档，但是配置了固定搭档id - {dnf_helper_info.pUserId}，将尝试绑定对方~")
+                bind_user_partner(f"绑定搭档 - {dnf_helper_info.pUserId}")
+                # 获取最新信息
+                taskInfo = getUserTaskList()
+            # 根据是否有搭档，给予不同提示
             if taskInfo.hasPartner:
                 logger.info(f"搭档为{taskInfo.pUserId}")
             else:
-                logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-")
+                logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-。如果找到了固定的队友，推荐将其userid填写到配置工具中，这样以后每期都会自动绑定~")
 
             logger.info("首先尝试完成接到身上的任务")
             normal_tasks = set()
@@ -6683,6 +6695,7 @@ class DjcHelper:
             "iGiftID",
             "iInviter",
             "iPageNow", "iPageSize",
+            "pUserId", "isBind",
         ]}
 
         # 整合得到所有默认值
@@ -7083,4 +7096,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.guanjia_new()
+        djcHelper.dnf_helper_chronicle()

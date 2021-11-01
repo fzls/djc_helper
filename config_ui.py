@@ -2293,11 +2293,15 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         add_row(form_layout, "唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 
+        self.lineedit_pUserId = create_lineedit(cfg.pUserId, "如果你有固定搭档，可以把他的社区ID填到这里，这样每期编年史将会自动绑定")
+        add_row(form_layout, "固定搭档的社区ID(pUserId)", self.lineedit_pUserId)
+
     def update_config(self, cfg: DnfHelperInfoConfig):
         cfg.userId = self.lineedit_userId.text()
         cfg.nickName = self.lineedit_nickName.text()
         cfg.token = self.lineedit_token.text()
         cfg.uniqueRoleId = self.lineedit_uniqueRoleId.text()
+        cfg.pUserId = self.lineedit_pUserId.text()
 
         cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
 

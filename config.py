@@ -167,6 +167,9 @@ class DnfHelperInfoConfig(ConfigInterface):
         # 需要确保助手里配置的编年史领奖角色和道聚城里的一致，否则这个值会对不上
         self.uniqueRoleId = ""
 
+        # 搭档的userId，让你的固定搭档告知你userid即可
+        self.pUserId = ""
+
         # dnf助手编年史是否开启抽奖
         self.chronicle_lottery = False
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json

@@ -2350,6 +2350,9 @@ def show_notices():
 
 
 def main():
+    import config as config_module
+    config_module.g_exit_on_check_error = False
+
     increase_counter(name="config_ui", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
 
     def catch_exceptions(t, val, tb):

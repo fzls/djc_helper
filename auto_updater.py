@@ -1,6 +1,4 @@
 # 更新器不启用文件日志
-import sys
-
 from log import color, fileHandler, logger, new_file_handler
 from version import now_version
 
@@ -17,7 +15,8 @@ from compress import decompress_dir_with_bandizip
 from update import need_update
 from upload_lanzouyun import Uploader
 from util import (bypass_proxy, change_title, exists_flag_file, kill_process,
-                  show_unexpected_exception_message, start_djc_helper)
+                  pause_and_exit, show_unexpected_exception_message,
+                  start_djc_helper)
 
 bandizip_executable_path = "./utils/bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -194,8 +193,7 @@ if __name__ == '__main__':
         show_unexpected_exception_message(e)
 
         logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~")
-        os.system("PAUSE")
-        sys.exit(1)
+        pause_and_exit(1)
 
 # 示例用法
 # import subprocess

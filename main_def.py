@@ -1,5 +1,4 @@
 from multiprocessing import cpu_count, freeze_support
-from sys import exit
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
@@ -40,8 +39,7 @@ def check_djc_role_binding():
 
     if not has_any_account_in_normal_run(cfg):
         logger.warning("未发现任何有效的账户配置，请检查配置文件")
-        pause()
-        exit(-1)
+        pause_and_exit(-1)
 
     _show_head_line("启动时检查各账号是否在道聚城绑定了dnf账号和任意手游账号")
 

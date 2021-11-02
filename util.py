@@ -1252,6 +1252,11 @@ def pause():
     os.system(pause_cmd)
 
 
+def pause_and_exit(code=-1):
+    pause()
+    sys.exit(code)
+
+
 def bytes_arr_to_hex_str(bytes_arr: List[int]) -> str:
     """
     [0x58, 0x59, 0x01, 0x00, 0x00] => "0x58, 0x59, 0x01, 0x00, 0x00"

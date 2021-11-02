@@ -2,7 +2,6 @@ import json
 import os
 import re
 from datetime import datetime
-from sys import exit
 
 from _build import build
 from _clear_github_artifact import clear_github_artifact
@@ -13,7 +12,8 @@ from _push_github import push_github
 from log import color, logger
 from upload_lanzouyun import Uploader
 from util import (change_console_window_mode_async, count_down,
-                  make_sure_dir_exists, range_from_one, show_head_line)
+                  make_sure_dir_exists, pause_and_exit, range_from_one,
+                  show_head_line)
 from version import now_version
 
 
@@ -26,7 +26,7 @@ def release():
 
     if re.match(version_reg, version) is None:
         logger.info(f"版本号格式有误，正确的格式类似：1.0.0 ，而不是 {version}")
-        exit(-1)
+        pause_and_exit(-1)
 
     # 最大化窗口
     change_console_window_mode_async(disable_min_console=True)

@@ -163,8 +163,7 @@ class QQLogin():
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                 )
                 async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
-                os.system("PAUSE")
-                exit(-1)
+                pause_and_exit(-1)
 
             # 然后使用本地的chrome来初始化driver对象
             options = Options()
@@ -327,7 +326,7 @@ class QQLogin():
                 "1. _ubuntu_download_and_install_chrome_and_driver.sh \n"
                 "2. _centos_download_and_install_chrome_and_driver.sh \n"
             ))
-            exit(-1)
+            pause_and_exit(-1)
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"{self.chrome_root_directory()}/chromedriver_{self.get_chrome_major_version()}.exe")

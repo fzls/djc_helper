@@ -1,11 +1,10 @@
 import json
 import os
 import subprocess
-from sys import exit
 
 from dao import GameInfo
 from log import logger
-from util import message_box, pause
+from util import message_box, pause_and_exit
 
 _loaded = False
 name_2_game_info_map = {}
@@ -41,8 +40,7 @@ def lazy_load():
             "\n"
             "请按照上述提示调整后重试\n"
         ), exc_info=e)
-        pause()
-        exit(-1)
+        pause_and_exit(-1)
 
 
 def get_game_info(name):
@@ -50,7 +48,7 @@ def get_game_info(name):
     if name not in name_2_game_info_map:
         message_box(f"未找到游戏【{name}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字", "游戏名不正确")
         subprocess.call(["utils/npp_portable/notepad++.exe", "utils/reference_data/djc_biz_list.json"])
-        exit(-1)
+        pause_and_exit(-1)
 
     return name_2_game_info_map[name]
 

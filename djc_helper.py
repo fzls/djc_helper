@@ -106,7 +106,7 @@ class DjcHelper:
         os.popen("start https://dnf.qq.com/lbact/a20200716wgmhz/index.html?wg_ad_from=loginfloatad")
         # 提示
         input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
-        exit(-1)
+        pause_and_exit(-1)
 
     def update_skey_qr_login(self, query_data, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)

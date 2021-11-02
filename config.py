@@ -798,7 +798,8 @@ class Config(ConfigInterface):
     def on_config_update(self, raw_config: dict):
         if not self.check():
             logger.error("配置有误，请根据提示信息修改")
-            exit(-1)
+            if g_exit_on_check_error:
+                pause_and_exit(-1)
 
         if len(self.account_configs) != 0 and self.common.run_first_account_only:
             logger.warning(color("bold_yellow") + f"当前是调试模式，仅处理第一个账号，并关闭多进程和超快速功能")
@@ -913,6 +914,9 @@ class Config(ConfigInterface):
 
 
 g_config = Config()
+
+# 是否在检查配置出错时退出程序，在配置工具中可以将该开关关闭，从而确保即使配置不符合规则，也能正常启动，修改对应配置~
+g_exit_on_check_error = True
 
 
 # 读取程序config

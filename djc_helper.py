@@ -256,14 +256,14 @@ class DjcHelper:
         bizcode = gameinfo.bizCode
         if bizcode not in self.bizcode_2_bind_role_map:
             logger.warning(color("fg_bold_yellow") + f"未在道聚城绑定手游【{get_game_info_by_bizcode(bizcode).bizName}】的角色信息，请前往道聚城app进行绑定。")
-            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
+            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整【配置工具】配置的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
             return False
 
         # 检查这个游戏是否是手游
         role_info = self.bizcode_2_bind_role_map[bizcode]
         if not role_info.is_mobile_game():
             logger.warning(color("fg_bold_yellow") + f"【{get_game_info_by_bizcode(bizcode).bizName}】是端游，不是手游。")
-            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整config.toml配置中的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
+            logger.warning(color("fg_bold_cyan") + "若想绑定其他手游则调整【配置工具】配置的手游名称，" + color("fg_bold_blue") + "若不启用则将手游名称调整为无")
             return False
 
         return True

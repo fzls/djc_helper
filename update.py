@@ -106,7 +106,7 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
                 )
                 win32api.MessageBox(0, message, "不好啦", win32con.MB_ICONERROR)
         else:
-            message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以前往config.toml，将check_update_on_start和check_update_on_end的值设为false即可"
+            message = "如果想停留在当前版本，不想每次启动都弹出前面这个提醒更新的框框，可以打开配置工具，在【公共配置】/【更新】中取消检查更新即可。"
             win32api.MessageBox(0, message, "取消启动时自动检查更新方法", win32con.MB_ICONINFORMATION)
     else:
         logger.info(f"当前版本{now_version}已是最新版本，无需更新")

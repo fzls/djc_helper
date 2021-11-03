@@ -3408,6 +3408,7 @@ class DjcHelper:
         # 更新本月的进度信息
         # TODO: 日后如果想加编年史的自动组队的时候，可以根据保存的上个月的这个信息去决定是否有资格参与自动组队 @2021-11-01 10:40:51
         user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(f"编年史进度-{self.qq()}").load()
+        user_info_db.account_name = self.cfg.name
         user_info_db.year_month_to_user_info[get_month()] = userInfo
         user_info_db.save()
 

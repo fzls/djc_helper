@@ -98,6 +98,7 @@ class DnfHelperChronicleUserActivityTopInfoDB(DBInterface):
     def __init__(self):
         super().__init__()
 
+        self.account_name = ""
         self.year_month_to_user_info = {}  # type: Dict[str, DnfHelperChronicleUserActivityTopInfo]
 
     def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:

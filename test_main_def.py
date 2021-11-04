@@ -18,7 +18,7 @@ def test_try_notify_new_pay_info():
     UserBuyInfoDB().with_context(str(qq_accounts)).reset()
 
     # 执行第一次查询
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info)
+    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info, show_message_box=False)
     # 在没有数据的情况下不应产生通知
     assert new_buy_dlc is False
     assert len(new_buy_monthly_pay_records) == 0
@@ -32,13 +32,13 @@ def test_try_notify_new_pay_info():
         *delta_normal_months,
         BuyRecord().auto_update_config({"buy_month": 2, "buy_at": "2021-02-08 00:00:00", "reason": "自动更新DLC赠送(自2.8至今最多累积未付费时长两个月***注意不是从购买日开始计算***)"}),
     ])
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info)
+    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info, show_message_box=False)
     # 确保通知有dlc和新的普通按月付费
     assert new_buy_dlc is True
     assert new_buy_monthly_pay_records == delta_normal_months
 
     # 不做任何操作，再次执行操作
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info)
+    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(qq_accounts, user_buy_info, show_message_box=False)
     # 确保未发生变化
     assert new_buy_dlc is False
     assert len(new_buy_monthly_pay_records) == 0

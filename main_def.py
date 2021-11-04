@@ -1490,7 +1490,7 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
                                           "\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月")
 
 
-def try_notify_new_pay_info(qq_accounts: List[str], latest_user_buy_info: BuyInfo) -> Tuple[bool, List[BuyRecord]]:
+def try_notify_new_pay_info(qq_accounts: List[str], latest_user_buy_info: BuyInfo, show_message_box=True) -> Tuple[bool, List[BuyRecord]]:
     new_buy_dlc = False
     new_buy_monthly_pay_records: List[BuyRecord] = []
 
@@ -1502,7 +1502,7 @@ def try_notify_new_pay_info(qq_accounts: List[str], latest_user_buy_info: BuyInf
         # 检查dlc
         if not db.buy_info.infer_has_buy_dlc() and latest_user_buy_info.infer_has_buy_dlc():
             new_buy_dlc = True
-            async_message_box("新购买的自动更新dlc已到账，请按 付费指引 中的使用说明进行使用~", "到账提醒")
+            if show_message_box: async_message_box("新购买的自动更新dlc已到账，请按 付费指引 中的使用说明进行使用~", "到账提醒")
             pass
 
         # 检查是否有新的按月付费
@@ -1517,7 +1517,7 @@ def try_notify_new_pay_info(qq_accounts: List[str], latest_user_buy_info: BuyInf
             msg = f"新购买的 {new_months} 月 按月付费已到账，详情如下"
             msg += "\n购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in new_buy_monthly_pay_records)
 
-            async_message_box(msg, "到账提醒")
+            if show_message_box: async_message_box(msg, "到账提醒")
 
     # 保存新的付费信息
     if new_buy_dlc or len(new_buy_monthly_pay_records) != 0 or not db.file_created:

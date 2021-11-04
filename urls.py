@@ -60,9 +60,6 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
-    "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
-    "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
-    "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
@@ -73,6 +70,9 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
 
     # 已过期活动
+    "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
+    "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
+    "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",

@@ -1,7 +1,9 @@
+import datetime
 from typing import Any, Dict, List, Tuple, Type
 
 from dao import BuyInfo, DnfHelperChronicleUserActivityTopInfo
 from db_def import ConfigInterface, DBInterface
+
 
 # ----------------- 数据定义 -----------------
 
@@ -14,12 +16,21 @@ class DemoDB(DBInterface):
 
 
 class FirstRunDB(DBInterface):
+    time_fmt = "%Y-%m-%d %H:%M:%S.%f"
+
     def __init__(self):
         super().__init__()
 
-    def get_update_at(self):
+        from util import format_now
+        self.last_run_at = format_now(self.time_fmt)
+
+    def get_last_run_at(self) -> datetime.datetime:
         from util import parse_time
-        return parse_time(self.update_at)
+        return parse_time(self.last_run_at, self.time_fmt)
+
+    def update_last_run_at(self):
+        from util import format_now
+        self.last_run_at = format_now(self.time_fmt)
 
 
 class WelfareDB(DBInterface):

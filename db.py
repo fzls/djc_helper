@@ -1,4 +1,3 @@
-import datetime
 from typing import Any, Dict, List, Tuple, Type
 
 from dao import BuyInfo, DnfHelperChronicleUserActivityTopInfo

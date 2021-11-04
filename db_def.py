@@ -16,7 +16,7 @@ class DBInterface(ConfigInterface):
         self.context = "global"
         self.db_type_name = self.__class__.__name__
         self.create_at = format_now()
-        self.update_at = format_now()
+        self.save_at = format_now()
         self.file_created = False
 
         # 如果设置了，则使用该路径，否则根据db类型和context的md5来生成路径
@@ -58,7 +58,7 @@ class DBInterface(ConfigInterface):
             if not os.path.isfile(db_file):
                 self.create_at = format_now()
 
-            self.update_at = format_now()
+            self.save_at = format_now()
             self.file_created = True
 
             self.save_to_json_file(db_file)

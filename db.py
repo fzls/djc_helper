@@ -15,22 +15,23 @@ class DemoDB(DBInterface):
         self.bool_val = True
 
 
-class FirstRunDB(DBInterface):
-    time_fmt = "%Y-%m-%d %H:%M:%S.%f"
+time_cmt_millseconds = "%Y-%m-%d %H:%M:%S.%f"
 
+
+class FirstRunDB(DBInterface):
     def __init__(self):
         super().__init__()
 
         from util import format_now
-        self.last_run_at = format_now(self.time_fmt)
+        self.last_run_at = format_now(time_cmt_millseconds)
 
     def get_last_run_at(self) -> datetime.datetime:
         from util import parse_time
-        return parse_time(self.last_run_at, self.time_fmt)
+        return parse_time(self.last_run_at, time_cmt_millseconds)
 
     def update_last_run_at(self):
         from util import format_now
-        self.last_run_at = format_now(self.time_fmt)
+        self.last_run_at = format_now(time_cmt_millseconds)
 
 
 class WelfareDB(DBInterface):
@@ -89,6 +90,17 @@ class CacheInfo(DBInterface):
         super().__init__()
 
         self.value = None  # type: Any
+
+        from util import format_now
+        self.last_update_at = format_now(time_cmt_millseconds)
+
+    def get_last_update_at(self) -> datetime.datetime:
+        from util import parse_time
+        return parse_time(self.last_update_at, time_cmt_millseconds)
+
+    def update_last_update_at(self):
+        from util import format_now
+        self.last_update_at = format_now(time_cmt_millseconds)
 
 
 class FireCrackersDB(DBInterface):

@@ -805,7 +805,7 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
         cached_value = cache_info.value
 
         if not force_update:
-            if cache_info.get_last_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
+            if cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
                 if cache_validate_func is None or cache_validate_func(cache_info.value):
                     logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
                     return cache_info.value
@@ -822,7 +822,7 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
 
     cache_info = CacheInfo()
     cache_info.value = latest_value
-    cache_info.update_last_update_at()
+    cache_info.set_update_at()
 
     db.cache[cache_key] = cache_info
 

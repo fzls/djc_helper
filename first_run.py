@@ -63,14 +63,14 @@ def _is_first_run(first_run_type: str, key="", duration=timedelta(days=1)) -> bo
             if first_run_type == FirstRunType.ONCE:
                 first_run = False
             elif first_run_type == FirstRunType.DURATION:
-                first_run = first_run_data.get_last_run_at() + duration < get_now()
+                first_run = first_run_data.get_update_at() + duration < get_now()
             else:
                 duration_func = duration_func_map[first_run_type]
-                first_run = duration_func() != duration_func(first_run_data.get_last_run_at())
+                first_run = duration_func() != duration_func(first_run_data.get_update_at())
 
         # 如果是，则更新缓存文件
         if first_run:
-            first_run_data.update_last_run_at()
+            first_run_data.set_update_at()
 
         logger.debug(f"{first_run_type:7s} {first_run_data.prepare_env_and_get_db_filepath()} first_run={first_run}, data={first_run_data}")
 

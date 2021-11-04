@@ -267,6 +267,29 @@ def test_parse_unicode_escape_string():
     assert parse_unicode_escape_string("\\u5982\\u679c") == "如果"
 
 
+def test_with_cache():
+    test_category = f"test_with_cache_category_{random.random()}"
+    cache_duration = 0.5
+
+    def f() -> float:
+        return get_now().timestamp()
+
+    test_key = f"test_with_cache_key_{random.random()}"
+    c1 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+    time.sleep(1.2 * cache_duration)
+    c2 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+    assert c1 != c2
+
+    test_key = f"test_with_cache_key_{random.random()}"
+    c1 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+    time.sleep(0.6 * cache_duration)
+    c2 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+    time.sleep(0.6 * cache_duration)
+    c3 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+    assert c1 == c2
+    assert c1 != c3
+
+
 def test_remove_none_from_list():
     assert remove_none_from_list([]) == []
     assert remove_none_from_list([None]) == []

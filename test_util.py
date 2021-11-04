@@ -268,7 +268,7 @@ def test_parse_unicode_escape_string():
 
 
 def test_with_cache():
-    test_category = f"test_with_cache_category_{random.random()}"
+    test_category = f"test_with_cache_category_{time.time()}_{random.random()}"
     cache_duration = 0.5
 
     def f() -> float:

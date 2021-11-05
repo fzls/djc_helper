@@ -20,7 +20,7 @@ class DBInterface(ConfigInterface):
         self.db_type_name = self.__class__.__name__
         self.create_at = format_now()
         self.save_at = format_now()
-        self.update_at = format_now(self.time_cmt_millseconds)
+        self._update_at = format_now(self.time_cmt_millseconds)
         self.file_created = False
 
         # 如果设置了，则使用该路径，否则根据db类型和context的md5来生成路径
@@ -28,11 +28,11 @@ class DBInterface(ConfigInterface):
 
     def get_update_at(self) -> datetime.datetime:
         from util import parse_time
-        return parse_time(self.update_at, self.time_cmt_millseconds)
+        return parse_time(self._update_at, self.time_cmt_millseconds)
 
     def set_update_at(self):
         from util import format_now
-        self.update_at = format_now(self.time_cmt_millseconds)
+        self._update_at = format_now(self.time_cmt_millseconds)
 
     # ----------------- 数据库读写操作 -----------------
     def with_context(self, context: str) -> DBInterface:

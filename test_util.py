@@ -269,7 +269,7 @@ def test_parse_unicode_escape_string():
 
 def test_with_cache():
     test_category = f"test_with_cache_category_{time.time()}_{random.random()}"
-    cache_duration = 0.5
+    cache_duration = 2
 
     def f() -> float:
         return get_now().timestamp()
@@ -279,6 +279,14 @@ def test_with_cache():
     time.sleep(1.2 * cache_duration)
     c2 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
     assert c1 != c2
+
+
+def test_with_cache_continued():
+    test_category = f"test_with_cache_category_{time.time()}_{random.random()}"
+    cache_duration = 2
+
+    def f() -> float:
+        return get_now().timestamp()
 
     test_key = f"test_with_cache_key_{random.random()}"
     c1 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)

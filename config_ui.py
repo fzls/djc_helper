@@ -553,9 +553,9 @@ class ConfigUi(QFrame):
             form_layout.addWidget(QHLine())
 
             self.push_button_grid_layout_pay_type_name = create_push_button_grid_layout(all_pay_type_names, "Cyan")
-            for btn in self.push_button_grid_layout_pay_type_name.buttons:
-                if btn.text() == "微信支付":
-                    btn.clicked.connect(self.show_wxpay_in_maintain)
+            # for btn in self.push_button_grid_layout_pay_type_name.buttons:
+            #     if btn.text() == "微信支付":
+            #         btn.clicked.connect(self.show_wxpay_in_maintain)
 
             form_layout.addRow("付款方式", self.push_button_grid_layout_pay_type_name)
 

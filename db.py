@@ -17,6 +17,9 @@ class FirstRunDB(DBInterface):
     def __init__(self):
         super().__init__()
 
+        # 2.0.0     修改字段update为_update，废弃原有数据
+        self.version = "2.0.0"
+
 
 class WelfareDB(DBInterface):
     def __init__(self):

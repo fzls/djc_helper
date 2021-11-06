@@ -2355,7 +2355,7 @@ class DjcHelper:
         self.dnf_comic_op("每日在线好礼", "774826")
 
         total_get, star_count = query_star_count()
-        msg = f"当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
+        msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
         logger.info(color("bold_yellow") + msg)
 
         if star_count > 0 and is_weekly_first_run("提示领道具") and not use_by_myself():
@@ -2772,7 +2772,7 @@ class DjcHelper:
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            extra_msg = "未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
+            extra_msg = f"账号 {self.cfg.name} 未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken")
             return
 
@@ -2820,7 +2820,7 @@ class DjcHelper:
         tips = '\n'.join([
             extra_msg,
             "",
-            f"助手token已过期或者未填写，请到群里({self.common_cfg.qq_group})发【助手token】，机器人会自动回复最新的获取token的方式"
+            f"账号 {self.cfg.name} 助手token已过期或者未填写，请到群里({self.common_cfg.qq_group})发【助手token】，机器人会自动回复最新的获取token的方式"
         ])
 
         logger.warning(
@@ -4023,7 +4023,7 @@ class DjcHelper:
 
             current_bind_role = self.get_dnf_bind_role_copy()
             if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会长"):
-                async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 是普通会员（或未加入公会），不是会长（只有会长角色可以领取这部分奖励，普通会员角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取会长活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
+                async_message_box(f"账号 {self.cfg.name} 由于当前绑定角色 {current_bind_role.roleName} 是普通会员（或未加入公会），不是会长（只有会长角色可以领取这部分奖励，普通会员角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取会长活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
 
             # 如果这个领取的角色不是道聚城设定的绑定角色，则继续尝试其他的，从而确保所有非绑定角色中符合条件的都会被尝试，这样只要随便从中挑一个来完成对应条件即可
             need_continue = take_lottery_count_role_info.roleCode != current_bind_role.roleCode
@@ -4043,7 +4043,7 @@ class DjcHelper:
 
             current_bind_role = self.get_dnf_bind_role_copy()
             if take_lottery_count_role_info.roleCode != current_bind_role.roleCode and is_weekly_first_run("公会活动-会员"):
-                async_message_box(f"由于当前绑定角色 {current_bind_role.roleName} 是会长（或未加入公会），不是公会会员（只有普通会员角色可以领取这部分奖励，会长角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取公会会员活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
+                async_message_box(f"账号 {self.cfg.name} 由于当前绑定角色 {current_bind_role.roleName} 是会长（或未加入公会），不是公会会员（只有普通会员角色可以领取这部分奖励，会长角色不行），因此临时选择了 {take_lottery_count_role_info.roleName} 来进行领取公会会员活动的奖励，请自行登录该角色去邮箱领取相应奖励", "领奖通知")
 
             # 如果这个领取的角色不是道聚城设定的绑定角色，则继续尝试其他的，从而确保所有非绑定角色中符合条件的都会被尝试，这样只要随便从中挑一个来完成对应条件即可
             need_continue = take_lottery_count_role_info.roleCode != current_bind_role.roleCode
@@ -5620,7 +5620,7 @@ class DjcHelper:
 
         info = query_info()
         untaken_awards = info.untaken_rewards()
-        msg = f"Colg活跃值已经达到 【{info.lv_score}】 了咯"
+        msg = f"账号 {self.cfg.name} Colg活跃值已经达到 【{info.lv_score}】 了咯"
         if len(untaken_awards) > 0:
             msg += f"，目前有以下奖励可以领取，记得去Colg领取哦\n{untaken_awards}"
         else:
@@ -5987,7 +5987,7 @@ class DjcHelper:
             logger.info("未配置34C的角色ID或区服id")
             if is_weekly_first_run(f"配置34C_{self.cfg.name}") and not use_by_myself():
                 title = "提示"
-                msg = f"未配置34C的角色ID，将不会领取wegame活动的34C奖励。请前往配置工具的 账号配置/其他 选择34c角色信息"
+                msg = f"账号 {self.cfg.name} 未配置34C的角色ID，将不会领取wegame活动的34C奖励。请前往配置工具的 账号配置/其他 选择34c角色信息"
                 async_message_box(msg, title)
 
     def check_dnf_wegame_dup(self, **extra_params):

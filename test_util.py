@@ -281,6 +281,31 @@ def test_with_cache():
     assert c1 != c2
 
 
+def test_with_cache_v2():
+    test_category = f"test_with_cache_category_{time.time()}_{random.random()}"
+    cache_duration = 2
+
+    def f() -> float:
+        return get_now().timestamp()
+
+    test_key = f"test_with_cache_key_{random.random()}"
+
+    # 先触发一次cache miss
+    c1 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+
+    # 移除_update字段，模拟上个版本的存盘记录
+    db = CacheDB().with_context(test_category).load()
+    db_info = db.cache[test_key]
+    db_info.update_at = db_info._update_at
+    delattr(db_info, "_update_at")
+    db.save()
+
+    # 再次调用，此时应当重新触发cache miss
+    c2 = with_cache(test_category, test_key, f, cache_max_seconds=cache_duration)
+
+    assert c1 != c2
+
+
 def test_with_cache_continued():
     test_category = f"test_with_cache_category_{time.time()}_{random.random()}"
     cache_duration = 2

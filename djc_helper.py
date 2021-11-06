@@ -3260,19 +3260,43 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_awards():
+            listOfBasicList = get_awards()
+            not_taken_awards = get_not_taken_awards(listOfBasicList)
+
+            take_all_not_taken_awards(not_taken_awards)
+
+            if len(not_taken_awards) == 0:
+                logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+            elif dnf_helper_info.token == "":
+                prompt_take_awards()
+
+        def get_awards() -> List[Tuple[bool, List[DnfHelperChronicleBasicAwardInfo]]]:
+            listOfBasicList = []
+
             basicAwardList = basic_award_list()
-            listOfBasicList = [(True, basicAwardList.basic1List)]
+
+            listOfBasicList.append((True, basicAwardList.basic1List))
             if basicAwardList.hasPartner:
                 listOfBasicList.append((False, basicAwardList.basic2List))
-            hasTakenAnyBasicAward = False
+
+            return listOfBasicList
+
+        def get_not_taken_awards(listOfBasicList: List[Tuple[bool, List[DnfHelperChronicleBasicAwardInfo]]]) -> List[Tuple[bool, DnfHelperChronicleBasicAwardInfo]]:
+            not_taken_award_list = []
+
             for selfGift, basicList in listOfBasicList:
+                not_token_awards = []
                 for award in basicList:
                     if award.isLock == 0 and award.isUsed == 0:
-                        # 已解锁，且未领取，则尝试领取
-                        take_basic_award_op(award, selfGift)
-                        hasTakenAnyBasicAward = True
-            if not hasTakenAnyBasicAward:
-                logger.info("目前没有新的可以领取的基础奖励，只能等升级咯~")
+                        # 已解锁，且未领取，则加入待领取列表
+                        not_taken_award_list.append((selfGift, award))
+
+            return not_taken_award_list
+
+        @try_except(show_last_process_result=False, extra_msg=extra_msg)
+        def take_all_not_taken_awards(not_taken_awards: List[Tuple[bool, DnfHelperChronicleBasicAwardInfo]]):
+            for selfGift, award in not_taken_awards:
+                take_basic_award_op(award, selfGift)
 
         def take_basic_award_op(awardInfo: DnfHelperChronicleBasicAwardInfo, selfGift=True):
             if selfGift:
@@ -3288,6 +3312,18 @@ class DjcHelper:
                 msg = f"账号 {self.cfg.name} 的 dnf助手鉴权信息不对，将无法领取奖励。请将配置工具中dnf助手的四个参数全部填写。或者直接月末手动去dnf助手app上把等级奖励都领一遍，一分钟搞定-。-"
                 async_message_box(msg, "助手鉴权失败", show_once=True)
                 raise DnfHelperChronicleTokenExpiredOrWrongException()
+
+        def prompt_take_awards():
+            # 如果有奖励，且未配置token，则在下列情况提醒手动领取
+            # 1. 满级了
+            # 2. 是本月最后一天
+            info = getUserActivityTopInfo()
+            _, end_date = start_and_end_date_of_a_month(get_now())
+            last_day = get_today(end_date)
+
+            if info.is_full_level() or get_today() == last_day:
+                msg = f"{self.cfg.name} 的编年史等级已满级，或者今天已是本月最后一天，但其仍有未领取的等级奖励，且未配置token，所以无法自动领取，请自行去道聚城app将这个账号的等级奖励都领取掉~"
+                async_message_box(msg, "提醒手动领取编年史奖励")
 
         @try_except(show_last_process_result=False, extra_msg="大概率是token不对或者过期了，导致无法领取等级奖励")
         def exchange_awards():

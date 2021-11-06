@@ -601,6 +601,9 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
 
         return levelInfo, chronicle_points
 
+    def is_full_level(self) -> bool:
+        return self.level == 30
+
 
 class DnfHelperChronicleUserTaskList(ConfigInterface):
     def __init__(self):

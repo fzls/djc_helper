@@ -36,6 +36,9 @@ class DBInterface(ConfigInterface):
         from util import format_now
         self._update_at = format_now(self.time_cmt_millseconds)
 
+    def get_version(self) -> str:
+        return ""
+
     # ----------------- 数据库读写操作 -----------------
     def with_context(self, context: str) -> DBInterface:
         """
@@ -74,6 +77,8 @@ class DBInterface(ConfigInterface):
 
             self.save_at = format_now()
             self.file_created = True
+
+            self.version = self.get_version()
 
             self.save_to_json_file(db_file)
         except Exception:
@@ -135,7 +140,7 @@ class DBInterface(ConfigInterface):
     def get_db_filename(self) -> str:
         from util import md5
 
-        key = f"{self.context}/{self.db_type_name}{self.version}"
+        key = f"{self.context}/{self.db_type_name}{self.get_version()}"
         return md5(key)
 
 

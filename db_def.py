@@ -18,6 +18,8 @@ class DBInterface(ConfigInterface):
 
         self.context = "global"
         self.db_type_name = self.__class__.__name__
+        self.version = ""
+
         self.create_at = format_now()
         self.save_at = format_now()
         self._update_at = format_now(self.time_cmt_millseconds)
@@ -133,7 +135,7 @@ class DBInterface(ConfigInterface):
     def get_db_filename(self) -> str:
         from util import md5
 
-        key = f"{self.context}/{self.db_type_name}"
+        key = f"{self.context}/{self.db_type_name}{self.version}"
         return md5(key)
 
 

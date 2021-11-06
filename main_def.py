@@ -1561,6 +1561,7 @@ def show_notices():
 
 
 disable_flag_file = ".no_sync_configs"
+sync_configs_done_flag_file = ".sync_configs_done"
 
 
 @try_except()
@@ -1607,13 +1608,20 @@ def try_load_old_version_configs_from_user_data_dir():
         logger.info(f"当前使用源码运行，无需同步配置")
         return
 
+    if not os.path.isdir(appdata_dir):
+        logger.info(f"当前没有备份的旧版本配置，无需同步配置")
+        return
+
     if not is_first_run("sync_config"):
         logger.info(f"当前不是首次运行，无需同步配置")
         return
 
-    if not os.path.isdir(appdata_dir):
-        logger.info(f"当前没有备份的旧版本配置，无需同步配置")
+    # 上面的判定是否是首次运行的功能，偶尔会因为windows下创建目录失败而无法正常判定，增加个基于标记文件的保底措施
+    if exists_flag_file(sync_configs_done_flag_file):
+        logger.info(f"当前目录存在 {sync_configs_done_flag_file}，说明已经完成过同步流程，将不再尝试")
         return
+    # 标记为已同步
+    open(sync_configs_done_flag_file, 'a').close()
 
     logger.info("符合同步条件，将开始同步流程~")
     sync_configs(appdata_dir, cwd)

@@ -37,6 +37,7 @@ _update_temp_dir/
 **/chrome_portable_*/
 
 .use_by_myself
+.sync_configs_done
 
 ark_lottery_special_version_customized.py
 

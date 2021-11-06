@@ -43,7 +43,7 @@ jobs:
 
       - name: Flake
         run: |
-          flake8 --ignore=E127,E402,E501,E701,E722,E731,F403,F405,W503,W504,F541 --max-complexity=60 --max-line-length=555 --show-source --statistics --exclude .cached,.db,.mypy_cache,.pytest_cache,.venv,.venv_dev,.tox,logs,releases,test,lanzou,reversi.py,qt_collapsible_box.py
+          flake8 --ignore=E127,E402,E501,E701,E722,E731,F403,F405,W503,W504,F541 --max-complexity=70 --max-line-length=555 --show-source --statistics --exclude .cached,.db,.mypy_cache,.pytest_cache,.venv,.venv_dev,.tox,logs,releases,test,lanzou,reversi.py,qt_collapsible_box.py
 
       - name: Isort
         run: |

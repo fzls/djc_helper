@@ -3376,7 +3376,7 @@ class DjcHelper:
                 for i in range(totalLotteryTimes):
                     op_lottery()
             else:
-                logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~")
+                logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~（ps: 年史碎片可以保留到下个月，也可以留着兑换以后的东西）")
 
         def op_lottery():
             res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)

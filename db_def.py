@@ -22,7 +22,7 @@ class DBInterface(ConfigInterface):
 
         self.create_at = format_now()
         self.save_at = format_now()
-        self._update_at = format_now(self.time_cmt_millseconds)
+        self._update_at = "2000-11-06 14:16:33.253591"
         self.file_created = False
 
         # 如果设置了，则使用该路径，否则根据db类型和context的md5来生成路径

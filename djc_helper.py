@@ -3285,7 +3285,6 @@ class DjcHelper:
             not_taken_award_list = []
 
             for selfGift, basicList in listOfBasicList:
-                not_token_awards = []
                 for award in basicList:
                     if award.isLock == 0 and award.isUsed == 0:
                         # 已解锁，且未领取，则加入待领取列表

@@ -3447,6 +3447,9 @@ class DjcHelper:
         user_info_db.year_month_to_user_info[get_month()] = userInfo
         user_info_db.save()
 
+        # 上报下编年史等级，看看等级分布，方便日后添加自动组队的时候，确认下用30级作为门槛能符合条件的人数与比例
+        increase_counter(ga_category="chronicle_level", name=userInfo.level)
+
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame

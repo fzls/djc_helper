@@ -160,9 +160,10 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
     for changelog_page, readme_page in get_urls_and_mirrors(config):
         try:
             return _get_update_info(changelog_page, readme_page)
-        except:
+        except Exception as e:
             # 尝试使用镜像来访问
-            logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~")
+            logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~ 错误={e}")
+            logger.debug(f"具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")
 

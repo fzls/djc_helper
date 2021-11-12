@@ -214,11 +214,15 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
             break
 
     # 尝试提取更新信息
-    update_message_list_match_groupdict = re.search(r"(?<=更新公告</h1>)\s*<ol>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE).groupdict()
-    if "update_message_list" in update_message_list_match_groupdict:
-        update_message_list_str = update_message_list_match_groupdict["update_message_list"]
-        update_messages = re.findall("<li>(?P<update_message>.+?)</li>", update_message_list_str, re.MULTILINE)
-        update_info.update_message = "\n".join(f"{idx + 1}. {message}" for idx, message in enumerate(update_messages))
+    update_message_list_match_groupdict_matches = re.search(r"(?<=更新公告</h1>)\s*<ol.+?>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE)
+    if update_message_list_match_groupdict_matches is not None:
+        update_message_list_match_groupdict = update_message_list_match_groupdict_matches.groupdict()
+        if "update_message_list" in update_message_list_match_groupdict:
+            update_message_list_str = update_message_list_match_groupdict["update_message_list"]
+            update_messages = re.findall("<li>(?P<update_message>.+?)</li>", update_message_list_str, re.MULTILINE)
+            update_info.update_message = "\n".join(f"{idx + 1}. {message}" for idx, message in enumerate(update_messages))
+    else:
+        async_message_box("走到这里说明提取更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0", "检查更新出错了", show_once_daily=True)
 
     logger.info(f"netdisk_address_matches={netdisk_address_matches}, selected=({update_info.netdisk_link}, {update_info.netdisk_passcode})")
 

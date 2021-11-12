@@ -68,6 +68,7 @@ act_name_to_url = {
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
+    "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
 
     # 已过期活动
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
@@ -75,7 +76,6 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20210903gqhd/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20210914WeGame/index.html",
     "虎牙": "https://www.huya.com/367967",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
@@ -206,7 +206,7 @@ class Urls:
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "399260"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "419708"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点

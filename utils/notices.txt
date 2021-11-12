@@ -448,5 +448,15 @@
     "open_url": "",
     "expire_at": "2021-11-15 00:13:57",
     "show_only_before_version": "14.2.5"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "关于检查更新失败的问题",
+    "message": "因github网页调整，之前解析版本更新内容的正则表达式与实际页面不匹配了，无法解析出更新内容，导致无法更新。\n\n如果你未购买自动更新DLC，且开启了检查更新功能，那么请手动打开网盘下载v14.3.1，确保能收到后续检查更新通知。\n\n如果是任何其他情况，请无视本通知和稍后打开的网页即可。\n",
+    "send_at": "2021-11-13 00:08:44",
+    "show_type": "once",
+    "open_url": "https://fzls.lanzoui.com/s/djc-helper",
+    "expire_at": "2021-11-20 00:08:44",
+    "show_only_before_version": "14.3.1"
   }
 ]

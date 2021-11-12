@@ -58,9 +58,7 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
@@ -71,6 +69,9 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
 
     # 已过期活动
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
+    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
     "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
@@ -103,7 +104,6 @@ act_name_to_url = {
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
-    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
 

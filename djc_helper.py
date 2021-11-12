@@ -408,6 +408,7 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
             ("管家蚊子腿", self.guanjia_new),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -419,7 +420,6 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
-            ("DNF心悦", self.dnf_xinyue),
             ("WeGame活动", self.dnf_wegame),
             ("虎牙", self.huya),
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
@@ -1281,7 +1281,7 @@ class DjcHelper:
                                 activity_op_func=self.xinyue_battle_ground_op, query_bind_flowid="748044", commit_bind_flowid="748043")
 
     def xinyue_battle_ground_op(self, ctx, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
-        return self.xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid, **extra_params)
+        return self.dnf_xinyue_op(ctx, self.urls.iActivityId_xinyue_battle_ground, iFlowId, package_id, print_res, lqlevel, teamid, **extra_params)
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
@@ -4183,37 +4183,39 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        def query_lottery_count() -> int:
-            res = self.dnf_xinyue_op("查询抽奖次数", "800444", print_res=False)
-            info = parse_amesvr_common_info(res)
+        # def query_lottery_count() -> int:
+        #     res = self.dnf_xinyue_op("查询抽奖次数", "800444", print_res=False)
+        #     info = parse_amesvr_common_info(res)
+        #
+        #     return int(info.sOutValue1) // 50 - int(info.sOutValue2)
 
-            return int(info.sOutValue1) // 50 - int(info.sOutValue2)
-
-        self.dnf_xinyue_op("充值礼", "790815")
-        self.dnf_xinyue_op("会员身份礼", "800098")
-
-        start_base_day = parse_time("2021-10-01 00:00:00")
         now = get_now()
-        for delta_day in range(8):
-            day_time = start_base_day + timedelta(days=delta_day)
-            if day_time.date() != now.date():
+        for weekDay in [
+            "2021-11-18 00:00:00",
+            "2021-11-25 00:00:00",
+            "2021-12-02 00:00:00",
+        ]:
+            weekday_time = parse_time(weekDay)
+            if weekday_time.date() != now.date():
                 continue
 
-            self.dnf_xinyue_op("签到礼", "800342", ukey=format_time(day_time, "%m%d"))
-            # self.dnf_xinyue_op("补签", "800388", ukey="1008")
+            self.dnf_xinyue_op("周周闪光好礼", "812031", weekDay=weekDay)
 
-        self.dnf_xinyue_op("扭蛋", "800420")
+        self.dnf_xinyue_op("签到", "812092", weekDay=get_today())
+        # self.dnf_xinyue_op("补签", "812379", weekDay=get_today())
 
-        self.dnf_xinyue_op("抽幸运资格", "790686")
-        self.dnf_xinyue_op("幸运登录礼", "800236")
-        self.dnf_xinyue_op("幸运10元充值礼", "800288")
+        if now.isoweekday() == 4:
+            self.dnf_xinyue_op("周四-周周开大奖", "812032")
+            self.dnf_xinyue_op("周四签到礼", "812397")
+        else:
+            logger.warning("当前不是周四，跳过开大奖和周四签到礼")
 
-        self.dnf_xinyue_op("心悦app礼包", "800341")
-        logger.warning(color("fg_bold_cyan") + "不要忘记前往app领取一次性礼包")
+        self.dnf_xinyue_op("心悦app礼包", "812030")
+        async_message_box("不要忘记前往app领取一次性礼包", f"DNF心悦app奖励提示_{get_act_url('DNF心悦')}", show_once=True)
 
     def check_dnf_xinyue(self):
         self.check_bind_account("DNF心悦", get_act_url("DNF心悦"),
-                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="799685", commit_bind_flowid="799684")
+                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="812024", commit_bind_flowid="812023")
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_xinyue
@@ -7179,4 +7181,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_xinyue()

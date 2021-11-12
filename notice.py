@@ -159,11 +159,14 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于很多弹窗的说明"
-    message = """v14.2.3为了修复一个判断是否首次运行的bug，调整了下底层实现，与旧版数据会不兼容，因此所有判定首次运行的地方都会被判定是首次运行，也就会导致出现一连串弹窗，跟第一次使用时的效果一样<_<
-应该只会影响这个版本后的第一次运行，问题不大，无视即可。
+    title = "关于检查更新失败的问题"
+    message = """因github网页调整，之前解析版本更新内容的正则表达式与实际页面不匹配了，无法解析出更新内容，导致无法更新。
+
+如果你未购买自动更新DLC，且开启了检查更新功能，那么请手动打开网盘下载v14.3.1，确保能收到后续检查更新通知。
+
+如果是任何其他情况，请无视本通知和稍后打开的网页即可。
 """
-    open_url = ""
+    open_url = "https://fzls.lanzoui.com/s/djc-helper"
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

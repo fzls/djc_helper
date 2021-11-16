@@ -28,7 +28,7 @@ not_ams_activities = [
     newAmsActInfo("管家蚊子腿", "2021-10-21 00:00:00", "2021-11-30 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
-    newAmsActInfo("超级会员", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
+    newAmsActInfo("超级会员", "2021-11-14 00:00:00", "2021-12-14 23:59:59"),
     newAmsActInfo("黄钻", "2021-10-14 00:00:00", "2021-11-14 23:59:59"),
     newAmsActInfo("集卡", "2021-09-14 00:00:00", "2021-10-31 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
@@ -59,7 +59,6 @@ act_name_to_url = {
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
-    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
@@ -67,6 +66,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
     "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
+    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
 
     # 已过期活动
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",

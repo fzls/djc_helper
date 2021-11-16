@@ -236,8 +236,8 @@ class ConfigUi(QFrame):
             report_click_event("save_config")
 
     def load_config(self) -> Config:
-        # load_config(local_config_path="", reset_before_load=True)
-        load_config(local_config_path="config.toml.local", reset_before_load=True)
+        load_config(local_config_path="", reset_before_load=True)
+        # load_config(local_config_path="config.toml.local", reset_before_load=True)
         return config()
 
     def save_config(self, cfg: Config):
@@ -2338,6 +2338,9 @@ class DnfHelperInfoConfigUi(QWidget):
 
             exchange_item.update_config(item_cfg)
 
+        # 排下序，已设置了兑换次数的放到前面
+        cfg.move_exchange_item_to_front()
+
     def try_set_default_exchange_items_for_cfg(self, cfg: DnfHelperInfoConfig):
         sLBcode_to_item = {}  # type: Dict[str, DnfHelperChronicleExchangeItemConfig]
         for item in cfg.chronicle_exchange_items:
@@ -2357,6 +2360,9 @@ class DnfHelperInfoConfigUi(QWidget):
             item.count = 0
             item.sync_everything_except_code_and_count(gift)
             cfg.chronicle_exchange_items.append(item)
+
+        # 排下序，已设置了兑换次数的放到前面
+        cfg.move_exchange_item_to_front()
 
 
 class DnfHelperChronicleExchangeItemConfigUi(QWidget):

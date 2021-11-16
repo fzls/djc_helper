@@ -398,7 +398,6 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF集合站", self.dnf_collection),
-            ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
@@ -406,6 +405,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("管家蚊子腿", self.guanjia_new),
             ("DNF心悦", self.dnf_xinyue),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -1728,15 +1728,15 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        self.qzone_act_op("幸运勇士礼包", "13620_0b518959")
-        self.qzone_act_op("勇士见面礼", "13621_82d8e16f")
-        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"):
-            self.qzone_act_op("分享给自己", "13622_c8a431ae", act_req_data={
-                "receivers": [
-                    self.qq(),
-                ]
-            })
-        self.qzone_act_op("分享领取礼包", "13623_4efae295")
+        self.qzone_act_op("幸运勇士礼包", "19929_7de4c74d")
+        self.qzone_act_op("勇士见面礼", "19930_cdadcd10")
+        # if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"):
+        #     self.qzone_act_op("分享给自己", "13622_c8a431ae", act_req_data={
+        #         "receivers": [
+        #             self.qq(),
+        #         ]
+        #     })
+        # self.qzone_act_op("分享领取礼包", "13623_4efae295")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下

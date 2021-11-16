@@ -230,6 +230,9 @@ class DnfHelperInfoConfig(ConfigInterface):
 
         return None
 
+    def move_exchange_item_to_front(self):
+        self.chronicle_exchange_items.sort(key=lambda item: item.count > 0, reverse=True)
+
 
 class HelloVoiceInfoConfig(ConfigInterface):
     def __init__(self):

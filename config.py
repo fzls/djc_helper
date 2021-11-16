@@ -2,6 +2,7 @@ import re
 from multiprocessing import cpu_count
 
 from const import *
+from dao import DnfHelperChronicleExchangeGiftInfo
 from data_struct import to_raw_type
 from log import *
 from sign import getACSRFTokenForAMS, getDjcSignParams
@@ -53,7 +54,21 @@ class DnfHelperChronicleExchangeItemConfig(ConfigInterface):
     def __init__(self):
         self.sLbcode = "ex_0003"
         self.sName = "装备提升礼盒*1"
-        self.count = 3
+        self.count = 0
+
+        # 以下字段由配置工具自动填充，无需配置
+        self.iCard = "20"
+        self.iNum = "5"
+        self.iLevel = "1"
+
+    def sync_everything_except_code_and_count(self, gift: DnfHelperChronicleExchangeGiftInfo):
+        if self.sLbcode != gift.sLbcode:
+            return
+
+        self.sName = gift.sName
+        self.iCard = gift.iCard
+        self.iNum = gift.iNum
+        self.iLevel = gift.iLevel
 
 
 class FirecrackersExchangeItemConfig(ConfigInterface):
@@ -207,6 +222,13 @@ class DnfHelperInfoConfig(ConfigInterface):
     def on_config_update(self, raw_config: dict):
         if len(self.token) != 0 and len(self.token) != 8:
             async_message_box(f"{self.nickName} 对应的token({self.token}) 必定是错误的，因为token的长度只可能是8位，而你填的token长度为{len(self.token)}", "token长度不对")
+
+    def get_exchange_item_by_sLbcode(self, sLbcode: str) -> Optional[DnfHelperChronicleExchangeItemConfig]:
+        for exchange_item in self.chronicle_exchange_items:
+            if exchange_item.sLbcode == sLbcode:
+                return exchange_item
+
+        return None
 
 
 class HelloVoiceInfoConfig(ConfigInterface):

@@ -2311,6 +2311,13 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_pUserId = create_lineedit(cfg.pUserId, "如果你有固定搭档，可以把他的社区ID填到这里，这样每期编年史将会自动绑定")
         add_row(form_layout, "固定搭档的社区ID", self.lineedit_pUserId)
 
+        self.try_set_default_exchange_items_for_cfg(cfg)
+        if len(cfg.chronicle_exchange_items) != 0:
+            add_row(form_layout, "---- 要兑换的道具 (等级/碎片/次数/名称) ----", QHLine())
+        self.exchange_items = {}
+        for exchange_item in cfg.chronicle_exchange_items:
+            self.exchange_items[exchange_item.sLbcode] = DnfHelperChronicleExchangeItemConfigUi(form_layout, exchange_item)
+
     def update_config(self, cfg: DnfHelperInfoConfig):
         cfg.userId = self.lineedit_userId.text()
         cfg.nickName = self.lineedit_nickName.text()
@@ -2320,6 +2327,48 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.pUserId = self.lineedit_pUserId.text()
 
         cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
+
+        self.try_set_default_exchange_items_for_cfg(cfg)
+        for sLbcode, exchange_item in self.exchange_items.items():
+            item_cfg = cfg.get_exchange_item_by_sLbcode(sLbcode)
+            if item_cfg is None:
+                continue
+
+            exchange_item.update_config(item_cfg)
+
+    def try_set_default_exchange_items_for_cfg(self, cfg: DnfHelperInfoConfig):
+        sLBcode_to_item = {}  # type: Dict[str, DnfHelperChronicleExchangeItemConfig]
+        for item in cfg.chronicle_exchange_items:
+            sLBcode_to_item[item.sLbcode] = item
+
+        # 特殊处理下编年史兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来
+        db = DnfHelperChronicleExchangeListDB().load()
+        for gift in db.exchange_list.gifts:
+            if gift.sLbcode in sLBcode_to_item:
+                # 同步下除count外的其他信息
+                sLBcode_to_item[gift.sLbcode].sync_everything_except_code_and_count(gift)
+                continue
+
+            # 未配置该道具，添加默认的空值，确保显示出来
+            item = DnfHelperChronicleExchangeItemConfig()
+            item.sLbcode = gift.sLbcode
+            item.count = 0
+            item.sync_everything_except_code_and_count(gift)
+            cfg.chronicle_exchange_items.append(item)
+
+
+class DnfHelperChronicleExchangeItemConfigUi(QWidget):
+    def __init__(self, form_layout: QFormLayout, cfg: DnfHelperChronicleExchangeItemConfig, parent=None):
+        super(DnfHelperChronicleExchangeItemConfigUi, self).__init__(parent)
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: DnfHelperChronicleExchangeItemConfig):
+        self.spinbox_count = create_spin_box(cfg.count, 99)
+        add_row(form_layout, f"{cfg.iLevel:2} {cfg.iCard:3} {cfg.iNum:2} {cfg.sName}", self.spinbox_count)
+
+    def update_config(self, cfg: DnfHelperChronicleExchangeItemConfig):
+        cfg.count = self.spinbox_count.value()
 
 
 class HelloVoiceInfoConfigUi(QWidget):

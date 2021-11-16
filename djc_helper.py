@@ -3331,6 +3331,14 @@ class DjcHelper:
             for gift in exchangeList.gifts:
                 exchangeGiftMap[gift.sLbcode] = gift
 
+            logger.info(color("bold_green") + f"本期可兑换道具如下:")
+            heads = ["名称", "兑换id", "所需等级", "领取次数", "消耗年史碎片"]
+            colSizes = [40, 8, 8, 8, 12]
+            logger.info(color("bold_green") + tableify(heads, colSizes))
+            for gift in exchangeList.gifts:
+                row = [gift.sName, gift.sLbcode, gift.iLevel, gift.iNum, gift.iCard]
+                logger.info(tableify(row, colSizes))
+
             if len(self.cfg.dnf_helper_info.chronicle_exchange_items) != 0:
                 all_exchanged = True
                 for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:

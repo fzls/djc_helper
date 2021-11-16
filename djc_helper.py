@@ -3327,6 +3327,12 @@ class DjcHelper:
         @try_except(show_last_process_result=False, extra_msg="大概率是token不对或者过期了，导致无法领取等级奖励")
         def exchange_awards():
             exchangeList = exchange_list()
+
+            # 本地保存一份，方便配置工具那边查询
+            db = DnfHelperChronicleExchangeListDB().load()
+            db.exchange_list = exchangeList
+            db.save()
+
             exchangeGiftMap = {}
             for gift in exchangeList.gifts:
                 exchangeGiftMap[gift.sLbcode] = gift

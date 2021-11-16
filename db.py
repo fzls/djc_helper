@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Tuple, Type
 
-from dao import BuyInfo, DnfHelperChronicleUserActivityTopInfo
+from dao import (BuyInfo, DnfHelperChronicleExchangeList,
+                 DnfHelperChronicleUserActivityTopInfo)
 from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
@@ -114,6 +115,13 @@ class DnfHelperChronicleUserActivityTopInfoDB(DBInterface):
             return DnfHelperChronicleUserActivityTopInfo()
 
         return self.year_month_to_user_info[last_month]
+
+
+class DnfHelperChronicleExchangeListDB(DBInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.exchange_list = DnfHelperChronicleExchangeList()
 
 
 if __name__ == '__main__':

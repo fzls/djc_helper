@@ -236,8 +236,8 @@ class ConfigUi(QFrame):
             report_click_event("save_config")
 
     def load_config(self) -> Config:
-        load_config(local_config_path="", reset_before_load=True)
-        # load_config(local_config_path="config.toml.local", reset_before_load=True)
+        # load_config(local_config_path="", reset_before_load=True)
+        load_config(local_config_path="config.toml.local", reset_before_load=True)
         return config()
 
     def save_config(self, cfg: Config):

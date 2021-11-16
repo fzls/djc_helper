@@ -2314,6 +2314,8 @@ class DnfHelperInfoConfigUi(QWidget):
         self.try_set_default_exchange_items_for_cfg(cfg)
         if len(cfg.chronicle_exchange_items) != 0:
             add_row(form_layout, "---- 要兑换的道具 (等级/碎片/次数/名称) ----", QHLine())
+            add_row(form_layout, "优先换前面的已配置兑换次数的奖励", QHLine())
+            add_row(form_layout, "如果前面的等级未到或者碎片不够，不会尝试兑换排在后面的", QHLine())
         self.exchange_items = {}
         for exchange_item in cfg.chronicle_exchange_items:
             self.exchange_items[exchange_item.sLbcode] = DnfHelperChronicleExchangeItemConfigUi(form_layout, exchange_item)

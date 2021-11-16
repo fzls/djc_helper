@@ -174,6 +174,8 @@ def main():
 
     increase_counter(name="run/end", ga_type=ga.GA_REPORT_TYPE_PAGE_VIEW)
 
+    show_head_line("运行完毕")
+
 
 def main_wrapper():
     freeze_support()

@@ -64,11 +64,12 @@ act_name_to_url = {
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
-    "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
+    "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
 
     # 已过期活动
+    "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
@@ -90,7 +91,6 @@ act_name_to_url = {
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20201126version/index.shtml",
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
-    "DNF闪光杯第三期": "http://xinyue.qq.com/act/a20201221sgbpc/index.html",
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
@@ -177,7 +177,7 @@ class Urls:
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
-        self.iActivityId_dnf_shanguang = "348607"  # DNF闪光杯第三期
+        self.iActivityId_dnf_shanguang = "419708"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc

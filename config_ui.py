@@ -2318,6 +2318,10 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_pUserId = create_lineedit(cfg.pUserId, "如果你有固定搭档，可以把他的社区ID填到这里，这样每期编年史将会自动绑定")
         add_row(form_layout, "固定搭档的社区ID", self.lineedit_pUserId)
 
+        add_row(form_layout, "++++ token和唯一角色id是用于自动领取编年史等级奖励 ++++", QHLine())
+        add_row(form_layout, "++++ 以及部分助手自己专属的活动的 ++++", QHLine())
+        add_row(form_layout, "++++ 如果真抓不来，可以手动做这部分 ++++", QHLine())
+
         self.try_set_default_exchange_items_for_cfg(cfg)
         if len(cfg.chronicle_exchange_items) != 0:
             add_row(form_layout, "---- 要兑换的道具 (等级/碎片/次数/名称) ----", QHLine())

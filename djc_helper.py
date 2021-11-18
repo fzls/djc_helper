@@ -4215,8 +4215,13 @@ class DjcHelper:
 
             self.dnf_xinyue_op("周周闪光好礼", "812031", weekDay=weekDay)
 
-        self.dnf_xinyue_op("签到", "812092", weekDay=get_today())
-        # self.dnf_xinyue_op("补签", "812379", weekDay=get_today())
+        today = get_today()
+        last_day = get_today(get_now() - timedelta(days=1))
+        the_day_before_last_day = get_today(get_now() - timedelta(days=2))
+        self.dnf_xinyue_op(f"签到-{today}", "812092", weekDay=today)
+        self.dnf_xinyue_op(f"补签-{last_day}", "812379", weekDay=last_day)
+        wait_for("等待一会", 5)
+        self.dnf_xinyue_op(f"补签-{the_day_before_last_day}", "812379", weekDay=the_day_before_last_day)
 
         if now.isoweekday() == 4:
             self.dnf_xinyue_op("周四-周周开大奖", "812032")

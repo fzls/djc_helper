@@ -289,6 +289,21 @@ def get_last_week_monday_datetime(now: Optional[datetime.datetime] = None) -> da
     return get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
 
 
+def get_this_thursday_of_dnf(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+    # 计算本周所属的那个周四，以dnf的周期计算（不过以0点计算，不以六点）
+    now = now or get_now()
+
+    dnf_thursday = now
+    if now.isoweekday() >= 4:
+        # 本周四及以后，所属周四是这周的周四
+        dnf_thursday = now - datetime.timedelta(days=now.isoweekday() - 4)
+    else:
+        # 本周四以前，所属周四是上周的周四（先找到本周四，然后往前推一周）
+        dnf_thursday = now + datetime.timedelta(days=4 - now.isoweekday()) - datetime.timedelta(days=7)
+
+    return dnf_thursday.replace(hour=0, minute=0, second=0, microsecond=0)
+
+
 def now_before(t="2000-01-01 00:00:00"):
     return get_now() < parse_time(t)
 

@@ -72,6 +72,24 @@ def test_get_last_week_monday_datetime():
     assert get_last_week_monday_datetime(now_for_test) == last_monday
 
 
+def test_get_this_thursday_of_dnf():
+    test_week_4_5 = datetime.datetime.now().replace(2021, 11, 18, 5, 0, 0, 0)
+    test_week_4_6 = datetime.datetime.now().replace(2021, 11, 18, 6, 0, 0, 0)
+    test_week_4 = datetime.datetime.now().replace(2021, 11, 18, 12, 0, 0, 0)
+    test_week_5 = datetime.datetime.now().replace(2021, 11, 19, 12, 0, 0, 0)
+
+    expect_week_4 = datetime.datetime.now().replace(2021, 11, 18, 0, 0, 0, 0)
+
+    assert get_this_thursday_of_dnf(test_week_4_5) == expect_week_4
+    assert get_this_thursday_of_dnf(test_week_4_6) == expect_week_4
+    assert get_this_thursday_of_dnf(test_week_4) == expect_week_4
+    assert get_this_thursday_of_dnf(test_week_5) == expect_week_4
+
+    test_week_2 = datetime.datetime.now().replace(2021, 11, 16, 12, 0, 0, 0)
+    expect_last_week_4 = datetime.datetime.now().replace(2021, 11, 11, 0, 0, 0, 0)
+    assert get_this_thursday_of_dnf(test_week_2) == expect_last_week_4
+
+
 def test_get_now():
     assert type(get_now()) is datetime.datetime
 

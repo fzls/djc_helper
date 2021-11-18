@@ -30,7 +30,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-11-14 00:00:00", "2021-12-14 23:59:59"),
     newAmsActInfo("黄钻", "2021-11-14 00:00:00", "2021-12-15 23:59:59"),
-    newAmsActInfo("集卡", "2021-09-14 00:00:00", "2021-10-31 23:59:59"),
+    newAmsActInfo("集卡", "2021-11-18 00:00:00", "2021-12-18 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
@@ -57,7 +57,6 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/2291_61694ad3",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
@@ -67,6 +66,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
+    "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
 
     # 已过期活动
     "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
@@ -263,7 +263,7 @@ class Urls:
         self.qzone_activity_new_send_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/GiftItems?g_tk={g_tk}"
         self.qzone_activity_new_query_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/QueryItems?g_tk={g_tk}&packetID={packetID}"
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10001
+        self.pesudo_ark_lottery_act_id = 10002
 
         self.qzone_activity_club_vip = "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
 

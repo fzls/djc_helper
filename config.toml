@@ -650,6 +650,8 @@ need_take_awards = false
 4495 = false
 # 2021.9.14 金秋阿拉德快活季
 10001 = false
+# 2021.11.18 史诗之路再次来袭
+10002 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

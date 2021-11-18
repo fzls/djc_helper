@@ -641,11 +641,11 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
     # 打印结果
     heads = [
         "序号", "账号名", "聚豆余额", "历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
-        "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "搭档", "引导石", "邀请次数", "论坛代币券",
+        "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "搭档", "引导石", "邀请次数", "论坛代币券", "闪光杯爆装"
     ]
     colSizes = [
         4, 12, 8, 8, 10, 6, 6, 16, 12,
-        8, 8, 8, 14, 8, 14, 6, 8, 10, 8,
+        8, 8, 8, 14, 8, 14, 6, 8, 10, 8, 10,
     ]
 
     logger.info(tableify(heads, colSizes))
@@ -692,6 +692,8 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     dbq = djcHelper.query_dnf_bbs_dbq()
 
+    shanguang_equip_count = djcHelper.query_dnf_shanguang_equip_count(print_warning=False)
+
     return [
         idx, account_config.name,
         djc_balance, djc_allin,
@@ -702,6 +704,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         levelInfo, chronicle_points, partner_levelInfo,
         majieluo_stone, majieluo_invite_count,
         dbq,
+        shanguang_equip_count,
     ]
 
 

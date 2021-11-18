@@ -6,6 +6,7 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
+from dnf_equipment import equipment_code_to_name
 from exceptions_def import *
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode
@@ -403,13 +404,14 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
             ("管家蚊子腿", self.guanjia_new),
-            ("DNF心悦", self.dnf_xinyue),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("DNF闪光杯", self.dnf_shanguang),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
+            ("DNF心悦", self.dnf_xinyue),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian_dup),
             ("DNF落地页活动", self.dnf_luodiye),
@@ -433,7 +435,6 @@ class DjcHelper:
             ("暖冬好礼活动", self.warm_winter),
             ("DNF共创投票", self.dnf_dianzan),
             ("史诗之路来袭活动合集", self.dnf_1224),
-            ("DNF闪光杯第三期", self.dnf_shanguang),
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
@@ -2437,61 +2438,89 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF十三周年庆活动"),
                                    **extra_params)
 
-    # --------------------------------------------DNF闪光杯第三期--------------------------------------------
+    # --------------------------------------------DNF闪光杯第四期--------------------------------------------
     @try_except()
     def dnf_shanguang(self):
-        show_head_line("DNF闪光杯第三期")
+        show_head_line("DNF闪光杯")
         self.show_amesvr_act_info(self.dnf_shanguang_op)
 
         if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
-            logger.warning("未启用领取DNF闪光杯第三期活动合集功能，将跳过")
+            logger.warning("未启用领取DNF闪光杯活动合集功能，将跳过")
             return
 
         self.check_dnf_shanguang()
 
+        def check_in():
+            today = get_today()
+            last_day = get_today(get_now() - timedelta(days=1))
+            the_day_before_last_day = get_today(get_now() - timedelta(days=2))
+            self.dnf_shanguang_op(f"签到-{today}", "812092", weekDay=today)
+            self.dnf_shanguang_op(f"补签-{last_day}", "812379", weekDay=last_day)
+            wait_for("等待一会", 5)
+            self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "812379", weekDay=the_day_before_last_day)
+
         # self.dnf_shanguang_op("报名礼", "724862")
-        # self.dnf_shanguang_op("app专属礼", "724877")
+        self.dnf_shanguang_op("app专属礼", "812030")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
+        async_message_box("不要忘记前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
         logger.warning(color("bold_yellow") + f"本周已获得指定装备{self.query_dnf_shanguang_equip_count()}件，具体装备可去活动页面查看")
 
-        self.dnf_shanguang_op("周周闪光好礼", "724878", weekDay=get_last_week_monday())
+        last_thursday = get_today(get_this_thursday_of_dnf() - timedelta(days=7))
+        self.dnf_shanguang_op(f"周周闪光好礼-{last_thursday}", "812031", weekDay=last_thursday)
+        self.dnf_shanguang_op("周四签到礼-闪光礼盒", "812397")
 
         for i in range(6):
-            res = self.dnf_shanguang_op("周周开大奖", "724879")
+            res = self.dnf_shanguang_op("周周开大奖", "812032")
             if int(res["ret"]) != 0:
                 break
             time.sleep(5)
 
-        self.dnf_shanguang_op("每日登录游戏", "724881")
-        self.dnf_shanguang_op("每日登录app", "724882")
-        # self.dnf_shanguang_op("每日网吧登录", "724883")
+        check_in()
+
+        # self.dnf_shanguang_op("每日登录游戏", "812034")
+        # self.dnf_shanguang_op("每日登录app", "812035")
+        # self.dnf_shanguang_op("每日网吧登录", "812036")
 
         lottery_times = self.get_dnf_shanguang_lottery_times()
-        logger.info(color("fg_bold_cyan") + f"当前剩余闪光夺宝次数为 {lottery_times} ")
+        logger.info(color("fg_bold_cyan") + f"当前剩余闪光夺宝次数为 {lottery_times} （本期没有查询剩余抽奖次数的函数，直接写最大值，避免漏掉~）")
         for i in range(lottery_times):
             self.dnf_shanguang_op("闪光夺宝", "724880")
             time.sleep(5)
 
-    def get_dnf_shanguang_lottery_times(self):
-        res = self.dnf_shanguang_op("闪光夺宝次数", "724885", print_res=False)
-        return int(res["modRet"]["sOutValue3"])
+        info = self.query_dnf_shanguang_info()
+        equipment_code_list = info.sOutValue3.split('_')
+        logger.info(color("bold_cyan") + "本周的目标爆装列表如下")
+        for code in equipment_code_list:
+            logger.info(color("bold_cyan") + '\t' + equipment_code_to_name.get(code, code))
 
+    def query_dnf_shanguang_info(self) -> AmesvrCommonModRet:
+        raw_info = self.dnf_shanguang_op("查询信息", "812037", print_res=False)
+        info = parse_amesvr_common_info(raw_info)
+
+        return info
+
+    def get_dnf_shanguang_lottery_times(self) -> int:
+        # res = self.dnf_shanguang_op("闪光夺宝次数", "724885", print_res=False)
+        # return int(res["modRet"]["sOutValue3"])
+        return 6
+
+    @try_except(show_exception_info=False, return_val_on_except=0)
     def query_dnf_shanguang_equip_count(self, print_warning=True):
-        res = self.dnf_shanguang_op("输出当前周期爆装信息", "724876", weekDay=get_this_week_monday(), print_res=False)
+        this_thursday = get_today(get_this_thursday_of_dnf())
+        res = self.dnf_shanguang_op(f"输出当前周期爆装信息-{this_thursday}", "812029", weekDay=this_thursday, print_res=False)
         equip_count = 0
         if "modRet" in res:
             info = parse_amesvr_common_info(res)
-            if info.sOutValue2 != "" and info.sOutValue2 != "0":
-                equip_count = len(info.sOutValue2.split(","))
+            equip_count = int(info.sOutValue1)
         else:
             if print_warning: logger.warning(color("bold_yellow") + "是不是还没有报名？")
 
         return equip_count
 
     def check_dnf_shanguang(self):
-        self.check_bind_account("DNF闪光杯第三期", get_act_url("DNF闪光杯第三期"),
-                                activity_op_func=self.dnf_shanguang_op, query_bind_flowid="724871", commit_bind_flowid="724870")
+        self.check_bind_account("DNF闪光杯", get_act_url("DNF闪光杯"),
+                                activity_op_func=self.dnf_shanguang_op, query_bind_flowid="812024", commit_bind_flowid="812023")
 
     def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_shanguang
@@ -4225,7 +4254,7 @@ class DjcHelper:
 
         if now.isoweekday() == 4:
             self.dnf_xinyue_op("周四-周周开大奖", "812032")
-            self.dnf_xinyue_op("周四签到礼", "812397")
+            self.dnf_xinyue_op("周四签到礼-闪光礼盒", "812397")
         else:
             logger.warning("当前不是周四，跳过开大奖和周四签到礼")
 
@@ -7200,4 +7229,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_shanguang()

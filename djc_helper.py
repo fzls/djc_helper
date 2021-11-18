@@ -409,6 +409,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -423,7 +424,6 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
-            ("WeGame活动", self.dnf_wegame),
             ("虎牙", self.huya),
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
             ("微信签到", self.wx_checkin),
@@ -5932,53 +5932,67 @@ class DjcHelper:
 
         self.check_dnf_wegame()
 
-        @try_except(show_exception_info=False, return_val_on_except=0)
-        def query_signin_days():
-            res = self.dnf_wegame_op("查询签到天数-condOutput", "800004", print_res=False)
-            return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
+        # @try_except(show_exception_info=False, return_val_on_except=0)
+        # def query_signin_days():
+        #     res = self.dnf_wegame_op("查询签到天数-condOutput", "800004", print_res=False)
+        #     return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
         def query_lottery_times():
-            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "800003", print_res=False)
-            return self.parse_jifenOutput(res, "356")
+            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "817444", print_res=False)
+            return self.parse_jifenOutput(res, "372")
 
-        # def query_signin_lottery_times():
-        #     res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "800003", print_res=False)
-        #     return self.parse_jifenOutput(res, "333")
+        def query_daily_lottery_times():
+            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "817444", print_res=False)
+            return self.parse_jifenOutput(res, "373")
 
-        # 阿拉德盲盒限时抽
-        self.dnf_wegame_op("分享获得盲盒", "801297")
-        self.dnf_wegame_op("页面签到获得盲盒", "801296")
-        self.dnf_wegame_op("消耗疲劳获得盲盒", "802773")
+        self.dnf_wegame_op("惊喜见面礼", "817422")
+        self.dnf_wegame_op("观看视频抽奖", "817424")
+
+        # 四选一
+        self.dnf_wegame_op("页面签到获取袖珍罐", "817426")
+        self.dnf_wegame_op("在线30分钟获得盲盒_copy", "817427")
+        self.dnf_wegame_op("通关史诗之路获得袖珍罐", "817428")
+
         totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
-            self.dnf_wegame_op(f"第{i + 1}次盲盒抽奖-4礼包抽奖", "802468")
+            self.dnf_wegame_op(f"第{i + 1}次 袖珍罐抽奖-4礼包抽奖", "817425")
 
-        # 挑战者大冒险
-        self.dnf_wegame_op("推荐3次地下城按钮", "803265")
-        self.dnf_wegame_op("推荐6次地下城按钮", "803266")
-        self.dnf_wegame_op("推荐10次地下城按", "803267")
-        self.dnf_wegame_op("消耗100疲劳按钮", "803268")
-        self.dnf_wegame_op("消耗156疲劳按钮", "803269")
+        # 达成游戏内容
+        self.dnf_wegame_op("史诗之路通关3次奖励", "817429")
+        self.dnf_wegame_op("通关史诗之路30次奖励", "817431")
+        self.dnf_wegame_op("累计通关50次史诗之路奖励", "817435")
 
-        # 勇士齐聚阿拉德
-        check_in_flow_id = "803263"
-        self.dnf_wegame_op("在线30min签到", check_in_flow_id)
-        self.dnf_wegame_op("领取签到礼包", check_in_flow_id)
+        # 抽奖
+        self.dnf_wegame_op("通过wegame启动登录游戏30分钟以上（抽奖券×1）", "817430")
+        self.dnf_wegame_op("通关3次史诗之路（抽奖券×1）", "817762")
 
+        self.dnf_wegame_op("在DNF专区关注任意一位主播（抽奖券×1）", "817432")
+        self.dnf_wegame_op("在专区关注任意一位DNF视频作者（抽奖券×1）", "817433")
+        
+        totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
+        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        for i in range(remainingLotteryTimes):
+            self.dnf_wegame_op(f"第{i + 1}次抽奖", "817434")
+
+        # # 勇士齐聚阿拉德
+        # check_in_flow_id = "803263"
+        # self.dnf_wegame_op("在线30min签到", check_in_flow_id)
+        # self.dnf_wegame_op("领取签到礼包", check_in_flow_id)
+        #
         # totalLotteryTimes, remainingLotteryTimes = query_signin_lottery_times()
         # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次签到抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         # for i in range(remainingLotteryTimes):
         #     self.dnf_wegame_op(f"第{i + 1}次签到抽奖", "779699")
-
-        logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
-        self.dnf_wegame_op("累计签到3天按钮2", "803281")
-        self.dnf_wegame_op("累计签到7天按钮2", "803282")
-        self.dnf_wegame_op("累计签到15天按钮2", "803283")
+        #
+        # logger.info(color("bold_yellow") + f"目前已累计签到{query_signin_days()}天")
+        # self.dnf_wegame_op("累计签到3天按钮2", "803281")
+        # self.dnf_wegame_op("累计签到7天按钮2", "803282")
+        # self.dnf_wegame_op("累计签到15天按钮2", "803283")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account("WeGame活动", get_act_url("WeGame活动"),
-                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="799977", commit_bind_flowid="799976",
+                                activity_op_func=self.dnf_wegame_op, query_bind_flowid="817419", commit_bind_flowid="817418",
                                 roleinfo=roleinfo, roleinfo_source=roleinfo_source)
 
     def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -7235,5 +7249,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        # djcHelper.dnf_wegame_dup()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_wegame()

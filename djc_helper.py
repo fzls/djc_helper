@@ -1809,9 +1809,25 @@ class DjcHelper:
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
         return self.dnf_ark_lottery in enabled_payed_act_funcs
 
-    # note：对接流程与上方黄钻完全一致，参照其流程即可
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
-    # hack: 除此之外有一些额外的部分，参照旧版集卡 def ark_lottery(self): 的操作指引
+
+    # note: 以下几个页面右键点击对应按钮即可，与上方黄钻完全一致，参照其流程即可
+    ark_lottery_sub_act_id_login = "19807_afcb909b"  # 增加抽卡次数-每日登陆游戏
+    ark_lottery_sub_act_id_share = "19801_33e1b906"  # 增加抽卡次数-每日活动分享
+    ark_lottery_sub_act_id_lucky = "19802_00d117b7"  # 增加抽卡次数-幸运勇士
+    ark_lottery_sub_act_id_draw_card = "19803_3c265869"  # 抽卡
+    ark_lottery_sub_act_id_award_1 = "19819_f69d828e"  # 领取奖励-第一排
+    ark_lottery_sub_act_id_award_2 = "19804_de7cc7a9"  # 领取奖励-第二排
+    ark_lottery_sub_act_id_award_3 = "19823_0b90f76b"  # 领取奖励-第三排
+    ark_lottery_sub_act_id_award_all = "19821_4748adea"  # 领取奖励-十二张
+    ark_lottery_sub_act_id_lottery = "19820_841fd774"  # 消耗卡片来抽奖
+
+    # note: 清空抓包数据，按f5刷新后，搜索  QueryItems
+    ark_lottery_packet_id_card = "7224_a45de826"  # 查询当前卡片数目
+
+    # note: xxx. 修改 urls.py 中的 pesudo_ark_lottery_act_id ，将其加一即可
+
+    # re: 除此之外有一些额外的部分，参照旧版集卡 def ark_lottery(self): 的操作指引
     @try_except()
     def dnf_ark_lottery(self):
         get_act_url("集卡")
@@ -1842,23 +1858,23 @@ class DjcHelper:
         self.dnf_ark_lottery_try_lottery_using_cards()
 
     def dnf_ark_lottery_add_ark_lottery_times(self):
-        self.qzone_act_op("增加抽卡次数-每日登陆游戏", "19807_afcb909b")
-        self.qzone_act_op("增加抽卡次数-每日活动分享", "19801_33e1b906")
-        self.qzone_act_op("增加抽卡次数-幸运勇士-尝试使用配置的幸运角色", "19802_00d117b7", act_req_data=self.try_make_lucky_user_req_data("集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id))
-        self.qzone_act_op("增加抽卡次数-幸运勇士-尝试使用当前角色", "19802_00d117b7")
+        self.qzone_act_op("增加抽卡次数-每日登陆游戏", self.ark_lottery_sub_act_id_login)
+        self.qzone_act_op("增加抽卡次数-每日活动分享", self.ark_lottery_sub_act_id_share)
+        self.qzone_act_op("增加抽卡次数-幸运勇士-尝试使用配置的幸运角色", self.ark_lottery_sub_act_id_lucky, act_req_data=self.try_make_lucky_user_req_data("集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id))
+        self.qzone_act_op("增加抽卡次数-幸运勇士-尝试使用当前角色", self.ark_lottery_sub_act_id_lucky)
 
     def dnf_ark_lottery_draw_ark_lottery(self):
         left, total = self.dnf_ark_lottery_remaining_lottery_times()
         logger.info(color("bold_green") + f"上述操作完毕后，历史累计获得次数为{total}，最新抽卡次数为{left}，并开始抽卡~")
         for idx in range(left):
-            self.qzone_act_op(f"抽卡-第{idx + 1}次", "19803_3c265869")
+            self.qzone_act_op(f"抽卡-第{idx + 1}次", self.ark_lottery_sub_act_id_draw_card)
 
     def dnf_ark_lottery_take_ark_lottery_awards(self, print_warning=True):
         if self.cfg.ark_lottery.need_take_awards:
-            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第一排", "19819_f69d828e")
-            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第二排", "19804_de7cc7a9")
-            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第三排", "19823_0b90f76b")
-            self.qzone_act_op(f"{self.cfg.name} 领取奖励-十二张", "19821_4748adea")
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第一排", self.ark_lottery_sub_act_id_award_1)
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第二排", self.ark_lottery_sub_act_id_award_2)
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-第三排", self.ark_lottery_sub_act_id_award_3)
+            self.qzone_act_op(f"{self.cfg.name} 领取奖励-十二张", self.ark_lottery_sub_act_id_award_all)
         else:
             if print_warning: logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
 
@@ -1895,7 +1911,7 @@ class DjcHelper:
 
         logger.info(f"尝试消耗{count}张卡片【{card_id}】来进行抽奖")
         for idx in range_from_one(count):
-            self.qzone_act_op(f"消耗卡片({card_id})来抽奖-{idx}/{count}", "19820_841fd774", extra_act_req_data={
+            self.qzone_act_op(f"消耗卡片({card_id})来抽奖-{idx}/{count}", self.ark_lottery_sub_act_id_lottery, extra_act_req_data={
                 "items": json_compact([
                     {
                         "id": f"{card_id}",
@@ -1908,7 +1924,7 @@ class DjcHelper:
         url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))
         # note: 这个packet id需要 抓手机包获取
         body = {
-            "packetID": "7224_a45de826",
+            "packetID": self.ark_lottery_packet_id_card,
             "items": [
                 {
                     "id": card_id,
@@ -1933,7 +1949,7 @@ class DjcHelper:
         """
         返回 剩余卡片数，总计获得卡片数
         """
-        res = self.qzone_act_query_op("查询抽卡次数", "19803_3c265869", print_res=False)
+        res = self.qzone_act_query_op("查询抽卡次数", self.ark_lottery_sub_act_id_draw_card, print_res=False)
         raw_data = json.loads(res.get('data'))
 
         info = NewArkLotteryLotteryCountInfo().auto_update_config(raw_data['check_rule']['prefer_rule_group']['coins'][0])
@@ -1943,7 +1959,7 @@ class DjcHelper:
     @try_except(return_val_on_except={})
     def dnf_ark_lottery_get_card_counts(self) -> Dict[str, int]:
         url = self.urls.qzone_activity_new_query_card.format(
-            packetID="7224_a45de826",
+            packetID=self.ark_lottery_packet_id_card,
             g_tk=getACSRFTokenForAMS(self.lr.p_skey),
         )
         body = {}

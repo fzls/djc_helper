@@ -68,9 +68,9 @@ act_name_to_url = {
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
 
     # 已过期活动
-    "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20210914index/",
@@ -206,7 +206,7 @@ class Urls:
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "419708"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "422200"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点

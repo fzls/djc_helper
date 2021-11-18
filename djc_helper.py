@@ -409,11 +409,11 @@ class DjcHelper:
             ("DNF闪光杯", self.dnf_shanguang),
             ("集卡", self.dnf_ark_lottery),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
-            ("DNF心悦", self.dnf_xinyue),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian_dup),
             ("DNF落地页活动", self.dnf_luodiye),
@@ -4244,44 +4244,34 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        # def query_lottery_count() -> int:
-        #     res = self.dnf_xinyue_op("查询抽奖次数", "800444", print_res=False)
-        #     info = parse_amesvr_common_info(res)
-        #
-        #     return int(info.sOutValue1) // 50 - int(info.sOutValue2)
+        self.dnf_xinyue_op("特邀兑换", "814522")
+        self.dnf_xinyue_op("V1兑换", "814561")
+        self.dnf_xinyue_op("V2兑换", "814562")
+        self.dnf_xinyue_op("V3兑换", "814563")
 
-        now = get_now()
-        for weekDay in [
-            "2021-11-18 00:00:00",
-            "2021-11-25 00:00:00",
-            "2021-12-02 00:00:00",
-        ]:
-            weekday_time = parse_time(weekDay)
-            if weekday_time.date() != now.date():
-                continue
+        self.dnf_xinyue_op("每日抽奖-总8次", "814571")
 
-            self.dnf_xinyue_op("周周闪光好礼", "812031", weekDay=weekDay)
+        self.dnf_xinyue_op("签到1天", "814575")
+        self.dnf_xinyue_op("签到2天", "814576")
+        self.dnf_xinyue_op("签到3天", "814577")
+        self.dnf_xinyue_op("签到4天", "814578")
+        self.dnf_xinyue_op("sign up礼", "814579")
 
-        today = get_today()
-        last_day = get_today(get_now() - timedelta(days=1))
-        the_day_before_last_day = get_today(get_now() - timedelta(days=2))
-        self.dnf_xinyue_op(f"签到-{today}", "812092", weekDay=today)
-        self.dnf_xinyue_op(f"补签-{last_day}", "812379", weekDay=last_day)
-        wait_for("等待一会", 5)
-        self.dnf_xinyue_op(f"补签-{the_day_before_last_day}", "812379", weekDay=the_day_before_last_day)
+        async_message_box("特邀和心悦可以在心悦荣耀专属活动页面使用成就点兑换 星恋双鱼 和 星愿天蝎 宠物，感兴趣的朋友可以自行前往心悦app去兑换", "心悦荣耀专属兑换提示", show_once=True)
+        # self.dnf_xinyue_op("V1兑换星恋双鱼", "815588")
+        # self.dnf_xinyue_op("V2兑换星恋双鱼", "815589")
+        # self.dnf_xinyue_op("V3兑换星恋双鱼", "815590")
+        # self.dnf_xinyue_op("V2兑换星恋天蝎", "815592")
+        # self.dnf_xinyue_op("V3兑换星愿天蝎", "815593")
+        # self.dnf_xinyue_op("V1兑换星愿天蝎", "815605")
 
-        if now.isoweekday() == 4:
-            self.dnf_xinyue_op("周四-周周开大奖", "812032")
-            self.dnf_xinyue_op("周四签到礼-闪光礼盒", "812397")
-        else:
-            logger.warning("当前不是周四，跳过开大奖和周四签到礼")
-
-        self.dnf_xinyue_op("心悦app礼包", "812030")
-        async_message_box("不要忘记前往app领取一次性礼包", f"DNF心悦app奖励提示_{get_act_url('DNF心悦')}", show_once=True)
+        async_message_box("特邀和心悦可以在心悦荣耀专属活动页面使用成就点 赠送或从他人那边 收到一个抽奖机会（赠送者消耗240左右成就点），可以抽取 心悦的各种光环、宠物、称号。有兴趣可以找其他符合条件的朋友互相赠送~", "心悦荣耀专属兑换提示", show_once=True)
+        # self.dnf_xinyue_op("赠送礼盒", "814565")
+        # self.dnf_xinyue_op("兑换礼盒", "814570", zsm_code=code)
 
     def check_dnf_xinyue(self):
         self.check_bind_account("DNF心悦", get_act_url("DNF心悦"),
-                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="812024", commit_bind_flowid="812023")
+                                activity_op_func=self.dnf_xinyue_op, query_bind_flowid="814532", commit_bind_flowid="814531")
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_xinyue
@@ -7246,4 +7236,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.dnf_collection_dup()
+        djcHelper.dnf_xinyue()

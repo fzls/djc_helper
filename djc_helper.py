@@ -400,7 +400,6 @@ class DjcHelper:
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF集合站", self.dnf_collection),
             ("KOL", self.dnf_kol),
-            ("WeGameDup", self.dnf_wegame_dup),
             ("qq视频蚊子腿", self.qq_video),
             ("DNF马杰洛的规划", self.majieluo),
             ("管家蚊子腿", self.guanjia_new),
@@ -414,6 +413,7 @@ class DjcHelper:
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
+            ("WeGameDup", self.dnf_wegame_dup),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian_dup),
             ("DNF落地页活动", self.dnf_luodiye),

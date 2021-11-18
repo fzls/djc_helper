@@ -408,6 +408,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF闪光杯", self.dnf_shanguang),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF集合站_史诗之路", self.dnf_collection_dup),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -446,7 +447,6 @@ class DjcHelper:
             ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
-            ("DNF集合站周年庆", self.dnf_collection_dup),
             ("集卡_旧版", self.ark_lottery),
             ("会员关怀", self.dnf_vip_mentor),
             ("qq视频-AME活动", self.qq_video_amesvr),
@@ -6425,24 +6425,23 @@ class DjcHelper:
         self.check_dnf_collection_dup()
 
         def query_signin_days():
-            res = self.dnf_collection_dup_op("查询", "773668", print_res=False)
-            info = AmesvrSigninInfo().auto_update_config(res["modRet"])
-            return int(info.total)
+            res = self.dnf_collection_dup_op("查询签到天数-condOutput", "815383", print_res=False)
+            return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_dup_op("勇士礼包", "773660")
-        self.dnf_collection_dup_op("全民参与礼包", "773665")
+        self.dnf_collection_dup_op("勇士礼包", "815366")
+        self.dnf_collection_dup_op("全民参与礼包", "815369")
+        self.dnf_collection_dup_op("公会礼包", "815371")
 
-        self.dnf_collection_dup_op("30分签到礼包", "773661")
+        self.dnf_collection_dup_op("30分签到礼包", "815370")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_dup_op("3日礼包", "773658")
-        self.dnf_collection_dup_op("7日礼包", "773662")
-        self.dnf_collection_dup_op("10日礼包", "773666")
-        self.dnf_collection_dup_op("15日礼包", "773663")
-        self.dnf_collection_dup_op("21日礼包", "773667")
+        self.dnf_collection_dup_op("累计登录3天", "815372")
+        self.dnf_collection_dup_op("累计登录7天", "815373")
+        self.dnf_collection_dup_op("累计登录15天", "815374")
+        self.dnf_collection_dup_op("累计登录21天", "815375")
 
     def check_dnf_collection_dup(self):
         self.check_bind_account("DNF集合站", get_act_url("DNF集合站周年庆"),
-                                activity_op_func=self.dnf_collection_dup_op, query_bind_flowid="773655", commit_bind_flowid="773654")
+                                activity_op_func=self.dnf_collection_dup_op, query_bind_flowid="815363", commit_bind_flowid="815362")
 
     def dnf_collection_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_collection_dup
@@ -7247,4 +7246,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
         # djcHelper.dnf_wegame_dup()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_collection_dup()

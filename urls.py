@@ -67,6 +67,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
+    "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
 
     # 已过期活动
     "DNF心悦": "https://xinyue.qq.com/act/a20211022sgb/pc/index_pre.html",
@@ -102,7 +103,6 @@ act_name_to_url = {
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
-    "DNF集合站周年庆": "https://dnf.qq.com/lbact/a20210617lbpqopr/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
@@ -201,7 +201,7 @@ class Urls:
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_dnf_collection = "408935"  # DNF集合站
-        self.iActivityId_dnf_collection_dup = "385269"  # DNF集合站
+        self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换

@@ -68,26 +68,39 @@ class QQLogin():
 
     # note: chrome版本升级流程
     #  1. 下载新版本chrome driver => chromedriver_{ver}.exe
-    #   1.1 https://sites.google.com/a/chromium.org/chromedriver/downloads
+    #   1.1 https://sites.google.com/chromium.org/driver/downloads
     #  2. 制作新版本便携版压缩包 => chrome_portable_{ver}.7z
     #   2.1 获取安装包
     #       2.1.1 找到系统安装的chrome的安装包
-    #           2.1.1.1 C:\Program Files (x86)\Google\Chrome\Application\90.0.4430.93\Installer\chrome.7z
-    #           2.1.1.2 C:\Program Files\Google\Chrome\Application\90.0.4430.93\Installer\chrome.7z
-    #           2.1.1.3 90.0.4430.93可替换为最新版本的版本号
+    #           2.1.1.1 %PROGRAMFILES%\Google\Chrome\Application
+    #           2.1.1.2 %PROGRAMFILES(X86)%\Google\Chrome\Application
+    #           2.1.1.3 在这个目录中找到 90.0.4430.93\Installer\chrome.7z
+    #           2.1.1.4 90.0.4430.93可替换为最新版本的版本号
     #       2.1.2 也可以从网上下载离线版安装包
     #           2.1.2.1 下载地址
     #               2.1.2.1.1 https://www.iplaysoft.com/tools/chrome/
     #           2.1.2.2 下载内容形如90.0.4430.93_chrome_installer.exe，使用bandizip打开然后解压得到chrome.7z，即可进行下一步
     #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
     #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
-    #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手 utils 目录下，并更新入库
+    #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手 utils 目录下
+    # todo:
     #  4. 下载新版本安装包 => Chrome_92.0.4515.131_普通安装包_非便携版.exe
     #       4.1 https://www.iplaysoft.com/tools/chrome/
     #  5. 上传以下内容到网盘的工具目录
     #       5.1 chromedriver_{ver}.exe
     #       5.1 chrome_portable_{ver}.7z
     #       5.1 Chrome_92.0.4515.131_普通安装包_非便携版.exe
+    # undone:
+    #  6. 更新linux版的路径
+    #       6.1 _centos_download_and_install_chrome_and_driver.sh
+    #       6.2 _ubuntu_download_chrome_and_driver.sh
+    # re:
+    #  7. 入库以下文件
+    #       qq_login.py
+    #       chromedriver_{ver}.exe
+    #       chrome_portable_{ver}.7z
+    #       _centos_download_and_install_chrome_and_driver.sh
+    #       _ubuntu_download_chrome_and_driver.sh
     chrome_major_version = 94
 
     default_window_width = 390

@@ -5969,7 +5969,7 @@ class DjcHelper:
 
         self.dnf_wegame_op("在DNF专区关注任意一位主播（抽奖券×1）", "817432")
         self.dnf_wegame_op("在专区关注任意一位DNF视频作者（抽奖券×1）", "817433")
-        
+
         totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):

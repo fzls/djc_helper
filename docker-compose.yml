@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  djc_helper:
+    image: fzls/djc_helper:latest
+    container_name: djc_helper
+    tty: true
+    volumes:
+      - ./data/config.toml:/djc_helper/config.toml:ro
+      - ./data/.cached:/ql/.cached
+      - ./data/.db:/ql/.db
+      - ./data/logs:/ql/logs

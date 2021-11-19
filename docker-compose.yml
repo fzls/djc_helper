@@ -1,3 +1,9 @@
+# 使用说明
+# 使用前先调用docker_compose_init.sh，完成配置文件的初始化
+#
+# 或者手动创建data目录，并下载 config.toml文件 放到data目录中
+#   https://cdn.jsdelivr.net/gh/fzls/djc_helper@master/config.toml
+
 version: '3.8'
 services:
   djc_helper:

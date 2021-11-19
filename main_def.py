@@ -189,14 +189,16 @@ def auto_send_cards(cfg: Config):
     for idx, target_qq in enumerate(target_qqs):
         if target_qq in qq_to_djcHelper:
             left_times: int
+            extra_message = ""
             if is_new_version_ark_lottery():
                 # 新版本里似乎没有查询接口，先随便写一个固定值
                 left_times = 4 * len(cfg.account_configs)
+                extra_message = "（这个数字是4*账号数，新版集卡查询不到实际数值）"
             else:
                 left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
 
             name = qq_to_djcHelper[target_qq].cfg.name
-            logger.warning(color("fg_bold_green") + f"第{idx + 1}/{len(target_qqs)}个赠送目标账号 {name}({target_qq}) 今日仍可被赠送 {left_times} 次卡片")
+            logger.warning(color("fg_bold_green") + f"第{idx + 1}/{len(target_qqs)}个赠送目标账号 {name}({target_qq}) 今日仍可被赠送 {left_times} 次卡片{extra_message}")
             # 最多赠送目标账号今日仍可接收的卡片数
             for send_idx in range_from_one(left_times):
                 other_account_has_card = send_card(target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs)

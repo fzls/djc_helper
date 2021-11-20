@@ -58,9 +58,6 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
-    "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
-    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
@@ -71,6 +68,9 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
 
     # 已过期活动
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
+    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
+    "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",

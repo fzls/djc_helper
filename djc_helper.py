@@ -2510,14 +2510,24 @@ class DjcHelper:
 
     @try_except(show_exception_info=False)
     def dnf_shanguang_show_equipments(self):
-        info = self.query_dnf_shanguang_info()
-        equipment_code_list = info.sOutValue3.split('_')
-
         msg_list = []
         msg_list.append("")
         msg_list.append("本周的目标爆装列表如下")
-        for code in equipment_code_list:
-            msg_list.append('\t' + equipment_code_to_name.get(code, code))
+
+        # info = self.query_dnf_shanguang_info()
+        # equipment_code_list = info.sOutValue3.split('_')
+        # for code in equipment_code_list:
+        #     msg_list.append('\t' + equipment_code_to_name.get(code, code))
+
+        # 本期的列表是写死的
+        week_to_target_equipments = {
+            "20211118": ("军神的心之所念（神话）", "太极天帝剑", "星之海:巴德纳尔", "骚动的冥焰", "堕入地狱之脚", "矛盾的抉择"),
+            "20211125": ("逆转结局（神话）", "白虎啸魂手套", "绝杀:无人生还", "支配黑暗之环", "军神的庇护宝石", "正义的抉择"),
+            "20211202": ("深渊囚禁者长袍（神话）", "哈蒂 - 赎月者", "无尽地狱黑暗之印", "军神的遗书", "驱散黑暗短裤", "暗黑术士亲笔古书"),
+        }
+        week_4 = get_this_thursday_of_dnf()
+        target_euiipments = week_to_target_equipments.get(get_today(week_4), ())
+        msg_list.extend([f'\t{idx + 1}. {equipment}' for idx, equipment in enumerate(target_euiipments)])
 
         logger.info(color("bold_cyan") + '\n'.join(msg_list))
 

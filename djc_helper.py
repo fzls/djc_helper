@@ -3835,9 +3835,7 @@ class DjcHelper:
     def fetch_guanjia_openid(self, print_warning=True):
         # 检查当前是否管家活动在生效中
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
-        if self.guanjia not in enabled_payed_act_funcs \
-                and self.guanjia_new not in enabled_payed_act_funcs \
-                and self.guanjia_new_dup not in enabled_payed_act_funcs:
+        if self.guanjia not in enabled_payed_act_funcs and self.guanjia_new not in enabled_payed_act_funcs and self.guanjia_new_dup not in enabled_payed_act_funcs:
             logger.debug("管家活动当前未生效，无需尝试更新p_skey")
             return
 

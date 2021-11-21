@@ -2506,11 +2506,20 @@ class DjcHelper:
             self.dnf_shanguang_op("闪光夺宝", "724880")
             time.sleep(5)
 
+        self.dnf_shanguang_show_equipments()
+
+    @try_except(show_exception_info=False)
+    def dnf_shanguang_show_equipments(self):
         info = self.query_dnf_shanguang_info()
         equipment_code_list = info.sOutValue3.split('_')
-        logger.info(color("bold_cyan") + "本周的目标爆装列表如下")
+
+        msg_list = []
+        msg_list.append("")
+        msg_list.append("本周的目标爆装列表如下")
         for code in equipment_code_list:
-            logger.info(color("bold_cyan") + '\t' + equipment_code_to_name.get(code, code))
+            msg_list.append('\t' + equipment_code_to_name.get(code, code))
+
+        logger.info(color("bold_cyan") + '\n'.join(msg_list))
 
     def query_dnf_shanguang_info(self) -> AmesvrCommonModRet:
         raw_info = self.dnf_shanguang_op("查询信息", "812037", print_res=False)
@@ -7249,4 +7258,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_kol()
+        djcHelper.dnf_shanguang_show_equipments()

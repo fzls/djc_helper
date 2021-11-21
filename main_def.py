@@ -654,6 +654,9 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
     for row in rows:
         logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
 
+    # 展示本周闪光杯爆装
+    DjcHelper(cfg.account_configs[0], cfg.common).dnf_shanguang_show_equipments()
+
 
 def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
     djcHelper = DjcHelper(account_config, common_config)

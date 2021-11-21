@@ -6,7 +6,6 @@ import json_parser
 from black_list import check_in_black_list
 from dao import *
 from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
-from dnf_equipment import equipment_code_to_name
 from exceptions_def import *
 from first_run import *
 from game_info import get_game_info, get_game_info_by_bizcode

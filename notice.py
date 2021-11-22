@@ -159,15 +159,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "分享一个较低成本且方便地在手机上间接运行小助手和dnf挂时长和小游戏的方案"
-    message = """昨天在腾讯云花134元买了个2c4g8m的云服务器，本来是准备用作其他用途的，只是暂时用不到。在选择镜像时发现可以装windows2019服务器，就想着可不可以用来运行小助手，甚至说运行DNF？
-于是折腾了一波，发现还真行，运行小助手很流畅，DNF的话可以正常进入并操作，只是因为配置问题，只能挂挂时长或者小游戏了，刷图是太卡了。
-而且微软的远程桌面在安卓、iOS的手机和pad上都有官方的app，可以很轻松的配置并一键连接，就可以实现在外面的时候也能在手机中间接地轻易运行小助手了
-
-录了个视频，介绍了下整体流程，大家有兴趣的可以看看哈~
-
+    title = "chrome便携版下载"
+    message = """如果今天更新的chrome96便携版下载非常慢，可以试试去以下地方下载chrome 96的完整版
+1. 异次元软件 https://www.iplaysoft.com/tools/chrome/
+2. qq软件中心 https://pc.qq.com/detail/1/detail_2661.html
+3. pc6       http://www.pc6.com/softview/SoftView_24670.html
 """
-    open_url = "https://www.bilibili.com/video/BV18f4y1M7uL/"
+    open_url = "https://www.iplaysoft.com/tools/chrome/"
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

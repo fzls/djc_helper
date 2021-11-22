@@ -1453,6 +1453,75 @@ class XinYueMatchServerRequestTeamResponse(ConfigInterface):
         self.team_id = ""
 
 
+class CreateWorkListInfo(ConfigInterface):
+    def __init__(self):
+        self.total = "0"
+        self.list = []  # type: List[CreateWorkInfo]
+
+    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        return [
+            ("list", CreateWorkInfo),
+        ]
+
+
+class CreateWorkInfo(ConfigInterface):
+    def __init__(self):
+        self.iInfoId = 1774933
+        self.tglAuthorID = 2190051
+        self.iBizUserId = ""
+        self.sVid = ""
+        self.iGameId = 453
+        self.iPlayTimes = 0
+        self.iStaus = 30
+        self.iStatus = 30
+        self.sTypeName = ""
+        self.sSubTypeName = ""
+        self.sKeyWord = ""
+        self.sUserCreator = "夕尘"
+        self.sCreator = "1051866291"
+        self.sUserQQ = "1051866291"
+        self.sUserAvatar = "http://thirdqq.qlogo.cn/g?b=oidb&k=XbfGAJwqEjUmz2pia57EzSA&s=100&t=1586250435"
+        self.sAuthorLevel = "C"
+        self.kol = ""
+        self.sFromUrl = ""
+        self.sTitle = "魔界人元气满满防尘口罩"
+        self.sContent = "<p><melo-data></melo-data></p><div><h1>魔界人口罩</h1><p>卖点：生活刚需，成本低下，展示个性。</p><p><img src='https://img.tgl.qq.com/cover/20211005/3f244bb8bee2ee6ef63d89fb235cf086_1633411914.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>设计：考虑到防疫口罩拥有极高的安全等级，因此推荐制作常规的装饰级口罩。<br  /></p><p><img src='https://img.tgl.qq.com/cover/20211005/5423e9635781cb5d4f54b8a6dbfcfb77_1633414580.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>·背景：</p><p>疫情时代下，口罩成为了人们的必需品。</p><p>2021年春节期间，五菱宏光为春晚独家提供了口罩支持，使其成为了当时春晚最成功的营销品牌之一。</p><p>看人先看脸，口罩作为戴在人们脸上的挂件，是最受人们关注的产品之一。一个好看的口罩，不仅可以让佩戴者心情愉悦，同时还可以广泛吸引其他人眼光。</p><p><img src='https://img.tgl.qq.com/cover/20211005/c19b96a1605df657c7f9252e3612df64_1633412019.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>案例：</p><p>著名游戏《最终幻想》系列厂商——史克威尔工作室就曾经推出过一款简单的文字口罩，作为周边商城满单赠送礼物，引发游戏圈不小讨论。</p><p><img src='https://img.tgl.qq.com/source/open/20211005/16334120477ad1d9973bb26993.jpg' style='max-width: 100%; height: auto;' data-origin='https%3A%2F%2Fimg1.gamersky.com%2Fimage2020%2F05%2F20200512_zty_412_4%2Fgamersky_02origin_03_202051210515B8.jpg'  /><br  /></p><p><br  /></p><p><br  /></p></div><img style='width:1px;height:1px;border:none' forstat='1'  src='https://itea-stat.qq.com/img/stat?cid=tgleb0db07909bad&aid=1774933'>"
+        self.sDetailUrl = ""
+        self.sInfoImageAddr = "https://img.tgl.qq.com/cover/20211005/e0d739e75c6b71b43f13ae1f92515c2b_1633414545.png"
+        self.sInfoBigImageAddr = "https://img.tgl.qq.com/cover/20211005/e0d739e75c6b71b43f13ae1f92515c2b_1633414545.png"
+        self.sSubContent = "魔界人元气满满防尘口罩"
+        self.description = ""
+        self.sArticleType = 0
+        self.sHourLong = ""
+        self.dtCreateTime = "2021-10-05 14:16:42"
+        self.dtModifyTime = "2021-11-10 18:11:40"
+        self.statUrl = "http://itea-cdn.qq.com/file/tgl/js/tgl_moni.js?aid=1774933&gid=453&cid=tgleb0db07909bad&_t=1637424000"
+        self.iDeliverSource = 6
+        self.atlas = ""
+        self.covers = []
+        self.feedCovers = []
+        self.infoImages = {}
+        self.autoAudit = False
+        self.firstRelease = False
+        self.sUserIDCard = "1b92f36d5446553be2680ba65b232e78"
+        self.themeId = "12"
+        self.isShortVideo = 0
+        self.extra_info = ""
+        self.original = 1
+        self.source = "0"
+        self.weChat = ""
+        self.mediaUser = None
+        self.mediaUserUid = ""
+        self.iPubInIu = 0
+        self.albumId = 0
+        self.category = 2
+        self.SubCategory = 12
+        self.audioUrl = ""
+        self.videoDirection = 0
+        self.iGlanceNum = "50"
+        self.iPraiseNum = "528"
+
+
 if __name__ == '__main__':
     from util import format_time, parse_time
 

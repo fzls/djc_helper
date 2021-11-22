@@ -478,5 +478,15 @@
     "open_url": "https://www.iplaysoft.com/tools/chrome/",
     "expire_at": "2021-11-30 00:37:44",
     "show_only_before_version": "14.6.0"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "chrome便携版下载",
+    "message": "如果今天更新的chrome96便携版下载非常慢，可以试试去以下地方下载chrome 96的完整版\n1. 异次元软件 https://www.iplaysoft.com/tools/chrome/\n2. qq软件中心 https://pc.qq.com/detail/1/detail_2661.html\n3. pc6       http://www.pc6.com/softview/SoftView_24670.html\n\n或者去qq群的群文件里下载【chrome_portable_96.7z】，然后手动原样放到小助手目录下的utils目录里面\n",
+    "send_at": "2021-11-23 00:49:49",
+    "show_type": "once",
+    "open_url": "https://www.iplaysoft.com/tools/chrome/",
+    "expire_at": "2021-11-30 00:49:49",
+    "show_only_before_version": "14.6.0"
   }
 ]

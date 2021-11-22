@@ -164,6 +164,8 @@ def main():
 1. 异次元软件 https://www.iplaysoft.com/tools/chrome/
 2. qq软件中心 https://pc.qq.com/detail/1/detail_2661.html
 3. pc6       http://www.pc6.com/softview/SoftView_24670.html
+
+或者去qq群的群文件里下载【chrome_portable_96.7z】，然后手动原样放到小助手目录下的utils目录里面
 """
     open_url = "https://www.iplaysoft.com/tools/chrome/"
     nm.add_notice(title, message,

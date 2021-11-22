@@ -406,6 +406,7 @@ class DjcHelper:
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -416,7 +417,6 @@ class DjcHelper:
             ("WeGameDup", self.dnf_wegame_dup),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian_dup),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("轻松之路", self.dnf_relax_road),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF公会活动", self.dnf_gonghui),
@@ -5905,20 +5905,30 @@ class DjcHelper:
 
         self.check_dnf_luodiye()
 
-        self.dnf_luodiye_op("登陆领取积分", "800206")
-        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_luodiye_分享_{self.uin()}"):
-            self.dnf_luodiye_op("分享", "800207", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
-        self.dnf_luodiye_op("登陆活动页送积分", "800208")
+        self.dnf_luodiye_op("登陆游戏参与史诗之路领取积分", "812227")
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"):
+            self.dnf_luodiye_op("用户授权(统一授权)", "814239")
+            self.dnf_luodiye_op("分享", "812228", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        self.dnf_luodiye_op("登陆活动页送积分", "812229")
 
-        for i in range(4):
-            res = self.dnf_luodiye_op("领取自选道具-装备提升礼盒*2", "800205", giftId="1756746")
-            if int(res["ret"]) != 0:
-                break
+        gift_list = [
+            ("1815653", "抗疲劳秘药（30点）"),
+            ("1823301", "黑钻7天"),
+            ("1815675", "一次性继承装置"),
+            ("1823317", "一次性材质转换器"),
+
+            ("1815702", "闪亮的雷米援助礼盒（10个）"),
+            ("1815667", "王者契约礼包（1天）"),
+            ("1823312", "普通材料礼盒"),
+            ("1823318", "[期限]时间引导石礼盒（10个）"),
+        ]
+        for gift_id, gift_name in gift_list:
+            self.dnf_luodiye_op(f"领取自选道具 - {gift_name}", "812226", giftId=gift_id)
             time.sleep(1)
 
     def check_dnf_luodiye(self):
         self.check_bind_account("DNF落地页活动", get_act_url("DNF落地页活动"),
-                                activity_op_func=self.dnf_luodiye_op, query_bind_flowid="800203", commit_bind_flowid="800202")
+                                activity_op_func=self.dnf_luodiye_op, query_bind_flowid="812224", commit_bind_flowid="812223")
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_luodiye
@@ -7265,4 +7275,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang_show_equipments()
+        djcHelper.dnf_luodiye()

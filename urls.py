@@ -67,6 +67,7 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
+    "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
 
     # 已过期活动
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
@@ -90,7 +91,6 @@ act_name_to_url = {
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
     "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
-    "DNF共创投票": "https://dnf.qq.com/cp/a20201126version/index.shtml",
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
@@ -182,7 +182,7 @@ class Urls:
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
-        self.iActivityId_dnf_dianzan = "348845"  # DNF2020共创投票领礼包需求
+        self.iActivityId_dnf_dianzan = "419223"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "407607"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
@@ -236,7 +236,7 @@ class Urls:
                                "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}" \
                                "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}" \
                                "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}" \
-                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}"
+                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize

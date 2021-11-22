@@ -407,6 +407,7 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF共创投票", self.dnf_dianzan),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -433,7 +434,6 @@ class DjcHelper:
             ("阿拉德勇士征集令", self.dnf_warriors_call),
             ("dnf漂流瓶", self.dnf_drift),
             ("暖冬好礼活动", self.warm_winter),
-            ("DNF共创投票", self.dnf_dianzan),
             ("史诗之路来袭活动合集", self.dnf_1224),
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
@@ -4597,6 +4597,77 @@ class DjcHelper:
 
         self.check_dnf_dianzan()
 
+        def report_first_login():
+            raw_page_info = self.dnf_dianzan_op("查询页面数据", "811832", print_res=False)
+            page_info = parse_amesvr_common_info(raw_page_info)
+            if page_info.sOutValue1 != "0":
+                return
+
+            self.dnf_dianzan_op("登录页面", "811831")
+
+        def get_one_work_randomly(mod_name: str, iType: str, iPage: str) -> CreateWorkInfo:
+            raw_work_info_list = self.dnf_dianzan_op("登录显示列表", "814952", iType=iType, iPage="1", print_res=False)
+            work_info_list = CreateWorkListInfo().auto_update_config(raw_work_info_list["modRet"]["jData"]["worklist"])
+
+            work_info = random.choice(work_info_list.list)
+            logger.info(f"为避免影响最终投票数据，随机选一个作品来投票，本次选中的作品为 {work_info.sTitle}")
+
+            return work_info
+
+        # ----------------------------------------------------
+
+        report_first_login()
+
+        # 给每个模块随机投票
+        mod_types = [
+            ('8', '文学'),
+            ('10', '音乐'),
+            ('7', '视频'),
+            ('11', 'cosplay'),
+            ('14', '表情包'),
+            ('9', '美术'),
+            ('12', '周边设计'),
+        ]
+        for mod_type, mod_name in mod_types:
+            if not is_weekly_first_run(f"点赞_{self.uin()}_{get_act_url('DNF共创投票')}_{mod_type}"):
+                logger.info(f"{mod_name} 已经投票过一次，不再尝试，避免过多影响投票数据")
+                continue
+
+            work_info = get_one_work_randomly(mod_name, mod_type, "1")
+
+            desc = f"{work_info.iInfoId} - {work_info.sUserCreator} - {work_info.sTitle}"
+
+            self.dnf_dianzan_op(f"{mod_type}-{mod_name}: 随机挑选一个点赞 - {desc}", "812365",
+                                iType=mod_type, iWork=work_info.iInfoId)
+
+            time.sleep(1)
+
+            # 投票后，有一定比例的浏览
+            if random.random() < 0.25:
+                self.dnf_dianzan_op(f"{desc} 浏览量+1", "812352", iType=mod_type, iWork=work_info.iInfoId)
+
+            time.sleep(1)
+            logger.info("")
+
+        self.dnf_dianzan_op("投票礼包", "812839")
+
+    def query_dnf_dianzan(self):
+        res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
+        info = parse_amesvr_common_info(res)
+
+        return int(info.sOutValue1), info.sOutValue2
+
+    def check_dnf_dianzan(self):
+        self.check_bind_account("DNF共创投票", get_act_url("DNF共创投票"),
+                                activity_op_func=self.dnf_dianzan_op, query_bind_flowid="811640", commit_bind_flowid="811639")
+
+    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_dianzan
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF共创投票"),
+                                   **extra_params)
+
+    def old_version_dianzan(self):
         db = DianzanDB().load()
         account_db = DianzanDB().with_context(self.cfg.name).load()
 
@@ -4696,22 +4767,6 @@ class DjcHelper:
         self.dnf_dianzan_op("累计 25票", "725340")
         self.dnf_dianzan_op("累计100票", "725341")
         self.dnf_dianzan_op("累计200票", "725342")
-
-    def query_dnf_dianzan(self):
-        res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
-        info = parse_amesvr_common_info(res)
-
-        return int(info.sOutValue1), info.sOutValue2
-
-    def check_dnf_dianzan(self):
-        self.check_bind_account("DNF共创投票", get_act_url("DNF共创投票"),
-                                activity_op_func=self.dnf_dianzan_op, query_bind_flowid="725330", commit_bind_flowid="725329")
-
-    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_dianzan
-
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF共创投票"),
-                                   **extra_params)
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     @try_except()
@@ -6873,6 +6928,7 @@ class DjcHelper:
             "iInviter",
             "iPageNow", "iPageSize",
             "pUserId", "isBind",
+            "iType", "iWork", "iPage",
         ]}
 
         # 整合得到所有默认值
@@ -7275,4 +7331,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_dianzan()

@@ -408,6 +408,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF共创投票", self.dnf_dianzan),
+            ("DNF公会活动", self.dnf_gonghui),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -420,7 +421,6 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian_dup),
             ("轻松之路", self.dnf_relax_road),
             ("关怀活动", self.dnf_guanhuai),
-            ("DNF公会活动", self.dnf_gonghui),
             ("colg每日签到", self.colg_signin),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
@@ -4076,12 +4076,103 @@ class DjcHelper:
 
         self.check_dnf_gonghui()
 
+        def query_huoyue() -> int:
+            return int(_query_info().sOutValue2)
+
         def query_score() -> int:
-            res = self.dnf_gonghui_op("查询数据", "800167", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+            return int(_query_info().sOutValue3)
 
-            return int(raw_info.sOutValue1)
+        def _query_info() -> AmesvrCommonModRet:
+            res = self.dnf_gonghui_op("查询数据", "814697", print_res=False)
+            return parse_amesvr_common_info(res)
 
+        self.dnf_gonghui_op("验证公会信息", "813948")
+        self.dnf_gonghui_op("工会验证礼包", "813940")
+        # self.dnf_gonghui_op("会长创群礼包", "813943", iQQGroup="iQQGroup")
+
+        self.dnf_gonghui_op("每日分享礼包", "813980")
+        self.dnf_gonghui_op("每日在线30分钟礼包", "814012")
+        self.dnf_gonghui_op("每日通关10次推荐地下城", "814017")
+        self.dnf_gonghui_op("每日消耗100疲劳", "814053")
+        self.dnf_gonghui_op("每日消耗156疲劳", "814063")
+
+        logger.info(color("bold_yellow") + f"{self.cfg.name} 当前活跃度为 {query_huoyue()}")
+        self.dnf_gonghui_op("活跃值礼包-25", "813951")
+        self.dnf_gonghui_op("活跃值礼包-50", "813973")
+        self.dnf_gonghui_op("活跃值礼包-75", "813974")
+        self.dnf_gonghui_op("活跃值礼包-100", "813975")
+        self.dnf_gonghui_op("活跃值礼包-125", "813976")
+        self.dnf_gonghui_op("活跃值礼包-150", "813977")
+        self.dnf_gonghui_op("活跃值礼包-175", "813978")
+
+        # 兑换奖励
+        def exchange_awards():
+            awards = [
+                ("灿烂的徽章自选礼盒-300 积分", "814067", 1),
+                ("次元玄晶碎片礼袋(5个)-180 积分", "814080", 2),
+                ("装备提升礼盒-30 积分", "814679", 10),
+                ("抗疲劳秘药 (20点)-30 积分", "814675", 5),
+                ("抗疲劳秘药 (50点)-180 积分", "814672", 2),
+                ("一次性继承装置-80 积分", "814674", 5),
+                ("宠物饲料礼袋 (10个)-10 积分", "814682", 30),
+
+                ("华丽的徽章神秘礼盒-10 积分", "814681", 10),
+                ("华丽的徽章自选礼盒-80 积分", "814673", 1),
+                ("本职业稀有符文神秘礼盒-30 积分", "814677", 8),
+                ("裂缝注视者通行证-30 积分", "814678", 10),
+                ("复活币礼盒 (1个)-30 积分", "814680", 30),
+            ]
+            for name, flowid, count in awards:
+                for idx in range_from_one(count):
+                    ctx = f"第{idx}/{count}次 尝试兑换 {name}"
+                    res = self.dnf_gonghui_op(ctx, flowid)
+                    msg = res["flowRet"]["sMsg"]
+                    if "积分" in msg:
+                        logger.warning(f"当前积分不足以兑换 {name}，将停止尝试后续兑换")
+                        return
+
+        total_score = query_score()
+        logger.info(color("bold_yellow") + f"当前拥有积分： {total_score}")
+
+        logger.info(f"先尝试抽奖（若开启）")
+        if self.cfg.function_switches.dnf_gonghui_enable_lottery:
+            # 每次抽奖需要消耗的10积分
+            total_lottery_count = total_score // 10
+            logger.info(color("bold_yellow") + f"当前可抽奖次数为： {total_lottery_count}（单次需要10积分）")
+
+            for idx in range_from_one(total_lottery_count):
+                self.dnf_gonghui_op(f"第 {idx}/{total_lottery_count} 积分抽奖", "814683")
+        else:
+            logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
+
+        logger.info("然后开始尝试按优先级兑换道具")
+        exchange_awards()
+
+        # 邀请好友
+        async_message_box("工会活动的邀请三个好友并让对方接受邀请，请自行完成，或放弃", "工会活动邀请", show_once=True)
+        self.dnf_gonghui_op("信息授权", "814700")
+        # self.dnf_gonghui_op("更新邀请登录状态", "817085", sCode="sCode")
+        self.dnf_gonghui_op("领取邀请三次好友的盲盒", "814684")
+
+        # if not self.cfg.function_switches.disable_share and is_daily_first_run(f"工会活动邀请_{self.uin()}"):
+        #     share_pskey = self.fetch_share_p_skey("工会活动邀请")
+        #     extra_cookies = f"p_skey={share_pskey}"
+        #
+        #     # 这个似乎是固定的，所以直接自己发送吧
+        #     self.dnf_gonghui_op("发送邀请信息", "814696", sCode="QQ号码", sNick=quote_plus("QQ昵称"), extra_cookies=extra_cookies)
+
+    def check_dnf_gonghui(self, **extra_params):
+        self.check_bind_account("DNF公会活动", get_act_url("DNF公会活动"),
+                                activity_op_func=self.dnf_gonghui_op, query_bind_flowid="813939", commit_bind_flowid="813938",
+                                **extra_params)
+
+    def dnf_gonghui_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_gonghui
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF公会活动"),
+                                   **extra_params)
+
+    def old_version_gonghui(self):
         def is_current_bind_character_guild_chairman() -> bool:
             res = self.dnf_gonghui_op("验证公会信息-是否会长", "797992", print_res=False)
             raw_info = parse_amesvr_common_info(res)
@@ -4129,10 +4220,6 @@ class DjcHelper:
             need_continue = take_lottery_count_role_info.roleCode != current_bind_role.roleCode
             return need_continue
 
-        self.dnf_gonghui_op("幸运验证礼包", "797851")
-
-        self.dnf_gonghui_op("活动分享", "798914")
-
         # 会员活动
         def need_try_huiyuan_role(take_lottery_count_role_info: RoleInfo) -> bool:
             if self.cfg.gonghui_rolename_huiyuan == "":
@@ -4152,56 +4239,6 @@ class DjcHelper:
             return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huizhang
 
         self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations, need_try_func=need_try_huizhang_role)
-
-        # 兑换奖励
-        def exchange_awards():
-            awards = [
-                ("灿烂的徽章自选礼盒-300 积分", "797914", 1),
-                ("次元玄晶碎片礼袋(5个)-180 积分", "798120", 2),
-                ("装备提升礼盒-30 积分", "798127", 10),
-                ("宠物饲料礼袋 (10个)-10 积分", "798143", 30),
-                ("一次性继承装置-80 积分", "798123", 5),
-                ("华丽的徽章自选礼盒-80 积分", "798122", 1),
-                ("华丽的徽章神秘礼盒-10 积分", "798129", 10),
-                ("复活币礼盒 (1个)-30 积分", "798128", 30),
-                ("抗疲劳秘药 (50点)-180 积分", "798121", 2),
-                ("抗疲劳秘药 (20点)-30 积分", "798124", 5),
-                ("本职业稀有符文神秘礼盒-30 积分", "798125", 8),
-                ("裂缝注视者通行证-30 积分", "798126", 10),
-            ]
-            for name, flowid, count in awards:
-                for idx in range_from_one(count):
-                    ctx = f"第{idx}/{count}次 尝试兑换 {name}"
-                    res = self.dnf_gonghui_op(ctx, flowid)
-                    msg = res["flowRet"]["sMsg"]
-                    if msg == "抱歉,你积分不够!":
-                        logger.warning(f"当前积分不足以兑换 {name}，将停止尝试后续兑换")
-                        return
-
-        exchange_awards()
-
-        total_score = query_score()
-        logger.info(color("bold_yellow") + f"当前拥有积分： {total_score}")
-        if self.cfg.function_switches.dnf_gonghui_enable_lottery:
-            # 每次抽奖需要消耗的10积分
-            total_lottery_count = total_score // 10
-            logger.info(color("bold_yellow") + f"当前可抽奖次数为： {total_lottery_count}（单次需要10积分）")
-
-            for idx in range_from_one(total_lottery_count):
-                self.dnf_gonghui_op(f"第 {idx}/{total_lottery_count} 积分抽奖", "797915")
-        else:
-            logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
-
-    def check_dnf_gonghui(self, **extra_params):
-        self.check_bind_account("DNF公会活动", get_act_url("DNF公会活动"),
-                                activity_op_func=self.dnf_gonghui_op, query_bind_flowid="797913", commit_bind_flowid="797912",
-                                **extra_params)
-
-    def dnf_gonghui_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_gonghui
-
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF公会活动"),
-                                   **extra_params)
 
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()
@@ -6929,6 +6966,7 @@ class DjcHelper:
             "iPageNow", "iPageSize",
             "pUserId", "isBind",
             "iType", "iWork", "iPage",
+            "sNick",
         ]}
 
         # 整合得到所有默认值
@@ -7331,4 +7369,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_dianzan()
+        djcHelper.dnf_gonghui()

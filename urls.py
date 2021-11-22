@@ -68,6 +68,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
+    "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
 
     # 已过期活动
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
@@ -78,7 +79,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
-    "DNF公会活动": "https://dnf.qq.com/cp/a20210914GH/gh1/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "虎牙": "https://www.huya.com/367967",
@@ -216,7 +216,7 @@ class Urls:
         self.iActivityId_dnf_kol = "416057"  # DNF KOL
         self.iActivityId_maoxian = "407067"  # 勇士的冒险补给
         self.iActivityId_maoxian_dup = "405979"  # 勇士的冒险补给-回归玩家
-        self.iActivityId_dnf_gonghui = "406454"  # DNF公会活动
+        self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "406829"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
@@ -236,7 +236,7 @@ class Urls:
                                "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}" \
                                "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}" \
                                "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}" \
-                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}"
+                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize

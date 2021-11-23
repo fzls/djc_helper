@@ -69,9 +69,9 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
 
     # 已过期活动
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211020care/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
@@ -189,7 +189,7 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_majieluo = "414613"  # DNF马杰洛的规划
+        self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "404886"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

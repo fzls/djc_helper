@@ -737,6 +737,7 @@ class CommonConfig(ConfigInterface):
         self.github_mirror_sites = [
             "github.com.cnpmjs.org",
             "hub.fastgit.org",
+            "gitclone.com/github.com",
         ]
         # 自动更新dlc购买地址
         self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.net/purchasing?link=auto-updater"

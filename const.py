@@ -26,3 +26,6 @@ compressed_temp_dir = f"{cached_dir}/compressed"
 directory_list = [v for k, v in locals().items() if k.endswith("_dir")]
 for directory in directory_list:
     os.makedirs(directory, exist_ok=True)
+
+# vscode 在线版
+vscode_online_url = "https://vscode.dev/"

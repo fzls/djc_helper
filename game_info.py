@@ -4,7 +4,8 @@ import subprocess
 
 from dao import GameInfo
 from log import logger
-from util import message_box, pause_and_exit
+from util import message_box, pause_and_exit, async_message_box
+from const import vscode_online_url
 
 _loaded = False
 name_2_game_info_map = {}
@@ -47,7 +48,7 @@ def get_game_info(name):
     lazy_load()
     if name not in name_2_game_info_map:
         message_box(f"未找到游戏【{name}】相关的配置，可能是空格等不完全匹配，请在稍后打开的文件中查找对应游戏的实际名字", "游戏名不正确")
-        subprocess.call(["utils/npp_portable/notepad++.exe", "utils/reference_data/djc_biz_list.json"])
+        async_message_box("请使用网页版vscode或者下载个本地版的vscode打开【utils/reference_data/djc_biz_list.json】文件来自行修改~", "提示", open_url=vscode_online_url)
         pause_and_exit(-1)
 
     return name_2_game_info_map[name]

@@ -6557,14 +6557,14 @@ class DjcHelper:
 
         self.dnf_collection_dup_op("勇士礼包", "815366")
         self.dnf_collection_dup_op("全民参与礼包", "815369")
-        self.dnf_collection_dup_op("公会礼包", "815371")
+        self.dnf_collection_dup_op("公会礼包按钮2", "818925")
 
-        self.dnf_collection_dup_op("30分签到礼包", "815370")
+        self.dnf_collection_dup_op("在线30分钟按钮2", "818733")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_dup_op("累计登录3天", "815372")
-        self.dnf_collection_dup_op("累计登录7天", "815373")
-        self.dnf_collection_dup_op("累计登录15天", "815374")
-        self.dnf_collection_dup_op("累计登录21天", "815375")
+        self.dnf_collection_dup_op("累计登录3天按钮2", "818926")
+        self.dnf_collection_dup_op("累计登录7天按钮2", "818927")
+        self.dnf_collection_dup_op("累计登录15天按钮2", "818928")
+        self.dnf_collection_dup_op("累计登录21天按钮2", "818929")
 
     def check_dnf_collection_dup(self):
         self.check_bind_account("DNF集合站", get_act_url("DNF集合站周年庆"),
@@ -7374,4 +7374,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_collection_dup()

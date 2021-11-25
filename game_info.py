@@ -1,11 +1,10 @@
 import json
 import os
-import subprocess
 
+from const import vscode_online_url
 from dao import GameInfo
 from log import logger
-from util import message_box, pause_and_exit, async_message_box
-from const import vscode_online_url
+from util import async_message_box, message_box, pause_and_exit
 
 _loaded = False
 name_2_game_info_map = {}

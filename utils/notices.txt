@@ -488,5 +488,15 @@
     "open_url": "https://www.iplaysoft.com/tools/chrome/",
     "expire_at": "2021-11-30 00:49:49",
     "show_only_before_version": "14.6.0"
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "chrome版本升级后使用情况调查",
+    "message": "11.22升级chrome到96版本后，部分人似乎无法使用。因此统计一下具体情况，用于确定是否要回滚到94版本。\n\nPS：如果目前无法使用，但旧版本可以，那么可以打开配置工具，在【公共配置】/【登录】下勾选【强制使用便携版chrome】，并将chrome版本设定为94.\n",
+    "send_at": "2021-11-25 16:40:18",
+    "show_type": "once",
+    "open_url": "https://www.wjx.cn/vj/QS6aa9l.aspx",
+    "expire_at": "2021-12-02 16:40:18",
+    "show_only_before_version": "14.7.0"
   }
 ]

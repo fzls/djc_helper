@@ -159,15 +159,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "chrome便携版下载"
-    message = """如果今天更新的chrome96便携版下载非常慢，可以试试去以下地方下载chrome 96的完整版
-1. 异次元软件 https://www.iplaysoft.com/tools/chrome/
-2. qq软件中心 https://pc.qq.com/detail/1/detail_2661.html
-3. pc6       http://www.pc6.com/softview/SoftView_24670.html
+    title = "chrome版本升级后使用情况调查"
+    message = """11.22升级chrome到96版本后，部分人似乎无法使用。因此统计一下具体情况，用于确定是否要回滚到94版本。
 
-或者去qq群的群文件里下载【chrome_portable_96.7z】，然后手动原样放到小助手目录下的utils目录里面
+PS：如果目前无法使用，但旧版本可以，那么可以打开配置工具，在【公共配置】/【登录】下勾选【强制使用便携版chrome】，并将chrome版本设定为94.
 """
-    open_url = "https://www.iplaysoft.com/tools/chrome/"
+    open_url = "https://www.wjx.cn/vj/QS6aa9l.aspx"
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

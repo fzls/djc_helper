@@ -6559,7 +6559,9 @@ class DjcHelper:
         self.dnf_collection_dup_op("全民参与礼包", "815369")
         self.dnf_collection_dup_op("公会礼包按钮2", "818925")
 
-        self.dnf_collection_dup_op("在线30分钟按钮2", "818733")
+        self.dnf_collection_dup_op("在线30分钟按钮 - 签到", "818733")
+        time.sleep(5)
+        self.dnf_collection_dup_op("在线30分钟按钮 - 领奖", "818733")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
         self.dnf_collection_dup_op("累计登录3天按钮2", "818926")
         self.dnf_collection_dup_op("累计登录7天按钮2", "818927")

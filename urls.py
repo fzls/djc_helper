@@ -27,6 +27,7 @@ not_ams_activities = [
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
     newAmsActInfo("管家蚊子腿", "2021-10-21 00:00:00", "2021-11-30 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿-爱玩", "2021-11-26 00:00:00", "2021-12-17 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-11-14 00:00:00", "2021-12-14 23:59:59"),
     newAmsActInfo("黄钻", "2021-11-14 00:00:00", "2021-12-15 23:59:59"),
@@ -70,6 +71,7 @@ act_name_to_url = {
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
+    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
 
     # 已过期活动
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
@@ -279,6 +281,9 @@ class Urls:
 
         # qq视频活动
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}&is_prepublish={is_prepublish}"
+
+        # qq视频 - 爱玩
+        self.qq_video_iwan = "https://act.iwan.qq.com/trpc.iwan.mission_system_server.MissionSystemSvr/dealSimpleMission?platformId=10&platformid=10&guid=&device=&acctype=qq&missionId={missionId}&gameId=48&sPlat=&sArea=&serverId={serverId}&sRoleId={sRoleId}"
 
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
         self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"

@@ -410,6 +410,7 @@ class DjcHelper:
             ("DNF共创投票", self.dnf_dianzan),
             ("DNF公会活动", self.dnf_gonghui),
             ("DNF马杰洛的规划", self.majieluo),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -2820,6 +2821,55 @@ class DjcHelper:
             f"vuserid={self.get_vuserid()}",
         ])
         return self.get(ctx, self.urls.qq_video, type=type, option=option, act_id=self.qq_video_act_id, module_id=module_id, task=task, is_prepublish=is_prepublish,
+                        print_res=print_res, extra_cookies=extra_cookies)
+
+    # --------------------------------------------qq视频蚊子腿-爱玩--------------------------------------------
+    @try_except()
+    def qq_video_iwan(self):
+        show_head_line("qq视频蚊子腿-爱玩")
+        self.show_not_ams_act_info("qq视频蚊子腿-爱玩")
+
+        if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
+            logger.warning("未启用领取qq视频蚊子腿-爱玩功能，将跳过")
+            return
+
+        lr = djcHelper.fetch_xinyue_login_info("获取openid和access_token")
+        access_token = lr.xinyue_access_token
+        openid = lr.openid
+        if access_token == "" or openid == "":
+            logger.warning(f"openid和access_token未能成功获取，将无法领取qq视频蚊子腿。access_token={access_token}, openid={openid}")
+            return
+
+        self.qq_video_access_token = access_token
+        self.qq_video_openid = openid
+
+        # -----------------------------------------------
+
+        logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
+
+        self.qq_video_iwan_op("幸运勇士礼包", "asfYkZs4q")
+        self.qq_video_iwan_op("勇士见面礼", "qj7RdLF3a")
+        self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "2rQlUVD6p")
+        self.qq_video_iwan_op("在线30分钟签到", "Zw6VZ6DcP")
+        self.qq_video_iwan_op("累计 3 天", "sAWkKaQ_8")
+        self.qq_video_iwan_op("累计 7 天", "WAxnsEgFO")
+        self.qq_video_iwan_op("累计 10 天", "MjmlorV3b")
+        self.qq_video_iwan_op("累计 15 天", "VR-VOeTHZ")
+
+    def qq_video_iwan_op(self, ctx: str, missionId: str, print_res=True):
+        role = djcHelper.get_dnf_bind_role_copy()
+
+        extra_cookies = "; ".join([
+            f"vqq_vuserid={self.get_vuserid()}",
+
+            "vqq_appid=101478665",
+            f"vqq_access_token={self.qq_video_access_token}",
+            f"vqq_openid={self.qq_video_openid}",
+
+            "main_login=qq",
+        ])
+
+        return self.get(ctx, self.urls.qq_video_iwan, missionId=missionId, serverId=role.serviceID, sRoleId=role.roleCode,
                         print_res=print_res, extra_cookies=extra_cookies)
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------
@@ -7376,4 +7426,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection_dup()
+        djcHelper.qq_video_iwan()

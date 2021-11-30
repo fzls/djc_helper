@@ -2840,8 +2840,8 @@ class DjcHelper:
             logger.warning(f"openid和access_token未能成功获取，将无法领取qq视频蚊子腿。access_token={access_token}, openid={openid}")
             return
 
-        self.qq_video_access_token = access_token
-        self.qq_video_openid = openid
+        self.qq_access_token = access_token
+        self.qq_openid = openid
 
         # -----------------------------------------------
 
@@ -2863,8 +2863,8 @@ class DjcHelper:
             f"vqq_vuserid={self.get_vuserid()}",
 
             "vqq_appid=101478665",
-            f"vqq_access_token={self.qq_video_access_token}",
-            f"vqq_openid={self.qq_video_openid}",
+            f"vqq_access_token={self.qq_access_token}",
+            f"vqq_openid={self.qq_openid}",
 
             "main_login=qq",
         ])
@@ -7246,6 +7246,12 @@ class DjcHelper:
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
         logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录心悦页面来获取心悦相关信息，请稍候~")
 
+        return with_cache("登录信息", "openid和access_token", cache_miss_func=self.update_xinyue_login_info, cache_validate_func=self.is_xinyue_login_info_valid, cache_max_seconds=-1,
+                          cache_value_unmarshal_func=LoginResult().auto_update_config,
+                          cache_hit_func=lambda lr: logger.info(f"使用缓存的登录信息: {lr}"))
+
+    def update_xinyue_login_info(self) -> LoginResult:
+        logger.warning("登陆信息已过期，将重新获取")
         ql = QQLogin(self.common_cfg)
         login_mode = ql.login_mode_xinyue
         if self.cfg.login_mode == "qr_login":
@@ -7256,6 +7262,17 @@ class DjcHelper:
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name)
 
         return lr
+
+    def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
+        if lr.openid == "" or lr.xinyue_access_token == "":
+            return False
+
+        self.qq_access_token = lr.xinyue_access_token
+        self.qq_openid = lr.openid
+
+        # {"code": 10001, "msg": "登陆态失效，请重新登录！", "operateGuide": {"operateType": "", "content": "", "isReceiveLimit": false, "isPassCondition": false, "isPassTask": false, "cdKeyInfo": null}}
+        res = self.qq_video_iwan_op("检测access token过期", "asfYkZs4q", print_res=False)
+        return res["code"] != 10001
 
     def parse_condOutput(self, res: dict, cond_id: str) -> int:
         """

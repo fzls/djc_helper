@@ -2856,15 +2856,18 @@ class DjcHelper:
         self.qq_video_iwan_op("累计 10 天", "MjmlorV3b")
         self.qq_video_iwan_op("累计 15 天", "VR-VOeTHZ")
 
-    def qq_video_iwan_op(self, ctx: str, missionId: str, print_res=True):
+    def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", print_res=True):
         role = djcHelper.get_dnf_bind_role_copy()
+
+        qq_access_token = qq_access_token or self.qq_access_token
+        qq_openid = qq_openid or self.qq_openid
 
         extra_cookies = "; ".join([
             f"vqq_vuserid={self.get_vuserid()}",
 
             "vqq_appid=101478665",
-            f"vqq_access_token={self.qq_access_token}",
-            f"vqq_openid={self.qq_openid}",
+            f"vqq_access_token={qq_access_token}",
+            f"vqq_openid={qq_openid}",
 
             "main_login=qq",
         ])
@@ -7267,11 +7270,8 @@ class DjcHelper:
         if lr.openid == "" or lr.xinyue_access_token == "":
             return False
 
-        self.qq_access_token = lr.xinyue_access_token
-        self.qq_openid = lr.openid
-
         # {"code": 10001, "msg": "登陆态失效，请重新登录！", "operateGuide": {"operateType": "", "content": "", "isReceiveLimit": false, "isPassCondition": false, "isPassTask": false, "cdKeyInfo": null}}
-        res = self.qq_video_iwan_op("检测access token过期", "asfYkZs4q", print_res=False)
+        res = self.qq_video_iwan_op("检测access token过期", "asfYkZs4q", qq_access_token=lr.xinyue_access_token, qq_openid=lr.openid, print_res=False)
         return res["code"] != 10001
 
     def parse_condOutput(self, res: dict, cond_id: str) -> int:

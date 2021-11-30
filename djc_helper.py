@@ -2833,7 +2833,8 @@ class DjcHelper:
             logger.warning("未启用领取qq视频蚊子腿-爱玩功能，将跳过")
             return
 
-        async_message_box("新版QQ视频需要额外获取一些登陆票据，因此有号不能完成登录的，可以自行将qq视频蚊子腿的开关先关闭（下次有新的qq视频蚊子腿的时候记得打开）", "qq视频蚊子腿-爱玩-登录提示", show_once=True)
+        if self.cfg.login_mode != self.cfg.login_mode_auto_login:
+            async_message_box("新版QQ视频需要额外获取一些登陆票据，因此将弹出一个登录框。小号似乎不能参与这个活动，会一直提示【登陆态失效，请重新登录！】。因此有号不能完成登录的，可以自行将qq视频蚊子腿的开关先关闭（下次有新的qq视频蚊子腿的时候记得打开）。", "qq视频蚊子腿-爱玩-登录提示", show_once=True)
 
         lr = djcHelper.fetch_xinyue_login_info("获取openid和access_token")
         access_token = lr.xinyue_access_token

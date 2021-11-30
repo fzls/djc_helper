@@ -1128,8 +1128,8 @@ class CommonConfigUi(QFrame):
         # -------------- 区域：其他 --------------
         self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
 
-        self.checkbox_enable_alipay_redpacket = create_checkbox(cfg.enable_alipay_redpacket)
-        add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket)
+        self.checkbox_enable_alipay_redpacket_v2 = create_checkbox(cfg.enable_alipay_redpacket_v2)
+        add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v2)
 
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
         add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
@@ -1187,7 +1187,7 @@ class CommonConfigUi(QFrame):
         cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
         cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()
-        cfg.enable_alipay_redpacket = self.checkbox_enable_alipay_redpacket.isChecked()
+        cfg.enable_alipay_redpacket_v2 = self.checkbox_enable_alipay_redpacket_v2.isChecked()
 
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()

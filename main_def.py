@@ -1057,14 +1057,16 @@ def show_ask_message_box_sync(cfg: Config):
     if not is_windows():
         return
 
-    if now_before("2021-11-30 23:59:59") and cfg.common.enable_alipay_redpacket and is_daily_first_run("支付宝红包活动") and not use_by_myself():
-        title = "支付宝红包活动"
+    if now_before("2022-01-15 23:59:59") and cfg.common.enable_alipay_redpacket_v2 and is_daily_first_run("支付宝红包活动") and not use_by_myself():
+        title = "支付宝红包活动（v2）"
         message = (
-            "现在支付宝有个红包活动，扫弹出来的这个二维码就可以领取一个红包，在便利店等实体店扫码就可以使用。\n"
+            "现在支付宝有个红包活动，扫弹出来的这个二维码就可以领取一个红包，在便利店等实体店扫码就可以使用，购买小助手的时候似乎也可以使用。\n"
             "你使用后我会同时领到一个小红包，大家一起白嫖-。-\n"
             "\n"
             "\n"
             "如果不想看到该弹窗，可以前往配置工具，取消勾选 公共配置/其他/是否弹出支付宝红包活动图片 即可，否则将每天运行时弹出一次0-0"
+            "\n"
+            "支付宝这个红包活动延期了-。-所以我把开关调整了下，之前关闭过的，如果真的不想看到，可以再去点一点<_<\n"
         )
         message_box(message, title, open_image="付费指引/支付宝红包活动.jpg")
 

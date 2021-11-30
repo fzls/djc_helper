@@ -7330,6 +7330,8 @@ def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig
 
 
 def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
+    login_retry_count = 0
+    max_login_retry_count = 5
     while True:
         try:
             # 这里故意等待随机一段时间，避免某账号skey过期时，多个进程同时走到尝试更新处，无法区分先后
@@ -7347,6 +7349,17 @@ def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name
                 f"[{account_config.name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。"
                 f"如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
             ), 20)
+        except AttributeError as e:
+            ctx = f"[{login_retry_count}/{max_login_retry_count}] [{account_config.name}] {act_name}"
+            logger.error("{ctx} 出错了", exc_info=e)
+
+            # 一般是因为网络原因登录检查失败了，等待一会，最多重试若干次
+            if login_retry_count >= max_login_retry_count:
+                logger.warning(f"{ctx} 经过多次重试后均失败了，将跳过该活动")
+                return
+
+            wait_for(f"{ctx} 登录检查失败了，等待一会后重试", 5)
+            login_retry_count += 1
 
 
 def is_new_version_ark_lottery() -> bool:

@@ -799,15 +799,20 @@ _root_caches_key = "caches"
 cache_name_download = "download_cache"
 cache_name_user_buy_info = "user_buy_info"
 
+never_expired_cache_seconds = -1
 
-def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600, force_update=False):
+
+def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600, force_update=False,
+               cache_value_unmarshal_func: Optional[Callable[[Any], Any]] = None, cache_hit_func: Optional[Callable[[Any], None]] = None):
     """
 
     :param cache_category: 缓存类别，不同类别的key不冲突
     :param cache_key: 缓存key，单个类别内唯一
     :param cache_miss_func: 缓存未命中时获取最新值的回调，返回值必须要是python原生类型，以便进行json的序列化和反序列化
     :param cache_validate_func: func(cached_value)->bool, 用于检查缓存值是否仍有效，比如如果缓存的是文件路径，则判断路径是否存在
-    :param cache_max_seconds: 缓存时限（秒），默认600s
+    :param cache_max_seconds: 缓存时限（秒），默认600s, -1表示无过期时限
+    :param cache_value_unmarshal_func: func(cached_value)->value，用于将缓存值转化为实际的对象，比如dict转换为实际的对象
+    :param cache_hit_func: func(cached_value)，用于在缓存击中时进行回调，比如打印日志
     :return: 缓存中获取的数据（若未过期），或最新获取的数据
     """
     db = CacheDB().with_context(cache_category).load()
@@ -820,9 +825,17 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
         cached_value = cache_info.value
 
         if not force_update:
-            if cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now():
+            if cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now() or cache_max_seconds == never_expired_cache_seconds:
+                if cache_value_unmarshal_func is not None:
+                    cache_info.value = cache_value_unmarshal_func(cache_info.value)
+                    logger.debug(f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}")
+
                 if cache_validate_func is None or cache_validate_func(cache_info.value):
                     logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
+
+                    if cache_hit_func:
+                        cache_hit_func(cache_info.value)
+
                     return cache_info.value
         else:
             logger.debug(f"强制更新缓存 cache_category={cache_category} cache_key={cache_key}")

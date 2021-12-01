@@ -25,7 +25,7 @@ Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 
 class Uploader:
     default_sub_domain = "fzls"
-    default_main_domain = "lanzoui"
+    default_main_domain = "lanzouo"
     default_domain = f"{default_sub_domain}.{default_main_domain}.com"
 
     folder_dnf_calc = Folder("魔改计算器", "1810329", f"https://{default_domain}/s/dnf-calc", "")
@@ -391,9 +391,11 @@ class Uploader:
             return [lanzouyun_url]
 
         return [
+            # 去 https://pc.woozooo.com/mydisk.php 登录，然后点击查看 外链分享地址 ，看里面显示的默认域名，优先用这个
             # 目前网盘默认分享链接是这个，后面可以根据经验，哪个最靠谱，调整先后顺序
             # 可以使用下面这个网站测试各个域名的全国连通性
             # https://www.ping.cn/
+            lanzouyun_url.replace(self.default_main_domain, 'lanzouo'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzous'),

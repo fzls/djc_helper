@@ -22,7 +22,7 @@ Github：https://github.com/fzls/autojs
 为了方便使用，推荐使用之前版本的auto.js。<br>
 以下链接为酷安评论区【点石斋废喵】网友使用之前免费版本源码编译出的apk包，目前我用的也是这个（不提供任何担保，仅方便各位快速找到可用版本）<br>
 1. [点石斋废喵 网友发布的github下载链接](https://github.com/Ericwyn/Auto.js/releases)
-2. [我从他这下载后上传到蓝奏云的链接](https://fzls.lanzoui.com/s/djc-helper)
+2. [我从他这下载后上传到蓝奏云的链接](https://fzls.lanzouo.com/s/djc-helper)
 
 # 视频演示
 心悦app脚本演示         https://www.bilibili.com/video/BV1zy4y1S7YL

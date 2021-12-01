@@ -16,11 +16,11 @@
   相关页面: <br>
   <a href="https://fzls.github.io/djc_helper/#/">网页</a>
   <span> | </span>
-  <a href="https://fzls.lanzoui.com/s/djc-helper">网盘</a>
+  <a href="https://fzls.lanzouo.com/s/djc-helper">网盘</a>
   <span> | </span>
   <a href="https://space.bilibili.com/1851177">B站视频教程</a>
   <span> | </span>
-  <a href="https://fzls.lanzoui.com/s/djc-tools">小工具</a>
+  <a href="https://fzls.lanzouo.com/s/djc-tools">小工具</a>
 </div>
 
 <br>
@@ -93,7 +93,7 @@
 
 ## 运行方式
 1. 使用打包版本
-> * 直接下载蓝奏云中的二进制版本使用 https://fzls.lanzoui.com/s/djc-helper
+> * 直接下载蓝奏云中的二进制版本使用 https://fzls.lanzouo.com/s/djc-helper
 > * 下载github最新发布版本 https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z
 > * 使用镜像加速国内下载 https://download.fastgit.org/fzls/djc_helper/releases/download/latest/djc_helper.7z
 
@@ -185,8 +185,8 @@ docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/d
 源代码将持续更新于[本仓库](https://github.com/fzls/djc_helper) ，每个版本将通过下面的蓝奏云链接进行发布，请勿于其他地方下载使用，如各种群文件、软件站等，避免使用到被篡改后的版本，以免出问题-。-
 
 # 网盘链接（更新于2020/10/21)
-链接: https://fzls.lanzoui.com/b01bor45i 提取码: fzls
-链接: https://fzls.lanzoui.com/s/djc-helper 提取码: fzls
+链接: https://fzls.lanzouo.com/b01bor45i 提取码: fzls
+链接: https://fzls.lanzouo.com/s/djc-helper 提取码: fzls
 
 # 视频教程
 https://space.bilibili.com/1851177

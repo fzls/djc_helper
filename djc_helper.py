@@ -7252,7 +7252,7 @@ class DjcHelper:
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
         logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录心悦页面来获取心悦相关信息，请稍候~")
 
-        return with_cache("登录信息", "openid和access_token", cache_miss_func=self.update_xinyue_login_info, cache_validate_func=self.is_xinyue_login_info_valid, cache_max_seconds=-1,
+        return with_cache("登录信息", f"openid_access_token_{self.cfg.name}", cache_miss_func=self.update_xinyue_login_info, cache_validate_func=self.is_xinyue_login_info_valid, cache_max_seconds=-1,
                           cache_value_unmarshal_func=LoginResult().auto_update_config,
                           cache_hit_func=lambda lr: logger.info(f"使用缓存的登录信息: {lr}"))
 

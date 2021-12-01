@@ -355,7 +355,12 @@ class Uploader:
 
     def get_folder_info_by_url(self, share_url, dir_pwd='', get_this_page=0) -> FolderDetail:
         for possiable_url in self.all_possiable_urls(share_url):
-            folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd, get_this_page=get_this_page)
+            try:
+                folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd, get_this_page=get_this_page)
+            except Exception as e:
+                folder_info = FolderDetail(LanZouCloud.NETWORK_ERROR)
+                logger.debug(f"get_folder_info_by_url {possiable_url} 出异常了", exc_info=e)
+
             if folder_info.code != LanZouCloud.SUCCESS:
                 logger.debug(f"请求{possiable_url}失败，将尝试下一个")
                 continue
@@ -367,7 +372,12 @@ class Uploader:
     def down_file_by_url(self, share_url, pwd='', save_path='./Download', *, callback=None, overwrite=False,
                          downloaded_handler=None) -> int:
         for possiable_url in self.all_possiable_urls(share_url):
-            retCode = self.lzy.down_file_by_url(possiable_url, pwd, save_path, callback=callback, overwrite=overwrite, downloaded_handler=downloaded_handler)
+            try:
+                retCode = self.lzy.down_file_by_url(possiable_url, pwd, save_path, callback=callback, overwrite=overwrite, downloaded_handler=downloaded_handler)
+            except Exception as e:
+                retCode = LanZouCloud.NETWORK_ERROR
+                logger.debug(f"down_file_by_url {possiable_url} 出异常了", exc_info=e)
+
             if retCode != LanZouCloud.SUCCESS:
                 logger.debug(f"请求{possiable_url}失败，将尝试下一个")
                 continue

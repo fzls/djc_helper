@@ -384,8 +384,8 @@ class Uploader:
             # 目前网盘默认分享链接是这个，后面可以根据经验，哪个最靠谱，调整先后顺序
             # 可以使用下面这个网站测试各个域名的全国连通性
             # https://www.ping.cn/
-            lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),
+            lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),
             lanzouyun_url.replace(self.default_main_domain, 'lanzous'),
         ]
 

@@ -4,5 +4,5 @@
 - [B站教程](https://space.bilibili.com/1851177)
 - [更新日志](./CHANGELOG.md)
 - **链接**
-- [蓝奏云下载链接](https://fzls.lanzoui.com/s/djc-helper)
+- [蓝奏云下载链接](https://fzls.lanzouo.com/s/djc-helper)
 - [github下载链接](https://github.com/fzls/djc_helper/releases/latest)

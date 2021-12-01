@@ -175,7 +175,7 @@ class QQLogin():
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                 )
-                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzoui.com/s/djc-tools")
+                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzouo.com/s/djc-tools")
                 pause_and_exit(-1)
 
             # 然后使用本地的chrome来初始化driver对象
@@ -254,7 +254,7 @@ class QQLogin():
             self.check_and_download_chrome_ahead_linux()
 
     def check_and_download_chrome_ahead_windows(self):
-        logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzoui.com/s/djc-tools")
+        logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
         chrome_root_directory = self.chrome_root_directory()

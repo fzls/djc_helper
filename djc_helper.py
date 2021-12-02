@@ -2477,33 +2477,35 @@ class DjcHelper:
             wait_for("等待一会", 5)
             self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "812379", weekDay=the_day_before_last_day)
 
+        # --------------------------------------------------------------------------------
+
         # self.dnf_shanguang_op("报名礼", "724862")
         self.dnf_shanguang_op("app专属礼", "812030")
         logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
         async_message_box("不要忘记前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
-        logger.warning(color("bold_yellow") + f"本周已获得指定装备{self.query_dnf_shanguang_equip_count()}件，具体装备可去活动页面查看")
-
-        last_thursday = get_today(get_this_thursday_of_dnf() - timedelta(days=7))
-        self.dnf_shanguang_op(f"周周闪光好礼-{last_thursday}", "812031", weekDay=last_thursday)
-        self.dnf_shanguang_op("周四签到礼-闪光礼盒", "812397")
-
-        for i in range(6):
-            res = self.dnf_shanguang_op("周周开大奖", "812032")
-            if int(res["ret"]) != 0:
-                break
-            time.sleep(5)
-
+        # 签到
         check_in()
 
-        # self.dnf_shanguang_op("每日登录游戏", "812034")
-        # self.dnf_shanguang_op("每日登录app", "812035")
-        # self.dnf_shanguang_op("每日网吧登录", "812036")
+        self.dnf_shanguang_op("周四签到礼-闪光礼盒", "812397")
+        time.sleep(5)
 
-        lottery_times = self.get_dnf_shanguang_lottery_times()
-        logger.info(color("fg_bold_cyan") + f"当前剩余闪光夺宝次数为 {lottery_times} （本期没有查询剩余抽奖次数的函数，直接写最大值，避免漏掉~）")
-        for i in range(lottery_times):
-            self.dnf_shanguang_op("闪光夺宝", "724880")
+        # 周赛奖励
+        logger.warning(color("bold_yellow") + f"本周已获得指定装备{self.query_dnf_shanguang_equip_count()}件，具体装备可去活动页面查看")
+        for weekday in [
+            "20211118",
+            "20211125",
+            "20211202",
+        ]:
+            self.dnf_shanguang_op(f"输出当前周期爆装信息 - {weekday}", "812029", weekDay=weekday)
+            self.dnf_shanguang_op(f"周周闪光好礼 - {weekday}", "812031", weekDay=weekday)
+            time.sleep(5)
+
+        # 抽奖
+        for idx in range_from_one(6):
+            res = self.dnf_shanguang_op(f"周周开大奖 - {idx}", "812032")
+            if int(res["ret"]) != 0:
+                break
             time.sleep(5)
 
         self.dnf_shanguang_show_equipments()
@@ -7459,4 +7461,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_shanguang()

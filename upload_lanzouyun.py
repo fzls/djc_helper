@@ -391,14 +391,15 @@ class Uploader:
             return [lanzouyun_url]
 
         return [
+            # note: 可以去 https://beian.miit.gov.cn/#/Integrated/recordQuery 查蓝奏云的备案号，看看域名 鲁ICP备15001327号
             # 去 https://pc.woozooo.com/mydisk.php 登录，然后点击查看 外链分享地址 ，看里面显示的默认域名，优先用这个
             # 目前网盘默认分享链接是这个，后面可以根据经验，哪个最靠谱，调整先后顺序
             # 可以使用下面这个网站测试各个域名的全国连通性
             # https://www.ping.cn/
-            lanzouyun_url.replace(self.default_main_domain, 'lanzouo'),
-            lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),
-            lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),
-            lanzouyun_url.replace(self.default_main_domain, 'lanzous'),
+            lanzouyun_url.replace(self.default_main_domain, 'lanzouo'),  # 2021-09-15 鲁ICP备15001327号-8
+            lanzouyun_url.replace(self.default_main_domain, 'lanzouw'),  # 2021-09-02 鲁ICP备15001327号-7
+            lanzouyun_url.replace(self.default_main_domain, 'lanzoui'),  # 2020-06-09 鲁ICP备15001327号-6
+            lanzouyun_url.replace(self.default_main_domain, 'lanzoux'),  # 2020-06-09 鲁ICP备15001327号-5
         ]
 
 

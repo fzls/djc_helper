@@ -45,7 +45,6 @@ class LanZouCloud(object):
         self._timeout = 15  # 每个请求的超时(不包含下载响应体的用时)
         self._max_size = 100  # 单个文件大小上限 MB
         self._upload_delay = (0, 0)  # 文件上传延时
-        self._host_url = 'https://pan.lanzouo.com'
         self._doupload_url = 'https://pc.woozooo.com/doupload.php'
         self._account_url = 'https://pc.woozooo.com/account.php'
         self._mydisk_url = 'https://pc.woozooo.com/mydisk.php'
@@ -56,6 +55,26 @@ class LanZouCloud(object):
             'Accept-Language': 'zh-CN,zh;q=0.9',  # 提取直连必需设置这个，否则拿不到数据
         }
         disable_warnings(InsecureRequestWarning)  # 全局禁用 SSL 警告
+
+        # 蓝奏云的域名有时候备案会出问题，这时候一般会出一个新的备案的域名
+        #   可在 https://www.ping.cn/ 查看域名在全国的访问情况
+        #
+        # 当出现这种情况的时候，可以通过下列方式查到新的域名
+        #   1. 去下面这个查备案的网址查 鲁ICP备15001327号 ，看看是否有新的域名备案了
+        #       https://beian.miit.gov.cn/#/Integrated/recordQuery
+        #   2. 去 https://pc.woozooo.com/mydisk.php 登录，然后点击查看 外链分享地址 ，看里面显示的默认域名
+        #
+        # 如果有新的，这时候只需要
+        #   1. 将 _host_url 的域名改为新的
+        #   2. 把 最新的域名，比如 lanzouo 加到可能的域名列表的最前面
+        #   3. 如果下面的域名有部分不再出现在备案信息中了，可以直接注释或者移除
+        self._host_url = 'https://pan.lanzouo.com'
+        self.available_domains = [
+            'lanzouo.com',  # 2021-09-15 鲁ICP备15001327号-8
+            'lanzouw.com',  # 2021-09-02 鲁ICP备15001327号-7
+            'lanzoui.com',  # 2020-06-09 鲁ICP备15001327号-6
+            'lanzoux.com',  # 2020-06-09 鲁ICP备15001327号-5
+        ]
 
     def _get(self, url, **kwargs):
         for possible_url in self._all_possible_urls(url):
@@ -79,17 +98,8 @@ class LanZouCloud(object):
 
         return None
 
-    @staticmethod
-    def _all_possible_urls(url: str) -> List[str]:
-        """蓝奏云的主域名有时会挂掉, 此时尝试切换到备用域名"""
-        available_domains = [
-            'lanzouo.com',  # 2021-09-15 鲁ICP备15001327号-8
-            'lanzouw.com',  # 2021-09-02 鲁ICP备15001327号-7
-            'lanzoui.com',  # 2020-06-09 鲁ICP备15001327号-6
-            'lanzoux.com',  # 2020-06-09 鲁ICP备15001327号-5
-        ]
-
-        return [re.sub(r'lanzou\w\.com', d, url) for d in available_domains]
+    def _all_possible_urls(self, url: str) -> List[str]:
+        return [re.sub(r'lanzou\w\.com', d, url) for d in self.available_domains]
 
     def ignore_limits(self):
         """解除官方限制"""

@@ -159,12 +159,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "chrome版本升级后使用情况调查"
-    message = """11.22升级chrome到96版本后，部分人似乎无法使用。因此统计一下具体情况，用于确定是否要回滚到94版本。
-
-PS：如果目前无法使用，但旧版本可以，那么可以打开配置工具，在【公共配置】/【登录】下勾选【强制使用便携版chrome】，并将chrome版本设定为94.
+    title = "新出的小活动-2021-12-02"
+    message = """新出了一个需要手动点的小活动，点击后有小奖励。有三个地图，需要按参与活动人数解锁，进度满了大家都可以领一个不错的奖励，可以打开点一下=、=
 """
-    open_url = "https://www.wjx.cn/vj/QS6aa9l.aspx"
+    open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),

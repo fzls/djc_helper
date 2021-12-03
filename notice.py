@@ -159,14 +159,19 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "新出的小活动-2021-12-02"
-    message = """新出了一个需要手动点的小活动，点击后有小奖励。有三个地图，需要按参与活动人数解锁，进度满了大家都可以领一个不错的奖励，可以打开点一下=、=
+    title = "支付宝红包0-0"
+    message = """支付宝的红包活动好像金额又变大了，之前都是一毛不到的，今天看好几个朋友领到都是好几块的0-0
+领了可以实体店买东西时用掉，买小助手的时候也能用
+
+大家可以扫扫看<_< 你使用后我也能领个小红包，大家一起白嫖0-0
 """
-    open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
+    open_url = "https://z3.ax1x.com/2021/12/03/oUKTqU.png"
+    show_only_before_version = ""
+
     nm.add_notice(title, message,
                   send_at=format_now(),
                   show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),
-                  show_only_before_version=now_version,
+                  show_only_before_version=show_only_before_version,
                   # show_only_before_version="",
                   )
 

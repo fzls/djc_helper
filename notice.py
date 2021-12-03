@@ -159,13 +159,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "支付宝红包0-0"
-    message = """支付宝的红包活动好像金额又变大了，之前都是一毛不到的，今天看好几个朋友领到都是好几块的0-0
-领了可以实体店买东西时用掉，买小助手的时候也能用
-
-大家可以扫扫看<_< 你使用后我也能领个小红包，大家一起白嫖0-0
+    title = ""
+    message = """
 """
-    open_url = "https://z3.ax1x.com/2021/12/03/oUKTqU.png"
+    open_url = ""
     show_only_before_version = ""
 
     nm.add_notice(title, message,

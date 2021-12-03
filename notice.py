@@ -165,12 +165,12 @@ def main():
     open_url = ""
     show_only_before_version = ""
 
-    nm.add_notice(title, message,
-                  send_at=format_now(),
-                  show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),
-                  show_only_before_version=show_only_before_version,
-                  # show_only_before_version="",
-                  )
+    if title != "":
+        nm.add_notice(title, message,
+                      send_at=format_now(),
+                      show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),
+                      show_only_before_version=show_only_before_version,
+                      )
 
     nm.save()
 

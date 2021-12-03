@@ -20,3 +20,6 @@ indent_size = 2
 
 [*.bat]
 end_of_line = crlf
+
+[*.txt]
+indent_size = 2

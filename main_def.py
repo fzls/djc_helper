@@ -1057,6 +1057,9 @@ def show_ask_message_box_sync(cfg: Config):
     if not is_windows():
         return
 
+    if exists_flag_file(".never_show_ask_message_box"):
+        return
+
     if now_before("2022-01-15 23:59:59") and cfg.common.enable_alipay_redpacket_v2 and is_daily_first_run("支付宝红包活动") and not use_by_myself():
         title = "支付宝红包活动（v2）"
         message = (

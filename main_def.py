@@ -645,14 +645,14 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         "序号", "账号名",
         "聚豆余额",
         "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚", "上周心悦", "自动组队", "心悦G分",
-        "编年史", "年史碎片", "搭档",
+        "编年史", "年史碎片", "搭档", "上月", "自动匹配",
         "论坛代币券", "闪光杯爆装",
     ]
     colSizes = [
         4, 12,
         8,
         10, 6, 6, 16, 12, 8, 8, 8,
-        14, 8, 14,
+        14, 8, 14, 4, 8,
         10, 10,
     ]
 
@@ -697,6 +697,19 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     if user_task_info.hasPartner:
         partner_levelInfo, _ = djcHelper.query_dnf_helper_chronicle_info(user_task_info.pUserId).get_level_info_and_points_to_show()
 
+    user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(djcHelper.get_dnf_helper_chronicle_db_key()).load()
+    last_month_user_task_info = user_info_db.get_last_month_user_info()
+    last_month_level = last_month_user_task_info.level
+
+    can_auto_match_dnf_helper_chronicle = ""
+    if djcHelper.check_dnf_helper_chronicle_auto_match(user_buy_info, print_waring=False):
+        if user_task_info.hasPartner:
+            can_auto_match_dnf_helper_chronicle = "匹配成功"
+        else:
+            can_auto_match_dnf_helper_chronicle = "等待匹配"
+    elif not account_config.dnf_helper_info.enable_auto_match_dnf_chronicle:
+        can_auto_match_dnf_helper_chronicle = "未开启"
+
     # majieluo_stone = djcHelper.query_stone_count()
     # time.sleep(1)  # 避免查询下面的次数时提示 速度过快
     # majieluo_invite_count = f"{djcHelper.query_invite_count()}/30"
@@ -712,7 +725,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
         last_week_xinyue_take_award_count, can_auto_match_xinyue_team, gpoints,
 
-        levelInfo, chronicle_points, partner_levelInfo,
+        levelInfo, chronicle_points, partner_levelInfo, last_month_level, can_auto_match_dnf_helper_chronicle,
 
         # majieluo_stone, majieluo_invite_count,
         dbq, shanguang_equip_count,

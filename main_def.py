@@ -642,11 +642,11 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
 
     # 打印结果
     heads = [
-        "序号", "账号名", "聚豆余额", "历史总数", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
+        "序号", "账号名", "聚豆余额", "心悦类型", "成就点", "勇士币", "心悦组队", "赛利亚",
         "上周心悦", "自动组队", "心悦G分", "编年史", "年史碎片", "搭档", "论坛代币券", "闪光杯爆装"
     ]
     colSizes = [
-        4, 12, 8, 8, 10, 6, 6, 16, 12,
+        4, 12, 8, 10, 6, 6, 16, 12,
         8, 8, 8, 14, 8, 14, 6, 8, 10,
     ]
 
@@ -664,7 +664,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     djcHelper.get_bind_role_list(print_warning=False)
 
     djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
-    djc_allin, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
+    _, djc_balance = int(djc_info['allin']), int(djc_info['balance'])
 
     xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
     teaminfo = djcHelper.query_xinyue_teaminfo()
@@ -701,7 +701,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     return [
         idx, account_config.name,
-        djc_balance, djc_allin,
+        djc_balance,
         xinyue_info.xytype_str, xinyue_info.score, xinyue_info.ysb, team_award_summary, xinyue_info.work_info(),
 
         last_week_xinyue_take_award_count, can_auto_match_xinyue_team,

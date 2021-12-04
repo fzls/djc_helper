@@ -2312,11 +2312,25 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
         add_row(form_layout, "唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 
+        add_row(form_layout, "", QHLine())
+
         self.lineedit_pNickName = create_lineedit(cfg.pNickName, "你的固定搭档的备注，无实际作用，方便记住固定搭档到底是谁<_<")
         add_row(form_layout, "固定搭档的名称(仅本地区分用)", self.lineedit_pNickName)
 
         self.lineedit_pUserId = create_lineedit(cfg.pUserId, "如果你有固定搭档，可以把他的社区ID填到这里，这样每期编年史将会自动绑定")
         add_row(form_layout, "固定搭档的社区ID", self.lineedit_pUserId)
+
+        add_row(form_layout, "", QHLine())
+
+        self.checkbox_enable_auto_match_dnf_chronicle = create_checkbox(cfg.enable_auto_match_dnf_chronicle)
+        add_row(form_layout, "是否自动匹配编年史搭档（优先级高于固定搭档）", self.checkbox_enable_auto_match_dnf_chronicle)
+
+        add_row(form_layout, "需要满足这些条件", QLabel((
+            "1. 在付费生效期间\n"
+            "2. 上个月达到了30级\n"
+        )))
+
+        add_row(form_layout, "", QHLine())
 
         add_row(form_layout, "++++ token和唯一角色id是用于自动领取编年史等级奖励 ++++", QHLine())
         add_row(form_layout, "++++ 以及部分助手自己专属的活动的 ++++", QHLine())
@@ -2338,6 +2352,7 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.uniqueRoleId = self.lineedit_uniqueRoleId.text()
         cfg.pNickName = self.lineedit_pNickName.text()
         cfg.pUserId = self.lineedit_pUserId.text()
+        cfg.enable_auto_match_dnf_chronicle = self.checkbox_enable_auto_match_dnf_chronicle.isChecked()
 
         cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
 

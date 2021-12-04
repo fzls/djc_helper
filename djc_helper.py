@@ -28,7 +28,7 @@ class DjcHelper:
 
     local_saved_teamid_file = os.path.join(cached_dir, ".teamid_new.{}.json")
 
-    def __init__(self, account_config, common_config):
+    def __init__(self, account_config, common_config, user_buy_info: Optional[BuyInfo] = None):
         self.cfg = account_config  # type: AccountConfig
         self.common_cfg = common_config  # type: CommonConfig
 
@@ -45,6 +45,8 @@ class DjcHelper:
 
         # 相关链接
         self.urls = Urls()
+
+        self.user_buy_info = user_buy_info
 
     # --------------------------------------------一些辅助函数--------------------------------------------
 
@@ -3260,10 +3262,88 @@ class DjcHelper:
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
 
+        # ------ 自动绑定 ------
+        @try_except(return_val_on_except=None)
+        def try_auto_bind() -> Optional[DnfHelperChronicleUserTaskList]:
+            task_info = None
+
+            partner_user_id = ""
+            partner_name = ""
+            is_auto_match = False
+
+            # --------------------- 获取队友信息 ---------------------
+            # 固定队友
+            if dnf_helper_info.pUserId != "":
+                partner_user_id = dnf_helper_info.pUserId
+                partner_name = dnf_helper_info.pNickName
+                logger.info(color("bold_cyan") + f"当前尚无搭档，但是配置了固定搭档信息 - {partner_user_id}")
+
+            # 自动匹配
+            if dnf_helper_info.enable_auto_match_dnf_chronicle:
+                logger.info(color("bold_yellow") + f"当前尚无搭档，但是配置了自动匹配功能，将尝试自动匹配")
+                if self.check_dnf_helper_chronicle_auto_match(self.user_buy_info):
+                    is_auto_match = True
+
+                    # 尝试从服务器匹配一个编年史用户
+                    partner_user_id = get_chronicle_user_id_from_server(dnf_helper_info.userId, self.qq())
+                    partner_name = "自动绑定"
+                    logger.info(f"自动匹配的搭档为 {partner_user_id}")
+                else:
+                    logger.info(f"不符合自动匹配条件，将跳过~")
+
+            # --------------------- 尝试绑定 ---------------------
+            if partner_user_id != "":
+                partner_desc = f"{partner_name}({partner_user_id})"
+                logger.info(color("bold_cyan") + f"将尝试绑定 {partner_desc}")
+                bind_user_partner(f"绑定搭档 - {partner_desc}", partner_user_id)
+
+                task_info = getUserTaskList()
+
+            # --------------------- 尝试加入匹配队列 ---------------------
+            if is_auto_match:
+                matched = True
+                if task_info is None:
+                    # 未匹配到其他用户，大概率是匹配队列为空
+                    matched = False
+                elif not task_info.hasPartner:
+                    # 匹配到了用户，但是未绑定成功
+                    matched = False
+
+                if not matched:
+                    # 如果符合自动匹配条件，且未自动绑定成功，则加入服务器端的匹配队列
+                    logger.info(f"未匹配到其他用户，或者未绑定成功。将尝试上报 {self.cfg.name} 的dnf编年史信息 {dnf_helper_info.userId} 到服务器")
+                    report_chronicle_user_id_to_server(dnf_helper_info.userId, self.qq())
+
+            # --------------------- 返回可能更新后的task_info ---------------------
+            return task_info
+
+        @try_except()
+        def report_chronicle_user_id_to_server(user_id: str, qq: str):
+            req = DnfChronicleMatchServerAddUserRequest()
+            req.user_id = user_id
+            req.qq = qq
+
+            self.post("上报编年史匹配信息", get_match_server_api("/add_user"), json=to_raw_type(req), disable_retry=True)
+
+        @try_except(return_val_on_except="")
+        def get_chronicle_user_id_from_server(user_id: str, qq: str) -> str:
+            req = DnfChronicleMatchServerRequestUserRequest()
+            req.request_user_id = user_id
+            req.request_qq = qq
+
+            raw_res = self.post("请求获取一个编年史用户信息", get_match_server_api("/req_user"), json=to_raw_type(req), disable_retry=True)
+            res = DnfChronicleMatchServerCommonResponse()
+            res.data = DnfChronicleMatchServerRequestUserResponse()
+            res.auto_update_config(raw_res)
+
+            increase_counter(ga_category="chronicle_auto_match", name="request_chronicle_user_id")
+            increase_counter(ga_category="chronicle_request_user_id", name=res.data.user_id != "")
+
+            return res.data.user_id
+
         # ------ 绑定搭档 ------
-        def bind_user_partner(ctx: str, isBind="1"):
-            ctx = f"{ctx}-{dnf_helper_info.pNickName}({dnf_helper_info.pUserId})"
-            res = self.post(ctx, url_mwegame, "", api="bindUserPartner", pUserId=dnf_helper_info.pUserId, isBind=isBind, **common_params)
+        def bind_user_partner(ctx: str, partner_user_id: str, isBind="1"):
+            res = self.post(ctx, url_mwegame, "", api="bindUserPartner", pUserId=partner_user_id, isBind=isBind, **common_params)
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 查询各种信息 ------
@@ -3300,18 +3380,22 @@ class DjcHelper:
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def takeTaskAwards():
             taskInfo = getUserTaskList()
+
             # 如果未绑定搭档，且设置了固定搭档id，则先尝试自动绑定
-            if not taskInfo.hasPartner and dnf_helper_info.pUserId != "":
-                partner_str = f"{dnf_helper_info.pNickName}({dnf_helper_info.pUserId})"
-                logger.info(color("bold_cyan") + f"当前尚无搭档，但是配置了固定搭档id - {partner_str}，将尝试绑定对方~")
-                bind_user_partner(f"绑定搭档 - {partner_str}")
-                # 获取最新信息
-                taskInfo = getUserTaskList()
+            if not taskInfo.hasPartner:
+                latest_task_info = try_auto_bind()
+                if latest_task_info is not None:
+                    taskInfo = latest_task_info
+
             # 根据是否有搭档，给予不同提示
             if taskInfo.hasPartner:
                 logger.info(f"搭档为{taskInfo.pUserId}")
             else:
-                logger.warning("目前尚无搭档，建议找一个，可以多领点东西-。-。如果找到了固定的队友，推荐将其userid填写到配置工具中，这样以后每期都会自动绑定~")
+                logger.warning((
+                    "目前尚无搭档，建议找一个，可以多领点东西-。-。\n"
+                    "如果找到了固定的队友，推荐将其userid填写到配置工具中，这样以后每期都会自动绑定~\n"
+                    "如果上期已经达到满级，且小助手的按月付费未过期，可尝试打开配置工具中当前账号的自动匹配编年史开关，将自动与其他符合该条件的小助手用户匹配到一起~\n"
+                ))
 
             logger.info("首先尝试完成接到身上的任务")
             normal_tasks = set()
@@ -3575,11 +3659,13 @@ class DjcHelper:
             partner_name = "你的搭档"
             if dnf_helper_info.pNickName != "":
                 partner_name += f"({dnf_helper_info.pNickName})"
+            elif dnf_helper_info.enable_auto_match_dnf_chronicle:
+                partner_name += f"(自动匹配)"
             show_user_info(partner_name, self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
 
         # 更新本月的进度信息
-        # TODO: 日后如果想加编年史的自动组队的时候，可以根据保存的上个月的这个信息去决定是否有资格参与自动组队 @2021-11-01 10:40:51
-        user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(f"编年史进度-{self.qq()}").load()
+        # 编年史的自动组队的时候，可以根据保存的上个月的这个信息去决定是否有资格参与自动组队 @2021-11-01 10:40:51
+        user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(self.get_dnf_helper_chronicle_db_key()).load()
         user_info_db.account_name = self.cfg.name
         user_info_db.year_month_to_user_info[get_month()] = userInfo
         user_info_db.save()
@@ -3623,6 +3709,30 @@ class DjcHelper:
         }
         res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
         return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
+
+    @try_except(return_val_on_except=False)
+    def check_dnf_helper_chronicle_auto_match(self, user_buy_info: BuyInfo, print_waring=True) -> bool:
+        # 在按月付费期间
+        if not user_buy_info.is_active(bypass_run_from_src=False):
+            if print_waring: logger.warning(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
+            return False
+
+        # 开启了本开关
+        if not self.cfg.dnf_helper_info.enable_auto_match_dnf_chronicle:
+            if print_waring: logger.info(f"{self.cfg.name} 未启用自动匹配编年史开关")
+            return False
+
+        # 上个月达到30级（根据本地上个月的记录）
+        user_info_db = DnfHelperChronicleUserActivityTopInfoDB().with_context(self.get_dnf_helper_chronicle_db_key()).load()
+        last_month_info = user_info_db.get_last_month_user_info()
+        if not last_month_info.is_full_level():
+            if print_waring: logger.info(f"{self.cfg.name} 上个月编年史等级未满级，等级为 {last_month_info.level}")
+            return False
+
+        return True
+
+    def get_dnf_helper_chronicle_db_key(self):
+        return f"编年史进度-{self.qq()}"
 
     # --------------------------------------------管家蚊子腿--------------------------------------------
     # note: 管家活动接入流程：
@@ -7331,7 +7441,7 @@ def async_run_all_act(account_config: AccountConfig, common_config: CommonConfig
     act_pool.starmap(run_act, [(account_config, common_config, act_name, act_func.__name__) for act_name, act_func in activity_funcs_to_run])
 
 
-def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name: str, act_func_name: str):
+def run_act(account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo, act_name: str, act_func_name: str):
     login_retry_count = 0
     max_login_retry_count = 5
     while True:
@@ -7339,7 +7449,7 @@ def run_act(account_config: AccountConfig, common_config: CommonConfig, act_name
             # 这里故意等待随机一段时间，避免某账号skey过期时，多个进程同时走到尝试更新处，无法区分先后
             time.sleep(random.random())
 
-            djcHelper = DjcHelper(account_config, common_config)
+            djcHelper = DjcHelper(account_config, common_config, user_buy_info)
             djcHelper.fetch_pskey()
             djcHelper.check_skey_expired()
             djcHelper.get_bind_role_list()
@@ -7438,6 +7548,10 @@ if __name__ == '__main__':
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
 
+    from main_def import get_user_buy_info
+
+    user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
+
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
@@ -7447,18 +7561,13 @@ if __name__ == '__main__':
             logger.warning("账号被禁用，将跳过")
             continue
 
-        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper = DjcHelper(account_config, cfg.common, user_buy_info)
 
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
         djcHelper.get_bind_role_list()
-        #
-        # from main_def import get_user_buy_info
-        #
-        # user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
-        # djcHelper.run(user_buy_info)
 
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang()
+        djcHelper.dnf_helper_chronicle()

@@ -1453,6 +1453,30 @@ class XinYueMatchServerRequestTeamResponse(ConfigInterface):
         self.team_id = ""
 
 
+class DnfChronicleMatchServerAddUserRequest(ConfigInterface):
+    def __init__(self):
+        self.user_id = ""
+        self.qq = ""
+
+
+class DnfChronicleMatchServerCommonResponse(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = ""
+        self.data = None
+
+
+class DnfChronicleMatchServerRequestUserRequest(ConfigInterface):
+    def __init__(self):
+        self.request_user_id = ""
+        self.request_qq = ""
+
+
+class DnfChronicleMatchServerRequestUserResponse(ConfigInterface):
+    def __init__(self):
+        self.user_id = ""
+
+
 class CreateWorkListInfo(ConfigInterface):
     def __init__(self):
         self.total = "0"

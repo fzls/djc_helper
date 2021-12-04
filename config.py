@@ -209,6 +209,13 @@ class DnfHelperInfoConfig(ConfigInterface):
         # 搭档的userId，让你的固定搭档告知你userid即可
         self.pUserId = ""
 
+        # 是否启用自动匹配编年史搭档功能
+        # 需要满足以下条件才会实际生效
+        #   1. 在按月付费期间
+        #   2. 开启了本开关
+        #   4. 上个月达到了30级
+        self.enable_auto_match_dnf_chronicle = False
+
         # dnf助手编年史是否开启抽奖
         self.chronicle_lottery = False
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json

@@ -1260,14 +1260,14 @@ class DjcHelper:
         req.leader_qq = self.qq()
         req.team_id = remote_team_id
 
-        self.post("上报心悦队伍信息", get_xinyue_match_api("/add_team"), json=to_raw_type(req), disable_retry=True)
+        self.post("上报心悦队伍信息", get_match_server_api("/add_team"), json=to_raw_type(req), disable_retry=True)
 
     @try_except(return_val_on_except="")
     def get_xinyue_remote_teamid_from_server(self) -> str:
         req = XinYueMatchServerRequestTeamRequest()
         req.request_qq = self.qq()
 
-        raw_res = self.post("请求获取一个心悦队伍", get_xinyue_match_api("/req_team"), json=to_raw_type(req), disable_retry=True)
+        raw_res = self.post("请求获取一个心悦队伍", get_match_server_api("/req_team"), json=to_raw_type(req), disable_retry=True)
         res = XinYueMatchServerCommonResponse()
         res.data = XinYueMatchServerRequestTeamResponse()
         res.auto_update_config(raw_res)

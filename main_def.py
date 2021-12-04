@@ -756,7 +756,7 @@ def run(cfg: Config, user_buy_info: BuyInfo):
         else:
             logger.info(color("bold_cyan") + f"已启用超快速模式，将使用{cfg.get_pool_size()}个进程并发运行各个账号的各个活动，日志将完全不可阅读~")
             activity_funcs_to_run = get_activity_funcs_to_run(cfg, user_buy_info)
-            get_pool().starmap(run_act, [(account_config, cfg.common, act_name, act_func.__name__)
+            get_pool().starmap(run_act, [(account_config, cfg.common, user_buy_info, act_name, act_func.__name__)
                                          for account_config in cfg.account_configs if account_config.is_enabled()
                                          for act_name, act_func in activity_funcs_to_run
                                          ])
@@ -843,7 +843,7 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig,
 
     start_time = datetime.datetime.now()
 
-    djcHelper = DjcHelper(account_config, common_config)
+    djcHelper = DjcHelper(account_config, common_config, user_buy_info)
     djcHelper.run(user_buy_info)
 
     used_time = datetime.datetime.now() - start_time

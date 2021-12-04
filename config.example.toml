@@ -876,6 +876,13 @@ pNickName = ""
 # 搭档的userId，填写后将尝试自动绑定
 pUserId = ""
 
+# 是否启用自动匹配编年史搭档功能
+# 需要满足以下条件才会实际生效
+#   1. 在按月付费期间
+#   2. 开启了本开关
+#   4. 上个月达到了30级
+enable_auto_match_dnf_chronicle = false
+
 # dnf助手编年史是否开启抽奖
 chronicle_lottery = false
 

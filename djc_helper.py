@@ -3514,10 +3514,15 @@ class DjcHelper:
             res = self.get("领取基础奖励", url_wang, api="send/basic", **common_params,
                            isLock=awardInfo.isLock, amsid=awardInfo.sLbCode, iLbSel1=awardInfo.iLbSel1, num=1, mold=mold)
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', f'出错啦-{res}')}")
-            if res.get('msg', "") == '登录态异常':
+            ret_msg = res.get('msg', "")
+            if ret_msg == '登录态异常':
                 msg = f"账号 {self.cfg.name} 的 dnf助手鉴权信息不对，将无法领取奖励。请将配置工具中dnf助手的四个参数全部填写。或者直接月末手动去dnf助手app上把等级奖励都领一遍，一分钟搞定-。-"
                 async_message_box(msg, "助手鉴权失败", show_once=True)
                 raise DnfHelperChronicleTokenExpiredOrWrongException()
+            elif ret_msg == '查询角色失败':
+                msg = f"账号 {self.cfg.name} 的 dnf助手app 绑定的角色与 道聚城app 绑定的角色不一样，会导致无法自动领取等级奖励，请将两个调整为一样的。"
+                if is_daily_first_run(f"编年史查询角色失败_{self.cfg.name}"):
+                    async_message_box(msg, "助手角色不一致")
 
         def prompt_take_awards():
             # 如果有奖励，且未配置token，则在下列情况提醒手动领取

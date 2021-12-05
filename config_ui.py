@@ -1921,6 +1921,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
         add_row(form_layout, "hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
 
+        self.checkbox_get_dnf_dianzan = create_checkbox(cfg.get_dnf_dianzan)
+        add_row(form_layout, "DNF共创投票", self.checkbox_get_dnf_dianzan)
+
         self.checkbox_get_dnf_welfare = create_checkbox(cfg.get_dnf_welfare)
         add_row(form_layout, "DNF福利中心兑换", self.checkbox_get_dnf_welfare)
 
@@ -2047,6 +2050,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
         cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
         cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
+        cfg.get_dnf_dianzan = self.checkbox_get_dnf_dianzan.isChecked()
         cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
         cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
         cfg.get_xinyue_cat = self.checkbox_get_xinyue_cat.isChecked()

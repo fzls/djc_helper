@@ -159,10 +159,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = ""
-    message = """
+    title = "嘉年华-第一周"
+    message = """嘉年华第一周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~
+可以领一个调整箱和随机灿烂~
 """
-    open_url = ""
+    open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
     show_only_before_version = ""
 
     if title != "":

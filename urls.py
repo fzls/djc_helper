@@ -58,7 +58,6 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/2713_fddd4a39",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/2715_6a3869b6",
@@ -74,6 +73,7 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
 
     # 已过期活动
+    "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",

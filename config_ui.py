@@ -2011,6 +2011,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_huya = create_checkbox(cfg.get_huya)
         add_row(form_layout, "虎牙", self.checkbox_get_huya)
 
+        self.checkbox_get_dnf_vote = create_checkbox(cfg.get_dnf_vote)
+        add_row(form_layout, "DNF名人堂", self.checkbox_get_dnf_vote)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -2080,6 +2083,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_guanhuai = self.checkbox_get_dnf_guanhuai.isChecked()
         cfg.get_dnf_relax_road = self.checkbox_get_dnf_relax_road.isChecked()
         cfg.get_huya = self.checkbox_get_huya.isChecked()
+        cfg.get_dnf_vote = self.checkbox_get_dnf_vote.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

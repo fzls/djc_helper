@@ -70,6 +70,7 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
+    "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
 
     # 已过期活动
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
@@ -222,6 +223,7 @@ class Urls:
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "406829"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
+        self.iActivityId_dnf_vote = "428587"  # DNF名人堂
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -238,7 +240,8 @@ class Urls:
                                "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}" \
                                "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}" \
                                "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}" \
-                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
+                               "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}" \
+                               "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}"
 
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize

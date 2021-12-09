@@ -408,7 +408,6 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动", self.dnf_luodiye),
-            ("DNF共创投票", self.dnf_dianzan),
             ("DNF公会活动", self.dnf_gonghui),
             ("DNF马杰洛的规划", self.majieluo),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -416,6 +415,7 @@ class DjcHelper:
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
+            ("DNF共创投票", self.dnf_dianzan),
             ("DNF集合站", self.dnf_collection),
             ("qq视频蚊子腿", self.qq_video),
             ("KOL", self.dnf_kol),

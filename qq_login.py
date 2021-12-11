@@ -690,7 +690,17 @@ class QQLogin():
 
             self.set_window_size()
 
-            logger.info("等待#loginframe加载完毕并切换")
+            logger.info("等待登录按钮#login-btn出来，确保加载完成")
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "login-btn"), "登录"))
+
+            logger.info("等待5秒，确保加载完成")
+            time.sleep(5)
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.ID, "login-btn").click()
+
+            logger.info("等待2秒，确保#loginframe显示出来并切换")
+            time.sleep(2)
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))
             login_frame = self.driver.find_element(By.CLASS_NAME, "loginframe")
             self.driver.switch_to.frame(login_frame)

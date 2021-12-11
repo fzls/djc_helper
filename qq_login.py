@@ -781,9 +781,10 @@ class QQLogin():
 
         for idx in range_from_one(max_try):
             try:
-                switch_to_login_frame_fn()
-
                 self.driver.execute_script(f"document.title = '{self.window_title}'")
+                logger.info(color("bold_green") + f"设置标题框为 {self.window_title}")
+
+                switch_to_login_frame_fn()
 
                 logger.info(f"[{idx}/{max_try}] {self.name} 尝试进行登陆")
                 if login_action_fn is not None:

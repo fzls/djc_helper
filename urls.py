@@ -71,6 +71,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
+    "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
 
     # 已过期活动
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
@@ -224,6 +225,7 @@ class Urls:
         self.iActivityId_dnf_guanhuai = "406829"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
+        self.iActivityId_dnf_reservation = "425797"  # DNF预约
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

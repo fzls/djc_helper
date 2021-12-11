@@ -386,6 +386,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_huya = True
         # 是否领取 DNF名人堂 活动
         self.get_dnf_vote = True
+        # 是否领取 DNF预约 活动
+        self.get_dnf_reservation = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

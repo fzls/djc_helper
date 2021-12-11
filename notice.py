@@ -1,4 +1,3 @@
-import json
 import os.path
 
 from const import downloads_dir
@@ -159,11 +158,16 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "嘉年华-第一周"
-    message = """嘉年华第一周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~
-可以领一个调整箱和随机灿烂~
+    title = "请 79***35 停止使用本工具"
+    message = """刚刚私聊我，问完问题来一句 "那你没用了" 的 79***35，请你立即停止使用本工具，我不欢迎没用基本礼貌的人使用本软件。
+你可能觉得没有泄漏自己实际使用的QQ，所以我拿你没辙，但我希望你有点基本的自尊心的话，请你自行停止使用。否则，我只能当你每次使用的时候，是给自己来一句：那你没用了。
+若有剩余时长，请使用实际的游戏QQ私聊我，来获得退款。
+
+另外再奉劝一句，网上与你对话的也是真实的人，无端这样对待他人，迟早是会吃苦头。
+
+（其他人可以无视这个通知，只是这人拿实际使用以外的QQ来恶心我一下，只能这么告知它了）
 """
-    open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
+    open_url = ""
     show_only_before_version = ""
 
     if title != "":

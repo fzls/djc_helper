@@ -411,7 +411,8 @@ class DjcHelper:
             ("DNF公会活动", self.dnf_gonghui),
             ("DNF马杰洛的规划", self.majieluo),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
-            ("DNF名人堂", self.dnf_vote)
+            ("DNF名人堂", self.dnf_vote),
+            ("DNF预约", self.dnf_reservation),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -7148,6 +7149,23 @@ class DjcHelper:
         return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF名人堂"),
                                    **extra_params)
 
+    # --------------------------------------------DNF预约--------------------------------------------
+    @try_except()
+    def dnf_reservation(self):
+        show_head_line("DNF预约")
+        self.show_amesvr_act_info(self.dnf_reservation_op)
+
+        if not self.cfg.function_switches.get_dnf_reservation or self.disable_most_activities():
+            logger.warning("未启用领取DNF预约功能，将跳过")
+            return
+
+        self.dnf_reservation_op("预约礼包-七天黑钻", "817582")
+
+    def dnf_reservation_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_reservation
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, get_act_url("DNF预约"),
+                                   **extra_params)
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(self, ctx, url, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True,
             extra_cookies="", check_fn: Callable[[requests.Response], Optional[Exception]] = None, extra_headers: Optional[Dict[str, str]] = None, **params) -> dict:
@@ -7650,4 +7668,4 @@ if __name__ == '__main__':
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_vote()
+        djcHelper.dnf_reservation()

@@ -120,6 +120,7 @@ class QQLogin():
     def prepare_chrome(self, ctx: str, login_type: str, login_url: str):
         logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
                                             f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})")
+        logger.info(color("bold_green") + f"{self.name} {ctx} 登录链接为: {login_url}")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
         caps["pageLoadStrategy"] = "none"  # Do not wait for full page load

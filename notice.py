@@ -3,16 +3,17 @@ import os.path
 from datetime import timedelta
 from typing import List, Optional
 
-import win32con
-
 from const import downloads_dir
 from data_struct import ConfigInterface, to_raw_type
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from log import logger
 from update import version_less
 from upload_lanzouyun import Uploader
-from util import format_now, format_time, get_now, message_box, parse_time, try_except
+from util import format_now, format_time, get_now, is_windows, message_box, parse_time, try_except
 from version import now_version
+
+if is_windows():
+    import win32con
 
 
 class NoticeShowType:

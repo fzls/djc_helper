@@ -211,7 +211,7 @@ class ConfigUi(QFrame):
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 
-        self.setStyleSheet(f"font-family: Microsoft YaHei")
+        self.setStyleSheet("font-family: Microsoft YaHei")
         self.setWindowIcon(QIcon("utils/icons/config_ui.ico"))
 
         self.setWhatsThis("简易配置工具")
@@ -449,7 +449,7 @@ class ConfigUi(QFrame):
             logger.info(f"尝试添加账号 {account_name} ...")
 
             if account_name == "":
-                show_message("添加失败", f"未填写账号名称，请重新操作~")
+                show_message("添加失败", "未填写账号名称，请重新操作~")
                 return
 
             for account in self.accounts:
@@ -755,7 +755,7 @@ class ConfigUi(QFrame):
                 return f"无效的QQ：{qq_to_check}"
 
         if len(game_qqs) > 5:
-            return f"最多五个QQ哦，如果有更多QQ，建议用配置工具添加多个账号一起使用（任意一个有权限就可以），无需全部填写~"
+            return "最多五个QQ哦，如果有更多QQ，建议用配置工具添加多个账号一起使用（任意一个有权限就可以），无需全部填写~"
 
         return CHECK_RESULT_OK
 
@@ -769,7 +769,7 @@ class ConfigUi(QFrame):
         server_addr = self.get_pay_server_addr()
         raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=20)
         logger.debug(f"req={req}")
-        process_result(f"使用卡密", raw_res)
+        process_result("使用卡密", raw_res)
         if raw_res.status_code != 200:
             show_message("出错了", f"服务器似乎暂时挂掉了, 请稍后再试试, result={raw_res.text}")
             return
@@ -862,7 +862,7 @@ class ConfigUi(QFrame):
         server_addr = self.get_pay_server_addr()
         raw_res = requests.post(f"{server_addr}/submit_order", json=to_raw_type(req), timeout=20)
         logger.debug(f"req={req}")
-        process_result(f"直接购买", raw_res)
+        process_result("直接购买", raw_res)
         if raw_res.status_code != 200:
             show_message("出错了", f"服务器似乎暂时挂掉了, 请稍后再试试, result={raw_res.text}")
             return
@@ -1913,7 +1913,7 @@ class FunctionSwitchesConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig):
-        add_form_seperator(form_layout, f"各功能开关")
+        add_form_seperator(form_layout, "各功能开关")
 
         self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
         add_row(form_layout, "禁用绝大部分活动", self.checkbox_disable_most_activities)

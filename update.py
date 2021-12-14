@@ -132,7 +132,7 @@ def update_fallback(config: CommonConfig):
     except Exception as err:
         logger.error(
             f"手动检查版本更新失败（这个跟自动更新没有任何关系）,大概率是访问不了github和gitee导致的，可自行前往网盘查看是否有更新, 错误为{err}"
-            + color("bold_green") + f"\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
+            + color("bold_green") + "\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
         )
 
         # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
@@ -163,7 +163,7 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
         except Exception as e:
             # 尝试使用镜像来访问
             logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~ 错误={e}")
-            logger.debug(f"具体信息", exc_info=e)
+            logger.debug("具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")
 

@@ -17,7 +17,7 @@ def init_venv_and_requirements(venv_path=".venv", requirements_path="requirement
     py_path = os.path.join(pyscript_path, "python")
     pip_path = os.path.join(pyscript_path, "pip")
 
-    show_head_line(f"尝试初始化venv环境", color("bold_yellow"))
+    show_head_line("尝试初始化venv环境", color("bold_yellow"))
 
     subprocess.call([
         "python",

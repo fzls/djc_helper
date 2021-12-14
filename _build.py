@@ -17,7 +17,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
     # 初始化venv和依赖
     init_venv_and_requirements(".venv", "requirements.txt", disable_douban, enable_proxy)
 
-    show_head_line(f"将使用.venv环境进行编译", color("bold_yellow"))
+    show_head_line("将使用.venv环境进行编译", color("bold_yellow"))
 
     temp_remove_file_dir = os.path.join(".cached", "build_temp_remove_files")
     site_packages_path = os.path.join(venv_path, "Lib", "site-packages")
@@ -90,7 +90,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
         logger.info(f"{prefix} 开始编译 {exe_name}，命令为：{' '.join(cmd_build)}")
         subprocess.call(cmd_build)
 
-        logger.info(f"编译结束，进行善后操作")
+        logger.info("编译结束，进行善后操作")
 
         # 复制二进制
         logger.info(f"复制{exe_name}到目标目录{target_dir}")

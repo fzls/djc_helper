@@ -45,7 +45,7 @@ def auto_update():
 
     if not exists_flag_file(".use_proxy"):
         bypass_proxy()
-        logger.info(f"当前已默认无视系统代理（VPN），如果需要dlc使用代理，请在小助手目录创建 .use_proxy 目录或文件")
+        logger.info("当前已默认无视系统代理（VPN），如果需要dlc使用代理，请在小助手目录创建 .use_proxy 目录或文件")
 
     uploader = Uploader()
 

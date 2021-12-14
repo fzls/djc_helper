@@ -73,12 +73,12 @@ def release():
     patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=True)
 
     # ---------------标记新版本
-    show_head_line(f"提交版本和版本变更说明，并同步到docs目录，用于生成github pages", color("bold_yellow"))
+    show_head_line("提交版本和版本变更说明，并同步到docs目录，用于生成github pages", color("bold_yellow"))
     os.chdir(dir_src)
     commit_new_version()
 
     # ---------------上传到蓝奏云
-    show_head_line(f"开始上传到蓝奏云", color("bold_yellow"))
+    show_head_line("开始上传到蓝奏云", color("bold_yellow"))
     os.chdir(dir_src)
     with open("upload_cookie.json") as fp:
         cookie = json.load(fp)
@@ -108,7 +108,7 @@ def release():
             ])
         ]
 
-        logger.info(color("bold_green") + f"具体上传列表如下：")
+        logger.info(color("bold_green") + "具体上传列表如下：")
         for upload_folder, upload_list in upload_info_list:
             logger.info(color("bold_cyan") + f"\t{upload_folder.name}：")
             for local_filepath, history_file_prefix in upload_list:
@@ -135,7 +135,7 @@ def release():
     # ---------------推送版本到github
     # 打包完成后git添加标签
     os.chdir(dir_src)
-    show_head_line(f"开始推送到github", color("bold_yellow"))
+    show_head_line("开始推送到github", color("bold_yellow"))
     push_github(version)
 
     # ---------------结束

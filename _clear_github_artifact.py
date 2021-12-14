@@ -8,7 +8,7 @@ from util import show_head_line
 def clear_github_artifact(dir_all_release, dir_github_action_artifact):
     old_cwd = os.getcwd()
 
-    show_head_line(f"清空旧版本github artifact目录", color("bold_yellow"))
+    show_head_line("清空旧版本github artifact目录", color("bold_yellow"))
 
     if not os.path.isdir(dir_all_release):
         os.mkdir(dir_all_release)

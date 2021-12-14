@@ -1,7 +1,7 @@
 import json
 import os.path
 from datetime import timedelta
-from typing import List
+from typing import List, Optional
 
 import win32con
 
@@ -139,7 +139,10 @@ class NoticeManager:
 
         logger.info("所有需要展示的公告均已展示完毕")
 
-    def add_notice(self, title, message, sender="风之凌殇", send_at=format_now(), show_type=NoticeShowType.ONCE, open_url="", valid_duration=timedelta(days=7), show_only_before_version=""):
+    def add_notice(self, title, message, sender="风之凌殇", send_at: str = "", show_type=NoticeShowType.ONCE, open_url="", valid_duration: Optional[timedelta] = None, show_only_before_version=""):
+        send_at = send_at or format_now()
+        valid_duration = valid_duration or timedelta(days=7)
+
         if show_type not in valid_notice_show_type:
             logger.error(f"无效的show_type={show_type}，有效值为{valid_notice_show_type}")
             return

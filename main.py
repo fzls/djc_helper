@@ -9,14 +9,38 @@ old_path = os.getcwd()
 os.chdir(dirpath)
 
 import argparse
+import datetime
+import time
+from multiprocessing import freeze_support
 
+import psutil
+
+import ga
 from check_first_run import check_first_run_async
-from log import log_directory
-from main_def import *
+from config import config, load_config
+from first_run import is_weekly_first_run
+from log import color, log_directory, logger
+from main_def import (auto_send_cards, check_all_skey_and_pskey,
+                      check_djc_role_binding, check_proxy, check_update,
+                      get_user_buy_info,
+                      print_update_message_on_first_run_new_version, run, sas,
+                      show_ask_message_box, show_buy_info, show_extra_infos,
+                      show_lottery_status, show_multiprocessing_info,
+                      show_notices, show_pay_info, try_auto_update,
+                      try_join_xinyue_team,
+                      try_load_old_version_configs_from_user_data_dir,
+                      try_report_usage_info, try_save_configs_to_user_data_dir,
+                      try_take_xinyue_team_award)
 from pool import close_pool, init_pool
-from show_usage import *
-from usage_count import *
-from version import *
+from show_usage import show_usage
+from usage_count import increase_counter
+from util import (MiB, async_call, async_message_box,
+                  change_console_window_mode_async, change_title,
+                  clean_dir_to_size, disable_pause_after_run,
+                  disable_quick_edit_mode, is_run_in_github_action,
+                  kill_other_instance_on_start, pause, show_head_line,
+                  show_unexpected_exception_message)
+from version import author, now_version, ver_time
 
 
 def parse_args():

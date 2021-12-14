@@ -10,7 +10,8 @@ from dao import DnfWarriorsCallInfo, GuanhuaiActInfo, RoleInfo
 from log import color, logger
 from network import process_result, try_request
 from qq_login import LoginResult
-from setting import *
+from setting import parse_card_group_info_map, parse_prize_list
+from setting_def import ArkLotteryZzConfig
 from sign import getACSRFTokenForAMS
 from urls import Urls, get_not_ams_act
 from util import format_now, format_time, parse_time, uin2qq

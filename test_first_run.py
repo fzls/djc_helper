@@ -1,4 +1,8 @@
-from first_run import *
+import datetime
+import random
+import time
+
+from first_run import is_first_run_in
 
 
 def test_is_first_run_in():

@@ -1,12 +1,22 @@
+import json
+import logging
+import os
+import platform
 import re
+import uuid
 from multiprocessing import cpu_count
+from typing import Dict, List, Optional
 
-from const import *
+import toml
+
+from const import appVersion, cached_dir
 from dao import DnfHelperChronicleExchangeGiftInfo
-from data_struct import to_raw_type
-from log import *
+from data_struct import ConfigInterface, to_raw_type
+from log import color, consoleHandler, consoleLogFormatter, logger
 from sign import getACSRFTokenForAMS, getDjcSignParams
-from util import *
+from util import (async_message_box, get_config_from_env, get_url_config_path,
+                  is_run_in_github_action, pause_and_exit,
+                  show_file_content_info, uin2qq)
 
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
 
@@ -1169,6 +1179,9 @@ if __name__ == '__main__':
 
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
+
+    from util import (gen_config_for_github_action_base64,
+                      gen_config_for_github_action_json_single_line)
 
     gen_config_for_github_action()
     gen_config_for_github_action_base64()

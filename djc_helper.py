@@ -1,23 +1,87 @@
+import datetime
+import json
+import math
+import os
+import random
+import re
 import string
+import time
 from multiprocessing import Pool
-from urllib.parse import quote, quote_plus
+from typing import Callable, Dict, List, Optional, Tuple
+from urllib import parse
+from urllib.parse import quote, quote_plus, unquote_plus
+
+import requests
 
 import json_parser
 from black_list import check_in_black_list
-from dao import *
-from dao import XiaojiangyouInfo, XiaojiangyouPackageInfo
-from exceptions_def import *
-from first_run import *
+from config import (AccountConfig, CommonConfig, XinYueOperationConfig, config,
+                    load_config)
+from const import (appVersion, cached_dir, guanjia_skey_version,
+                   vscode_online_url)
+from dao import (AmesvrCommonModRet, AmesvrQueryFriendsInfo, AmesvrQueryRole,
+                 AmesvrUserBindInfo, BuyInfo, ColgBattlePassInfo,
+                 CreateWorkInfo, CreateWorkListInfo,
+                 DnfChronicleMatchServerAddUserRequest,
+                 DnfChronicleMatchServerCommonResponse,
+                 DnfChronicleMatchServerRequestUserRequest,
+                 DnfChronicleMatchServerRequestUserResponse, DnfCollectionInfo,
+                 DnfHeiyaInfo, DnfHelperChronicleBasicAwardInfo,
+                 DnfHelperChronicleBasicAwardList,
+                 DnfHelperChronicleExchangeGiftInfo,
+                 DnfHelperChronicleExchangeList, DnfHelperChronicleLotteryList,
+                 DnfHelperChronicleSignGiftInfo, DnfHelperChronicleSignList,
+                 DnfHelperChronicleUserActivityTopInfo,
+                 DnfHelperChronicleUserTaskList, DnfHelperQueryInfo,
+                 DnfRoleInfo, GameRoleInfo, GoodsInfo, GuanjiaNewLotteryResult,
+                 GuanjiaNewQueryLotteryInfo, GuanjiaNewRequest,
+                 HuyaActTaskInfo, HuyaUserTaskInfo, MobileGameGiftInfo,
+                 NewArkLotteryCardCountInfo, NewArkLotteryLotteryCountInfo,
+                 NewArkLotterySendCardResult, RankUserInfo, RoleInfo,
+                 SailiyamWorkInfo, SpringFuDaiInfo,
+                 TemporaryChangeBindRoleInfo, XiaojiangyouInfo,
+                 XiaojiangyouPackageInfo, XinyueCatInfo, XinyueCatInfoFromApp,
+                 XinyueCatMatchResult, XinyueCatUserInfo, XinyueFinancingInfo,
+                 XinYueInfo, XinYueMatchServerAddTeamRequest,
+                 XinYueMatchServerCommonResponse,
+                 XinYueMatchServerRequestTeamRequest,
+                 XinYueMatchServerRequestTeamResponse, XinYueTeamAwardInfo,
+                 XinYueTeamGroupInfo, XinYueTeamInfo, XinYueTeamMember,
+                 XinyueWeeklyGiftInfo, XinyueWeeklyGPointsInfo,
+                 parse_amesvr_common_info)
+from data_struct import to_raw_type
+from db import (DianzanDB, DnfHelperChronicleExchangeListDB,
+                DnfHelperChronicleUserActivityTopInfoDB, FireCrackersDB,
+                WelfareDB)
+from exceptions_def import (DnfHelperChronicleTokenExpiredOrWrongException,
+                            GithubActionLoginException,
+                            SameAccountTryLoginAtMultipleThreadsException)
+from first_run import (is_daily_first_run, is_first_run, is_monthly_first_run,
+                       is_weekly_first_run)
 from game_info import get_game_info, get_game_info_by_bizcode
-from network import *
+from log import color, logger
+from network import Network, extract_qq_video_message, jsonp_callback_flag
 from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
-from setting import *
-from sign import getMillSecondsUnix
+from setting import (dnf_server_id_to_area_info, dnf_server_id_to_name,
+                     parse_card_group_info_map, zzconfig)
+from sign import getACSRFTokenForAMS, getMillSecondsUnix
 from urls import (Urls, get_act_url, get_ams_act, get_ams_act_desc,
                   get_not_ams_act, get_not_ams_act_desc, not_know_end_time,
                   search_act)
 from usage_count import increase_counter
+from util import (async_message_box, base64_str, extract_between,
+                  filter_unused_params_catch_exception, format_now,
+                  format_time, get_last_week_monday_datetime,
+                  get_match_server_api, get_meaningful_call_point_for_log,
+                  get_month, get_now, get_now_unix, get_this_thursday_of_dnf,
+                  get_this_week_monday_datetime, get_today, is_act_expired,
+                  json_compact, message_box, now_in_range, padLeftRight,
+                  parse_time, pause, pause_and_exit, range_from_one,
+                  remove_suffix, show_end_time, show_head_line,
+                  show_quick_edit_mode_tip, start_and_end_date_of_a_month,
+                  tableify, try_except, uin2qq, use_by_myself, utf8len,
+                  wait_for, will_act_expired_in, with_cache, with_retry)
 
 
 # DNF蚊子腿小助手
@@ -2471,8 +2535,8 @@ class DjcHelper:
 
         def check_in():
             today = get_today()
-            last_day = get_today(get_now() - timedelta(days=1))
-            the_day_before_last_day = get_today(get_now() - timedelta(days=2))
+            last_day = get_today(get_now() - datetime.timedelta(days=1))
+            the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
             self.dnf_shanguang_op(f"签到-{today}", "812092", weekDay=today)
             self.dnf_shanguang_op(f"补签-{last_day}", "812379", weekDay=last_day)
             wait_for("等待一会", 5)
@@ -5957,7 +6021,7 @@ class DjcHelper:
 
             # 如果有剩余奖励
             act_config = get_not_ams_act("colg每日签到")
-            if act_config is not None and will_act_expired_in(act_config.dtEndTime, timedelta(days=5)):
+            if act_config is not None and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
                 # 活动即将过期时，则每天提示一次
                 need_show_message_box = is_daily_first_run(f"colg_{info.activity_id}2_领取奖励_活动即将结束时_每日提醒")
                 title = f"活动快过期了，记得领取奖励（过期时间为 {act_config.dtEndTime}）"
@@ -6030,7 +6094,7 @@ class DjcHelper:
                 logger.info(f"{self.cfg.name} 的 DNF生日（账号创建日期） 为 {birthday}")
 
                 now = get_now()
-                max_delta = timedelta(days=30)
+                max_delta = datetime.timedelta(days=30)
 
                 # 依次判断去年、今年生日是否在今天之前30天内
                 possiable_birthdays = [

@@ -1,22 +1,55 @@
+import datetime
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import threading
+import time
 from multiprocessing import cpu_count, freeze_support
+from typing import Callable, Dict, List, Optional, Tuple
+
+import requests
+import win32api
+import win32con
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
-from dao import BuyRecord
+from dao import BuyInfo, BuyRecord
+from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
 from djc_helper import (DjcHelper, get_prize_names, is_new_version_ark_lottery,
                         run_act)
-from first_run import *
+from first_run import is_daily_first_run, is_first_run, is_weekly_first_run
+from log import asciiReset, color, logger
 from notice import NoticeManager
 from pool import get_pool, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
-from setting import *
-from show_usage import *
+from setting import parse_card_group_info_map, zzconfig
+from show_usage import (global_usage_counter_name,
+                        my_active_monthly_pay_usage_counter_name,
+                        my_auto_updater_usage_counter_name,
+                        my_usage_counter_name,
+                        this_version_global_usage_counter_name,
+                        this_version_my_usage_counter_name)
 from update import check_update_on_start, get_update_info
 from upload_lanzouyun import Uploader
 from urls import Urls, get_not_ams_act_desc
-from usage_count import *
-from version import author
+from usage_count import get_count, increase_counter
+from util import (MB_ICONINFORMATION, append_if_not_in, async_call,
+                  async_message_box, auto_updater_latest_path,
+                  auto_updater_path, bypass_proxy, cache_name_user_buy_info,
+                  change_title, clear_login_status, exists_auto_updater_dlc,
+                  exists_flag_file, format_now, format_time, get_appdata_dir,
+                  get_pay_server_addr, is_run_in_github_action, is_windows,
+                  make_sure_dir_exists, md5_file, message_box, now_before,
+                  padLeftRight, parse_time, parse_timestamp, pause,
+                  pause_and_exit, printed_width, range_from_one,
+                  remove_none_from_list, run_from_src, show_head_line,
+                  sync_configs, tableify, time_less, try_except, uin2qq,
+                  use_by_myself, wait_a_while, with_cache)
+from version import author, now_version, ver_time
 
 
 def has_any_account_in_normal_run(cfg):
@@ -264,7 +297,7 @@ def get_owned_card_infos_sort_by_count(card_name_to_counts: Dict[str, int]) -> L
     return owned_card_infos
 
 
-def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> Tuple[Dict[str, int], Dict[str, int], DjcHelper]:
+def query_account_ark_lottery_info(idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig) -> Optional[Tuple[Dict[str, int], Dict[str, int], DjcHelper]]:
     djcHelper = DjcHelper(account_config, common_config)
     lr = djcHelper.fetch_pskey()
     if lr is None:

@@ -1,5 +1,10 @@
+import os
+import subprocess
+
+from log import color
 from upload_lanzouyun import Uploader
-from util import *
+from util import logger, parse_time, parse_timestamp
+from version import now_version
 
 
 def demo():

@@ -11,8 +11,6 @@ from multiprocessing import cpu_count, freeze_support
 from typing import Callable, Dict, List, Optional, Tuple
 
 import requests
-import win32api
-import win32con
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
@@ -81,6 +79,10 @@ from util import (
     with_cache,
 )
 from version import author, now_version, ver_time
+
+if is_windows():
+    import win32api
+    import win32con
 
 
 def has_any_account_in_normal_run(cfg):

@@ -7,7 +7,9 @@ from log import color, logger
 from util import bypass_proxy, show_head_line
 
 
-def init_venv_and_requirements(venv_path=".venv", requirements_path="requirements.txt", disable_douban=False, enable_proxy=False):
+def init_venv_and_requirements(
+    venv_path=".venv", requirements_path="requirements.txt", disable_douban=False, enable_proxy=False
+):
     if not enable_proxy:
         logger.info("当前已无视系统代理")
         bypass_proxy()
@@ -19,56 +21,64 @@ def init_venv_and_requirements(venv_path=".venv", requirements_path="requirement
 
     show_head_line("尝试初始化venv环境", color("bold_yellow"))
 
-    subprocess.call([
-        "python",
-        "-m",
-        "venv",
-        venv_path,
-    ])
+    subprocess.call(
+        [
+            "python",
+            "-m",
+            "venv",
+            venv_path,
+        ]
+    )
 
     logger.info("尝试更新pip setuptools wheel")
     douban_op = ["-i", "https://pypi.doubanio.com/simple"]
     if disable_douban:
         douban_op = []
-    subprocess.call([
-        py_path,
-        "-m",
-        "pip",
-        "install",
-        *douban_op,
-        "--upgrade",
-        "pip",
-        "setuptools",
-        "wheel",
-    ])
+    subprocess.call(
+        [
+            py_path,
+            "-m",
+            "pip",
+            "install",
+            *douban_op,
+            "--upgrade",
+            "pip",
+            "setuptools",
+            "wheel",
+        ]
+    )
 
     logger.info("尝试安装依赖库和pyinstaller")
-    subprocess.call([
-        pip_path,
-        "install",
-        *douban_op,
-        "-r",
-        requirements_path,
-        "--upgrade",
-        "wheel",
-        "pyinstaller",
-    ])
+    subprocess.call(
+        [
+            pip_path,
+            "install",
+            *douban_op,
+            "-r",
+            requirements_path,
+            "--upgrade",
+            "wheel",
+            "pyinstaller",
+        ]
+    )
 
     logger.info("安装pywin32_postinstall")
-    subprocess.call([
-        py_path,
-        os.path.join(pyscript_path, "pywin32_postinstall.py"),
-        "-install",
-    ])
+    subprocess.call(
+        [
+            py_path,
+            os.path.join(pyscript_path, "pywin32_postinstall.py"),
+            "-install",
+        ]
+    )
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--disable_douban", action='store_true')
-    parser.add_argument("--enable_proxy", action='store_true')
+    parser.add_argument("--disable_douban", action="store_true")
+    parser.add_argument("--enable_proxy", action="store_true")
     parser.add_argument("--venv_path", default=".venv")
     parser.add_argument("--requirements_path", default="requirements.txt")
-    parser.add_argument("--dev", action='store_true')
+    parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
 
     if args.dev:
@@ -78,6 +88,6 @@ def parse_args():
     return args
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_args()
     init_venv_and_requirements(args.venv_path, args.requirements_path, args.disable_douban, args.enable_proxy)

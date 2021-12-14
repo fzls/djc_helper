@@ -7,13 +7,11 @@ import win32con
 
 from const import downloads_dir
 from data_struct import ConfigInterface, to_raw_type
-from first_run import (is_daily_first_run, is_first_run, is_monthly_first_run,
-                       is_weekly_first_run, reset_first_run)
+from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from log import logger
 from update import version_less
 from upload_lanzouyun import Uploader
-from util import (format_now, format_time, get_now, message_box, parse_time,
-                  try_except)
+from util import format_now, format_time, get_now, message_box, parse_time, try_except
 from version import now_version
 
 
@@ -100,7 +98,7 @@ class NoticeManager:
             return
 
         # 读取公告
-        with open(path, encoding='utf-8') as save_file:
+        with open(path, encoding="utf-8") as save_file:
             for raw_notice in json.load(save_file):
                 notice = Notice().auto_update_config(raw_notice)
                 self.notices.append(notice)
@@ -112,12 +110,14 @@ class NoticeManager:
         uploader = Uploader()
 
         dirpath, filename = os.path.dirname(self.cache_path), os.path.basename(self.cache_path)
-        uploader.download_file_in_folder(uploader.folder_online_files, filename, dirpath, try_compressed_version_first=True)
+        uploader.download_file_in_folder(
+            uploader.folder_online_files, filename, dirpath, try_compressed_version_first=True
+        )
 
     @try_except()
     def save(self):
         # 本地存盘
-        with open(self.save_path, 'w', encoding='utf-8') as save_file:
+        with open(self.save_path, "w", encoding="utf-8") as save_file:
             json.dump(to_raw_type(self.notices), save_file, ensure_ascii=False, indent=2)
             logger.info("公告存盘完毕")
 
@@ -126,7 +126,9 @@ class NoticeManager:
         with open("upload_cookie.json") as fp:
             cookie = json.load(fp)
         uploader.login(cookie)
-        uploader.upload_to_lanzouyun(self.save_path, uploader.folder_online_files, delete_history_file=True, also_upload_compressed_version=True)
+        uploader.upload_to_lanzouyun(
+            self.save_path, uploader.folder_online_files, delete_history_file=True, also_upload_compressed_version=True
+        )
 
     @try_except()
     def show_notices(self):
@@ -135,11 +137,27 @@ class NoticeManager:
         logger.info(f"发现 {len(valid_notices)} 个新公告")
         for idx, notice in enumerate(valid_notices):
             # 展示公告
-            message_box(notice.message, f"公告({idx + 1}/{len(valid_notices)}) - {notice.title}", icon=win32con.MB_ICONINFORMATION, open_url=notice.open_url, follow_flag_file=False)
+            message_box(
+                notice.message,
+                f"公告({idx + 1}/{len(valid_notices)}) - {notice.title}",
+                icon=win32con.MB_ICONINFORMATION,
+                open_url=notice.open_url,
+                follow_flag_file=False,
+            )
 
         logger.info("所有需要展示的公告均已展示完毕")
 
-    def add_notice(self, title, message, sender="风之凌殇", send_at: str = "", show_type=NoticeShowType.ONCE, open_url="", valid_duration: Optional[timedelta] = None, show_only_before_version=""):
+    def add_notice(
+        self,
+        title,
+        message,
+        sender="风之凌殇",
+        send_at: str = "",
+        show_type=NoticeShowType.ONCE,
+        open_url="",
+        valid_duration: Optional[timedelta] = None,
+        show_only_before_version="",
+    ):
         send_at = send_at or format_now()
         valid_duration = valid_duration or timedelta(days=7)
 
@@ -179,11 +197,15 @@ def main():
     show_only_before_version = ""
 
     if title != "":
-        nm.add_notice(title, message,
-                      send_at=format_now(),
-                      show_type=NoticeShowType.ONCE, open_url=open_url, valid_duration=timedelta(days=7),
-                      show_only_before_version=show_only_before_version,
-                      )
+        nm.add_notice(
+            title,
+            message,
+            send_at=format_now(),
+            show_type=NoticeShowType.ONCE,
+            open_url=open_url,
+            valid_duration=timedelta(days=7),
+            show_only_before_version=show_only_before_version,
+        )
 
     nm.save()
 
@@ -202,9 +224,10 @@ def test():
     os.system("PAUSE")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TEST = False
     from util import bypass_proxy
+
     bypass_proxy()
 
     if not TEST:

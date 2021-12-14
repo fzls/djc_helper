@@ -23,7 +23,9 @@ def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", d
 
     # 压缩打包
     logger_func(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
-    subprocess.call([get_bz_path(dir_src_path), 'c', '-y', '-r', '-aoa', '-fmt:7z', '-l:9', compressed_7z_filepath, dirpath])
+    subprocess.call(
+        [get_bz_path(dir_src_path), "c", "-y", "-r", "-aoa", "-fmt:7z", "-l:9", compressed_7z_filepath, dirpath]
+    )
 
 
 def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str = "", dst_parent_folder: str = "."):
@@ -34,7 +36,16 @@ def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str 
 
     # 尝试解压
     logger_func(f"开始解压缩 目录 {compressed_7z_filepath} 到 目录 {dst_parent_folder} 下面")
-    subprocess.call([get_bz_path(dir_src_path), "x", f"-o:{dst_parent_folder}", "-aoa", "-target:auto", realpath(compressed_7z_filepath)])
+    subprocess.call(
+        [
+            get_bz_path(dir_src_path),
+            "x",
+            f"-o:{dst_parent_folder}",
+            "-aoa",
+            "-target:auto",
+            realpath(compressed_7z_filepath),
+        ]
+    )
 
 
 def get_bz_path(dir_src_path: str = "") -> str:
@@ -62,6 +73,7 @@ def compress_file_with_lzma(filepath: str, compressed_7z_filepath: str = ""):
 def decompress_file_with_lzma(compressed_7z_filepath: str, filepath: str = ""):
     if filepath == "":
         from util import remove_suffix
+
         filepath = remove_suffix(compressed_7z_filepath, ".7z")
 
     compressed_7z_filepath = realpath(compressed_7z_filepath)
@@ -103,7 +115,7 @@ def test():
     test_file_name = "test_file.json"
     test_compressed_file_name = test_file_name + ".7z"
     test_decompressed_file_name = test_compressed_file_name + ".json"
-    with open(test_file_name, 'w', encoding='utf-8') as f:
+    with open(test_file_name, "w", encoding="utf-8") as f:
         json.dump("test_file_compress", f)
     compress_file_with_lzma(test_file_name, test_compressed_file_name)
     decompress_file_with_lzma(test_compressed_file_name, test_decompressed_file_name)
@@ -112,7 +124,7 @@ def test():
     test_folder_name = "test_folder"
     test_compressed_folder_name = test_folder_name + ".7z"
     make_sure_dir_exists(test_folder_name)
-    with open(os.path.join(test_folder_name, "test.json"), 'w', encoding='utf-8') as f:
+    with open(os.path.join(test_folder_name, "test.json"), "w", encoding="utf-8") as f:
         json.dump("test_folder_compress", f)
 
     compress_dir_with_bandizip(test_folder_name, test_compressed_folder_name, dir_src)
@@ -131,5 +143,5 @@ def test():
     print(test_text == decompressed)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

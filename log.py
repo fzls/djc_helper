@@ -15,13 +15,16 @@ from const import get_final_dir_path
 ###########################################################
 #                         logging                         #
 ###########################################################
-asciiReset = colorlog.escape_codes.escape_codes['reset']
+asciiReset = colorlog.escape_codes.escape_codes["reset"]
 
 fileFmtStr = "%(asctime)s %(filename)s:%(lineno)d %(funcName)s %(levelname)-5.5s: %(message)s [%(name)s] [%(processName)s(%(process)d)]"
 consoleFmtStr = "{}%(asctime)s{} {}%(funcName)s:%(lineno)-3d{} {}%(levelname)-5.5s: %(message)s{}".format(
-    "%(bold_purple)s", asciiReset,
-    "%(purple)s", asciiReset,
-    "%(log_color)s", asciiReset,
+    "%(bold_purple)s",
+    asciiReset,
+    "%(purple)s",
+    asciiReset,
+    "%(log_color)s",
+    asciiReset,
 )
 
 logger = logging.getLogger()
@@ -43,13 +46,13 @@ log_filename = ""
 log_filename_file = get_final_dir_path(".log.filename")
 if "MainProcess" in process_name:
     # 为了兼容多进程模式，仅主进程确定日志文件名并存盘，后续其他进程则读取该文件内容作为写日志的目标地址，比如出现很多日志文件
-    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    time_str = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     log_filename = f"{log_directory}/{logger.name}_{process_name}_{time_str}.log"
-    pathlib.Path(log_filename_file).write_text(log_filename, encoding='utf-8')
+    pathlib.Path(log_filename_file).write_text(log_filename, encoding="utf-8")
 
 for _i in range(3):
     try:
-        with open(log_filename_file, encoding='utf-8') as f:
+        with open(log_filename_file, encoding="utf-8") as f:
             log_filename = f.read()
     except Exception as e:
         print(f"读取日志文件名的时候出错了，等待一秒，e={e}")
@@ -60,7 +63,7 @@ for _i in range(3):
 
 if log_filename == "":
     print("无法读取到主进程的日志文件名，只能另建一个了~")
-    time_str = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    time_str = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     log_filename = f"{log_directory}/{logger.name}_{process_name}_{time_str}.log"
 
 
@@ -77,24 +80,20 @@ fileHandler = new_file_handler()
 logger.addHandler(fileHandler)
 
 # hack: 将底层的color暴露出来
-COLORS = [
-    'black',
-    'red',
-    'green',
-    'yellow',
-    'blue',
-    'purple',
-    'cyan',
-    'white'
-]
+COLORS = ["black", "red", "green", "yellow", "blue", "purple", "cyan", "white"]
 
 PREFIXES = [
     # Foreground without prefix
-    '', 'bold_', 'thin_',
+    "",
+    "bold_",
+    "thin_",
     # Foreground with fg_ prefix
-    'fg_', 'fg_bold_', 'fg_thin_',
+    "fg_",
+    "fg_bold_",
+    "fg_thin_",
     # Background with bg_ prefix - bold/light works differently
-    'bg_', 'bg_bold_',
+    "bg_",
+    "bg_bold_",
 ]
 
 color_names = {}
@@ -107,15 +106,18 @@ consoleLogFormatter = colorlog.ColoredFormatter(
     consoleFmtStr,
     datefmt="%H:%M:%S",
     reset=True,
-    log_colors={**color_names, **{
-        'DEBUG': 'cyan',
-        'INFO': 'green',
-        'WARNING': 'yellow',
-        'ERROR': 'fg_bold_red',
-        'CRITICAL': 'fg_bold_red',
-    }},
+    log_colors={
+        **color_names,
+        **{
+            "DEBUG": "cyan",
+            "INFO": "green",
+            "WARNING": "yellow",
+            "ERROR": "fg_bold_red",
+            "CRITICAL": "fg_bold_red",
+        },
+    },
     secondary_log_colors={},
-    style='%'
+    style="%",
 )
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(consoleLogFormatter)
@@ -146,7 +148,7 @@ def get_log_func(log_func: Callable, show_log=True) -> Callable:
     return log_func
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     consoleHandler.setLevel(logging.DEBUG)
     logger.debug("debug")
     logger.info("info")

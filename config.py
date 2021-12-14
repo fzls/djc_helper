@@ -14,9 +14,15 @@ from dao import DnfHelperChronicleExchangeGiftInfo
 from data_struct import ConfigInterface, to_raw_type
 from log import color, consoleHandler, consoleLogFormatter, logger
 from sign import getACSRFTokenForAMS, getDjcSignParams
-from util import (async_message_box, get_config_from_env, get_url_config_path,
-                  is_run_in_github_action, pause_and_exit,
-                  show_file_content_info, uin2qq)
+from util import (
+    async_message_box,
+    get_config_from_env,
+    get_url_config_path,
+    is_run_in_github_action,
+    pause_and_exit,
+    show_file_content_info,
+    uin2qq,
+)
 
 encoding_error_str = "Found invalid character in key name: '#'. Try quoting the key name. (line 1 column 2 char 1)"
 
@@ -116,17 +122,368 @@ class XinYueAppOperationConfig(ConfigInterface):
         # 也就是说，下面两种格式都支持
         # encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00]
         # encrypted_raw_http_body = "58 59 01 00"
-        self.encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00, 0x00, 0x01, 0x61, 0x0A, 0x01, 0x01, 0x2B, 0x10, 0x02, 0x3D, 0x00, 0x00, 0x10, 0xE5, 0xF7, 0x11, 0x0E, 0xF8, 0x2F, 0x1B, 0x13, 0x10, 0x6E, 0xA5, 0xF7, 0xE2, 0x7B, 0xD3, 0x58,
-                                        0x0B, 0x1D, 0x00, 0x01, 0x01, 0x41, 0x28, 0x52, 0x61, 0x09, 0x86, 0x2C, 0x45, 0x32, 0x20, 0x87, 0xBA, 0xAE, 0xDF, 0x03, 0x34, 0x24, 0x68, 0x75, 0x65, 0x58, 0xDF, 0xC1, 0x61, 0x95, 0x7F, 0xAD, 0x9D,
-                                        0xD3, 0x8E, 0x1E, 0x04, 0x5F, 0x68, 0xB2, 0xFA, 0x7A, 0x64, 0x77, 0x99, 0xCA, 0x36, 0x3D, 0xB9, 0x71, 0xF1, 0x80, 0x13, 0xAE, 0xCA, 0xBE, 0xF5, 0x26, 0x99, 0xB6, 0x6F, 0x93, 0xFD, 0xA0, 0x5C, 0x22,
-                                        0xF5, 0x11, 0x21, 0xD2, 0x11, 0xE6, 0x0B, 0x39, 0xE2, 0xB8, 0xB0, 0x05, 0x8A, 0xA7, 0x76, 0xD7, 0xF4, 0x22, 0xA4, 0x24, 0x0F, 0xB5, 0xD2, 0x12, 0xAF, 0x09, 0xD8, 0xA0, 0x1C, 0x23, 0x0D, 0x75, 0xF0,
-                                        0x68, 0x09, 0x6A, 0x2E, 0xEF, 0x6A, 0x76, 0x49, 0x5A, 0x6B, 0x78, 0xAA, 0xE2, 0x69, 0xE9, 0x31, 0x92, 0xB7, 0x21, 0x7C, 0xD9, 0x6E, 0x8C, 0x1E, 0x0D, 0xE6, 0xE0, 0xC0, 0x10, 0xDF, 0x95, 0x8E, 0x55,
-                                        0xFC, 0x64, 0x21, 0x27, 0xA7, 0x87, 0x1E, 0x2B, 0x58, 0xBD, 0x84, 0x4F, 0xE3, 0xC2, 0xC4, 0xB4, 0x23, 0x79, 0x45, 0x57, 0x94, 0xFD, 0x2D, 0xD3, 0xA1, 0x09, 0x04, 0x86, 0xB7, 0xAC, 0xC5, 0x56, 0xB4,
-                                        0xEF, 0xA2, 0x3A, 0xF2, 0x41, 0x16, 0x14, 0x02, 0xC4, 0xB2, 0x00, 0x5E, 0xD5, 0x0C, 0x9B, 0x5E, 0x0A, 0xFD, 0x1C, 0x75, 0xEC, 0xB1, 0x50, 0x7A, 0x4E, 0x6C, 0x78, 0xF9, 0xC4, 0x58, 0x7E, 0x73, 0xB6,
-                                        0xA8, 0xB0, 0x91, 0xCE, 0x0D, 0xBA, 0xF8, 0xFC, 0x82, 0x81, 0xE6, 0xA8, 0x97, 0x75, 0x5F, 0x8B, 0x5A, 0x4B, 0xEB, 0x59, 0x45, 0x7F, 0x26, 0x57, 0x16, 0x4C, 0x84, 0x6A, 0x50, 0xF8, 0x95, 0x8F, 0x4C,
-                                        0x85, 0x2D, 0xA1, 0x88, 0x81, 0xA8, 0xFF, 0x4D, 0x69, 0xEC, 0x6D, 0xC8, 0x05, 0xA0, 0xE0, 0x8F, 0x7D, 0x9C, 0x37, 0xCD, 0xB3, 0x0B, 0x05, 0xFD, 0xF0, 0x52, 0xB2, 0x86, 0x0D, 0x36, 0x27, 0x8B, 0xDF,
-                                        0x34, 0x01, 0xA2, 0xC2, 0x01, 0xA8, 0x7F, 0xC9, 0x2F, 0xFA, 0x44, 0x1F, 0xBA, 0x81, 0x73, 0xF6, 0xD0, 0xAC, 0x5D, 0xA4, 0xED, 0x1F, 0xDB, 0x1D, 0xF8, 0x10, 0x97, 0x7E, 0x3F, 0xC3, 0x21, 0x08, 0x8D,
-                                        0xB9, 0xCD, 0x82, 0x74, 0x1A, 0xE5, 0x8A, 0x39, 0x67, 0x3C, 0x26, 0x18, 0x53, 0xFC, 0xC4, 0x22, 0xAF, 0x83, 0x2F, 0x06, 0x13, 0xAB, 0xCF, 0x56, 0xF6, 0x42, 0x7D, 0x52, 0xD8, 0x62]
+        self.encrypted_raw_http_body = [
+            0x58,
+            0x59,
+            0x01,
+            0x00,
+            0x00,
+            0x01,
+            0x61,
+            0x0A,
+            0x01,
+            0x01,
+            0x2B,
+            0x10,
+            0x02,
+            0x3D,
+            0x00,
+            0x00,
+            0x10,
+            0xE5,
+            0xF7,
+            0x11,
+            0x0E,
+            0xF8,
+            0x2F,
+            0x1B,
+            0x13,
+            0x10,
+            0x6E,
+            0xA5,
+            0xF7,
+            0xE2,
+            0x7B,
+            0xD3,
+            0x58,
+            0x0B,
+            0x1D,
+            0x00,
+            0x01,
+            0x01,
+            0x41,
+            0x28,
+            0x52,
+            0x61,
+            0x09,
+            0x86,
+            0x2C,
+            0x45,
+            0x32,
+            0x20,
+            0x87,
+            0xBA,
+            0xAE,
+            0xDF,
+            0x03,
+            0x34,
+            0x24,
+            0x68,
+            0x75,
+            0x65,
+            0x58,
+            0xDF,
+            0xC1,
+            0x61,
+            0x95,
+            0x7F,
+            0xAD,
+            0x9D,
+            0xD3,
+            0x8E,
+            0x1E,
+            0x04,
+            0x5F,
+            0x68,
+            0xB2,
+            0xFA,
+            0x7A,
+            0x64,
+            0x77,
+            0x99,
+            0xCA,
+            0x36,
+            0x3D,
+            0xB9,
+            0x71,
+            0xF1,
+            0x80,
+            0x13,
+            0xAE,
+            0xCA,
+            0xBE,
+            0xF5,
+            0x26,
+            0x99,
+            0xB6,
+            0x6F,
+            0x93,
+            0xFD,
+            0xA0,
+            0x5C,
+            0x22,
+            0xF5,
+            0x11,
+            0x21,
+            0xD2,
+            0x11,
+            0xE6,
+            0x0B,
+            0x39,
+            0xE2,
+            0xB8,
+            0xB0,
+            0x05,
+            0x8A,
+            0xA7,
+            0x76,
+            0xD7,
+            0xF4,
+            0x22,
+            0xA4,
+            0x24,
+            0x0F,
+            0xB5,
+            0xD2,
+            0x12,
+            0xAF,
+            0x09,
+            0xD8,
+            0xA0,
+            0x1C,
+            0x23,
+            0x0D,
+            0x75,
+            0xF0,
+            0x68,
+            0x09,
+            0x6A,
+            0x2E,
+            0xEF,
+            0x6A,
+            0x76,
+            0x49,
+            0x5A,
+            0x6B,
+            0x78,
+            0xAA,
+            0xE2,
+            0x69,
+            0xE9,
+            0x31,
+            0x92,
+            0xB7,
+            0x21,
+            0x7C,
+            0xD9,
+            0x6E,
+            0x8C,
+            0x1E,
+            0x0D,
+            0xE6,
+            0xE0,
+            0xC0,
+            0x10,
+            0xDF,
+            0x95,
+            0x8E,
+            0x55,
+            0xFC,
+            0x64,
+            0x21,
+            0x27,
+            0xA7,
+            0x87,
+            0x1E,
+            0x2B,
+            0x58,
+            0xBD,
+            0x84,
+            0x4F,
+            0xE3,
+            0xC2,
+            0xC4,
+            0xB4,
+            0x23,
+            0x79,
+            0x45,
+            0x57,
+            0x94,
+            0xFD,
+            0x2D,
+            0xD3,
+            0xA1,
+            0x09,
+            0x04,
+            0x86,
+            0xB7,
+            0xAC,
+            0xC5,
+            0x56,
+            0xB4,
+            0xEF,
+            0xA2,
+            0x3A,
+            0xF2,
+            0x41,
+            0x16,
+            0x14,
+            0x02,
+            0xC4,
+            0xB2,
+            0x00,
+            0x5E,
+            0xD5,
+            0x0C,
+            0x9B,
+            0x5E,
+            0x0A,
+            0xFD,
+            0x1C,
+            0x75,
+            0xEC,
+            0xB1,
+            0x50,
+            0x7A,
+            0x4E,
+            0x6C,
+            0x78,
+            0xF9,
+            0xC4,
+            0x58,
+            0x7E,
+            0x73,
+            0xB6,
+            0xA8,
+            0xB0,
+            0x91,
+            0xCE,
+            0x0D,
+            0xBA,
+            0xF8,
+            0xFC,
+            0x82,
+            0x81,
+            0xE6,
+            0xA8,
+            0x97,
+            0x75,
+            0x5F,
+            0x8B,
+            0x5A,
+            0x4B,
+            0xEB,
+            0x59,
+            0x45,
+            0x7F,
+            0x26,
+            0x57,
+            0x16,
+            0x4C,
+            0x84,
+            0x6A,
+            0x50,
+            0xF8,
+            0x95,
+            0x8F,
+            0x4C,
+            0x85,
+            0x2D,
+            0xA1,
+            0x88,
+            0x81,
+            0xA8,
+            0xFF,
+            0x4D,
+            0x69,
+            0xEC,
+            0x6D,
+            0xC8,
+            0x05,
+            0xA0,
+            0xE0,
+            0x8F,
+            0x7D,
+            0x9C,
+            0x37,
+            0xCD,
+            0xB3,
+            0x0B,
+            0x05,
+            0xFD,
+            0xF0,
+            0x52,
+            0xB2,
+            0x86,
+            0x0D,
+            0x36,
+            0x27,
+            0x8B,
+            0xDF,
+            0x34,
+            0x01,
+            0xA2,
+            0xC2,
+            0x01,
+            0xA8,
+            0x7F,
+            0xC9,
+            0x2F,
+            0xFA,
+            0x44,
+            0x1F,
+            0xBA,
+            0x81,
+            0x73,
+            0xF6,
+            0xD0,
+            0xAC,
+            0x5D,
+            0xA4,
+            0xED,
+            0x1F,
+            0xDB,
+            0x1D,
+            0xF8,
+            0x10,
+            0x97,
+            0x7E,
+            0x3F,
+            0xC3,
+            0x21,
+            0x08,
+            0x8D,
+            0xB9,
+            0xCD,
+            0x82,
+            0x74,
+            0x1A,
+            0xE5,
+            0x8A,
+            0x39,
+            0x67,
+            0x3C,
+            0x26,
+            0x18,
+            0x53,
+            0xFC,
+            0xC4,
+            0x22,
+            0xAF,
+            0x83,
+            0x2F,
+            0x06,
+            0x13,
+            0xAB,
+            0xCF,
+            0x56,
+            0xF6,
+            0x42,
+            0x7D,
+            0x52,
+            0xD8,
+            0x62,
+        ]
 
     def on_config_update(self, raw_config: dict):
         if type(self.encrypted_raw_http_body) is str:
@@ -134,11 +491,11 @@ class XinYueAppOperationConfig(ConfigInterface):
             self.encrypted_raw_http_body = self.hxd_hex_str_to_hex_list(str(self.encrypted_raw_http_body))
 
     def hxd_hex_str_to_hex_list(self, hxd_hex_str) -> List[int]:
-        hex_str_list = hxd_hex_str.split(' ')
+        hex_str_list = hxd_hex_str.split(" ")
 
         hex_with_0x_list = [f"0x{h}" for h in hex_str_list]
 
-        return eval('[' + ', '.join(hex_with_0x_list) + ']')
+        return eval("[" + ", ".join(hex_with_0x_list) + "]")
 
 
 class WegameGuoqingExchangeItemConfig(ConfigInterface):
@@ -164,7 +521,9 @@ class ArkLotteryAwardConfig(ConfigInterface):
 class ArkLotteryConfig(ConfigInterface):
     def __init__(self):
         # 用于完成幸运勇士的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
-        self.lucky_dnf_server_id = ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.lucky_dnf_server_id = (
+            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        )
         self.lucky_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         # 是否领取礼包（建议仅大号开启这个功能）
         self.need_take_awards = False
@@ -179,11 +538,13 @@ class ArkLotteryConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('take_awards', ArkLotteryAwardConfig),
+            ("take_awards", ArkLotteryAwardConfig),
         ]
 
     def on_config_update(self, raw_config: dict):
-        self.act_id_to_cost_all_cards_and_do_lottery = {int(k): bool(v) for k, v in self.act_id_to_cost_all_cards_and_do_lottery.items()}
+        self.act_id_to_cost_all_cards_and_do_lottery = {
+            int(k): bool(v) for k, v in self.act_id_to_cost_all_cards_and_do_lottery.items()
+        }
 
 
 class VipMentorConfig(ConfigInterface):
@@ -191,7 +552,9 @@ class VipMentorConfig(ConfigInterface):
         # 领取第几个关怀礼包，可填1/2/3，一般是第二个最好
         self.take_index = 2
         # 用于完成关怀礼包的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
-        self.guanhuai_dnf_server_id = ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.guanhuai_dnf_server_id = (
+            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        )
         self.guanhuai_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
 
 
@@ -233,12 +596,15 @@ class DnfHelperInfoConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('chronicle_exchange_items', DnfHelperChronicleExchangeItemConfig),
+            ("chronicle_exchange_items", DnfHelperChronicleExchangeItemConfig),
         ]
 
     def on_config_update(self, raw_config: dict):
         if len(self.token) != 0 and len(self.token) != 8:
-            async_message_box(f"{self.nickName} 对应的token({self.token}) 必定是错误的，因为token的长度只可能是8位，而你填的token长度为{len(self.token)}", "token长度不对")
+            async_message_box(
+                f"{self.nickName} 对应的token({self.token}) 必定是错误的，因为token的长度只可能是8位，而你填的token长度为{len(self.token)}",
+                "token长度不对",
+            )
 
     def get_exchange_item_by_sLbcode(self, sLbcode: str) -> Optional[DnfHelperChronicleExchangeItemConfig]:
         for exchange_item in self.chronicle_exchange_items:
@@ -267,7 +633,7 @@ class FirecrackersConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('exchange_items', FirecrackersExchangeItemConfig),
+            ("exchange_items", FirecrackersExchangeItemConfig),
         ]
 
 
@@ -507,10 +873,10 @@ class AccountConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('exchange_items', ExchangeItemConfig),
-            ('xinyue_operations', XinYueOperationConfig),
-            ('xinyue_app_operations', XinYueAppOperationConfig),
-            ('wegame_guoqing_exchange_items', WegameGuoqingExchangeItemConfig),
+            ("exchange_items", ExchangeItemConfig),
+            ("xinyue_operations", XinYueOperationConfig),
+            ("xinyue_app_operations", XinYueAppOperationConfig),
+            ("wegame_guoqing_exchange_items", WegameGuoqingExchangeItemConfig),
         ]
 
     def is_enabled(self):
@@ -544,7 +910,10 @@ class AccountConfig(ConfigInterface):
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():
-            async_message_box(f"账号 {self.name} 的{ctx}幸运角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作", "配置有误")
+            async_message_box(
+                f"账号 {self.name} 的{ctx}幸运角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作",
+                "配置有误",
+            )
             return False
 
         return True
@@ -554,7 +923,9 @@ class AccountConfig(ConfigInterface):
         self.account_info.skey = skey
 
         self.g_tk = str(getACSRFTokenForAMS(self.account_info.skey))
-        self.sDjcSign = getDjcSignParams(self.aes_key, self.rsa_public_key_file, uin2qq(self.account_info.uin), self.sDeviceID, appVersion)
+        self.sDjcSign = getDjcSignParams(
+            self.aes_key, self.rsa_public_key_file, uin2qq(self.account_info.uin), self.sDeviceID, appVersion
+        )
 
     def getSDeviceID(self):
         sDeviceIdFileName = os.path.join(cached_dir, f".sDeviceID.{self.name}.txt")
@@ -669,7 +1040,7 @@ class MajieluoConfig(ConfigInterface):
 
 
 class FixedTeamConfig(ConfigInterface):
-    reg_qq = r'\d+'
+    reg_qq = r"\d+"
 
     def __init__(self):
         # 是否启用该固定队
@@ -814,7 +1185,7 @@ class CommonConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('fixed_teams', FixedTeamConfig),
+            ("fixed_teams", FixedTeamConfig),
         ]
 
     def on_config_update(self, raw_config: dict):
@@ -840,12 +1211,12 @@ class CommonConfig(ConfigInterface):
         url_config_filepath = get_url_config_path()
         if os.path.isfile(url_config_filepath):
             try:
-                with open(url_config_filepath, encoding='utf-8-sig') as url_config_file:
+                with open(url_config_filepath, encoding="utf-8-sig") as url_config_file:
                     url_config = toml.load(url_config_file)
-                    if 'pay_by_month_purchase_url' in url_config:
-                        self.pay_by_month_purchase_url = url_config['pay_by_month_purchase_url']
-                    if 'netdisk_link' in url_config:
-                        self.netdisk_link = url_config['netdisk_link']
+                    if "pay_by_month_purchase_url" in url_config:
+                        self.pay_by_month_purchase_url = url_config["pay_by_month_purchase_url"]
+                    if "netdisk_link" in url_config:
+                        self.netdisk_link = url_config["netdisk_link"]
             except Exception:
                 pass
 
@@ -861,7 +1232,7 @@ class Config(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('account_configs', AccountConfig),
+            ("account_configs", AccountConfig),
         ]
 
     def on_config_update(self, raw_config: dict):
@@ -903,7 +1274,9 @@ class Config(ConfigInterface):
 
             # 检查名称是否重复
             if account.name in name2index:
-                logger.error(color("fg_bold_red") + f"第{idx}个账号的名称 {account.name} 与第{name2index[account.name]}个账号的名称重复，请调整为不同的名字")
+                logger.error(
+                    color("fg_bold_red") + f"第{idx}个账号的名称 {account.name} 与第{name2index[account.name]}个账号的名称重复，请调整为不同的名字"
+                )
                 return False
             name2index[account.name] = idx
 
@@ -913,10 +1286,13 @@ class Config(ConfigInterface):
                 try:
                     int(dhi.userId)
                 except ValueError:
-                    logger.error(color("fg_bold_red") + (
-                        f"第{idx}个账号配置的dnf助手信息的社区ID(userId)=[{dhi.userId}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{dhi.nickName}]的值填反了？"
-                        "id应该类似[504051073]，而昵称则形如[风之凌殇]"
-                    ))
+                    logger.error(
+                        color("fg_bold_red")
+                        + (
+                            f"第{idx}个账号配置的dnf助手信息的社区ID(userId)=[{dhi.userId}]似乎为昵称，请仔细检查是否与昵称(nickName)=[{dhi.nickName}]的值填反了？"
+                            "id应该类似[504051073]，而昵称则形如[风之凌殇]"
+                        )
+                    )
                     return False
 
         return True
@@ -971,8 +1347,11 @@ class Config(ConfigInterface):
         return None
 
     def get_qq_accounts(self) -> List[str]:
-        return list(uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs
-                    if account_cfg.enable and account_cfg.account_info.has_login())
+        return list(
+            uin2qq(account_cfg.account_info.uin)
+            for account_cfg in self.account_configs
+            if account_cfg.enable and account_cfg.account_info.has_login()
+        )
 
     def get_any_enabled_account(self) -> Optional[AccountConfig]:
         for account_config in self.account_configs:
@@ -1001,15 +1380,23 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         raw_config = toml.load(config_path)
         g_config.auto_update_config(raw_config)
     except UnicodeDecodeError as error:
-        logger.error(color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n")
+        logger.error(
+            color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
+        )
         raise error
     except Exception as error:
         if encoding_error_str in str(error):
-            logger.error(color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n")
+            logger.error(
+                color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
+            )
             raise error
 
-        logger.error(color("fg_bold_red") + f"读取{config_path}文件出错，是否直接在压缩包中打开了或者toml语法有问题？\n具体出错为：{error}\n"
-                     + color("fg_bold_yellow") + "若未完整解压，请先解压。否则请根据上面的英文报错信息，自行百度学习toml的基本语法，然后处理对应行的语法错误（看不懂的话自行用百度翻译或有道翻译）")
+        logger.error(
+            color("fg_bold_red")
+            + f"读取{config_path}文件出错，是否直接在压缩包中打开了或者toml语法有问题？\n具体出错为：{error}\n"
+            + color("fg_bold_yellow")
+            + "若未完整解压，请先解压。否则请根据上面的英文报错信息，自行百度学习toml的基本语法，然后处理对应行的语法错误（看不懂的话自行用百度翻译或有道翻译）"
+        )
         raise error
 
     # 然后尝试读取本地文件（不受版本管理系统控制）
@@ -1127,7 +1514,7 @@ def gen_config_for_github_action():
 
     show_config_size(cfg, "精简后")
 
-    save_filename = 'config.toml.github_action'
+    save_filename = "config.toml.github_action"
     save_config(cfg, save_filename)
     logger.info(f"已经保存到 {save_filename}")
 
@@ -1146,7 +1533,11 @@ def remove_unnecessary_configs(cfg, default_cfg):
         # 1. 移除动态参数
         # 2. 移除与默认配置一致的参数
         # 3. 移除没有任何子字段的实现配置接口的字段
-        if not hasattr(default_cfg, attr) or getattr(default_cfg, attr) == value or (isinstance(value, ConfigInterface) and value.__dict__ == {}):
+        if (
+            not hasattr(default_cfg, attr)
+            or getattr(default_cfg, attr) == value
+            or (isinstance(value, ConfigInterface) and value.__dict__ == {})
+        ):
             attrs_to_remove.append(attr)
 
     for attr in attrs_to_remove:
@@ -1154,20 +1545,21 @@ def remove_unnecessary_configs(cfg, default_cfg):
 
 
 def save_config(cfg: Config, config_path="config.toml"):
-    with open(config_path, 'w', encoding='utf-8') as save_file:
+    with open(config_path, "w", encoding="utf-8") as save_file:
         data_to_save = json.loads(json.dumps(to_raw_type(cfg)))
         toml.dump(data_to_save, save_file)
 
 
 def config(force_reload_when_no_accounts=False, print_res=True):
     if not g_config.loaded or (force_reload_when_no_accounts and len(g_config.account_configs) == 0):
-        if print_res: logger.info("配置尚未加载，需要初始化")
+        if print_res:
+            logger.info("配置尚未加载，需要初始化")
         load_config("config.toml", "config.toml.local")
 
     return g_config
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_config("config.toml", "config.toml.local")
     logger.info(config().common.account_count)
 
@@ -1180,8 +1572,7 @@ if __name__ == '__main__':
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)
 
-    from util import (gen_config_for_github_action_base64,
-                      gen_config_for_github_action_json_single_line)
+    from util import gen_config_for_github_action_base64, gen_config_for_github_action_json_single_line
 
     gen_config_for_github_action()
     gen_config_for_github_action_base64()

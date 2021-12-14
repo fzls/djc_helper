@@ -17,25 +17,74 @@ import selenium.common.exceptions
 
 from db import CacheDB
 from network import set_last_response_info
-from util import (EiB, GiB, KiB, MiB, PiB, TiB, YiB, ZiB, append_if_not_in,
-                  base64_str, bytes_arr_to_hex_str, check_some_exception,
-                  endswith_any, extract_between, filter_unused_params,
-                  format_now, format_time, format_timestamp, get_cid,
-                  get_current, get_last_month, get_last_n_days,
-                  get_last_week_monday, get_last_week_monday_datetime,
-                  get_meaningful_call_point_for_log, get_month, get_now,
-                  get_now_unix, get_past_time, get_random_face,
-                  get_remaining_time, get_this_thursday_of_dnf,
-                  get_this_week_monday, get_this_week_monday_datetime,
-                  get_today, get_uuid, get_week, get_year,
-                  hex_str_to_bytes_arr, human_readable_size, is_act_expired,
-                  is_valid_qq, md5, now_after, now_before, now_in_range,
-                  padLeftRight, parse_scode, parse_time, parse_timestamp,
-                  parse_unicode_escape_string, printed_width,
-                  remove_invalid_unicode_escape_string, remove_none_from_list,
-                  remove_suffix, start_and_end_date_of_a_month, startswith_any,
-                  tableify, time_less, truncate, try_except, uin2qq,
-                  use_by_myself, utf8len, will_act_expired_in, with_cache)
+from util import (
+    EiB,
+    GiB,
+    KiB,
+    MiB,
+    PiB,
+    TiB,
+    YiB,
+    ZiB,
+    append_if_not_in,
+    base64_str,
+    bytes_arr_to_hex_str,
+    check_some_exception,
+    endswith_any,
+    extract_between,
+    filter_unused_params,
+    format_now,
+    format_time,
+    format_timestamp,
+    get_cid,
+    get_current,
+    get_last_month,
+    get_last_n_days,
+    get_last_week_monday,
+    get_last_week_monday_datetime,
+    get_meaningful_call_point_for_log,
+    get_month,
+    get_now,
+    get_now_unix,
+    get_past_time,
+    get_random_face,
+    get_remaining_time,
+    get_this_thursday_of_dnf,
+    get_this_week_monday,
+    get_this_week_monday_datetime,
+    get_today,
+    get_uuid,
+    get_week,
+    get_year,
+    hex_str_to_bytes_arr,
+    human_readable_size,
+    is_act_expired,
+    is_valid_qq,
+    md5,
+    now_after,
+    now_before,
+    now_in_range,
+    padLeftRight,
+    parse_scode,
+    parse_time,
+    parse_timestamp,
+    parse_unicode_escape_string,
+    printed_width,
+    remove_invalid_unicode_escape_string,
+    remove_none_from_list,
+    remove_suffix,
+    start_and_end_date_of_a_month,
+    startswith_any,
+    tableify,
+    time_less,
+    truncate,
+    try_except,
+    uin2qq,
+    use_by_myself,
+    utf8len,
+    will_act_expired_in,
+    with_cache,
+)
 
 now_for_test = datetime.datetime.now().replace(2021, 8, 6, 12, 0, 0, 0)
 
@@ -147,7 +196,7 @@ def test_get_today():
 
 
 def test_get_last_n_days():
-    assert get_last_n_days(3, now_for_test) == ['20210805', '20210804', '20210803']
+    assert get_last_n_days(3, now_for_test) == ["20210805", "20210804", "20210803"]
 
 
 def test_get_week():
@@ -440,9 +489,22 @@ def test_get_cid():
 
 
 def test_parse_scode():
-    assert parse_scode("MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
-    assert parse_scode("https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
-    assert parse_scode("https://dnf.qq.com/cp/a20210911care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=") == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    assert (
+        parse_scode("MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    )
+    assert (
+        parse_scode(
+            "https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+        )
+        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    )
+    assert (
+        parse_scode(
+            "https://dnf.qq.com/cp/a20210911care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+        )
+        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+    )
 
 
 def test_bytes_arr_to_hex_str():

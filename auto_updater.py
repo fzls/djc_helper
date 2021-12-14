@@ -14,9 +14,15 @@ from distutils import dir_util
 from compress import decompress_dir_with_bandizip
 from update import need_update
 from upload_lanzouyun import Uploader
-from util import (bypass_proxy, change_title, exists_flag_file, kill_process,
-                  pause_and_exit, show_unexpected_exception_message,
-                  start_djc_helper)
+from util import (
+    bypass_proxy,
+    change_title,
+    exists_flag_file,
+    kill_process,
+    pause_and_exit,
+    show_unexpected_exception_message,
+    start_djc_helper,
+)
 
 bandizip_executable_path = "./utils/bandizip_portable/bz.exe"
 tmp_dir = "_update_temp_dir"
@@ -79,7 +85,9 @@ def update(args, uploader):
         patches_range = uploader.latest_patches_range()
         logger.info(f"当前可以应用增量补丁更新的版本范围为{patches_range}")
 
-        can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(patches_range[1], args.version)
+        can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(
+            patches_range[1], args.version
+        )
         if can_use_patch:
             logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
 
@@ -108,7 +116,7 @@ def full_update(args, uploader):
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
 
-    target_dir = filepath.replace('.7z', '')
+    target_dir = filepath.replace(".7z", "")
     logger.info("预处理解压缩文件：移除部分文件")
     for file in ["config.toml", "utils/auto_updater.exe"]:
         file_to_remove = os.path.realpath(os.path.join(target_dir, file))
@@ -139,18 +147,20 @@ def incremental_update(args, uploader):
 
     kill_original_process(args.pid)
 
-    target_dir = filepath.replace('.7z', '')
+    target_dir = filepath.replace(".7z", "")
     target_patch = os.path.join(target_dir, f"{args.version}.patch")
     logger.info(f"开始应用补丁 {target_patch}")
     # hpatchz.exe -C-diff -f . "%target_patch_file%" .
-    ret_code = subprocess.call([
-        os.path.realpath("utils/hpatchz.exe"),
-        "-C-diff",
-        "-f",
-        os.path.realpath("."),
-        os.path.realpath(target_patch),
-        os.path.realpath("."),
-    ])
+    ret_code = subprocess.call(
+        [
+            os.path.realpath("utils/hpatchz.exe"),
+            "-C-diff",
+            "-f",
+            os.path.realpath("."),
+            os.path.realpath(target_patch),
+            os.path.realpath("."),
+        ]
+    )
 
     if ret_code != 0:
         logger.error(f"增量更新失败，错误码为{ret_code}，具体报错请看上面日志")
@@ -185,7 +195,7 @@ def start_new_version(args):
     kill_process(os.getpid())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         os.system("title 自动更新工具")
         auto_update()

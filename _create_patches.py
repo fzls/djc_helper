@@ -34,16 +34,24 @@ class HistoryVersionFileInfo:
         return self.version
 
 
-def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=False) -> str:
+def create_patch(
+    dir_src,
+    dir_all_release,
+    create_patch_for_latest_n_version,
+    dir_github_action_artifact,
+    get_final_patch_path_only=False,
+) -> str:
     latest_version = now_version
 
     old_cwd = os.getcwd()
     os.chdir(dir_all_release)
-    if not get_final_patch_path_only: logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
+    if not get_final_patch_path_only:
+        logger.info(f"工作目录已调整为{os.getcwd()}，最新版本为v{latest_version}")
 
     uploader = Uploader()
 
-    if not get_final_patch_path_only: logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
+    if not get_final_patch_path_only:
+        logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
     old_version_infos = []  # type: List[HistoryVersionFileInfo]
 
     # 获取当前网盘的最新版本，若比当前发布版本低，也加入
@@ -141,20 +149,25 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
         patch_file = f"{patches_dir}/{version}.patch"
 
         logger.info("-" * 80)
-        logger.info(color("bold_yellow") + f"[{idx + 1}/{len(old_version_infos)}] 创建从v{version}升级到v{latest_version}的补丁{patch_file}")
+        logger.info(
+            color("bold_yellow")
+            + f"[{idx + 1}/{len(old_version_infos)}] 创建从v{version}升级到v{latest_version}的补丁{patch_file}"
+        )
 
         version_dir = f"DNF蚊子腿小助手_v{version}_by风之凌殇"
 
         shutil.copytree(version_dir, temp_path(version_dir))
         preprocess_before_patch(temp_path(version_dir))
 
-        subprocess.call([
-            os.path.realpath(os.path.join(dir_src, "utils/hdiffz.exe")),
-            f"-p-{multiprocessing.cpu_count()}",  # 设置系统最大cpu数
-            os.path.realpath(os.path.join(temp_dir, version_dir)),
-            os.path.realpath(os.path.join(temp_dir, target_version_dir)),
-            patch_file,
-        ])
+        subprocess.call(
+            [
+                os.path.realpath(os.path.join(dir_src, "utils/hdiffz.exe")),
+                f"-p-{multiprocessing.cpu_count()}",  # 设置系统最大cpu数
+                os.path.realpath(os.path.join(temp_dir, version_dir)),
+                os.path.realpath(os.path.join(temp_dir, target_version_dir)),
+                patch_file,
+            ]
+        )
 
         filesize = os.path.getsize(patch_file)
         logger.info(f"创建补丁{patch_file}结束，最终大小为{human_readable_size(filesize)}")
@@ -166,15 +179,15 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     compress_dir_with_bandizip(patches_dir, patch_7z_file, dir_src)
 
     # 额外备份一份最新的供github action 使用
-    shutil.copyfile(patch_7z_file, os.path.join(dir_github_action_artifact, 'djc_helper_patches.7z'))
+    shutil.copyfile(patch_7z_file, os.path.join(dir_github_action_artifact, "djc_helper_patches.7z"))
 
     os.chdir(old_cwd)
 
     return patch_7z_file
 
 
-if __name__ == '__main__':
-    dir_src = os.path.realpath('.')
+if __name__ == "__main__":
+    dir_src = os.path.realpath(".")
     dir_all_release = os.path.realpath(os.path.join("releases"))
     dir_github_action_artifact = "_github_action_artifact"
     create_patch(dir_src, dir_all_release, 3, dir_github_action_artifact)

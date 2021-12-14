@@ -27,23 +27,24 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     # 需要复制的文件与目录
     files_to_copy = []
     # 基于正则确定初始复制范围
-    reg_wantted_file = r'.*\.(toml|md|txt|png|jpg|docx|url)$'
-    for file in os.listdir('.'):
+    reg_wantted_file = r".*\.(toml|md|txt|png|jpg|docx|url)$"
+    for file in os.listdir("."):
         if not re.search(reg_wantted_file, file, flags=re.IGNORECASE):
             continue
         files_to_copy.append(file)
     # 额外补充一些文件和目录
-    files_to_copy.extend([
-        "config.example.toml",
-        "DNF蚊子腿小助手.exe",
-        "DNF蚊子腿小助手配置工具.exe",
-        "DNF蚊子腿小助手配置文件.bat",
-
-        "使用教程",
-        "付费指引",
-        "相关信息",
-        "utils",
-    ])
+    files_to_copy.extend(
+        [
+            "config.example.toml",
+            "DNF蚊子腿小助手.exe",
+            "DNF蚊子腿小助手配置工具.exe",
+            "DNF蚊子腿小助手配置文件.bat",
+            "使用教程",
+            "付费指引",
+            "相关信息",
+            "utils",
+        ]
+    )
     # 按顺序复制
     files_to_copy = sorted(files_to_copy)
     # 复制文件与目录过去
@@ -73,17 +74,20 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     logger.info(color("bold_yellow") + "清除一些无需发布的内容")
     dir_to_filenames_need_remove = {
         ".": [
-            *list(path.name for path in pathlib.Path(".").glob('requirements*.txt')),
-
+            *list(path.name for path in pathlib.Path(".").glob("requirements*.txt")),
             "config.toml.local",
-            *list(path.name for path in pathlib.Path(".").glob('config.toml.github_action*')),
+            *list(path.name for path in pathlib.Path(".").glob("config.toml.github_action*")),
         ],
         "utils": [
-            "logs", ".db", ".cached", ".first_run", ".log.filename",
-            "buy_auto_updater_users.txt", "user_monthly_pay_info.txt", "notices.txt",
-
-            *list(path.name for path in pathlib.Path("utils").glob('chrome_portable_*')),
-
+            "logs",
+            ".db",
+            ".cached",
+            ".first_run",
+            ".log.filename",
+            "buy_auto_updater_users.txt",
+            "user_monthly_pay_info.txt",
+            "notices.txt",
+            *list(path.name for path in pathlib.Path("utils").glob("chrome_portable_*")),
             "upx.exe",
         ],
     }
@@ -106,20 +110,20 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     compress_dir_with_bandizip(release_dir_name, release_7z_name, dir_src)
 
     # 额外备份一份最新的供github action 使用
-    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, 'djc_helper.7z'))
+    shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, "djc_helper.7z"))
 
     os.chdir(old_cwd)
 
 
 def main():
-    dir_src = os.path.realpath('.')
+    dir_src = os.path.realpath(".")
     dir_all_release = os.path.realpath(os.path.join("releases"))
     release_dir_name = f"DNF蚊子腿小助手_v{now_version}_by风之凌殇"
-    release_7z_name = f'{release_dir_name}.7z'
+    release_7z_name = f"{release_dir_name}.7z"
     dir_github_action_artifact = "_github_action_artifact"
 
     package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

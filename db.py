@@ -1,7 +1,6 @@
 from typing import Any, Dict, List, Tuple, Type
 
-from dao import (BuyInfo, DnfHelperChronicleExchangeList,
-                 DnfHelperChronicleUserActivityTopInfo)
+from dao import BuyInfo, DnfHelperChronicleExchangeList, DnfHelperChronicleUserActivityTopInfo
 from db_def import ConfigInterface, DBInterface
 
 # ----------------- 数据定义 -----------------
@@ -69,9 +68,7 @@ class CacheDB(DBInterface):
         self.cache = {}  # type: Dict[str, CacheInfo]
 
     def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
-        return [
-            ('cache', CacheInfo)
-        ]
+        return [("cache", CacheInfo)]
 
 
 class CacheInfo(DBInterface):
@@ -103,9 +100,7 @@ class DnfHelperChronicleUserActivityTopInfoDB(DBInterface):
         self.year_month_to_user_info = {}  # type: Dict[str, DnfHelperChronicleUserActivityTopInfo]
 
     def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
-        return [
-            ('year_month_to_user_info', DnfHelperChronicleUserActivityTopInfo)
-        ]
+        return [("year_month_to_user_info", DnfHelperChronicleUserActivityTopInfo)]
 
     def get_last_month_user_info(self) -> DnfHelperChronicleUserActivityTopInfo:
         from util import get_last_month
@@ -124,6 +119,6 @@ class DnfHelperChronicleExchangeListDB(DBInterface):
         self.exchange_list = DnfHelperChronicleExchangeList()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(DBInterface())
     print(DemoDB())

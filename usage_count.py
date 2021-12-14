@@ -18,7 +18,14 @@ LEAN_CLOUD_APP_KEY = "LAs9VtM5UtGHLksPzoLwuCvx"
 leancloud.init(LEAN_CLOUD_APP_ID, LEAN_CLOUD_APP_KEY)
 
 
-def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_google_analytics=True, ga_type=ga.GA_REPORT_TYPE_EVENT, ga_category="", ga_misc_params: dict = None):
+def increase_counter(
+    name: Any = "",
+    report_to_lean_cloud=False,
+    report_to_google_analytics=True,
+    ga_type=ga.GA_REPORT_TYPE_EVENT,
+    ga_category="",
+    ga_misc_params: dict = None,
+):
     name = str(name)
 
     if name == "":
@@ -41,7 +48,7 @@ def increase_counter(name: Any = "", report_to_lean_cloud=False, report_to_googl
 def increase_counter_sync_lean_cloud(name: str):
     logger.debug(f"report to lean cloud, name = {name}")
     for counter in get_counters(name):
-        counter.increment('count')
+        counter.increment("count")
         counter.save()
 
 
@@ -53,7 +60,7 @@ def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category:
     if ga_type == ga.GA_REPORT_TYPE_EVENT:
         if ga_category == "":
             # 如果ga_category为空，则尝试从name中解析，假设name中以/分隔的第一个部分作为ga_category
-            parts = name.split('/', 1)
+            parts = name.split("/", 1)
             if len(parts) == 2:
                 ga_category, name = parts
             else:
@@ -81,15 +88,15 @@ def get_counters(name):
 
 @try_except(show_exception_info=False, return_val_on_except=0)
 def get_count(name, time_period):
-    return get_counter(name, time_period).get('count', 0)
+    return get_counter(name, time_period).get("count", 0)
 
 
 @try_except(show_exception_info=False, return_val_on_except=0)
 def get_record_count_name_start_with(name_start_with, time_period):
     CounterClass = leancloud.Object.extend("CounterClass")
     query = CounterClass.query
-    query.startswith('name', name_start_with)
-    query.equal_to('time_period', time_period)
+    query.startswith("name", name_start_with)
+    query.equal_to("time_period", time_period)
     return query.count()
 
 
@@ -99,8 +106,8 @@ def get_counter(name, time_period):
     """
     CounterClass = leancloud.Object.extend("CounterClass")
     query = CounterClass.query
-    query.equal_to('name', name)
-    query.equal_to('time_period', time_period)
+    query.equal_to("name", name)
+    query.equal_to("time_period", time_period)
     counters = query.find()
     if len(counters) != 0:
         # 若已存在，则返回现有实例
@@ -108,9 +115,9 @@ def get_counter(name, time_period):
 
     # 否则需要创建这个counter
     counter = CounterClass()  # type: leancloud.Object
-    counter.set('name', name)
-    counter.set('time_period', time_period)
-    counter.set('count', 0)
+    counter.set("name", name)
+    counter.set("time_period", time_period)
+    counter.set("count", 0)
     counter.save()
     return counter
 
@@ -126,5 +133,5 @@ def test():
     os.system("PAUSE")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

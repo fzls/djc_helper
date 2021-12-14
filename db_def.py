@@ -30,10 +30,12 @@ class DBInterface(ConfigInterface):
 
     def get_update_at(self) -> datetime.datetime:
         from util import parse_time
+
         return parse_time(self._update_at, self.time_cmt_millseconds)
 
     def set_update_at(self):
         from util import format_now
+
         self._update_at = format_now(self.time_cmt_millseconds)
 
     def get_version(self) -> str:
@@ -56,10 +58,13 @@ class DBInterface(ConfigInterface):
             try:
                 self.load_from_json_file(db_file)
             except Exception as e:
-                logger.error(f"读取数据库失败，将重置该数据库 context={self.context} db_type_name={self.db_type_name} db_file={db_file}", exc_info=e)
+                logger.error(
+                    f"读取数据库失败，将重置该数据库 context={self.context} db_type_name={self.db_type_name} db_file={db_file}",
+                    exc_info=e,
+                )
                 self.save()
 
-                with open(db_file, encoding='utf-8') as f:
+                with open(db_file, encoding="utf-8") as f:
                     old_content = f.read()
                 logger.debug(f"old_content={old_content}")
 
@@ -188,6 +193,6 @@ def test_filepath_db():
     print(filepath_db.prepare_env_and_get_db_filepath())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # test()
     test_filepath_db()

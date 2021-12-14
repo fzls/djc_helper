@@ -122,7 +122,8 @@ def show_tip_on_first_run(first_run_tip_name, title, tips, loginfo, show_count=1
         message_box(tips, _title)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from config import config
+
     check_first_run_async(config())
     input("按enter结束测试")

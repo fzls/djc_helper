@@ -12,9 +12,9 @@ def getACSRFTokenForAMS(skey):
     skeyBytes = skey.encode()
     token = init_token_value
     for byte in skeyBytes:
-        token += byte + (token << 5 & 0x7fffffff)
+        token += byte + (token << 5 & 0x7FFFFFFF)
 
-    return token & 0x7fffffff
+    return token & 0x7FFFFFFF
 
 
 # AES/ECB/PKCS5Padding

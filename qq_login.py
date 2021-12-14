@@ -12,8 +12,7 @@ from urllib.parse import quote_plus, unquote_plus
 
 import win32con
 from selenium import webdriver
-from selenium.common.exceptions import (StaleElementReferenceException,
-                                        TimeoutException)
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -28,22 +27,43 @@ from config import AccountConfig, CommonConfig, config, load_config
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
-from exceptions_def import (GithubActionLoginException,
-                            SameAccountTryLoginAtMultipleThreadsException)
+from exceptions_def import GithubActionLoginException, SameAccountTryLoginAtMultipleThreadsException
 from first_run import is_first_run_in
 from log import color, logger
 from upload_lanzouyun import Uploader
 from urls import get_act_url
-from util import (async_message_box, count_down, get_screen_size,
-                  is_run_in_github_action, is_windows, pause_and_exit,
-                  range_from_one, show_head_line, truncate, try_except,
-                  use_by_myself)
+from util import (
+    async_message_box,
+    count_down,
+    get_screen_size,
+    is_run_in_github_action,
+    is_windows,
+    pause_and_exit,
+    range_from_one,
+    show_head_line,
+    truncate,
+    try_except,
+    use_by_myself,
+)
 from version import now_version
 
 
 class LoginResult(ConfigInterface):
-    def __init__(self, uin="", skey="", openid="", p_skey="", vuserid="", qc_openid="", qc_k="",
-                 apps_p_skey="", xinyue_openid="", xinyue_access_token="", qc_access_token="", qc_nickname=""):
+    def __init__(
+        self,
+        uin="",
+        skey="",
+        openid="",
+        p_skey="",
+        vuserid="",
+        qc_openid="",
+        qc_k="",
+        apps_p_skey="",
+        xinyue_openid="",
+        xinyue_access_token="",
+        qc_access_token="",
+        qc_nickname="",
+    ):
         super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
@@ -68,7 +88,7 @@ class LoginResult(ConfigInterface):
         self.guanjia_skey_version = 0
 
 
-class QQLogin():
+class QQLogin:
     login_type_auto_login = "账密自动登录"
     login_type_qr_login = "扫码登录"
 
@@ -128,13 +148,18 @@ class QQLogin():
         self.time_start_login = datetime.datetime.now()
 
         self.screen_width, self.screen_height = get_screen_size()
-        col_size, row_size = round(self.screen_width / self.default_window_width), round(self.screen_height / self.default_window_height)
+        col_size, row_size = round(self.screen_width / self.default_window_width), round(
+            self.screen_height / self.default_window_height
+        )
         self.window_position_x = self.default_window_width * ((window_index - 1) % col_size)
         self.window_position_y = self.default_window_height * (((window_index - 1) // col_size) % row_size)
 
     def prepare_chrome(self, ctx: str, login_type: str, login_url: str):
-        logger.info(color("fg_bold_cyan") + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
-                                            f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})")
+        logger.info(
+            color("fg_bold_cyan")
+            + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
+            f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})"
+        )
         logger.info(color("bold_green") + f"{self.name} {ctx} 登录链接为: {login_url}")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
@@ -154,7 +179,11 @@ class QQLogin():
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
                 options = Options()
                 self.append_common_options(options, login_type, login_url)
-                self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), desired_capabilities=caps, options=options)
+                self.driver = webdriver.Chrome(
+                    service=Service(executable_path=self.chrome_driver_executable_path()),
+                    desired_capabilities=caps,
+                    options=options,
+                )
                 logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
                 inited = True
         except Exception:
@@ -191,31 +220,44 @@ class QQLogin():
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                     "------- 已经说得如此明白，如果还有人进群问，将直接踢出群聊 -------\n"
                 )
-                async_message_box(msg, f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版", icon=win32con.MB_ICONERROR, open_url="https://fzls.lanzouo.com/s/djc-tools")
+                async_message_box(
+                    msg,
+                    f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版",
+                    icon=win32con.MB_ICONERROR,
+                    open_url="https://fzls.lanzouo.com/s/djc-tools",
+                )
                 pause_and_exit(-1)
 
             # 然后使用本地的chrome来初始化driver对象
             options = Options()
             options.binary_location = self.chrome_binary_location()
-            options.add_argument('--no-sandbox')
-            options.add_argument('--no-default-browser-check')
-            options.add_argument('--no-first-run')
+            options.add_argument("--no-sandbox")
+            options.add_argument("--no-default-browser-check")
+            options.add_argument("--no-first-run")
             self.append_common_options(options, login_type, login_url)
 
-            self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), desired_capabilities=caps, options=options)
+            self.driver = webdriver.Chrome(
+                service=Service(executable_path=self.chrome_driver_executable_path()),
+                desired_capabilities=caps,
+                options=options,
+            )
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
     def prepare_chrome_linux(self, caps: Dict[str, str], login_type: str, login_url: str):
         # linux下只尝试使用系统安装的chrome
         options = Options()
         options.binary_location = self.chrome_binary_location_linux()
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--no-default-browser-check')
-        options.add_argument('--no-first-run')
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-default-browser-check")
+        options.add_argument("--no-first-run")
         self.append_common_options(options, login_type, login_url)
 
-        self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path_linux()), desired_capabilities=caps, options=options)
+        self.driver = webdriver.Chrome(
+            service=Service(executable_path=self.chrome_driver_executable_path_linux()),
+            desired_capabilities=caps,
+            options=options,
+        )
         logger.info(color("bold_yellow") + f"{self.name} Linux环境下使用自带chrome")
 
     def append_common_options(self, options: Options, login_type: str, login_url: str):
@@ -226,10 +268,10 @@ class QQLogin():
         options.add_argument("--mute-audio")
         if not self.cfg._debug_show_chrome_logs:
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
-            selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+            selenium_logger = logging.getLogger("selenium.webdriver.remote.remote_connection")
             selenium_logger.setLevel(logging.WARNING)
             # 使用Selenium期间将urllib的日志关闭
-            urllib_logger = logging.getLogger('urllib3.connectionpool')
+            urllib_logger = logging.getLogger("urllib3.connectionpool")
             urllib_logger.setLevel(logging.WARNING)
         if self.cfg.run_in_headless_mode:
             if login_type == self.login_type_auto_login:
@@ -252,7 +294,7 @@ class QQLogin():
             threading.Thread(target=self.driver.quit, daemon=True).start()
 
         # 使用Selenium结束将日志级别改回去
-        urllib_logger = logging.getLogger('urllib3.connectionpool')
+        urllib_logger = logging.getLogger("urllib3.connectionpool")
         urllib_logger.setLevel(logger.level)
 
     @try_except(extra_msg="自动下载缺失的dlc失败，请根据上面打印的提示日志去操作~")
@@ -270,7 +312,10 @@ class QQLogin():
             self.check_and_download_chrome_ahead_linux()
 
     def check_and_download_chrome_ahead_windows(self):
-        logger.info(color("bold_yellow") + "如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools")
+        logger.info(
+            color("bold_yellow")
+            + "如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools"
+        )
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
         chrome_root_directory = self.chrome_root_directory()
@@ -279,7 +324,9 @@ class QQLogin():
         if not os.path.isfile(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
             uploader = Uploader()
-            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory)
+            uploader.download_file_in_folder(
+                uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory
+            )
 
         options = Options()
         options.headless = True
@@ -287,7 +334,9 @@ class QQLogin():
         if not self.cfg.force_use_portable_chrome:
             try:
                 logger.info("检查系统自带的chrome是否可用")
-                self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
+                self.driver = webdriver.Chrome(
+                    service=Service(executable_path=self.chrome_driver_executable_path()), options=options
+                )
                 self.driver.quit()
                 return
             except Exception:
@@ -311,10 +360,12 @@ class QQLogin():
         try:
             options.binary_location = self.chrome_binary_location()
             # you may need some other options
-            options.add_argument('--no-sandbox')
-            options.add_argument('--no-default-browser-check')
-            options.add_argument('--no-first-run')
-            self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
+            options.add_argument("--no-sandbox")
+            options.add_argument("--no-default-browser-check")
+            options.add_argument("--no-first-run")
+            self.driver = webdriver.Chrome(
+                service=Service(executable_path=self.chrome_driver_executable_path()), options=options
+            )
             self.driver.quit()
             return
         except Exception:
@@ -323,8 +374,20 @@ class QQLogin():
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
         uploader = Uploader()
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory, cache_max_seconds=0, download_only_if_server_version_is_newer=False)
-        uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory, cache_max_seconds=0, download_only_if_server_version_is_newer=False)
+        uploader.download_file_in_folder(
+            uploader.folder_djc_helper_tools,
+            chrome_driver_exe_name,
+            chrome_root_directory,
+            cache_max_seconds=0,
+            download_only_if_server_version_is_newer=False,
+        )
+        uploader.download_file_in_folder(
+            uploader.folder_djc_helper_tools,
+            zip_name,
+            chrome_root_directory,
+            cache_max_seconds=0,
+            download_only_if_server_version_is_newer=False,
+        )
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
         decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
@@ -334,27 +397,36 @@ class QQLogin():
 
         if not os.path.exists(self.chrome_binary_location_linux()):
             ok = False
-            logger.info(color("bold_red") + (
-                f"未在发现chrome，请按照下面这个推文的步骤去下载安装最新稳定版本chrome到该位置\n"
-                f"预期位置: {self.chrome_binary_location_linux()}\n"
-                f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
-            ))
+            logger.info(
+                color("bold_red")
+                + (
+                    f"未在发现chrome，请按照下面这个推文的步骤去下载安装最新稳定版本chrome到该位置\n"
+                    f"预期位置: {self.chrome_binary_location_linux()}\n"
+                    f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
+                )
+            )
 
         if not os.path.exists(self.chrome_driver_executable_path_linux()):
             ok = False
-            logger.info(color("bold_red") + (
-                f"未在发现chromedriver，请按照下面这个推文的步骤去下载安装最新稳定版本chromedriver到该位置（需要确保与安装的chrome版本匹配）\n"
-                f"预期位置: {self.chrome_driver_executable_path_linux()}\n"
-                f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
-            ))
+            logger.info(
+                color("bold_red")
+                + (
+                    f"未在发现chromedriver，请按照下面这个推文的步骤去下载安装最新稳定版本chromedriver到该位置（需要确保与安装的chrome版本匹配）\n"
+                    f"预期位置: {self.chrome_driver_executable_path_linux()}\n"
+                    f"安装教程: https://blog.csdn.net/weixin_42649856/article/details/103275162 \n"
+                )
+            )
 
         if not ok:
-            logger.info(color("bold_yellow") + (
-                "当前运行在非windows的环境，检测到chrome和对应driver未全部安装，请按照上述提示完成安装后重新运行~\n"
-                "或者根据你的系统直接使用或参考以下脚本之一来完成一键下载安装\n"
-                "1. _ubuntu_download_and_install_chrome_and_driver.sh \n"
-                "2. _centos_download_and_install_chrome_and_driver.sh \n"
-            ))
+            logger.info(
+                color("bold_yellow")
+                + (
+                    "当前运行在非windows的环境，检测到chrome和对应driver未全部安装，请按照上述提示完成安装后重新运行~\n"
+                    "或者根据你的系统直接使用或参考以下脚本之一来完成一键下载安装\n"
+                    "1. _ubuntu_download_and_install_chrome_and_driver.sh \n"
+                    "2. _centos_download_and_install_chrome_and_driver.sh \n"
+                )
+            )
             pause_and_exit(-1)
 
     def chrome_driver_executable_path(self):
@@ -367,7 +439,9 @@ class QQLogin():
         return os.path.realpath(f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}")
 
     def chrome_binary_location(self):
-        return os.path.realpath(f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}/chrome.exe")
+        return os.path.realpath(
+            f"{self.chrome_root_directory()}/chrome_portable_{self.get_chrome_major_version()}/chrome.exe"
+        )
 
     def chrome_installer_name(self):
         return f"Chrome_{self.get_chrome_major_version()}.(小版本号)_普通安装包_非便携版.exe"
@@ -405,7 +479,9 @@ class QQLogin():
             # 切换到自动登录界面
             logger.info(f"{name} 等待#switcher_plogin加载完毕")
             time.sleep(self.cfg.login.open_url_wait_time)
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, 'switcher_plogin')))
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
+            )
 
             # 选择密码登录
             self.driver.find_element(By.ID, "switcher_plogin").click()
@@ -426,7 +502,9 @@ class QQLogin():
             # 尝试自动处理验证码
             self.try_auto_resolve_captcha()
 
-        return self._login(self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode)
+        return self._login(
+            self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode
+        )
 
     def qr_login(self, login_mode="normal", name=""):
         """
@@ -447,7 +525,9 @@ class QQLogin():
             raise SameAccountTryLoginAtMultipleThreadsException
 
         login_retry_key = "login_retry_key"
-        login_retry_data, retry_timeouts = self.get_retry_data(login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time)
+        login_retry_data, retry_timeouts = self.get_retry_data(
+            login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time
+        )
 
         for idx in range_from_one(self.cfg.login.max_retry_count):
             self.login_mode = login_mode
@@ -507,7 +587,11 @@ class QQLogin():
 
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")
-                logger.info(f"[{login_result}] " + color("bold_yellow") + f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次 {ctx} 共耗时为 {used_time}")
+                logger.info(
+                    f"[{login_result}] "
+                    + color("bold_yellow")
+                    + f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次 {ctx} 共耗时为 {used_time}"
+                )
                 logger.info("")
                 self.destroy_chrome()
 
@@ -532,19 +616,27 @@ class QQLogin():
                     # 登陆成功
                     if idx > 1:
                         # 第idx-1次的重试成功了，尝试更新历史数据
-                        self.update_retry_data(login_retry_key, retry_timeouts[idx - 2], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
+                        self.update_retry_data(
+                            login_retry_key,
+                            retry_timeouts[idx - 2],
+                            self.cfg.login.recommended_retry_wait_time_change_rate,
+                            self.name,
+                        )
 
         # 能走到这里说明登录失败了，大概率是网络不行
-        logger.warning(color("bold_yellow") + (
-            f"已经尝试登录 {self.name} {self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题(v{now_version})\n"
-            "建议依次尝试下列措施\n"
-            "1. 重新打开程序\n"
-            "2. 重启电脑\n"
-            "3. 更换dns，如谷歌、阿里、腾讯、百度的dns，具体更换方法请百度\n"
-            "4. 重装网卡驱动\n"
-            "5. 换个网络环境\n"
-            "6. 换台电脑\n"
-        ))
+        logger.warning(
+            color("bold_yellow")
+            + (
+                f"已经尝试登录 {self.name} {self.cfg.login.max_retry_count}次，均已失败，大概率是网络有问题(v{now_version})\n"
+                "建议依次尝试下列措施\n"
+                "1. 重新打开程序\n"
+                "2. 重启电脑\n"
+                "3. 更换dns，如谷歌、阿里、腾讯、百度的dns，具体更换方法请百度\n"
+                "4. 重装网卡驱动\n"
+                "5. 换个网络环境\n"
+                "6. 换台电脑\n"
+            )
+        )
         if login_mode == self.login_mode_guanjia:
             logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就去配置工具关闭管家活动的开关（不是关闭这个登录页面）~")
 
@@ -553,8 +645,7 @@ class QQLogin():
             raise GithubActionLoginException()
 
         raise Exception(
-            "网络很有可能有问题（备注：访问其他网页没问题不代表访问这个网页也没问题-。-）\n"
-            "如果是chrome版本更新后才这样，可以尝试在配置工具中设置强制使用便携版chrome，并指定chrome的版本号，如89"
+            "网络很有可能有问题（备注：访问其他网页没问题不代表访问这个网页也没问题-。-）\n" "如果是chrome版本更新后才这样，可以尝试在配置工具中设置强制使用便携版chrome，并指定chrome的版本号，如89"
         )
 
     def _login_real(self, login_type, login_action_fn=None):
@@ -570,15 +661,20 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.url_to_be(s_url)
+            )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
-                           p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"),
-                           apps_p_skey=self.get_cookie("apps_p_skey"),
-                           )
+        return LoginResult(
+            uin=self.get_cookie("uin"),
+            skey=self.get_cookie("skey"),
+            p_skey=self.get_cookie("p_skey"),
+            vuserid=self.get_cookie("vuserid"),
+            apps_p_skey=self.get_cookie("apps_p_skey"),
+        )
 
     def _login_qzone(self, login_type, login_action_fn=None):
         """
@@ -593,15 +689,20 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.url_to_be(s_url)
+            )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
-        return LoginResult(p_skey=self.get_cookie("p_skey"),
-                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), vuserid=self.get_cookie("vuserid"),
-                           apps_p_skey=self.get_cookie("apps_p_skey"),
-                           )
+        return LoginResult(
+            p_skey=self.get_cookie("p_skey"),
+            uin=self.get_cookie("uin"),
+            skey=self.get_cookie("skey"),
+            vuserid=self.get_cookie("vuserid"),
+            apps_p_skey=self.get_cookie("apps_p_skey"),
+        )
 
     def _login_club_vip(self, login_type, login_action_fn=None):
         """
@@ -616,14 +717,18 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.url_to_be(s_url)
+            )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取uin和skey
-        return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"),
-                           p_skey=self.get_cookie("p_skey"),
-                           )
+        return LoginResult(
+            uin=self.get_cookie("uin"),
+            skey=self.get_cookie("skey"),
+            p_skey=self.get_cookie("p_skey"),
+        )
 
     def _login_guanjia(self, login_type, login_action_fn=None):
         """
@@ -639,7 +744,9 @@ class QQLogin():
             self.set_window_size()
 
             logger.info("等待登录按钮#dologin出来，确保加载完成")
-            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【登录】"))
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【登录】")
+            )
 
             logger.info("等待5秒，确保加载完成")
             time.sleep(5)
@@ -649,17 +756,26 @@ class QQLogin():
 
             logger.info("等待2秒，确保#login_ifr显示出来并切换")
             time.sleep(2)
-            loginIframe = list(filter(lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property('src'), self.driver.find_elements(by=By.TAG_NAME, value="iframe")))[0]
+            loginIframe = list(
+                filter(
+                    lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property("src"),
+                    self.driver.find_elements(by=By.TAG_NAME, value="iframe"),
+                )
+            )[0]
             self.driver.switch_to.frame(loginIframe)
 
             logger.info("等待#login_ifr#ptlogin_iframe加载完毕并切换")
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
+            )
             ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待#logined的div可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【注销】"))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.text_to_be_present_in_element((By.ID, "layer72"), "【注销】")
+            )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
@@ -669,9 +785,16 @@ class QQLogin():
         user_info = GuanJiaUserInfo().auto_update_config(raw_userinfo)
 
         # 从cookie中获取uin和skey
-        return LoginResult(qc_openid=user_info.openid, qc_k=user_info.key,
-                           qc_access_token=user_info.key, qc_nickname=user_info.nickname,
-                           uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"), vuserid=self.get_cookie("vuserid"))
+        return LoginResult(
+            qc_openid=user_info.openid,
+            qc_k=user_info.key,
+            qc_access_token=user_info.key,
+            qc_nickname=user_info.nickname,
+            uin=self.get_cookie("uin"),
+            skey=self.get_cookie("skey"),
+            p_skey=self.get_cookie("p_skey"),
+            vuserid=self.get_cookie("vuserid"),
+        )
 
     def _login_wegame(self, login_type, login_action_fn=None):
         """
@@ -686,7 +809,9 @@ class QQLogin():
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.url_to_be(s_url))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.url_to_be(s_url)
+            )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
@@ -707,7 +832,9 @@ class QQLogin():
             self.set_window_size()
 
             logger.info("等待登录按钮#login-btn出来，确保加载完成")
-            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(expected_conditions.text_to_be_present_in_element((By.ID, "login-btn"), "登录"))
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                expected_conditions.text_to_be_present_in_element((By.ID, "login-btn"), "登录")
+            )
 
             logger.info("等待5秒，确保加载完成")
             time.sleep(5)
@@ -717,25 +844,31 @@ class QQLogin():
 
             logger.info("等待2秒，确保#loginframe显示出来并切换")
             time.sleep(2)
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe")))
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe"))
+            )
             login_frame = self.driver.find_element(By.CLASS_NAME, "loginframe")
             self.driver.switch_to.frame(login_frame)
 
             logger.info("等待#loginframe#ptlogin_iframe加载完毕并切换")
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe")))
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
+            )
             ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待#btn_wxqclogin可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
-            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin")))
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin"))
+            )
 
             logger.info("等待1s，确认获取openid的请求完成")
             time.sleep(1)
 
             # 确保openid已设置
             for t in range(1, 3 + 1):
-                if self.driver.get_cookie('openid') is None:
+                if self.driver.get_cookie("openid") is None:
                     logger.info(f"第{t}/3未在心悦的cookie中找到openid，等一秒再试")
                     time.sleep(1)
                     continue
@@ -744,7 +877,11 @@ class QQLogin():
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
 
         # 从cookie中获取openid
-        return LoginResult(openid=self.get_cookie("openid"), xinyue_openid=self.get_cookie("xinyue_openid"), xinyue_access_token=self.get_cookie("xinyue_access_token"))
+        return LoginResult(
+            openid=self.get_cookie("openid"),
+            xinyue_openid=self.get_cookie("xinyue_openid"),
+            xinyue_access_token=self.get_cookie("xinyue_access_token"),
+        )
 
     def get_switch_to_login_frame_fn(self, appid, daid, s_url, style=34, theme=2):
         # 参数：appid  daid
@@ -790,7 +927,9 @@ class QQLogin():
         is_qr_login = self.login_type_qr_login in login_type
 
         short_login_retry_key = "short_login_retry_key"
-        login_retry_data, retry_timeouts = self.get_retry_data(short_login_retry_key, max_try, self.get_login_timeout(is_qr_login))
+        login_retry_data, retry_timeouts = self.get_retry_data(
+            short_login_retry_key, max_try, self.get_login_timeout(is_qr_login)
+        )
         if is_qr_login:
             # 如果是扫码登录，则每次都等待固定时长
             retry_timeouts = [self.get_login_timeout(True) for v in retry_timeouts]
@@ -807,22 +946,34 @@ class QQLogin():
                     login_action_fn()
 
                 wait_time = retry_timeouts[idx - 1]
-                logger.info(f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}")
-                WebDriverWait(self.driver, wait_time).until(expected_conditions.invisibility_of_element_located((By.ID, "login")))
+                logger.info(
+                    f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
+                )
+                WebDriverWait(self.driver, wait_time).until(
+                    expected_conditions.invisibility_of_element_located((By.ID, "login"))
+                )
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据
-                    self.update_retry_data(short_login_retry_key, retry_timeouts[idx - 1 - 1], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
+                    self.update_retry_data(
+                        short_login_retry_key,
+                        retry_timeouts[idx - 1 - 1],
+                        self.cfg.login.recommended_retry_wait_time_change_rate,
+                        self.name,
+                    )
                 break
             except Exception as e:
-                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。"
-                             + color("bold_yellow") + (
-                                 "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致。\n"
-                                 "若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题（如果一直弹这个，应该就是你的qq被判定登录环境异常，需要扫码一段时间让其自然消失才可以。）\n"
-                                 "如果上面的方法都试了，还是不行，试试关闭 网络连接的ipv6功能，也许会有作用（具体流程请百度）"
-                             ),
-                             exc_info=e)
-                if '电脑管家' in login_type:
+                logger.error(
+                    f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。"
+                    + color("bold_yellow")
+                    + (
+                        "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致。\n"
+                        "若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题（如果一直弹这个，应该就是你的qq被判定登录环境异常，需要扫码一段时间让其自然消失才可以。）\n"
+                        "如果上面的方法都试了，还是不行，试试关闭 网络连接的ipv6功能，也许会有作用（具体流程请百度）"
+                    ),
+                    exc_info=e,
+                )
+                if "电脑管家" in login_type:
                     logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就去配置工具关闭管家活动的开关（不是关闭这个登录页面）~")
                     logger.info("电脑管家模式不尝试短时间重试，直接等待下次重试")
                     break
@@ -861,24 +1012,37 @@ class QQLogin():
             retry_timeouts = [max_retry_wait_time]
         elif max_retry_count > 1:
             # 默认重试时间为按时长等分递增
-            retry_timeouts = list(idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count))
+            retry_timeouts = list(
+                idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)
+            )
             if login_retry_data.recommended_first_retry_timeout != 0:
                 # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
                 retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
                 remaining_retry_count = max_retry_count - 1
-                retry_timeouts.extend(list(idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)))
+                retry_timeouts.extend(
+                    list(
+                        idx / remaining_retry_count * max_retry_wait_time
+                        for idx in range_from_one(remaining_retry_count)
+                    )
+                )
 
         return login_retry_data, retry_timeouts
 
-    def update_retry_data(self, retry_key: str, success_timeout: int, recommended_retry_wait_time_change_rate=0.125, debug_ctx=""):
+    def update_retry_data(
+        self, retry_key: str, success_timeout: int, recommended_retry_wait_time_change_rate=0.125, debug_ctx=""
+    ):
         def cb(login_retry_data: LoginRetryDB):
             # 第idx-1次的重试成功了，尝试更新历史数据
             cr = recommended_retry_wait_time_change_rate
-            login_retry_data.recommended_first_retry_timeout = (1 - cr) * login_retry_data.recommended_first_retry_timeout + cr * success_timeout
+            login_retry_data.recommended_first_retry_timeout = (
+                1 - cr
+            ) * login_retry_data.recommended_first_retry_timeout + cr * success_timeout
             login_retry_data.history_success_timeouts.append(success_timeout)
 
             if use_by_myself():
-                logger.info(color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}")
+                logger.info(
+                    color("bold_cyan") + f"(仅我可见){debug_ctx} 本次重试等待时间为{success_timeout}，当前历史重试数据为{login_retry_data}"
+                )
 
         LoginRetryDB().with_context(retry_key).update(cb)
 
@@ -893,22 +1057,22 @@ class QQLogin():
         logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
         self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
         for _i in range(5):
-            vuserid = self.driver.get_cookie('vuserid')
+            vuserid = self.driver.get_cookie("vuserid")
             if vuserid is not None:
                 break
             time.sleep(1)
-        self.add_cookie('vuserid', self.driver.get_cookie('vuserid'))
+        self.add_cookie("vuserid", self.driver.get_cookie("vuserid"))
 
     def fetch_apps_p_skey(self):
         logger.info(f"{self.name} 跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
         self.driver.get("https://apps.game.qq.com/")
         time.sleep(1)
         for _i in range(5):
-            p_skey = self.driver.get_cookie('p_skey')
+            p_skey = self.driver.get_cookie("p_skey")
             if p_skey is not None:
                 break
             time.sleep(1)
-        self.add_cookie('apps_p_skey', self.driver.get_cookie('p_skey'))
+        self.add_cookie("apps_p_skey", self.driver.get_cookie("p_skey"))
 
     def fetch_xinyue_openid_access_token(self):
         logger.info(f"{self.name} 跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
@@ -917,19 +1081,19 @@ class QQLogin():
         for _i in range(5):
             openid, access_token = None, None
             try:
-                openid = self.driver.get_cookie('openid')
-                access_token = self.driver.get_cookie('access_token')
+                openid = self.driver.get_cookie("openid")
+                access_token = self.driver.get_cookie("access_token")
             except Exception:
                 pass
             if openid is not None and access_token is not None:
                 break
             time.sleep(1)
-        self.add_cookie('xinyue_openid', self.driver.get_cookie('openid'))
-        self.add_cookie('xinyue_access_token', self.driver.get_cookie('access_token'))
+        self.add_cookie("xinyue_openid", self.driver.get_cookie("openid"))
+        self.add_cookie("xinyue_access_token", self.driver.get_cookie("access_token"))
 
     def wait_for_IED_LOG_INFO2_QC(self):
         for _i in range(5):
-            userinfo = self.driver.get_cookie('uInfo101478239')
+            userinfo = self.driver.get_cookie("uInfo101478239")
             if userinfo is not None:
                 break
             time.sleep(1)
@@ -957,24 +1121,34 @@ class QQLogin():
 
         account_db = CaptchaDB().with_context(self.name).load()
         try:
-            WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe")))
+            WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe"))
+            )
             tcaptcha_iframe = self.driver.find_element(By.ID, "tcaptcha_iframe")
             self.driver.switch_to.frame(tcaptcha_iframe)
 
-            logger.info(color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）")
+            logger.info(
+                color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）"
+            )
 
             try:
-                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slide")))
-                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "slideBlock")))
-                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_drag_button")))
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                    expected_conditions.visibility_of_element_located((By.ID, "slide"))
+                )
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                    expected_conditions.visibility_of_element_located((By.ID, "slideBlock"))
+                )
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                    expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_drag_button"))
+                )
             except Exception as e:
                 logger.warning(f"{self.name} 等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
 
-            drag_tarck_width = self.driver.find_element(By.ID, 'slide').size['width'] or 280  # 进度条轨道宽度
-            drag_block_width = self.driver.find_element(By.ID, 'slideBlock').size['width'] or 56  # 缺失方块宽度
+            drag_tarck_width = self.driver.find_element(By.ID, "slide").size["width"] or 280  # 进度条轨道宽度
+            drag_block_width = self.driver.find_element(By.ID, "slideBlock").size["width"] or 56  # 缺失方块宽度
             delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
 
-            drag_button = self.driver.find_element(By.ID, 'tcaptcha_drag_button')  # 进度条按钮
+            drag_button = self.driver.find_element(By.ID, "tcaptcha_drag_button")  # 进度条按钮
 
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []
@@ -1020,7 +1194,9 @@ class QQLogin():
                 captcha_try_count += 1
                 success_xoffset = xoffset
                 distance_rate = (init_offset - xoffset) / drag_block_width
-                logger.info(f"{self.name} 尝试第{captcha_try_count}次拖拽验证码，本次尝试偏移量为{xoffset}，距离右侧初始尝试位置({init_offset})距离相当于{distance_rate:.2f}个滑块宽度(若失败将等待{wait_time}秒)")
+                logger.info(
+                    f"{self.name} 尝试第{captcha_try_count}次拖拽验证码，本次尝试偏移量为{xoffset}，距离右侧初始尝试位置({init_offset})距离相当于{distance_rate:.2f}个滑块宽度(若失败将等待{wait_time}秒)"
+                )
 
                 time.sleep(wait_time)
 
@@ -1040,7 +1216,7 @@ class QQLogin():
     def add_cookies(self, cookies):
         to_add = []
         for cookie in cookies:
-            if self.get_cookie(cookie['name']) == "":
+            if self.get_cookie(cookie["name"]) == "":
                 to_add.append(cookie)
 
         self.cookies.extend(to_add)
@@ -1049,23 +1225,23 @@ class QQLogin():
         if cookie is None:
             return
 
-        cookie['name'] = new_name
+        cookie["name"] = new_name
         self.cookies.append(cookie)
         logger.warning(f"{self.name} add_cookie {cookie['domain']} {cookie['name']} {cookie['value']}")
 
     def get_cookie(self, name):
         for cookie in self.cookies:
-            if cookie['name'] == name:
-                return cookie['value']
-        return ''
+            if cookie["name"] == name:
+                return cookie["value"]
+        return ""
 
     def print_cookie(self):
         for cookie in self.cookies:
-            domain, name, value = cookie['domain'], cookie['name'], cookie['value']
+            domain, name, value = cookie["domain"], cookie["name"], cookie["value"]
             logger.debug(f"{domain:20s} {name:20s} {value:20s} {cookie}")
 
     def open_url_on_start(self, url):
-        chrome_default_url = 'data:,'
+        chrome_default_url = "data:,"
         while True:
             self.driver.get(url)
             # 等待一会，确保地址栏url变量已变更
@@ -1141,6 +1317,7 @@ def test():
     else:
         # 并行测试
         from multiprocessing import Pool, cpu_count, freeze_support
+
         freeze_support()
 
         pool_size = min(cpu_count(), len(test_cases))
@@ -1151,8 +1328,12 @@ def test():
     show_head_line(f"全部{total}个测试运行完毕", color("bold_green"))
 
 
-def do_login(login_mode: str, login_type: str, window_index: int, total, common_cfg: CommonConfig, account: AccountConfig):
-    show_head_line(f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode}", color("bold_green"))
+def do_login(
+    login_mode: str, login_type: str, window_index: int, total, common_cfg: CommonConfig, account: AccountConfig
+):
+    show_head_line(
+        f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode}", color("bold_green")
+    )
     acc = account.account_info
     ql = QQLogin(common_cfg, window_index=window_index)
 
@@ -1161,8 +1342,11 @@ def do_login(login_mode: str, login_type: str, window_index: int, total, common_
     else:
         lr = ql.qr_login(login_mode=login_mode, name=account.name)
 
-    logger.info(color("bold_green") + f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode} 的结果为： {lr}")
+    logger.info(
+        color("bold_green")
+        + f"用例({window_index}/{total}): 测试 {account.name} 使用 {login_type} 来登录 {login_mode} 的结果为： {lr}"
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

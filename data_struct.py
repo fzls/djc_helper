@@ -36,14 +36,14 @@ class AESCipher:
     def decrypt(self, enc):
         # 通过key值，使用ECB模式进行解密
         cipher = AES.new(self.key, AES.MODE_ECB)
-        return self.unpad(cipher.decrypt(enc)).decode('utf8')
+        return self.unpad(cipher.decrypt(enc)).decode("utf8")
 
     # Padding for the input string --not related to encryption itself.
     def pad(self, s):
         return s + (self.BLOCK_SIZE - len(s) % self.BLOCK_SIZE) * chr(self.BLOCK_SIZE - len(s) % self.BLOCK_SIZE)
 
     def unpad(self, s):
-        return s[:-ord(s[len(s) - 1:])]
+        return s[: -ord(s[len(s) - 1 :])]
 
 
 # 如果配置的值是dict，可以用ConfigInterface自行实现对应结构，将会自动解析
@@ -77,7 +77,7 @@ class ConfigInterface(metaclass=ABCMeta):
         return self
 
     def load_from_json_file(self, filepath: str):
-        with open(filepath, encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             raw_config = json.load(f)
 
         if type(raw_config) != dict:
@@ -87,7 +87,7 @@ class ConfigInterface(metaclass=ABCMeta):
         return self.auto_update_config(raw_config)
 
     def save_to_json_file(self, filepath: str, ensure_ascii=False, indent=2):
-        with open(filepath, 'w', encoding='utf-8') as save_file:
+        with open(filepath, "w", encoding="utf-8") as save_file:
             json.dump(to_raw_type(self), save_file, ensure_ascii=ensure_ascii, indent=indent)
 
     def fill_array_fields(self, raw_config: dict, fields_to_fill: list[tuple[str, type[ConfigInterface]]]):
@@ -97,7 +97,9 @@ class ConfigInterface(metaclass=ABCMeta):
                     setattr(self, field_name, [])
                     continue
                 if type(raw_config[field_name]) is list:
-                    setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
+                    setattr(
+                        self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]]
+                    )
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return []
@@ -109,7 +111,11 @@ class ConfigInterface(metaclass=ABCMeta):
                     setattr(self, field_name, {})
                     continue
                 if type(raw_config[field_name]) is dict:
-                    setattr(self, field_name, {key: field_type().auto_update_config(val) for key, val in raw_config[field_name].items()})
+                    setattr(
+                        self,
+                        field_name,
+                        {key: field_type().auto_update_config(val) for key, val in raw_config[field_name].items()},
+                    )
 
     def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return []
@@ -152,14 +158,10 @@ def test():
             self.dict_str_sub_config = {}  # type: Dict[str, TestSubConfig]
 
         def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
-            return [
-                ('list_sub_config', TestSubConfig)
-            ]
+            return [("list_sub_config", TestSubConfig)]
 
         def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
-            return [
-                ('dict_str_sub_config', TestSubConfig)
-            ]
+            return [("dict_str_sub_config", TestSubConfig)]
 
     test_raw_config = {
         "int_val": 1,
@@ -180,7 +182,7 @@ def test():
             "1": {"val": 1},
             "2": {"val": 2},
             "3": {"val": 3},
-        }
+        },
     }
 
     test_config = TestConfig().auto_update_config(test_raw_config)
@@ -189,5 +191,5 @@ def test():
     print(test_config)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

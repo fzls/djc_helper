@@ -12,7 +12,7 @@ class UserAgent(Enum):
     XINYUE = "tgclub/5.7.6.81(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(UserAgent.MOBILE_QQ.name)
     print(UserAgent.MOBILE_QQ.value)
     print(repr(UserAgent.MOBILE_QQ))

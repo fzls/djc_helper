@@ -11,9 +11,14 @@ from _package import package
 from _push_github import push_github
 from log import color, logger
 from upload_lanzouyun import Uploader
-from util import (change_console_window_mode_async, count_down,
-                  make_sure_dir_exists, pause_and_exit, range_from_one,
-                  show_head_line)
+from util import (
+    change_console_window_mode_async,
+    count_down,
+    make_sure_dir_exists,
+    pause_and_exit,
+    range_from_one,
+    show_head_line,
+)
 from version import now_version
 
 
@@ -31,7 +36,7 @@ def release():
     # 最大化窗口
     change_console_window_mode_async(disable_min_console=True)
 
-    version = 'v' + version
+    version = "v" + version
 
     run_start_time = datetime.now()
     show_head_line(f"开始发布版本 {version}", color("bold_yellow"))
@@ -40,10 +45,10 @@ def release():
     os.system(set_title_cmd)
 
     # 先声明一些需要用到的目录的地址
-    dir_src = os.path.realpath('.')
+    dir_src = os.path.realpath(".")
     dir_all_release = os.path.realpath(os.path.join("releases"))
     release_dir_name = f"DNF蚊子腿小助手_{version}_by风之凌殇"
-    release_7z_name = f'{release_dir_name}.7z'
+    release_7z_name = f"{release_dir_name}.7z"
     dir_github_action_artifact = "_github_action_artifact"
 
     # ---------------构建
@@ -70,7 +75,13 @@ def release():
 
     # ---------------获取补丁地址（分开方便调试）
     os.chdir(dir_all_release)
-    patch_file_name = create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact, get_final_patch_path_only=True)
+    patch_file_name = create_patch(
+        dir_src,
+        dir_all_release,
+        create_patch_for_latest_n_version,
+        dir_github_action_artifact,
+        get_final_patch_path_only=True,
+    )
 
     # ---------------标记新版本
     show_head_line("提交版本和版本变更说明，并同步到docs目录，用于生成github pages", color("bold_yellow"))
@@ -94,18 +105,24 @@ def release():
         realpath = os.path.realpath
 
         upload_info_list = [
-            (uploader.folder_djc_helper, [
-                (realpath(release_7z_name), uploader.history_version_prefix),
-                (path_in_src("utils/auto_updater.exe"), ""),
-                (path_in_src("使用教程/使用文档.docx"), ""),
-                (path_in_src("使用教程/视频教程.txt"), ""),
-                (path_in_src("付费指引/付费指引.docx"), ""),
-                (path_in_src("utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt"), ""),
-                (realpath(patch_file_name), uploader.history_patches_prefix),
-            ]),
-            (uploader.folder_dnf_calc, [
-                (realpath(release_7z_name), uploader.history_version_prefix),
-            ])
+            (
+                uploader.folder_djc_helper,
+                [
+                    (realpath(release_7z_name), uploader.history_version_prefix),
+                    (path_in_src("utils/auto_updater.exe"), ""),
+                    (path_in_src("使用教程/使用文档.docx"), ""),
+                    (path_in_src("使用教程/视频教程.txt"), ""),
+                    (path_in_src("付费指引/付费指引.docx"), ""),
+                    (path_in_src("utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt"), ""),
+                    (realpath(patch_file_name), uploader.history_patches_prefix),
+                ],
+            ),
+            (
+                uploader.folder_dnf_calc,
+                [
+                    (realpath(release_7z_name), uploader.history_version_prefix),
+                ],
+            ),
         ]
 
         logger.info(color("bold_green") + "具体上传列表如下：")
@@ -114,14 +131,16 @@ def release():
             for local_filepath, _history_file_prefix in upload_list:
                 logger.info(f"\t\t{local_filepath}")
 
-            logger.info('\n')
+            logger.info("\n")
 
         for upload_folder, upload_list in upload_info_list:
             for local_filepath, history_file_prefix in reversed(upload_list):
                 # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
                 total_try_count = 1
                 for try_index in range_from_one(total_try_count):
-                    upload_ok = uploader.upload_to_lanzouyun(local_filepath, upload_folder, history_file_prefix=history_file_prefix)
+                    upload_ok = uploader.upload_to_lanzouyun(
+                        local_filepath, upload_folder, history_file_prefix=history_file_prefix
+                    )
                     if upload_ok:
                         break
 
@@ -139,12 +158,12 @@ def release():
     push_github(version)
 
     # ---------------结束
-    logger.info('+' * 40)
+    logger.info("+" * 40)
     logger.info(color("bold_yellow") + f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请检查上传至蓝奏云流程是否OK")
-    logger.info('+' * 40)
+    logger.info("+" * 40)
 
     os.system("PAUSE")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     release()

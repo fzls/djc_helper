@@ -42,7 +42,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
             "imageformats/qsvg.dll",
             "imageformats/qwebp.dll",
             "platforms/qwebgl.dll",
-        ]
+        ],
     }
     logger.info(color("bold_green") + f"开始编译前先尝试移动这些确定用不到的库文件到临时目录 {temp_remove_file_dir}，从而尽可能减少最终编译的大小")
     for parent_directory, file_or_directory_name_list in dep_files_to_remove_during_build.items():
@@ -63,7 +63,14 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", ["PyQt5"], []),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
-        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", "utils/icons/ark_lottery_special_version.ico", ".", ["PyQt5"], []),
+        (
+            "ark_lottery_special_version.py",
+            "DNF蚊子腿小助手_集卡特别版.exe",
+            "utils/icons/ark_lottery_special_version.ico",
+            ".",
+            ["PyQt5"],
+            [],
+        ),
         ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "utils/icons/config_ui.ico", ".", [], ["--noconsole"]),
     ]
 
@@ -75,16 +82,17 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
 
         cmd_build = [
             pyinstaller_path,
-            '--name', exe_name,
-            '-F',
+            "--name",
+            exe_name,
+            "-F",
             src_path,
         ]
         if icon_path != "":
-            cmd_build.extend(['--icon', icon_path])
+            cmd_build.extend(["--icon", icon_path])
         for module in exclude_modules:
-            cmd_build.extend(['--exclude-module', module])
+            cmd_build.extend(["--exclude-module", module])
         if use_upx:
-            cmd_build.extend(['--upx-dir', "utils"])
+            cmd_build.extend(["--upx-dir", "utils"])
         cmd_build.extend(extra_args)
 
         logger.info(f"{prefix} 开始编译 {exe_name}，命令为：{' '.join(cmd_build)}")
@@ -128,14 +136,14 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--disable_douban", action='store_true')
-    parser.add_argument("--enable_proxy", action='store_true')
-    parser.add_argument("--disable_upx", action='store_true')
+    parser.add_argument("--disable_douban", action="store_true")
+    parser.add_argument("--enable_proxy", action="store_true")
+    parser.add_argument("--disable_upx", action="store_true")
     args = parser.parse_args()
 
     return args
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_args()
     build(args.disable_douban, args.enable_proxy, not args.disable_upx)

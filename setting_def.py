@@ -45,7 +45,7 @@ class ArkLotteryCardGroup(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('cardList', ArkLotteryCard),
+            ("cardList", ArkLotteryCard),
         ]
 
 
@@ -110,7 +110,7 @@ class DnfAreaServerListConfig(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('opt_data_array', DnfServerConfig),
+            ("opt_data_array", DnfServerConfig),
         ]
 
 

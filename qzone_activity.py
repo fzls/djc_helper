@@ -2,6 +2,7 @@ import datetime
 import json
 import random
 import time
+from typing import Optional
 
 import requests
 
@@ -24,13 +25,13 @@ class QzoneActivity:
         :type lr: LoginResult
         """
         # 即使没绑定dnf角色，也放行，方便领取分享奖励
-        roleinfo = None
+        roleinfo: Optional[RoleInfo] = None
         try:
             if "dnf" in djc_helper.bizcode_2_bind_role_map:
                 roleinfo = djc_helper.bizcode_2_bind_role_map["dnf"].sRoleInfo
         except Exception:
             pass
-        self.roleinfo: RoleInfo = roleinfo
+        self.roleinfo: Optional[RoleInfo] = roleinfo
 
         self.djc_helper = djc_helper
         self.lr = lr

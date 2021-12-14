@@ -159,6 +159,7 @@ def try_request(
                 time.sleep(retryCfg.retry_wait_time)
 
     logger.error(f"重试{retryCfg.max_retry_count}次后仍失败")
+    return None
 
 
 # 每次处理完备份一次最后的报错，方便出错时打印出来~
@@ -171,6 +172,9 @@ def set_last_response_info(status_code: int, reason: str, text: str):
     last_response_info.status_code = status_code
     last_response_info.reason = reason
     last_response_info.text = text
+
+
+last_process_result: Optional[dict] = None
 
 
 def process_result(

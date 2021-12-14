@@ -1072,7 +1072,7 @@ class ConfigUi(QFrame):
         self.common = CommonConfigUi(cfg.common)
         self.tabs.addTab(self.common, "公共配置")
 
-    def create_majieluo_tab(self, cfg: config):
+    def create_majieluo_tab(self, cfg: Config):
         self.majieluo = MajieluoConfigUi(cfg.common.majieluo, self)
         self.tabs.addTab(self.majieluo, "马杰洛小工具")
 
@@ -1781,8 +1781,10 @@ class AccountConfigUi(QWidget):
 
         self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
         self.xinyue_exchange_items = {}
-        for exchange_item in cfg.xinyue_operations:
-            self.xinyue_exchange_items[exchange_item.unique_key()] = XinyueOperationConfigUi(form_layout, exchange_item)
+        for xinyue_exchange_item in cfg.xinyue_operations:
+            self.xinyue_exchange_items[xinyue_exchange_item.unique_key()] = XinyueOperationConfigUi(
+                form_layout, xinyue_exchange_item
+            )
 
         # -------------- 区域：心悦app --------------
         (
@@ -1940,12 +1942,12 @@ class AccountConfigUi(QWidget):
             exchange_item.update_config(item_cfg)
 
         self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
-        for unique_key, exchange_item in self.xinyue_exchange_items.items():
-            item_cfg = cfg.get_xinyue_exchange_item_by_unique_key(unique_key)
-            if item_cfg is None:
+        for unique_key, xinyue_exchange_item in self.xinyue_exchange_items.items():
+            xinyue_item_cfg = cfg.get_xinyue_exchange_item_by_unique_key(unique_key)
+            if xinyue_item_cfg is None:
                 continue
 
-            exchange_item.update_config(item_cfg)
+            xinyue_exchange_item.update_config(xinyue_item_cfg)
 
         self.try_set_default_xinyue_app_operations_for_cfg(cfg)
         for name, operation in self.xinyue_app_operations.items():

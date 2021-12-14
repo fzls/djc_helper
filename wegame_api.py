@@ -40,7 +40,7 @@ class WegameApi:
         if not os.path.isfile(self.get_token_file(account)):
             return None
 
-        with open(self.get_token_file(account), "r", encoding="utf-8") as f:
+        with open(self.get_token_file(account), encoding="utf-8") as f:
             return json.load(f)
 
     def save_token(self, account):

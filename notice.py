@@ -26,7 +26,7 @@ class NoticeShowType:
     DEPRECATED = "deprecated"
 
 
-valid_notice_show_type = set(val for attr, val in NoticeShowType.__dict__.items() if not attr.startswith("__"))
+valid_notice_show_type = {val for attr, val in NoticeShowType.__dict__.items() if not attr.startswith("__")}
 
 
 class Notice(ConfigInterface):
@@ -100,7 +100,7 @@ class NoticeManager:
             return
 
         # 读取公告
-        with open(path, 'r', encoding='utf-8') as save_file:
+        with open(path, encoding='utf-8') as save_file:
             for raw_notice in json.load(save_file):
                 notice = Notice().auto_update_config(raw_notice)
                 self.notices.append(notice)

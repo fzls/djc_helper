@@ -169,7 +169,7 @@ def get_parents(child):
 
 
 def printed_width(msg):
-    return sum([1 if ord(c) < 128 else 2 for c in msg])
+    return sum(1 if ord(c) < 128 else 2 for c in msg)
 
 
 def split_by_printed_width(msg: str, expect_width: int) -> Tuple[str, str]:
@@ -488,11 +488,11 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     elif type(e) in [selenium.common.exceptions.TimeoutException, ]:
         msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间")
     elif type(e) in [PermissionError, ]:
-        msg += format_msg((
+        msg += format_msg(
             "权限错误一般是以下原因造成的\n"
             "1. 该文件被占用，比如打开了多个小助手实例或者其他应用占用了这些文件，可以尝试重启电脑后再运行\n"
             "2. 开启了VPN，请尝试关闭VPN后再运行（看上去毫不相关，但确实会这样- -）"
-        ))
+        )
 
     if show_last_process_result:
         from network import last_response_info
@@ -605,9 +605,9 @@ YiB = 1024 * ZiB
 def human_readable_size(num, suffix='B') -> str:
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
-            return "%3.1f%s%s" % (num, unit, suffix)
+            return f"{num:3.1f}{unit}{suffix}"
         num /= 1024.0
-    return "%.1f%s%s" % (num, 'Yi', suffix)
+    return f"{num:.1f}Yi{suffix}"
 
 
 @try_except()
@@ -727,7 +727,7 @@ def gen_config_for_github_action_base64(github_action_config_path='config.toml.g
         ctx += "(压缩后转码)"
         target_filepath = f"{github_action_config_path}.compressed.base64"
 
-    with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
+    with open(github_action_config_path, encoding='utf-8') as toml_file:
         with open(target_filepath, 'w', encoding='utf-8') as save_file:
             toml_bytes = toml_file.read().encode()
             if compress_before_encode:
@@ -741,7 +741,7 @@ def gen_config_for_github_action_base64(github_action_config_path='config.toml.g
 def gen_config_for_github_action_json_single_line(github_action_config_path='config.toml.github_action'):
     target_filepath = f"{github_action_config_path}.json"
 
-    with open(github_action_config_path, 'r', encoding='utf-8') as toml_file:
+    with open(github_action_config_path, encoding='utf-8') as toml_file:
         with open(target_filepath, 'w', encoding='utf-8') as save_file:
             cfg = toml.load(toml_file)
             json.dump(cfg, save_file)
@@ -773,7 +773,7 @@ def disable_pause_after_run() -> bool:
 
 # 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
 def remove_invalid_unicode_escape_string_in_file(filename: str):
-    with open(filename, 'r', encoding='utf-8') as f:
+    with open(filename, encoding='utf-8') as f:
         print(remove_invalid_unicode_escape_string(f.read()))
 
 
@@ -1244,7 +1244,7 @@ def remove_suffix(input_string: str, suffix: str) -> str:
 
 
 def get_cid():
-    return "{}-{}".format(platform.node(), uuid.getnode())
+    return f"{platform.node()}-{uuid.getnode()}"
 
 
 def get_resolution() -> str:

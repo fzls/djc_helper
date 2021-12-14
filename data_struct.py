@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from abc import ABCMeta
-from typing import Dict, List, Tuple, Type
+from typing import Dict, List
 
 from Crypto.Cipher import AES
 
@@ -77,7 +77,7 @@ class ConfigInterface(metaclass=ABCMeta):
         return self
 
     def load_from_json_file(self, filepath: str):
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             raw_config = json.load(f)
 
         if type(raw_config) != dict:
@@ -90,7 +90,7 @@ class ConfigInterface(metaclass=ABCMeta):
         with open(filepath, 'w', encoding='utf-8') as save_file:
             json.dump(to_raw_type(self), save_file, ensure_ascii=ensure_ascii, indent=indent)
 
-    def fill_array_fields(self, raw_config: dict, fields_to_fill: List[Tuple[str, Type[ConfigInterface]]]):
+    def fill_array_fields(self, raw_config: dict, fields_to_fill: list[tuple[str, type[ConfigInterface]]]):
         for field_name, field_type in fields_to_fill:
             if field_name in raw_config:
                 if raw_config[field_name] is None:
@@ -99,10 +99,10 @@ class ConfigInterface(metaclass=ABCMeta):
                 if type(raw_config[field_name]) is list:
                     setattr(self, field_name, [field_type().auto_update_config(item) for item in raw_config[field_name]])
 
-    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return []
 
-    def fill_dict_fields(self, raw_config: dict, fields_to_fill: List[Tuple[str, Type[ConfigInterface]]]):
+    def fill_dict_fields(self, raw_config: dict, fields_to_fill: list[tuple[str, type[ConfigInterface]]]):
         for field_name, field_type in fields_to_fill:
             if field_name in raw_config:
                 if raw_config[field_name] is None:
@@ -111,7 +111,7 @@ class ConfigInterface(metaclass=ABCMeta):
                 if type(raw_config[field_name]) is dict:
                     setattr(self, field_name, {key: field_type().auto_update_config(val) for key, val in raw_config[field_name].items()})
 
-    def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return []
 
     def on_config_update(self, raw_config: dict):
@@ -129,7 +129,7 @@ def to_raw_type(v):
     elif isinstance(v, tuple):
         return tuple(to_raw_type(sv) for sk, sv in enumerate(v))
     elif isinstance(v, set):
-        return set(to_raw_type(sv) for sk, sv in enumerate(v))
+        return {to_raw_type(sv) for sk, sv in enumerate(v)}
     elif isinstance(v, dict):
         return {sk: to_raw_type(sv) for sk, sv in v.items()}
     else:
@@ -151,12 +151,12 @@ def test():
             self.dict_str_str = {}  # type: Dict[str, str]
             self.dict_str_sub_config = {}  # type: Dict[str, TestSubConfig]
 
-        def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
             return [
                 ('list_sub_config', TestSubConfig)
             ]
 
-        def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+        def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
             return [
                 ('dict_str_sub_config', TestSubConfig)
             ]

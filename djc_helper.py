@@ -143,7 +143,7 @@ class DjcHelper:
     def update_skey_by_hand(self, query_data, window_index=1):
         js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
         fallback_js_code = """document.cookie.split(/; */);"""
-        logger.error((
+        logger.error(
             "skey过期，请按下列步骤获取最新skey并更新到配置中\n"
             "1. 在本脚本自动打开的活动网页中使用通用登录组件完成登录操作\n"
             "   1.1 指点击（亲爱的玩家，请【登录】）中的登录按钮，并完成后续登录操作\n"
@@ -159,7 +159,7 @@ class DjcHelper:
             "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
             "\n"
             f"具体信息为：ret={query_data['ret']} msg={query_data['msg']}"
-        ))
+        )
         # 打开配置界面
         cfgFile = "./config.toml"
         localCfgFile = "./config.toml.local"
@@ -211,7 +211,7 @@ class DjcHelper:
         if not os.path.isfile(self.get_local_saved_skey_file()):
             return
 
-        with open(self.get_local_saved_skey_file(), "r", encoding="utf-8") as f:
+        with open(self.get_local_saved_skey_file(), encoding="utf-8") as f:
             try:
                 loginResult = json.load(f)
             except json.decoder.JSONDecodeError:
@@ -1277,7 +1277,7 @@ class DjcHelper:
         if not os.path.isfile(fname):
             return ""
 
-        with open(fname, "r", encoding="utf-8") as f:
+        with open(fname, encoding="utf-8") as f:
             teamidInfo = json.load(f)
             logger.debug(f"读取本地缓存的固定队信息，具体内容如下：{teamidInfo}")
             return teamidInfo["remote_teamid"]
@@ -1296,7 +1296,7 @@ class DjcHelper:
         info.is_special_member = int(raw_info.sOutValue2) == 1
         if info.is_special_member:
             info.xytype_str = "特邀会员"
-        info.ysb, info.score, info.ticket = [int(val) for val in raw_info.sOutValue3.split('|')]
+        info.ysb, info.score, info.ticket = (int(val) for val in raw_info.sOutValue3.split('|'))
         info.username, info.usericon = raw_info.sOutValue4.split('|')
         info.username = unquote_plus(info.username)
         info.login_qq = raw_info.sOutValue5
@@ -1744,7 +1744,7 @@ class DjcHelper:
         if not os.path.isfile(self.get_local_saved_pskey_file()):
             return
 
-        with open(self.get_local_saved_pskey_file(), "r", encoding="utf-8") as f:
+        with open(self.get_local_saved_pskey_file(), encoding="utf-8") as f:
             loginResult = json.load(f)
             logger.debug(f"读取本地缓存的pskey信息，具体内容如下：{loginResult}")
             return loginResult
@@ -2257,7 +2257,7 @@ class DjcHelper:
         res = self.wegame_op("查询剩余抽奖次数", "703542", print_res=False)
         # "sOutValue1": "239:16:4|240:8:1",
         val = res["modRet"]["sOutValue1"]
-        star_count, lottery_times = [int(jifen.split(':')[-1]) for jifen in val.split('|')]
+        star_count, lottery_times = (int(jifen.split(':')[-1]) for jifen in val.split('|'))
         return star_count, lottery_times
 
     def get_wegame_checkin_days(self):
@@ -3454,11 +3454,11 @@ class DjcHelper:
             if taskInfo.hasPartner:
                 logger.info(f"搭档为{taskInfo.pUserId}")
             else:
-                logger.warning((
+                logger.warning(
                     "目前尚无搭档，建议找一个，可以多领点东西-。-。\n"
                     "如果找到了固定的队友，推荐将其userid填写到配置工具中，这样以后每期都会自动绑定~\n"
                     "如果上期已经达到满级，且小助手的按月付费未过期，可尝试打开配置工具中当前账号的自动匹配编年史开关，将自动与其他符合该条件的小助手用户匹配到一起~\n"
-                ))
+                )
 
             logger.info("首先尝试完成接到身上的任务")
             normal_tasks = set()
@@ -4160,7 +4160,7 @@ class DjcHelper:
         if not os.path.isfile(self.get_local_saved_guanjia_openid_file()):
             return None
 
-        with open(self.get_local_saved_guanjia_openid_file(), "r", encoding="utf-8") as f:
+        with open(self.get_local_saved_guanjia_openid_file(), encoding="utf-8") as f:
             raw_loginResult = json.load(f)
             loginResult = LoginResult().auto_update_config(raw_loginResult)
             logger.debug(f"读取本地缓存的管家openid信息，具体内容如下：{loginResult}")
@@ -4196,7 +4196,7 @@ class DjcHelper:
             res = self.hello_voice_op("兑换券查询", "786954", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            ticket = sum([int(x) for x in raw_info.sOutValue1.split(',')])
+            ticket = sum(int(x) for x in raw_info.sOutValue1.split(','))
 
             return ticket
 
@@ -5641,7 +5641,7 @@ class DjcHelper:
             res = self.warm_winter_op("查询剩余抽奖次数", "728476", print_res=False)
             # "sOutValue1": "279:2:1",
             val = res["modRet"]["sOutValue1"]
-            jfId, total, remaining = [int(v) for v in val.split(':')]
+            jfId, total, remaining = (int(v) for v in val.split(':'))
             return total, remaining
 
         def get_checkin_days():
@@ -6089,7 +6089,7 @@ class DjcHelper:
 
             match = re.search(reg_birthday, text)
             if match is not None:
-                year, month, day = [int(v) for v in match.groups()]
+                year, month, day = (int(v) for v in match.groups())
                 birthday = datetime.datetime(year, month, day)
                 logger.info(f"{self.cfg.name} 的 DNF生日（账号创建日期） 为 {birthday}")
 

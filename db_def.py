@@ -59,7 +59,7 @@ class DBInterface(ConfigInterface):
                 logger.error(f"读取数据库失败，将重置该数据库 context={self.context} db_type_name={self.db_type_name} db_file={db_file}", exc_info=e)
                 self.save()
 
-                with open(db_file, 'r', encoding='utf-8') as f:
+                with open(db_file, encoding='utf-8') as f:
                     old_content = f.read()
                 logger.debug(f"old_content={old_content}")
 

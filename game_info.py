@@ -19,7 +19,7 @@ def lazy_load():
 
     global name_2_game_info_map, code_2_game_info_map, name_2_mobile_game_info_map
     try:
-        with open("utils/reference_data/djc_biz_list.json", "r", encoding="utf-8") as f:
+        with open("utils/reference_data/djc_biz_list.json", encoding="utf-8") as f:
             raw_data = json.load(f)
             for game_data in raw_data["data"]:
                 gameInfo = GameInfo(game_data)

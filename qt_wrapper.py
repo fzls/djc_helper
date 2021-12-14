@@ -16,40 +16,40 @@ from util import get_now, padLeftRight
 
 class QHLine(QFrame):
     def __init__(self):
-        super(QHLine, self).__init__()
+        super().__init__()
         self.setFrameShape(QFrame.HLine)
         self.setFrameShadow(QFrame.Sunken)
 
 
 class QVLine(QFrame):
     def __init__(self):
-        super(QVLine, self).__init__()
+        super().__init__()
         self.setFrameShape(QFrame.VLine)
         self.setFrameShadow(QFrame.Sunken)
 
 
 class MySpinbox(QSpinBox):
     def __init__(self, parent=None):
-        super(MySpinbox, self).__init__(parent)
+        super().__init__(parent)
 
         self.setFocusPolicy(Qt.StrongFocus)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         if self.hasFocus():
-            super(MySpinbox, self).wheelEvent(event)
+            super().wheelEvent(event)
         else:
             event.ignore()
 
 
 class MyDoubleSpinbox(QDoubleSpinBox):
     def __init__(self, parent=None):
-        super(MyDoubleSpinbox, self).__init__(parent)
+        super().__init__(parent)
 
         self.setFocusPolicy(Qt.StrongFocus)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         if self.hasFocus():
-            super(MyDoubleSpinbox, self).wheelEvent(event)
+            super().wheelEvent(event)
         else:
             event.ignore()
 
@@ -59,11 +59,11 @@ class MyComboBox(QComboBox):
 
     def showPopup(self):
         self.clicked.emit()
-        super(MyComboBox, self).showPopup()
+        super().showPopup()
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         if self.hasFocus():
-            super(MyComboBox, self).wheelEvent(event)
+            super().wheelEvent(event)
         else:
             event.ignore()
 
@@ -266,7 +266,7 @@ class ConfirmMessageBox(QMessageBox):
 
 class MyPushButtonGridLayout(QGridLayout):
     def __init__(self, color="Cyan"):
-        super(MyPushButtonGridLayout, self).__init__()
+        super().__init__()
 
         self.color = color
         self.buttons = []  # type: List[QPushButton]

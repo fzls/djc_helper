@@ -145,7 +145,7 @@ class GetBuyInfoThread(QThread):
     signal_results = pyqtSignal(str, str, str)
 
     def __init__(self, parent, cfg: Config):
-        super(GetBuyInfoThread, self).__init__(parent)
+        super().__init__(parent)
 
         self.cfg = cfg
         self.time_start = datetime.now()
@@ -205,7 +205,7 @@ class GetBuyInfoThread(QThread):
 
 class ConfigUi(QFrame):
     def __init__(self, parent=None):
-        super(ConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.resize(1080, 780)
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
@@ -662,11 +662,11 @@ class ConfigUi(QFrame):
         for show_index in range_from_one(total_confirm_time):
             message_box = ConfirmMessageBox()
             message_box.setWindowTitle("友情提示")
-            message_box.setText((
+            message_box.setText(
                 f"[{show_index}/{total_confirm_time}] 重要的事情说{total_confirm_time}遍\n"
                 "\n"
                 f"自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-"
-            ))
+            )
             message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             message_box.set_disabled_duration(3, [0])
             ret = message_box.exec_()
@@ -705,12 +705,12 @@ class ConfigUi(QFrame):
 
         message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认账号信息")
-        message_box.setText((
+        message_box.setText(
             "请确认输入的账号信息是否无误，避免充错账号~\n"
             "\n"
             f"主QQ：       {qq}\n"
             f"其他QQ列表： {game_qqs}\n"
-        ))
+        )
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
@@ -736,7 +736,7 @@ class ConfigUi(QFrame):
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
 
-    def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: List[str]) -> str:
+    def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: list[str]) -> str:
         if len(card.split('-')) != 3:
             return "无效的卡号"
 
@@ -749,7 +749,7 @@ class ConfigUi(QFrame):
 
         return CHECK_RESULT_OK
 
-    def check_qqs(self, qq: str, game_qqs: List[str]) -> str:
+    def check_qqs(self, qq: str, game_qqs: list[str]) -> str:
         for qq_to_check in [qq, *game_qqs]:
             if not is_valid_qq(qq_to_check):
                 return f"无效的QQ：{qq_to_check}"
@@ -759,7 +759,7 @@ class ConfigUi(QFrame):
 
         return CHECK_RESULT_OK
 
-    def do_pay_request(self, card: str, secret: str, qq: str, game_qqs: List[str]):
+    def do_pay_request(self, card: str, secret: str, qq: str, game_qqs: list[str]):
         req = PayRequest()
         req.card_secret.card = card
         req.card_secret.secret = secret
@@ -810,7 +810,7 @@ class ConfigUi(QFrame):
 
         message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认购买信息")
-        message_box.setText((
+        message_box.setText(
             "请确认输入的购买信息是否无误，避免充错账号~\n"
             "\n"
             f"主QQ：       {qq}\n"
@@ -819,7 +819,7 @@ class ConfigUi(QFrame):
             f"付费内容：   {item_name}\n"
             f"付款方式：   {pay_type_name}\n"
             f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
-        ))
+        )
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
@@ -851,7 +851,7 @@ class ConfigUi(QFrame):
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
 
-    def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: List[str]):
+    def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: list[str]):
         req = SubmitOrderRequest()
         req.qq = qq
         req.game_qqs = game_qqs
@@ -1075,7 +1075,7 @@ class ConfigUi(QFrame):
 
 class CommonConfigUi(QFrame):
     def __init__(self, cfg: CommonConfig, parent=None):
-        super(CommonConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(cfg)
 
@@ -1250,7 +1250,7 @@ class CommonConfigUi(QFrame):
 
 class MajieluoConfigUi(QFrame):
     def __init__(self, cfg: MajieluoConfig, config_ui: ConfigUi, parent=None):
-        super(MajieluoConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.config_ui = config_ui
 
@@ -1283,13 +1283,13 @@ class MajieluoConfigUi(QFrame):
         self.lineedit_xiaohao_qq_list = create_lineedit(list_to_str(cfg.xiaohao_qq_list), placeholder_text="最多3个，使用英文逗号分隔，如 123,456,789 表示三个小号的QQ号分别为123/456/789")
         # self.lineedit_xiaohao_qq_list.setValidator(QQListValidator())
         form_layout.addRow("小号在马杰洛页面的Uin列表", self.lineedit_xiaohao_qq_list)
-        form_layout.addRow("获取说明", QLabel((
+        form_layout.addRow("获取说明", QLabel(
             "1. 打开马杰洛活动，找到赠送列表，一页页翻，直到找到小号\n"
             "2. 如果找不到你的小号，那就可以放弃了，只能手动赠送给其他qq\n"
             "3. 否则，可以在小号右侧的按钮处，右键，选择 检查元素，然后复制其中uin的值，形如（0502696b3b1e8cfe0ec987ec32be08a89）\n"
             "\n"
             "此外，本期一天只能送两次，需要只需要两个小号\n"
-        )))
+        ))
 
         # -------------- 区域：发送礼盒链接给小号 --------------
         top_layout.addWidget(QHLine())
@@ -1452,7 +1452,7 @@ class MajieluoConfigUi(QFrame):
 
 class LoginConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: LoginConfig, parent=None):
-        super(LoginConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -1503,7 +1503,7 @@ class LoginConfigUi(QWidget):
 
 class RetryConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: RetryConfig, parent=None):
-        super(RetryConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -1525,7 +1525,7 @@ class RetryConfigUi(QWidget):
 
 class FixedTeamConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: FixedTeamConfig, parent=None):
-        super(FixedTeamConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -1556,7 +1556,7 @@ class AccountConfigUi(QWidget):
     })
 
     def __init__(self, cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
-        super(AccountConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.common_cfg = common_cfg
 
@@ -1611,11 +1611,11 @@ class AccountConfigUi(QWidget):
         self.checkbox_enable_auto_match_xinyue_team = create_checkbox(cfg.enable_auto_match_xinyue_team)
         add_row(form_layout, "是否心悦自动匹配组队", self.checkbox_enable_auto_match_xinyue_team)
 
-        add_row(form_layout, "需要满足这些条件", QLabel((
+        add_row(form_layout, "需要满足这些条件", QLabel(
             "1. 在付费生效期间\n"
             "2. 当前QQ是特邀会员或者心悦会员\n"
             "3. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次\n"
-        )))
+        ))
 
         # -------------- 区域：心悦特权专区兑换 --------------
         self.collapsible_box_xinyue_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
@@ -1869,7 +1869,7 @@ class AccountConfigUi(QWidget):
 
 class AccountInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: AccountInfoConfig, parent=None):
-        super(AccountInfoConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -1908,7 +1908,7 @@ class AccountInfoConfigUi(QWidget):
 
 class FunctionSwitchesConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig, parent=None):
-        super(FunctionSwitchesConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2132,7 +2132,7 @@ class FunctionSwitchesConfigUi(QWidget):
 
 class MobileGameRoleInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: MobileGameRoleInfoConfig, parent=None):
-        super(MobileGameRoleInfoConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2146,7 +2146,7 @@ class MobileGameRoleInfoConfigUi(QWidget):
 
 class ExchangeItemConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: ExchangeItemConfig, parent=None):
-        super(ExchangeItemConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2160,7 +2160,7 @@ class ExchangeItemConfigUi(QWidget):
 
 class XinyueOperationConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: XinYueOperationConfig, parent=None):
-        super(XinyueOperationConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2174,7 +2174,7 @@ class XinyueOperationConfigUi(QWidget):
 
 class XinYueAppOperationConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig, parent=None):
-        super(XinYueAppOperationConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2188,7 +2188,7 @@ class XinYueAppOperationConfigUi(QWidget):
 
 class ArkLotteryConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: ArkLotteryConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
-        super(ArkLotteryConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
@@ -2229,7 +2229,7 @@ class ArkLotteryConfigUi(QWidget):
 
 class VipMentorConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: VipMentorConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
-        super(VipMentorConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
@@ -2260,7 +2260,7 @@ class RoleSelector(QWidget):
     combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会"
 
     def __init__(self, ctx, combobox_server_name: MyComboBox, lineedit_role_id: QLineEdit, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
-        super(RoleSelector, self).__init__(parent)
+        super().__init__(parent)
 
         self.ctx = ctx
         self.combobox_server_name = combobox_server_name
@@ -2326,7 +2326,7 @@ class RoleSelector(QWidget):
 
         return ""
 
-    def get_roles(self) -> List[DnfRoleInfo]:
+    def get_roles(self) -> list[DnfRoleInfo]:
         server_id = self.get_server_id()
         if server_id not in self.server_id_to_roles:
             return []
@@ -2336,7 +2336,7 @@ class RoleSelector(QWidget):
 
 class DnfHelperInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: DnfHelperInfoConfig, parent=None):
-        super(DnfHelperInfoConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2369,10 +2369,10 @@ class DnfHelperInfoConfigUi(QWidget):
         self.checkbox_enable_auto_match_dnf_chronicle = create_checkbox(cfg.enable_auto_match_dnf_chronicle)
         add_row(form_layout, "是否自动匹配编年史搭档（优先级高于固定搭档）", self.checkbox_enable_auto_match_dnf_chronicle)
 
-        add_row(form_layout, "需要满足这些条件", QLabel((
+        add_row(form_layout, "需要满足这些条件", QLabel(
             "1. 在付费生效期间\n"
             "2. 上个月达到了30级\n"
-        )))
+        ))
 
         add_row(form_layout, "", QHLine())
 
@@ -2437,7 +2437,7 @@ class DnfHelperInfoConfigUi(QWidget):
 
 class DnfHelperChronicleExchangeItemConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: DnfHelperChronicleExchangeItemConfig, parent=None):
-        super(DnfHelperChronicleExchangeItemConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 
@@ -2451,7 +2451,7 @@ class DnfHelperChronicleExchangeItemConfigUi(QWidget):
 
 class HelloVoiceInfoConfigUi(QWidget):
     def __init__(self, form_layout: QFormLayout, cfg: HelloVoiceInfoConfig, parent=None):
-        super(HelloVoiceInfoConfigUi, self).__init__(parent)
+        super().__init__(parent)
 
         self.from_config(form_layout, cfg)
 

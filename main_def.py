@@ -1067,14 +1067,14 @@ def check_update(cfg):
         "PS：不购买这个DLC也能正常使用蚊子腿小助手哒（跟之前版本体验一致）~只是购买后可以免去手动升级的烦恼哈哈，顺带能鼓励我花更多时间来维护小助手，支持新的蚊子腿以及优化使用体验(oﾟ▽ﾟ)o  \n"
     ))
 
-    logger.info((
+    logger.info(
         "\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
         "现在准备访问github仓库相关页面来检查是否有新版本\n"
         "由于国内网络问题，访问可能会比较慢，请不要立即关闭，可以选择最小化或切换到其他窗口0-0\n"
         "若有新版本会自动弹窗提示~\n"
         "++++++++++++++++++++++++++++++++++++++++\n"
-    ))
+    )
     check_update_on_start(cfg.common)
 
 
@@ -1334,7 +1334,7 @@ def has_buy_auto_updater_dlc_and_query_ok(qq_accounts: List[str], max_retry_coun
                     continue
 
                 buy_users = []
-                with open(user_list_filepath, 'r', encoding='utf-8') as data_file:
+                with open(user_list_filepath, encoding='utf-8') as data_file:
                     buy_users = json.load(data_file)
 
                 if len(buy_users) != 0:
@@ -1344,12 +1344,12 @@ def has_buy_auto_updater_dlc_and_query_ok(qq_accounts: List[str], max_retry_coun
                     if qq in buy_users:
                         return True, True
 
-                logger.debug((
+                logger.debug(
                     "DLC购买调试日志：\n"
                     f"remote_filename={remote_filename}\n"
                     f"账号列表={qq_accounts}\n"
                     f"用户列表={buy_users}\n"
-                ))
+                )
 
             if has_no_users:
                 # note: 如果读取失败或云盘该文件列表为空，则默认所有人都放行
@@ -1446,7 +1446,7 @@ def get_user_buy_info_from_netdisk(qq_accounts: List[str], max_retry_count=3, re
                         if time_less(old_info.expire_at, info.expire_at):
                             buy_users[qq] = info
 
-                with open(buy_info_filepath, 'r', encoding='utf-8') as data_file:
+                with open(buy_info_filepath, encoding='utf-8') as data_file:
                     raw_infos = json.load(data_file)
                     for qq, raw_info in raw_infos.items():
                         info = BuyInfo().auto_update_config(raw_info)

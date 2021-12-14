@@ -560,7 +560,7 @@ class AccountConfig(ConfigInterface):
         sDeviceIdFileName = os.path.join(cached_dir, f".sDeviceID.{self.name}.txt")
 
         if os.path.isfile(sDeviceIdFileName):
-            with open(sDeviceIdFileName, "r", encoding="utf-8") as file:
+            with open(sDeviceIdFileName, encoding="utf-8") as file:
                 sDeviceID = file.read()
                 if len(sDeviceID) == 36:
                     # print("use cached sDeviceID", sDeviceID)
@@ -840,7 +840,7 @@ class CommonConfig(ConfigInterface):
         url_config_filepath = get_url_config_path()
         if os.path.isfile(url_config_filepath):
             try:
-                with open(url_config_filepath, 'r', encoding='utf-8-sig') as url_config_file:
+                with open(url_config_filepath, encoding='utf-8-sig') as url_config_file:
                     url_config = toml.load(url_config_file)
                     if 'pay_by_month_purchase_url' in url_config:
                         self.pay_by_month_purchase_url = url_config['pay_by_month_purchase_url']
@@ -971,8 +971,8 @@ class Config(ConfigInterface):
         return None
 
     def get_qq_accounts(self) -> List[str]:
-        return list([uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs
-                     if account_cfg.enable and account_cfg.account_info.has_login()])
+        return list(uin2qq(account_cfg.account_info.uin) for account_cfg in self.account_configs
+                    if account_cfg.enable and account_cfg.account_info.has_login())
 
     def get_any_enabled_account(self) -> Optional[AccountConfig]:
         for account_config in self.account_configs:

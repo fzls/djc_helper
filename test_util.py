@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # -------------------------------
 # File      : test_util
 # DateTime  : 2021/8/4 19:07

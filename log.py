@@ -49,7 +49,7 @@ if "MainProcess" in process_name:
 
 for _i in range(3):
     try:
-        with open(log_filename_file, 'r', encoding='utf-8') as f:
+        with open(log_filename_file, encoding='utf-8') as f:
             log_filename = f.read()
     except Exception as e:
         print(f"读取日志文件名的时候出错了，等待一秒，e={e}")

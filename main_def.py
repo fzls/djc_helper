@@ -1651,7 +1651,7 @@ def get_user_buy_info_from_netdisk(
                     # 如果网盘没有这个文件，就跳过
                     continue
 
-                buy_users = {}  # type: Dict[str, BuyInfo]
+                buy_users: Dict[str, BuyInfo] = {}
 
                 def update_if_longer(qq: str, info: BuyInfo):
                     if qq not in buy_users:

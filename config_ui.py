@@ -1078,7 +1078,7 @@ class ConfigUi(QFrame):
         self.tabs.addTab(self.majieluo, "马杰洛小工具")
 
     def create_account_tabs(self, cfg: Config):
-        self.accounts = []  # type: List[AccountConfigUi]
+        self.accounts: list[AccountConfigUi] = []
         for account in cfg.account_configs:
             account_ui = AccountConfigUi(account, self.to_config().common)
             self.add_account_tab(account_ui)
@@ -1534,7 +1534,7 @@ class MajieluoConfigUi(QFrame):
                 show_message("配置有误", f"配置的小号序号({account_index}) 不对，正确范围是[1, {len(cfg.account_configs)}]")
                 return
 
-        messages = []  # type: List[str]
+        messages: list[str] = []
 
         for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
             account_config = cfg.account_configs[account_index - 1]
@@ -2523,7 +2523,7 @@ class RoleSelector(QWidget):
         self.account_cfg = account_cfg
         self.common_cfg = common_cfg
 
-        self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
+        self.server_id_to_roles: dict[str, list[DnfRoleInfo]] = {}
 
         self.combobox_role_name = create_combobox(
             self.combobox_role_name_placeholder, [self.combobox_role_name_placeholder]
@@ -2672,7 +2672,7 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.move_exchange_item_to_front()
 
     def try_set_default_exchange_items_for_cfg(self, cfg: DnfHelperInfoConfig):
-        sLBcode_to_item = {}  # type: Dict[str, DnfHelperChronicleExchangeItemConfig]
+        sLBcode_to_item: dict[str, DnfHelperChronicleExchangeItemConfig] = {}
         for item in cfg.chronicle_exchange_items:
             sLBcode_to_item[item.sLbcode] = item
 

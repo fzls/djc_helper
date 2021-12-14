@@ -203,7 +203,7 @@ def init_collapsible_box_size(parent_widget: QWidget):
         if not attr_name.startswith("collapsible_box_"):
             continue
 
-        collapsible_box = getattr(parent_widget, attr_name)  # type: CollapsibleBox
+        collapsible_box: CollapsibleBox = getattr(parent_widget, attr_name)
         collapsible_box.try_adjust_size()
 
 
@@ -289,7 +289,7 @@ class MyPushButtonGridLayout(QGridLayout):
         super().__init__()
 
         self.color = color
-        self.buttons = []  # type: List[QPushButton]
+        self.buttons: List[QPushButton] = []
 
     def add_button(self, btn: QPushButton, row: int, col: int):
         btn.setStyleSheet(f"QPushButton::checked {{ background-color: {self.color}; }}")

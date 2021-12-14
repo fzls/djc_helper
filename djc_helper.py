@@ -162,8 +162,8 @@ class DjcHelper:
     local_saved_teamid_file = os.path.join(cached_dir, ".teamid_new.{}.json")
 
     def __init__(self, account_config, common_config, user_buy_info: Optional[BuyInfo] = None):
-        self.cfg = account_config  # type: AccountConfig
-        self.common_cfg = common_config  # type: CommonConfig
+        self.cfg: AccountConfig = account_config
+        self.common_cfg: CommonConfig = common_config
 
         self.zzconfig = zzconfig()
 
@@ -202,11 +202,11 @@ class DjcHelper:
         check_in_black_list(self.uin())
 
     def update_skey(self, query_data, window_index=1):
-        login_mode_dict = {
+        login_mode_dict: Dict[str, Callable[[Dict, int], None]] = {
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
             "auto_login": self.update_skey_auto_login,
-        }  # type: Dict[str, Callable[[Dict, int], None]]
+        }
         login_mode_dict[self.cfg.login_mode](query_data, window_index)
 
     def update_skey_by_hand(self, query_data, window_index=1):
@@ -1361,7 +1361,7 @@ class DjcHelper:
             f"查询心悦组队奖励-{iPageNow}-{iPageSize}", "747563", iPageNow=iPageNow, iPageSize=iPageSize, print_res=False
         )
 
-        awards = []  # type: List[XinYueTeamAwardInfo]
+        awards: List[XinYueTeamAwardInfo] = []
         for raw_award in raw_res["modRet"]["myGiftList"]:
             award = XinYueTeamAwardInfo().auto_update_config(raw_award)
             awards.append(award)
@@ -5961,12 +5961,12 @@ class DjcHelper:
                 )
 
         def get_financing_info_map():
-            financingInfoMap = json.loads(
+            financingInfoMap: dict = json.loads(
                 self.xinyue_financing_op("查询各理财卡信息", "409714", print_res=False)["modRet"]["jData"]["arr"]
-            )  # type: dict
-            financingTimeInfoMap = json.loads(
+            )
+            financingTimeInfoMap: dict = json.loads(
                 self.xinyue_financing_op("查询理财礼卡天数信息", "409396", print_res=False)["modRet"]["jData"]["arr"]
-            )  # type: dict
+            )
 
             info_map = {}
             for typ, financingInfo in financingInfoMap.items():

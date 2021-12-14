@@ -30,14 +30,14 @@ class QzoneActivity:
                 roleinfo = djc_helper.bizcode_2_bind_role_map["dnf"].sRoleInfo
         except Exception:
             pass
-        self.roleinfo = roleinfo  # type: RoleInfo
+        self.roleinfo: RoleInfo = roleinfo
 
         self.djc_helper = djc_helper
         self.lr = lr
 
-        self.cfg = djc_helper.cfg  # type: AccountConfig
-        self.common_cfg = djc_helper.common_cfg  # type: CommonConfig
-        self.zzconfig = djc_helper.zzconfig  # type: ArkLotteryZzConfig
+        self.cfg: AccountConfig = djc_helper.cfg
+        self.common_cfg: CommonConfig = djc_helper.common_cfg
+        self.zzconfig: ArkLotteryZzConfig = djc_helper.zzconfig
 
         self.g_tk = getACSRFTokenForAMS(lr.p_skey)
         self.urls = Urls()

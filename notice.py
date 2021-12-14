@@ -77,7 +77,7 @@ class Notice(ConfigInterface):
 
 class NoticeManager:
     def __init__(self, load_from_remote=True):
-        self.notices = []  # type: List[Notice]
+        self.notices: List[Notice] = []
 
         self.file_name = "notices.txt"
         self.cache_path = f"{downloads_dir}/{self.file_name}"

@@ -815,8 +815,8 @@ class QQLogin():
                     self.update_retry_data(short_login_retry_key, retry_timeouts[idx - 1 - 1], self.cfg.login.recommended_retry_wait_time_change_rate, self.name)
                 break
             except Exception as e:
-                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。" +
-                             color("bold_yellow") + (
+                logger.error(f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。"
+                             + color("bold_yellow") + (
                                  "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致。\n"
                                  "若隐藏了浏览器，请取消隐藏再打开，确认到底是什么问题（如果一直弹这个，应该就是你的qq被判定登录环境异常，需要扫码一段时间让其自然消失才可以。）\n"
                                  "如果上面的方法都试了，还是不行，试试关闭 网络连接的ipv6功能，也许会有作用（具体流程请百度）"
@@ -992,8 +992,8 @@ class QQLogin():
                 xoffsets.append(init_offset - 3 * (drag_block_width // 4))
 
             logger.info(
-                color("bold_green") +
-                f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
+                color("bold_green")
+                + f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
             )
 
             # 将普通序列放入其中

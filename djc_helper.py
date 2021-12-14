@@ -3012,8 +3012,8 @@ class DjcHelper:
         ])
 
         logger.warning(
-            '\n' +
-            color("fg_bold_yellow") + tips
+            '\n'
+            + color("fg_bold_yellow") + tips
         )
         # 首次在对应场景时弹窗
         if always_show_message_box or (show_message_box_once_key != "" and is_first_run(f"show_dnf_helper_info_guide_{show_message_box_once_key}")):
@@ -3713,8 +3713,8 @@ class DjcHelper:
         # 展示进度信息
         def show_user_info(name: str, ui: DnfHelperChronicleUserActivityTopInfo):
             logger.warning(
-                color("fg_bold_yellow") +
-                f"账号 {name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
+                color("fg_bold_yellow")
+                + f"账号 {name} 当前编年史等级为LV{ui.level}({ui.levelName}) 本级经验：{ui.currentExp}/{ui.levelExp} 当前总获取经验为{ui.totalExp} 剩余年史碎片为{ui.point}"
             )
 
         # 自己

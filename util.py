@@ -226,7 +226,9 @@ def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
     return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
 
 
-def show_head_line(msg, msg_color=color("fg_bold_green"), max_line_content_width=80, min_line_printed_width=80):
+def show_head_line(msg, msg_color="", max_line_content_width=80, min_line_printed_width=80):
+    msg_color = msg_color or color("fg_bold_green")
+
     msg = split_line_if_too_long(msg, max_line_content_width)
     line_width = max(min_line_printed_width, get_max_line_width(msg))
 
@@ -543,11 +545,11 @@ def parse_timestamp(ts: float) -> datetime.datetime:
     return datetime.datetime.fromtimestamp(ts)
 
 
-def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S"):
+def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S") -> str:
     return dt.strftime(time_fmt)
 
 
-def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None):
+def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> str:
     now = now or get_now()
     return format_time(now, time_fmt=time_fmt)
 

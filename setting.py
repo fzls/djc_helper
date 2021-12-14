@@ -48,7 +48,7 @@ def parse_prize_list(cfg: ArkLotteryZzConfig):
 
 
 def dnf_area_server_list_config() -> List[DnfAreaServerListConfig]:
-    area_servers = []  # type: List[DnfAreaServerListConfig]
+    area_servers: List[DnfAreaServerListConfig] = []
     for area_server_setting in dnf_server_list.setting:
         area_servers.append(DnfAreaServerListConfig().auto_update_config(area_server_setting))
 
@@ -58,7 +58,7 @@ def dnf_area_server_list_config() -> List[DnfAreaServerListConfig]:
 def dnf_server_list_config():
     area_servers = dnf_area_server_list_config()
 
-    servers = []  # type: List[DnfServerConfig]
+    servers: List[DnfServerConfig] = []
     for area_server in area_servers:
         servers.extend(area_server.opt_data_array)
 

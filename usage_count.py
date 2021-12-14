@@ -114,7 +114,7 @@ def get_counter(name, time_period):
         return counters[0]
 
     # 否则需要创建这个counter
-    counter = CounterClass()  # type: leancloud.Object
+    counter: leancloud.Object = CounterClass()
     counter.set("name", name)
     counter.set("time_period", time_period)
     counter.set("count", 0)

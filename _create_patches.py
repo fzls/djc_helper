@@ -52,7 +52,7 @@ def create_patch(
 
     if not get_final_patch_path_only:
         logger.info(f"尝试从网盘查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
-    old_version_infos = []  # type: List[HistoryVersionFileInfo]
+    old_version_infos: List[HistoryVersionFileInfo] = []
 
     # 获取当前网盘的最新版本，若比当前发布版本低，也加入
     netdisk_latest_version_fileinfo = uploader.find_latest_version()
@@ -64,7 +64,7 @@ def create_patch(
     for page in range_from_one(100):
         folder_info = uploader.get_folder_info_by_url(uploader.folder_history_files.url, get_this_page=page)
         for file in folder_info.files:
-            filename = file.name  # type: str
+            filename: str = file.name
 
             if not filename.startswith(uploader.history_version_prefix):
                 # 跳过非历史版本的文件

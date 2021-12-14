@@ -57,7 +57,7 @@ class ConfigInterface(metaclass=ABCMeta):
                 if hasattr(self, key):
                     attr = getattr(self, key)
                     if isinstance(attr, ConfigInterface):
-                        config_field = attr  # type: ConfigInterface
+                        config_field: ConfigInterface = attr
                         config_field.auto_update_config(val)
                     else:
                         setattr(self, key, val)
@@ -152,10 +152,10 @@ def test():
             self.int_val = 0
             self.str_val = ""
             self.bool_val = False
-            self.list_int = []  # type: List[int]
-            self.list_sub_config = []  # type: List[TestSubConfig]
-            self.dict_str_str = {}  # type: Dict[str, str]
-            self.dict_str_sub_config = {}  # type: Dict[str, TestSubConfig]
+            self.list_int: list[int] = []
+            self.list_sub_config: list[TestSubConfig] = []
+            self.dict_str_str: dict[str, str] = {}
+            self.dict_str_sub_config: dict[str, TestSubConfig] = {}
 
         def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
             return [("list_sub_config", TestSubConfig)]

@@ -17,7 +17,7 @@ jsonp_callback_flag = "jsonp_callback"
 
 class Network:
     def __init__(self, sDeviceID, uin, skey, common_cfg):
-        self.common_cfg = common_cfg  # type: CommonConfig
+        self.common_cfg: CommonConfig = common_cfg
 
         self.base_cookies = (
             "djc_appSource=android; djc_appVersion={djc_appVersion}; acctype=; uin={uin}; skey={skey};".format(
@@ -130,7 +130,7 @@ def try_request(
     """
     for i in range(retryCfg.max_retry_count):
         try:
-            response = request_fn()  # type: requests.Response
+            response: requests.Response = request_fn()
             fix_encoding(response)
 
             if check_fn is not None:
@@ -162,7 +162,7 @@ def try_request(
 
 
 # 每次处理完备份一次最后的报错，方便出错时打印出来~
-last_response_info = None  # type: Optional[ResponseInfo]
+last_response_info: Optional[ResponseInfo] = None
 
 
 def set_last_response_info(status_code: int, reason: str, text: str):

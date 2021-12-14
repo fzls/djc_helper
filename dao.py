@@ -96,7 +96,7 @@ class GoodsInfo(ConfigInterface):
         self.limitPerOrder = "1"
         self.totalLimit = "0"
         self.recommend = "80"
-        self.valiDate = []  # type: List[GoodsValiDateInfo]
+        self.valiDate: list[GoodsValiDateInfo] = []
         self.heroSkin = []
         self.related = False
         self.category = GoodsCategoryInfo()
@@ -291,7 +291,7 @@ class XinYueTeamInfo(ConfigInterface):
         self.result = 0
         self.id = ""
         self.award_summary = "大大小|小中大"
-        self.members = []  # type: List[XinYueTeamMember]
+        self.members: list[XinYueTeamMember] = []
 
     def is_team_full(self) -> bool:
         return len(self.members) == 2
@@ -520,7 +520,7 @@ class DnfHelperChronicleExchangeList(ConfigInterface):
     def __init__(self):
         self.code = 200
         self.exp = 0
-        self.gifts = []  # type: List[DnfHelperChronicleExchangeGiftInfo]
+        self.gifts: list[DnfHelperChronicleExchangeGiftInfo] = []
         self.hasPartner = False
         self.level = 1
         self.msg = "success"
@@ -546,8 +546,8 @@ class DnfHelperChronicleExchangeGiftInfo(ConfigInterface):
 
 class DnfHelperChronicleBasicAwardList(ConfigInterface):
     def __init__(self):
-        self.basic1List = []  # type: List[DnfHelperChronicleBasicAwardInfo]
-        self.basic2List = []  # type: List[DnfHelperChronicleBasicAwardInfo]
+        self.basic1List: list[DnfHelperChronicleBasicAwardInfo] = []
+        self.basic2List: list[DnfHelperChronicleBasicAwardInfo] = []
         self.code = 200
         self.hasPartner = False
         self.msg = "success"
@@ -575,7 +575,7 @@ class DnfHelperChronicleBasicAwardInfo(ConfigInterface):
 class DnfHelperChronicleLotteryList(ConfigInterface):
     def __init__(self):
         self.code = 200
-        self.gifts = []  # type: List[DnfHelperChronicleLotteryGiftInfo]
+        self.gifts: list[DnfHelperChronicleLotteryGiftInfo] = []
         self.msg = "success"
 
     def fields_to_fill(self):
@@ -629,7 +629,7 @@ class DnfHelperChronicleUserTaskList(ConfigInterface):
         self.mIcon = "http://q.qlogo.cn/qqapp/1104466820/0E82A1DBAE746043CF3AEF95EC39FC2B/100"
         self.pIcon = ""
         self.hasPartner = False
-        self.taskList = []  # type: List[DnfHelperChronicleUserTaskInfo]
+        self.taskList: list[DnfHelperChronicleUserTaskInfo] = []
 
     def fields_to_fill(self):
         return [
@@ -652,7 +652,7 @@ class DnfHelperChronicleUserTaskInfo(ConfigInterface):
 class DnfHelperChronicleSignList(ConfigInterface):
     def __init__(self):
         self.code = 200
-        self.gifts = []  # type: List[DnfHelperChronicleSignGiftInfo]
+        self.gifts: list[DnfHelperChronicleSignGiftInfo] = []
         self.msg = "success"
 
     def fields_to_fill(self):
@@ -763,7 +763,7 @@ class AmesvrQueryFriendsInfo(ConfigInterface):
         self.page = 1
         self.pageSize = 4
         self.total = 90
-        self.list = []  # type: List[AmesvrFriendInfo]
+        self.list: list[AmesvrFriendInfo] = []
 
     def fields_to_fill(self):
         return [
@@ -792,7 +792,7 @@ class BuyInfo(ConfigInterface):
         self.game_qqs = []
         self.expire_at = "2020-01-01 00:00:00"
         self.total_buy_month = 0
-        self.buy_records = []  # type: List[BuyRecord]
+        self.buy_records: list[BuyRecord] = []
 
     def fields_to_fill(self):
         return [
@@ -814,7 +814,7 @@ class BuyInfo(ConfigInterface):
 
         self.total_buy_month += other.total_buy_month
 
-        records = [*self.buy_records, *other.buy_records]  # type: List[BuyRecord]
+        records: list[BuyRecord] = [*self.buy_records, *other.buy_records]
         records.sort(key=lambda br: br.buy_at)
 
         # 重新计算时长
@@ -1116,7 +1116,7 @@ class GuanjiaNewQueryLotteryInfo(ConfigInterface):
         self.success = 0
         self.message = ""
         self._id = ""
-        self.result = []  # type: List[GuanjiaNewQueryLotteryResult]
+        self.result: list[GuanjiaNewQueryLotteryResult] = []
 
     def fields_to_fill(self):
         return [
@@ -1200,8 +1200,8 @@ class ColgBattlePassInfo(ConfigInterface):
     def __init__(self):
         self.activity_id = "4"
         self.lv_score = 0
-        self.tasks = []  # type: List[ColgBattlePassTaskInfo]
-        self.rewards = []  # type: List[ColgBattlePassRewardInfo]
+        self.tasks: list[ColgBattlePassTaskInfo] = []
+        self.rewards: list[ColgBattlePassRewardInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
@@ -1494,7 +1494,7 @@ class DnfChronicleMatchServerRequestUserResponse(ConfigInterface):
 class CreateWorkListInfo(ConfigInterface):
     def __init__(self):
         self.total = "0"
-        self.list = []  # type: List[CreateWorkInfo]
+        self.list: list[CreateWorkInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [

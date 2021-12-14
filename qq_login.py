@@ -142,8 +142,8 @@ class QQLogin:
     default_window_height = 360
 
     def __init__(self, common_config, window_index=1):
-        self.cfg = common_config  # type: CommonConfig
-        self.driver = None  # type: Optional[WebDriver]
+        self.cfg: CommonConfig = common_config
+        self.driver: Optional[WebDriver] = None
         self.window_title = ""
         self.time_start_login = datetime.datetime.now()
 

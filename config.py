@@ -534,7 +534,7 @@ class ArkLotteryConfig(ConfigInterface):
         self.show_color = ""
 
         # 活动ID => 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
-        self.act_id_to_cost_all_cards_and_do_lottery = {}  # type: Dict[int, bool]
+        self.act_id_to_cost_all_cards_and_do_lottery: Dict[int, bool] = {}
 
     def fields_to_fill(self):
         return [
@@ -592,7 +592,7 @@ class DnfHelperInfoConfig(ConfigInterface):
         # dnf助手编年史是否开启抽奖
         self.chronicle_lottery = False
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json
-        self.chronicle_exchange_items = []  # type: List[DnfHelperChronicleExchangeItemConfig]
+        self.chronicle_exchange_items: List[DnfHelperChronicleExchangeItemConfig] = []
 
     def fields_to_fill(self):
         return [
@@ -629,7 +629,7 @@ class FirecrackersConfig(ConfigInterface):
         # 是否开启抽奖，建议兑换完所有道具后再开启
         self.enable_lottery = False
         # 兑换道具信息
-        self.exchange_items = []  # type: List[FirecrackersExchangeItemConfig]
+        self.exchange_items: List[FirecrackersExchangeItemConfig] = []
 
     def fields_to_fill(self):
         return [
@@ -806,11 +806,11 @@ class AccountConfig(ConfigInterface):
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
         self.cannot_bind_dnf = False
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
-        self.drift_send_qq_list = []  # type: List[str]
+        self.drift_send_qq_list: List[str] = []
         # dnf13周年邀请列表，最多可填3个（不会实际发消息）
-        self.dnf_13_send_qq_list = []  # type: List[str]
+        self.dnf_13_send_qq_list: List[str] = []
         # 新春福袋大作战邀请列表（会实际发消息）
-        self.spring_fudai_receiver_qq_list = []  # type: List[str]
+        self.spring_fudai_receiver_qq_list: List[str] = []
         # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
         self.enable_firecrackers_invite_friend = False
         # 马杰洛活动是否尝试黑钻送好友（不会实际发消息）
@@ -819,7 +819,7 @@ class AccountConfig(ConfigInterface):
         self.enable_majieluo_lucky = False
         # 不参与奥兹玛竞速活动切换角色的角色名列表（如果某些号确定不打奥兹玛的，可以把名字加到这里，从而跳过尝试这个角色）
         # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
-        self.ozma_ignored_rolename_list = []  # type: List[str]
+        self.ozma_ignored_rolename_list: List[str] = []
         # 公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
         self.gonghui_rolename_huizhang = ""
         # 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
@@ -853,17 +853,17 @@ class AccountConfig(ConfigInterface):
         # 完成《礼包达人》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
         # 兑换道具信息
-        self.exchange_items = []  # type: List[ExchangeItemConfig]
+        self.exchange_items: List[ExchangeItemConfig] = []
         # 心悦相关操作信息
-        self.xinyue_operations = []  # type: List[XinYueOperationConfig]
+        self.xinyue_operations: List[XinYueOperationConfig] = []
         # 心悦app相关操作
-        self.xinyue_app_operations = []  # type: List[XinYueAppOperationConfig]
+        self.xinyue_app_operations: List[XinYueAppOperationConfig] = []
         # 抽卡相关配置
         self.ark_lottery = ArkLotteryConfig()
         # 会员关怀相关配置
         self.vip_mentor = VipMentorConfig()
         # wegame国庆活动兑换道具
-        self.wegame_guoqing_exchange_items = []  # type: List[WegameGuoqingExchangeItemConfig]
+        self.wegame_guoqing_exchange_items: List[WegameGuoqingExchangeItemConfig] = []
         # dnf助手信息
         self.dnf_helper_info = DnfHelperInfoConfig()
         # hello语音相关信息
@@ -1157,16 +1157,16 @@ class CommonConfig(ConfigInterface):
         # 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）
         self.cost_all_cards_and_do_lottery_on_last_day = False
         # 调整日志等级对应颜色，颜色表可以运行log.py获取
-        self.log_colors = {}  # type: Dict[str, str]
+        self.log_colors: Dict[str, str] = {}
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
-        self.auto_send_card_target_qqs = []  # type: List[str]
+        self.auto_send_card_target_qqs: List[str] = []
         # 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
         self.scode_list_accept_give = []
         # 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知
         self.scode_list_accept_ask = []
         # 马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知
-        self.majieluo_invite_uin_list = []  # type: List[str]
+        self.majieluo_invite_uin_list: List[str] = []
         # 是否弹出支付宝红包活动图片
         self.enable_alipay_redpacket_v2 = True
 
@@ -1177,9 +1177,9 @@ class CommonConfig(ConfigInterface):
         # 心悦相关配置
         self.xinyue = XinYueConfig()
         # 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。
-        self.fixed_teams = []  # type: List[FixedTeamConfig]
+        self.fixed_teams: List[FixedTeamConfig] = []
         # 赛利亚活动拜访目标QQ列表
-        self.sailiyam_visit_target_qqs = []  # type: List[str]
+        self.sailiyam_visit_target_qqs: List[str] = []
         # 马杰洛相关配置
         self.majieluo = MajieluoConfig()
 
@@ -1228,7 +1228,7 @@ class Config(ConfigInterface):
         # 所有账号共用的配置
         self.common = CommonConfig()
         # 兑换道具信息
-        self.account_configs = []  # type: List[AccountConfig]
+        self.account_configs: List[AccountConfig] = []
 
     def fields_to_fill(self):
         return [

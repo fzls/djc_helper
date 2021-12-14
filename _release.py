@@ -111,7 +111,7 @@ def release():
         logger.info(color("bold_green") + "具体上传列表如下：")
         for upload_folder, upload_list in upload_info_list:
             logger.info(color("bold_cyan") + f"\t{upload_folder.name}：")
-            for local_filepath, history_file_prefix in upload_list:
+            for local_filepath, _history_file_prefix in upload_list:
                 logger.info(f"\t\t{local_filepath}")
 
             logger.info('\n')

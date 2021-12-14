@@ -892,7 +892,7 @@ class QQLogin():
     def fetch_qq_video_vuserid(self):
         logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
         self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
-        for i in range(5):
+        for _i in range(5):
             vuserid = self.driver.get_cookie('vuserid')
             if vuserid is not None:
                 break
@@ -903,7 +903,7 @@ class QQLogin():
         logger.info(f"{self.name} 跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")
         self.driver.get("https://apps.game.qq.com/")
         time.sleep(1)
-        for i in range(5):
+        for _i in range(5):
             p_skey = self.driver.get_cookie('p_skey')
             if p_skey is not None:
                 break
@@ -914,7 +914,7 @@ class QQLogin():
         logger.info(f"{self.name} 跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
-        for i in range(5):
+        for _i in range(5):
             openid, access_token = None, None
             try:
                 openid = self.driver.get_cookie('openid')
@@ -928,7 +928,7 @@ class QQLogin():
         self.add_cookie('xinyue_access_token', self.driver.get_cookie('access_token'))
 
     def wait_for_IED_LOG_INFO2_QC(self):
-        for i in range(5):
+        for _i in range(5):
             userinfo = self.driver.get_cookie('uInfo101478239')
             if userinfo is not None:
                 break
@@ -983,7 +983,7 @@ class QQLogin():
                 # 若有则取其中最频繁的前几个作为优先尝试项
                 mostCommon = Counter(account_db.offset_to_history_succes_count).most_common()
                 logger.info(f"{self.name} 根据本地记录数据，过去运行中成功解锁次数最多的偏移值为：{mostCommon}，将首先尝试他们")
-                for xoffset, success_count in mostCommon:
+                for xoffset, _success_count in mostCommon:
                     xoffsets.append(int(xoffset))
             else:
                 # 没有历史数据，只能取默认经验值了
@@ -1116,7 +1116,7 @@ def test():
     total = len(login_types) * len(login_modes) * len(login_accounts) * TEST_SWITCH_RUN_COUNT
 
     window_index = 0
-    for loop_index in range(TEST_SWITCH_RUN_COUNT):
+    for _loop_index in range(TEST_SWITCH_RUN_COUNT):
         for login_type in login_types:
             for login_mode in login_modes:
                 for login_account in login_accounts:

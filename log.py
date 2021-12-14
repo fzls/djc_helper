@@ -47,7 +47,7 @@ if "MainProcess" in process_name:
     log_filename = f"{log_directory}/{logger.name}_{process_name}_{time_str}.log"
     pathlib.Path(log_filename_file).write_text(log_filename, encoding='utf-8')
 
-for i in range(3):
+for _i in range(3):
     try:
         with open(log_filename_file, 'r', encoding='utf-8') as f:
             log_filename = f.read()

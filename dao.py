@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import List
 
 from data_struct import ConfigInterface, to_raw_type
 

@@ -1550,9 +1550,9 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
 
     if show_dlc_info:
         logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx")
-        logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n" +
-                    color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
-                                          f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
+        logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n"
+                    + color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
+                    + f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
         logger.info(color("bold_black") + "若对自动更新送的两月有疑义，请看付费指引的常见问题章节\n"
                                           "\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利\n"
                                           "\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月")

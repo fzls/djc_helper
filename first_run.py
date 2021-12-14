@@ -1,6 +1,8 @@
 from datetime import timedelta
 
-from util import *
+from db import FirstRunDB
+from log import logger
+from util import get_month, get_now, get_today, get_week, get_year, try_except
 
 
 class FirstRunType:

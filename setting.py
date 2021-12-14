@@ -1,5 +1,8 @@
+from typing import List
+
 from config import ArkLotteryAwardConfig
-from setting_def import *
+from setting_def import (ArkLotteryZzConfig, DnfAreaServerListConfig,
+                         DnfServerConfig)
 from settings import ark_lottery, dnf_server_list
 
 

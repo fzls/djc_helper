@@ -1,10 +1,20 @@
+import json
 import os.path
+from datetime import timedelta
+from typing import List
+
+import win32con
 
 from const import downloads_dir
-from data_struct import to_raw_type
-from first_run import *
+from data_struct import ConfigInterface, to_raw_type
+from first_run import (is_daily_first_run, is_first_run, is_monthly_first_run,
+                       is_weekly_first_run, reset_first_run)
+from log import logger
 from update import version_less
 from upload_lanzouyun import Uploader
+from util import (format_now, format_time, get_now, message_box, parse_time,
+                  try_except)
+from version import now_version
 
 
 class NoticeShowType:
@@ -191,6 +201,7 @@ def test():
 
 if __name__ == '__main__':
     TEST = False
+    from util import bypass_proxy
     bypass_proxy()
 
     if not TEST:

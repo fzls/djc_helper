@@ -1,6 +1,10 @@
-from config import *
+import platform
+import threading
+
+from config import Config
 from first_run import is_first_run
-from util import message_box
+from log import logger
+from util import is_run_in_github_action, message_box
 
 
 def check_first_run_async(cfg: Config):
@@ -119,5 +123,6 @@ def show_tip_on_first_run(first_run_tip_name, title, tips, loginfo, show_count=1
 
 
 if __name__ == '__main__':
+    from config import config
     check_first_run_async(config())
     input("按enter结束测试")

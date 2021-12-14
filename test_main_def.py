@@ -1,4 +1,8 @@
-from main_def import *
+from dao import BuyInfo, BuyRecord
+from db import UserBuyInfoDB
+from main_def import (new_ark_lottery_parse_card_id_from_index,
+                      new_ark_lottery_parse_index_from_card_id,
+                      try_notify_new_pay_info)
 
 
 def test_try_notify_new_pay_info():

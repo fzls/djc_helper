@@ -1,5 +1,8 @@
-from usage_count import *
-from util import *
+from log import color, logger
+from usage_count import (get_count, get_record_count_name_start_with,
+                         time_periods, time_periods_desc)
+from util import get_last_n_days, get_uuid, show_head_line, tableify
+from version import now_version, ver_time
 
 user_usage_counter_name_prefix = "user_count"
 auto_updater_usage_counter_name_prefix = "auto_updater"
@@ -40,6 +43,10 @@ def show_usage():
 
 
 if __name__ == '__main__':
+    import os
+
+    from util import change_console_window_mode_async
+
     change_console_window_mode_async()
     show_usage()
     os.system("PAUSE")

@@ -1,9 +1,17 @@
-from main_def import *
-from main_def import _show_head_line
+import datetime
+from multiprocessing import freeze_support
+
+from config import AccountConfig, CommonConfig, config, load_config
+from djc_helper import DjcHelper, is_new_version_ark_lottery
+from log import color, logger
+from main_def import (_show_head_line, auto_send_cards, check_proxy,
+                      has_any_account_in_normal_run, show_lottery_status,
+                      show_multiprocessing_info)
 from pool import close_pool, get_pool, init_pool
-from show_usage import *
-from usage_count import *
-from version import author
+from qq_login import QQLogin
+from util import (change_console_window_mode_async, change_title, pause,
+                  show_unexpected_exception_message)
+from version import author, now_version, ver_time
 
 
 def check_all_skey_and_pskey(cfg):

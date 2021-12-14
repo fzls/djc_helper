@@ -1,7 +1,16 @@
+import json
+import os
+from typing import Optional
+
 import requests
 
+from const import cached_dir
 from dao import AmsActInfo
-from util import *
+from log import color, logger
+from util import (exists_flag_file, format_time, get_now, get_past_time,
+                  get_remaining_time, is_act_expired, make_sure_dir_exists,
+                  padLeftRight, parse_time, start_and_end_date_of_a_month,
+                  tableify, try_except, with_cache)
 
 
 def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):

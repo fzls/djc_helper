@@ -20,7 +20,7 @@ import traceback
 import uuid
 import webbrowser
 from functools import wraps
-from typing import Callable, Optional
+from typing import Any, Callable, List, Optional, Tuple, Type
 from urllib import parse
 
 import psutil
@@ -32,7 +32,7 @@ import urllib3.exceptions
 from compress import (compress_in_memory_with_lzma,
                       decompress_in_memory_with_lzma)
 from const import cached_dir
-from db import *
+from db import CacheDB, CacheInfo
 from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
 

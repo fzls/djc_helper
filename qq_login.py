@@ -10,7 +10,6 @@ from collections import Counter
 from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
-import win32con
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
@@ -46,6 +45,9 @@ from util import (
     use_by_myself,
 )
 from version import now_version
+
+if is_windows():
+    import win32con
 
 
 class LoginResult(ConfigInterface):

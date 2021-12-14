@@ -19,33 +19,60 @@ from check_first_run import check_first_run_async
 from config import config, load_config
 from first_run import is_weekly_first_run
 from log import color, log_directory, logger
-from main_def import (auto_send_cards, check_all_skey_and_pskey,
-                      check_djc_role_binding, check_proxy, check_update,
-                      get_user_buy_info,
-                      print_update_message_on_first_run_new_version, run, sas,
-                      show_ask_message_box, show_buy_info, show_extra_infos,
-                      show_lottery_status, show_multiprocessing_info,
-                      show_notices, show_pay_info, try_auto_update,
-                      try_join_xinyue_team,
-                      try_load_old_version_configs_from_user_data_dir,
-                      try_report_usage_info, try_save_configs_to_user_data_dir,
-                      try_take_xinyue_team_award)
+from main_def import (
+    auto_send_cards,
+    check_all_skey_and_pskey,
+    check_djc_role_binding,
+    check_proxy,
+    check_update,
+    get_user_buy_info,
+    print_update_message_on_first_run_new_version,
+    run,
+    sas,
+    show_ask_message_box,
+    show_buy_info,
+    show_extra_infos,
+    show_lottery_status,
+    show_multiprocessing_info,
+    show_notices,
+    show_pay_info,
+    try_auto_update,
+    try_join_xinyue_team,
+    try_load_old_version_configs_from_user_data_dir,
+    try_report_usage_info,
+    try_save_configs_to_user_data_dir,
+    try_take_xinyue_team_award,
+)
 from pool import close_pool, init_pool
 from show_usage import show_usage
 from usage_count import increase_counter
-from util import (MiB, async_call, async_message_box,
-                  change_console_window_mode_async, change_title,
-                  clean_dir_to_size, disable_pause_after_run,
-                  disable_quick_edit_mode, is_run_in_github_action,
-                  kill_other_instance_on_start, pause, show_head_line,
-                  show_unexpected_exception_message)
+from util import (
+    MiB,
+    async_call,
+    async_message_box,
+    change_console_window_mode_async,
+    change_title,
+    clean_dir_to_size,
+    disable_pause_after_run,
+    disable_quick_edit_mode,
+    is_run_in_github_action,
+    kill_other_instance_on_start,
+    pause,
+    show_head_line,
+    show_unexpected_exception_message,
+)
 from version import author, now_version, ver_time
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--no_max_console", default=False, action="store_true", help="是否不将窗口调整为最大化")
-    parser.add_argument("--wait_for_pid_exit", default=0, type=int, help="启动后是否等待对应pid的进程结束后再启动，主要用于使用配置工具启动小助手的情况，只有配置工具退出运行，自动更新才能正常进行")
+    parser.add_argument(
+        "--wait_for_pid_exit",
+        default=0,
+        type=int,
+        help="启动后是否等待对应pid的进程结束后再启动，主要用于使用配置工具启动小助手的情况，只有配置工具退出运行，自动更新才能正常进行",
+    )
     parser.add_argument("--max_wait_time", default=5, type=int, help="最大等待时间")
     args = parser.parse_args()
 
@@ -118,7 +145,9 @@ def main():
 
     init_pool(cfg.get_pool_size())
 
-    change_title(multiprocessing_pool_size=cfg.get_pool_size(), enable_super_fast_mode=cfg.common.enable_super_fast_mode)
+    change_title(
+        multiprocessing_pool_size=cfg.get_pool_size(), enable_super_fast_mode=cfg.common.enable_super_fast_mode
+    )
 
     show_multiprocessing_info(cfg)
 
@@ -213,8 +242,9 @@ def main_wrapper():
 
         # 如果总用时太高的情况时，尝试提示开启多进程和超快速模式
         cfg = config()
-        if total_used_time > datetime.timedelta(minutes=10) \
-                and (not cfg.common.enable_multiprocessing or not cfg.common.enable_super_fast_mode):
+        if total_used_time > datetime.timedelta(minutes=10) and (
+            not cfg.common.enable_multiprocessing or not cfg.common.enable_super_fast_mode
+        ):
             msg = (
                 f"当前累计用时似乎很久({total_used_time})，是否要尝试多进程和超快速模式？\n"
                 "多进程模式下，将开启多个进程并行运行不同账号的领取流程\n"
@@ -241,5 +271,5 @@ def main_wrapper():
             pause()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main_wrapper()

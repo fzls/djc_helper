@@ -4,13 +4,17 @@ from multiprocessing import freeze_support
 from config import AccountConfig, CommonConfig, config, load_config
 from djc_helper import DjcHelper, is_new_version_ark_lottery
 from log import color, logger
-from main_def import (_show_head_line, auto_send_cards, check_proxy,
-                      has_any_account_in_normal_run, show_lottery_status,
-                      show_multiprocessing_info)
+from main_def import (
+    _show_head_line,
+    auto_send_cards,
+    check_proxy,
+    has_any_account_in_normal_run,
+    show_lottery_status,
+    show_multiprocessing_info,
+)
 from pool import close_pool, get_pool, init_pool
 from qq_login import QQLogin
-from util import (change_console_window_mode_async, change_title, pause,
-                  show_unexpected_exception_message)
+from util import change_console_window_mode_async, change_title, pause, show_unexpected_exception_message
 from version import author, now_version, ver_time
 
 
@@ -24,8 +28,14 @@ def check_all_skey_and_pskey(cfg):
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
-        get_pool().starmap(do_check_all_skey_and_pskey, [(_idx + 1, account_config, cfg.common)
-                                                         for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+        get_pool().starmap(
+            do_check_all_skey_and_pskey,
+            [
+                (_idx + 1, account_config, cfg.common)
+                for _idx, account_config in enumerate(cfg.account_configs)
+                if account_config.is_enabled()
+            ],
+        )
         logger.info("全部账号检查完毕")
     else:
         for _idx, account_config in enumerate(cfg.account_configs):
@@ -56,8 +66,14 @@ def run(cfg):
 
     if cfg.common.enable_multiprocessing:
         logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
-        get_pool().starmap(do_run, [(_idx + 1, account_config, cfg.common)
-                                    for _idx, account_config in enumerate(cfg.account_configs) if account_config.is_enabled()])
+        get_pool().starmap(
+            do_run,
+            [
+                (_idx + 1, account_config, cfg.common)
+                for _idx, account_config in enumerate(cfg.account_configs)
+                if account_config.is_enabled()
+            ],
+        )
     else:
         for idx, account_config in enumerate(cfg.account_configs):
             idx += 1
@@ -126,7 +142,7 @@ def main():
     show_multiprocessing_info(cfg)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     freeze_support()
     try:
         run_start_time = datetime.datetime.now()

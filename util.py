@@ -29,8 +29,7 @@ import selenium.common.exceptions
 import toml
 import urllib3.exceptions
 
-from compress import (compress_in_memory_with_lzma,
-                      decompress_in_memory_with_lzma)
+from compress import compress_in_memory_with_lzma, decompress_in_memory_with_lzma
 from const import cached_dir
 from db import CacheDB, CacheInfo
 from log import asciiReset, color, get_log_func, logger
@@ -54,7 +53,7 @@ else:
 
 
 def uin2qq(uin):
-    return str(uin)[1:].lstrip('0')
+    return str(uin)[1:].lstrip("0")
 
 
 def is_valid_qq(qq: str) -> bool:
@@ -100,7 +99,10 @@ def ensure_cmd_window_buffer_size_for_windows(cfg):
     lines = 9999
 
     os.system(f"mode con:cols={cols} lines={lines}")
-    logger.info(color("bold_cyan") + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请关闭【修改命令行缓存大小】开关")
+    logger.info(
+        color("bold_cyan")
+        + f"当前是windows系统，分辨率为{width}*{height}，强制修改窗口大小为{lines}行*{cols}列，以确保运行日志能不被截断。如不想启用该功能，请关闭【修改命令行缓存大小】开关"
+    )
 
 
 def change_console_window_mode(cfg, disable_min_console=False):
@@ -111,7 +113,9 @@ def change_console_window_mode(cfg, disable_min_console=False):
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")
 
     try_set_console_window_mode(win32con.SW_MAXIMIZE, "最大化窗口", cfg.common.enable_max_console)
-    try_set_console_window_mode(win32con.SW_MINIMIZE, "最小化窗口", cfg.common.enable_min_console and not disable_min_console)
+    try_set_console_window_mode(
+        win32con.SW_MINIMIZE, "最小化窗口", cfg.common.enable_min_console and not disable_min_console
+    )
 
 
 def try_set_console_window_mode(show_mode: int, mode_name: str, mode_enabled: bool):
@@ -200,7 +204,7 @@ def truncate(msg, expect_width) -> str:
             break
         truncated.append(substr)
 
-    return ''.join(truncated)
+    return "".join(truncated)
 
 
 def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=False):
@@ -222,8 +226,10 @@ def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=Fa
         return pad_char * (pad_left_len + pad_right_len) + msg
 
 
-def tableify(cols, colSizes, delimiter=' ', need_truncate=False):
-    return delimiter.join([padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)])
+def tableify(cols, colSizes, delimiter=" ", need_truncate=False):
+    return delimiter.join(
+        [padLeftRight(col, colSizes[idx], need_truncate=need_truncate) for idx, col in enumerate(cols)]
+    )
 
 
 def show_head_line(msg, msg_color="", max_line_content_width=80, min_line_printed_width=80):
@@ -363,33 +369,33 @@ def get_year(t: Optional[datetime.datetime] = None) -> str:
 
 def filter_unused_params(urlRendered: str) -> str:
     path = ""
-    if '?' in urlRendered:
+    if "?" in urlRendered:
         # https://www.example.com/index?a=1&b=2
-        idx = urlRendered.index('?')
-        path, urlRendered = urlRendered[:idx], urlRendered[idx + 1:]
-    elif '=' in urlRendered or '&' in urlRendered:
+        idx = urlRendered.index("?")
+        path, urlRendered = urlRendered[:idx], urlRendered[idx + 1 :]
+    elif "=" in urlRendered or "&" in urlRendered:
         # a=1&b=2
         path, urlRendered = "", urlRendered
     else:
         # https://www.example.com/index
         path, urlRendered = urlRendered, ""
 
-    parts = urlRendered.split('&')
+    parts = urlRendered.split("&")
 
     validParts = []
     for part in parts:
         if part == "":
             continue
-        k, v = part.split('=', maxsplit=1)
+        k, v = part.split("=", maxsplit=1)
         if v != "":
             validParts.append(part)
 
     newUrl = path
     if len(validParts) != 0:
         if len(path) != 0:
-            newUrl = path + "?" + '&'.join(validParts)
+            newUrl = path + "?" + "&".join(validParts)
         else:
-            newUrl = '&'.join(validParts)
+            newUrl = "&".join(validParts)
 
     return newUrl
 
@@ -400,7 +406,7 @@ def filter_unused_params_catch_exception(urlRendered: str) -> str:
         return filter_unused_params(urlRendered)
     except Exception as e:
         logger.error(f"过滤参数出错了，urlRendered={originalUrl}", exc_info=e)
-        stack_info = color("bold_black") + ''.join(traceback.format_stack())
+        stack_info = color("bold_black") + "".join(traceback.format_stack())
         logger.error(f"看到上面这个报错，请帮忙截图发反馈群里~ 调用堆栈=\n{stack_info}")
         return originalUrl
 
@@ -420,7 +426,9 @@ def use_by_myself() -> bool:
     return exists_flag_file(".use_by_myself")
 
 
-def try_except(show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None) -> Callable:
+def try_except(
+    show_exception_info=True, show_last_process_result=True, extra_msg="", return_val_on_except=None
+) -> Callable:
     def decorator(fun):
         @wraps(fun)
         def wrapper(*args, **kwargs):
@@ -479,15 +487,26 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         return "\n" + color(_color) + msg + asciiReset
 
     # 特判一些错误
-    if type(e) is KeyError and e.args[0] == 'modRet':
-        msg += format_msg("大概率是这个活动过期了，或者放鸽子到点了还没开放，若影响正常运行流程，可先自行关闭这个活动开关(若config.toml中没有，请去config.example.toml找到对应开关名称)，或等待新版本（日常加班，有时候可能会很久才发布新版本）")
-    elif type(e) in [socket.timeout,
-                     urllib3.exceptions.ConnectTimeoutError, urllib3.exceptions.MaxRetryError, urllib3.exceptions.ReadTimeoutError,
-                     requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout, ]:
+    if type(e) is KeyError and e.args[0] == "modRet":
+        msg += format_msg(
+            "大概率是这个活动过期了，或者放鸽子到点了还没开放，若影响正常运行流程，可先自行关闭这个活动开关(若config.toml中没有，请去config.example.toml找到对应开关名称)，或等待新版本（日常加班，有时候可能会很久才发布新版本）"
+        )
+    elif type(e) in [
+        socket.timeout,
+        urllib3.exceptions.ConnectTimeoutError,
+        urllib3.exceptions.MaxRetryError,
+        urllib3.exceptions.ReadTimeoutError,
+        requests.exceptions.ConnectTimeout,
+        requests.exceptions.ReadTimeout,
+    ]:
         msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<")
-    elif type(e) in [selenium.common.exceptions.TimeoutException, ]:
+    elif type(e) in [
+        selenium.common.exceptions.TimeoutException,
+    ]:
         msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间")
-    elif type(e) in [PermissionError, ]:
+    elif type(e) in [
+        PermissionError,
+    ]:
         msg += format_msg(
             "权限错误一般是以下原因造成的\n"
             "1. 该文件被占用，比如打开了多个小助手实例或者其他应用占用了这些文件，可以尝试重启电脑后再运行\n"
@@ -496,6 +515,7 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
 
     if show_last_process_result:
         from network import last_response_info
+
         if last_response_info is not None:
             lr = last_response_info
             text = parse_unicode_escape_string(lr.text)
@@ -509,12 +529,16 @@ def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[da
     return datetime.datetime.strptime(end_time, time_fmt) < now
 
 
-def will_act_expired_in(end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> bool:
+def will_act_expired_in(
+    end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None
+) -> bool:
     now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) < now + duration
 
 
-def get_remaining_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> datetime.timedelta:
+def get_remaining_time(
+    end_time, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None
+) -> datetime.timedelta:
     now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) - now
 
@@ -562,11 +586,45 @@ def async_call(cb, *args, **params):
     threading.Thread(target=cb, args=args, kwargs=params, daemon=True).start()
 
 
-def async_message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan", open_image="", show_once_daily=False):
-    async_call(message_box, msg, title, print_log, icon, open_url, show_once, follow_flag_file, color_name, open_image, show_once_daily)
+def async_message_box(
+    msg,
+    title,
+    print_log=True,
+    icon=MB_ICONINFORMATION,
+    open_url="",
+    show_once=False,
+    follow_flag_file=True,
+    color_name="bold_cyan",
+    open_image="",
+    show_once_daily=False,
+):
+    async_call(
+        message_box,
+        msg,
+        title,
+        print_log,
+        icon,
+        open_url,
+        show_once,
+        follow_flag_file,
+        color_name,
+        open_image,
+        show_once_daily,
+    )
 
 
-def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url="", show_once=False, follow_flag_file=True, color_name="bold_cyan", open_image="", show_once_daily=False):
+def message_box(
+    msg,
+    title,
+    print_log=True,
+    icon=MB_ICONINFORMATION,
+    open_url="",
+    show_once=False,
+    follow_flag_file=True,
+    color_name="bold_cyan",
+    open_image="",
+    show_once_daily=False,
+):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
     if is_run_in_github_action():
@@ -579,7 +637,7 @@ def message_box(msg, title, print_log=True, icon=MB_ICONINFORMATION, open_url=""
         show_message_box = False
     if show_once_daily and not is_daily_first_run(f"daily_message_box_{title}"):
         show_message_box = False
-    if follow_flag_file and exists_flag_file('.no_message_box'):
+    if follow_flag_file and exists_flag_file(".no_message_box"):
         show_message_box = False
 
     if show_message_box and is_windows():
@@ -602,8 +660,8 @@ ZiB = 1024 * EiB
 YiB = 1024 * ZiB
 
 
-def human_readable_size(num, suffix='B') -> str:
-    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
+def human_readable_size(num, suffix="B") -> str:
+    for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
         if abs(num) < 1024.0:
             return f"{num:3.1f}{unit}{suffix}"
         num /= 1024.0
@@ -625,10 +683,12 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
         logger.info(f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理")
         return
 
-    logger.info(f"当前日志目录大小为{hrs(logs_size)}，超出设定最大值为{hrs(max_logs_size)}，将按照时间顺序移除部分日志，直至不高于设定清理后剩余大小{hrs(keep_logs_size)}")
+    logger.info(
+        f"当前日志目录大小为{hrs(logs_size)}，超出设定最大值为{hrs(max_logs_size)}，将按照时间顺序移除部分日志，直至不高于设定清理后剩余大小{hrs(keep_logs_size)}"
+    )
 
     # 获取全部日志文件，并按照时间升序排列
-    logs = list(pathlib.Path(dir_name).glob('**/*'))
+    logs = list(pathlib.Path(dir_name).glob("**/*"))
 
     def sort_key(f: pathlib.Path):
         return f.stat().st_mtime
@@ -646,30 +706,53 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
         remove_log_size += stat.st_size
 
         os.remove(f"{log_file}")
-        logger.info(f"移除第{remove_log_count}个日志:{log_file.name} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}")
+        logger.info(
+            f"移除第{remove_log_count}个日志:{log_file.name} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}"
+        )
 
         if remaining_logs_size <= keep_logs_size:
-            logger.info(color("bold_green") + f"当前剩余日志大小为{hrs(remaining_logs_size)}，将停止日志清理流程~ 本次累计清理{remove_log_count}个日志文件，总大小为{hrs(remove_log_size)}")
+            logger.info(
+                color("bold_green")
+                + f"当前剩余日志大小为{hrs(remaining_logs_size)}，将停止日志清理流程~ 本次累计清理{remove_log_count}个日志文件，总大小为{hrs(remove_log_size)}"
+            )
             break
 
 
 def get_directory_size(dir_name: str) -> int:
     root_directory = pathlib.Path(dir_name)
-    return sum(f.stat().st_size for f in root_directory.glob('**/*') if f.is_file())
+    return sum(f.stat().st_size for f in root_directory.glob("**/*") if f.is_file())
 
 
 def get_random_face() -> str:
-    return random.choice([
-        'ヾ(◍°∇°◍)ﾉﾞ', 'ヾ(✿ﾟ▽ﾟ)ノ', 'ヾ(๑╹◡╹)ﾉ"', '٩(๑❛ᴗ❛๑)۶', '٩(๑-◡-๑)۶ ',
-        'ヾ(●´∀｀●) ', '(｡◕ˇ∀ˇ◕)', '(◕ᴗ◕✿)', '✺◟(∗❛ัᴗ❛ั∗)◞✺', '(づ｡◕ᴗᴗ◕｡)づ',
-        '(≧∀≦)♪', '♪（＾∀＾●）ﾉ', '(●´∀｀●)ﾉ', "(〃'▽'〃)", '(｀・ω・´)',
-        'ヾ(=･ω･=)o', '(◍´꒳`◍)', '(づ●─●)づ', '｡◕ᴗ◕｡', '●﹏●',
-    ])
+    return random.choice(
+        [
+            "ヾ(◍°∇°◍)ﾉﾞ",
+            "ヾ(✿ﾟ▽ﾟ)ノ",
+            'ヾ(๑╹◡╹)ﾉ"',
+            "٩(๑❛ᴗ❛๑)۶",
+            "٩(๑-◡-๑)۶ ",
+            "ヾ(●´∀｀●) ",
+            "(｡◕ˇ∀ˇ◕)",
+            "(◕ᴗ◕✿)",
+            "✺◟(∗❛ัᴗ❛ั∗)◞✺",
+            "(づ｡◕ᴗᴗ◕｡)づ",
+            "(≧∀≦)♪",
+            "♪（＾∀＾●）ﾉ",
+            "(●´∀｀●)ﾉ",
+            "(〃'▽'〃)",
+            "(｀・ω・´)",
+            "ヾ(=･ω･=)o",
+            "(◍´꒳`◍)",
+            "(づ●─●)づ",
+            "｡◕ᴗ◕｡",
+            "●﹏●",
+        ]
+    )
 
 
 def clear_login_status():
     # 获取全部日志文件，并按照时间升序排列
-    saved_login_cache_files = list(pathlib.Path(cached_dir).glob('.saved_*'))
+    saved_login_cache_files = list(pathlib.Path(cached_dir).glob(".saved_*"))
     for cache_file in saved_login_cache_files:
         os.remove(cache_file)
         logger.info(f"移除缓存的登录信息：{cache_file}")
@@ -720,15 +803,17 @@ def get_config_from_env() -> str:
     return ""
 
 
-def gen_config_for_github_action_base64(github_action_config_path='config.toml.github_action', compress_before_encode=False):
+def gen_config_for_github_action_base64(
+    github_action_config_path="config.toml.github_action", compress_before_encode=False
+):
     ctx = "base64版本"
     target_filepath = f"{github_action_config_path}.base64"
     if compress_before_encode:
         ctx += "(压缩后转码)"
         target_filepath = f"{github_action_config_path}.compressed.base64"
 
-    with open(github_action_config_path, encoding='utf-8') as toml_file:
-        with open(target_filepath, 'w', encoding='utf-8') as save_file:
+    with open(github_action_config_path, encoding="utf-8") as toml_file:
+        with open(target_filepath, "w", encoding="utf-8") as save_file:
             toml_bytes = toml_file.read().encode()
             if compress_before_encode:
                 toml_bytes = compress_in_memory_with_lzma(toml_bytes)
@@ -738,11 +823,11 @@ def gen_config_for_github_action_base64(github_action_config_path='config.toml.g
     show_file_content_info(ctx, pathlib.Path(target_filepath).read_text())
 
 
-def gen_config_for_github_action_json_single_line(github_action_config_path='config.toml.github_action'):
+def gen_config_for_github_action_json_single_line(github_action_config_path="config.toml.github_action"):
     target_filepath = f"{github_action_config_path}.json"
 
-    with open(github_action_config_path, encoding='utf-8') as toml_file:
-        with open(target_filepath, 'w', encoding='utf-8') as save_file:
+    with open(github_action_config_path, encoding="utf-8") as toml_file:
+        with open(target_filepath, "w", encoding="utf-8") as save_file:
             cfg = toml.load(toml_file)
             json.dump(cfg, save_file)
 
@@ -751,7 +836,7 @@ def gen_config_for_github_action_json_single_line(github_action_config_path='con
 
 def show_file_content_info(ctx: str, file_content: str):
     total_size = len(file_content)
-    total_lines = file_content.count('\n') + 1
+    total_lines = file_content.count("\n") + 1
     logger.info(f"{ctx} 生成配置文件大小为{total_size}({human_readable_size(total_size)})，总行数为{total_lines}")
 
 
@@ -773,15 +858,15 @@ def disable_pause_after_run() -> bool:
 
 # 解析文件中的unicode编码字符串，形如\u5df2，将其转化为可以直观展示的【已】，目前用于查看github action的日志
 def remove_invalid_unicode_escape_string_in_file(filename: str):
-    with open(filename, encoding='utf-8') as f:
+    with open(filename, encoding="utf-8") as f:
         print(remove_invalid_unicode_escape_string(f.read()))
 
 
 def remove_invalid_unicode_escape_string(contents: str) -> str:
     invalid_chars = []
-    for code in range(ord('g'), ord('z') + 1):
+    for code in range(ord("g"), ord("z") + 1):
         invalid_chars.append(chr(code))
-    for code in range(ord('G'), ord('Z') + 1):
+    for code in range(ord("G"), ord("Z") + 1):
         invalid_chars.append(chr(code))
     for char in invalid_chars:
         contents = contents.replace(f"u{char}", f"u0020u{char}")
@@ -804,8 +889,16 @@ cache_name_user_buy_info = "user_buy_info"
 never_expired_cache_seconds = -1
 
 
-def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[], Any], cache_validate_func: Optional[Callable[[Any], bool]] = None, cache_max_seconds=600, force_update=False,
-               cache_value_unmarshal_func: Optional[Callable[[Any], Any]] = None, cache_hit_func: Optional[Callable[[Any], None]] = None):
+def with_cache(
+    cache_category: str,
+    cache_key: str,
+    cache_miss_func: Callable[[], Any],
+    cache_validate_func: Optional[Callable[[Any], bool]] = None,
+    cache_max_seconds=600,
+    force_update=False,
+    cache_value_unmarshal_func: Optional[Callable[[Any], Any]] = None,
+    cache_hit_func: Optional[Callable[[Any], None]] = None,
+):
     """
 
     :param cache_category: 缓存类别，不同类别的key不冲突
@@ -827,7 +920,10 @@ def with_cache(cache_category: str, cache_key: str, cache_miss_func: Callable[[]
         cached_value = cache_info.value
 
         if not force_update:
-            if cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now() or cache_max_seconds == never_expired_cache_seconds:
+            if (
+                cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now()
+                or cache_max_seconds == never_expired_cache_seconds
+            ):
                 if cache_value_unmarshal_func is not None:
                     cache_info.value = cache_value_unmarshal_func(cache_info.value)
                     logger.debug(f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}")
@@ -881,7 +977,7 @@ def count_down(ctx: str, seconds: float, update_interval=0.1):
 
     while now_time < end_time:
         remaining_duration = end_time - now_time
-        print("\r" + f"{ctx} 剩余等待时间: {remaining_duration}", end='')
+        print("\r" + f"{ctx} 剩余等待时间: {remaining_duration}", end="")
         time.sleep(update_interval)
         now_time = get_now()
     print("\r" + " " * 80)
@@ -903,7 +999,7 @@ def kill_process(pid: int, wait_time=5):
 
 
 def kill_other_instance_on_start():
-    pids_dir = os.path.join(cached_dir, 'pids')
+    pids_dir = os.path.join(cached_dir, "pids")
     make_sure_dir_exists(pids_dir)
 
     old_pids = os.listdir(pids_dir)
@@ -915,7 +1011,7 @@ def kill_other_instance_on_start():
 
     current_pid = os.getpid()
     pid_filename = os.path.join(pids_dir, str(current_pid))
-    open(pid_filename, 'w').close()
+    open(pid_filename, "w").close()
     logger.info(f"当前pid为{current_pid}")
 
 
@@ -940,7 +1036,10 @@ def show_unexpected_exception_message(e: Exception):
         cfg = config()
     except Exception:
         pass
-    msg = f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群{cfg.common.qq_group}反馈或自行解决。" + check_some_exception(e)
+    msg = (
+        f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群{cfg.common.qq_group}反馈或自行解决。"
+        + check_some_exception(e)
+    )
     logger.exception(color("fg_bold_yellow") + msg, exc_info=e)
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
@@ -950,7 +1049,9 @@ def show_unexpected_exception_message(e: Exception):
     logger.warning(color("fg_bold_cyan") + f"链接：{cfg.common.netdisk_link}")
 
     if run_from_src():
-        show_head_line("目前使用的是源码版本，出现任何问题请自行调试或google解决，这是使用源码版本的前提。另外，在出问题时，建议先尝试更新依赖库，确保与依赖配置中的版本匹配。", color("bold_yellow"))
+        show_head_line(
+            "目前使用的是源码版本，出现任何问题请自行调试或google解决，这是使用源码版本的前提。另外，在出问题时，建议先尝试更新依赖库，确保与依赖配置中的版本匹配。", color("bold_yellow")
+        )
 
 
 def get_pay_server_addr() -> str:
@@ -978,12 +1079,14 @@ def disable_quick_edit_mode():
 
 
 def show_quick_edit_mode_tip():
-    logger.info(color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
-                                     "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）")
+    logger.info(
+        color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
+        "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）"
+    )
 
 
 def is_run_in_pycharm() -> bool:
-    return os.getenv('PYCHARM_HOSTED') == '1'
+    return os.getenv("PYCHARM_HOSTED") == "1"
 
 
 def remove_file(file_path):
@@ -1027,32 +1130,32 @@ def md5_file(filepath: str) -> str:
 
 # 以下函数必定不是我们感兴趣的调用处
 ignore_caller_names = {
-    'process_result',
-    'get',
-    'post',
-    'amesvr_request',
-    'check_bind_account',
-    'is_guanjia_openid_expired',
-    'fetch_guanjia_openid',
-    'wrapper',
-    'show_head_line',
-    'show_ams_act_info',
-    'show_amesvr_act_info',
-    'show_not_ams_act_info',
-    'query_dnf_rolelist',
-    'temporary_change_bind_and_do',
-    'try_do_with_lucky_role_and_normal_role',
-    'try_request',
+    "process_result",
+    "get",
+    "post",
+    "amesvr_request",
+    "check_bind_account",
+    "is_guanjia_openid_expired",
+    "fetch_guanjia_openid",
+    "wrapper",
+    "show_head_line",
+    "show_ams_act_info",
+    "show_amesvr_act_info",
+    "show_not_ams_act_info",
+    "query_dnf_rolelist",
+    "temporary_change_bind_and_do",
+    "try_do_with_lucky_role_and_normal_role",
+    "try_request",
 }
 
 ignore_prefixes = [
-    'check_',
-    'do_',
-    'query_',
-    '_',
+    "check_",
+    "do_",
+    "query_",
+    "_",
 ]
 ignore_suffixes = [
-    '_op',
+    "_op",
 ]
 
 
@@ -1064,9 +1167,11 @@ def get_meaningful_call_point_for_log() -> str:
     stack_except_this = inspect.stack()[1:]
 
     for caller_info in stack_except_this:
-        if caller_info.function in ignore_caller_names \
-                or startswith_any(caller_info.function, ignore_prefixes) \
-                or endswith_any(caller_info.function, ignore_suffixes):
+        if (
+            caller_info.function in ignore_caller_names
+            or startswith_any(caller_info.function, ignore_prefixes)
+            or endswith_any(caller_info.function, ignore_suffixes)
+        ):
             continue
 
         call_at = f"{caller_info.function}:{caller_info.lineno} "
@@ -1103,19 +1208,31 @@ def popen(args, cwd="."):
         args = [str(arg) for arg in args]
 
     if is_windows():
-        subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.Popen(
+            args,
+            cwd=cwd,
+            shell=True,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
     else:
-        subprocess.Popen(args, cwd=cwd, shell=True,
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.Popen(
+            args, cwd=cwd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
 
 def start_djc_helper(exe_path: str):
-    popen([
-        exe_path,
-        "--wait_for_pid_exit", os.getpid(),
-        "--max_wait_time", 5,
-    ])
+    popen(
+        [
+            exe_path,
+            "--wait_for_pid_exit",
+            os.getpid(),
+            "--max_wait_time",
+            5,
+        ]
+    )
     logger.info(f"{exe_path} 已经启动~")
 
 
@@ -1127,16 +1244,13 @@ def sync_configs(source_dir: str, target_dir: str):
         # 配置文件
         "config.toml",
         "config.toml.local",
-
         # 特定功能的开关
         ".disable_pause_after_run",
         ".use_by_myself",
         "不查询活动.txt",
         ".no_message_box",
-
         # 缓存文件所在目录
         ".db",
-
         # # 自动更新DLC
         # "utils/auto_updater.exe"
     ]
@@ -1151,7 +1265,7 @@ def sync_configs(source_dir: str, target_dir: str):
             logger.debug(f"旧版本目录未发现 {filename}，将跳过")
             continue
 
-        if 'config.toml' in filename and os.stat(source).st_size == 0:
+        if "config.toml" in filename and os.stat(source).st_size == 0:
             logger.warning("旧版本中的配置文件是空文件，可能意外损坏了，将不覆盖到本地")
             continue
 
@@ -1183,12 +1297,15 @@ def start_and_end_date_of_a_month(date: datetime.datetime) -> Tuple[datetime.dat
         month += 1
     next_month_start_date = this_mon_start_date.replace(month=month, year=year)
 
-    this_month_end_date = (next_month_start_date - datetime.timedelta(days=1)).replace(hour=23, minute=59, second=59, microsecond=0)
+    this_month_end_date = (next_month_start_date - datetime.timedelta(days=1)).replace(
+        hour=23, minute=59, second=59, microsecond=0
+    )
 
     return this_mon_start_date, this_month_end_date
 
 
 # 常见系统变量：https://docs.microsoft.com/en-us/windows/deployment/usmt/usmt-recognized-environment-variables
+
 
 def get_appdata_dir() -> str:
     if is_windows():
@@ -1218,7 +1335,9 @@ def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, 
         if enable_super_fast_mode:
             pool_info = "超级" + pool_info
 
-    set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
+    set_title_cmd = (
+        f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} by风之凌殇 {get_random_face()}"
+    )
     if is_windows():
         os.system(set_title_cmd)
     else:
@@ -1239,7 +1358,7 @@ def auto_updater_latest_path():
 
 def remove_suffix(input_string: str, suffix: str) -> str:
     if suffix and input_string.endswith(suffix):
-        return input_string[:-len(suffix)]
+        return input_string[: -len(suffix)]
     return input_string
 
 
@@ -1253,14 +1372,14 @@ def get_resolution() -> str:
 
 
 def bypass_proxy():
-    os.environ['no_proxy'] = '*'
+    os.environ["no_proxy"] = "*"
 
 
 def use_proxy():
-    if 'no_proxy' not in os.environ:
+    if "no_proxy" not in os.environ:
         return
 
-    os.environ.pop('no_proxy')
+    os.environ.pop("no_proxy")
 
 
 def parse_scode(scode_or_url: str) -> str:
@@ -1271,12 +1390,12 @@ def parse_scode(scode_or_url: str) -> str:
         # 是url
         # https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=
         parsed = parse.urlparse(scode_or_url)
-        return parse.parse_qs(parsed.query)['sCode'][0]
+        return parse.parse_qs(parsed.query)["sCode"][0]
 
 
 def pause():
     if is_windows():
-        pause_cmd = 'PAUSE'
+        pause_cmd = "PAUSE"
     else:
         pause_cmd = 'read -r -p "Press Enter to continue..." key'
     os.system(pause_cmd)
@@ -1302,7 +1421,7 @@ def hex_str_to_bytes_arr(bytes_str: str) -> List[int]:
 
 
 def utf8len(s: str) -> int:
-    return len(s.encode('utf-8'))
+    return len(s.encode("utf-8"))
 
 
 def base64_str(text: str) -> str:
@@ -1310,7 +1429,7 @@ def base64_str(text: str) -> str:
 
 
 def json_compact(val) -> str:
-    return json.dumps(val, separators=(',', ':'))
+    return json.dumps(val, separators=(",", ":"))
 
 
 def get_url_config_path() -> str:
@@ -1321,7 +1440,7 @@ def use_new_pay_method() -> bool:
     return not os.path.isfile(get_url_config_path())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())
     # print(get_last_week_monday())

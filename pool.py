@@ -28,7 +28,7 @@ def get_pool() -> Optional[TPool]:
     return pool
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_pool())
 
     init_pool(8)

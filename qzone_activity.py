@@ -26,8 +26,8 @@ class QzoneActivity:
         # 即使没绑定dnf角色，也放行，方便领取分享奖励
         roleinfo = None
         try:
-            if 'dnf' in djc_helper.bizcode_2_bind_role_map:
-                roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
+            if "dnf" in djc_helper.bizcode_2_bind_role_map:
+                roleinfo = djc_helper.bizcode_2_bind_role_map["dnf"].sRoleInfo
         except Exception:
             pass
         self.roleinfo = roleinfo  # type: RoleInfo
@@ -70,7 +70,13 @@ class QzoneActivity:
     def add_ark_lottery_times(self):
         if self.zzconfig.rules.loginPage != 0:
             self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", self.zzconfig.rules.loginPage)
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-每日登陆游戏", self.zzconfig.rules.login, query="0", act_name=self.zzconfig.loginActId)
+        self.do_ark_lottery(
+            "v2/fcg_yvip_game_pull_flow",
+            "增加抽卡次数-每日登陆游戏",
+            self.zzconfig.rules.login,
+            query="0",
+            act_name=self.zzconfig.loginActId,
+        )
         self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日分享", self.zzconfig.rules.share)
         if self.zzconfig.rules.video != 0:
             self.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日观看直播", self.zzconfig.rules.video)
@@ -81,15 +87,25 @@ class QzoneActivity:
             logger.warning("未配置抽卡的幸运勇士的区服和角色信息，将使用道聚城绑定的角色信息")
         else:
             if self.cfg.ark_lottery.lucky_dnf_role_id == "":
-                logger.warning(f"配置了抽卡幸运勇士的区服ID为{self.cfg.ark_lottery.lucky_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
+                logger.warning(
+                    f"配置了抽卡幸运勇士的区服ID为{self.cfg.ark_lottery.lucky_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表"
+                )
                 self.djc_helper.query_dnf_rolelist(self.cfg.ark_lottery.lucky_dnf_server_id)
             else:
                 logger.info("使用配置的区服和角色信息来进行幸运勇士加次数")
                 cfg = self.cfg.ark_lottery
                 server_id, roleid = cfg.lucky_dnf_server_id, cfg.lucky_dnf_role_id
 
-        self.do_ark_lottery("v2/fcg_yvip_game_pull_flow", "增加抽卡次数-幸运勇士", self.zzconfig.rules.imback, query="0", act_name=self.zzconfig.backActId,
-                            area=server_id, partition=server_id, roleid=roleid)
+        self.do_ark_lottery(
+            "v2/fcg_yvip_game_pull_flow",
+            "增加抽卡次数-幸运勇士",
+            self.zzconfig.rules.imback,
+            query="0",
+            act_name=self.zzconfig.backActId,
+            area=server_id,
+            partition=server_id,
+            roleid=roleid,
+        )
 
     def draw_ark_lottery(self):
         count = self.remaining_lottery_times()
@@ -109,20 +125,28 @@ class QzoneActivity:
                         api = "fcg_prize_lottery"
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid=self.zzconfig.gameid)
         else:
-            if print_warning: logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
+            if print_warning:
+                logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
 
     def try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():
-            if print_warning: logger.warning(color("fg_bold_cyan") + f"已开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
+            if print_warning:
+                logger.warning(
+                    color("fg_bold_cyan") + f"已开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能"
+                )
             if self.roleinfo is None:
-                if print_warning: logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
+                if print_warning:
+                    logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
                 return
 
             card_counts = self.get_card_counts()
             for name, count in card_counts.items():
                 self.lottery_using_cards(name, count)
         else:
-            if print_warning: logger.warning(color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。")
+            if print_warning:
+                logger.warning(
+                    color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。"
+                )
 
     def enable_cost_all_cards_and_do_lottery(self):
         if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.is_last_day():
@@ -149,7 +173,9 @@ class QzoneActivity:
             self.do_ark_lottery("fcg_qzact_present", f"增加抽奖次数-消耗卡片({card_name})", ruleid)
 
             # 抽奖
-            self.do_ark_lottery("fcg_prize_lottery", "进行卡片抽奖", self.zzconfig.rules.lotteryByCard, gameid=self.zzconfig.gameid)
+            self.do_ark_lottery(
+                "fcg_prize_lottery", "进行卡片抽奖", self.zzconfig.rules.lotteryByCard, gameid=self.zzconfig.gameid
+            )
 
     def fetch_lottery_data(self):
         self.lottery_data = self.fetch_data(self.urls.ark_lottery_page)
@@ -157,7 +183,7 @@ class QzoneActivity:
     def remaining_lottery_times(self):
         self.fetch_lottery_data()
 
-        return self.lottery_data["actCount"]["rule"][str(self.zzconfig.rules.lottery)]["count"][0]['left']
+        return self.lottery_data["actCount"]["rule"][str(self.zzconfig.rules.lottery)]["count"][0]["left"]
 
     def get_card_counts(self):
         self.fetch_lottery_data()
@@ -206,8 +232,35 @@ class QzoneActivity:
 
         return prize_counts
 
-    def do_ark_lottery(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
-        return self.do_qzone_activity(self.zzconfig.actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, "", pretty, print_res)
+    def do_ark_lottery(
+        self,
+        api,
+        ctx,
+        ruleid,
+        query="",
+        act_name="",
+        gameid="",
+        area="",
+        partition="",
+        roleid="",
+        pretty=False,
+        print_res=True,
+    ):
+        return self.do_qzone_activity(
+            self.zzconfig.actid,
+            api,
+            ctx,
+            ruleid,
+            query,
+            act_name,
+            gameid,
+            area,
+            partition,
+            roleid,
+            "",
+            pretty,
+            print_res,
+        )
 
     # ----------------- 阿拉德勇士征集令 ----------------------
 
@@ -219,7 +272,9 @@ class QzoneActivity:
 
         # 抽象一些方法
         def gamePullFlow(ctx):
-            return self.do_dnf_warriors_call("v2/fcg_yvip_game_pull_flow", ctx, "", query="0", gameid=zz.gameid, act_name=zz.gameActName)
+            return self.do_dnf_warriors_call(
+                "v2/fcg_yvip_game_pull_flow", ctx, "", query="0", gameid=zz.gameid, act_name=zz.gameActName
+            )
 
         def lottery(ctx):
             return self.do_dnf_warriors_call("fcg_prize_lottery", ctx, zz.actbossRule.lottery, gameid=zz.gameid)
@@ -255,7 +310,7 @@ class QzoneActivity:
         self.fetch_dnf_warriors_call_data()
         logger.info(color("fg_bold_cyan") + f"当前助力积分为{self.dnf_warriors_call_get_score()}")
 
-        if datetime.datetime.now() >= datetime.datetime.strptime('2020-12-26', "%Y-%m-%d"):
+        if datetime.datetime.now() >= datetime.datetime.strptime("2020-12-26", "%Y-%m-%d"):
             level = self.dnf_warriors_call_get_level()
             if level > 0:
                 getPrize("领取宝箱", zz.actbossRule.__getattribute__(f"getBox{level}"))
@@ -292,9 +347,24 @@ class QzoneActivity:
         self.dnf_warriors_call_raw_data = self.fetch_data(self.urls.dnf_warriors_call_page)
         self.dnf_warriors_call_data = DnfWarriorsCallInfo().auto_update_config(self.dnf_warriors_call_raw_data)
 
-    def do_dnf_warriors_call(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", pretty=False, print_res=True):
+    def do_dnf_warriors_call(
+        self,
+        api,
+        ctx,
+        ruleid,
+        query="",
+        act_name="",
+        gameid="",
+        area="",
+        partition="",
+        roleid="",
+        pretty=False,
+        print_res=True,
+    ):
         # 活动id为self.dnf_warriors_call_data.zz.actid=4117
-        return self.do_qzone_activity(self.zz().actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, "", pretty, print_res)
+        return self.do_qzone_activity(
+            self.zz().actid, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, "", pretty, print_res
+        )
 
     # ----------------- 会员关怀 ----------------------
 
@@ -352,16 +422,30 @@ class QzoneActivity:
             if guanhuai_distinctActive == "0":
                 logger.warning(color("bold_cyan") + "本次会员关怀活动不允许获取资格和领取奖励的账号不同，因此若当前QQ未被判定为幸运玩家，则不会领取成功~")
 
-            return _game_award(ctx, guanhuai_gift.act_name, guanhuai_gift.ruleid, area=server_id, partition=server_id, roleid=roleid)
+            return _game_award(
+                ctx, guanhuai_gift.act_name, guanhuai_gift.ruleid, area=server_id, partition=server_id, roleid=roleid
+            )
 
         def addLotteryTimes(ctx):
             return _game_award(ctx, add_lottery_times_act_info.act_name, add_lottery_times_act_info.ruleid)
 
         def _game_award(ctx, act_name, ruleid, area="", partition="", roleid=""):
-            if guanhuai_distinctActive == '1':
-                return self.do_vip_mentor("v2/fcg_yvip_game_pull_flow", ctx, ruleid, query="0", gameid="dnf", act_name=act_name, area=area, partition=partition, roleid=roleid)
+            if guanhuai_distinctActive == "1":
+                return self.do_vip_mentor(
+                    "v2/fcg_yvip_game_pull_flow",
+                    ctx,
+                    ruleid,
+                    query="0",
+                    gameid="dnf",
+                    act_name=act_name,
+                    area=area,
+                    partition=partition,
+                    roleid=roleid,
+                )
             else:
-                return self.do_vip_mentor("fcg_receive_reward", ctx, ruleid, gameid="dnf", partition=partition, roleid=roleid)
+                return self.do_vip_mentor(
+                    "fcg_receive_reward", ctx, ruleid, gameid="dnf", partition=partition, roleid=roleid
+                )
 
         def queryLotteryTimes(ctx):
             res = self.do_vip_mentor("fcg_qzact_count", ctx, "", countid=query_lottery_times_countid, print_res=False)
@@ -383,8 +467,36 @@ class QzoneActivity:
             lottery(f"第{idx + 1}次抽奖，并等待一会")
             time.sleep(5)
 
-    def do_vip_mentor(self, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
-        return self.do_qzone_activity(self.vip_mentor_actId, api, ctx, ruleid, query, act_name, gameid, area, partition, roleid, countid, pretty, print_res)
+    def do_vip_mentor(
+        self,
+        api,
+        ctx,
+        ruleid,
+        query="",
+        act_name="",
+        gameid="",
+        area="",
+        partition="",
+        roleid="",
+        countid="",
+        pretty=False,
+        print_res=True,
+    ):
+        return self.do_qzone_activity(
+            self.vip_mentor_actId,
+            api,
+            ctx,
+            ruleid,
+            query,
+            act_name,
+            gameid,
+            area,
+            partition,
+            roleid,
+            countid,
+            pretty,
+            print_res,
+        )
 
     # ----------------- QQ空间活动通用逻辑 ----------------------
 
@@ -393,7 +505,9 @@ class QzoneActivity:
         data_suffix = ";\n</script>"
 
         def request_fn():
-            return requests.post(activity_page_url, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+            return requests.post(
+                activity_page_url, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout
+            )
 
         def check_fn(response: requests.Response):
             return data_prefix not in response.text
@@ -414,7 +528,22 @@ class QzoneActivity:
 
         raise Exception("无法正常获取QQ空间活动数据")
 
-    def do_qzone_activity(self, actid, api, ctx, ruleid, query="", act_name="", gameid="", area="", partition="", roleid="", countid="", pretty=False, print_res=True):
+    def do_qzone_activity(
+        self,
+        actid,
+        api,
+        ctx,
+        ruleid,
+        query="",
+        act_name="",
+        gameid="",
+        area="",
+        partition="",
+        roleid="",
+        countid="",
+        pretty=False,
+        print_res=True,
+    ):
         url = self.urls.qzone_activity.format(
             api=api,
             g_tk=self.g_tk,

@@ -121,5 +121,5 @@ def cui():
         message_box("已领取完毕，请修改send_to_xiaohao为True，方便明天继续从头用", "提示")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cui()

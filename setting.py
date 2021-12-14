@@ -1,8 +1,7 @@
 from typing import List
 
 from config import ArkLotteryAwardConfig
-from setting_def import (ArkLotteryZzConfig, DnfAreaServerListConfig,
-                         DnfServerConfig)
+from setting_def import ArkLotteryZzConfig, DnfAreaServerListConfig, DnfServerConfig
 from settings import ark_lottery, dnf_server_list
 
 
@@ -67,7 +66,7 @@ def dnf_server_list_config():
 
 
 def dnf_server_name_list():
-    return ['', *[server.t for server in dnf_server_list_config()]]
+    return ["", *[server.t for server in dnf_server_list_config()]]
 
 
 def dnf_server_name_to_id(name):
@@ -95,7 +94,7 @@ def dnf_server_id_to_area_info(id: str) -> DnfAreaServerListConfig:
     return DnfAreaServerListConfig()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cfg = zzconfig()
     print("卡片信息如下")
     for name, card in parse_card_group_info_map(cfg).items():

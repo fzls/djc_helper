@@ -79,7 +79,9 @@ def _is_first_run(first_run_type: str, key="", duration: Optional[timedelta] = N
         if first_run:
             first_run_data.set_update_at()
 
-        logger.debug(f"{first_run_type:7s} {first_run_data.prepare_env_and_get_db_filepath()} first_run={first_run}, data={first_run_data}")
+        logger.debug(
+            f"{first_run_type:7s} {first_run_data.prepare_env_and_get_db_filepath()} first_run={first_run}, data={first_run_data}"
+        )
 
         return first_run
 
@@ -96,7 +98,7 @@ def get_first_run_cache_filename(key) -> str:
     return FirstRunDB().with_context(key).get_db_filename()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(is_first_run("first_run"))
     print(is_first_run_in("test_duration", timedelta(minutes=1)))
     print(is_daily_first_run("first_run_daily"))

@@ -11,27 +11,56 @@ from typing import Dict, List
 
 import requests
 
-from config import (AccountConfig, AccountInfoConfig, ArkLotteryConfig,
-                    CommonConfig, Config, DnfHelperChronicleExchangeItemConfig,
-                    DnfHelperInfoConfig, ExchangeItemConfig, FixedTeamConfig,
-                    FunctionSwitchesConfig, HelloVoiceInfoConfig, LoginConfig,
-                    MajieluoConfig, MobileGameRoleInfoConfig, RetryConfig,
-                    VipMentorConfig, XinYueAppOperationConfig,
-                    XinYueOperationConfig, config, load_config, save_config)
+from config import (
+    AccountConfig,
+    AccountInfoConfig,
+    ArkLotteryConfig,
+    CommonConfig,
+    Config,
+    DnfHelperChronicleExchangeItemConfig,
+    DnfHelperInfoConfig,
+    ExchangeItemConfig,
+    FixedTeamConfig,
+    FunctionSwitchesConfig,
+    HelloVoiceInfoConfig,
+    LoginConfig,
+    MajieluoConfig,
+    MobileGameRoleInfoConfig,
+    RetryConfig,
+    VipMentorConfig,
+    XinYueAppOperationConfig,
+    XinYueOperationConfig,
+    config,
+    load_config,
+    save_config,
+)
 from db import DnfHelperChronicleExchangeListDB
 from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from qt_wrapper import (
-    ConfirmMessageBox, MyComboBox, QHLine, QQListValidator, add_form_seperator,
-    add_row, add_vbox_seperator, create_checkbox,
+    ConfirmMessageBox,
+    MyComboBox,
+    QHLine,
+    QQListValidator,
+    add_form_seperator,
+    add_row,
+    add_vbox_seperator,
+    create_checkbox,
     create_collapsible_box_add_to_parent_layout,
     create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout,
-    create_combobox, create_double_spin_box, create_lineedit,
-    create_push_button_grid_layout, create_pushbutton, create_spin_box,
-    init_collapsible_box_size, list_to_str, make_scroll_layout, show_message,
-    str_to_list)
-from setting import (dnf_server_id_to_name, dnf_server_name_list,
-                     dnf_server_name_to_id, zzconfig)
+    create_combobox,
+    create_double_spin_box,
+    create_lineedit,
+    create_push_button_grid_layout,
+    create_pushbutton,
+    create_spin_box,
+    init_collapsible_box_size,
+    list_to_str,
+    make_scroll_layout,
+    show_message,
+    str_to_list,
+)
+from setting import dnf_server_id_to_name, dnf_server_name_list, dnf_server_name_to_id, zzconfig
 from update import get_update_info, try_manaual_update, update_fallback
 from version import now_version
 
@@ -46,27 +75,56 @@ from urllib.parse import unquote
 
 from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QFormLayout, QFrame,
-                             QHBoxLayout, QInputDialog, QLabel, QLineEdit,
-                             QMessageBox, QStyleFactory, QTabWidget,
-                             QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QFormLayout,
+    QFrame,
+    QHBoxLayout,
+    QInputDialog,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QStyleFactory,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from dao import CardSecret, DnfRoleInfo
 from data_struct import ConfigInterface, to_raw_type
 from djc_helper import DjcHelper, is_new_version_ark_lottery
 from ga import GA_REPORT_TYPE_PAGE_VIEW
 from game_info import get_name_2_mobile_game_info_map
-from main_def import (_show_head_line, disable_flag_file, get_user_buy_info,
-                      has_any_account_in_normal_run, has_buy_auto_updater_dlc)
+from main_def import (
+    _show_head_line,
+    disable_flag_file,
+    get_user_buy_info,
+    has_any_account_in_normal_run,
+    has_buy_auto_updater_dlc,
+)
 from network import process_result
 from urls import Urls
 from usage_count import increase_counter
-from util import (bytes_arr_to_hex_str, cache_name_download,
-                  cache_name_user_buy_info, clear_login_status,
-                  get_pay_server_addr, get_random_face, hex_str_to_bytes_arr,
-                  is_valid_qq, kill_process, parse_scode, range_from_one,
-                  reset_cache, run_from_src, start_djc_helper, sync_configs,
-                  try_except, use_new_pay_method)
+from util import (
+    bytes_arr_to_hex_str,
+    cache_name_download,
+    cache_name_user_buy_info,
+    clear_login_status,
+    get_pay_server_addr,
+    get_random_face,
+    hex_str_to_bytes_arr,
+    is_valid_qq,
+    kill_process,
+    parse_scode,
+    range_from_one,
+    reset_cache,
+    run_from_src,
+    start_djc_helper,
+    sync_configs,
+    try_except,
+    use_new_pay_method,
+)
 
 # 客户端错误码
 CHECK_RESULT_OK = "检查通过"
@@ -82,13 +140,16 @@ RESULT_ALREADY_BUY = "自动更新只需购买一次"
 pay_item_item_auto_updater = "自动更新DLC"
 
 all_pay_item_names = [
-    "按月付费1个月", "按月付费2个月", "按月付费3个月",
-    "按月付费6个月", "按月付费12个月", pay_item_item_auto_updater,
+    "按月付费1个月",
+    "按月付费2个月",
+    "按月付费3个月",
+    "按月付费6个月",
+    "按月付费12个月",
+    pay_item_item_auto_updater,
 ]
 
 item_name_to_money_map = {
     pay_item_item_auto_updater: 10.24,
-
     "按月付费1个月": 5 * 1,
     "按月付费2个月": 5 * 2,
     "按月付费3个月": 5 * 3,
@@ -97,7 +158,9 @@ item_name_to_money_map = {
 }
 
 all_pay_type_names = [
-    "支付宝", "微信支付", "QQ钱包",
+    "支付宝",
+    "微信支付",
+    "QQ钱包",
 ]
 
 pay_type_name_to_type = {
@@ -135,7 +198,7 @@ class SubmitOrderResponse(ConfigInterface):
         self.order_url = ""
 
 
-class BiDict():
+class BiDict:
     def __init__(self, original_dict: dict):
         self.key_to_val = dict({k: v for k, v in original_dict.items()})
         self.val_to_key = dict({v: k for k, v in original_dict.items()})
@@ -165,9 +228,11 @@ class GetBuyInfoThread(QThread):
 
         dlc_info = "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx\n"
         if has_buy_auto_update_dlc:
-            dlc_info += "已购买自动更新DLC" \
-                        "\n\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利" \
-                        "\n\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月"
+            dlc_info += (
+                "已购买自动更新DLC"
+                "\n\t请注意这里的两月是指从2.8开始累积未付费时长最多允许为两个月，是给2.8以前购买DLC的朋友的小福利"
+                "\n\t如果4.11以后才购买就享受不到这个的，因为购买时自2.8开始的累积未付费时长已经超过两个月"
+            )
         else:
             dlc_info += "当前所有账号均未购买自动更新DLC"
         monthly_pay_info = user_buy_info.description()
@@ -229,15 +294,15 @@ class ConfigUi(QFrame):
         # 弹窗提示选择旧版本的小助手exe所在目录
         msg = "打开旧版本的【DNF蚊子腿小助手.exe】所在的目录，形如【DNF蚊子腿小助手_v10.5.0_by风之凌殇】"
         # show_message("操作指引", msg)
-        old_version_dir = QFileDialog.getExistingDirectory(self, msg,
-                                                           os.path.realpath(".."),
-                                                           QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
-        if old_version_dir == '':
+        old_version_dir = QFileDialog.getExistingDirectory(
+            self, msg, os.path.realpath(".."), QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks
+        )
+        if old_version_dir == "":
             logger.info("未选择任何目录")
             return
 
         # 通过判断目录中是否存在【DNF蚊子腿小助手.exe】来判定选择的目录是否是正确的目录
-        djc_helper_exe = 'DNF蚊子腿小助手.exe'
+        djc_helper_exe = "DNF蚊子腿小助手.exe"
         if not os.path.isfile(os.path.join(old_version_dir, djc_helper_exe)):
             show_message("出错啦", f"未在选中的目录 {old_version_dir} 中发现 {djc_helper_exe} ，请重新点击按钮进行选择~")
             return
@@ -419,7 +484,15 @@ class ConfigUi(QFrame):
         if type(args) is list:
             args = [str(arg) for arg in args]
 
-        subprocess.Popen(args, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.Popen(
+            args,
+            cwd=cwd,
+            shell=True,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
 
     def clear_login_status(self, checked=False):
         clear_login_status()
@@ -430,7 +503,10 @@ class ConfigUi(QFrame):
     def join_group(self, checked=False):
         # note: 如果群 517463079 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
         webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=oH1boMJu1qlXm-MFcun0lKYcCj7qitca&jump_from=webapi")
-        for suffix in ["png", "jpg", ]:
+        for suffix in [
+            "png",
+            "jpg",
+        ]:
             img_name = f"DNF蚊子腿小助手交流群群二维码.{suffix}"
             if not os.path.isfile(img_name):
                 continue
@@ -444,7 +520,9 @@ class ConfigUi(QFrame):
         report_click_event("join_telegram")
 
     def add_account(self, checked=False):
-        account_name, ok = QInputDialog.getText(self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts) + 1}")
+        account_name, ok = QInputDialog.getText(
+            self, "添加账号", "要添加的账号名称", QLineEdit.Normal, f"默认账号名-{len(self.accounts) + 1}"
+        )
         if ok:
             logger.info(f"尝试添加账号 {account_name} ...")
 
@@ -517,12 +595,20 @@ class ConfigUi(QFrame):
         top_layout.setAlignment(Qt.AlignCenter)
 
         # -------------- 区域：购买卡密 --------------
-        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout("购买卡密(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse")
+        self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout(
+            "购买卡密(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse"
+        )
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
 
-        btn_buy_auto_updater_dlc = create_pushbutton("购买自动更新DLC的卡密", "DeepSkyBlue", "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引/付费指引.docx")
-        btn_pay_by_month = create_pushbutton("购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引/付费指引.docx")
+        btn_buy_auto_updater_dlc = create_pushbutton(
+            "购买自动更新DLC的卡密",
+            "DeepSkyBlue",
+            "10.24元，一次性付费，永久激活自动更新功能，需去网盘或群文件下载auto_updater.exe放到utils目录，详情可见付费指引/付费指引.docx",
+        )
+        btn_pay_by_month = create_pushbutton(
+            "购买按月付费的卡密", "DeepSkyBlue", "5元/月(31天)，付费生效期间可以激活2020.2.6及之后加入的短期活动，可从账号概览区域看到付费情况，详情可见付费指引/付费指引.docx"
+        )
 
         btn_buy_auto_updater_dlc.clicked.connect(self.buy_auto_updater_dlc)
         btn_pay_by_month.clicked.connect(self.pay_by_month)
@@ -531,7 +617,9 @@ class ConfigUi(QFrame):
         hbox_layout.addWidget(btn_pay_by_month)
 
         # -------------- 区域：使用卡密 --------------
-        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout("使用卡密(点击展开)", top_layout, title_backgroup_color="MediumSpringGreen")
+        self.collapsible_box_use_card_secret = create_collapsible_box_add_to_parent_layout(
+            "使用卡密(点击展开)", top_layout, title_backgroup_color="MediumSpringGreen"
+        )
         vbox_layout = QVBoxLayout()
         self.collapsible_box_use_card_secret.setContentLayout(vbox_layout)
 
@@ -541,7 +629,9 @@ class ConfigUi(QFrame):
         self.lineedit_card = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的卡号，形如 auto_update-20210313133230-00001")
         form_layout.addRow("卡号", self.lineedit_card)
 
-        self.lineedit_secret = create_lineedit("", placeholder_text="填入在卡密网站付款后得到的密码，形如 BF8h0y1Zcb8ukY6rsn5YFhkh0Nbe9hit")
+        self.lineedit_secret = create_lineedit(
+            "", placeholder_text="填入在卡密网站付款后得到的密码，形如 BF8h0y1Zcb8ukY6rsn5YFhkh0Nbe9hit"
+        )
         form_layout.addRow("卡密", self.lineedit_secret)
 
         self.lineedit_qq = create_lineedit("", placeholder_text="形如 1234567")
@@ -562,7 +652,9 @@ class ConfigUi(QFrame):
             self.hide_card_secret()
 
             # 显示新版的付费界面
-            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout("购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan")
+            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout(
+                "购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
+            )
             vbox_layout = QVBoxLayout()
             self.collapsible_box_pay_directly.setContentLayout(vbox_layout)
 
@@ -574,10 +666,15 @@ class ConfigUi(QFrame):
             # 如果首个账号配置为自动登录，且设置了qq，则直接填入作为主QQ默认值，简化操作
             if len(cfg.account_configs) != 0:
                 account_cfg = cfg.account_configs[0]
-                if account_cfg.login_mode == account_cfg.login_mode_auto_login and account_cfg.account_info.has_set_account():
+                if (
+                    account_cfg.login_mode == account_cfg.login_mode_auto_login
+                    and account_cfg.account_info.has_set_account()
+                ):
                     self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
 
-            self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
+            self.lineedit_pay_directly_game_qqs = create_lineedit(
+                "", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
+            )
             self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
             form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
 
@@ -629,12 +726,16 @@ class ConfigUi(QFrame):
         init_collapsible_box_size(self)
 
     def show_wxpay_in_maintain(self):
-        show_message("提示", (
-            "支付网站的微信支付渠道暂时在维护中，请选择 支付宝或者QQ钱包 进行支付\n"
-            "\n"
-            "如果你其他两个里没放钱，可以点击【其他功能】tab中第一行最右侧的【显示原来的卡密支付界面】，然后回到当前页面，即可看到卡密的界面。\n"
-            "若卡密网站的微信支付渠道可用，可以在那边下单后再使用卡密~\n"
-        ), disabled_seconds=5)
+        show_message(
+            "提示",
+            (
+                "支付网站的微信支付渠道暂时在维护中，请选择 支付宝或者QQ钱包 进行支付\n"
+                "\n"
+                "如果你其他两个里没放钱，可以点击【其他功能】tab中第一行最右侧的【显示原来的卡密支付界面】，然后回到当前页面，即可看到卡密的界面。\n"
+                "若卡密网站的微信支付渠道可用，可以在那边下单后再使用卡密~\n"
+            ),
+            disabled_seconds=5,
+        )
 
     def is_card_secret_hidden(self) -> bool:
         return self.collapsible_box_buy_card_secret.isHidden()
@@ -705,12 +806,7 @@ class ConfigUi(QFrame):
 
         message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认账号信息")
-        message_box.setText(
-            "请确认输入的账号信息是否无误，避免充错账号~\n"
-            "\n"
-            f"主QQ：       {qq}\n"
-            f"其他QQ列表： {game_qqs}\n"
-        )
+        message_box.setText("请确认输入的账号信息是否无误，避免充错账号~\n" "\n" f"主QQ：       {qq}\n" f"其他QQ列表： {game_qqs}\n")
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
@@ -724,20 +820,14 @@ class ConfigUi(QFrame):
         try:
             self.do_pay_request(card, secret, qq, game_qqs)
         except Exception as e:
-            show_message("出错了", (
-                f"请求出现异常，报错如下:\n"
-                "\n"
-                f"{e}\n"
-                "\n"
-                "可以试试使用付款方式二进行付款~\n"
-            ))
+            show_message("出错了", (f"请求出现异常，报错如下:\n" "\n" f"{e}\n" "\n" "可以试试使用付款方式二进行付款~\n"))
 
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
 
     def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: list[str]) -> str:
-        if len(card.split('-')) != 3:
+        if len(card.split("-")) != 3:
             return "无效的卡号"
 
         if len(secret) != 32:
@@ -784,7 +874,9 @@ class ConfigUi(QFrame):
 
             # 自动更新购买完成后提示去网盘下载
             if card.startswith("auto_update"):
-                show_message("提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引/付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）")
+                show_message(
+                    "提示", "自动更新已激活，请前往网盘下载auto_updater.exe，具体操作流程请看【付费指引/付费指引.docx】（或者直接运行小助手也可以，现在支持尝试自动下载dlc到本地）"
+                )
 
             self.report_use_card_secret(card)
         else:
@@ -793,7 +885,7 @@ class ConfigUi(QFrame):
 
     @try_except(return_val_on_except=False)
     def report_use_card_secret(self, card: str):
-        increase_counter(ga_category="use_card_secret", name=card.split('-')[0])
+        increase_counter(ga_category="use_card_secret", name=card.split("-")[0])
 
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
@@ -839,13 +931,7 @@ class ConfigUi(QFrame):
             self.show_card_secret()
             self.collapsible_box_pay_directly.setVisible(False)
 
-            show_message("出错了", (
-                f"直接购买出现异常，报错如下:\n"
-                "\n"
-                f"{e}\n"
-                "\n"
-                "已切换回卡密界面，可尝试卡密方案付款或者使用付款方式二直接付款\n"
-            ))
+            show_message("出错了", (f"直接购买出现异常，报错如下:\n" "\n" f"{e}\n" "\n" "已切换回卡密界面，可尝试卡密方案付款或者使用付款方式二直接付款\n"))
 
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)
@@ -950,25 +1036,35 @@ class ConfigUi(QFrame):
         report_click_event("toggle_card_secret")
 
     def auto_run_on_login(self):
-        self.popen([
-            "reg",
-            "add", "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-            "/v", "DNF蚊子腿小助手",
-            "/t", "reg_sz",
-            "/d", self.get_djc_helper_path(),
-            "/f",
-        ])
+        self.popen(
+            [
+                "reg",
+                "add",
+                "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "/v",
+                "DNF蚊子腿小助手",
+                "/t",
+                "reg_sz",
+                "/d",
+                self.get_djc_helper_path(),
+                "/f",
+            ]
+        )
         show_message("设置完毕", "已设置为开机自动启动~\n若想定时运行，请打开【使用教程/使用文档.docx】，参照【定时自动运行】章节（目前在第21页）设置")
 
         report_click_event("auto_run_on_login")
 
     def stop_auto_run_on_login(self):
-        self.popen([
-            "reg",
-            "delete", 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
-            "/v", "DNF蚊子腿小助手",
-            "/f",
-        ])
+        self.popen(
+            [
+                "reg",
+                "delete",
+                "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "/v",
+                "DNF蚊子腿小助手",
+                "/f",
+            ]
+        )
         show_message("设置完毕", "已取消开机自动启动~")
 
         report_click_event("stop_auto_run_on_login")
@@ -989,7 +1085,9 @@ class ConfigUi(QFrame):
 
     def add_account_tab(self, account_ui: AccountConfigUi):
         self.accounts.append(account_ui)
-        self.tabs.addTab(account_ui, self.get_account_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked()))
+        self.tabs.addTab(
+            account_ui, self.get_account_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked())
+        )
 
         # 记录当前账号名，用于同步修改tab名称
         account_ui.old_name = account_ui.lineedit_name.text()
@@ -1086,7 +1184,10 @@ class CommonConfigUi(QFrame):
         top_layout.addLayout(form_layout)
 
         # -------------- 区域：角色绑定与同步 --------------
-        self.collapsible_box_role_binding_sync, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("角色绑定与同步", top_layout)
+        (
+            self.collapsible_box_role_binding_sync,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("角色绑定与同步", top_layout)
 
         self.checkbox_try_auto_bind_new_activity = create_checkbox(cfg.try_auto_bind_new_activity)
         add_row(form_layout, "尝试自动绑定新活动", self.checkbox_try_auto_bind_new_activity)
@@ -1095,24 +1196,35 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "是否强制与道聚城的绑定角色同步", self.checkbox_force_sync_bind_with_djc)
 
         # -------------- 区域：集卡 --------------
-        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
+        (
+            self.collapsible_box_ark_lottery,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
 
-        self.lineedit_auto_send_card_target_qqs = create_lineedit(list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789")
+        self.lineedit_auto_send_card_target_qqs = create_lineedit(
+            list_to_str(cfg.auto_send_card_target_qqs), "填写要接收卡片的qq号列表，使用英文逗号分开，示例：123, 456, 789"
+        )
         self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
         add_row(form_layout, "自动赠送卡片的目标QQ数组(这些QQ将接收来自其他QQ赠送的卡片)", self.lineedit_auto_send_card_target_qqs)
 
-        self.checkbox_cost_all_cards_and_do_lottery_on_last_day = create_checkbox(cfg.cost_all_cards_and_do_lottery_on_last_day)
+        self.checkbox_cost_all_cards_and_do_lottery_on_last_day = create_checkbox(
+            cfg.cost_all_cards_and_do_lottery_on_last_day
+        )
         add_row(form_layout, "是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）", self.checkbox_cost_all_cards_and_do_lottery_on_last_day)
 
         # -------------- 区域：心悦 --------------
-        self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦固定队（限定两人）", top_layout)
+        self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "心悦固定队（限定两人）", top_layout
+        )
 
         self.fixed_teams = []
         for team in cfg.fixed_teams:
             self.fixed_teams.append(FixedTeamConfigUi(form_layout, team))
 
         # -------------- 区域：更新 --------------
-        self.collapsible_box_update, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("更新", top_layout)
+        self.collapsible_box_update, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "更新", top_layout
+        )
 
         self.checkbox_check_update_on_start = create_checkbox(cfg.check_update_on_start)
         add_row(form_layout, "启动时检查更新", self.checkbox_check_update_on_start)
@@ -1124,7 +1236,10 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "自动更新（需要购买DLC才可生效）", self.checkbox_auto_update_on_start)
 
         # -------------- 区域：多进程 --------------
-        self.collapsible_box_multiprocessing, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
+        (
+            self.collapsible_box_multiprocessing,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("多进程", top_layout)
 
         self.checkbox_enable_multiprocessing = create_checkbox(cfg.enable_multiprocessing)
         add_row(form_layout, "是否启用多进程功能", self.checkbox_enable_multiprocessing)
@@ -1136,7 +1251,9 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
         # -------------- 区域：登录 --------------
-        self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("登录", top_layout)
+        self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "登录", top_layout
+        )
 
         self.checkbox_force_use_portable_chrome = create_checkbox(cfg.force_use_portable_chrome)
         add_row(form_layout, "强制使用便携版chrome", self.checkbox_force_use_portable_chrome)
@@ -1150,7 +1267,10 @@ class CommonConfigUi(QFrame):
         self.login = LoginConfigUi(form_layout, cfg.login)
 
         # -------------- 区域：窗口大小调整 --------------
-        self.collapsible_box_window_size, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("窗口大小调整", top_layout)
+        (
+            self.collapsible_box_window_size,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("窗口大小调整", top_layout)
 
         self.checkbox_enable_change_cmd_buffer = create_checkbox(cfg.enable_change_cmd_buffer)
         add_row(form_layout, "是否修改命令行缓存大小，以避免运行日志被截断", self.checkbox_enable_change_cmd_buffer)
@@ -1162,7 +1282,9 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "是否最小化窗口", self.checkbox_enable_min_console)
 
         # -------------- 区域：其他 --------------
-        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "其他", top_layout
+        )
 
         self.checkbox_enable_alipay_redpacket_v2 = create_checkbox(cfg.enable_alipay_redpacket_v2)
         add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v2)
@@ -1185,13 +1307,16 @@ class CommonConfigUi(QFrame):
         self.checkbox_allow_only_one_instance = create_checkbox(cfg.allow_only_one_instance)
         add_row(form_layout, "是否仅允许单个运行实例", self.checkbox_allow_only_one_instance)
 
-        self.combobox_log_level = create_combobox(cfg.log_level, [
-            "debug",
-            "info",
-            "warning",
-            "error",
-            "critical",
-        ])
+        self.combobox_log_level = create_combobox(
+            cfg.log_level,
+            [
+                "debug",
+                "info",
+                "warning",
+                "error",
+                "critical",
+            ],
+        )
         add_row(form_layout, "日志级别", self.combobox_log_level)
 
         self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
@@ -1228,7 +1353,9 @@ class CommonConfigUi(QFrame):
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
-        cfg.cost_all_cards_and_do_lottery_on_last_day = self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
+        cfg.cost_all_cards_and_do_lottery_on_last_day = (
+            self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
+        )
 
         self.login.update_config(cfg.login)
         self.retry.update_config(cfg.retry)
@@ -1238,8 +1365,8 @@ class CommonConfigUi(QFrame):
         # 特殊处理基于标记文件的开关
         if self.checkbox_disable_sync_configs.isChecked():
             if not os.path.exists(disable_flag_file):
-                with open(disable_flag_file, 'w', encoding='utf-8') as f:
-                    f.write('ok')
+                with open(disable_flag_file, "w", encoding="utf-8") as f:
+                    f.write("ok")
         else:
             if os.path.exists(disable_flag_file):
                 if os.path.isfile(disable_flag_file):
@@ -1273,23 +1400,32 @@ class MajieluoConfigUi(QFrame):
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 
-        self.lineedit_dahao_index = create_lineedit(cfg.dahao_index, placeholder_text="大号在配置中的账号序号，从1开始计算，如 1 表示第一个账号作为大号")
+        self.lineedit_dahao_index = create_lineedit(
+            cfg.dahao_index, placeholder_text="大号在配置中的账号序号，从1开始计算，如 1 表示第一个账号作为大号"
+        )
         form_layout.addRow("大号序号", self.lineedit_dahao_index)
 
-        self.lineedit_xiaohao_indexes = create_lineedit(list_to_str(cfg.xiaohao_indexes), placeholder_text="最多3个，使用英文逗号分隔，如 1,2,3 表示使用本地配置的第 1/2/3 个账号作为小号")
+        self.lineedit_xiaohao_indexes = create_lineedit(
+            list_to_str(cfg.xiaohao_indexes), placeholder_text="最多3个，使用英文逗号分隔，如 1,2,3 表示使用本地配置的第 1/2/3 个账号作为小号"
+        )
         self.lineedit_xiaohao_indexes.setValidator(QQListValidator())
         form_layout.addRow("小号序号列表", self.lineedit_xiaohao_indexes)
 
-        self.lineedit_xiaohao_qq_list = create_lineedit(list_to_str(cfg.xiaohao_qq_list), placeholder_text="最多3个，使用英文逗号分隔，如 123,456,789 表示三个小号的QQ号分别为123/456/789")
+        self.lineedit_xiaohao_qq_list = create_lineedit(
+            list_to_str(cfg.xiaohao_qq_list), placeholder_text="最多3个，使用英文逗号分隔，如 123,456,789 表示三个小号的QQ号分别为123/456/789"
+        )
         # self.lineedit_xiaohao_qq_list.setValidator(QQListValidator())
         form_layout.addRow("小号在马杰洛页面的Uin列表", self.lineedit_xiaohao_qq_list)
-        form_layout.addRow("获取说明", QLabel(
-            "1. 打开马杰洛活动，找到赠送列表，一页页翻，直到找到小号\n"
-            "2. 如果找不到你的小号，那就可以放弃了，只能手动赠送给其他qq\n"
-            "3. 否则，可以在小号右侧的按钮处，右键，选择 检查元素，然后复制其中uin的值，形如（0502696b3b1e8cfe0ec987ec32be08a89）\n"
-            "\n"
-            "此外，本期一天只能送两次，需要只需要两个小号\n"
-        ))
+        form_layout.addRow(
+            "获取说明",
+            QLabel(
+                "1. 打开马杰洛活动，找到赠送列表，一页页翻，直到找到小号\n"
+                "2. 如果找不到你的小号，那就可以放弃了，只能手动赠送给其他qq\n"
+                "3. 否则，可以在小号右侧的按钮处，右键，选择 检查元素，然后复制其中uin的值，形如（0502696b3b1e8cfe0ec987ec32be08a89）\n"
+                "\n"
+                "此外，本期一天只能送两次，需要只需要两个小号\n"
+            ),
+        )
 
         # -------------- 区域：发送礼盒链接给小号 --------------
         top_layout.addWidget(QHLine())
@@ -1303,16 +1439,22 @@ class MajieluoConfigUi(QFrame):
         form_layout = QFormLayout()
         top_layout.addLayout(form_layout)
 
-        self.lineedit_scode_1 = create_lineedit(cfg.scode_1,
-                                                placeholder_text="第1个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_1 = create_lineedit(
+            cfg.scode_1,
+            placeholder_text="第1个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=",
+        )
         form_layout.addRow("SCode 1", self.lineedit_scode_1)
 
-        self.lineedit_scode_2 = create_lineedit(cfg.scode_2,
-                                                placeholder_text="第2个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_2 = create_lineedit(
+            cfg.scode_2,
+            placeholder_text="第2个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=",
+        )
         form_layout.addRow("SCode 2", self.lineedit_scode_2)
 
-        self.lineedit_scode_3 = create_lineedit(cfg.scode_3,
-                                                placeholder_text="第3个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+        self.lineedit_scode_3 = create_lineedit(
+            cfg.scode_3,
+            placeholder_text="第3个小号收到的礼盒链接，直接整个复制过来，或者单独复制scode的值，形如 https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0= 或 MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=",
+        )
         form_layout.addRow("SCode 3", self.lineedit_scode_3)
 
         top_layout.addWidget(QHLine())
@@ -1357,16 +1499,19 @@ class MajieluoConfigUi(QFrame):
         logger.info(color("bold_green") + f"发送宝箱链接给小号QQ: {xiaohao_qq_list}")
 
         results = djcHelper.majieluo_send_to_xiaohao(xiaohao_qq_list)
-        msg = '\n'.join(f'    {res}' for res in results)
+        msg = "\n".join(f"    {res}" for res in results)
 
-        show_message("后续流程", (
-            "赠送结果如下:\n"
-            f"{msg}\n"
-            "\n"
-            "0. 如果上述赠送结果显示OK，则按下面步骤继续操作。"
-            "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制整个链接到各个Scode的输入框内\n"
-            "2. 输入完毕后请点击 接收宝箱 按钮\n"
-        ))
+        show_message(
+            "后续流程",
+            (
+                "赠送结果如下:\n"
+                f"{msg}\n"
+                "\n"
+                "0. 如果上述赠送结果显示OK，则按下面步骤继续操作。"
+                "1. 链接已发送完毕，请在电脑登录大号QQ，依次点击各个小号的对话框里刚刚发送的礼盒链接，在浏览器中复制整个链接到各个Scode的输入框内\n"
+                "2. 输入完毕后请点击 接收宝箱 按钮\n"
+            ),
+        )
         report_click_event("majieluo_send_box_url")
 
     def open_box(self):
@@ -1430,7 +1575,7 @@ class MajieluoConfigUi(QFrame):
         messages.append("")
         messages.append(f"已领取完毕，当前累计赠送次数为 {invite_count}/30")
 
-        show_message("操作结果如下", '\n'.join(messages))
+        show_message("操作结果如下", "\n".join(messages))
 
         report_click_event("majieluo_open_box")
 
@@ -1549,11 +1694,13 @@ class FixedTeamConfigUi(QWidget):
 
 
 class AccountConfigUi(QWidget):
-    login_mode_bidict = BiDict({
-        # "手动登录": "by_hand",
-        "扫码/点击头像登录": "qr_login",
-        "账号密码自动登录": "auto_login",
-    })
+    login_mode_bidict = BiDict(
+        {
+            # "手动登录": "by_hand",
+            "扫码/点击头像登录": "qr_login",
+            "账号密码自动登录": "auto_login",
+        }
+    )
 
     def __init__(self, cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
         super().__init__(parent)
@@ -1575,11 +1722,17 @@ class AccountConfigUi(QWidget):
         self.lineedit_name = create_lineedit(cfg.name, "账号名称，仅用于区分不同账号，请确保不同账号名称不一样")
         add_row(form_layout, "账号名称", self.lineedit_name)
 
-        self.combobox_login_mode = create_combobox(self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"), list(self.login_mode_bidict.key_to_val.keys()))
+        self.combobox_login_mode = create_combobox(
+            self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"),
+            list(self.login_mode_bidict.key_to_val.keys()),
+        )
         add_row(form_layout, "登录模式", self.combobox_login_mode)
 
         # -------------- 区域：QQ信息 --------------
-        self.collapsible_box_account_password, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("账号密码", top_layout)
+        (
+            self.collapsible_box_account_password,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("账号密码", top_layout)
 
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
@@ -1590,7 +1743,9 @@ class AccountConfigUi(QWidget):
         add_vbox_seperator(top_layout, "以下内容为选填内容，不填仍可正常运行，不过部分活动将无法领取")
 
         # -------------- 区域：道聚城 --------------
-        self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城", top_layout)
+        self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "道聚城", top_layout
+        )
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
         add_row(form_layout, "无法在道聚城绑定dnf", self.checkbox_cannot_bind_dnf)
@@ -1598,7 +1753,10 @@ class AccountConfigUi(QWidget):
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
         # -------------- 区域：道聚城兑换 --------------
-        self.collapsible_box_djc_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换", top_layout)
+        (
+            self.collapsible_box_djc_exchange,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换", top_layout)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = {}
@@ -1606,19 +1764,21 @@ class AccountConfigUi(QWidget):
             self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
 
         # -------------- 区域：心悦组队 --------------
-        self.collapsible_box_xinyue_team, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦组队", top_layout)
+        (
+            self.collapsible_box_xinyue_team,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦组队", top_layout)
 
         self.checkbox_enable_auto_match_xinyue_team = create_checkbox(cfg.enable_auto_match_xinyue_team)
         add_row(form_layout, "是否心悦自动匹配组队", self.checkbox_enable_auto_match_xinyue_team)
 
-        add_row(form_layout, "需要满足这些条件", QLabel(
-            "1. 在付费生效期间\n"
-            "2. 当前QQ是特邀会员或者心悦会员\n"
-            "3. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次\n"
-        ))
+        add_row(form_layout, "需要满足这些条件", QLabel("1. 在付费生效期间\n" "2. 当前QQ是特邀会员或者心悦会员\n" "3. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次\n"))
 
         # -------------- 区域：心悦特权专区兑换 --------------
-        self.collapsible_box_xinyue_exchange, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
+        (
+            self.collapsible_box_xinyue_exchange,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
 
         self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
         self.xinyue_exchange_items = {}
@@ -1626,9 +1786,14 @@ class AccountConfigUi(QWidget):
             self.xinyue_exchange_items[exchange_item.unique_key()] = XinyueOperationConfigUi(form_layout, exchange_item)
 
         # -------------- 区域：心悦app --------------
-        self.collapsible_box_xinyue_app, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦app", top_layout)
+        (
+            self.collapsible_box_xinyue_app,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦app", top_layout)
 
-        self.btn_show_xinyue_app_guide = create_pushbutton("点击查看心悦app的加密http请求体获取方式（相当复杂，建议手动打开app领取，不信邪可以点开试试-。-）", "cyan")
+        self.btn_show_xinyue_app_guide = create_pushbutton(
+            "点击查看心悦app的加密http请求体获取方式（相当复杂，建议手动打开app领取，不信邪可以点开试试-。-）", "cyan"
+        )
         self.btn_show_xinyue_app_guide.clicked.connect(self.show_xinyue_app_guide)
         add_row(form_layout, "", self.btn_show_xinyue_app_guide)
 
@@ -1638,43 +1803,72 @@ class AccountConfigUi(QWidget):
             self.xinyue_app_operations[operation.name] = XinYueAppOperationConfigUi(form_layout, operation)
 
         # -------------- 区域：集卡 --------------
-        self.collapsible_box_ark_lottery, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
+        (
+            self.collapsible_box_ark_lottery,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
 
         # -------------- 区域：dnf助手 --------------
-        self.collapsible_box_dnf_helper_info, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
+        (
+            self.collapsible_box_dnf_helper_info,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
 
         # -------------- 区域：dnf论坛 --------------
-        self.collapsible_box_dnf_bbs, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
+        (
+            self.collapsible_box_dnf_bbs,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
-        self.lineedit_dnf_bbs_formhash = create_lineedit(cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_formhash字段的说明")
+        self.lineedit_dnf_bbs_formhash = create_lineedit(
+            cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_formhash字段的说明"
+        )
         add_row(form_layout, "dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
 
-        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_cookie字段的说明")
+        self.lineedit_dnf_bbs_cookie = create_lineedit(
+            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_cookie字段的说明"
+        )
         add_row(form_layout, "dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
-        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明")
+        self.lineedit_colg_cookie = create_lineedit(
+            cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明"
+        )
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
         # -------------- 区域：会员关怀 --------------
-        self.collapsible_box_vip_mentor, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
+        (
+            self.collapsible_box_vip_mentor,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
 
         # -------------- 区域：hello语音 --------------
-        self.collapsible_box_hello_voice, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
+        (
+            self.collapsible_box_hello_voice,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
 
         # -------------- 区域：其他 --------------
-        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("其他", top_layout)
+        self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "其他", top_layout
+        )
 
-        self.lineedit_ozma_ignored_rolename_list = create_lineedit(list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号")
+        self.lineedit_ozma_ignored_rolename_list = create_lineedit(
+            list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号"
+        )
         add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
-        self.lineedit_gonghui_rolename_huizhang = create_lineedit(cfg.gonghui_rolename_huizhang, "公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）")
+        self.lineedit_gonghui_rolename_huizhang = create_lineedit(
+            cfg.gonghui_rolename_huizhang, "公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）"
+        )
         add_row(form_layout, "公会活动-会长角色名称", self.lineedit_gonghui_rolename_huizhang)
 
-        self.lineedit_gonghui_rolename_huiyuan = create_lineedit(cfg.gonghui_rolename_huiyuan, "公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）")
+        self.lineedit_gonghui_rolename_huiyuan = create_lineedit(
+            cfg.gonghui_rolename_huiyuan, "公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）"
+        )
         add_row(form_layout, "公会活动-会员角色名称", self.lineedit_gonghui_rolename_huiyuan)
 
         self.checkbox_comic_lottery = create_checkbox(cfg.comic_lottery)
@@ -1686,17 +1880,26 @@ class AccountConfigUi(QWidget):
         self.checkbox_dnf_gonghui_enable_lottery = create_checkbox(cfg.function_switches.dnf_gonghui_enable_lottery)
         add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
 
-        self.combobox_take_award_34c_server_name = create_combobox(dnf_server_id_to_name(cfg.take_award_34c_server_id), dnf_server_name_list())
+        self.combobox_take_award_34c_server_name = create_combobox(
+            dnf_server_id_to_name(cfg.take_award_34c_server_id), dnf_server_name_list()
+        )
         add_row(form_layout, "wegame活动的34C角色 区服名称", self.combobox_take_award_34c_server_name)
 
-        self.lineedit_take_award_34c_role_id = create_lineedit(cfg.take_award_34c_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
+        self.lineedit_take_award_34c_role_id = create_lineedit(
+            cfg.take_award_34c_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
+        )
         add_row(form_layout, "wegame活动的34C角色 角色ID", self.lineedit_take_award_34c_role_id)
 
-        self.role_selector = RoleSelector("幸运勇士", self.combobox_take_award_34c_server_name, self.lineedit_take_award_34c_role_id, cfg, self.common_cfg)
+        self.role_selector = RoleSelector(
+            "幸运勇士", self.combobox_take_award_34c_server_name, self.lineedit_take_award_34c_role_id, cfg, self.common_cfg
+        )
         add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
         # -------------- 区域：活动开关 --------------
-        self.collapsible_box_function_switches, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("活动开关", top_layout)
+        (
+            self.collapsible_box_function_switches,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("活动开关", top_layout)
         self.function_switches = FunctionSwitchesConfigUi(form_layout, cfg.function_switches)
 
         # -------------- 区域代码结束 --------------
@@ -1760,21 +1963,24 @@ class AccountConfigUi(QWidget):
 
     def show_xinyue_app_guide(self):
         report_click_event("show_xinyue_app_guide")
-        show_message("获取方式", (
-            "以下流程相当复杂，需要了解【https抓包、手机抓包、调试】等背景知识，建议手动打开心悦app领取，不信邪可以按下面流程操作试试-。-\n"
-            "\n"
-            "抓包获取http body，以下流程以fiddler为例，具体流程或其他抓包软件的操作流程请自行根据各个环节关键词去百度学习\n"
-            "\n"
-            "1. 使用fiddler抓取手机心悦app中G分兑换的所有请求\n"
-            "2. 从请求中找到请求body大小为150左右的那个请求（一般就是点击兑换后抓取到的第一个请求）\n"
-            "3. 右侧点Inspector/HexView，选中Http Body部分的字节码（未标蓝部分），右击Copy/Copy as 0x##，然后粘贴出来，将其中的bytes复制到下列对应数组位置\n"
-            "4. 对每个需要的兑换（如复活币、霸王契约）进行1/2/3步骤的操作（ps：每个兑换当天只能完成一次，如果当天抓失败了，就要第二天重试）\n"
-            "\n"
-            "5. 举例：\n"
-            "5.1 假设复制出的结果为 byte[] arrOutput = { 0x58, 0x59, 0x01, 0x00, 0x00 };\n"
-            "5.2 复制出bytes部分： 0x58, 0x59, 0x01, 0x00, 0x00\n"
-            "5.3 粘贴以上内容到配置工具对应兑换的加密请求体输入框中\n"
-        ))
+        show_message(
+            "获取方式",
+            (
+                "以下流程相当复杂，需要了解【https抓包、手机抓包、调试】等背景知识，建议手动打开心悦app领取，不信邪可以按下面流程操作试试-。-\n"
+                "\n"
+                "抓包获取http body，以下流程以fiddler为例，具体流程或其他抓包软件的操作流程请自行根据各个环节关键词去百度学习\n"
+                "\n"
+                "1. 使用fiddler抓取手机心悦app中G分兑换的所有请求\n"
+                "2. 从请求中找到请求body大小为150左右的那个请求（一般就是点击兑换后抓取到的第一个请求）\n"
+                "3. 右侧点Inspector/HexView，选中Http Body部分的字节码（未标蓝部分），右击Copy/Copy as 0x##，然后粘贴出来，将其中的bytes复制到下列对应数组位置\n"
+                "4. 对每个需要的兑换（如复活币、霸王契约）进行1/2/3步骤的操作（ps：每个兑换当天只能完成一次，如果当天抓失败了，就要第二天重试）\n"
+                "\n"
+                "5. 举例：\n"
+                "5.1 假设复制出的结果为 byte[] arrOutput = { 0x58, 0x59, 0x01, 0x00, 0x00 };\n"
+                "5.2 复制出bytes部分： 0x58, 0x59, 0x01, 0x00, 0x00\n"
+                "5.3 粘贴以上内容到配置工具对应兑换的加密请求体输入框中\n"
+            ),
+        )
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
         all_item_ids = set()
@@ -1786,7 +1992,6 @@ class AccountConfigUi(QWidget):
             # ("111", "高级装扮兑换券（无期限）（活动期间5次）"),
             # ("753", "装备品级调整箱（5个）（每天限兑2次）"),
             # ("755", "魔界抗疲劳秘药（10点）（每天限兑1次）"),
-
             ("3089", "高级装扮兑换券（7天）（每周限量1次）"),
             ("3120", "魔界抗疲劳秘药（10点）（每周限量1次）"),
             ("3088", "装备品级调整箱（2个）（每月限兑1次）"),
@@ -1854,7 +2059,7 @@ class AccountConfigUi(QWidget):
             cfg.xinyue_app_operations.append(operation)
 
     def on_login_mode_change(self, text, in_init_step=False):
-        disable = text != self.login_mode_bidict.val_to_key['auto_login']
+        disable = text != self.login_mode_bidict.val_to_key["auto_login"]
 
         # 需要排除一个特例：
         # 启动时界面还未显示时，所有组件都是hidden状态
@@ -2137,7 +2342,9 @@ class MobileGameRoleInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: MobileGameRoleInfoConfig):
-        self.combobox_game_name = create_combobox(cfg.game_name, ['无', '任意手游', *sorted(get_name_2_mobile_game_info_map().keys())])
+        self.combobox_game_name = create_combobox(
+            cfg.game_name, ["无", "任意手游", *sorted(get_name_2_mobile_game_info_map().keys())]
+        )
         add_row(form_layout, "完成礼包达人任务的手游名称", self.combobox_game_name)
 
     def update_config(self, cfg: MobileGameRoleInfoConfig):
@@ -2179,7 +2386,9 @@ class XinYueAppOperationConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig):
-        self.lineedit_encrypted_raw_http_body = create_lineedit(bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00")
+        self.lineedit_encrypted_raw_http_body = create_lineedit(
+            bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00"
+        )
         add_row(form_layout, f"{cfg.name}", self.lineedit_encrypted_raw_http_body)
 
     def update_config(self, cfg: XinYueAppOperationConfig):
@@ -2187,7 +2396,14 @@ class XinYueAppOperationConfigUi(QWidget):
 
 
 class ArkLotteryConfigUi(QWidget):
-    def __init__(self, form_layout: QFormLayout, cfg: ArkLotteryConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
+    def __init__(
+        self,
+        form_layout: QFormLayout,
+        cfg: ArkLotteryConfig,
+        account_cfg: AccountConfig,
+        common_cfg: CommonConfig,
+        parent=None,
+    ):
         super().__init__(parent)
 
         self.account_cfg = account_cfg
@@ -2196,19 +2412,31 @@ class ArkLotteryConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: ArkLotteryConfig):
-        self.combobox_lucky_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list())
+        self.combobox_lucky_dnf_server_name = create_combobox(
+            dnf_server_id_to_name(cfg.lucky_dnf_server_id), dnf_server_name_list()
+        )
         add_row(form_layout, "幸运勇士区服名称", self.combobox_lucky_dnf_server_name)
 
-        self.lineedit_lucky_dnf_role_id = create_lineedit(cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
+        self.lineedit_lucky_dnf_role_id = create_lineedit(
+            cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
+        )
         add_row(form_layout, "幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
-        self.role_selector = RoleSelector("幸运勇士", self.combobox_lucky_dnf_server_name, self.lineedit_lucky_dnf_role_id, self.account_cfg, self.common_cfg)
+        self.role_selector = RoleSelector(
+            "幸运勇士",
+            self.combobox_lucky_dnf_server_name,
+            self.lineedit_lucky_dnf_role_id,
+            self.account_cfg,
+            self.common_cfg,
+        )
         add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
         self.checkbox_need_take_awards = create_checkbox(cfg.need_take_awards)
         add_row(form_layout, "领取礼包", self.checkbox_need_take_awards)
 
-        cost_all_cards_and_do_lottery = cfg.act_id_to_cost_all_cards_and_do_lottery.get(self.get_ark_lottery_act_id(), False)
+        cost_all_cards_and_do_lottery = cfg.act_id_to_cost_all_cards_and_do_lottery.get(
+            self.get_ark_lottery_act_id(), False
+        )
         self.checkbox_cost_all_cards_and_do_lottery = create_checkbox(cost_all_cards_and_do_lottery)
         add_row(form_layout, "是否消耗所有卡牌来抽奖", self.checkbox_cost_all_cards_and_do_lottery)
 
@@ -2218,7 +2446,9 @@ class ArkLotteryConfigUi(QWidget):
 
         cfg.need_take_awards = self.checkbox_need_take_awards.isChecked()
 
-        cfg.act_id_to_cost_all_cards_and_do_lottery[self.get_ark_lottery_act_id()] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
+        cfg.act_id_to_cost_all_cards_and_do_lottery[
+            self.get_ark_lottery_act_id()
+        ] = self.checkbox_cost_all_cards_and_do_lottery.isChecked()
 
     def get_ark_lottery_act_id(self) -> int:
         if is_new_version_ark_lottery():
@@ -2228,7 +2458,14 @@ class ArkLotteryConfigUi(QWidget):
 
 
 class VipMentorConfigUi(QWidget):
-    def __init__(self, form_layout: QFormLayout, cfg: VipMentorConfig, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
+    def __init__(
+        self,
+        form_layout: QFormLayout,
+        cfg: VipMentorConfig,
+        account_cfg: AccountConfig,
+        common_cfg: CommonConfig,
+        parent=None,
+    ):
         super().__init__(parent)
 
         self.account_cfg = account_cfg
@@ -2240,13 +2477,23 @@ class VipMentorConfigUi(QWidget):
         self.spinbox_take_index = create_spin_box(cfg.take_index, 3, 1)
         add_row(form_layout, "兑换数目", self.spinbox_take_index)
 
-        self.combobox_guanhuai_dnf_server_name = create_combobox(dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list())
+        self.combobox_guanhuai_dnf_server_name = create_combobox(
+            dnf_server_id_to_name(cfg.guanhuai_dnf_server_id), dnf_server_name_list()
+        )
         add_row(form_layout, "关怀礼包角色区服名称", self.combobox_guanhuai_dnf_server_name)
 
-        self.lineedit_guanhuai_dnf_role_id = create_lineedit(cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）")
+        self.lineedit_guanhuai_dnf_role_id = create_lineedit(
+            cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
+        )
         add_row(form_layout, "关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
-        self.role_selector = RoleSelector("会员关怀", self.combobox_guanhuai_dnf_server_name, self.lineedit_guanhuai_dnf_role_id, self.account_cfg, self.common_cfg)
+        self.role_selector = RoleSelector(
+            "会员关怀",
+            self.combobox_guanhuai_dnf_server_name,
+            self.lineedit_guanhuai_dnf_role_id,
+            self.account_cfg,
+            self.common_cfg,
+        )
         add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
     def update_config(self, cfg: VipMentorConfig):
@@ -2259,7 +2506,15 @@ class VipMentorConfigUi(QWidget):
 class RoleSelector(QWidget):
     combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会"
 
-    def __init__(self, ctx, combobox_server_name: MyComboBox, lineedit_role_id: QLineEdit, account_cfg: AccountConfig, common_cfg: CommonConfig, parent=None):
+    def __init__(
+        self,
+        ctx,
+        combobox_server_name: MyComboBox,
+        lineedit_role_id: QLineEdit,
+        account_cfg: AccountConfig,
+        common_cfg: CommonConfig,
+        parent=None,
+    ):
         super().__init__(parent)
 
         self.ctx = ctx
@@ -2270,7 +2525,9 @@ class RoleSelector(QWidget):
 
         self.server_id_to_roles = {}  # type: Dict[str, List[DnfRoleInfo]]
 
-        self.combobox_role_name = create_combobox(self.combobox_role_name_placeholder, [self.combobox_role_name_placeholder])
+        self.combobox_role_name = create_combobox(
+            self.combobox_role_name_placeholder, [self.combobox_role_name_placeholder]
+        )
         self.combobox_role_name.clicked.connect(self.on_role_name_clicked)
         self.combobox_role_name.activated.connect(self.on_role_name_select)
 
@@ -2350,10 +2607,14 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
         add_row(form_layout, "昵称(nickName)", self.lineedit_nickName)
 
-        self.lineedit_token = create_lineedit(cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
+        self.lineedit_token = create_lineedit(
+            cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路"
+        )
         add_row(form_layout, "登陆票据(token)", self.lineedit_token)
 
-        self.lineedit_uniqueRoleId = create_lineedit(cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路")
+        self.lineedit_uniqueRoleId = create_lineedit(
+            cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路"
+        )
         add_row(form_layout, "唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 
         add_row(form_layout, "", QHLine())
@@ -2369,10 +2630,7 @@ class DnfHelperInfoConfigUi(QWidget):
         self.checkbox_enable_auto_match_dnf_chronicle = create_checkbox(cfg.enable_auto_match_dnf_chronicle)
         add_row(form_layout, "是否自动匹配编年史搭档（优先级高于固定搭档）", self.checkbox_enable_auto_match_dnf_chronicle)
 
-        add_row(form_layout, "需要满足这些条件", QLabel(
-            "1. 在付费生效期间\n"
-            "2. 上个月达到了30级\n"
-        ))
+        add_row(form_layout, "需要满足这些条件", QLabel("1. 在付费生效期间\n" "2. 上个月达到了30级\n"))
 
         add_row(form_layout, "", QHLine())
 
@@ -2387,7 +2645,9 @@ class DnfHelperInfoConfigUi(QWidget):
             add_row(form_layout, "如果前面的等级未到或者碎片不够，不会尝试兑换排在后面的", QHLine())
         self.exchange_items = {}
         for exchange_item in cfg.chronicle_exchange_items:
-            self.exchange_items[exchange_item.sLbcode] = DnfHelperChronicleExchangeItemConfigUi(form_layout, exchange_item)
+            self.exchange_items[exchange_item.sLbcode] = DnfHelperChronicleExchangeItemConfigUi(
+                form_layout, exchange_item
+            )
 
     def update_config(self, cfg: DnfHelperInfoConfig):
         cfg.userId = self.lineedit_userId.text()
@@ -2469,15 +2729,20 @@ def report_click_event(event: str):
 
 def show_notices():
     if use_new_pay_method() and is_first_run("新版界面隐藏卡密提示"):
-        show_message("付费界面调整", (
-            "目前已启用了新版的付费界面，原有的卡密界面已被隐藏，望周知。\n"
-            "\n"
-            "如新版无法正常使用，或者所选择的付费渠道在维护中，可以在【其他】tab中点击【显示原来的卡密支付界面】按钮来临时显示卡密界面\n"
-        ), disabled_seconds=5)
+        show_message(
+            "付费界面调整",
+            (
+                "目前已启用了新版的付费界面，原有的卡密界面已被隐藏，望周知。\n"
+                "\n"
+                "如新版无法正常使用，或者所选择的付费渠道在维护中，可以在【其他】tab中点击【显示原来的卡密支付界面】按钮来临时显示卡密界面\n"
+            ),
+            disabled_seconds=5,
+        )
 
 
 def main():
     import config as config_module
+
     config_module.g_exit_on_check_error = False
 
     increase_counter(name="config_ui", ga_type=GA_REPORT_TYPE_PAGE_VIEW)
@@ -2511,5 +2776,5 @@ def main():
     sys.exit(app.exec())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

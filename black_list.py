@@ -32,14 +32,10 @@ black_list = {
 def check_in_black_list(uin):
     qq = uin2qq(uin)
     if qq in black_list:
-        message = (
-            "发现你的QQ在本工具的黑名单里，本工具禁止你使用，将在本窗口消失后退出运行。\n"
-            "黑名单相关信息如下：\n"
-            f"{black_list[qq]}"
-        )
+        message = "发现你的QQ在本工具的黑名单里，本工具禁止你使用，将在本窗口消失后退出运行。\n" "黑名单相关信息如下：\n" f"{black_list[qq]}"
         message_box(message, "禁止使用")
         exit(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     check_in_black_list("o823985815")

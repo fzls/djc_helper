@@ -105,7 +105,7 @@ class GoodsInfo(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('valiDate', GoodsValiDateInfo),
+            ("valiDate", GoodsValiDateInfo),
         ]
 
 
@@ -254,7 +254,15 @@ class XinYueInfo(DaoObject):
 
 
 class XinYueItemInfo(DaoObject):
-    def __init__(self, total_obtain_two_score, used_two_score, total_obtain_free_do, used_free_do, total_obtain_refresh, used_refresh):
+    def __init__(
+        self,
+        total_obtain_two_score,
+        used_two_score,
+        total_obtain_free_do,
+        used_free_do,
+        total_obtain_refresh,
+        used_refresh,
+    ):
         # 免做卡
         self.免做卡 = int(total_obtain_free_do) - int(used_free_do)
         # 双倍卡
@@ -341,12 +349,14 @@ class AmesvrUserBindInfo(ConfigInterface):
         self.FroleId = "71672841"
         self.FroleName = "%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%91%80"
         self.FroleLevel = "100"
-        self.Fcheckparam = "dnf|yes|1054073896|11|45168567*45230145*45481100*62889873*64327847*64327855*64333408*64333413*64349521*64349525*64370730*64370732*64632622*64632641*69837948*69837951*71672841*||||%E9%A3%8E%E4%B9%8B%E5%87%8C%E6" \
-                           "%AE%87*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%93%87*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87Meow*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%80%E5%8F%B7*%E5%8D%A2%E5%8" \
-                           "5%8B%E5%A5%B6%E5%A6%88%E4%BA%8C%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%89%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%9B%9B%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%BA%94%E5%8F%B7*%E5" \
-                           "%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%85%AD%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%83%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%85%AB%E5%8F%B7*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5%E" \
-                           "5%96%B5*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5%E5%91%9C*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B9%9D%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%8D%81%E5%8F%B7*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87" \
-                           "%E5%91%80*|0*3*13*14*14*14*14*14*14*14*14*14*3*3*14*14*11*||1600743086|"
+        self.Fcheckparam = (
+            "dnf|yes|1054073896|11|45168567*45230145*45481100*62889873*64327847*64327855*64333408*64333413*64349521*64349525*64370730*64370732*64632622*64632641*69837948*69837951*71672841*||||%E9%A3%8E%E4%B9%8B%E5%87%8C%E6"
+            "%AE%87*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%93%87*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87Meow*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%80%E5%8F%B7*%E5%8D%A2%E5%8"
+            "5%8B%E5%A5%B6%E5%A6%88%E4%BA%8C%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%89%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%9B%9B%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%BA%94%E5%8F%B7*%E5"
+            "%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%85%AD%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B8%83%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%85%AB%E5%8F%B7*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5%E"
+            "5%96%B5*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87%E5%96%B5%E5%91%9C*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E4%B9%9D%E5%8F%B7*%E5%8D%A2%E5%85%8B%E5%A5%B6%E5%A6%88%E5%8D%81%E5%8F%B7*%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87"
+            "%E5%91%80*|0*3*13*14*14*14*14*14*14*14*14*14*3*3*14*14*11*||1600743086|"
+        )
         self.Fmd5str = "FDAF0B1B1E51111CCC0AAD240317E96F"
         self.Fdate = "2020-09-22 10:51:29"
         self.FupdateDate = "2020-09-22 10:51:29"
@@ -356,22 +366,26 @@ class AmesvrUserBindInfo(ConfigInterface):
 
 class AmesvrQueryRole(ConfigInterface):
     def __init__(self):
-        self.version = 'V1.0.20201105.20201105101730'
-        self.retCode = '0'
-        self.serial_num = 'AMS-DNF-1220171837-4zFGHv-348623-5381'
-        self.data = '_idip_req_id_=&_webplat_msg=21|45168567 风之凌殇 0 100|45230145 风之凌殇喵 3 100|45481100 风之凌殇哇 13 100|62889873 风之凌殇Meow 14 100|64327847 卢克奶妈一号 14 100|64327855 卢克奶妈二号 14 100|64333408 卢克奶妈三号 14 100' \
-                    '|64333413 卢克奶妈四号 14 100|64349521 卢克奶妈五号 14 100|64349525 卢克奶妈六号 14 100|64370730 卢克奶妈七号 14 100|64370732 卢克奶妈八号 14 100|64632622 风之凌殇喵喵 3 100|64632641 风之凌殇喵呜 3 100|69837948 卢克奶妈九号 1' \
-                    '4 100|69837951 卢克奶妈十号 14 100|71672841 风之凌殇呀 11 100|72282733 风之凌殇哦 4 100|72522431 风之凌殇咯 3 100|72574316 风之凌殇咩 3 100|72767454 风之凌殇嘿 3 100|&_webplat_msg_code=0&area=11&msg=21|45168567 风之凌殇 0 ' \
-                    '100|45230145 风之凌殇喵 3 100|45481100 风之凌殇哇 13 100|62889873 风之凌殇Meow 14 100|64327847 卢克奶妈一号 14 100|64327855 卢克奶妈二号 14 100|64333408 卢克奶妈三号 14 100|64333413 卢克奶妈四号 14 100|64349521 卢克奶妈五号 ' \
-                    '14 100|64349525 卢克奶妈六号 14 100|64370730 卢克奶妈七号 14 100|64370732 卢克奶妈八号 14 100|64632622 风之凌殇喵喵 3 100|64632641 风之凌殇喵呜 3 100|69837948 卢克奶妈九号 14 100|69837951 卢克奶妈十号 14 100|71672841 风之凌殇' \
-                    '呀 11 100|72282733 风之凌殇哦 4 100|72522431 风之凌殇咯 3 100|72574316 风之凌殇咩 3 100|72767454 风之凌殇嘿 3 100|&result=0&uin=1054073896&'
-        self.msg = 'success'
-        self.checkparam = 'dnf|yes|1054073896|11|45168567*45230145*45481100*62889873*64327847*64327855*64333408*64333413*64349521*64349525*64370730*64370732*64632622*64632641*69837948*69837951*71672841*72282733*72522431*72574316*72767454' \
-                          '*||||风之凌殇*风之凌殇喵*风之凌殇哇*风之凌殇Meow*卢克奶妈一号*卢克奶妈二号*卢克奶妈三号*卢克奶妈四号*卢克奶妈五号*卢克奶妈六号*卢克奶妈七号*卢克奶妈八号*风之凌殇喵喵*风之凌殇喵呜*卢克奶妈九号*卢克奶妈十号*风之凌殇呀*风之凌殇哦*风之' \
-                          '凌殇咯*风之凌殇咩*风之凌殇嘿*|0*3*13*14*14*14*14*14*14*14*14*14*3*3*14*14*11*4*3*3*3*||1608455917|'
-        self.md5str = '3F7F5D5C92CF3E633A40E246A637CC0B'
-        self.infostr = ''
-        self.checkstr = ''
+        self.version = "V1.0.20201105.20201105101730"
+        self.retCode = "0"
+        self.serial_num = "AMS-DNF-1220171837-4zFGHv-348623-5381"
+        self.data = (
+            "_idip_req_id_=&_webplat_msg=21|45168567 风之凌殇 0 100|45230145 风之凌殇喵 3 100|45481100 风之凌殇哇 13 100|62889873 风之凌殇Meow 14 100|64327847 卢克奶妈一号 14 100|64327855 卢克奶妈二号 14 100|64333408 卢克奶妈三号 14 100"
+            "|64333413 卢克奶妈四号 14 100|64349521 卢克奶妈五号 14 100|64349525 卢克奶妈六号 14 100|64370730 卢克奶妈七号 14 100|64370732 卢克奶妈八号 14 100|64632622 风之凌殇喵喵 3 100|64632641 风之凌殇喵呜 3 100|69837948 卢克奶妈九号 1"
+            "4 100|69837951 卢克奶妈十号 14 100|71672841 风之凌殇呀 11 100|72282733 风之凌殇哦 4 100|72522431 风之凌殇咯 3 100|72574316 风之凌殇咩 3 100|72767454 风之凌殇嘿 3 100|&_webplat_msg_code=0&area=11&msg=21|45168567 风之凌殇 0 "
+            "100|45230145 风之凌殇喵 3 100|45481100 风之凌殇哇 13 100|62889873 风之凌殇Meow 14 100|64327847 卢克奶妈一号 14 100|64327855 卢克奶妈二号 14 100|64333408 卢克奶妈三号 14 100|64333413 卢克奶妈四号 14 100|64349521 卢克奶妈五号 "
+            "14 100|64349525 卢克奶妈六号 14 100|64370730 卢克奶妈七号 14 100|64370732 卢克奶妈八号 14 100|64632622 风之凌殇喵喵 3 100|64632641 风之凌殇喵呜 3 100|69837948 卢克奶妈九号 14 100|69837951 卢克奶妈十号 14 100|71672841 风之凌殇"
+            "呀 11 100|72282733 风之凌殇哦 4 100|72522431 风之凌殇咯 3 100|72574316 风之凌殇咩 3 100|72767454 风之凌殇嘿 3 100|&result=0&uin=1054073896&"
+        )
+        self.msg = "success"
+        self.checkparam = (
+            "dnf|yes|1054073896|11|45168567*45230145*45481100*62889873*64327847*64327855*64333408*64333413*64349521*64349525*64370730*64370732*64632622*64632641*69837948*69837951*71672841*72282733*72522431*72574316*72767454"
+            "*||||风之凌殇*风之凌殇喵*风之凌殇哇*风之凌殇Meow*卢克奶妈一号*卢克奶妈二号*卢克奶妈三号*卢克奶妈四号*卢克奶妈五号*卢克奶妈六号*卢克奶妈七号*卢克奶妈八号*风之凌殇喵喵*风之凌殇喵呜*卢克奶妈九号*卢克奶妈十号*风之凌殇呀*风之凌殇哦*风之"
+            "凌殇咯*风之凌殇咩*风之凌殇嘿*|0*3*13*14*14*14*14*14*14*14*14*14*3*3*14*14*11*4*3*3*3*||1608455917|"
+        )
+        self.md5str = "3F7F5D5C92CF3E633A40E246A637CC0B"
+        self.infostr = ""
+        self.checkstr = ""
 
 
 class RankUserInfo(ConfigInterface):
@@ -488,16 +502,8 @@ class DnfWarriorsCallZZBossRule(ConfigInterface):
 
 class DnfWarriorsCallBoss(ConfigInterface):
     def __init__(self):
-        self.left = {
-            "117925": 0,
-            "117926": 0,
-            "undefined": 0
-        }
-        self.used = {
-            "117925": 0,
-            "117926": 1,
-            "undefined": 0
-        }
+        self.left = {"117925": 0, "117926": 0, "undefined": 0}
+        self.used = {"117925": 0, "117926": 1, "undefined": 0}
 
 
 class QzoneActivityResponse(ConfigInterface):
@@ -521,7 +527,7 @@ class DnfHelperChronicleExchangeList(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('gifts', DnfHelperChronicleExchangeGiftInfo),
+            ("gifts", DnfHelperChronicleExchangeGiftInfo),
         ]
 
 
@@ -548,8 +554,8 @@ class DnfHelperChronicleBasicAwardList(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('basic1List', DnfHelperChronicleBasicAwardInfo),
-            ('basic2List', DnfHelperChronicleBasicAwardInfo),
+            ("basic1List", DnfHelperChronicleBasicAwardInfo),
+            ("basic2List", DnfHelperChronicleBasicAwardInfo),
         ]
 
 
@@ -574,7 +580,7 @@ class DnfHelperChronicleLotteryList(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('gifts', DnfHelperChronicleLotteryGiftInfo),
+            ("gifts", DnfHelperChronicleLotteryGiftInfo),
         ]
 
 
@@ -627,7 +633,7 @@ class DnfHelperChronicleUserTaskList(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('taskList', DnfHelperChronicleUserTaskInfo),
+            ("taskList", DnfHelperChronicleUserTaskInfo),
         ]
 
 
@@ -651,7 +657,7 @@ class DnfHelperChronicleSignList(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('gifts', DnfHelperChronicleSignGiftInfo),
+            ("gifts", DnfHelperChronicleSignGiftInfo),
         ]
 
 
@@ -761,7 +767,7 @@ class AmesvrQueryFriendsInfo(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('list', AmesvrFriendInfo),
+            ("list", AmesvrFriendInfo),
         ]
 
 
@@ -790,7 +796,7 @@ class BuyInfo(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('buy_records', BuyRecord),
+            ("buy_records", BuyRecord),
         ]
 
     def merge(self, other: BuyInfo):
@@ -869,7 +875,9 @@ class BuyInfo(ConfigInterface):
         if len(self.game_qqs) != 0:
             msg += f"\n附属QQ {', '.join(self.game_qqs)}"
         if len(self.buy_records) != 0:
-            msg += "\n购买详情如下：\n" + '\n'.join('\t' + f'{record.buy_at} {record.reason} {record.buy_month} 月' for record in self.buy_records)
+            msg += "\n购买详情如下：\n" + "\n".join(
+                "\t" + f"{record.buy_at} {record.reason} {record.buy_month} 月" for record in self.buy_records
+            )
 
         msg += "\n"
         msg += "\n通过配置工具直接购买或者使用卡密购买，无需私聊告知，等待10到20分钟左右后即可到账。目前有缓存机制，可能不能及时查询到最新信息~"
@@ -950,10 +958,7 @@ class AmsActInfo(ConfigInterface):
         self.iAreaRoleModId = "15640"
         self.iAreaModIsNew = 1
         self.iAreaRoleFlowId = "732626"
-        self.iAreaRoleAppId = {
-            "qq_appid": "",
-            "wx_appid": "wxb30cf8a19c708c2a"
-        }
+        self.iAreaRoleAppId = {"qq_appid": "", "wx_appid": "wxb30cf8a19c708c2a"}
         self.flows = {}
 
     def is_last_day(self):
@@ -1115,7 +1120,7 @@ class GuanjiaNewQueryLotteryInfo(ConfigInterface):
 
     def fields_to_fill(self):
         return [
-            ('result', GuanjiaNewQueryLotteryResult),
+            ("result", GuanjiaNewQueryLotteryResult),
         ]
 
 
@@ -1193,7 +1198,7 @@ class GuanjiaNewLotteryResultData(ConfigInterface):
 
 class ColgBattlePassInfo(ConfigInterface):
     def __init__(self):
-        self.activity_id = '4'
+        self.activity_id = "4"
         self.lv_score = 0
         self.tasks = []  # type: List[ColgBattlePassTaskInfo]
         self.rewards = []  # type: List[ColgBattlePassRewardInfo]
@@ -1267,10 +1272,7 @@ class XiaojiangyouInfo(ConfigInterface):
         self.role_info = XiaojiangyouRoleInfo()
         self.history_page_count = 10
         self.certificate = "600eac0a8be98459477c30971c23f25cd63de6cc"
-        self.user_profile = {
-            "robot_use_status": 1,
-            "wx_img": ""
-        }
+        self.user_profile = {"robot_use_status": 1, "wx_img": ""}
 
 
 class XiaojiangyouInterveneMsg(ConfigInterface):
@@ -1521,14 +1523,16 @@ class CreateWorkInfo(ConfigInterface):
         self.kol = ""
         self.sFromUrl = ""
         self.sTitle = "魔界人元气满满防尘口罩"
-        self.sContent = "<p><melo-data></melo-data></p><div><h1>魔界人口罩</h1><p>卖点：生活刚需，成本低下，展示个性。</p><p><img src='https://img.tgl.qq.com/cover/20211005/3f244bb8bee2ee6ef63d89fb235cf086_1633411914.png' style='max-width: " \
-                        "100%; height: auto;'  /><br  /></p><p><br  /></p><p>设计：考虑到防疫口罩拥有极高的安全等级，因此推荐制作常规的装饰级口罩。<br  /></p><p><img src='https://img.tgl.qq.com/cover/20211005/5423e9635781cb5d4f54b8a6dbfcfb77_" \
-                        "1633414580.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>·背景：</p><p>疫情时代下，口罩成为了人们的必需品。</p><p>2021年春节期间，五菱宏光为春晚独家提供了口罩支持，使其成为了当时春晚最成功的营" \
-                        "销品牌之一。</p><p>看人先看脸，口罩作为戴在人们脸上的挂件，是最受人们关注的产品之一。一个好看的口罩，不仅可以让佩戴者心情愉悦，同时还可以广泛吸引其他人眼光。</p><p><img src='https://img.tgl.qq.com/cover/20211005/c19b96a1605df6" \
-                        "57c7f9252e3612df64_1633412019.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>案例：</p><p>著名游戏《最终幻想》系列厂商——史克威尔工作室就曾经推出过一款简单的文字口罩，作为周边商城满单赠送礼物，" \
-                        "引发游戏圈不小讨论。</p><p><img src='https://img.tgl.qq.com/source/open/20211005/16334120477ad1d9973bb26993.jpg' style='max-width: 100%; height: auto;' data-origin='https%3A%2F%2Fimg1.gamersky.com%2Fimage2020%2F0" \
-                        "5%2F20200512_zty_412_4%2Fgamersky_02origin_03_202051210515B8.jpg'  /><br  /></p><p><br  /></p><p><br  /></p></div><img style='width:1px;height:1px;border:none' forstat='1'  src='https://itea-stat.qq.com/img/sta" \
-                        "t?cid=tgleb0db07909bad&aid=1774933'>"
+        self.sContent = (
+            "<p><melo-data></melo-data></p><div><h1>魔界人口罩</h1><p>卖点：生活刚需，成本低下，展示个性。</p><p><img src='https://img.tgl.qq.com/cover/20211005/3f244bb8bee2ee6ef63d89fb235cf086_1633411914.png' style='max-width: "
+            "100%; height: auto;'  /><br  /></p><p><br  /></p><p>设计：考虑到防疫口罩拥有极高的安全等级，因此推荐制作常规的装饰级口罩。<br  /></p><p><img src='https://img.tgl.qq.com/cover/20211005/5423e9635781cb5d4f54b8a6dbfcfb77_"
+            "1633414580.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>·背景：</p><p>疫情时代下，口罩成为了人们的必需品。</p><p>2021年春节期间，五菱宏光为春晚独家提供了口罩支持，使其成为了当时春晚最成功的营"
+            "销品牌之一。</p><p>看人先看脸，口罩作为戴在人们脸上的挂件，是最受人们关注的产品之一。一个好看的口罩，不仅可以让佩戴者心情愉悦，同时还可以广泛吸引其他人眼光。</p><p><img src='https://img.tgl.qq.com/cover/20211005/c19b96a1605df6"
+            "57c7f9252e3612df64_1633412019.png' style='max-width: 100%; height: auto;'  /><br  /></p><p><br  /></p><p>案例：</p><p>著名游戏《最终幻想》系列厂商——史克威尔工作室就曾经推出过一款简单的文字口罩，作为周边商城满单赠送礼物，"
+            "引发游戏圈不小讨论。</p><p><img src='https://img.tgl.qq.com/source/open/20211005/16334120477ad1d9973bb26993.jpg' style='max-width: 100%; height: auto;' data-origin='https%3A%2F%2Fimg1.gamersky.com%2Fimage2020%2F0"
+            "5%2F20200512_zty_412_4%2Fgamersky_02origin_03_202051210515B8.jpg'  /><br  /></p><p><br  /></p><p><br  /></p></div><img style='width:1px;height:1px;border:none' forstat='1'  src='https://itea-stat.qq.com/img/sta"
+            "t?cid=tgleb0db07909bad&aid=1774933'>"
+        )
         self.sDetailUrl = ""
         self.sInfoImageAddr = "https://img.tgl.qq.com/cover/20211005/e0d739e75c6b71b43f13ae1f92515c2b_1633414545.png"
         self.sInfoBigImageAddr = "https://img.tgl.qq.com/cover/20211005/e0d739e75c6b71b43f13ae1f92515c2b_1633414545.png"
@@ -1538,7 +1542,9 @@ class CreateWorkInfo(ConfigInterface):
         self.sHourLong = ""
         self.dtCreateTime = "2021-10-05 14:16:42"
         self.dtModifyTime = "2021-11-10 18:11:40"
-        self.statUrl = "http://itea-cdn.qq.com/file/tgl/js/tgl_moni.js?aid=1774933&gid=453&cid=tgleb0db07909bad&_t=1637424000"
+        self.statUrl = (
+            "http://itea-cdn.qq.com/file/tgl/js/tgl_moni.js?aid=1774933&gid=453&cid=tgleb0db07909bad&_t=1637424000"
+        )
         self.iDeliverSource = 6
         self.atlas = ""
         self.covers = []
@@ -1565,7 +1571,7 @@ class CreateWorkInfo(ConfigInterface):
         self.iPraiseNum = "528"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from util import format_time, parse_time
 
     a = BuyInfo()

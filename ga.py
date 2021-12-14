@@ -18,16 +18,14 @@ headers = {
 }
 
 common_data = {
-    'v': '1',  # API Version.
-    'tid': GA_TRACKING_ID,  # Tracking ID / Property ID.
-    'cid': get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
-    'ua': 'djc_helper',
-
-    'an': "djc_helper",
-    'av': now_version,
-
-    'ds': 'app',
-    'sr': get_resolution(),
+    "v": "1",  # API Version.
+    "tid": GA_TRACKING_ID,  # Tracking ID / Property ID.
+    "cid": get_cid(),  # Anonymous Client Identifier. Ideally, this should be a UUID that is associated with particular user, device, or browser instance.
+    "ua": "djc_helper",
+    "an": "djc_helper",
+    "av": now_version,
+    "ds": "app",
+    "sr": get_resolution(),
 }
 
 GA_REPORT_TYPE_EVENT = "event"
@@ -41,13 +39,11 @@ def track_event(category: str, action: str, label=None, value=0, ga_misc_params:
 
     data = {
         **common_data,
-
-        't': 'event',  # Event hit type.
-        'ec': category,  # Event category.
-        'ea': action,  # Event action.
-        'el': label,  # Event label.
-        'ev': value,  # Event value, must be an integer
-
+        "t": "event",  # Event hit type.
+        "ec": category,  # Event category.
+        "ea": action,  # Event action.
+        "el": label,  # Event label.
+        "ev": value,  # Event value, must be an integer
         **ga_misc_params,  # 透传的一些额外参数
     }
 
@@ -63,12 +59,10 @@ def track_page(page: str, ga_misc_params: dict = None):
     page = quote_plus(page)
     data = {
         **common_data,
-
-        't': 'pageview',  # Event hit type.
-        'dh': "djc-helper.com",  # Document hostname.
-        'dp': page,  # Page.
-        'dt': "",  # Title.
-
+        "t": "pageview",  # Event hit type.
+        "dh": "djc-helper.com",  # Document hostname.
+        "dp": page,  # Page.
+        "dt": "",  # Title.
         **ga_misc_params,  # 透传的一些额外参数
     }
 
@@ -76,6 +70,6 @@ def track_page(page: str, ga_misc_params: dict = None):
     logger.debug(f"request body = {res.request.body}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # track_event("example", "test")
     track_page("/example/test_quote")

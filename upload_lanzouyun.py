@@ -10,11 +10,9 @@ from const import compressed_temp_dir, downloads_dir
 from lanzou.api import LanZouCloud
 from lanzou.api.types import FileInFolder, FolderDetail
 from log import color, get_log_func, logger
-from util import (cache_name_download, human_readable_size,
-                  make_sure_dir_exists, parse_time, parse_timestamp,
-                  with_cache)
+from util import cache_name_download, human_readable_size, make_sure_dir_exists, parse_time, parse_timestamp, with_cache
 
-Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
+Folder = namedtuple("Folder", ["name", "id", "url", "password"])
 
 
 # 参考文档可见：https://github.com/zaxtyson/LanZouCloud-API/wiki
@@ -22,6 +20,7 @@ Folder = namedtuple('Folder', ['name', 'id', 'url', 'password'])
 # 如果日后蓝奏云仍出现多次问题，可以考虑增加一个fallback选项
 # 在gitee新建一个仓库，通过git add操作更新文件，通过访问raw链接来下载文件
 # 如：https://gitee.com/fzls/djc_helper/raw/master/CHANGELOG.MD
+
 
 class Uploader:
     default_sub_domain = "fzls"
@@ -33,14 +32,16 @@ class Uploader:
     folder_history_files = Folder("历史版本", "2303716", f"https://{default_domain}/b01bp17zg", "")
     folder_djc_helper_tools = Folder("蚊子腿小助手相关工具", "2291287", f"https://{default_domain}/s/djc-tools", "")
     folder_online_files = Folder("在线文件存储-v2", "3828082", f"https://{default_domain}/s/myfiles-v2", "3jte")
-    folder_online_files_history_files = Folder("历史版本-v2", "3828089", f"https://{default_domain}/myfiles-v2-history", "fwqi")
+    folder_online_files_history_files = Folder(
+        "历史版本-v2", "3828089", f"https://{default_domain}/myfiles-v2-history", "fwqi"
+    )
 
     history_version_prefix = "DNF蚊子腿小助手_v"
     history_patches_prefix = "DNF蚊子腿小助手_增量更新文件_"
     history_dlc_version_prefix = "auto_updater.exe"
 
-    regex_version = r'DNF蚊子腿小助手_v(.+)_by风之凌殇.7z'
-    regex_patches = r'DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z'
+    regex_version = r"DNF蚊子腿小助手_v(.+)_by风之凌殇.7z"
+    regex_patches = r"DNF蚊子腿小助手_增量更新文件_v(.+)_to_v(.+).7z"
 
     # 保存购买了自动更新工具的用户信息
     buy_auto_updater_users_filename = "buy_auto_updater_users.txt"
@@ -68,7 +69,15 @@ class Uploader:
         # 仅上传需要登录
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 
-    def upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix="", delete_history_file=False, also_upload_compressed_version=False, only_upload_compressed_version=False) -> bool:
+    def upload_to_lanzouyun(
+        self,
+        filepath: str,
+        target_folder: Folder,
+        history_file_prefix="",
+        delete_history_file=False,
+        also_upload_compressed_version=False,
+        only_upload_compressed_version=False,
+    ) -> bool:
         if not self.login_ok:
             logger.info("未登录，不能上传文件")
             return False
@@ -91,11 +100,15 @@ class Uploader:
             # 创建压缩版本
             compress_file_with_lzma(filepath, compressed_filepath)
             # 上传
-            return self._upload_to_lanzouyun(compressed_filepath, target_folder, compressed_history_file_prefix, delete_history_file)
+            return self._upload_to_lanzouyun(
+                compressed_filepath, target_folder, compressed_history_file_prefix, delete_history_file
+            )
 
         return True
 
-    def _upload_to_lanzouyun(self, filepath: str, target_folder: Folder, history_file_prefix, delete_history_file=False) -> bool:
+    def _upload_to_lanzouyun(
+        self, filepath: str, target_folder: Folder, history_file_prefix, delete_history_file=False
+    ) -> bool:
         if history_file_prefix == "":
             logger.error("未设置history_file_prefix")
             return False
@@ -134,7 +147,10 @@ class Uploader:
             return False
 
         filesize = os.path.getsize(filepath)
-        logger.warning(color("bold_yellow") + f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}")
+        logger.warning(
+            color("bold_yellow")
+            + f"上传文件 {filename}({human_readable_size(filesize)}) 总计耗时{datetime.now() - run_start_time}"
+        )
 
         return True
 
@@ -229,17 +245,35 @@ class Uploader:
 
         raise FileNotFoundError("latest version not found")
 
-    def download_file_in_folder(self, folder: Folder, name: str, download_dir: str, overwrite=True, show_log=True, try_compressed_version_first=False, cache_max_seconds=600, download_only_if_server_version_is_newer=True) -> str:
+    def download_file_in_folder(
+        self,
+        folder: Folder,
+        name: str,
+        download_dir: str,
+        overwrite=True,
+        show_log=True,
+        try_compressed_version_first=False,
+        cache_max_seconds=600,
+        download_only_if_server_version_is_newer=True,
+    ) -> str:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
 
         def _download(fname: str) -> str:
-            return with_cache(cache_name_download, os.path.join(folder.name, fname), cache_max_seconds=cache_max_seconds,
-                              cache_miss_func=lambda: self.download_file(self.find_file(folder, fname), download_dir, overwrite=overwrite, show_log=show_log,
-                                                                         download_only_if_server_version_is_newer=download_only_if_server_version_is_newer),
-                              cache_validate_func=lambda target_path: os.path.isfile(target_path),
-                              )
+            return with_cache(
+                cache_name_download,
+                os.path.join(folder.name, fname),
+                cache_max_seconds=cache_max_seconds,
+                cache_miss_func=lambda: self.download_file(
+                    self.find_file(folder, fname),
+                    download_dir,
+                    overwrite=overwrite,
+                    show_log=show_log,
+                    download_only_if_server_version_is_newer=download_only_if_server_version_is_newer,
+                ),
+                cache_validate_func=lambda target_path: os.path.isfile(target_path),
+            )
 
         if try_compressed_version_first:
             # 先尝试获取压缩版本
@@ -264,7 +298,11 @@ class Uploader:
                 target_path = os.path.join(dirname, name)
 
                 need_decompress = True
-                if before_download_last_modify_time is not None and before_download_last_modify_time == after_download_last_modify_time and os.path.exists(target_path):
+                if (
+                    before_download_last_modify_time is not None
+                    and before_download_last_modify_time == after_download_last_modify_time
+                    and os.path.exists(target_path)
+                ):
                     # 如果前后修改时间没有变动，说明没有实际发生下载，比如网盘版本与当前本地版本一致，如果此时目标文件已经解压过，将不再尝试解压
                     need_decompress = False
 
@@ -291,7 +329,14 @@ class Uploader:
 
         raise FileNotFoundError(f"file={name} not found in folder={folder.name}")
 
-    def download_file(self, fileinfo: FileInFolder, download_dir: str, overwrite=True, show_log=True, download_only_if_server_version_is_newer=True) -> str:
+    def download_file(
+        self,
+        fileinfo: FileInFolder,
+        download_dir: str,
+        overwrite=True,
+        show_log=True,
+        download_only_if_server_version_is_newer=True,
+    ) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
@@ -307,11 +352,16 @@ class Uploader:
             server_version_upload_time = parse_time(fileinfo.time) - timedelta(minutes=1)
             local_version_last_modify_time = parse_timestamp(os.stat(target_path.value).st_mtime)
 
-            get_log_func(logger.info, show_log)(f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}")
+            get_log_func(logger.info, show_log)(
+                f"{fileinfo.name} 本地修改时间为：{local_version_last_modify_time} 网盘版本上传时间为：{server_version_upload_time}"
+            )
 
             if server_version_upload_time <= local_version_last_modify_time:
                 # 暂无最新版本，无需重试
-                get_log_func(logger.info, show_log)(color("bold_cyan") + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本{local_version_last_modify_time}之前，无需重新下载")
+                get_log_func(logger.info, show_log)(
+                    color("bold_cyan")
+                    + f"当前设置了对比修改时间参数，网盘中最新版本 {fileinfo.name} 上传于{server_version_upload_time}左右，在当前版本{local_version_last_modify_time}之前，无需重新下载"
+                )
                 return target_path.value
 
         def after_downloaded(file_name):
@@ -321,22 +371,28 @@ class Uploader:
 
         get_log_func(logger.info, show_log)(f"即将开始下载 {target_path.value}")
         callback = None
-        if show_log: callback = self.show_progress
-        retCode = self.down_file_by_url(fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite)
+        if show_log:
+            callback = self.show_progress
+        retCode = self.down_file_by_url(
+            fileinfo.url, "", download_dir, callback=callback, downloaded_handler=after_downloaded, overwrite=overwrite
+        )
         if retCode != LanZouCloud.SUCCESS:
             get_log_func(logger.error, show_log)(f"下载失败，retCode={retCode}")
             if retCode == LanZouCloud.NETWORK_ERROR:
-                get_log_func(logger.warning, show_log)(color("bold_yellow") + (
-                    "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
-                    "分别尝试在浏览器中访问下列两个网页，是否一个打的开一个打不开？\n"
-                    "https://fzls.lanzoux.com/s/djc-helper\n"
-                    "https://fzls.lanzous.com/s/djc-helper\n"
-                    "\n"
-                    "如果是这样，请按照下面这个链接，修改本机的dns，使用阿里、腾讯、百度、谷歌dns中的任意一个应该都可以解决。\n"
-                    "https://www.ypojie.com/9830.html\n"
-                    "\n"
-                    "如果两个都打不开，大概率是蓝奏云挂了-。-可选择忽略后面的弹框，继续运行旧版本，或者手动去QQ群或github下载最新版本"
-                ))
+                get_log_func(logger.warning, show_log)(
+                    color("bold_yellow")
+                    + (
+                        "蓝奏云api返回网络错误，这很可能是由于dns的问题导致的\n"
+                        "分别尝试在浏览器中访问下列两个网页，是否一个打的开一个打不开？\n"
+                        "https://fzls.lanzoux.com/s/djc-helper\n"
+                        "https://fzls.lanzous.com/s/djc-helper\n"
+                        "\n"
+                        "如果是这样，请按照下面这个链接，修改本机的dns，使用阿里、腾讯、百度、谷歌dns中的任意一个应该都可以解决。\n"
+                        "https://www.ypojie.com/9830.html\n"
+                        "\n"
+                        "如果两个都打不开，大概率是蓝奏云挂了-。-可选择忽略后面的弹框，继续运行旧版本，或者手动去QQ群或github下载最新版本"
+                    )
+                )
             raise Exception("下载失败")
 
         return target_path.value
@@ -345,15 +401,15 @@ class Uploader:
         """显示进度的回调函数"""
         percent = now_size / total_size
         bar_len = 40  # 进度条长总度
-        bar_str = '>' * round(bar_len * percent) + '=' * round(bar_len * (1 - percent))
+        bar_str = ">" * round(bar_len * percent) + "=" * round(bar_len * (1 - percent))
         show_percent = percent * 100
         now_mb = now_size / 1048576
         total_mb = total_size / 1048576
-        print(f'\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ', end='')
+        print(f"\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ", end="")
         if total_size == now_size:
-            print('')  # 下载完成换行
+            print("")  # 下载完成换行
 
-    def get_folder_info_by_url(self, share_url, dir_pwd='', get_this_page=0) -> FolderDetail:
+    def get_folder_info_by_url(self, share_url, dir_pwd="", get_this_page=0) -> FolderDetail:
         for possiable_url in self.all_possiable_urls(share_url):
             try:
                 folder_info = self.lzy.get_folder_info_by_url(possiable_url, dir_pwd, get_this_page=get_this_page)
@@ -369,11 +425,19 @@ class Uploader:
 
         return FolderDetail(LanZouCloud.FAILED)
 
-    def down_file_by_url(self, share_url, pwd='', save_path='./Download', *, callback=None, overwrite=False,
-                         downloaded_handler=None) -> int:
+    def down_file_by_url(
+        self, share_url, pwd="", save_path="./Download", *, callback=None, overwrite=False, downloaded_handler=None
+    ) -> int:
         for possiable_url in self.all_possiable_urls(share_url):
             try:
-                retCode = self.lzy.down_file_by_url(possiable_url, pwd, save_path, callback=callback, overwrite=overwrite, downloaded_handler=downloaded_handler)
+                retCode = self.lzy.down_file_by_url(
+                    possiable_url,
+                    pwd,
+                    save_path,
+                    callback=callback,
+                    overwrite=overwrite,
+                    downloaded_handler=downloaded_handler,
+                )
             except Exception as e:
                 retCode = LanZouCloud.NETWORK_ERROR
                 logger.debug(f"down_file_by_url {possiable_url} 出异常了", exc_info=e)
@@ -406,9 +470,28 @@ def demo():
     logger.info(f"最新增量补丁为{uploader.find_latest_patches()}")
     uploader.download_latest_patches(downloads_dir)
 
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, downloads_dir, try_compressed_version_first=True)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, downloads_dir, try_compressed_version_first=True, download_only_if_server_version_is_newer=False, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, download_only_if_server_version_is_newer=True, cache_max_seconds=0)
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_user_monthly_pay_info_filename,
+        downloads_dir,
+        try_compressed_version_first=True,
+    )
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_buy_auto_updater_users_filename,
+        downloads_dir,
+        try_compressed_version_first=True,
+        download_only_if_server_version_is_newer=False,
+        cache_max_seconds=0,
+    )
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_used_card_secrets,
+        downloads_dir,
+        try_compressed_version_first=True,
+        download_only_if_server_version_is_newer=True,
+        cache_max_seconds=0,
+    )
 
     # 需要登录才能使用的接口
     test_login_functions = False
@@ -427,12 +510,36 @@ def demo():
 
 def demo_downloads():
     uploader = Uploader()
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.all_jiaoyile_orders_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_used_card_secrets, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_user_monthly_pay_info_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
-    uploader.download_file_in_folder(uploader.folder_online_files, uploader.cs_buy_auto_updater_users_filename, downloads_dir, try_compressed_version_first=True, cache_max_seconds=0)
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.all_jiaoyile_orders_filename,
+        downloads_dir,
+        try_compressed_version_first=True,
+        cache_max_seconds=0,
+    )
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_used_card_secrets,
+        downloads_dir,
+        try_compressed_version_first=True,
+        cache_max_seconds=0,
+    )
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_user_monthly_pay_info_filename,
+        downloads_dir,
+        try_compressed_version_first=True,
+        cache_max_seconds=0,
+    )
+    uploader.download_file_in_folder(
+        uploader.folder_online_files,
+        uploader.cs_buy_auto_updater_users_filename,
+        downloads_dir,
+        try_compressed_version_first=True,
+        cache_max_seconds=0,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # demo()
     demo_downloads()

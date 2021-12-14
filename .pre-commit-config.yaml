@@ -1,5 +1,13 @@
 default_language_version:
   python: python3
+exclude: |
+  (?x)
+      # 源码目录
+      ^(lanzou|test)/|
+      # 其他目录
+      ^(.cached|.db|.mypy_cache|.pytest_cache|.venv|.venv_dev|.tox|logs|releases)/|
+      # 源码文件
+      ^(reversi.py|qt_collapsible_box.py)$
 repos:
   - repo: https://github.com/PyCQA/flake8
     rev: 3.9.2

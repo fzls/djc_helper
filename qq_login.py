@@ -142,7 +142,7 @@ class QQLogin():
                 self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), desired_capabilities=caps, options=options)
                 logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
                 inited = True
-        except:
+        except Exception:
             pass
         if not inited:
             # 如果找不到，则尝试使用打包的便携版chrome
@@ -275,7 +275,7 @@ class QQLogin():
                 self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
                 self.driver.quit()
                 return
-            except:
+            except Exception:
                 logger.info("走到这里说明系统自带的chrome不可用")
                 pass
         else:
@@ -302,7 +302,7 @@ class QQLogin():
             self.driver = webdriver.Chrome(service=Service(executable_path=self.chrome_driver_executable_path()), options=options)
             self.driver.quit()
             return
-        except:
+        except Exception:
             pass
 
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
@@ -904,7 +904,7 @@ class QQLogin():
             try:
                 openid = self.driver.get_cookie('openid')
                 access_token = self.driver.get_cookie('access_token')
-            except:
+            except Exception:
                 pass
             if openid is not None and access_token is not None:
                 break

@@ -41,13 +41,9 @@ jobs:
       - name: Set time zone
         run: tzutil /s "China Standard Time"
 
-      - name: Flake
+      - name: lint
         run: |
-          tox -e lint flake8
-
-      - name: Isort
-        run: |
-          tox -e lint isort
+          tox -e lint
 
   test:
     runs-on: ${{ matrix.os }}

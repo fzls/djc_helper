@@ -437,7 +437,9 @@ class QzoneActivity:
             countid=countid,
         )
 
-        request_fn = lambda: requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+        def request_fn():
+            return requests.post(url, raw_data, headers=self.headers, timeout=self.djc_helper.common_cfg.http_timeout)
+
         res = try_request(request_fn, self.djc_helper.common_cfg.retry)
         logger.debug(f"{raw_data}")
         return process_result(ctx, res, pretty, print_res)

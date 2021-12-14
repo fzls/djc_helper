@@ -552,10 +552,10 @@ class QQLogin():
             # github action 环境下特殊处理
             raise GithubActionLoginException()
 
-        raise Exception((
+        raise Exception(
             "网络很有可能有问题（备注：访问其他网页没问题不代表访问这个网页也没问题-。-）\n"
             "如果是chrome版本更新后才这样，可以尝试在配置工具中设置强制使用便携版chrome，并指定chrome的版本号，如89"
-        ))
+        )
 
     def _login_real(self, login_type, login_action_fn=None):
         """
@@ -861,12 +861,12 @@ class QQLogin():
             retry_timeouts = [max_retry_wait_time]
         elif max_retry_count > 1:
             # 默认重试时间为按时长等分递增
-            retry_timeouts = list([idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)])
+            retry_timeouts = list(idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count))
             if login_retry_data.recommended_first_retry_timeout != 0:
                 # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
                 retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
                 remaining_retry_count = max_retry_count - 1
-                retry_timeouts.extend(list([idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)]))
+                retry_timeouts.extend(list(idx / remaining_retry_count * max_retry_wait_time for idx in range_from_one(remaining_retry_count)))
 
         return login_retry_data, retry_timeouts
 

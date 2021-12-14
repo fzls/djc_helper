@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import List, Tuple, Type
+from typing import List
 
 from data_struct import ConfigInterface, to_raw_type
 
@@ -604,7 +604,7 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
         self.levelExp = 5
         self.giftImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233235fbfbcb30af65.png"
 
-    def get_level_info_and_points_to_show(self) -> Tuple[str, str]:
+    def get_level_info_and_points_to_show(self) -> tuple[str, str]:
         levelInfo = f"LV{self.level}({self.currentExp}/{self.levelExp})"
         chronicle_points = self.point
         if self.totalExp == 0:
@@ -827,7 +827,7 @@ class BuyInfo(ConfigInterface):
         self.expire_at = format_time(expired_at)
         self.buy_records = records
 
-    def append_records_and_recompute(self, new_records: List[BuyRecord]):
+    def append_records_and_recompute(self, new_records: list[BuyRecord]):
         other = BuyInfo()
         other.qq = self.qq
         other.buy_records = new_records
@@ -886,7 +886,7 @@ class BuyInfo(ConfigInterface):
 
         return self.buy_records[0].is_dlc_reward()
 
-    def get_normal_buy_records(self) -> List[BuyRecord]:
+    def get_normal_buy_records(self) -> list[BuyRecord]:
         if self.infer_has_buy_dlc():
             return self.buy_records[1:]
 
@@ -1198,13 +1198,13 @@ class ColgBattlePassInfo(ConfigInterface):
         self.tasks = []  # type: List[ColgBattlePassTaskInfo]
         self.rewards = []  # type: List[ColgBattlePassRewardInfo]
 
-    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
             ("tasks", ColgBattlePassTaskInfo),
             ("rewards", ColgBattlePassRewardInfo),
         ]
 
-    def untaken_rewards(self) -> List[str]:
+    def untaken_rewards(self) -> list[str]:
         untaken_rewards = []
 
         for reward in self.rewards:
@@ -1494,7 +1494,7 @@ class CreateWorkListInfo(ConfigInterface):
         self.total = "0"
         self.list = []  # type: List[CreateWorkInfo]
 
-    def fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
             ("list", CreateWorkInfo),
         ]

@@ -422,7 +422,7 @@ def get_act_desc_js(actId):
     if not os.path.exists(act_cache_file):
         return ""
 
-    with open(act_cache_file, 'r', encoding="utf-8") as f:
+    with open(act_cache_file, encoding="utf-8") as f:
         return f.read()
 
 

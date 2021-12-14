@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # 云函数入口文件（Serverless Cloud Function，SCF）
 # https://cloud.tencent.com/document/product/583/56051
 

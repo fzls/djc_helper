@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # -------------------------------
 # File      : _create_patch.py
 # DateTime  : 2020/7/15 0015 2:22

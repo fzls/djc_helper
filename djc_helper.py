@@ -168,7 +168,7 @@ class DjcHelper:
         self.zzconfig = zzconfig()
 
         # 初始化部分字段
-        self.lr = None
+        self.lr: Optional[LoginResult] = None
 
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
@@ -2310,7 +2310,7 @@ class DjcHelper:
             packetID=self.ark_lottery_packet_id_card,
             g_tk=getACSRFTokenForAMS(self.lr.p_skey),
         )
-        body = {}
+        body: dict = {}
 
         res = self._qzone_act_op("查询卡片", url, body, print_res=False)
 

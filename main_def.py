@@ -174,7 +174,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
         check_all_skey_and_pskey_silently_sync(cfg)
     else:
         # 串行登录
-        qq2index = {}
+        qq2index: Dict[str, int] = {}
 
         for _idx, account_config in enumerate(cfg.account_configs):
             idx = _idx + 1
@@ -366,7 +366,8 @@ def query_account_ark_lottery_info(
     djcHelper = DjcHelper(account_config, common_config)
     lr = djcHelper.fetch_pskey()
     if lr is None:
-        return
+        return None
+
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
 
@@ -415,7 +416,7 @@ def send_card(
     else:
         logger.debug("所有奖励都已兑换，将赠送目标QQ其他QQ最富余的卡片")
         # 统计其余账号的各卡牌总数
-        merged_card_name_to_count = {}
+        merged_card_name_to_count: Dict[str, int] = {}
         for _qq, card_name_to_count in qq_to_card_name_to_counts.items():
             for card_name, card_count in card_name_to_count.items():
                 merged_card_name_to_count[card_name] = merged_card_name_to_count.get(card_name, 0) + card_count
@@ -464,11 +465,11 @@ def send_card(
     return False
 
 
-def new_ark_lottery_parse_index_from_card_id(card_id: str) -> str:
+def new_ark_lottery_parse_index_from_card_id(card_id_str: str) -> str:
     """
     将 卡片id 转换为 坐标，如 7 -> 2-3
     """
-    card_id = int(card_id)
+    card_id = int(card_id_str)
     row = (card_id + 3) // 4
     col = (card_id - 1) % 4 + 1
     index = f"{row}-{col}"
@@ -653,12 +654,12 @@ def query_lottery_status(
     order_map: Dict[str, str],
 ) -> Optional[List]:
     if not account_config.ark_lottery.show_status:
-        return
+        return None
 
     djcHelper = DjcHelper(account_config, common_config)
     lr = djcHelper.fetch_pskey()
     if lr is None:
-        return
+        return None
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
 

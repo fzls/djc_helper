@@ -1263,7 +1263,7 @@ class Config(ConfigInterface):
                 self.common.enable_multiprocessing = False
 
     def check(self) -> bool:
-        name2index = {}
+        name2index: Dict[str, int] = {}
         for _idx, account in enumerate(self.account_configs):
             idx = _idx + 1
 

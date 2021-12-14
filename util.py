@@ -20,7 +20,7 @@ import traceback
 import uuid
 import webbrowser
 from functools import wraps
-from typing import Any, Callable, List, Optional, Tuple, Type
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 from urllib import parse
 
 import psutil
@@ -134,9 +134,9 @@ def try_set_console_window_mode(show_mode: int, mode_name: str, mode_enabled: bo
     parents = get_parents(current_pid)
 
     # 找到所有窗口中在该当前进程到进程树的顶端之间路径的窗口
-    candidates_index_to_hwnd = {}
+    candidates_index_to_hwnd: Dict[int, int] = {}
 
-    def max_current_console(hwnd, argument):
+    def max_current_console(hwnd: int, argument: Dict[int, int]):
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
         if pid in parents:
             # 记录下他们在进程树路径的下标
@@ -275,7 +275,7 @@ def get_max_line_width(msg: str) -> int:
     return line_length
 
 
-def get_now() -> datetime:
+def get_now() -> datetime.datetime:
     return datetime.datetime.now()
 
 

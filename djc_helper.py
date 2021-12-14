@@ -1945,7 +1945,7 @@ class DjcHelper:
 
     def dnf_ark_lottery_try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():
-            if print_warning: logger.warning(color("fg_bold_cyan") + f"已开启消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
+            if print_warning: logger.warning(color("fg_bold_cyan") + "已开启消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
             if 'dnf' not in self.bizcode_2_bind_role_map:
                 if print_warning: logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
                 return
@@ -2029,7 +2029,7 @@ class DjcHelper:
         )
         body = {}
 
-        res = self._qzone_act_op(f"查询卡片", url, body, print_res=False)
+        res = self._qzone_act_op("查询卡片", url, body, print_res=False)
 
         card_counts = {}
         # 初始化，确保每个卡片都有值
@@ -2665,7 +2665,7 @@ class DjcHelper:
             valid_roles = query_level_100_roles(ignore_rolename_list)
 
             logger.info(color("bold_green") + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项")
-            self.temporary_change_bind_and_do(f"领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op)
+            self.temporary_change_bind_and_do("领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op)
 
         def take_lottery_count_op(take_lottery_count_role_info: RoleInfo) -> bool:
             # 领奖
@@ -2822,7 +2822,7 @@ class DjcHelper:
         self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
 
         self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user)
-        logger.info(color("bold_cyan") + f"上面的这个幸运角色可以使用其他区服的回归角色进行领取，不过这样的话其实也只有黑钻可以被当前角色用到-。-所以有兴趣的就自己去页面上操作下吧，这里就不额外做了（懒。。。")
+        logger.info(color("bold_cyan") + "上面的这个幸运角色可以使用其他区服的回归角色进行领取，不过这样的话其实也只有黑钻可以被当前角色用到-。-所以有兴趣的就自己去页面上操作下吧，这里就不额外做了（懒。。。")
 
         # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift)
         # self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
@@ -3198,7 +3198,7 @@ class DjcHelper:
 
                 self.dnf_helper_op(f"尝试完成选择的任务并领取奖励 {category} - {name} - {award}", info.taskId)
             else:
-                logger.error(f"任务似乎选择失败了，请查看上面具体日志信息~")
+                logger.error("任务似乎选择失败了，请查看上面具体日志信息~")
 
             # 打印任务状态
             info = self.dnf_helper_query_info()
@@ -3343,7 +3343,7 @@ class DjcHelper:
 
             # 自动匹配
             if dnf_helper_info.enable_auto_match_dnf_chronicle:
-                logger.info(color("bold_yellow") + f"当前尚无搭档，但是配置了自动匹配功能，将尝试自动匹配")
+                logger.info(color("bold_yellow") + "当前尚无搭档，但是配置了自动匹配功能，将尝试自动匹配")
                 if self.check_dnf_helper_chronicle_auto_match(self.user_buy_info):
                     is_auto_match = True
 
@@ -3352,7 +3352,7 @@ class DjcHelper:
                     partner_name = "自动绑定"
                     logger.info(f"自动匹配的搭档为 {partner_user_id}")
                 else:
-                    logger.info(f"不符合自动匹配条件，将跳过~")
+                    logger.info("不符合自动匹配条件，将跳过~")
 
             # --------------------- 尝试绑定 ---------------------
             if partner_user_id != "":
@@ -3612,7 +3612,7 @@ class DjcHelper:
             for gift in exchangeList.gifts:
                 exchangeGiftMap[gift.sLbcode] = gift
 
-            logger.info(color("bold_green") + f"本期可兑换道具如下:")
+            logger.info(color("bold_green") + "本期可兑换道具如下:")
             heads = ["名称", "兑换id", "所需等级", "领取次数", "消耗年史碎片"]
             colSizes = [40, 8, 8, 8, 12]
             logger.info(color("bold_green") + tableify(heads, colSizes))
@@ -3684,7 +3684,7 @@ class DjcHelper:
 
         # 检查领奖额外需要的参数
         if self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "":
-            extra_msg = f"dnf助手的token/uniqueRoleId未配置，将无法领取等级奖励（其他似乎不受影响）。若想要自动领奖，请按照下列流程进行配置"
+            extra_msg = "dnf助手的token/uniqueRoleId未配置，将无法领取等级奖励（其他似乎不受影响）。若想要自动领奖，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
             # 不通过也继续走，只是领奖会失败而已
 
@@ -3728,7 +3728,7 @@ class DjcHelper:
             if dnf_helper_info.pNickName != "":
                 partner_name += f"({dnf_helper_info.pNickName})"
             elif dnf_helper_info.enable_auto_match_dnf_chronicle:
-                partner_name += f"(自动匹配)"
+                partner_name += "(自动匹配)"
             show_user_info(partner_name, self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
 
         # 更新本月的进度信息
@@ -3910,7 +3910,7 @@ class DjcHelper:
             return self.guanjia_new_op(ctx, "pc_sdi_receive/add_draw_pool", lid)
 
         def take_unclaimed_awards():
-            raw_res = self.guanjia_new_op(f"查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
+            raw_res = self.guanjia_new_op("查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
             info = GuanjiaNewQueryLotteryInfo().auto_update_config(raw_res)
             for lr in info.result:
                 if lr.has_taken():
@@ -3992,7 +3992,7 @@ class DjcHelper:
             return self.guanjia_new_dup_op(ctx, "pc_sdi_receive/add_draw_pool", lid)
 
         def take_unclaimed_awards():
-            raw_res = self.guanjia_new_dup_op(f"查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
+            raw_res = self.guanjia_new_dup_op("查询领奖信息", "lottery.do?method=myNew", "", page_index=1, page_size=1000, domain_name="sdi.3g.qq.com", print_res=False)
             info = GuanjiaNewQueryLotteryInfo().auto_update_config(raw_res)
             for lr in info.result:
                 if lr.has_taken():
@@ -4370,7 +4370,7 @@ class DjcHelper:
         total_score = query_score()
         logger.info(color("bold_yellow") + f"当前拥有积分： {total_score}")
 
-        logger.info(f"先尝试抽奖（若开启）")
+        logger.info("先尝试抽奖（若开启）")
         if self.cfg.function_switches.dnf_gonghui_enable_lottery:
             # 每次抽奖需要消耗的10积分
             total_lottery_count = total_score // 10
@@ -4379,7 +4379,7 @@ class DjcHelper:
             for idx in range_from_one(total_lottery_count):
                 self.dnf_gonghui_op(f"第 {idx}/{total_lottery_count} 积分抽奖", "814683")
         else:
-            logger.warning(f"当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
+            logger.warning("当前未开启积分抽奖，若需要的奖励均已兑换完成，可以打开这个开关")
 
         logger.info("然后开始尝试按优先级兑换道具")
         exchange_awards()
@@ -4464,7 +4464,7 @@ class DjcHelper:
             # 如果设置了指定角色，则仅尝试这个角色
             return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huiyuan
 
-        self.temporary_change_bind_and_do(f"从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations, need_try_func=need_try_huiyuan_role)
+        self.temporary_change_bind_and_do("从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_member_operations, need_try_func=need_try_huiyuan_role)
 
         # 会长活动
         def need_try_huizhang_role(take_lottery_count_role_info: RoleInfo) -> bool:
@@ -4474,7 +4474,7 @@ class DjcHelper:
             # 如果设置了指定角色，则仅尝试这个角色
             return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huizhang
 
-        self.temporary_change_bind_and_do(f"从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations, need_try_func=need_try_huizhang_role)
+        self.temporary_change_bind_and_do("从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）", self.query_dnf_rolelist_for_temporary_change_bind(), self.check_dnf_gonghui, guild_chairman_operations, need_try_func=need_try_huizhang_role)
 
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()
@@ -4786,7 +4786,7 @@ class DjcHelper:
 
         @try_except(return_val_on_except="19", show_exception_info=False)
         def query_siActivityId():
-            res = self.dnf_welfare_op(f"查询我的分享码状态", "649261", print_res=False)
+            res = self.dnf_welfare_op("查询我的分享码状态", "649261", print_res=False)
             return res["modRet"]["jData"]["siActivityId"]
 
         # 正式逻辑
@@ -5149,7 +5149,7 @@ class DjcHelper:
 
         show_financing_info()
 
-        logger.warning(color("fg_bold_yellow") + f"这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引/付费指引.docx")
+        logger.warning(color("fg_bold_yellow") + "这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引/付费指引.docx")
 
     @try_except(return_val_on_except=0)
     def query_gpoints(self):
@@ -6918,7 +6918,7 @@ class DjcHelper:
                 self.dnf_fuqian_op(f"福签赠送-{qq}", "742115", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
                 self.dnf_fuqian_op(f"福签索要-{qq}", "742824", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
         else:
-            logger.warning(color("bold_yellow") + f"未配置新春福袋大作战邀请列表, 将跳过赠送福签")
+            logger.warning(color("bold_yellow") + "未配置新春福袋大作战邀请列表, 将跳过赠送福签")
 
         take_invite_awards()
 

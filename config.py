@@ -871,7 +871,7 @@ class Config(ConfigInterface):
                 pause_and_exit(-1)
 
         if len(self.account_configs) != 0 and self.common.run_first_account_only:
-            logger.warning(color("bold_yellow") + f"当前是调试模式，仅处理第一个账号，并关闭多进程和超快速功能")
+            logger.warning(color("bold_yellow") + "当前是调试模式，仅处理第一个账号，并关闭多进程和超快速功能")
             self.account_configs = self.account_configs[:1]
             self.common.enable_multiprocessing = False
             self.common.enable_super_fast_mode = False

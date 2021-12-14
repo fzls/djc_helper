@@ -97,7 +97,7 @@ def check_djc_role_binding():
         else:
             logger.warning(color("bold_blue") + f"请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定dnf或任意手游的账号【{not_binded_accounts}】进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）")
             logger.warning(color("bold_blue") + (
-                f"具体操作流程可以参考一下教程信息：\n"
+                "具体操作流程可以参考一下教程信息：\n"
                 "1. 使用教程/使用文档.docx 【设置领奖角色】章节和【设置道聚城手游角色】章节\n"
                 "2. 使用教程/道聚城自动化助手使用视频教程 中 DNF蚊子腿小助手4.1.1版本简要&完整视频教程 中 3:17 位置 关于绑定的介绍"
             ))
@@ -261,7 +261,7 @@ def try_copy_cards(djcHelper: DjcHelper):
     if not use_by_myself():
         return
     # 目前似乎可以赠送给自己，先自己测试几天
-    logger.warning(color("bold_yellow") + f"仅本号测试：尝试额外赠送给自己（复制卡片）")
+    logger.warning(color("bold_yellow") + "仅本号测试：尝试额外赠送给自己（复制卡片）")
 
     card_name_to_counts = djcHelper.dnf_ark_lottery_get_card_counts()
     logger.warning(color("bold_green") + f"尝试额外赠送给自己（复制卡片），最新卡片信息为：{card_name_to_counts}")
@@ -930,7 +930,7 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
         group_info = djcHelper.get_xinyue_team_group_info(user_buy_info)
         teaminfo = djcHelper.query_xinyue_teaminfo()
         if not group_info.is_local and not teaminfo.is_team_full():
-            logger.warning(color("fg_yellow") + f"当前启用了云端自动组队功能，但仍未组到队。因为组队前获取的奖励不会计入默契福利，暂时不尝试领取心悦奖励")
+            logger.warning(color("fg_yellow") + "当前启用了云端自动组队功能，但仍未组到队。因为组队前获取的奖励不会计入默契福利，暂时不尝试领取心悦奖励")
             continue
 
         djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
@@ -1036,7 +1036,7 @@ def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
     logger.warning(color("fg_bold_cyan") + message)
     if is_windows():
         if not use_by_myself() or force_message_box:
-            win32api.MessageBox(0, message, f"付费提示(〃'▽'〃)", win32con.MB_OK)
+            win32api.MessageBox(0, message, "付费提示(〃'▽'〃)", win32con.MB_OK)
         # os.popen("付费指引/支持一下.png")
         os.popen("付费指引/付费指引.docx")
 
@@ -1251,7 +1251,7 @@ def try_auto_update(cfg):
         else:
             if not exists_auto_updater_dlc():
                 if not query_ok:
-                    logger.debug(f"当前应该是查询dlc失败后全部放行的情况，这种情况下若本地没有dlc，则不尝试自动下载，避免后续查询功能恢复正常后提示没有权限，需要手动删除")
+                    logger.debug("当前应该是查询dlc失败后全部放行的情况，这种情况下若本地没有dlc，则不尝试自动下载，避免后续查询功能恢复正常后提示没有权限，需要手动删除")
                     return
 
                 # 未发现dlc和最新版dlc，尝试从网盘下载
@@ -1550,7 +1550,7 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
 
     if show_dlc_info:
         logger.info(color("bold_yellow") + "注意：自动更新和按月付费是两个完全不同的东西，具体区别请看 付费指引/付费指引.docx")
-        logger.info(color("bold_cyan") + f"当前运行的qq中已有某个qq购买过自动更新dlc\n"
+        logger.info(color("bold_cyan") + "当前运行的qq中已有某个qq购买过自动更新dlc\n"
                     + color("bold_green") + f"\t自{free_start_time}开始将累积可免费使用付费功能两个月，累计未付费时长为{not_paied_times}，将补偿{fixup_times}\n"
                     + f"\t实际过期时间为{user_buy_info.expire_at}(原结束时间为{old_expire_at})")
         logger.info(color("bold_black") + "若对自动更新送的两月有疑义，请看付费指引的常见问题章节\n"
@@ -1605,7 +1605,7 @@ def show_multiprocessing_info(cfg: Config):
         else:
             msg += ", 超快速模式未开启，将并行运行各个账号。如需同时运行各个活动，可开启该模式~"
     else:
-        msg += f"未开启多进程模式，如需开启，可前往配置工具开启"
+        msg += "未开启多进程模式，如需开启，可前往配置工具开启"
 
     logger.info(color("bold_yellow") + msg)
 
@@ -1673,15 +1673,15 @@ def try_load_old_version_configs_from_user_data_dir():
         return
 
     if run_from_src():
-        logger.info(f"当前使用源码运行，无需同步配置")
+        logger.info("当前使用源码运行，无需同步配置")
         return
 
     if not os.path.isdir(appdata_dir):
-        logger.info(f"当前没有备份的旧版本配置，无需同步配置")
+        logger.info("当前没有备份的旧版本配置，无需同步配置")
         return
 
     if not is_first_run("sync_config"):
-        logger.info(f"当前不是首次运行，无需同步配置")
+        logger.info("当前不是首次运行，无需同步配置")
         return
 
     # 上面的判定是否是首次运行的功能，偶尔会因为windows下创建目录失败而无法正常判定，增加个基于标记文件的保底措施
@@ -1701,10 +1701,10 @@ def get_appdata_save_dir() -> str:
 
 def check_proxy(cfg: Config):
     if cfg.common.bypass_proxy:
-        logger.info(f"当前配置为无视系统代理，将直接访问网络。")
+        logger.info("当前配置为无视系统代理，将直接访问网络。")
         bypass_proxy()
     else:
-        logger.info(f"当前未开启无视系统代理配置，如果使用了vpn，将优先通过vpn进行访问。如果在国内，并且经常用到vpn，建议打开该配置")
+        logger.info("当前未开启无视系统代理配置，如果使用了vpn，将优先通过vpn进行访问。如果在国内，并且经常用到vpn，建议打开该配置")
 
 
 def demo_show_notices():

@@ -74,7 +74,7 @@ def change_console_window_mode_async(disable_min_console=False):
     try:
         cfg = deepcopy(config())
     except Exception as e:
-        logger.error(f"读取配置失败", exc_info=e)
+        logger.error("读取配置失败", exc_info=e)
 
     # 如果是windows系统的话，先尝试同步设置cmd属性
     ensure_cmd_window_buffer_size_for_windows(cfg)
@@ -1150,7 +1150,7 @@ def sync_configs(source_dir: str, target_dir: str):
             continue
 
         if 'config.toml' in filename and os.stat(source).st_size == 0:
-            logger.warning(f"旧版本中的配置文件是空文件，可能意外损坏了，将不覆盖到本地")
+            logger.warning("旧版本中的配置文件是空文件，可能意外损坏了，将不覆盖到本地")
             continue
 
         # 确保要复制的目标文件所在目录存在

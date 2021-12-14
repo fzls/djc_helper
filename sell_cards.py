@@ -75,7 +75,7 @@ def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
     if len(cards_to_send) != 0:
         msg += f"\n无法发送以下卡片：{cards_to_send}，是否已达到赠送上限或者这个卡卖完了？"
     if len(success_send_list) != 0:
-        msg += f"\n请使用手机打开集卡页面确认是否到账~ 若到账请按1元每张的价格主动扫码转账哦~（不定期我会核查的，如果买了不付款的话就加入本工具黑名单~）"
+        msg += "\n请使用手机打开集卡页面确认是否到账~ 若到账请按1元每张的价格主动扫码转账哦~（不定期我会核查的，如果买了不付款的话就加入本工具黑名单~）"
     msg += "\n"
 
     return msg

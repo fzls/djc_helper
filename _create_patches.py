@@ -97,7 +97,7 @@ def create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, di
     logger.info(f"需要制作补丁包的版本为{old_version_infos}")
 
     # 确保版本都在本地
-    logger.info(f"确保以上版本均已下载并解压到本地~")
+    logger.info("确保以上版本均已下载并解压到本地~")
     for info in old_version_infos:
         local_folder_path = os.path.join(dir_all_release, f"DNF蚊子腿小助手_v{info.version}_by风之凌殇")
         local_7z_path = local_folder_path + ".7z"

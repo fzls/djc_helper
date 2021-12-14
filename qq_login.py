@@ -270,7 +270,7 @@ class QQLogin():
             self.check_and_download_chrome_ahead_linux()
 
     def check_and_download_chrome_ahead_windows(self):
-        logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools")
+        logger.info(color("bold_yellow") + "如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
         chrome_root_directory = self.chrome_root_directory()
@@ -304,7 +304,7 @@ class QQLogin():
 
         # 尝试解压
         if not os.path.isdir(self.chrome_binary_directory()):
-            logger.info(f"自动解压便携版chrome到当前目录")
+            logger.info("自动解压便携版chrome到当前目录")
             decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
 
         logger.info("检查便携版chrome是否有效")

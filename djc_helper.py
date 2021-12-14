@@ -735,10 +735,7 @@ class DjcHelper:
                     formatted_role_name = padLeftRight(role.rolename, 26, mode='left')
                     lines.append(f"\t第{idx + 1:2d}个角色信息：\tid = {role.roleid:10s} \t名字 = {formatted_role_name} \t职业 = {formatted_force_name} \t等级 = {role.level:3d}")
             else:
-                lines.append(f"\t未查到dnf服务器id={dnfServerId}上的角色信息，请确认服务器id已填写正确或者在对应区服已创建角色")
-                lines.append("\t区服id可查看稍后打开的utils/reference_data/dnf_server_list.js，详情参见config.toml的对应注释")
-                lines.append("\t区服(partition)的id可运行程序在自动打开的utils/reference_data/dnf_server_list或手动打开这个文件， 查看 STD_DATA中对应区服的v")
-                async_message_box(f"请使用网页版vscode或者下载个本地版的vscode打开【utils/reference_data/dnf_server_list.js】文件来查看~", "提示", open_url=vscode_online_url)
+                async_message_box(f"\t未查到dnf服务器({dnf_server_id_to_name(dnfServerId)})上的角色信息，请确认选择了正确的服务器或者在对应区服已创建角色", "提示")
             lines.append("+" * 40)
             logger.info(get_meaningful_call_point_for_log() + "\n".join(lines))
 

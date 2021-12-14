@@ -258,7 +258,7 @@ def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True) -> dict:
                 jsonRes[k] = unquote_plus(v)
             else:
                 jsonRes[k] = v
-        except:
+        except Exception:
             pass
 
     return jsonRes

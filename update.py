@@ -258,7 +258,7 @@ def get_netdisk_addr(config: CommonConfig):
     try:
         ui = get_update_info(config)
         return ui.netdisk_link
-    except:
+    except Exception:
         return config.netdisk_link
 
 

@@ -2103,7 +2103,7 @@ class DjcHelper:
             roleinfo.roleCode = "123456"
             try:
                 roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
-            except:
+            except Exception:
                 pass
             act_req_data = {
                 "role_info": {

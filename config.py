@@ -836,7 +836,7 @@ class CommonConfig(ConfigInterface):
                         self.pay_by_month_purchase_url = url_config['pay_by_month_purchase_url']
                     if 'netdisk_link' in url_config:
                         self.netdisk_link = url_config['netdisk_link']
-            except:
+            except Exception:
                 pass
 
 

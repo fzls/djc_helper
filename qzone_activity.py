@@ -27,7 +27,7 @@ class QzoneActivity:
         try:
             if 'dnf' in djc_helper.bizcode_2_bind_role_map:
                 roleinfo = djc_helper.bizcode_2_bind_role_map['dnf'].sRoleInfo
-        except:
+        except Exception:
             pass
         self.roleinfo = roleinfo  # type: RoleInfo
 

@@ -102,7 +102,7 @@ class QzoneActivity:
             take_awards = parse_prize_list(self.zzconfig)
 
             for award in take_awards:
-                for idx in range(award.count):
+                for _idx in range(award.count):
                     api = "fcg_receive_reward"
                     if int(award.ruleid) == self.zzconfig.prizeGroups.group4.rule:
                         # 至尊礼包的接口与其他奖励接口不一样
@@ -144,7 +144,7 @@ class QzoneActivity:
 
         card_info_map = parse_card_group_info_map(self.zzconfig)
         ruleid = card_info_map[card_name].lotterySwitchId
-        for idx in range(count):
+        for _idx in range(count):
             # 消耗卡片获得抽奖资格
             self.do_ark_lottery("fcg_qzact_present", f"增加抽奖次数-消耗卡片({card_name})", ruleid)
 
@@ -168,7 +168,7 @@ class QzoneActivity:
         if "rule" in self.lottery_data["actCount"]:
             count_map = self.lottery_data["actCount"]["rule"]
 
-        for group_name, group_info in self.lottery_data["zzconfig"]["cardGroups"].items():
+        for _group_name, group_info in self.lottery_data["zzconfig"]["cardGroups"].items():
             for cardinfo in group_info["cardList"]:
                 ruleid, count_id, name = str(cardinfo["lotterySwitchId"]), cardinfo["id"], cardinfo["name"]
 
@@ -192,7 +192,7 @@ class QzoneActivity:
         if "rule" in self.lottery_data["actCount"]:
             count_map = self.lottery_data["actCount"]["rule"]
 
-        for group_name, group_info in self.lottery_data["zzconfig"]["prizeGroups"].items():
+        for _group_name, group_info in self.lottery_data["zzconfig"]["prizeGroups"].items():
             ruleid, count_id, name = str(group_info["rule"]), group_info["qual"], group_info["title"]
 
             prize_counts[name] = 0
@@ -399,7 +399,7 @@ class QzoneActivity:
             return data_prefix not in response.text
 
         retry_cfg = self.djc_helper.common_cfg.retry
-        for i in range(retry_cfg.max_retry_count):
+        for _i in range(retry_cfg.max_retry_count):
             try:
                 res = try_request(request_fn, self.djc_helper.common_cfg.retry)
                 page_html = res.text

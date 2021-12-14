@@ -267,7 +267,7 @@ def try_copy_cards(djcHelper: DjcHelper):
     logger.warning(color("bold_green") + f"尝试额外赠送给自己（复制卡片），最新卡片信息为：{card_name_to_counts}")
 
     # 尝试复制四次
-    for copy_idx in range_from_one(4):
+    for _copy_idx in range_from_one(4):
         # 当前账号的卡牌按照卡牌数升序排列，取出其中为正数的部分来尝试进行复制卡片（赠送给自己）
         owned_card_infos = get_owned_card_infos_sort_by_count(card_name_to_counts)
         if len(owned_card_infos) == 0:
@@ -329,7 +329,7 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
 
     # 检查目标账号是否有可剩余的兑换奖励次数
     has_any_left_gift = False
-    for name, count in qq_to_prize_counts[target_qq].items():
+    for _name, count in qq_to_prize_counts[target_qq].items():
         if count > 0:
             has_any_left_gift = True
             break
@@ -345,7 +345,7 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
         logger.debug("所有奖励都已兑换，将赠送目标QQ其他QQ最富余的卡片")
         # 统计其余账号的各卡牌总数
         merged_card_name_to_count = {}
-        for qq, card_name_to_count in qq_to_card_name_to_counts.items():
+        for _qq, card_name_to_count in qq_to_card_name_to_counts.items():
             for card_name, card_count in card_name_to_count.items():
                 merged_card_name_to_count[card_name] = merged_card_name_to_count.get(card_name, 0) + card_count
         # 降序排列
@@ -354,7 +354,7 @@ def send_card(target_qq: str, qq_to_card_name_to_counts: Dict[str, Dict[str, int
         target_card_infos.sort(key=lambda card: -card[1])
 
     # 升序遍历
-    for card_name, card_count in target_card_infos:
+    for card_name, _card_count in target_card_infos:
         # 找到任意一个拥有卡片的其他账号，让他送给目标账户。默认越靠前的号越重要，因此从后面的号开始查
         for qq, card_name_to_count in reverse_map(qq_to_card_name_to_counts):
             if qq in target_qqs:
@@ -581,7 +581,7 @@ def query_lottery_status(idx: int, account_config: AccountConfig, common_config:
     cols = [idx, account_config.name]
 
     # 处理各个卡片数目
-    for card_position, card_index in enumerate(card_indexes):
+    for _card_position, card_index in enumerate(card_indexes):
         card_count = card_counts[order_map[card_index]]
 
         cols.append(card_count)

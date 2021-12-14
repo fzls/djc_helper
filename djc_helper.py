@@ -256,7 +256,7 @@ class DjcHelper:
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个
         if self.cfg.mobile_game_role_info.use_any_binded_mobile_game():
             found_binded_game = False
-            for bizcode, bind_role_info in self.bizcode_2_bind_role_map.items():
+            for _bizcode, bind_role_info in self.bizcode_2_bind_role_map.items():
                 if bind_role_info.is_mobile_game():
                     self.cfg.mobile_game_role_info.game_name = bind_role_info.sRoleInfo.gameName
                     found_binded_game = True
@@ -345,7 +345,7 @@ class DjcHelper:
         # 运行活动
         activity_funcs_to_run = self.get_activity_funcs_to_run(user_buy_info)
 
-        for act_name, activity_func in activity_funcs_to_run:
+        for _act_name, activity_func in activity_funcs_to_run:
             activity_func()
 
         # # 以下为并行执行各个活动的调用方式
@@ -725,7 +725,7 @@ class DjcHelper:
     # 尝试领取每日任务奖励
     def can_take_task_award(self, taskinfo, iRuleId):
         opt_tasks = taskinfo["data"]["list"]["day"].copy()
-        for id, task in taskinfo["data"]["chest_list"].items():
+        for _id, task in taskinfo["data"]["chest_list"].items():
             opt_tasks.append(task)
         for tinfo in opt_tasks:
             if int(iRuleId) == int(tinfo["iruleId"]):
@@ -745,7 +745,7 @@ class DjcHelper:
 
         retryCfg = self.common_cfg.retry
         for ei in self.cfg.exchange_items:
-            for i in range(ei.count):
+            for _i in range(ei.count):
                 for try_index in range(retryCfg.max_retry_count):
                     res = self.exchange_item(f"4.2 兑换 {ei.sGoodsName}", ei.iGoodsId)
                     if int(res.get('ret', '0')) == -9905:
@@ -780,7 +780,7 @@ class DjcHelper:
         # 做个保底，偶尔这个接口可能会不返回角色信息，比如下面这样
         #   {"version": "V1.0.20210818110349", "retCode": "-1", "serial_num": "AMS-DNF-1024030706-0aZzJ5-980901-5381", "data": "", "msg": "�ǳ���Ǹ�����ڲ����û����࣬�����Ժ��������룬�����������㾴���½�", "checkparam": "", "md5str": "", "infostr": "", "checkstr": "", "user_id_in_game": ""}
         roleLists = []
-        for i in range(3):
+        for _i in range(3):
             roleListJsonRes = self.get(ctx, self.urls.get_game_role_list, game=game_info.gameCode, sAMSTargetAppId=game_info.wxAppid, area=dnfServerId, platid="", partition="", is_jsonp=True, print_res=False)
             roleLists = json_parser.parse_role_list(roleListJsonRes)
             if len(roleLists) != 0:
@@ -1019,7 +1019,7 @@ class DjcHelper:
         for i in range(op.count):
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
 
-            for try_index in range(retryCfg.max_retry_count):
+            for _try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
                 if op.count > 1:
                     if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
@@ -2237,7 +2237,7 @@ class DjcHelper:
         self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
         _, lottery_times = self.get_wegame_star_count_lottery_times()
         logger.info(color("fg_bold_cyan") + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}")
-        for i in range(lottery_times):
+        for _i in range(lottery_times):
             res = self.wegame_op("抽奖", "703957")
             if res.get('ret', "0") == "600":
                 # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
@@ -2368,7 +2368,7 @@ class DjcHelper:
         self.dnf_relax_road_op("登录送抽奖1次", "799120")
         for xiaohao in self.common_cfg.majieluo.xiaohao_qq_list:
             self.dnf_relax_road_op(f"分享给 {xiaohao} 送抽奖1次", "799121", iInviter=xiaohao)
-        for i in range(2):
+        for _i in range(2):
             self.dnf_relax_road_op("抽奖", "798858")
 
     def check_dnf_relax_road(self):
@@ -3642,7 +3642,7 @@ class DjcHelper:
                         logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
                         break
 
-                    for i in range(ei.count):
+                    for _i in range(ei.count):
                         exchange_award_op(gift)
 
                 if all_exchanged:
@@ -3662,7 +3662,7 @@ class DjcHelper:
                 userInfo = getUserActivityTopInfo()
                 totalLotteryTimes = userInfo.point // 10
                 logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
-                for i in range(totalLotteryTimes):
+                for _i in range(totalLotteryTimes):
                     op_lottery()
             else:
                 logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~（ps: 年史碎片可以保留到下个月，也可以留着兑换以后的东西）")
@@ -3847,7 +3847,7 @@ class DjcHelper:
         self.guanjia_common_gifts_op("每日游戏在线30分钟", giftId=self.guanjia_gift_id_game_online_30_minutes)
         self.guanjia_common_gifts_op("每日签到任务", giftId=self.guanjia_gift_id_sign_in)
 
-        for i in range(10):
+        for _i in range(10):
             res = self.guanjia_lottery_gifts_op("抽奖")
             # {"code": 4101, "msg": "积分不够", "result": []}
             if res["code"] != 0:
@@ -3941,7 +3941,7 @@ class DjcHelper:
         add_draw_pool("每日游戏在线30分钟", self.guanjia_new_gift_id_game_online_30_minutes)
         add_draw_pool("每日签到任务", self.guanjia_new_gift_id_sign_in)
 
-        for i in range(10):
+        for _i in range(10):
             success = lottery("抽奖")
             if not success:
                 break
@@ -4023,7 +4023,7 @@ class DjcHelper:
         add_draw_pool("每日游戏在线30分钟", self.guanjia_new_dup_gift_id_game_online_30_minutes)
         add_draw_pool("每日签到任务", self.guanjia_new_dup_gift_id_sign_in)
 
-        for i in range(10):
+        for _i in range(10):
             success = lottery("抽奖")
             if not success:
                 break
@@ -5665,7 +5665,7 @@ class DjcHelper:
         self.warm_winter_op("2.游戏在线30分钟", "723176")
         total_lottery_times, lottery_times = get_lottery_times()
         logger.info(color("fg_bold_cyan") + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}，累计获取{total_lottery_times}次抽奖机会")
-        for i in range(lottery_times):
+        for _i in range(lottery_times):
             res = self.warm_winter_op("每日抽奖", "723177")
             if res.get('ret', "0") == "600":
                 # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
@@ -5872,7 +5872,7 @@ class DjcHelper:
             for op_func, name, flowid, index_str, count in operations:
                 logger.debug(f"{op_func}, {name}, {flowid}, {index_str}, {count}")
 
-                for i in range(count):
+                for _i in range(count):
                     res = op_func(f"{op_func.__name__}_{name}", flowid, index=index_str)
                     if res["ret"] == "700":
                         msg = res["flowRet"]["sMsg"]

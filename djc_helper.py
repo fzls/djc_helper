@@ -4509,28 +4509,6 @@ class DjcHelper:
         # 目前通过autojs实现
         return
 
-        show_head_line("微信签到--临时版本，仅本地使用")
-
-        # if not self.cfg.function_switches.wx_checkin:
-        #     logger.warning("未启用微信签到功能，将跳过")
-        #     return
-
-        # re: 继续研究如何获取微信稳定的登陆态，也就是下面这四个东西（顺带新请求看看这个东西会变不） @2020-10-30 11:03:36 By Chen Ji
-        #   QQ的登录态(前两个)似乎非常稳定，似乎只需要处理后面那俩，根据今天的测试，早上十一点半获取的token，下午三点再次运行的时候已经提示：微信身份态过期（缓存找不到）
-        wx_login_cookies = self.make_cookie({
-            # ----------QQ登录态----------
-            # 登录态（这个似乎可以长期不用改动）
-            "fsza_sk_t_q_at_101482157": "01EHSGBKRZ9ECXXWPF589HFY2M",
-
-            # ----------WX登录态----------
-            # 登录态 undone: 这个两小时就会过期，需要搞定这个~
-            "fsza_sk_t_at_wxa817069bb040f860": "5840d4fd0603367b6ac9737a346f0987fa8bc622f996f0f78095ff6887536d13",
-        })
-
-        self.post("微信签到", 'https://gw.gzh.qq.com/awp-signin/register?id=260', {}, extra_cookies=wx_login_cookies)
-
-        self.get("微信签到信息", 'https://gw.gzh.qq.com/awp-signin/check?id=260', extra_cookies=wx_login_cookies)
-
     # -------------------------------------------- 虎牙 --------------------------------------------
     @try_except()
     def huya(self):

@@ -2790,6 +2790,34 @@ class DjcHelper:
             "774798",
             "774799",
             "774800",
+            "821206",
+            "821207",
+            "821208",
+            "821209",
+            "821210",
+            "821211",
+            "821212",
+            "821213",
+            "821214",
+            "821215",
+            "821216",
+            "821217",
+            "821218",
+            "821219",
+            "821220",
+            "821221",
+            "821222",
+            "821223",
+            "821224",
+            "821225",
+            "821226",
+            "821227",
+            "821228",
+            "821229",
+            "821230",
+            "821231",
+            "821232",
+            "821233",
         ]
         # note: 当前更新至（定期刷新这个值）
 
@@ -2801,6 +2829,7 @@ class DjcHelper:
         newly_updated = pass_days // 7
 
         current_updated = base_updated + newly_updated
+        logger.info(f"当前预计更新到 第{current_updated}/{len(watch_comic_flowids)} 集")
 
         for _idx, flowid in enumerate(watch_comic_flowids):
             idx = _idx + 1
@@ -2810,6 +2839,7 @@ class DjcHelper:
 
             if is_weekly_first_run(f"comic_watch_{self.uin()}_{idx}"):
                 self.dnf_comic_op(f"观看资格领取_第{idx}话", flowid)
+                time.sleep(1)
 
         self.dnf_comic_op("观看礼包资格消耗", "775253")
 
@@ -9365,4 +9395,4 @@ if __name__ == "__main__":
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reservation()
+        djcHelper.dnf_comic()

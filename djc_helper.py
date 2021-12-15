@@ -8914,6 +8914,8 @@ class DjcHelper:
                 "iMatchId",
                 "iGameId",
                 "iIPId",
+                "iVoteId",
+                "iResult",
             ]
         }
 

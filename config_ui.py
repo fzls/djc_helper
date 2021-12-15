@@ -2256,6 +2256,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_vote = create_checkbox(cfg.get_dnf_vote)
         add_row(form_layout, "DNF名人堂", self.checkbox_get_dnf_vote)
 
+        self.checkbox_get_wegame_new = create_checkbox(cfg.get_wegame_new)
+        add_row(form_layout, "WeGame活动_新版", self.checkbox_get_wegame_new)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -2326,6 +2329,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_relax_road = self.checkbox_get_dnf_relax_road.isChecked()
         cfg.get_huya = self.checkbox_get_huya.isChecked()
         cfg.get_dnf_vote = self.checkbox_get_dnf_vote.isChecked()
+        cfg.get_wegame_new = self.checkbox_get_wegame_new.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

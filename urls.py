@@ -96,6 +96,7 @@ act_name_to_url = {
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
+    "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     #
     # 已过期活动
     #
@@ -107,7 +108,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/destiny/index",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20210622lb0wcuh/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
-    "关怀活动": "http://dnf.qq.com/lbact/a20210914care/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "虎牙": "https://www.huya.com/367967",
@@ -251,7 +251,7 @@ class Urls:
         self.iActivityId_maoxian_dup = "405979"  # 勇士的冒险补给-回归玩家
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
-        self.iActivityId_dnf_guanhuai = "406829"  # 关怀活动
+        self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "425797"  # DNF预约

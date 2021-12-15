@@ -73,7 +73,9 @@ act_name_to_url = {
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
+    #
     # 短期付费活动
+    #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -93,7 +95,10 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
+    "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
+    #
     # 已过期活动
+    #
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
@@ -250,6 +255,7 @@ class Urls:
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "425797"  # DNF预约
+        self.iActivityId_dnf_memory = "431712"  # DNF记忆
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

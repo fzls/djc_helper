@@ -452,6 +452,8 @@ get_dnf_relax_road = true
 get_huya = true
 # 是否领取 DNF名人堂 活动
 get_dnf_vote = true
+# 是否领取 WeGame活动_新版 活动
+get_wegame_new = true
 
 # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
 # 是否启用 集卡 功能

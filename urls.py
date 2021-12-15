@@ -97,6 +97,7 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
+    "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     #
     # 已过期活动
     #
@@ -256,6 +257,7 @@ class Urls:
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "425797"  # DNF预约
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
+        self.iActivityId_dnf_game = "427765"  # DNF娱乐赛
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

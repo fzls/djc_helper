@@ -130,6 +130,7 @@ from util import (
     is_act_expired,
     json_compact,
     message_box,
+    now_after,
     now_in_range,
     padLeftRight,
     parse_time,
@@ -564,6 +565,7 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF记忆", self.dnf_memory),
             ("关怀活动", self.dnf_guanhuai),
+            ("DNF娱乐赛", self.dnf_game),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -8652,6 +8654,58 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF娱乐赛--------------------------------------------
+    @try_except()
+    def dnf_game(self):
+        show_head_line("DNF娱乐赛")
+        self.show_amesvr_act_info(self.dnf_game_op)
+
+        if not self.cfg.function_switches.get_dnf_game or self.disable_most_activities():
+            logger.warning("未启用领取DNF娱乐赛功能，将跳过")
+            return
+
+        self.check_dnf_game()
+
+        self.dnf_game_op("1 VS 1 投票", "819796", iVoteId=random.randint(1, 3))
+        self.dnf_game_op("2 VS 2 投票", "819817", iVoteId=random.randint(4, 6))
+        self.dnf_game_op("4 VS 4 投票", "819818", iVoteId=random.randint(7, 9))
+
+        self.dnf_game_op("比分竞猜", "819833", iResult=random.randint(1, 6))
+
+        if now_after("2021-12-20 16:00:00"):
+            self.dnf_game_op("猜对比分 红10增幅券", "819805")
+
+        for idx in range_from_one(4):
+            res = self.dnf_game_op(f"{idx} 许愿池抽奖", "818859")
+            if res.get("ret", "-1") != "0":
+                break
+            time.sleep(5)
+
+        self.dnf_game_op("查询我的竞猜和投票", "820733")
+
+    def check_dnf_game(self):
+        self.check_bind_account(
+            "DNF娱乐赛",
+            get_act_url("DNF娱乐赛"),
+            activity_op_func=self.dnf_game_op,
+            query_bind_flowid="818536",
+            commit_bind_flowid="818535",
+        )
+
+    def dnf_game_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_game
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF娱乐赛"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9434,4 +9488,4 @@ if __name__ == "__main__":
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_guanhuai()
+        djcHelper.dnf_game()

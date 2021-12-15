@@ -563,6 +563,7 @@ class DjcHelper:
             ("DNF名人堂", self.dnf_vote),
             ("DNF预约", self.dnf_reservation),
             ("DNF记忆", self.dnf_memory),
+            ("关怀活动", self.dnf_guanhuai),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -575,7 +576,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian_dup),
             ("轻松之路", self.dnf_relax_road),
-            ("关怀活动", self.dnf_guanhuai),
             ("colg每日签到", self.colg_signin),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
@@ -2653,25 +2653,25 @@ class DjcHelper:
         self.check_dnf_guanhuai()
 
         def take_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.dnf_guanhuai_op("关怀礼包1领取", "798239")
-            self.dnf_guanhuai_op("关怀礼包2领取", "798241")
-            self.dnf_guanhuai_op("关怀礼包3领取", "798242")
+            self.dnf_guanhuai_op("关怀礼包1领取", "813599")
+            self.dnf_guanhuai_op("关怀礼包2领取", "813601")
+            self.dnf_guanhuai_op("关怀礼包3领取", "813602")
 
             return True
 
         self.try_do_with_lucky_role_and_normal_role("领取关怀礼包", self.check_dnf_guanhuai, take_gifts)
 
-        self.dnf_guanhuai_op("领取每日抽奖次数", "798243")
+        self.dnf_guanhuai_op("领取每日抽奖次数", "813603")
         for idx in range_from_one(2):
-            self.dnf_guanhuai_op(f"{idx}/2 关怀抽奖", "798244")
+            self.dnf_guanhuai_op(f"{idx}/2 关怀抽奖", "813605")
 
     def check_dnf_guanhuai(self, **extra_params):
         self.check_bind_account(
             "关怀活动",
             get_act_url("关怀活动"),
             activity_op_func=self.dnf_guanhuai_op,
-            query_bind_flowid="798236",
-            commit_bind_flowid="798235",
+            query_bind_flowid="813595",
+            commit_bind_flowid="813594",
             **extra_params,
         )
 
@@ -9434,4 +9434,4 @@ if __name__ == "__main__":
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.dnf_memory()
+        djcHelper.dnf_guanhuai()

@@ -568,7 +568,7 @@ class DjcHelper:
             ("关怀活动", self.dnf_guanhuai),
             ("DNF娱乐赛", self.dnf_game),
             ("dnf助手活动", self.dnf_helper),
-            ("WeGame活动_新版", self.wegame_new)
+            ("WeGame活动_新版", self.wegame_new),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -7507,7 +7507,11 @@ class DjcHelper:
             return
 
         if is_daily_first_run("WeGame活动_新版_提示"):
-            async_message_box("新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃（此消息每天弹出一次，不想看到的话请把该活动关闭 - WeGame活动_新版）", "请手动领取", open_url="https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/")
+            async_message_box(
+                "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃（此消息每天弹出一次，不想看到的话请把该活动关闭 - WeGame活动_新版）",
+                "请手动领取",
+                open_url="https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
+            )
 
         # self.wegame_new_op_post("测试POST", "Wand-20211206100115-Fde55ab61e52f", json={"url_param": "", "checkLogin": True, "needLogin": False})
         # self.wegame_new_op("测试GET", "Wand-20211208111014-F6568800dd5fb")
@@ -7520,7 +7524,13 @@ class DjcHelper:
 
         signed_url = f"{self.urls.wegame_new_host}{api_path}&s={sign}"
         # note: 有两个参数无法获取，太麻烦了，先不弄了，wand_safecode_str 和 wand_safecode_ticket
-        return self.get(ctx, signed_url, print_res=print_res, flow_id=flow_id, extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey}; ")
+        return self.get(
+            ctx,
+            signed_url,
+            print_res=print_res,
+            flow_id=flow_id,
+            extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey}; ",
+        )
 
     def wegame_new_op_post(self, ctx: str, flow_id: str, json=None, print_res=True, **extra_params):
         api_path = self.format(self.urls.wegame_new_api, flow_id=flow_id)
@@ -7528,7 +7538,14 @@ class DjcHelper:
         sign = md5(sign_content)
 
         signed_url = f"{self.urls.wegame_new_host}{api_path}&s={sign}"
-        return self.post(ctx, signed_url, json=json, print_res=print_res, flow_id=flow_id, extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey};")
+        return self.post(
+            ctx,
+            signed_url,
+            json=json,
+            print_res=print_res,
+            flow_id=flow_id,
+            extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey};",
+        )
 
     # --------------------------------------------我的dnf13周年活动--------------------------------------------
     @try_except()

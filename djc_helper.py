@@ -2268,7 +2268,7 @@ class DjcHelper:
         else:
             if print_warning:
                 logger.warning(
-                    color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。"
+                    color("fg_bold_cyan") + f"尚未开启抽卡活动({self.urls.pesudo_ark_lottery_act_id})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。"
                 )
                 logger.warning(
                     color("fg_bold_cyan")

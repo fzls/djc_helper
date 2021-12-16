@@ -1336,6 +1336,10 @@ def show_tips(cfg):
             "\t2. 已开启开关\n"
             "\t3. 上个月编年史等级达到30级\n"
         ),
+        "1216_colg活动": (
+            "colg有个新的投票活动，可以自己去点一点领取-。-\n"
+            "https://bbs.colg.cn/plugin.php?id=colg_activity_new:annual_ceremony&from=2021_annual_ceremony_offcial\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

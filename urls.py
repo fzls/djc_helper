@@ -59,6 +59,7 @@ not_ams_activities = [
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
     newAmsActInfo("虎牙", "2021-09-11 00:00:00", "2021-10-13 23:59:59"),
+    newAmsActInfo("WeGame活动_新版", "2021-12-13 00:00:00", "2021-12-31 23:59:59"),
 ]
 
 act_name_to_url = {
@@ -99,6 +100,7 @@ act_name_to_url = {
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/MatchGuess2021/index1",
+    "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     #
     # 已过期活动
     #

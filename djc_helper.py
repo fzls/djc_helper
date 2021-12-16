@@ -551,7 +551,6 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF闪光杯", self.dnf_shanguang),
-            ("集卡", self.dnf_ark_lottery),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("DNF心悦", self.dnf_xinyue),
             ("WeGame活动", self.dnf_wegame),
@@ -569,6 +568,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
+            ("集卡", self.dnf_ark_lottery),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -2169,18 +2169,18 @@ class DjcHelper:
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
     # note: 以下几个页面右键点击对应按钮即可，与上方黄钻完全一致，参照其流程即可
-    ark_lottery_sub_act_id_login = "19807_afcb909b"  # 增加抽卡次数-每日登陆游戏
-    ark_lottery_sub_act_id_share = "19801_33e1b906"  # 增加抽卡次数-每日活动分享
-    ark_lottery_sub_act_id_lucky = "19802_00d117b7"  # 增加抽卡次数-幸运勇士
-    ark_lottery_sub_act_id_draw_card = "19803_3c265869"  # 抽卡
-    ark_lottery_sub_act_id_award_1 = "19819_f69d828e"  # 领取奖励-第一排
-    ark_lottery_sub_act_id_award_2 = "19804_de7cc7a9"  # 领取奖励-第二排
-    ark_lottery_sub_act_id_award_3 = "19823_0b90f76b"  # 领取奖励-第三排
-    ark_lottery_sub_act_id_award_all = "19821_4748adea"  # 领取奖励-十二张
-    ark_lottery_sub_act_id_lottery = "19820_841fd774"  # 消耗卡片来抽奖
+    ark_lottery_sub_act_id_login = "21894_0fb4dafd"  # 增加抽卡次数-每日登陆游戏
+    ark_lottery_sub_act_id_share = "21890_584bedde"  # 增加抽卡次数-每日活动分享
+    ark_lottery_sub_act_id_lucky = "21891_9f98f17c"  # 增加抽卡次数-幸运勇士
+    ark_lottery_sub_act_id_draw_card = "21892_485888d0"  # 抽卡
+    ark_lottery_sub_act_id_award_1 = "21895_05ee8359"  # 领取奖励-第一排
+    ark_lottery_sub_act_id_award_2 = "21893_e06dd3fc"  # 领取奖励-第二排
+    ark_lottery_sub_act_id_award_3 = "21898_87efdcee"  # 领取奖励-第三排
+    ark_lottery_sub_act_id_award_all = "21897_2a425813"  # 领取奖励-十二张
+    ark_lottery_sub_act_id_lottery = "21896_919dd3d2"  # 消耗卡片来抽奖
 
-    # note: 清空抓包数据，按f5刷新后，搜索  QueryItems
-    ark_lottery_packet_id_card = "7224_a45de826"  # 查询当前卡片数目
+    # note: 清空抓包数据，按f5刷新后，搜索  QueryItems  (hack: 其实就是活动链接的 最后一部分)
+    ark_lottery_packet_id_card = "7533_13e52f70"  # 查询当前卡片数目
 
     # note: xxx. 修改 urls.py 中的 pesudo_ark_lottery_act_id ，将其加一即可
 
@@ -2201,6 +2201,9 @@ class DjcHelper:
 
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
+
+        if is_first_run("2021-12-16新集卡并行提示"):
+            async_message_box("之前集卡18号结束，与新集卡有两天重合，如果需要继续做，请手动做或者使用之前版本运行~", "集卡并行提示", open_url="https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826")
 
         # 增加次数
         self.dnf_ark_lottery_add_ark_lottery_times()
@@ -9478,4 +9481,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.guanjia_new()
+        djcHelper.dnf_ark_lottery()

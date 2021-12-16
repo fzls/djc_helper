@@ -53,7 +53,7 @@ not_ams_activities = [
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("黄钻", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
-    newAmsActInfo("集卡", "2021-11-18 00:00:00", "2021-12-18 23:59:59"),
+    newAmsActInfo("集卡", "2021-12-16 00:00:00", "2022-01-18 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
     newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
@@ -83,7 +83,6 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
-    "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
@@ -101,6 +100,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
+    "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7533_13e52f70",
     #
     # 已过期活动
     #
@@ -314,7 +314,7 @@ class Urls:
             "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/QueryItems?g_tk={g_tk}&packetID={packetID}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10002
+        self.pesudo_ark_lottery_act_id = 10003
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

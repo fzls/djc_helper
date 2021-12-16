@@ -1336,7 +1336,7 @@ def show_tips(cfg):
             "\t2. 已开启开关\n"
             "\t3. 上个月编年史等级达到30级\n"
         ),
-        "1216_colg活动": (
+        "1216-colg活动": (
             "colg有个新的投票活动，可以自己去点一点领取-。-\n"
             "https://bbs.colg.cn/plugin.php?id=colg_activity_new:annual_ceremony&from=2021_annual_ceremony_offcial\n"
         ),

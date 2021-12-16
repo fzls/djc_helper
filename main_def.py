@@ -1347,6 +1347,10 @@ def show_tips(cfg):
         "1216-管家活动": (
             "管家活动页面下载管家可以领一个红7增幅券，有兴趣可以自行去活动页面下载~\n"
             "https://sdi.3g.qq.com/v/2021121419311511660"
+        ),
+        "1216-WeGame活动提示手动领取": (
+            "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n"
+            "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/"
         )
     }
 

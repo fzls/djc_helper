@@ -2224,8 +2224,13 @@ class DjcHelper:
                 return
 
             card_counts = self.dnf_ark_lottery_get_card_counts()
-            for card_id, count in card_counts.items():
-                self.lottery_using_cards(card_id, count)
+            max_count = max(card_counts.values())
+            logger.info(color("bold_cyan") + f"将尝试均匀抽掉各个卡片，最多的卡片数目为 {max_count}，完整数目为 {card_counts}")
+            for lottery_idx in range_from_one(max_count):
+                logger.info(color("bold_green") + f"----- 开始第 {lottery_idx}/{max_count} 轮 抽奖 -----")
+                for card_id, count in card_counts.items():
+                    if count >= lottery_idx:
+                        self.lottery_using_card(f"{lottery_idx}/{count}", card_id)
         else:
             if print_warning:
                 logger.warning(
@@ -2250,26 +2255,21 @@ class DjcHelper:
         day_fmt = "%Y-%m-%d"
         return format_time(parse_time(act_info.dtEndTime), day_fmt) == format_now(day_fmt)
 
-    def lottery_using_cards(self, card_id: str, count=1):
-        if count <= 0:
-            return
-
-        logger.info(f"尝试消耗{count}张卡片【{card_id}】来进行抽奖")
-        for idx in range_from_one(count):
-            self.qzone_act_op(
-                f"消耗卡片({card_id})来抽奖-{idx}/{count}",
-                self.ark_lottery_sub_act_id_lottery,
-                extra_act_req_data={
-                    "items": json_compact(
-                        [
-                            {
-                                "id": f"{card_id}",
-                                "num": 1,
-                            }
-                        ]
-                    ),
-                },
-            )
+    def lottery_using_card(self, ctx: str, card_id: str) -> dict:
+        return self.qzone_act_op(
+            f"{ctx} 消耗卡片({card_id})来抽奖",
+            self.ark_lottery_sub_act_id_lottery,
+            extra_act_req_data={
+                "items": json_compact(
+                    [
+                        {
+                            "id": f"{card_id}",
+                            "num": 1,
+                        }
+                    ]
+                ),
+            },
+        )
 
     def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1) -> bool:
         url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))

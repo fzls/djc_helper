@@ -2202,13 +2202,6 @@ class DjcHelper:
         if "dnf" not in self.bizcode_2_bind_role_map:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
-        if is_first_run("2021-12-16新集卡并行提示"):
-            async_message_box(
-                "之前集卡18号结束，与新集卡有两天重合，如果需要继续做，请手动做或者使用之前版本运行~",
-                "集卡并行提示",
-                open_url="https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
-            )
-
         # 增加次数
         self.dnf_ark_lottery_add_ark_lottery_times()
 

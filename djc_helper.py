@@ -2102,7 +2102,15 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        self.qzone_act_op("幸运勇士礼包", "34634_14bbfc02")
+        lucky_act_id = "34634_14bbfc02"
+        self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
+        self.qzone_act_op(
+            "幸运勇士礼包 - 集卡幸运角色",
+            lucky_act_id,
+            act_req_data=self.try_make_lucky_user_req_data(
+                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
+            ),
+        )
         self.qzone_act_op("勇士见面礼", "34635_194d13ce")
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"

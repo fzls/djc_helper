@@ -47,7 +47,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-10-21 00:00:00", "2021-12-15 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("qq视频蚊子腿-爱玩", "2021-11-26 00:00:00", "2021-12-17 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
@@ -82,7 +82,6 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021101811193411406",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
@@ -101,6 +100,7 @@ act_name_to_url = {
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
     #
     # 已过期活动
     #

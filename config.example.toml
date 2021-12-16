@@ -789,6 +789,8 @@ show_color = ""
 10001 = false
 # 2021.11.18 史诗之路再次来袭
 10002 = false
+# 2021.12.16 向着希望前进 集DNF2021嘉年华卡片拼图，抽克隆天空
+10003 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

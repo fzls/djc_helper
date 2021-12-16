@@ -1347,6 +1347,11 @@ def show_tips(cfg):
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")
 
     for title, tip in tips.items():
+        # 为保证格式一致，移除末尾的\n
+        tip = str(tip)
+        if tip.endswith('\n'):
+            tip = tip[:-1]
+
         msg = f"{title}: {tip}\n "
         async_message_box(msg, f"一些小提示_{title}", show_once=True, follow_flag_file=False)
 

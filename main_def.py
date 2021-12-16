@@ -1318,12 +1318,6 @@ def show_tips(cfg):
     tips = {
         "工具下载": ("如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzouo.com/s/djc-tools"),
         "视频教程": ("部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1"),
-        "部分新出的活动": (
-            "以下活动请自行完成~\n"
-            "\n"
-            "充值夺宝第三期：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_sd50ds3_lottery&pf=__mds_dnf_share\n"
-            "微信DNF公众号签到：在 地下城与勇士 公众号 输入 金秋签到 即可，20天可以领一个自选灿烂\n"
-        ),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"

@@ -84,9 +84,7 @@ act_name_to_url = {
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
@@ -104,6 +102,8 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
+    "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20210914jhye/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",

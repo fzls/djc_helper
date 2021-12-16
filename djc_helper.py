@@ -552,7 +552,6 @@ class DjcHelper:
             ("hello语音网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
             ("超级会员", self.dnf_super_vip),
-            ("黄钻", self.dnf_yellow_diamond),
             ("DNF闪光杯", self.dnf_shanguang),
             ("集卡", self.dnf_ark_lottery),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
@@ -569,6 +568,7 @@ class DjcHelper:
             ("DNF娱乐赛", self.dnf_game),
             ("dnf助手活动", self.dnf_helper),
             ("WeGame活动_新版", self.wegame_new),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -2088,15 +2088,15 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        self.qzone_act_op("幸运勇士礼包", "19995_cb374490")
-        self.qzone_act_op("勇士见面礼", "19996_2e1117b3")
-        # if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"):
-        #     self.qzone_act_op("分享给自己", "13654_01a04124", act_req_data={
-        #         "receivers": [
-        #             self.qq(),
-        #         ]
-        #     })
-        # self.qzone_act_op("分享领取礼包", "13655_daa970f6")
+        self.qzone_act_op("幸运勇士礼包", "34634_14bbfc02")
+        self.qzone_act_op("勇士见面礼", "34635_194d13ce")
+        if not self.cfg.function_switches.disable_share and is_first_run(f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"):
+            self.qzone_act_op("分享给自己", "34636_5621512c", act_req_data={
+                "receivers": [
+                    self.qq(),
+                ]
+            })
+        self.qzone_act_op("分享领取礼包", "34637_20bfcb49")
 
     # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
     # note：对接流程与上方黄钻完全一致，参照其流程即可
@@ -9452,4 +9452,4 @@ if __name__ == "__main__":
         # djcHelper.dnf_super_vip()
         # djcHelper.dnf_yellow_diamond()
         # djcHelper.dnf_kol()
-        djcHelper.wegame_new()
+        djcHelper.dnf_yellow_diamond()

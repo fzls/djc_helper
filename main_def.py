@@ -1336,16 +1336,12 @@ def show_tips(cfg):
         ),
         "1216-旧版集卡活动": (
             "之前集卡18号结束，与新集卡有两天重合，如果需要继续做，请手动做或者使用之前版本运行~\n",
-            "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826"
+            "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
         ),
-        "1216-管家活动": (
-            "管家活动页面下载管家可以领一个红7增幅券，有兴趣可以自行去活动页面下载~\n"
-            "https://sdi.3g.qq.com/v/2021121419311511660"
-        ),
+        "1216-管家活动": ("管家活动页面下载管家可以领一个红7增幅券，有兴趣可以自行去活动页面下载~\n" "https://sdi.3g.qq.com/v/2021121419311511660"),
         "1216-WeGame活动提示手动领取": (
-            "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n"
-            "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/"
-        )
+            "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n" "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

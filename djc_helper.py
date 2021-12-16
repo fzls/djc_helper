@@ -4159,17 +4159,18 @@ class DjcHelper:
                 userInfo = getUserActivityTopInfo()
                 totalLotteryTimes = userInfo.point // 10
                 logger.info(f"当前共有{userInfo.point}年史诗片，将进行{totalLotteryTimes}次抽奖")
-                for _i in range(totalLotteryTimes):
-                    op_lottery()
+                for idx in range_from_one(totalLotteryTimes):
+                    op_lottery(idx, totalLotteryTimes)
             else:
                 logger.info("当前未启用抽奖功能，若奖励兑换完毕时，建议开启抽奖功能~（ps: 年史碎片可以保留到下个月，也可以留着兑换以后的东西）")
 
-        def op_lottery():
-            res = self.get("抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
-            gift = res.get("giftName", "出错啦")
+        def op_lottery(idx: int, totalLotteryTimes: int):
+            ctx = f"[{idx}/{totalLotteryTimes}]"
+            res = self.get(f"{ctx} 抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
+            gift = res.get("giftName", "出错啦: " + res.get("msg", "未知错误"))
             beforeMoney = res.get("money", 0)
             afterMoney = res.get("value", 0)
-            logger.info(f"抽奖结果为: {gift}，年史诗片：{beforeMoney}->{afterMoney}")
+            logger.info(f"{ctx} 抽奖结果为: {gift}，年史诗片：{beforeMoney}->{afterMoney}")
 
         # ------ 实际逻辑 ------
 

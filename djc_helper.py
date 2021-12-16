@@ -7508,8 +7508,7 @@ class DjcHelper:
 
         if is_daily_first_run("WeGame活动_新版_提示手动领取"):
             async_message_box(
-                "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n"
-                + "（此消息每天弹出一次，不想看到的话请把该活动关闭 - WeGame活动_新版）\n",
+                "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n" + "（此消息每天弹出一次，不想看到的话请把该活动关闭 - WeGame活动_新版）\n",
                 "请手动领取",
                 open_url="https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
             )

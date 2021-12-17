@@ -1307,10 +1307,7 @@ def show_ask_message_box_sync(cfg: Config):
             "\n"
             "支付宝这个红包活动延期了-。-所以我把开关调整了下，之前关闭过的，如果真的不想看到，可以再去点一点<_<\n"
         )
-        image_path = random.choice([
-            "付费指引/支付宝红包活动.jpg",
-            "付费指引/支付宝红包活动_实体版.jpg"
-        ])
+        image_path = random.choice(["付费指引/支付宝红包活动.jpg", "付费指引/支付宝红包活动_实体版.jpg"])
         message_box(message, title, open_image=image_path)
 
 
@@ -1349,7 +1346,7 @@ def show_tips(cfg):
             "\n"
             "以上活动链接可在小助手命令行的小提示区域复制\n"
             ""
-        )
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")
@@ -1357,7 +1354,7 @@ def show_tips(cfg):
     for title, tip in tips.items():
         # 为保证格式一致，移除末尾的\n
         tip = str(tip)
-        if tip.endswith('\n'):
+        if tip.endswith("\n"):
             tip = tip[:-1]
 
         msg = f"{title}: {tip}\n "

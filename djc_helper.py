@@ -555,7 +555,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF公会活动", self.dnf_gonghui),
             ("DNF马杰洛的规划", self.majieluo),
-            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF名人堂", self.dnf_vote),
             ("DNF预约", self.dnf_reservation),
             ("DNF记忆", self.dnf_memory),
@@ -567,6 +566,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
             ("集卡", self.dnf_ark_lottery),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -3431,6 +3431,10 @@ class DjcHelper:
         )
 
     # --------------------------------------------qq视频蚊子腿-爱玩--------------------------------------------
+    # note: 接入流程
+    #   1. 浏览器使用 手机QQ UA 打开活动页面
+    #   2. 在下面对应的 各个按钮 上右键查看元素，复制其中的 single_task_id 的值
+    #   3. 更新 url 和 活动时间
     @try_except()
     def qq_video_iwan(self):
         show_head_line("qq视频蚊子腿-爱玩")
@@ -3461,14 +3465,14 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
 
-        self.qq_video_iwan_op("幸运勇士礼包", "asfYkZs4q")
-        self.qq_video_iwan_op("勇士见面礼", "qj7RdLF3a")
-        self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "2rQlUVD6p")
-        self.qq_video_iwan_op("在线30分钟签到", "Zw6VZ6DcP")
-        self.qq_video_iwan_op("累计 3 天", "sAWkKaQ_8")
-        self.qq_video_iwan_op("累计 7 天", "WAxnsEgFO")
-        self.qq_video_iwan_op("累计 10 天", "MjmlorV3b")
-        self.qq_video_iwan_op("累计 15 天", "VR-VOeTHZ")
+        self.qq_video_iwan_op("幸运勇士礼包", "VvmEHzeRd")
+        self.qq_video_iwan_op("勇士见面礼", "VTU8S-2x2")
+        self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "fj174odxr")
+        self.qq_video_iwan_op("在线30分钟签到", "v5UTv0Wci")
+        self.qq_video_iwan_op("累计 3 天", "M5fHfQTJE")
+        self.qq_video_iwan_op("累计 7 天", "m10QPb_zR")
+        self.qq_video_iwan_op("累计 10 天", "f7CgztgTZ")
+        self.qq_video_iwan_op("累计 15 天", "Cx7cbB0cM")
 
     def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", print_res=True):
         role = self.get_dnf_bind_role_copy()
@@ -9479,4 +9483,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.qq_video_iwan()

@@ -1335,18 +1335,21 @@ def show_tips(cfg):
             "\t2. 已开启开关\n"
             "\t3. 上个月编年史等级达到30级\n"
         ),
-        "1216-colg活动": (
-            "colg有个新的投票活动，可以自己去点一点领取-。-\n"
-            "https://bbs.colg.cn/plugin.php?id=colg_activity_new:annual_ceremony&from=2021_annual_ceremony_offcial\n"
-        ),
         "1216-旧版集卡活动": (
             "之前集卡18号结束，与新集卡有两天重合，如果需要继续做，请手动做或者使用之前版本运行~\n",
             "https://act.qzone.qq.com//v2/vip/tx/p/7224_a45de826",
         ),
         "1216-管家活动": ("管家活动页面下载管家可以领一个红7增幅券，有兴趣可以自行去活动页面下载~\n" "https://sdi.3g.qq.com/v/2021121419311511660"),
-        "1216-WeGame活动提示手动领取": (
-            "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n" "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/"
-        ),
+        "21嘉年华手动领取": (
+            "以下活动请手动领取\n"
+            "1. colg投票活动 https://bbs.colg.cn/plugin.php?id=colg_activity_new:annual_ceremony&from=2021_annual_ceremony_offcial\n"
+            "2. 新版wegame活动 https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/\n"
+            "3. 斗鱼 https://www.douyu.com/topic/DNFJNH?rid=470321\n"
+            "4. 充值活动 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_5000jnhsz_sd3zd&pf=__mds_dnf_share\n"
+            "\n"
+            "以上活动链接可在小助手命令行的小提示区域复制\n"
+            ""
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

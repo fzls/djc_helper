@@ -190,9 +190,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "嘉年华-第二周"
-    message = """嘉年华第二周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~
-可以领一个深渊石头和高级装扮
+    title = "嘉年华-第三周"
+    message = """嘉年华第三周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~
+可以领取下列内容
+
+恭喜您获得了礼包： 次元玄晶碎片礼袋x1，绝版装扮礼盒神秘袖珍罐x1，嘉年华冰雪伤害字体x1 , 请注意：游戏虚拟道具奖品将会在24小时内到账
 """
     open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
     show_only_before_version = ""

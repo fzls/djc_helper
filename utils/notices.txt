@@ -538,5 +538,15 @@
     "open_url": "https://dnf.qq.com/cp/a20211201carnival/index.html",
     "expire_at": "2021-12-19 00:40:58",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "嘉年华-第三周",
+    "message": "嘉年华第三周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~\n可以领取下列内容\n\n恭喜您获得了礼包： 次元玄晶碎片礼袋x1，绝版装扮礼盒神秘袖珍罐x1，嘉年华冰雪伤害字体x1 , 请注意：游戏虚拟道具奖品将会在24小时内到账\n",
+    "send_at": "2021-12-18 04:23:35",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20211201carnival/index.html",
+    "expire_at": "2021-12-25 04:23:35",
+    "show_only_before_version": ""
   }
 ]

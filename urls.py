@@ -49,7 +49,7 @@ not_ams_activities = [
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
     newAmsActInfo("管家蚊子腿", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿-爱玩", "2021-11-26 00:00:00", "2021-12-17 23:59:59"),
+    newAmsActInfo("qq视频蚊子腿-爱玩", "2021-12-16 00:00:00", "2022-01-15 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
     newAmsActInfo("超级会员", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("黄钻", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
@@ -87,7 +87,6 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
-    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/w5jli4iijddi98d7i8jr00hpu9/index_page1.html",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
@@ -99,6 +98,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7533_13e52f70",
+    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/kx1ul30rw807c3sfkzfwyrgiug/index_page1.html",
     #
     # 已过期活动
     #

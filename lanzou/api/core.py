@@ -107,7 +107,16 @@ class LanZouCloud(object):
         return None
 
     def _all_possible_urls(self, url: str) -> List[str]:
-        return [re.sub(r'lanzou\w\.com', d, url) for d in self.available_domains]
+        # 先把原始链接放到第一个，因为部分链接只能特定域名访问，比如 https://developer.lanzoug.com/file/?xxxx 这个系列，目前只有最初页面下发的那个域名可以访问，改成其他域名访问就会提示 文件取消分享
+        urls = [url]
+
+        # 然后再尝试其他的
+        for d in self.available_domains:
+            new_url = re.sub(r'lanzou\w\.com', d, url)
+            if new_url not in urls:
+                urls.append(new_url)
+
+        return urls
 
     def ignore_limits(self):
         """解除官方限制"""

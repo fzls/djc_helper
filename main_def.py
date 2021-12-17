@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import platform
+import random
 import shutil
 import subprocess
 import sys
@@ -1306,7 +1307,11 @@ def show_ask_message_box_sync(cfg: Config):
             "\n"
             "支付宝这个红包活动延期了-。-所以我把开关调整了下，之前关闭过的，如果真的不想看到，可以再去点一点<_<\n"
         )
-        message_box(message, title, open_image="付费指引/支付宝红包活动.jpg")
+        image_path = random.choice([
+            "付费指引/支付宝红包活动.jpg",
+            "付费指引/支付宝红包活动_实体版.jpg"
+        ])
+        message_box(message, title, open_image=image_path)
 
 
 @try_except()

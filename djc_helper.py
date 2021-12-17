@@ -567,6 +567,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("集卡", self.dnf_ark_lottery),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -574,7 +575,6 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF共创投票", self.dnf_dianzan),
-            ("DNF集合站", self.dnf_collection),
             ("qq视频蚊子腿", self.qq_video),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
@@ -8026,27 +8026,27 @@ class DjcHelper:
         self.check_dnf_collection()
 
         def query_signin_days() -> int:
-            res = self.dnf_collection_op("查询签到天数-condOutput", "801238", print_res=False)
+            res = self.dnf_collection_op("查询签到天数-condOutput", "825414", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_op("幸运Party礼包", "802431")
+        self.dnf_collection_op("领取幸运勇士礼包", "823906")
 
-        self.dnf_collection_op("全民参与礼包", "802430")
+        self.dnf_collection_op("领取全民参与礼包", "823904")
 
-        self.dnf_collection_op("30分签到礼包", "801723")
+        self.dnf_collection_op("30分钟在线按钮", "825407")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_op("累计签到3天按钮", "801229")
-        self.dnf_collection_op("累计签到7天按钮", "801230")
-        self.dnf_collection_op("累计签到15天按钮", "801231")
-        self.dnf_collection_op("累计签到21天按钮", "801232")
+        self.dnf_collection_op("累计登录3天按钮", "825408")
+        self.dnf_collection_op("累计登录7天按钮", "825409")
+        self.dnf_collection_op("累计登录15天按钮", "825410")
+        self.dnf_collection_op("累计登录21天按钮", "825411")
 
     def check_dnf_collection(self):
         self.check_bind_account(
             "DNF集合站",
             get_act_url("DNF集合站"),
             activity_op_func=self.dnf_collection_op,
-            query_bind_flowid="801222",
-            commit_bind_flowid="801221",
+            query_bind_flowid="823901",
+            commit_bind_flowid="823900",
         )
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -9483,4 +9483,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_collection()

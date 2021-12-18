@@ -190,13 +190,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "嘉年华-第三周"
-    message = """嘉年华第三周的奖励可以领了，大家记得等下弹出的网页中去自行领取哈~
-可以领取下列内容
-
-恭喜您获得了礼包： 次元玄晶碎片礼袋x1，绝版装扮礼盒神秘袖珍罐x1，嘉年华冰雪伤害字体x1 , 请注意：游戏虚拟道具奖品将会在24小时内到账
+    title = "新的腾讯视频活动"
+    message = """新出的腾讯视频活动，充会员送的那个钥匙兑换的光环，分解后可以获取白金徽章和玲珑徽章。
+最多可以换三个，我全部分解后有4个白金，3个玲珑和几个灿烂。
+正好有需要腾讯视频会员的可以在这个活动页面充值下哈哈哈。
 """
-    open_url = "https://dnf.qq.com/cp/a20211201carnival/index.html"
+    open_url = "https://magic.iwan.qq.com/magic-act/kx1ul30rw807c3sfkzfwyrgiug/index_page1.html"
     show_only_before_version = ""
 
     if title != "":

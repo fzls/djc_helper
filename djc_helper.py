@@ -548,7 +548,6 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
@@ -568,6 +567,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF集合站", self.dnf_collection),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -5531,8 +5531,9 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        db = WelfareDB().with_context("v3").load()
-        account_db = WelfareDB().with_context(f"v3/{self.cfg.name}").load()
+        welfare_version = "v4"
+        db = WelfareDB().with_context(welfare_version).load()
+        account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.name}").load()
 
         def exchange_package(sContent: str):
             # 检查是否已经兑换过
@@ -5586,6 +5587,10 @@ class DjcHelper:
             "DNFQKF",
             "DNFGFLT",
             "DNFQJQR",
+            "充满希望的一天",
+            "冒险新出发",
+            "合金战士降临",
+            "向着希望前进",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -5593,12 +5598,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("第一个 2020.09.14 - 2020.09.16 登录游戏", "799592")
-        self.dnf_welfare_login_gifts_op("第二个 2020.09.17 - 2020.09.20 登录游戏", "799618")
-        self.dnf_welfare_login_gifts_op("第三个 2020.09.21 - 2021.09.30 登录游戏", "799622")
+        self.dnf_welfare_login_gifts_op("12.19~21登录礼包", "822889")
+        self.dnf_welfare_login_gifts_op("12.22~25登录礼包", "822890")
+        self.dnf_welfare_login_gifts_op("12.26~12.30", "822891")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "799594", siActivityId=query_siActivityId())
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "822893", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account(
@@ -9483,4 +9488,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection()
+        djcHelper.dnf_welfare()

@@ -79,7 +79,6 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
@@ -100,6 +99,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/7533_13e52f70",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/kx1ul30rw807c3sfkzfwyrgiug/index_page1.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
@@ -220,7 +220,7 @@ class Urls:
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
         self.iActivityId_dnf_dianzan = "419223"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
-        self.iActivityId_dnf_welfare_login_gifts = "407607"  # DNF福利中心-登陆游戏领福利
+        self.iActivityId_dnf_welfare_login_gifts = "433305"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包

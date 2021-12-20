@@ -1111,6 +1111,15 @@ def remove_directory(directory_path):
         logger.error(f"删除目录 {directory_path} 失败", exc_info=e)
 
 
+def remove_file_or_directory(target_path: str):
+    if os.path.isdir(target_path):
+        logger.debug(f"删除目录 {target_path}")
+        remove_directory(target_path)
+    else:
+        logger.debug(f"删除文件 {target_path}")
+        remove_file(target_path)
+
+
 def wait_a_while(idx: int):
     # 各进程按顺序依次等待对应时长，避免多个进程输出混在一起
     time.sleep(0.1 * idx)

@@ -6,7 +6,7 @@ import subprocess
 
 from _init_venv_and_requirements import init_venv_and_requirements
 from log import color, logger
-from util import human_readable_size, make_sure_dir_exists, show_head_line
+from util import human_readable_size, make_sure_dir_exists, remove_file_or_directory, show_head_line
 
 
 def build(disable_douban=False, enable_proxy=False, use_upx=True):
@@ -53,6 +53,8 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
             if not os.path.exists(path):
                 logger.warning(f"\t{path} 不存在，将跳过")
                 continue
+            if os.path.exists(backup_path):
+                remove_file_or_directory(backup_path)
 
             # 将文件移动到备份目录
             logger.info(f"\t开始移动 {path}")

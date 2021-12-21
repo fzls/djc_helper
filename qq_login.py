@@ -938,8 +938,8 @@ class QQLogin:
 
         for idx in range_from_one(max_try):
             try:
-                self.driver.execute_script(f"document.title = '{self.window_title}'")
                 logger.info(color("bold_green") + f"设置标题框为 {self.window_title}")
+                self.driver.execute_script(f"document.title = '{self.window_title}'")
 
                 switch_to_login_frame_fn()
 

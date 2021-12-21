@@ -129,23 +129,33 @@ def check_djc_role_binding():
         if all_binded:
             break
         else:
+            _show_head_line("以上是问题描述")
+
+            _show_head_line("解决方案")
             logger.warning(
-                color("bold_blue")
+                color("bold_cyan")
                 + f"请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定dnf或任意手游的账号【{not_binded_accounts}】进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）"
             )
+
+            _show_head_line("详细教程")
             logger.warning(
-                color("bold_blue")
+                color("bold_cyan")
                 + (
                     "具体操作流程可以参考一下教程信息：\n"
                     "1. 使用教程/使用文档.docx 【设置领奖角色】章节和【设置道聚城手游角色】章节\n"
                     "2. 使用教程/道聚城自动化助手使用视频教程 中 DNF蚊子腿小助手4.1.1版本简要&完整视频教程 中 3:17 位置 关于绑定的介绍"
                 )
             )
+
+            _show_head_line("跳过方式")
             logger.warning(
-                color("bold_green")
+                color("yellow")
                 + "如果本账号不需要道聚城相关操作，可以打开配置工具，将该账号的【道聚城配置】中的【无法在道聚城绑定dnf】勾选上，并将【完成礼包达人任务的手游名称】设为最上方的【无】"
             )
-            logger.warning(color("fg_bold_cyan") + "操作完成后点击任意键即可再次进行检查流程...")
+
+            _show_head_line("请完成上述操作，然后按任意键再次进行检查")
+            logger.warning(color("bold_red") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
+            logger.info("\n\n")
             pause()
 
             # 这时候重新读取一遍用户修改过后的配置文件（比如把手游设为了 无 ）

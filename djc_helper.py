@@ -568,6 +568,7 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF集合站", self.dnf_collection),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("新职业预约活动", self.dnf_reserve),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -602,7 +603,6 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("刃影预约活动", self.dnf_reserve),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
@@ -7734,18 +7734,33 @@ class DjcHelper:
 
         return res
 
-    # --------------------------------------------刃影预约活动--------------------------------------------
+    # --------------------------------------------新职业预约活动--------------------------------------------
     @try_except()
     def dnf_reserve(self):
-        show_head_line("刃影预约活动")
+        show_head_line("新职业预约活动")
 
         if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
-            logger.warning("未启用领取刃影预约活动功能，将跳过")
+            logger.warning("未启用领取新职业预约活动功能，将跳过")
             return
 
         self.show_amesvr_act_info(self.dnf_reserve_op)
 
-        self.dnf_reserve_op("预约领奖", "773111")
+        self.check_dnf_reserve()
+
+        act_url = get_act_url("新职业预约活动")
+        async_message_box("合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~", f"手动预约_{act_url}", open_url=act_url, show_once=True)
+
+        if now_after("2021-12-30 12:00:00"):
+            self.dnf_reserve_op("领取预约限定装扮", "820562")
+
+    def check_dnf_reserve(self):
+        self.check_bind_account(
+            "新职业预约活动",
+            get_act_url("新职业预约活动"),
+            activity_op_func=self.dnf_reserve_op,
+            query_bind_flowid="820923",
+            commit_bind_flowid="820922",
+        )
 
     def dnf_reserve_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_reserve
@@ -7763,7 +7778,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("刃影预约活动"),
+            get_act_url("新职业预约活动"),
             sArea=roleinfo.serviceID,
             sPartition=roleinfo.serviceID,
             sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
@@ -9488,4 +9503,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_reserve()

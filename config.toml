@@ -331,7 +331,7 @@ get_dnf_comic = true
 get_dnf_13 = true
 # 是否领取 我的dnf13周年活动 活动
 get_dnf_my_story = true
-# 是否领取 刃影预约活动 活动
+# 是否领取 新职业预约活动 活动
 get_dnf_reserve = true
 # 是否领取 DNF周年庆登录活动 活动
 get_dnf_anniversary = true

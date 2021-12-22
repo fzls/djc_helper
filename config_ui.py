@@ -2224,7 +2224,7 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, "我的dnf13周年活动", self.checkbox_get_dnf_my_story)
 
         self.checkbox_get_dnf_reserve = create_checkbox(cfg.get_dnf_reserve)
-        add_row(form_layout, "刃影预约活动", self.checkbox_get_dnf_reserve)
+        add_row(form_layout, "新职业预约活动", self.checkbox_get_dnf_reserve)
 
         self.checkbox_get_dnf_anniversary = create_checkbox(cfg.get_dnf_anniversary)
         add_row(form_layout, "DNF周年庆登录活动", self.checkbox_get_dnf_anniversary)

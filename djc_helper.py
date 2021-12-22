@@ -7748,7 +7748,9 @@ class DjcHelper:
         self.check_dnf_reserve()
 
         act_url = get_act_url("新职业预约活动")
-        async_message_box("合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~", f"手动预约_{act_url}", open_url=act_url, show_once=True)
+        async_message_box(
+            "合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~", f"手动预约_{act_url}", open_url=act_url, show_once=True
+        )
 
         if now_after("2021-12-30 12:00:00"):
             self.dnf_reserve_op("领取预约限定装扮", "820562")

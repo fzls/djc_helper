@@ -190,12 +190,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "新的腾讯视频活动"
-    message = """新出的腾讯视频活动，充会员送的那个钥匙兑换的光环，分解后可以获取白金徽章和玲珑徽章。
-最多可以换三个，我全部分解后有4个白金，3个玲珑和几个灿烂。
-正好有需要腾讯视频会员的可以在这个活动页面充值下哈哈哈。
+    title = "男枪第五职业预约礼包"
+    message = """合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~
+预约成功后，将在12.30的12:00之后可以领取奖励~
 """
-    open_url = "https://magic.iwan.qq.com/magic-act/kx1ul30rw807c3sfkzfwyrgiug/index_page1.html"
+    open_url = "https://dnf.qq.com/cp/a20211130reserve/index.html"
     show_only_before_version = ""
 
     if title != "":

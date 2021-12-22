@@ -526,7 +526,9 @@ class QQLogin:
                     expected_conditions.visibility_of_element_located((By.CLASS_NAME, tip_class_name))
                 )
                 logger.info(color("bold_green") + f"设置标题框为 {self.window_title}，同时修改提示文字为该值")
-                self.driver.execute_script(f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; ")
+                self.driver.execute_script(
+                    f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; "
+                )
             except JavascriptException as e:
                 logger.error("扫码出错了", exc_info=e)
 

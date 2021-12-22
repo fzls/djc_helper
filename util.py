@@ -642,12 +642,12 @@ def message_box(
 
     if show_message_box and is_windows():
         win32api.MessageBox(0, msg, title, icon)
+    
+        if open_url != "":
+            webbrowser.open(open_url)
 
-    if open_url != "":
-        webbrowser.open(open_url)
-
-    if open_image != "":
-        os.popen(os.path.realpath(open_image))
+        if open_image != "":
+            os.popen(os.path.realpath(open_image))
 
 
 KiB = 1024

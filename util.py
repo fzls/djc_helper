@@ -642,7 +642,7 @@ def message_box(
 
     if show_message_box and is_windows():
         win32api.MessageBox(0, msg, title, icon)
-    
+
         if open_url != "":
             webbrowser.open(open_url)
 

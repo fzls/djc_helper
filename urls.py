@@ -100,6 +100,7 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/kx1ul30rw807c3sfkzfwyrgiug/index_page1.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
+    "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     #
     # 已过期活动
     #
@@ -131,7 +132,6 @@ act_name_to_url = {
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
-    "刃影预约活动": "https://dnf.qq.com/cp/a20210618reserve/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
@@ -247,7 +247,7 @@ class Urls:
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
         self.iActivityId_dnf_my_story = "382161"  # 我的dnf13周年活动
-        self.iActivityId_dnf_reserve = "384604"  # 刃影预约活动
+        self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "416057"  # DNF KOL
         self.iActivityId_maoxian = "407067"  # 勇士的冒险补给

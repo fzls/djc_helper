@@ -740,7 +740,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_13 = True
         # 是否领取 我的dnf13周年活动 活动
         self.get_dnf_my_story = True
-        # 是否领取 刃影预约活动 活动
+        # 是否领取 新职业预约活动 活动
         self.get_dnf_reserve = True
         # 是否领取 DNF周年庆登录活动 活动
         self.get_dnf_anniversary = True

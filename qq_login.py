@@ -11,7 +11,7 @@ from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import JavascriptException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -518,6 +518,18 @@ class QQLogin:
         self.window_title = f"请扫码 {name} - {login_mode}"
 
         def login_with_qr_code():
+            try:
+                tip_class_name = "qr_safe_tips"
+                tip = f"请扫码 {name}"
+
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                    expected_conditions.visibility_of_element_located((By.CLASS_NAME, tip_class_name))
+                )
+                logger.info(color("bold_green") + f"设置标题框为 {self.window_title}，同时修改提示文字为该值")
+                self.driver.execute_script(f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; ")
+            except JavascriptException as e:
+                logger.error("扫码出错了", exc_info=e)
+
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
@@ -939,7 +951,7 @@ class QQLogin:
         for idx in range_from_one(max_try):
             try:
                 logger.info(color("bold_green") + f"设置标题框为 {self.window_title}")
-                self.driver.execute_script(f"document.title = '{self.window_title}'")
+                self.driver.execute_script(f"document.title = '{self.window_title}';")
 
                 switch_to_login_frame_fn()
 

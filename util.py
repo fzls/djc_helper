@@ -1146,6 +1146,7 @@ ignore_caller_names = {
     "get",
     "post",
     "amesvr_request",
+    "ide_request",
     "check_bind_account",
     "is_guanjia_openid_expired",
     "fetch_guanjia_openid",

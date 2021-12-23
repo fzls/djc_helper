@@ -6880,29 +6880,29 @@ class DjcHelper:
 
         def try_exchange():
             operations = [
-                (self.dnf_bbs_op, "灿烂的徽章自选礼盒【50代币券】", "788270", "10", 1),
-                (self.dnf_bbs_dup_op, "灿烂的徽章自选礼盒【50代币券】", "821327", "10", 1),
-                (self.dnf_bbs_op, "灿烂的徽章神秘礼盒【25代币券】", "788270", "9", 1),
-                (self.dnf_bbs_dup_op, "灿烂的徽章神秘礼盒【25代币券】", "821327", "9", 1),
-                (self.dnf_bbs_op, "装备提升礼盒【2代币券】", "788270", "4", 5),
-                (self.dnf_bbs_dup_op, "纯净的增幅书【25代币券】", "821327", "8", 1),
-                (self.dnf_bbs_dup_op, "装备提升礼盒【2代币券】", "821327", "3", 5),
-                (self.dnf_bbs_op, "一次性材质转换器【2代币券】", "788270", "1", 5),
-                (self.dnf_bbs_dup_op, "一次性材质转换器【2代币券】", "821327", "1", 5),
-                (self.dnf_bbs_op, "一次性继承装置【2代币券】", "788270", "2", 5),
-                (self.dnf_bbs_dup_op, "一次性继承装置【2代币券】", "821327", "2", 5),
-                (self.dnf_bbs_op, "华丽的徽章自选礼盒【12代币券】", "788270", "5", 2),
-                (self.dnf_bbs_dup_op, "华丽的徽章自选礼盒【12代币券】", "821327", "6", 2),
-                (self.dnf_bbs_op, "华丽的徽章神秘礼盒【2代币券】", "788270", "3", 5),
-                (self.dnf_bbs_dup_op, "华丽的徽章神秘礼盒【5代币券】", "821327", "5", 2),
-                (self.dnf_bbs_op, "Lv100传说装备自选礼盒【12代币券】", "788270", "7", 1),
-                (self.dnf_bbs_dup_op, "Lv100传说装备自选礼盒【12代币券】", "821327", "7", 1),
-                (self.dnf_bbs_op, "异界气息净化书【25代币券】", "788270", "8", 1),
-                (self.dnf_bbs_op, "抗疲劳秘药 (30点)【12代币券】", "788270", "6", 1),
-                (self.dnf_bbs_dup_op, "灵魂武器袖珍罐【12代币券】", "821327", "4", 1),
+                ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op),
+                ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_dup_op),
+                ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op),
+                ("9", "821327", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_dup_op),
+                ("4", "788270", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op),
+                ("8", "821327", 1, "纯净的增幅书【25代币券】", self.dnf_bbs_dup_op),
+                ("3", "821327", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_dup_op),
+                ("1", "788270", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op),
+                ("1", "821327", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_dup_op),
+                ("2", "788270", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op),
+                ("2", "821327", 5, "一次性继承装置【2代币券】", self.dnf_bbs_dup_op),
+                ("5", "788270", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op),
+                ("6", "821327", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_dup_op),
+                ("3", "788270", 5, "华丽的徽章神秘礼盒【2代币券】", self.dnf_bbs_op),
+                ("5", "821327", 2, "华丽的徽章神秘礼盒【5代币券】", self.dnf_bbs_dup_op),
+                ("7", "788270", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op),
+                ("7", "821327", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_dup_op),
+                ("8", "788270", 1, "异界气息净化书【25代币券】", self.dnf_bbs_op),
+                ("6", "788270", 1, "抗疲劳秘药 (30点)【12代币券】", self.dnf_bbs_op),
+                ("4", "821327", 1, "灵魂武器袖珍罐【12代币券】", self.dnf_bbs_dup_op),
             ]
 
-            for op_func, name, flowid, index_str, count in operations:
+            for index_str, flowid, count, name, op_func in operations:
                 logger.debug(f"{op_func}, {name}, {flowid}, {index_str}, {count}")
 
                 for _i in range(count):

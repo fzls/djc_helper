@@ -6748,7 +6748,7 @@ class DjcHelper:
 
         self.check_dnf_bbs()
 
-        # self.check_dnf_bbs_dup()
+        self.check_dnf_bbs_dup()
 
         def signin():
             retryCfg = self.common_cfg.retry
@@ -6804,75 +6804,99 @@ class DjcHelper:
                     time.sleep(retryCfg.retry_wait_time)
 
         # 可能有多个活动并行
-        # https://dnf.qq.com/act/a20210611act/index.html
         # https://dnf.qq.com/act/a20210803act/index.html
+        # https://dnf.qq.com/cp/a20211130act/index.html
         @try_except()
         def query_remaining_quota():
-            res = self.dnf_bbs_op("查询礼包剩余量", "788271", print_res=False)
+            _query_quota_version_one(
+                "9-12月",
+                self.dnf_bbs_op,
+                "788271",
+                [
+                    "一次性材质转换器",
+                    "一次性继承装置",
+                    "华丽的徽章神秘礼盒",
+                    "装备提升礼盒",
+                    "华丽的徽章自选礼盒",
+                    "抗疲劳秘药 (30点)",
+                    "Lv100传说装备自选礼盒",
+                    "异界气息净化书",
+                    "灿烂的徽章神秘礼盒",
+                    "灿烂的徽章自选礼盒",
+                ],
+            )
+
+            _query_quota_version_one(
+                "12-3月",
+                self.dnf_bbs_dup_op,
+                "821339",
+                [
+                    "一次性材质转换器",
+                    "一次性继承装置",
+                    "装备提升礼盒",
+                    "灵魂武器袖珍罐",
+                    "华丽的徽章神秘礼盒",
+                    "华丽的徽章自选礼盒",
+                    "Lv100传说装备自选礼盒",
+                    "纯净的增幅书",
+                    "灿烂的徽章神秘礼盒",
+                    "灿烂的徽章自选礼盒",
+                ],
+            )
+
+        def _query_quota_version_one(ctx: str, op_func: Callable[..., dict], flow_id: str, item_name_list: List[str]):
+            res = op_func("查询礼包剩余量", flow_id, print_res=False)
             info = parse_amesvr_common_info(res)
 
             # 999989,49990,49989,49981,19996,9998,9999,9999,9997,9996
             remaining_counts = info.sOutValue2.split(",")
 
-            logger.info(
-                "\n".join(
-                    [
-                        "9-12月 当前礼包全局剩余量如下",
-                        f"\t一次性材质转换器: {remaining_counts[0]}",
-                        f"\t一次性继承装置: {remaining_counts[1]}",
-                        f"\t华丽的徽章神秘礼盒: {remaining_counts[2]}",
-                        f"\t装备提升礼盒: {remaining_counts[3]}",
-                        f"\t华丽的徽章自选礼盒: {remaining_counts[4]}",
-                        f"\t抗疲劳秘药 (30点): {remaining_counts[5]}",
-                        f"\tLv100传说装备自选礼盒: {remaining_counts[6]}",
-                        f"\t异界气息净化书: {remaining_counts[7]}",
-                        f"\t灿烂的徽章神秘礼盒: {remaining_counts[8]}",
-                        f"\t灿烂的徽章自选礼盒: {remaining_counts[9]}",
-                    ]
-                )
-            )
+            messages = [f"{ctx} 当前礼包全局剩余量如下"]
+            for idx, item_name in enumerate(item_name_list):
+                messages.append(f"\t{item_name}: {remaining_counts[idx]}")
+            logger.info("\n".join(messages))
 
-            # res = self.dnf_bbs_dup_op("查询礼包剩余量 1-8", "774037", print_res=False)
-            # info = parse_amesvr_common_info(res)
-            # res = self.dnf_bbs_dup_op("查询礼包剩余量 9-10", "774235", print_res=False)
-            # info_2 = parse_amesvr_common_info(res)
-            #
-            # logger.info('\n'.join([
-            #     "6-9月 当前礼包全局剩余量如下",
-            #     f"\t抗疲劳秘药 (10点): {info.sOutValue1}",
-            #     f"\t宠物饲料礼袋 (20个): {info.sOutValue2}",
-            #     f"\t一次性继承装置: {info.sOutValue3}",
-            #     f"\t装备提升礼盒: {info.sOutValue4}",
-            #     f"\t华丽的徽章神秘礼盒: {info.sOutValue5}",
-            #     f"\t胜 · 深渊之鳞武器自选礼盒: {info.sOutValue6}",
-            #     f"\tLv100传说装备自选礼盒: {info.sOutValue7}",
-            #     f"\t+10 装备强化券: {info.sOutValue8}",
-            #     f"\t灿烂的徽章神秘礼盒: {info_2.sOutValue1}",
-            #     f"\t灿烂的徽章自选礼盒: {info_2.sOutValue2}",
-            # ]))
+        def _query_quota_version_two(
+            op_func: Callable[..., dict], flow_id_part_1: str, flow_id_part_2: str, ctx: str, item_name_list: List[str]
+        ):
+            res = op_func("查询礼包剩余量 1-8", flow_id_part_1, print_res=False)
+            info = parse_amesvr_common_info(res)
+            res = op_func("查询礼包剩余量 9-10", flow_id_part_2, print_res=False)
+            info_2 = parse_amesvr_common_info(res)
+
+            messages = [f"{ctx} 当前礼包全局剩余量如下"]
+            for idx in range(8):
+                count = eval(f"info.sOutValue{idx + 1}")
+                messages.append(f"\t{messages[idx]}: {count}")
+
+            for idx in range(2):
+                count = eval(f"info_2.sOutValue{idx + 1}")
+                messages.append(f"\t{messages[8 + idx]}: {count}")
+
+            logger.info("\n".join(messages))
 
         def try_exchange():
             operations = [
-                # (self.dnf_bbs_dup_op, "灿烂的徽章自选礼盒【50代币券】", "774055", "", 1),
                 (self.dnf_bbs_op, "灿烂的徽章自选礼盒【50代币券】", "788270", "10", 1),
-                # (self.dnf_bbs_dup_op, "灿烂的徽章神秘礼盒【25代币券】", "774054", "", 1),
+                (self.dnf_bbs_dup_op, "灿烂的徽章自选礼盒【50代币券】", "821327", "10", 1),
                 (self.dnf_bbs_op, "灿烂的徽章神秘礼盒【25代币券】", "788270", "9", 1),
-                # (self.dnf_bbs_dup_op, "装备提升礼盒【2代币券】", "774049", "", 5),
+                (self.dnf_bbs_dup_op, "灿烂的徽章神秘礼盒【25代币券】", "821327", "9", 1),
                 (self.dnf_bbs_op, "装备提升礼盒【2代币券】", "788270", "4", 5),
+                (self.dnf_bbs_dup_op, "纯净的增幅书【25代币券】", "821327", "8", 1),
+                (self.dnf_bbs_dup_op, "装备提升礼盒【2代币券】", "821327", "3", 5),
                 (self.dnf_bbs_op, "一次性材质转换器【2代币券】", "788270", "1", 5),
-                # (self.dnf_bbs_dup_op, "一次性继承装置【2代币券】", "774048", "", 5),
+                (self.dnf_bbs_dup_op, "一次性材质转换器【2代币券】", "821327", "1", 5),
                 (self.dnf_bbs_op, "一次性继承装置【2代币券】", "788270", "2", 5),
-                # (self.dnf_bbs_dup_op, "+10 装备强化券【25代币券】", "774053", "", 1),
-                # (self.dnf_bbs_dup_op, "宠物饲料礼袋 (20个)【2代币券】", "774047", "", 2),
-                # (self.dnf_bbs_dup_op, "胜 · 深渊之鳞武器自选礼盒【12代币券】", "774051", "", 1),
+                (self.dnf_bbs_dup_op, "一次性继承装置【2代币券】", "821327", "2", 5),
                 (self.dnf_bbs_op, "华丽的徽章自选礼盒【12代币券】", "788270", "5", 2),
-                # (self.dnf_bbs_dup_op, "华丽的徽章神秘礼盒【12代币券】", "774050", "", 2),
+                (self.dnf_bbs_dup_op, "华丽的徽章自选礼盒【12代币券】", "821327", "6", 2),
                 (self.dnf_bbs_op, "华丽的徽章神秘礼盒【2代币券】", "788270", "3", 5),
-                # (self.dnf_bbs_dup_op, "Lv100传说装备自选礼盒【12代币券】", "774052", "", 1),
+                (self.dnf_bbs_dup_op, "华丽的徽章神秘礼盒【5代币券】", "821327", "5", 2),
                 (self.dnf_bbs_op, "Lv100传说装备自选礼盒【12代币券】", "788270", "7", 1),
+                (self.dnf_bbs_dup_op, "Lv100传说装备自选礼盒【12代币券】", "821327", "7", 1),
                 (self.dnf_bbs_op, "异界气息净化书【25代币券】", "788270", "8", 1),
                 (self.dnf_bbs_op, "抗疲劳秘药 (30点)【12代币券】", "788270", "6", 1),
-                # (self.dnf_bbs_dup_op, "抗疲劳秘药 (10点)【5代币券】", "774033", "", 5),
+                (self.dnf_bbs_dup_op, "灵魂武器袖珍罐【12代币券】", "821327", "4", 1),
             ]
 
             for op_func, name, flowid, index_str, count in operations:
@@ -6947,10 +6971,10 @@ class DjcHelper:
     def check_dnf_bbs_dup(self):
         self.check_bind_account(
             "DNF论坛积分兑换活动",
-            "https://dnf.qq.com/act/a20210611act/index.html",
+            "https://dnf.qq.com/cp/a20211130act/index.html",
             activity_op_func=self.dnf_bbs_dup_op,
-            query_bind_flowid="774035",
-            commit_bind_flowid="774034",
+            query_bind_flowid="821323",
+            commit_bind_flowid="821322",
         )
 
     def dnf_bbs_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -6964,7 +6988,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            "https://dnf.qq.com/act/a20210611act/",
+            "https://dnf.qq.com/cp/a20211130act/",
             **extra_params,
         )
 
@@ -9505,4 +9529,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reserve()
+        djcHelper.dnf_bbs()

@@ -22,6 +22,7 @@ import webbrowser
 from functools import wraps
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 from urllib import parse
+from urllib.parse import quote_plus
 
 import psutil
 import requests.exceptions
@@ -1449,6 +1450,10 @@ def get_url_config_path() -> str:
 
 def use_new_pay_method() -> bool:
     return not os.path.isfile(get_url_config_path())
+
+
+def double_quote(strToQuote: str) -> str:
+    return quote_plus(quote_plus(strToQuote))
 
 
 if __name__ == "__main__":

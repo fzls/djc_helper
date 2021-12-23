@@ -917,6 +917,11 @@ def with_cache(
     # 尝试使用缓存内容
     if cache_key in db.cache:
         cache_info = db.cache[cache_key]
+
+        if cache_value_unmarshal_func is not None:
+            cache_info.value = cache_value_unmarshal_func(cache_info.value)
+            logger.debug(f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}")
+
         cached_value = cache_info.value
 
         if not force_update:
@@ -924,9 +929,6 @@ def with_cache(
                 cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now()
                 or cache_max_seconds == never_expired_cache_seconds
             ):
-                if cache_value_unmarshal_func is not None:
-                    cache_info.value = cache_value_unmarshal_func(cache_info.value)
-                    logger.debug(f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}")
 
                 if cache_validate_func is None or cache_validate_func(cache_info.value):
                     logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")

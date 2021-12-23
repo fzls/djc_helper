@@ -281,6 +281,12 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}"
         )
 
+        # ide通用活动
+        self.ide = "https://{ide_host}/ide/"
+        self.ide_raw_data = (
+            "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_url}%253Freqid%253D{uuid}%2526version%253D24"
+        )
+
         # DNF共创投票
         # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize
         self.query_dianzan_contents = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery191015906433451135138_{millseconds}&serviceType=dnf&sAction=showList&sModel=Ugc&actId=2&iCategory1={iCategory1}&iCategory2={iCategory2}&order=0&page={page}&pagesize={pagesize}&_=1608559950347"

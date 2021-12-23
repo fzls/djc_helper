@@ -1457,6 +1457,10 @@ def double_quote(strToQuote: str) -> str:
     return quote_plus(quote_plus(strToQuote))
 
 
+def triple_quote(strToQuote: str) -> str:
+    return quote_plus(double_quote(strToQuote))
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

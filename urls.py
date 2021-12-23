@@ -60,6 +60,7 @@ not_ams_activities = [
     newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
     newAmsActInfo("虎牙", "2021-09-11 00:00:00", "2021-10-13 23:59:59"),
     newAmsActInfo("WeGame活动_新版", "2021-12-13 00:00:00", "2021-12-31 23:59:59"),
+    newAmsActInfo("DNF马杰洛的规划", "2021-12-22 00:00:00", "2022-01-19 23:59:59"),  # 基于ide通用活动
 ]
 
 act_name_to_url = {
@@ -85,7 +86,6 @@ act_name_to_url = {
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211122care/index.html",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
@@ -101,6 +101,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
     #
     # 已过期活动
     #
@@ -282,9 +283,17 @@ class Urls:
         )
 
         # ide通用活动
+        # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID
+        #   https://comm.ams.game.qq.com/ide/page/{actId}
+        self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
+        self.ide_iActivityId_majieluo = "44_dOsCdP"  # DNF马杰洛的规划
+
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (
-            "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_url}%253Freqid%253D{uuid}%2526version%253D24"
+            "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}"
+            "&sRoleId={sRoleId}&sRoleName={sRoleName}&sArea={sArea}&sMd5str={sMd5str}&sCheckparam={sCheckparam}&roleJob={roleJob}&sAreaName={sAreaName}"
+            "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}"
+            "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}"
         )
 
         # DNF共创投票

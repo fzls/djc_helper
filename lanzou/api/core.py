@@ -118,6 +118,9 @@ class LanZouCloud(object):
 
         return urls
 
+    def get_latest_url(self, url: str) -> str:
+        return re.sub(r'lanzou\w\.com', self.available_domains[0], url)
+
     def ignore_limits(self):
         """解除官方限制"""
         logger.warning("*** You have enabled the big file upload and filename disguise features ***")

@@ -9006,11 +9006,7 @@ class DjcHelper:
         if get_ams_act_info_only:
             return get_ams_act(iActivityId)
 
-        eas_url = remove_suffix(eas_url, "index.html")
-        eas_url = remove_suffix(eas_url, "index_pc.html")
-        eas_url = remove_suffix(eas_url, "index_new.html")
-        eas_url = remove_suffix(eas_url, "index.htm")
-        eas_url = remove_suffix(eas_url, "zzx.html")
+        eas_url = self.preprocess_eas_url(eas_url)
 
         data = self.format(
             self.urls.amesvr_raw_data,
@@ -9056,6 +9052,46 @@ class DjcHelper:
             extra_cookies=extra_cookies,
             check_fn=_check,
         )
+
+    def ide_request(
+        self,
+        ctx: str,
+        ide_host: str,
+        iFlowId: str,
+        sIdeToken: str,
+        print_res: bool,
+        eas_url: str,
+        extra_cookies="",
+        **data_extra_params,
+    ):
+        eas_url = self.preprocess_eas_url(eas_url)
+
+        data = self.format(
+            self.urls.ide_raw_data,
+            iChartId=iFlowId,
+            iSubChartId=iFlowId,
+            sIdeToken=sIdeToken,
+            eas_url=quote_plus(quote_plus(eas_url)),
+            **data_extra_params,
+        )
+
+        return self.post(
+            ctx,
+            self.urls.ide,
+            data,
+            ide_host=ide_host,
+            print_res=print_res,
+            extra_cookies=extra_cookies,
+        )
+
+    def preprocess_eas_url(self, eas_url: str) -> str:
+        eas_url = remove_suffix(eas_url, "index.html")
+        eas_url = remove_suffix(eas_url, "index_pc.html")
+        eas_url = remove_suffix(eas_url, "index_new.html")
+        eas_url = remove_suffix(eas_url, "index.htm")
+        eas_url = remove_suffix(eas_url, "zzx.html")
+
+        return eas_url
 
     def show_ams_act_info(self, iActivityId):
         logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_ams_act_desc(iActivityId))
@@ -9532,4 +9568,5 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bbs()
+        # djcHelper.dnf_bbs()
+        djcHelper.ide_request("测试", "comm.ams.game.qq.com", "113923", "8EKgvh", print_res=True, eas_url="https://dnf.qq.com/cp/a20211222care/index.html")

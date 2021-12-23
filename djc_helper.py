@@ -114,6 +114,7 @@ from usage_count import increase_counter
 from util import (
     async_message_box,
     base64_str,
+    double_quote,
     extract_between,
     filter_unused_params_catch_exception,
     format_now,
@@ -9237,9 +9238,6 @@ class DjcHelper:
                     # 若未从外部传入roleinfo，则使用道聚城绑定的信息
                     roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
                 checkInfo = self.get_dnf_roleinfo(roleinfo)
-
-                def double_quote(strToQuote):
-                    return quote_plus(quote_plus(strToQuote))
 
                 logger.warning(
                     color("bold_yellow")

@@ -809,7 +809,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         "上月",
         "自动匹配",
         "论坛代币券",
-        "闪光杯爆装",
+        # "闪光杯爆装",
     ]
     colSizes = [
         4,
@@ -829,15 +829,15 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         4,
         8,
         10,
-        10,
+        # 10,
     ]
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
         logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
 
-    # 展示本周闪光杯爆装
-    DjcHelper(cfg.account_configs[0], cfg.common).dnf_shanguang_show_equipments()
+    # # 展示本周闪光杯爆装
+    # DjcHelper(cfg.account_configs[0], cfg.common).dnf_shanguang_show_equipments()
 
 
 def get_account_status(idx: int, account_config: AccountConfig, common_config: CommonConfig, user_buy_info: BuyInfo):
@@ -896,7 +896,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     dbq = djcHelper.query_dnf_bbs_dbq()
 
-    shanguang_equip_count = djcHelper.query_dnf_shanguang_equip_count(print_warning=False)
+    # shanguang_equip_count = djcHelper.query_dnf_shanguang_equip_count(print_warning=False)
 
     return [
         idx,
@@ -917,7 +917,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         can_auto_match_dnf_helper_chronicle,
         # majieluo_stone, majieluo_invite_count,
         dbq,
-        shanguang_equip_count,
+        # shanguang_equip_count,
     ]
 
 

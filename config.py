@@ -1226,6 +1226,10 @@ class CommonConfig(ConfigInterface):
             except Exception:
                 pass
 
+        # 替换网盘链接中的域名为蓝奏云api中最新的域名
+        from lanzou.api import LanZouCloud
+        self.netdisk_link = LanZouCloud().get_latest_url(self.netdisk_link)
+
 
 class Config(ConfigInterface):
     def __init__(self):

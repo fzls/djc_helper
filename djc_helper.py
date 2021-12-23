@@ -5037,7 +5037,9 @@ class DjcHelper:
                     ctx = f"第{idx}/{count}次 尝试兑换 {name}"
                     res = self.dnf_gonghui_op(ctx, flowid)
                     msg = res["flowRet"]["sMsg"]
-                    if "积分" in msg:
+                    if "已经领取过" in msg:
+                        break
+                    elif "没有足够的积分" in msg:
                         logger.warning(f"当前积分不足以兑换 {name}，将停止尝试后续兑换")
                         return
 

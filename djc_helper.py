@@ -6864,6 +6864,9 @@ class DjcHelper:
             res = op_func("查询礼包剩余量 9-10", flow_id_part_2, print_res=False)
             info_2 = parse_amesvr_common_info(res)
 
+            # 后面通过eval使用，这里赋值来避免lint报错
+            _, _ = info, info_2
+
             messages = [f"{ctx} 当前礼包全局剩余量如下"]
             for idx in range(8):
                 count = eval(f"info.sOutValue{idx + 1}")

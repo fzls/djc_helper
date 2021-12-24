@@ -529,7 +529,7 @@ class QQLogin:
                 self.driver.execute_script(
                     f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; "
                 )
-            except JavascriptException as e:
+            except Exception as e:
                 logger.error("扫码出错了", exc_info=e)
 
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")

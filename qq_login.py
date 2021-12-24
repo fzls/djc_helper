@@ -517,7 +517,7 @@ class QQLogin:
         self.name = name
         self.window_title = f"请扫码 {name} - {login_mode}"
 
-        def login_with_qr_code():
+        def replace_qr_code_tip():
             try:
                 tip_class_name = "qr_safe_tips"
                 tip = f"请扫码 {name}"
@@ -532,7 +532,10 @@ class QQLogin:
             except Exception as e:
                 logger.warning("替换扫码提示文字出错了（不影响登录流程）", exc_info=e)
 
+        def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
+
+            replace_qr_code_tip()
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 

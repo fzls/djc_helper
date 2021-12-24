@@ -1282,6 +1282,11 @@ class Config(ConfigInterface):
                 logger.error(color("fg_bold_red") + f"第{idx}个账号未设置名称，请确保已填写对应账号配置的name")
                 return False
 
+            # 检查QQ号是否填写格式不对，若末尾带有换行符，会导致登录时，通过js设置标题栏时，报错：selenium.common.exceptions.JavascriptException: Message: javascript error: Invalid or unexpected token
+            if account.login_mode == account.login_mode_auto_login and account.account_info.account.endswith("\n"):
+                logger.error(color("fg_bold_red") + f"第 {idx} 个账号 {account.name} 配置为账号密码登录，但QQ号末尾有多余换行符，请重新输入QQ，不要输入额外字符，如换行符。")
+                return False
+
             # 检查名称是否重复
             if account.name in name2index:
                 logger.error(

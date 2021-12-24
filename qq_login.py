@@ -522,15 +522,15 @@ class QQLogin:
                 tip_class_name = "qr_safe_tips"
                 tip = f"请扫码 {name}"
 
+                logger.info(color("bold_green") + f"准备修改二维码上方提示文字为 {tip}")
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
                     expected_conditions.visibility_of_element_located((By.CLASS_NAME, tip_class_name))
                 )
-                logger.info(color("bold_green") + f"设置标题框为 {self.window_title}，同时修改提示文字为该值")
                 self.driver.execute_script(
                     f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; "
                 )
             except Exception as e:
-                logger.error("扫码出错了", exc_info=e)
+                logger.warning("替换扫码提示文字出错了（不影响登录流程）", exc_info=e)
 
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
 

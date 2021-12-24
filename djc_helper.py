@@ -565,12 +565,12 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("新职业预约活动", self.dnf_reserve),
             ("DNF马杰洛的规划", self.majieluo),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
             ("DNF闪光杯", self.dnf_shanguang),
-            ("dnf助手活动", self.dnf_helper),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
             ("DNF预约", self.dnf_reservation),
@@ -3718,17 +3718,39 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
             return
 
-        self.dnf_helper_op("提交个人赛预测 - 仇东生", "819558", personAct="A1")
-        self.dnf_helper_op("提交团队赛预测 - 中国队", "820285", teamAct="B1")
-        self.dnf_helper_op("提交小组赛助威 - 仇东生", "820286", personAct="A1")
+        @try_except(return_val_on_except=0)
+        def query_signin_count() -> int:
+            raw_res = self.dnf_helper_op("查询", "824767", print_res=False)
+            info = parse_amesvr_common_info(raw_res)
 
-        self.dnf_helper_op("参与竞猜奖励（普发）", "819181")
+            count = int(info.sOutValue2.split(";")[1])
+            return count
 
-        self.dnf_helper_op("竞猜成功奖励-个人赛助威获胜", "819326")
-        self.dnf_helper_op("竞猜成功奖励-团队赛助威获胜", "819208")
-        self.dnf_helper_op("竞猜成功奖励-小组赛助威获胜", "820167")
+        self.dnf_helper_op("抽取果实", "823806")
+        total_count = query_signin_count()
+        logger.info(color("bold_yellow") + f"当前累计每日摘取次数为: {total_count} 次")
 
-        self.dnf_helper_op("竞猜抽奖", "819327")
+        award_infos = [
+            (1, "824741"),
+            (2, "824745"),
+            (4, "824746"),
+            (6, "824747"),
+            (9, "824748"),
+            (12, "824750"),
+            (16, "824751"),
+            (23, "824752"),
+        ]
+        for require_days, flowid in award_infos:
+            if total_count >= require_days:
+                self.dnf_helper_op(f"摘取 {require_days} 次", flowid)
+            else:
+                logger.warning("签到次数不够，跳过尝试领取后续奖励")
+                break
+
+        if get_today() == "20211225":
+            self.dnf_helper_op("限时领取1225", "824754")
+        if get_today() == "20220101":
+            self.dnf_helper_op("限时领取0101", "824757")
 
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
@@ -9631,4 +9653,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_helper()

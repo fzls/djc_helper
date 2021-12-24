@@ -96,11 +96,11 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20211209plants/indexpc.html",
     #
     # 已过期活动
     #
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/MatchGuess2021/index1",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
@@ -227,7 +227,7 @@ class Urls:
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
-        self.iActivityId_dnf_helper = "429675"  # DNF助手活动
+        self.iActivityId_dnf_helper = "434331"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs = "397645"  # DNF论坛积分兑换活动

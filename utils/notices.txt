@@ -568,5 +568,15 @@
     "open_url": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "expire_at": "2021-12-29 14:11:36",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "新版本登录超时问题",
+    "message": "部分朋友使用新版本的时候会在登录时提示超时（比如后面弹出来这个图片里那样），如果以前版本一直没出现过这种情况，可以试试切换为旧版本chrome。\n\n配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本\n",
+    "send_at": "2021-12-24 10:57:25",
+    "show_type": "once",
+    "open_url": "https://s4.ax1x.com/2021/12/24/TYVxMt.png",
+    "expire_at": "2021-12-31 10:57:25",
+    "show_only_before_version": ""
   }
 ]

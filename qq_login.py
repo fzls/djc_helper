@@ -11,7 +11,7 @@ from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import JavascriptException, StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver

@@ -7,7 +7,7 @@ exclude: |
       # 其他目录
       ^(.cached|.db|.mypy_cache|.pytest_cache|.venv|.venv_dev|.tox|logs|releases)/|
       # 源码文件
-      ^(reversi.py|qt_collapsible_box.py)$
+      ^(reversi.py|qt_collapsible_box.py|utils/notices.txt)$
 repos:
   - repo: https://github.com/PyCQA/flake8
     rev: 4.0.1

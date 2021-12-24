@@ -190,11 +190,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "男枪第五职业预约礼包"
-    message = """合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~
-预约成功后，将在12.30的12:00之后可以领取奖励~
+    title = "新版本登录超时问题"
+    message = """部分朋友使用新版本的时候会在登录时提示超时（比如后面弹出来这个图片里那样），如果以前版本一直没出现过这种情况，可以试试切换为旧版本chrome。
+
+配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本
 """
-    open_url = "https://dnf.qq.com/cp/a20211130reserve/index.html"
+    open_url = "https://s4.ax1x.com/2021/12/24/TYVxMt.png"
     show_only_before_version = ""
 
     if title != "":

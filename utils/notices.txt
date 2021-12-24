@@ -578,5 +578,15 @@
     "open_url": "https://s4.ax1x.com/2021/12/24/TYVxMt.png",
     "expire_at": "2021-12-31 10:57:25",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "v15.6.0版本登录超时问题",
+    "message": "v15.6.0版本增加了替换扫码模式时二维码上方提示文字为账号名称的功能，但是部分情况下可能会无法定位该元素，导致报错TimeoutException。\n部分朋友使用时可能提示稍后出来的图片里这种报错，无视即可，等它十次重试完成就行。\n更新新版本即可修复（有dlc的话，等它重试登录完后走到自动更新流程即可）\n",
+    "send_at": "2021-12-24 11:19:35",
+    "show_type": "once",
+    "open_url": "https://s4.ax1x.com/2021/12/24/TYVxMt.png",
+    "expire_at": "2021-12-31 11:19:35",
+    "show_only_before_version": ""
   }
 ]

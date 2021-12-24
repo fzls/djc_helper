@@ -190,10 +190,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "新版本登录超时问题"
-    message = """部分朋友使用新版本的时候会在登录时提示超时（比如后面弹出来这个图片里那样），如果以前版本一直没出现过这种情况，可以试试切换为旧版本chrome。
-
-配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本
+    title = "v15.6.0版本登录超时问题"
+    message = """v15.6.0版本增加了替换扫码模式时二维码上方提示文字为账号名称的功能，但是部分情况下可能会无法定位该元素，导致报错TimeoutException。
+部分朋友使用时可能提示稍后出来的图片里这种报错，无视即可，等它十次重试完成就行。
+更新新版本即可修复（有dlc的话，等它重试登录完后走到自动更新流程即可）
 """
     open_url = "https://s4.ax1x.com/2021/12/24/TYVxMt.png"
     show_only_before_version = ""

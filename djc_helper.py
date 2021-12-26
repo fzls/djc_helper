@@ -6572,11 +6572,11 @@ class DjcHelper:
         return results
 
     @try_except()
-    def majieluo_open_box(self, scode: str) -> AmesvrCommonModRet:
+    def majieluo_open_box(self, scode: str) -> Tuple[int, str]:
         self.majieluo_permit_social()
 
         raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "113775", "JKiTtc", sCode=scode)
-        return parse_amesvr_common_info(raw_res)
+        return raw_res["iRet"], raw_res["sMsg"]
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
@@ -9040,6 +9040,7 @@ class DjcHelper:
                 "sAreaName",
                 "sAuthInfo",
                 "sActivityInfo",
+                "openid",
             ]
         }
 
@@ -9653,4 +9654,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper()
+        djcHelper.majieluo()

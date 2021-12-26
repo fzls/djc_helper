@@ -6481,7 +6481,7 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "113787", "hSY17q")
+            self.majieluo_op("领取见面礼", "113787")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -6491,10 +6491,10 @@ class DjcHelper:
             take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
-        self.majieluo_op("每日登录礼包", "113788", "voCV2q")
-        self.majieluo_op("每日通关史诗之路礼包", "113857", "uGuJM3")
-        self.majieluo_op("累计7天礼包", "113867", "8YT3NR")
-        self.majieluo_op("累计14天礼包", "113882", "0PWxOL")
+        self.majieluo_op("每日登录礼包", "113788")
+        self.majieluo_op("每日通关史诗之路礼包", "113857")
+        self.majieluo_op("累计7天礼包", "113867")
+        self.majieluo_op("累计14天礼包", "113882")
 
         # 赠送礼盒
         self.majieluo_permit_social()
@@ -6524,36 +6524,35 @@ class DjcHelper:
         )
         logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
 
-        self.majieluo_op("累计赠送30次礼包", "113887", "aKRTln")
+        self.majieluo_op("累计赠送30次礼包", "113887")
 
         # 提取得福利
         stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
-        act_info = self.majieluo_op("获取活动信息", "", "", get_act_info_only=True)
+        act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
         endTime = get_today(parse_time(act_info.dev.action.sDownDate))
 
         takeStone = False
-        takeStoneActId = "113898"
-        takeStoneToken = "BZxnC3"
+        takeStoneFlowId = "113898"
         maxStoneCount = 1500
         if stoneCount >= maxStoneCount:
             # 达到上限
-            self.majieluo_op("提取时间引导石", takeStoneActId, takeStoneToken, giftNum=str(maxStoneCount // 100))
+            self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(maxStoneCount // 100))
             takeStone = True
         elif get_today() == endTime:
             # 今天是活动最后一天
-            self.majieluo_op("提取时间引导石", takeStoneActId, takeStoneToken, giftNum=str(stoneCount // 100))
+            self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(stoneCount // 100))
             takeStone = True
         else:
             logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
 
         if takeStone:
-            self.majieluo_op("提取引导石大于1000礼包", "113902", "a2L4xt")
+            self.majieluo_op("提取引导石大于1000礼包", "113902")
             # self.majieluo_op("分享得好礼", "769008")
 
     def majieluo_permit_social(self):
-        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", "GWiuSI", sAuthInfo="MJL", sActivityInfo="MJL13")
+        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="MJL", sActivityInfo="MJL13")
         return
 
     @try_except()
@@ -6564,7 +6563,7 @@ class DjcHelper:
 
         results = []
         for openid in xiaohao_qq_list:
-            res = self.majieluo_op(f"赠送单个用户（发送好友ark消息）-{openid}", "113966", "RDh3QR", openid=openid, p_skey=p_skey)
+            res = self.majieluo_op(f"赠送单个用户（发送好友ark消息）-{openid}", "113966", openid=openid, p_skey=p_skey)
             if int(res["iRet"]) == 0:
                 results.append("赠送成功")
             else:
@@ -6576,18 +6575,18 @@ class DjcHelper:
     def majieluo_open_box(self, scode: str) -> Tuple[int, str]:
         self.majieluo_permit_social()
 
-        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "113775", "JKiTtc", sCode=scode)
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "113775", sCode=scode)
         return raw_res["iRet"], raw_res["sMsg"]
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询邀请数目", "113782", "20oPah", print_res=False)
+        res = self.majieluo_op("查询邀请数目", "113782", print_res=False)
 
         return len(res["jData"]["result"])
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "114424", "nTWNO6", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "114424", print_res=False)
 
         return int(res["jData"]["iStones"])
 
@@ -6595,9 +6594,9 @@ class DjcHelper:
         # re: 周末参考ams的绑定流程，改成通用的机制
         self.majieluo_permit_social()
 
-        bind_config = self.majieluo_op("查询活动信息", "", "", get_act_info_only=True).get_bind_config()
+        bind_config = self.majieluo_op("查询活动信息", "", get_act_info_only=True).get_bind_config()
 
-        query_bind_res = self.majieluo_op("查询绑定", bind_config.query_map_id, bind_config.query_map_token, print_res=False)
+        query_bind_res = self.majieluo_op("查询绑定", bind_config.query_map_id, print_res=False)
         if query_bind_res["jData"]["bindarea"] is not None:
             return
 
@@ -6613,7 +6612,6 @@ class DjcHelper:
         self.majieluo_op(
             "提交绑定",
             bind_config.bind_map_id,
-            bind_config.bind_map_token,
             sRoleId=roleinfo.roleCode,
             sRoleName=triple_quote(roleinfo.roleName),
             sArea=roleinfo.serviceID,
@@ -6627,7 +6625,6 @@ class DjcHelper:
         self,
         ctx: str,
         iFlowId: str,
-        sIdeToken: str,
         cardType="",
         inviteId="",
         sendName="",
@@ -6643,14 +6640,11 @@ class DjcHelper:
         iActivityId = self.urls.ide_iActivityId_majieluo
         _ = iActivityId
 
-        # TODO: sIdeToken改为从活动描述页面中iFlowId对应的信息中解析出来，不再手动传入
-
         return self.ide_request(
             ctx,
             "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
-            sIdeToken,
             print_res,
             get_act_url("DNF马杰洛的规划"),
             cardType=cardType,
@@ -6669,21 +6663,17 @@ class DjcHelper:
         self,
         ctx: str,
         iFlowId: str,
-        sIdeToken: str,
         print_res=True,
         **extra_params,
     ):
         iActivityId = self.urls.ide_iActivityId_dnf_social_relation_permission
         _ = iActivityId
 
-        # TODO: sIdeToken改为从活动描述页面中iFlowId对应的信息中解析出来，不再手动传入
-
         return self.ide_request(
             ctx,
             "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
-            sIdeToken,
             print_res,
             "",
             **extra_params,
@@ -9076,7 +9066,7 @@ class DjcHelper:
         activity_op_func("查询活动信息", "", show_info_only=True)
 
     def show_idesvr_act_info(self, activity_op_func):
-        activity_op_func("查询活动信息", "", "", show_info_only=True)
+        activity_op_func("查询活动信息", "", show_info_only=True)
 
     def amesvr_request(
         self,
@@ -9152,7 +9142,6 @@ class DjcHelper:
         ide_host: str,
         iActivityId: str,
         iFlowId: str,
-        sIdeToken: str,
         print_res: bool,
         eas_url: str,
         extra_cookies="",
@@ -9165,6 +9154,11 @@ class DjcHelper:
             return None
         if get_act_info_only:
             return get_ide_act(iActivityId)
+
+        sIdeToken = ""
+        if iFlowId != "":
+            act_info = get_ide_act(iActivityId)
+            sIdeToken = act_info.flows[iFlowId].sIdeToken
 
         eas_url = self.preprocess_eas_url(eas_url)
 

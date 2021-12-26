@@ -958,7 +958,10 @@ class AmsActInfo(ConfigInterface):
         self.iAreaModIsNew = 1
         self.iAreaRoleFlowId = "732626"
         self.iAreaRoleAppId = {"qq_appid": "", "wx_appid": "wxb30cf8a19c708c2a"}
-        self.flows = {}
+        self.flows: dict[str, AmsActFlowInfo] = {}  # flowid => info
+
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [("flows", AmsActFlowInfo)]
 
     def is_last_day(self):
         from util import format_time, get_today, parse_time
@@ -977,6 +980,82 @@ class AmsActFlowInfo(ConfigInterface):
         self.openToOpen = {}
         self.iCap = "0"
         self.functions = []
+
+
+class IdeActInfo(ConfigInterface):
+    def __init__(self):
+        self.iRet = 0
+        self.sMsg = "ok"
+        self.tokens: dict[str, str] = {}  # token => flowid
+        self.dev = IdeDevInfo()
+        self.flows: dict[str, IdeFlowInfo] = {}  # flowid => info
+        self.default_tpls: list[IdeTPLInfo] = []
+        self.iPaaSId = "434671"
+
+    def fields_to_fill(self):
+        return [
+            ("default_tpls", IdeTPLInfo),
+        ]
+
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [("flows", IdeFlowInfo)]
+
+    def is_last_day(self):
+        from util import format_time, get_today, parse_time
+
+        return format_time(parse_time(self.dev.action.sDownDate), "%Y%m%d") == get_today()
+
+    def get_bind_config(self) -> IdeTPLInfo | None:
+        """
+        获取绑定配置
+        """
+        for tpl in self.default_tpls:
+            if tpl.tpl == "bind_area":
+                return tpl
+
+        return None
+
+
+class IdeDevInfo(ConfigInterface):
+    def __init__(self):
+        self.host = "9.140.210.216 comm.ams.game.qq.com ; 9.25.7.222 apps.game.qq.com ; 9.25.7.222 ossweb-img.qq.com（若有未发布的iHub文件）"
+        self.action = IdeActionInfo()
+
+
+class IdeActionInfo(ConfigInterface):
+    def __init__(self):
+        self.sName = "马杰洛的关怀第十三期"
+        self.sUpDate = "2021-12-14 10:11:59"
+        self.sDownDate = "2022-01-19 23:59:59"
+
+
+class IdeFlowInfo(ConfigInterface):
+    def __init__(self):
+        self.sIdeToken = "JKiTtc"
+        self.sAccountType = "1"
+        self.isLogin = "1"
+        self.sName = "接受礼盒"
+        self.iAreaChooseType = "1"
+        self.sServiceType = "dnf"
+        self.sTplType = "default"
+        self.iType = "1"
+        self.targetAppId = ""
+        self.sAMSTrusteeship = "0"
+        self.appName = ""
+        self.inputParams = []
+        self.iCustom = "1"
+        self.sAreaService = "dnf"
+
+
+class IdeTPLInfo(ConfigInterface):
+    def __init__(self):
+        self.tpl = "bind_area"
+        self.tpl_name = "大区角色绑定"
+        self.query_map_id = "113789"
+        self.query_map_token = "FfPhWA"
+        self.bind_map_id = "113790"
+        self.bind_map_token = "ii77aT"
+        self.sServiceType = "dnf"
 
 
 class XinyueWeeklyGiftInfo(ConfigInterface):

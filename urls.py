@@ -5,7 +5,7 @@ from typing import Optional
 import requests
 
 from const import cached_dir
-from dao import AmsActInfo
+from dao import AmsActInfo, IdeActInfo
 from log import color, logger
 from util import (
     exists_flag_file,
@@ -465,7 +465,7 @@ class Urls:
 
 
 @try_except()
-def search_act(actId):
+def search_act(actId) -> Optional[AmsActInfo]:
     actId = str(actId)
     act_desc_js = get_act_desc_js(actId)
     if act_desc_js == "":
@@ -531,6 +531,58 @@ def download_act_desc_js(actId: str) -> str:
     return ""
 
 
+@try_except()
+def search_ide_act(actId: str) -> Optional[IdeActInfo]:
+    actId = str(actId)
+    act_desc_json = get_ide_act_desc_json(actId)
+    if act_desc_json == "":
+        return None
+
+    raw_act_info = json.loads(act_desc_json)
+    info = IdeActInfo().auto_update_config(raw_act_info)
+
+    return info
+
+
+def get_ide_act_desc_json(actId) -> str:
+    actId = str(actId)
+
+    a_week_seconds = 7 * 24 * 3600
+
+    act_cache_file = with_cache(
+        "ide_act_desc",
+        actId,
+        cache_max_seconds=a_week_seconds,
+        cache_miss_func=lambda: download_ide_act_desc_json(actId),
+        cache_validate_func=lambda filepath: os.path.isfile(filepath),
+    )
+
+    if not os.path.exists(act_cache_file):
+        return ""
+
+    with open(act_cache_file, encoding="utf-8") as f:
+        return f.read()
+
+
+def download_ide_act_desc_json(actId: str) -> str:
+    first_two = str(actId[:2])
+    act_cache_dir = f"{cached_dir}/ideActDesc/{first_two}"
+    act_cache_file = f"{act_cache_dir}/{actId}.json"
+
+    # 然后从服务器获取活动信息
+    url = f"https://comm.ams.game.qq.com/ide/page/{actId}"
+
+    res = requests.get(url, timeout=1)
+    if res.status_code != 200:
+        return ""
+
+    make_sure_dir_exists(act_cache_dir)
+    with open(act_cache_file, "w", encoding="utf-8") as f:
+        f.write(res.text)
+
+    return act_cache_file
+
+
 def get_ams_act_desc(actId: str) -> str:
     act = get_ams_act(actId)
     if act is None:
@@ -583,3 +635,4 @@ if __name__ == "__main__":
     urls = Urls()
     urls.show_current_valid_act_infos()
     # print(get_not_ams_act_desc("集卡"))
+    # print(search_ide_act("44_dOsCdP"))

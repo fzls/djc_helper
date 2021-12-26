@@ -6608,7 +6608,6 @@ class DjcHelper:
         checkInfo = self.get_dnf_roleinfo(roleinfo)
         role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
 
-
         self.majieluo_op(
             "提交绑定",
             bind_config.bind_map_id,

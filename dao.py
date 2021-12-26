@@ -931,6 +931,14 @@ class CardSecretUseDetail(ConfigInterface):
         self.use_at = "2020-03-13 12:30:15"  # 使用时间点
 
 
+class ActCommonInfo(ConfigInterface):
+    def __init__(self):
+        self.iActivityId = "354870"
+        self.sActivityName = "马杰洛的关怀第三期活动"
+        self.dtBeginTime = "2021-01-21 10:30:00"
+        self.dtEndTime = "2021-02-23 23:59:59"
+
+
 class AmsActInfo(ConfigInterface):
     def __init__(self):
         self.iActivityId = "354870"
@@ -971,6 +979,15 @@ class AmsActInfo(ConfigInterface):
     def get_endtime(self) -> str:
         return self.dtEndTime
 
+    def get_common_info(self) -> ActCommonInfo:
+        info = ActCommonInfo()
+        info.iActivityId = self.iActivityId
+        info.sActivityName = self.sActivityName
+        info.dtBeginTime = self.dtBeginTime
+        info.dtEndTime = self.dtEndTime
+
+        return info
+
 
 class AmsActFlowInfo(ConfigInterface):
     def __init__(self):
@@ -1010,6 +1027,17 @@ class IdeActInfo(ConfigInterface):
 
     def get_endtime(self) -> str:
         return self.dev.action.sDownDate
+
+    def get_common_info(self, act_id="") -> ActCommonInfo:
+        action = self.dev.action
+
+        info = ActCommonInfo()
+        info.iActivityId = act_id
+        info.sActivityName = action.sName
+        info.dtBeginTime = action.sUpDate
+        info.dtEndTime = action.sDownDate
+
+        return info
 
     def get_bind_config(self) -> IdeTPLInfo | None:
         """

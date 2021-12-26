@@ -1,11 +1,11 @@
 import json
 import os
-from typing import Optional
+from typing import List, Optional
 
 import requests
 
 from const import cached_dir
-from dao import AmsActInfo, IdeActInfo
+from dao import ActCommonInfo, AmsActInfo, IdeActInfo
 from log import color, logger
 from util import (
     exists_flag_file,
@@ -409,14 +409,16 @@ class Urls:
         self.wegame_new_appkey = "wegame!#act$2020"
 
     def show_current_valid_act_infos(self):
-        acts = []
+        acts: List[ActCommonInfo] = []
 
+        # others
         for not_ams_act in not_ams_activities:
             if is_act_expired(not_ams_act.dtEndTime):
                 continue
 
-            acts.append(not_ams_act)
+            acts.append(not_ams_act.get_common_info())
 
+        # ams
         for attr_name, act_id in self.__dict__.items():
             if not attr_name.startswith("iActivityId_"):
                 continue
@@ -432,12 +434,30 @@ class Urls:
             if is_act_expired(act.dtEndTime):
                 continue
 
-            acts.append(act)
+            acts.append(act.get_common_info())
+
+        # ide
+        for attr_name, act_id in self.__dict__.items():
+            if not attr_name.startswith("ide_iActivityId_"):
+                continue
+
+            # 部分电脑上可能会在这一步卡住，因此加一个标志项，允许不启用活动
+            if exists_flag_file("不查询活动.txt"):
+                continue
+
+            act = search_ide_act(act_id)
+            if act is None:
+                continue
+
+            if is_act_expired(act.get_endtime()):
+                continue
+
+            acts.append(act.get_common_info(act_id))
 
         acts.sort(key=lambda act: act.dtEndTime)
 
         heads = ["序号", "活动名称", "活动ID", "开始时间", "结束时间", "剩余时间"]
-        colSizes = [4, 44, 8, 20, 20, 14]
+        colSizes = [4, 44, 10, 20, 20, 14]
 
         table = ""
         table += "\n" + tableify(heads, colSizes)

@@ -6471,7 +6471,7 @@ class DjcHelper:
     def majieluo(self):
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
-        self.show_not_ams_act_info("DNF马杰洛的规划")
+        self.show_ide_act_info(self.majieluo_op)
 
         if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
             logger.warning("未启用领取DNF马杰洛的规划活动功能，将跳过")
@@ -6530,10 +6530,8 @@ class DjcHelper:
         stoneCount = self.query_stone_count()
         logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
-        # re: 完成解析新的活动信息后，重新改为动态读取
-        # act_info = self.majieluo_op("获取活动信息", "", get_ams_act_info_only=True)
-        # endTime = get_today(parse_time(act_info.dtEndTime))
-        endTime = get_today(parse_time("2022-01-19 23:59:59"))
+        act_info = self.majieluo_op("获取活动信息", "", "", get_act_info_only=True)
+        endTime = get_today(parse_time(act_info.dev.action.sDownDate))
 
         takeStone = False
         takeStoneActId = "113898"

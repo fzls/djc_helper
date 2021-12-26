@@ -588,11 +588,25 @@ def get_ams_act_desc(actId: str) -> str:
     if act is None:
         return ""
 
-    return format_act(act)
+    return format_act(act.iActivityId, act.sActivityName, act.dtBeginTime, act.dtEndTime)
 
 
 def get_ams_act(actId: str) -> Optional[AmsActInfo]:
     act = search_act(actId)
+    return act
+
+
+def get_ide_act_desc(actId: str) -> str:
+    act = get_ide_act(actId)
+    if act is None:
+        return ""
+
+    action = act.dev.action
+    return format_act(actId, action.sName, action.sUpDate, action.sDownDate)
+
+
+def get_ide_act(actId: str) -> Optional[IdeActInfo]:
+    act = search_ide_act(actId)
     return act
 
 
@@ -601,7 +615,7 @@ def get_not_ams_act_desc(act_name: str) -> str:
     if act is None:
         return f"未找到活动 {act_name} 的相关信息"
 
-    return format_act(act)
+    return format_act(act.iActivityId, act.sActivityName, act.dtBeginTime, act.dtEndTime)
 
 
 def get_not_ams_act(act_name: str) -> Optional[AmsActInfo]:
@@ -612,19 +626,18 @@ def get_not_ams_act(act_name: str) -> Optional[AmsActInfo]:
     return None
 
 
-def format_act(act: AmsActInfo, needPadding=False):
-    act_name = act.sActivityName
+def format_act(act_id: str, act_name: str, begin_time: str, end_time: str, needPadding=False):
     if needPadding:
-        act_name = padLeftRight(act.sActivityName, 44, mode="left")
+        act_name = padLeftRight(act_name, 44, mode="left")
 
-    msg = f"活动 {act_name}({act.iActivityId})"
+    msg = f"活动 {act_name}({act_id})"
 
-    if act.dtEndTime != "":
-        msg += f" 开始时间为 {act.dtBeginTime}，结束时间为 {act.dtEndTime}，"
-        if not is_act_expired(act.dtEndTime):
-            msg += f"距离结束还有 {get_remaining_time(act.dtEndTime)}"
+    if end_time != "":
+        msg += f" 开始时间为 {begin_time}，结束时间为 {end_time}，"
+        if not is_act_expired(end_time):
+            msg += f"距离结束还有 {get_remaining_time(end_time)}"
         else:
-            msg += f"已经结束了 {get_past_time(act.dtEndTime)}"
+            msg += f"已经结束了 {get_past_time(end_time)}"
     else:
         msg += " 尚无已知的开始和结束时间"
 

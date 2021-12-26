@@ -70,7 +70,6 @@ logger.addHandler(new_file_handler())
 import os.path
 from io import StringIO
 from traceback import print_tb
-from urllib.parse import unquote
 
 from PyQt5.QtCore import QCoreApplication, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon

@@ -6638,7 +6638,6 @@ class DjcHelper:
         **extra_params,
     ):
         iActivityId = self.urls.ide_iActivityId_majieluo
-        _ = iActivityId
 
         return self.ide_request(
             ctx,
@@ -6667,7 +6666,6 @@ class DjcHelper:
         **extra_params,
     ):
         iActivityId = self.urls.ide_iActivityId_dnf_social_relation_permission
-        _ = iActivityId
 
         return self.ide_request(
             ctx,

@@ -6595,7 +6595,9 @@ class DjcHelper:
         # re: 周末参考ams的绑定流程，改成通用的机制
         self.majieluo_permit_social()
 
-        query_bind_res = self.majieluo_op("查询绑定", "113789", "FfPhWA", print_res=False)
+        bind_config = self.majieluo_op("查询活动信息", "", "", get_act_info_only=True).get_bind_config()
+
+        query_bind_res = self.majieluo_op("查询绑定", bind_config.query_map_id, bind_config.query_map_token, print_res=False)
         if query_bind_res["jData"]["bindarea"] is not None:
             return
 
@@ -6607,10 +6609,11 @@ class DjcHelper:
         checkInfo = self.get_dnf_roleinfo(roleinfo)
         role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
 
+
         self.majieluo_op(
             "提交绑定",
-            "113790",
-            "ii77aT",
+            bind_config.bind_map_id,
+            bind_config.bind_map_token,
             sRoleId=roleinfo.roleCode,
             sRoleName=triple_quote(roleinfo.roleName),
             sArea=roleinfo.serviceID,

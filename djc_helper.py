@@ -8,7 +8,7 @@ import string
 import time
 import uuid
 from multiprocessing import Pool
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, Union
 from urllib import parse
 from urllib.parse import quote, quote_plus, unquote_plus
 
@@ -50,6 +50,7 @@ from dao import (
     GuanjiaNewRequest,
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
+    IdeActInfo,
     MobileGameGiftInfo,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
@@ -105,6 +106,8 @@ from urls import (
     get_act_url,
     get_ams_act,
     get_ams_act_desc,
+    get_ide_act,
+    get_ide_act_desc,
     get_not_ams_act,
     get_not_ams_act_desc,
     not_know_end_time,
@@ -473,8 +476,8 @@ class DjcHelper:
                     try:
                         act_info = get_not_ams_act(act_name)
                         if act_info is None and hasattr(self, op_func_name):
-                            # 可能是ams活动
-                            act_info = getattr(self, op_func_name)("获取活动信息", "", get_ams_act_info_only=True)
+                            # 可能是ams或ide活动
+                            act_info = getattr(self, op_func_name)("获取活动信息", "", get_act_info_only=True)
                     except Exception as e:
                         logger.debug(f"请求{act_name} 出错了", exc_info=e)
 
@@ -3234,7 +3237,7 @@ class DjcHelper:
         # 黄金宝箱 30-44分
         # 钻石宝箱 45-59分
         # 泰拉宝箱 60分
-        act_info = self.dnf_ozma_op("获取活动信息", "", get_ams_act_info_only=True)
+        act_info = self.dnf_ozma_op("获取活动信息", "", get_act_info_only=True)
         endTime = get_today(parse_time(act_info.dtEndTime))
 
         need_take = info.box_score >= 60
@@ -6644,6 +6647,7 @@ class DjcHelper:
         return self.ide_request(
             ctx,
             "comm.ams.game.qq.com",
+            iActivityId,
             iFlowId,
             sIdeToken,
             print_res,
@@ -6676,6 +6680,7 @@ class DjcHelper:
         return self.ide_request(
             ctx,
             "comm.ams.game.qq.com",
+            iActivityId,
             iFlowId,
             sIdeToken,
             print_res,
@@ -9069,6 +9074,9 @@ class DjcHelper:
     def show_amesvr_act_info(self, activity_op_func):
         activity_op_func("查询活动信息", "", show_info_only=True)
 
+    def show_ide_act_info(self, activity_op_func):
+        activity_op_func("查询活动信息", "", show_info_only=True)
+
     def amesvr_request(
         self,
         ctx,
@@ -9081,13 +9089,13 @@ class DjcHelper:
         eas_url: str,
         extra_cookies="",
         show_info_only=False,
-        get_ams_act_info_only=False,
+        get_act_info_only=False,
         **data_extra_params,
     ):
         if show_info_only:
             self.show_ams_act_info(iActivityId)
             return
-        if get_ams_act_info_only:
+        if get_act_info_only:
             return get_ams_act(iActivityId)
 
         eas_url = self.preprocess_eas_url(eas_url)
@@ -9141,13 +9149,22 @@ class DjcHelper:
         self,
         ctx: str,
         ide_host: str,
+        iActivityId: str,
         iFlowId: str,
         sIdeToken: str,
         print_res: bool,
         eas_url: str,
         extra_cookies="",
+        show_info_only=False,
+        get_act_info_only=False,
         **data_extra_params,
-    ):
+    ) -> Union[dict, IdeActInfo, None]:
+        if show_info_only:
+            self.show_ide_act_info(iActivityId)
+            return None
+        if get_act_info_only:
+            return get_ide_act(iActivityId)
+
         eas_url = self.preprocess_eas_url(eas_url)
 
         eas_refer = ""
@@ -9184,6 +9201,9 @@ class DjcHelper:
 
     def show_ams_act_info(self, iActivityId: str):
         logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_ams_act_desc(iActivityId))
+
+    def show_ide_act_info(self, iActivityId: str):
+        logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_ide_act_desc(iActivityId))
 
     def show_not_ams_act_info(self, act_name: str):
         logger.info(color("bold_green") + get_meaningful_call_point_for_log() + get_not_ams_act_desc(act_name))

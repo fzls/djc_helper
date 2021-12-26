@@ -1547,25 +1547,10 @@ class MajieluoConfigUi(QFrame):
             scode = scode_list[order_index]
             logger.info(f"第{order_index + 1}个小号领取刚刚运行后填写的Scode列表中第{order_index + 1}个scode - {scode}")
 
-            res = djcHelper.majieluo_open_box(scode)
-            if res.sOutValue1 == "0":
+            ret, message = djcHelper.majieluo_open_box(scode)
+            if ret == 0:
                 messages.append(f"第 {order_index + 1} 个小号 {djcHelper.qq()} 领取礼盒成功")
             else:
-                code_to_message = {
-                    "1": "无效的赠送链接",
-                    "2": "不能打开自己的礼盒~",
-                    "3": "该礼盒已经被开启",
-                    "4": "好友今天的礼盒已经被全部打开了哦~",
-                    "5": "一天只可以打开3次礼盒哦~",
-                    "6": "该礼盒已经被开启",
-                    "7": "该礼盒已经被开启",
-                }
-                message = "系统繁忙，请稍后再试~"
-                if res.sOutValue1 in code_to_message:
-                    message = code_to_message[res.sOutValue1]
-                else:
-                    message = unquote(res.sOutValue2)
-
                 messages.append(f"第 {order_index + 1} 个小号 {djcHelper.qq()}：{message}")
 
             time.sleep(1)

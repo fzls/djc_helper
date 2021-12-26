@@ -6471,7 +6471,7 @@ class DjcHelper:
     def majieluo(self):
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
-        self.show_ide_act_info(self.majieluo_op)
+        self.show_idesvr_act_info(self.majieluo_op)
 
         if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
             logger.warning("未启用领取DNF马杰洛的规划活动功能，将跳过")
@@ -9072,8 +9072,8 @@ class DjcHelper:
     def show_amesvr_act_info(self, activity_op_func):
         activity_op_func("查询活动信息", "", show_info_only=True)
 
-    def show_ide_act_info(self, activity_op_func):
-        activity_op_func("查询活动信息", "", show_info_only=True)
+    def show_idesvr_act_info(self, activity_op_func):
+        activity_op_func("查询活动信息", "", "", show_info_only=True)
 
     def amesvr_request(
         self,

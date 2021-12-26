@@ -966,7 +966,10 @@ class AmsActInfo(ConfigInterface):
     def is_last_day(self):
         from util import format_time, get_today, parse_time
 
-        return format_time(parse_time(self.dtEndTime), "%Y%m%d") == get_today()
+        return format_time(parse_time(self.get_endtime()), "%Y%m%d") == get_today()
+
+    def get_endtime(self) -> str:
+        return self.dtEndTime
 
 
 class AmsActFlowInfo(ConfigInterface):
@@ -1003,7 +1006,10 @@ class IdeActInfo(ConfigInterface):
     def is_last_day(self):
         from util import format_time, get_today, parse_time
 
-        return format_time(parse_time(self.dev.action.sDownDate), "%Y%m%d") == get_today()
+        return format_time(parse_time(self.get_endtime()), "%Y%m%d") == get_today()
+
+    def get_endtime(self) -> str:
+        return self.dev.action.sDownDate
 
     def get_bind_config(self) -> IdeTPLInfo | None:
         """

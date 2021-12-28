@@ -96,6 +96,7 @@ act_name_to_url = {
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20211209plants/indexpc.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20211209xinchun/share.html",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
-    "DNF心悦": "https://xinyue.qq.com/act/a20211108zsdc/index_pc.html",
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
@@ -242,7 +242,7 @@ class Urls:
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "422200"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "433531"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
@@ -278,7 +278,7 @@ class Urls:
             "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}"
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
-            "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}"
+            "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}"
         )
 
         # ide通用活动

@@ -3718,7 +3718,7 @@ class DjcHelper:
 
         if self.cfg.dnf_helper_info.token == "":
             extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
-            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper")
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动')}")
             return
 
         @try_except(return_val_on_except=0)
@@ -4242,13 +4242,13 @@ class DjcHelper:
             extra_msg = (
                 f"dnf助手的userId未配置或配置有误或者本月没有编年史活动，当前值为[{self.cfg.dnf_helper_info.userId}]，无法进行dnf助手编年史活动，请按照下列流程进行配置"
             )
-            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_{get_month()}")
             return
 
         # 检查领奖额外需要的参数
         if self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "":
             extra_msg = "dnf助手的token/uniqueRoleId未配置，将无法领取等级奖励（其他似乎不受影响）。若想要自动领奖，请按照下列流程进行配置"
-            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_chronicle")
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_{get_month()}")
             # 不通过也继续走，只是领奖会失败而已
 
         # 提示做任务

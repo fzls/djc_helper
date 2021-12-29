@@ -1731,7 +1731,11 @@ class AccountConfigUi(QWidget):
         )
 
         self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
-        add_row(form_layout, "无法在道聚城绑定dnf\n（开启后将无法领取任何奖励，主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）", self.checkbox_cannot_bind_dnf)
+        add_row(
+            form_layout,
+            "无法在道聚城绑定dnf\n（开启后将无法领取任何奖励，主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）",
+            self.checkbox_cannot_bind_dnf,
+        )
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 

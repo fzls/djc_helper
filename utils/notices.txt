@@ -598,5 +598,15 @@
     "open_url": "",
     "expire_at": "2022-01-04 00:03:19",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "关于 勇士的好运盆栽 活动",
+    "message": "这两天有不少问这个活动为什么没有自动做，这里统一回复一下：\n勇士的好运盆栽 活动是 DNF助手 专属活动，未正确配置token的情况不会自动领取\n\n如果想要领取这个活动，请在群里发送 【助手token】，按照机器人的提示进行配置\n",
+    "send_at": "2021-12-29 11:10:26",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-01-05 11:10:26",
+    "show_only_before_version": ""
   }
 ]

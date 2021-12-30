@@ -1202,7 +1202,7 @@ class DjcHelper:
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
 
             for _try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype)
+                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=1)
                 if op.count > 1:
                     if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
                         logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
@@ -9053,6 +9053,7 @@ class DjcHelper:
                 "sActivityInfo",
                 "openid",
                 "param",
+                "dhnums",
             ]
         }
 

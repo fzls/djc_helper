@@ -641,8 +641,8 @@ get_guanjia = true
 ## --------------- 充值权益（勇士币兑换） --------------------
 ## ++++++++++普通兑换专场（特邀会员以及心悦会员可兑换）++++++++++++
 #[[account_configs.xinyue_operations]]
-#iFlowId = "747718"
-#sFlowName = "复活币*1(日限100)(需1点勇士币)"
+#iFlowId = "821281"
+#sFlowName = "新版复活币*1(日限100)(需1点勇士币)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]

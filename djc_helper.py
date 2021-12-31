@@ -5634,6 +5634,7 @@ class DjcHelper:
             "DNFQKF",
             "DNFGFLT",
             "DNFQJQR",
+            "DNFXJY",
             "充满希望的一天",
             "冒险新出发",
             "合金战士降临",
@@ -9686,4 +9687,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_welfare()

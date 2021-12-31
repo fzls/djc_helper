@@ -32,6 +32,7 @@ DNF蚊子腿小助手_集卡特别版.exe
 releases/
 
 utils/auto_updater.exe
+utils/chrome*.download
 
 _update_temp_dir/
 

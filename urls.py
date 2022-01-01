@@ -79,7 +79,6 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/1648_4615e306",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
@@ -97,6 +96,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20211209plants/indexpc.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20211209xinchun/share.html",
+    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     #
     # 已过期活动
     #

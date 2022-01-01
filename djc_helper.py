@@ -571,6 +571,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("DNF心悦", self.dnf_xinyue),
+            ("会员关怀", self.dnf_vip_mentor),
         ]
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
@@ -612,7 +613,6 @@ class DjcHelper:
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
-            ("会员关怀", self.dnf_vip_mentor),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("勇士的冒险补给", self.maoxian),
             ("qq会员杯", self.dnf_club_vip),
@@ -2153,17 +2153,19 @@ class DjcHelper:
         if self.lr is None:
             return
 
+        lucky_act_id = "21535_758e9209"
+        self.qzone_act_op("关怀礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
-            "关怀礼包",
-            "7310_13a6f4de",
+            "关怀礼包 - 尝试使用配置关怀角色",
+            lucky_act_id,
             act_req_data=self.try_make_lucky_user_req_data(
                 "关怀", self.cfg.vip_mentor.guanhuai_dnf_server_id, self.cfg.vip_mentor.guanhuai_dnf_role_id
             ),
         )
 
-        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "7314_241a75f5")
+        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "21538_7430ac3a")
         for idx in range_from_one(10):
-            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "7315_84b2b743")
+            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "21539_14860aae")
             if res.get("Data", "") == "":
                 break
 
@@ -9687,4 +9689,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_vip_mentor()

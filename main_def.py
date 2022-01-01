@@ -1037,6 +1037,7 @@ def try_report_usage_info(cfg: Config):
         increase_counter(ga_category="login_mode", name=account_config.login_mode)
 
         increase_counter(ga_category="enable_xinyue_team_auto_match", name=account_config.enable_auto_match_xinyue_team)
+        increase_counter(ga_category="enable_auto_match_dnf_chronicle", name=account_config.dnf_helper_info.enable_auto_match_dnf_chronicle)
 
     # 上报网盘地址，用于区分分发渠道
     if not run_from_src():

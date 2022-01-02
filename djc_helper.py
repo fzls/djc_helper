@@ -556,10 +556,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("hello语音网页礼包兑换", self.hello_voice),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
-            ("WeGame活动", self.dnf_wegame),
-            ("DNF公会活动", self.dnf_gonghui),
-            ("DNF娱乐赛", self.dnf_game),
-            ("WeGame活动_新版", self.wegame_new),
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
@@ -576,6 +572,10 @@ class DjcHelper:
 
     def expired_activities(self) -> List[Tuple[str, Callable]]:
         return [
+            ("WeGame活动_新版", self.wegame_new),
+            ("DNF娱乐赛", self.dnf_game),
+            ("DNF公会活动", self.dnf_gonghui),
+            ("WeGame活动", self.dnf_wegame),
             ("DNF闪光杯", self.dnf_shanguang),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
@@ -9689,4 +9689,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_vip_mentor()
+        djcHelper.dnf_collection_dup()

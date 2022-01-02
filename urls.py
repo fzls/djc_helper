@@ -81,10 +81,6 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
-    "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
-    "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
-    "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
-    "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
@@ -100,6 +96,10 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
+    "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
+    "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
+    "WeGame活动": "https://dnf.qq.com/lbact/a20211118wegame/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",

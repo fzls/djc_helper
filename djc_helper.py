@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import functools
 import json
 import math
 import os
@@ -10,7 +11,7 @@ import string
 import time
 import uuid
 from multiprocessing import Pool
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib import parse
 from urllib.parse import quote, quote_plus, unquote_plus
 
@@ -2378,7 +2379,7 @@ class DjcHelper:
         return res.data.token
 
     def dnf_ark_lottery_send_card_by_request_step_agree_request_card(self, token: str, card_id: str, target_djc_helper: DjcHelper) -> bool:
-        self.fetch_club_vip_p_skey()
+        self.fetch_club_vip_p_skey("集卡同意索取", cache_max_seconds=600)
 
         self_name, self_qq, self_pskey = self.cfg.name, self.qq(), self.lr.p_skey
         target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
@@ -2467,7 +2468,7 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        self.fetch_club_vip_p_skey()
+        self.fetch_club_vip_p_skey("club.vip")
         if self.lr is None:
             return
 
@@ -9492,14 +9493,27 @@ class DjcHelper:
         )
         return AmesvrQueryRole().auto_update_config(res)
 
-    def fetch_share_p_skey(self, ctx) -> str:
-        return self._fetch_login_result(ctx, QQLogin.login_mode_normal).apps_p_skey
+    def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> str:
+        return self.fetch_login_result(ctx, QQLogin.login_mode_normal, cache_max_seconds=cache_max_seconds).apps_p_skey
 
-    def fetch_club_vip_p_skey(self):
-        self.lr = self._fetch_login_result("club.vip", QQLogin.login_mode_club_vip)
+    def fetch_club_vip_p_skey(self, ctx: str, cache_max_seconds: int = 0):
+        self.lr = self.fetch_login_result(ctx, QQLogin.login_mode_club_vip, cache_max_seconds=cache_max_seconds)
 
-    def _fetch_login_result(self, ctx: str, login_mode: str) -> LoginResult:
-        logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录活动页面来获取p_skey，请稍候~")
+    def fetch_login_result(self, ctx: str, login_mode: str, cache_max_seconds: int = 0, cache_validate_func: Optional[Callable[[Any], bool]] = None) -> LoginResult:
+        logger.warning(color("bold_yellow") + f"开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
+
+        return with_cache(
+            "登录信息",
+            f"{login_mode}_{self.cfg.name}",
+            cache_miss_func=functools.partial(self.update_login_info, login_mode),
+            cache_validate_func=cache_validate_func,
+            cache_max_seconds=cache_max_seconds,
+            cache_value_unmarshal_func=LoginResult().auto_update_config,
+            cache_hit_func=lambda lr: logger.info(f"使用缓存的登录信息: {lr}"),
+        )
+
+    def update_login_info(self, login_mode: str) -> LoginResult:
+        logger.warning("登陆信息已过期，将重新获取")
 
         ql = QQLogin(self.common_cfg)
         if self.cfg.login_mode == "qr_login":

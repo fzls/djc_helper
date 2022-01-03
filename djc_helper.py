@@ -9656,6 +9656,8 @@ if __name__ == "__main__":
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
+    qq_to_djcHelper: Dict[str, DjcHelper] = {}
+
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
@@ -9668,6 +9670,8 @@ if __name__ == "__main__":
         djcHelper = DjcHelper(account_config, cfg.common)
         djcHelper.fetch_pskey()
         djcHelper.check_skey_expired()
+
+        qq_to_djcHelper[djcHelper.qq()] = djcHelper
 
     from main_def import get_user_buy_info
 

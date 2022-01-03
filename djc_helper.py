@@ -2382,16 +2382,16 @@ class DjcHelper:
         return res.data.token
 
     def dnf_ark_lottery_send_card_by_request_step_agree_request_card(self, token: str, card_id: str, target_djc_helper: DjcHelper) -> bool:
-        self.fetch_club_vip_p_skey("集卡同意索取", cache_max_seconds=600)
+        lr = self.fetch_club_vip_p_skey("集卡同意索取", cache_max_seconds=600)
 
-        self_name, self_qq, self_pskey = self.cfg.name, self.qq(), self.lr.p_skey
+        self_name, self_qq, self_pskey = self.cfg.name, self.qq(), lr.p_skey
         target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
 
         # 当前账号同意索取
         url = self.urls.qzone_activity_new_agree_request_card.format(token=token, g_tk=getACSRFTokenForAMS(self_pskey), rand=random.random())
 
         ctx = f"{self_name}({self_qq}) 同意 {target_name}({target_qq}) 的 索取卡片 {card_id} 的请求，token={token}"
-        raw_res = self._qzone_act_get_op(ctx, url, extra_headers={
+        raw_res = self._qzone_act_get_op(ctx, url, p_skey=self_pskey, extra_headers={
             "Content-Type": "application/json",
         })
 
@@ -2471,7 +2471,7 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        self.fetch_club_vip_p_skey("club.vip")
+        self.lr = self.fetch_club_vip_p_skey("club.vip")
         if self.lr is None:
             return
 
@@ -2606,8 +2606,9 @@ class DjcHelper:
 
         return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)
 
-    def _qzone_act_get_op(self, ctx: str, url: str, print_res=True, **params):
-        extra_cookies = f"p_skey={self.lr.p_skey}; "
+    def _qzone_act_get_op(self, ctx: str, url: str, p_skey: str = "", print_res=True, **params):
+        p_skey = p_skey or self.lr.p_skey
+        extra_cookies = f"p_skey={p_skey}; "
 
         return self.get(ctx, url, extra_cookies=extra_cookies, print_res=print_res, **params)
 
@@ -9499,11 +9500,11 @@ class DjcHelper:
     def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> str:
         return self.fetch_login_result(ctx, QQLogin.login_mode_normal, cache_max_seconds=cache_max_seconds).apps_p_skey
 
-    def fetch_club_vip_p_skey(self, ctx: str, cache_max_seconds: int = 0):
-        self.lr = self.fetch_login_result(ctx, QQLogin.login_mode_club_vip, cache_max_seconds=cache_max_seconds)
+    def fetch_club_vip_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> LoginResult:
+        return self.fetch_login_result(ctx, QQLogin.login_mode_club_vip, cache_max_seconds=cache_max_seconds)
 
     def fetch_login_result(self, ctx: str, login_mode: str, cache_max_seconds: int = 0, cache_validate_func: Optional[Callable[[Any], bool]] = None) -> LoginResult:
-        logger.warning(color("bold_yellow") + f"开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
+        logger.warning(color("bold_yellow") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
 
         return with_cache(
             "登录信息",

@@ -327,6 +327,8 @@ class Urls:
         self.qzone_activity_new_query_card = (
             "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/QueryItems?g_tk={g_tk}&packetID={packetID}"
         )
+        self.qzone_activity_new_request_card = "https://act.qzone.qq.com/v2/vip/tx/trpc/xcard/RequestItems?g_tk={g_tk}"
+        self.qzone_activity_new_agree_request_card = "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
         self.pesudo_ark_lottery_act_id = 10003
 

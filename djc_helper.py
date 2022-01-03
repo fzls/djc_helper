@@ -2316,7 +2316,7 @@ class DjcHelper:
             },
         )
 
-    def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1) -> bool:
+    def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1, target_djc_helper: Optional[DjcHelper] = None) -> bool:
         url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))
         # note: 这个packet id需要 抓手机包获取
         body = {
@@ -2338,6 +2338,9 @@ class DjcHelper:
         # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到每日单Q上限"}}
         res = NewArkLotterySendCardResult().auto_update_config(raw_res)
 
+        if not res.is_ok() and target_djc_helper is not None:
+            logger.warning("赠送失败，尝试使用索取功能来赠送")
+            return self.dnf_ark_lottery_send_card_by_request(card_id, target_djc_helper, card_count)
 
         return res.is_ok()
 

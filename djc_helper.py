@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import json
 import math
@@ -52,8 +54,10 @@ from dao import (
     HuyaUserTaskInfo,
     IdeActInfo,
     MobileGameGiftInfo,
+    NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
+    NewArkLotteryRequestCardResult,
     NewArkLotterySendCardResult,
     RankUserInfo,
     RoleInfo,
@@ -2332,6 +2336,64 @@ class DjcHelper:
         # {"code": 0, "message": "succ", "data": {}}
         # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到每日单Q上限"}}
         res = NewArkLotterySendCardResult().auto_update_config(raw_res)
+
+
+        return res.is_ok()
+
+    @try_except(return_val_on_except=False)
+    def dnf_ark_lottery_send_card_by_request(self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1) -> bool:
+        token = self.dnf_ark_lottery_send_card_by_request_step_request_card(card_id, target_djc_helper, card_count)
+        if token == "":
+            logger.warning(f"未能索取卡片 {card_id}")
+            return False
+
+        return self.dnf_ark_lottery_send_card_by_request_step_agree_request_card(token, card_id, target_djc_helper)
+
+    def dnf_ark_lottery_send_card_by_request_step_request_card(self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1) -> str:
+        self_name, self_qq, self_pskey = self.cfg.name, self.qq(), self.lr.p_skey
+        target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
+
+        # 使用 目标账号 向 当前账号 发起 索取请求
+        url = self.urls.qzone_activity_new_request_card.format(g_tk=getACSRFTokenForAMS(target_pskey))
+        # note: 这个packet id需要 抓手机包获取
+        body = {
+            "packetID": self.ark_lottery_packet_id_card,
+            "items": [
+                {
+                    "id": card_id,
+                    "num": card_count,
+                }
+            ],
+            "uid": self_qq,
+            "uidType": 1,
+            "r": random.random(),
+        }
+
+        ctx = f"{target_name}({target_qq}) 向 {self_name}({self_qq}) 请求卡片 {card_id}"
+        raw_res = target_djc_helper._qzone_act_op(ctx, url, body)
+
+        # {"code":0,"message":"succ","data":{"token":"7533_13e52f700103200619aSabcd"}}
+        res = NewArkLotteryRequestCardResult().auto_update_config(raw_res)
+
+        return res.data.token
+
+    def dnf_ark_lottery_send_card_by_request_step_agree_request_card(self, token: str, card_id: str, target_djc_helper: DjcHelper) -> bool:
+        self.fetch_club_vip_p_skey()
+
+        self_name, self_qq, self_pskey = self.cfg.name, self.qq(), self.lr.p_skey
+        target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
+
+        # 当前账号同意索取
+        url = self.urls.qzone_activity_new_agree_request_card.format(token=token, g_tk=getACSRFTokenForAMS(self_pskey), rand=random.random())
+
+        ctx = f"{self_name}({self_qq}) 同意 {target_name}({target_qq}) 的 索取卡片 {card_id} 的请求，token={token}"
+        raw_res = self._qzone_act_get_op(ctx, url, extra_headers={
+            "Content-Type": "application/json",
+        })
+
+        # {"code":0,"message":"succ","data":{}}
+        # {"code":0,"message":"succ","data":{"code":999,"message":"数量不足，不能进行赠送，索要"}}
+        res = NewArkLotteryAgreeRequestCardResult().auto_update_config(raw_res)
 
         return res.is_ok()
 

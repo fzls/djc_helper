@@ -1464,6 +1464,34 @@ class NewArkLotterySendCardResultData(ConfigInterface):
         self.message = ""
 
 
+class NewArkLotteryRequestCardResult(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = "succ"
+        self.data = NewArkLotteryRequestCardResultData()
+
+
+class NewArkLotteryRequestCardResultData(ConfigInterface):
+    def __init__(self):
+        self.token = ""
+
+
+class NewArkLotteryAgreeRequestCardResult(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = "succ"
+        self.data = NewArkLotteryAgreeRequestCardResultData()
+
+    def is_ok(self) -> bool:
+        return self.code == 0 and self.data.code == 0
+
+
+class NewArkLotteryAgreeRequestCardResultData(ConfigInterface):
+    def __init__(self):
+        self.code = 0
+        self.message = ""
+
+
 class DnfHelperQueryInfo(ConfigInterface):
     def __init__(self):
         self.hasfinish = 0

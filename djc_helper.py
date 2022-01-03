@@ -2339,7 +2339,7 @@ class DjcHelper:
         res = NewArkLotterySendCardResult().auto_update_config(raw_res)
 
         if not res.is_ok() and target_djc_helper is not None:
-            logger.warning("赠送失败，尝试使用索取功能来赠送")
+            logger.warning("赠送失败，可能是达到每日赠送上限，尝试使用索取功能来赠送")
             return self.dnf_ark_lottery_send_card_by_request(card_id, target_djc_helper, card_count)
 
         return res.is_ok()

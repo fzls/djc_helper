@@ -9528,32 +9528,7 @@ class DjcHelper:
         return lr
 
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
-        logger.warning(color("bold_yellow") + f"开启了{ctx}功能，因此需要登录心悦页面来获取心悦相关信息，请稍候~")
-
-        return with_cache(
-            "登录信息",
-            f"openid_access_token_{self.cfg.name}",
-            cache_miss_func=self.update_xinyue_login_info,
-            cache_validate_func=self.is_xinyue_login_info_valid,
-            cache_max_seconds=-1,
-            cache_value_unmarshal_func=LoginResult().auto_update_config,
-            cache_hit_func=lambda lr: logger.info(f"使用缓存的登录信息: {lr}"),
-        )
-
-    def update_xinyue_login_info(self) -> LoginResult:
-        logger.warning("登陆信息已过期，将重新获取")
-        ql = QQLogin(self.common_cfg)
-        login_mode = ql.login_mode_xinyue
-        if self.cfg.login_mode == "qr_login":
-            # 扫码登录
-            lr = ql.qr_login(login_mode=login_mode, name=self.cfg.name)
-        else:
-            # 自动登录
-            lr = ql.login(
-                self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name
-            )
-
-        return lr
+        return self.fetch_login_result(ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid)
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
         if lr.openid == "" or lr.xinyue_access_token == "":

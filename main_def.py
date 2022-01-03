@@ -465,7 +465,7 @@ def send_card(
                 index: str
 
                 if is_new_version_ark_lottery():
-                    send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(card_name, target_qq)
+                    send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(card_name, target_qq, target_djc_helper=qq_to_djcHelper[target_qq])
 
                     index = new_ark_lottery_parse_index_from_card_id(card_name)
                 else:

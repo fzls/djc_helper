@@ -1762,6 +1762,7 @@ def get_user_buy_info_from_netdisk(
 
 def try_add_extra_times(user_buy_info: BuyInfo, has_buy_dlc: bool, show_dlc_info: bool):
     if has_buy_dlc:
+        # hack: 这里不特别去除2021.4.11之前未购买按月付费的情况，是为了与服务器保持一致。目前从服务器解析回来时，判定是否购买dlc，是通过dlc的那个额外条目来判定的，移除后将无法判定。当然也可以选择添加新字段，但这里为了省事和兼容之前版本，就不修改了
         add_extra_times_for_dlc(user_buy_info, show_dlc_info)
 
     # 根据需要可以在这里添加额外的赠送时长逻辑

@@ -1761,7 +1761,7 @@ def get_user_buy_info_from_netdisk(
 
 
 def try_add_extra_times(user_buy_info: BuyInfo, has_buy_dlc: bool, show_dlc_info: bool):
-    if has_buy_dlc:
+    if has_buy_dlc and user_buy_info.should_append_dlc_reward():
         add_extra_times_for_dlc(user_buy_info, show_dlc_info)
 
     # 根据需要可以在这里添加额外的赠送时长逻辑
@@ -2111,7 +2111,7 @@ def demo_pay_info():
     user_buy_info = get_user_buy_info(cfg.get_qq_accounts())
 
     if has_buy_auto_update_dlc:
-        dlc_info = "当前某一个账号已购买自动更新DLC(若对自动更新送的两月有疑义，请看付费指引的常见问题章节)"
+        dlc_info = "当前某一个账号已购买自动更新DLC"
     else:
         dlc_info = "当前所有账号均未购买自动更新DLC"
     monthly_pay_info = user_buy_info.description()

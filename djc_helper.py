@@ -2338,8 +2338,8 @@ class DjcHelper:
         # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到每日单Q上限"}}
         res = NewArkLotterySendCardResult().auto_update_config(raw_res)
 
-        if not res.is_ok() and target_djc_helper is not None:
-            logger.warning("赠送失败，可能是达到每日赠送上限，尝试使用索取功能来赠送")
+        if not res.is_ok() and target_djc_helper is not None and self.common_cfg.enable_send_card_by_request:
+            logger.warning("赠送失败，可能是达到每日赠送上限，尝试使用索取功能来赠送(可通过 配置工具/公共配置/集卡/索取 开关来关闭)")
             return self.dnf_ark_lottery_send_card_by_request(card_id, target_djc_helper, card_count)
 
         return res.is_ok()

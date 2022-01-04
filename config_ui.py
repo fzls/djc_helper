@@ -1205,6 +1205,9 @@ class CommonConfigUi(QFrame):
         self.lineedit_auto_send_card_target_qqs.setValidator(QQListValidator())
         add_row(form_layout, "自动赠送卡片的目标QQ数组(这些QQ将接收来自其他QQ赠送的卡片)", self.lineedit_auto_send_card_target_qqs)
 
+        self.checkbox_enable_send_card_by_request = create_checkbox(cfg.enable_send_card_by_request)
+        add_row(form_layout, "集卡赠送次数耗尽后，是否尝试通过索取的方式来赠送卡片", self.checkbox_enable_send_card_by_request)
+
         self.checkbox_cost_all_cards_and_do_lottery_on_last_day = create_checkbox(
             cfg.cost_all_cards_and_do_lottery_on_last_day
         )
@@ -1351,6 +1354,7 @@ class CommonConfigUi(QFrame):
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())
+        cfg.enable_send_card_by_request = self.checkbox_enable_send_card_by_request.isChecked()
         cfg.cost_all_cards_and_do_lottery_on_last_day = (
             self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
         )

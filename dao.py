@@ -887,18 +887,6 @@ class BuyInfo(ConfigInterface):
 
         return msg
 
-    def should_append_dlc_reward(self) -> bool:
-        from util import parse_time
-
-        # 仅在 2021.04.11 之前有购买过按月付费的显示dlc赠送的两个月，否则直接不显示，避免引起误会来询问
-        base_time = parse_time("2021-04-11 00:00:00")
-
-        for record in self.buy_records:
-            if parse_time(record.buy_at) < base_time:
-                return True
-
-        return False
-
     def infer_has_buy_dlc(self) -> bool:
         if len(self.buy_records) == 0:
             return False

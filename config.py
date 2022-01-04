@@ -1167,6 +1167,8 @@ class CommonConfig(ConfigInterface):
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
         self.auto_send_card_target_qqs: List[str] = []
+        # 集卡赠送次数耗尽后，是否尝试通过索取的方式来赠送卡片
+        self.enable_send_card_by_request = True
         # 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
         self.scode_list_accept_give = []
         # 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知

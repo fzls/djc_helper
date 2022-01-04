@@ -87,6 +87,9 @@ cost_all_cards_and_do_lottery_on_last_day = false
 #   auto_send_card_target_qqs = ["123456", "654321", "111111"]
 auto_send_card_target_qqs = []
 
+# 集卡赠送次数耗尽后，是否尝试通过索取的方式来赠送卡片
+enable_send_card_by_request = true
+
 # 赛利亚活动拜访目标QQ列表
 # 依次拜访给一到三个QQ的示例如下，更多拜访目标则类推
 #   想要其他账号拜访1个QQ 123456

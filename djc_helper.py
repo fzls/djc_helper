@@ -11,7 +11,7 @@ import string
 import time
 import uuid
 from multiprocessing import Pool
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable
 from urllib import parse
 from urllib.parse import quote, quote_plus, unquote_plus
 
@@ -174,14 +174,14 @@ class DjcHelper:
 
     local_saved_teamid_file = os.path.join(cached_dir, ".teamid_new.{}.json")
 
-    def __init__(self, account_config, common_config, user_buy_info: Optional[BuyInfo] = None):
+    def __init__(self, account_config, common_config, user_buy_info: BuyInfo | None = None):
         self.cfg: AccountConfig = account_config
         self.common_cfg: CommonConfig = common_config
 
         self.zzconfig = zzconfig()
 
         # 初始化部分字段
-        self.lr: Optional[LoginResult] = None
+        self.lr: LoginResult | None = None
 
         # 配置加载后，尝试读取本地缓存的skey
         self.local_load_uin_skey()
@@ -215,7 +215,7 @@ class DjcHelper:
         check_in_black_list(self.uin())
 
     def update_skey(self, query_data, window_index=1):
-        login_mode_dict: Dict[str, Callable[[Dict, int], None]] = {
+        login_mode_dict: dict[str, Callable[[dict, int], None]] = {
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
             "auto_login": self.update_skey_auto_login,
@@ -446,7 +446,7 @@ class DjcHelper:
         # #    因此在不同账号已经在不同的进程下运行的前提下，子进程下不能再创建新的子进程了
         # async_run_all_act(self.cfg, self.common_cfg, activity_funcs_to_run)
 
-    def get_activity_funcs_to_run(self, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:
+    def get_activity_funcs_to_run(self, user_buy_info: BuyInfo) -> list[tuple[str, Callable]]:
         activity_funcs_to_run = []
         activity_funcs_to_run.extend(self.free_activities())
         if user_buy_info.is_active():
@@ -540,7 +540,7 @@ class DjcHelper:
 
         logger.info(paied_activities_summary)
 
-    def free_activities(self) -> List[Tuple[str, Callable]]:
+    def free_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("道聚城", self.djc_operations),
             ("DNF地下城与勇士心悦特权专区", self.xinyue_battle_ground),
@@ -554,7 +554,7 @@ class DjcHelper:
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
 
-    def payed_activities(self) -> List[Tuple[str, Callable]]:
+    def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
@@ -575,7 +575,7 @@ class DjcHelper:
             ("会员关怀", self.dnf_vip_mentor),
         ]
 
-    def expired_activities(self) -> List[Tuple[str, Callable]]:
+    def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("WeGame活动_新版", self.wegame_new),
             ("DNF娱乐赛", self.dnf_game),
@@ -908,7 +908,7 @@ class DjcHelper:
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
         # self.query_dnf_gifts()
 
-    def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> List[DnfRoleInfo]:
+    def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> list[DnfRoleInfo]:
         ctx = f"获取账号({self.cfg.name})在服务器({dnf_server_id_to_name(dnfServerId)})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
 
@@ -954,7 +954,7 @@ class DjcHelper:
 
         return roleLists
 
-    def query_dnf_rolelist_for_temporary_change_bind(self) -> List[TemporaryChangeBindRoleInfo]:
+    def query_dnf_rolelist_for_temporary_change_bind(self) -> list[TemporaryChangeBindRoleInfo]:
         djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 
         temp_change_bind_roles = []
@@ -973,7 +973,7 @@ class DjcHelper:
 
         return temp_change_bind_roles
 
-    def query_dnf_role_info_by_serverid_and_roleid(self, server_id: str, role_id: str) -> Optional[DnfRoleInfo]:
+    def query_dnf_role_info_by_serverid_and_roleid(self, server_id: str, role_id: str) -> DnfRoleInfo | None:
         for role in self.query_dnf_rolelist(server_id, False):
             if role.roleid == role_id:
                 return role
@@ -1347,7 +1347,7 @@ class DjcHelper:
 
         return take_count
 
-    def query_last_week_xinyue_team_awards(self) -> List[XinYueTeamAwardInfo]:
+    def query_last_week_xinyue_team_awards(self) -> list[XinYueTeamAwardInfo]:
         last_monday = get_last_week_monday_datetime()
         this_monday = get_this_week_monday_datetime()
 
@@ -1372,12 +1372,12 @@ class DjcHelper:
         return last_week_awards
 
     @try_except(return_val_on_except=[])
-    def query_xinyue_team_awards(self, iPageNow=1, iPageSize=4) -> List[XinYueTeamAwardInfo]:
+    def query_xinyue_team_awards(self, iPageNow=1, iPageSize=4) -> list[XinYueTeamAwardInfo]:
         raw_res = self.xinyue_battle_ground_op(
             f"查询心悦组队奖励-{iPageNow}-{iPageSize}", "747563", iPageNow=iPageNow, iPageSize=iPageSize, print_res=False
         )
 
-        awards: List[XinYueTeamAwardInfo] = []
+        awards: list[XinYueTeamAwardInfo] = []
         for raw_award in raw_res["modRet"]["myGiftList"]:
             award = XinYueTeamAwardInfo().auto_update_config(raw_award)
             awards.append(award)
@@ -1831,7 +1831,7 @@ class DjcHelper:
             return 0
         return res["13320"]["data"]["uPoint"]
 
-    def send_card(self, card_name: str, cardId: str, to_qq: str, print_res=False) -> Dict:
+    def send_card(self, card_name: str, cardId: str, to_qq: str, print_res=False) -> dict:
         from_qq = self.qq()
 
         ctx = f"{from_qq} 赠送卡片 {card_name}({cardId}) 给 {to_qq}"
@@ -2316,7 +2316,9 @@ class DjcHelper:
             },
         )
 
-    def dnf_ark_lottery_send_card(self, card_id: str, target_qq: str, card_count: int = 1, target_djc_helper: Optional[DjcHelper] = None) -> bool:
+    def dnf_ark_lottery_send_card(
+        self, card_id: str, target_qq: str, card_count: int = 1, target_djc_helper: DjcHelper | None = None
+    ) -> bool:
         url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))
         # note: 这个packet id需要 抓手机包获取
         body = {
@@ -2345,7 +2347,9 @@ class DjcHelper:
         return res.is_ok()
 
     @try_except(return_val_on_except=False)
-    def dnf_ark_lottery_send_card_by_request(self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1) -> bool:
+    def dnf_ark_lottery_send_card_by_request(
+        self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1
+    ) -> bool:
         token = self.dnf_ark_lottery_send_card_by_request_step_request_card(card_id, target_djc_helper, card_count)
         if token == "":
             logger.warning(f"未能索取卡片 {card_id}")
@@ -2353,9 +2357,15 @@ class DjcHelper:
 
         return self.dnf_ark_lottery_send_card_by_request_step_agree_request_card(token, card_id, target_djc_helper)
 
-    def dnf_ark_lottery_send_card_by_request_step_request_card(self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1) -> str:
-        self_name, self_qq, self_pskey = self.cfg.name, self.qq(), self.lr.p_skey
-        target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
+    def dnf_ark_lottery_send_card_by_request_step_request_card(
+        self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1
+    ) -> str:
+        self_name, self_qq, _ = self.cfg.name, self.qq(), self.lr.p_skey
+        target_name, target_qq, target_pskey = (
+            target_djc_helper.cfg.name,
+            target_djc_helper.qq(),
+            target_djc_helper.lr.p_skey,
+        )
 
         # 使用 目标账号 向 当前账号 发起 索取请求
         url = self.urls.qzone_activity_new_request_card.format(g_tk=getACSRFTokenForAMS(target_pskey))
@@ -2381,19 +2391,32 @@ class DjcHelper:
 
         return res.data.token
 
-    def dnf_ark_lottery_send_card_by_request_step_agree_request_card(self, token: str, card_id: str, target_djc_helper: DjcHelper) -> bool:
+    def dnf_ark_lottery_send_card_by_request_step_agree_request_card(
+        self, token: str, card_id: str, target_djc_helper: DjcHelper
+    ) -> bool:
         lr = self.fetch_club_vip_p_skey("集卡同意索取", cache_max_seconds=600)
 
         self_name, self_qq, self_pskey = self.cfg.name, self.qq(), lr.p_skey
-        target_name, target_qq, target_pskey = target_djc_helper.cfg.name, target_djc_helper.qq(), target_djc_helper.lr.p_skey
+        target_name, target_qq, _ = (
+            target_djc_helper.cfg.name,
+            target_djc_helper.qq(),
+            target_djc_helper.lr.p_skey,
+        )
 
         # 当前账号同意索取
-        url = self.urls.qzone_activity_new_agree_request_card.format(token=token, g_tk=getACSRFTokenForAMS(self_pskey), rand=random.random())
+        url = self.urls.qzone_activity_new_agree_request_card.format(
+            token=token, g_tk=getACSRFTokenForAMS(self_pskey), rand=random.random()
+        )
 
         ctx = f"{self_name}({self_qq}) 同意 {target_name}({target_qq}) 的 索取卡片 {card_id} 的请求，token={token}"
-        raw_res = self._qzone_act_get_op(ctx, url, p_skey=self_pskey, extra_headers={
-            "Content-Type": "application/json",
-        })
+        raw_res = self._qzone_act_get_op(
+            ctx,
+            url,
+            p_skey=self_pskey,
+            extra_headers={
+                "Content-Type": "application/json",
+            },
+        )
 
         # {"code":0,"message":"succ","data":{}}
         # {"code":0,"message":"succ","data":{"code":999,"message":"数量不足，不能进行赠送，索要"}}
@@ -2402,7 +2425,7 @@ class DjcHelper:
         return res.is_ok()
 
     @try_except(return_val_on_except=(0, 0))
-    def dnf_ark_lottery_remaining_lottery_times(self) -> Tuple[int, int]:
+    def dnf_ark_lottery_remaining_lottery_times(self) -> tuple[int, int]:
         """
         返回 剩余卡片数，总计获得卡片数
         """
@@ -2416,7 +2439,7 @@ class DjcHelper:
         return info.left, info.add
 
     @try_except(return_val_on_except={})
-    def dnf_ark_lottery_get_card_counts(self) -> Dict[str, int]:
+    def dnf_ark_lottery_get_card_counts(self) -> dict[str, int]:
         url = self.urls.qzone_activity_new_query_card.format(
             packetID=self.ark_lottery_packet_id_card,
             g_tk=getACSRFTokenForAMS(self.lr.p_skey),
@@ -2438,7 +2461,7 @@ class DjcHelper:
 
         return card_counts
 
-    def dnf_ark_lottery_get_prize_counts(self) -> Dict[str, int]:
+    def dnf_ark_lottery_get_prize_counts(self) -> dict[str, int]:
         # 新版本集卡无法查询奖励剩余兑换次数，因此直接写死，从而可以兼容旧版本代码
         return {
             "第一排": 1,
@@ -2447,7 +2470,7 @@ class DjcHelper:
             "十二张": 15,
         }
 
-    def dnf_ark_lottery_get_prize_names(self) -> List[str]:
+    def dnf_ark_lottery_get_prize_names(self) -> list[str]:
         return list(self.dnf_ark_lottery_get_prize_counts().keys())
 
     # -------------------------------------------- qq会员杯 --------------------------------------------
@@ -2491,7 +2514,7 @@ class DjcHelper:
 
     def try_make_lucky_user_req_data(
         self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str
-    ) -> Optional[dict]:
+    ) -> dict | None:
         # 确认使用的角色
         server_id, roleid = "", ""
         if lucky_dnf_server_id == "":
@@ -2521,9 +2544,7 @@ class DjcHelper:
 
         return lucky_req_data
 
-    def qzone_act_op(
-        self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: Optional[dict] = None, print_res=True
-    ):
+    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True):
         body = {
             "SubActId": sub_act_id,
             "ActReqData": json.dumps(self.get_qzone_act_req_data(act_req_data, extra_act_req_data)),
@@ -2533,7 +2554,7 @@ class DjcHelper:
         return self._qzone_act_op(ctx, self.urls.qzone_activity_new, body, print_res)
 
     def club_qzone_act_op(
-        self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: Optional[dict] = None, print_res=True
+        self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True
     ):
         # 另一类qq空间系活动，需要特殊处理
         # https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk=502405433&isomorphism-args=W3siU3ViQWN0SWQiOiIxMjAwNl9kZWRkYzQ4YSIsIkFjd .......
@@ -2567,7 +2588,7 @@ class DjcHelper:
             print_res=print_res,
         )
 
-    def get_qzone_act_req_data(self, act_req_data=None, extra_act_req_data: Optional[dict] = None) -> dict:
+    def get_qzone_act_req_data(self, act_req_data=None, extra_act_req_data: dict | None = None) -> dict:
         if act_req_data is None:
             roleinfo = RoleInfo()
             roleinfo.roleCode = "123456"
@@ -3245,7 +3266,7 @@ class DjcHelper:
 
             return True
 
-        def query_level_100_roles(ignore_rolename_list: List[str]) -> List[TemporaryChangeBindRoleInfo]:
+        def query_level_100_roles(ignore_rolename_list: list[str]) -> list[TemporaryChangeBindRoleInfo]:
             djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 
             valid_roles = []
@@ -3932,7 +3953,7 @@ class DjcHelper:
 
         # ------ 自动绑定 ------
         @try_except(return_val_on_except=None)
-        def try_auto_bind() -> Optional[DnfHelperChronicleUserTaskList]:
+        def try_auto_bind() -> DnfHelperChronicleUserTaskList | None:
             task_info = None
 
             partner_user_id = ""
@@ -4148,7 +4169,7 @@ class DjcHelper:
             elif dnf_helper_info.token == "":
                 prompt_take_awards()
 
-        def get_awards() -> List[Tuple[bool, List[DnfHelperChronicleBasicAwardInfo]]]:
+        def get_awards() -> list[tuple[bool, list[DnfHelperChronicleBasicAwardInfo]]]:
             listOfBasicList = []
 
             basicAwardList = basic_award_list()
@@ -4160,8 +4181,8 @@ class DjcHelper:
             return listOfBasicList
 
         def get_not_taken_awards(
-            listOfBasicList: List[Tuple[bool, List[DnfHelperChronicleBasicAwardInfo]]]
-        ) -> List[Tuple[bool, DnfHelperChronicleBasicAwardInfo]]:
+            listOfBasicList: list[tuple[bool, list[DnfHelperChronicleBasicAwardInfo]]]
+        ) -> list[tuple[bool, DnfHelperChronicleBasicAwardInfo]]:
             not_taken_award_list = []
 
             for selfGift, basicList in listOfBasicList:
@@ -4173,7 +4194,7 @@ class DjcHelper:
             return not_taken_award_list
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
-        def take_all_not_taken_awards(not_taken_awards: List[Tuple[bool, DnfHelperChronicleBasicAwardInfo]]):
+        def take_all_not_taken_awards(not_taken_awards: list[tuple[bool, DnfHelperChronicleBasicAwardInfo]]):
             for selfGift, award in not_taken_awards:
                 take_basic_award_op(award, selfGift)
 
@@ -4892,7 +4913,7 @@ class DjcHelper:
         lr.save_to_json_file(self.get_local_saved_guanjia_openid_file())
         logger.debug(f"本地保存管家openid信息，具体内容如下：{lr}")
 
-    def load_guanjia_login_result(self) -> Optional[LoginResult]:
+    def load_guanjia_login_result(self) -> LoginResult | None:
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:
             return None
@@ -5451,7 +5472,7 @@ class DjcHelper:
                 ctx, url, extra_headers=huya_headers, is_jsonp=True, is_normal_jsonp=True, print_res=print_res
             )
 
-        def query_act_tasks_dict(component_id: int, act_id: int) -> Dict[int, HuyaActTaskInfo]:
+        def query_act_tasks_dict(component_id: int, act_id: int) -> dict[int, HuyaActTaskInfo]:
             raw_res = _get(
                 "查询活动任务信息",
                 f"https://activityapi.huya.com/cache/acttask/getActTaskDetail?callback=getActTaskDetail_matchComponent{component_id}&actId={act_id}&platform=1",
@@ -5465,7 +5486,7 @@ class DjcHelper:
 
             return task_id_to_info
 
-        def query_user_tasks_list(component_id: int, act_id: int) -> List[HuyaUserTaskInfo]:
+        def query_user_tasks_list(component_id: int, act_id: int) -> list[HuyaUserTaskInfo]:
             raw_res = _get(
                 "查询玩家任务信息",
                 f"https://activityapi.huya.com/acttask/getActUserTaskDetail?callback=getUserTasks_matchComponent{component_id}&actId={act_id}&platform=1&_={getMillSecondsUnix()}",
@@ -6644,7 +6665,7 @@ class DjcHelper:
         return
 
     @try_except()
-    def majieluo_send_to_xiaohao(self, xiaohao_qq_list: List[str]) -> List[str]:
+    def majieluo_send_to_xiaohao(self, xiaohao_qq_list: list[str]) -> list[str]:
         p_skey = self.fetch_share_p_skey("马杰洛赠送好友")
 
         self.majieluo_permit_social()
@@ -6660,7 +6681,7 @@ class DjcHelper:
         return results
 
     @try_except()
-    def majieluo_open_box(self, scode: str) -> Tuple[int, str]:
+    def majieluo_open_box(self, scode: str) -> tuple[int, str]:
         self.majieluo_permit_social()
 
         raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "113775", sCode=scode)
@@ -6999,7 +7020,7 @@ class DjcHelper:
                 ],
             )
 
-        def _query_quota_version_one(ctx: str, op_func: Callable[..., dict], flow_id: str, item_name_list: List[str]):
+        def _query_quota_version_one(ctx: str, op_func: Callable[..., dict], flow_id: str, item_name_list: list[str]):
             res = op_func("查询礼包剩余量", flow_id, print_res=False)
             info = parse_amesvr_common_info(res)
 
@@ -7012,7 +7033,7 @@ class DjcHelper:
             logger.info("\n".join(messages))
 
         def _query_quota_version_two(
-            op_func: Callable[..., dict], flow_id_part_1: str, flow_id_part_2: str, ctx: str, item_name_list: List[str]
+            op_func: Callable[..., dict], flow_id_part_1: str, flow_id_part_2: str, ctx: str, item_name_list: list[str]
         ):
             res = op_func("查询礼包剩余量 1-8", flow_id_part_1, print_res=False)
             info = parse_amesvr_common_info(res)
@@ -8908,8 +8929,8 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        check_fn: Callable[[requests.Response], Exception | None] = None,
+        extra_headers: dict[str, str] | None = None,
         **params,
     ) -> dict:
         return self.network.get(
@@ -8937,8 +8958,8 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        check_fn: Callable[[requests.Response], Exception | None] = None,
+        extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         **params,
     ) -> dict:
@@ -9188,7 +9209,7 @@ class DjcHelper:
             **data_extra_params,
         )
 
-        def _check(response: requests.Response) -> Optional[Exception]:
+        def _check(response: requests.Response) -> Exception | None:
             if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
                 # res.status=401, Unauthorized <Response [401]>
                 #
@@ -9235,7 +9256,7 @@ class DjcHelper:
         show_info_only=False,
         get_act_info_only=False,
         **data_extra_params,
-    ) -> Union[dict, IdeActInfo, None]:
+    ) -> dict | IdeActInfo | None:
         if show_info_only:
             self.show_ide_act_info(iActivityId)
             return None
@@ -9305,7 +9326,7 @@ class DjcHelper:
     def temporary_change_bind_and_do(
         self,
         ctx: str,
-        change_bind_role_infos: List[TemporaryChangeBindRoleInfo],
+        change_bind_role_infos: list[TemporaryChangeBindRoleInfo],
         check_func: Callable,
         callback_func: Callable[[RoleInfo], bool],
         need_try_func: Callable[[RoleInfo], bool] = None,
@@ -9503,7 +9524,13 @@ class DjcHelper:
     def fetch_club_vip_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> LoginResult:
         return self.fetch_login_result(ctx, QQLogin.login_mode_club_vip, cache_max_seconds=cache_max_seconds)
 
-    def fetch_login_result(self, ctx: str, login_mode: str, cache_max_seconds: int = 0, cache_validate_func: Optional[Callable[[Any], bool]] = None) -> LoginResult:
+    def fetch_login_result(
+        self,
+        ctx: str,
+        login_mode: str,
+        cache_max_seconds: int = 0,
+        cache_validate_func: Callable[[Any], bool] | None = None,
+    ) -> LoginResult:
         logger.warning(color("bold_yellow") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
 
         return with_cache(
@@ -9532,7 +9559,9 @@ class DjcHelper:
         return lr
 
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
-        return self.fetch_login_result(ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid)
+        return self.fetch_login_result(
+            ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid
+        )
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
         if lr.openid == "" or lr.xinyue_access_token == "":
@@ -9561,7 +9590,7 @@ class DjcHelper:
 
         return 0
 
-    def parse_jifenOutput(self, res: dict, count_id: str) -> Tuple[int, int]:
+    def parse_jifenOutput(self, res: dict, count_id: str) -> tuple[int, int]:
         """
         解析并返回对应的总数和剩余值
         """
@@ -9596,7 +9625,7 @@ class DjcHelper:
 
 
 def async_run_all_act(
-    account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: List[Tuple[str, Callable]]
+    account_config: AccountConfig, common_config: CommonConfig, activity_funcs_to_run: list[tuple[str, Callable]]
 ):
     pool_size = len(activity_funcs_to_run)
     logger.warning(color("bold_yellow") + f"将使用{pool_size}个进程并行运行{len(activity_funcs_to_run)}个活动")
@@ -9654,7 +9683,7 @@ def is_new_version_ark_lottery() -> bool:
     return fake_djc_helper().is_new_version_ark_lottery()
 
 
-def get_prize_names() -> List[str]:
+def get_prize_names() -> list[str]:
     return fake_djc_helper().dnf_ark_lottery_get_prize_names()
 
 
@@ -9711,7 +9740,7 @@ if __name__ == "__main__":
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
-    qq_to_djcHelper: Dict[str, DjcHelper] = {}
+    qq_to_djcHelper: dict[str, DjcHelper] = {}
 
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]

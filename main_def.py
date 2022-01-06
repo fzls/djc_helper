@@ -465,7 +465,9 @@ def send_card(
                 index: str
 
                 if is_new_version_ark_lottery():
-                    send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(card_name, target_qq, target_djc_helper=qq_to_djcHelper[target_qq])
+                    send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(
+                        card_name, target_qq, target_djc_helper=qq_to_djcHelper[target_qq]
+                    )
 
                     index = new_ark_lottery_parse_index_from_card_id(card_name)
                 else:
@@ -1037,8 +1039,13 @@ def try_report_usage_info(cfg: Config):
         increase_counter(ga_category="login_mode", name=account_config.login_mode)
 
         increase_counter(ga_category="enable_xinyue_team_auto_match", name=account_config.enable_auto_match_xinyue_team)
-        increase_counter(ga_category="enable_auto_match_dnf_chronicle", name=account_config.dnf_helper_info.enable_auto_match_dnf_chronicle)
-        increase_counter(ga_category="enable_fixed_dnf_chronicle_partner", name=account_config.dnf_helper_info.pUserId != "")
+        increase_counter(
+            ga_category="enable_auto_match_dnf_chronicle",
+            name=account_config.dnf_helper_info.enable_auto_match_dnf_chronicle,
+        )
+        increase_counter(
+            ga_category="enable_fixed_dnf_chronicle_partner", name=account_config.dnf_helper_info.pUserId != ""
+        )
 
     # 上报网盘地址，用于区分分发渠道
     if not run_from_src():

@@ -323,6 +323,7 @@ def auto_send_cards(cfg: Config):
             )
             # 最多赠送目标账号今日仍可接收的卡片数
             for send_idx in range_from_one(left_times):
+                logger.info(color("bold_yellow") + f"尝试第 [{send_idx}/{left_times}] 次赠送卡片给 {name}({target_qq})")
                 other_account_has_card = send_card(
                     target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs
                 )

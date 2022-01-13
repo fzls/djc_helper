@@ -9531,7 +9531,7 @@ class DjcHelper:
         cache_max_seconds: int = 0,
         cache_validate_func: Callable[[Any], bool] | None = None,
     ) -> LoginResult:
-        logger.warning(color("bold_yellow") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
+        logger.warning(color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
 
         return with_cache(
             "登录信息",

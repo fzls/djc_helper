@@ -240,7 +240,7 @@ class Urls:
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
-        self.iActivityId_hello_voice = "396564"  # hello语音奖励兑换
+        self.iActivityId_hello_voice = "438826"  # hello语音奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "433531"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路

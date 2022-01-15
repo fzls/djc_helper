@@ -4949,13 +4949,13 @@ class DjcHelper:
         self.check_hello_voice()
 
         def query_coin():
-            res = self.hello_voice_op("hello贝查询", "786955", print_res=False)
+            res = self.hello_voice_op("hello贝查询", "828451", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
             return int(raw_info.sOutValue1)
 
         def query_ticket():
-            res = self.hello_voice_op("兑换券查询", "786954", print_res=False)
+            res = self.hello_voice_op("兑换券查询", "828450", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
             ticket = sum(int(x) for x in raw_info.sOutValue1.split(","))
@@ -4964,41 +4964,40 @@ class DjcHelper:
 
         # ------ 专属福利区 ------
         # Hello见面礼
-        self.hello_voice_op("hello见面礼包", "786970")
+        self.hello_voice_op("hello见面礼包", "828466")
         # hello专属周礼包
-        self.hello_voice_op("hello专属周礼包", "786971")
+        self.hello_voice_op("hello专属周礼包", "828467")
         # hello专属月礼包
-        self.hello_voice_op("hello专属月礼包", "786972")
+        self.hello_voice_op("hello专属月礼包", "828468")
         # hello专属特权礼包
-        self.hello_voice_op("兑换券月限礼包_专属特权礼包-1", "786967")
-        self.hello_voice_op("兑换券月限礼包_专属特权礼包-2(每月Hello端内累积消费满1000钻石可领取)", "786974", "1713843")
+        self.hello_voice_op("兑换券月限礼包_专属特权礼包-1", "828470", "1917676")
 
         # ------ Hello贝兑换区 ------
         # Hello贝兑换
         logger.info(color("bold_green") + "下面Hello贝可兑换的内容已写死，如需调整，请自行修改源码")
-        # self.hello_voice_op("神秘契约礼盒(1天)(150Hello贝)(日限1)", "786973", "1713897")
-        # self.hello_voice_op("闪亮的雷米援助礼盒(5个)(150Hello贝)(日限1)", "786973", "1713901")
-        # self.hello_voice_op("远古精灵的超级秘药(150Hello贝)(日限1)", "786973", "1713940")
-        self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "786975", "1713941")
-        self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "786975", "1713942")
-        # self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "786975", "1713960")
-        self.hello_voice_op("装备提升礼盒*5(800Hello贝)(月限1)", "786976", "1539257")
-        # self.hello_voice_op("时间引导石*20(550Hello贝)(月限1)", "786976", "1713961")
-        # self.hello_voice_op("升级券(lv50~99)(2000Hello贝)(月限1)", "786976", "1713964")
+        # self.hello_voice_op("神秘契约礼盒(1天)(150Hello贝)(日限1)", "828469", "1917677")
+        # self.hello_voice_op("宠物饲料礼袋(10个)(150Hello贝)(日限1)", "828469", "1917678")
+        # self.hello_voice_op("裂缝注视者通行证(150Hello贝)(日限1)", "828469", "1917679")
+        # self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "828471", "1917680")
+        # self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "828471", "1917681")
+        # self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "828471", "1917682")
+        # self.hello_voice_op("升级券(550Hello贝)(月限1)", "828472", "1917684")
+        self.hello_voice_op("灿烂的徽章神秘礼盒(2000Hello贝)(月限1)", "828472", "1917683")
 
         # 活动奖励兑换
-        self.hello_voice_op("时间引导石*20", "787210", "1713965")
-        self.hello_voice_op("神秘契约礼盒(1天)", "787210", "1714031")
-        self.hello_voice_op("黑钻3天", "786978", "1713967")
-        self.hello_voice_op("神器守护珠神秘礼盒", "787210", "1714034")
-        self.hello_voice_op("宠物饲料礼袋（10个）", "787210", "1714035")
-        self.hello_voice_op("升级券(Lv50~99)", "787210", "1714051")
-        self.hello_voice_op("华丽的徽章神秘礼盒", "787210", "1714086")
-        self.hello_voice_op("复活币礼盒 (1个)", "787210", "1714092")
-        self.hello_voice_op("本职业符文神秘礼盒(高级~稀有）", "787210", "1714094")
-        self.hello_voice_op("hello语音专属光环", "786977", "1714098")
-        self.hello_voice_op("hello语音专属称号", "786977", "1714158")
-        self.hello_voice_op("hello语音专属宠物", "786977", "1714163")
+        logger.info(color("bold_green") + "开始尝试兑换 活动奖励的各个兑换券")
+        self.hello_voice_op("时间引导石*20", "828475", "1917685")
+        self.hello_voice_op("黑钻3天", "828474", "1917686")
+        self.hello_voice_op("复活币礼盒 (1个)", "828475", "1917687")
+        self.hello_voice_op("装备品级调整箱礼盒 (1个)", "828540", "1917688")
+        self.hello_voice_op("高级材料礼盒", "828475", "1917689")
+        self.hello_voice_op("升级券(Lv50~99)", "828475", "1917690")
+        self.hello_voice_op("华丽的徽章神秘礼盒", "828475", "1917691")
+        self.hello_voice_op("神器护石神秘礼盒", "828475", "1917692")
+        self.hello_voice_op("高级装扮兑换券礼盒(无期限)", "828470", "1917693")
+        self.hello_voice_op("hello语音专属光环", "828473", "1917694")
+        self.hello_voice_op("hello语音专属称号", "828473", "1917695")
+        self.hello_voice_op("hello语音专属宠物", "828473", "1917696")
 
         # 打印最新信息
         logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
@@ -5010,8 +5009,8 @@ class DjcHelper:
             "hello语音奖励兑换",
             get_act_url("hello语音网页礼包兑换"),
             activity_op_func=self.hello_voice_op,
-            query_bind_flowid="786960",
-            commit_bind_flowid="786959",
+            query_bind_flowid="828456",
+            commit_bind_flowid="828455",
         )
 
     def hello_voice_op(self, ctx, iFlowId, prize="", print_res=True, **extra_params):
@@ -9777,4 +9776,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection_dup()
+        djcHelper.hello_voice()

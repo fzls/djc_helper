@@ -619,8 +619,8 @@ class DnfHelperInfoConfig(ConfigInterface):
 
 class HelloVoiceInfoConfig(ConfigInterface):
     def __init__(self):
-        # hello语音的用户ID
-        # 获取方式：打开hello语音，点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
+        # hello语音（皮皮蟹）的用户ID
+        # 获取方式：打开hello语音（皮皮蟹），点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
         self.hello_id = ""
 
 
@@ -680,7 +680,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_rank = True
         # 是否领取dnf助手编年史活动，额外需要助手userId
         self.get_dnf_helper_chronicle = True
-        # 是否启用hello语音奖励兑换功能，额外需要hello语音的用户ID
+        # 是否启用hello语音（皮皮蟹）奖励兑换功能，额外需要hello语音（皮皮蟹）的用户ID
         self.get_hello_voice = True
         # 是否领取2020DNF嘉年华页面主页面签到活动
         self.get_dnf_carnival = True
@@ -872,7 +872,7 @@ class AccountConfig(ConfigInterface):
         self.wegame_guoqing_exchange_items: List[WegameGuoqingExchangeItemConfig] = []
         # dnf助手信息
         self.dnf_helper_info = DnfHelperInfoConfig()
-        # hello语音相关信息
+        # hello语音（皮皮蟹）相关信息
         self.hello_voice = HelloVoiceInfoConfig()
         # 燃放爆竹相关配置
         self.firecrackers = FirecrackersConfig()

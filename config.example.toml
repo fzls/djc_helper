@@ -375,7 +375,7 @@ get_dnf_female_mage_awaken = true
 get_dnf_rank = true
 # 是否领取dnf助手编年史活动，额外需要助手userId
 get_dnf_helper_chronicle = true
-# 是否启用hello语音奖励兑换功能，额外需要hello语音的用户ID
+# 是否启用hello语音（皮皮蟹）奖励兑换功能，额外需要hello语音（皮皮蟹）的用户ID
 get_hello_voice = true
 # 是否领取2020DNF嘉年华页面主页面签到活动
 get_dnf_carnival = true
@@ -935,10 +935,10 @@ chronicle_lottery = false
 ## 表示领取几次这个奖励
 #count = 1
 
-# hello语音相关信息
+# hello语音（皮皮蟹）相关信息
 [account_configs.hello_voice]
-# hello语音的用户ID
-# 获取方式：打开hello语音，点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
+# hello语音（皮皮蟹）的用户ID
+# 获取方式：打开hello语音（皮皮蟹），点击右下角【我的】tab，在最上方头像框的右侧，昵称下方，有形如【ID：XXXXXX】的字样，其中ID后面这串数字就是用户ID
 hello_id = ""
 
 # 燃放爆竹相关配置

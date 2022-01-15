@@ -1837,11 +1837,11 @@ class AccountConfigUi(QWidget):
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
 
-        # -------------- 区域：hello语音 --------------
+        # -------------- 区域：hello语音（皮皮蟹） --------------
         (
             self.collapsible_box_hello_voice,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音（皮皮蟹）", top_layout)
         self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
 
         # -------------- 区域：其他 --------------
@@ -2153,7 +2153,7 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, "dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
 
         self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
-        add_row(form_layout, "hello语音奖励兑换（需配置hello语音的用户ID）", self.checkbox_get_hello_voice)
+        add_row(form_layout, "hello语音（皮皮蟹）奖励兑换（需配置hello语音（皮皮蟹）的用户ID）", self.checkbox_get_hello_voice)
 
         self.checkbox_get_dnf_dianzan = create_checkbox(cfg.get_dnf_dianzan)
         add_row(form_layout, "DNF共创投票", self.checkbox_get_dnf_dianzan)
@@ -2713,8 +2713,8 @@ class HelloVoiceInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: HelloVoiceInfoConfig):
-        self.lineedit_hello_id = create_lineedit(cfg.hello_id, "hello语音->我的->头像右侧，昵称下方的【ID：XXXXXX】中的XXX那部分")
-        add_row(form_layout, "hello语音的用户ID", self.lineedit_hello_id)
+        self.lineedit_hello_id = create_lineedit(cfg.hello_id, "hello语音（皮皮蟹）->我的->头像右侧，昵称下方的【ID：XXXXXX】中的XXX那部分")
+        add_row(form_layout, "hello语音（皮皮蟹）的用户ID", self.lineedit_hello_id)
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
         cfg.hello_id = self.lineedit_hello_id.text()

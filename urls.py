@@ -79,7 +79,7 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "hello语音网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
+    "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
@@ -240,7 +240,7 @@ class Urls:
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
-        self.iActivityId_hello_voice = "438826"  # hello语音奖励兑换
+        self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "433531"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
@@ -375,7 +375,7 @@ class Urls:
         # 助手活动相关接口
         self.dnf_helper = "https://mwegame.qq.com/act/dnf/destiny/{api}?gameId=10014&roleSwitch=1&toOpenid=&roleId={roleId}&uniqueRoleId={uniqueRoleId}&openid=&serverName={serverName}&toUin={toUin}&cGameId=1006&userId={userId}&serverId={serverId}&token={token}&isMainRole=0&subGameId=10014&areaId={areaId}&gameName=DNF&areaName={areaName}&roleJob={roleJob}&nickname={nickname}&roleName={roleName}&uin={uin}&roleLevel={roleLevel}&"
 
-        # hello语音，额外参数：api，hello_id，type，packid
+        # hello语音（皮皮蟹），额外参数：api，hello_id，type，packid
         self.hello_voice = "https://ulink.game.qq.com/app/1164/c7028bb806cd2d6c/index.php?route=Raward/{api}&iActId=1192&ulenv=&game=dnf&hello_id={hello_id}&type={type}&packid={packid}"
 
         # dnf论坛签到，额外参数：formhash: 论坛formhash

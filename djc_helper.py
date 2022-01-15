@@ -559,7 +559,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("hello语音网页礼包兑换", self.hello_voice),
+            ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
@@ -4931,15 +4931,15 @@ class DjcHelper:
     def get_local_saved_guanjia_openid_file(self):
         return self.local_saved_guanjia_openid_file.format(self.cfg.name)
 
-    # --------------------------------------------hello语音奖励兑换--------------------------------------------
+    # --------------------------------------------hello语音（皮皮蟹）奖励兑换--------------------------------------------
     @try_except()
     def hello_voice(self):
         # （从hello语音app中兑换奖励页点开网页）
-        show_head_line("hello语音奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
+        show_head_line("hello语音（皮皮蟹）奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
         self.show_amesvr_act_info(self.hello_voice_op)
 
         if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
-            logger.warning("未启用hello语音奖励兑换功能，将跳过")
+            logger.warning("未启用hello语音（皮皮蟹）奖励兑换功能，将跳过")
             return
 
         if self.cfg.hello_voice.hello_id == "":
@@ -5002,11 +5002,11 @@ class DjcHelper:
         # 打印最新信息
         logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
 
-        logger.info(color("bold_cyan") + "小助手只进行hello语音的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷")
+        logger.info(color("bold_cyan") + "小助手只进行hello语音（皮皮蟹）的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷")
 
     def check_hello_voice(self):
         self.check_bind_account(
-            "hello语音奖励兑换",
+            "hello语音（皮皮蟹）奖励兑换",
             get_act_url("hello语音网页礼包兑换"),
             activity_op_func=self.hello_voice_op,
             query_bind_flowid="828456",

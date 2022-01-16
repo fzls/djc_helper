@@ -6921,9 +6921,9 @@ class DjcHelper:
             logger.warning("未配置dnf官方论坛的cookie或formhash，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
-        self.check_dnf_bbs()
-
         self.check_dnf_bbs_dup()
+
+        self.check_dnf_bbs()
 
         def signin():
             retryCfg = self.common_cfg.retry
@@ -6985,7 +6985,7 @@ class DjcHelper:
         def query_remaining_quota():
             _query_quota_version_one(
                 "9-12月",
-                self.dnf_bbs_op,
+                self.dnf_bbs_dup_op,
                 "788271",
                 [
                     "一次性材质转换器",
@@ -7003,7 +7003,7 @@ class DjcHelper:
 
             _query_quota_version_one(
                 "12-3月",
-                self.dnf_bbs_dup_op,
+                self.dnf_bbs_op,
                 "821339",
                 [
                     "一次性材质转换器",
@@ -7019,6 +7019,7 @@ class DjcHelper:
                 ],
             )
 
+        @try_except()
         def _query_quota_version_one(ctx: str, op_func: Callable[..., dict], flow_id: str, item_name_list: list[str]):
             res = op_func("查询礼包剩余量", flow_id, print_res=False)
             info = parse_amesvr_common_info(res)
@@ -7031,6 +7032,7 @@ class DjcHelper:
                 messages.append(f"\t{item_name}: {remaining_counts[idx]}")
             logger.info("\n".join(messages))
 
+        @try_except()
         def _query_quota_version_two(
             op_func: Callable[..., dict], flow_id_part_1: str, flow_id_part_2: str, ctx: str, item_name_list: list[str]
         ):
@@ -7053,28 +7055,29 @@ class DjcHelper:
 
             logger.info("\n".join(messages))
 
+        @try_except()
         def try_exchange():
             operations = [
-                ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op),
-                ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_dup_op),
-                ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op),
-                ("9", "821327", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_dup_op),
-                ("4", "788270", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op),
-                ("8", "821327", 1, "纯净的增幅书【25代币券】", self.dnf_bbs_dup_op),
-                ("3", "821327", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_dup_op),
-                ("1", "788270", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op),
-                ("1", "821327", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_dup_op),
-                ("2", "788270", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op),
-                ("2", "821327", 5, "一次性继承装置【2代币券】", self.dnf_bbs_dup_op),
-                ("5", "788270", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op),
-                ("6", "821327", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_dup_op),
-                ("3", "788270", 5, "华丽的徽章神秘礼盒【2代币券】", self.dnf_bbs_op),
-                ("5", "821327", 2, "华丽的徽章神秘礼盒【5代币券】", self.dnf_bbs_dup_op),
-                ("7", "788270", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op),
-                ("7", "821327", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_dup_op),
-                ("8", "788270", 1, "异界气息净化书【25代币券】", self.dnf_bbs_op),
-                ("6", "788270", 1, "抗疲劳秘药 (30点)【12代币券】", self.dnf_bbs_op),
-                ("4", "821327", 1, "灵魂武器袖珍罐【12代币券】", self.dnf_bbs_dup_op),
+                ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_dup_op),
+                ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op),
+                ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_dup_op),
+                ("9", "821327", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op),
+                ("4", "788270", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_dup_op),
+                ("8", "821327", 1, "纯净的增幅书【25代币券】", self.dnf_bbs_op),
+                ("3", "821327", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op),
+                ("1", "788270", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_dup_op),
+                ("1", "821327", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op),
+                ("2", "788270", 5, "一次性继承装置【2代币券】", self.dnf_bbs_dup_op),
+                ("2", "821327", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op),
+                ("5", "788270", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_dup_op),
+                ("6", "821327", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op),
+                ("3", "788270", 5, "华丽的徽章神秘礼盒【2代币券】", self.dnf_bbs_dup_op),
+                ("5", "821327", 2, "华丽的徽章神秘礼盒【5代币券】", self.dnf_bbs_op),
+                ("7", "788270", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_dup_op),
+                ("7", "821327", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op),
+                ("8", "788270", 1, "异界气息净化书【25代币券】", self.dnf_bbs_dup_op),
+                ("6", "788270", 1, "抗疲劳秘药 (30点)【12代币券】", self.dnf_bbs_dup_op),
+                ("4", "821327", 1, "灵魂武器袖珍罐【12代币券】", self.dnf_bbs_op),
             ]
 
             for index_str, flowid, count, name, op_func in operations:
@@ -7116,22 +7119,22 @@ class DjcHelper:
         if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
             return 0
 
-        res = self.dnf_bbs_op("查询代币券", "788271", print_res=False)
+        res = self.dnf_bbs_op("查询代币券", "821339", print_res=False)
         info = parse_amesvr_common_info(res)
         return int(info.sOutValue1)
 
     @try_except()
-    def check_dnf_bbs(self):
+    def check_dnf_bbs_dup(self):
         self.check_bind_account(
             "DNF论坛积分兑换活动",
             "https://dnf.qq.com/act/a20210803act/index.html",
-            activity_op_func=self.dnf_bbs_op,
+            activity_op_func=self.dnf_bbs_dup_op,
             query_bind_flowid="788267",
             commit_bind_flowid="788266",
         )
 
-    def dnf_bbs_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_bbs
+    def dnf_bbs_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bbs_dup
 
         return self.amesvr_request(
             ctx,
@@ -7146,17 +7149,17 @@ class DjcHelper:
         )
 
     @try_except()
-    def check_dnf_bbs_dup(self):
+    def check_dnf_bbs(self):
         self.check_bind_account(
             "DNF论坛积分兑换活动",
             "https://dnf.qq.com/cp/a20211130act/index.html",
-            activity_op_func=self.dnf_bbs_dup_op,
+            activity_op_func=self.dnf_bbs_op,
             query_bind_flowid="821323",
             commit_bind_flowid="821322",
         )
 
-    def dnf_bbs_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_bbs_dup
+    def dnf_bbs_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bbs
 
         return self.amesvr_request(
             ctx,
@@ -9776,4 +9779,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.hello_voice()
+        djcHelper.dnf_bbs()

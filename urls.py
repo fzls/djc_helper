@@ -229,8 +229,8 @@ class Urls:
         self.iActivityId_dnf_helper = "434331"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
-        self.iActivityId_dnf_bbs = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_bbs_dup = "431448"  # DNF论坛积分兑换活动
+        self.iActivityId_dnf_bbs_dup = "397645"  # DNF论坛积分兑换活动
+        self.iActivityId_dnf_bbs = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "419868"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "425699"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动

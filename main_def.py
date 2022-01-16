@@ -1327,7 +1327,7 @@ def show_ask_message_box_sync(cfg: Config):
         return
 
     if (
-        now_before("2022-01-15 23:59:59")
+        now_before("2022-03-31 23:59:59")
         and cfg.common.enable_alipay_redpacket_v2
         and is_daily_first_run("支付宝红包活动")
         and not use_by_myself()

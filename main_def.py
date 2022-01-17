@@ -59,6 +59,7 @@ from util import (
     make_sure_dir_exists,
     md5_file,
     message_box,
+    now_after,
     now_before,
     padLeftRight,
     parse_time,
@@ -1364,6 +1365,15 @@ def show_tips(cfg):
             "使用手机QQ打开: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1"
         ),
     }
+
+    if now_after("2022-01-20 06:00:00"):
+        tips = {
+            **tips,
+
+            "22手机绑定活动": (
+                "手机绑定可领取666欢乐代币券，请自行绑定领取：https://dnf.qq.com/cp/a20211230info/index.html"
+            ),
+        }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")
 

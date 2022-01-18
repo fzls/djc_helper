@@ -684,9 +684,6 @@ class ConfigUi(QFrame):
             form_layout.addWidget(QHLine())
 
             self.push_button_grid_layout_pay_type_name = create_push_button_grid_layout(all_pay_type_names, "Cyan")
-            # for btn in self.push_button_grid_layout_pay_type_name.buttons:
-            #     if btn.text() == "微信支付":
-            #         btn.clicked.connect(self.show_wxpay_in_maintain)
 
             form_layout.addRow("付款方式", self.push_button_grid_layout_pay_type_name)
 
@@ -722,18 +719,6 @@ class ConfigUi(QFrame):
         self.tabs.addTab(tab, "付费相关")
 
         init_collapsible_box_size(self)
-
-    def show_wxpay_in_maintain(self):
-        show_message(
-            "提示",
-            (
-                "支付网站的微信支付渠道暂时在维护中，请选择 支付宝或者QQ钱包 进行支付\n"
-                "\n"
-                "如果你其他两个里没放钱，可以点击【其他功能】tab中第一行最右侧的【显示原来的卡密支付界面】，然后回到当前页面，即可看到卡密的界面。\n"
-                "若卡密网站的微信支付渠道可用，可以在那边下单后再使用卡密~\n"
-            ),
-            disabled_seconds=5,
-        )
 
     def is_card_secret_hidden(self) -> bool:
         return self.collapsible_box_buy_card_secret.isHidden()
@@ -893,6 +878,10 @@ class ConfigUi(QFrame):
 
         pay_type = pay_type_name_to_type[pay_type_name]
 
+        # 检查对应渠道是否在维护中
+        if not self.check_pay_type_name(pay_type_name):
+            return
+
         msg = self.check_qqs(qq, game_qqs)
         if msg != CHECK_RESULT_OK:
             show_message("出错了", msg)
@@ -934,6 +923,25 @@ class ConfigUi(QFrame):
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
+
+    def check_pay_type_name(self, pay_type_name: str) -> bool:
+        # if pay_type_name == "微信支付":
+        #     self.show_pay_type_in_maintain("微信支付", "支付宝或者QQ钱包")
+        #     return False
+
+        return True
+
+    def show_pay_type_in_maintain(self, pay_type_name: str, others: str):
+        show_message(
+            "提示",
+            (
+                f"支付网站的 {pay_type_name} 渠道暂时在维护中，请选择 {others} 进行支付\n"
+                "\n"
+                "如果你其他两个里没放钱，可以点击【其他功能】tab中第一行最右侧的【显示原来的卡密支付界面】，然后回到当前页面，即可看到卡密的界面。\n"
+                f"若卡密网站的 {pay_type_name} 渠道可用，可以在那边下单后再使用卡密~\n"
+            ),
+            disabled_seconds=5,
+        )
 
     def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: list[str]):
         req = SubmitOrderRequest()

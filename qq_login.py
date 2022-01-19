@@ -11,7 +11,7 @@ from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import NoSuchWindowException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -65,6 +65,8 @@ class LoginResult(ConfigInterface):
         xinyue_access_token="",
         qc_access_token="",
         qc_nickname="",
+        iwan_openid="",
+        iwan_access_token="",
     ):
         super().__init__()
         # 使用炎炎夏日活动界面得到
@@ -87,6 +89,10 @@ class LoginResult(ConfigInterface):
         self.xinyue_openid = xinyue_openid
         self.xinyue_access_token = xinyue_access_token
 
+        # 爱玩相关
+        self.iwan_openid = iwan_openid
+        self.iwan_access_token = iwan_access_token
+
         self.guanjia_skey_version = 0
 
 
@@ -100,6 +106,7 @@ class QQLogin:
     login_mode_guanjia = "guanjia"
     login_mode_wegame = "wegame"
     login_mode_club_vip = "club_vip"
+    login_mode_iwan = "iwan"
 
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
 
@@ -583,6 +590,11 @@ class QQLogin:
                     "club.vip.qq.com",
                     self.get_login_url(8000212, 18, "https://club.vip.qq.com/qqvip/acts2021/dnf"),
                 ),
+                self.login_mode_iwan: (
+                    self._login_iwan_real,
+                    "爱玩",
+                    "https://iwan.qq.com/g/gift",
+                ),
             }[login_mode]
 
             ctx = f"{login_type}-{suffix}"
@@ -748,6 +760,63 @@ class QQLogin:
             uin=self.get_cookie("uin"),
             skey=self.get_cookie("skey"),
             p_skey=self.get_cookie("p_skey"),
+        )
+
+    def _login_iwan_real(self, login_type, login_action_fn=None):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            if self.need_reopen_url(login_type):
+                logger.info("打开活动界面")
+                self.open_url_on_start("https://iwan.qq.com/g/gift")
+
+            self.set_window_size()
+            try:
+                logger.info("等待登录按钮出来，确保加载完成")
+                xpath_login = "//div[contains(text(), '点击登录')]"
+                WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                    expected_conditions.element_to_be_clickable((By.XPATH, xpath_login))
+                )
+
+                logger.info("等待3秒，确保加载完成")
+                time.sleep(3)
+
+                logger.info("点击登录按钮")
+                self.driver.find_element(By.XPATH, xpath_login).click()
+                time.sleep(3)
+            except Exception as e:
+                logger.warning("爱玩处理 点击登录按钮 流程失败了，可能是已经处理成功了")
+
+            try:
+                self.driver.find_element(By.CLASS_NAME, "js-check-input").click()
+                time.sleep(2)
+                self.driver.find_element(By.CLASS_NAME, "iwanLogin_qq").click()
+            except Exception as e:
+                logger.warning("爱玩处理 中间同意协议 流程失败了，可能是已经处理成功了")
+
+            logger.info("等待#ptlogin_iframe加载完毕并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
+            )
+            ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
+            self.driver.switch_to.frame(ptlogin_iframe)
+
+        def assert_login_finished_fn():
+            logger.info("等待 切换登录账号 按钮出来，确保加载完成")
+            xpath_switch_login = "//span[contains(text(), '切换登录账号')]"
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                expected_conditions.visibility_of_element_located((By.XPATH, xpath_switch_login))
+            )
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
+
+        # 从cookie中获取openid
+        return LoginResult(
+            iwan_openid=self.get_cookie("vqq_openid"),
+            iwan_access_token=self.get_cookie("vqq_access_token"),
         )
 
     def _login_guanjia(self, login_type, login_action_fn=None):
@@ -1026,6 +1095,8 @@ class QQLogin:
             self.fetch_xinyue_openid_access_token()
         if self.login_mode in [self.login_mode_guanjia]:
             self.wait_for_IED_LOG_INFO2_QC()
+        if self.login_mode in [self.login_mode_iwan]:
+            self.fetch_iwan_openid_access_token()
 
         self.print_cookie()
 
@@ -1123,6 +1194,19 @@ class QQLogin:
         for _i in range(5):
             userinfo = self.driver.get_cookie("uInfo101478239")
             if userinfo is not None:
+                break
+            time.sleep(1)
+
+    def fetch_iwan_openid_access_token(self):
+        logger.info(f"{self.name} 获取爱玩的openid和access_token，用于腾讯视频蚊子腿相关操作")
+        for _i in range(5):
+            openid, access_token = None, None
+            try:
+                openid = self.driver.get_cookie("vqq_openid")
+                access_token = self.driver.get_cookie("vqq_access_token")
+            except Exception:
+                pass
+            if openid is not None and access_token is not None:
                 break
             time.sleep(1)
 
@@ -1234,7 +1318,7 @@ class QQLogin:
             # 更新历史数据
             account_db.increse_success_count(success_xoffset)
             account_db.save()
-        except TimeoutException:
+        except (TimeoutException, NoSuchWindowException):
             logger.info(f"{self.name} 看上去没有出现验证码")
 
     def set_window_size(self):

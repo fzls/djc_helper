@@ -80,11 +80,6 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
-    "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
-    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
-    "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
@@ -96,6 +91,11 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
+    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
+    "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
+    "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",

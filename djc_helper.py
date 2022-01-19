@@ -3554,6 +3554,7 @@ class DjcHelper:
             logger.warning(f"openid和access_token未能成功获取，将无法领取qq视频蚊子腿。access_token={access_token}, openid={openid}")
             return
 
+        self.qq_appid = "101478665"
         self.qq_access_token = access_token
         self.qq_openid = openid
 
@@ -3579,7 +3580,7 @@ class DjcHelper:
         extra_cookies = "; ".join(
             [
                 f"vqq_vuserid={self.get_vuserid()}",
-                "vqq_appid=101478665",
+                f"vqq_appid={self.qq_appid}",
                 f"vqq_access_token={qq_access_token}",
                 f"vqq_openid={qq_openid}",
                 "main_login=qq",

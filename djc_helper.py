@@ -3547,14 +3547,14 @@ class DjcHelper:
                 show_once=True,
             )
 
-        lr = self.fetch_xinyue_login_info("获取openid和access_token")
-        access_token = lr.xinyue_access_token
-        openid = lr.openid
+        lr = self.fetch_iwan_login_info("获取openid和access_token")
+        access_token = lr.iwan_access_token
+        openid = lr.iwan_openid
         if access_token == "" or openid == "":
             logger.warning(f"openid和access_token未能成功获取，将无法领取qq视频蚊子腿。access_token={access_token}, openid={openid}")
             return
 
-        self.qq_appid = "101478665"
+        self.qq_appid = "101489622"
         self.qq_access_token = access_token
         self.qq_openid = openid
 
@@ -3571,16 +3571,17 @@ class DjcHelper:
         self.qq_video_iwan_op("累计 10 天", "uBiO594xn")
         self.qq_video_iwan_op("累计 15 天", "U4urMEDRr")
 
-    def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", print_res=True):
+    def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", qq_appid="", print_res=True):
         role = self.get_dnf_bind_role_copy()
 
         qq_access_token = qq_access_token or self.qq_access_token
         qq_openid = qq_openid or self.qq_openid
+        qq_appid = qq_appid or self.qq_appid
 
         extra_cookies = "; ".join(
             [
                 f"vqq_vuserid={self.get_vuserid()}",
-                f"vqq_appid={self.qq_appid}",
+                f"vqq_appid={qq_appid}",
                 f"vqq_access_token={qq_access_token}",
                 f"vqq_openid={qq_openid}",
                 "main_login=qq",
@@ -9601,15 +9602,27 @@ class DjcHelper:
         )
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
-        if lr.openid == "" or lr.xinyue_access_token == "":
+        return self._is_openid_login_info_valid("101478665", lr.openid, lr.xinyue_access_token)
+
+    def fetch_iwan_login_info(self, ctx) -> LoginResult:
+        return self.fetch_login_result(
+            ctx, QQLogin.login_mode_iwan, cache_max_seconds=-1, cache_validate_func=self.is_iwan_login_info_valid
+        )
+
+    def is_iwan_login_info_valid(self, lr: LoginResult) -> bool:
+        return self._is_openid_login_info_valid("101489622", lr.iwan_openid, lr.iwan_access_token)
+
+    def _is_openid_login_info_valid(self, qq_appid: str, openid: str, access_token: str) -> bool:
+        if qq_appid == "" or openid == "" or access_token == "":
             return False
 
         # {"code": 10001, "msg": "登陆态失效，请重新登录！", "operateGuide": {"operateType": "", "content": "", "isReceiveLimit": false, "isPassCondition": false, "isPassTask": false, "cdKeyInfo": null}}
         res = self.qq_video_iwan_op(
             "检测access token过期",
             "asfYkZs4q",
-            qq_access_token=lr.xinyue_access_token,
-            qq_openid=lr.openid,
+            qq_access_token=access_token,
+            qq_openid=openid,
+            qq_appid=qq_appid,
             print_res=False,
         )
         return res["code"] != 10001

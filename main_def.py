@@ -1364,6 +1364,11 @@ def show_tips(cfg):
         "22年套预购活动": (
             "使用手机QQ打开: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1"
         ),
+        "22春节微信签到活动": (
+            "官方微信公众号【地下城与勇士】的签到活动请自行完成，或者借助于autojs等工具来自动完成，具体思路可以参考我之前写的autojs盖楼活动的流程，自行修改。\n"
+            "手动参与流程：1. 打开公众号 2. 输入【虎年签到】，点进活动页面签到即可\n"
+            "连续签到30天可以领取一个+12强化券。活动目前显示调试中，不知何时会上线\n"
+        )
     }
 
     # if now_after("2022-01-20 06:00:00"):

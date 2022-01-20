@@ -89,10 +89,10 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/20545_145ba002",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
+    "DNF集合站": "https://dnf.qq.com/lbact/a20220121gather/",
     #
     # 已过期活动
     #
-    "DNF集合站": "https://dnf.qq.com/lbact/a20211215gather/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
@@ -238,7 +238,7 @@ class Urls:
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
-        self.iActivityId_dnf_collection = "434453"  # DNF集合站
+        self.iActivityId_dnf_collection = "443735"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速

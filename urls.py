@@ -82,7 +82,6 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20211222care/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20211209plants/indexpc.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20211209xinchun/share.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
@@ -94,6 +93,7 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220120care/index.html",
     #
     # 已过期活动
     #
@@ -290,7 +290,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "44_dOsCdP"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "93_6YpT4D"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
 
         self.ide = "https://{ide_host}/ide/"

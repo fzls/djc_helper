@@ -47,7 +47,7 @@ not_ams_activities = [
     newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
+    newAmsActInfo("管家蚊子腿", "2022-01-20 00:00:00", "2022-02-20 23:59:59"),
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("qq视频蚊子腿-爱玩", "2021-01-20 00:00:00", "2022-02-10 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
@@ -91,10 +91,10 @@ act_name_to_url = {
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220121gather/",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220119wegame/index.html",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     #
     # 已过期活动
     #
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2021121414444511605",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",

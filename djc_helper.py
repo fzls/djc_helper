@@ -115,7 +115,7 @@ from urls import (
     get_ide_act_desc,
     get_not_ams_act,
     get_not_ams_act_desc,
-    not_know_end_time,
+    not_know_end_time____,
     search_act,
 )
 from usage_count import increase_counter
@@ -476,7 +476,7 @@ class DjcHelper:
 
                     op_func_name = act_func.__name__ + "_op"
 
-                    end_time = parse_time(not_know_end_time)
+                    end_time = parse_time(not_know_end_time____)
                     # 可能是非ams活动
                     act_info = None
                     try:

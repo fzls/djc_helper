@@ -24,7 +24,7 @@ from util import (
 )
 
 
-def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
+def newNotAmsActInfo(dtBeginTime: str, dtEndTime: str, sActivityName: str) -> AmsActInfo:
     info = AmsActInfo()
     info.iActivityId = "000000"
     info.sActivityName = sActivityName
@@ -34,32 +34,33 @@ def newAmsActInfo(sActivityName, dtBeginTime, dtEndTime):
     return info
 
 
-not_know_start_time = "2000-01-01 00:00:00"
+not_know_start_time__ = "2000-01-01 00:00:00"
 # 不知道时间的统一把时间设定为后年年初-。-
-not_know_end_time = format_time(
+not_know_end_time____ = format_time(
     get_now().replace(year=get_now().year + 2, month=1, day=1, hour=0, second=0, microsecond=0)
 )
 
-month_start_day, month_end_day = start_and_end_date_of_a_month(get_now())
+_msd, _med = start_and_end_date_of_a_month(get_now())
+month_start_day______, month_end_day________ = format_time(_msd), format_time(_med)
 
 not_ams_activities = [
-    newAmsActInfo("道聚城", not_know_start_time, not_know_end_time),
-    newAmsActInfo("黑钻礼包", not_know_start_time, not_know_end_time),
-    newAmsActInfo("腾讯游戏信用礼包", not_know_start_time, not_know_end_time),
-    newAmsActInfo("心悦app", not_know_start_time, not_know_end_time),
-    newAmsActInfo("管家蚊子腿", "2022-01-20 00:00:00", "2022-02-20 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
-    newAmsActInfo("qq视频蚊子腿-爱玩", "2021-01-20 00:00:00", "2022-02-10 23:59:59"),
-    newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
-    newAmsActInfo("超级会员", "2021-01-20 00:00:00", "2022-02-28 23:59:59"),
-    newAmsActInfo("黄钻", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
-    newAmsActInfo("集卡", "2021-01-19 00:00:00", "2022-02-20 23:59:59"),
-    newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
-    newAmsActInfo("colg每日签到", "2022-01-20 00:00:00", "2022-03-02 23:59:59"),
-    newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
-    newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
-    newAmsActInfo("虎牙", "2021-09-11 00:00:00", "2021-10-13 23:59:59"),
-    newAmsActInfo("WeGame活动_新版", "2021-12-13 00:00:00", "2021-12-31 23:59:59"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "道聚城"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "心悦app"),
+    newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-20 23:59:59", "管家蚊子腿"),
+    newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
+    newNotAmsActInfo("2021-01-20 00:00:00", "2022-02-10 23:59:59", "qq视频蚊子腿-爱玩"),
+    newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),
+    newNotAmsActInfo("2021-01-20 00:00:00", "2022-02-28 23:59:59", "超级会员"),
+    newNotAmsActInfo("2021-12-16 00:00:00", "2022-01-16 23:59:59", "黄钻"),
+    newNotAmsActInfo("2021-01-19 00:00:00", "2022-02-20 23:59:59", "集卡"),
+    newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
+    newNotAmsActInfo("2022-01-20 00:00:00", "2022-03-02 23:59:59", "colg每日签到"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
+    newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
+    newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
+    newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
 ]
 
 act_name_to_url = {

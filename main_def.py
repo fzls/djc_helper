@@ -1361,13 +1361,17 @@ def show_tips(cfg):
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
-        "22年套预购活动": (
-            "使用手机QQ打开: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1"
-        ),
         "22春节微信签到活动": (
             "官方微信公众号【地下城与勇士】的签到活动请自行完成，或者借助于autojs等工具来自动完成，具体思路可以参考我之前写的autojs盖楼活动的流程，自行修改。\n"
             "手动参与流程：1. 打开公众号 2. 输入【虎年签到】，点进活动页面签到即可\n"
             "连续签到30天可以领取一个+12强化券。活动目前显示调试中，不知何时会上线\n"
+        ),
+        "22春节手动参与的活动": (
+            "以下活动请手动参与:\n"
+            "1. 心悦充值点花灯 https://xinyue.qq.com/act/a20211209xinchun/share.html\n"
+            "2. 预购活动 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1\n"
+            "3. 年套补给站 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xcjqdhz_lottery&pf=__mds_dnf_dy_xzs\n"
+            "4. 拼团活动 尚未放出链接"
         )
     }
 

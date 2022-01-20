@@ -54,6 +54,7 @@ from dao import (
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
     IdeActInfo,
+    MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
     NewArkLotteryAgreeRequestCardResult,
@@ -562,7 +563,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("DNF心悦", self.dnf_xinyue),
             ("会员关怀", self.dnf_vip_mentor),
@@ -576,6 +576,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("魔界人探险记", self.mojieren),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6692,7 +6693,6 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     @try_except()
     def majieluo(self):
-        # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("DNF马杰洛的规划")
         self.show_idesvr_act_info(self.majieluo_op)
 
@@ -6702,9 +6702,14 @@ class DjcHelper:
 
         self.check_majieluo()
 
+        def query_info() -> MaJieLuoInfo:
+            raw_res = self.majieluo_op("查询信息", "116819", print_res=False)
+
+            return MaJieLuoInfo().auto_update_config(raw_res["jData"])
+
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "113787")
+            self.majieluo_op("领取见面礼", "116809")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -6714,10 +6719,15 @@ class DjcHelper:
             take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
-        self.majieluo_op("每日登录礼包", "113788")
-        self.majieluo_op("每日通关史诗之路礼包", "113857")
-        self.majieluo_op("累计7天礼包", "113867")
-        self.majieluo_op("累计14天礼包", "113882")
+        self.majieluo_op("每日登录礼包", "116810")
+        self.majieluo_op("每日通关史诗之路礼包", "116813")
+
+        # 抽奖
+        info = query_info()
+        lottery_times = int(info.iDraw)
+        logger.info(color("bold_cyan") + f"当前抽奖次数为 {lottery_times}")
+        for idx in range_from_one(lottery_times):
+            self.majieluo_op(f"{idx}/{lottery_times} 幸运抽奖", "116816")
 
         # 赠送礼盒
         self.majieluo_permit_social()
@@ -6745,34 +6755,43 @@ class DjcHelper:
             f"马杰洛赠送提示_{get_act_url('DNF马杰洛的规划')}",
             show_once=True,
         )
-        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次，总共需要30次~")
+        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次")
 
-        self.majieluo_op("累计赠送30次礼包", "113887")
-
-        # 提取得福利
-        stoneCount = self.query_stone_count()
-        logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
+        # self.majieluo_op("累计赠送30次礼包", "113887")
+        #
+        # # 提取得福利
+        # stoneCount = self.query_stone_count()
+        # logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
-        endTime = get_today(parse_time(act_info.dev.action.sDownDate))
+        sDownDate = act_info.dev.action.sDownDate
+        if sDownDate == not_know_end_time____:
+            # re: 如果活动配置表未配置dev字段，则需要手动设置过期时间，确保后续流程执行正常
+            sDownDate = "2022-02-16 00:00:00"
+        endTime = get_today(parse_time(sDownDate))
 
-        takeStone = False
-        takeStoneFlowId = "113898"
-        maxStoneCount = 1500
-        if stoneCount >= maxStoneCount:
-            # 达到上限
-            self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(maxStoneCount // 100))
-            takeStone = True
-        elif get_today() == endTime:
-            # 今天是活动最后一天
-            self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(stoneCount // 100))
-            takeStone = True
-        else:
-            logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
+        if get_today() == endTime:
+            # 最后一天再领取仅可领取单次的奖励
+            self.majieluo_op("福气礼包", "116817")
+            self.majieluo_op("幸运礼包", "116818")
 
-        if takeStone:
-            self.majieluo_op("提取引导石大于1000礼包", "113902")
-            # self.majieluo_op("分享得好礼", "769008")
+        # takeStone = False
+        # takeStoneFlowId = "113898"
+        # maxStoneCount = 1500
+        # if stoneCount >= maxStoneCount:
+        #     # 达到上限
+        #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(maxStoneCount // 100))
+        #     takeStone = True
+        # elif get_today() == endTime:
+        #     # 今天是活动最后一天
+        #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(stoneCount // 100))
+        #     takeStone = True
+        # else:
+        #     logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
+
+        # if takeStone:
+        #     self.majieluo_op("提取引导石大于1000礼包", "113902")
+        #     # self.majieluo_op("分享得好礼", "769008")
 
     def majieluo_permit_social(self):
         self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="MJL", sActivityInfo="MJL13")
@@ -6798,18 +6817,18 @@ class DjcHelper:
     def majieluo_open_box(self, scode: str) -> tuple[int, str]:
         self.majieluo_permit_social()
 
-        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "113775", sCode=scode)
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "116801", sCode=scode)
         return raw_res["iRet"], raw_res["sMsg"]
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询邀请数目", "113782", print_res=False)
+        res = self.majieluo_op("查询邀请数目", "116819", print_res=False)
 
-        return len(res["jData"]["result"])
+        return len(res["jData"]["iSend"])
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "114424", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "116821", print_res=False)
 
         return int(res["jData"]["iStones"])
 
@@ -10075,4 +10094,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.mojieren()
+        djcHelper.majieluo()

@@ -1742,6 +1742,21 @@ class MoJieRenHoldItem(ConfigInterface):
         self.iLeftNum = 0
 
 
+class MaJieLuoInfo(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "ok"
+        self.jHolds = {}
+        self.iLogined = "1"
+        self.iSend = "0"
+        self.iOpen = "0"
+        self.iDrawed = "0"
+        self.iDraw = "0"
+        self.iFuqi = "40"
+        self.iPassed = "0"
+        self.iLuck = "0"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

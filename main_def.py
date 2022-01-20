@@ -71,6 +71,7 @@ from util import (
     remove_none_from_list,
     run_from_src,
     show_head_line,
+    show_quick_edit_mode_tip,
     sync_configs,
     tableify,
     time_less,
@@ -87,7 +88,7 @@ if is_windows():
     import win32con
 
 
-def has_any_account_in_normal_run(cfg):
+def has_any_account_in_normal_run(cfg: Config):
     for _idx, account_config in enumerate(cfg.account_configs):
         if not account_config.is_enabled():
             # 未启用的账户的账户不走该流程
@@ -1348,7 +1349,7 @@ def show_ask_message_box_sync(cfg: Config):
 
 
 @try_except()
-def show_tips(cfg):
+def show_tips(cfg: Config):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("一些小提示")
@@ -1408,6 +1409,9 @@ def show_tips(cfg):
 
     # 尝试给自己展示一些提示
     show_tips_for_myself()
+
+    if cfg.common.disable_cmd_quick_edit:
+        show_quick_edit_mode_tip()
 
 
 def show_tips_for_myself():

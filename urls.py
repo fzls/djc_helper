@@ -287,8 +287,11 @@ class Urls:
         # ide通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID
         #   https://comm.ams.game.qq.com/ide/page/{actId}
+        #
+        # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_majieluo = "44_dOsCdP"  # DNF马杰洛的规划
+        self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (

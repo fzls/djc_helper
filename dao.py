@@ -1058,9 +1058,11 @@ class IdeDevInfo(ConfigInterface):
 
 class IdeActionInfo(ConfigInterface):
     def __init__(self):
-        self.sName = "马杰洛的关怀第十三期"
-        self.sUpDate = "2021-12-14 10:11:59"
-        self.sDownDate = "2022-01-19 23:59:59"
+        from urls import not_know_end_time____, not_know_start_time__
+
+        self.sName = "无法获取活动名称"
+        self.sUpDate = not_know_start_time__
+        self.sDownDate = not_know_end_time____
 
 
 class IdeFlowInfo(ConfigInterface):
@@ -1709,6 +1711,35 @@ class CreateWorkInfo(ConfigInterface):
         self.videoDirection = 0
         self.iGlanceNum = "50"
         self.iPraiseNum = "528"
+
+
+class MoJieRenInfo(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "ok"
+        self.cubeNum = "0"
+        self.lotteryNum = "0"
+        self.iCurrPos = "7"
+        self.iCurrRound = "1"
+        self.iExploreTimes = "2"
+        self.hold = MoJieRenHoldInfo()
+        self.inviteList = []
+        self.task = {}
+
+
+class MoJieRenHoldInfo(ConfigInterface):
+    def __init__(self):
+        self.round1 = MoJieRenHoldItem()
+        self.round2 = MoJieRenHoldItem()
+        self.round3 = MoJieRenHoldItem()
+        self.adventure30 = MoJieRenHoldItem()
+        self.loginGift = MoJieRenHoldItem()
+        self.returnLoginGift = MoJieRenHoldItem()
+
+
+class MoJieRenHoldItem(ConfigInterface):
+    def __init__(self):
+        self.iLeftNum = 0
 
 
 if __name__ == "__main__":

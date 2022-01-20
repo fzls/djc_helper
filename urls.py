@@ -51,7 +51,7 @@ not_ams_activities = [
     newAmsActInfo("qq视频蚊子腿", "2021-10-18 00:00:00", "2021-11-18 23:59:59"),
     newAmsActInfo("qq视频蚊子腿-爱玩", "2021-01-20 00:00:00", "2022-02-10 23:59:59"),
     newAmsActInfo("会员关怀", "2021-03-31 00:00:00", not_know_end_time),
-    newAmsActInfo("超级会员", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
+    newAmsActInfo("超级会员", "2021-01-20 00:00:00", "2022-02-28 23:59:59"),
     newAmsActInfo("黄钻", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("集卡", "2021-01-19 00:00:00", "2022-02-20 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
@@ -92,10 +92,10 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20220121gather/",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220119wegame/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b",
     #
     # 已过期活动
     #
-    "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/7531_349e4f73",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/20171_a565fd57",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",

@@ -55,6 +55,7 @@ from dao import (
     HuyaUserTaskInfo,
     IdeActInfo,
     MobileGameGiftInfo,
+    MoJieRenInfo,
     NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
@@ -575,6 +576,7 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("魔界人探险记", self.mojieren),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6878,6 +6880,128 @@ class DjcHelper:
             extra_cookies=f"p_skey={p_skey}",
         )
 
+    # --------------------------------------------魔界人探险记--------------------------------------------
+    @try_except()
+    def mojieren(self):
+        # note: 对接新版活动时，记得前往 urls.py 调整活动时间
+        show_head_line("魔界人探险记")
+        self.show_idesvr_act_info(self.mojieren_op)
+
+        if not self.cfg.function_switches.get_mojieren or self.disable_most_activities():
+            logger.warning("未启用领取魔界人探险记活动功能，将跳过")
+            return
+
+        @try_except(return_val_on_except=0)
+        def query_info() -> MoJieRenInfo:
+            raw_res = self.mojieren_op("查询信息", "116512", print_res=False)
+
+            return MoJieRenInfo().auto_update_config(raw_res["jData"])
+
+        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="SJTZ", sActivityInfo="SJTZ")
+
+        self.check_mojieren()
+
+        self.mojieren_op("获取魔方（每日登录）", "115862")
+        self.mojieren_op("幸运勇士魔方", "116434")
+
+        self.mojieren_op("开始探险", "115979")
+
+        # self.mojieren_op("更换当前任务", "116292")
+        self.mojieren_op("完成任务", "116293")
+
+        info = query_info()
+
+        lottery_times = int(info.lotteryNum)
+        logger.info(color("bold_cyan") + f"当前剩余夺宝次数为 {lottery_times}")
+        for idx in range_from_one(lottery_times):
+            self.mojieren_op(f"{idx}/{lottery_times} 奇兵夺宝", "116435")
+
+        accumulative_award_info = [
+            ("116436", "累计完成1轮冒险", info.hold.round1.iLeftNum, int(info.iCurrRound), 1),
+            ("116437", "累计完成2轮冒险", info.hold.round2.iLeftNum, int(info.iCurrRound), 2),
+            ("116458", "累计完成3轮冒险", info.hold.round3.iLeftNum, int(info.iCurrRound), 3),
+            ("116459", "累计完成30次探险", info.hold.adventure30.iLeftNum, int(info.iExploreTimes), 30 - 1),
+        ]
+
+        for flowid, name, iLeftNum, current_val, bounds_val in accumulative_award_info:
+            if iLeftNum < 1:
+                continue
+            if current_val <= bounds_val:
+                continue
+
+            self.mojieren_op(name, flowid)
+
+        logger.warning("分享给流失好友可以获取额外夺宝次数，请自行手动完成")
+        # self.mojieren_op("关系链数据脱敏", "115858")
+        # self.mojieren_op("发送好友ark消息", "115872")
+        # self.mojieren_op("接受邀请", "115853")
+
+    def check_mojieren(self, **extra_params):
+        bind_config = self.mojieren_op("查询活动信息", "", get_act_info_only=True).get_bind_config()
+
+        query_bind_res = self.mojieren_op("查询绑定", bind_config.query_map_id, print_res=False)
+        if query_bind_res["jData"]["bindarea"] is not None:
+            return
+
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            return
+
+        # 若道聚城已绑定dnf角色，则尝试绑定这个角色
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        checkInfo = self.get_dnf_roleinfo(roleinfo)
+        role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
+
+        self.mojieren_op(
+            "提交绑定",
+            bind_config.bind_map_id,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=triple_quote(roleinfo.roleName),
+            sArea=roleinfo.serviceID,
+            sMd5str=checkInfo.md5str,
+            sCheckparam=quote_plus(checkInfo.checkparam),
+            roleJob=role_extra_info.forceid,
+            sAreaName=triple_quote(roleinfo.serviceName),
+        )
+
+    def mojieren_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        cardType="",
+        inviteId="",
+        sendName="",
+        receiveUin="",
+        receiver="",
+        receiverName="",
+        receiverUrl="",
+        giftNum="",
+        p_skey="",
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_mojieren
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("魔界人探险记"),
+            cardType=cardType,
+            inviteId=inviteId,
+            sendName=sendName,
+            receiveUin=receiveUin,
+            receiver=receiver,
+            receiverName=receiverName,
+            receiverUrl=receiverUrl,
+            giftNum=giftNum,
+            **extra_params,
+            extra_cookies=f"p_skey={p_skey}",
+        )
+
+    # --------------------------------------------新版活动统一社交权限接口--------------------------------------------
+
     def dnf_social_relation_permission_op(
         self,
         ctx: str,
@@ -9951,4 +10075,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_yellow_diamond()
+        djcHelper.mojieren()

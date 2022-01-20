@@ -770,6 +770,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_memory = True
         # 是否领取 DNF娱乐赛 活动
         self.get_dnf_game = True
+        # 是否领取 魔界人探险记 活动
+        self.get_mojieren = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

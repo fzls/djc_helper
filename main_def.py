@@ -1371,6 +1371,17 @@ def show_tips(cfg):
         )
     }
 
+    wx_act_flag_file = ".disable_wx_sign_tip"
+    if not exists_flag_file(wx_act_flag_file) and is_daily_first_run("22春节微信签到活动"):
+        async_message_box(
+            (
+                "请打开微信，在【地下城与勇士】公众号 输入【虎年签到】，参与签到活动。累计30天可以领取+12强化券。\n"
+                "\n"
+                f"如果不想要每天弹出本提示，请在小助手目录创建名为 {wx_act_flag_file} 的文件或者目录来关闭本提示\n"
+            ),
+            "微信签到每日提示"
+        )
+
     # if now_after("2022-01-20 06:00:00"):
     #     tips = {
     #         **tips,

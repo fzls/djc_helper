@@ -1372,7 +1372,7 @@ def show_tips(cfg: Config):
             "1. 心悦充值点花灯 https://xinyue.qq.com/act/a20211209xinchun/share.html\n"
             "2. 预购活动 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1\n"
             "3. 年套补给站 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xcjqdhz_lottery&pf=__mds_dnf_dy_xzs\n"
-            "4. 拼团活动 尚未放出链接"
+            "4. 拼团活动 https://club.vip.qq.com/qqvip/acts2022/dnfGroup?_wv=16777216"
         ),
         "22春节联动会员活动": (
             "以下活动是各种会员联动，购买对应会员后可以领取特定奖励，以及兑换部分奖励\n"

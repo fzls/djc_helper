@@ -569,6 +569,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("colg每日签到", self.colg_signin),
+            ("dnf助手活动Dup", self.dnf_helper_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -3893,6 +3894,116 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("dnf助手活动"),
+            sArea=roleinfo.serviceID,
+            serverId=roleinfo.serviceID,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+            uin=qq,
+            skey=self.cfg.account_info.skey,
+            nickName=quote_plus(quote_plus(dnf_helper_info.nickName)),
+            userId=dnf_helper_info.userId,
+            token=quote_plus(quote_plus(dnf_helper_info.token)),
+            **extra_params,
+        )
+
+        # 1000017016: 登录态失效,请重新登录
+        if (
+            res is not None
+            and type(res) is dict
+            and res["flowRet"]["iRet"] == "700"
+            and "登录态失效" in res["flowRet"]["sMsg"]
+        ):
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
+
+            raise RuntimeError("dnf助手token过期，请重试获取")
+
+        return res
+
+    @try_except()
+    def dnf_helper_dup(self):
+        show_head_line("dnf助手活动Dup")
+
+        if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
+            logger.warning("未启用领取dnf助手活动功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.show_amesvr_act_info(self.dnf_helper_dup_op)
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动Dup')}")
+            return
+
+        @try_except(return_val_on_except=0)
+        def query_signin_count() -> int:
+            raw_res = self.dnf_helper_dup_op("查询", "828448", print_res=False)
+            info = parse_amesvr_common_info(raw_res)
+
+            count = int(info.sOutValue2.split(";")[1])
+            return count
+
+        self.dnf_helper_dup_op("异界寻宝", "828436")
+        total_count = query_signin_count()
+        logger.info(color("bold_yellow") + f"当前累计每日摘取次数为: {total_count} 次")
+
+        award_infos = [
+            (1, "828438"),
+            (2, "828439"),
+            (4, "828440"),
+            (7, "828441"),
+            (10, "828442"),
+            (12, "828443"),
+            (15, "828444"),
+            (19, "828445"),
+            (25, "828477"),
+        ]
+        for require_days, flowid in award_infos:
+            if total_count >= require_days:
+                self.dnf_helper_dup_op(f"摘取 {require_days} 次", flowid)
+            else:
+                logger.warning("签到次数不够，跳过尝试领取后续奖励")
+                break
+
+        sign_infos = [
+            ("20220125", "828478"),
+            ("20220126", "828565"),
+            ("20220131", "828566"),
+            ("20220201", "828567"),
+            ("20220203", "828568"),
+            ("20220205", "828569"),
+            ("20220208", "828570"),
+            ("20220215", "828571"),
+        ]
+        today = get_today()
+        logger.info(f"今天是 {today}")
+        for sign_date, flowid in sign_infos:
+            if today == sign_date:
+                self.dnf_helper_dup_op(f"限时领取 - {sign_date}", flowid)
+            else:
+                logger.warning(f"今天不是 {sign_date}，将跳过该签到奖励")
+
+    def dnf_helper_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_helper_dup
+
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        qq = self.qq()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("dnf助手活动Dup"),
             sArea=roleinfo.serviceID,
             serverId=roleinfo.serviceID,
             sRoleId=roleinfo.roleCode,
@@ -9827,4 +9938,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_helper_dup()

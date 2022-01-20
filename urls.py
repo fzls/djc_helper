@@ -88,6 +88,7 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/20545_145ba002",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html",
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
     #
     # 已过期活动
     #
@@ -227,6 +228,7 @@ class Urls:
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "434331"  # DNF助手活动
+        self.iActivityId_dnf_helper_dup = "438820"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动

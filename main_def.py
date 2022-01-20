@@ -1373,6 +1373,12 @@ def show_tips(cfg: Config):
             "2. 预购活动 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1\n"
             "3. 年套补给站 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xcjqdhz_lottery&pf=__mds_dnf_dy_xzs\n"
             "4. 拼团活动 尚未放出链接"
+        ),
+        "22春节联动会员活动": (
+            "以下活动是各种会员联动，购买对应会员后可以领取特定奖励，以及兑换部分奖励\n"
+            "1. QQ视频 https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html\n"
+            "2. 超级会员 https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b\n"
+            "3. 黄钻 https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c\n"
         )
     }
 

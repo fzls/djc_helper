@@ -55,7 +55,7 @@ not_ams_activities = [
     newAmsActInfo("黄钻", "2021-12-16 00:00:00", "2022-01-16 23:59:59"),
     newAmsActInfo("集卡", "2021-01-19 00:00:00", "2022-02-20 23:59:59"),
     newAmsActInfo("DNF助手编年史", format_time(month_start_day), format_time(month_end_day)),
-    newAmsActInfo("colg每日签到", "2021-09-17 00:00:00", "2021-10-19 23:59:59"),
+    newAmsActInfo("colg每日签到", "2022-01-20 00:00:00", "2022-03-02 23:59:59"),
     newAmsActInfo("小酱油周礼包和生日礼包", not_know_start_time, not_know_end_time),
     newAmsActInfo("qq会员杯", "2021-09-19 00:00:00", "2021-10-5 23:59:59"),
     newAmsActInfo("虎牙", "2021-09-11 00:00:00", "2021-10-13 23:59:59"),

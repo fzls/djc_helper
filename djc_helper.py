@@ -574,11 +574,11 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("管家蚊子腿", self.guanjia_new),
             ("超级会员", self.dnf_super_vip),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
-            ("黄钻", self.dnf_yellow_diamond),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("WeGame活动_新版", self.wegame_new),
             ("DNF娱乐赛", self.dnf_game),
@@ -2114,7 +2114,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "34634_14bbfc02"
+        lucky_act_id = "37313_ae768ddf"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2123,20 +2123,20 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "34635_194d13ce")
+        self.qzone_act_op("勇士见面礼", "37314_5c4b5cec")
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"
         ):
             self.qzone_act_op(
                 "分享给自己",
-                "34636_5621512c",
+                "37315_d10cc950",
                 act_req_data={
                     "receivers": [
                         self.qq(),
                     ]
                 },
             )
-        self.qzone_act_op("分享领取礼包", "34637_20bfcb49")
+        self.qzone_act_op("分享领取礼包", "37316_4aa84e62")
 
     # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
     # note：对接流程与上方黄钻完全一致，参照其流程即可
@@ -9951,4 +9951,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_yellow_diamond()

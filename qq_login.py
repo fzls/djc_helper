@@ -1070,9 +1070,14 @@ class QQLogin:
                     + "如果之前版本都是正常的，可以试试切换旧版本chrome - 配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本，并开启 强制使用便携版 开关\n",
                     exc_info=e,
                 )
+
                 if "电脑管家" in login_type:
-                    logger.warning(color("bold_cyan") + "如果一直卡在管家登录流程，可能是你网不行，建议多试几次，真不行就去配置工具关闭管家活动的开关（不是关闭这个登录页面）~")
-                    logger.info("电脑管家模式不尝试短时间重试，直接等待下次重试")
+                    logger.warning(color("bold_green") + "如果一直卡在管家登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 管家 活动 的开关（不是关闭这个登录页面）~")
+                    logger.info("电脑管家 模式不尝试短时间重试，直接等待下次重试")
+                    break
+                if "iwan" in login_type:
+                    logger.warning(color("bold_green") + "如果一直卡在 iwan 登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 qq视频 活动 的开关（不是关闭这个登录页面）~")
+                    logger.info("iwan 模式不尝试短时间重试，直接等待下次重试")
                     break
 
                 if idx < max_try:

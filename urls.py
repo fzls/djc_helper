@@ -95,6 +95,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220120care/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20220120index/index.html",
     #
     # 已过期活动
     #
@@ -108,7 +109,6 @@ act_name_to_url = {
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20211118index/",
     "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
@@ -235,7 +235,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "419868"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "441440"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "442952"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
@@ -283,7 +283,7 @@ class Urls:
             "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}"
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
-            "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}"
+            "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
         )
 
         # ide通用活动

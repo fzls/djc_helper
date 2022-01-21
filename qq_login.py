@@ -788,14 +788,14 @@ class QQLogin:
                 logger.info("点击登录按钮")
                 self.driver.find_element(By.XPATH, xpath_login).click()
                 time.sleep(3)
-            except Exception as e:
+            except Exception:
                 logger.warning("爱玩处理 点击登录按钮 流程失败了，可能是已经处理成功了")
 
             try:
                 self.driver.find_element(By.CLASS_NAME, "js-check-input").click()
                 time.sleep(2)
                 self.driver.find_element(By.CLASS_NAME, "iwanLogin_qq").click()
-            except Exception as e:
+            except Exception:
                 logger.warning("爱玩处理 中间同意协议 流程失败了，可能是已经处理成功了")
 
             try:
@@ -805,7 +805,7 @@ class QQLogin:
                 )
                 ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
                 self.driver.switch_to.frame(ptlogin_iframe)
-            except Exception as e:
+            except Exception:
                 logger.warning("爱玩处理 切换登录iframe 流程失败了，可能是已经处理成功了")
 
         def assert_login_finished_fn():
@@ -1046,7 +1046,7 @@ class QQLogin:
                     WebDriverWait(self.driver, wait_time).until(
                         expected_conditions.invisibility_of_element_located((By.ID, "login"))
                     )
-                except NoSuchWindowException as e:
+                except NoSuchWindowException:
                     logger.debug("这种情况好像不影响登录，可以无视")
 
                 if idx > 1:
@@ -1079,11 +1079,16 @@ class QQLogin:
                 )
 
                 if "电脑管家" in login_type:
-                    logger.warning(color("bold_green") + "如果一直卡在管家登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 管家 活动 的开关（不是关闭这个登录页面）~")
+                    logger.warning(
+                        color("bold_green") + "如果一直卡在管家登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 管家 活动 的开关（不是关闭这个登录页面）~"
+                    )
                     logger.info("电脑管家 模式不尝试短时间重试，直接等待下次重试")
                     break
                 if "iwan" in login_type:
-                    logger.warning(color("bold_green") + "如果一直卡在 iwan 登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 qq视频 活动 的开关（不是关闭这个登录页面）~")
+                    logger.warning(
+                        color("bold_green")
+                        + "如果一直卡在 iwan 登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 qq视频 活动 的开关（不是关闭这个登录页面）~"
+                    )
                     logger.info("iwan 模式不尝试短时间重试，直接等待下次重试")
                     break
 

@@ -102,6 +102,7 @@ from main_def import (
     has_buy_auto_updater_dlc,
 )
 from network import process_result
+from server import get_pay_server_addr
 from urls import Urls
 from usage_count import increase_counter
 from util import (
@@ -109,7 +110,6 @@ from util import (
     cache_name_download,
     cache_name_user_buy_info,
     clear_login_status,
-    get_pay_server_addr,
     get_random_face,
     hex_str_to_bytes_arr,
     is_valid_qq,

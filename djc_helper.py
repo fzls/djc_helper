@@ -106,6 +106,7 @@ from log import color, logger
 from network import Network, extract_qq_video_message, jsonp_callback_flag
 from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
+from server import get_match_server_api
 from setting import dnf_server_id_to_area_info, dnf_server_id_to_name, parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS, getMillSecondsUnix
 from urls import (
@@ -130,7 +131,6 @@ from util import (
     format_now,
     format_time,
     get_last_week_monday_datetime,
-    get_match_server_api,
     get_meaningful_call_point_for_log,
     get_month,
     get_now,

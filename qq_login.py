@@ -798,12 +798,15 @@ class QQLogin:
             except Exception as e:
                 logger.warning("爱玩处理 中间同意协议 流程失败了，可能是已经处理成功了")
 
-            logger.info("等待#ptlogin_iframe加载完毕并切换")
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
-                expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
-            )
-            ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
-            self.driver.switch_to.frame(ptlogin_iframe)
+            try:
+                logger.info("等待#ptlogin_iframe加载完毕并切换")
+                WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                    expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
+                )
+                ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
+                self.driver.switch_to.frame(ptlogin_iframe)
+            except Exception as e:
+                logger.warning("爱玩处理 切换登录iframe 流程失败了，可能是已经处理成功了")
 
         def assert_login_finished_fn():
             logger.info("等待 切换登录账号 按钮出来，确保加载完成")

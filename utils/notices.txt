@@ -648,5 +648,15 @@
     "open_url": "",
     "expire_at": "2022-01-24 11:14:16",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "卡 爱玩 登录流程",
+    "message": "新的QQ视频活动需要登录【腾讯爱玩】来获取相关票据，部分人可能会在这卡住，可以选择将【配置工具/账号配置/活动开关/qq视频】活动关闭\n",
+    "send_at": "2022-01-21 16:20:32",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-01-28 16:20:32",
+    "show_only_before_version": ""
   }
 ]

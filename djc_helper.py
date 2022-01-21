@@ -5495,35 +5495,21 @@ class DjcHelper:
             return need_continue
 
         # 会员活动
-        def need_try_huiyuan_role(take_lottery_count_role_info: RoleInfo) -> bool:
-            if self.cfg.gonghui_rolename_huiyuan == "":
-                return True
-
-            # 如果设置了指定角色，则仅尝试这个角色
-            return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huiyuan
-
         self.temporary_change_bind_and_do(
             "从当前服务器选择一个公会会员角色参与公会会员活动（优先当前绑定角色）",
-            self.query_dnf_rolelist_for_temporary_change_bind(),
+            self.query_dnf_rolelist_for_temporary_change_bind(role_name=self.cfg.gonghui_rolename_huiyuan),
             self.check_dnf_gonghui,
             guild_member_operations,
-            need_try_func=need_try_huiyuan_role,
+            need_try_func=None,
         )
 
         # 会长活动
-        def need_try_huizhang_role(take_lottery_count_role_info: RoleInfo) -> bool:
-            if self.cfg.gonghui_rolename_huizhang == "":
-                return True
-
-            # 如果设置了指定角色，则仅尝试这个角色
-            return take_lottery_count_role_info.roleName == self.cfg.gonghui_rolename_huizhang
-
         self.temporary_change_bind_and_do(
             "从当前服务器选择一个会长角色参与会长活动（优先当前绑定角色）",
-            self.query_dnf_rolelist_for_temporary_change_bind(),
+            self.query_dnf_rolelist_for_temporary_change_bind(role_name=self.cfg.gonghui_rolename_huizhang),
             self.check_dnf_gonghui,
             guild_chairman_operations,
-            need_try_func=need_try_huizhang_role,
+            need_try_func=None,
         )
 
     # --------------------------------------------DNF强者之路--------------------------------------------
@@ -8028,31 +8014,7 @@ class DjcHelper:
             self.dnf_wegame_op(f"第{i + 1}次 开启补给箱-4礼包抽奖", "833650")
 
         # 达成游戏内容
-        logger.info(color("bold_green") + f"尝试寻找当前绑定区服中的刃影角色来进行领取升级活动奖励")
-        djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
-        take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
-
-        valid_roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
-        target_base_force_name = "神枪手（男）"
-        target_force_name = "合金战士"
-        for idx, role in enumerate(valid_roles):
-            if role.get_force_name() != target_base_force_name:
-                # 跳过不是男枪手的角色
-                continue
-
-            # 临时更新绑定角色为该角色
-            logger.info("")
-            logger.info(
-                color("bold_cyan")
-                + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 {target_base_force_name} {role.rolename} 来尝试领取 {target_force_name} wegame创角和升级奖励"
-            )
-
-            take_lottery_count_role_info.roleCode = role.roleid
-            take_lottery_count_role_info.roleName = role.rolename
-            self.check_dnf_wegame(roleinfo=take_lottery_count_role_info, roleinfo_source="临时切换的领取角色")
-
-            # 领奖
+        def take_hejin_awards():
             self.dnf_wegame_op("创建合金战士获得补给箱", "833308")
             self.dnf_wegame_op("LV1等级礼包", "833309")
             self.dnf_wegame_op("LV50等级礼包", "833310")
@@ -8060,9 +8022,15 @@ class DjcHelper:
             self.dnf_wegame_op("LV95等级礼包", "833312")
             self.dnf_wegame_op("LV100等级礼包", "833313")
 
-        # 切换回原有绑定角色
-        logger.info(color("bold_green") + "所有符合条件的角色尝试领取升级奖励完毕，切换为原有绑定角色")
-        self.check_dnf_wegame()
+            return True
+
+        self.temporary_change_bind_and_do(
+            "尝试寻找当前绑定区服中的 合金战士 角色来进行领取升级活动奖励",
+            self.query_dnf_rolelist_for_temporary_change_bind(base_force_name="神枪手（男）"),
+            self.check_dnf_wegame,
+            take_hejin_awards,
+            need_try_func=None,
+        )
 
         # 抽奖
         self.dnf_wegame_op("登录游戏30min抽奖券", "833314")

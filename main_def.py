@@ -1384,6 +1384,11 @@ def show_tips(cfg: Config):
             "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n"
             "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
         ),
+        "22直播活动": (
+            "斗鱼虎牙的活动请自行完成\n"
+            "斗鱼：https://www.douyu.com/topic/DNFXCFL?rid=5324055\n"
+            "虎牙：https://www.huya.com/g/2#cate-1-5027\n"
+        ),
     }
 
     wx_act_flag_file = ".disable_wx_sign_tip"

@@ -959,7 +959,9 @@ class DjcHelper:
 
         return roleLists
 
-    def query_dnf_rolelist_for_temporary_change_bind(self, base_force_name="", role_name="") -> list[TemporaryChangeBindRoleInfo]:
+    def query_dnf_rolelist_for_temporary_change_bind(
+        self, base_force_name="", role_name=""
+    ) -> list[TemporaryChangeBindRoleInfo]:
         djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 
         temp_change_bind_roles = []

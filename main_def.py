@@ -59,7 +59,6 @@ from util import (
     make_sure_dir_exists,
     md5_file,
     message_box,
-    now_after,
     now_before,
     padLeftRight,
     parse_time,

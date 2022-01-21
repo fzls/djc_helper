@@ -1379,7 +1379,11 @@ def show_tips(cfg: Config):
             "1. QQ视频 https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html\n"
             "2. 超级会员 https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b\n"
             "3. 黄钻 https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c\n"
-        )
+        ),
+        "22魔界人跳一跳": (
+            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n"
+            "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
+        ),
     }
 
     wx_act_flag_file = ".disable_wx_sign_tip"

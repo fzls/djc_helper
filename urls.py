@@ -223,7 +223,7 @@ class Urls:
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
         self.iActivityId_dnf_dianzan = "419223"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
-        self.iActivityId_dnf_welfare_login_gifts = "433305"  # DNF福利中心-登陆游戏领福利
+        self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包

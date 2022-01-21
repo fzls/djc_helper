@@ -5933,14 +5933,9 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNFQKF",
-            "DNFGFLT",
-            "DNFQJQR",
-            "DNFXJY",
-            "充满希望的一天",
-            "冒险新出发",
-            "合金战士降临",
-            "向着希望前进",
+            "CJBBGFLT",
+            "CJBBQKF",
+            "CJQKF",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -5948,12 +5943,12 @@ class DjcHelper:
             exchange_package(sContent)
 
         # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("12.19~21登录礼包", "822889")
-        self.dnf_welfare_login_gifts_op("12.22~25登录礼包", "822890")
-        self.dnf_welfare_login_gifts_op("12.26~12.30", "822891")
+        self.dnf_welfare_login_gifts_op("1月20 - 22日登录礼包", "831262")
+        self.dnf_welfare_login_gifts_op("1月23 - 26日登录礼包", "831263")
+        self.dnf_welfare_login_gifts_op("1月27日 - 2月2日登录礼包", "831264")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "822893", siActivityId=query_siActivityId())
+        self.dnf_welfare_login_gifts_op("分享奖励领取", "831272", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account(
@@ -10210,4 +10205,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_welfare()

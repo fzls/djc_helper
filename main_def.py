@@ -1381,8 +1381,7 @@ def show_tips(cfg: Config):
             "3. 黄钻 https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c\n"
         ),
         "22魔界人跳一跳": (
-            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n"
-            "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
+            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
         ),
         "22直播活动": (
             "斗鱼虎牙的活动请自行完成\n"
@@ -1399,7 +1398,7 @@ def show_tips(cfg: Config):
                 "\n"
                 f"如果不想要每天弹出本提示，请在小助手目录创建名为 {wx_act_flag_file} 的文件或者目录来关闭本提示\n"
             ),
-            "微信签到每日提示"
+            "微信签到每日提示",
         )
 
     # if now_after("2022-01-20 06:00:00"):

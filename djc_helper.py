@@ -4042,7 +4042,9 @@ class DjcHelper:
 
         if self.cfg.dnf_helper_info.token == "":
             extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
-            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动Dup')}")
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动Dup')}"
+            )
             return
 
         @try_except(return_val_on_except=0)
@@ -7987,7 +7989,7 @@ class DjcHelper:
 
         # 达成游戏内容
         logger.info(color("bold_green") + f"尝试寻找当前绑定区服中的刃影角色来进行领取升级活动奖励")
-        djc_roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
         take_lottery_count_role_info = RoleInfo().auto_update_config(to_raw_type(djc_roleinfo))
 
@@ -8001,7 +8003,10 @@ class DjcHelper:
 
             # 临时更新绑定角色为该角色
             logger.info("")
-            logger.info(color("bold_cyan") + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 {target_base_force_name} {role.rolename} 来尝试领取 {target_force_name} wegame创角和升级奖励")
+            logger.info(
+                color("bold_cyan")
+                + f"[{idx + 1}/{len(valid_roles)}] 尝试临时切换领取角色为 {target_base_force_name} {role.rolename} 来尝试领取 {target_force_name} wegame创角和升级奖励"
+            )
 
             take_lottery_count_role_info.roleCode = role.roleid
             take_lottery_count_role_info.roleName = role.rolename
@@ -8029,7 +8034,6 @@ class DjcHelper:
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for i in range(remainingLotteryTimes):
             self.dnf_wegame_op(f"第{i + 1}次抽奖", "833318")
-
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(

@@ -959,13 +959,20 @@ class DjcHelper:
 
         return roleLists
 
-    def query_dnf_rolelist_for_temporary_change_bind(self) -> list[TemporaryChangeBindRoleInfo]:
+    def query_dnf_rolelist_for_temporary_change_bind(self, base_force_name="", role_name="") -> list[TemporaryChangeBindRoleInfo]:
         djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 
         temp_change_bind_roles = []
 
         roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
         for role in roles:
+            if base_force_name != "" and role.get_force_name() != base_force_name:
+                # 若有基础职业限制，则跳过与职业不符合的角色
+                continue
+            if role_name != "" and role.rolename != role_name:
+                # 若指定了名称，则跳过其他角色
+                continue
+
             change_bind_role = TemporaryChangeBindRoleInfo()
             change_bind_role.serviceID = djc_roleinfo.serviceID
             change_bind_role.roleCode = role.roleid

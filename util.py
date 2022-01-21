@@ -1058,11 +1058,15 @@ def show_unexpected_exception_message(e: Exception):
 
 
 def get_pay_server_addr() -> str:
-    return "http://139.198.179.81:8438"
+    return f"http://{get_server_ip()}:8438"
 
 
 def get_match_server_api(api_name="/") -> str:
-    return f"http://139.198.179.81:8439{api_name}"
+    return f"http://{get_server_ip()}:8439{api_name}"
+
+
+def get_server_ip() -> str:
+    return "139.198.179.81"
 
 
 def disable_quick_edit_mode():

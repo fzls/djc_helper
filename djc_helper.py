@@ -8014,7 +8014,7 @@ class DjcHelper:
             self.dnf_wegame_op(f"第{i + 1}次 开启补给箱-4礼包抽奖", "833650")
 
         # 达成游戏内容
-        def take_hejin_awards():
+        def take_hejin_awards(role_info: RoleInfo):
             self.dnf_wegame_op("创建合金战士获得补给箱", "833308")
             self.dnf_wegame_op("LV1等级礼包", "833309")
             self.dnf_wegame_op("LV50等级礼包", "833310")

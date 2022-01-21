@@ -24,6 +24,7 @@ from notice import NoticeManager
 from pool import get_pool, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
+from server import get_pay_server_addr
 from setting import parse_card_group_info_map, zzconfig
 from show_usage import (
     global_usage_counter_name,
@@ -53,7 +54,6 @@ from util import (
     format_now,
     format_time,
     get_appdata_dir,
-    get_pay_server_addr,
     is_run_in_github_action,
     is_windows,
     make_sure_dir_exists,

@@ -537,7 +537,8 @@ class QQLogin:
                     f"document.getElementsByClassName('{tip_class_name}')[0].innerText = '{tip}'; "
                 )
             except Exception as e:
-                logger.warning("替换扫码提示文字出错了（不影响登录流程）", exc_info=e)
+                logger.warning("替换扫码提示文字出错了（不影响登录流程）")
+                logger.debug("", exc_info=e)
 
         def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
@@ -1038,9 +1039,12 @@ class QQLogin:
                 logger.info(
                     f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
                 )
-                WebDriverWait(self.driver, wait_time).until(
-                    expected_conditions.invisibility_of_element_located((By.ID, "login"))
-                )
+                try:
+                    WebDriverWait(self.driver, wait_time).until(
+                        expected_conditions.invisibility_of_element_located((By.ID, "login"))
+                    )
+                except NoSuchWindowException as e:
+                    logger.debug("这种情况好像不影响登录，可以无视")
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据

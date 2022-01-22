@@ -579,6 +579,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("组队拜年", self.team_happy_new_year),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("冒险的起点", self.maoxian_start),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -624,7 +625,6 @@ class DjcHelper:
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
             ("qq视频-AME活动", self.qq_video_amesvr),
-            ("冒险的起点", self.maoxian_start),
             ("qq会员杯", self.dnf_club_vip),
         ]
 
@@ -8246,21 +8246,21 @@ class DjcHelper:
             logger.warning("未启用领取冒险的起点功能，将跳过")
             return
 
-        self.maoxian_start_op("第一天-时间引导石(20个)", "798455")
-        self.maoxian_start_op("第二天-时间引导石(20个)", "798457")
-        self.maoxian_start_op("第三天-升级券", "798458")
-        self.maoxian_start_op("第四天-升级券", "798459")
-        self.maoxian_start_op("第五天-高级材料礼盒", "798460")
-        self.maoxian_start_op("第六天-高级材料礼盒", "798461")
-        self.maoxian_start_op("第七天-时间引导石(100个)", "798462")
+        self.maoxian_start_op("1_copy", "828667")
+        self.maoxian_start_op("2_copy", "828669")
+        self.maoxian_start_op("3_copy", "828670")
+        self.maoxian_start_op("4_copy", "828671")
+        self.maoxian_start_op("5_copy", "828672")
+        self.maoxian_start_op("6_copy", "828673")
+        self.maoxian_start_op("7_copy", "828674")
 
     def check_maoxian(self):
         self.check_bind_account(
             "冒险的起点",
             get_act_url("冒险的起点"),
             activity_op_func=self.maoxian_start_op,
-            query_bind_flowid="798452",
-            commit_bind_flowid="798451",
+            query_bind_flowid="828664",
+            commit_bind_flowid="828663",
         )
 
     def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):

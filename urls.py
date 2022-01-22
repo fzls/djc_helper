@@ -93,6 +93,7 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
+    "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220120care/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220120index/index.html",

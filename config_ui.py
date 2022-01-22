@@ -2236,6 +2236,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_dnf_kol = create_checkbox(cfg.get_dnf_kol)
         add_row(form_layout, "KOL", self.checkbox_get_dnf_kol)
 
+        self.checkbox_get_maoxian_start = create_checkbox(cfg.get_maoxian_start)
+        add_row(form_layout, "冒险的起点", self.checkbox_get_maoxian_start)
+
         self.checkbox_get_maoxian = create_checkbox(cfg.get_maoxian)
         add_row(form_layout, "勇士的冒险补给", self.checkbox_get_maoxian)
 
@@ -2328,6 +2331,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_reserve = self.checkbox_get_dnf_reserve.isChecked()
         cfg.get_dnf_anniversary = self.checkbox_get_dnf_anniversary.isChecked()
         cfg.get_dnf_kol = self.checkbox_get_dnf_kol.isChecked()
+        cfg.get_maoxian_start = self.checkbox_get_maoxian_start.isChecked()
         cfg.get_maoxian = self.checkbox_get_maoxian.isChecked()
         cfg.get_xiaojiangyou = self.checkbox_get_xiaojiangyou.isChecked()
         cfg.get_dnf_gonghui = self.checkbox_get_dnf_gonghui.isChecked()

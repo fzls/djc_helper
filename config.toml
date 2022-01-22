@@ -340,6 +340,8 @@ get_dnf_reserve = true
 get_dnf_anniversary = true
 # 是否领取 KOL 活动
 get_dnf_kol = true
+# 是否领取 冒险的起点 活动
+get_maoxian_start = true
 # 是否领取 勇士的冒险补给 活动
 get_maoxian = true
 # 是否领取 小酱油周礼包和生日礼包 活动

@@ -746,6 +746,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_anniversary = True
         # 是否领取 KOL 活动
         self.get_dnf_kol = True
+        # 是否领取 冒险的起点 活动
+        self.get_maoxian_start = True
         # 是否领取 勇士的冒险补给 活动
         self.get_maoxian = True
         # 是否领取 小酱油周礼包和生日礼包 活动

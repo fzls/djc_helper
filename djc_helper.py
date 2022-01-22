@@ -624,7 +624,7 @@ class DjcHelper:
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
             ("qq视频-AME活动", self.qq_video_amesvr),
-            ("勇士的冒险补给", self.maoxian),
+            ("冒险的起点", self.maoxian_start),
             ("qq会员杯", self.dnf_club_vip),
         ]
 
@@ -8236,35 +8236,35 @@ class DjcHelper:
             **extra_params,
         )
 
-    # --------------------------------------------勇士的冒险补给--------------------------------------------
+    # --------------------------------------------冒险的起点--------------------------------------------
     @try_except()
-    def maoxian(self):
-        show_head_line("勇士的冒险补给")
-        self.show_amesvr_act_info(self.maoxian_op)
+    def maoxian_start(self):
+        show_head_line("冒险的起点")
+        self.show_amesvr_act_info(self.maoxian_start_op)
 
-        if not self.cfg.function_switches.get_maoxian or self.disable_most_activities():
-            logger.warning("未启用领取勇士的冒险补给功能，将跳过")
+        if not self.cfg.function_switches.get_maoxian_start or self.disable_most_activities():
+            logger.warning("未启用领取冒险的起点功能，将跳过")
             return
 
-        self.maoxian_op("第一天-时间引导石(20个)", "798455")
-        self.maoxian_op("第二天-时间引导石(20个)", "798457")
-        self.maoxian_op("第三天-升级券", "798458")
-        self.maoxian_op("第四天-升级券", "798459")
-        self.maoxian_op("第五天-高级材料礼盒", "798460")
-        self.maoxian_op("第六天-高级材料礼盒", "798461")
-        self.maoxian_op("第七天-时间引导石(100个)", "798462")
+        self.maoxian_start_op("第一天-时间引导石(20个)", "798455")
+        self.maoxian_start_op("第二天-时间引导石(20个)", "798457")
+        self.maoxian_start_op("第三天-升级券", "798458")
+        self.maoxian_start_op("第四天-升级券", "798459")
+        self.maoxian_start_op("第五天-高级材料礼盒", "798460")
+        self.maoxian_start_op("第六天-高级材料礼盒", "798461")
+        self.maoxian_start_op("第七天-时间引导石(100个)", "798462")
 
     def check_maoxian(self):
         self.check_bind_account(
-            "勇士的冒险补给",
-            get_act_url("勇士的冒险补给"),
-            activity_op_func=self.maoxian_op,
+            "冒险的起点",
+            get_act_url("冒险的起点"),
+            activity_op_func=self.maoxian_start_op,
             query_bind_flowid="798452",
             commit_bind_flowid="798451",
         )
 
-    def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_maoxian
+    def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_maoxian_start
         return self.amesvr_request(
             ctx,
             "x6m5.ams.game.qq.com",
@@ -8273,7 +8273,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("勇士的冒险补给"),
+            get_act_url("冒险的起点"),
             **extra_params,
         )
 
@@ -10207,4 +10207,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.maoxian_start()

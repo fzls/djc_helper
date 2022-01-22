@@ -6994,10 +6994,16 @@ class DjcHelper:
         self.mojieren_op("获取魔方（每日登录）", "115862")
         self.mojieren_op("幸运勇士魔方", "116434")
 
-        self.mojieren_op("开始探险", "115979")
+        while True:
+            info = query_info()
+            logger.info(color("bold_green") + f"当前位于 第 {info.iCurrRound} 轮 {info.iCurrPos} 格，剩余探索次数为 {info.cubeNum}")
+            if int(info.cubeNum) <= 0:
+                break
 
-        # self.mojieren_op("更换当前任务", "116292")
-        self.mojieren_op("完成任务", "116293")
+            self.mojieren_op(f"开始探险", "115979", startPos=info.iCurrPos)
+
+            # self.mojieren_op("更换当前任务", "116292")
+            self.mojieren_op("尝试完成任务", "116293")
 
         info = query_info()
 
@@ -7014,9 +7020,8 @@ class DjcHelper:
         ]
 
         for flowid, name, iLeftNum, current_val, bounds_val in accumulative_award_info:
-            if iLeftNum < 1:
-                continue
-            if current_val <= bounds_val:
+            if iLeftNum < 1 or current_val <= bounds_val:
+                logger.warning(f"{name} 条件不满足，当前进度为 {current_val}，需要大于 {bounds_val}，将跳过")
                 continue
 
             self.mojieren_op(name, flowid)
@@ -9521,6 +9526,7 @@ class DjcHelper:
                 "dhnums",
                 "sUin",
                 "pointID",
+                "startPos",
             ]
         }
 

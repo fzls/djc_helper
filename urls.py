@@ -301,7 +301,7 @@ class Urls:
         self.ide_raw_data = (
             "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}"
             "&sRoleId={sRoleId}&sRoleName={sRoleName}&sArea={sArea}&sMd5str={sMd5str}&sCheckparam={sCheckparam}&roleJob={roleJob}&sAreaName={sAreaName}"
-            "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}"
+            "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}"
         )
 

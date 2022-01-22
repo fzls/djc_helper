@@ -256,7 +256,7 @@ class Urls:
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "416057"  # DNF KOL
         self.iActivityId_maoxian_start = "407067"  # 冒险的起点
-        self.iActivityId_maoxian_dup = "405979"  # 勇士的冒险补给-回归玩家
+        self.iActivityId_maoxian = "405979"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动

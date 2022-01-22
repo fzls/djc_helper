@@ -6994,7 +6994,7 @@ class DjcHelper:
         self.mojieren_op("获取魔方（每日登录）", "115862")
         self.mojieren_op("幸运勇士魔方", "116434")
 
-        while True:
+        for i in range(10):
             info = query_info()
             logger.info(color("bold_green") + f"当前位于 第 {info.iCurrRound} 轮 {info.iCurrPos} 格，剩余探索次数为 {info.cubeNum}")
             if int(info.cubeNum) <= 0:

@@ -580,6 +580,7 @@ class DjcHelper:
             ("组队拜年", self.team_happy_new_year),
             ("DNF落地页活动", self.dnf_luodiye),
             ("冒险的起点", self.maoxian_start),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -598,7 +599,6 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
-            ("勇士的冒险补给", self.maoxian),
             ("轻松之路", self.dnf_relax_road),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
@@ -8289,26 +8289,25 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_op("邀请一位回归用户礼包", "797248")
-        self.maoxian_op("邀请两位回归用户抽奖", "798383")
-        self.maoxian_op("邀请三位回归用户抽奖", "798434")
+        self.maoxian_op("回归角色登录礼包", "831159")
 
-        self.maoxian_op("回归玩家登录1次", "798441")
-        self.maoxian_op("回归玩家登录2次", "798588")
-        self.maoxian_op("回归玩家登录3次", "798590")
-        self.maoxian_op("回归玩家登录4次", "798592")
+        # self.maoxian_op("抽奖", "831228")
 
-        self.maoxian_op("冒险-在线15分钟", "798596")
-        self.maoxian_op("冒险-在线30分钟", "798597")
-        self.maoxian_op("冒险-通过地下城1次", "798598")
+        self.maoxian_op("每日通关副本", "831378")
+        self.maoxian_op("累计获得每日奖励 - 3次", "831410")
+        self.maoxian_op("累计获得每日奖励 - 5", "831428")
+        self.maoxian_op("累计获得每日奖励 - 8", "831429")
+        self.maoxian_op("累计获得每日奖励 - 12", "831430")
+        self.maoxian_op("累计获得每日奖励 - 16", "831431")
+        self.maoxian_op("累计获得每日奖励 - 20", "831432")
 
     def check_maoxian_dup(self):
         self.check_bind_account(
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
             activity_op_func=self.maoxian_op,
-            query_bind_flowid="800024",
-            commit_bind_flowid="800023",
+            query_bind_flowid="831224",
+            commit_bind_flowid="831223",
         )
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10207,4 +10206,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian_start()
+        djcHelper.maoxian()

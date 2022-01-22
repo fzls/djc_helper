@@ -1,6 +1,7 @@
 import requests
 
 from log import color, logger
+from usage_count import increase_counter
 
 # 可能的服务器列表，优先使用前面的
 server_ip_list = [
@@ -47,6 +48,9 @@ def get_server_ip() -> str:
             logger.warning(f"未发现任何可用服务器，将使用首个服务器 {current_chosen_server_ip}")
 
         logger.info(color("bold_cyan") + f"已初始化服务器为 {current_chosen_server_ip}")
+
+        # 上报选用的服务器ip
+        increase_counter(ga_category="chosen_server_ip", name=current_chosen_server_ip)
 
     return current_chosen_server_ip
 

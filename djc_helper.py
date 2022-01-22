@@ -6927,33 +6927,12 @@ class DjcHelper:
         return int(res["jData"]["iStones"])
 
     def check_majieluo(self, **extra_params):
-        # re: 周末参考ams的绑定流程，改成通用的机制
-        self.majieluo_permit_social()
-
-        bind_config = self.majieluo_op("查询活动信息", "", get_act_info_only=True).get_bind_config()
-
-        query_bind_res = self.majieluo_op("查询绑定", bind_config.query_map_id, print_res=False)
-        if query_bind_res["jData"]["bindarea"] is not None:
-            return
-
-        if "dnf" not in self.bizcode_2_bind_role_map:
-            return
-
-        # 若道聚城已绑定dnf角色，则尝试绑定这个角色
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        checkInfo = self.get_dnf_roleinfo(roleinfo)
-        role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
-
-        self.majieluo_op(
-            "提交绑定",
-            bind_config.bind_map_id,
-            sRoleId=roleinfo.roleCode,
-            sRoleName=triple_quote(roleinfo.roleName),
-            sArea=roleinfo.serviceID,
-            sMd5str=checkInfo.md5str,
-            sCheckparam=quote_plus(checkInfo.checkparam),
-            roleJob=role_extra_info.forceid,
-            sAreaName=triple_quote(roleinfo.serviceName),
+        return self.ide_check_bind_account(
+            "DNF马杰洛的规划",
+            get_act_url("DNF马杰洛的规划"),
+            activity_op_func=self.majieluo_op,
+            sAuthInfo="MJL",
+            sActivityInfo="MJL13",
         )
 
     def majieluo_op(
@@ -7010,8 +6989,6 @@ class DjcHelper:
 
             return MoJieRenInfo().auto_update_config(raw_res["jData"])
 
-        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="SJTZ", sActivityInfo="SJTZ")
-
         self.check_mojieren()
 
         self.mojieren_op("获取魔方（每日登录）", "115862")
@@ -7050,30 +7027,12 @@ class DjcHelper:
         # self.mojieren_op("接受邀请", "115853")
 
     def check_mojieren(self, **extra_params):
-        bind_config = self.mojieren_op("查询活动信息", "", get_act_info_only=True).get_bind_config()
-
-        query_bind_res = self.mojieren_op("查询绑定", bind_config.query_map_id, print_res=False)
-        if query_bind_res["jData"]["bindarea"] is not None:
-            return
-
-        if "dnf" not in self.bizcode_2_bind_role_map:
-            return
-
-        # 若道聚城已绑定dnf角色，则尝试绑定这个角色
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        checkInfo = self.get_dnf_roleinfo(roleinfo)
-        role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
-
-        self.mojieren_op(
-            "提交绑定",
-            bind_config.bind_map_id,
-            sRoleId=roleinfo.roleCode,
-            sRoleName=triple_quote(roleinfo.roleName),
-            sArea=roleinfo.serviceID,
-            sMd5str=checkInfo.md5str,
-            sCheckparam=quote_plus(checkInfo.checkparam),
-            roleJob=role_extra_info.forceid,
-            sAreaName=triple_quote(roleinfo.serviceName),
+        return self.ide_check_bind_account(
+            "魔界人探险记",
+            get_act_url("魔界人探险记"),
+            activity_op_func=self.mojieren_op,
+            sAuthInfo="SJTZ",
+            sActivityInfo="SJTZ",
         )
 
     def mojieren_op(
@@ -9914,6 +9873,42 @@ class DjcHelper:
             logger.info(color("bold_yellow") + "请在完成绑定后按任意键继续")
             pause()
 
+    def ide_check_bind_account(
+        self,
+        activity_name: str,
+        activity_url: str,
+        activity_op_func: Callable,
+        sAuthInfo: str,
+        sActivityInfo: str,
+    ):
+        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo)
+
+        bind_config = activity_op_func(f"查询活动信息 - {activity_name}", "", get_act_info_only=True).get_bind_config()
+
+        query_bind_res = activity_op_func("查询绑定", bind_config.query_map_id, print_res=False)
+        if query_bind_res["jData"]["bindarea"] is not None:
+            return
+
+        if "dnf" not in self.bizcode_2_bind_role_map:
+            return
+
+        # 若道聚城已绑定dnf角色，则尝试绑定这个角色
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        checkInfo = self.get_dnf_roleinfo(roleinfo)
+        role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
+
+        activity_op_func(
+            "提交绑定",
+            bind_config.bind_map_id,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=triple_quote(roleinfo.roleName),
+            sArea=roleinfo.serviceID,
+            sMd5str=checkInfo.md5str,
+            sCheckparam=quote_plus(checkInfo.checkparam),
+            roleJob=role_extra_info.forceid,
+            sAreaName=triple_quote(roleinfo.serviceName),
+        )
+
     def disable_most_activities(self):
         return self.cfg.function_switches.disable_most_activities
 
@@ -10206,4 +10201,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.mojieren()

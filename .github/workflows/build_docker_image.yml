@@ -47,12 +47,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to TencentCloud
-        uses: docker/login-action@v1
-        with:
-          registry: ccr.ccs.tencentyun.com
-          username: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_TOKEN }}
+      #      - name: Login to TencentCloud
+      #        uses: docker/login-action@v1
+      #        with:
+      #          registry: ccr.ccs.tencentyun.com
+      #          username: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_USERNAME }}
+      #          password: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -61,7 +61,7 @@ jobs:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
-            ccr.ccs.tencentyun.com/${{ github.repository }}
+          #  ccr.ccs.tencentyun.com/${{ github.repository }}
           # generate Docker tags based on the following events/attributes
           #   nightly, master, pr-2, 1.2.3, 1.2, 1
           tags: |

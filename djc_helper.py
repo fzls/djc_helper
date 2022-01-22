@@ -597,7 +597,7 @@ class DjcHelper:
             ("qq视频蚊子腿", self.qq_video),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
-            ("勇士的冒险补给", self.maoxian_dup),
+            ("勇士的冒险补给", self.maoxian),
             ("轻松之路", self.dnf_relax_road),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("管家蚊子腿", self.guanjia_new_dup),
@@ -8279,9 +8279,9 @@ class DjcHelper:
 
     # --------------------------------------------勇士的冒险补给--------------------------------------------
     @try_except()
-    def maoxian_dup(self):
+    def maoxian(self):
         show_head_line("勇士的冒险补给")
-        self.show_amesvr_act_info(self.maoxian_dup_op)
+        self.show_amesvr_act_info(self.maoxian_op)
 
         if not self.cfg.function_switches.get_maoxian or self.disable_most_activities():
             logger.warning("未启用领取勇士的冒险补给功能，将跳过")
@@ -8289,30 +8289,30 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_dup_op("邀请一位回归用户礼包", "797248")
-        self.maoxian_dup_op("邀请两位回归用户抽奖", "798383")
-        self.maoxian_dup_op("邀请三位回归用户抽奖", "798434")
+        self.maoxian_op("邀请一位回归用户礼包", "797248")
+        self.maoxian_op("邀请两位回归用户抽奖", "798383")
+        self.maoxian_op("邀请三位回归用户抽奖", "798434")
 
-        self.maoxian_dup_op("回归玩家登录1次", "798441")
-        self.maoxian_dup_op("回归玩家登录2次", "798588")
-        self.maoxian_dup_op("回归玩家登录3次", "798590")
-        self.maoxian_dup_op("回归玩家登录4次", "798592")
+        self.maoxian_op("回归玩家登录1次", "798441")
+        self.maoxian_op("回归玩家登录2次", "798588")
+        self.maoxian_op("回归玩家登录3次", "798590")
+        self.maoxian_op("回归玩家登录4次", "798592")
 
-        self.maoxian_dup_op("冒险-在线15分钟", "798596")
-        self.maoxian_dup_op("冒险-在线30分钟", "798597")
-        self.maoxian_dup_op("冒险-通过地下城1次", "798598")
+        self.maoxian_op("冒险-在线15分钟", "798596")
+        self.maoxian_op("冒险-在线30分钟", "798597")
+        self.maoxian_op("冒险-通过地下城1次", "798598")
 
     def check_maoxian_dup(self):
         self.check_bind_account(
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
-            activity_op_func=self.maoxian_dup_op,
+            activity_op_func=self.maoxian_op,
             query_bind_flowid="800024",
             commit_bind_flowid="800023",
         )
 
-    def maoxian_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_maoxian_dup
+    def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_maoxian
 
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         qq = self.qq()

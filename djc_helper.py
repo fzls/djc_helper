@@ -7000,7 +7000,7 @@ class DjcHelper:
             if int(info.cubeNum) <= 0:
                 break
 
-            self.mojieren_op(f"开始探险", "115979", startPos=info.iCurrPos)
+            self.mojieren_op("开始探险", "115979", startPos=info.iCurrPos)
 
             # self.mojieren_op("更换当前任务", "116292")
             self.mojieren_op("尝试完成任务", "116293")
@@ -9889,7 +9889,9 @@ class DjcHelper:
         roleinfo: RoleInfo = None,
         roleinfo_source="道聚城所绑定的角色",
     ):
-        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo, print_res=False)
+        self.dnf_social_relation_permission_op(
+            "更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo, print_res=False
+        )
 
         bind_config = activity_op_func(f"查询活动信息 - {activity_name}", "", get_act_info_only=True).get_bind_config()
 

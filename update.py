@@ -9,7 +9,7 @@ import requests
 
 from config import CommonConfig
 from dao import UpdateInfo
-from first_run import is_first_run
+from first_run import is_first_run, is_weekly_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
 from util import async_message_box, bypass_proxy, is_run_in_github_action, is_windows, try_except, use_proxy
@@ -132,14 +132,23 @@ def update_fallback(config: CommonConfig):
             + "\n（无法理解上面这段话的话，就当没看见这段话，对正常功能没有任何影响）"
         )
 
-        # 如果一直连不上github，则尝试判断距离上次更新的时间是否已经很长
-        time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
-        if time_since_last_update.days >= 7:
-            msg = f"无法访问github确认是否有新版本，而当前版本更新于{ver_time}，距今已有{time_since_last_update}，很可能已经有新的版本，建议打开目录中的[网盘链接]看看是否有新版本，或者购买自动更新DLC省去手动更新的操作\n\n（如果已购买自动更新DLC，就无视这句话）"
-            logger.info(color("bold_green") + msg)
-            if is_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-                win32api.MessageBox(0, msg, "更新提示", win32con.MB_ICONINFORMATION)
-                webbrowser.open(config.netdisk_link)
+
+@try_except()
+def notify_manual_check_update_on_release_too_long(config: CommonConfig):
+    time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
+    if time_since_last_update.days >= 14:
+        msg = (
+            f"当前版本更新于{ver_time}，距今已有{time_since_last_update}。\n"
+            "可能原因如下:\n"
+            f"    购买了DLC：可能是dlc出了bug，后续版本可能已经修复\n"
+            f"    未购买DLC：可能是因网络问题而未能检查更新\n"
+            "\n"
+            f"很可能已经有新的版本，建议打开小助手目录中的【相关信息/网盘链接】，手动去网盘看看是否有新版本"
+        )
+        logger.warning(color("bold_yellow") + msg)
+        if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
+            win32api.MessageBox(0, msg, "版本太久未更新提示", win32con.MB_ICONINFORMATION)
+            webbrowser.open(config.netdisk_link)
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):
@@ -289,6 +298,8 @@ if __name__ == "__main__":
     load_config()
     cfg = config()
     cfg.common.check_update_on_start = True
+
+    notify_manual_check_update_on_release_too_long(cfg.common)
     check_update_on_start(cfg.common)
 
     ver = get_version_from_gitee()

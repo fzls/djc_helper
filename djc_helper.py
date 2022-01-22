@@ -9880,22 +9880,60 @@ class DjcHelper:
         activity_op_func: Callable,
         sAuthInfo: str,
         sActivityInfo: str,
+        roleinfo: RoleInfo = None,
+        roleinfo_source="道聚城所绑定的角色",
     ):
-        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo)
+        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo, print_res=False)
 
         bind_config = activity_op_func(f"查询活动信息 - {activity_name}", "", get_act_info_only=True).get_bind_config()
 
         query_bind_res = activity_op_func("查询绑定", bind_config.query_map_id, print_res=False)
-        if query_bind_res["jData"]["bindarea"] is not None:
+
+        need_bind = False
+        bind_reason = ""
+
+        if query_bind_res["jData"]["bindarea"] is None:
+            # 未绑定角色
+            need_bind = True
+            bind_reason = "未绑定角色"
+        elif self.common_cfg.force_sync_bind_with_djc:
+            if roleinfo is None:
+                # 若未从外部传入roleinfo，则使用道聚城绑定的信息
+                roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+            bindinfo = AmesvrUserBindInfo().auto_update_config(query_bind_res["jData"]["bindarea"])
+
+            if roleinfo.serviceID != bindinfo.Farea or roleinfo.roleCode != bindinfo.FroleId:
+                current_account = (
+                    f"{unquote_plus(bindinfo.FareaName)}-{unquote_plus(bindinfo.FroleName)}-{bindinfo.FroleId}"
+                )
+                djc_account = f"{roleinfo.serviceName}-{roleinfo.roleName}-{roleinfo.roleCode}"
+
+                need_bind = True
+                bind_reason = f"当前绑定账号({current_account})与{roleinfo_source}({djc_account})不一致"
+
+        if not need_bind:
+            # 不需要绑定
+            return
+
+        if not self.common_cfg.try_auto_bind_new_activity:
+            # 未开启自动绑定
             return
 
         if "dnf" not in self.bizcode_2_bind_role_map:
+            # 道聚城未绑定DNF角色
             return
 
         # 若道聚城已绑定dnf角色，则尝试绑定这个角色
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        if roleinfo is None:
+            # 若未从外部传入roleinfo，则使用道聚城绑定的信息
+            roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         checkInfo = self.get_dnf_roleinfo(roleinfo)
         role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
+
+        logger.warning(
+            color("bold_yellow")
+            + f"活动【{activity_name}】{bind_reason}，当前配置为自动绑定模式，将尝试绑定为{roleinfo_source}({roleinfo.serviceName}-{roleinfo.roleName})"
+        )
 
         activity_op_func(
             "提交绑定",

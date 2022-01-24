@@ -1368,7 +1368,8 @@ def show_tips(cfg: Config):
         "22春节微信签到活动": (
             "官方微信公众号【地下城与勇士】的签到活动请自行完成，或者借助于autojs等工具来自动完成，具体思路可以参考我之前写的autojs盖楼活动的流程，自行修改。\n"
             "手动参与流程：1. 打开公众号 2. 输入【虎年签到】，点进活动页面签到即可\n"
-            "连续签到30天可以领取一个+12强化券。活动目前显示调试中，不知何时会上线\n"
+            "连续签到30天可以领取一个+12强化券。\n"
+            "活动目前显示调试中，不知何时会上线\n"
         ),
         "22春节手动参与的活动": (
             "以下活动请手动参与:\n"
@@ -1393,16 +1394,16 @@ def show_tips(cfg: Config):
         ),
     }
 
-    wx_act_flag_file = ".disable_wx_sign_tip"
-    if not exists_flag_file(wx_act_flag_file) and is_daily_first_run("22春节微信签到活动"):
-        async_message_box(
-            (
-                "请打开微信，在【地下城与勇士】公众号 输入【虎年签到】，参与签到活动。累计30天可以领取+12强化券。\n"
-                "\n"
-                f"如果不想要每天弹出本提示，请在小助手目录创建名为 {wx_act_flag_file} 的文件或者目录来关闭本提示\n"
-            ),
-            "微信签到每日提示",
-        )
+    # wx_act_flag_file = ".disable_wx_sign_tip"
+    # if not exists_flag_file(wx_act_flag_file) and is_daily_first_run("22春节微信签到活动"):
+    #     async_message_box(
+    #         (
+    #             "请打开微信，在【地下城与勇士】公众号 输入【虎年签到】，参与签到活动。累计30天可以领取+12强化券。\n"
+    #             "\n"
+    #             f"如果不想要每天弹出本提示，请在小助手目录创建名为 {wx_act_flag_file} 的文件或者目录来关闭本提示\n"
+    #         ),
+    #         "微信签到每日提示",
+    #     )
 
     # if now_after("2022-01-20 06:00:00"):
     #     tips = {

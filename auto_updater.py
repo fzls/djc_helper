@@ -113,6 +113,15 @@ def full_update(args, uploader):
     logger.info("开始下载最新版本的压缩包")
     filepath = uploader.download_latest_version(tmp_dir)
 
+    # TODO：从蓝奏云下载失败时，尝试从github及其镜像下载最新版本
+    # https://pd.zwc365.com/seturl/https://github.com/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://gh.xiu2.xyz/https://github.com/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://gh.api.99988866.xyz/https://github.com/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://github.rc1844.workers.dev/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://download.fastgit.org/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://ghproxy.com/https://github.com/fzls/djc_helper/releases/latest/download/djc_helper.7z
+    # https://github.com/fzls/djc_helper/releases/latest/download/djc_helper.7z
+
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
 

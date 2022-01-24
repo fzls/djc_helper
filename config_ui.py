@@ -1303,7 +1303,7 @@ class CommonConfigUi(QFrame):
         add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v2)
 
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
-        add_row(form_layout, "是否启用高DPI模式（如4k屏，启用后请重启配置工具）", self.checkbox_config_ui_enable_high_dpi)
+        add_row(form_layout, "是否启用高DPI模式（如4k屏，重启生效）", self.checkbox_config_ui_enable_high_dpi)
 
         self.checkbox_bypass_proxy = create_checkbox(cfg.bypass_proxy)
         add_row(form_layout, "是否无视系统代理（VPN）", self.checkbox_bypass_proxy)

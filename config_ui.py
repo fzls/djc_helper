@@ -1332,6 +1332,12 @@ class CommonConfigUi(QFrame):
         )
         add_row(form_layout, "日志级别", self.combobox_log_level)
 
+        self.spinbox_max_logs_size = create_spin_box(cfg.max_logs_size)
+        add_row(form_layout, "日志目录最大允许大小（单位为MiB）", self.spinbox_max_logs_size)
+
+        self.spinbox_keep_logs_size = create_spin_box(cfg.keep_logs_size)
+        add_row(form_layout, "日志目录保留大小（单位为MiB）", self.spinbox_keep_logs_size)
+
         self.spinbox_http_timeout = create_spin_box(cfg.http_timeout)
         add_row(form_layout, "HTTP超时（秒）", self.spinbox_http_timeout)
 
@@ -1363,6 +1369,8 @@ class CommonConfigUi(QFrame):
         cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()
         cfg.enable_alipay_redpacket_v2 = self.checkbox_enable_alipay_redpacket_v2.isChecked()
 
+        cfg.max_logs_size = self.spinbox_max_logs_size.value()
+        cfg.keep_logs_size = self.spinbox_keep_logs_size.value()
         cfg.http_timeout = self.spinbox_http_timeout.value()
         cfg.log_level = self.combobox_log_level.currentText()
         cfg.auto_send_card_target_qqs = str_to_list(self.lineedit_auto_send_card_target_qqs.text())

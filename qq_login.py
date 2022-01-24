@@ -1060,7 +1060,7 @@ class QQLogin:
                 break
             except Exception as e:
                 logger.error(
-                    f"[{idx}/{max_try}] {self.name} 出错了，等待两秒再重试登陆。\n"
+                    f"[{idx}/{max_try}] {self.name} {login_type} 出错了，等待两秒再重试登陆。\n"
                     + color("bold_yellow")
                     + (
                         "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致。\n"

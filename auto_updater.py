@@ -202,7 +202,7 @@ if __name__ == "__main__":
     except Exception as e:
         show_unexpected_exception_message(e)
 
-        logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~")
+        logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~（当前版本的本体可以照常使用）")
         pause_and_exit(1)
 
 # 示例用法

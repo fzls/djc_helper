@@ -1726,6 +1726,13 @@ class MoJieRenInfo(ConfigInterface):
         self.inviteList = []
         self.task = {}
 
+    def on_config_update(self, raw_config: dict):
+        # 首次查询时，部分字段会是null，需要修改为正确的值，确保后续逻辑无误
+        # "iCurrPos": null, "iCurrRound": null, "iExploreTimes": null
+        self.iCurrPos = self.iCurrPos or "1"
+        self.iCurrRound = self.iCurrRound or "1"
+        self.iExploreTimes = self.iExploreTimes or "0"
+
 
 class MoJieRenHoldInfo(ConfigInterface):
     def __init__(self):

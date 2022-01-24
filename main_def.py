@@ -18,6 +18,7 @@ from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
 from djc_helper import DjcHelper, get_prize_names, is_new_version_ark_lottery, run_act
+from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount
 from first_run import is_daily_first_run, is_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
 from notice import NoticeManager
@@ -323,14 +324,17 @@ def auto_send_cards(cfg: Config):
                 + f"第{idx + 1}/{len(target_qqs)}个赠送目标账号 {name}({target_qq}) 今日仍可被赠送 {left_times} 次卡片{extra_message}"
             )
             # 最多赠送目标账号今日仍可接收的卡片数
-            for send_idx in range_from_one(left_times):
-                logger.info(color("bold_yellow") + f"尝试第 [{send_idx}/{left_times}] 次赠送卡片给 {name}({target_qq})")
-                other_account_has_card = send_card(
-                    target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs
-                )
-                if not other_account_has_card:
-                    logger.warning(f"第 {send_idx} 次赠送时其他账号已经没有任何卡片，跳过后续尝试")
-                    break
+            try:
+                for send_idx in range_from_one(left_times):
+                    logger.info(color("bold_yellow") + f"尝试第 [{send_idx}/{left_times}] 次赠送卡片给 {name}({target_qq})")
+                    other_account_has_card = send_card(
+                        target_qq, qq_to_card_name_to_counts, qq_to_prize_counts, qq_to_djcHelper, target_qqs
+                    )
+                    if not other_account_has_card:
+                        logger.warning(f"第 {send_idx} 次赠送时其他账号已经没有任何卡片，跳过后续尝试")
+                        break
+            except ArkLotteryTargetQQSendByRequestReachMaxCount as e:
+                logger.warning(color("bold_yellow") + f"{name}({target_qq}) 今日被赠送和通过索取来赠送均已达上限，将跳过尝试后续赠送尝试。具体结果为：{e}")
 
             # 赠送卡片完毕后尝试领取奖励和抽奖
             djcHelper = qq_to_djcHelper[target_qq]

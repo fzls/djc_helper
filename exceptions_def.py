@@ -22,3 +22,11 @@ class DnfHelperChronicleTokenExpiredOrWrongException(Exception):
     """
 
     pass
+
+
+class ArkLotteryTargetQQSendByRequestReachMaxCount(Exception):
+    """
+    集卡目标QQ本日索取赠送次数已达到上限
+    """
+
+    pass

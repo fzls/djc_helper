@@ -96,6 +96,7 @@ from db import (
     WelfareDB,
 )
 from exceptions_def import (
+    ArkLotteryTargetQQSendByRequestReachMaxCount,
     DnfHelperChronicleTokenExpiredOrWrongException,
     GithubActionLoginException,
     SameAccountTryLoginAtMultipleThreadsException,
@@ -2360,7 +2361,6 @@ class DjcHelper:
 
         return res.is_ok()
 
-    @try_except(return_val_on_except=False)
     def dnf_ark_lottery_send_card_by_request(
         self, card_id: str, target_djc_helper: DjcHelper, card_count: int = 1
     ) -> bool:
@@ -2434,7 +2434,13 @@ class DjcHelper:
 
         # {"code":0,"message":"succ","data":{}}
         # {"code":0,"message":"succ","data":{"code":999,"message":"数量不足，不能进行赠送，索要"}}
+        # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到每日可被赠送上限"}}
+        # {"code": 0, "message": "succ", "data": {"code": 999, "message": "用户1054073896已达到活动可被赠送上限"}}
         res = NewArkLotteryAgreeRequestCardResult().auto_update_config(raw_res)
+
+        # 特殊处理目标QQ被赠送次数达到上限的情况，方便外面停止该流程
+        if res.data.message in [f"用户{target_qq}已达到每日可被赠送上限", f"用户{target_qq}已达到活动可被赠送上限"]:
+            raise ArkLotteryTargetQQSendByRequestReachMaxCount(res.data.message)
 
         return res.is_ok()
 

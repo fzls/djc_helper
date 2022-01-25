@@ -67,6 +67,8 @@ from dao import (
     SailiyamWorkInfo,
     SpringFuDaiInfo,
     TemporaryChangeBindRoleInfo,
+    VoteWorkInfo,
+    VoteWorkList,
     XiaojiangyouInfo,
     XiaojiangyouPackageInfo,
     XinyueCatInfo,
@@ -582,6 +584,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("冒险的起点", self.maoxian_start),
             ("勇士的冒险补给", self.maoxian),
+            ("DNF共创投票", self.dnf_dianzan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -596,7 +599,6 @@ class DjcHelper:
             ("DNF记忆", self.dnf_memory),
             ("DNF预约", self.dnf_reservation),
             ("DNF名人堂", self.dnf_vote),
-            ("DNF共创投票", self.dnf_dianzan),
             ("qq视频蚊子腿", self.qq_video),
             ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
@@ -6025,68 +6027,59 @@ class DjcHelper:
 
         self.check_dnf_dianzan()
 
-        def report_first_login():
-            raw_page_info = self.dnf_dianzan_op("查询页面数据", "811832", print_res=False)
-            page_info = parse_amesvr_common_info(raw_page_info)
-            if page_info.sOutValue1 != "0":
-                return
+        def query_info() -> tuple[int, int, int]:
+            res = self.dnf_dianzan_op("查询信息", "830958", print_res=False)
+            info = parse_amesvr_common_info(res)
 
-            self.dnf_dianzan_op("登录页面", "811831")
+            loginGame, playRaid, loginPage, voteTimes, drawTimes = info.sOutValue1.split("|")
+            voteTickets = info.sOutValue2
 
-        def get_one_work_randomly(mod_name: str, iType: str, iPage: str) -> CreateWorkInfo:
-            raw_work_info_list = self.dnf_dianzan_op("登录显示列表", "814952", iType=iType, iPage="1", print_res=False)
-            work_info_list = CreateWorkListInfo().auto_update_config(raw_work_info_list["modRet"]["jData"]["worklist"])
+            return int(voteTickets), int(voteTimes), int(drawTimes)
 
-            work_info = random.choice(work_info_list.list)
-            logger.info(f"为避免影响最终投票数据，随机选一个作品来投票，本次选中的作品为 {work_info.sTitle}")
+        def query_work_info_list(limit=30) -> list[VoteWorkInfo]:
+            res = self.dnf_dianzan_op("查询投票列表", "830970", isSort="1", append_raw_data="jobName=&titleName=", print_res=False)
+            info = VoteWorkList().auto_update_config(res["modRet"]["jData"])
 
-            return work_info
+            work_info_list = []
+            for work in info.data:
+                work_info_list.append(work)
 
-        # ----------------------------------------------------
+                if len(work_info_list) >= limit:
+                    break
 
-        report_first_login()
+            return work_info_list
 
-        # 给每个模块随机投票
-        mod_types = [
-            ("8", "文学"),
-            ("10", "音乐"),
-            ("7", "视频"),
-            ("11", "cosplay"),
-            ("14", "表情包"),
-            ("9", "美术"),
-            ("12", "周边设计"),
-        ]
-        for mod_type, mod_name in mod_types:
-            if not is_weekly_first_run(f"点赞_{self.uin()}_{get_act_url('DNF共创投票')}_{mod_type}"):
-                logger.info(f"{mod_name} 已经投票过一次，不再尝试，避免过多影响投票数据")
-                continue
+        self.dnf_dianzan_op("登陆游戏领积分（946229）", "830957")
+        self.dnf_dianzan_op("通关副本获取积分（946241）", "830965")
+        self.dnf_dianzan_op("分享页面获取积分（946244）", "830969")
 
-            work_info = get_one_work_randomly(mod_name, mod_type, "1")
+        voteTickets, voteTimes, _ = query_info()
+        logger.info(f"已拥有投票次数：{voteTickets} 已完成投票次数：{voteTimes}")
+        if voteTickets > 0:
+            limit = 30
+            work_info_list = random.sample(query_work_info_list(limit), voteTickets)
+            logger.info(f"随机从前 {limit} 中选 {voteTickets} 个进行投票")
 
-            desc = f"{work_info.iInfoId} - {work_info.sUserCreator} - {work_info.sTitle}"
+            for work_info in work_info_list:
+                self.dnf_dianzan_op(f"投票 - {work_info.title} (已有投票: {work_info.tickets})", "830971", workId=work_info.workId)
+                time.sleep(5)
 
-            self.dnf_dianzan_op(
-                f"{mod_type}-{mod_name}: 随机挑选一个点赞 - {desc}", "812365", iType=mod_type, iWork=work_info.iInfoId
-            )
+        self.dnf_dianzan_op("投票满3次领取（946249）", "830973")
 
-            time.sleep(1)
-
-            # 投票后，有一定比例的浏览
-            if random.random() < 0.25:
-                self.dnf_dianzan_op(f"{desc} 浏览量+1", "812352", iType=mod_type, iWork=work_info.iInfoId)
-
-            time.sleep(1)
-            logger.info("")
-
-        self.dnf_dianzan_op("投票礼包", "812839")
+        _, voteTimes, drawTimes = query_info()
+        remaining_draw_times = voteTimes - drawTimes
+        logger.info(f"累计获得抽奖资格：{voteTimes}次，剩余抽奖次数：{remaining_draw_times}")
+        for idx in range_from_one(remaining_draw_times):
+            self.dnf_dianzan_op(f"{idx}/{remaining_draw_times} 转盘（946252）", "830976")
+            time.sleep(5)
 
     def check_dnf_dianzan(self):
         self.check_bind_account(
             "DNF共创投票",
             get_act_url("DNF共创投票"),
             activity_op_func=self.dnf_dianzan_op,
-            query_bind_flowid="811640",
-            commit_bind_flowid="811639",
+            query_bind_flowid="830975",
+            commit_bind_flowid="830974",
         )
 
     def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
@@ -9533,6 +9526,10 @@ class DjcHelper:
                 "sUin",
                 "pointID",
                 "startPos",
+                "workId",
+                "isSort",
+                "jobName",
+                "title",
             ]
         }
 
@@ -9577,6 +9574,7 @@ class DjcHelper:
         extra_cookies="",
         show_info_only=False,
         get_act_info_only=False,
+        append_raw_data="",
         **data_extra_params,
     ):
         if show_info_only:
@@ -9596,6 +9594,9 @@ class DjcHelper:
             iFlowId=iFlowId,
             **data_extra_params,
         )
+
+        if append_raw_data != "":
+            data = f"{data}&{append_raw_data}"
 
         def _check(response: requests.Response) -> Exception | None:
             if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
@@ -10253,4 +10254,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.mojieren()
+        djcHelper.dnf_dianzan()

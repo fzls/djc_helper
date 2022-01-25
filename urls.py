@@ -99,6 +99,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220120index/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20211220lbdiwme/index.html",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20211231recall/indexpc.html",
+    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
     #
     # 已过期活动
     #
@@ -112,7 +113,6 @@ act_name_to_url = {
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
-    "DNF共创投票": "http://dnf.qq.com/cp/a20210922create/page.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
@@ -223,7 +223,7 @@ class Urls:
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
-        self.iActivityId_dnf_dianzan = "419223"  # DNF2020共创投票领礼包需求
+        self.iActivityId_dnf_dianzan = "441065"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
@@ -286,6 +286,7 @@ class Urls:
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
+            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}"
         )
 
         # ide通用活动

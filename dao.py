@@ -1764,6 +1764,25 @@ class MaJieLuoInfo(ConfigInterface):
         self.iLuck = "0"
 
 
+class VoteWorkList(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "ok"
+        self.data: list[VoteWorkInfo] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("data", VoteWorkInfo),
+        ]
+
+
+class VoteWorkInfo(ConfigInterface):
+    def __init__(self):
+        self.tickets = 9064
+        self.title = "鹿王本生-女鬼剑士"
+        self.workId = "21"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

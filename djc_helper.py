@@ -28,8 +28,6 @@ from dao import (
     AmesvrUserBindInfo,
     BuyInfo,
     ColgBattlePassInfo,
-    CreateWorkInfo,
-    CreateWorkListInfo,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
@@ -6037,7 +6035,9 @@ class DjcHelper:
             return int(voteTickets), int(voteTimes), int(drawTimes)
 
         def query_work_info_list(limit=30) -> list[VoteWorkInfo]:
-            res = self.dnf_dianzan_op("查询投票列表", "830970", isSort="1", append_raw_data="jobName=&titleName=", print_res=False)
+            res = self.dnf_dianzan_op(
+                "查询投票列表", "830970", isSort="1", append_raw_data="jobName=&titleName=", print_res=False
+            )
             info = VoteWorkList().auto_update_config(res["modRet"]["jData"])
 
             work_info_list = []
@@ -6061,7 +6061,9 @@ class DjcHelper:
             logger.info(f"随机从前 {limit} 中选 {voteTickets} 个进行投票")
 
             for work_info in work_info_list:
-                self.dnf_dianzan_op(f"投票 - {work_info.title} (已有投票: {work_info.tickets})", "830971", workId=work_info.workId)
+                self.dnf_dianzan_op(
+                    f"投票 - {work_info.title} (已有投票: {work_info.tickets})", "830971", workId=work_info.workId
+                )
                 time.sleep(5)
 
         self.dnf_dianzan_op("投票满3次领取（946249）", "830973")

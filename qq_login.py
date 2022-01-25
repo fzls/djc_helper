@@ -342,7 +342,7 @@ class QQLogin:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if not self.cfg.force_use_portable_chrome:
             try:
-                logger.info("检查系统自带的chrome是否可用")
+                logger.info("检查系统自带的chrome是否可用，如果一直卡在这里，请试试打开【配置工具/公共配置/登录/强制使用便携版chrome】开关后，再次运行~")
                 self.driver = webdriver.Chrome(
                     service=Service(executable_path=self.chrome_driver_executable_path()), options=options
                 )

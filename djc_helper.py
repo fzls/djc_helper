@@ -6080,12 +6080,6 @@ class DjcHelper:
 
         self.dnf_dianzan_op("投票礼包", "812839")
 
-    def query_dnf_dianzan(self):
-        res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
-        info = parse_amesvr_common_info(res)
-
-        return int(info.sOutValue1), info.sOutValue2
-
     def check_dnf_dianzan(self):
         self.check_bind_account(
             "DNF共创投票",
@@ -6113,6 +6107,12 @@ class DjcHelper:
     def old_version_dianzan(self):
         db = DianzanDB().load()
         account_db = DianzanDB().with_context(self.cfg.name).load()
+
+        def query_dnf_dianzan():
+            res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
+            info = parse_amesvr_common_info(res)
+
+            return int(info.sOutValue1), info.sOutValue2
 
         # 投票
         def today_dianzan():
@@ -6209,7 +6209,7 @@ class DjcHelper:
             )
             return int(res["iRet"]) == 0
 
-        totalDianZanCount, _ = self.query_dnf_dianzan()
+        totalDianZanCount, _ = query_dnf_dianzan()
         if totalDianZanCount < 200:
             # 进行今天剩余的点赞操作
             today_dianzan()
@@ -6217,7 +6217,7 @@ class DjcHelper:
             logger.warning("累积投票已经超过200次，无需再投票")
 
         # 查询点赞信息
-        totalDianZanCount, rewardTakenInfo = self.query_dnf_dianzan()
+        totalDianZanCount, rewardTakenInfo = query_dnf_dianzan()
         logger.warning(color("fg_bold_yellow") + f"DNF共创投票活动当前已投票{totalDianZanCount}次，奖励领取状态为{rewardTakenInfo}")
 
         # 领取点赞奖励

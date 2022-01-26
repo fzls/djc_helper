@@ -133,10 +133,11 @@ def check_djc_role_binding():
                         f"2. 因未绑定道聚城，将无法获取角色绑定信息，因此将无法领取任何其他奖励\n"
                         "\n"
                         "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
-                        "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置"
+                        "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置\n"
                     ),
                     f"禁用道聚城绑定后果提示_{account_config.name}",
                     show_once=True,
+                    color_name="yellow",
                 )
 
             djcHelper = DjcHelper(account_config, cfg.common)
@@ -147,15 +148,25 @@ def check_djc_role_binding():
         if all_binded:
             break
         else:
-            _show_head_line("以上是问题描述")
+            _show_head_line("0. 以上是问题描述")
 
-            _show_head_line("解决方案")
+            _show_head_line("1. 解决方案")
             logger.warning(
                 color("bold_cyan")
-                + f"请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定dnf或任意手游的账号【{not_binded_accounts}】进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）"
+                + f"请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定【dnf】或【任意手游】的账号进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）"
             )
 
-            _show_head_line("详细教程")
+            logger.info(color("bold_cyan") + "相关账号如下:")
+            heads = ["序号", "账号名", "QQ"]
+            colSizes = [4, 12, 10]
+            logger.info(color("bold_cyan") + tableify(heads, colSizes))
+            for idx, info in enumerate(not_binded_accounts):
+                name, qq = info
+
+                row = [idx + 1, name, qq]
+                logger.info(color("bold_cyan") + tableify(row, colSizes))
+
+            _show_head_line("2. 详细教程")
             logger.warning(
                 color("bold_cyan")
                 + (
@@ -165,13 +176,22 @@ def check_djc_role_binding():
                 )
             )
 
-            _show_head_line("跳过方式")
+            _show_head_line("3. 跳过方式")
             logger.warning(
-                color("yellow") + "如果本账号不需要道聚城相关操作，可以打开配置工具，将该账号的【道聚城配置】中的【无法在道聚城绑定dnf】勾选上，并将【完成礼包达人任务的手游名称】设为最上方的【无】"
+                color("bold_yellow") + (
+                    "如果本账号不需要道聚城相关操作，请按下列步骤操作\n"
+                    "1. 可以打开配置工具，点开对应账号的tab\n"
+                    "2. 将该账号的【道聚城配置】中的【无法在道聚城绑定dnf】勾选上\n"
+                    "3. 并将【完成礼包达人任务的手游名称】选择为最上方的【无】\n"
+                    "4. 保存配置\n"
+                    "5. 回到这个页面按任意键继续\n"
+                )
             )
 
-            _show_head_line("请完成上述操作，然后按任意键再次进行检查")
+            _show_head_line("4. 请完成上述操作，然后按任意键再次进行检查")
             logger.warning(color("bold_red") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
+            logger.warning(color("bold_yellow") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
+            logger.warning(color("bold_blue") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
             logger.info("\n\n")
             pause()
 

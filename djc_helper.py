@@ -1218,12 +1218,19 @@ class DjcHelper:
         retryCfg = self.common_cfg.retry
         # 最少等待5秒
         wait_time = max(retryCfg.request_wait_time, 5)
+        retry_wait_time = max(retryCfg.retry_wait_time, 5)
+
         for i in range(op.count):
             ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
 
             for _try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=1)
                 if op.count > 1:
+                    if "操作过于频繁" in res["modRet"]["sMsg"]:
+                        logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
+                        time.sleep(retry_wait_time)
+                        continue
+
                     if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
                         logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
                         return

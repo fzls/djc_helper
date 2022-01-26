@@ -1216,8 +1216,8 @@ class DjcHelper:
         :type op: XinYueOperationConfig
         """
         retryCfg = self.common_cfg.retry
-        # 最少等待5秒
-        wait_time = max(retryCfg.request_wait_time, 5)
+        # 设置最少等待时间
+        wait_time = max(retryCfg.request_wait_time, 10)
         retry_wait_time = max(retryCfg.retry_wait_time, 5)
 
         for i in range(op.count):

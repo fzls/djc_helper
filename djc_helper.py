@@ -1226,7 +1226,7 @@ class DjcHelper:
             for _try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=1)
                 if op.count > 1:
-                    if "操作过于频繁" in res["modRet"]["sMsg"]:
+                    if res["ret"] == "700" and "操作过于频繁" in res["flowRet"]["sMsg"]:
                         logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
                         time.sleep(retry_wait_time)
                         continue

@@ -153,7 +153,7 @@ def check_djc_role_binding():
             _show_head_line("1. 解决方案")
             logger.warning(
                 color("bold_cyan")
-                + f"请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定【dnf】或【任意手游】的账号进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）"
+                + "请前往道聚城（未安装的话，手机上应用商城搜索 道聚城 下载安装就行）将上述提示的未绑定【dnf】或【任意手游】的账号进行绑定（就是去道聚城对应游戏页面把领奖角色给选好）"
             )
 
             logger.info(color("bold_cyan") + "相关账号如下:")
@@ -178,7 +178,8 @@ def check_djc_role_binding():
 
             _show_head_line("3. 跳过方式")
             logger.warning(
-                color("bold_yellow") + (
+                color("bold_yellow")
+                + (
                     "如果本账号不需要道聚城相关操作，请按下列步骤操作\n"
                     "1. 可以打开配置工具，点开对应账号的tab\n"
                     "2. 将该账号的【道聚城配置】中的【无法在道聚城绑定dnf】勾选上\n"

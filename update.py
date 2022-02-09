@@ -145,7 +145,8 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
             "\n"
             f"【很可能】已经有新的版本，建议打开小助手目录中的【相关信息/网盘链接】，手动去网盘看看是否有新版本\n"
             "\n"
-            f"如果在网盘没有发现更新的版本，说明自这次版本发布至今，没有任何新活动需要添加，也没有bug需要修复，无视本提示即可。本提示是用于在无法检查更新的情况下，保底提醒更新版本，避免一直使用好几个月以前的版本而无法领到新活动的奖励\n"
+            "如果在网盘没有发现更新的版本，说明自这次版本发布至今，没有任何新活动需要添加，也没有bug需要修复，无视本提示即可。\n"
+            "本提示是用于在无法检查更新的情况下，保底提醒更新版本，避免一直使用好几个月以前的版本而无法领到新活动的奖励\n"
         )
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):

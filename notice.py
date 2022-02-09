@@ -190,18 +190,8 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "心悦经验药"
-    message = """昨天加的心悦经验药，因为它是角色绑定的，所以如果要领取给合金战士的话，得按教程先把道聚城的绑定角色修改为你的合金战士角色，这样才能领取到对应角色上。
-
-如果不想修改领取角色，也可以去网页上按照下列方式手动领取
-1. 使用 chrome/edge 等现代浏览器打开心悦活动的网页: https://xinyue.qq.com/act/a20210317dnf/index_pc.html
-2. 登录账号
-3. 切换绑定角色为 合金战士的角色
-4. 按F12，进入开发者工具页面
-5. 选择上方 【控制台/Console】 tab，进入console界面
-6. 输入下列内容后，点击 回车键，然后手动点击弹出的确认框
-
-BeSureEx(747759,{'package_id':1537696})
+    title = "支付备选方案"
+    message = """支付网站好像暂时挂掉了，需要续费的朋友们，可以先试试卡密方案（具体流程可以看付费指引）
 """
     open_url = ""
     show_only_before_version = ""

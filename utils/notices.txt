@@ -678,5 +678,15 @@
     "open_url": "",
     "expire_at": "2022-02-02 10:29:00",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "支付备选方案",
+    "message": "支付网站好像暂时挂掉了，需要续费的朋友们，可以先试试卡密方案（具体流程可以看付费指引）\n",
+    "send_at": "2022-02-09 23:46:25",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-02-16 23:46:25",
+    "show_only_before_version": ""
   }
 ]

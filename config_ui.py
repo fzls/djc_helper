@@ -594,7 +594,7 @@ class ConfigUi(QFrame):
 
         # -------------- 区域：购买卡密 --------------
         self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout(
-            "购买卡密(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse"
+            "购买卡密(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse"
         )
         hbox_layout = QHBoxLayout()
         self.collapsible_box_buy_card_secret.setContentLayout(hbox_layout)
@@ -651,7 +651,7 @@ class ConfigUi(QFrame):
 
             # 显示新版的付费界面
             self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout(
-                "购买付费内容(点击展开)(不会操作可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
+                "购买付费内容(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
             )
             vbox_layout = QVBoxLayout()
             self.collapsible_box_pay_directly.setContentLayout(vbox_layout)

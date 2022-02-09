@@ -136,7 +136,7 @@ def update_fallback(config: CommonConfig):
 @try_except()
 def notify_manual_check_update_on_release_too_long(config: CommonConfig):
     time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
-    if time_since_last_update.days >= 14:
+    if time_since_last_update.days >= 21:
         msg = (
             f"当前版本更新于{ver_time}，距今已有{time_since_last_update}。\n"
             "可能原因如下:\n"

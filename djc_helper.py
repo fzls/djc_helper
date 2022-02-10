@@ -7021,6 +7021,7 @@ class DjcHelper:
         for idx in range_from_one(lottery_times):
             self.mojieren_op(f"{idx}/{lottery_times} 奇兵夺宝", "116435")
 
+        logger.info(color("bold_cyan") + f"当前累计完成 {info.iCurrRound} 轮冒险， {info.iExploreTimes} 次探险")
         accumulative_award_info = [
             ("116436", "累计完成1轮冒险", info.hold.round1.iLeftNum, int(info.iCurrRound), 1),
             ("116437", "累计完成2轮冒险", info.hold.round2.iLeftNum, int(info.iCurrRound), 2),
@@ -7030,7 +7031,7 @@ class DjcHelper:
 
         for flowid, name, iLeftNum, current_val, bounds_val in accumulative_award_info:
             if iLeftNum < 1 or current_val <= bounds_val:
-                logger.warning(f"{name} 条件不满足，当前进度为 {current_val}，需要大于 {bounds_val}，将跳过")
+                logger.warning(f"{name} 条件不满足，当前进度为 {current_val}，剩余领取次数为 {iLeftNum}，需要进度大于 {bounds_val}且有剩余领取次数，将跳过")
                 continue
 
             self.mojieren_op(name, flowid)

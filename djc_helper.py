@@ -6993,6 +6993,7 @@ class DjcHelper:
 
         @try_except(return_val_on_except=0)
         def query_info() -> MoJieRenInfo:
+            wait_for("查询信息", 5)
             raw_res = self.mojieren_op("查询信息", "116512", print_res=False)
 
             return MoJieRenInfo().auto_update_config(raw_res["jData"])
@@ -10263,4 +10264,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_dianzan()
+        djcHelper.mojieren()

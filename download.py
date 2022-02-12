@@ -24,7 +24,7 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
     make_sure_dir_exists(download_dir)
 
     with open(target_file_path, "wb") as f:
-        total_length = response.headers.get('content-length')
+        total_length = response.headers.get("content-length")
 
         if total_length is None:  # no content length header
             f.write(response.content)
@@ -65,10 +65,12 @@ def download_latest_github_release(download_dir: str) -> str:
     random.shuffle(urls)
 
     # 最后加入几个慢的镜像和源站
-    urls.extend([
-        f"https://download.fastgit.org/{release_file_path}",
-        f"https://github.com/{release_file_path}",
-    ])
+    urls.extend(
+        [
+            f"https://download.fastgit.org/{release_file_path}",
+            f"https://github.com/{release_file_path}",
+        ]
+    )
 
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
@@ -82,5 +84,5 @@ def download_latest_github_release(download_dir: str) -> str:
     raise Exception("所有镜像都下载失败")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     download_latest_github_release(".cached/downloads")

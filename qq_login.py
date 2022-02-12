@@ -295,7 +295,7 @@ class QQLogin:
             logger.warning(f"{self.name} 在linux环境下强制使用headless模式运行chrome")
 
         # 隐藏提示：Chrome 正收到自动测试软件的控制。
-        options.add_experimental_option("excludeSwitches", ['enable-automation'])
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")

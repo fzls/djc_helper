@@ -7,9 +7,9 @@ from log import color, logger
 from util import get_now, make_sure_dir_exists, show_progress
 
 
-def download_file(url: str, download_dir=".cached/downloads", filename="", connect_timeout=10):
-    if filename == "":
-        filename = os.path.basename(url)
+def download_file(url: str, download_dir=".cached/downloads", filename="", connect_timeout=10) -> str:
+    download_dir = os.path.realpath(download_dir)
+    filename = filename or os.path.basename(url)
 
     start_time = get_now()
 
@@ -45,8 +45,10 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
 
     logger.info(color("bold_yellow") + f"下载完成，耗时 {end_time - start_time}")
 
+    return target_file_path
 
-def download_latest_github_release():
+
+def download_latest_github_release(download_dir: str) -> str:
     release_file_path = "fzls/djc_helper/releases/latest/download/djc_helper.7z"
 
     # 先加入比较快的几个镜像
@@ -71,13 +73,14 @@ def download_latest_github_release():
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
         try:
-            download_file(url)
-            break
+            return download_file(url, download_dir)
         except Exception as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)
             continue
 
+    raise Exception("所有镜像都下载失败")
+
 
 if __name__ == '__main__':
-    download_latest_github_release()
+    download_latest_github_release(".cached/downloads")

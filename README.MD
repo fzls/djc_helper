@@ -100,7 +100,7 @@
 
 | 来源 | 链接 |
 | :---- | :---- |
-| 蓝奏云 | https://fzls.lanzouo.com/s/djc-helper |
+| 网盘 | https://fzls.lanzouo.com/s/djc-helper |
 | github | https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z |
 | 镜像 | https://pd.zwc365.com/seturl/https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z |
 | 镜像 | https://gh.xiu.workers.dev/https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z |

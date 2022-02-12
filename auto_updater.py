@@ -193,7 +193,7 @@ def start_new_version(args):
     kill_process(os.getpid())
 
 
-if __name__ == "__main__":
+def main():
     try:
         os.system("title 自动更新工具")
         auto_update()
@@ -202,6 +202,10 @@ if __name__ == "__main__":
 
         logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~（当前版本的本体可以照常使用）")
         pause_and_exit(1)
+
+
+if __name__ == "__main__":
+    main()
 
 # 示例用法
 # import subprocess

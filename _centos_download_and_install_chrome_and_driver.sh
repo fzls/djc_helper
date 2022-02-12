@@ -2,8 +2,8 @@
 
 sudo yum install unzip -y
 # 从_ubuntu_download_chrome_and_driver.sh 获取对应版本号，替换到下面即可
-wget -N https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-96.0.4664.45-1.x86_64.rpm
-wget -N https://chromedriver.storage.googleapis.com/96.0.4664.45/chromedriver_linux64.zip
+wget -N https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-98.0.4758.80-1.x86_64.rpm
+wget -N https://chromedriver.storage.googleapis.com/98.0.4758.80/chromedriver_linux64.zip
 unzip -o chromedriver_linux64.zip
 
 sudo yum localinstall google-chrome*.rpm -y

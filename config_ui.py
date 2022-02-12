@@ -1036,14 +1036,19 @@ class ConfigUi(QFrame):
         self.tabs.addTab(self.others, "其他功能")
 
     def toggle_card_secret(self, checked=False):
-        if self.is_card_secret_hidden():
+        toggle_to_enable = self.is_card_secret_hidden()
+
+        self.set_card_secret_button_status(toggle_to_enable)
+
+        report_click_event("toggle_card_secret")
+
+    def set_card_secret_button_status(self, enable=False):
+        if enable:
             self.show_card_secret()
             self.btn_toggle_card_secret.setText("隐藏原来的卡密支付界面")
         else:
             self.hide_card_secret()
             self.btn_toggle_card_secret.setText("显示原来的卡密支付界面")
-
-        report_click_event("toggle_card_secret")
 
     def auto_run_on_login(self):
         self.popen(
@@ -2796,6 +2801,9 @@ def main():
 
     ui = ConfigUi()
     ui.show()
+
+    # re: 目前支付网站有点问题，临时先默认启用卡密，等其恢复后再调整回来
+    ui.set_card_secret_button_status(True)
 
     show_notices()
 

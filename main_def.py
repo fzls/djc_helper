@@ -1458,7 +1458,14 @@ def show_tips_for_myself():
         return
 
     # if is_weekly_first_run("微信支付维护提示"):
-    #     async_message_box("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
+    #     show_tip_for_myself("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
+
+    if is_weekly_first_run("交易乐维护提示"):
+        show_tip_for_myself("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
+
+
+def show_tip_for_myself(msg: str, title: str):
+    async_message_box(msg, f"给自己看的提示 - {title}")
 
 
 def try_auto_update(cfg):

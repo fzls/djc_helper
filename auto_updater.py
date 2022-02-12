@@ -204,8 +204,17 @@ def main():
         pause_and_exit(1)
 
 
+def test():
+    pass
+
+
 if __name__ == "__main__":
-    main()
+    TEST = False
+
+    if not TEST:
+        main()
+    else:
+        test()
 
 # 示例用法
 # import subprocess

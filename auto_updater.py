@@ -28,6 +28,8 @@ tmp_dir = "_update_temp_dir"
 # note: 作为cwd的默认值，用于检测是否直接双击自动更新工具
 invalid_cwd = "./invalid_cwd"
 
+TEST_MODE = False
+
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
@@ -127,7 +129,10 @@ def full_update(args, uploader):
     kill_original_process(args.pid)
 
     logger.info("进行更新操作...")
-    dir_util.copy_tree(target_dir, ".")
+    if not TEST_MODE:
+        dir_util.copy_tree(target_dir, ".")
+    else:
+        logger.warning(f"当前为测试模式，将不会实际覆盖 {target_dir} 到当前目录")
 
     remove_temp_dir("更新完毕，移除临时目录")
 
@@ -148,21 +153,24 @@ def incremental_update(args, uploader):
     target_dir = filepath.replace(".7z", "")
     target_patch = os.path.join(target_dir, f"{args.version}.patch")
     logger.info(f"开始应用补丁 {target_patch}")
-    # hpatchz.exe -C-diff -f . "%target_patch_file%" .
-    ret_code = subprocess.call(
-        [
-            os.path.realpath("utils/hpatchz.exe"),
-            "-C-diff",
-            "-f",
-            os.path.realpath("."),
-            os.path.realpath(target_patch),
-            os.path.realpath("."),
-        ]
-    )
+    if not TEST_MODE:
+        # hpatchz.exe -C-diff -f . "%target_patch_file%" .
+        ret_code = subprocess.call(
+            [
+                os.path.realpath("utils/hpatchz.exe"),
+                "-C-diff",
+                "-f",
+                os.path.realpath("."),
+                os.path.realpath(target_patch),
+                os.path.realpath("."),
+            ]
+        )
 
-    if ret_code != 0:
-        logger.error(f"增量更新失败，错误码为{ret_code}，具体报错请看上面日志")
-        return False
+        if ret_code != 0:
+            logger.error(f"增量更新失败，错误码为{ret_code}，具体报错请看上面日志")
+            return False
+    else:
+        logger.warning(f"当前为测试模式，将不会实际应用补丁 {target_patch}")
 
     remove_temp_dir("更新完毕，移除临时目录")
 
@@ -205,7 +213,13 @@ def main():
 
 
 def test():
-    pass
+    global TEST_MODE
+    TEST_MODE = True
+
+    args = parse_args()
+    uploader = Uploader()
+
+    full_update(args, uploader)
 
 
 if __name__ == "__main__":

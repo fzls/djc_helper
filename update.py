@@ -150,8 +150,7 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
         )
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-            win32api.MessageBox(0, msg, "版本太久未更新提示", win32con.MB_ICONINFORMATION)
-            webbrowser.open(config.netdisk_link)
+            async_message_box(msg, "版本太久未更新提示", open_url=config.netdisk_link, print_log=False)
 
 
 def show_update_info_on_first_run(ui: UpdateInfo):

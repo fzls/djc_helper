@@ -1453,6 +1453,19 @@ def triple_quote(strToQuote: str) -> str:
     return quote_plus(double_quote(strToQuote))
 
 
+def show_progress(file_name: str, total_size: int, now_size: int):
+    """显示进度的回调函数"""
+    percent = now_size / total_size
+    bar_len = 40  # 进度条长总度
+    bar_str = ">" * round(bar_len * percent) + "=" * round(bar_len * (1 - percent))
+    show_percent = percent * 100
+    now_mb = now_size / 1048576
+    total_mb = total_size / 1048576
+    print(f"\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ", end="")
+    if total_size == now_size:
+        print("")  # 下载完成换行
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

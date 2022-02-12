@@ -1,4 +1,3 @@
-# 更新器不启用文件日志
 from log import color, fileHandler, logger, new_file_handler
 from version import now_version
 

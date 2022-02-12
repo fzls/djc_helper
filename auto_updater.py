@@ -244,7 +244,7 @@ def test():
     global TEST_MODE
     TEST_MODE = True
 
-    logger.info(color("bold_yellow") + f"开始测试更新器功能（不会实际覆盖文件）")
+    logger.info(color("bold_yellow") + "开始测试更新器功能（不会实际覆盖文件）")
 
     args = parse_args()
     uploader = Uploader()

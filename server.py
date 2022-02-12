@@ -40,7 +40,7 @@ def get_server_ip() -> str:
                 current_chosen_server_ip = ip
                 break
 
-            logger.warning(f"无法连接服务器 {ip}")
+            logger.debug("连接失败")
 
         # 没有任何可用服务器时，取第一个
         if current_chosen_server_ip == "":

@@ -11,6 +11,7 @@ import subprocess
 from distutils import dir_util
 
 from compress import decompress_dir_with_bandizip
+from download import download_latest_github_release
 from update import need_update
 from upload_lanzouyun import Uploader
 from util import (
@@ -111,12 +112,21 @@ def full_update(args, uploader):
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath = uploader.download_latest_version(tmp_dir)
+    filepath: str
+    try:
+        filepath = uploader.download_latest_version(tmp_dir)
+    except Exception as e:
+        logger.error(f"从蓝奏云下载最新版本失败，将尝试从github及其镜像下载最新版本, exc={e}")
+        logger.debug("", exc_info=e)
+
+        filepath = download_latest_github_release(tmp_dir)
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
 
-    target_dir = filepath.replace(".7z", "")
+    # 计算解压后的目录的路径
+    target_dir = extract_decompressed_directory_name(filepath)
+
     logger.info("预处理解压缩文件：移除部分文件")
     for file in ["config.toml", "utils/auto_updater.exe"]:
         file_to_remove = os.path.realpath(os.path.join(target_dir, file))
@@ -137,6 +147,24 @@ def full_update(args, uploader):
     remove_temp_dir("更新完毕，移除临时目录")
 
     return True
+
+
+def extract_decompressed_directory_name(filepath: str) -> str:
+    # 手动打包的压缩包，去除.7z后缀后，就是对应的目录名称
+    target_dir = filepath.replace(".7z", "")
+
+    if not os.path.isdir(target_dir):
+        # 兼容下从github下载的压缩包，压缩包名称固定为 xxx.7z，自动解压后 其名称为 实际的名称
+        # 这里假设该目录中仅有这两个文件和目录，在更新器目前的设定下是符合的
+        root_dir = os.path.dirname(filepath)
+        for entry in os.listdir(root_dir):
+            entry_full_path = os.path.join(root_dir, entry)
+
+            if os.path.isdir(entry_full_path):
+                target_dir = entry_full_path
+                break
+
+    return target_dir
 
 
 def incremental_update(args, uploader):
@@ -215,6 +243,8 @@ def main():
 def test():
     global TEST_MODE
     TEST_MODE = True
+
+    logger.info(color("bold_yellow") + f"开始测试更新器功能（不会实际覆盖文件）")
 
     args = parse_args()
     uploader = Uploader()

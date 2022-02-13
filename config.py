@@ -1227,6 +1227,8 @@ class CommonConfig(ConfigInterface):
             try:
                 with open(url_config_filepath, encoding="utf-8-sig") as url_config_file:
                     url_config = toml.load(url_config_file)
+                    if "auto_updater_dlc_purchase_url" in url_config:
+                        self.auto_updater_dlc_purchase_url = url_config["auto_updater_dlc_purchase_url"]
                     if "pay_by_month_purchase_url" in url_config:
                         self.pay_by_month_purchase_url = url_config["pay_by_month_purchase_url"]
                     if "netdisk_link" in url_config:

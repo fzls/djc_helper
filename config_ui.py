@@ -646,9 +646,6 @@ class ConfigUi(QFrame):
 
         # 如果不是代理
         if use_new_pay_method():
-            # 将卡密界面隐藏起来
-            self.hide_card_secret()
-
             # 显示新版的付费界面
             self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout(
                 "购买付费内容(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
@@ -694,6 +691,9 @@ class ConfigUi(QFrame):
 
             btn_pay_directly.clicked.connect(self.pay_directly)
 
+            # 将卡密界面隐藏起来
+            self.hide_card_secret()
+
         # -------------- 区域：查询信息 --------------
         add_vbox_seperator(top_layout, "查询信息")
         vbox_layout = QVBoxLayout()
@@ -727,9 +727,15 @@ class ConfigUi(QFrame):
         self.collapsible_box_buy_card_secret.setVisible(False)
         self.collapsible_box_use_card_secret.setVisible(False)
 
+        if use_new_pay_method():
+            self.collapsible_box_pay_directly.setVisible(True)
+
     def show_card_secret(self):
         self.collapsible_box_buy_card_secret.setVisible(True)
         self.collapsible_box_use_card_secret.setVisible(True)
+
+        if use_new_pay_method():
+            self.collapsible_box_pay_directly.setVisible(False)
 
     def buy_auto_updater_dlc(self, checked=False):
         if not self.confirm_buy_auto_updater():

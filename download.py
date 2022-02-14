@@ -24,13 +24,13 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
     make_sure_dir_exists(download_dir)
 
     with open(target_file_path, "wb") as f:
-        total_length = response.headers.get("content-length")
+        total_length_optional = response.headers.get("content-length")
 
-        if total_length is None:  # no content length header
+        if total_length_optional is None:  # no content length header
             f.write(response.content)
         else:
             dl = 0
-            total_length = int(total_length)
+            total_length = int(total_length_optional)
             for data in response.iter_content(chunk_size=4096):
                 # filter out keep-alive new lines
                 if not data:

@@ -58,3 +58,7 @@ repos:
           - tomli
           - types-atomicwrites
           - types-pkg_resources
+          - types-requests
+          - types-toml
+          - types-selenium
+          - types-psutil

@@ -60,5 +60,5 @@ repos:
           - types-pkg_resources
           - types-requests
           - types-toml
-          - types-selenium
+#          - types-selenium # 由于只适配v3，而目前使用的是v4，所以禁用这个
           - types-psutil

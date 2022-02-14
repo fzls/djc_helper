@@ -48,7 +48,7 @@ def track_event(category: str, action: str, label=None, value=0, ga_misc_params:
     }
 
     res = requests.post(GA_API_URL, data=data, headers=headers, timeout=10)
-    logger.debug(f"request body = {res.request.body:!r}")
+    logger.debug(f"request body = {res.request.body!r}")
 
 
 @try_except(show_exception_info=False)

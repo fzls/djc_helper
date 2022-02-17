@@ -14,6 +14,7 @@ from compress import decompress_dir_with_bandizip
 from download import download_latest_github_release
 from update import need_update
 from upload_lanzouyun import Uploader
+from usage_count import increase_counter
 from util import (
     bypass_proxy,
     change_title,
@@ -95,6 +96,7 @@ def update(args, uploader):
             update_ok = incremental_update(args, uploader)
             if update_ok:
                 logger.info("增量更新完毕")
+                report_dlc_usage("incremental update")
                 return
             else:
                 logger.warning("增量更新失败，尝试默认的全量更新方案")
@@ -115,11 +117,13 @@ def full_update(args, uploader):
     filepath: str
     try:
         filepath = uploader.download_latest_version(tmp_dir)
+        report_dlc_usage("full_update_from_netdisk")
     except Exception as e:
         logger.error(f"从蓝奏云下载最新版本失败，将尝试从github及其镜像下载最新版本, exc={e}")
         logger.debug("", exc_info=e)
 
         filepath = download_latest_github_release(tmp_dir)
+        report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
@@ -226,18 +230,28 @@ def start_new_version(args):
     start_djc_helper(target_exe)
 
     logger.info("退出配置工具")
+    report_dlc_usage("end_by_start_new_version")
     kill_process(os.getpid())
 
 
 def main():
     try:
+        report_dlc_usage("start")
+
         os.system("title 自动更新工具")
         auto_update()
+
+        report_dlc_usage("end_without_update")
     except Exception as e:
+        report_dlc_usage("exception")
         show_unexpected_exception_message(e)
 
         logger.info("完整截图反馈后点击任意键继续流程，谢谢合作~（当前版本的本体可以照常使用）")
         pause_and_exit(1)
+
+
+def report_dlc_usage(ctx: str):
+    increase_counter(ga_category="auto_updater", name=ctx)
 
 
 def test():

@@ -5,6 +5,8 @@ from usage_count import increase_counter
 
 # 可能的服务器列表，优先使用前面的
 server_ip_list = [
+    # "127.0.0.1",  # 本地测试机
+    
     "139.198.179.81",  # 青云
     "101.43.54.94",  # 腾讯云轻量服务器
 ]

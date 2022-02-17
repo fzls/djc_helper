@@ -691,8 +691,16 @@ class ConfigUi(QFrame):
 
             btn_pay_directly.clicked.connect(self.pay_directly)
 
-            # 将卡密界面隐藏起来
+        # -------------- 区域：切换卡密/直接购买界面 --------------
+        self.btn_toggle_card_secret = create_pushbutton("显示原来的卡密支付界面")
+        self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
+        top_layout.addWidget(self.btn_toggle_card_secret)
+
+        if use_new_pay_method():
+            # 如果将卡密界面隐藏起来
             self.hide_card_secret()
+
+        top_layout.addWidget(QHLine())
 
         # -------------- 区域：查询信息 --------------
         add_vbox_seperator(top_layout, "查询信息")
@@ -1013,16 +1021,13 @@ class ConfigUi(QFrame):
 
         btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
         btn_check_update = create_pushbutton("检查更新", "SpringGreen")
-        self.btn_toggle_card_secret = create_pushbutton("显示原来的卡密支付界面", "Gray")
 
         btn_support.clicked.connect(self.support)
         btn_check_update.clicked.connect(self.check_update)
-        self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_support)
         layout.addWidget(btn_check_update)
-        layout.addWidget(self.btn_toggle_card_secret)
         top_layout.addLayout(layout)
 
         btn_auto_run_on_login = create_pushbutton("开机自启", "MediumTurquoise")

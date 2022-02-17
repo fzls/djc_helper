@@ -251,7 +251,7 @@ def main():
 
 
 def report_dlc_usage(ctx: str):
-    increase_counter(ga_category="auto_updater", name=ctx)
+    increase_counter(ga_category="use_auto_updater", name=ctx)
 
 
 def test():

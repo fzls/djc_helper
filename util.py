@@ -899,6 +899,7 @@ def with_cache(
     force_update=False,
     cache_value_unmarshal_func: Optional[Callable[[Any], Any]] = None,
     cache_hit_func: Optional[Callable[[Any], None]] = None,
+    return_none_on_exception=False,
 ):
     """
 
@@ -946,8 +947,11 @@ def with_cache(
         latest_value = cache_miss_func()
     except Exception as e:
         logger.error(f"更新缓存时出错了 {cache_category} {cache_key}", exc_info=e)
-        # 无法获取最新数据时，则保底使用最后一次缓存的数据
-        latest_value = cached_value
+        if not return_none_on_exception:
+            # 无法获取最新数据时，则保底使用最后一次缓存的数据
+            latest_value = cached_value
+        else:
+            latest_value = None
 
     cache_info = CacheInfo()
     cache_info.value = latest_value

@@ -1371,6 +1371,23 @@ def get_cid():
     return f"{platform.node()}-{uuid.getnode()}"
 
 
+def is_valid_json_file(json_file: str) -> bool:
+    try:
+        with open(json_file, 'r', encoding='utf-8') as jf:
+            return is_valid_json(jf.read())
+    except Exception:
+        return False
+
+
+def is_valid_json(json_data: str) -> bool:
+    try:
+        json.loads(json_data)
+
+        return True
+    except Exception:
+        return False
+
+
 def get_resolution() -> str:
     width, height = get_screen_size()
     return f"{width}x{height}"

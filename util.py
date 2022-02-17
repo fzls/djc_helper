@@ -331,7 +331,7 @@ def disable_quick_edit_mode():
 def show_quick_edit_mode_tip():
     logger.info(
         color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
-                             "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）"
+        "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）"
     )
 
 
@@ -581,7 +581,7 @@ def filter_unused_params(urlRendered: str) -> str:
     if "?" in urlRendered:
         # https://www.example.com/index?a=1&b=2
         idx = urlRendered.index("?")
-        path, urlRendered = urlRendered[:idx], urlRendered[idx + 1:]
+        path, urlRendered = urlRendered[:idx], urlRendered[idx + 1 :]
     elif "=" in urlRendered or "&" in urlRendered:
         # a=1&b=2
         path, urlRendered = "", urlRendered
@@ -1382,7 +1382,7 @@ def get_cid():
 
 def is_valid_json_file(json_file: str) -> bool:
     try:
-        with open(json_file, 'r', encoding='utf-8') as jf:
+        with open(json_file, encoding="utf-8") as jf:
             return is_valid_json(jf.read())
     except Exception:
         return False

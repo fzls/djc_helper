@@ -3,7 +3,7 @@ import os
 import re
 from collections import namedtuple
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 from compress import compress_file_with_lzma, decompress_file_with_lzma
 from const import compressed_temp_dir, downloads_dir
@@ -263,7 +263,8 @@ class Uploader:
         try_compressed_version_first=False,
         cache_max_seconds=600,
         download_only_if_server_version_is_newer=True,
-    ) -> str:
+        return_none_on_exception=False,
+    ) -> Optional[str]:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
@@ -281,6 +282,7 @@ class Uploader:
                     download_only_if_server_version_is_newer=download_only_if_server_version_is_newer,
                 ),
                 cache_validate_func=lambda target_path: os.path.isfile(target_path),
+                return_none_on_exception=return_none_on_exception,
             )
 
         if try_compressed_version_first:

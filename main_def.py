@@ -1626,7 +1626,7 @@ def has_buy_auto_updater_dlc_and_query_ok(
                     continue
 
                 buy_users = []
-                with open(user_list_filepath, encoding="utf-8") as data_file:
+                with open(str(user_list_filepath), encoding="utf-8") as data_file:
                     buy_users = json.load(data_file)
 
                 if len(buy_users) != 0:
@@ -1751,7 +1751,7 @@ def get_user_buy_info_from_netdisk(
                         if time_less(old_info.expire_at, info.expire_at):
                             buy_users[qq] = info
 
-                with open(buy_info_filepath, encoding="utf-8") as data_file:
+                with open(str(buy_info_filepath), encoding="utf-8") as data_file:
                     raw_infos = json.load(data_file)
                     for qq, raw_info in raw_infos.items():
                         info = BuyInfo().auto_update_config(raw_info)

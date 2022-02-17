@@ -73,7 +73,12 @@ class Uploader:
         self.lzy = LanZouCloud()
         self.login_ok = False
 
-    def login(self, cookie):
+    def login(self, cookie: str = ""):
+        # 仅上传需要登录
+        if cookie == "":
+            with open("upload_cookie.json") as fp:
+                cookie = json.load(fp)
+
         # 仅上传需要登录
         self.login_ok = self.lzy.login_by_cookie(cookie) == LanZouCloud.SUCCESS
 

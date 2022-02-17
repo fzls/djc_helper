@@ -354,6 +354,21 @@ def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, 
         logger.info(color("bold_yellow") + set_title_cmd)
 
 
+def gen_config_for_github_action_json_single_line(github_action_config_path="config.toml.github_action"):
+    target_filepath = f"{github_action_config_path}.json"
+
+    with open(github_action_config_path, encoding="utf-8") as toml_file:
+        with open(target_filepath, "w", encoding="utf-8") as save_file:
+            cfg = toml.load(toml_file)
+            json.dump(cfg, save_file)
+
+    show_file_content_info("json版本", pathlib.Path(target_filepath).read_text())
+
+
+def json_to_toml(github_action_config_json: str) -> str:
+    return toml.dumps(json.loads(github_action_config_json))
+
+
 def uin2qq(uin):
     return str(uin)[1:].lstrip("0")
 
@@ -898,17 +913,6 @@ def gen_config_for_github_action_base64(
     show_file_content_info(ctx, pathlib.Path(target_filepath).read_text())
 
 
-def gen_config_for_github_action_json_single_line(github_action_config_path="config.toml.github_action"):
-    target_filepath = f"{github_action_config_path}.json"
-
-    with open(github_action_config_path, encoding="utf-8") as toml_file:
-        with open(target_filepath, "w", encoding="utf-8") as save_file:
-            cfg = toml.load(toml_file)
-            json.dump(cfg, save_file)
-
-    show_file_content_info("json版本", pathlib.Path(target_filepath).read_text())
-
-
 def show_file_content_info(ctx: str, file_content: str):
     total_size = len(file_content)
     total_lines = file_content.count("\n") + 1
@@ -921,10 +925,6 @@ def base64_to_toml(github_action_config_base64: str, compress_before_encode=Fals
         toml_bytes = decompress_in_memory_with_lzma(toml_bytes)
 
     return toml_bytes.decode()
-
-
-def json_to_toml(github_action_config_json: str) -> str:
-    return toml.dumps(json.loads(github_action_config_json))
 
 
 def disable_pause_after_run() -> bool:

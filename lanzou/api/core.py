@@ -68,7 +68,6 @@ class LanZouCloud(object):
         #   1. 将 _host_url 的域名改为新的
         #   2. 把 最新的域名，比如 lanzouo 加到可能的域名列表的最前面
         #   3. 如果下面的域名有部分不再出现在备案信息中了，可以直接注释或者移除
-        self._host_url = 'https://pan.lanzoup.com'
         self.available_domains = [
             'lanzouu.com',  # 2021-01-17 鲁ICP备15001327号-21
             'lanzouh.com',  # 2021-01-17 鲁ICP备15001327号-20
@@ -88,6 +87,10 @@ class LanZouCloud(object):
             'lanzoui.com',  # 2020-06-09 鲁ICP备15001327号-6
             'lanzoux.com',  # 2020-06-09 鲁ICP备15001327号-5
         ]
+        
+        # 默认链接使用最新的域名
+        latest_domain = self.available_domains[0]
+        self._host_url = re.sub(r'lanzou\w\.com', latest_domain, 'https://pan.lanzoup.com')
 
     def _get(self, url, **kwargs):
         for possible_url in self._all_possible_urls(url):

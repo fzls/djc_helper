@@ -48,7 +48,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "心悦app"),
-    newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-20 23:59:59", "管家蚊子腿"),
+    newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2021-01-20 00:00:00", "2022-02-20 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),

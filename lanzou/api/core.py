@@ -70,6 +70,11 @@ class LanZouCloud(object):
         #   3. 如果下面的域名有部分不再出现在备案信息中了，可以直接注释或者移除
         self._host_url = 'https://pan.lanzoup.com'
         self.available_domains = [
+            'lanzouu.com',  # 2021-01-17 鲁ICP备15001327号-21
+            'lanzouh.com',  # 2021-01-17 鲁ICP备15001327号-20
+            'lanzoum.com',  # 2021-01-17 鲁ICP备15001327号-19
+            'lanzouf.com',  # 2021-01-17 鲁ICP备15001327号-18
+            'lanzoub.com',  # 2021-01-17 鲁ICP备15001327号-17
             'lanzoup.com',  # 2021-12-10 鲁ICP备15001327号-16
             'lanzout.com',  # 2021-12-10 鲁ICP备15001327号-15
             'lanzouy.com',  # 2021-12-10 鲁ICP备15001327号-14

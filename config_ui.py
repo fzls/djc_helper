@@ -639,7 +639,7 @@ class ConfigUi(QFrame):
         self.lineedit_game_qqs.setValidator(QQListValidator())
         form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_game_qqs)
 
-        btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务", "MediumSpringGreen")
+        btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务（二十分钟内生效）", "MediumSpringGreen")
         vbox_layout.addWidget(btn_pay_by_card_and_secret)
 
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)

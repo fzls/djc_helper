@@ -569,10 +569,10 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
-            ("DNF马杰洛的规划", self.majieluo),
             ("冒险的起点", self.maoxian_start),
             ("勇士的冒险补给", self.maoxian),
             ("DNF共创投票", self.dnf_dianzan),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6793,6 +6793,8 @@ class DjcHelper:
         )
 
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
+    flowid_majieluo_query_info = "121146"
+
     @try_except()
     def majieluo(self):
         show_head_line("DNF马杰洛的规划")
@@ -6805,13 +6807,13 @@ class DjcHelper:
         self.check_majieluo()
 
         def query_info() -> MaJieLuoInfo:
-            raw_res = self.majieluo_op("查询信息", "116819", print_res=False)
+            raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
 
             return MaJieLuoInfo().auto_update_config(raw_res["jData"])
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "116809")
+            self.majieluo_op("领取见面礼", "121138")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -6821,15 +6823,15 @@ class DjcHelper:
             take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
-        self.majieluo_op("每日登录礼包", "116810")
-        self.majieluo_op("每日通关史诗之路礼包", "116813")
+        self.majieluo_op("每日登录礼包", "121139")
+        self.majieluo_op("每日通关异界礼包", "121142")
 
         # 抽奖
         info = query_info()
         lottery_times = int(info.iDraw)
         logger.info(color("bold_cyan") + f"当前抽奖次数为 {lottery_times}")
         for idx in range_from_one(lottery_times):
-            self.majieluo_op(f"{idx}/{lottery_times} 幸运抽奖", "116816")
+            self.majieluo_op(f"{idx}/{lottery_times} 幸运抽奖", "121143")
 
         # 赠送礼盒
         self.majieluo_permit_social()
@@ -6861,9 +6863,9 @@ class DjcHelper:
 
         # self.majieluo_op("累计赠送30次礼包", "113887")
         #
-        # # 提取得福利
-        # stoneCount = self.query_stone_count()
-        # logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
+        # 提取得福利
+        stoneCount = self.query_stone_count()
+        logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
 
         act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
         sDownDate = act_info.dev.action.sDownDate
@@ -6874,8 +6876,7 @@ class DjcHelper:
 
         if get_today() == endTime:
             # 最后一天再领取仅可领取单次的奖励
-            self.majieluo_op("福气礼包", "116817")
-            self.majieluo_op("幸运礼包", "116818")
+            self.majieluo_op("晶体礼包", "121144")
 
         # takeStone = False
         # takeStoneFlowId = "113898"
@@ -6906,8 +6907,9 @@ class DjcHelper:
         self.majieluo_permit_social()
 
         results = []
+        iType = 0  # 0 赠送 1 索要
         for openid in xiaohao_qq_list:
-            res = self.majieluo_op(f"赠送单个用户（发送好友ark消息）-{openid}", "113966", openid=openid, p_skey=p_skey)
+            res = self.majieluo_op(f"赠送单个用户（发送好友ark消息）-{openid}", "121147", openid=openid, iType=iType, p_skey=p_skey)
             if int(res["iRet"]) == 0:
                 results.append("赠送成功")
             else:
@@ -6919,20 +6921,20 @@ class DjcHelper:
     def majieluo_open_box(self, scode: str) -> tuple[int, str]:
         self.majieluo_permit_social()
 
-        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "116801", sCode=scode)
+        raw_res = self.majieluo_op(f"接受好友赠送礼盒 - {scode}", "121130", sCode=scode)
         return raw_res["iRet"], raw_res["sMsg"]
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_invite_count(self) -> int:
-        res = self.majieluo_op("查询邀请数目", "116819", print_res=False)
+        res = self.majieluo_op("查询邀请数目", self.flowid_majieluo_query_info, print_res=False)
 
         return len(res["jData"]["iSend"])
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "116821", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "121148", print_res=False)
 
-        return int(res["jData"]["iStones"])
+        return int(res["jData"]["iFuqi"])
 
     def check_majieluo(self, **extra_params):
         return self.ide_check_bind_account(
@@ -10265,4 +10267,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.mojieren()
+        djcHelper.majieluo()

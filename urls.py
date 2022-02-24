@@ -86,10 +86,10 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220120care/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20211220lbdiwme/index.html",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20211231recall/indexpc.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220224care/index.html",
     #
     # 已过期活动
     #
@@ -295,7 +295,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "93_6YpT4D"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "99_8jv3uh"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
 
         self.ide = "https://{ide_host}/ide/"

@@ -82,20 +82,20 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
-    "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220120care/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20220120index/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20211220lbdiwme/index.html",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20211231recall/indexpc.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
     #
     # 已过期活动
     #
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20220120index/index.html",
+    "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
+    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220119wegame/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220121gather/",

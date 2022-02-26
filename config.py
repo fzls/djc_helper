@@ -1144,9 +1144,9 @@ class CommonConfig(ConfigInterface):
             "gitclone.com/github.com",
         ]
         # 自动更新dlc购买地址
-        self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.net/purchasing?link=auto-updater"
+        self.auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
         # 按月付费购买地址
-        self.pay_by_month_purchase_url = "https://www.kuaifaka.net/purchasing?link=pay-by-month"
+        self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
         # 网盘地址
         self.netdisk_link = "https://fzls.lanzouo.com/s/djc-helper"
         # QQ群

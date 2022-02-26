@@ -1148,7 +1148,7 @@ class CommonConfig(ConfigInterface):
         # 按月付费购买地址
         self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
         # 网盘地址
-        self.netdisk_link = "https://fzls.lanzouo.com/s/djc-helper"
+        self.netdisk_link = "https://fzls.lanzoum.com/s/djc-helper"
         # QQ群
         self.qq_group = 517463079
         # 是否启用自动更新功能

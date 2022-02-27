@@ -1390,26 +1390,8 @@ def show_tips(cfg: Config):
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
-        "22春节手动参与的活动": (
-            "以下活动请手动参与:\n"
-            "1. 心悦充值点花灯 https://xinyue.qq.com/act/a20211209xinchun/share.html\n"
-            "2. 预购活动 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xctdqygz_lottery&pf=__mds_dnf_share&_wv=1\n"
-            "3. 年套补给站 https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_xcjqdhz_lottery&pf=__mds_dnf_dy_xzs\n"
-            "4. 拼团活动 https://club.vip.qq.com/qqvip/acts2022/dnfGroup?_wv=16777216"
-        ),
-        "22春节联动会员活动": (
-            "以下活动是各种会员联动，购买对应会员后可以领取特定奖励，以及兑换部分奖励\n"
-            "1. QQ视频 https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html\n"
-            "2. 超级会员 https://act.qzone.qq.com/v2/vip/tx/p/20687_41fbdb6b\n"
-            "3. 黄钻 https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c\n"
-        ),
         "22魔界人跳一跳": (
             "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
-        ),
-        "22直播活动": (
-            "斗鱼虎牙的活动请自行完成\n"
-            "斗鱼：https://www.douyu.com/topic/DNFXCFL?rid=5324055\n"
-            "虎牙：https://www.huya.com/g/2#cate-1-5027\n"
         ),
     }
 
@@ -1438,8 +1420,8 @@ def show_tips_for_myself():
     # if is_weekly_first_run("微信支付维护提示"):
     #     show_tip_for_myself("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
 
-    if is_weekly_first_run("交易乐维护提示"):
-        show_tip_for_myself("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
+    # if is_weekly_first_run("交易乐维护提示"):
+    #     show_tip_for_myself("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
 
 
 def show_tip_for_myself(msg: str, title: str):

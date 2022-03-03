@@ -4468,6 +4468,9 @@ class DjcHelper:
                 msg = f"账号 {self.cfg.name} 的 dnf助手app 绑定的角色与 道聚城app 绑定的角色不一样，会导致无法自动领取等级奖励，请将两个调整为一样的。"
                 if is_daily_first_run(f"编年史查询角色失败_{self.cfg.name}"):
                     async_message_box(msg, "助手角色不一致")
+            elif ret_msg == "角色绑定的账号错误":
+                msg = f"账号 {self.cfg.name} 的 dnf编年史尚未初始化，请手动去助手app到编年史页面完成初始化操作（也就是 是否绑定 QQ XXX 为本期编年史的账号），点下确认即可"
+                logger.warning(msg)
 
         def prompt_take_awards():
             # 如果有奖励，且未配置token，则在下列情况提醒手动领取

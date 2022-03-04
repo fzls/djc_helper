@@ -2813,8 +2813,8 @@ def main():
     ui = ConfigUi()
     ui.show()
 
-    # re: 目前支付网站有点问题，临时先默认启用卡密，等其恢复后再调整回来
-    ui.set_card_secret_button_status(True)
+    # re: 在这里控制默认显示卡密（True）还是直接购买界面（False）
+    ui.set_card_secret_button_status(False)
 
     show_notices()
 

@@ -190,10 +190,15 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "支付备选方案"
-    message = """支付网站好像暂时挂掉了，需要续费的朋友们，可以先试试卡密方案（具体流程可以看付费指引）
+    title = "绑定手机领666代币券"
+    message = """之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点
+1. 绑定手机
+2. 点击领取
+
+https://dnf.qq.com/cp/a20211230info/index.html
+(点确认后会弹出活动页面）
 """
-    open_url = ""
+    open_url = "https://dnf.qq.com/cp/a20211230info/index.html"
     show_only_before_version = ""
 
     if title != "":

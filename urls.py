@@ -23,6 +23,9 @@ from util import (
     with_cache,
 )
 
+# 活动描述文件缓存时间
+DESC_JS_CACHE_SECONDS = 1 * 24 * 3600
+
 
 def newNotAmsActInfo(dtBeginTime: str, dtEndTime: str, sActivityName: str) -> AmsActInfo:
     info = AmsActInfo()
@@ -523,12 +526,10 @@ def search_act(actId) -> Optional[AmsActInfo]:
 def get_act_desc_js(actId):
     actId = str(actId)
 
-    a_week_seconds = 7 * 24 * 3600
-
     act_cache_file = with_cache(
         "act_desc",
         actId,
-        cache_max_seconds=a_week_seconds,
+        cache_max_seconds=DESC_JS_CACHE_SECONDS,
         cache_miss_func=lambda: download_act_desc_js(actId),
         cache_validate_func=lambda filepath: os.path.isfile(filepath),
     )
@@ -581,12 +582,10 @@ def search_ide_act(actId: str) -> Optional[IdeActInfo]:
 def get_ide_act_desc_json(actId) -> str:
     actId = str(actId)
 
-    a_week_seconds = 7 * 24 * 3600
-
     act_cache_file = with_cache(
         "ide_act_desc",
         actId,
-        cache_max_seconds=a_week_seconds,
+        cache_max_seconds=DESC_JS_CACHE_SECONDS,
         cache_miss_func=lambda: download_ide_act_desc_json(actId),
         cache_validate_func=lambda filepath: os.path.isfile(filepath),
     )

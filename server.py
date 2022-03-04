@@ -32,6 +32,9 @@ def get_match_server_api(api_name="/") -> str:
 def get_server_ip() -> str:
     global current_chosen_server_ip
 
+    # 可取消下面这行来本地测试，显示调试日志
+    # logger.debug = logger.warning
+
     if current_chosen_server_ip == "":
         logger.debug(f"开始尝试选择可用的服务器: {server_ip_list}，超时时间为{check_timeout}秒")
         # 按优先级选择第一个可用的服务器

@@ -2133,6 +2133,7 @@ def demo_pay_info():
     # from config import to_raw_type
     # cfg.common.on_config_update(to_raw_type(cfg.common))
 
+    # from util import reset_cache
     # reset_cache(cache_name_user_buy_info)
 
     logger.info("尝试获取DLC信息")

@@ -32,26 +32,27 @@ def get_match_server_api(api_name="/") -> str:
 def get_server_ip() -> str:
     global current_chosen_server_ip
 
+    debugFunc = logger.debug
     # 可取消下面这行来本地测试，显示调试日志
-    # logger.debug = logger.warning
+    # debugFunc = logger.warning
 
     if current_chosen_server_ip == "":
-        logger.debug(f"开始尝试选择可用的服务器: {server_ip_list}，超时时间为{check_timeout}秒")
+        debugFunc(f"开始尝试选择可用的服务器: {server_ip_list}，超时时间为{check_timeout}秒")
         # 按优先级选择第一个可用的服务器
         for ip in server_ip_list:
-            logger.debug("尝试连接服务器: " + ip)
+            debugFunc("尝试连接服务器: " + ip)
             if is_server_alive(ip):
                 current_chosen_server_ip = ip
                 break
 
-            logger.debug("连接失败")
+            debugFunc("连接失败")
 
         # 没有任何可用服务器时，取第一个
         if current_chosen_server_ip == "":
             current_chosen_server_ip = server_ip_list[0]
             logger.warning(f"未发现任何可用服务器，将使用首个服务器 {current_chosen_server_ip}")
 
-        logger.debug(color("bold_cyan") + f"已初始化服务器为 {current_chosen_server_ip}")
+        debugFunc(color("bold_cyan") + f"已初始化服务器为 {current_chosen_server_ip}")
 
         # 上报选用的服务器ip
         increase_counter(ga_category="chosen_server_ip", name=current_chosen_server_ip)

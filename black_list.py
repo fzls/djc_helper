@@ -1,5 +1,6 @@
 from sys import exit
 
+from config_cloud import config_cloud
 from util import message_box, uin2qq
 
 
@@ -30,7 +31,18 @@ black_list = {
 }
 
 
+def try_update_black_list():
+    remote_config = config_cloud()
+    for info in remote_config.black_list:
+        if info.qq in black_list:
+            continue
+
+        black_list[info.qq] = BlackListInfo(info.ban_at, info.qq, info.nickname, info.reason)
+
+
 def check_in_black_list(uin):
+    try_update_black_list()
+
     qq = uin2qq(uin)
     if qq in black_list:
         message = (

@@ -35,7 +35,6 @@ from config import (
 )
 from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
-from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from qt_wrapper import (
     ConfirmMessageBox,
@@ -2837,7 +2836,7 @@ def main():
             logger.info("远程配置禁用直接购买界面")
             ui.collapsible_box_pay_directly.setVisible(False)
 
-        logger.info(f"远程配置禁用了卡密或直接购买界面，将隐藏切换按钮")
+        logger.info("远程配置禁用了卡密或直接购买界面，将隐藏切换按钮")
         ui.btn_toggle_card_secret.setVisible(False)
 
     show_notices()

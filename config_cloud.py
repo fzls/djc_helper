@@ -91,7 +91,7 @@ def async_update_config_cloud():
     async_call(download_github_raw_content, cloud_config_filename, save_dir)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_config_cloud()
     logger.info(f"{g_config_cloud}")
 

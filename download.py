@@ -48,8 +48,8 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
     return target_file_path
 
 
-def download_latest_github_release(download_dir: str) -> str:
-    release_file_path = "fzls/djc_helper/releases/latest/download/djc_helper.7z"
+def download_latest_github_release(download_dir: str, owner="fzls", repo_name="djc_helper", asset_name="djc_helper.7z") -> str:
+    release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
 
     # 先加入比较快的几个镜像
     urls = [

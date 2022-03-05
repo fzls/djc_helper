@@ -1,5 +1,6 @@
 import requests
 
+from config_cloud import config_cloud
 from log import color, logger
 from usage_count import increase_counter
 
@@ -37,6 +38,11 @@ def get_server_ip() -> str:
     # debugFunc = logger.warning
 
     if current_chosen_server_ip == "":
+        config = config_cloud()
+        if len(config.server_ip_list) != 0:
+            server_ip_list.extend(config.server_ip_list)
+            debugFunc(f"从远程配置获取到新的服务器列表：{config.server_ip_list}")
+
         debugFunc(f"开始尝试选择可用的服务器: {server_ip_list}，超时时间为{check_timeout}秒")
         # 按优先级选择第一个可用的服务器
         for ip in server_ip_list:

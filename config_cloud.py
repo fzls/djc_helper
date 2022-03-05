@@ -1,4 +1,5 @@
 from os import path
+from typing import List
 
 import toml
 
@@ -15,8 +16,8 @@ class ConfigCloud(ConfigInterface):
         # 是否已经从配置文件中加载
         self.loaded = False
 
-        # 测试开关
-        self.test = "未加载"
+        # 新增的服务器IP列表
+        self.server_ip_list: List[str] = []
 
 
 # 配置保存路径

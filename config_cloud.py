@@ -75,7 +75,6 @@ def load_config_cloud():
     except Exception as e:
         logger.debug("读取远程配置失败", exc_info=e)
 
-    # 尝试异步从github下载最新的远程配置，供下次读取使用（主要是为了避免影响其他流程）
     async_update_config_cloud()
 
     # 标记为已经初始化完毕
@@ -84,6 +83,7 @@ def load_config_cloud():
 
 @try_except()
 def async_update_config_cloud():
+    logger.info("尝试异步从github下载最新的远程配置，供下次读取使用（主要是为了避免影响其他流程）")
     async_call(download_github_raw_content, cloud_config_filename, save_dir)
 
 

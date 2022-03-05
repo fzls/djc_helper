@@ -666,9 +666,7 @@ class ConfigUi(QFrame):
             ):
                 self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
 
-        self.lineedit_pay_directly_game_qqs = create_lineedit(
-            "", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
-        )
+        self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
         self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
         form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
 

@@ -3,11 +3,12 @@ import random
 
 import requests
 
+from const import downloads_dir
 from log import color, logger
 from util import get_now, make_sure_dir_exists, show_progress
 
 
-def download_file(url: str, download_dir=".cached/downloads", filename="", connect_timeout=10) -> str:
+def download_file(url: str, download_dir=downloads_dir, filename="", connect_timeout=10) -> str:
     """
     下载指定url的文件到指定目录
 
@@ -57,7 +58,7 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
     return target_file_path
 
 
-def download_latest_github_release(download_dir: str, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper") -> str:
+def download_latest_github_release(download_dir=downloads_dir, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper", connect_timeout=10) -> str:
     """
     从github及其镜像下载指定仓库最新的release中指定资源
 
@@ -65,6 +66,7 @@ def download_latest_github_release(download_dir: str, asset_name="djc_helper.7z"
     :param asset_name: release的资源名称
     :param owner: 仓库拥有者名称
     :param repo_name: 仓库名称
+    :param connect_timeout: 连接超时时间
     :return: 最终下载的本地文件绝对路径
     """
     release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
@@ -97,7 +99,7 @@ def download_latest_github_release(download_dir: str, asset_name="djc_helper.7z"
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
         try:
-            return download_file(url, download_dir)
+            return download_file(url, download_dir, connect_timeout=connect_timeout)
         except Exception as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)

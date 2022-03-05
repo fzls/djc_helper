@@ -58,7 +58,6 @@ g_config_cloud = ConfigCloud()
 # 获取远程配置，首次调用时会触发加载
 def config_cloud() -> ConfigCloud:
     if not g_config_cloud.loaded:
-        logger.info("配置尚未加载，需要初始化")
         load_config_cloud()
 
     return g_config_cloud

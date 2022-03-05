@@ -108,5 +108,53 @@ def download_latest_github_release(download_dir=downloads_dir, asset_name="djc_h
     raise Exception("所有镜像都下载失败")
 
 
+def download_latest_github_raw_content(filepath_in_repo: str, download_dir=downloads_dir, owner="fzls", repo_name="djc_helper", branch_name="master", connect_timeout=10) -> str:
+    """
+    从github及其镜像下载指定仓库的指定分支的指定文件到本地指定目录
+
+    :param filepath_in_repo: 要下载的文件在仓库中的路径，如 docs/README.md
+    :param download_dir: 本地保存的目录
+    :param owner: 仓库拥有者名称
+    :param repo_name: 仓库名称
+    :param branch_name: 分支名称
+    :param connect_timeout: 连接超时
+    :return: 最终下载的本地文件绝对路径
+    """
+    # 先加入比较快的几个镜像
+    urls = [
+        f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+    ]
+
+    # 随机乱序，确保均匀分布请求
+    random.shuffle(urls)
+
+    # 最后加入几个慢的镜像和源站
+    urls.extend(
+        [
+            f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
+        ]
+    )
+
+    # 开始依次下载，直到成功下载
+    for idx, url in enumerate(urls):
+        try:
+            return download_file(url, download_dir, connect_timeout=connect_timeout)
+        except Exception as e:
+            logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
+            logger.debug("详细异常信息", exc_info=e)
+            continue
+
+    raise Exception("所有镜像都下载失败")
+
+
 if __name__ == "__main__":
-    download_latest_github_release(".cached/downloads")
+    # download_latest_github_release()
+    download_latest_github_raw_content("CHANGELOG.MD")

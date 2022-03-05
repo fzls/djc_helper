@@ -565,12 +565,12 @@ class DjcHelper:
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF马杰洛的规划", self.majieluo),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("DNF共创投票", self.dnf_dianzan),
-            ("勇士的冒险补给", self.maoxian),
             ("冒险的起点", self.maoxian_start),
             ("黄钻", self.dnf_yellow_diamond),
             ("超级会员", self.dnf_super_vip),
@@ -8268,25 +8268,22 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_op("回归角色登录礼包", "831159")
-
-        # self.maoxian_op("抽奖", "831228")
-
-        self.maoxian_op("每日通关副本", "831378")
-        self.maoxian_op("累计获得每日奖励 - 3次", "831410")
-        self.maoxian_op("累计获得每日奖励 - 5", "831428")
-        self.maoxian_op("累计获得每日奖励 - 8", "831429")
-        self.maoxian_op("累计获得每日奖励 - 12", "831430")
-        self.maoxian_op("累计获得每日奖励 - 16", "831431")
-        self.maoxian_op("累计获得每日奖励 - 20", "831432")
+        self.maoxian_op("1", "839847")
+        self.maoxian_op("2", "839849")
+        self.maoxian_op("3", "839850")
+        self.maoxian_op("4", "839851")
+        self.maoxian_op("5", "839852")
+        self.maoxian_op("任务1_copy", "839853")
+        self.maoxian_op("任务2_copy", "839854")
+        self.maoxian_op("任务3_copy", "839855")
 
     def check_maoxian_dup(self):
         self.check_bind_account(
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
             activity_op_func=self.maoxian_op,
-            query_bind_flowid="831224",
-            commit_bind_flowid="831223",
+            query_bind_flowid="839813",
+            commit_bind_flowid="839812",
         )
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -8298,9 +8295,9 @@ class DjcHelper:
 
         res = self.amesvr_request(
             ctx,
-            "comm.ams.game.qq.com",
-            "group_k",
-            "bb",
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
             iActivityId,
             iFlowId,
             print_res,
@@ -10270,4 +10267,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.maoxian()

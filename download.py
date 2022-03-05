@@ -108,7 +108,7 @@ def download_latest_github_release(download_dir=downloads_dir, asset_name="djc_h
     raise Exception("所有镜像都下载失败")
 
 
-def download_latest_github_raw_content(filepath_in_repo: str, download_dir=downloads_dir, owner="fzls", repo_name="djc_helper", branch_name="master", connect_timeout=10) -> str:
+def download_github_raw_content(filepath_in_repo: str, download_dir=downloads_dir, owner="fzls", repo_name="djc_helper", branch_name="master", connect_timeout=10) -> str:
     """
     从github及其镜像下载指定仓库的指定分支的指定文件到本地指定目录
 
@@ -157,4 +157,4 @@ def download_latest_github_raw_content(filepath_in_repo: str, download_dir=downl
 
 if __name__ == "__main__":
     # download_latest_github_release()
-    download_latest_github_raw_content("CHANGELOG.MD")
+    download_github_raw_content("CHANGELOG.MD")

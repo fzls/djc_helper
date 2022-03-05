@@ -19,6 +19,12 @@ class ConfigCloud(ConfigInterface):
         # 新增的服务器IP列表
         self.server_ip_list: List[str] = []
 
+        # 是否启用卡密界面
+        self.enable_card_secret = True
+        # 是否启用直接购买界面
+        self.enable_pay_directly = True
+        # 是否优先展示卡密界面
+        self.show_card_secret_first = False
 
 # 配置保存路径
 save_dir = downloads_dir

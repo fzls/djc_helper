@@ -33,6 +33,7 @@ from config import (
     load_config,
     save_config,
 )
+from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
 from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
@@ -2815,8 +2816,29 @@ def main():
     ui = ConfigUi()
     ui.show()
 
-    # re: 在这里控制默认显示卡密（True）还是直接购买界面（False）
-    ui.set_card_secret_button_status(False)
+    # 按照远程配置，调整付费界面
+    remote_config = config_cloud()
+
+    # 先将全部界面都显示
+    ui.collapsible_box_buy_card_secret.setVisible(True)
+    ui.collapsible_box_use_card_secret.setVisible(True)
+    ui.collapsible_box_pay_directly.setVisible(True)
+
+    if remote_config.enable_card_secret and remote_config.enable_pay_directly:
+        logger.info(f"远程配置优先显示卡密: {remote_config.show_card_secret_first}")
+        ui.set_card_secret_button_status(remote_config.show_card_secret_first)
+    else:
+        if not remote_config.enable_card_secret:
+            logger.info("远程配置禁用卡密界面")
+            ui.collapsible_box_buy_card_secret.setVisible(False)
+            ui.collapsible_box_use_card_secret.setVisible(False)
+
+        if not remote_config.enable_pay_directly:
+            logger.info("远程配置禁用直接购买界面")
+            ui.collapsible_box_pay_directly.setVisible(False)
+
+        logger.info(f"远程配置禁用了卡密或直接购买界面，将隐藏切换按钮")
+        ui.btn_toggle_card_secret.setVisible(False)
 
     show_notices()
 

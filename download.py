@@ -49,6 +49,15 @@ def download_file(url: str, download_dir=".cached/downloads", filename="", conne
 
 
 def download_latest_github_release(download_dir: str, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper") -> str:
+    """
+    从github及其镜像下载指定仓库最新的release中指定资源
+
+    :param download_dir: 下载目录
+    :param asset_name: release的资源名称
+    :param owner: 仓库拥有者名称
+    :param repo_name: 仓库名称
+    :return: 最终下载的本地文件绝对路径
+    """
     release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
 
     # 先加入比较快的几个镜像

@@ -60,7 +60,11 @@ def download_latest_github_release(download_dir: str, owner="fzls", repo_name="d
         f"https://ghgo.feizhuqwq.workers.dev/https://github.com/{release_file_path}",
         f"https://git.yumenaka.net/https://github.com/{release_file_path}",
         f"https://ghproxy.com/https://github.com/{release_file_path}",
+        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+        f"https://github.ddlc.love/https://github.com/{release_file_path}",
+        f"https://github.do/https://github.com/{release_file_path}",
     ]
+
     # 随机乱序，确保均匀分布请求
     random.shuffle(urls)
 

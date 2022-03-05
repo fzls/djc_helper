@@ -76,6 +76,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
         ".": [
             *list(path.name for path in pathlib.Path(".").glob("requirements*.txt")),
             "config.toml.local",
+            "config.cloud.toml",
             *list(path.name for path in pathlib.Path(".").glob("config.toml.github_action*")),
         ],
         "utils": [

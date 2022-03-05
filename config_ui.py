@@ -1061,6 +1061,37 @@ class ConfigUi(QFrame):
             self.hide_card_secret()
             self.btn_toggle_card_secret.setText("显示原来的卡密支付界面")
 
+    def adjust_pay_window(self):
+        if not use_new_pay_method():
+            # 没有使用新支付方式的情况下，只需要隐藏切换按钮，无需额外处理
+            logger.info("未使用新支付方式，不需要显示切换按钮")
+            self.btn_toggle_card_secret.setVisible(False)
+            return
+
+        # 按照远程配置，调整付费界面
+        remote_config = config_cloud()
+
+        # 先将全部界面都显示
+        self.collapsible_box_buy_card_secret.setVisible(True)
+        self.collapsible_box_use_card_secret.setVisible(True)
+        self.collapsible_box_pay_directly.setVisible(True)
+
+        if remote_config.enable_card_secret and remote_config.enable_pay_directly:
+            logger.info(f"远程配置优先显示卡密: {remote_config.show_card_secret_first}")
+            self.set_card_secret_button_status(remote_config.show_card_secret_first)
+        else:
+            if not remote_config.enable_card_secret:
+                logger.info("远程配置禁用卡密界面")
+                self.collapsible_box_buy_card_secret.setVisible(False)
+                self.collapsible_box_use_card_secret.setVisible(False)
+
+            if not remote_config.enable_pay_directly:
+                logger.info("远程配置禁用直接购买界面")
+                self.collapsible_box_pay_directly.setVisible(False)
+
+            logger.info("远程配置禁用了卡密或直接购买界面，将隐藏切换按钮")
+            self.btn_toggle_card_secret.setVisible(False)
+
     def auto_run_on_login(self):
         self.popen(
             [
@@ -2815,29 +2846,7 @@ def main():
     ui = ConfigUi()
     ui.show()
 
-    # 按照远程配置，调整付费界面
-    remote_config = config_cloud()
-
-    # 先将全部界面都显示
-    ui.collapsible_box_buy_card_secret.setVisible(True)
-    ui.collapsible_box_use_card_secret.setVisible(True)
-    ui.collapsible_box_pay_directly.setVisible(True)
-
-    if remote_config.enable_card_secret and remote_config.enable_pay_directly:
-        logger.info(f"远程配置优先显示卡密: {remote_config.show_card_secret_first}")
-        ui.set_card_secret_button_status(remote_config.show_card_secret_first)
-    else:
-        if not remote_config.enable_card_secret:
-            logger.info("远程配置禁用卡密界面")
-            ui.collapsible_box_buy_card_secret.setVisible(False)
-            ui.collapsible_box_use_card_secret.setVisible(False)
-
-        if not remote_config.enable_pay_directly:
-            logger.info("远程配置禁用直接购买界面")
-            ui.collapsible_box_pay_directly.setVisible(False)
-
-        logger.info("远程配置禁用了卡密或直接购买界面，将隐藏切换按钮")
-        ui.btn_toggle_card_secret.setVisible(False)
+    ui.adjust_pay_window()
 
     show_notices()
 

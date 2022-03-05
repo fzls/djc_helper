@@ -1,3 +1,4 @@
+from datetime import timedelta
 from os import path
 from typing import List
 
@@ -6,6 +7,7 @@ import toml
 from const import downloads_dir
 from data_struct import ConfigInterface
 from download import download_github_raw_content
+from first_run import is_first_run_in
 from log import logger
 from util import async_call, try_except
 
@@ -82,6 +84,9 @@ def load_config_cloud():
 
 @try_except()
 def async_update_config_cloud():
+    if not is_first_run_in("同步远程配置", timedelta(minutes=10)):
+        return
+
     logger.info("尝试异步从github下载最新的远程配置，供下次读取使用（主要是为了避免影响其他流程）")
     async_call(download_github_raw_content, cloud_config_filename, save_dir)
 

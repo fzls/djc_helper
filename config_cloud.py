@@ -10,6 +10,18 @@ from log import logger
 from util import async_call, try_except
 
 
+class BlackListConfig(ConfigInterface):
+    def __init__(self):
+        # 封禁于
+        self.ban_at = "2020-01-01"
+        # QQ
+        self.qq = ""
+        # 昵称
+        self.nickname = ""
+        # 原因
+        self.reason = ""
+
+
 # 远程配置，方便动态调整部分配置
 class ConfigCloud(ConfigInterface):
     def __init__(self):
@@ -25,6 +37,15 @@ class ConfigCloud(ConfigInterface):
         self.enable_pay_directly = True
         # 是否优先展示卡密界面
         self.show_card_secret_first = False
+
+        # 新增的黑名单
+        self.black_list: List[BlackListConfig] = []
+
+    def fields_to_fill(self):
+        return [
+            ("black_list", BlackListConfig),
+        ]
+
 
 # 配置保存路径
 save_dir = downloads_dir

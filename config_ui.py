@@ -644,61 +644,59 @@ class ConfigUi(QFrame):
 
         btn_pay_by_card_and_secret.clicked.connect(self.pay_by_card_and_secret)
 
-        # 如果不是代理
-        if use_new_pay_method():
-            # 显示新版的付费界面
-            self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout(
-                "购买付费内容(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
-            )
-            vbox_layout = QVBoxLayout()
-            self.collapsible_box_pay_directly.setContentLayout(vbox_layout)
+        # -------------- 区域：直接购买 --------------
+        # 显示新版的付费界面
+        self.collapsible_box_pay_directly = create_collapsible_box_add_to_parent_layout(
+            "购买付费内容(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="LightCyan"
+        )
+        vbox_layout = QVBoxLayout()
+        self.collapsible_box_pay_directly.setContentLayout(vbox_layout)
 
-            form_layout = QFormLayout()
-            vbox_layout.addLayout(form_layout)
+        form_layout = QFormLayout()
+        vbox_layout.addLayout(form_layout)
 
-            self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text="形如 1234567")
-            form_layout.addRow("主QQ", self.lineedit_pay_directly_qq)
-            # 如果首个账号配置为自动登录，且设置了qq，则直接填入作为主QQ默认值，简化操作
-            if len(cfg.account_configs) != 0:
-                account_cfg = cfg.account_configs[0]
-                if (
-                    account_cfg.login_mode == account_cfg.login_mode_auto_login
-                    and account_cfg.account_info.has_set_account()
-                ):
-                    self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
+        self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text="形如 1234567")
+        form_layout.addRow("主QQ", self.lineedit_pay_directly_qq)
+        # 如果首个账号配置为自动登录，且设置了qq，则直接填入作为主QQ默认值，简化操作
+        if len(cfg.account_configs) != 0:
+            account_cfg = cfg.account_configs[0]
+            if (
+                account_cfg.login_mode == account_cfg.login_mode_auto_login
+                and account_cfg.account_info.has_set_account()
+            ):
+                self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
 
-            self.lineedit_pay_directly_game_qqs = create_lineedit(
-                "", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
-            )
-            self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
-            form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
+        self.lineedit_pay_directly_game_qqs = create_lineedit(
+            "", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
+        )
+        self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
+        form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
 
-            form_layout.addWidget(QHLine())
+        form_layout.addWidget(QHLine())
 
-            self.push_button_grid_layout_item_name = create_push_button_grid_layout(all_pay_item_names, "Cyan")
-            form_layout.addRow("付费内容", self.push_button_grid_layout_item_name)
+        self.push_button_grid_layout_item_name = create_push_button_grid_layout(all_pay_item_names, "Cyan")
+        form_layout.addRow("付费内容", self.push_button_grid_layout_item_name)
 
-            form_layout.addWidget(QHLine())
+        form_layout.addWidget(QHLine())
 
-            self.push_button_grid_layout_pay_type_name = create_push_button_grid_layout(all_pay_type_names, "Cyan")
+        self.push_button_grid_layout_pay_type_name = create_push_button_grid_layout(all_pay_type_names, "Cyan")
 
-            form_layout.addRow("付款方式", self.push_button_grid_layout_pay_type_name)
+        form_layout.addRow("付款方式", self.push_button_grid_layout_pay_type_name)
 
-            form_layout.addWidget(QHLine())
+        form_layout.addWidget(QHLine())
 
-            btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可，二十分钟内生效）", "SpringGreen")
-            vbox_layout.addWidget(btn_pay_directly)
+        btn_pay_directly = create_pushbutton("购买对应服务（点击后会跳转到付费页面，扫码支付即可，二十分钟内生效）", "SpringGreen")
+        vbox_layout.addWidget(btn_pay_directly)
 
-            btn_pay_directly.clicked.connect(self.pay_directly)
+        btn_pay_directly.clicked.connect(self.pay_directly)
 
         # -------------- 区域：切换卡密/直接购买界面 --------------
         self.btn_toggle_card_secret = create_pushbutton("显示原来的卡密支付界面")
         self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
         top_layout.addWidget(self.btn_toggle_card_secret)
 
-        if use_new_pay_method():
-            # 如果将卡密界面隐藏起来
-            self.hide_card_secret()
+        # 视情况调整付费界面
+        self.adjust_pay_window()
 
         top_layout.addWidget(QHLine())
 
@@ -735,15 +733,13 @@ class ConfigUi(QFrame):
         self.collapsible_box_buy_card_secret.setVisible(False)
         self.collapsible_box_use_card_secret.setVisible(False)
 
-        if use_new_pay_method():
-            self.collapsible_box_pay_directly.setVisible(True)
+        self.collapsible_box_pay_directly.setVisible(True)
 
     def show_card_secret(self):
         self.collapsible_box_buy_card_secret.setVisible(True)
         self.collapsible_box_use_card_secret.setVisible(True)
 
-        if use_new_pay_method():
-            self.collapsible_box_pay_directly.setVisible(False)
+        self.collapsible_box_pay_directly.setVisible(False)
 
     def buy_auto_updater_dlc(self, checked=False):
         if not self.confirm_buy_auto_updater():
@@ -1063,8 +1059,8 @@ class ConfigUi(QFrame):
 
     def adjust_pay_window(self):
         if not use_new_pay_method():
-            # 没有使用新支付方式的情况下，只需要隐藏切换按钮，无需额外处理
-            logger.info("未使用新支付方式，不需要显示切换按钮")
+            # 没有使用新支付方式的情况下，隐藏切换按钮，并显示卡密界面
+            self.set_card_secret_button_status(True)
             self.btn_toggle_card_secret.setVisible(False)
             return
 
@@ -2845,8 +2841,6 @@ def main():
 
     ui = ConfigUi()
     ui.show()
-
-    ui.adjust_pay_window()
 
     show_notices()
 

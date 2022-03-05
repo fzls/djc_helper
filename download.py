@@ -8,6 +8,15 @@ from util import get_now, make_sure_dir_exists, show_progress
 
 
 def download_file(url: str, download_dir=".cached/downloads", filename="", connect_timeout=10) -> str:
+    """
+    下载指定url的文件到指定目录
+
+    :param url: 要下载的文件的url
+    :param download_dir: 保存的目录
+    :param filename: 保存的文件名，如果为空，则使用url的文件名
+    :param connect_timeout: 连接超时时间
+    :return: 下载后的文件绝对路径
+    """
     download_dir = os.path.realpath(download_dir)
     filename = filename or os.path.basename(url)
 

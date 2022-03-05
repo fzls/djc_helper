@@ -58,7 +58,9 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
     return target_file_path
 
 
-def download_latest_github_release(download_dir=downloads_dir, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper", connect_timeout=10) -> str:
+def download_latest_github_release(
+    download_dir=downloads_dir, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper", connect_timeout=10
+) -> str:
     """
     从github及其镜像下载指定仓库最新的release中指定资源
 
@@ -108,7 +110,14 @@ def download_latest_github_release(download_dir=downloads_dir, asset_name="djc_h
     raise Exception("所有镜像都下载失败")
 
 
-def download_github_raw_content(filepath_in_repo: str, download_dir=downloads_dir, owner="fzls", repo_name="djc_helper", branch_name="master", connect_timeout=10) -> str:
+def download_github_raw_content(
+    filepath_in_repo: str,
+    download_dir=downloads_dir,
+    owner="fzls",
+    repo_name="djc_helper",
+    branch_name="master",
+    connect_timeout=10,
+) -> str:
     """
     从github及其镜像下载指定仓库的指定分支的指定文件到本地指定目录
 

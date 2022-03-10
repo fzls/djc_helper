@@ -190,15 +190,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "绑定手机领666代币券"
-    message = """之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点
-1. 绑定手机
-2. 点击领取
+    title = "下载DNF蚊子腿"
+    message = """使用活动页面的下载器完成客户端下载，可以领取几个蚊子腿-。-需要的话，可以自行操作下~
 
-https://dnf.qq.com/cp/a20211230info/index.html
+https://dnf.qq.com/cp/a20220120down/
 (点确认后会弹出活动页面）
 """
-    open_url = "https://dnf.qq.com/cp/a20211230info/index.html"
+    open_url = "https://dnf.qq.com/cp/a20220120down/"
     show_only_before_version = ""
 
     if title != "":

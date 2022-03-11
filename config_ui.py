@@ -1126,7 +1126,7 @@ class ConfigUi(QFrame):
 
     def create_majieluo_tab(self, cfg: Config):
         self.majieluo = MajieluoConfigUi(cfg.common.majieluo, self)
-        self.tabs.addTab(self.majieluo, "马杰洛小工具")
+        # self.tabs.addTab(self.majieluo, "马杰洛小工具")
 
     def create_account_tabs(self, cfg: Config):
         self.accounts: list[AccountConfigUi] = []

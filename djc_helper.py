@@ -10179,7 +10179,15 @@ def get_prize_names() -> list[str]:
 
 def fake_djc_helper() -> DjcHelper:
     cfg = config(force_reload_when_no_accounts=True, print_res=False)
-    return DjcHelper(cfg.account_configs[0], cfg.common)
+
+    account_config: AccountConfig
+    if len(cfg.account_configs) != 0:
+        account_config = cfg.account_configs[0]
+    else:
+        account_config = AccountConfig()
+        account_config.on_config_update({})
+
+    return DjcHelper(account_config, cfg.common)
 
 
 def watch_live():

@@ -131,7 +131,8 @@ def download_github_raw_content(
     """
     # 先加入比较快的几个镜像
     urls = [
-        f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 下面这个似乎会缓存很久，不会及时更新，先注释掉
+        # f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
@@ -166,4 +167,4 @@ def download_github_raw_content(
 
 if __name__ == "__main__":
     # download_latest_github_release()
-    download_github_raw_content("CHANGELOG.MD")
+    download_github_raw_content("config.cloud.toml")

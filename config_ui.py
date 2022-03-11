@@ -693,9 +693,6 @@ class ConfigUi(QFrame):
         self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
         top_layout.addWidget(self.btn_toggle_card_secret)
 
-        # 视情况调整付费界面
-        self.adjust_pay_window()
-
         top_layout.addWidget(QHLine())
 
         # -------------- 区域：查询信息 --------------
@@ -1056,6 +1053,7 @@ class ConfigUi(QFrame):
             self.btn_toggle_card_secret.setText("显示原来的卡密支付界面")
 
     def adjust_pay_window(self):
+        logger.info("根据配置情况，调整付费界面")
         if not use_new_pay_method():
             # 没有使用新支付方式的情况下，隐藏切换按钮，并显示卡密界面
             self.set_card_secret_button_status(True)
@@ -2839,6 +2837,9 @@ def main():
 
     ui = ConfigUi()
     ui.show()
+
+    # 视情况调整付费界面
+    ui.adjust_pay_window()
 
     show_notices()
 

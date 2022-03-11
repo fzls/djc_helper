@@ -1774,7 +1774,7 @@ class AccountConfigUi(QWidget):
             self.login_mode_bidict.val_to_key.get(cfg.login_mode, "扫码/点击头像登录"),
             list(self.login_mode_bidict.key_to_val.keys()),
         )
-        add_row(form_layout, "登录模式", self.combobox_login_mode)
+        add_row(form_layout, "登录模式（可下拉切换）", self.combobox_login_mode)
 
         # -------------- 区域：QQ信息 --------------
         (

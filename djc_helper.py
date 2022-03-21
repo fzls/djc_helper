@@ -4160,6 +4160,10 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
+    # note: 测试流程
+    #   1. 使用手机抓包编年史页面，获取带各种校验参数的链接，并分享到电脑（或者直接在 https://mwegame.qq.com/fe/dnf/calculation/? 后面加上从生日活动获得的参数也可以）
+    #   2. 电脑使用chrome打开上述链接，并设置为手机模式，ua则使用 上面抓包得到的，或者： Mozilla/5.0 (Linux; Android 9; MIX 2 Build/PKQ1.190118.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045714 Mobile Safari/537.36 GameHelper_1006/2103060508
+    #   3. 在活动页面或者其他页面完成登陆后，即可正常测试
     @try_except()
     def dnf_helper_chronicle(self):
         # dnf助手左侧栏

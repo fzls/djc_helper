@@ -4193,6 +4193,7 @@ class DjcHelper:
             "sRoleId": roleid,
             "print_res": False,
             "uin": self.qq(),
+            "toUin": self.qq(),
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
@@ -4401,7 +4402,7 @@ class DjcHelper:
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
             res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params, amsid=giftInfo.sLbcode)
-            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', '出错啦')}")
+            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', f'出错啦-{res}')}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_awards():
@@ -4462,7 +4463,7 @@ class DjcHelper:
                 num=1,
                 mold=mold,
             )
-            logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {res.get('giftName', f'出错啦-{res}')}")
+            logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {awardInfo.giftName} - {res}")
             ret_msg = res.get("msg", "")
             if ret_msg == "登录态异常":
                 msg = f"账号 {self.cfg.name} 的 dnf助手鉴权信息不对，将无法领取奖励。请将配置工具中dnf助手的四个参数全部填写。或者直接月末手动去dnf助手app上把等级奖励都领一遍，一分钟搞定-。-"
@@ -9547,6 +9548,7 @@ class DjcHelper:
                 "isSort",
                 "jobName",
                 "title",
+                "toUin",
             ]
         }
 

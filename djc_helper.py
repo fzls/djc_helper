@@ -4424,7 +4424,7 @@ class DjcHelper:
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
             res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params, amsid=giftInfo.sLbcode)
-            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res.get('giftName', f'出错啦-{res}')}")
+            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_awards():
@@ -4577,7 +4577,7 @@ class DjcHelper:
                 iNum=giftInfo.iNum,
                 isLock=giftInfo.isLock,
             )
-            logger.info(f"兑换奖励: {res.get('giftName', '出错啦')}")
+            logger.info(f"{ctx}兑换奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def lottery():

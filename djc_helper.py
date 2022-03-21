@@ -553,7 +553,7 @@ class DjcHelper:
             ("心悦app理财礼卡", self.xinyue_financing),
             ("心悦猫咪", self.xinyue_cat),
             ("心悦app周礼包", self.xinyue_weekly_gift),
-            ("dnf论坛签到", self.dnf_bbs),
+            # ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
 

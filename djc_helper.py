@@ -4556,8 +4556,9 @@ class DjcHelper:
                         logger.warning(f"目前年史碎片数目为{userInfo.point}，不够兑换{gift.sName}所需的{gift.iCard}个，将跳过后续优先级较低的兑换奖励")
                         break
 
-                    for _i in range(ei.count):
-                        exchange_award_op(gift)
+                    exchange_count = min(ei.count, userInfo.point // int(gift.iCard))
+                    for idx in range_from_one(exchange_count):
+                        exchange_award_op(f"[{idx}/{exchange_count}]", gift)
 
                 if all_exchanged:
                     logger.info(color("fg_bold_yellow") + "似乎配置的兑换列表已到达兑换上限，建议开启抽奖功能，避免浪费年史碎片~")
@@ -4565,7 +4566,7 @@ class DjcHelper:
                 logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
-        def exchange_award_op(giftInfo: DnfHelperChronicleExchangeGiftInfo):
+        def exchange_award_op(ctx:str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get(
                 "兑换奖励",
                 url_wang,

@@ -1487,6 +1487,10 @@ def show_progress(file_name: str, total_size: int, now_size: int):
         print("")  # 下载完成换行
 
 
+def post_json_to_data(json_data: Dict[str, Any]) -> str:
+    return "&".join([f"{k}={v}" for k, v in json_data.items()])
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

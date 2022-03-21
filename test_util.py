@@ -69,6 +69,7 @@ from util import (
     parse_time,
     parse_timestamp,
     parse_unicode_escape_string,
+    post_json_to_data,
     printed_width,
     remove_invalid_unicode_escape_string,
     remove_none_from_list,
@@ -525,3 +526,9 @@ def test_base64_str():
     assert base64_str("test") == "dGVzdA=="
     assert base64_str("测试") == "5rWL6K+V"
     assert base64_str("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
+
+
+def test_post_json_to_data():
+    assert post_json_to_data({}) == ""
+    assert post_json_to_data({"k": "v"}) == "k=v"
+    assert post_json_to_data({"k1": "v1", "k2": "v2"}) == "k1=v1&k2=v2"

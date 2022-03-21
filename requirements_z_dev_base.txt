@@ -4,6 +4,6 @@ pytest-randomly==3.11.0
 pytest-xdist[psutil]==2.5.0
 flake8==4.0.1
 isort==5.10.1
-coverage==6.3.1
+coverage==6.3.2
 coveralls==3.3.1
 tox==3.24.5

@@ -4566,7 +4566,7 @@ class DjcHelper:
                 logger.info("未配置dnf助手编年史活动的兑换列表，若需要兑换，可前往配置文件进行调整")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
-        def exchange_award_op(ctx:str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
+        def exchange_award_op(ctx: str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
             res = self.get(
                 "兑换奖励",
                 url_wang,
@@ -4618,7 +4618,7 @@ class DjcHelper:
         # 检查是否绑定QQ
         bind_info = query_bind_info()
         if bind_info.is_need_bind:
-            extra_msg = f"编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
+            extra_msg = "编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_{get_month()}")
 
         # 提示做任务

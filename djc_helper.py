@@ -4295,10 +4295,16 @@ class DjcHelper:
 
         # ------ 检查是否绑定QQ ------
         def query_bind_info() -> DnfHelperChronicleBindInfo:
-            raw_res = self.post("查询助手与QQ绑定信息", self.urls.dnf_helper_chronicle_binding, post_json_to_data({
-                **common_params,
-                "gameId": 10014,
-            }))
+            raw_res = self.post(
+                "查询助手与QQ绑定信息",
+                self.urls.dnf_helper_chronicle_binding,
+                post_json_to_data(
+                    {
+                        **common_params,
+                        "gameId": 10014,
+                    }
+                ),
+            )
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res["data"])
 
@@ -4611,11 +4617,8 @@ class DjcHelper:
         # 检查是否绑定QQ
         bind_info = query_bind_info()
         if bind_info.is_need_bind:
-            extra_msg = (
-                f"编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
-            )
+            extra_msg = f"编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_{get_month()}")
-
 
         # 提示做任务
         msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"

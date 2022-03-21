@@ -1783,6 +1783,14 @@ class VoteWorkInfo(ConfigInterface):
         self.workId = "21"
 
 
+class DnfHelperChronicleBindInfo(ConfigInterface):
+    def __init__(self):
+        self.is_need_bind = True
+        self.is_allow_enter = False
+        self.is_roleid_bind_userid_match = False
+        self.tip = ""
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

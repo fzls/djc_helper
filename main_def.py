@@ -1394,6 +1394,9 @@ def show_tips(cfg: Config):
             "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
         ),
         "绑定手机领666代币券": ("之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: https://dnf.qq.com/cp/a20211230info/index.html"),
+        "colg新的签到活动":(
+            "colg新增了个签到小游戏，每天玩一次后可以签到，15天可以领一个自选灿烂，有兴趣的朋友请自行操作: https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

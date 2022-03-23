@@ -190,17 +190,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "下载DNF蚊子腿"
-    message = """使用活动页面的下载器完成客户端下载，可以领取几个蚊子腿-。-需要的话，可以自行操作下~
-
-需要满足下列两个条件：
-1. 6个月内未下载过客户端
-2. 在2021-12-23至2022-01-19未登录游戏
-
-https://dnf.qq.com/cp/a20220120down/
-(点确认后会弹出活动页面）
+    title = "colg新的签到活动"
+    message = """colg新增了个签到小游戏，每天玩一次后可以签到，15天可以领一个自选灿烂，有兴趣的朋友请自行操作~
 """
-    open_url = "https://dnf.qq.com/cp/a20220120down/"
+    open_url = "https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart"
     show_only_before_version = ""
 
     if title != "":

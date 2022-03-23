@@ -708,5 +708,15 @@
     "open_url": "https://dnf.qq.com/cp/a20220120down/",
     "expire_at": "2022-03-17 20:42:32",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "colg新的签到活动",
+    "message": "colg新增了个签到小游戏，每天玩一次后可以签到，15天可以领一个自选灿烂，有兴趣的朋友请自行操作~\n",
+    "send_at": "2022-03-23 18:53:40",
+    "show_type": "once",
+    "open_url": "https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart",
+    "expire_at": "2022-03-30 18:53:40",
+    "show_only_before_version": ""
   }
 ]

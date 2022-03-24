@@ -304,12 +304,9 @@ class QQLogin:
             options.add_experimental_option("excludeSwitches", exclude_switches)
 
         # 隐藏保存密码的提示窗
-        options.add_experimental_option("prefs", {
-            "credentials_enable_service": False,
-            "profile": {
-                "password_manager_enabled": False
-            }
-        })
+        options.add_experimental_option(
+            "prefs", {"credentials_enable_service": False, "profile": {"password_manager_enabled": False}}
+        )
 
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")

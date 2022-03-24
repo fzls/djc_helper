@@ -569,6 +569,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("冒险的起点", self.maoxian_start),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -579,7 +580,6 @@ class DjcHelper:
             ("管家蚊子腿", self.guanjia_new),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("colg每日签到", self.colg_signin),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("魔界人探险记", self.mojieren),
             ("会员关怀", self.dnf_vip_mentor),
             ("组队拜年", self.team_happy_new_year),
@@ -7912,33 +7912,32 @@ class DjcHelper:
 
             return int(raw_info.sOutValue5) == 1
 
-        self.dnf_luodiye_op("每日登录游戏", "831481")
-        # 这个需要切换角色，但是实在没有必要，就不弄了
-        self.dnf_luodiye_op("创建合金战士角色", "831483")
-        self.dnf_luodiye_op("通关异界地下城", "831509")
-        self.dnf_luodiye_op("浏览活动集合页", "831511")
+        # ------------ 实际流程 --------------
 
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
         ):
-            self.dnf_luodiye_op("用户授权(统一授权)", "831516")
-            self.dnf_luodiye_op("分享", "831522", sUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+            self.dnf_luodiye_op("用户授权(统一授权)", "844965")
+            self.dnf_luodiye_op("分享", "844972", sUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
 
-        self.dnf_luodiye_op("分享指定QQ好友", "831507")
+        self.dnf_luodiye_op("登录游戏积分", "844938")
+        self.dnf_luodiye_op("分享好友积分", "844952")
+        self.dnf_luodiye_op("登录游戏顾问奖励", "844953")
+        self.dnf_luodiye_op("分享好友店长奖励", "844959")
 
-        lottery_times = query_lottery_times()
-        logger.info(f"当前可抽卡次数为 {lottery_times}")
-        for idx in range_from_one(lottery_times):
-            self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽取卡面", "831320")
-
-        if not already_duihuan():
-            self.dnf_luodiye_op("五虎卡面集齐奖励", "831322")
-        else:
-            self.dnf_luodiye_op("卡面抽奖", "831375", pointID="401")
-            self.dnf_luodiye_op("卡面抽奖", "831375", pointID="402")
-            self.dnf_luodiye_op("卡面抽奖", "831375", pointID="403")
-            self.dnf_luodiye_op("卡面抽奖", "831375", pointID="404")
-            self.dnf_luodiye_op("卡面抽奖", "831375", pointID="405")
+        # lottery_times = query_lottery_times()
+        # logger.info(f"当前可抽卡次数为 {lottery_times}")
+        # for idx in range_from_one(lottery_times):
+        #     self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽取卡面", "831320")
+        #
+        # if not already_duihuan():
+        #     self.dnf_luodiye_op("五虎卡面集齐奖励", "831322")
+        # else:
+        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="401")
+        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="402")
+        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="403")
+        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="404")
+        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="405")
 
         #
         # gift_list = [
@@ -7960,8 +7959,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="831407",
-            commit_bind_flowid="831406",
+            query_bind_flowid="844934",
+            commit_bind_flowid="844933",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -10312,4 +10311,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_luodiye()

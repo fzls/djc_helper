@@ -4294,6 +4294,7 @@ class DjcHelper:
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 检查是否绑定QQ ------
+        @try_except(return_val_on_except=DnfHelperChronicleBindInfo())
         def query_bind_info() -> DnfHelperChronicleBindInfo:
             raw_res = self.post(
                 "查询助手与QQ绑定信息",
@@ -4306,7 +4307,7 @@ class DjcHelper:
                 ),
             )
 
-            return DnfHelperChronicleBindInfo().auto_update_config(raw_res["data"])
+            return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
 
         # ------ 查询各种信息 ------
         def exchange_list() -> DnfHelperChronicleExchangeList:

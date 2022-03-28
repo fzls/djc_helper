@@ -1915,13 +1915,15 @@ def show_multiprocessing_info(cfg: Config):
     if cfg.common.enable_multiprocessing:
         msg += f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}"
         if cfg.common.enable_super_fast_mode:
-            msg += ", 超快速模式已开启，将并行运行各个账号的各个活动~"
+            msg += "\n\n超快速模式已开启，将并行运行各个账号的各个活动~"
         else:
-            msg += ", 超快速模式未开启，将并行运行各个账号。如需同时运行各个活动，可开启该模式~"
+            msg += "\n\n超快速模式未开启，将并行运行各个账号。如需同时运行各个活动，可开启该模式~"
+
+        msg += "\n\n如果每次启动时明显卡顿或者会导致电脑死机，请在【配置工具/公共配置/多进程】中调整进程池大小，或者关闭多进程相关模式（仅影响运行速度，不影响运行结果）"
     else:
         msg += "未开启多进程模式，如需开启，可前往配置工具开启"
 
-    logger.info(color("bold_yellow") + msg)
+    async_message_box(msg, "多进程配置提示", show_once=True, color_name="bold_yellow")
 
     # 上报多进程相关功能的使用情况
     increase_counter(ga_category="enable_multiprocessing", name=cfg.common.enable_multiprocessing)

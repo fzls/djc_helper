@@ -124,9 +124,10 @@ class QQLogin:
     #           2.1.2.1 下载地址
     #               2.1.2.1.1 https://www.iplaysoft.com/tools/chrome/
     #           2.1.2.2 下载内容形如90.0.4430.93_chrome_installer.exe，使用bandizip打开然后解压得到chrome.7z，即可进行下一步
-    #   2.2 将chrome.7z解压然后重新压缩，得到chrome_portable_90.7z
+    #   2.2 将chrome.7z解压然后重新压缩，得到 chrome_portable_90.7z
     #       2.2.1 确保chrome_portable_90.7z压缩包的首层目录形如（89.0.4389.72、chrome.exe、chrome_proxy.exe）
     #  3. 替换chromedriver_{ver}.exe和chrome_portable_{ver}.7z到小助手 utils 目录下
+    #   3.1 修改版本号为 {ver} 后，测试下登录流程
     # todo:
     #  4. 下载新版本安装包 => Chrome_92.0.4515.131_普通安装包_非便携版.exe
     #       4.1 https://www.iplaysoft.com/tools/chrome/
@@ -136,8 +137,8 @@ class QQLogin:
     #       5.1 Chrome_92.0.4515.131_普通安装包_非便携版.exe
     # undone:
     #  6. 更新linux版的路径
-    #       6.1 _centos_download_and_install_chrome_and_driver.sh
-    #       6.2 _ubuntu_download_chrome_and_driver.sh
+    #       6.1 _ubuntu_download_chrome_and_driver.sh
+    #       6.2 _centos_download_and_install_chrome_and_driver.sh
     # re:
     #  7. 入库以下文件
     #       qq_login.py
@@ -145,7 +146,7 @@ class QQLogin:
     #       chrome_portable_{ver}.7z
     #       _centos_download_and_install_chrome_and_driver.sh
     #       _ubuntu_download_chrome_and_driver.sh
-    chrome_major_version = 98
+    chrome_major_version = 100
 
     default_window_width = 390
     default_window_height = 360

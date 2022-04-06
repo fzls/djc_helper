@@ -632,6 +632,8 @@ class QQLogin:
                 if login_exception is not None:
                     login_result = color("bold_cyan") + "登录失败"
 
+                current_url = self.driver.current_url
+
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")
                 logger.info(
@@ -655,6 +657,7 @@ class QQLogin:
                         msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data.recommended_first_retry_timeout}"
                         if use_by_myself():
                             msg += f"\n\t(仅我可见)历史重试成功等待时间列表：{login_retry_data.history_success_timeouts}"
+                        msg += f"\n\t当前网址为 {current_url}"
                         logger.exception(msg, exc_info=login_exception)
                         count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
                     else:
@@ -1113,6 +1116,7 @@ class QQLogin:
         logger.info(f"{self.name} 回到主iframe")
         self.driver.switch_to.default_content()
 
+        logger.info(f"{self.name} 当前网址为 {self.driver.current_url}")
         assert_login_finished_fn()
 
         logger.info(f"{self.name} 登录完成")

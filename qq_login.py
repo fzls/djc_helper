@@ -710,7 +710,7 @@ class QQLogin:
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
-                expected_conditions.url_to_be(s_url)
+                expected_conditions.url_contains(s_url)
             )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -738,7 +738,7 @@ class QQLogin:
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
-                expected_conditions.url_to_be(s_url)
+                expected_conditions.url_contains(s_url)
             )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -766,7 +766,7 @@ class QQLogin:
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
-                expected_conditions.url_to_be(s_url)
+                expected_conditions.url_contains(s_url)
             )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
@@ -918,7 +918,7 @@ class QQLogin:
         def assert_login_finished_fn():
             logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
-                expected_conditions.url_to_be(s_url)
+                expected_conditions.url_contains(s_url)
             )
 
         self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)

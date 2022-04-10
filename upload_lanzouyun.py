@@ -74,7 +74,7 @@ class Uploader:
         self.login_ok = False
 
         self.lzy._timeout = 5
-        logger.info(f"调整蓝奏云超时时间为 {self.lzy._timeout} 秒")
+        logger.debug(f"调整蓝奏云超时时间为 {self.lzy._timeout} 秒")
 
     def login(self, cookie: str = ""):
         # 仅上传需要登录

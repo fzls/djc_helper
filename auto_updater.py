@@ -274,7 +274,15 @@ def test():
     args = parse_args()
     uploader = Uploader()
 
-    full_update(args, uploader)
+    # 进行实际的检查是否需要更新操作
+    latest_version = get_latest_version(uploader)
+    logger.info(f"当前版本为{args.version}，网盘最新版本为{latest_version}")
+
+    if need_update(args.version, latest_version):
+        update(args, uploader)
+        start_new_version(args)
+    else:
+        logger.info("已经是最新版本，不需要更新")
 
 
 if __name__ == "__main__":

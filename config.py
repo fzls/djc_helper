@@ -1140,9 +1140,10 @@ class CommonConfig(ConfigInterface):
         self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
         self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
         self.github_mirror_sites = [
-            "github.com.cnpmjs.org",
-            "hub.fastgit.org",
-            "gitclone.com/github.com",
+            "api.mtr.pub",
+            "gh.gcdn.mirr.one",
+            "hub.0z.gs",
+            "hub.fastgit.xyz",
         ]
         # 自动更新dlc购买地址
         self.auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"

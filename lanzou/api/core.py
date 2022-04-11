@@ -24,6 +24,10 @@ from lanzou.api.utils import *
 __all__ = ['LanZouCloud']
 
 
+class NotFoundError(IOError):
+    """404"""
+
+
 class LanZouCloud(object):
     FAILED = -1
     SUCCESS = 0
@@ -98,9 +102,15 @@ class LanZouCloud(object):
             try:
                 kwargs.setdefault('timeout', self._timeout)
                 kwargs.setdefault('headers', self._headers)
-                return self._session.get(possible_url, verify=False, **kwargs)
-            except (ConnectionError, requests.RequestException):
-                logger.debug(f"Get {possible_url} failed, try another domain")
+                res = self._session.get(possible_url, verify=False, **kwargs)
+
+                if res.status_code == 404:
+                    # 当前域名404的话，抛出异常，从而尝试下一个域名
+                    raise NotFoundError()
+
+                return res
+            except (ConnectionError, requests.RequestException, NotFoundError) as e:
+                logger.debug(f"Get {possible_url} failed, try another domain, err={e}")
 
         return None
 
@@ -109,9 +119,15 @@ class LanZouCloud(object):
             try:
                 kwargs.setdefault('timeout', self._timeout)
                 kwargs.setdefault('headers', self._headers)
-                return self._session.post(possible_url, data, verify=False, **kwargs)
-            except (ConnectionError, requests.RequestException):
-                logger.debug(f"Post to {possible_url} ({data}) failed, try another domain")
+                res = self._session.post(possible_url, data, verify=False, **kwargs)
+
+                if res.status_code == 404:
+                    # 当前域名404的话，抛出异常，从而尝试下一个域名
+                    raise NotFoundError()
+
+                return res
+            except (ConnectionError, requests.RequestException, NotFoundError) as e:
+                logger.debug(f"Post to {possible_url} ({data}) failed, try another domain, err={e}")
 
         return None
 

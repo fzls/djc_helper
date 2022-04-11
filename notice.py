@@ -190,10 +190,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "colg新的签到活动"
-    message = """colg新增了个签到小游戏，每天玩一次后可以签到，15天可以领一个自选灿烂，有兴趣的朋友请自行操作~
+    title = "卡登陆提示"
+    message = """16.8.1及以前版本最近可能会卡在登录完成后的界面，由于自动更新流程发生在登录完成之后，所以遇到这种情况的朋友们可能无法自动更新和进行后续流程。
+
+新版本已兼容该情况，请手动前往网盘下载最新版本(16.8.2或者更新版本）
 """
-    open_url = "https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart"
+    open_url = ""
     show_only_before_version = ""
 
     if title != "":

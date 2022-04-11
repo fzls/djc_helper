@@ -718,5 +718,15 @@
     "open_url": "https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart",
     "expire_at": "2022-03-30 18:53:40",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "卡登陆提示",
+    "message": "16.8.1及以前版本最近可能会卡在登录完成后的界面，由于自动更新流程发生在登录完成之后，所以遇到这种情况的朋友们可能无法自动更新和进行后续流程。\n\n新版本已兼容该情况，请手动前往网盘下载最新版本(16.8.2或者更新版本）\n",
+    "send_at": "2022-04-11 22:31:28",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-04-18 22:31:28",
+    "show_only_before_version": ""
   }
 ]

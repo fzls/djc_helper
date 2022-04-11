@@ -133,6 +133,14 @@ def update_fallback(config: CommonConfig):
         )
 
 
+def get_latest_version_from_github(common_config: CommonConfig) -> str:
+    try:
+        ui = get_update_info(common_config)
+        return ui.latest_version
+    except:
+        return get_version_from_gitee()
+
+
 @try_except()
 def notify_manual_check_update_on_release_too_long(config: CommonConfig):
     time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")

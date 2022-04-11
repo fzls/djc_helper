@@ -135,9 +135,11 @@ def update_fallback(config: CommonConfig):
 
 def get_latest_version_from_github(common_config: CommonConfig) -> str:
     try:
+        logger.debug("尝试使用github 页面获取版本号")
         ui = get_update_info(common_config)
         return ui.latest_version
     except:
+        logger.debug("尝试使用gitee api获取版本号")
         return get_version_from_gitee()
 
 

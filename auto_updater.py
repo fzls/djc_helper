@@ -1,3 +1,4 @@
+from config import CommonConfig
 from log import color, fileHandler, logger, new_file_handler
 from version import now_version
 
@@ -12,7 +13,7 @@ from distutils import dir_util
 
 from compress import decompress_dir_with_bandizip
 from download import download_latest_github_release
-from update import need_update
+from update import get_latest_version_from_github, need_update
 from upload_lanzouyun import Uploader
 from usage_count import increase_counter
 from util import (
@@ -58,7 +59,7 @@ def auto_update():
     uploader = Uploader()
 
     # 进行实际的检查是否需要更新操作
-    latest_version = uploader.latest_version()
+    latest_version = get_latest_version(uploader)
     logger.info(f"当前版本为{args.version}，网盘最新版本为{latest_version}")
 
     if need_update(args.version, latest_version):
@@ -77,6 +78,16 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+
+def get_latest_version(uploader: Uploader) -> str:
+    try:
+        # 默认从网盘获取最新版本
+        return uploader.latest_version()
+    except:
+        # 尝试从github获取版本信息
+        cfg = CommonConfig()
+        return get_latest_version_from_github(cfg)
 
 
 def update(args, uploader):

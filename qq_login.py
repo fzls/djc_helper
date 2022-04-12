@@ -632,7 +632,9 @@ class QQLogin:
                 if login_exception is not None:
                     login_result = color("bold_cyan") + "登录失败"
 
-                current_url = self.driver.current_url
+                current_url = ""
+                if self.driver is not None:
+                    current_url = self.driver.current_url
 
                 used_time = datetime.datetime.now() - self.time_start_login
                 logger.info("")

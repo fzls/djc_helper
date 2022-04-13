@@ -4403,7 +4403,9 @@ class DjcHelper:
 
         def doActionIncrExp(actionName, actionId, exp):
             res = self.post(
-                "领取任务经验", url_yoyo, api="doactionincrexp",
+                "领取任务经验",
+                url_yoyo,
+                api="doactionincrexp",
                 data=post_json_to_data(
                     {
                         **common_params,

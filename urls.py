@@ -400,6 +400,7 @@ class Urls:
         self.dnf_bbs_signin = (
             "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
         )
+        self.dnf_bbs_home = "https://dnf.gamebbs.qq.com/home.php?mod=spacecp&ac=credit"
 
         # 心悦app
         # 心悦猫咪api

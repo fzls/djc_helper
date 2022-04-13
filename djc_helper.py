@@ -7534,11 +7534,28 @@ class DjcHelper:
         if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
             return 0
 
-        # re: 切换版本时需要修改这个值
-        latest_op_query_flowid = "821339"
-        res = self.dnf_bbs_op("查询代币券", latest_op_query_flowid, print_res=False)
-        info = parse_amesvr_common_info(res)
-        return int(info.sOutValue1)
+        # note: 鉴于兑换活动会存在真空期，改用解析个人中心的方式来获取论坛代币数目
+        url = self.urls.dnf_bbs_home
+        headers = {
+            "cookie": self.cfg.dnf_bbs_cookie,
+        }
+
+        res = requests.get(url, headers=headers, timeout=10)
+        html_text = res.text
+
+        # <li><em> 论坛代币: </em>17 </li>
+        prefix = "论坛代币: </em>"
+        suffix = "</li>"
+        if prefix not in html_text:
+            logger.warning("未能定位到论坛代币数目")
+            return 0
+
+        prefix_idx = html_text.index(prefix) + len(prefix)
+        suffix_idx = html_text.index(suffix, prefix_idx)
+
+        coin = int(html_text[prefix_idx:suffix_idx])
+
+        return coin
 
     @try_except()
     def check_dnf_bbs_v1(self):

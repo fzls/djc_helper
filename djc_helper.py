@@ -7314,9 +7314,9 @@ class DjcHelper:
             logger.warning("未配置dnf官方论坛的cookie或formhash，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
-        self.check_dnf_bbs_v1()
-
-        self.check_dnf_bbs_v2()
+        # self.check_dnf_bbs_v1()
+        #
+        # self.check_dnf_bbs_v2()
 
         def signin():
             retryCfg = self.common_cfg.retry
@@ -7376,41 +7376,43 @@ class DjcHelper:
         # https://dnf.qq.com/cp/a20211130act/index.html
         @try_except()
         def query_remaining_quota():
-            _query_quota_version_one(
-                "9-12月",
-                self.dnf_bbs_op_v2,
-                "788271",
-                [
-                    "一次性材质转换器",
-                    "一次性继承装置",
-                    "华丽的徽章神秘礼盒",
-                    "装备提升礼盒",
-                    "华丽的徽章自选礼盒",
-                    "抗疲劳秘药 (30点)",
-                    "Lv100传说装备自选礼盒",
-                    "异界气息净化书",
-                    "灿烂的徽章神秘礼盒",
-                    "灿烂的徽章自选礼盒",
-                ],
-            )
+            # _query_quota_version_one(
+            #     "9-12月",
+            #     self.dnf_bbs_op_v2,
+            #     "788271",
+            #     [
+            #         "一次性材质转换器",
+            #         "一次性继承装置",
+            #         "华丽的徽章神秘礼盒",
+            #         "装备提升礼盒",
+            #         "华丽的徽章自选礼盒",
+            #         "抗疲劳秘药 (30点)",
+            #         "Lv100传说装备自选礼盒",
+            #         "异界气息净化书",
+            #         "灿烂的徽章神秘礼盒",
+            #         "灿烂的徽章自选礼盒",
+            #     ],
+            # )
+            #
+            # _query_quota_version_one(
+            #     "12-3月",
+            #     self.dnf_bbs_op_v1,
+            #     "821339",
+            #     [
+            #         "一次性材质转换器",
+            #         "一次性继承装置",
+            #         "装备提升礼盒",
+            #         "灵魂武器袖珍罐",
+            #         "华丽的徽章神秘礼盒",
+            #         "华丽的徽章自选礼盒",
+            #         "Lv100传说装备自选礼盒",
+            #         "纯净的增幅书",
+            #         "灿烂的徽章神秘礼盒",
+            #         "灿烂的徽章自选礼盒",
+            #     ],
+            # )
 
-            _query_quota_version_one(
-                "12-3月",
-                self.dnf_bbs_op_v1,
-                "821339",
-                [
-                    "一次性材质转换器",
-                    "一次性继承装置",
-                    "装备提升礼盒",
-                    "灵魂武器袖珍罐",
-                    "华丽的徽章神秘礼盒",
-                    "华丽的徽章自选礼盒",
-                    "Lv100传说装备自选礼盒",
-                    "纯净的增幅书",
-                    "灿烂的徽章神秘礼盒",
-                    "灿烂的徽章自选礼盒",
-                ],
-            )
+            pass
 
         @try_except()
         def _query_quota_version_one(ctx: str, op_func: Callable[..., dict], flow_id: str, item_name_list: list[str]):
@@ -7459,26 +7461,26 @@ class DjcHelper:
         @try_except()
         def try_exchange():
             operations = [
-                ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v2),
-                ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v1),
-                ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op_v2),
-                ("9", "821327", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op_v1),
-                ("4", "788270", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op_v2),
-                ("8", "821327", 1, "纯净的增幅书【25代币券】", self.dnf_bbs_op_v1),
-                ("3", "821327", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op_v1),
-                ("1", "788270", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op_v2),
-                ("1", "821327", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op_v1),
-                ("2", "788270", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op_v2),
-                ("2", "821327", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op_v1),
-                ("5", "788270", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op_v2),
-                ("6", "821327", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op_v1),
-                ("3", "788270", 5, "华丽的徽章神秘礼盒【2代币券】", self.dnf_bbs_op_v2),
-                ("5", "821327", 2, "华丽的徽章神秘礼盒【5代币券】", self.dnf_bbs_op_v1),
-                ("7", "788270", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op_v2),
-                ("7", "821327", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op_v1),
-                ("8", "788270", 1, "异界气息净化书【25代币券】", self.dnf_bbs_op_v2),
-                ("6", "788270", 1, "抗疲劳秘药 (30点)【12代币券】", self.dnf_bbs_op_v2),
-                ("4", "821327", 1, "灵魂武器袖珍罐【12代币券】", self.dnf_bbs_op_v1),
+                # ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v2),
+                # ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v1),
+                # ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op_v2),
+                # ("9", "821327", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op_v1),
+                # ("4", "788270", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op_v2),
+                # ("8", "821327", 1, "纯净的增幅书【25代币券】", self.dnf_bbs_op_v1),
+                # ("3", "821327", 5, "装备提升礼盒【2代币券】", self.dnf_bbs_op_v1),
+                # ("1", "788270", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op_v2),
+                # ("1", "821327", 5, "一次性材质转换器【2代币券】", self.dnf_bbs_op_v1),
+                # ("2", "788270", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op_v2),
+                # ("2", "821327", 5, "一次性继承装置【2代币券】", self.dnf_bbs_op_v1),
+                # ("5", "788270", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op_v2),
+                # ("6", "821327", 2, "华丽的徽章自选礼盒【12代币券】", self.dnf_bbs_op_v1),
+                # ("3", "788270", 5, "华丽的徽章神秘礼盒【2代币券】", self.dnf_bbs_op_v2),
+                # ("5", "821327", 2, "华丽的徽章神秘礼盒【5代币券】", self.dnf_bbs_op_v1),
+                # ("7", "788270", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op_v2),
+                # ("7", "821327", 1, "Lv100传说装备自选礼盒【12代币券】", self.dnf_bbs_op_v1),
+                # ("8", "788270", 1, "异界气息净化书【25代币券】", self.dnf_bbs_op_v2),
+                # ("6", "788270", 1, "抗疲劳秘药 (30点)【12代币券】", self.dnf_bbs_op_v2),
+                # ("4", "821327", 1, "灵魂武器袖珍罐【12代币券】", self.dnf_bbs_op_v1),
             ]
 
             for index_str, flowid, count, name, op_func in operations:
@@ -10331,4 +10333,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_bbs()

@@ -10274,8 +10274,10 @@ if __name__ == "__main__":
 
     check_proxy(cfg)
 
+    # ps: 小号一号是 5
     RunAll = False
     indexes = [1]
+    # indexes = [4 + 1]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 

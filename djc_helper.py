@@ -4189,6 +4189,8 @@ class DjcHelper:
         # 为了不与其他函数名称冲突，且让函数名称短一些，写到函数内部~
         url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
+        url_yoyo = self.urls.dnf_helper_chronicle_yoyo
+
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         partition = roleinfo.serviceID
@@ -4399,7 +4401,17 @@ class DjcHelper:
                 logger.info(f"{actionName}已经领取过了")
 
         def doActionIncrExp(actionName, actionId, exp):
-            res = self.post("领取任务经验", url_mwegame, "", api="doActionIncrExp", actionId=actionId, **common_params)
+            res = self.post(
+                "领取任务经验", url_yoyo, api="doactionincrexp",
+                data=post_json_to_data(
+                    {
+                        **common_params,
+                        "gameId": "1006",
+                        "actionId": actionId,
+                    }
+                ),
+            )
+
             data = res.get("data", 0)
             if data != 0:
                 logger.info(f"领取{actionName}-{actionId}，获取经验为{exp}，回包data={data}")
@@ -10318,4 +10330,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_helper_chronicle()

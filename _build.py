@@ -6,13 +6,27 @@ import subprocess
 
 from _init_venv_and_requirements import init_venv_and_requirements
 from log import color, logger
-from util import human_readable_size, make_sure_dir_exists, remove_file_or_directory, show_head_line
+from util import (
+    async_message_box,
+    clear_file,
+    human_readable_size,
+    make_sure_dir_exists,
+    remove_file_or_directory,
+    show_head_line,
+)
 
 
 def build(disable_douban=False, enable_proxy=False, use_upx=True):
     # 初始化相关路径变量
     venv_path = ".venv"
     pyinstaller_path = os.path.join(venv_path, "Scripts", "pyinstaller")
+
+    # 确保test.py内容为空，避免出现异常状况
+    if os.path.isfile("test.py") and os.stat("test.py").st_size != 0:
+        with open("test.py", encoding="utf-8") as f:
+            async_message_box(f"test.py内容不为空，未避免构建过程中执行产生副作用，将清空其内容，其内容如下:\n\n{f.read()}", "警告：test.py的测试代码未移除")
+
+        clear_file("test.py")
 
     # 初始化venv和依赖
     init_venv_and_requirements(".venv", "requirements.txt", disable_douban, enable_proxy)

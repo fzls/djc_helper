@@ -1491,6 +1491,11 @@ def post_json_to_data(json_data: Dict[str, Any]) -> str:
     return "&".join([f"{k}={v}" for k, v in json_data.items()])
 
 
+def clear_file(file_path: str):
+    with open(file_path, "w"):
+        pass
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

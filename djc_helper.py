@@ -4627,7 +4627,7 @@ class DjcHelper:
 
         # 检查领奖额外需要的参数
         if self.cfg.dnf_helper_info.token == "" or self.cfg.dnf_helper_info.uniqueRoleId == "":
-            extra_msg = "dnf助手的token/uniqueRoleId未配置，将无法领取等级奖励（其他似乎不受影响）。若想要自动领奖，请按照下列流程进行配置"
+            extra_msg = "dnf助手的token/uniqueRoleId未配置，将无法领取 【等级奖励】和【任务经验】（其他似乎不受影响）。若想要自动执行这些操作，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_{get_month()}")
             # 不通过也继续走，只是领奖会失败而已
         else:

@@ -748,5 +748,15 @@
     "open_url": "",
     "expire_at": "2022-04-22 22:21:19",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "22.4 虎牙斗鱼新活动",
+    "message": "4.14 虎牙斗鱼新增了几个蚊子腿，不会接入，请手动参与，链接如下：\n\n虎牙：https://www.huya.com/g/2#cate-1-5027\n斗鱼: https://www.douyu.com/topic/DNFCRZBJ?rid=5324055\n",
+    "send_at": "2022-04-15 22:23:19",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-04-22 22:23:19",
+    "show_only_before_version": ""
   }
 ]

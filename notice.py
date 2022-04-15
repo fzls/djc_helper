@@ -190,17 +190,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于安全管家报毒的问题"
-    message = """由于小助手没有购买微软签名（太贵了，一年四千到六千<_<没有必要花这个钱），所以有些版本会被 腾讯安全管家、360等杀毒软件误报，相关说明如下：
+    title = "22.4 虎牙斗鱼新活动"
+    message = """4.14 虎牙斗鱼新增了几个蚊子腿，不会接入，请手动参与，链接如下：
 
-建议把小助手目录加入白名单，具体流程可百度（windows defender如何加入白名单）。
-或者可以使用火绒杀毒软件替换windows defender，就不会频繁误报了。
-再或者可以直接关闭windows defender的杀毒功能（具体流程百度）（不推荐，因为现在网上下各种东西还是有中毒的风险的-。-）
-
-如果不放心，害怕真有毒，可以去在线杀毒引擎上传压缩包，用多种不同杀毒引擎扫一遍~
-比如以下几个：
-https://www.virscan.org/language/zh-cn/
-https://www.virustotal.com/gui/
+虎牙：https://www.huya.com/g/2#cate-1-5027
+斗鱼: https://www.douyu.com/topic/DNFCRZBJ?rid=5324055
 """
     open_url = ""
     show_only_before_version = ""

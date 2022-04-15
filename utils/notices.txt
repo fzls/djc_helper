@@ -738,5 +738,15 @@
     "open_url": "",
     "expire_at": "2022-04-22 21:53:29",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "关于安全管家报毒的问题",
+    "message": "由于小助手没有购买微软签名（太贵了，一年四千到六千<_<没有必要花这个钱），所以有些版本会被 腾讯安全管家、360等杀毒软件误报，相关说明如下：\n\n建议把小助手目录加入白名单，具体流程可百度（windows defender如何加入白名单）。\n或者可以使用火绒杀毒软件替换windows defender，就不会频繁误报了。\n再或者可以直接关闭windows defender的杀毒功能（具体流程百度）（不推荐，因为现在网上下各种东西还是有中毒的风险的-。-）\n\n如果不放心，害怕真有毒，可以去在线杀毒引擎上传压缩包，用多种不同杀毒引擎扫一遍~\n比如以下几个：\nhttps://www.virscan.org/language/zh-cn/\nhttps://www.virustotal.com/gui/\n",
+    "send_at": "2022-04-15 22:21:19",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-04-22 22:21:19",
+    "show_only_before_version": ""
   }
 ]

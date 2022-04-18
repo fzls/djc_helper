@@ -72,7 +72,6 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         )
     elif type(e) is OSError:
         # OSError: [WinError 1455] 页面文件太小，无法完成操作。
-        e: OSError
         if e.winerror == 1455:
             msg += f"当前电脑内存不足，请调小多进程相关配置。可将【配置工具/公共配置/多进程】调整为当前cpu的一半（{cpu_count() / 2}），或者其他合适的数值，或者关闭。"
     elif type(e) in [

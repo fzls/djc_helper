@@ -73,7 +73,10 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     elif type(e) is OSError:
         # OSError: [WinError 1455] 页面文件太小，无法完成操作。
         if e.winerror == 1455:
-            msg += f"当前电脑内存不足，请调小多进程相关配置。可将【配置工具/公共配置/多进程】调整为当前cpu的一半（{cpu_count() / 2}），或者其他合适的数值，或者关闭。"
+            msg += format_msg(f"当前电脑内存不足，请调小多进程相关配置。可将【配置工具/公共配置/多进程】调整为当前cpu的一半（{cpu_count() / 2}），或者其他合适的数值，或者关闭。")
+    elif type(e) is FileNotFoundError:
+        # FileNotFoundError: [Errno 2] No such file or directory: 'config.toml'
+        msg += format_msg(f"文件 {e.filename} 不见了，很有可能是被杀毒软件删除了，请重新解压一份小助手来使用，同时最好将小助手所在文件夹添加到杀毒软件的白名单中")
     elif type(e) in [
         selenium.common.exceptions.TimeoutException,
     ]:

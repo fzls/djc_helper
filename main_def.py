@@ -1238,7 +1238,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
                 has_use_card_secret = True
                 break
 
-        if is_first_run("卡密付费方案提示v2") or (
+        if (
             not use_by_myself()
             and user_buy_info.total_buy_month > 0
             and not has_use_card_secret

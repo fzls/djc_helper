@@ -173,10 +173,12 @@ def v1_to_v2():
 
     db_files = list(pathlib.Path(db_top_dir_v1).glob("*/*"))
 
-    logger.info(f"db版本 v1 -> v2，将开始迁移，总计文件 {len(db_files)} 个")
+    ctx = "数据库 v1 -> v2"
+
+    logger.info(f"{ctx} 将开始迁移，总计文件 {len(db_files)} 个")
 
     for idx, db_file in enumerate(db_files):
-        logger.info(f"[{idx+1}/{len(db_files)}] 正在迁移 {db_file}")
+        logger.info(f"[{idx+1}/{len(db_files)}] {ctx} 正在迁移 {db_file}")
         hname = db_file.name
 
         target_directory = f"{db_top_dir_v2}/{hname[0:2]}/{hname[2:4]}"
@@ -185,7 +187,7 @@ def v1_to_v2():
         make_sure_dir_exists(target_directory)
         shutil.copy2(db_file.absolute(), path_v2)
 
-    logger.info(f"数据库 v1 -> v2 迁移完毕，将清理旧版本")
+    logger.info(f"{ctx} 迁移完毕，将清理旧版本")
 
     shutil.rmtree(db_top_dir_v1)
 

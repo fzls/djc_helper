@@ -16,7 +16,7 @@ def get_final_dir_path(current_dir: str) -> str:
 
 
 # 定义一些目录
-db_top_dir = get_final_dir_path(".db")
+db_top_dir = get_final_dir_path(".db_v2")
 cached_dir = get_final_dir_path(".cached")
 
 downloads_dir = f"{cached_dir}/downloads"

@@ -135,7 +135,9 @@ class DBInterface(ConfigInterface):
         else:
             key_md5 = self.get_db_filename()
 
-            db_dir = os.path.join(db_top_dir, key_md5[0:3])
+            hash_part_one = key_md5[0:2]
+            hash_part_two = key_md5[2:4]
+            db_dir = os.path.join(db_top_dir, hash_part_one, hash_part_two)
             db_file = os.path.join(db_dir, key_md5)
 
         make_sure_dir_exists(db_dir)

@@ -18,6 +18,7 @@ start_config_ui.bat
 **/.first_run/
 **/.cached/
 **/.db/
+**/.db_v2/
 **/.log.filename
 
 config.toml.local

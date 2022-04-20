@@ -15,8 +15,15 @@ def get_final_dir_path(current_dir: str) -> str:
     return current_dir
 
 
+# 不同版本的db目录
+# key_md5[0:3]/key_md5
+db_top_dir_v1 = get_final_dir_path(".db")
+
+# key_md5[0:2]/key_md5[2:4]/key_md5
+db_top_dir_v2 = get_final_dir_path(".db_v2")
+
 # 定义一些目录
-db_top_dir = get_final_dir_path(".db_v2")
+db_top_dir = db_top_dir_v2
 cached_dir = get_final_dir_path(".cached")
 
 downloads_dir = f"{cached_dir}/downloads"

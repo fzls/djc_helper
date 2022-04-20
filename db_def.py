@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import datetime
 import os
+import pathlib
+import shutil
 from typing import Any, Callable
 
-from const import db_top_dir
+from const import db_top_dir, db_top_dir_v1, db_top_dir_v2
 from data_struct import ConfigInterface
 from log import logger
 
@@ -151,6 +153,43 @@ class DBInterface(ConfigInterface):
         return md5(key)
 
 
+def try_migrate_db():
+    from util import try_except
+
+    @try_except()
+    def _wrapper():
+        v1_to_v2()
+
+    _wrapper()
+
+
+def v1_to_v2():
+    from util import make_sure_dir_exists
+
+    if not os.path.exists(db_top_dir_v1):
+        return
+
+    make_sure_dir_exists(db_top_dir_v2)
+
+    db_files = list(pathlib.Path(db_top_dir_v1).glob("*/*"))
+
+    logger.info(f"db版本 v1 -> v2，将开始迁移，总计文件 {len(db_files)} 个")
+
+    for idx, db_file in enumerate(db_files):
+        logger.info(f"[{idx+1}/{len(db_files)}] 正在迁移 {db_file}")
+        hname = db_file.name
+
+        target_directory = f"{db_top_dir_v2}/{hname[0:2]}/{hname[2:4]}"
+        path_v2 = f"{target_directory}/{hname}"
+
+        make_sure_dir_exists(target_directory)
+        shutil.copy2(db_file.absolute(), path_v2)
+
+    logger.info(f"数据库 v1 -> v2 迁移完毕，将清理旧版本")
+
+    shutil.rmtree(db_top_dir_v1)
+
+
 def test():
     from db import DemoDB
 
@@ -198,3 +237,5 @@ def test_filepath_db():
 if __name__ == "__main__":
     # test()
     test_filepath_db()
+
+    try_migrate_db()

@@ -567,6 +567,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("集卡", self.dnf_ark_lottery),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -586,7 +587,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
-            ("集卡", self.dnf_ark_lottery),
             ("DNF心悦", self.dnf_xinyue),
             ("dnf助手活动", self.dnf_helper),
             ("新职业预约活动", self.dnf_reserve),
@@ -2206,18 +2206,18 @@ class DjcHelper:
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
     # note: 以下几个页面右键点击对应按钮即可，与上方黄钻完全一致，参照其流程即可
-    ark_lottery_sub_act_id_login = "36951_99c1da65"  # 增加抽卡次数-每日登陆游戏
-    ark_lottery_sub_act_id_share = "36947_63bb0067"  # 增加抽卡次数-每日活动分享
-    ark_lottery_sub_act_id_lucky = "36948_d4dff83e"  # 增加抽卡次数-幸运勇士
-    ark_lottery_sub_act_id_draw_card = "36949_7bdfd29d"  # 抽卡
-    ark_lottery_sub_act_id_award_1 = "36952_59acb676"  # 领取奖励-第一排
-    ark_lottery_sub_act_id_award_2 = "36950_bd6363d6"  # 领取奖励-第二排
-    ark_lottery_sub_act_id_award_3 = "36955_90ad8151"  # 领取奖励-第三排
-    ark_lottery_sub_act_id_award_all = "36954_3c6aad3b"  # 领取奖励-十二张
-    ark_lottery_sub_act_id_lottery = "36953_a619e74a"  # 消耗卡片来抽奖
+    ark_lottery_sub_act_id_login = "62666_51deabb9"  # 增加抽卡次数-每日登陆游戏
+    ark_lottery_sub_act_id_share = "62660_c93332ea"  # 增加抽卡次数-每日活动分享
+    ark_lottery_sub_act_id_lucky = "62661_1f20c9cd"  # 增加抽卡次数-幸运勇士
+    ark_lottery_sub_act_id_draw_card = "62662_9a0ad07f"  # 抽卡
+    ark_lottery_sub_act_id_award_1 = "62663_954eea04"  # 领取奖励-第一排
+    ark_lottery_sub_act_id_award_2 = "62664_03aac861"  # 领取奖励-第二排
+    ark_lottery_sub_act_id_award_3 = "62665_8a9910d4"  # 领取奖励-第三排
+    ark_lottery_sub_act_id_award_all = "62668_2de15953"  # 领取奖励-十二张
+    ark_lottery_sub_act_id_lottery = "62662_9a0ad07f"  # 消耗卡片来抽奖
 
     # note: 清空抓包数据，按f5刷新后，搜索  QueryItems  (hack: 其实就是活动链接的 最后一部分)
-    ark_lottery_packet_id_card = "20545_145ba002"  # 查询当前卡片数目
+    ark_lottery_packet_id_card = "41154_7393e90a"  # 查询当前卡片数目
 
     # note: xxx. 修改 urls.py 中的 pesudo_ark_lottery_act_id ，将其加一即可
 
@@ -10352,4 +10352,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bbs()
+        djcHelper.dnf_ark_lottery()

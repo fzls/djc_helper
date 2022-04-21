@@ -86,6 +86,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/41154_7393e90a",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220421care/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220406dnfxy/pc/index.html",
+    "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     #
     # 已过期活动
     #
@@ -270,6 +271,7 @@ class Urls:
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
         self.iActivityId_dnf_game = "427765"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
+        self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

@@ -5,10 +5,10 @@ import re
 import shutil
 
 from compress import compress_dir_with_bandizip
+from const import db_top_dir
 from log import color, logger
 from util import show_head_line
 from version import now_version
-from const import db_top_dir
 
 
 def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):

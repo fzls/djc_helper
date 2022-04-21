@@ -145,7 +145,6 @@ from util import (
     md5,
     message_box,
     now_after,
-    now_before,
     now_in_range,
     padLeftRight,
     parse_time,
@@ -9427,7 +9426,7 @@ class DjcHelper:
             res = self.dnf_card_flip_op("卡片翻转状态", "849048", print_res=False)
             raw_res = parse_amesvr_common_info(res)
 
-            status_list = [int(status) for status in raw_res.sOutValue1.split(',')]
+            status_list = [int(status) for status in raw_res.sOutValue1.split(",")]
 
             return status_list
 
@@ -9455,7 +9454,7 @@ class DjcHelper:
                 if status == 1:
                     continue
 
-                self.dnf_card_flip_op(f"翻牌 - 第 {idx+1} 张牌", "848911", iNum=idx+1)
+                self.dnf_card_flip_op(f"翻牌 - 第 {idx+1} 张牌", "848911", iNum=idx + 1)
 
                 times -= 1
                 if times <= 0:

@@ -777,6 +777,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_mojieren = True
         # 是否领取 组队拜年 活动
         self.get_team_happy_new_year = True
+        # 是否领取 翻牌 活动
+        self.get_dnf_card_flip = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

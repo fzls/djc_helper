@@ -567,6 +567,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("集卡", self.dnf_ark_lottery),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -587,7 +588,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
-            ("DNF心悦", self.dnf_xinyue),
             ("dnf助手活动", self.dnf_helper),
             ("新职业预约活动", self.dnf_reserve),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
@@ -5657,57 +5657,54 @@ class DjcHelper:
 
         @try_except(return_val_on_except=0)
         def query_signin_days():
-            res = self.dnf_xinyue_op("查询签到天数", "823142", print_res=False)
+            res = self.dnf_xinyue_op("查询签到天数", "850551", print_res=False)
             info = parse_amesvr_common_info(res)
-            return int(info.sOutValue8.split("|")[3])
+            return int(info.sOutValue2)
 
-        self.dnf_xinyue_op("预约礼包", "823407")
+        self.dnf_xinyue_op("充值返利", "850135")
 
-        if now_after("2022-01-10 00:00:00"):
-            async_message_box(
-                "1.10之后每充值200元，可以在心悦活动页面中自选奖池并进行一次抽奖。因为部分奖励是自行选定的，因此请自行完成~",
-                "2022心悦充值活动",
-                show_once=True,
-            )
-            # self.dnf_xinyue_op("记录自选道具", "824237")
-            # self.dnf_xinyue_op("放烟花抽奖", "823813")
-            # self.dnf_xinyue_op("累计抽奖礼", "823808")
-
-        if now_before("2022-01-10 00:00:00"):
-            self.dnf_xinyue_op("静候佳期礼", "824223")
-        else:
-            self.dnf_xinyue_op("特邀会员身份礼", "823413")
-            self.dnf_xinyue_op("心悦会员身份礼", "823414")
-
-        self.dnf_xinyue_op("全员狂欢礼-任务3-充值66元", "823636")
-        self.dnf_xinyue_op("全员狂欢礼-任务2-消耗疲劳>=100点", "823417")
-        self.dnf_xinyue_op("全员狂欢礼-任务1-在线时长>=120分钟", "823415")
-
-        # self.dnf_xinyue_op("全员狂欢任务1揭榜", "823418")
-        # self.dnf_xinyue_op("全员狂欢任务2揭榜", "823437")
-        # self.dnf_xinyue_op("全员狂欢任务3揭榜", "823438")
-
-        self.dnf_xinyue_op("每日签到礼包-在线10分钟", "823675")
+        self.dnf_xinyue_op("每日签到", "850194")
         signin_days = query_signin_days()
-        logger.info(f"当前累计签到天数为 {signin_days}")
-        for day in [3, 7, 10, 15, 21, 28]:
-            if signin_days < day:
-                logger.info(f"签到天数({signin_days}) 不足 {day} 天，将不尝试领取后续累计签到奖励")
-                break
+        logger.warning(f"当前累计签到天数为 {signin_days}")
 
-            self.dnf_xinyue_op(f"累计签到礼 - {day} 天", "823679", param=day)
+        for required_signin_days, flowid, lottery_count in [
+            (1, "850200", 1),
+            (3, "850222", 2),
+            (7, "850223", 4),
+        ]:
+            name = f"累签 {required_signin_days} 次"
+            if signin_days < required_signin_days:
+                logger.warning(f"签到天数未达到 {required_signin_days}，跳过领取 {name}")
+                continue
 
-        if now_after("2022-01-01 00:00:00"):
-            self.dnf_xinyue_op("心悦app专属礼包", "823803")
-            async_message_box("心悦app专属礼包请自行前往app进行领取", "2022心悦充值活动-专属礼包", show_once=True)
+            for idx in range_from_one(lottery_count):
+                res = self.dnf_xinyue_op(f"{idx}/{lottery_count} {name}", flowid)
+                if int(res.get("ret", "-1")) != 0:
+                    logger.warning(f"{name} 出错了，跳过后续尝试")
+                    break
+
+        self.dnf_xinyue_op("累签7次抽成就点", "852258")
+
+        self.dnf_xinyue_op("心悦V3礼", "850686")
+        self.dnf_xinyue_op("心悦V2礼", "850685")
+        self.dnf_xinyue_op("心悦V1礼", "850684")
+        self.dnf_xinyue_op("特邀会员礼", "850302")
+
+        self.dnf_xinyue_op("回流白名单", "850534")
+        self.dnf_xinyue_op("回流领取徽章", "850303")
+        self.dnf_xinyue_op("回流消耗50点疲劳", "850540")
+        self.dnf_xinyue_op("回流充值6元", "850545")
+
+        self.dnf_xinyue_op("心悦专属礼", "850550")
+        async_message_box("心悦app专属礼包请自行前往app进行领取", "2022-04 心悦充值活动-专属礼包", show_once=True)
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
             "DNF心悦",
             get_act_url("DNF心悦"),
             activity_op_func=self.dnf_xinyue_op,
-            query_bind_flowid="823130",
-            commit_bind_flowid="823129",
+            query_bind_flowid="850600",
+            commit_bind_flowid="850599",
         )
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10355,4 +10352,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_xinyue()

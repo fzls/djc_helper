@@ -568,7 +568,8 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF心悦", self.dnf_xinyue),
-            ("翻牌活动", self.dnf_card_flip)
+            ("翻牌活动", self.dnf_card_flip),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -589,7 +590,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
-            ("dnf助手活动", self.dnf_helper),
             ("新职业预约活动", self.dnf_reserve),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("WeGame活动_新版", self.wegame_new),
@@ -3945,39 +3945,45 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动')}")
             return
 
-        @try_except(return_val_on_except=0)
-        def query_signin_count() -> int:
-            raw_res = self.dnf_helper_op("查询", "824767", print_res=False)
+        def query_lottery_count() -> int:
+            raw_res = self.dnf_helper_op("查询抽奖次数", "850836", print_res=False)
             info = parse_amesvr_common_info(raw_res)
 
-            count = int(info.sOutValue2.split(";")[1])
-            return count
+            return int(info.sOutValue3)
 
-        self.dnf_helper_op("抽取果实", "823806")
-        total_count = query_signin_count()
-        logger.info(color("bold_yellow") + f"当前累计每日摘取次数为: {total_count} 次")
+        def query_current_week_index() -> int:
+            raw_res = self.dnf_helper_op("查询周序号", "850836", print_res=False)
+            info = parse_amesvr_common_info(raw_res)
 
-        award_infos = [
-            (1, "824741"),
-            (2, "824745"),
-            (4, "824746"),
-            (6, "824747"),
-            (9, "824748"),
-            (12, "824750"),
-            (16, "824751"),
-            (23, "824752"),
+            week_status_list = info.sOutValue6.split(";")
+            for idx, status in enumerate(week_status_list):
+                if status == "0":
+                    return idx
+
+            return len(week_status_list) - 1
+
+        self.dnf_helper_op("每日抽奖积分", "850973")
+        self.dnf_helper_op("完成任务赠送", "851051")
+
+        lottery_count = query_lottery_count()
+        logger.info(f"当前剩余抽奖次数为 {lottery_count}")
+        for idx in range_from_one(lottery_count):
+            self.dnf_helper_op(f"{idx}/{lottery_count} 每日抽奖", "850957")
+            time.sleep(5)
+
+        week_awards = [
+            ("累签奖励", "850975"),
+            ("累签奖励2", "852938"),
+            ("累签奖励3", "852939"),
+            ("累签奖励4", "852940"),
+            ("累签奖励5", "852941"),
         ]
-        for require_days, flowid in award_infos:
-            if total_count >= require_days:
-                self.dnf_helper_op(f"摘取 {require_days} 次", flowid)
-            else:
-                logger.warning("签到次数不够，跳过尝试领取后续奖励")
-                break
+        week_index = query_current_week_index()
+        logger.info(f"当前为第 {week_index + 1} 周")
 
-        if get_today() == "20211225":
-            self.dnf_helper_op("限时领取1225", "824754")
-        if get_today() == "20220101":
-            self.dnf_helper_op("限时领取0101", "824757")
+        name, flowid = week_awards[week_index]
+        for actSign in range_from_one(5):
+            self.dnf_helper_op(f"{name} - {flowid} - 第 {actSign} 天", flowid, actSign=actSign)
 
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
@@ -9733,6 +9739,7 @@ class DjcHelper:
                 "jobName",
                 "title",
                 "toUin",
+                "actSign",
             ]
         }
 
@@ -10467,4 +10474,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_card_flip()
+        djcHelper.dnf_helper()

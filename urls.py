@@ -87,6 +87,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220421care/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220406dnfxy/pc/index.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     #
     # 已过期活动
     #
@@ -106,7 +107,6 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20220119wegame/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220121gather/",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20211209plants/indexpc.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
@@ -235,7 +235,7 @@ class Urls:
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
-        self.iActivityId_dnf_helper = "434331"  # DNF助手活动
+        self.iActivityId_dnf_helper = "461270"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "438820"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
@@ -291,7 +291,7 @@ class Urls:
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
-            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}"
+            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}"
         )
 
         # ide通用活动

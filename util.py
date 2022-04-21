@@ -32,7 +32,7 @@ import toml
 import urllib3.exceptions
 
 from compress import compress_in_memory_with_lzma, decompress_in_memory_with_lzma
-from const import cached_dir
+from const import cached_dir, db_top_dir
 from db import CacheDB, CacheInfo
 from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
@@ -1292,7 +1292,7 @@ def sync_configs(source_dir: str, target_dir: str):
         "不查询活动.txt",
         ".no_message_box",
         # 缓存文件所在目录
-        ".db",
+        db_top_dir,
         # # 自动更新DLC
         # "utils/auto_updater.exe"
     ]

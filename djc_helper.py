@@ -6854,7 +6854,7 @@ class DjcHelper:
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗]
     flowid_majieluo_query_info = "127328"
     # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入
-    majieluo_DownDate = "2022-04-20 00:00:00"
+    majieluo_DownDate = "2022-05-18 00:00:00"
 
     @try_except()
     def majieluo(self):

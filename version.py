@@ -13,5 +13,5 @@ def print_current_version_for_changelog():
     print(f"# v{now_version} {ver_time}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print_current_version_for_changelog()

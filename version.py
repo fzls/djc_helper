@@ -6,3 +6,12 @@
 now_version = "16.8.4"
 ver_time = "2022.4.14"
 author = "风之凌殇"
+
+
+# re: 可以运行这个方法来获取changelog中所需的版本信息
+def print_current_version_for_changelog():
+    print(f"# v{now_version} {ver_time}")
+
+
+if __name__ == '__main__':
+    print_current_version_for_changelog()

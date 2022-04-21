@@ -667,6 +667,8 @@ need_take_awards = false
 10003 = false
 # 2022.01.19 新春新气象 虎啸阿拉德 新春集雪人卡片，追忆天空欢乐送！
 10004 = false
+# 2022.04.21 精灵传说 耕耘来袭
+10005 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

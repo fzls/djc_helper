@@ -1277,6 +1277,7 @@ def start_djc_helper(exe_path: str):
     logger.info(f"{exe_path} 已经启动~")
 
 
+@try_except()
 def sync_configs(source_dir: str, target_dir: str):
     """
     将指定的配置相关文件从 源目录 覆盖到 目标目录

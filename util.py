@@ -61,7 +61,7 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         requests.exceptions.ConnectTimeout,
         requests.exceptions.ReadTimeout,
     ]:
-        msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<")
+        msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<（不用管，会自动重试的）")
     elif type(e) in [
         PermissionError,
     ]:

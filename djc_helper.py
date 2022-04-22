@@ -570,6 +570,7 @@ class DjcHelper:
             ("翻牌活动", self.dnf_card_flip),
             ("dnf助手活动", self.dnf_helper),
             ("DNF集合站", self.dnf_collection),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -580,7 +581,6 @@ class DjcHelper:
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF共创投票", self.dnf_dianzan),
             ("黄钻", self.dnf_yellow_diamond),
-            ("超级会员", self.dnf_super_vip),
             ("管家蚊子腿", self.guanjia_new),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("colg每日签到", self.colg_signin),
@@ -2087,7 +2087,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "37374_d54f84df"
+        lucky_act_id = "41482_9ee9126d"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2096,20 +2096,20 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "37375_1782b367")
+        self.qzone_act_op("勇士见面礼", "41483_7fd0d3bc")
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         ):
             self.qzone_act_op(
                 "分享给自己",
-                "37376_eec7c932",
+                "41484_69fb2a5c",
                 act_req_data={
                     "receivers": [
                         self.qq(),
                     ]
                 },
             )
-        self.qzone_act_op("分享领取礼包", "37377_89fa9ef3")
+        self.qzone_act_op("分享领取礼包", "41485_9c43b4c5")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下
@@ -10471,4 +10471,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection()
+        djcHelper.dnf_super_vip()

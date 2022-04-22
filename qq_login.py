@@ -44,7 +44,7 @@ from util import (
     try_except,
     use_by_myself,
 )
-from version import now_version
+from version import now_version, ver_time
 
 if is_windows():
     import win32con
@@ -654,7 +654,7 @@ class QQLogin:
                     if idx < lc.max_retry_count:
                         # 每次等待时长线性递增
                         wait_time = retry_timeouts[idx - 1]
-                        msg += f"，等待{wait_time}秒后重试(v{now_version})"
+                        msg += f"，等待{wait_time}秒后重试(v{now_version} {ver_time})"
                         msg += f"\n\t当前登录重试等待时间序列：{retry_timeouts}"
                         msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data.recommended_first_retry_timeout}"
                         if use_by_myself():
@@ -1252,7 +1252,7 @@ class QQLogin:
         try:
             self._try_auto_resolve_captcha()
         except Exception as e:
-            msg = f"ver {now_version} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群{config().common.qq_group}反馈或自行解决。请手动进行处理验证码"
+            msg = f"ver {now_version} {ver_time} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群{config().common.qq_group}反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
             logger.warning(color("fg_bold_cyan") + f"链接：{config().common.netdisk_link}")

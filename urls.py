@@ -56,7 +56,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-01-20 00:00:00", "2022-02-20 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-04-21 00:00:00", "2022-05-21 23:59:59", "超级会员"),
-    newNotAmsActInfo("2021-01-20 00:00:00", "2022-02-28 23:59:59", "黄钻"),
+    newNotAmsActInfo("2021-04-21 00:00:00", "2022-05-21 23:59:59", "黄钻"),
     newNotAmsActInfo("2021-04-21 00:00:00", "2022-05-20 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-03-02 23:59:59", "colg每日签到"),
@@ -90,6 +90,7 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220421jhy/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/21300_738a9e42",
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/21304_cf492f48",
     #
     # 已过期活动
     #
@@ -98,7 +99,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220218lbu5p6f/indexm.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
-    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/20683_605cb50c",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",

@@ -1,6 +1,6 @@
 from config import CommonConfig
 from log import color, fileHandler, logger, new_file_handler
-from version import now_version
+from version import now_version, ver_time
 
 logger.name = "auto_updater"
 logger.removeHandler(fileHandler)
@@ -40,7 +40,7 @@ def auto_update():
 
     change_title("自动更新DLC")
 
-    logger.info(color("bold_yellow") + f"更新器的进程为{os.getpid()}, 代码版本为{now_version}")
+    logger.info(color("bold_yellow") + f"更新器的进程为{os.getpid()}, 代码版本为{now_version} {ver_time}")
     logger.info(color("bold_yellow") + f"需要检查更新的小助手主进程为{args.pid}, 版本为{args.version}")
 
     # note: 工作目录预期为小助手的exe所在目录

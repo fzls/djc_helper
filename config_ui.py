@@ -61,7 +61,7 @@ from qt_wrapper import (
 )
 from setting import dnf_server_id_to_name, dnf_server_name_list, dnf_server_name_to_id, zzconfig
 from update import get_update_info, try_manaual_update, update_fallback
-from version import now_version
+from version import now_version, ver_time
 
 logger.name = "config_ui"
 logger.removeHandler(fileHandler)
@@ -271,7 +271,7 @@ class ConfigUi(QFrame):
         super().__init__(parent)
 
         self.resize(1080, 780)
-        title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} by风之凌殇 {get_random_face()}"
+        title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
         self.setWindowTitle(title)
 
         self.setStyleSheet("font-family: Microsoft YaHei")
@@ -281,7 +281,7 @@ class ConfigUi(QFrame):
 
         self.load()
 
-        logger.info(f"配置工具启动成功，版本号为v{now_version}")
+        logger.info(f"配置工具启动成功，版本号为v{now_version} {ver_time}")
 
     def load(self):
         self.from_config(self.load_config())
@@ -2819,7 +2819,7 @@ def main():
         print_tb(tb, file=result)
         msg = f"{t} {val}:\n{result.getvalue()}"
         logger.error(msg)
-        QMessageBox.critical(None, f"出错了 - v{now_version}", msg)
+        QMessageBox.critical(None, f"出错了 - v{now_version} {ver_time}", msg)
         old_hook(t, val, tb)
 
     old_hook = sys.excepthook

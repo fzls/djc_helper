@@ -572,6 +572,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -587,7 +588,6 @@ class DjcHelper:
             ("魔界人探险记", self.mojieren),
             ("会员关怀", self.dnf_vip_mentor),
             ("组队拜年", self.team_happy_new_year),
-            ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("新职业预约活动", self.dnf_reserve),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
@@ -8044,68 +8044,48 @@ class DjcHelper:
 
         self.check_dnf_wegame()
 
-        # @try_except(show_exception_info=False, return_val_on_except=0)
-        # def query_signin_days():
-        #     res = self.dnf_wegame_op("查询签到天数-condOutput", "800004", print_res=False)
-        #     return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
+        jifen_flowid = "852658"
 
-        def query_lottery_times():
-            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "833323", print_res=False)
-            return self.parse_jifenOutput(res, "407")
+        def query_open_box_times():
+            res = self.dnf_wegame_op("查询开盒子次数-jifenOutput", jifen_flowid, print_res=False)
+            return self.parse_jifenOutput(res, "444")
 
         def query_daily_lottery_times():
-            res = self.dnf_wegame_op("查询抽奖次数-jifenOutput", "833323", print_res=False)
-            return self.parse_jifenOutput(res, "408")
+            res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
+            return self.parse_jifenOutput(res, "443")
 
-        self.dnf_wegame_op("全民见面礼", "833305")
+        self.dnf_wegame_op("全民见面礼_copy", "852642")
 
         # 四选一
-        self.dnf_wegame_op("创建合金战士获得补给箱", "833308")
-        self.dnf_wegame_op("在线30分钟获得补给箱", "833307")
-        self.dnf_wegame_op("页面签到获得补给箱", "833306")
+        self.dnf_wegame_op("页面签到获得补给箱_copy", "852644")
+        self.dnf_wegame_op("在线30分钟获得补给箱_copy", "852645")
+        self.dnf_wegame_op("分享获得盲盒次数+1", "852650")
 
-        totalLotteryTimes, remainingLotteryTimes = query_lottery_times()
+        totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for i in range(remainingLotteryTimes):
-            self.dnf_wegame_op(f"第{i + 1}次 开启补给箱-4礼包抽奖", "833650")
+        for idx in range_from_one(remainingLotteryTimes):
+            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "852649")
 
-        # 达成游戏内容
-        def take_hejin_awards(role_info: RoleInfo):
-            self.dnf_wegame_op("创建合金战士获得补给箱", "833308")
-            self.dnf_wegame_op("LV1等级礼包", "833309")
-            self.dnf_wegame_op("LV50等级礼包", "833310")
-            self.dnf_wegame_op("LV90等级礼包", "833311")
-            self.dnf_wegame_op("LV95等级礼包", "833312")
-            self.dnf_wegame_op("LV100等级礼包", "833313")
-
-            return True
-
-        self.temporary_change_bind_and_do(
-            "尝试寻找当前绑定区服中的 合金战士 角色来进行领取升级活动奖励",
-            self.query_dnf_rolelist_for_temporary_change_bind(base_force_name="神枪手（男）"),
-            self.check_dnf_wegame,
-            take_hejin_awards,
-            need_try_func=None,
-        )
+        self.dnf_wegame_op("1阶段通关奖励", "852651")
+        self.dnf_wegame_op("2阶段通关奖励", "852652")
+        self.dnf_wegame_op("3阶段通关奖励", "852653")
 
         # 抽奖
-        self.dnf_wegame_op("登录游戏30min抽奖券", "833314")
-        self.dnf_wegame_op("通关异界获得抽奖券", "833315")
-        self.dnf_wegame_op("许愿房间停留5分钟获得抽奖券", "833316")
-        self.dnf_wegame_op("观看视频获得抽奖券", "833317")
+        self.dnf_wegame_op("登录游戏30min抽奖券_copy", "852646")
+        self.dnf_wegame_op("许愿房间停留5分钟获得抽奖券_copy", "852647")
 
         totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for i in range(remainingLotteryTimes):
-            self.dnf_wegame_op(f"第{i + 1}次抽奖", "833318")
+        for idx in range_from_one(remainingLotteryTimes):
+            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "852648")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
             "WeGame活动",
             get_act_url("WeGame活动"),
             activity_op_func=self.dnf_wegame_op,
-            query_bind_flowid="833300",
-            commit_bind_flowid="833299",
+            query_bind_flowid="852639",
+            commit_bind_flowid="852638",
             roleinfo=roleinfo,
             roleinfo_source=roleinfo_source,
         )
@@ -10471,4 +10451,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_wegame()

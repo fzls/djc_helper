@@ -91,6 +91,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/lbact/a20220421jhy/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/21300_738a9e42",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/21304_cf492f48",
+    "WeGame活动": "https://dnf.qq.com/lbact/a20220419lbrmrox/index.html",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
-    "WeGame活动": "https://dnf.qq.com/lbact/a20220119wegame/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/iuc6hayzjxw2it907a4q7yerkg/index_page1.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
@@ -242,7 +242,7 @@ class Urls:
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "454695"  # DNF落地页活动需求
-        self.iActivityId_dnf_wegame = "442952"  # WeGame活动
+        self.iActivityId_dnf_wegame = "463710"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战

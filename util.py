@@ -353,9 +353,7 @@ def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, 
         if enable_super_fast_mode:
             pool_info = "超级" + pool_info
 
-    set_title_cmd = (
-        f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
-    )
+    set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
     if is_windows():
         os.system(set_title_cmd)
     else:

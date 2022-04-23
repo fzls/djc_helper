@@ -1372,11 +1372,14 @@ class DjcHelper:
         return take_count
 
     def query_last_week_xinyue_team_awards(self) -> list[XinYueTeamAwardInfo]:
+        # 假设过去两周每天兑换40个道具（比如装备提升礼盒），每页为4个
+        two_week_max_page = 40 * 7 * 2 // 4
+
         last_monday = get_last_week_monday_datetime()
         this_monday = get_this_week_monday_datetime()
 
         last_week_awards = []
-        for page in range_from_one(20):
+        for page in range_from_one(two_week_max_page):
             awards = self.query_xinyue_team_awards(page)
             if len(awards) == 0:
                 break

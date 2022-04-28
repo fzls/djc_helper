@@ -190,11 +190,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "22.4 虎牙斗鱼新活动"
-    message = """4.14 虎牙斗鱼新增了几个蚊子腿，不会接入，请手动参与，链接如下：
+    title = "关于360浏览器"
+    message = """目前有好几个人反馈，在安装了360浏览器的时候，不论使用便携版chrome，还是普通chrome，都会卡在【检查便携版chrome是否可用】这一步，或者卡在【Starting ChromeDriver ...】开头的黑框框界面。
 
-虎牙：https://www.huya.com/g/2#cate-1-5027
-斗鱼: https://www.douyu.com/topic/DNFCRZBJ?rid=5324055
+遇到这种情况的话，建议卸载 360浏览器，改用 edge 或者 chrome 浏览器 
 """
     open_url = ""
     show_only_before_version = ""

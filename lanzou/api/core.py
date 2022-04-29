@@ -72,25 +72,48 @@ class LanZouCloud(object):
         #   1. 将 _host_url 的域名改为新的
         #   2. 把 最新的域名，比如 lanzouo 加到可能的域名列表的最前面
         #   3. 如果下面的域名有部分不再出现在备案信息中了，可以直接注释或者移除
-        self.available_domains = [
-            # note: 下面两个似乎暂时不可用
-            # 'lanzouu.com',  # 2021-01-17 鲁ICP备15001327号-21
-            # 'lanzouh.com',  # 2021-01-17 鲁ICP备15001327号-20
-            'lanzoum.com',  # 2021-01-17 鲁ICP备15001327号-19
-            'lanzouf.com',  # 2021-01-17 鲁ICP备15001327号-18
-            'lanzoub.com',  # 2021-01-17 鲁ICP备15001327号-17
+        # 根据最近一次检测的结果，将下列域名分为以下三类
+        # 可以快速访问的
+        quick_domain_list = [
+            'lanzouu.com',  # 2021-01-17 鲁ICP备15001327号-21
+            'lanzouh.com',  # 2021-01-17 鲁ICP备15001327号-20
+
             'lanzoup.com',  # 2021-12-10 鲁ICP备15001327号-16
             'lanzout.com',  # 2021-12-10 鲁ICP备15001327号-15
             'lanzouy.com',  # 2021-12-10 鲁ICP备15001327号-14
             'lanzoul.com',  # 2021-12-10 鲁ICP备15001327号-13
-            'lanzoug.com',  # 2021-12-10 鲁ICP备15001327号-12
             'lanzouv.com',  # 2021-12-10 鲁ICP备15001327号-11
+
             'lanzouj.com',  # 2021-12-10 鲁ICP备15001327号-10
             'lanzouq.com',  # 2021-12-10 鲁ICP备15001327号-9
-            'lanzouo.com',  # 2021-09-15 鲁ICP备15001327号-8
+
             'lanzouw.com',  # 2021-09-02 鲁ICP备15001327号-7
             'lanzoui.com',  # 2020-06-09 鲁ICP备15001327号-6
             'lanzoux.com',  # 2020-06-09 鲁ICP备15001327号-5
+        ]
+
+        # 访问速度比较慢
+        slow_domain_list = [
+            'lanzoum.com',  # 2021-01-17 鲁ICP备15001327号-19
+            'lanzouf.com',  # 2021-01-17 鲁ICP备15001327号-18
+            'lanzoub.com',  # 2021-01-17 鲁ICP备15001327号-17
+        ]
+
+        # 不可访问
+        unavailable_domain_list = [
+            'lanzoug.com',  # 2021-12-10 鲁ICP备15001327号-12
+            'lanzouo.com',  # 2021-09-15 鲁ICP备15001327号-8
+        ]
+
+        shuffle(quick_domain_list)
+        shuffle(slow_domain_list)
+        shuffle(unavailable_domain_list)
+
+        self.available_domains = [
+            *quick_domain_list,
+            *slow_domain_list,
+
+            # *unavailable_domain_list,
         ]
 
         # 默认链接使用最新的域名

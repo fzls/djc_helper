@@ -540,12 +540,15 @@ class QQLogin:
         self.window_title = f"请扫码 {name} - {login_mode}"
 
         def replace_qr_code_tip():
+            qr_js_wait_time = 1
+
             try:
+                # 扫码登录
                 tip_class_name = "qr_safe_tips"
                 tip = f"请扫码 {name}"
 
-                logger.info(color("bold_green") + f"准备修改二维码上方提示文字为 {tip}")
-                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
+                logger.info(color("bold_green") + f"准备修改二维码上方 扫码提示文字 为 {tip}")
+                WebDriverWait(self.driver, qr_js_wait_time).until(
                     expected_conditions.visibility_of_element_located((By.CLASS_NAME, tip_class_name))
                 )
                 self.driver.execute_script(
@@ -553,6 +556,33 @@ class QQLogin:
                 )
             except Exception as e:
                 logger.warning("替换扫码提示文字出错了（不影响登录流程）")
+                logger.debug("", exc_info=e)
+
+            try:
+                # 调整箭头
+                logger.info(color("bold_green") + f"准备修改两侧箭头为可见的 ⬅️和 ➡️")
+                self.driver.execute_script(
+                    """
+                    function setArrow(elementId = "", arrow="") {
+                        let target = document.getElementById(elementId)
+
+                        // 需要修改 display 为 block 才能获取高度
+                        let oldDisplay = target.style.display
+                        target.style.display = "block"
+                        let desiredHeight = parseInt((target.clientHeight || 120) * 1.5)
+                        target.style.display = oldDisplay
+
+                        // 修改为位于头像左右的箭头
+                        target.innerText = arrow
+                        target.style.lineHeight = desiredHeight + "px"
+                    }
+
+                    setArrow("prePage", "⬅️")
+                    setArrow("nextPage", "➡️")
+                    """
+                )
+            except Exception as e:
+                logger.warning("修改箭头失败了（不影响登录流程）")
                 logger.debug("", exc_info=e)
 
         def login_with_qr_code():

@@ -78,7 +78,7 @@ def download_latest_github_release(
         f"https://pd.zwc365.com/seturl/https://github.com/{release_file_path}",
         f"https://gh.xiu.workers.dev/https://github.com/{release_file_path}",
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-        f"https://github.rc1844.workers.dev/{release_file_path}",
+        # f"https://github.rc1844.workers.dev/{release_file_path}",
         f"https://ghgo.feizhuqwq.workers.dev/https://github.com/{release_file_path}",
         f"https://git.yumenaka.net/https://github.com/{release_file_path}",
         f"https://ghproxy.com/https://github.com/{release_file_path}",

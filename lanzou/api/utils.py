@@ -46,6 +46,9 @@ def name_format(name: str) -> str:
     return re.sub(r'[$%^!*<>)(+=`\'\"/:;,?]', '', name)
 
 
+reg_date = r'\d{4}-\d{2}-\d{2}'
+
+
 def time_format(time_str: str) -> str:
     """输出格式化时间 %Y-%m-%d %H:%M:%S"""
     now = datetime.now()
@@ -65,6 +68,9 @@ def time_format(time_str: str) -> str:
     elif '天前' in time_str:
         days = time_str.replace(' 天前', '')
         delta = timedelta(days=int(days))
+    elif re.match(reg_date, time_str):
+        # 2022-03-25
+        delta = now - datetime.strptime(time_str, '%Y-%m-%d')
     else:
         return time_str
 

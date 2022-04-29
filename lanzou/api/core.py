@@ -592,6 +592,14 @@ class LanZouCloud(object):
             if len(sign) < 20:  # 此时 sign 保存在变量里面, 变量名是 sign 匹配的字符
                 sign = re.search(rf"var {sign}\s*=\s*'(.+?)';", first_page).group(1)
             post_data = {'action': 'downprocess', 'sign': sign, 'ves': 1}
+            # 某些特殊情况 share_url 会出现 webpage 参数, post_data 需要更多参数
+            # https://github.com/zaxtyson/LanZouCloud-API/issues/74
+            if "?webpage=" in share_url:
+                ajax_data = re.search(r"var ajaxdata\s*=\s*'(.+?)';", first_page).group(1)
+                web_sign = re.search(r"var websign\s*=\s*'(.+?)';", first_page).group(1)
+                web_sign_key = re.search(r"var websignkey\s*=\s*'(.+?)';", first_page).group(1)
+                post_data = {'action': 'downprocess', 'signs': ajax_data, 'sign': sign, 'ves': 1,
+                             'websign': web_sign, 'websignkey': web_sign_key}
             link_info = self._post(self._host_url + '/ajaxm.php', post_data)
             if not link_info:
                 return FileDetail(LanZouCloud.NETWORK_ERROR, name=f_name, time=f_time, size=f_size, desc=f_desc,

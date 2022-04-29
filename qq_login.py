@@ -796,6 +796,22 @@ class QQLogin:
 
             self.set_window_size()
             try:
+                logger.info("尝试处理可能有的每日签到弹窗")
+                xpath_close_daily_sign = "//i[contains(@class, 'athena-dialog-close-icon')]"
+                WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                    expected_conditions.element_to_be_clickable((By.XPATH, xpath_close_daily_sign))
+                )
+
+                logger.info("等待3秒，确保加载完成")
+                time.sleep(3)
+
+                logger.info("点击关闭每日签到弹窗")
+                self.driver.find_element(By.XPATH, xpath_close_daily_sign).click()
+                time.sleep(3)
+            except Exception:
+                logger.warning("爱玩处理 关闭签到弹窗 流程失败了，可能是本次没有弹窗")
+
+            try:
                 logger.info("等待登录按钮出来，确保加载完成")
                 xpath_login = "//div[contains(text(), '点击登录')]"
                 WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(

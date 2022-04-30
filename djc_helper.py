@@ -140,6 +140,7 @@ from util import (
     get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
+    get_week,
     is_act_expired,
     json_compact,
     md5,
@@ -3824,9 +3825,12 @@ class DjcHelper:
         logger.warning("\n" + color("fg_bold_yellow") + tips)
         # 首次在对应场景时弹窗
         if always_show_message_box or (
-            show_message_box_once_key != "" and is_first_run(f"show_dnf_helper_info_guide_{show_message_box_once_key}")
+            show_message_box_once_key != "" and is_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
         ):
             async_message_box(tips, "助手信息获取指引", print_log=False)
+
+    def get_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str) -> str:
+        return f"show_dnf_helper_info_guide_{self.cfg.name}_{show_message_box_once_key}"
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):

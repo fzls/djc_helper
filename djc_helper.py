@@ -102,7 +102,7 @@ from exceptions_def import (
     GithubActionLoginException,
     SameAccountTryLoginAtMultipleThreadsException,
 )
-from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
+from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from game_info import get_game_info, get_game_info_by_bizcode
 from log import color, logger
 from network import Network, extract_qq_video_message, jsonp_callback_flag
@@ -3829,6 +3829,9 @@ class DjcHelper:
         ):
             async_message_box(tips, "助手信息获取指引", print_log=False)
 
+    def reset_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str):
+        reset_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
+
     def get_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str) -> str:
         return f"show_dnf_helper_info_guide_{self.cfg.name}_{show_message_box_once_key}"
 
@@ -4434,6 +4437,14 @@ class DjcHelper:
                 logger.info(f"领取{actionName}-{actionId}，获取经验为{exp}，回包data={data}")
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
+
+            # "returnCode": -30003, "returnMsg": "登录态失效，请重新登录"
+            show_message_box_once_key = "编年史token过期_" + get_week()
+            if res.get("returnCode", 0) == -30003:
+                extra_msg = "dnf助手的登录态已过期，导致编年史相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
+            else:
+                self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gifts():

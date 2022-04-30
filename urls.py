@@ -93,6 +93,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/21304_cf492f48",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220419lbrmrox/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/1xirtswph2eh1wtpg9x1gd7lw1/index_index.html",
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
     #
     # 已过期活动
     #
@@ -102,7 +103,6 @@ act_name_to_url = {
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
-    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20211216newyear/indexpc.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
@@ -236,7 +236,7 @@ class Urls:
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "461270"  # DNF助手活动
-        self.iActivityId_dnf_helper_dup = "438820"  # DNF助手活动
+        self.iActivityId_dnf_helper_dup = "451819"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
@@ -291,7 +291,7 @@ class Urls:
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
-            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}"
+            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}"
         )
 
         # ide通用活动

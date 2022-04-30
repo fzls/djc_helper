@@ -575,6 +575,7 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("dnf助手活动Dup", self.dnf_helper_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -585,7 +586,6 @@ class DjcHelper:
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF共创投票", self.dnf_dianzan),
             ("管家蚊子腿", self.guanjia_new),
-            ("dnf助手活动Dup", self.dnf_helper_dup),
             ("colg每日签到", self.colg_signin),
             ("魔界人探险记", self.mojieren),
             ("会员关怀", self.dnf_vip_mentor),
@@ -4088,53 +4088,49 @@ class DjcHelper:
             )
             return
 
-        @try_except(return_val_on_except=0)
-        def query_signin_count() -> int:
-            raw_res = self.dnf_helper_dup_op("查询", "828448", print_res=False)
-            info = parse_amesvr_common_info(raw_res)
+        self.check_dnf_helper_dup()
 
-            count = int(info.sOutValue2.split(";")[1])
-            return count
 
-        self.dnf_helper_dup_op("异界寻宝", "828436")
-        total_count = query_signin_count()
-        logger.info(color("bold_yellow") + f"当前累计每日摘取次数为: {total_count} 次")
+        # <option value="1">周一</option>
+        # <option value="2">周二</option>
+        # <option value="3">周三</option>
+        # <option value="4">周四</option>
+        # <option value="5">周五</option>
+        # <option value="6">周末</option>
+        # <option value="7">全部</option>
+        # <option value="8">时间不定</option>
+        if is_daily_first_run(f"打团报名_{self.cfg.name}"):
+            self.dnf_helper_dup_op("报名", "851838", prefer="6")
+            
+            logger.info("等待10秒后再进行下一个操作")
+            time.sleep(10)
 
-        award_infos = [
-            (1, "828438"),
-            (2, "828439"),
-            (4, "828440"),
-            (7, "828441"),
-            (10, "828442"),
-            (12, "828443"),
-            (15, "828444"),
-            (19, "828445"),
-            (25, "828477"),
-        ]
-        for require_days, flowid in award_infos:
-            if total_count >= require_days:
-                self.dnf_helper_dup_op(f"摘取 {require_days} 次", flowid)
-            else:
-                logger.warning("签到次数不够，跳过尝试领取后续奖励")
-                break
+        self.dnf_helper_dup_op("周末礼包", "844295")
 
-        sign_infos = [
-            ("20220125", "828478"),
-            ("20220126", "828565"),
-            ("20220131", "828566"),
-            ("20220201", "828567"),
-            ("20220203", "828568"),
-            ("20220205", "828569"),
-            ("20220208", "828570"),
-            ("20220215", "828571"),
-        ]
-        today = get_today()
-        logger.info(f"今天是 {today}")
-        for sign_date, flowid in sign_infos:
-            if today == sign_date:
-                self.dnf_helper_dup_op(f"限时领取 - {sign_date}", flowid)
-            else:
-                logger.warning(f"今天不是 {sign_date}，将跳过该签到奖励")
+        async_message_box("仅尝试报名和领取周末礼包，积分兑换请自行前往dnf助手的活动页面按照个人喜好进行兑换~", "打团活动", show_once=True, open_url=get_act_url("dnf助手活动Dup"))
+        # self.dnf_helper_dup_op("积分兑换--2积分限20次_复活币", "845120")
+        # self.dnf_helper_dup_op("积分兑换--4积分限20次_闪亮", "853815")
+        # self.dnf_helper_dup_op("积分兑换--4积分限20次_王者改镶嵌", "853816")
+        # self.dnf_helper_dup_op("积分兑换--10积分限20次_一次性继承", "853817")
+        # self.dnf_helper_dup_op("积分兑换--8积分限30次每周2_装备", "853818")
+        # self.dnf_helper_dup_op("积分兑换--15积分每周2_华丽", "853819")
+        # self.dnf_helper_dup_op("积分兑换--20积分10次_黑砖15天", "853820")
+        # self.dnf_helper_dup_op("积分兑换--40积分限每月1_+10装备强化", "853821")
+        # self.dnf_helper_dup_op("积分兑换--30积分每周1次_异界", "853822")
+        # self.dnf_helper_dup_op("积分兑换--60积分每周1_纯净", "853823")
+        # self.dnf_helper_dup_op("积分兑换--25积分每周1_次元", "853824")
+        # self.dnf_helper_dup_op("积分兑换--160积分每周1 _ 10装备增幅券", "853825")
+        # self.dnf_helper_dup_op("积分兑换--160积分每周1_灿烂", "853826")
+        # self.dnf_helper_dup_op("积分兑换--240积分每周1_11装备增幅券", "853828")
+
+    def check_dnf_helper_dup(self):
+        self.check_bind_account(
+            "dnf助手活动Dup",
+            get_act_url("dnf助手活动Dup"),
+            activity_op_func=self.dnf_helper_dup_op,
+            query_bind_flowid="846972",
+            commit_bind_flowid="846971",
+        )
 
     def dnf_helper_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper_dup
@@ -9736,6 +9732,7 @@ class DjcHelper:
                 "title",
                 "toUin",
                 "actSign",
+                "prefer",
             ]
         }
 
@@ -10470,4 +10467,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_card_flip()
+        djcHelper.dnf_helper_dup()

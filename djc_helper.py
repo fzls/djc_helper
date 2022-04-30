@@ -4436,13 +4436,14 @@ class DjcHelper:
             else:
                 logger.warning(f"{actionName}尚未完成，无法领取哦~")
 
-            # "returnCode": -30003, "returnMsg": "登录态失效，请重新登录"
-            show_message_box_once_key = "编年史token过期_" + get_week()
-            if res.get("returnCode", 0) == -30003:
-                extra_msg = "dnf助手的登录态已过期，导致编年史相关操作无法执行，目前需要手动更新，具体操作流程如下"
-                self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
-            else:
-                self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
+            if dnf_helper_info.token != "":
+                # "returnCode": -30003, "returnMsg": "登录态失效，请重新登录"
+                show_message_box_once_key = "编年史token过期_" + get_week()
+                if res.get("returnCode", 0) == -30003:
+                    extra_msg = "dnf助手的登录态已过期，导致编年史相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                    self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
+                else:
+                    self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gifts():

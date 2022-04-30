@@ -3825,7 +3825,8 @@ class DjcHelper:
         logger.warning("\n" + color("fg_bold_yellow") + tips)
         # 首次在对应场景时弹窗
         if always_show_message_box or (
-            show_message_box_once_key != "" and is_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
+            show_message_box_once_key != ""
+            and is_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
         ):
             async_message_box(tips, "助手信息获取指引", print_log=False)
 
@@ -4090,7 +4091,6 @@ class DjcHelper:
 
         self.check_dnf_helper_dup()
 
-
         # <option value="1">周一</option>
         # <option value="2">周二</option>
         # <option value="3">周三</option>
@@ -4101,13 +4101,15 @@ class DjcHelper:
         # <option value="8">时间不定</option>
         if is_daily_first_run(f"打团报名_{self.cfg.name}"):
             self.dnf_helper_dup_op("报名", "851838", prefer="6")
-            
+
             logger.info("等待10秒后再进行下一个操作")
             time.sleep(10)
 
         self.dnf_helper_dup_op("周末礼包", "844295")
 
-        async_message_box("仅尝试报名和领取周末礼包，积分兑换请自行前往dnf助手的活动页面按照个人喜好进行兑换~", "打团活动", show_once=True, open_url=get_act_url("dnf助手活动Dup"))
+        async_message_box(
+            "仅尝试报名和领取周末礼包，积分兑换请自行前往dnf助手的活动页面按照个人喜好进行兑换~", "打团活动", show_once=True, open_url=get_act_url("dnf助手活动Dup")
+        )
         # self.dnf_helper_dup_op("积分兑换--2积分限20次_复活币", "845120")
         # self.dnf_helper_dup_op("积分兑换--4积分限20次_闪亮", "853815")
         # self.dnf_helper_dup_op("积分兑换--4积分限20次_王者改镶嵌", "853816")

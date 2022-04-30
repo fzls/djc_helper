@@ -558,7 +558,6 @@ class QQLogin:
                 logger.warning("替换扫码提示文字出错了（不影响登录流程）")
                 logger.debug("", exc_info=e)
 
-
             try:
                 # 点击头像登录
                 tip_id = "qlogin_tips"
@@ -568,16 +567,14 @@ class QQLogin:
                 WebDriverWait(self.driver, qr_js_wait_time).until(
                     expected_conditions.visibility_of_element_located((By.ID, tip_id))
                 )
-                self.driver.execute_script(
-                    f"document.getElementById('{tip_id}').innerText = '{tip}'; "
-                )
+                self.driver.execute_script(f"document.getElementById('{tip_id}').innerText = '{tip}'; ")
             except Exception as e:
                 logger.warning("替换扫码提示文字出错了（不影响登录流程）")
                 logger.debug("", exc_info=e)
 
             try:
                 # 调整箭头
-                logger.info(color("bold_green") + f"准备修改两侧箭头为可见的 ⬅️和 ➡️")
+                logger.info(color("bold_green") + "准备修改两侧箭头为可见的 ⬅️和 ➡️")
                 self.driver.execute_script(
                     """
                     function setArrow(elementId = "", arrow="") {

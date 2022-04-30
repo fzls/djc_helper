@@ -1,5 +1,3 @@
-import pytest
-
 from lanzou.api import LanZouCloud
 from lanzou.api.utils import is_file_url, is_folder_url, time_format
 from util import parse_time

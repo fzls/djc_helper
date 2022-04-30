@@ -193,7 +193,7 @@ def main():
     title = "关于360浏览器"
     message = """目前有好几个人反馈，在安装了360浏览器的时候，不论使用便携版chrome，还是普通chrome，都会卡在【检查便携版chrome是否可用】这一步，或者卡在【Starting ChromeDriver ...】开头的黑框框界面。
 
-遇到这种情况的话，建议卸载 360浏览器，改用 edge 或者 chrome 浏览器 
+遇到这种情况的话，建议卸载 360浏览器，改用 edge 或者 chrome 浏览器
 """
     open_url = ""
     show_only_before_version = ""

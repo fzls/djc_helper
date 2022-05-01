@@ -224,7 +224,7 @@ def async_message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
-    use_qt_messagebox=True,
+    use_qt_messagebox=False,
 ):
     async_call(
         message_box,
@@ -253,7 +253,7 @@ def message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
-    use_qt_messagebox=True,
+    use_qt_messagebox=False,
 ):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
@@ -272,13 +272,9 @@ def message_box(
 
     if show_message_box and is_windows():
         if use_qt_messagebox:
-            from PyQt5.QtWidgets import QApplication
-
+            # 使用该选项时，必须要在主线程调用该接口之前，初始化了一个QApplication实例
             from qt_wrapper import show_message
-
-            app = QApplication([])
             show_message(title, msg, is_text_selectable=True)
-            app.quit()
         else:
             win32api.MessageBox(0, msg, title, icon)
 

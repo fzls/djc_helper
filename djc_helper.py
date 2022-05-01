@@ -4232,6 +4232,15 @@ class DjcHelper:
                 **extra_params,
             )
 
+        def wegame_post(ctx: str, api: str, **extra_params) -> dict:
+            return self.post(
+                ctx,
+                url_mwegame,
+                api=api,
+                **common_params,
+                **extra_params,
+            )
+
         def yoyo_post(ctx: str, api: str, **extra_params) -> dict:
             return self.post(
                 ctx,
@@ -4328,9 +4337,10 @@ class DjcHelper:
 
         # ------ 绑定搭档 ------
         def bind_user_partner(ctx: str, partner_user_id: str, isBind="1"):
-            res = self.post(
-                ctx, url_mwegame, "", api="bindUserPartner", pUserId=partner_user_id, isBind=isBind, **common_params
-            )
+            res = wegame_post(ctx, "bindUserPartner",
+                              pUserId=partner_user_id,
+                              isBind=isBind,
+                              )
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 检查是否绑定QQ ------
@@ -4354,11 +4364,11 @@ class DjcHelper:
             return DnfHelperChronicleLotteryList().auto_update_config(res)
 
         def getUserActivityTopInfo() -> DnfHelperChronicleUserActivityTopInfo:
-            res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
+            res = wegame_post("活动基础状态信息", "getUserActivityTopInfo")
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
         def _getUserTaskList() -> dict:
-            return self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
+            return wegame_post("任务信息", "getUserTaskList")
 
         def getUserTaskList() -> DnfHelperChronicleUserTaskList:
             res = _getUserTaskList()

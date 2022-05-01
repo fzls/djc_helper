@@ -224,7 +224,6 @@ def async_message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
-    use_qt_messagebox=False,
 ):
     async_call(
         message_box,
@@ -238,7 +237,6 @@ def async_message_box(
         color_name,
         open_image,
         show_once_daily,
-        use_qt_messagebox,
     )
 
 

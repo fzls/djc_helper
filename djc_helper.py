@@ -4333,10 +4333,12 @@ class DjcHelper:
 
         # ------ 绑定搭档 ------
         def bind_user_partner(ctx: str, partner_user_id: str, isBind="1"):
-            res = wegame_post(ctx, "bindUserPartner",
-                              pUserId=partner_user_id,
-                              isBind=isBind,
-                              )
+            res = wegame_post(
+                ctx,
+                "bindUserPartner",
+                pUserId=partner_user_id,
+                isBind=isBind,
+            )
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 检查是否绑定QQ ------
@@ -4347,26 +4349,28 @@ class DjcHelper:
                 logger.warning(f"{self.cfg.name} 本月的编年史尚未与当前QQ绑定，将尝试自动绑定")
                 bind_ok = bind_qq()
                 if not bind_ok:
-                    extra_msg = (
-                        "编年史未与QQ号进行绑定，且自动绑定流程失败了。请前往道聚城编年史页面手动进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
-                    )
+                    extra_msg = "编年史未与QQ号进行绑定，且自动绑定流程失败了。请前往道聚城编年史页面手动进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
                     self.show_dnf_helper_info_guide(
                         extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_bind_qq_{get_month()}"
                     )
 
         def query_bind_qq_info() -> DnfHelperChronicleBindInfo:
-            raw_res = yoyo_post("查询助手与QQ绑定信息", "getcheatguardbinding",
-                                gameId=10014,
-                                )
+            raw_res = yoyo_post(
+                "查询助手与QQ绑定信息",
+                "getcheatguardbinding",
+                gameId=10014,
+            )
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
 
         def bind_qq() -> bool:
             current_qq = self.qq()
-            raw_res = yoyo_post(f"{self.cfg.name} 将编年史与当前QQ({current_qq})绑定", "bindcheatguard",
-                                gameId=10014,
-                                bindUin=current_qq,
-                                )
+            raw_res = yoyo_post(
+                f"{self.cfg.name} 将编年史与当前QQ({current_qq})绑定",
+                "bindcheatguard",
+                gameId=10014,
+                bindUin=current_qq,
+            )
 
             # {"result":0,"returnCode":0,"returnMsg":""}
             return raw_res.get("returnCode", -1) == 0
@@ -4497,9 +4501,11 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
-            res = wang_get("领取签到奖励", "send/sign",
-                           amsid=giftInfo.sLbcode,
-                           )
+            res = wang_get(
+                "领取签到奖励",
+                "send/sign",
+                amsid=giftInfo.sLbcode,
+            )
             logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
@@ -4550,13 +4556,15 @@ class DjcHelper:
             else:
                 mold = 2  # 队友
                 side = "队友"
-            res = wang_get("领取基础奖励", "send/basic",
-                           isLock=awardInfo.isLock,
-                           amsid=awardInfo.sLbCode,
-                           iLbSel1=awardInfo.iLbSel1,
-                           num=1,
-                           mold=mold,
-                           )
+            res = wang_get(
+                "领取基础奖励",
+                "send/basic",
+                isLock=awardInfo.isLock,
+                amsid=awardInfo.sLbCode,
+                iLbSel1=awardInfo.iLbSel1,
+                num=1,
+                mold=mold,
+            )
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {awardInfo.giftName} - {res}")
             ret_msg = res.get("msg", "")
             if ret_msg == "登录态异常":
@@ -4639,13 +4647,15 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_award_op(ctx: str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
-            res = wang_get("兑换奖励", "send/exchange",
-                           exNum=1,
-                           iCard=giftInfo.iCard,
-                           amsid=giftInfo.sLbcode,
-                           iNum=giftInfo.iNum,
-                           isLock=giftInfo.isLock,
-                           )
+            res = wang_get(
+                "兑换奖励",
+                "send/exchange",
+                exNum=1,
+                iCard=giftInfo.iCard,
+                amsid=giftInfo.sLbcode,
+                iNum=giftInfo.iNum,
+                isLock=giftInfo.isLock,
+            )
             logger.info(f"{ctx}兑换奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
@@ -4661,10 +4671,12 @@ class DjcHelper:
 
         def op_lottery(idx: int, totalLotteryTimes: int):
             ctx = f"[{idx}/{totalLotteryTimes}]"
-            res = wang_get(f"{ctx} 抽奖", "send/lottery",
-                           amsid="lottery_0007",
-                           iCard=10,
-                           )
+            res = wang_get(
+                f"{ctx} 抽奖",
+                "send/lottery",
+                amsid="lottery_0007",
+                iCard=10,
+            )
             gift = res.get("giftName", "出错啦: " + res.get("msg", "未知错误"))
             beforeMoney = res.get("money", 0)
             afterMoney = res.get("value", 0)

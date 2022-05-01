@@ -237,7 +237,7 @@ def async_message_box(
         color_name,
         open_image,
         show_once_daily,
-        call_from_async=True
+        call_from_async=True,
     )
 
 

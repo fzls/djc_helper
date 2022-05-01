@@ -1384,25 +1384,19 @@ def show_tips(cfg: Config):
 
     tips = {
         "工具下载": (
-            "如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：\n"
-            "https://fzls.lanzouo.com/s/djc-tools\n"
+            "如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：\n" "https://fzls.lanzouo.com/s/djc-tools\n"
         ),
-        "视频教程": (
-            "部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：\n"
-            "https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1\n"
-        ),
+        "视频教程": ("部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：\n" "https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1\n"),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
         "22魔界人跳一跳": (
-            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n"
-            "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
+            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
         ),
         "绑定手机领666代币券": (
-            "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n"
-            "https://dnf.qq.com/cp/a20211230info/index.html\n"
+            "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
         "2022.4 51充值活动": (
             "51充值活动请自行参与：\n"
@@ -2166,6 +2160,7 @@ def demo_pay_info():
 
     logger.info(dlc_info)
     logger.info(color("bold_cyan") + monthly_pay_info)
+
 
 def demo_show_tips():
     # 读取配置信息

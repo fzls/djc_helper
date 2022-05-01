@@ -390,10 +390,6 @@ class Urls:
 
         # 编年史新版接口
         self.dnf_helper_chronicle_yoyo = "https://mwegame.qq.com/yoyo/dnf/{api}"
-        # 领取任务经验
-        self.dnf_helper_chronicle_api_take_task_exp = "doactionincrexp"
-        # 账号绑定信息
-        self.dnf_helper_chronicle_api_query_binding = "getcheatguardbinding"
 
         # 助手活动相关接口
         self.dnf_helper = "https://mwegame.qq.com/act/dnf/destiny/{api}?gameId=10014&roleSwitch=1&toOpenid=&roleId={roleId}&uniqueRoleId={uniqueRoleId}&openid=&serverName={serverName}&toUin={toUin}&cGameId=1006&userId={userId}&serverId={serverId}&token={token}&isMainRole=0&subGameId=10014&areaId={areaId}&gameName=DNF&areaName={areaName}&roleJob={roleJob}&nickname={nickname}&roleName={roleName}&uin={uin}&roleLevel={roleLevel}&"

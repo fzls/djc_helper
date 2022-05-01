@@ -4356,7 +4356,7 @@ class DjcHelper:
                 )
 
         def query_bind_qq_info() -> DnfHelperChronicleBindInfo:
-            raw_res = yoyo_post("查询助手与QQ绑定信息", self.urls.dnf_helper_chronicle_api_query_binding, gameId=10014)
+            raw_res = yoyo_post("查询助手与QQ绑定信息", "getcheatguardbinding", gameId=10014)
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
 
@@ -4451,7 +4451,7 @@ class DjcHelper:
                 logger.info(f"{actionName}已经领取过了")
 
         def doActionIncrExp(actionName, actionId, exp):
-            res = yoyo_post("领取任务经验", self.urls.dnf_helper_chronicle_api_take_task_exp, gameId=1006, actionId=actionId)
+            res = yoyo_post("领取任务经验", "doactionincrexp", gameId=1006, actionId=actionId)
 
             data = res.get("data", 0)
             if data != 0:

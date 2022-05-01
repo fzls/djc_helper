@@ -4344,8 +4344,18 @@ class DjcHelper:
             logger.info(color("bold_green") + f"{ctx} 结果为: {res}")
 
         # ------ 检查是否绑定QQ ------
-        @try_except(return_val_on_except=DnfHelperChronicleBindInfo())
-        def query_bind_info() -> DnfHelperChronicleBindInfo:
+        @try_except()
+        def check_bind_qq():
+            bind_info = query_bind_qq_info()
+            if bind_info.is_need_bind:
+                extra_msg = (
+                    "编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
+                )
+                self.show_dnf_helper_info_guide(
+                    extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_bind_qq_{get_month()}"
+                )
+
+        def query_bind_qq_info() -> DnfHelperChronicleBindInfo:
             raw_res = yoyo_post("查询助手与QQ绑定信息", self.urls.dnf_helper_chronicle_api_query_binding, gameId=10014)
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
@@ -4666,14 +4676,7 @@ class DjcHelper:
             # 不通过也继续走，只是领奖会失败而已
         else:
             # 在设置了必要参数的情况下，检查是否绑定QQ
-            bind_info = query_bind_info()
-            if bind_info.is_need_bind:
-                extra_msg = (
-                    "编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
-                )
-                self.show_dnf_helper_info_guide(
-                    extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_bind_qq_{get_month()}"
-                )
+            check_bind_qq()
 
         # 提示做任务
         msg = "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-"

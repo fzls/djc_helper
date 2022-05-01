@@ -2171,6 +2171,14 @@ def demo_pay_info():
     logger.info(dlc_info)
     logger.info(color("bold_cyan") + monthly_pay_info)
 
+def demo_show_tips():
+    # 读取配置信息
+    load_config("config.toml")
+    cfg = config()
+
+    show_tips(cfg)
+    pause()
+
 
 if __name__ == "__main__":
     freeze_support()
@@ -2180,4 +2188,5 @@ if __name__ == "__main__":
 
     # demo_show_notices()
     # demo_show_activities_summary()
-    # show_tips()
+
+    # demo_show_tips()

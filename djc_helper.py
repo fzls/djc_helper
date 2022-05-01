@@ -4344,17 +4344,32 @@ class DjcHelper:
         def check_bind_qq():
             bind_info = query_bind_qq_info()
             if bind_info.is_need_bind:
-                extra_msg = (
-                    "编年史未与QQ号进行绑定，请前往道聚城编年史页面进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
-                )
-                self.show_dnf_helper_info_guide(
-                    extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_bind_qq_{get_month()}"
-                )
+                logger.warning(f"{self.cfg.name} 本月的编年史尚未与当前QQ绑定，将尝试自动绑定")
+                bind_ok = bind_qq()
+                if not bind_ok:
+                    extra_msg = (
+                        "编年史未与QQ号进行绑定，且自动绑定流程失败了。请前往道聚城编年史页面手动进行绑定（进入后会见到形如 【账号确认 你是否将 XXX 作为本期参与编年活动的唯一账号 ... 】，使用正确的QQ登陆后，点击确认即可）"
+                    )
+                    self.show_dnf_helper_info_guide(
+                        extra_msg, show_message_box_once_key=f"dnf_helper_chronicle_bind_qq_{get_month()}"
+                    )
 
         def query_bind_qq_info() -> DnfHelperChronicleBindInfo:
-            raw_res = yoyo_post("查询助手与QQ绑定信息", "getcheatguardbinding", gameId=10014)
+            raw_res = yoyo_post("查询助手与QQ绑定信息", "getcheatguardbinding",
+                                gameId=10014,
+                                )
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
+
+        def bind_qq() -> bool:
+            current_qq = self.qq()
+            raw_res = yoyo_post(f"{self.cfg.name} 将编年史与当前QQ({current_qq})绑定", "bindcheatguard",
+                                gameId=10014,
+                                bindUin=current_qq,
+                                )
+
+            # {"result":0,"returnCode":0,"returnMsg":""}
+            return raw_res.get("returnCode", -1) == 0
 
         # ------ 查询各种信息 ------
         def exchange_list() -> DnfHelperChronicleExchangeList:

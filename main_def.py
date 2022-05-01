@@ -1444,7 +1444,7 @@ def show_tips_for_myself():
 
 
 def show_tip_for_myself(msg: str, title: str):
-    async_message_box(msg, f"给自己看的提示 - {title}", use_qt_messagebox=True)
+    message_box(msg, f"给自己看的提示 - {title}")
 
 
 def try_auto_update(cfg):

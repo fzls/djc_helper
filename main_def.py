@@ -12,7 +12,6 @@ from multiprocessing import cpu_count, freeze_support
 from typing import Callable, Dict, List, Optional, Tuple
 
 import requests
-from PyQt5.QtWidgets import QApplication
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
@@ -1383,9 +1382,6 @@ def show_tips(cfg: Config):
         return
     _show_head_line("一些小提示")
 
-    # 初始化qt，方便使用qt的弹窗
-    qt_message_box_container = QApplication([])
-
     tips = {
         "工具下载": ("如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzouo.com/s/djc-tools"),
         "视频教程": ("部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1"),
@@ -1428,8 +1424,6 @@ def show_tips(cfg: Config):
 
     if cfg.common.disable_cmd_quick_edit:
         show_quick_edit_mode_tip()
-
-    qt_message_box_container.quit()
 
 
 def show_tips_for_myself():

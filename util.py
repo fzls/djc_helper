@@ -272,8 +272,17 @@ def message_box(
 
     if show_message_box and is_windows():
         if use_qt_messagebox and not call_from_async:
+            from PyQt5.QtWidgets import QApplication
+
             from qt_wrapper import show_message
+
+            # 初始化qt，方便使用qt的弹窗
+            qt_message_box_container = QApplication([])
+
             show_message(title, msg, is_text_selectable=True)
+
+            # 清理
+            qt_message_box_container.quit()
         else:
             win32api.MessageBox(0, msg, title, icon)
 

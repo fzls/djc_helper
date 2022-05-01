@@ -4223,7 +4223,16 @@ class DjcHelper:
         }
 
         # ------ 封装通用接口 ------
-        def yoyo_post(ctx: str, api: str, **extra_json_data) -> dict:
+        def wang_get(ctx: str, api: str, **extra_params) -> dict:
+            return self.get(
+                ctx,
+                url_wang,
+                api=api,
+                **common_params,
+                **extra_params,
+            )
+
+        def yoyo_post(ctx: str, api: str, **extra_params) -> dict:
             return self.post(
                 ctx,
                 url_yoyo,
@@ -4231,7 +4240,7 @@ class DjcHelper:
                 data=post_json_to_data(
                     {
                         **common_params,
-                        **extra_json_data,
+                        **extra_params,
                     }
                 ),
             )
@@ -4333,15 +4342,15 @@ class DjcHelper:
 
         # ------ 查询各种信息 ------
         def exchange_list() -> DnfHelperChronicleExchangeList:
-            res = self.get("可兑换道具列表", url_wang, api="list/exchange", **common_params)
+            res = wang_get("可兑换道具列表", "list/exchange")
             return DnfHelperChronicleExchangeList().auto_update_config(res)
 
         def basic_award_list() -> DnfHelperChronicleBasicAwardList:
-            res = self.get("基础奖励与搭档奖励", url_wang, api="list/basic", **common_params)
+            res = wang_get("基础奖励与搭档奖励", "list/basic")
             return DnfHelperChronicleBasicAwardList().auto_update_config(res)
 
         def lottery_list() -> DnfHelperChronicleLotteryList:
-            res = self.get("碎片抽奖奖励", url_wang, api="lottery/receive", **common_params)
+            res = wang_get("碎片抽奖奖励", "lottery/receive")
             return DnfHelperChronicleLotteryList().auto_update_config(res)
 
         def getUserActivityTopInfo() -> DnfHelperChronicleUserActivityTopInfo:
@@ -4356,7 +4365,7 @@ class DjcHelper:
             return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
         def sign_gifts_list() -> DnfHelperChronicleSignList:
-            res = self.get("连续签到奖励列表", url_wang, api="list/sign", **common_params)
+            res = wang_get("连续签到奖励列表", "list/sign")
             return DnfHelperChronicleSignList().auto_update_config(res)
 
         # ------ 领取各种奖励 ------
@@ -4457,7 +4466,9 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
-            res = self.get("领取签到奖励", url_wang, api="send/sign", **common_params, amsid=giftInfo.sLbcode)
+            res = wang_get("领取签到奖励", "send/sign",
+                           amsid=giftInfo.sLbcode,
+                           )
             logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
@@ -4508,17 +4519,13 @@ class DjcHelper:
             else:
                 mold = 2  # 队友
                 side = "队友"
-            res = self.get(
-                "领取基础奖励",
-                url_wang,
-                api="send/basic",
-                **common_params,
-                isLock=awardInfo.isLock,
-                amsid=awardInfo.sLbCode,
-                iLbSel1=awardInfo.iLbSel1,
-                num=1,
-                mold=mold,
-            )
+            res = wang_get("领取基础奖励", "send/basic",
+                           isLock=awardInfo.isLock,
+                           amsid=awardInfo.sLbCode,
+                           iLbSel1=awardInfo.iLbSel1,
+                           num=1,
+                           mold=mold,
+                           )
             logger.info(f"领取{side}的第{awardInfo.sName}个基础奖励: {awardInfo.giftName} - {res}")
             ret_msg = res.get("msg", "")
             if ret_msg == "登录态异常":
@@ -4601,17 +4608,13 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_award_op(ctx: str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
-            res = self.get(
-                "兑换奖励",
-                url_wang,
-                api="send/exchange",
-                **common_params,
-                exNum=1,
-                iCard=giftInfo.iCard,
-                amsid=giftInfo.sLbcode,
-                iNum=giftInfo.iNum,
-                isLock=giftInfo.isLock,
-            )
+            res = wang_get("兑换奖励", "send/exchange",
+                           exNum=1,
+                           iCard=giftInfo.iCard,
+                           amsid=giftInfo.sLbcode,
+                           iNum=giftInfo.iNum,
+                           isLock=giftInfo.isLock,
+                           )
             logger.info(f"{ctx}兑换奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
@@ -4627,7 +4630,10 @@ class DjcHelper:
 
         def op_lottery(idx: int, totalLotteryTimes: int):
             ctx = f"[{idx}/{totalLotteryTimes}]"
-            res = self.get(f"{ctx} 抽奖", url_wang, api="send/lottery", **common_params, amsid="lottery_0007", iCard=10)
+            res = wang_get(f"{ctx} 抽奖", "send/lottery",
+                           amsid="lottery_0007",
+                           iCard=10,
+                           )
             gift = res.get("giftName", "出错啦: " + res.get("msg", "未知错误"))
             beforeMoney = res.get("money", 0)
             afterMoney = res.get("value", 0)

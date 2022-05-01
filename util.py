@@ -237,6 +237,7 @@ def async_message_box(
         color_name,
         open_image,
         show_once_daily,
+        call_from_async=True
     )
 
 
@@ -252,6 +253,7 @@ def message_box(
     open_image="",
     show_once_daily=False,
     use_qt_messagebox=False,
+    call_from_async=False,
 ):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
@@ -269,8 +271,7 @@ def message_box(
         show_message_box = False
 
     if show_message_box and is_windows():
-        if use_qt_messagebox:
-            # 使用该选项时，必须要在主线程调用该接口之前，初始化了一个QApplication实例
+        if use_qt_messagebox and not call_from_async:
             from qt_wrapper import show_message
             show_message(title, msg, is_text_selectable=True)
         else:

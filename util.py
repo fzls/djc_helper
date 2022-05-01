@@ -224,6 +224,7 @@ def async_message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
+    use_qt_messagebox=True,
 ):
     async_call(
         message_box,
@@ -237,6 +238,7 @@ def async_message_box(
         color_name,
         open_image,
         show_once_daily,
+        use_qt_messagebox,
     )
 
 
@@ -251,6 +253,7 @@ def message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
+    use_qt_messagebox=True,
 ):
     get_log_func(logger.warning, print_log)(color(color_name) + msg)
 
@@ -268,7 +271,16 @@ def message_box(
         show_message_box = False
 
     if show_message_box and is_windows():
-        win32api.MessageBox(0, msg, title, icon)
+        if use_qt_messagebox:
+            from PyQt5.QtWidgets import QApplication
+
+            from qt_wrapper import show_message
+
+            app = QApplication([])
+            show_message(title, msg, is_text_selectable=True)
+            app.quit()
+        else:
+            win32api.MessageBox(0, msg, title, icon)
 
         if open_url != "":
             webbrowser.open(open_url)
@@ -1522,6 +1534,8 @@ if __name__ == "__main__":
 
     # print(start_and_end_date_of_a_month(get_now()))
 
-    clear_login_status()
+    # clear_login_status()
+
+    message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
 
     pass

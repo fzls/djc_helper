@@ -387,8 +387,11 @@ class Urls:
         self.dnf_helper_chronicle_wang_xinyue = "https://wang.xinyue.qq.com/peak/{api}?userId={userId}&gameId=1006&sPartition={sPartition}&sRoleId={sRoleId}&game_code=dnf&token={token}&uin={uin}&toUin={toUin}&uniqueRoleId={uniqueRoleId}&isLock={isLock}&amsid={amsid}&iLbSel1={iLbSel1}&num={num}&mold={mold}&exNum={exNum}&iCard={iCard}&iNum={iNum}&appidTask=1000042&"
         # mwegame相关接口，额外参数：api: 具体api名称，userId（助手userId），sPartition/sRoleId, actionId: 自己的任务为任务信息中的各个任务的mActionId，队友的任务对应的是各个任务的pActionId
         self.dnf_helper_chronicle_mwegame = "https://mwegame.qq.com/act/GradeExp/ajax/{api}?userId={userId}&gameId=1006&sPartition={sPartition}&sRoleId={sRoleId}&game_code=dnf&actionId={actionId}&pUserId={pUserId}&isBind={isBind}"
-        # 新版接口
+
+        # 编年史新版接口
         self.dnf_helper_chronicle_yoyo = "https://mwegame.qq.com/yoyo/dnf/{api}"
+        # 领取任务经验
+        self.dnf_helper_chronicle_api_take_task_exp = "doactionincrexp"
         # 账号绑定信息
         self.dnf_helper_chronicle_api_query_binding = "getcheatguardbinding"
 

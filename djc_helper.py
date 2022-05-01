@@ -4222,6 +4222,20 @@ class DjcHelper:
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
         }
 
+        # ------ 封装通用接口 ------
+        def yoyo_post(ctx: str, api: str, **extra_json_data) -> dict:
+            return self.post(
+                ctx,
+                url_yoyo,
+                api=api,
+                data=post_json_to_data(
+                    {
+                        **common_params,
+                        **extra_json_data,
+                    }
+                ),
+            )
+
         # ------ 自动绑定 ------
         @try_except(return_val_on_except=None)
         def try_auto_bind() -> DnfHelperChronicleUserTaskList | None:
@@ -4313,17 +4327,7 @@ class DjcHelper:
         # ------ 检查是否绑定QQ ------
         @try_except(return_val_on_except=DnfHelperChronicleBindInfo())
         def query_bind_info() -> DnfHelperChronicleBindInfo:
-            raw_res = self.post(
-                "查询助手与QQ绑定信息",
-                url_yoyo,
-                api=self.urls.dnf_helper_chronicle_api_query_binding,
-                data=post_json_to_data(
-                    {
-                        **common_params,
-                        "gameId": 10014,
-                    }
-                ),
-            )
+            raw_res = yoyo_post("查询助手与QQ绑定信息", self.urls.dnf_helper_chronicle_api_query_binding, gameId=10014)
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
 
@@ -4418,18 +4422,7 @@ class DjcHelper:
                 logger.info(f"{actionName}已经领取过了")
 
         def doActionIncrExp(actionName, actionId, exp):
-            res = self.post(
-                "领取任务经验",
-                url_yoyo,
-                api="doactionincrexp",
-                data=post_json_to_data(
-                    {
-                        **common_params,
-                        "gameId": "1006",
-                        "actionId": actionId,
-                    }
-                ),
-            )
+            res = yoyo_post("领取任务经验", self.urls.dnf_helper_chronicle_api_take_task_exp, gameId=1006, actionId=actionId)
 
             data = res.get("data", 0)
             if data != 0:

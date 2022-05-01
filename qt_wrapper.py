@@ -230,12 +230,15 @@ class QQListValidator(QValidator):
         return (QValidator.Acceptable, text, pos)
 
 
-def show_message(title: str, text: str, disabled_seconds=0):
+def show_message(title: str, text: str, disabled_seconds=0, is_text_selectable=False):
     logger.info(f"{title} {text}")
 
     message_box = ConfirmMessageBox()
     message_box.setWindowTitle(title)
     message_box.setText(text)
+
+    if is_text_selectable:
+        message_box.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
     message_box.setStandardButtons(QMessageBox.Ok)
     if disabled_seconds > 0:

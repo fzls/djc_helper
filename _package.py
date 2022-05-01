@@ -7,7 +7,7 @@ import shutil
 from compress import compress_dir_with_bandizip
 from const import db_top_dir
 from log import color, logger
-from util import show_head_line
+from util import human_readable_size, show_head_line
 from version import now_version
 
 
@@ -113,6 +113,10 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 
     # 额外备份一份最新的供github action 使用
     shutil.copyfile(release_7z_name, os.path.join(dir_github_action_artifact, "djc_helper.7z"))
+
+    # 打印最终大小
+    filesize = os.path.getsize(release_7z_name)
+    logger.info(color("bold_green") + f"打包结束，最终大小为{human_readable_size(filesize)}，最终路径为 {release_7z_name}")
 
     os.chdir(old_cwd)
 

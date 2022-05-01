@@ -4202,10 +4202,6 @@ class DjcHelper:
             return
 
         # 为了不与其他函数名称冲突，且让函数名称短一些，写到函数内部~
-        url_wang = self.urls.dnf_helper_chronicle_wang_xinyue
-        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
-        url_yoyo = self.urls.dnf_helper_chronicle_yoyo
-
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         partition = roleinfo.serviceID
@@ -4226,7 +4222,7 @@ class DjcHelper:
         def wang_get(ctx: str, api: str, **extra_params) -> dict:
             return self.get(
                 ctx,
-                url_wang,
+                self.urls.dnf_helper_chronicle_wang_xinyue,
                 api=api,
                 **common_params,
                 **extra_params,
@@ -4235,7 +4231,7 @@ class DjcHelper:
         def wegame_post(ctx: str, api: str, **extra_params) -> dict:
             return self.post(
                 ctx,
-                url_mwegame,
+                self.urls.dnf_helper_chronicle_mwegame,
                 api=api,
                 **common_params,
                 **extra_params,
@@ -4244,7 +4240,7 @@ class DjcHelper:
         def yoyo_post(ctx: str, api: str, **extra_params) -> dict:
             return self.post(
                 ctx,
-                url_yoyo,
+                self.urls.dnf_helper_chronicle_yoyo,
                 api=api,
                 data=post_json_to_data(
                     {

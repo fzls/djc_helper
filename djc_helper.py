@@ -576,13 +576,13 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("DNF落地页活动", self.dnf_luodiye),
             ("冒险的起点", self.maoxian_start),
-            ("勇士的冒险补给", self.maoxian),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF共创投票", self.dnf_dianzan),
             ("管家蚊子腿", self.guanjia_new),
@@ -8382,22 +8382,22 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_op("1", "839847")
-        self.maoxian_op("2", "839849")
-        self.maoxian_op("3", "839850")
-        self.maoxian_op("4", "839851")
-        self.maoxian_op("5", "839852")
-        self.maoxian_op("任务1_copy", "839853")
-        self.maoxian_op("任务2_copy", "839854")
-        self.maoxian_op("任务3_copy", "839855")
+        self.maoxian_op("1", "854914")
+        self.maoxian_op("2", "854916")
+        self.maoxian_op("3", "854917")
+        self.maoxian_op("4", "854918")
+        self.maoxian_op("5", "854919")
+        self.maoxian_op("任务1", "854920")
+        self.maoxian_op("任务2", "854921")
+        self.maoxian_op("任务3", "854928")
 
     def check_maoxian_dup(self):
         self.check_bind_account(
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
             activity_op_func=self.maoxian_op,
-            query_bind_flowid="839813",
-            commit_bind_flowid="839812",
+            query_bind_flowid="854830",
+            commit_bind_flowid="854829",
         )
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10506,4 +10506,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.maoxian()

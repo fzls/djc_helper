@@ -4315,8 +4315,9 @@ class DjcHelper:
         def query_bind_info() -> DnfHelperChronicleBindInfo:
             raw_res = self.post(
                 "查询助手与QQ绑定信息",
-                self.urls.dnf_helper_chronicle_binding,
-                post_json_to_data(
+                url_yoyo,
+                api=self.urls.dnf_helper_chronicle_api_query_binding,
+                data=post_json_to_data(
                     {
                         **common_params,
                         "gameId": 10014,
@@ -10470,4 +10471,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_dup()
+        djcHelper.dnf_helper_chronicle()

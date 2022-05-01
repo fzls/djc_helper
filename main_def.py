@@ -1383,28 +1383,30 @@ def show_tips(cfg: Config):
     _show_head_line("一些小提示")
 
     tips = {
-        "工具下载": ("如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：https://fzls.lanzouo.com/s/djc-tools"),
-        "视频教程": ("部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1"),
+        "工具下载": (
+            "如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：\n"
+            "https://fzls.lanzouo.com/s/djc-tools\n"
+        ),
+        "视频教程": (
+            "部分活动的配置可能比较麻烦，因此新录制了几个视频教程，有兴趣的朋友可以自行观看：\n"
+            "https://www.bilibili.com/video/BV1LQ4y1y7QJ?p=1\n"
+        ),
         "助手编年史": (
             "dnf助手签到任务和浏览咨询详情页请使用auto.js等自动化工具来模拟打开助手去执行对应操作，当然也可以每天手动打开助手点一点-。-\n"
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
         "22魔界人跳一跳": (
-            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
+            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n"
+            "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
         ),
-        "绑定手机领666代币券": ("之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: https://dnf.qq.com/cp/a20211230info/index.html"),
-        "colg新的签到活动": (
-            "colg新增了个签到小游戏，每天玩一次后可以签到，15天可以领一个自选灿烂，有兴趣的朋友请自行操作: https://bbs.colg.cn/colg_activity_new-ac.html/lifeRestart"
-        ),
-        "2022.3 微信公众号": ("微信公众号【地下城与勇士】有一个每日答题抽奖活动，在公众号依次输入 dta dtb dtc ，直到提示答对为止，然后点击【戳这里】即可抽奖"),
-        "2022.4 虎牙斗鱼活动": (
-            "虎牙斗鱼的活动请自行参与\n"
-            "虎牙：https://www.huya.com/g/2#cate-1-5027\n"
-            "斗鱼: https://www.douyu.com/topic/DNFCRZBJ?rid=5324055\n"
+        "绑定手机领666代币券": (
+            "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n"
+            "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
         "2022.4 51充值活动": (
-            "51充值活动请自行参与：https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_gylbbjz_lottery&pf=__mds_dnf_share"
+            "51充值活动请自行参与：\n"
+            "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_gylbbjz_lottery&pf=__mds_dnf_share\n"
         ),
     }
 
@@ -1416,7 +1418,7 @@ def show_tips(cfg: Config):
         if tip.endswith("\n"):
             tip = tip[:-1]
 
-        msg = f"{title}: {tip}\n "
+        msg = tip.replace("\n", "\n\n")
         message_box(msg, f"一些小提示_{title}", show_once=True, follow_flag_file=False, use_qt_messagebox=True)
 
     # 尝试给自己展示一些提示

@@ -577,12 +577,12 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("勇士的冒险补给", self.maoxian),
+            ("冒险的起点", self.maoxian_start),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("DNF落地页活动", self.dnf_luodiye),
-            ("冒险的起点", self.maoxian_start),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("DNF共创投票", self.dnf_dianzan),
             ("管家蚊子腿", self.guanjia_new),
@@ -8339,21 +8339,21 @@ class DjcHelper:
             logger.warning("未启用领取冒险的起点功能，将跳过")
             return
 
-        self.maoxian_start_op("1_copy", "841114")
-        self.maoxian_start_op("2_copy", "841116")
-        self.maoxian_start_op("3_copy", "841117")
-        self.maoxian_start_op("4_copy", "841118")
-        self.maoxian_start_op("5_copy", "841119")
-        self.maoxian_start_op("6_copy", "841120")
-        self.maoxian_start_op("7_copy", "841121")
+        self.maoxian_start_op("1", "854650")
+        self.maoxian_start_op("2", "854652")
+        self.maoxian_start_op("3", "854653")
+        self.maoxian_start_op("4", "854654")
+        self.maoxian_start_op("5", "854655")
+        self.maoxian_start_op("6", "854656")
+        self.maoxian_start_op("7", "854657")
 
     def check_maoxian(self):
         self.check_bind_account(
             "冒险的起点",
             get_act_url("冒险的起点"),
             activity_op_func=self.maoxian_start_op,
-            query_bind_flowid="841111",
-            commit_bind_flowid="841110",
+            query_bind_flowid="854647",
+            commit_bind_flowid="854646",
         )
 
     def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10506,4 +10506,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.maoxian_start()

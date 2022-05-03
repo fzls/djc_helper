@@ -17,6 +17,7 @@ Github：https://github.com/fzls/autojs
     DNF蚊子腿小助手七群 389786092
     DNF蚊子腿小助手八群 552940664
     DNF蚊子腿小助手九群 517463079
+    DNF蚊子腿小助手10群 791343073
 # auto.js下载地址
 由于auto.js被各种黑产使用，原作者停止发布auto.js，而是开发与发布加了一些限制的auto.js pro（限制指无法对国内一些app操作，如支付宝、微信、淘宝啥的）。<br>
 为了方便使用，推荐使用之前版本的auto.js。<br>

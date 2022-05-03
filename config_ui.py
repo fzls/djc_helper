@@ -499,8 +499,8 @@ class ConfigUi(QFrame):
         report_click_event("clear_login_status")
 
     def join_group(self, checked=False):
-        # note: 如果群 517463079 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
-        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=oH1boMJu1qlXm-MFcun0lKYcCj7qitca&jump_from=webapi")
+        # note: 如果群 791343073 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
+        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=w-U4SsRhWKGHtiMprzqa6plhbvCSALA2&jump_from=webapi")
         for suffix in [
             "png",
             "jpg",

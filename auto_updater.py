@@ -94,6 +94,8 @@ def get_latest_version(uploader: Uploader) -> str:
 def update(args, uploader):
     logger.info("需要更新，开始更新流程")
 
+    logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新。一般这种情况是蓝奏云抽风了")
+
     try:
         # 首先尝试使用增量更新文件
         patches_range = uploader.latest_patches_range()

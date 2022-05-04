@@ -114,7 +114,7 @@ def update(args, uploader):
                 return
             else:
                 logger.warning("增量更新失败，尝试默认的全量更新方案")
-    except Exception as e:
+    except BaseException as e:
         logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
 
     # 保底使用全量更新
@@ -132,7 +132,7 @@ def full_update(args, uploader):
     try:
         filepath = uploader.download_latest_version(tmp_dir)
         report_dlc_usage("full_update_from_netdisk")
-    except Exception as e:
+    except BaseException as e:
         logger.error(f"从蓝奏云下载最新版本失败，将尝试从github及其镜像下载最新版本, exc={e}")
         logger.debug("", exc_info=e)
 

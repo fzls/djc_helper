@@ -277,6 +277,8 @@ def test():
     args = parse_args()
     uploader = Uploader()
 
+    args.version = "16.13.0"
+
     # 进行实际的检查是否需要更新操作
     latest_version = get_latest_version(uploader)
     logger.info(f"当前版本为{args.version}，网盘最新版本为{latest_version}")

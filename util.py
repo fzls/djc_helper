@@ -34,6 +34,7 @@ import urllib3.exceptions
 from compress import compress_in_memory_with_lzma, decompress_in_memory_with_lzma
 from const import cached_dir, db_top_dir
 from db import CacheDB, CacheInfo
+from exceptions_def import SameAccountTryLoginAtMultipleThreadsException
 from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
 
@@ -81,6 +82,10 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         selenium.common.exceptions.TimeoutException,
     ]:
         msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间")
+    elif type(e) in [
+        SameAccountTryLoginAtMultipleThreadsException,
+    ]:
+        msg += format_msg("请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~")
 
     if show_last_process_result:
         from network import last_response_info

@@ -5425,14 +5425,28 @@ class DjcHelper:
         # self.dnf_pk_op("决赛冠军奖励（977181）", "852124")
 
     def check_dnf_pk(self):
-        self.check_bind_account("DNF格斗大赛", get_act_url("DNF格斗大赛"),
-                                activity_op_func=self.dnf_pk_op, query_bind_flowid="852085", commit_bind_flowid="852084")
+        self.check_bind_account(
+            "DNF格斗大赛",
+            get_act_url("DNF格斗大赛"),
+            activity_op_func=self.dnf_pk_op,
+            query_bind_flowid="852085",
+            commit_bind_flowid="852084",
+        )
 
     def dnf_pk_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_pk
 
-        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210405pk/",
-                                   **extra_params)
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            "http://dnf.qq.com/cp/a20210405pk/",
+            **extra_params,
+        )
 
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()

@@ -1403,8 +1403,7 @@ def show_tips(cfg: Config):
             "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_gylbbjz_lottery&pf=__mds_dnf_share\n"
         ),
         "22.5 投票活动": (
-            "可在该网页选任意六个喜欢的职业进行投票，投票完成后会有一次抽奖。因为奖励比较迷你，所以请自行完成\n"
-            "https://dnf.qq.com/act/a20220429aldxw/index.html\n"
+            "可在该网页选任意六个喜欢的职业进行投票，投票完成后会有一次抽奖。因为奖励比较迷你，所以请自行完成\n" "https://dnf.qq.com/act/a20220429aldxw/index.html\n"
         ),
     }
 

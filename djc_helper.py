@@ -578,6 +578,7 @@ class DjcHelper:
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("勇士的冒险补给", self.maoxian),
             ("冒险的起点", self.maoxian_start),
+            ("DNF格斗大赛", self.dnf_pk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5388,6 +5389,50 @@ class DjcHelper:
             prize=prize,
             **extra_params,
         )
+
+    # --------------------------------------------DNF格斗大赛--------------------------------------------
+    @try_except()
+    def dnf_pk(self):
+        show_head_line("DNF格斗大赛功能")
+        self.show_amesvr_act_info(self.dnf_pk_op)
+
+        if not self.cfg.function_switches.get_dnf_pk or self.disable_most_activities():
+            logger.warning("未启用DNF格斗大赛功能，将跳过")
+            return
+
+        self.check_dnf_pk()
+
+        def query_ticket_count():
+            res = self.dnf_pk_op("查询数据", "852125", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue1)
+
+        self.dnf_pk_op("每日在线30分钟（977156）", "852098")
+        self.dnf_pk_op("每日PK（977162）", "852102")
+        self.dnf_pk_op("回流（977167）", "852107")
+
+        ticket = query_ticket_count()
+        logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
+        for idx in range_from_one(ticket):
+            self.dnf_pk_op(f"[{idx}/{ticket}]幸运夺宝", "852109")
+            if idx != ticket:
+                time.sleep(5)
+
+        # self.dnf_pk_op("海选普发奖励（977173）", "852113")
+        # self.dnf_pk_op("周赛晋级奖励（977176）", "852115")
+        # self.dnf_pk_op("决赛普发奖励（977180）", "852123")
+        # self.dnf_pk_op("决赛冠军奖励（977181）", "852124")
+
+    def check_dnf_pk(self):
+        self.check_bind_account("DNF格斗大赛", get_act_url("DNF格斗大赛"),
+                                activity_op_func=self.dnf_pk_op, query_bind_flowid="852085", commit_bind_flowid="852084")
+
+    def dnf_pk_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_pk
+
+        return self.amesvr_request(ctx, "x6m5.ams.game.qq.com", "group_3", "dnf", iActivityId, iFlowId, print_res, "http://dnf.qq.com/cp/a20210405pk/",
+                                   **extra_params)
 
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()
@@ -10506,4 +10551,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian_start()
+        djcHelper.dnf_pk()

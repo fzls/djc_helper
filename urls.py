@@ -96,6 +96,7 @@ act_name_to_url = {
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220424lb6c8sl/indexm.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220424lbps16q/index.html",
+    "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     #
     # 已过期活动
     #
@@ -141,7 +142,6 @@ act_name_to_url = {
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20210618anniversary/index.html",
-    "DNF格斗大赛": "https://dnf.qq.com/cp/a20210405pk/",
     "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
@@ -251,7 +251,7 @@ class Urls:
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
-        self.iActivityId_dnf_pk = "370758"  # DNF格斗大赛
+        self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "460086"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动

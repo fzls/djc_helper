@@ -485,7 +485,7 @@ class QQLogin:
         else:
             return self.cfg.force_use_chrome_major_version
 
-    def login(self, account, password, login_mode="normal", name=""):
+    def login(self, account, password, login_mode:str, name=""):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
@@ -530,7 +530,7 @@ class QQLogin:
             self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode
         )
 
-    def qr_login(self, login_mode="normal", name=""):
+    def qr_login(self, login_mode:str, name=""):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -1548,9 +1548,9 @@ def do_login(
     ql = QQLogin(common_cfg, window_index=window_index)
 
     if login_type == ql.login_type_auto_login:
-        lr = ql.login(acc.account, acc.password, login_mode=login_mode, name=account.name)
+        lr = ql.login(acc.account, acc.password, login_mode, name=account.name)
     else:
-        lr = ql.qr_login(login_mode=login_mode, name=account.name)
+        lr = ql.qr_login(login_mode, name=account.name)
 
     logger.info(
         color("bold_green")

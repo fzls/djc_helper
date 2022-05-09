@@ -263,13 +263,13 @@ class DjcHelper:
 
     def update_skey_qr_login(self, query_data, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
-        loginResult = qqLogin.qr_login(name=self.cfg.name)
+        loginResult = qqLogin.qr_login(QQLogin.login_mode_normal, name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def update_skey_auto_login(self, query_data, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
         ai = self.cfg.account_info
-        loginResult = qqLogin.login(ai.account, ai.password, name=self.cfg.name)
+        loginResult = qqLogin.login(ai.account, ai.password, QQLogin.login_mode_normal, name=self.cfg.name)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def save_uin_skey(self, uin, skey, vuserid):
@@ -1920,13 +1920,13 @@ class DjcHelper:
             try:
                 if self.cfg.login_mode == "qr_login":
                     # 扫码登录
-                    lr = ql.qr_login(login_mode=ql.login_mode_qzone, name=self.cfg.name)
+                    lr = ql.qr_login(ql.login_mode_qzone, name=self.cfg.name)
                 else:
                     # 自动登录
                     lr = ql.login(
                         self.cfg.account_info.account,
                         self.cfg.account_info.password,
-                        login_mode=ql.login_mode_qzone,
+                        ql.login_mode_qzone,
                         name=self.cfg.name,
                     )
             except GithubActionLoginException:
@@ -5225,13 +5225,13 @@ class DjcHelper:
             ql = QQLogin(self.common_cfg)
             if self.cfg.login_mode == "qr_login":
                 # 扫码登录
-                lr = ql.qr_login(login_mode=ql.login_mode_guanjia, name=self.cfg.name)
+                lr = ql.qr_login(ql.login_mode_guanjia, name=self.cfg.name)
             else:
                 # 自动登录
                 lr = ql.login(
                     self.cfg.account_info.account,
                     self.cfg.account_info.password,
-                    login_mode=ql.login_mode_guanjia,
+                    ql.login_mode_guanjia,
                     name=self.cfg.name,
                 )
             # 保存
@@ -10315,11 +10315,11 @@ class DjcHelper:
         ql = QQLogin(self.common_cfg)
         if self.cfg.login_mode == "qr_login":
             # 扫码登录
-            lr = ql.qr_login(login_mode=login_mode, name=self.cfg.name)
+            lr = ql.qr_login(login_mode, name=self.cfg.name)
         else:
             # 自动登录
             lr = ql.login(
-                self.cfg.account_info.account, self.cfg.account_info.password, login_mode=login_mode, name=self.cfg.name
+                self.cfg.account_info.account, self.cfg.account_info.password, login_mode, name=self.cfg.name
             )
 
         return lr

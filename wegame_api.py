@@ -27,7 +27,7 @@ class WegameApi:
                 logger.warning("token invalided, try get new")
 
         ql = QQLogin(common_cfg)
-        lr = ql.login(account, password, login_mode=ql.login_mode_wegame, name=account_name)
+        lr = ql.login(account, password, ql.login_mode_wegame, name=account_name)
         logger.info(lr)
         api.login(lr.uin, lr.skey, lr.p_skey)
         self.save_token(account)

@@ -768,5 +768,15 @@
     "open_url": "",
     "expire_at": "2022-05-05 21:03:01",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "助手token的查询",
+    "message": "因为机器人最近经常被冻结，导致通过机器人自动回复来获取token的具体操作流程方式经常不可用。将在下个版本中关闭机器人的该功能，新的查询方式如下：\n\n打开【使用教程/使用文档.docx】，查看其中的【获取助手token】章节的说明（内容与机器人之前的提示内容基本一致，调整了排版）\n",
+    "send_at": "2022-05-10 00:43:00",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-05-17 00:43:00",
+    "show_only_before_version": ""
   }
 ]

@@ -1158,13 +1158,13 @@ class QQLogin:
                     exc_info=e,
                 )
 
-                if "电脑管家" in login_type:
+                if self.login_mode == self.login_mode_guanjia:
                     logger.warning(
                         color("bold_green") + "如果一直卡在管家登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 管家 活动 的开关（不是关闭这个登录页面）~"
                     )
                     logger.info("电脑管家 模式不尝试短时间重试，直接等待下次重试")
                     break
-                if "爱玩" in login_type:
+                if self.login_mode == self.login_mode_iwan:
                     logger.warning(
                         color("bold_green")
                         + "如果一直卡在 iwan 登录流程，可能是你网络没法登录这个，建议多试几次，真不行就去配置工具关闭 qq视频 活动 的开关（不是关闭这个登录页面）~"

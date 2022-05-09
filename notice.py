@@ -190,10 +190,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "关于360浏览器"
-    message = """目前有好几个人反馈，在安装了360浏览器的时候，不论使用便携版chrome，还是普通chrome，都会卡在【检查便携版chrome是否可用】这一步，或者卡在【Starting ChromeDriver ...】开头的黑框框界面。
+    title = "助手token的查询"
+    message = """因为机器人最近经常被冻结，导致通过机器人自动回复来获取token的具体操作流程方式经常不可用。将在下个版本中关闭机器人的该功能，新的查询方式如下：
 
-遇到这种情况的话，建议卸载 360浏览器，改用 edge 或者 chrome 浏览器
+打开【使用教程/使用文档.docx】，查看其中的【获取助手token】章节的说明（内容与机器人之前的提示内容基本一致，调整了排版）
 """
     open_url = ""
     show_only_before_version = ""

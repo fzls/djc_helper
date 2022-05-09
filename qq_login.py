@@ -180,6 +180,7 @@ class QQLogin:
             + f"{self.name} 正在初始化chrome driver（版本为{self.get_chrome_major_version()}），用以进行【{ctx}】相关操作。"
             f"浏览器坐标：({self.window_position_x}, {self.window_position_y})@{self.default_window_width}*{self.default_window_height}({self.screen_width}*{self.screen_height})"
         )
+        self.login_url = login_url
         logger.info(color("bold_green") + f"{self.name} {ctx} 登录链接为: {login_url}")
         caps = DesiredCapabilities().CHROME
         # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
@@ -1147,6 +1148,7 @@ class QQLogin:
                         self.cfg.login.recommended_retry_wait_time_change_rate,
                         self.name,
                     )
+
                 break
             except Exception as e:
                 login_mode_name = self.login_mode_to_description[self.login_mode]
@@ -1187,6 +1189,9 @@ class QQLogin:
                     )
                     logger.info("iwan 模式不尝试短时间重试，直接等待下次重试")
                     break
+
+                logger.info(f"为避免本次异常是在登录完成后发生的，也就是此时页面已经不是登录页面了，导致后续登录尝试一直失败，这里主动重新打开登录页面: {self.login_url}")
+                self.driver.get(self.login_url)
 
                 if idx < max_try:
                     time.sleep(2)
@@ -1504,7 +1509,7 @@ def test():
     # 需要运行的测试维度：账号、登录类别、登录模式
     login_accounts = [cfg.account_configs[idx - 1] for idx in [1]]
     login_types = [QQLogin.login_type_auto_login]
-    login_modes = [QQLogin.login_mode_normal]
+    login_modes = [QQLogin.login_mode_qzone]
 
     if TEST_SWITCH_TEST_ALL_ACCOUNTS:
         login_accounts = [account for account in cfg.account_configs]

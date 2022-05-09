@@ -220,6 +220,10 @@ class DjcHelper:
         check_in_black_list(self.uin())
 
     def update_skey(self, query_data, window_index=1):
+        if self.cfg.function_switches.disable_login_mode_normal:
+            logger.warning(f"禁用了普通登录模式，将不会尝试更新skey")
+            return
+
         login_mode_dict: dict[str, Callable[[dict, int], None]] = {
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
@@ -1895,8 +1899,8 @@ class DjcHelper:
             logger.warning("未启用领取QQ空间相关的功能，将跳过尝试更新QQ空间的p_skey的流程")
             return
 
-        if self.cfg.function_switches.disable_qzone_pskey_activities:
-            logger.warning("已禁用QQ空间pskey系列活动，将跳过尝试更新流程")
+        if self.cfg.function_switches.disable_login_mode_qzone:
+            logger.warning("已禁用QQ空间登录模式，将跳过尝试更新p_skey流程")
             return
 
         # 仅支持扫码登录和自动登录
@@ -5195,8 +5199,8 @@ class DjcHelper:
                 logger.warning("未启用管家相关活动，将跳过尝试更新管家p_skey流程")
             return
 
-        if self.cfg.function_switches.disable_guanjia_pskey_activities:
-            logger.warning("已禁用管家pskey系列活动，将跳过尝试更新流程")
+        if self.cfg.function_switches.disable_login_mode_guanjia:
+            logger.warning("已禁用管家登录模式，将跳过尝试更新管家信息流程")
             return
 
         # 检查是否已在道聚城绑定
@@ -10285,6 +10289,10 @@ class DjcHelper:
         return AmesvrQueryRole().auto_update_config(res)
 
     def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> str:
+        if self.cfg.function_switches.disable_login_mode_normal:
+            logger.warning(f"禁用了普通登录模式，将不会尝试获取分享用的p_skey: {ctx}")
+            return ""
+
         return self.fetch_login_result(ctx, QQLogin.login_mode_normal, cache_max_seconds=cache_max_seconds).apps_p_skey
 
     def fetch_club_vip_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> LoginResult:
@@ -10325,6 +10333,10 @@ class DjcHelper:
         return lr
 
     def fetch_xinyue_login_info(self, ctx) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_xinyue:
+            logger.warning(f"禁用了心悦登录模式，将不会尝试更新心悦登录信息: {ctx}")
+            return LoginResult()
+
         return self.fetch_login_result(
             ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid
         )
@@ -10333,6 +10345,10 @@ class DjcHelper:
         return self._is_openid_login_info_valid("101478665", lr.openid, lr.xinyue_access_token)
 
     def fetch_iwan_login_info(self, ctx) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_xinyue:
+            logger.warning(f"禁用了爱玩登录模式，将不会尝试更新爱玩 p_skey: {ctx}")
+            return LoginResult()
+
         return self.fetch_login_result(
             ctx, QQLogin.login_mode_iwan, cache_max_seconds=-1, cache_validate_func=self.is_iwan_login_info_valid
         )

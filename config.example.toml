@@ -343,10 +343,17 @@ disable_most_activities = false
 # 是否禁用分享功能
 disable_share = false
 
-# 是否禁用 QQ空间pskey 活动
-disable_qzone_pskey_activities = false
-# 是否禁用 安全管家pskey 活动
-disable_guanjia_pskey_activities = false
+# ------------ 登陆类型开关 ------------
+# 是否禁用 普通 登录
+disable_login_mode_normal = false
+# 是否禁用 QQ空间 登录
+disable_login_mode_qzone = false
+# 是否禁用 爱玩 登录
+disable_login_mode_iwan = false
+# 是否禁用 安全管家 登录
+disable_login_mode_guanjia = false
+# 是否禁用 心悦 登录
+disable_login_mode_xinyue = false
 
 # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
 # 是否领取道聚城

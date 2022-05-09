@@ -496,7 +496,7 @@ class QQLogin:
         else:
             return self.cfg.force_use_chrome_major_version
 
-    def login(self, account, password, login_mode:str, name=""):
+    def login(self, account, password, login_mode: str, name=""):
         """
         自动登录指定账号，并返回登陆后的cookie中包含的uin、skey数据
         :param account: 账号
@@ -541,7 +541,7 @@ class QQLogin:
             self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode
         )
 
-    def qr_login(self, login_mode:str, name=""):
+    def qr_login(self, login_mode: str, name=""):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -629,7 +629,9 @@ class QQLogin:
         self.login_slow_retry_max_count = self.cfg.login.max_retry_count
         for idx in range_from_one(self.login_slow_retry_max_count):
             self.login_slow_retry_index = idx
-            logger.info(color("bold_green") + f"[慢速重试阶段] [{idx}/{self.login_slow_retry_max_count}] {self.name} 开始本轮登录流程")
+            logger.info(
+                color("bold_green") + f"[慢速重试阶段] [{idx}/{self.login_slow_retry_max_count}] {self.name} 开始本轮登录流程"
+            )
 
             self.login_mode = login_mode
 
@@ -707,7 +709,9 @@ class QQLogin:
 
                 if login_exception is not None:
                     # 登陆失败
-                    msg = f"[慢速重试阶段] {self.name} 第{self.login_slow_retry_index}/{self.login_slow_retry_max_count}次尝试登录出错"
+                    msg = (
+                        f"[慢速重试阶段] {self.name} 第{self.login_slow_retry_index}/{self.login_slow_retry_max_count}次尝试登录出错"
+                    )
                     if idx < self.login_slow_retry_max_count:
                         # 每次等待时长线性递增
                         wait_time = retry_timeouts[idx - 1]
@@ -1135,7 +1139,8 @@ class QQLogin:
 
                 wait_time = retry_timeouts[idx - 1]
                 logger.info(
-                    color("bold_green") + f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
+                    color("bold_green")
+                    + f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
                 )
                 try:
                     WebDriverWait(self.driver, wait_time).until(
@@ -1175,7 +1180,8 @@ class QQLogin:
                     + color("bold_cyan")
                     + "如果之前版本都是正常的，可以试试切换旧版本chrome - 配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本，并开启 强制使用便携版 开关\n"
                     + "\n"
-                    + color("bold_green") + f"如果一直卡在 {login_mode_name} 登录流程，可能是你网络没法登录这个，或者是该登陆类型的服务器抽风了（经常出现），建议多试几次。\n"
+                    + color("bold_green")
+                    + f"如果一直卡在 {login_mode_name} 登录流程，可能是你网络没法登录这个，或者是该登陆类型的服务器抽风了（经常出现），建议多试几次。\n"
                     + f"真不行就去配置工具打开 【当前账号配置/活动开关/登陆类型开关/禁用 {login_mode_name} 登录】 开关，从而跳过 {login_mode_name} 类型的登录\n"
                     + "",
                     exc_info=e,

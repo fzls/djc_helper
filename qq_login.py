@@ -108,6 +108,16 @@ class QQLogin:
     login_mode_club_vip = "club_vip"
     login_mode_iwan = "iwan"
 
+    login_mode_to_description = {
+        login_mode_normal: "普通",
+        login_mode_xinyue: "心悦",
+        login_mode_qzone: "QQ空间",
+        login_mode_guanjia: "电脑管家",
+        login_mode_wegame: "Wegame",
+        login_mode_club_vip: "club.vip",
+        login_mode_iwan: "爱玩",
+    }
+
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
 
     # note: chrome版本升级流程
@@ -1139,6 +1149,8 @@ class QQLogin:
                     )
                 break
             except Exception as e:
+                login_mode_name = self.login_mode_to_description[self.login_mode]
+
                 logger.error(
                     f"[{idx}/{max_try}] {self.name} {login_type} 出错了，等待两秒再重试登陆。\n"
                     + color("bold_yellow")
@@ -1154,7 +1166,11 @@ class QQLogin:
                     )
                     + "\n"
                     + color("bold_cyan")
-                    + "如果之前版本都是正常的，可以试试切换旧版本chrome - 配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本，并开启 强制使用便携版 开关\n",
+                    + "如果之前版本都是正常的，可以试试切换旧版本chrome - 配置工具/公共配置/登录/强制使用特定大版本chrome，修改为94或者更早的版本，并开启 强制使用便携版 开关\n"
+                    + "\n"
+                    + color("bold_green") + f"如果一直卡在 {login_mode_name} 登录流程，可能是你网络没法登录这个，或者是该登陆类型的服务器抽风了（经常出现），建议多试几次。\n"
+                    + f"真不行就去配置工具打开 【当前账号配置/活动开关/登陆类型开关/禁用 {login_mode_name} 登录】 开关，从而跳过 {login_mode_name} 类型的登录\n"
+                    + "",
                     exc_info=e,
                 )
 

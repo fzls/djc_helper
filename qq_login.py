@@ -626,7 +626,11 @@ class QQLogin:
             login_retry_key, self.cfg.login.max_retry_count - 1, self.cfg.login.retry_wait_time
         )
 
-        for idx in range_from_one(self.cfg.login.max_retry_count):
+        self.login_slow_retry_max_count = self.cfg.login.max_retry_count
+        for idx in range_from_one(self.login_slow_retry_max_count):
+            self.login_slow_retry_index = idx
+            logger.info(color("bold_green") + f"[慢速重试阶段] [{idx}/{self.login_slow_retry_max_count}] {self.name} 开始本轮登录流程")
+
             self.login_mode = login_mode
 
             # note: 如果get_login_url的surl变更，代码中确认登录完成的地方也要一起改
@@ -696,20 +700,18 @@ class QQLogin:
                 logger.info(
                     f"[{login_result}] "
                     + color("bold_yellow")
-                    + f"{self.name} 第{idx}/{self.cfg.login.max_retry_count}次 {ctx} 共耗时为 {used_time}"
+                    + f"{self.name} [慢速重试阶段] 第{idx}/{self.login_slow_retry_max_count}次 {ctx} 共耗时为 {used_time}"
                 )
                 logger.info("")
                 self.destroy_chrome()
 
                 if login_exception is not None:
                     # 登陆失败
-                    lc = self.cfg.login
-
-                    msg = f"{self.name} 第{idx}/{lc.max_retry_count}次尝试登录出错"
-                    if idx < lc.max_retry_count:
+                    msg = f"[慢速重试阶段] {self.name} 第{self.login_slow_retry_index}/{self.login_slow_retry_max_count}次尝试登录出错"
+                    if idx < self.login_slow_retry_max_count:
                         # 每次等待时长线性递增
                         wait_time = retry_timeouts[idx - 1]
-                        msg += f"，等待{wait_time}秒后重试(v{now_version} {ver_time})"
+                        msg += f"将等待较长一段时间后再重试，也就是 {wait_time:.2f}秒后重试(v{now_version} {ver_time})"
                         msg += f"\n\t当前登录重试等待时间序列：{retry_timeouts}"
                         msg += f"\n\t根据历史数据得出的推荐重试等待时间：{login_retry_data.recommended_first_retry_timeout}"
                         if use_by_myself():
@@ -1106,32 +1108,34 @@ class QQLogin:
         # 实际登录的逻辑，不同方式的处理不同，这里调用外部传入的函数
         logger.info(f"{self.name} 开始{login_type}流程")
 
-        max_try = 10
+        # 当登录出错时，默认快速重试该次数，避免网络状况等造成的偶然登录失败
+        quick_retry_max_count = 3
+        quick_retry_wait_seconds = 2
 
         is_qr_login = self.login_type_qr_login in login_type
 
         short_login_retry_key = "short_login_retry_key"
         login_retry_data, retry_timeouts = self.get_retry_data(
-            short_login_retry_key, max_try, self.get_login_timeout(is_qr_login)
+            short_login_retry_key, quick_retry_max_count, self.get_login_timeout(is_qr_login)
         )
         if is_qr_login:
             # 如果是扫码登录，则每次都等待固定时长
             retry_timeouts = [self.get_login_timeout(True) for v in retry_timeouts]
 
-        for idx in range_from_one(max_try):
+        for idx in range_from_one(quick_retry_max_count):
             try:
                 logger.info(color("bold_green") + f"设置标题框为 {self.window_title}")
                 self.driver.execute_script(f"document.title = '{self.window_title}';")
 
                 switch_to_login_frame_fn()
 
-                logger.info(f"[{idx}/{max_try}] {self.name} 尝试进行登陆")
+                logger.info(color("bold_green") + f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} 尝试进行登陆")
                 if login_action_fn is not None:
                     login_action_fn()
 
                 wait_time = retry_timeouts[idx - 1]
                 logger.info(
-                    f"[{idx}/{max_try}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
+                    color("bold_green") + f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
                 )
                 try:
                     WebDriverWait(self.driver, wait_time).until(
@@ -1154,7 +1158,8 @@ class QQLogin:
                 login_mode_name = self.login_mode_to_description[self.login_mode]
 
                 logger.error(
-                    f"[{idx}/{max_try}] {self.name} {login_type} 出错了，等待两秒再重试登陆。\n"
+                    f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} {login_type} 出错了。（此时慢速重试阶段为[{self.login_slow_retry_index}/{self.login_slow_retry_max_count}]）\n"
+                    f"为避免偶然因素，前{quick_retry_max_count}次出错将采用快速重试策略，也就是等待{quick_retry_wait_seconds}秒后立刻重试登陆。\n"
                     + color("bold_yellow")
                     + (
                         "也许是短期内登陆太多账号显示登录环境异常/网络有问题/出现短信验证码/账号密码不匹配导致。\n"
@@ -1193,8 +1198,10 @@ class QQLogin:
                 logger.info(f"为避免本次异常是在登录完成后发生的，也就是此时页面已经不是登录页面了，导致后续登录尝试一直失败，这里主动重新打开登录页面: {self.login_url}")
                 self.driver.get(self.login_url)
 
-                if idx < max_try:
-                    time.sleep(2)
+                if idx < quick_retry_max_count:
+                    time.sleep(quick_retry_wait_seconds)
+                else:
+                    raise Exception("快速重试最大上限后仍失败了")
 
         logger.info(f"{self.name} 回到主iframe")
         self.driver.switch_to.default_content()

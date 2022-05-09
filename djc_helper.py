@@ -221,7 +221,7 @@ class DjcHelper:
 
     def update_skey(self, query_data, window_index=1):
         if self.cfg.function_switches.disable_login_mode_normal:
-            logger.warning(f"禁用了普通登录模式，将不会尝试更新skey")
+            logger.warning("禁用了普通登录模式，将不会尝试更新skey")
             return
 
         login_mode_dict: dict[str, Callable[[dict, int], None]] = {
@@ -10326,9 +10326,7 @@ class DjcHelper:
             lr = ql.qr_login(login_mode, name=self.cfg.name)
         else:
             # 自动登录
-            lr = ql.login(
-                self.cfg.account_info.account, self.cfg.account_info.password, login_mode, name=self.cfg.name
-            )
+            lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode, name=self.cfg.name)
 
         return lr
 

@@ -3820,6 +3820,9 @@ class DjcHelper:
                 extra_msg,
                 "",
                 f"账号 {self.cfg.name} 助手token已过期或者未填写，请到群里({self.common_cfg.qq_group})发【助手token】，机器人会自动回复最新的获取token的方式",
+                "",
+                "如果机器人没有回复，很可能是被冻结了，这时候请打开 【使用教程/使用文档.docx】，查看其中的【获取助手token】章节的说明",
+                "或者在群里历史记录搜【助手token】应该也可以找到"
             ]
         )
 

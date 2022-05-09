@@ -2673,12 +2673,12 @@ class DnfHelperInfoConfigUi(QWidget):
         add_row(form_layout, "昵称(nickName)", self.lineedit_nickName)
 
         self.lineedit_token = create_lineedit(
-            cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路"
+            cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路，或者查看【使用教程/使用文档.docx/获取助手token】，或者直接在聊天记录搜索【助手token】"
         )
         add_row(form_layout, "登陆票据(token)", self.lineedit_token)
 
         self.lineedit_uniqueRoleId = create_lineedit(
-            cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路"
+            cfg.uniqueRoleId, "形如 3482436497，抓包或分享链接可得（ps：不知道咋操作，就到群里大喊一句：助手token，就会有好心的机器人来为你指路，或者查看【使用教程/使用文档.docx/获取助手token】，或者直接在聊天记录搜索【助手token】"
         )
         add_row(form_layout, "唯一角色ID(uniqueRoleId)", self.lineedit_uniqueRoleId)
 

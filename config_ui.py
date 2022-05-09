@@ -2180,6 +2180,24 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)
 
         # ----------------------------------------------------------
+        add_form_seperator(form_layout, "登录类型开关")
+
+        self.checkbox_disable_login_mode_normal = create_checkbox(cfg.disable_login_mode_normal)
+        add_row(form_layout, "禁用 普通 登录", self.checkbox_disable_login_mode_normal)
+
+        self.checkbox_disable_login_mode_qzone = create_checkbox(cfg.disable_login_mode_qzone)
+        add_row(form_layout, "禁用 QQ空间 登录", self.checkbox_disable_login_mode_qzone)
+
+        self.checkbox_disable_login_mode_iwan = create_checkbox(cfg.disable_login_mode_iwan)
+        add_row(form_layout, "禁用 爱玩 登录", self.checkbox_disable_login_mode_iwan)
+
+        self.checkbox_disable_login_mode_guanjia = create_checkbox(cfg.disable_login_mode_guanjia)
+        add_row(form_layout, "禁用 安全管家 登录", self.checkbox_disable_login_mode_guanjia)
+
+        self.checkbox_disable_login_mode_xinyue = create_checkbox(cfg.disable_login_mode_xinyue)
+        add_row(form_layout, "禁用 心悦 登录", self.checkbox_disable_login_mode_xinyue)
+
+        # ----------------------------------------------------------
         add_form_seperator(form_layout, "普通skey")
 
         self.checkbox_get_djc = create_checkbox(cfg.get_djc)
@@ -2344,6 +2362,12 @@ class FunctionSwitchesConfigUi(QWidget):
     def update_config(self, cfg: FunctionSwitchesConfig):
         cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
         cfg.disable_share = self.checkbox_disable_share.isChecked()
+
+        cfg.disable_login_mode_normal = self.checkbox_disable_login_mode_normal.isChecked()
+        cfg.disable_login_mode_qzone = self.checkbox_disable_login_mode_qzone.isChecked()
+        cfg.disable_login_mode_iwan = self.checkbox_disable_login_mode_iwan.isChecked()
+        cfg.disable_login_mode_guanjia = self.checkbox_disable_login_mode_guanjia.isChecked()
+        cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
 
         cfg.get_djc = self.checkbox_get_djc.isChecked()
         cfg.make_wish = self.checkbox_make_wish.isChecked()

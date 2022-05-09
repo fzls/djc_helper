@@ -649,10 +649,17 @@ class FunctionSwitchesConfig(ConfigInterface):
         # 是否禁用分享功能
         self.disable_share = False
 
-        # 是否禁用 QQ空间pskey 活动
-        self.disable_qzone_pskey_activities = False
-        # 是否禁用 安全管家pskey 活动
-        self.disable_guanjia_pskey_activities = False
+        # ------------ 登陆类型开关 ------------
+        # 是否禁用 普通 登录
+        self.disable_login_mode_normal = False
+        # 是否禁用 QQ空间 登录
+        self.disable_login_mode_qzone = False
+        # 是否禁用 爱玩 登录
+        self.disable_login_mode_iwan = False
+        # 是否禁用 安全管家 登录
+        self.disable_login_mode_guanjia = False
+        # 是否禁用 心悦 登录
+        self.disable_login_mode_xinyue = False
 
         # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
         # 是否领取道聚城
@@ -1485,8 +1492,8 @@ def gen_config_for_github_action():
         account_cfg.function_switches.get_guanjia = False
 
         # qq空间和管家全局开关
-        account_cfg.function_switches.disable_qzone_pskey_activities = True
-        account_cfg.function_switches.disable_guanjia_pskey_activities = True
+        account_cfg.function_switches.disable_login_mode_qzone = True
+        account_cfg.function_switches.disable_login_mode_guanjia = True
 
     # 保存到专门配置文件
     show_config_size(cfg, "精简前")

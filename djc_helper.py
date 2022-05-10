@@ -10343,7 +10343,7 @@ class DjcHelper:
         return self._is_openid_login_info_valid("101478665", lr.openid, lr.xinyue_access_token)
 
     def fetch_iwan_login_info(self, ctx) -> LoginResult:
-        if self.cfg.function_switches.disable_login_mode_xinyue:
+        if self.cfg.function_switches.disable_login_mode_iwan:
             logger.warning(f"禁用了爱玩登录模式，将不会尝试更新爱玩 p_skey: {ctx}")
             return LoginResult()
 

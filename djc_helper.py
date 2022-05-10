@@ -2223,7 +2223,7 @@ class DjcHelper:
     ark_lottery_sub_act_id_award_2 = "62664_03aac861"  # 领取奖励-第二排
     ark_lottery_sub_act_id_award_3 = "62665_8a9910d4"  # 领取奖励-第三排
     ark_lottery_sub_act_id_award_all = "62668_2de15953"  # 领取奖励-十二张
-    ark_lottery_sub_act_id_lottery = "62662_9a0ad07f"  # 消耗卡片来抽奖
+    ark_lottery_sub_act_id_lottery = "62667_334d207b"  # 消耗卡片来抽奖
 
     # note: 清空抓包数据，按f5刷新后，搜索  QueryItems  (hack: 其实就是活动链接的 最后一部分)
     ark_lottery_packet_id_card = "41154_7393e90a"  # 查询当前卡片数目
@@ -10579,4 +10579,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pk()
+        djcHelper.dnf_ark_lottery()

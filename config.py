@@ -846,8 +846,6 @@ class AccountConfig(ConfigInterface):
         self.gonghui_rolename_huizhang = ""
         # 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
         self.gonghui_rolename_huiyuan = ""
-        # dnf论坛签到formhash
-        self.dnf_bbs_formhash = ""
         # dnf论坛cookie
         self.dnf_bbs_cookie = ""
         # colg cookie

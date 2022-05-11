@@ -163,27 +163,10 @@ gonghui_rolename_huizhang = ""
 # 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
 gonghui_rolename_huiyuan = ""
 
-# 以下dnf论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题。
-# 获取方式
-#   1. 访问 签到页面 https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign
-#   2. 按f12打开开发者工具，点击NetWork tab，然后勾选第二行的Preserve log（保留日志）
-#   3. 先登录账号，然后点击右上角头像退出登录
-#   4. 在左上角筛选项中输入 action=logout&formhash=
-#   5. 在筛选出的请求中，从请求参数中找到formhash的值，将其填到下面（如果不知道到哪里位置是formhash的值，就百度 http get请求参数格式，别来问我）
-#   6. 在该请求的详情中，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
-#
-# dnf论坛签到formhash
-dnf_bbs_formhash = ""
-# dnf论坛cookie
+# dnf论坛cookie，具体获取方式请看【使用教程/使用文档.docx/其他功能/DNF官方论坛Cookie获取方式】
 dnf_bbs_cookie = ""
 
-# colg cookie
-# 获取方式：
-#   1. 访问 colg https://bbs.colg.cn/forum-171-1.html
-#   2. 按f12打开开发者工具
-#   3. 按f5刷新一遍网页
-#   4. 在左上角筛选项中输入 plugin.php
-#   5. 选择筛选出的任意一个请求，在Headers Tab -> Request Headers -> cookie 找到请求头信息中的cookie，将其值整个复制过来，填到下面的双引号里面（这一步不知道怎么操作，就百度：chrome开发者工具 如何查看网络请求的完整cookie，别来问我）
+# colg cookie，具体获取方式请看【使用教程/使用文档.docx/其他功能/colg论坛Cookie获取方式】
 colg_cookie = ""
 
 # 获取方式 与colg的流程基本一致，除了网页调整为虎牙的页面（需要先登录）

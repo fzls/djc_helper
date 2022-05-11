@@ -7435,19 +7435,49 @@ class DjcHelper:
             logger.warning("未启用领取dnf官方论坛签到活动合集功能，将跳过")
             return
 
-        if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
-            logger.warning("未配置dnf官方论坛的cookie或formhash，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
+        if self.cfg.dnf_bbs_cookie == "":
+            logger.warning("未配置dnf官方论坛的cookie，将跳过（dnf官方论坛相关的配置会配置就配置，不会就不要配置，我不会回答关于这俩如何获取的问题）")
             return
 
         # self.check_dnf_bbs_v1()
         #
         # self.check_dnf_bbs_v2()
 
+        def query_formhash() -> str:
+            if self.cfg.dnf_bbs_cookie == "":
+                return ""
+
+            # note: 鉴于兑换活动会存在真空期，改用解析个人中心的方式来获取论坛代币数目
+            url = self.urls.dnf_bbs_home
+            headers = {
+                "cookie": self.cfg.dnf_bbs_cookie,
+            }
+
+            res = requests.get(url, headers=headers, timeout=10)
+            html_text = res.text
+
+            # <a class="logout" href="member.php?mod=logging&amp;action=logout&amp;formhash=02d1xxxx">退出登陆</a>
+            prefix = "formhash="
+            suffix = '">退出登陆</a>'
+            if prefix not in html_text:
+                logger.warning("未能定位到论坛formhash")
+                return ""
+
+            prefix_idx = html_text.index(prefix) + len(prefix)
+            suffix_idx = html_text.index(suffix, prefix_idx)
+
+            formhash = html_text[prefix_idx:suffix_idx]
+
+            return formhash
+
         def signin():
             retryCfg = self.common_cfg.retry
             for idx in range(retryCfg.max_retry_count):
                 try:
-                    url = self.urls.dnf_bbs_signin.format(formhash=self.cfg.dnf_bbs_formhash)
+                    formhash = query_formhash()
+                    logger.info(f"查询到的formhash为: {formhash}")
+
+                    url = self.urls.dnf_bbs_signin.format(formhash=formhash)
                     headers = {
                         "cookie": self.cfg.dnf_bbs_cookie,
                         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -7487,7 +7517,7 @@ class DjcHelper:
                     logger.debug(f"不在预期内的签到返回内容如下：\n{html_text}")
 
                     async_message_box(
-                        f"{self.cfg.name} 的 官方论坛cookie和formhash似乎过期了，记得更新新的cookie和formhash~（可参照config.example.toml中这两个字段的注释操作）。如果不想继续签到了，可以不填论坛的cookie，就不会继续弹窗提示了",
+                        f"{self.cfg.name} 的 官方论坛cookie似乎过期了，记得更新最新的cookie~（可参照config.example.toml中这个字段的注释操作，打开后搜索 dnf_bbs_cookie）。如果不想继续签到了，可以不填论坛的cookie，就不会继续弹窗提示了",
                         "cookie似乎过期",
                     )
 
@@ -7656,7 +7686,7 @@ class DjcHelper:
 
     @try_except(show_exception_info=False, return_val_on_except=0)
     def query_dnf_bbs_dbq(self) -> int:
-        if self.cfg.dnf_bbs_cookie == "" or self.cfg.dnf_bbs_formhash == "":
+        if self.cfg.dnf_bbs_cookie == "":
             return 0
 
         # note: 鉴于兑换活动会存在真空期，改用解析个人中心的方式来获取论坛代币数目

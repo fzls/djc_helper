@@ -1806,7 +1806,7 @@ class AccountConfigUi(QWidget):
         (
             self.collapsible_box_djc_exchange,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换（填 0 就是不兑换）", top_layout)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = {}
@@ -1828,7 +1828,7 @@ class AccountConfigUi(QWidget):
         (
             self.collapsible_box_xinyue_exchange,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦特权专区兑换（填 0 就是不兑换）", top_layout)
 
         self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
         self.xinyue_exchange_items = {}
@@ -2587,7 +2587,7 @@ class VipMentorConfigUi(QWidget):
 
 
 class RoleSelector(QWidget):
-    combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会"
+    combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会（一直卡的话，建议先运行一遍本体，完成登录后再进行这个操作）"
 
     def __init__(
         self,

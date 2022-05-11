@@ -559,7 +559,7 @@ class DjcHelper:
             ("心悦app理财礼卡", self.xinyue_financing),
             ("心悦猫咪", self.xinyue_cat),
             ("心悦app周礼包", self.xinyue_weekly_gift),
-            # ("dnf论坛签到", self.dnf_bbs),
+            ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
 
@@ -10579,4 +10579,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_bbs()

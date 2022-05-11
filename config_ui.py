@@ -1874,18 +1874,13 @@ class AccountConfigUi(QWidget):
             form_layout,
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
-        self.lineedit_dnf_bbs_formhash = create_lineedit(
-            cfg.dnf_bbs_formhash, "形如：8df1d678，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_formhash字段的说明"
-        )
-        add_row(form_layout, "dnf论坛签到formhash", self.lineedit_dnf_bbs_formhash)
-
         self.lineedit_dnf_bbs_cookie = create_lineedit(
-            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中dnf_bbs_cookie字段的说明"
+            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看【使用教程/使用文档.docx/其他功能/DNF官方论坛Cookie获取方式】"
         )
         add_row(form_layout, "dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
 
         self.lineedit_colg_cookie = create_lineedit(
-            cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看config.example.toml示例配置文件中colg_cookie字段的说明"
+            cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看【使用教程/使用文档.docx/其他功能/colg论坛Cookie获取方式】"
         )
         add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
 
@@ -1973,7 +1968,6 @@ class AccountConfigUi(QWidget):
         cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
         cfg.enable_auto_match_xinyue_team = self.checkbox_enable_auto_match_xinyue_team.isChecked()
 
-        cfg.dnf_bbs_formhash = self.lineedit_dnf_bbs_formhash.text()
         cfg.dnf_bbs_cookie = self.lineedit_dnf_bbs_cookie.text()
         cfg.colg_cookie = self.lineedit_colg_cookie.text()
 

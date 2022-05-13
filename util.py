@@ -19,7 +19,7 @@ import time
 import traceback
 import uuid
 import webbrowser
-from functools import wraps
+from functools import lru_cache, wraps
 from multiprocessing import cpu_count
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 from urllib import parse
@@ -747,20 +747,23 @@ def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
 
 
 def time_less(left_time_str, right_time_str, time_fmt="%Y-%m-%d %H:%M:%S") -> bool:
-    left_time = datetime.datetime.strptime(left_time_str, time_fmt)
-    right_time = datetime.datetime.strptime(right_time_str, time_fmt)
+    left_time = parse_time(left_time_str, time_fmt)
+    right_time = parse_time(right_time_str, time_fmt)
 
     return left_time < right_time
 
 
+@lru_cache(maxsize=None)
 def parse_time(time_str, time_fmt="%Y-%m-%d %H:%M:%S") -> datetime.datetime:
     return datetime.datetime.strptime(time_str, time_fmt)
 
 
+@lru_cache(maxsize=None)
 def parse_timestamp(ts: float) -> datetime.datetime:
     return datetime.datetime.fromtimestamp(ts)
 
 
+@lru_cache(maxsize=None)
 def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S") -> str:
     return dt.strftime(time_fmt)
 
@@ -770,6 +773,7 @@ def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = 
     return format_time(now, time_fmt=time_fmt)
 
 
+@lru_cache(maxsize=None)
 def format_timestamp(ts: float):
     return format_time(parse_timestamp(ts))
 

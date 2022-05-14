@@ -1,5 +1,4 @@
 # Google Analytics 4 上报脚本
-
 import requests
 
 from log import logger

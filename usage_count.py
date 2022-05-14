@@ -3,7 +3,6 @@ import os
 from typing import Any
 
 import leancloud
-import leancloud.object_
 
 import ga
 import ga4

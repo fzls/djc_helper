@@ -3,8 +3,6 @@ import sys
 
 # 修改工作目录为程序所在目录，这样通过注册表实现开机自动启动时也能获取到正确的工作目录
 # PS: 放到这个地方，是确保在所有其他初始化代码之前先修改掉工作目录
-from db_def import try_migrate_db
-
 dirpath = os.path.dirname(os.path.realpath(sys.argv[0]))
 old_path = os.getcwd()
 os.chdir(dirpath)
@@ -19,6 +17,7 @@ import psutil
 import ga
 from check_first_run import check_first_run_async
 from config import config, load_config
+from db_def import try_migrate_db
 from first_run import is_weekly_first_run
 from log import color, log_directory, logger
 from main_def import (

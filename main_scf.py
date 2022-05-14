@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # 云函数入口文件（Serverless Cloud Function，SCF）
 # https://cloud.tencent.com/document/product/583/56051
-
 from flask import Flask, request
 
 from main import main_wrapper

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 
@@ -7,9 +9,9 @@ from log import logger
 from util import async_message_box, message_box, pause_and_exit
 
 _loaded = False
-name_2_game_info_map = {}
-code_2_game_info_map = {}
-name_2_mobile_game_info_map = {}
+name_2_game_info_map: dict[str, GameInfo] = {}
+code_2_game_info_map: dict[str, GameInfo] = {}
+name_2_mobile_game_info_map: dict[str, GameInfo] = {}
 
 
 def lazy_load():

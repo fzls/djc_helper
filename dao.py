@@ -11,7 +11,7 @@ class DaoObject:
 
 
 class GameInfo(DaoObject):
-    def __init__(self, data):
+    def __init__(self, data: dict):
         self.bizName = data["bizName"]
         self.bizCode = data["bizCode"]
         self.gameCode = data["gameCode"]

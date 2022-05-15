@@ -1,6 +1,6 @@
 pytest==7.1.2
 pytest-cov==3.0.0
-pytest-randomly==3.11.0
+pytest-randomly==3.12.0
 pytest-xdist[psutil]==2.5.0
 flake8==4.0.1
 isort==5.10.1

@@ -9,23 +9,15 @@ exclude: |
       # 源码文件
       ^(reversi.py|qt_collapsible_box.py|utils/notices.txt)$
 repos:
-  - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
-    hooks:
-      - id: flake8
-        language_version: python3.8
-        additional_dependencies:
-          - flake8-typing-imports==1.9.0
-          - flake8-bugbear == 20.11.1
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.32.0
     hooks:
       - id: pyupgrade
         args: [ --py38-plus ]
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
@@ -45,6 +37,14 @@ repos:
     rev: v1.9.0
     hooks:
       - id: python-use-type-annotations
+  - repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        language_version: python3.8
+        additional_dependencies:
+          - flake8-typing-imports==1.9.0
+          - flake8-bugbear == 20.11.1
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.942
     hooks:

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Google Analytics 上报脚本
 from urllib.parse import quote_plus
 
@@ -33,7 +35,7 @@ GA_REPORT_TYPE_PAGE_VIEW = "page_view"
 
 
 @try_except(show_exception_info=False)
-def track_event(category: str, action: str, label=None, value=0, ga_misc_params: dict = None):
+def track_event(category: str, action: str, label=None, value=0, ga_misc_params: dict | None = None):
     if ga_misc_params is None:
         ga_misc_params = {}
 
@@ -52,7 +54,7 @@ def track_event(category: str, action: str, label=None, value=0, ga_misc_params:
 
 
 @try_except(show_exception_info=False)
-def track_page(page: str, ga_misc_params: dict = None):
+def track_page(page: str, ga_misc_params: dict | None = None):
     if ga_misc_params is None:
         ga_misc_params = {}
 

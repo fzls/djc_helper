@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import json
 import time
 import traceback
-from typing import Callable, Dict, Optional
+from typing import Callable
 from urllib.parse import unquote_plus
 
 import requests
@@ -49,8 +51,8 @@ class Network:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        extra_headers: dict[str, str] | None = None,
     ) -> dict:
 
         cookies = self.base_cookies + extra_cookies
@@ -84,8 +86,8 @@ class Network:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        extra_headers: dict[str, str] | None = None,
         disable_retry=False,
     ) -> dict:
 
@@ -122,8 +124,8 @@ class Network:
 def try_request(
     request_fn: Callable[[], requests.Response],
     retryCfg: RetryConfig,
-    check_fn: Callable[[requests.Response], Optional[Exception]] = None,
-) -> Optional[requests.Response]:
+    check_fn: Callable[[requests.Response], Exception | None] | None = None,
+) -> requests.Response | None:
     """
     :param check_fn: func(requests.Response) -> bool
     :type retryCfg: RetryConfig
@@ -163,7 +165,7 @@ def try_request(
 
 
 # 每次处理完备份一次最后的报错，方便出错时打印出来~
-last_response_info: Optional[ResponseInfo] = None
+last_response_info: ResponseInfo | None = None
 
 
 def set_last_response_info(status_code: int, reason: str, text: str):
@@ -174,7 +176,7 @@ def set_last_response_info(status_code: int, reason: str, text: str):
     last_response_info.text = text
 
 
-last_process_result: Optional[dict] = None
+last_process_result: dict | None = None
 
 
 def process_result(
@@ -223,7 +225,7 @@ def fix_encoding(res: requests.Response):
         res.encoding = "utf-8"
 
 
-def pre_process_data(data) -> Optional[dict]:
+def pre_process_data(data) -> dict | None:
     # 特殊处理一些数据
     if type(data) is dict:
         if "frame_resp" in data and "data" in data:

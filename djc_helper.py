@@ -9639,7 +9639,7 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
         **params,
     ) -> dict:
@@ -9668,7 +9668,7 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         **params,
@@ -10053,7 +10053,7 @@ class DjcHelper:
         change_bind_role_infos: list[TemporaryChangeBindRoleInfo],
         check_func: Callable,
         callback_func: Callable[[RoleInfo], bool],
-        need_try_func: Callable[[RoleInfo], bool] = None,
+        need_try_func: Callable[[RoleInfo], bool] | None = None,
     ):
         """
         callback_func: 传入参数为 将要领奖的角色信息，返回参数为 是否继续尝试下一个
@@ -10106,7 +10106,7 @@ class DjcHelper:
         query_bind_flowid,
         commit_bind_flowid,
         try_auto_bind=True,
-        roleinfo: RoleInfo = None,
+        roleinfo: RoleInfo | None = None,
         roleinfo_source="道聚城所绑定的角色",
     ):
         while True:
@@ -10158,7 +10158,7 @@ class DjcHelper:
         commit_bind_flowid="",
         try_auto_bind=False,
         bind_reason="未绑定角色",
-        roleinfo: RoleInfo = None,
+        roleinfo: RoleInfo | None = None,
         roleinfo_source="道聚城所绑定的角色",
     ):
         if (
@@ -10228,7 +10228,7 @@ class DjcHelper:
         activity_op_func: Callable,
         sAuthInfo: str,
         sActivityInfo: str,
-        roleinfo: RoleInfo = None,
+        roleinfo: RoleInfo | None = None,
         roleinfo_source="道聚城所绑定的角色",
     ):
         self.dnf_social_relation_permission_op(
@@ -10300,7 +10300,7 @@ class DjcHelper:
     def disable_most_activities(self):
         return self.cfg.function_switches.disable_most_activities
 
-    def get_dnf_roleinfo(self, roleinfo: RoleInfo = None):
+    def get_dnf_roleinfo(self, roleinfo: RoleInfo | None = None):
         if roleinfo is None:
             roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 

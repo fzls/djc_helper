@@ -1158,6 +1158,7 @@ class CommonConfig(ConfigInterface):
         self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
         # 网盘地址
         self.netdisk_link = "https://fzls.lanzoum.com/s/djc-helper"
+        self.netdisk_link_for_report = self.netdisk_link
         # QQ群
         self.qq_group = 791343073
         # 是否启用自动更新功能
@@ -1244,6 +1245,9 @@ class CommonConfig(ConfigInterface):
                         self.netdisk_link = url_config["netdisk_link"]
             except Exception:
                 pass
+
+        # 备份一份原始配置链接，方便统计来源
+        self.netdisk_link_for_report = self.netdisk_link
 
         # 替换网盘链接中的域名为蓝奏云api中最新的域名
         from lanzou.api import LanZouCloud

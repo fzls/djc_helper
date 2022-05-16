@@ -4638,7 +4638,7 @@ class DjcHelper:
                 all_exchanged = True
                 for ei in self.cfg.dnf_helper_info.chronicle_exchange_items:
                     if ei.sLbcode not in exchangeGiftMap:
-                        logger.error(f"未找到兑换项{ei.sLbcode}对应的配置，请参考utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json")
+                        logger.error(f"未找到兑换项{ei.sLbcode}({ei.sName})对应的配置，请参考 {db.prepare_env_and_get_db_filepath()}")
                         continue
 
                     gift = exchangeGiftMap[ei.sLbcode]

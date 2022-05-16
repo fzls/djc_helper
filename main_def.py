@@ -1094,7 +1094,7 @@ def try_report_usage_info(cfg: Config):
 
     # 上报网盘地址，用于区分分发渠道
     if not run_from_src():
-        increase_counter(ga_category="netdisk_link", name=cfg.common.netdisk_link)
+        increase_counter(ga_category="netdisk_link", name=cfg.common.netdisk_link_for_report)
 
 
 @try_except(show_exception_info=False)

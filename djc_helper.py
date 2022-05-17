@@ -1228,8 +1228,10 @@ class DjcHelper:
         wait_time = max(retryCfg.request_wait_time, 10)
         retry_wait_time = max(retryCfg.retry_wait_time, 5)
 
-        for i in range(op.count):
-            ctx = f"6.2 心悦操作： {op.sFlowName}({i + 1}/{op.count})"
+        exchange_count = 0
+        while exchange_count < op.count:
+            exchange_count += 1
+            ctx = f"6.2 心悦操作： {op.sFlowName}({exchange_count}/{op.count})"
 
             for _try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=1)

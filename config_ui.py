@@ -2455,7 +2455,7 @@ class XinyueOperationConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: XinYueOperationConfig):
-        self.spinbox_count = create_spin_box(cfg.count, 99)
+        self.spinbox_count = create_spin_box(cfg.count, 999)
         add_row(form_layout, f"{cfg.sFlowName}", self.spinbox_count)
 
     def update_config(self, cfg: XinYueOperationConfig):

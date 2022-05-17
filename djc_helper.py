@@ -1228,13 +1228,26 @@ class DjcHelper:
         wait_time = max(retryCfg.request_wait_time, 10)
         retry_wait_time = max(retryCfg.retry_wait_time, 5)
 
-        exchange_count = 0
-        while exchange_count < op.count:
-            exchange_count += 1
-            ctx = f"6.2 心悦操作： {op.sFlowName}({exchange_count}/{op.count})"
+        progress = 0
+        while progress < op.count:
+            # 默认每次兑换一个
+            exchange_count = 1
+            if op.iFlowId == "821281":
+                # 821281    新版复活币*1(日限100)(需1点勇士币)
+                # 特殊处理复活币
+                remaining = op.count - progress
+                if 1 <= remaining < 5:
+                    exchange_count = 1
+                elif 5 <= remaining < 20:
+                    exchange_count = 5
+                else:
+                    exchange_count = 20
+            progress += exchange_count
+
+            ctx = f"6.2 心悦操作： {op.sFlowName}({progress}/{op.count}) 本次兑换 {exchange_count}个"
 
             for _try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=1)
+                res = self.xinyue_battle_ground_op(ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=exchange_count)
                 if op.count > 1:
                     if res["ret"] == "700" and "操作过于频繁" in res["flowRet"]["sMsg"]:
                         logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
@@ -10611,4 +10624,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bbs()
+        djcHelper.xinyue_battle_ground()

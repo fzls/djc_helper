@@ -336,7 +336,7 @@ class DjcHelper:
         # 查询全部绑定角色信息
         res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False)
         self.bizcode_2_bind_role_map = {}
-        for roleinfo_dict in res["data"]:
+        for roleinfo_dict in res.get("data", []):
             role_info = GameRoleInfo().auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 

@@ -60,8 +60,9 @@ from util import (
     is_run_in_github_action,
     kill_other_instance_on_start,
     pause,
+    remove_old_version_portable_chrome_files,
     show_head_line,
-    show_unexpected_exception_message, remove_old_version_portable_chrome_files,
+    show_unexpected_exception_message,
 )
 from version import author, now_version, ver_time
 

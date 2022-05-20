@@ -800,6 +800,7 @@ def human_readable_size(num, suffix="B") -> str:
         num /= 1024.0
     return f"{num:.1f}Yi{suffix}"
 
+
 @try_except()
 def remove_old_version_portable_chrome_files():
     """清理非当前版本的便携版chrome相关文件，避免占用过多空间
@@ -900,6 +901,7 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
             )
             break
 
+
 def get_file_or_directory_size(target_path: str) -> int:
     if not os.path.exists(target_path):
         return 0
@@ -908,6 +910,7 @@ def get_file_or_directory_size(target_path: str) -> int:
         return os.stat(target_path).st_size
     else:
         return get_directory_size(target_path)
+
 
 def get_directory_size(dir_name: str) -> int:
     root_directory = pathlib.Path(dir_name)

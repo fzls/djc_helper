@@ -61,7 +61,7 @@ from util import (
     kill_other_instance_on_start,
     pause,
     show_head_line,
-    show_unexpected_exception_message,
+    show_unexpected_exception_message, remove_old_version_portable_chrome_files,
 )
 from version import author, now_version, ver_time
 
@@ -165,6 +165,7 @@ def main():
 
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
+    remove_old_version_portable_chrome_files()
 
     show_ask_message_box(cfg)
 

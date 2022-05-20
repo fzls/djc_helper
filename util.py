@@ -9,6 +9,7 @@ import os
 import pathlib
 import platform
 import random
+import re
 import shutil
 import signal
 import socket
@@ -799,6 +800,56 @@ def human_readable_size(num, suffix="B") -> str:
         num /= 1024.0
     return f"{num:.1f}Yi{suffix}"
 
+@try_except()
+def remove_old_version_portable_chrome_files():
+    """清理非当前版本的便携版chrome相关文件，避免占用过多空间
+
+    主要包括下列文件或目录
+    1. chromedriver_{ver}.exe
+    2. chrome_portable_{ver}.7z
+    3. chrome_portable_{ver}
+    """
+    from qq_login import QQLogin
+
+    current_chrome_version = QQLogin.chrome_major_version
+    logger.info(color("bold_green") + f"开始尝试清理非当前版本的便携版chrome相关文件，当前chrome版本为{current_chrome_version}")
+
+    chrome_file_regex = [
+        r"chromedriver_(?P<version>\d+)\.exe",
+        r"chrome_portable_(?P<version>\d+)\.7z",
+        r"chrome_portable_(?P<version>\d+)",
+    ]
+
+    total_remove = 0
+
+    for path in pathlib.Path("utils").glob("*"):
+        # 尝试解析版本信息
+        version = 0
+        for regex in chrome_file_regex:
+            match = re.match(regex, path.name)
+            if not match:
+                continue
+
+            version = int(match.group("version"))
+            break
+
+        if version == 0 or version == current_chrome_version:
+            # 不是需要清理的文件
+            continue
+
+        # 清除该文件或目录
+        target_path = os.path.realpath(str(path))
+        target_size = get_file_or_directory_size(target_path)
+
+        logger.info(f"开始移除 {target_path}，其大小为 {human_readable_size(target_size)}")
+        remove_file_or_directory(target_path)
+        total_remove += target_size
+
+    if total_remove > 0:
+        logger.info(color("bold_green") + f"清理完成，共移除 {human_readable_size(total_remove)}")
+    else:
+        logger.info(color("bold_green") + "没有需要移除的文件")
+
 
 @try_except()
 def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB):
@@ -849,6 +900,14 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
             )
             break
 
+def get_file_or_directory_size(target_path: str) -> int:
+    if not os.path.exists(target_path):
+        return 0
+
+    if os.path.isfile(target_path):
+        return os.stat(target_path).st_size
+    else:
+        return get_directory_size(target_path)
 
 def get_directory_size(dir_name: str) -> int:
     root_directory = pathlib.Path(dir_name)
@@ -1549,6 +1608,7 @@ if __name__ == "__main__":
 
     # clear_login_status()
 
-    message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
+    # message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
 
+    remove_old_version_portable_chrome_files()
     pass

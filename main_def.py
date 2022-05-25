@@ -1412,13 +1412,11 @@ def show_tips(cfg: Config):
         "绑定手机领666代币券": (
             "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
-        "2022.4 51充值活动": (
-            "51充值活动请自行参与：\n"
-            "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_gylbbjz_lottery&pf=__mds_dnf_share\n"
-        ),
-        "22.5 投票活动": (
-            "可在该网页选任意六个喜欢的职业进行投票，投票完成后会有一次抽奖。因为奖励比较迷你，所以请自行完成\n" "https://dnf.qq.com/act/a20220429aldxw/index.html\n"
-        ),
+        "22.5 云游戏会员": (
+            "新出了个云游戏的会员，开通对应月数的会员可以领取兑换券，可以兑换两本增幅书，以及抽取奖励。\n"
+            "如果有使用云游戏，有购买会员的需求，可以在这个页面购买后自行领取奖励~\n"
+            "https://dnf.qq.com/cp/a20220600start/index.html\n"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

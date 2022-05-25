@@ -574,7 +574,6 @@ class DjcHelper:
             ("翻牌活动", self.dnf_card_flip),
             ("dnf助手活动", self.dnf_helper),
             ("DNF集合站", self.dnf_collection),
-            ("黄钻", self.dnf_yellow_diamond),
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
@@ -583,6 +582,7 @@ class DjcHelper:
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -2163,7 +2163,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "41544_7272955f"
+        lucky_act_id = "66613_2fd7e98b"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2172,20 +2172,20 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "41545_f41d009b")
+        self.qzone_act_op("勇士见面礼", "66614_23246ef1")
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"
         ):
             self.qzone_act_op(
                 "分享给自己",
-                "41546_0b7b3b59",
+                "66615_9132410d",
                 act_req_data={
                     "receivers": [
                         self.qq(),
                     ]
                 },
             )
-        self.qzone_act_op("分享领取礼包", "41547_67dfeb07")
+        self.qzone_act_op("分享领取礼包", "66616_44f492ad")
 
     # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
     # note：对接流程与上方黄钻完全一致，参照其流程即可
@@ -10626,4 +10626,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_yellow_diamond()

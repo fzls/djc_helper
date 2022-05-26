@@ -989,7 +989,7 @@ class ConfigUi(QFrame):
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:
-        server_not_online_message = "无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引/付费指引.docx】"
+        server_not_online_message = f"无法访问服务器，若非最新版本，请尝试更新小助手版本~ 保底可使用扫码付费后私聊的方式购买，具体流程请参考【付费指引/付费指引.docx】\n\n当前使用版本为： v{now_version} {ver_time}"
         try:
             res = requests.get(self.get_pay_server_addr(), timeout=3)
             if res.status_code == 200:

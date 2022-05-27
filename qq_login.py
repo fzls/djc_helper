@@ -26,7 +26,11 @@ from config import AccountConfig, CommonConfig, config, load_config
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
-from exceptions_def import GithubActionLoginException, SameAccountTryLoginAtMultipleThreadsException
+from exceptions_def import (
+    GithubActionLoginException,
+    RequireVerifyMessageButInHeadlessMode,
+    SameAccountTryLoginAtMultipleThreadsException,
+)
 from first_run import is_first_run_in
 from log import color, logger
 from upload_lanzouyun import Uploader
@@ -725,6 +729,10 @@ class QQLogin:
                             msg += f"\n\t(仅我可见)历史重试成功等待时间列表：{login_retry_data.history_success_timeouts}"
                         msg += f"\n\t当前网址为 {current_url}"
                         logger.exception(msg, exc_info=login_exception)
+                        if type(login_exception) is RequireVerifyMessageButInHeadlessMode:
+                            logger.info(color("bold_yellow") + "检测到需要验证手机，将立即开始第二次慢速重试，且显示浏览器界面")
+                            wait_time = 1
+
                         count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
                     else:
                         logger.exception(msg, exc_info=login_exception)
@@ -1151,6 +1159,24 @@ class QQLogin:
                     )
                 except NoSuchWindowException:
                     logger.debug("这种情况好像不影响登录，可以无视")
+                except BaseException as e:
+                    # 判断是否出现了【手机号码验证】，若是，则把等待时间调长
+                    try:
+                        self.driver.find_element(By.ID, "verify_iframe_mask")
+
+                        verify_max_wait_time = 600
+                        logger.warning(color("bold_yellow") + f"{self.name} 需要进行手机号码验证，将最多等待 {verify_max_wait_time} 秒")
+                        if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
+                            raise RequireVerifyMessageButInHeadlessMode()
+
+                        WebDriverWait(self.driver, verify_max_wait_time).until(
+                            expected_conditions.invisibility_of_element_located((By.ID, "verify_iframe_mask"))
+                        )
+                    except RequireVerifyMessageButInHeadlessMode as verify_exception:
+                        raise verify_exception
+                    except:
+                        # 如果没有手机验证，则按原样抛出异常
+                        raise e
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据
@@ -1162,6 +1188,8 @@ class QQLogin:
                     )
 
                 break
+            except RequireVerifyMessageButInHeadlessMode as verify_exception:
+                raise verify_exception
             except Exception as e:
                 login_mode_name = self.login_mode_to_description[self.login_mode]
 

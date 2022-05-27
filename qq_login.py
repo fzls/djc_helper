@@ -1174,7 +1174,7 @@ class QQLogin:
                         )
                     except RequireVerifyMessageButInHeadlessMode as verify_exception:
                         raise verify_exception
-                    except:
+                    except Exception:
                         # 如果没有手机验证，则按原样抛出异常
                         raise e
 

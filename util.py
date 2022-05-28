@@ -802,7 +802,7 @@ def human_readable_size(num, suffix="B") -> str:
 
 
 @try_except()
-def remove_old_version_portable_chrome_files():
+def remove_old_version_portable_chrome_files(current_chrome_version: int):
     """清理非当前版本的便携版chrome相关文件，避免占用过多空间
 
     主要包括下列文件或目录
@@ -810,9 +810,6 @@ def remove_old_version_portable_chrome_files():
     2. chrome_portable_{ver}.7z
     3. chrome_portable_{ver}
     """
-    from qq_login import QQLogin
-
-    current_chrome_version = QQLogin.chrome_major_version
     logger.info(color("bold_green") + f"开始尝试清理非当前版本的便携版chrome相关文件，当前chrome版本为{current_chrome_version}")
 
     chrome_file_regex = [
@@ -1590,6 +1587,14 @@ def clear_file(file_path: str):
         pass
 
 
+def demo_remove_chrome():
+    from config import config
+    from qq_login import QQLogin
+    cfg = config()
+    current_chrome_version = QQLogin(cfg.common).get_chrome_major_version()
+    remove_old_version_portable_chrome_files(current_chrome_version)
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())
@@ -1613,5 +1618,5 @@ if __name__ == "__main__":
 
     # message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
 
-    remove_old_version_portable_chrome_files()
+    demo_remove_chrome()
     pass

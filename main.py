@@ -45,6 +45,7 @@ from main_def import (
     try_take_xinyue_team_award,
 )
 from pool import close_pool, init_pool
+from qq_login import QQLogin
 from show_usage import show_usage
 from update import notify_manual_check_update_on_release_too_long
 from usage_count import increase_counter
@@ -166,7 +167,9 @@ def main():
 
     clean_dir_to_size(log_directory, cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
     clean_dir_to_size(f"utils/{log_directory}", cfg.common.max_logs_size * MiB, cfg.common.keep_logs_size * MiB)
-    remove_old_version_portable_chrome_files()
+
+    current_chrome_version = QQLogin(cfg.common).get_chrome_major_version()
+    remove_old_version_portable_chrome_files(current_chrome_version)
 
     show_ask_message_box(cfg)
 

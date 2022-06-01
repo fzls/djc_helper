@@ -133,21 +133,32 @@ def download_github_raw_content(
     urls = [
         # 下面这个似乎会缓存很久，不会及时更新，先注释掉
         # f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+
+        f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://raw.連接.台灣/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        f"https://raw-gh.gcdn.mirr.one/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
     # 随机乱序，确保均匀分布请求
     random.shuffle(urls)
 
-    # 最后加入几个慢的镜像和源站
+    # 然后加入几个慢的镜像和源站
     urls.extend(
         [
             f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            f"https://ghproxy.futils.com/https://github.com/{owner}/{repo_name}/blob/{branch_name}/{filepath_in_repo}",
+        ]
+    )
+
+    # 最后加入原始地址和一些不可达的
+    urls.extend(
+        [
             f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
         ]

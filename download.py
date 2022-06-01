@@ -7,6 +7,10 @@ from const import downloads_dir
 from log import color, logger
 from util import get_now, make_sure_dir_exists, show_progress
 
+user_agent_headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
+}
+
 
 def download_file(url: str, download_dir=downloads_dir, filename="", connect_timeout=10) -> str:
     """
@@ -26,7 +30,7 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
     target_file_path = os.path.join(download_dir, filename)
 
     logger.info(f"开始下载 {url} 到 {target_file_path}")
-    response = requests.get(url, stream=True, timeout=connect_timeout)
+    response = requests.get(url, stream=True, timeout=connect_timeout, headers=user_agent_headers)
 
     if response.status_code != 200:
         raise Exception(f"下载失败，状态码 {response.status_code}")

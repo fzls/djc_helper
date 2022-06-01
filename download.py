@@ -79,16 +79,9 @@ def download_latest_github_release(
 
     # 先加入比较快的几个镜像
     urls = [
-        f"https://pd.zwc365.com/seturl/https://github.com/{release_file_path}",
-        f"https://gh.xiu.workers.dev/https://github.com/{release_file_path}",
+
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-        # f"https://github.rc1844.workers.dev/{release_file_path}",
-        f"https://ghgo.feizhuqwq.workers.dev/https://github.com/{release_file_path}",
-        f"https://git.yumenaka.net/https://github.com/{release_file_path}",
-        f"https://ghproxy.com/https://github.com/{release_file_path}",
         f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-        f"https://github.ddlc.love/https://github.com/{release_file_path}",
-        f"https://github.do/https://github.com/{release_file_path}",
     ]
 
     # 随机乱序，确保均匀分布请求
@@ -97,6 +90,19 @@ def download_latest_github_release(
     # 最后加入几个慢的镜像和源站
     urls.extend(
         [
+            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+            f"https://download.おうか.tw/{release_file_path}",
+            f"https://hub.連接.台灣/{release_file_path}",
+            f"https://git.yumenaka.net/https://github.com/{release_file_path}",
+
+            f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
+            f"https://gh.xiu.workers.dev/https://github.com/{release_file_path}",
+            f"https://pd.zwc365.com/seturl/https://github.com/{release_file_path}",
+            f"https://github.rc1844.workers.dev/{release_file_path}",
+            f"https://ghgo.feizhuqwq.workers.dev/https://github.com/{release_file_path}",
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            f"https://github.ddlc.love/https://github.com/{release_file_path}",
+            f"https://github.do/https://github.com/{release_file_path}",
             f"https://download.fastgit.org/{release_file_path}",
             f"https://github.com/{release_file_path}",
         ]

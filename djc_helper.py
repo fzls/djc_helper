@@ -4240,6 +4240,7 @@ class DjcHelper:
             "toUin": self.qq(),
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
+            "date": format_now("%Y-%m-%d"),
         }
 
         # ------ 封装通用接口 ------
@@ -4530,8 +4531,9 @@ class DjcHelper:
                 "领取签到奖励",
                 "send/sign",
                 amsid=giftInfo.sLbcode,
+                num=1,
             )
-            logger.info(f"领取连续签到{giftInfo.sDays}的奖励: {res}")
+            logger.info(f"领取连续签到 {giftInfo.sDays} 的奖励: {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_basic_awards():

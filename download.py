@@ -79,7 +79,6 @@ def download_latest_github_release(
 
     # 先加入比较快的几个镜像
     urls = [
-
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
         f"https://gh.ddlc.top/https://github.com/{release_file_path}",
     ]
@@ -94,7 +93,6 @@ def download_latest_github_release(
             f"https://download.おうか.tw/{release_file_path}",
             f"https://hub.連接.台灣/{release_file_path}",
             f"https://git.yumenaka.net/https://github.com/{release_file_path}",
-
             f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
             f"https://gh.xiu.workers.dev/https://github.com/{release_file_path}",
             f"https://pd.zwc365.com/seturl/https://github.com/{release_file_path}",
@@ -144,7 +142,6 @@ def download_github_raw_content(
         # 下面这个似乎会缓存很久，不会及时更新，先注释掉
         # f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         # f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-
         f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         f"https://raw.連接.台灣/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         f"https://raw-gh.gcdn.mirr.one/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",

@@ -5893,7 +5893,6 @@ class DjcHelper:
 
         exchange_gifts()
 
-
     def check_dnf_xinyue(self):
         self.check_bind_account(
             "DNF心悦",
@@ -6294,9 +6293,7 @@ class DjcHelper:
             return int(voteTickets), int(voteTimes), int(drawTimes)
 
         def query_work_info_list() -> list[VoteEndWorkInfo]:
-            res = self.dnf_dianzan_op(
-                "查询投票列表", "860311", print_res=False
-            )
+            res = self.dnf_dianzan_op("查询投票列表", "860311", print_res=False)
             info = VoteEndWorkList().auto_update_config(res["modRet"]["jData"])
 
             work_info_list: list[VoteEndWorkInfo] = []

@@ -1590,6 +1590,7 @@ def clear_file(file_path: str):
 def demo_remove_chrome():
     from config import config
     from qq_login import QQLogin
+
     cfg = config()
     current_chrome_version = QQLogin(cfg.common).get_chrome_major_version()
     remove_old_version_portable_chrome_files(current_chrome_version)

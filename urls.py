@@ -97,12 +97,12 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220519care/index.html",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
+    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     #
     # 已过期活动
     #
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220324index/",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
@@ -227,7 +227,7 @@ class Urls:
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
-        self.iActivityId_dnf_dianzan = "441065"  # DNF2020共创投票领礼包需求
+        self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡

@@ -66,6 +66,8 @@ from dao import (
     SailiyamWorkInfo,
     SpringFuDaiInfo,
     TemporaryChangeBindRoleInfo,
+    VoteEndWorkInfo,
+    VoteEndWorkList,
     VoteWorkInfo,
     VoteWorkList,
     XiaojiangyouInfo,
@@ -583,13 +585,13 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("DNF共创投票", self.dnf_dianzan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("DNF落地页活动", self.dnf_luodiye),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
-            ("DNF共创投票", self.dnf_dianzan),
             ("管家蚊子腿", self.guanjia_new),
             ("colg每日签到", self.colg_signin),
             ("魔界人探险记", self.mojieren),
@@ -6227,53 +6229,56 @@ class DjcHelper:
         self.check_dnf_dianzan()
 
         def query_info() -> tuple[int, int, int]:
-            res = self.dnf_dianzan_op("查询信息", "830958", print_res=False)
+            res = self.dnf_dianzan_op("查询信息", "860276", print_res=False)
             info = parse_amesvr_common_info(res)
 
-            loginGame, playRaid, loginPage, voteTimes, drawTimes = info.sOutValue1.split("|")
-            voteTickets = info.sOutValue2
+            loginGame, playRaid, loginPage, drawTimes = info.sOutValue1.split("|")
+
+            voteTickets, totalGetTickets = info.sOutValue2.split("|")
+            voteTimes = int(totalGetTickets) - int(voteTickets)
 
             return int(voteTickets), int(voteTimes), int(drawTimes)
 
-        def query_work_info_list(limit=30) -> list[VoteWorkInfo]:
+        def query_work_info_list() -> list[VoteEndWorkInfo]:
             res = self.dnf_dianzan_op(
-                "查询投票列表", "830970", isSort="1", append_raw_data="jobName=&titleName=", print_res=False
+                "查询投票列表", "860311", print_res=False
             )
-            info = VoteWorkList().auto_update_config(res["modRet"]["jData"])
+            info = VoteEndWorkList().auto_update_config(res["modRet"]["jData"])
 
-            work_info_list = []
-            for work in info.data:
-                work_info_list.append(work)
+            work_info_list: list[VoteEndWorkInfo] = []
+            for workId, tickets in info.data.items():
+                work_info = VoteEndWorkInfo()
+                work_info.workId = workId
+                work_info.tickets = int(tickets)
 
-                if len(work_info_list) >= limit:
-                    break
+                work_info_list.append(work_info)
 
             return work_info_list
 
-        self.dnf_dianzan_op("登陆游戏领积分（946229）", "830957")
-        self.dnf_dianzan_op("通关副本获取积分（946241）", "830965")
-        self.dnf_dianzan_op("分享页面获取积分（946244）", "830969")
+        self.dnf_dianzan_op("登陆游戏获取票数（988902）", "860275")
+        self.dnf_dianzan_op("通关副本（988956）", "860326")
+        self.dnf_dianzan_op("分享（988959）", "860331")
 
         voteTickets, voteTimes, _ = query_info()
         logger.info(f"已拥有投票次数：{voteTickets} 已完成投票次数：{voteTimes}")
         if voteTickets > 0:
-            limit = 30
-            work_info_list = random.sample(query_work_info_list(limit), voteTickets)
-            logger.info(f"随机从前 {limit} 中选 {voteTickets} 个进行投票")
+            all_work_info = query_work_info_list()
+            work_info_list = random.sample(all_work_info, voteTickets)
+            logger.info(f"随机从 {len(all_work_info)} 个最终投票中选 {voteTickets} 个进行投票")
 
             for work_info in work_info_list:
                 self.dnf_dianzan_op(
-                    f"投票 - {work_info.title} (已有投票: {work_info.tickets})", "830971", workId=work_info.workId
+                    f"投票 - {work_info.workId} (已有投票: {work_info.tickets})", "860300", workId=work_info.workId
                 )
                 time.sleep(5)
 
-        self.dnf_dianzan_op("投票满3次领取（946249）", "830973")
+        self.dnf_dianzan_op("投票3次领取（988964）", "860336")
 
         _, voteTimes, drawTimes = query_info()
         remaining_draw_times = voteTimes - drawTimes
         logger.info(f"累计获得抽奖资格：{voteTimes}次，剩余抽奖次数：{remaining_draw_times}")
         for idx in range_from_one(remaining_draw_times):
-            self.dnf_dianzan_op(f"{idx}/{remaining_draw_times} 转盘（946252）", "830976")
+            self.dnf_dianzan_op(f"{idx}/{remaining_draw_times} 转盘（988974）", "860346")
             time.sleep(5)
 
     def check_dnf_dianzan(self):
@@ -6281,8 +6286,8 @@ class DjcHelper:
             "DNF共创投票",
             get_act_url("DNF共创投票"),
             activity_op_func=self.dnf_dianzan_op,
-            query_bind_flowid="830975",
-            commit_bind_flowid="830974",
+            query_bind_flowid="860273",
+            commit_bind_flowid="860272",
         )
 
     def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
@@ -10626,4 +10631,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_dianzan()

@@ -1815,6 +1815,18 @@ class VoteWorkInfo(ConfigInterface):
         self.workId = "21"
 
 
+class VoteEndWorkList(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.data: dict[int, str] = {}
+
+
+class VoteEndWorkInfo(ConfigInterface):
+    def __init__(self):
+        self.tickets = 9064
+        self.workId = "21"
+
+
 class DnfHelperChronicleBindInfo(ConfigInterface):
     def __init__(self):
         self.is_need_bind = True

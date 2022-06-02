@@ -257,33 +257,36 @@ def extract_qq_video_message(res) -> str:
 def is_request_ok(data) -> bool:
     success = True
     try:
-        returnCodeKeys = [
-            "ret",
-            "code",
-            "iRet",
-            "status",
-            "ecode",
-        ]
-        for key in returnCodeKeys:
-            if key in data:
-                # 特殊处理 status
-                val = data[key]
-                if key == "status":
-                    if type(val) is str and not val.isnumeric():
-                        success = False
+        if type(data) is dict:
+            returnCodeKeys = [
+                "ret",
+                "code",
+                "iRet",
+                "status",
+                "ecode",
+            ]
+            for key in returnCodeKeys:
+                if key in data:
+                    # 特殊处理 status
+                    val = data[key]
+                    if key == "status":
+                        if type(val) is str and not val.isnumeric():
+                            success = False
+                        else:
+                            success = int(val) in [0, 1, 200]
                     else:
-                        success = int(val) in [0, 1, 200]
-                else:
-                    success = int(val) == 0
-                break
+                        success = int(val) == 0
+                    break
 
-        # 特殊处理qq视频
-        if "data" in data and type(data["data"]) is dict and "sys_code" in data["data"]:
-            success = int(data["data"]["sys_code"]) == 0
+            # 特殊处理qq视频
+            if "data" in data and type(data["data"]) is dict and "sys_code" in data["data"]:
+                success = int(data["data"]["sys_code"]) == 0
 
-        # 特殊处理赠送卡片
-        if "13333" in data and type(data["13333"]) is dict and "ret" in data["13333"]:
-            success = int(data["13333"]["ret"]) == 0
+            # 特殊处理赠送卡片
+            if "13333" in data and type(data["13333"]) is dict and "ret" in data["13333"]:
+                success = int(data["13333"]["ret"]) == 0
+        elif type(data) is int:
+            success = data == 0
 
     except Exception as e:
         logger.error(f"is_request_ok parse failed data={data}, exception=\n{e}")

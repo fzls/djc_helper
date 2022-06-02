@@ -571,16 +571,8 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("集卡", self.dnf_ark_lottery),
-            ("DNF心悦", self.dnf_xinyue),
-            ("翻牌活动", self.dnf_card_flip),
-            ("dnf助手活动", self.dnf_helper),
-            ("DNF集合站", self.dnf_collection),
-            ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
-            ("勇士的冒险补给", self.maoxian),
-            ("冒险的起点", self.maoxian_start),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
@@ -590,6 +582,14 @@ class DjcHelper:
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
+            ("冒险的起点", self.maoxian_start),
+            ("勇士的冒险补给", self.maoxian),
+            ("WeGame活动", self.dnf_wegame),
+            ("DNF集合站", self.dnf_collection),
+            ("dnf助手活动", self.dnf_helper),
+            ("翻牌活动", self.dnf_card_flip),
+            ("DNF心悦", self.dnf_xinyue),
+            ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
@@ -10634,4 +10634,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.maoxian()

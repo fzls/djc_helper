@@ -4387,6 +4387,7 @@ class DjcHelper:
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
 
+        @try_except(return_val_on_except=False)
         def bind_qq() -> bool:
             current_qq = self.qq()
             raw_res = yoyo_post(
@@ -10631,4 +10632,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_dianzan()
+        djcHelper.dnf_helper_chronicle()

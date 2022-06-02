@@ -579,11 +579,11 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF共创投票", self.dnf_dianzan),
             ("DNF心悦", self.dnf_xinyue),
+            ("冒险的起点", self.maoxian_start),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
-            ("冒险的起点", self.maoxian_start),
             ("勇士的冒险补给", self.maoxian),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
@@ -8505,21 +8505,21 @@ class DjcHelper:
             logger.warning("未启用领取冒险的起点功能，将跳过")
             return
 
-        self.maoxian_start_op("1", "854650")
-        self.maoxian_start_op("2", "854652")
-        self.maoxian_start_op("3", "854653")
-        self.maoxian_start_op("4", "854654")
-        self.maoxian_start_op("5", "854655")
-        self.maoxian_start_op("6", "854656")
-        self.maoxian_start_op("7", "854657")
+        self.maoxian_start_op("1", "860646")
+        self.maoxian_start_op("2", "860648")
+        self.maoxian_start_op("3", "860649")
+        self.maoxian_start_op("4", "860650")
+        self.maoxian_start_op("5", "860651")
+        self.maoxian_start_op("6", "860652")
+        self.maoxian_start_op("7", "860653")
 
     def check_maoxian(self):
         self.check_bind_account(
             "冒险的起点",
             get_act_url("冒险的起点"),
             activity_op_func=self.maoxian_start_op,
-            query_bind_flowid="854647",
-            commit_bind_flowid="854646",
+            query_bind_flowid="860643",
+            commit_bind_flowid="860642",
         )
 
     def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10682,4 +10682,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.maoxian_start()

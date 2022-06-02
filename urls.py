@@ -91,10 +91,10 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220429dnfMX/index.html",
+    "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     #
     # 已过期活动
     #
-    "冒险的起点": "https://dnf.qq.com/lbact/a20220424lbps16q/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220424lb6c8sl/indexm.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220419lbrmrox/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220421jhy/index.html",
@@ -260,7 +260,7 @@ class Urls:
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "382072"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "416057"  # DNF KOL
-        self.iActivityId_maoxian_start = "465994"  # 冒险的起点
+        self.iActivityId_maoxian_start = "473752"  # 冒险的起点
         self.iActivityId_maoxian = "466194"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛

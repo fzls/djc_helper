@@ -1829,10 +1829,11 @@ class VoteEndWorkInfo(ConfigInterface):
 
 class DnfHelperChronicleBindInfo(ConfigInterface):
     def __init__(self):
-        self.is_need_bind = True
+        self.is_need_transfer = True
         self.is_allow_enter = False
         self.is_roleid_bind_userid_match = False
         self.tip = ""
+        self.tip_title = ""
 
 
 if __name__ == "__main__":

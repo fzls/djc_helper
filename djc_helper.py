@@ -4369,7 +4369,7 @@ class DjcHelper:
         @try_except()
         def check_bind_qq():
             bind_info = query_bind_qq_info()
-            if bind_info.is_need_bind:
+            if bind_info.is_need_transfer:
                 logger.warning(f"{self.cfg.name} 本月的编年史尚未与当前QQ绑定，将尝试自动绑定")
                 bind_ok = bind_qq()
                 if not bind_ok:

@@ -1346,10 +1346,7 @@ def print_update_message_on_first_run_new_version():
     if is_first_run(f"print_update_message_v{now_version}"):
         try:
             ui = get_update_info(cfg.common)
-            message = (
-                f"新版本v{ui.latest_version}已更新完毕，具体更新内容展示如下，以供参考：\n"
-                f"{ui.update_message}"
-            )
+            message = f"新版本v{ui.latest_version}已更新完毕，具体更新内容展示如下，以供参考：\n" f"{ui.update_message}"
 
             async_message_box(message, "新版本更新内容")
         except Exception as e:

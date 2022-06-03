@@ -69,6 +69,7 @@ from util import (
     parse_time,
     parse_timestamp,
     parse_unicode_escape_string,
+    parse_url_param,
     post_json_to_data,
     printed_width,
     remove_invalid_unicode_escape_string,
@@ -532,3 +533,14 @@ def test_post_json_to_data():
     assert post_json_to_data({}) == ""
     assert post_json_to_data({"k": "v"}) == "k=v"
     assert post_json_to_data({"k1": "v1", "k2": "v2"}) == "k1=v1&k2=v2"
+
+
+def test_parse_url_param():
+    a = "1"
+    b = "test"
+    c = "~~~"
+    url = f"https://example.com?a={a}&b={b}&c={c}"
+
+    assert parse_url_param(url, "a") == a
+    assert parse_url_param(url, "b") == b
+    assert parse_url_param(url, "c") == c

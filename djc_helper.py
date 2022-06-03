@@ -68,8 +68,6 @@ from dao import (
     TemporaryChangeBindRoleInfo,
     VoteEndWorkInfo,
     VoteEndWorkList,
-    VoteWorkInfo,
-    VoteWorkList,
     XiaojiangyouInfo,
     XiaojiangyouPackageInfo,
     XinyueCatInfo,
@@ -5863,11 +5861,13 @@ class DjcHelper:
             ]
             for giftid, cost, max_exchange_count, name in gifts:
                 for idx in range_from_one(max_exchange_count):
-                    res = self.dnf_xinyue_op(f"兑换 {name}: {idx}/{max_exchange_count}", "859039", giftid=giftid)
+                    res = self.dnf_xinyue_op(
+                        f"兑换 {name}({cost} 积分): {idx}/{max_exchange_count}", "859039", giftid=giftid
+                    )
 
                     ret = int(res.get("ret"))
                     if ret == 700:
-                        logger.warning(f"未获得活动资格，停止后续兑换操作")
+                        logger.warning("未获得活动资格，停止后续兑换操作")
                         return
 
                     # TODO: 处理 超出兑换次数 和 没有足够积分的情况，前者break，后者return

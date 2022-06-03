@@ -10,7 +10,7 @@ import requests
 from config import CommonConfig
 from dao import UpdateInfo
 from download import download_github_raw_content
-from first_run import is_first_run, is_weekly_first_run
+from first_run import is_weekly_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
 from util import async_message_box, bypass_proxy, is_run_in_github_action, is_windows, try_except, use_proxy
@@ -176,7 +176,7 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
     try:
         return get_update_info_by_download_raw_file()
     except Exception as e:
-        logger.warning(f"尝试下载raw文件来解析更新信息失败")
+        logger.warning("尝试下载raw文件来解析更新信息失败")
         logger.debug("具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")
@@ -198,9 +198,7 @@ def get_urls_and_mirrors(config: CommonConfig) -> List[Tuple[str, str]]:
     random.shuffle(urls)
 
     # 最后尝试源站
-    urls.append(
-        (config.changelog_page, config.readme_page)
-    )
+    urls.append((config.changelog_page, config.readme_page))
 
     return urls
 
@@ -265,12 +263,12 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
 
 
 def get_update_info_by_download_raw_file() -> UpdateInfo:
-    logger.info(f"尝试从github下载源文件来解析更新信息")
+    logger.info("尝试从github下载源文件来解析更新信息")
     readme_filepath = download_github_raw_content("README.MD")
     changelog_filepath = download_github_raw_content("CHANGELOG.MD")
 
-    readme_txt = open(readme_filepath, encoding='utf-8').read()
-    changelog_txt = open(changelog_filepath, encoding='utf-8').read()
+    readme_txt = open(readme_filepath, encoding="utf-8").read()
+    changelog_txt = open(changelog_filepath, encoding="utf-8").read()
 
     logger.info(f"尝试从 {changelog_filepath} 中解析更新信息")
 
@@ -283,7 +281,7 @@ def get_update_info_by_download_raw_file() -> UpdateInfo:
 
     # 从readme中提取最新网盘信息
     netdisk_address_matches = re.findall(
-        r'链接: (?P<link>.+?) 提取码: (?P<passcode>[a-zA-Z0-9]+)',
+        r"链接: (?P<link>.+?) 提取码: (?P<passcode>[a-zA-Z0-9]+)",
         readme_txt,
         re.MULTILINE,
     )
@@ -300,9 +298,7 @@ def get_update_info_by_download_raw_file() -> UpdateInfo:
             break
 
     # 尝试提取更新信息
-    update_message_matches = re.search(
-        r"(?<=更新公告)\s*(?P<update_message>(\s|\S)+?)\n\n", changelog_txt, re.MULTILINE
-    )
+    update_message_matches = re.search(r"(?<=更新公告)\s*(?P<update_message>(\s|\S)+?)\n\n", changelog_txt, re.MULTILINE)
     if update_message_matches is not None:
         update_info.update_message = update_message_matches.groupdict()["update_message"]
     else:

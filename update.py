@@ -9,6 +9,7 @@ import requests
 
 from config import CommonConfig
 from dao import UpdateInfo
+from download import download_github_raw_content
 from first_run import is_first_run, is_weekly_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
@@ -162,6 +163,7 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
+    # 先尝试从github以及镜像网站的页面来解析更新信息
     for changelog_page, readme_page in get_urls_and_mirrors(config):
         try:
             return _get_update_info(changelog_page, readme_page)
@@ -169,6 +171,13 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
             # 尝试使用镜像来访问
             logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~ 错误={e}")
             logger.debug("具体信息", exc_info=e)
+
+    # 再尝试通过raw文件来解析更新信息
+    try:
+        return get_update_info_by_download_raw_file()
+    except Exception as e:
+        logger.warning(f"尝试下载raw文件来解析更新信息失败")
+        logger.debug("具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")
 
@@ -255,6 +264,57 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
     return update_info
 
 
+def get_update_info_by_download_raw_file() -> UpdateInfo:
+    logger.info(f"尝试从github下载源文件来解析更新信息")
+    readme_filepath = download_github_raw_content("README.MD")
+    changelog_filepath = download_github_raw_content("CHANGELOG.MD")
+
+    readme_txt = open(readme_filepath, encoding='utf-8').read()
+    changelog_txt = open(changelog_filepath, encoding='utf-8').read()
+
+    logger.info(f"尝试从 {changelog_filepath} 中解析更新信息")
+
+    update_info = UpdateInfo()
+
+    # 从更新日志中提取所有版本信息
+    versions = re.findall(r"(?<=[vV])[0-9.]+(?=\s+\d+\.\d+\.\d+)", changelog_txt)
+    # 找出其中最新的那个版本号
+    update_info.latest_version = version_int_list_to_version(max(version_to_version_int_list(ver) for ver in versions))
+
+    # 从readme中提取最新网盘信息
+    netdisk_address_matches = re.findall(
+        r'链接: (?P<link>.+?) 提取码: (?P<passcode>[a-zA-Z0-9]+)',
+        readme_txt,
+        re.MULTILINE,
+    )
+    # 先选取首个网盘链接作为默认值
+    update_info.netdisk_link = netdisk_address_matches[0][0]
+    update_info.netdisk_passcode = netdisk_address_matches[0][1]
+    # 然后随机从仍有效的网盘链接中随机一个作为最终结果
+    random.seed(datetime.now())
+    random.shuffle(netdisk_address_matches)
+    for match in netdisk_address_matches:
+        if not is_shared_content_blocked(match[0]):
+            update_info.netdisk_link = match[0]
+            update_info.netdisk_passcode = match[1]
+            break
+
+    # 尝试提取更新信息
+    update_message_matches = re.search(
+        r"(?<=更新公告)\s*(?P<update_message>(\s|\S)+?)\n\n", changelog_txt, re.MULTILINE
+    )
+    if update_message_matches is not None:
+        update_info.update_message = update_message_matches.groupdict()["update_message"]
+    else:
+        async_message_box("走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0", "检查更新出错了", show_once_daily=True)
+
+    logger.info(
+        f"netdisk_address_matches={netdisk_address_matches}, selected=({update_info.netdisk_link}, {update_info.netdisk_passcode})"
+    )
+
+    return update_info
+
+
 # 是否需要更新
 def need_update(current_version, latest_version) -> bool:
     return version_less(current_version, latest_version)
@@ -315,3 +375,6 @@ if __name__ == "__main__":
 
     ver = get_version_from_gitee()
     print(f"最新版本是：{ver}")
+
+    info = get_update_info_by_download_raw_file()
+    print(info)

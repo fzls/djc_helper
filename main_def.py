@@ -1349,11 +1349,9 @@ def print_update_message_on_first_run_new_version():
             message = (
                 f"新版本v{ui.latest_version}已更新完毕，具体更新内容展示如下，以供参考：\n"
                 f"{ui.update_message}"
-                "\n"
-                "若未购买自动更新dlc，可无视下一句\n"
-                "PS：自动更新会更新示例配置config.example.toml，但不会更新config.toml。不过由于基本所有活动的默认配置都是开启的，所以除非你想要关闭特定活动，或者调整活动配置，其实没必要修改config.toml\n"
             )
-            logger.warning(color("bold_yellow") + message)
+
+            async_message_box(message, "新版本更新内容")
         except Exception as e:
             logger.warning("新版本首次运行获取更新内容失败，请自行查看CHANGELOG.MD", exc_info=e)
 

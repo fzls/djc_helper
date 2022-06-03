@@ -173,6 +173,10 @@ def main():
 
     show_ask_message_box(cfg)
 
+    # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
+    if cfg.common.check_update_on_start:
+        check_update(cfg)
+
     check_all_skey_and_pskey(cfg)
 
     check_djc_role_binding()
@@ -182,10 +186,6 @@ def main():
 
     # 挪到所有账号都登陆后再尝试自动更新，从而能够判定是否已购买DLC
     try_auto_update(cfg)
-
-    # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
-    if cfg.common.check_update_on_start:
-        check_update(cfg)
 
     # 查询付费信息供后面使用
     show_head_line("查询付费信息")

@@ -115,6 +115,7 @@ from util import (
     is_valid_qq,
     kill_process,
     parse_scode,
+    parse_url_param,
     range_from_one,
     reset_cache,
     run_from_src,
@@ -2684,11 +2685,15 @@ class DnfHelperInfoConfigUi(QWidget):
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
         add_row(form_layout, "编年史开启抽奖", self.checkbox_chronicle_lottery)
 
+        self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请查看【使用教程/使用文档.docx/获取助手token】")
+        add_row(form_layout, "助手生日活动链接", self.lineedit_url)
+        self.lineedit_url.textEdited.connect(self.on_url_changed)
+
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
         add_row(form_layout, "社区ID(userId)", self.lineedit_userId)
 
         self.lineedit_nickName = create_lineedit(cfg.nickName, "dnf助手->我的->编辑->昵称")
-        add_row(form_layout, "昵称(nickName)", self.lineedit_nickName)
+        add_row(form_layout, "昵称(nickname)", self.lineedit_nickName)
 
         self.lineedit_token = create_lineedit(
             cfg.token, "形如 sSfsEtDH，抓包或分享链接可得（ps：不知道咋操作，可查看【使用教程/使用文档.docx/获取助手token】"
@@ -2776,6 +2781,17 @@ class DnfHelperInfoConfigUi(QWidget):
 
         # 排下序，已设置了兑换次数的放到前面
         cfg.move_exchange_item_to_front()
+
+    def on_url_changed(self, new_url: str):
+        userId = parse_url_param(new_url, "userId")
+        nickname = parse_url_param(new_url, "nickname")
+        token = parse_url_param(new_url, "token")
+        uniqueRoleId = parse_url_param(new_url, "uniqueRoleId")
+
+        self.lineedit_userId.setText(userId)
+        self.lineedit_nickName.setText(nickname)
+        self.lineedit_token.setText(token)
+        self.lineedit_uniqueRoleId.setText(uniqueRoleId)
 
 
 class DnfHelperChronicleExchangeItemConfigUi(QWidget):

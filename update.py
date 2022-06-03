@@ -36,12 +36,13 @@ def get_update_desc(config: CommonConfig):
 
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
-    if config.bypass_proxy:
-        logger.info("检查更新前临时启用代理")
-        use_proxy()
-
-    check_update = config.check_update_on_start or config.check_update_on_end
     try:
+        if config.bypass_proxy:
+            logger.info("检查更新前临时启用代理")
+            use_proxy()
+
+        check_update = config.check_update_on_start or config.check_update_on_end
+
         if is_run_in_github_action():
             logger.info("当前在github action环境下运行，无需检查更新")
             return

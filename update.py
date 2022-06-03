@@ -36,18 +36,17 @@ def get_update_desc(config: CommonConfig):
 
 # 启动时检查是否有更新
 def check_update_on_start(config: CommonConfig):
+    if config.bypass_proxy:
+        logger.info("检查更新前临时启用代理")
+        use_proxy()
+
+    check_update = config.check_update_on_start or config.check_update_on_end
     try:
-        if config.bypass_proxy:
-            logger.info("检查更新前临时启用代理")
-            use_proxy()
-
-        check_update = config.check_update_on_start or config.check_update_on_end
-
         if is_run_in_github_action():
             logger.info("当前在github action环境下运行，无需检查更新")
             return
 
-        if not check_update and not config.auto_update_on_start:
+        if not check_update:
             logger.warning("启动时检查更新被禁用，若需启用请在config.toml中设置")
             return
 
@@ -55,9 +54,6 @@ def check_update_on_start(config: CommonConfig):
 
         if check_update:
             try_manaual_update(ui)
-
-        if config.auto_update_on_start:
-            show_update_info_on_first_run(ui)
     except Exception as e:
         logger.debug(f"更新失败 {e}")
         if check_update:
@@ -162,13 +158,6 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
             async_message_box(msg, "版本太久未更新提示", open_url=config.netdisk_link, print_log=False)
-
-
-def show_update_info_on_first_run(ui: UpdateInfo):
-    if now_version == ui.latest_version and is_first_run(f"update_version_v{ui.latest_version}"):
-        message = f"新版本v{ui.latest_version}已更新完毕，并成功完成首次运行。本次具体更新内容展示如下，以供参考：\n" f"{ui.update_message}"
-
-        async_message_box(message, "更新")
 
 
 # 获取最新版本号与下载网盘地址

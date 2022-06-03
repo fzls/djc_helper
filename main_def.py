@@ -1301,8 +1301,7 @@ def check_update(cfg):
         logger.info("当前在github action环境下运行，无需检查更新")
         return
 
-    auto_updater_path = os.path.realpath("utils/auto_updater.exe")
-    if os.path.exists(auto_updater_path):
+    if exists_auto_updater_dlc():
         # 如果存在自动更新DLC，则走自动更新的流程，不再手动检查是否有更新内容
         return
 

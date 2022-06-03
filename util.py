@@ -1510,6 +1510,15 @@ def parse_scode(scode_or_url: str) -> str:
         return parse.parse_qs(parsed.query)["sCode"][0]
 
 
+def parse_url_param(url: str, param: str) -> str:
+    parsed = parse.urlparse(url)
+    kvs = parse.parse_qs(parsed.query)
+
+    if param not in kvs:
+        return ""
+
+    return kvs[param][0]
+
 def pause():
     if is_windows():
         pause_cmd = "PAUSE"

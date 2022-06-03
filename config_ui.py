@@ -398,18 +398,18 @@ class ConfigUi(QFrame):
         btn_open_pay_guide = create_pushbutton("查看付费指引", "SpringGreen")
         btn_open_usage_guide = create_pushbutton("查看使用教程（文字版）", "SpringGreen")
         btn_open_usage_video = create_pushbutton("查看使用教程（视频版）", "SpringGreen")
-        btn_open_autojs = create_pushbutton("查看autojs版", "PaleGreen")
+        btn_check_update = create_pushbutton("检查更新", "PaleGreen")
 
         btn_open_pay_guide.clicked.connect(self.open_pay_guide)
         btn_open_usage_guide.clicked.connect(self.open_usage_guide)
         btn_open_usage_video.clicked.connect(self.open_usage_video)
-        btn_open_autojs.clicked.connect(self.open_autojs)
+        btn_check_update.clicked.connect(self.check_update)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_open_pay_guide)
         layout.addWidget(btn_open_usage_guide)
         layout.addWidget(btn_open_usage_video)
-        layout.addWidget(btn_open_autojs)
+        layout.addWidget(btn_check_update)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 
@@ -1011,14 +1011,14 @@ class ConfigUi(QFrame):
         top_layout = QVBoxLayout()
 
         btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
-        btn_check_update = create_pushbutton("检查更新", "SpringGreen")
+        btn_open_autojs = create_pushbutton("查看autojs版", "SpringGreen")
 
         btn_support.clicked.connect(self.support)
-        btn_check_update.clicked.connect(self.check_update)
+        btn_open_autojs.clicked.connect(self.open_autojs)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_support)
-        layout.addWidget(btn_check_update)
+        layout.addWidget(btn_open_autojs)
         top_layout.addLayout(layout)
 
         btn_auto_run_on_login = create_pushbutton("开机自启", "MediumTurquoise")

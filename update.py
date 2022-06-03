@@ -174,9 +174,9 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
 
 
 def get_urls_and_mirrors(config: CommonConfig) -> List[Tuple[str, str]]:
-    urls = [
-        (config.changelog_page, config.readme_page),
-    ]
+    urls = []
+
+    # 先尝试镜像站
     for mirror_site in config.github_mirror_sites:
         urls.append(
             (
@@ -184,6 +184,15 @@ def get_urls_and_mirrors(config: CommonConfig) -> List[Tuple[str, str]]:
                 get_mirror(config.readme_page, mirror_site),
             )
         )
+
+    # 镜像站随机顺序
+    random.shuffle(urls)
+
+    # 最后尝试源站
+    urls.append(
+        (config.changelog_page, config.readme_page)
+    )
+
     return urls
 
 

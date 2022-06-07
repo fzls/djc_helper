@@ -24,6 +24,8 @@ enable_multiprocessing = true
 enable_super_fast_mode = true
 # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
 multiprocessing_pool_size = -1
+# 是否启用多进程登录功能，如果分不清哪个号在登录，请关闭该选项
+enable_multiprocessing_login = true
 
 # 是否强制使用打包附带的便携版chrome
 force_use_portable_chrome = false

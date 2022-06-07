@@ -1303,6 +1303,9 @@ class CommonConfigUi(QFrame):
         self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
         add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
+        self.checkbox_enable_multiprocessing_login = create_checkbox(cfg.enable_multiprocessing_login)
+        add_row(form_layout, "是否启用多进程登录功能（如果分不清哪个号在登录，请关闭该选项）", self.checkbox_enable_multiprocessing_login)
+
         # -------------- 区域：登录 --------------
         self.collapsible_box_login, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
             "登录", top_layout
@@ -1399,6 +1402,7 @@ class CommonConfigUi(QFrame):
         cfg.enable_min_console = self.checkbox_enable_min_console.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
         cfg.enable_super_fast_mode = self.checkbox_enable_super_fast_mode.isChecked()
+        cfg.enable_multiprocessing_login = self.checkbox_enable_multiprocessing_login.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()
         cfg.check_update_on_end = self.checkbox_check_update_on_end.isChecked()

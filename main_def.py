@@ -215,7 +215,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
 
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
-    if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
+    if cfg.common.enable_multiprocessing and cfg.common.enable_multiprocessing_login and cfg.is_all_account_auto_login():
         # 并行登陆
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 

@@ -1124,6 +1124,8 @@ class CommonConfig(ConfigInterface):
         self.enable_super_fast_mode = True
         # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
         self.multiprocessing_pool_size = -1
+        # 是否启用多进程登录功能，如果分不清哪个号在登录，请关闭该选项
+        self.enable_multiprocessing_login = True
         # 是否强制使用打包附带的便携版chrome
         self.force_use_portable_chrome = False
         # 强制使用特定大版本的chrome，默认为0，表示使用小助手默认设定的版本。

@@ -41,6 +41,7 @@ from urls import Urls, get_not_ams_act_desc
 from usage_count import get_count, increase_counter
 from util import (
     MB_ICONINFORMATION,
+    MiB,
     append_if_not_in,
     async_call,
     async_message_box,
@@ -49,6 +50,7 @@ from util import (
     bypass_proxy,
     cache_name_user_buy_info,
     change_title,
+    clean_dir_to_size,
     clear_login_status,
     exists_auto_updater_dlc,
     exists_flag_file,
@@ -1989,6 +1991,33 @@ def try_save_configs_to_user_data_dir():
             indent=4,
             ensure_ascii=False,
         )
+
+    # 顺带同时保存多个版本的配置文件，方便找回
+    save_multiple_version_config()
+
+
+def save_multiple_version_config():
+    cwd = os.getcwd()
+    appdata_dir = get_appdata_save_dir()
+
+    config_backup_dir = os.path.join(appdata_dir, "..backups")
+    current_backup_dir = os.path.join(config_backup_dir, format_now("%Y-%m-%d %H_%M_%S"))
+
+    config_file = "config.toml"
+    if os.path.isfile("config.toml.local"):
+        config_file = "config.toml.local"
+
+    source = os.path.join(cwd, config_file)
+    destination = os.path.join(current_backup_dir, config_file)
+
+    logger.info(color("bold_yellow") + f"单独保存多个版本的 {config_file} 到 {config_backup_dir}，可在该目录中找到之前版本的配置文件，方便在意外修改配置且已经同步到备份目录时仍能找回配置")
+    make_sure_dir_exists(current_backup_dir)
+
+    # 备份配置文件
+    shutil.copy2(source, destination)
+
+    # 为避免备份数据过大，超过一定大小时进行删除
+    clean_dir_to_size(config_backup_dir, max_logs_size=20 * MiB)
 
 
 @try_except()

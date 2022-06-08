@@ -890,8 +890,9 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
         remove_log_size += stat.st_size
 
         os.remove(f"{log_file}")
+        relative_filepath = os.path.relpath(str(log_file), dir_name)
         logger.info(
-            f"移除第{remove_log_count}个日志:{log_file.name} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}"
+            f"移除第{remove_log_count}个日志:{relative_filepath} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}"
         )
 
         if remaining_logs_size <= keep_logs_size:

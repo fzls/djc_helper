@@ -851,6 +851,9 @@ def remove_old_version_portable_chrome_files(current_chrome_version: int):
 
 @try_except()
 def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB):
+    if keep_logs_size > max_logs_size:
+        keep_logs_size = max_logs_size // 2
+
     # 检查一下是否存在目录
     if not os.path.isdir(dir_name):
         return

@@ -1779,11 +1779,14 @@ class AccountConfigUi(QWidget):
         )
         add_row(form_layout, "登录模式（可下拉切换）", self.combobox_login_mode)
 
+        self.lineedit_account = create_lineedit(cfg.account_info.account, "账号密码模式下用于配置QQ信息，扫码模式下填写将尝试触发自动点击头像登录（若对应QQ客户端已登录）")
+        add_row(form_layout, "QQ账号", self.lineedit_account)
+
         # -------------- 区域：QQ信息 --------------
         (
             self.collapsible_box_account_password,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("账号密码", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("密码", top_layout)
 
         self.account_info = AccountInfoConfigUi(form_layout, cfg.account_info)
 
@@ -1963,6 +1966,7 @@ class AccountConfigUi(QWidget):
         cfg.enable = self.checkbox_enable.isChecked()
         cfg.name = self.lineedit_name.text()
         cfg.login_mode = self.login_mode_bidict.key_to_val[self.combobox_login_mode.currentText()]
+        cfg.account_info.account = self.lineedit_account.text()
         cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
 
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
@@ -2131,9 +2135,6 @@ class AccountInfoConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: AccountInfoConfig):
-        self.lineedit_account = create_lineedit(cfg.account)
-        add_row(form_layout, "QQ账号", self.lineedit_account)
-
         self.lineedit_password = create_lineedit(cfg.password, "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用")
         self.lineedit_password.setEchoMode(QLineEdit.Password)
 
@@ -2153,13 +2154,11 @@ class AccountInfoConfigUi(QWidget):
         self.lineedit_password.setEchoMode(QLineEdit.Password)
 
     def update_config(self, cfg: AccountInfoConfig):
-        cfg.account = self.lineedit_account.text()
         cfg.password = self.lineedit_password.text()
 
     def setDisabled(self, disabled: bool) -> None:
         super().setDisabled(disabled)
 
-        self.lineedit_account.setDisabled(disabled)
         self.lineedit_password.setDisabled(disabled)
 
 

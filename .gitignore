@@ -34,6 +34,7 @@ releases/
 
 utils/auto_updater.exe
 utils/chrome*.download
+utils/chrome_temporary_dir/
 
 _update_temp_dir/
 

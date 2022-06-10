@@ -124,7 +124,10 @@ class QQLogin:
 
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
 
-    # note: chrome版本升级流程
+    # re: chrome版本一键升级流程
+    #  0. 使用 _update_chrome.py 脚本，按照提示操作即可获取最新稳定版本chrome的便携版、driver、安装包等
+    # .
+    # note: chrome版本手动升级流程
     #  1. 下载新版本chrome driver => chromedriver_{ver}.exe
     #   1.1 https://sites.google.com/chromium.org/driver/downloads
     #  2. 制作新版本便携版压缩包 => chrome_portable_{ver}.7z

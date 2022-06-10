@@ -1523,6 +1523,7 @@ def parse_url_param(url: str, param: str) -> str:
 
     return kvs[param][0]
 
+
 def pause():
     if is_windows():
         pause_cmd = "PAUSE"

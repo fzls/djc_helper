@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import lzma
 import os
 import shutil
@@ -11,7 +13,7 @@ if os.path.exists(".use_by_myself"):
     logger_func = logger.info
 
 
-def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", dir_src_path: str = ""):
+def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", dir_src_path: str = "", extra_options: list[str] = None):
     """
     压缩 目录dirpath 到 compressed_7z_filepath，并设定源代码根目录为dir_src_path，用于定位bz.exe
     """
@@ -23,9 +25,16 @@ def compress_dir_with_bandizip(dirpath: str, compressed_7z_filepath: str = "", d
 
     # 压缩打包
     logger_func(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
-    subprocess.call(
-        [get_bz_path(dir_src_path), "c", "-y", "-r", "-aoa", "-fmt:7z", "-l:9", compressed_7z_filepath, dirpath]
-    )
+
+    args = [
+        get_bz_path(dir_src_path), "c", "-y", "-r", "-aoa", "-fmt:7z", "-l:9",
+    ]
+    if extra_options is not None:
+        args.extend(extra_options)
+    args.extend([
+        compressed_7z_filepath, dirpath,
+    ])
+    subprocess.call(args)
 
 
 def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str = "", dst_parent_folder: str = "."):

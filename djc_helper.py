@@ -267,7 +267,7 @@ class DjcHelper:
 
     def update_skey_qr_login(self, query_data, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
-        loginResult = qqLogin.qr_login(QQLogin.login_mode_normal, name=self.cfg.name)
+        loginResult = qqLogin.qr_login(QQLogin.login_mode_normal, name=self.cfg.name, account=self.cfg.account_info.account)
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def update_skey_auto_login(self, query_data, window_index=1):
@@ -1941,7 +1941,7 @@ class DjcHelper:
             try:
                 if self.cfg.login_mode == "qr_login":
                     # 扫码登录
-                    lr = ql.qr_login(ql.login_mode_qzone, name=self.cfg.name)
+                    lr = ql.qr_login(ql.login_mode_qzone, name=self.cfg.name, account=self.cfg.account_info.account)
                 else:
                     # 自动登录
                     lr = ql.login(
@@ -5249,7 +5249,7 @@ class DjcHelper:
             ql = QQLogin(self.common_cfg)
             if self.cfg.login_mode == "qr_login":
                 # 扫码登录
-                lr = ql.qr_login(ql.login_mode_guanjia, name=self.cfg.name)
+                lr = ql.qr_login(ql.login_mode_guanjia, name=self.cfg.name, account=self.cfg.account_info.account)
             else:
                 # 自动登录
                 lr = ql.login(
@@ -10426,7 +10426,7 @@ class DjcHelper:
         ql = QQLogin(self.common_cfg)
         if self.cfg.login_mode == "qr_login":
             # 扫码登录
-            lr = ql.qr_login(login_mode, name=self.cfg.name)
+            lr = ql.qr_login(login_mode, name=self.cfg.name, account=self.cfg.account_info.account)
         else:
             # 自动登录
             lr = ql.login(self.cfg.account_info.account, self.cfg.account_info.password, login_mode, name=self.cfg.name)

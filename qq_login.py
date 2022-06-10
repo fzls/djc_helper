@@ -548,7 +548,7 @@ class QQLogin:
             self.login_type_auto_login, login_action_fn=login_with_account_and_password, login_mode=login_mode
         )
 
-    def qr_login(self, login_mode: str, name=""):
+    def qr_login(self, login_mode: str, name="", account=""):
         """
         二维码登录，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -577,7 +577,7 @@ class QQLogin:
                 logger.debug("", exc_info=e)
 
             try:
-                # 点击头像登录
+                # 提示点击头像登录
                 tip_id = "qlogin_tips"
                 tip = f"请点击头像授权登录 {name} - 多余两个账号可以点击两侧箭头切换"
 
@@ -617,10 +617,32 @@ class QQLogin:
                 logger.warning("修改箭头失败了（不影响登录流程）")
                 logger.debug("", exc_info=e)
 
+        def try_auto_click_avatar():
+            try:
+                # 尝试自动点击头像登录
+                if account != "":
+                    selector = f"#qlogin_list > a[uin='{account}']"
+
+                    logger.info(color("bold_green") + f"尝试点击头像来登录【{name}({account})】")
+
+                    self.driver.execute_script(
+                        f"""
+                        document.querySelector("{selector}").click()
+                        """
+                    )
+                else:
+                    async_message_box("现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True)
+
+            except Exception as e:
+                logger.warning("尝试自动点击头像登录失败了，请自行操作~")
+                logger.debug("", exc_info=e)
+
         def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
 
             replace_qr_code_tip()
+
+            try_auto_click_avatar()
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
@@ -1615,7 +1637,7 @@ def do_login(
     if login_type == ql.login_type_auto_login:
         lr = ql.login(acc.account, acc.password, login_mode, name=account.name)
     else:
-        lr = ql.qr_login(login_mode, name=account.name)
+        lr = ql.qr_login(login_mode, name=account.name, account=acc.account)
 
     logger.info(
         color("bold_green")

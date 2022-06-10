@@ -631,7 +631,9 @@ class QQLogin:
                         """
                     )
                 else:
-                    async_message_box("现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True)
+                    async_message_box(
+                        "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
+                    )
 
             except Exception as e:
                 logger.warning("尝试自动点击头像登录失败了，请自行操作~")

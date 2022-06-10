@@ -217,7 +217,11 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
 
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
-    if cfg.common.enable_multiprocessing and cfg.common.enable_multiprocessing_login and cfg.is_all_account_auto_login():
+    if (
+        cfg.common.enable_multiprocessing
+        and cfg.common.enable_multiprocessing_login
+        and cfg.is_all_account_auto_login()
+    ):
         # 并行登陆
         logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
@@ -2010,7 +2014,10 @@ def save_multiple_version_config():
     source = os.path.join(cwd, config_file)
     destination = os.path.join(current_backup_dir, config_file)
 
-    logger.info(color("bold_yellow") + f"单独保存多个版本的 {config_file} 到 {config_backup_dir}，可在该目录中找到之前版本的配置文件，方便在意外修改配置且已经同步到备份目录时仍能找回配置")
+    logger.info(
+        color("bold_yellow")
+        + f"单独保存多个版本的 {config_file} 到 {config_backup_dir}，可在该目录中找到之前版本的配置文件，方便在意外修改配置且已经同步到备份目录时仍能找回配置"
+    )
     make_sure_dir_exists(current_backup_dir)
 
     # 备份配置文件

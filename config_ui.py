@@ -1779,7 +1779,9 @@ class AccountConfigUi(QWidget):
         )
         add_row(form_layout, "登录模式（可下拉切换）", self.combobox_login_mode)
 
-        self.lineedit_account = create_lineedit(cfg.account_info.account, "账号密码模式下用于配置QQ信息，扫码模式下填写将尝试触发自动点击头像登录（若对应QQ客户端已登录）")
+        self.lineedit_account = create_lineedit(
+            cfg.account_info.account, "账号密码模式下用于配置QQ信息，扫码模式下填写将尝试触发自动点击头像登录（若对应QQ客户端已登录）"
+        )
         add_row(form_layout, "QQ账号", self.lineedit_account)
 
         # -------------- 区域：QQ信息 --------------

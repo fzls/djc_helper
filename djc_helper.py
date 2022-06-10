@@ -267,7 +267,9 @@ class DjcHelper:
 
     def update_skey_qr_login(self, query_data, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
-        loginResult = qqLogin.qr_login(QQLogin.login_mode_normal, name=self.cfg.name, account=self.cfg.account_info.account)
+        loginResult = qqLogin.qr_login(
+            QQLogin.login_mode_normal, name=self.cfg.name, account=self.cfg.account_info.account
+        )
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
     def update_skey_auto_login(self, query_data, window_index=1):

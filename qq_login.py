@@ -11,7 +11,12 @@ from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchWindowException, StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    NoSuchWindowException,
+    StaleElementReferenceException,
+    TimeoutException,
+)
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -521,28 +526,36 @@ class QQLogin:
         def login_with_account_and_password():
             logger.info(color("bold_green") + f"{name} 当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
 
-            # 切换到自动登录界面
-            logger.info(f"{name} 等待#switcher_plogin加载完毕")
-            time.sleep(self.cfg.login.open_url_wait_time)
-            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
-                expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
-            )
+            logger.info("由于账号密码登录有可能会触发短信验证，因此优先尝试点击头像来登录~")
+            login_by_click_avatar_success = self.try_auto_click_avatar(account, name)
 
-            # 选择密码登录
-            self.driver.find_element(By.ID, "switcher_plogin").click()
+            if login_by_click_avatar_success:
+                logger.info(f"使用头像点击登录成功")
+            else:
+                logger.warning(f"点击头像登录失败，尝试输入账号密码来进行登录")
 
-            # 输入账号
-            self.driver.find_element(By.ID, "u").clear()
-            self.driver.find_element(By.ID, "u").send_keys(account)
-            # 输入密码
-            self.driver.find_element(By.ID, "p").clear()
-            self.driver.find_element(By.ID, "p").send_keys(password)
+                # 切换到自动登录界面
+                logger.info(f"{name} 等待#switcher_plogin加载完毕")
+                time.sleep(self.cfg.login.open_url_wait_time)
+                WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                    expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
+                )
 
-            logger.info(f"{name} 等待一会，确保登录键可以点击")
-            time.sleep(3)
+                # 选择密码登录
+                self.driver.find_element(By.ID, "switcher_plogin").click()
 
-            # 发送登录请求
-            self.driver.find_element(By.ID, "login_button").click()
+                # 输入账号
+                self.driver.find_element(By.ID, "u").clear()
+                self.driver.find_element(By.ID, "u").send_keys(account)
+                # 输入密码
+                self.driver.find_element(By.ID, "p").clear()
+                self.driver.find_element(By.ID, "p").send_keys(password)
+
+                logger.info(f"{name} 等待一会，确保登录键可以点击")
+                time.sleep(3)
+
+                # 发送登录请求
+                self.driver.find_element(By.ID, "login_button").click()
 
             # 尝试自动处理验证码
             self.try_auto_resolve_captcha()

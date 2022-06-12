@@ -927,8 +927,11 @@ class QQLogin:
                 logger.warning("爱玩处理 点击登录按钮 流程失败了，可能是已经处理成功了")
 
             try:
+                logger.info("勾选同意协议")
                 self.driver.find_element(By.CLASS_NAME, "js-check-input").click()
                 time.sleep(2)
+
+                logger.info("点击使用QQ登录")
                 self.driver.find_element(By.CLASS_NAME, "iwanLogin_qq").click()
             except Exception:
                 logger.warning("爱玩处理 中间同意协议 流程失败了，可能是已经处理成功了")

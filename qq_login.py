@@ -659,12 +659,14 @@ class QQLogin:
         # 实际登录流程
         login_success = False
 
+        ctx = f"【{name}({account})】"
+
         try:
             # 尝试自动点击头像登录
             if account != "":
                 selector = f"#qlogin_list > a[uin='{account}']"
 
-                logger.info(color("bold_green") + f"尝试点击头像来登录【{name}({account})】")
+                logger.info(color("bold_green") + f"{ctx} 尝试点击头像来登录")
 
                 logger.info("检查对应头像是否存在")
                 time.sleep(1)
@@ -679,14 +681,14 @@ class QQLogin:
 
                 time.sleep(1)
                 login_success = not self.driver.find_elements(By.ID, "switcher_plogin")
-                logger.info(f"点击头像登录的结果为: {'成功' if login_success else '失败'}")
+                logger.info(color("bold_green") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
             elif login_type == self.login_type_qr_login:
                 async_message_box(
                     "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
                 )
 
         except Exception as e:
-            logger.warning("尝试自动点击头像登录失败了，请自行操作~")
+            logger.warning(f"{ctx} 尝试自动点击头像登录失败了，请自行操作~")
             logger.debug("", exc_info=e)
 
         return login_success

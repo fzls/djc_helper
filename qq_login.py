@@ -620,36 +620,49 @@ class QQLogin:
                 logger.warning("修改箭头失败了（不影响登录流程）")
                 logger.debug("", exc_info=e)
 
-        def try_auto_click_avatar():
-            try:
-                # 尝试自动点击头像登录
-                if account != "":
-                    selector = f"#qlogin_list > a[uin='{account}']"
-
-                    logger.info(color("bold_green") + f"尝试点击头像来登录【{name}({account})】")
-
-                    self.driver.execute_script(
-                        f"""
-                        document.querySelector("{selector}").click()
-                        """
-                    )
-                else:
-                    async_message_box(
-                        "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
-                    )
-
-            except Exception as e:
-                logger.warning("尝试自动点击头像登录失败了，请自行操作~")
-                logger.debug("", exc_info=e)
-
         def login_with_qr_code():
             logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
 
             replace_qr_code_tip()
 
-            try_auto_click_avatar()
+            self.try_auto_click_avatar(account, name)
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
+
+    def try_auto_click_avatar(self, account: str, name: str) -> bool:
+        login_success = False
+
+        try:
+            # 尝试自动点击头像登录
+            if account != "":
+                selector = f"#qlogin_list > a[uin='{account}']"
+
+                logger.info(color("bold_green") + f"尝试点击头像来登录【{name}({account})】")
+
+                logger.info("检查对应头像是否存在")
+                time.sleep(1)
+                self.driver.find_element(By.CSS_SELECTOR, selector)
+
+                logger.info("开始点击对应头像")
+                self.driver.execute_script(
+                    f"""
+                    document.querySelector("{selector}").click()
+                    """
+                )
+
+                time.sleep(1)
+                login_success = not self.driver.find_elements(By.ID, "switcher_plogin")
+                logger.info(f"点击头像登录的结果为: {'成功' if login_success else '失败'}")
+            else:
+                async_message_box(
+                    "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
+                )
+
+        except Exception as e:
+            logger.warning("尝试自动点击头像登录失败了，请自行操作~")
+            logger.debug("", exc_info=e)
+
+        return login_success
 
     def _login(self, login_type, login_action_fn=None, login_mode="normal"):
         if not is_first_run_in(f"login_locker_{login_mode}_{self.name}", duration=datetime.timedelta(seconds=10)):

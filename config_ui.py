@@ -1655,7 +1655,9 @@ class LoginConfigUi(QWidget):
     def from_config(self, form_layout: QFormLayout, cfg: LoginConfig):
         add_form_seperator(form_layout, "自动点击头像登录")
 
-        self.checkbox_enable_auto_click_avatar_in_auto_login = create_checkbox(cfg.enable_auto_click_avatar_in_auto_login)
+        self.checkbox_enable_auto_click_avatar_in_auto_login = create_checkbox(
+            cfg.enable_auto_click_avatar_in_auto_login
+        )
         add_row(form_layout, "账密自动登录 时是否启用", self.checkbox_enable_auto_click_avatar_in_auto_login)
 
         self.checkbox_enable_auto_click_avatar_in_qr_login = create_checkbox(cfg.enable_auto_click_avatar_in_qr_login)

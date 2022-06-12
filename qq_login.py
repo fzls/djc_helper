@@ -11,12 +11,7 @@ from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    NoSuchWindowException,
-    StaleElementReferenceException,
-    TimeoutException,
-)
+from selenium.common.exceptions import NoSuchWindowException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -530,9 +525,9 @@ class QQLogin:
             login_by_click_avatar_success = self.try_auto_click_avatar(account, name, self.login_type_auto_login)
 
             if login_by_click_avatar_success:
-                logger.info(f"使用头像点击登录成功")
+                logger.info("使用头像点击登录成功")
             else:
-                logger.warning(f"点击头像登录失败，尝试输入账号密码来进行登录")
+                logger.warning("点击头像登录失败，尝试输入账号密码来进行登录")
 
                 # 切换到自动登录界面
                 logger.info(f"{name} 等待#switcher_plogin加载完毕")
@@ -683,9 +678,7 @@ class QQLogin:
                 login_success = not self.driver.find_elements(By.ID, "switcher_plogin")
                 logger.info(color("bold_green") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
             elif login_type == self.login_type_qr_login:
-                async_message_box(
-                    "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
-                )
+                async_message_box("现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True)
 
         except Exception as e:
             logger.warning(f"{ctx} 尝试自动点击头像登录失败了，请自行操作~")

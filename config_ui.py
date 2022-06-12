@@ -1653,6 +1653,15 @@ class LoginConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: LoginConfig):
+        add_form_seperator(form_layout, "自动处理滑动验证码")
+
+        self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
+        add_row(form_layout, "启用", self.checkbox_auto_resolve_captcha)
+
+        self.doublespinbox_move_captcha_delta_width_rate = create_double_spin_box(cfg.move_captcha_delta_width_rate)
+        self.doublespinbox_move_captcha_delta_width_rate.setSingleStep(0.01)
+        add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
+
         add_form_seperator(form_layout, "超时时长(秒)")
 
         self.spinbox_max_retry_count = create_spin_box(cfg.max_retry_count)
@@ -1676,16 +1685,10 @@ class LoginConfigUi(QWidget):
         self.spinbox_login_finished_timeout = create_spin_box(cfg.login_finished_timeout)
         add_row(form_layout, "等待登录完成的超时时间", self.spinbox_login_finished_timeout)
 
-        add_form_seperator(form_layout, "自动处理滑动验证码")
-
-        self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
-        add_row(form_layout, "启用", self.checkbox_auto_resolve_captcha)
-
-        self.doublespinbox_move_captcha_delta_width_rate = create_double_spin_box(cfg.move_captcha_delta_width_rate)
-        self.doublespinbox_move_captcha_delta_width_rate.setSingleStep(0.01)
-        add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
-
     def update_config(self, cfg: LoginConfig):
+        cfg.auto_resolve_captcha = self.checkbox_auto_resolve_captcha.isChecked()
+        cfg.move_captcha_delta_width_rate = self.doublespinbox_move_captcha_delta_width_rate.value()
+
         cfg.max_retry_count = self.spinbox_max_retry_count.value()
         cfg.retry_wait_time = self.spinbox_retry_wait_time.value()
         cfg.open_url_wait_time = self.spinbox_open_url_wait_time.value()
@@ -1693,8 +1696,6 @@ class LoginConfigUi(QWidget):
         cfg.load_login_iframe_timeout = self.spinbox_load_login_iframe_timeout.value()
         cfg.login_timeout = self.spinbox_login_timeout.value()
         cfg.login_finished_timeout = self.spinbox_login_finished_timeout.value()
-        cfg.auto_resolve_captcha = self.checkbox_auto_resolve_captcha.isChecked()
-        cfg.move_captcha_delta_width_rate = self.doublespinbox_move_captcha_delta_width_rate.value()
 
 
 class RetryConfigUi(QWidget):

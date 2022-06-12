@@ -897,7 +897,7 @@ class QQLogin:
             try:
                 logger.info("尝试处理可能有的每日签到弹窗")
                 xpath_close_daily_sign = "//i[contains(@class, 'athena-dialog-close-icon')]"
-                WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
                     expected_conditions.element_to_be_clickable((By.XPATH, xpath_close_daily_sign))
                 )
 

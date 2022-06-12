@@ -1022,6 +1022,12 @@ class LoginConfig(ConfigInterface):
         # 推荐登录重试间隔变化率r。新的推荐值 = (1-r)*旧的推荐值 + r*本次成功重试的间隔
         self.recommended_retry_wait_time_change_rate = 0.125
 
+        # 点击头像登录
+        # 账号密码登录 是否尝试 自动点击头像登录
+        self.enable_auto_click_avatar_in_auto_login = True
+        # 扫码登录 是否尝试 自动点击头像登录
+        self.enable_auto_click_avatar_in_qr_login = True
+
 
 class RetryConfig(ConfigInterface):
     def __init__(self):

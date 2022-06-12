@@ -527,7 +527,7 @@ class QQLogin:
             logger.info(color("bold_green") + f"{name} 当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
 
             logger.info("由于账号密码登录有可能会触发短信验证，因此优先尝试点击头像来登录~")
-            login_by_click_avatar_success = self.try_auto_click_avatar(account, name)
+            login_by_click_avatar_success = self.try_auto_click_avatar(account, name, self.login_type_auto_login)
 
             if login_by_click_avatar_success:
                 logger.info(f"使用头像点击登录成功")
@@ -638,11 +638,25 @@ class QQLogin:
 
             replace_qr_code_tip()
 
-            self.try_auto_click_avatar(account, name)
+            logger.info(color("bold_green") + "尝试自动点击头像进行登录")
+            self.try_auto_click_avatar(account, name, self.login_type_qr_login)
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
-    def try_auto_click_avatar(self, account: str, name: str) -> bool:
+    def try_auto_click_avatar(self, account: str, name: str, login_type: str) -> bool:
+        # 检测功能开关
+        if login_type == self.login_type_auto_login:
+            enable = self.cfg.login.enable_auto_click_avatar_in_auto_login
+        else:
+            enable = self.cfg.login.enable_auto_click_avatar_in_qr_login
+
+        if not enable:
+            logger.warning(f"当前未开启【{login_type} 模式下尝试点击头像来登录】，请自行操作~。若需要该功能，可在配置工具【公共配置/登录】中开启本功能")
+            return False
+
+        logger.info(f"当前已开启【{login_type} 模式下尝试点击头像来登录】。如该功能有异常，导致登录流程无法正常进行，可在配置工具【公共配置/登录】中关闭本功能")
+
+        # 实际登录流程
         login_success = False
 
         try:
@@ -666,7 +680,7 @@ class QQLogin:
                 time.sleep(1)
                 login_success = not self.driver.find_elements(By.ID, "switcher_plogin")
                 logger.info(f"点击头像登录的结果为: {'成功' if login_success else '失败'}")
-            else:
+            elif login_type == self.login_type_qr_login:
                 async_message_box(
                     "现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True
                 )

@@ -1653,6 +1653,14 @@ class LoginConfigUi(QWidget):
         self.from_config(form_layout, cfg)
 
     def from_config(self, form_layout: QFormLayout, cfg: LoginConfig):
+        add_form_seperator(form_layout, "自动点击头像登录")
+
+        self.checkbox_enable_auto_click_avatar_in_auto_login = create_checkbox(cfg.enable_auto_click_avatar_in_auto_login)
+        add_row(form_layout, "账密自动登录 时是否启用", self.checkbox_enable_auto_click_avatar_in_auto_login)
+
+        self.checkbox_enable_auto_click_avatar_in_qr_login = create_checkbox(cfg.enable_auto_click_avatar_in_qr_login)
+        add_row(form_layout, "扫码登录 时是否启用", self.checkbox_enable_auto_click_avatar_in_qr_login)
+
         add_form_seperator(form_layout, "自动处理滑动验证码")
 
         self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
@@ -1686,6 +1694,9 @@ class LoginConfigUi(QWidget):
         add_row(form_layout, "等待登录完成的超时时间", self.spinbox_login_finished_timeout)
 
     def update_config(self, cfg: LoginConfig):
+        cfg.enable_auto_click_avatar_in_auto_login = self.checkbox_enable_auto_click_avatar_in_auto_login.isChecked()
+        cfg.enable_auto_click_avatar_in_qr_login = self.checkbox_enable_auto_click_avatar_in_qr_login.isChecked()
+
         cfg.auto_resolve_captcha = self.checkbox_auto_resolve_captcha.isChecked()
         cfg.move_captcha_delta_width_rate = self.doublespinbox_move_captcha_delta_width_rate.value()
 

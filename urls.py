@@ -90,8 +90,8 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20220429dnfMX/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     #
     # 已过期活动
     #
@@ -252,7 +252,7 @@ class Urls:
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "471696"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "473842"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
@@ -291,7 +291,7 @@ class Urls:
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
-            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}"
+            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}"
         )
 
         # ide通用活动

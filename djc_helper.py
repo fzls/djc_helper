@@ -578,8 +578,8 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF共创投票", self.dnf_dianzan),
-            ("DNF心悦", self.dnf_xinyue),
             ("冒险的起点", self.maoxian_start),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5800,108 +5800,73 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        # @try_except(return_val_on_except=0)
-        # def query_signin_days():
-        #     res = self.dnf_xinyue_op("查询签到天数", "850551", print_res=False)
-        #     info = parse_amesvr_common_info(res)
-        #     return int(info.sOutValue2)
-        #
-        # self.dnf_xinyue_op("充值返利", "850135")
-        #
-        # self.dnf_xinyue_op("每日签到", "850194")
-        # signin_days = query_signin_days()
-        # logger.warning(f"当前累计签到天数为 {signin_days}")
-        #
-        # for required_signin_days, flowid, lottery_count in [
-        #     (1, "850200", 1),
-        #     (3, "850222", 2),
-        #     (7, "850223", 4),
-        # ]:
-        #     name = f"累签 {required_signin_days} 次"
-        #     if signin_days < required_signin_days:
-        #         logger.warning(f"签到天数未达到 {required_signin_days}，跳过领取 {name}")
-        #         continue
-        #
-        #     for idx in range_from_one(lottery_count):
-        #         res = self.dnf_xinyue_op(f"{idx}/{lottery_count} {name}", flowid)
-        #         if int(res.get("ret", "-1")) != 0:
-        #             logger.warning(f"{name} 出错了，跳过后续尝试")
-        #             break
-        #
-        # self.dnf_xinyue_op("累签7次抽成就点", "852258")
-        #
-        # self.dnf_xinyue_op("心悦V3礼", "850686")
-        # self.dnf_xinyue_op("心悦V2礼", "850685")
-        # self.dnf_xinyue_op("心悦V1礼", "850684")
-        # self.dnf_xinyue_op("特邀会员礼", "850302")
-        #
-        # self.dnf_xinyue_op("回流白名单", "850534")
-        # self.dnf_xinyue_op("回流领取徽章", "850303")
-        # self.dnf_xinyue_op("回流消耗50点疲劳", "850540")
-        # self.dnf_xinyue_op("回流充值6元", "850545")
-        #
-        # self.dnf_xinyue_op("心悦专属礼", "850550")
-        # async_message_box("心悦app专属礼包请自行前往app进行领取", "2022-04 心悦充值活动-专属礼包", show_once=True)
+        def query_card_counts() -> list[int]:
+            res = self.dnf_xinyue_op("查询信息", "860785", print_res=True)
+            raw_info = parse_amesvr_common_info(res)
 
-        def exchange_gifts():
-            gifts = [
-                (1, 15, 1, "灿烂的徽章神秘礼盒"),
-                (2, 10, 1, "+7装备增幅券"),
-                (3, 5, 2, "华丽的徽章神秘礼盒"),
-                (4, 5, 2, "次元玄晶碎片礼袋"),
-                (5, 3, 2, "装备提升礼盒"),
-                (6, 3, 3, "装备品级调整箱礼盒"),
-                (7, 2, 2, "一次性材质转换器"),
-                (8, 2, 2, "一次性继承装置"),
-                (9, 1, 3, "神秘契约礼包（1天）"),
-                (10, 1, 5, "本职业稀有护石神秘礼盒"),
-                (11, 1, 5, "闪亮的雷米援助礼盒"),
-                (12, 1, 3, "复活币礼盒（1个）"),
-                (13, 1, 5, "成长胶囊 (5百分比)"),
-                (14, 1, 5, "宠物饲料礼袋 (10个)"),
-                (15, 2, 3, "黑钻1天"),
-            ]
-            for giftid, cost, max_exchange_count, name in gifts:
-                for idx in range_from_one(max_exchange_count):
-                    res = self.dnf_xinyue_op(
-                        f"兑换 {name}({cost} 积分): {idx}/{max_exchange_count}", "859039", giftid=giftid
-                    )
+            card_counts = []
+            for raw_card_info in raw_info.sOutValue6.split("|")[1:-1]:
+                card_count = int(raw_card_info.strip().split(" ")[2])
 
-                    ret = int(res.get("ret"))
-                    if ret == 700:
-                        logger.warning("未获得活动资格，停止后续兑换操作")
-                        return
+                card_counts.append(card_count)
 
-                    # TODO: 处理 超出兑换次数 和 没有足够积分的情况，前者break，后者return
+            return card_counts
 
-        self.dnf_xinyue_op("幸运冒险家礼包", "858764")
+        def has_bind_friend() -> bool:
+            res = self.dnf_xinyue_op("查询信息", "860785", print_res=True)
+            raw_info = parse_amesvr_common_info(res)
 
-        self.dnf_xinyue_op("任务-登录游戏", "858934")
-        self.dnf_xinyue_op("任务-累计在线10分钟", "858987")
-        self.dnf_xinyue_op("任务-通关任意地下城1次", "858990")
-        self.dnf_xinyue_op("任务-通关任意地下城3次", "859000")
+            return "@@" in raw_info.sOutValue3
 
-        self.dnf_xinyue_op("任务-通关任意地下城5次", "859002")
-        self.dnf_xinyue_op("任务-累计在线30分钟", "859006")
-        self.dnf_xinyue_op("任务-消耗疲劳值10点", "859007")
-        self.dnf_xinyue_op("任务-消耗疲劳值50点", "859008")
+        self.dnf_xinyue_op("特邀等级礼", "861002")
+        self.dnf_xinyue_op("V1等级礼", "860777")
+        self.dnf_xinyue_op("V2等级礼", "861003")
+        self.dnf_xinyue_op("V3等级礼", "861004")
 
-        self.dnf_xinyue_op("任务-消耗疲劳值100点", "859010")
-        self.dnf_xinyue_op("任务-完成游戏内任意一个任务", "859012")
-        self.dnf_xinyue_op("任务-通关荆棘乐园/德洛斯矿山外围/绝望摇篮/远古墓地任意1次", "859019")
-        self.dnf_xinyue_op("任务-通关希洛克1次", "859024")
+        self.dnf_xinyue_op("登录有礼", "861007")
+        self.dnf_xinyue_op("充值礼", "861011")
+        self.dnf_xinyue_op("App专属礼", "861012")
+        if now_after("2022-06-16 18:00:00"):
+            async_message_box("心悦活动可在app领取一次性奖励，请自行打开app在DNF专区领取~", "22.6心悦活动-app礼包", show_once=True)
 
-        self.dnf_xinyue_op("查询信息", "858766")
+        self.dnf_xinyue_op("加群送亲密值", "861908")
 
-        exchange_gifts()
+        self.dnf_xinyue_op("每日登录游戏抽卡", "861017")
+        self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
+
+        card_counts = query_card_counts()
+        logger.info(f"当前卡片信息为: {card_counts}")
+
+        send_to_qq = self.common_cfg.xinyue_send_card_target_qq
+        if send_to_qq != "" and self.qq() != send_to_qq:
+            logger.info(f"当前配置了心悦周年集卡赠送目标QQ({send_to_qq})，将尝试赠送给该QQ")
+            for idx, count in enumerate(card_counts):
+                if count == 0:
+                    continue
+
+                card_index = idx+1
+                self.dnf_xinyue_op(f"{self.qq()} 尝试赠送卡 {card_index} 给 {send_to_qq}", "861085", card=card_index, sendQQ=send_to_qq)
+
+        if send_to_qq == "":
+            async_message_box("如果本地配置了多个账号，且其中有每日上线的账号，可以配置", "22.6心悦活动-设置赠送目标",
+                              show_once=True)
+
+
+        for count in [40, 100, 140]:
+            self.dnf_xinyue_op(f"亲密值领取-{count}", "860783", num=count)
+
+        if not has_bind_friend():
+            async_message_box(f"{self.cfg.name} 当前未绑定心悦活动的紧密好友，部分奖励可能无法领取，请手动在活动页面进行领取~", "22.6心悦活动-绑定好友",
+                              open_url=get_act_url("DNF心悦"),
+                              show_once=True)
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
             "DNF心悦",
             get_act_url("DNF心悦"),
             activity_op_func=self.dnf_xinyue_op,
-            query_bind_flowid="858763",
-            commit_bind_flowid="858762",
+            query_bind_flowid="860768",
+            commit_bind_flowid="860767",
         )
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -9940,6 +9905,7 @@ class DjcHelper:
                 "toUin",
                 "actSign",
                 "prefer",
+                "card",
             ]
         }
 
@@ -10684,4 +10650,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian_start()
+        djcHelper.dnf_xinyue()

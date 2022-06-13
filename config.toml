@@ -45,6 +45,9 @@ notify_pay_expired_in_days = 7
 # 马杰洛新春版本赠送卡片目标QQ
 majieluo_send_card_target_qq = ""
 
+# 心悦集卡赠送卡片目标QQ
+xinyue_send_card_target_qq = ""
+
 # 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）
 cost_all_cards_and_do_lottery_on_last_day = false
 

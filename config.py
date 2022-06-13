@@ -1182,6 +1182,8 @@ class CommonConfig(ConfigInterface):
         self.notify_pay_expired_in_days = 7
         # 马杰洛新春版本赠送卡片目标QQ
         self.majieluo_send_card_target_qq = ""
+        # 心悦集卡赠送卡片目标QQ
+        self.xinyue_send_card_target_qq = ""
         # 抽卡汇总展示色彩
         self.ark_lottery_summary_show_color = ""
         # 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）

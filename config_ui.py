@@ -1267,8 +1267,11 @@ class CommonConfigUi(QFrame):
 
         # -------------- 区域：心悦 --------------
         self.collapsible_box_xinyue, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
-            "心悦固定队（限定两人）", top_layout
+            "心悦相关", top_layout
         )
+
+        self.lineedit_xinyue_send_card_target_qq = create_lineedit(cfg.xinyue_send_card_target_qq)
+        add_row(form_layout, "心悦集卡赠送卡片目标QQ(这个QQ将接收来自其他QQ赠送的卡片)", self.lineedit_xinyue_send_card_target_qq)
 
         self.fixed_teams = []
         for team in cfg.fixed_teams:
@@ -1427,6 +1430,8 @@ class CommonConfigUi(QFrame):
         self.retry.update_config(cfg.retry)
         for idx, team in enumerate(self.fixed_teams):
             team.update_config(cfg.fixed_teams[idx])
+
+        cfg.xinyue_send_card_target_qq = self.lineedit_xinyue_send_card_target_qq.text()
 
         # 特殊处理基于标记文件的开关
         if self.checkbox_disable_sync_configs.isChecked():

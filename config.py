@@ -780,6 +780,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_memory = True
         # 是否领取 DNF娱乐赛 活动
         self.get_dnf_game = True
+        # 是否领取 DNF互动站 活动
+        self.get_dnf_interactive = True
         # 是否领取 魔界人探险记 活动
         self.get_mojieren = True
         # 是否领取 组队拜年 活动

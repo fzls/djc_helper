@@ -92,6 +92,7 @@ act_name_to_url = {
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
+    "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     #
     # 已过期活动
     #
@@ -272,6 +273,7 @@ class Urls:
         self.iActivityId_dnf_game = "427765"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
+        self.iActivityId_dnf_interactive = "469840"  # DNF互动站
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

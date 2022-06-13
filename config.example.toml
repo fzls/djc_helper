@@ -72,6 +72,9 @@ notify_pay_expired_in_days = 7
 # 马杰洛新春版本赠送卡片目标QQ
 majieluo_send_card_target_qq = ""
 
+# 心悦集卡赠送卡片目标QQ
+xinyue_send_card_target_qq = ""
+
 # 抽卡汇总展示色彩
 ark_lottery_summary_show_color = ""
 

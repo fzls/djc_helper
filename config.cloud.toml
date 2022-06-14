@@ -8,7 +8,7 @@ enable_card_secret = true
 # 是否启用直接购买界面
 enable_pay_directly = true
 # 是否优先展示卡密界面
-show_card_secret_first = false
+show_card_secret_first = true
 
 # 新增的黑名单
 #[[black_list]]

@@ -581,6 +581,7 @@ class DjcHelper:
             ("冒险的起点", self.maoxian_start),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF互动站", self.dnf_interactive),
+            ("DNF闪光杯", self.dnf_shanguang),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -603,7 +604,6 @@ class DjcHelper:
             ("WeGame活动_新版", self.wegame_new),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF公会活动", self.dnf_gonghui),
-            ("DNF闪光杯", self.dnf_shanguang),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
             ("DNF预约", self.dnf_reservation),
@@ -3264,99 +3264,44 @@ class DjcHelper:
             today = get_today()
             last_day = get_today(get_now() - datetime.timedelta(days=1))
             the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
-            self.dnf_shanguang_op(f"签到-{today}", "812092", weekDay=today)
-            self.dnf_shanguang_op(f"补签-{last_day}", "812379", weekDay=last_day)
-            wait_for("等待一会", 5)
-            self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "812379", weekDay=the_day_before_last_day)
+            self.dnf_shanguang_op(f"签到（预热）-{today}", "861119", weekDay=today)
+            # self.dnf_shanguang_op(f"补签（预热）-{last_day}", "861120", weekDay=last_day)
+            # wait_for("等待一会", 5)
+            # self.dnf_shanguang_op(f"补签（预热）-{the_day_before_last_day}", "861120", weekDay=the_day_before_last_day)
 
         # --------------------------------------------------------------------------------
 
         # self.dnf_shanguang_op("报名礼", "724862")
-        self.dnf_shanguang_op("app专属礼", "812030")
-        logger.warning(color("fg_bold_cyan") + "不要忘记前往网页手动报名并领取报名礼以及前往app领取一次性礼包")
-        async_message_box("不要忘记前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
+        # self.dnf_shanguang_op("报名礼包（预热）", "861122")
+        self.dnf_shanguang_op("app专属礼（预热）", "861108")
+        async_message_box("请手动前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
         # 签到
         check_in()
 
-        self.dnf_shanguang_op("周四签到礼-闪光礼盒", "812397")
-        time.sleep(5)
-
         # 周赛奖励
-        logger.warning(color("bold_yellow") + f"本周已获得指定装备{self.query_dnf_shanguang_equip_count()}件，具体装备可去活动页面查看")
-        for weekday in [
-            "20211118",
-            "20211125",
-            "20211202",
-        ]:
-            self.dnf_shanguang_op(f"输出当前周期爆装信息 - {weekday}", "812029", weekDay=weekday)
-            self.dnf_shanguang_op(f"周周闪光好礼 - {weekday}", "812031", weekDay=weekday)
-            time.sleep(5)
-
-        # 抽奖
-        for idx in range_from_one(6):
-            res = self.dnf_shanguang_op(f"周周开大奖 - {idx}", "812032")
+        self.dnf_shanguang_op("每日登录游戏-送抽奖资格", "861111")
+        for idx in range_from_one(2):
+            res = self.dnf_shanguang_op(f"抽奖（预热） - {idx}", "861565")
             if int(res["ret"]) != 0:
                 break
             time.sleep(5)
 
-        self.dnf_shanguang_show_equipments()
-
-    @try_except(show_exception_info=False)
-    def dnf_shanguang_show_equipments(self):
-        msg_list = []
-        msg_list.append("")
-        msg_list.append("本周的目标爆装列表如下")
-
-        # info = self.query_dnf_shanguang_info()
-        # equipment_code_list = info.sOutValue3.split('_')
-        # for code in equipment_code_list:
-        #     msg_list.append('\t' + equipment_code_to_name.get(code, code))
-
-        # 本期的列表是写死的
-        week_to_target_equipments = {
-            "20211118": ("军神的心之所念（神话）", "太极天帝剑", "星之海:巴德纳尔", "骚动的冥焰", "堕入地狱之脚", "矛盾的抉择"),
-            "20211125": ("逆转结局（神话）", "白虎啸魂手套", "绝杀:无人生还", "支配黑暗之环", "军神的庇护宝石", "正义的抉择"),
-            "20211202": ("深渊囚禁者长袍（神话）", "哈蒂 - 赎月者", "无尽地狱黑暗之印", "军神的遗书", "驱散黑暗短裤", "暗黑术士亲笔古书"),
-        }
-        week_4 = get_this_thursday_of_dnf()
-        target_euiipments = week_to_target_equipments.get(get_today(week_4), ())
-        msg_list.extend([f"\t{idx + 1}. {equipment}" for idx, equipment in enumerate(target_euiipments)])
-
-        logger.info(color("bold_cyan") + "\n".join(msg_list))
-
-    def query_dnf_shanguang_info(self) -> AmesvrCommonModRet:
-        raw_info = self.dnf_shanguang_op("查询信息", "812037", print_res=False)
-        info = parse_amesvr_common_info(raw_info)
-
-        return info
-
-    def get_dnf_shanguang_lottery_times(self) -> int:
-        # res = self.dnf_shanguang_op("闪光夺宝次数", "724885", print_res=False)
-        # return int(res["modRet"]["sOutValue3"])
-        return 6
-
-    @try_except(show_exception_info=False, return_val_on_except=0)
-    def query_dnf_shanguang_equip_count(self, print_warning=True):
-        this_thursday = get_today(get_this_thursday_of_dnf())
-        res = self.dnf_shanguang_op(f"输出当前周期爆装信息-{this_thursday}", "812029", weekDay=this_thursday, print_res=False)
-        equip_count = 0
-        if "modRet" in res:
-            info = parse_amesvr_common_info(res)
-            equip_count = int(info.sOutValue1)
-        else:
-            if print_warning:
-                logger.warning(color("bold_yellow") + "是不是还没有报名？")
-
-        return equip_count
+        # 暂未开放的部分
+        # self.dnf_shanguang_op("app专属礼（正式）", "863325")
+        # self.dnf_shanguang_op("签到（正式）", "863326")
+        # self.dnf_shanguang_op("补签（正式）", "863327")
+        # self.dnf_shanguang_op("报名礼包（正式）", "863329")
+        # self.dnf_shanguang_op("抽奖（正式）", "863330")
+        # self.dnf_shanguang_op("爆装奖励（正式）", "861109")
 
     def check_dnf_shanguang(self):
         self.check_bind_account(
             "DNF闪光杯",
             get_act_url("DNF闪光杯"),
             activity_op_func=self.dnf_shanguang_op,
-            query_bind_flowid="812024",
-            commit_bind_flowid="812023",
+            query_bind_flowid="861102",
+            commit_bind_flowid="861101",
         )
 
     def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
@@ -3370,7 +3315,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            "https://xinyue.qq.com/act/a20201221sgb",
+            get_act_url("DNF闪光杯"),
             weekDay=weekDay,
             **extra_params,
         )
@@ -10659,7 +10604,7 @@ if __name__ == "__main__":
     # ps: 小号一号是 5
     RunAll = False
     indexes = [1]
-    indexes = [4 + 3]
+    # indexes = [4 + 3]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10700,4 +10645,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_interactive()
+        djcHelper.dnf_shanguang()

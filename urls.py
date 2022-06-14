@@ -93,6 +93,7 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
+    "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     #
     # 已过期活动
     #
@@ -114,7 +115,6 @@ act_name_to_url = {
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
-    "DNF闪光杯": "https://xinyue.qq.com/act/a20211022sgb/pc/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
@@ -223,7 +223,7 @@ class Urls:
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
-        self.iActivityId_dnf_shanguang = "419708"  # DNF闪光杯
+        self.iActivityId_dnf_shanguang = "474091"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc

@@ -5845,21 +5845,24 @@ class DjcHelper:
                 if count == 0:
                     continue
 
-                card_index = idx+1
-                self.dnf_xinyue_op(f"{self.qq()} 尝试赠送卡 {card_index} 给 {send_to_qq}", "861085", card=card_index, sendQQ=send_to_qq)
+                card_index = idx + 1
+                self.dnf_xinyue_op(
+                    f"{self.qq()} 尝试赠送卡 {card_index} 给 {send_to_qq}", "861085", card=card_index, sendQQ=send_to_qq
+                )
 
         if send_to_qq == "":
-            async_message_box("如果本地配置了多个账号，且其中有每日上线的账号，可以配置", "22.6心悦活动-设置赠送目标",
-                              show_once=True)
-
+            async_message_box("如果本地配置了多个账号，且其中有每日上线的账号，可以配置", "22.6心悦活动-设置赠送目标", show_once=True)
 
         for count in [40, 100, 140]:
             self.dnf_xinyue_op(f"亲密值领取-{count}", "860783", num=count)
 
         if not has_bind_friend():
-            async_message_box(f"{self.cfg.name} 当前未绑定心悦活动的紧密好友，部分奖励可能无法领取，请手动在活动页面进行领取~", "22.6心悦活动-绑定好友",
-                              open_url=get_act_url("DNF心悦"),
-                              show_once=True)
+            async_message_box(
+                f"{self.cfg.name} 当前未绑定心悦活动的紧密好友，部分奖励可能无法领取，请手动在活动页面进行领取~",
+                "22.6心悦活动-绑定好友",
+                open_url=get_act_url("DNF心悦"),
+                show_once=True,
+            )
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
@@ -9577,7 +9580,6 @@ class DjcHelper:
         self.dnf_interactive_op("周年庆大礼包（988169）", "859603")
 
         async_message_box("DNF互动站分享奖励请自行领取，可领一个装备提升礼盒-。-", "22.6互动站-分享", open_url=get_act_url("DNF互动站"), show_once=True)
-
 
     def check_dnf_interactive(self):
         self.check_bind_account(

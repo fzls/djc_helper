@@ -10251,6 +10251,8 @@ class DjcHelper:
                 "若无需该功能，可关闭工具，然后前往配置文件自行关闭该功能\n"
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
                 f"{activity_url}\n"
+                "\n"
+                "如果该账号没有DNF角色，无法完成绑定，请打开当前账号的【活动开关/各功能开关/禁用绝大部分活动】，避免每次都弹出需要绑定的窗口\n"
             )
             message_box(msg, "需绑定账号", open_url=activity_url)
             logger.info(color("bold_yellow") + "请在完成绑定后按任意键继续")

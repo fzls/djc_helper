@@ -6112,22 +6112,24 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "CJBBGFLT",
-            "CJBBQKF",
-            "CJQKF",
+            "DNF生日快乐",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
         for sContent in sContents:
             exchange_package(sContent)
 
-        # 登陆游戏领福利
-        self.dnf_welfare_login_gifts_op("1月20 - 22日登录礼包", "831262")
-        self.dnf_welfare_login_gifts_op("1月23 - 26日登录礼包", "831263")
-        self.dnf_welfare_login_gifts_op("1月27日 - 2月2日登录礼包", "831264")
 
         # 分享礼包
-        self.dnf_welfare_login_gifts_op("分享奖励领取", "831272", siActivityId=query_siActivityId())
+        self.dnf_welfare_op("分享奖励领取", "863948", siActivityId=query_siActivityId())
+
+        # # 登陆游戏领福利
+        # self.dnf_welfare_login_gifts_op("1月20 - 22日登录礼包", "831262")
+        # self.dnf_welfare_login_gifts_op("1月23 - 26日登录礼包", "831263")
+        # self.dnf_welfare_login_gifts_op("1月27日 - 2月2日登录礼包", "831264")
+        #
+        # # 分享礼包
+        # self.dnf_welfare_login_gifts_op("分享奖励领取", "831272", siActivityId=query_siActivityId())
 
     def check_dnf_welfare(self):
         self.check_bind_account(
@@ -10646,4 +10648,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang()
+        djcHelper.dnf_welfare()

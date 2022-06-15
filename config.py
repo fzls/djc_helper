@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 import os
@@ -12,6 +13,7 @@ import toml
 from const import appVersion, cached_dir
 from dao import DnfHelperChronicleExchangeGiftInfo
 from data_struct import ConfigInterface, to_raw_type
+from first_run import is_first_run_in
 from log import color, consoleHandler, consoleLogFormatter, logger
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import (
@@ -929,6 +931,11 @@ class AccountConfig(ConfigInterface):
 
         if not self.check_role_id("关怀活动", self.vip_mentor.guanhuai_dnf_role_id):
             self.vip_mentor.guanhuai_dnf_role_id = ""
+
+        if self.cannot_bind_dnf and not self.function_switches.disable_most_activities:
+            if is_first_run_in(f"修正禁用活动-{self.name}", datetime.timedelta(minutes=10)):
+                logger.warning(f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。")
+            self.function_switches.disable_most_activities = True
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():

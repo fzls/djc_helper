@@ -137,7 +137,6 @@ from util import (
     get_month,
     get_now,
     get_now_unix,
-    get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
     get_week,
@@ -3262,8 +3261,8 @@ class DjcHelper:
 
         def check_in():
             today = get_today()
-            last_day = get_today(get_now() - datetime.timedelta(days=1))
-            the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
+            # last_day = get_today(get_now() - datetime.timedelta(days=1))
+            # the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
             self.dnf_shanguang_op(f"签到（预热）-{today}", "861119", weekDay=today)
             # self.dnf_shanguang_op(f"补签（预热）-{last_day}", "861120", weekDay=last_day)
             # wait_for("等待一会", 5)

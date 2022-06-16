@@ -59,7 +59,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "黄钻"),
     newNotAmsActInfo("2021-04-21 00:00:00", "2022-05-20 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2022-01-20 00:00:00", "2022-03-02 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
@@ -92,6 +92,7 @@ act_name_to_url = {
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220616index/",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220525dnfmxbj/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -123,7 +124,6 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/lbact/a20211014kol2/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "虎牙": "https://www.huya.com/367967",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",

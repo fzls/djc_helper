@@ -936,7 +936,9 @@ class AccountConfig(ConfigInterface):
 
         if self.cannot_bind_dnf and not self.function_switches.disable_most_activities:
             if is_first_run_in(f"修正禁用活动-{self.name}", datetime.timedelta(minutes=10)):
-                logger.warning(f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。")
+                logger.warning(
+                    f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。"
+                )
             self.function_switches.disable_most_activities = True
 
     def check_role_id(self, ctx, role_id) -> bool:

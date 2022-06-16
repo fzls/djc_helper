@@ -6125,7 +6125,6 @@ class DjcHelper:
         for sContent in sContents:
             exchange_package(sContent)
 
-
         # 分享礼包
         self.dnf_welfare_op("分享奖励领取", "863948", siActivityId=query_siActivityId())
 
@@ -7006,17 +7005,14 @@ class DjcHelper:
             ("每日登录礼包", "134224"),
             ("每日通关礼包", "134227"),
             ("每日在线礼包", "134241"),
-
             ("累计邀请10人", "134254"),
             ("累计登录10天", "134252"),
             ("累计登录20天", "134253"),
-
             ("累计邀请20人", "134255"),
         ]
         for name, flowid in tasks:
             self.majieluo_op(name, flowid)
             time.sleep(5)
-
 
         # # 抽奖
         # info = query_info()
@@ -7362,14 +7358,10 @@ class DjcHelper:
 
         lastday = get_today(parse_time("2022-07-15 00:00:00"))
         if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
-            async_message_box(
-                "我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换",
-                "我的小屋兑换提醒-每周一次或最后一天"
-            )
+            async_message_box("我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换", "我的小屋兑换提醒-每周一次或最后一天")
         # self.dnf_my_home_op("兑换本身小屋道具", "132421")
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
         # self.dnf_my_home_op("兑换终极道具", "132491")
-
 
     def check_dnf_my_home(self, **extra_params):
         return self.ide_check_bind_account(
@@ -7998,11 +7990,11 @@ class DjcHelper:
             if need_show_message_box:
                 async_message_box(msg, title, open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
 
-        async_message_box((
-            "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷\n"
-            "\n"
-            "此外colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品"
-        ), f"colg社区活跃任务-{info.activity_id}-提示", show_once=True)
+        async_message_box(
+            ("除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷\n" "\n" "此外colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品"),
+            f"colg社区活跃任务-{info.activity_id}-提示",
+            show_once=True,
+        )
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -8642,15 +8634,12 @@ class DjcHelper:
 
         res = self.amesvr_request(
             ctx,
-
             # "x6m5.ams.game.qq.com",
             # "group_3",
             # "dnf",
-
             "comm.ams.game.qq.com",
             "group_k",
             "bb",
-
             iActivityId,
             iFlowId,
             print_res,
@@ -8747,11 +8736,15 @@ class DjcHelper:
         self.show_amesvr_act_info(self.dnf_anniversary_op)
 
         if now_in_range("2022-06-18 06:00:00", "2022-06-20 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示登录"):
-            async_message_box((
-                "周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~\n"
-                "\n"
-                "此外在6.16到7.28期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
-            ), "周年庆登录", open_url=get_act_url("DNF周年庆登录活动"))
+            async_message_box(
+                (
+                    "周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~\n"
+                    "\n"
+                    "此外在6.16到7.28期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
+                ),
+                "周年庆登录",
+                open_url=get_act_url("DNF周年庆登录活动"),
+            )
 
         if not self.cfg.function_switches.get_dnf_anniversary or self.disable_most_activities():
             logger.warning("未启用领取DNF周年庆登录活动功能，将跳过")

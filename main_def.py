@@ -1412,13 +1412,9 @@ def show_tips(cfg: Config):
         "绑定手机领666代币券": (
             "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
-        "22.6 Hello语音": (
-            "Hello语音app活动请自行完成，可领取宠物和光环等（似乎是限量发放的-。-）\n https://dnf.qq.com/cp/a20220615hello/"
-        ),
+        "22.6 Hello语音": ("Hello语音app活动请自行完成，可领取宠物和光环等（似乎是限量发放的-。-）\n https://dnf.qq.com/cp/a20220615hello/"),
         "22.6 公众号签到": (
-            "DNF公众号【地下城与勇士】有个新的签到活动，需要自行完成，步骤如下:\n"
-            "关注公众号，每天在公众号发送【签到】，点击回复的活动链接，进去签到即可\n"
-            "累计20天可得增幅书，30天一个灿烂自选-。-"
+            "DNF公众号【地下城与勇士】有个新的签到活动，需要自行完成，步骤如下:\n" "关注公众号，每天在公众号发送【签到】，点击回复的活动链接，进去签到即可\n" "累计20天可得增幅书，30天一个灿烂自选-。-"
         ),
         "22.6 虎牙斗鱼": (
             "虎牙斗鱼的活动依旧请自行完成，链接如下：\n"
@@ -1429,7 +1425,7 @@ def show_tips(cfg: Config):
             "colg的模拟器活动请自行参加，15天可领取随机灿烂，流程如下："
             "1. 每天打开模拟器页面，选择装备并保存搭配：https://bbs.colg.cn/colg_activity_new-simulator.html?from_collect\n"
             "2. 保存后在活动页面点击签到领取奖励：https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
-        )
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")
@@ -2196,7 +2192,7 @@ def demo_pay_info():
     load_config("config.toml")
     cfg = config()
 
-    cfg.account_configs[0].account_info.uin = "o" + "1054073896"
+    cfg.account_configs[0].account_info.uin = "o" + "469677484"
 
     # cfg.common.log_level = "debug"
     # from config import to_raw_type

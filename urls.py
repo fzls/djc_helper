@@ -83,7 +83,6 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220519care/index.html",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
@@ -94,6 +93,7 @@ act_name_to_url = {
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220525dnfmxbj/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220617challenge/index.html",
     #
     # 已过期活动
     #
@@ -302,7 +302,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "71_h8pgLd"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "22_FdBGxj"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
 
         self.ide = "https://{ide_host}/ide/"

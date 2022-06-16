@@ -83,7 +83,6 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
-    "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
@@ -94,6 +93,7 @@ act_name_to_url = {
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220617challenge/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     #
     # 已过期活动
     #

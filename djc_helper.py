@@ -579,6 +579,7 @@ class DjcHelper:
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF落地页活动", self.dnf_luodiye),
             ("勇士的冒险补给", self.maoxian),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -594,7 +595,6 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
-            ("colg每日签到", self.colg_signin),
             ("魔界人探险记", self.mojieren),
             ("会员关怀", self.dnf_vip_mentor),
             ("组队拜年", self.team_happy_new_year),
@@ -7862,9 +7862,11 @@ class DjcHelper:
             if need_show_message_box:
                 async_message_box(msg, title, open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
 
-        logger.info(color("bold_cyan") + "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷")
-
-        logger.info(color("bold_cyan") + "colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品")
+        async_message_box((
+            "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷\n"
+            "\n"
+            "此外colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品"
+        ), f"colg社区活跃任务-{info.activity_id}-提示", show_once=True)
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -10660,4 +10662,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.colg_signin()

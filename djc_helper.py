@@ -578,6 +578,7 @@ class DjcHelper:
             ("DNF互动站", self.dnf_interactive),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -586,7 +587,6 @@ class DjcHelper:
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("勇士的冒险补给", self.maoxian),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("dnf助手活动", self.dnf_helper),
@@ -8469,22 +8469,21 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_op("1", "854914")
-        self.maoxian_op("2", "854916")
-        self.maoxian_op("3", "854917")
-        self.maoxian_op("4", "854918")
-        self.maoxian_op("5", "854919")
-        self.maoxian_op("任务1", "854920")
-        self.maoxian_op("任务2", "854921")
-        self.maoxian_op("任务3", "854928")
+        self.maoxian_op("第一天回流", "863104")
+        self.maoxian_op("第二天回流", "863852")
+        self.maoxian_op("第三天回流", "863855")
+        self.maoxian_op("第四天回流", "863866")
+        self.maoxian_op("第五天回流", "863868")
+
+        logger.warning("邀请回归及抽取对应获得的领奖次数，请自行完成")
 
     def check_maoxian_dup(self):
         self.check_bind_account(
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
             activity_op_func=self.maoxian_op,
-            query_bind_flowid="854830",
-            commit_bind_flowid="854829",
+            query_bind_flowid="863845",
+            commit_bind_flowid="863844",
         )
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -8496,9 +8495,15 @@ class DjcHelper:
 
         res = self.amesvr_request(
             ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
+
+            # "x6m5.ams.game.qq.com",
+            # "group_3",
+            # "dnf",
+
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+
             iActivityId,
             iFlowId,
             print_res,
@@ -10655,4 +10660,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.maoxian()

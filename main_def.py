@@ -1424,6 +1424,11 @@ def show_tips(cfg: Config):
             "虎牙斗鱼的活动依旧请自行完成，链接如下：\n"
             "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
             "斗鱼：https://www.douyu.com/topic/DNFSRH?rid=5324055\n"
+        ),
+        "22.6 colg模拟器活动": (
+            "colg的模拟器活动请自行参加，15天可领取随机灿烂，流程如下："
+            "1. 每天打开模拟器页面，选择装备并保存搭配：https://bbs.colg.cn/colg_activity_new-simulator.html?from_collect\n"
+            "2. 保存后在活动页面点击签到领取奖励：https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
         )
     }
 

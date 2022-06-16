@@ -82,14 +82,10 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/1xirtswph2eh1wtpg9x1gd7lw1/index_index.html",
-    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220519care/index.html",
     "超级会员": "https://act.qzone.qq.com//v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com//v2/vip/tx/p/41784_f68ffe5f",
-    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
@@ -97,6 +93,10 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
+    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/1xirtswph2eh1wtpg9x1gd7lw1/index_index.html",
+    "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220424lb6c8sl/indexm.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220419lbrmrox/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220421jhy/index.html",

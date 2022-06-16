@@ -583,7 +583,9 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
-            ("我的小屋", self.dnf_my_home)
+            ("我的小屋", self.dnf_my_home),
+            # re: 下面这几个还没找到活动页面，不要实际开启 @2022-06-16 10:11:37 By Chen Ji
+            # ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -593,7 +595,6 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF漫画预约活动", self.dnf_comic),
             ("WeGame活动", self.dnf_wegame),
-            ("DNF集合站", self.dnf_collection),
             ("dnf助手活动", self.dnf_helper),
             ("翻牌活动", self.dnf_card_flip),
             ("集卡", self.dnf_ark_lottery),
@@ -8974,25 +8975,26 @@ class DjcHelper:
         self.check_dnf_collection()
 
         def query_signin_days() -> int:
-            res = self.dnf_collection_op("查询签到天数-condOutput", "852979", print_res=False)
+            res = self.dnf_collection_op("查询签到天数-condOutput", "864509", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_op("回归玩家礼包按钮", "852968")
-        self.dnf_collection_op("全民参与礼包按钮", "852970")
+        self.dnf_collection_op("全民参与礼包", "864497")
+        self.dnf_collection_op("回归玩家礼包", "864499")
 
-        self.dnf_collection_op("每日签到30分钟礼包按钮", "852971")
+        self.dnf_collection_op("每日签到30分钟礼包按钮", "864500")
         logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_op("累计签到3天礼包按钮", "852972")
-        self.dnf_collection_op("累计签到7天礼包按钮", "852973")
-        self.dnf_collection_op("累计签到15天礼包按钮", "852974")
+
+        self.dnf_collection_op("累积签到3天礼包", "864501")
+        self.dnf_collection_op("累积签到7天礼包", "864502")
+        self.dnf_collection_op("累积签到15天礼包", "864503")
 
     def check_dnf_collection(self):
         self.check_bind_account(
             "DNF集合站",
             get_act_url("DNF集合站"),
             activity_op_func=self.dnf_collection_op,
-            query_bind_flowid="852965",
-            commit_bind_flowid="852964",
+            query_bind_flowid="864494",
+            commit_bind_flowid="864493",
         )
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10743,10 +10745,10 @@ if __name__ == "__main__":
 
     check_proxy(cfg)
 
-    # ps: 小号一号是 5
+    # ps: 小号一号是 4 + 1
     RunAll = False
-    indexes = [1]
-    # indexes = [4 + 3]
+    # indexes = [1]
+    indexes = [4 + 3]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10787,4 +10789,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.dnf_collection()

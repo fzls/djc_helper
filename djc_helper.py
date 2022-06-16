@@ -56,6 +56,8 @@ from dao import (
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
+    MyHomeGift,
+    MyHomeGiftList,
     NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
@@ -581,6 +583,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
+            ("我的小屋", self.dnf_my_home)
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7299,6 +7302,102 @@ class DjcHelper:
             extra_cookies=f"p_skey={p_skey}",
         )
 
+    # --------------------------------------------我的小屋--------------------------------------------
+    @try_except()
+    def dnf_my_home(self):
+        # note: 对接新版活动时，记得前往 urls.py 调整活动时间
+        show_head_line("我的小屋")
+        self.show_idesvr_act_info(self.dnf_my_home_op)
+
+        if not self.cfg.function_switches.get_dnf_my_home or self.disable_most_activities():
+            logger.warning("未启用领取我的小屋活动功能，将跳过")
+            return
+
+        self.check_dnf_my_home()
+
+        @try_except(return_val_on_except=0)
+        def query_integral() -> int:
+            raw_res = self.dnf_my_home_op("个人信息", "132493")
+
+            return int(raw_res["jData"]["iIntegral"])
+
+        def query_gifts() -> list[MyHomeGift]:
+            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "132338")
+            gifts = MyHomeGiftList().auto_update_config(raw_res)
+
+            return gifts.jData
+
+        # 初始化
+        self.dnf_my_home_op("更新访问日期", "133320")
+        self.dnf_my_home_op("开通小屋", "132689")
+        self.dnf_my_home_op("刷新宝箱道具", "132469")
+
+        # 每日任务
+        tasks = [
+            ("每日登录游戏", "130906"),
+            ("在线30分钟", "131009"),
+            ("分享礼包", "131017"),
+            ("通关任意副本", "131018"),
+            ("消耗疲劳值礼包", "131033"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_my_home_op(name, flowid)
+            time.sleep(5)
+
+        logger.info(color("bold_yellow") + f"当前积分为 {query_integral}")
+
+        # 邀请好友
+        async_message_box("邀请好友可以额外获得一些积分，如果有需要，请自行完成", "我的小屋-邀请好友任务", show_once=True, open_url=get_act_url("我的小屋"))
+        # self.dnf_my_home_op("邀请好友", "131806")
+        # self.dnf_my_home_op("接受邀请", "131838")
+        # self.dnf_my_home_op("好友小屋列表", "131196")
+        # self.dnf_my_home_op("好友邀请列表", "131338")
+        # self.dnf_my_home_op("好友小屋道具信息", "132038")
+
+        #  兑换道具
+        logger.info("今日的宝箱如下:")
+        for gift in query_gifts():
+            logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
+
+        lastday = get_today(parse_time("2022-07-15 00:00:00"))
+        if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
+            async_message_box(
+                "我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换",
+                "我的小屋兑换提醒-每周一次或最后一天"
+            )
+        # self.dnf_my_home_op("兑换本身小屋道具", "132421")
+        # self.dnf_my_home_op("兑换他人小屋道具", "132449")
+        # self.dnf_my_home_op("兑换终极道具", "132491")
+
+
+    def check_dnf_my_home(self, **extra_params):
+        return self.ide_check_bind_account(
+            "我的小屋",
+            get_act_url("我的小屋"),
+            activity_op_func=self.dnf_my_home_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_my_home_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_my_home
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("我的小屋"),
+            **extra_params,
+        )
+
     # --------------------------------------------新版活动统一社交权限接口--------------------------------------------
 
     def dnf_social_relation_permission_op(
@@ -10309,9 +10408,10 @@ class DjcHelper:
         roleinfo: RoleInfo | None = None,
         roleinfo_source="道聚城所绑定的角色",
     ):
-        self.dnf_social_relation_permission_op(
-            "更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo, print_res=False
-        )
+        if sAuthInfo != "" and sActivityInfo != "":
+            self.dnf_social_relation_permission_op(
+                "更新创建用户授权信息", "108939", sAuthInfo=sAuthInfo, sActivityInfo=sActivityInfo, print_res=False
+            )
 
         bind_config = activity_op_func(f"查询活动信息 - {activity_name}", "", get_act_info_only=True).get_bind_config()
 
@@ -10687,4 +10787,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_yellow_diamond()
+        djcHelper.dnf_my_home()

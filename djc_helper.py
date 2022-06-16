@@ -586,6 +586,7 @@ class DjcHelper:
             ("我的小屋", self.dnf_my_home),
             # re: 下面这几个还没找到活动页面，不要实际开启 @2022-06-16 10:11:37 By Chen Ji
             # ("DNF集合站", self.dnf_collection),
+            # ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -594,7 +595,6 @@ class DjcHelper:
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("WeGame活动", self.dnf_wegame),
             ("dnf助手活动", self.dnf_helper),
             ("翻牌活动", self.dnf_card_flip),
             ("集卡", self.dnf_ark_lottery),
@@ -8323,7 +8323,7 @@ class DjcHelper:
 
         self.check_dnf_wegame()
 
-        jifen_flowid = "852658"
+        jifen_flowid = "864177"
 
         def query_open_box_times():
             res = self.dnf_wegame_op("查询开盒子次数-jifenOutput", jifen_flowid, print_res=False)
@@ -8333,38 +8333,47 @@ class DjcHelper:
             res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
             return self.parse_jifenOutput(res, "443")
 
-        self.dnf_wegame_op("全民见面礼_copy", "852642")
+        # re: 等看到活动链接 @2022-06-16 10:21:22
+        self.dnf_wegame_op("全民庆生礼", "864175")
 
         # 四选一
-        self.dnf_wegame_op("页面签到获得补给箱_copy", "852644")
-        self.dnf_wegame_op("在线30分钟获得补给箱_copy", "852645")
-        self.dnf_wegame_op("分享获得盲盒次数+1", "852650")
+        # totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
+        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        # for idx in range_from_one(remainingLotteryTimes):
+        #     self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "852649")
 
-        totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
-        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for idx in range_from_one(remainingLotteryTimes):
-            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "852649")
+        self.dnf_wegame_op("通关【昆法特】", "864312")
+        self.dnf_wegame_op("通关【国王摇篮】3次", "864302")
+        self.dnf_wegame_op("通关【毁坏的寂静】5次", "864303")
+        self.dnf_wegame_op("通关【贵族机要】8次", "864304")
 
-        self.dnf_wegame_op("1阶段通关奖励", "852651")
-        self.dnf_wegame_op("2阶段通关奖励", "852652")
-        self.dnf_wegame_op("3阶段通关奖励", "852653")
+        self.dnf_wegame_op("Lv105装备20件", "864305")
+
+        self.dnf_wegame_op("每日登录游戏", "864306")
+        self.dnf_wegame_op("在线10分钟", "864311")
+        self.dnf_wegame_op("在线30分钟", "864307")
+        self.dnf_wegame_op("消除100疲劳值", "864308")
+
+        self.dnf_wegame_op("分享", "864648")
+        self.dnf_wegame_op("每日分享", "864310")
 
         # 抽奖
-        self.dnf_wegame_op("登录游戏30min抽奖券_copy", "852646")
-        self.dnf_wegame_op("许愿房间停留5分钟获得抽奖券_copy", "852647")
+        self.dnf_wegame_op("扭一次按钮", "865066")
+        self.dnf_wegame_op("转盘按钮", "865107")
+        self.dnf_wegame_op("转盘", "864487")
 
-        totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
-        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for idx in range_from_one(remainingLotteryTimes):
-            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "852648")
+        # totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
+        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        # for idx in range_from_one(remainingLotteryTimes):
+        #     self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "852648")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
             "WeGame活动",
             get_act_url("WeGame活动"),
             activity_op_func=self.dnf_wegame_op,
-            query_bind_flowid="852639",
-            commit_bind_flowid="852638",
+            query_bind_flowid="864172",
+            commit_bind_flowid="864171",
             roleinfo=roleinfo,
             roleinfo_source=roleinfo_source,
         )
@@ -10789,4 +10798,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection()
+        djcHelper.dnf_wegame()

@@ -580,6 +580,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("勇士的冒险补给", self.maoxian),
             ("colg每日签到", self.colg_signin),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -631,7 +632,6 @@ class DjcHelper:
             ("DNF强者之路", self.dnf_strong),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
@@ -8601,35 +8601,24 @@ class DjcHelper:
         show_head_line("DNF周年庆登录活动")
         self.show_amesvr_act_info(self.dnf_anniversary_op)
 
-        if now_in_range("2021-06-19 06:00:00", "2021-06-21 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示登录"):
-            async_message_box("周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~", "周年庆登录")
+        if now_in_range("2022-06-18 06:00:00", "2022-06-20 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示登录"):
+            async_message_box((
+                "周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~\n"
+                "\n"
+                "此外在6.16到7.28期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
+            ), "周年庆登录", open_url=get_act_url("DNF周年庆登录活动"))
 
-        if self.disable_most_activities():
+        if not self.cfg.function_switches.get_dnf_anniversary or self.disable_most_activities():
             logger.warning("未启用领取DNF周年庆登录活动功能，将跳过")
-            return
-
-        if not self.cfg.function_switches.get_dnf_anniversary:
-            async_message_box(
-                (
-                    "为了保持仪式感，默认不领取DNF周年庆登录活动功能，将跳过，如需自动领取，请打开该开关~\n"
-                    "另外请不要忘记在2021年6月19日06:00~2021年6月21日05:59期间至少登录一次游戏，否则将无法领取奖励~"
-                ),
-                "周年庆提示",
-                show_once=True,
-            )
-
-            if now_in_range("2021-06-24 06:00:00", "2021-07-01 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示领奖"):
-                async_message_box("今天是否去周年庆网页领奖了吗~，不要忘记哦~", "提示领奖", open_url=get_act_url("DNF周年庆登录活动"))
-
             return
 
         self.check_dnf_anniversary()
 
         gifts = [
-            ("第一弹", "769503", "2021-06-24 16:00:00"),
-            ("第二弹", "769700", "2021-06-25 00:00:00"),
-            ("第三弹", "769718", "2021-06-26 00:00:00"),
-            ("第四弹", "769719", "2021-06-27 00:00:00"),
+            ("第一弹", "862311", "2022-06-23 16:00:00"),
+            ("第二弹", "862313", "2022-06-24 00:00:00"),
+            ("第三弹", "862314", "2022-06-25 00:00:00"),
+            ("第四弹", "862431", "2022-06-26 00:00:00"),
         ]
 
         now = get_now()
@@ -8644,8 +8633,8 @@ class DjcHelper:
             "DNF周年庆登录活动",
             get_act_url("DNF周年庆登录活动"),
             activity_op_func=self.dnf_anniversary_op,
-            query_bind_flowid="769502",
-            commit_bind_flowid="769501",
+            query_bind_flowid="861915",
+            commit_bind_flowid="861914",
         )
 
     def dnf_anniversary_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10662,4 +10651,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_anniversary()

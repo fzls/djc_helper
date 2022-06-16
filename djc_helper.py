@@ -577,6 +577,7 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF互动站", self.dnf_interactive),
             ("DNF闪光杯", self.dnf_shanguang),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -591,7 +592,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("翻牌活动", self.dnf_card_flip),
             ("集卡", self.dnf_ark_lottery),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
             ("colg每日签到", self.colg_signin),
@@ -8098,16 +8098,18 @@ class DjcHelper:
 
         # ------------ 实际流程 --------------
 
-        if not self.cfg.function_switches.disable_share and is_first_run(
-            f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
-        ):
-            self.dnf_luodiye_op("用户授权(统一授权)", "844965")
-            self.dnf_luodiye_op("分享", "844972", sUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
 
-        self.dnf_luodiye_op("登录游戏积分", "844938")
-        self.dnf_luodiye_op("分享好友积分", "844952")
-        self.dnf_luodiye_op("登录游戏顾问奖励", "844953")
-        self.dnf_luodiye_op("分享好友店长奖励", "844959")
+        # if not self.cfg.function_switches.disable_share and is_first_run(
+        #     f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
+        # ):
+        #     self.dnf_luodiye_op("用户授权(统一授权)", "844965")
+        #     self.dnf_luodiye_op("分享", "844972", sUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        #
+        # self.dnf_luodiye_op("登录游戏积分", "844938")
+        # self.dnf_luodiye_op("分享好友积分", "844952")
+        # self.dnf_luodiye_op("登录游戏顾问奖励", "844953")
+        # self.dnf_luodiye_op("分享好友店长奖励", "844959")
 
         # lottery_times = query_lottery_times()
         # logger.info(f"当前可抽卡次数为 {lottery_times}")
@@ -8143,8 +8145,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="844934",
-            commit_bind_flowid="844933",
+            query_bind_flowid="860901",
+            commit_bind_flowid="860900",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -9904,6 +9906,9 @@ class DjcHelper:
                 "actSign",
                 "prefer",
                 "card",
+                "answer1",
+                "answer2",
+                "answer3",
             ]
         }
 
@@ -10650,4 +10655,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_luodiye()

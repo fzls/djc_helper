@@ -90,6 +90,7 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20220616index/",
     #
     # 已过期活动
     #
@@ -103,7 +104,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/41154_7393e90a",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20220324index/",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -242,7 +242,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "454695"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "473946"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "463710"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
@@ -293,7 +293,7 @@ class Urls:
             "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
-            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}"
+            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
         )
 
         # ide通用活动

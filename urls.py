@@ -304,6 +304,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_majieluo = "22_FdBGxj"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
+        self.ide_iActivityId_dnf_my_home = "49_Un4iJS"  # 我的小屋
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (

@@ -1836,6 +1836,31 @@ class DnfHelperChronicleBindInfo(ConfigInterface):
         self.tip_title = ""
 
 
+class MyHomeGiftList(ConfigInterface):
+    def __init__(self):
+        self.jData: list[MyHomeGift] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("jData", MyHomeGift),
+        ]
+
+
+class MyHomeGift(ConfigInterface):
+    def __init__(self):
+        self.id = "176718"
+        self.iUin = "1054073896"
+        self.iPropId = "2109723"
+        self.sPropName = "+10 装备增幅券"
+        self.iType = "2"
+        self.iPoints = "1600"
+        self.iTimes = "1"
+        self.iUsedNum = "0"
+        self.discount = "100"
+        self.dDate = "2022-06-16"
+        self.dtCreateAt = "2022-06-16 21:07:14"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

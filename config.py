@@ -786,6 +786,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_interactive = True
         # 是否领取 魔界人探险记 活动
         self.get_mojieren = True
+        # 是否领取 我的小屋 活动
+        self.get_dnf_my_home = True
         # 是否领取 组队拜年 活动
         self.get_team_happy_new_year = True
         # 是否领取 翻牌 活动

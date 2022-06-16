@@ -570,7 +570,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF格斗大赛", self.dnf_pk),
-            ("黄钻", self.dnf_yellow_diamond),
             ("冒险的起点", self.maoxian_start),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF互动站", self.dnf_interactive),
@@ -581,6 +580,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
+            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10687,4 +10687,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_yellow_diamond()

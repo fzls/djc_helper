@@ -6113,6 +6113,8 @@ class DjcHelper:
 
         sContents = [
             "DNF生日快乐",
+            "曹操出行打车便宜",
+            "电脑数码万店齐发",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]

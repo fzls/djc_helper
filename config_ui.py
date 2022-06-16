@@ -658,13 +658,10 @@ class ConfigUi(QFrame):
 
         self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text="形如 1234567")
         form_layout.addRow("主QQ", self.lineedit_pay_directly_qq)
-        # 如果首个账号配置为自动登录，且设置了qq，则直接填入作为主QQ默认值，简化操作
+        # 如果首个账号设置了qq，则直接填入作为主QQ默认值，简化操作
         if len(cfg.account_configs) != 0:
             account_cfg = cfg.account_configs[0]
-            if (
-                account_cfg.login_mode == account_cfg.login_mode_auto_login
-                and account_cfg.account_info.has_set_account()
-            ):
+            if account_cfg.account_info.has_set_account():
                 self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
 
         self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")

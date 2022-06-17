@@ -5802,6 +5802,7 @@ class DjcHelper:
             async_message_box("如果本地配置了多个账号，且其中有每日上线的账号，可以配置", "22.6心悦活动-设置赠送目标", show_once=True)
 
         for count in [40, 100, 140]:
+            time.sleep(5)
             self.dnf_xinyue_op(f"亲密值领取-{count}", "860783", num=count)
 
         if not has_bind_friend():
@@ -10746,7 +10747,7 @@ if __name__ == "__main__":
     # ps: 小号一号是 4 + 1
     RunAll = False
     indexes = [1]
-    indexes = [4 + 7]
+    # indexes = [4 + 7]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10787,4 +10788,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.get_heizuan_gift()
+        djcHelper.dnf_xinyue()

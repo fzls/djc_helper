@@ -1427,6 +1427,9 @@ def show_tips(cfg: Config):
             "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
+        ),
+        "22.6 b站联合活动": (
+            "b站出了个DNF周年庆活动，有兴趣的朋友请自行参与：https://www.bilibili.com/blackboard/activity-W9sZ1qMkS9.html#M6SZxUxF66L\n"
         )
     }
 

@@ -1425,12 +1425,15 @@ def show_tips(cfg: Config):
         ),
         "22.6 肥腙与井盖小游戏": (
             "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
+            "其实就是选择关卡后不停循环点四个技能按钮，所以可以用按键精灵、autojs等工具做一个简单的脚本，循环点这四个位置就好了- -有兴趣可以自行折腾~\n"
+            "可以参考我的autojs仓库中的 fat_zong.js ，将x，y坐标改成你手机上的实际位置就好了~\n"
+            "\n"
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
         "22.6 b站联合活动": (
             "b站出了个DNF周年庆活动，有兴趣的朋友请自行参与：https://www.bilibili.com/blackboard/activity-W9sZ1qMkS9.html#M6SZxUxF66L\n"
-        )
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

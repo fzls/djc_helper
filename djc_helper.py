@@ -10753,6 +10753,9 @@ if __name__ == "__main__":
 
     qq_to_djcHelper: dict[str, DjcHelper] = {}
 
+    # 测试时仍然启用被标记为安全模式的账号，方便测试
+    cfg.common.enable_in_safe_mode_accounts = True
+
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 

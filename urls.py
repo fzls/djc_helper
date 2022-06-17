@@ -94,8 +94,8 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220617challenge/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "DNF集合站": "TODO：暂时不知道网页链接",
-    "WeGame活动": "TODO：暂时不知道网页链接",
+    "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
+    "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     #
     # 已过期活动
     #

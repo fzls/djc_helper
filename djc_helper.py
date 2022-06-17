@@ -5749,18 +5749,6 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        def query_card_counts() -> list[int]:
-            res = self.dnf_xinyue_op("查询信息", "860785", print_res=True)
-            raw_info = parse_amesvr_common_info(res)
-
-            card_counts = []
-            for raw_card_info in raw_info.sOutValue6.split("|")[1:-1]:
-                card_count = int(raw_card_info.strip().split(" ")[2])
-
-                card_counts.append(card_count)
-
-            return card_counts
-
         def has_bind_friend() -> bool:
             res = self.dnf_xinyue_op("查询信息", "860785", print_res=True)
             raw_info = parse_amesvr_common_info(res)
@@ -5808,7 +5796,7 @@ class DjcHelper:
         draw_card()
         self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
 
-        card_counts = query_card_counts()
+        card_counts = self.query_xinyue_card_counts()
         show_card_summary(card_counts)
 
         send_to_qq = self.common_cfg.xinyue_send_card_target_qq
@@ -5837,6 +5825,18 @@ class DjcHelper:
                 open_url=get_act_url("DNF心悦"),
                 show_once=True,
             )
+
+    def query_xinyue_card_counts(self) -> list[int]:
+        res = self.dnf_xinyue_op("查询信息", "860785", print_res=False)
+        raw_info = parse_amesvr_common_info(res)
+
+        card_counts = []
+        for raw_card_info in raw_info.sOutValue6.split("|")[1:-1]:
+            card_count = int(raw_card_info.strip().split(" ")[2])
+
+            card_counts.append(card_count)
+
+        return card_counts
 
     def check_dnf_xinyue(self):
         self.check_bind_account(

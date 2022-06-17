@@ -657,6 +657,8 @@ need_take_awards = false
 10004 = false
 # 2022.04.21 精灵传说 耕耘来袭
 10005 = false
+# 2022.06.17 破界新生 满级突破
+10006 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

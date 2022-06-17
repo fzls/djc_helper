@@ -584,8 +584,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
             ("我的小屋", self.dnf_my_home),
-            # re: 下面这几个还没找到活动页面，不要实际开启 @2022-06-16 10:11:37 By Chen Ji
-            # ("DNF集合站", self.dnf_collection),
+            ("DNF集合站", self.dnf_collection),
             # ("WeGame活动", self.dnf_wegame),
         ]
 
@@ -10750,8 +10749,8 @@ if __name__ == "__main__":
 
     # ps: 小号一号是 4 + 1
     RunAll = False
-    # indexes = [1]
-    indexes = [4 + 3]
+    indexes = [1]
+    # indexes = [4 + 3]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10792,4 +10791,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_collection()

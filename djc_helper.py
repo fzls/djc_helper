@@ -5790,6 +5790,7 @@ class DjcHelper:
 
                 # 为了对全局存量有个了解，增加统计各个卡牌的存量信息
                 increase_counter(ga_category=f"心悦集卡-存量-{name}", name=count)
+                time.sleep(1)
 
         self.dnf_xinyue_op("特邀等级礼", "861002")
         self.dnf_xinyue_op("V1等级礼", "860777")

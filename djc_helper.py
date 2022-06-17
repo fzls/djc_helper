@@ -6570,7 +6570,7 @@ class DjcHelper:
 
         logger.warning(color("fg_bold_yellow") + "这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引/付费指引.docx")
 
-    @try_except(return_val_on_except=0)
+    @try_except(return_val_on_except=0, show_exception_info=False)
     def query_gpoints(self):
         res = AmesvrCommonModRet().auto_update_config(
             self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"]

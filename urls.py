@@ -57,7 +57,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "超级会员"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "黄钻"),
-    newNotAmsActInfo("2021-04-21 00:00:00", "2022-05-20 23:59:59", "集卡"),
+    newNotAmsActInfo("2022-06-17 00:00:00", "2022-07-13 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
@@ -96,6 +96,7 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
-    "集卡": "https://act.qzone.qq.com//v2/vip/tx/p/41154_7393e90a",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -351,7 +351,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10005
+        self.pesudo_ark_lottery_act_id = 10006
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

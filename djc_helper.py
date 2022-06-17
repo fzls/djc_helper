@@ -5767,6 +5767,30 @@ class DjcHelper:
 
             return "@@" in raw_info.sOutValue3
 
+        @try_except()
+        def draw_card():
+            raw_res = self.dnf_xinyue_op("每日登录游戏抽卡", "861017")
+            if raw_res["ret"] != "0":
+                return
+
+            card_name = raw_res["modRet"]["sPackageName"]
+            if card_name == "14":
+                async_message_box(f"{self.cfg.name} 抽到了 心悦集卡的 14，运气真不错-。-可以兑换天三，或者去闲鱼卖掉，现在好像可以卖五六百了", "心悦集卡欧皇提示")
+
+            # 统计一下每天使用小助手的人抽到的卡片的分布情况，方便有个直观了解
+            increase_counter(ga_category="心悦集卡-抽卡结果", name=card_name)
+
+        def show_card_summary(card_counts: list[int]):
+            logger.info(f"当前卡片概览为: {card_counts}")
+
+            card_names = ["14", "周", "年", "狂", "欢"]
+            for idx, count in enumerate(card_counts):
+                name = card_names[idx]
+                logger.info(f"{name}: {count}")
+
+                # 为了对全局存量有个了解，增加统计各个卡牌的存量信息
+                increase_counter(ga_category=f"心悦集卡-存量-{name}", name=count)
+
         self.dnf_xinyue_op("特邀等级礼", "861002")
         self.dnf_xinyue_op("V1等级礼", "860777")
         self.dnf_xinyue_op("V2等级礼", "861003")
@@ -5780,11 +5804,11 @@ class DjcHelper:
 
         self.dnf_xinyue_op("加群送亲密值", "861908")
 
-        self.dnf_xinyue_op("每日登录游戏抽卡", "861017")
+        draw_card()
         self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
 
         card_counts = query_card_counts()
-        logger.info(f"当前卡片信息为: {card_counts}")
+        show_card_summary(card_counts)
 
         send_to_qq = self.common_cfg.xinyue_send_card_target_qq
         if send_to_qq != "" and self.qq() != send_to_qq:

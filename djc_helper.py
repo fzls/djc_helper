@@ -1815,10 +1815,11 @@ class DjcHelper:
 
         while True:
             res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
-            # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
-            if res["iRet"] == -50014:
-                self.guide_to_bind_account("每月黑钻等级礼包", get_act_url("黑钻礼包"), activity_op_func=None)
-                continue
+            # note: 黑钻的活动页面不见了，现在没法手动绑定了，不再增加这个提示
+            # # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
+            # if res["iRet"] == -50014:
+            #     self.guide_to_bind_account("每月黑钻等级礼包", get_act_url("黑钻礼包"), activity_op_func=None)
+            #     continue
 
             return res
 
@@ -10745,7 +10746,7 @@ if __name__ == "__main__":
     # ps: 小号一号是 4 + 1
     RunAll = False
     indexes = [1]
-    # indexes = [4 + 3]
+    indexes = [4 + 7]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10786,4 +10787,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.get_heizuan_gift()

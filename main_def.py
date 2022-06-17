@@ -1406,9 +1406,6 @@ def show_tips(cfg: Config):
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
-        "22魔界人跳一跳": (
-            "一个类似微信跳一跳的小游戏，每天最多尝试6次，全部通过可以获得一年的黑钻，需要手动完成\n" "https://dnf.qq.com/mingame/jump/index.html?pt=1\n"
-        ),
         "绑定手机领666代币券": (
             "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
@@ -1426,6 +1423,11 @@ def show_tips(cfg: Config):
             "1. 每天打开模拟器页面，选择装备并保存搭配：https://bbs.colg.cn/colg_activity_new-simulator.html?from_collect\n"
             "2. 保存后在活动页面点击签到领取奖励：https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
         ),
+        "22.6 肥腙与井盖小游戏": (
+            "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
+            "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
+            "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

@@ -10209,6 +10209,27 @@ class DjcHelper:
             **data_extra_params,
         )
 
+        def _check(response: requests.Response) -> Exception | None:
+            if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
+                # res.status=401, Unauthorized <Response [401]>
+                #
+                # <html>
+                # <head><title>Tencent Game 401</title></head>
+                # <meta charset="utf-8" />
+                # <body bgcolor="white">
+                # <center><h1>Welcome Tencent Game 401</h1></center>
+                # <center><h1>您的速度过快或参数非法，请重试哦</h1></center>
+                # <hr><center>Welcome Tencent Game</center>
+                # </body>
+                # </html>
+                #
+                wait_seconds = 0.1 + random.random()
+                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
+                time.sleep(wait_seconds)
+                return Exception("请求过快")
+
+            return None
+
         return self.post(
             ctx,
             self.urls.ide,
@@ -10216,6 +10237,7 @@ class DjcHelper:
             ide_host=ide_host,
             print_res=print_res,
             extra_cookies=extra_cookies,
+            check_fn=_check,
         )
 
     def preprocess_eas_url(self, eas_url: str) -> str:

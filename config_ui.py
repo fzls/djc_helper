@@ -792,12 +792,20 @@ class ConfigUi(QFrame):
 
         message_box = ConfirmMessageBox()
         message_box.setWindowTitle("请确认账号信息")
-        message_box.setText("请确认输入的账号信息是否无误，避免充错账号~\n" "\n" f"主QQ：       {qq}\n" f"其他QQ列表： {game_qqs}\n")
+        message_box.setText(
+            "请确认输入的账号信息是否无误，避免充错账号~\n"
+            "\n"
+            f"主QQ：       {format_qq_for_message_box(qq)}\n"
+            f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
+        )
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         message_box.set_disabled_duration(3, [0])
         ret = message_box.exec_()
         if ret == QMessageBox.Cancel:
             logger.info("取消使用卡密")
+            return
+
+        if not self.check_main_qq_in_local(qq):
             return
 
         if not self.check_pay_server():
@@ -895,8 +903,8 @@ class ConfigUi(QFrame):
         message_box.setText(
             "请确认输入的购买信息是否无误，避免充错账号~\n"
             "\n"
-            f"主QQ：       {qq}\n"
-            f"其他QQ列表： {game_qqs}\n"
+            f"主QQ：       {format_qq_for_message_box(qq)}\n"
+            f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
             "\n"
             f"付费内容：   {item_name}\n"
             f"付款方式：   {pay_type_name}\n"
@@ -907,6 +915,9 @@ class ConfigUi(QFrame):
         ret = message_box.exec_()
         if ret == QMessageBox.Cancel:
             logger.info("取消购买")
+            return
+
+        if not self.check_main_qq_in_local(qq):
             return
 
         if item_name == pay_item_item_auto_updater and not self.confirm_buy_auto_updater():
@@ -926,6 +937,41 @@ class ConfigUi(QFrame):
         # 点击付费按钮后重置cache
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
+
+    def check_main_qq_in_local(self, main_qq: str) -> bool:
+        local_qqs = [
+            account.account_info.account
+            for account in self.to_config().account_configs
+            if account.account_info.has_set_account()
+        ]
+        if len(local_qqs) == 0:
+            # 本地账号未配置QQ，则视为通过
+            return True
+
+        if main_qq in local_qqs:
+            # 当前主QQ在本地QQ列表中
+            return True
+
+        logger.info(f"当前充值的主QQ {main_qq} 不在本地QQ列表中，将额外弹窗确认是否是预期行为 {local_qqs}")
+
+        total_confirm_time = 3
+        for show_index in range_from_one(total_confirm_time):
+            message_box = ConfirmMessageBox()
+            message_box.setWindowTitle("友情提示")
+            message_box.setText(
+                f"[{show_index}/{total_confirm_time}] 你当前填写的主QQ并不在本地配置的QQ列表中，请确认这是你预期的行为，而不是手误填错了~\n"
+                "\n"
+                f"当前填写主QQ：{format_qq_for_message_box(main_qq)}\n"
+                f"本地QQ列表: {format_qq_list_for_message_box(local_qqs)}\n"
+            )
+            message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            message_box.set_disabled_duration(3, [0])
+            ret = message_box.exec_()
+            if ret == QMessageBox.Cancel:
+                logger.info("取消购买")
+                return False
+
+        return True
 
     def check_pay_type_name(self, pay_type_name: str) -> bool:
         if pay_type_name == "微信支付":
@@ -2841,6 +2887,14 @@ class HelloVoiceInfoConfigUi(QWidget):
 
     def update_config(self, cfg: HelloVoiceInfoConfig):
         cfg.hello_id = self.lineedit_hello_id.text()
+
+
+def format_qq_list_for_message_box(qq_list: list[str]) -> str:
+    return "\n" + "\n".join(f"\t{qq}" for qq in qq_list)
+
+
+def format_qq_for_message_box(qq: str) -> str:
+    return "\n" + f"\t{qq}"
 
 
 def report_click_event(event: str):

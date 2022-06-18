@@ -7368,7 +7368,8 @@ class DjcHelper:
             self.dnf_my_home_op(name, flowid)
             time.sleep(5)
 
-        logger.info(color("bold_yellow") + f"当前积分为 {query_integral()}")
+        current_points = query_integral()
+        logger.info(color("bold_yellow") + f"当前积分为 {current_points}")
 
         # 邀请好友
         async_message_box("邀请好友可以额外获得一些积分，如果有需要，请自行完成", "我的小屋-邀请好友任务", show_once=True, open_url=get_act_url("我的小屋"))
@@ -7383,9 +7384,18 @@ class DjcHelper:
         for gift in query_gifts():
             logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
 
+            price = int(gift.iPoints)
+            price_after_discount = int(int(gift.iPoints) * int(gift.discount) / 100)
+            if price > 1000 and current_points >= price_after_discount:
+                async_message_box(
+                    f"今日宝箱中包含稀有道具: {gift.sPropName}，需要积分为 {price_after_discount}，而 {self.cfg.name} 当前拥有积分为 {current_points}，足够兑换该道具了。如果需要兑换，请使用手机打开稍后的网页，自行兑换~",
+                    "我的小屋兑换提示",
+                    open_url=get_act_url("我的小屋")
+                )
+
         lastday = get_today(parse_time("2022-07-15 00:00:00"))
         if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
-            async_message_box("我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换", "我的小屋兑换提醒-每周一次或最后一天")
+            async_message_box("我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换", "我的小屋兑换提醒-每周一次或最后一天", open_url=get_act_url("我的小屋"))
         # self.dnf_my_home_op("兑换本身小屋道具", "132421")
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
         # self.dnf_my_home_op("兑换终极道具", "132491")
@@ -10794,7 +10804,7 @@ if __name__ == "__main__":
     # ps: 小号一号是 4 + 1
     RunAll = False
     indexes = [1]
-    # indexes = [4 + 7]
+    indexes = [4 + 2]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 
@@ -10838,4 +10848,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_my_home()

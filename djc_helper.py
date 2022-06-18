@@ -7390,12 +7390,16 @@ class DjcHelper:
                 async_message_box(
                     f"今日宝箱中包含稀有道具: {gift.sPropName}，需要积分为 {price_after_discount}，而 {self.cfg.name} 当前拥有积分为 {current_points}，足够兑换该道具了。如果需要兑换，请使用手机打开稍后的网页，自行兑换~",
                     "我的小屋兑换提示",
-                    open_url=get_act_url("我的小屋")
+                    open_url=get_act_url("我的小屋"),
                 )
 
         lastday = get_today(parse_time("2022-07-15 00:00:00"))
         if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
-            async_message_box("我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换", "我的小屋兑换提醒-每周一次或最后一天", open_url=get_act_url("我的小屋"))
+            async_message_box(
+                "我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换",
+                "我的小屋兑换提醒-每周一次或最后一天",
+                open_url=get_act_url("我的小屋"),
+            )
         # self.dnf_my_home_op("兑换本身小屋道具", "132421")
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
         # self.dnf_my_home_op("兑换终极道具", "132491")

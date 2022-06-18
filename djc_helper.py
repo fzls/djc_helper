@@ -7339,12 +7339,6 @@ class DjcHelper:
 
         self.check_dnf_my_home()
 
-        @try_except(return_val_on_except=0)
-        def query_integral() -> int:
-            raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
-
-            return int(raw_res["jData"]["iIntegral"])
-
         def query_gifts() -> list[MyHomeGift]:
             raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "132338", print_res=False)
             gifts = MyHomeGiftList().auto_update_config(raw_res)
@@ -7368,7 +7362,7 @@ class DjcHelper:
             self.dnf_my_home_op(name, flowid)
             time.sleep(5)
 
-        current_points = query_integral()
+        current_points = self.my_home_query_integral()
         logger.info(color("bold_yellow") + f"当前积分为 {current_points}")
 
         # 邀请好友
@@ -7403,6 +7397,12 @@ class DjcHelper:
         # self.dnf_my_home_op("兑换本身小屋道具", "132421")
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
         # self.dnf_my_home_op("兑换终极道具", "132491")
+
+    @try_except(return_val_on_except=0)
+    def my_home_query_integral(self) -> int:
+        raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
+
+        return int(raw_res["jData"]["iIntegral"])
 
     def check_dnf_my_home(self, **extra_params):
         return self.ide_check_bind_account(

@@ -7341,12 +7341,12 @@ class DjcHelper:
 
         @try_except(return_val_on_except=0)
         def query_integral() -> int:
-            raw_res = self.dnf_my_home_op("个人信息", "132493")
+            raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
 
             return int(raw_res["jData"]["iIntegral"])
 
         def query_gifts() -> list[MyHomeGift]:
-            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "132338")
+            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "132338", print_res=False)
             gifts = MyHomeGiftList().auto_update_config(raw_res)
 
             return gifts.jData
@@ -7368,7 +7368,7 @@ class DjcHelper:
             self.dnf_my_home_op(name, flowid)
             time.sleep(5)
 
-        logger.info(color("bold_yellow") + f"当前积分为 {query_integral}")
+        logger.info(color("bold_yellow") + f"当前积分为 {query_integral()}")
 
         # 邀请好友
         async_message_box("邀请好友可以额外获得一些积分，如果有需要，请自行完成", "我的小屋-邀请好友任务", show_once=True, open_url=get_act_url("我的小屋"))

@@ -10805,10 +10805,13 @@ if __name__ == "__main__":
 
     check_proxy(cfg)
 
-    # ps: 小号一号是 4 + 1
     RunAll = False
     indexes = [1]
-    indexes = [4 + 2]
+    # ps: 小号一号是 4 + 1
+    # indexes = [
+    #     4 + 1,
+    #     *[4 + idx for idx in range(1, 7 + 1)],
+    # ]
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 

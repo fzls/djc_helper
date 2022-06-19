@@ -94,6 +94,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220617challenge/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
+    "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
     "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",

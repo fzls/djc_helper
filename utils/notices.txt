@@ -828,5 +828,15 @@
     "open_url": "",
     "expire_at": "2022-06-25 20:10:32",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "更新周年庆版本小助手提示",
+    "message": "当你看到这个公告时，请看看命令行的标题栏里的版本号，确认其版本至少为【v17.3.1 2022.6.17】，如果发现你的版本在这之前，请在点击确认后弹出的网盘页面中手动下载下最新版本的小助手\n\n不然的话，你会发现这几天跑了小助手，游戏里邮箱也没收到啥东西-。-\n",
+    "send_at": "2022-06-20 00:36:58",
+    "show_type": "once",
+    "open_url": "https://fzls.lanzouf.com/s/djc-helper",
+    "expire_at": "2022-06-27 00:36:58",
+    "show_only_before_version": "17.3.1"
   }
 ]

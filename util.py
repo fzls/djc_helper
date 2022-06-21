@@ -220,8 +220,8 @@ def get_parents(child):
 
 
 def async_message_box(
-    msg,
-    title,
+    msg: str,
+    title: str,
     print_log=True,
     icon=MB_ICONINFORMATION,
     open_url="",
@@ -248,8 +248,8 @@ def async_message_box(
 
 
 def message_box(
-    msg,
-    title,
+    msg: str,
+    title: str,
     print_log=True,
     icon=MB_ICONINFORMATION,
     open_url="",

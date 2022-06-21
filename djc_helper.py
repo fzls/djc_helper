@@ -139,6 +139,7 @@ from util import (
     get_month,
     get_now,
     get_now_unix,
+    get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
     get_week,
@@ -3267,36 +3268,41 @@ class DjcHelper:
             today = get_today()
             # last_day = get_today(get_now() - datetime.timedelta(days=1))
             # the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
-            self.dnf_shanguang_op(f"签到（预热）-{today}", "861119", weekDay=today)
-            # self.dnf_shanguang_op(f"补签（预热）-{last_day}", "861120", weekDay=last_day)
+            self.dnf_shanguang_op(f"签到-{today}", "863326", weekDay=today)
+            # self.dnf_shanguang_op(f"补签-{last_day}", "863327", weekDay=last_day)
             # wait_for("等待一会", 5)
-            # self.dnf_shanguang_op(f"补签（预热）-{the_day_before_last_day}", "861120", weekDay=the_day_before_last_day)
+            # self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "863327", weekDay=the_day_before_last_day)
 
         # --------------------------------------------------------------------------------
 
         # self.dnf_shanguang_op("报名礼", "724862")
-        # self.dnf_shanguang_op("报名礼包（预热）", "861122")
-        self.dnf_shanguang_op("app专属礼（预热）", "861108")
+        self.dnf_shanguang_op("报名礼包", "863329")
+        self.dnf_shanguang_op("app专属礼", "863325")
         async_message_box("请手动前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
-        # 签到
-        check_in()
+        # # 签到
+        # check_in()
 
         # 周赛奖励
+        week_4 = get_today(get_this_thursday_of_dnf())
+        week_4_to_flowid = {
+            "20220623": "864758",
+            "20220630": "864759",
+            "20220707": "864760",
+        }
+
+        if week_4 in week_4_to_flowid:
+            flow_id = week_4_to_flowid[week_4]
+            self.dnf_shanguang_op(f"领取本周的爆装奖励 - {week_4}", flow_id)
+            time.sleep(5)
+
+        # 抽奖
         self.dnf_shanguang_op("每日登录游戏-送抽奖资格", "861111")
-        for idx in range_from_one(2):
-            res = self.dnf_shanguang_op(f"抽奖（预热） - {idx}", "861565")
+        for idx in range_from_one(5):
+            res = self.dnf_shanguang_op(f"抽奖 - {idx}", "863330")
             if int(res["ret"]) != 0:
                 break
             time.sleep(5)
-
-        # 暂未开放的部分
-        # self.dnf_shanguang_op("app专属礼（正式）", "863325")
-        # self.dnf_shanguang_op("签到（正式）", "863326")
-        # self.dnf_shanguang_op("补签（正式）", "863327")
-        # self.dnf_shanguang_op("报名礼包（正式）", "863329")
-        # self.dnf_shanguang_op("抽奖（正式）", "863330")
-        # self.dnf_shanguang_op("爆装奖励（正式）", "861109")
 
     def check_dnf_shanguang(self):
         self.check_bind_account(
@@ -10868,4 +10874,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_kol()
+        djcHelper.dnf_shanguang()

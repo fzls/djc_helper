@@ -1453,7 +1453,7 @@ def show_tips(cfg: Config):
         if tip.endswith("\n"):
             tip = tip[:-1]
 
-        msg = tip.replace("\n", "\n\n")
+        msg = tip.replace("\n", "\n\n") + "\n"
         message_box(msg, f"一些小提示_{title}", show_once=True, follow_flag_file=False, use_qt_messagebox=True)
 
     # 尝试给自己展示一些提示

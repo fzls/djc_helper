@@ -587,6 +587,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
+            ("KOL", self.dnf_kol),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -612,7 +613,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF名人堂", self.dnf_vote),
             ("qq视频蚊子腿", self.qq_video),
-            ("KOL", self.dnf_kol),
             ("WeGameDup", self.dnf_wegame_dup),
             ("轻松之路", self.dnf_relax_road),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
@@ -9113,37 +9113,48 @@ class DjcHelper:
 
         self.check_dnf_kol()
 
-        def query_lottery_times():
-            res = self.dnf_kol_op("jifenOutput", "808590", print_res=False)
-            return self.parse_jifenOutput(res, "364")
+        def query_energy() -> tuple[int, int]:
+            res = self.dnf_kol_op("查询信息", "862612", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-        self.dnf_kol_op("点击助力按钮", "808574")
-        self.dnf_kol_op("点击领取按钮", "808576")
+            total, left = raw_info.sOutValue1.split("|")
+            return int(total), int(left)
 
-        self.dnf_kol_op("助力任务-登录30分钟按钮", "808577")
-        self.dnf_kol_op("助力任务-裂缝注视者副本按钮", "808578")
-        self.dnf_kol_op("助力任务-消耗30疲劳按钮", "808579")
+        # 领取能量值
+        self.dnf_kol_op("账号为幸运回归玩家-回流（幸运）玩家主动领取", "863482")
+        self.dnf_kol_op("每日登录进入DNF游戏-每日登录", "859926")
+        self.dnf_kol_op("每日通关任意地下城3次", "860218")
+        self.dnf_kol_op("每日在线", "860216")
+        self.dnf_kol_op("每日完成游戏内任意一个任务", "860229")
 
-        self.dnf_kol_op("YYDS任务-通关命运抉择按钮", "808580")
+        for pilao in [50, 100]:
+            self.dnf_kol_op(f"每日消耗疲劳点-{pilao}点", "860221", countsInfo=pilao)
 
-        total, remaining = query_lottery_times()
-        logger.info(f"当前剩余抽奖次数为{remaining}，累积获得{total}")
-        for idx in range_from_one(remaining):
-            self.dnf_kol_op(f"第{idx}次抽奖", "808581")
+        total_energy, left_energy = query_energy()
+        logger.info(f"当前累计获得 {total_energy}，剩余票数 {left_energy}")
+        for energy in [20,40,80,140,280,400]:
+            if total_energy >= energy:
+                self.dnf_kol_op(f"累积能力值领取礼包 - {energy}", "860366", power=energy)
+                time.sleep(5)
 
-        self.dnf_kol_op("签到助力-每日签到按钮", "808582")
-        self.dnf_kol_op("签到助力-累计3天按钮", "808583")
-        self.dnf_kol_op("签到助力-累计7天按钮", "808584")
-        self.dnf_kol_op("签到助力-累计10天按钮", "808585")
-        self.dnf_kol_op("签到助力-累计15天按钮", "808586")
+        # 邀请回归玩家
+        logger.warning("邀请幸运玩家的部分请自行玩家~")
+        # self.dnf_kol_op("累积邀请回归用户领取礼包", "861459", inviteNum=1)
+
+        # 能量收集站
+        logger.warning("没有大量邀请回归基本不可能领取到排行礼包，请自行完成~")
+        # self.dnf_kol_op("领取排行礼包", "863366")
+
+        # 投票
+        logger.warning("投票似乎没有奖励，同时为了避免影响原来的分布，请自行按照喜好投票给对应kol")
 
     def check_dnf_kol(self):
         self.check_bind_account(
             "KOL",
             get_act_url("KOL"),
             activity_op_func=self.dnf_kol_op,
-            query_bind_flowid="808571",
-            commit_bind_flowid="808570",
+            query_bind_flowid="859628",
+            commit_bind_flowid="859627",
         )
 
     def dnf_kol_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -9156,7 +9167,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            "http://dnf.qq.com/lbact/a20211014kol2/zzx.html",
+            get_act_url("KOL"),
             **extra_params,
         )
 
@@ -10080,6 +10091,8 @@ class DjcHelper:
                 "answer1",
                 "answer2",
                 "answer3",
+                "countsInfo",
+                "power",
             ]
         }
 
@@ -10855,4 +10868,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.dnf_kol()

@@ -261,7 +261,7 @@ def message_box(
     use_qt_messagebox=False,
     call_from_async=False,
 ):
-    get_log_func(logger.warning, print_log)(color(color_name) + msg)
+    get_log_func(logger.warning, print_log)(color(color_name) + msg.replace("\n\n", "\n"))
 
     if is_run_in_github_action():
         return

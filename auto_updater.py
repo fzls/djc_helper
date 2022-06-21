@@ -19,6 +19,7 @@ from usage_count import increase_counter
 from util import (
     bypass_proxy,
     change_title,
+    disable_quick_edit_mode,
     exists_flag_file,
     kill_process,
     pause_and_exit,
@@ -39,6 +40,8 @@ def auto_update():
     args = parse_args()
 
     change_title("自动更新DLC")
+
+    disable_quick_edit_mode()
 
     logger.info(color("bold_yellow") + f"更新器的进程为{os.getpid()}, 代码版本为{now_version} {ver_time}")
     logger.info(color("bold_yellow") + f"需要检查更新的小助手主进程为{args.pid}, 版本为{args.version}")

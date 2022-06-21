@@ -285,7 +285,7 @@ def message_box(
             # 初始化qt，方便使用qt的弹窗
             qt_message_box_container = QApplication([])
 
-            show_message(title, msg, is_text_selectable=True)
+            show_message(title, msg, is_text_selectable=True, show_log=False)
 
             # 清理
             qt_message_box_container.quit()

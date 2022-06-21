@@ -1436,7 +1436,6 @@ def show_tips(cfg: Config):
             "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
             "其实就是选择关卡后不停循环点四个技能按钮，所以可以用按键精灵、autojs等工具做一个简单的脚本，循环点这四个位置就好了- -有兴趣可以自行折腾~\n"
             "可以参考我的autojs仓库中的 fat_zong.js ，将x，y坐标改成你手机上的实际位置就好了~\n"
-            "\n"
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),

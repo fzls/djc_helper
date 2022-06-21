@@ -9138,7 +9138,7 @@ class DjcHelper:
 
         total_energy, left_energy = query_energy()
         logger.info(f"当前累计获得 {total_energy}，剩余票数 {left_energy}")
-        for energy in [20,40,80,140,280,400]:
+        for energy in [20, 40, 80, 140, 280, 400]:
             if total_energy >= energy:
                 self.dnf_kol_op(f"累积能力值领取礼包 - {energy}", "860366", power=energy)
                 time.sleep(5)

@@ -2240,12 +2240,7 @@ class FunctionSwitchesConfigUi(QWidget):
         add_form_seperator(form_layout, "各功能开关")
 
         self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
-        add_row(form_layout,
-                (
-                    "禁用绝大部分活动\n"
-                    "    若开启【道聚城/无法绑定DNF】，则强制开启本开关"
-                ),
-                self.checkbox_disable_most_activities)
+        add_row(form_layout, ("禁用绝大部分活动\n" "    若开启【道聚城/无法绑定DNF】，则强制开启本开关"), self.checkbox_disable_most_activities)
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
         add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)

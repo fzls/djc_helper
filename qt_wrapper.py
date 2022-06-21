@@ -231,8 +231,9 @@ class QQListValidator(QValidator):
         return (QValidator.Acceptable, text, pos)
 
 
-def show_message(title: str, text: str, disabled_seconds=0, is_text_selectable=False):
-    logger.info(f"{title} {text}")
+def show_message(title: str, text: str, disabled_seconds=0, is_text_selectable=False, show_log=True):
+    if show_log:
+        logger.info(f"{title} {text}")
 
     message_box = ConfirmMessageBox()
     message_box.setWindowTitle(title)

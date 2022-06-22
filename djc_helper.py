@@ -7404,7 +7404,7 @@ class DjcHelper:
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
         # self.dnf_my_home_op("兑换终极道具", "132491")
 
-    @try_except(return_val_on_except=0)
+    @try_except(return_val_on_except=0, show_exception_info=False)
     def my_home_query_integral(self) -> int:
         raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
 

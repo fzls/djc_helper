@@ -599,7 +599,7 @@ get_guanjia = true
 #
 #[[account_configs.xinyue_operations]]
 #iFlowId = "747684"
-#sFlowName = "抗疲劳秘药30点（95lv以上，1天1次）(日限3)(需50成就点)"
+#sFlowName = "抗疲劳秘药30点（95lv以上，1天1次）(日限3)(需30成就点)"
 #count = 1
 #
 #[[account_configs.xinyue_operations]]

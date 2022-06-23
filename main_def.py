@@ -1442,6 +1442,10 @@ def show_tips(cfg: Config):
         "22.6 b站联合活动": (
             "b站出了个DNF周年庆活动，有兴趣的朋友请自行参与：https://www.bilibili.com/blackboard/activity-W9sZ1qMkS9.html#M6SZxUxF66L\n"
         ),
+        "22.6 快手活动": (
+            "新出了个快手活动，请自行完成~\n"
+            "https://ppg.viviv.com/doodle/YWVPrRSG.html"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

@@ -589,13 +589,13 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
             ("KOL", self.dnf_kol),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("DNF共创投票", self.dnf_dianzan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
-            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF漫画预约活动", self.dnf_comic),
             ("dnf助手活动", self.dnf_helper),
             ("翻牌活动", self.dnf_card_flip),
@@ -3675,8 +3675,8 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
 
-        self.qq_video_iwan_op("幸运勇士礼包", "k4i1F3s0Y")
-        self.qq_video_iwan_op("全民大礼包", "SeELr7rsW")
+        self.qq_video_iwan_op("幸运勇士礼包", "qXcsHHmOg")
+        self.qq_video_iwan_op("全民大礼包", "2hiHF_yAf")
         # self.qq_video_iwan_op("勇士见面礼", "ur5nh8ZiM")
         # self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "fj174odxr")
         # self.qq_video_iwan_op("在线30分钟签到", "1X7VUbqgr")
@@ -3684,6 +3684,14 @@ class DjcHelper:
         # self.qq_video_iwan_op("累计 7 天", "jyi3LQ9bo")
         # self.qq_video_iwan_op("累计 10 天", "uBiO594xn")
         # self.qq_video_iwan_op("累计 15 天", "U4urMEDRr")
+
+        act_url = get_act_url("qq视频蚊子腿-爱玩")
+        async_message_box(
+            "QQ视频活动有个专属光环和其他道具可以兑换，不过至少得在页面上充值两个月的QQ视频会员。各位如有需求，可以自行前往活动页面进行购买与兑换~",
+            f"QQ视频活动-光环-{act_url}",
+            open_url=act_url,
+            show_once=True,
+        )
 
     def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", qq_appid="", print_res=True):
         role = self.get_dnf_bind_role_copy()
@@ -10874,4 +10882,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang()
+        djcHelper.qq_video_iwan()

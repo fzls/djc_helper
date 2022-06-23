@@ -934,18 +934,18 @@ class AccountConfig(ConfigInterface):
         if not self.check_role_id("关怀活动", self.vip_mentor.guanhuai_dnf_role_id):
             self.vip_mentor.guanhuai_dnf_role_id = ""
 
-        if self.cannot_bind_dnf and not self.function_switches.disable_most_activities:
-            if is_first_run_in(f"修正禁用活动-v2-{self.name}", datetime.timedelta(minutes=10)):
-                async_message_box(
-                    (
-                        f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。\n"
-                        "\n"
-                        "如果这不是你所预期的，也就是你其实是想领取奖励的，请前往配置工具自行将【道聚城/无法在道聚城绑定dnf】与【活动开关/禁用绝大多数活动】这两个开关 取消勾选\n"
-                    ),
-                    "禁用活动开关已开启提示",
-                    show_once=True,
-                )
-            self.function_switches.disable_most_activities = True
+        # if self.cannot_bind_dnf and not self.function_switches.disable_most_activities:
+        #     if is_first_run_in(f"修正禁用活动-v2-{self.name}", datetime.timedelta(minutes=10)):
+        #         async_message_box(
+        #             (
+        #                 f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。\n"
+        #                 "\n"
+        #                 "如果这不是你所预期的，也就是你其实是想领取奖励的，请前往配置工具自行将【道聚城/无法在道聚城绑定dnf】与【活动开关/禁用绝大多数活动】这两个开关 取消勾选\n"
+        #             ),
+        #             "禁用活动开关已开启提示",
+        #             show_once=True,
+        #         )
+        #     self.function_switches.disable_most_activities = True
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():

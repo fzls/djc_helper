@@ -1877,8 +1877,14 @@ class AccountConfigUi(QWidget):
             form_layout,
             (
                 "无法在道聚城绑定dnf\n"
-                "    开启后将强制开启【禁用绝大部分活动】开关，请确认这是你想要的结果~\n"
-                "    开启后将无法领取任何奖励，主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "\n"
+                "    开启后将不再检查是否已在道聚城app进行绑定dnf角色，用于跳过开始阶段的检查dnf绑定流程\n"
+                "    若实际没有进行绑定，在后续尝试绑定各个活动的角色时，会提示手动进行绑定\n"
+                "\n"
+                "    主要配合后面的【禁用绝大部分活动】开关使用，用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人"
             ),
             self.checkbox_cannot_bind_dnf,
         )
@@ -2252,7 +2258,14 @@ class FunctionSwitchesConfigUi(QWidget):
         add_form_seperator(form_layout, "各功能开关")
 
         self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
-        add_row(form_layout, ("禁用绝大部分活动\n" "    若开启【道聚城/无法绑定DNF】，则强制开启本开关"), self.checkbox_disable_most_activities)
+        add_row(form_layout, (
+            "禁用绝大部分活动\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "\n"
+            "    勾选后将几乎不能领取任何活动，主要是给【QQ空间集卡】工具人小号使用的"
+        ), self.checkbox_disable_most_activities)
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
         add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)

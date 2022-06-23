@@ -117,6 +117,7 @@ from util import (
     parse_scode,
     parse_url_param,
     range_from_one,
+    remove_suffix,
     reset_cache,
     run_from_src,
     start_djc_helper,
@@ -1179,7 +1180,7 @@ class ConfigUi(QFrame):
     def add_account_tab(self, account_ui: AccountConfigUi):
         self.accounts.append(account_ui)
         self.tabs.addTab(
-            account_ui, self.get_account_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked())
+            account_ui, self.account_name_to_tab_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked())
         )
 
         # 记录当前账号名，用于同步修改tab名称
@@ -1187,26 +1188,32 @@ class ConfigUi(QFrame):
 
         # 当修改账号名时，根据之前的账号名，定位并同步修改tab名称
         def update_tab_name(_):
-            old_name_enabled = self.get_account_name(account_ui.old_name, True)
-            old_name_disabled = self.get_account_name(account_ui.old_name, False)
-
             new_account_name = account_ui.lineedit_name.text()
-            new_name_formatted = self.get_account_name(new_account_name, account_ui.checkbox_enable.isChecked())
+            new_tab_name = self.account_name_to_tab_name(new_account_name, account_ui.checkbox_enable.isChecked())
 
             for tab_index in range(self.tabs.count()):
-                if self.tabs.tabText(tab_index) in [old_name_enabled, old_name_disabled]:
-                    self.tabs.setTabText(tab_index, new_name_formatted)
+                tab_name = self.tabs.tabText(tab_index)
+                account_name = self.tab_name_to_account_name(tab_name)
+
+                if account_name == account_ui.old_name:
+                    self.tabs.setTabText(tab_index, new_tab_name)
                     account_ui.old_name = new_account_name
                     break
 
         account_ui.lineedit_name.textChanged.connect(update_tab_name)
         account_ui.checkbox_enable.stateChanged.connect(update_tab_name)
 
-    def get_account_name(self, name: str, enabled: bool) -> str:
+    def account_name_to_tab_name(self, name: str, enabled: bool) -> str:
         if enabled:
             return name
         else:
-            return f"{name}（未启用）"
+            return name + self.disabled_account_name_suffix()
+
+    def tab_name_to_account_name(self, tab_name) -> str:
+        return remove_suffix(tab_name, self.disabled_account_name_suffix())
+
+    def disabled_account_name_suffix(self) -> str:
+        return "（未启用）"
 
     def show_buy_info(self, clicked=False):
         cfg = self.to_config()

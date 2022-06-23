@@ -934,18 +934,24 @@ class AccountConfig(ConfigInterface):
         if not self.check_role_id("关怀活动", self.vip_mentor.guanhuai_dnf_role_id):
             self.vip_mentor.guanhuai_dnf_role_id = ""
 
-        # if self.cannot_bind_dnf and not self.function_switches.disable_most_activities:
-        #     if is_first_run_in(f"修正禁用活动-v2-{self.name}", datetime.timedelta(minutes=10)):
-        #         async_message_box(
-        #             (
-        #                 f"{self.name} 当前设置了【无法绑定道聚城】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。因此这里强制将该开关打开，避免该问题。\n"
-        #                 "\n"
-        #                 "如果这不是你所预期的，也就是你其实是想领取奖励的，请前往配置工具自行将【道聚城/无法在道聚城绑定dnf】与【活动开关/禁用绝大多数活动】这两个开关 取消勾选\n"
-        #             ),
-        #             "禁用活动开关已开启提示",
-        #             show_once=True,
-        #         )
-        #     self.function_switches.disable_most_activities = True
+        if self.cannot_bind_dnf_v2 and not self.function_switches.disable_most_activities_v2:
+            if is_monthly_first_run(f"每月提示绑定dnf与活动开关不匹配-{self.name}"):
+                async_message_box(
+                    (
+                        f"{self.name} 当前设置了【无法在道聚城绑定dnf】，但却没有设置【禁用绝大多数活动】，会导致部分新活动无法自动绑定，每次都提示手动绑定。\n"
+                        "\n"
+                        "请确定你想要的下面哪种情况:\n"
+                        "\n"
+                        "1. 这个号需要领取奖励\n"
+                        "    请前往配置工具将【道聚城/无法在道聚城绑定dnf】与【活动开关/禁用绝大多数活动】这两个开关 取消勾选\n"
+                        "\n"
+                        "2. 这个号不需要领取奖励，纯粹是QQ空间集卡活动的工具人\n"
+                        "    请前往配置工具将【活动开关/禁用绝大多数活动】勾选上，确保不会执行各种需要角色信息才能运行的活动，避免一直弹窗提示【需要去活动页面绑定角色】\n"
+                        "\n"
+                        "如果仍保持当前配置，也就是设置了前者，未设置后者，那么每个月会弹出一次本弹窗~\n"
+                    ),
+                    "禁用活动开关已开启提示",
+                )
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():

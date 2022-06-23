@@ -1211,7 +1211,7 @@ def try_xinyue_sailiyam_start_work(cfg):
         djcHelper.get_bind_role_list()
         if (
             account_config.function_switches.get_xinyue_sailiyam
-            or account_config.function_switches.disable_most_activities
+            and not account_config.function_switches.disable_most_activities
         ):
             # 先尝试领工资
             djcHelper.show_xinyue_sailiyam_work_log()

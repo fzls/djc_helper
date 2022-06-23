@@ -53,7 +53,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "心悦app"),
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
-    newNotAmsActInfo("2022-04-27 00:00:00", "2022-06-10 23:59:59", "qq视频蚊子腿-爱玩"),
+    newNotAmsActInfo("2022-06-23 00:00:00", "2022-07-22 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "超级会员"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "黄钻"),
@@ -99,12 +99,12 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
+    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
     #
     # 已过期活动
     #
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
-    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/1xirtswph2eh1wtpg9x1gd7lw1/index_index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",

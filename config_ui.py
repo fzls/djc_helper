@@ -1868,6 +1868,7 @@ class AccountConfigUi(QWidget):
             ),
             self.checkbox_cannot_bind_dnf_v2,
         )
+        self.checkbox_cannot_bind_dnf_v2.stateChanged.connect(self.confirm_set_cannot_bind_dnf)
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
 
@@ -2077,6 +2078,27 @@ class AccountConfigUi(QWidget):
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         self.hello_voice.update_config(cfg.hello_voice)
 
+    def confirm_set_cannot_bind_dnf(self, state: int):
+        if state != Qt.Checked:
+            return
+
+        ret = show_confirm_message_box("请确认", (
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "\n"
+            "勾选这个开关后，将导致以下结果\n"
+            "1. 将跳过检查dnf角色绑定流程，在未绑定道聚城的情况下可以继续使用\n"
+            "2. 如果真的没用在道聚城中绑定dnf的角色，将导致后续流程中无法获取角色绑定信息，因此将无法完成自动绑定活动角色以及领取奖励\n"
+            "\n"
+            "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
+            "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置\n"
+            "\n"
+            "如果你单纯是因为小号注册后进游戏就提示被封禁而无法绑定角色，所以想开启这个开关，建议按照【使用教程/小号无法创建角色的解决方案.txt】中的流程去申请解封，一般一天左右就能解决\n"
+        ))
+        if ret == QMessageBox.Cancel:
+            self.checkbox_cannot_bind_dnf_v2.setCheckState(Qt.Unchecked)
+
     def show_xinyue_app_guide(self):
         report_click_event("show_xinyue_app_guide")
         show_message(
@@ -2238,14 +2260,19 @@ class FunctionSwitchesConfigUi(QWidget):
         add_form_seperator(form_layout, "各功能开关")
 
         self.checkbox_disable_most_activities_v2 = create_checkbox(cfg.disable_most_activities_v2)
-        add_row(form_layout, (
-            "禁用绝大部分活动\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "\n"
-            "    勾选后将几乎不能领取任何活动，主要是给【QQ空间集卡】工具人小号使用的"
-        ), self.checkbox_disable_most_activities_v2)
+        add_row(
+            form_layout,
+            (
+                "禁用绝大部分活动\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "\n"
+                "    勾选后将几乎不能领取任何活动，主要是给【QQ空间集卡】工具人小号使用的"
+            ),
+            self.checkbox_disable_most_activities_v2,
+        )
+        self.checkbox_disable_most_activities_v2.stateChanged.connect(self.confirm_set_disable_most_activities)
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
         add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)
@@ -2493,6 +2520,23 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_club_vip = self.checkbox_get_dnf_club_vip.isChecked()
 
         cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
+
+    def confirm_set_disable_most_activities(self, state: int):
+        if state != Qt.Checked:
+            return
+
+        ret = show_confirm_message_box("请确认", (
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+            "\n"
+            "勾选这个开关后，将导致无法领取绝大部分活动，请确认这是你想要做的。\n"
+            "\n"
+            "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
+            "\n"
+        ))
+        if ret == QMessageBox.Cancel:
+            self.checkbox_disable_most_activities_v2.setCheckState(Qt.Unchecked)
 
 
 class MobileGameRoleInfoConfigUi(QWidget):

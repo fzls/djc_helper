@@ -37,7 +37,6 @@ from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
 from log import color, fileHandler, logger, new_file_handler
 from qt_wrapper import (
-    ConfirmMessageBox,
     MyComboBox,
     QHLine,
     QQListValidator,
@@ -56,6 +55,7 @@ from qt_wrapper import (
     init_collapsible_box_size,
     list_to_str,
     make_scroll_layout,
+    show_confirm_message_box,
     show_message,
     str_to_list,
 )
@@ -748,16 +748,11 @@ class ConfigUi(QFrame):
     def confirm_buy_auto_updater(self) -> bool:
         total_confirm_time = 3
         for show_index in range_from_one(total_confirm_time):
-            message_box = ConfirmMessageBox()
-            message_box.setWindowTitle("友情提示")
-            message_box.setText(
+            ret = show_confirm_message_box("友情提示", (
                 f"[{show_index}/{total_confirm_time}] 重要的事情说{total_confirm_time}遍\n"
                 "\n"
                 f"自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-"
-            )
-            message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            message_box.set_disabled_duration(3, [0])
-            ret = message_box.exec_()
+            ))
             if ret == QMessageBox.Cancel:
                 logger.info("取消购买")
                 return False
@@ -791,17 +786,12 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        message_box = ConfirmMessageBox()
-        message_box.setWindowTitle("请确认账号信息")
-        message_box.setText(
+        ret = show_confirm_message_box("请确认账号信息", (
             "请确认输入的账号信息是否无误，避免充错账号~\n"
             "\n"
             f"主QQ：       {format_qq_for_message_box(qq)}\n"
             f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
-        )
-        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        message_box.set_disabled_duration(3, [0])
-        ret = message_box.exec_()
+        ))
         if ret == QMessageBox.Cancel:
             logger.info("取消使用卡密")
             return
@@ -899,9 +889,7 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        message_box = ConfirmMessageBox()
-        message_box.setWindowTitle("请确认购买信息")
-        message_box.setText(
+        ret = show_confirm_message_box("请确认购买信息", (
             "请确认输入的购买信息是否无误，避免充错账号~\n"
             "\n"
             f"主QQ：       {format_qq_for_message_box(qq)}\n"
@@ -910,10 +898,7 @@ class ConfigUi(QFrame):
             f"付费内容：   {item_name}\n"
             f"付款方式：   {pay_type_name}\n"
             f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
-        )
-        message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        message_box.set_disabled_duration(3, [0])
-        ret = message_box.exec_()
+        ))
         if ret == QMessageBox.Cancel:
             logger.info("取消购买")
             return
@@ -957,17 +942,12 @@ class ConfigUi(QFrame):
 
         total_confirm_time = 3
         for show_index in range_from_one(total_confirm_time):
-            message_box = ConfirmMessageBox()
-            message_box.setWindowTitle("友情提示")
-            message_box.setText(
+            ret = show_confirm_message_box("友情提示", (
                 f"[{show_index}/{total_confirm_time}] 你当前填写的主QQ并不在本地配置的QQ列表中，请确认这是你预期的行为，而不是手误填错了~\n"
                 "\n"
                 f"当前填写主QQ：{format_qq_for_message_box(main_qq)}\n"
                 f"本地QQ列表: {format_qq_list_for_message_box(local_qqs)}\n"
-            )
-            message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            message_box.set_disabled_duration(3, [0])
-            ret = message_box.exec_()
+            ))
             if ret == QMessageBox.Cancel:
                 logger.info("取消购买")
                 return False

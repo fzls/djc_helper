@@ -289,6 +289,20 @@ class ConfirmMessageBox(QMessageBox):
                 btn.setEnabled(True)
 
 
+def show_confirm_message_box(
+    title: str,
+    message: str,
+    confirm_duration: int = 3,
+) -> int:
+    message_box = ConfirmMessageBox()
+    message_box.setWindowTitle(title)
+    message_box.setText(message)
+    message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+    message_box.set_disabled_duration(confirm_duration, [0])
+
+    return message_box.exec_()
+
+
 class MyPushButtonGridLayout(QGridLayout):
     def __init__(self, color="Cyan"):
         super().__init__()

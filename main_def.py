@@ -128,12 +128,12 @@ def check_djc_role_binding():
             logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name}------------")
 
             # 如果配置为无法绑定道聚城，则提示将无法领取任何奖励
-            if account_config.cannot_bind_dnf:
+            if account_config.cannot_bind_dnf_v2:
                 async_message_box(
                     (
                         f"账号 {account_config.name} 目前配置为 【无法在道聚城绑定dnf】，将产生下列后果：\n"
                         f"1. 将在未绑定道聚城的情况下可以继续使用\n"
-                        f"2. 因未绑定道聚城，将无法获取角色绑定信息，因此将无法领取任何其他奖励\n"
+                        f"2. 如果真的没用在道聚城中绑定dnf的角色，将导致后续流程中无法获取角色绑定信息，因此将无法完成自动绑定活动角色以及领取奖励\n"
                         "\n"
                         "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
                         "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置\n"
@@ -1211,7 +1211,7 @@ def try_xinyue_sailiyam_start_work(cfg):
         djcHelper.get_bind_role_list()
         if (
             account_config.function_switches.get_xinyue_sailiyam
-            and not account_config.function_switches.disable_most_activities
+            and not account_config.function_switches.disable_most_activities_v2
         ):
             # 先尝试领工资
             djcHelper.show_xinyue_sailiyam_work_log()

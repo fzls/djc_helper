@@ -379,7 +379,7 @@ class DjcHelper:
         binded = True
         if self.cfg.function_switches.get_djc:
             # 检查道聚城是否已绑定dnf角色信息，若未绑定则警告（这里不停止运行是因为可以不配置领取dnf的道具）
-            if not self.cfg.cannot_bind_dnf and "dnf" not in self.bizcode_2_bind_role_map:
+            if not self.cfg.cannot_bind_dnf_v2 and "dnf" not in self.bizcode_2_bind_role_map:
                 logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
                 binded = False
 
@@ -10557,7 +10557,7 @@ class DjcHelper:
         )
 
     def disable_most_activities(self):
-        return self.cfg.function_switches.disable_most_activities
+        return self.cfg.function_switches.disable_most_activities_v2
 
     def get_dnf_roleinfo(self, roleinfo: RoleInfo | None = None):
         if roleinfo is None:
@@ -10799,7 +10799,7 @@ def watch_live():
         logger.info(color("bold_yellow") + f"开始执行第{t + 1}分钟的流程")
         for idx in indexes:  # 从1开始，第i个
             account_config = cfg.account_configs[idx - 1]
-            if not account_config.is_enabled() or account_config.cannot_bind_dnf:
+            if not account_config.is_enabled() or account_config.cannot_bind_dnf_v2:
                 logger.warning("账号被禁用或无法绑定DNF，将跳过")
                 continue
 

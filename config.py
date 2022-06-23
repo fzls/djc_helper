@@ -13,7 +13,7 @@ import toml
 from const import appVersion, cached_dir
 from dao import DnfHelperChronicleExchangeGiftInfo
 from data_struct import ConfigInterface, to_raw_type
-from first_run import is_first_run_in
+from first_run import is_first_run_in, is_monthly_first_run
 from log import color, consoleHandler, consoleLogFormatter, logger
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import (
@@ -646,7 +646,7 @@ class FunctionSwitchesConfig(ConfigInterface):
         # 是否禁用各种活动，供小号使用，这样新增的各种活动都将被禁用
         # 例外情况：道聚城、许愿、心悦特权专区、集卡这四个活动不受该配置项影响
         # 如果想要单独设置各个活动的开关，请不要设置这个配置项，否则各个新活动都会被禁用
-        self.disable_most_activities = False
+        self.disable_most_activities_v2 = False
 
         # 是否禁用分享功能
         self.disable_share = False
@@ -832,7 +832,7 @@ class AccountConfig(ConfigInterface):
         # auto_login：   自动登录，每次运行若本地缓存的.skey文件中存储的skey过期了，根据填写的账密信息，自动登录来获取uin和skey，无需手动操作
         self.login_mode = self.login_mode_qr_login
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
-        self.cannot_bind_dnf = False
+        self.cannot_bind_dnf_v2 = False
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
         self.drift_send_qq_list: List[str] = []
         # dnf13周年邀请列表，最多可填3个（不会实际发消息）

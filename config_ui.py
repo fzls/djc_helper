@@ -1872,7 +1872,7 @@ class AccountConfigUi(QWidget):
             "道聚城", top_layout
         )
 
-        self.checkbox_cannot_bind_dnf = create_checkbox(cfg.cannot_bind_dnf)
+        self.checkbox_cannot_bind_dnf_v2 = create_checkbox(cfg.cannot_bind_dnf_v2)
         add_row(
             form_layout,
             (
@@ -1886,7 +1886,7 @@ class AccountConfigUi(QWidget):
                 "\n"
                 "    主要配合后面的【禁用绝大部分活动】开关使用，用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人"
             ),
-            self.checkbox_cannot_bind_dnf,
+            self.checkbox_cannot_bind_dnf_v2,
         )
 
         self.mobile_game_role_info = MobileGameRoleInfoConfigUi(form_layout, cfg.mobile_game_role_info)
@@ -2048,7 +2048,7 @@ class AccountConfigUi(QWidget):
         cfg.name = self.lineedit_name.text()
         cfg.login_mode = self.login_mode_bidict.key_to_val[self.combobox_login_mode.currentText()]
         cfg.account_info.account = self.lineedit_account.text()
-        cfg.cannot_bind_dnf = self.checkbox_cannot_bind_dnf.isChecked()
+        cfg.cannot_bind_dnf_v2 = self.checkbox_cannot_bind_dnf_v2.isChecked()
 
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
         cfg.gonghui_rolename_huizhang = self.lineedit_gonghui_rolename_huizhang.text()
@@ -2257,7 +2257,7 @@ class FunctionSwitchesConfigUi(QWidget):
     def from_config(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig):
         add_form_seperator(form_layout, "各功能开关")
 
-        self.checkbox_disable_most_activities = create_checkbox(cfg.disable_most_activities)
+        self.checkbox_disable_most_activities_v2 = create_checkbox(cfg.disable_most_activities_v2)
         add_row(form_layout, (
             "禁用绝大部分活动\n"
             "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
@@ -2265,7 +2265,7 @@ class FunctionSwitchesConfigUi(QWidget):
             "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
             "\n"
             "    勾选后将几乎不能领取任何活动，主要是给【QQ空间集卡】工具人小号使用的"
-        ), self.checkbox_disable_most_activities)
+        ), self.checkbox_disable_most_activities_v2)
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
         add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)
@@ -2451,7 +2451,7 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, "管家蚊子腿", self.checkbox_get_guanjia)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
-        cfg.disable_most_activities = self.checkbox_disable_most_activities.isChecked()
+        cfg.disable_most_activities_v2 = self.checkbox_disable_most_activities_v2.isChecked()
         cfg.disable_share = self.checkbox_disable_share.isChecked()
 
         cfg.disable_login_mode_normal = self.checkbox_disable_login_mode_normal.isChecked()

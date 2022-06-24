@@ -22,7 +22,9 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
 from compress import decompress_dir_with_bandizip
-from config import AccountConfig, CommonConfig, config, load_config
+from config import AccountConfig, CommonConfig
+from config import config as get_config
+from config import load_config
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
@@ -1599,7 +1601,7 @@ class QQLogin:
 def test():
     # 读取配置信息
     load_config("config.toml", "config.toml.local")
-    cfg = config()
+    cfg = get_config()
 
     cfg.common.force_use_portable_chrome = True
     cfg.common.run_in_headless_mode = False

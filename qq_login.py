@@ -1606,6 +1606,9 @@ def test():
     cfg.common.force_use_portable_chrome = True
     cfg.common.run_in_headless_mode = False
 
+    cfg.common.login.enable_auto_click_avatar_in_auto_login = True
+    cfg.common.login.enable_auto_click_avatar_in_qr_login = True
+
     # 获取登录相关信息
     all_login_types = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_type_")]
     all_login_modes = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_mode_")]

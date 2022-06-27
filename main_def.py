@@ -19,7 +19,7 @@ from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
 from djc_helper import DjcHelper, get_prize_names, is_new_version_ark_lottery, run_act
 from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAccountTryLoginAtMultipleThreadsException
-from first_run import is_daily_first_run, is_first_run, is_weekly_first_run
+from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
 from notice import NoticeManager
 from pool import get_pool, init_pool
@@ -1034,6 +1034,37 @@ def run(cfg: Config, user_buy_info: BuyInfo):
 
     if cfg.common.enable_multiprocessing:
         _show_head_line(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
+
+        if is_monthly_first_run("每月提醒：多进程模式可能漏奖励"):
+            async_message_box(
+                """
+经反馈发现，超快速模式下单次运行时可能会漏奖励。大概率是因为部分活动会共享请求CD，而超快速模式下，所有活动会并行执行，导致可能部分请求因超出频率而失败。
+
+可采取下列方式：
+1. 每天多运行几次，
+这样基本都能领全，而且每次运行时间比较快
+
+2. 调小默认并发进程数
+默认设置的并发数可能比较大，调小一点可能能缓解这个，代价是运行会慢一些
+
+3. 关闭超快速模式，仅保留多进程模式
+速度会比超快速模式慢不少，但是因为请求过快而单次领不全的概率会大幅下降
+
+4. 关闭超快速模式和多进程模式
+速度会显著变慢，但是基本不会出现请求过快而领不全奖励的问题了
+
+PS0:1/3/4方案的大致速度对比如下，可自行按需选择
+1: 一般在2-4分钟，基本等于 登录单个账号 + 运行单个活动 + 查询单个账号概览 的时间
+3: 一般在十分钟上下，基本等于 登录单个账号 + 运行单个账号所有活动 + 查询单个账号概览 的时间
+4: 一般在 账号数目*3分钟 上下， 基本等于 账号数目 * （登录单个账号 + 运行所有活动 + 查询单个账号概览） 的世界
+
+PS1：相关配置位置：配置工具/公共配置/多进程
+
+PS2：在开启多进程模式的情况下，这个弹窗每月会弹出一次，用来提示这种副作用的存在~
+""".strip(),
+                "超快速模式副作用",
+            )
+            pass
 
         if not cfg.common.enable_super_fast_mode:
             logger.info("当前未开启超快速模式~将并行运行各个账号")

@@ -1064,7 +1064,6 @@ PS2：在开启多进程模式的情况下，这个弹窗每月会弹出一次�
 """.strip(),
                 "超快速模式副作用",
             )
-            pass
 
         if not cfg.common.enable_super_fast_mode:
             logger.info("当前未开启超快速模式~将并行运行各个账号")

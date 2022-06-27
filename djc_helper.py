@@ -8391,7 +8391,9 @@ class DjcHelper:
         totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for idx in range_from_one(remainingLotteryTimes):
-            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "865066")
+            res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "865066")
+            if int(res.get("ret", 0)) != 0:
+                break
 
         # 体验新副本
         self.dnf_wegame_op("通关【国王摇篮】3次", "864302")

@@ -748,11 +748,14 @@ class ConfigUi(QFrame):
     def confirm_buy_auto_updater(self) -> bool:
         total_confirm_time = 3
         for show_index in range_from_one(total_confirm_time):
-            ret = show_confirm_message_box("友情提示", (
-                f"[{show_index}/{total_confirm_time}] 重要的事情说{total_confirm_time}遍\n"
-                "\n"
-                f"自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-"
-            ))
+            ret = show_confirm_message_box(
+                "友情提示",
+                (
+                    f"[{show_index}/{total_confirm_time}] 重要的事情说{total_confirm_time}遍\n"
+                    "\n"
+                    f"自动更新DLC的唯一作用仅仅是【自动更新】，不会给你带来付费活动的使用资格的哦，请确认你想要购买的是这个功能后再点击【确认】按钮进行购买-。-"
+                ),
+            )
             if ret == QMessageBox.Cancel:
                 logger.info("取消购买")
                 return False
@@ -786,12 +789,15 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        ret = show_confirm_message_box("请确认账号信息", (
-            "请确认输入的账号信息是否无误，避免充错账号~\n"
-            "\n"
-            f"主QQ：       {format_qq_for_message_box(qq)}\n"
-            f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
-        ))
+        ret = show_confirm_message_box(
+            "请确认账号信息",
+            (
+                "请确认输入的账号信息是否无误，避免充错账号~\n"
+                "\n"
+                f"主QQ：       {format_qq_for_message_box(qq)}\n"
+                f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
+            ),
+        )
         if ret == QMessageBox.Cancel:
             logger.info("取消使用卡密")
             return
@@ -889,16 +895,19 @@ class ConfigUi(QFrame):
             show_message("出错了", msg)
             return
 
-        ret = show_confirm_message_box("请确认购买信息", (
-            "请确认输入的购买信息是否无误，避免充错账号~\n"
-            "\n"
-            f"主QQ：       {format_qq_for_message_box(qq)}\n"
-            f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
-            "\n"
-            f"付费内容：   {item_name}\n"
-            f"付款方式：   {pay_type_name}\n"
-            f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
-        ))
+        ret = show_confirm_message_box(
+            "请确认购买信息",
+            (
+                "请确认输入的购买信息是否无误，避免充错账号~\n"
+                "\n"
+                f"主QQ：       {format_qq_for_message_box(qq)}\n"
+                f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
+                "\n"
+                f"付费内容：   {item_name}\n"
+                f"付款方式：   {pay_type_name}\n"
+                f"总计金额：   {item_name_to_money_map[item_name]} 元\n"
+            ),
+        )
         if ret == QMessageBox.Cancel:
             logger.info("取消购买")
             return
@@ -942,12 +951,15 @@ class ConfigUi(QFrame):
 
         total_confirm_time = 3
         for show_index in range_from_one(total_confirm_time):
-            ret = show_confirm_message_box("友情提示", (
-                f"[{show_index}/{total_confirm_time}] 你当前填写的主QQ并不在本地配置的QQ列表中，请确认这是你预期的行为，而不是手误填错了~\n"
-                "\n"
-                f"当前填写主QQ：{format_qq_for_message_box(main_qq)}\n"
-                f"本地QQ列表: {format_qq_list_for_message_box(local_qqs)}\n"
-            ))
+            ret = show_confirm_message_box(
+                "友情提示",
+                (
+                    f"[{show_index}/{total_confirm_time}] 你当前填写的主QQ并不在本地配置的QQ列表中，请确认这是你预期的行为，而不是手误填错了~\n"
+                    "\n"
+                    f"当前填写主QQ：{format_qq_for_message_box(main_qq)}\n"
+                    f"本地QQ列表: {format_qq_list_for_message_box(local_qqs)}\n"
+                ),
+            )
             if ret == QMessageBox.Cancel:
                 logger.info("取消购买")
                 return False
@@ -1160,7 +1172,8 @@ class ConfigUi(QFrame):
     def add_account_tab(self, account_ui: AccountConfigUi):
         self.accounts.append(account_ui)
         self.tabs.addTab(
-            account_ui, self.account_name_to_tab_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked())
+            account_ui,
+            self.account_name_to_tab_name(account_ui.lineedit_name.text(), account_ui.checkbox_enable.isChecked()),
         )
 
         # 记录当前账号名，用于同步修改tab名称
@@ -2082,20 +2095,23 @@ class AccountConfigUi(QWidget):
         if state != Qt.Checked:
             return
 
-        ret = show_confirm_message_box("请确认", (
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "\n"
-            "勾选这个开关后，将导致以下结果\n"
-            "1. 将跳过检查dnf角色绑定流程，在未绑定道聚城的情况下可以继续使用\n"
-            "2. 如果真的没用在道聚城中绑定dnf的角色，将导致后续流程中无法获取角色绑定信息，因此将无法完成自动绑定活动角色以及领取奖励\n"
-            "\n"
-            "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
-            "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置\n"
-            "\n"
-            "如果你单纯是因为小号注册后进游戏就提示被封禁而无法绑定角色，所以想开启这个开关，建议按照【使用教程/小号无法创建角色的解决方案.txt】中的流程去申请解封，一般一天左右就能解决\n"
-        ))
+        ret = show_confirm_message_box(
+            "请确认",
+            (
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "\n"
+                "勾选这个开关后，将导致以下结果\n"
+                "1. 将跳过检查dnf角色绑定流程，在未绑定道聚城的情况下可以继续使用\n"
+                "2. 如果真的没用在道聚城中绑定dnf的角色，将导致后续流程中无法获取角色绑定信息，因此将无法完成自动绑定活动角色以及领取奖励\n"
+                "\n"
+                "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
+                "请确定你打开这个开关的目的是这样，如果仅仅是不想领取道聚城的奖励，其他奖励想正常使用，请勿打开本开关，请单独修改【道聚城兑换】相关的配置\n"
+                "\n"
+                "如果你单纯是因为小号注册后进游戏就提示被封禁而无法绑定角色，所以想开启这个开关，建议按照【使用教程/小号无法创建角色的解决方案.txt】中的流程去申请解封，一般一天左右就能解决\n"
+            ),
+        )
         if ret == QMessageBox.Cancel:
             self.checkbox_cannot_bind_dnf_v2.setCheckState(Qt.Unchecked)
 
@@ -2525,16 +2541,19 @@ class FunctionSwitchesConfigUi(QWidget):
         if state != Qt.Checked:
             return
 
-        ret = show_confirm_message_box("请确认", (
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
-            "\n"
-            "勾选这个开关后，将导致无法领取绝大部分活动，请确认这是你想要做的。\n"
-            "\n"
-            "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
-            "\n"
-        ))
+        ret = show_confirm_message_box(
+            "请确认",
+            (
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "    !!! 如果你不能理解下面这几句话是什么意思，就千万不要勾选这个开关 !!!\n"
+                "\n"
+                "勾选这个开关后，将导致无法领取绝大部分活动，请确认这是你想要做的。\n"
+                "\n"
+                "这个开关主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人\n"
+                "\n"
+            ),
+        )
         if ret == QMessageBox.Cancel:
             self.checkbox_disable_most_activities_v2.setCheckState(Qt.Unchecked)
 

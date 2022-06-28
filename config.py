@@ -7,7 +7,6 @@ import platform
 import re
 import uuid
 from multiprocessing import cpu_count
-from typing import Dict, List, Optional
 
 import toml
 
@@ -494,7 +493,7 @@ class XinYueAppOperationConfig(ConfigInterface):
             # 填的是从hxd复制出来的格式，转换为hex数组
             self.encrypted_raw_http_body = self.hxd_hex_str_to_hex_list(str(self.encrypted_raw_http_body))
 
-    def hxd_hex_str_to_hex_list(self, hxd_hex_str) -> List[int]:
+    def hxd_hex_str_to_hex_list(self, hxd_hex_str) -> list[int]:
         hex_str_list = hxd_hex_str.split(" ")
 
         hex_with_0x_list = [f"0x{h}" for h in hex_str_list]
@@ -538,7 +537,7 @@ class ArkLotteryConfig(ConfigInterface):
         self.show_color = ""
 
         # 活动ID => 是否消耗所有卡牌来抽奖（建议在兑换完所有礼包后再开启这个功能）
-        self.act_id_to_cost_all_cards_and_do_lottery: Dict[int, bool] = {}
+        self.act_id_to_cost_all_cards_and_do_lottery: dict[int, bool] = {}
 
     def fields_to_fill(self):
         return [
@@ -596,7 +595,7 @@ class DnfHelperInfoConfig(ConfigInterface):
         # dnf助手编年史是否开启抽奖
         self.chronicle_lottery = False
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json
-        self.chronicle_exchange_items: List[DnfHelperChronicleExchangeItemConfig] = []
+        self.chronicle_exchange_items: list[DnfHelperChronicleExchangeItemConfig] = []
 
     def fields_to_fill(self):
         return [
@@ -610,7 +609,7 @@ class DnfHelperInfoConfig(ConfigInterface):
                 "token长度不对",
             )
 
-    def get_exchange_item_by_sLbcode(self, sLbcode: str) -> Optional[DnfHelperChronicleExchangeItemConfig]:
+    def get_exchange_item_by_sLbcode(self, sLbcode: str) -> DnfHelperChronicleExchangeItemConfig | None:
         for exchange_item in self.chronicle_exchange_items:
             if exchange_item.sLbcode == sLbcode:
                 return exchange_item
@@ -633,7 +632,7 @@ class FirecrackersConfig(ConfigInterface):
         # 是否开启抽奖，建议兑换完所有道具后再开启
         self.enable_lottery = False
         # 兑换道具信息
-        self.exchange_items: List[FirecrackersExchangeItemConfig] = []
+        self.exchange_items: list[FirecrackersExchangeItemConfig] = []
 
     def fields_to_fill(self):
         return [
@@ -835,11 +834,11 @@ class AccountConfig(ConfigInterface):
         # 是否无法在道聚城绑定dnf，比如被封禁或者是朋友的QQ（主要用于小号，被风控不能注册dnf账号，但是不影响用来当抽卡等活动的工具人）
         self.cannot_bind_dnf_v2 = False
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
-        self.drift_send_qq_list: List[str] = []
+        self.drift_send_qq_list: list[str] = []
         # dnf13周年邀请列表，最多可填3个（不会实际发消息）
-        self.dnf_13_send_qq_list: List[str] = []
+        self.dnf_13_send_qq_list: list[str] = []
         # 新春福袋大作战邀请列表（会实际发消息）
-        self.spring_fudai_receiver_qq_list: List[str] = []
+        self.spring_fudai_receiver_qq_list: list[str] = []
         # 燃放爆竹活动是否尝试邀请好友（不会实际发消息）
         self.enable_firecrackers_invite_friend = False
         # 马杰洛活动是否尝试黑钻送好友（不会实际发消息）
@@ -848,7 +847,7 @@ class AccountConfig(ConfigInterface):
         self.enable_majieluo_lucky = False
         # 不参与奥兹玛竞速活动切换角色的角色名列表（如果某些号确定不打奥兹玛的，可以把名字加到这里，从而跳过尝试这个角色）
         # eg. ["卢克奶妈一号", "卢克奶妈二号", "卢克奶妈三号"]
-        self.ozma_ignored_rolename_list: List[str] = []
+        self.ozma_ignored_rolename_list: list[str] = []
         # 公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
         self.gonghui_rolename_huizhang = ""
         # 公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）
@@ -880,17 +879,17 @@ class AccountConfig(ConfigInterface):
         # 完成《礼包达人》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()
         # 兑换道具信息
-        self.exchange_items: List[ExchangeItemConfig] = []
+        self.exchange_items: list[ExchangeItemConfig] = []
         # 心悦相关操作信息
-        self.xinyue_operations: List[XinYueOperationConfig] = []
+        self.xinyue_operations: list[XinYueOperationConfig] = []
         # 心悦app相关操作
-        self.xinyue_app_operations: List[XinYueAppOperationConfig] = []
+        self.xinyue_app_operations: list[XinYueAppOperationConfig] = []
         # 抽卡相关配置
         self.ark_lottery = ArkLotteryConfig()
         # 会员关怀相关配置
         self.vip_mentor = VipMentorConfig()
         # wegame国庆活动兑换道具
-        self.wegame_guoqing_exchange_items: List[WegameGuoqingExchangeItemConfig] = []
+        self.wegame_guoqing_exchange_items: list[WegameGuoqingExchangeItemConfig] = []
         # dnf助手信息
         self.dnf_helper_info = DnfHelperInfoConfig()
         # hello语音（皮皮蟹）相关信息
@@ -956,37 +955,37 @@ class AccountConfig(ConfigInterface):
 
         # 移除改版前的心悦战场的周期礼包和日常任务，避免继续执行，浪费时间
         deprecated_xinyue_operations: dict[tuple[str, str], str] = {
-            ("513581", "") : "Y600周礼包_特邀会员",
-            ("673270", "") : "月礼包_特邀会员_20200610后使用",
-            ("513573", "") : "Y600周礼包",
-            ("673269", "") : "月礼包_20200610后使用",
-            ("673262", "") : "周礼包_白名单用户",
-            ("673264", "") : "月礼包_白名单用户",
-            ("513585", "") : "累计宝箱",
-            ("512408", "") : "每月赠送双倍积分卡（仅心悦会员）",
-            ("512432", "") : "充值DNF3000点券_双倍（成就点=6）",
-            ("512435", "") : "游戏内消耗疲劳值120_双倍（成就点=6）",
-            ("512437", "") : "游戏内在线时长40_双倍（成就点=6）",
-            ("512441", "") : "游戏内PK3次_双倍（成就点=6）",
-            ("512396", "") : "充值DNF3000点券（成就点=3）",
-            ("512398", "") : "游戏内在线时长40（成就点=3）",
-            ("512400", "") : "游戏内消耗疲劳值120（成就点=3）",
-            ("512402", "") : "游戏内PK3次（成就点=3）",
-            ("512490", "") : "领取每周免做卡",
-            ("512415", "") : "充值DNF3000点券_免做（成就点=3）",
-            ("512418", "") : "游戏内消耗疲劳值120_免做（成就点=3）",
-            ("512421", "") : "游戏内在线时长40_免做（成就点=3）",
-            ("512424", "") : "游戏内PK3次_免做（成就点=3）",
-            ("512395", "") : "充值DNF2000点券（成就点=2）",
-            ("512397", "") : "游戏内在线时长30（成就点=2）",
-            ("512399", "") : "游戏内消耗疲劳值50（成就点=2）",
-            ("512401", "") : "游戏内PK2次（成就点=2）",
-            ("512393", "") : "邮箱无未读邮件（成就点=2）",
-            ("578321", "") : "精英赛投票（成就点=未知）",
-            ("512388", "") : "充值DNF1000点券（成就点=1）",
-            ("512389", "") : "游戏内在线时长15（成就点=1）",
-            ("512390", "") : "游戏内消耗疲劳值10（成就点=1）",
-            ("512391", "") : "游戏内PK1次（成就点=1）",
+            ("513581", ""): "Y600周礼包_特邀会员",
+            ("673270", ""): "月礼包_特邀会员_20200610后使用",
+            ("513573", ""): "Y600周礼包",
+            ("673269", ""): "月礼包_20200610后使用",
+            ("673262", ""): "周礼包_白名单用户",
+            ("673264", ""): "月礼包_白名单用户",
+            ("513585", ""): "累计宝箱",
+            ("512408", ""): "每月赠送双倍积分卡（仅心悦会员）",
+            ("512432", ""): "充值DNF3000点券_双倍（成就点=6）",
+            ("512435", ""): "游戏内消耗疲劳值120_双倍（成就点=6）",
+            ("512437", ""): "游戏内在线时长40_双倍（成就点=6）",
+            ("512441", ""): "游戏内PK3次_双倍（成就点=6）",
+            ("512396", ""): "充值DNF3000点券（成就点=3）",
+            ("512398", ""): "游戏内在线时长40（成就点=3）",
+            ("512400", ""): "游戏内消耗疲劳值120（成就点=3）",
+            ("512402", ""): "游戏内PK3次（成就点=3）",
+            ("512490", ""): "领取每周免做卡",
+            ("512415", ""): "充值DNF3000点券_免做（成就点=3）",
+            ("512418", ""): "游戏内消耗疲劳值120_免做（成就点=3）",
+            ("512421", ""): "游戏内在线时长40_免做（成就点=3）",
+            ("512424", ""): "游戏内PK3次_免做（成就点=3）",
+            ("512395", ""): "充值DNF2000点券（成就点=2）",
+            ("512397", ""): "游戏内在线时长30（成就点=2）",
+            ("512399", ""): "游戏内消耗疲劳值50（成就点=2）",
+            ("512401", ""): "游戏内PK2次（成就点=2）",
+            ("512393", ""): "邮箱无未读邮件（成就点=2）",
+            ("578321", ""): "精英赛投票（成就点=未知）",
+            ("512388", ""): "充值DNF1000点券（成就点=1）",
+            ("512389", ""): "游戏内在线时长15（成就点=1）",
+            ("512390", ""): "游戏内消耗疲劳值10（成就点=1）",
+            ("512391", ""): "游戏内PK1次（成就点=1）",
         }
 
         xinyue_operations: list[XinYueOperationConfig] = []
@@ -1036,21 +1035,21 @@ class AccountConfig(ConfigInterface):
 
         return sDeviceID
 
-    def get_exchange_item_by_iGoodsId(self, iGoodsId: str) -> Optional[ExchangeItemConfig]:
+    def get_exchange_item_by_iGoodsId(self, iGoodsId: str) -> ExchangeItemConfig | None:
         for exchange_item in self.exchange_items:
             if exchange_item.iGoodsId == iGoodsId:
                 return exchange_item
 
         return None
 
-    def get_xinyue_exchange_item_by_unique_key(self, unique_key: str) -> Optional[XinYueOperationConfig]:
+    def get_xinyue_exchange_item_by_unique_key(self, unique_key: str) -> XinYueOperationConfig | None:
         for exchange_item in self.xinyue_operations:
             if exchange_item.unique_key() == unique_key:
                 return exchange_item
 
         return None
 
-    def get_xinyue_app_operation_by_name(self, name: str) -> Optional[XinYueAppOperationConfig]:
+    def get_xinyue_app_operation_by_name(self, name: str) -> XinYueAppOperationConfig | None:
         for operation in self.xinyue_app_operations:
             if operation.name == name:
                 return operation
@@ -1260,10 +1259,10 @@ class CommonConfig(ConfigInterface):
         # 是否在活动最后一天消耗所有卡牌来抽奖（若还有卡）
         self.cost_all_cards_and_do_lottery_on_last_day = False
         # 调整日志等级对应颜色，颜色表可以运行log.py获取
-        self.log_colors: Dict[str, str] = {}
+        self.log_colors: dict[str, str] = {}
         # 自动赠送卡片的目标QQ数组，这些QQ必须是配置的账号之一，若配置则会在程序结束时尝试从其他小号赠送卡片给这些账号，且这些账号不会赠送卡片给其他账号，若不配置则不启用。
         # 赠送策略为：如果该QQ仍有可兑换奖励，将赠送目标QQ最需要的卡片；否则将赠送目标QQ其他QQ最富余的卡片
-        self.auto_send_card_target_qqs: List[str] = []
+        self.auto_send_card_target_qqs: list[str] = []
         # 集卡赠送次数耗尽后，是否尝试通过索取的方式来赠送卡片
         self.enable_send_card_by_request = True
         # 接受福签赠送的scode列表，点赠送后查看链接中的sCode参数可知
@@ -1271,7 +1270,7 @@ class CommonConfig(ConfigInterface):
         # 接受福签索要的scode列表，点索要后查看链接中的sCode参数可知
         self.scode_list_accept_ask = []
         # 马杰洛赠送礼包inviteUin列表，点赠送后查看链接中的inviteUin参数可知
-        self.majieluo_invite_uin_list: List[str] = []
+        self.majieluo_invite_uin_list: list[str] = []
         # 是否弹出支付宝红包活动图片
         self.enable_alipay_redpacket_v2 = True
 
@@ -1282,9 +1281,9 @@ class CommonConfig(ConfigInterface):
         # 心悦相关配置
         self.xinyue = XinYueConfig()
         # 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。
-        self.fixed_teams: List[FixedTeamConfig] = []
+        self.fixed_teams: list[FixedTeamConfig] = []
         # 赛利亚活动拜访目标QQ列表
-        self.sailiyam_visit_target_qqs: List[str] = []
+        self.sailiyam_visit_target_qqs: list[str] = []
         # 马杰洛相关配置
         self.majieluo = MajieluoConfig()
 
@@ -1343,7 +1342,7 @@ class Config(ConfigInterface):
         # 所有账号共用的配置
         self.common = CommonConfig()
         # 兑换道具信息
-        self.account_configs: List[AccountConfig] = []
+        self.account_configs: list[AccountConfig] = []
 
     def fields_to_fill(self):
         return [
@@ -1378,7 +1377,7 @@ class Config(ConfigInterface):
                 self.common.enable_multiprocessing = False
 
     def check(self) -> bool:
-        name2index: Dict[str, int] = {}
+        name2index: dict[str, int] = {}
         for _idx, account in enumerate(self.account_configs):
             idx = _idx + 1
 
@@ -1461,21 +1460,21 @@ class Config(ConfigInterface):
 
         return final_pool_size
 
-    def get_account_config_by_name(self, name: str) -> Optional[AccountConfig]:
+    def get_account_config_by_name(self, name: str) -> AccountConfig | None:
         for account_config in self.account_configs:
             if account_config.name == name:
                 return account_config
 
         return None
 
-    def get_qq_accounts(self) -> List[str]:
+    def get_qq_accounts(self) -> list[str]:
         return list(
             uin2qq(account_cfg.account_info.uin)
             for account_cfg in self.account_configs
             if account_cfg.enable and account_cfg.account_info.has_login()
         )
 
-    def get_any_enabled_account(self) -> Optional[AccountConfig]:
+    def get_any_enabled_account(self) -> AccountConfig | None:
         for account_config in self.account_configs:
             if account_config.is_enabled():
                 return account_config

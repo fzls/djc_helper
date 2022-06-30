@@ -56,8 +56,10 @@ from dao import (
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
+    MyHomeFriendList,
     MyHomeGift,
     MyHomeGiftList,
+    MyHomeValueGift,
     NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
@@ -7359,6 +7361,93 @@ class DjcHelper:
 
             return gifts.jData
 
+        def query_friend_list(iPage: int) -> MyHomeFriendList:
+            raw_res = self.dnf_my_home_op("好友小屋列表", "131196", iPage=iPage, print_res=False)
+
+            return MyHomeFriendList().auto_update_config(raw_res["jData"])
+
+        def query_friend_gift_info(sUin: str) -> list[MyHomeGift]:
+            raw_res = self.dnf_my_home_op("好友小屋道具信息", "132038", type=1, sUin=sUin, print_res=False)
+            if raw_res["ret"] != 0:
+                return []
+
+            gifts = MyHomeGiftList().auto_update_config(raw_res)
+
+            return gifts.jData
+
+        def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
+            if len(valuable_gifts) == 0:
+                return
+
+            gift_desc_list = []
+            for g in valuable_gifts:
+                gift_desc_list.append(
+                    " " * 4
+                    + f"{g.owner} 的宝箱: {g.gift.sPropName} {g.gift.price_after_discount()}({g.gift.format_discount()})"
+                )
+            gift_descs = "\n".join(gift_desc_list)
+
+            async_message_box(
+                (
+                    f"{self.cfg.name} 当前拥有积分为 {current_points}，足够兑换下列稀有道具了~\n"
+                    f"{gift_descs}\n"
+                    "\n"
+                    f"如果需要兑换，请使用手机打开稍后的网页，自行兑换~"
+                ),
+                "我的小屋兑换提示",
+                open_url=get_act_url("我的小屋"),
+            )
+
+        def try_add_valuable_gift(valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str):
+            if not gift.is_valuable_gift():
+                # 普通奖励
+                return
+
+            if int(gift.iUsedNum) >= int(gift.iTimes):
+                # 已超过兑换次数
+                return
+
+            if current_points < gift.price_after_discount():
+                # 积分不够
+                logger.warning(
+                    f"{self.cfg.name} {owner} 的宝箱中有 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()}), 但当前积分只有 {current_points}，不够兑换-。-"
+                )
+                return
+
+            valuable_gifts.append(MyHomeValueGift(owner, gift))
+
+        @try_except()
+        def notify_exchange_valuable_gift(current_points: int):
+            # 需要提醒的稀有奖励列表
+            valuable_gifts: list[MyHomeValueGift] = []
+
+            # 先看看自己的稀有奖励
+            logger.info("今日的宝箱如下:")
+            my_gifts = query_gifts()
+            for gift in my_gifts:
+                logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
+
+                try_add_valuable_gift(valuable_gifts, gift, "自己")
+
+            # 然后看看好友的稀有奖励
+            logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
+            for friend_page in range_from_one(1000):
+                friend_list = query_friend_list(friend_page)
+                logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
+                for friend_info in friend_list.data:
+                    friend_gifts = query_friend_gift_info(friend_info.sUin)
+                    for gift in friend_gifts:
+                        try_add_valuable_gift(valuable_gifts, gift, f"好友 {friend_info.sNick}({gift.iUin})")
+
+                    time.sleep(0.1)
+
+                if friend_page >= int(friend_list.total):
+                    # 已是最后一页
+                    break
+
+            # 提醒兑换奖励
+            notify_valuable_gifts(current_points, valuable_gifts)
+
         # 初始化
         self.dnf_my_home_op("更新访问日期", "133320")
         self.dnf_my_home_op("开通小屋", "132689")
@@ -7388,18 +7477,7 @@ class DjcHelper:
         # self.dnf_my_home_op("好友小屋道具信息", "132038")
 
         #  兑换道具
-        logger.info("今日的宝箱如下:")
-        for gift in query_gifts():
-            logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
-
-            price = int(gift.iPoints)
-            price_after_discount = int(int(gift.iPoints) * int(gift.discount) / 100)
-            if price > 1000 and current_points >= price_after_discount:
-                async_message_box(
-                    f"今日宝箱中包含稀有道具: {gift.sPropName}，需要积分为 {price_after_discount}，而 {self.cfg.name} 当前拥有积分为 {current_points}，足够兑换该道具了。如果需要兑换，请使用手机打开稍后的网页，自行兑换~",
-                    "我的小屋兑换提示",
-                    open_url=get_act_url("我的小屋"),
-                )
+        notify_exchange_valuable_gift(current_points)
 
         lastday = get_today(parse_time("2022-07-15 00:00:00"))
         if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
@@ -10884,4 +10962,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_my_home()

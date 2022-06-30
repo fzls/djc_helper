@@ -1860,6 +1860,50 @@ class MyHomeGift(ConfigInterface):
         self.dDate = "2022-06-16"
         self.dtCreateAt = "2022-06-16 21:07:14"
 
+    def is_valuable_gift(self) -> bool:
+        price = int(self.iPoints)
+
+        # 原价大于1000的是稀有奖励，包含下列奖励
+        #   1. 次元穿梭光环兑换券	1200 积分
+        #   2. +10 装备增幅券	1600 积分
+        #   3. 第3期稀有装扮1部位自选礼盒	1800 积分
+        #   4. 原初职业白金徽章礼盒	1800 积分
+        return price > 1000
+
+    def price_after_discount(self) -> int:
+        price_after_discount = int(int(self.iPoints) * int(self.discount) / 100)
+
+        return price_after_discount
+
+    def format_discount(self) -> str:
+        return f"{int(self.discount)//10}折"
+
+
+class MyHomeValueGift:
+    def __init__(self, owner: str, gift: MyHomeGift):
+        self.owner = owner
+        self.gift = gift
+
+
+class MyHomeFriendList(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "ok"
+        self.total = "9"
+        self.data: list[MyHomeFriendInfo] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("data", MyHomeFriendInfo),
+        ]
+
+
+class MyHomeFriendInfo(ConfigInterface):
+    def __init__(self):
+        self.iUin = "24***71"
+        self.sNick = "I***r"
+        self.sUin = "NzZUL21FStYzZYdz09-1234567890"
+
 
 if __name__ == "__main__":
     from util import format_time, parse_time

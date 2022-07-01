@@ -7362,8 +7362,8 @@ class DjcHelper:
 
             return gifts.jData
 
-        def query_friend_list(iPage: int) -> MyHomeFriendList:
-            raw_res = self.dnf_my_home_op("好友小屋列表", "131196", iPage=iPage, print_res=False)
+        def query_friend_list(iPage: int, share_p_skey: str) -> MyHomeFriendList:
+            raw_res = self.dnf_my_home_op("好友小屋列表", "131196", iPage=iPage, extra_cookies=f"p_skey={share_p_skey}", print_res=False)
 
             return MyHomeFriendList().auto_update_config(raw_res["jData"])
 
@@ -7432,8 +7432,9 @@ class DjcHelper:
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
+            share_p_skey = self.fetch_share_p_skey("我的小屋查询好友")
             for friend_page in range_from_one(1000):
-                friend_list = query_friend_list(friend_page)
+                friend_list = query_friend_list(friend_page, share_p_skey)
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
                 for friend_info in friend_list.data:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)

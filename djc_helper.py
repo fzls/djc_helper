@@ -10959,7 +10959,7 @@ if __name__ == "__main__":
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
-        show_head_line(f"开始处理第{idx}个账户[{account_config.name}]", color("fg_bold_yellow"))
+        show_head_line(f"开始处理第{idx}个账户[{account_config.name}({account_config.qq()})]", color("fg_bold_yellow"))
 
         if not account_config.is_enabled():
             logger.warning("账号被禁用，将跳过")

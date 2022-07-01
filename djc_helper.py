@@ -7363,7 +7363,9 @@ class DjcHelper:
             return gifts.jData
 
         def query_friend_list(iPage: int, share_p_skey: str) -> MyHomeFriendList:
-            raw_res = self.dnf_my_home_op("好友小屋列表", "131196", iPage=iPage, extra_cookies=f"p_skey={share_p_skey}", print_res=False)
+            raw_res = self.dnf_my_home_op(
+                "好友小屋列表", "131196", iPage=iPage, extra_cookies=f"p_skey={share_p_skey}", print_res=False
+            )
 
             return MyHomeFriendList().auto_update_config(raw_res["jData"])
 

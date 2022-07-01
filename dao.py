@@ -1896,7 +1896,8 @@ class MyHomeGift(ConfigInterface):
 
 
 class MyHomeValueGift:
-    def __init__(self, owner: str, gift: MyHomeGift):
+    def __init__(self, page: int, owner: str, gift: MyHomeGift):
+        self.page = page
         self.owner = owner
         self.gift = gift
 

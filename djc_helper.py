@@ -7386,7 +7386,7 @@ class DjcHelper:
             for g in valuable_gifts:
                 gift_desc_list.append(
                     " " * 4
-                    + f"{g.owner} 的宝箱: {g.gift.sPropName} {g.gift.price_after_discount()}({g.gift.format_discount()})"
+                    + f"第 {g.page} 页 {g.owner} 的宝箱: {g.gift.sPropName} {g.gift.price_after_discount()}({g.gift.format_discount()})"
                 )
             gift_descs = "\n".join(gift_desc_list)
 
@@ -7401,7 +7401,7 @@ class DjcHelper:
                 open_url=get_act_url("我的小屋"),
             )
 
-        def try_add_valuable_gift(valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str):
+        def try_add_valuable_gift(valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int):
             if not gift.is_valuable_gift():
                 # 普通奖励
                 return
@@ -7417,7 +7417,7 @@ class DjcHelper:
                 )
                 return
 
-            valuable_gifts.append(MyHomeValueGift(owner, gift))
+            valuable_gifts.append(MyHomeValueGift(page, owner, gift))
 
         @try_except()
         def notify_exchange_valuable_gift(current_points: int):
@@ -7430,7 +7430,7 @@ class DjcHelper:
             for gift in my_gifts:
                 logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
 
-                try_add_valuable_gift(valuable_gifts, gift, "自己")
+                try_add_valuable_gift(valuable_gifts, gift, "自己", 0)
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
@@ -7441,7 +7441,7 @@ class DjcHelper:
                 for friend_info in friend_list.data:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
                     for gift in friend_gifts:
-                        try_add_valuable_gift(valuable_gifts, gift, f"好友 {friend_info.sNick}({gift.iUin})")
+                        try_add_valuable_gift(valuable_gifts, gift, f"好友 {friend_info.sNick}({gift.iUin})", friend_page)
 
                     time.sleep(0.1)
 

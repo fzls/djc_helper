@@ -7512,8 +7512,8 @@ class DjcHelper:
             "我的小屋",
             get_act_url("我的小屋"),
             activity_op_func=self.dnf_my_home_op,
-            sAuthInfo="",
-            sActivityInfo="",
+            sAuthInfo="WDXW",
+            sActivityInfo="469853",
         )
 
     def dnf_my_home_op(

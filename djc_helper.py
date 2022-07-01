@@ -59,6 +59,7 @@ from dao import (
     MyHomeFriendList,
     MyHomeGift,
     MyHomeGiftList,
+    MyHomeInfo,
     MyHomeValueGift,
     NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
@@ -7488,13 +7489,22 @@ class DjcHelper:
             )
         # self.dnf_my_home_op("兑换本身小屋道具", "132421")
         # self.dnf_my_home_op("兑换他人小屋道具", "132449")
-        # self.dnf_my_home_op("兑换终极道具", "132491")
+
+        # 兑换光环, 6月30日12点开启兑换通道
+        info = self.my_home_query_info()
+        if int(info.iExchange) > 0 and get_now() >= parse_time("2022-06-30 12:00:00"):
+            self.dnf_my_home_op("兑换终极道具(次元穿梭光环)", "132491")
+
+    def my_home_query_info(self) -> MyHomeInfo:
+        raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
+
+        return MyHomeInfo().auto_update_config(raw_res["jData"])
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def my_home_query_integral(self) -> int:
-        raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
+        info = self.my_home_query_info()
 
-        return int(raw_res["jData"]["iIntegral"])
+        return int(info.iIntegral)
 
     def check_dnf_my_home(self, **extra_params):
         return self.ide_check_bind_account(

@@ -1836,6 +1836,22 @@ class DnfHelperChronicleBindInfo(ConfigInterface):
         self.tip_title = ""
 
 
+class MyHomeInfo(ConfigInterface):
+    def __init__(self):
+        self.iRet = "0"
+        self.sMsg = "ok"
+        self.iAuth = "1"
+        self.isFirst = 0
+        self.iIntegral = "1045"
+        self.iExchange = "0"
+        self.iRefresh = "0"
+        self.isUser = 1
+        self.iHasRare = "1"
+        self.sNick = "风***呀"
+        self.isOpen = 1
+        self.iInviteNum = "0"
+
+
 class MyHomeGiftList(ConfigInterface):
     def __init__(self):
         self.jData: list[MyHomeGift] = []

@@ -7450,6 +7450,7 @@ class DjcHelper:
             notify_valuable_gifts(current_points, valuable_gifts)
 
         # 初始化
+        self.dnf_my_home_op("任务状态与资格", "133680")
         self.dnf_my_home_op("更新访问日期", "133320")
         self.dnf_my_home_op("开通小屋", "132689")
         self.dnf_my_home_op("刷新宝箱道具", "132469")

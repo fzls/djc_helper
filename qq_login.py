@@ -1522,7 +1522,7 @@ class QQLogin:
 
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []
-            init_offset = drag_tarck_width - missing_block_width - delta_width
+            init_offset = drag_tarck_width - drag_block_width - delta_width
             if len(account_db.offset_to_history_succes_count) != 0:
                 # 若有则取其中最频繁的前几个作为优先尝试项
                 mostCommon = Counter(account_db.offset_to_history_succes_count).most_common()

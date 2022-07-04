@@ -5811,7 +5811,7 @@ class DjcHelper:
         self.dnf_xinyue_op("加群送亲密值", "861908")
 
         draw_card()
-        self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
+        # self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
 
         card_counts = self.query_xinyue_card_counts()
         show_card_summary(card_counts)

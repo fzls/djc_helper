@@ -1463,7 +1463,7 @@ class QQLogin:
             logger.info(f"{self.name} 未启用自动处理拖拽验证码的功能")
             return
 
-        if self.cfg.login.move_captcha_delta_width_rate <= 0:
+        if self.cfg.login.move_captcha_delta_width_rate_v2 <= 0:
             logger.info(f"{self.name} 未设置每次尝试的偏移值，跳过自动拖拽验证码")
             return
 
@@ -1515,7 +1515,7 @@ class QQLogin:
             drag_block_width = items[1].size["width"] or 54 # 滑块宽度
             missing_block_width = items[2].size["width"] or 50  # 上方缺失方块宽度
 
-            delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
+            delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate_v2) or 11  # 每次尝试多移动该宽度
 
             # 获取滑块，方便后面滚动
             drag_button = items[1]  # 滑块
@@ -1537,7 +1537,7 @@ class QQLogin:
 
             logger.info(
                 color("bold_green")
-                + f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，上方方块宽度为{missing_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)，初始偏差值为{init_offset}"
+                + f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，上方方块宽度为{missing_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate_v2:.2f}倍滑块宽度)，初始偏差值为{init_offset}"
             )
 
             # 将普通序列放入其中

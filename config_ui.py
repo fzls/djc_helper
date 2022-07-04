@@ -1716,9 +1716,9 @@ class LoginConfigUi(QWidget):
         self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
         add_row(form_layout, "启用", self.checkbox_auto_resolve_captcha)
 
-        self.doublespinbox_move_captcha_delta_width_rate = create_double_spin_box(cfg.move_captcha_delta_width_rate)
-        self.doublespinbox_move_captcha_delta_width_rate.setSingleStep(0.01)
-        add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate)
+        self.doublespinbox_move_captcha_delta_width_rate_v2 = create_double_spin_box(cfg.move_captcha_delta_width_rate_v2)
+        self.doublespinbox_move_captcha_delta_width_rate_v2.setSingleStep(0.01)
+        add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate_v2)
 
         add_form_seperator(form_layout, "超时时长(秒)")
 
@@ -1748,7 +1748,7 @@ class LoginConfigUi(QWidget):
         cfg.enable_auto_click_avatar_in_qr_login = self.checkbox_enable_auto_click_avatar_in_qr_login.isChecked()
 
         cfg.auto_resolve_captcha = self.checkbox_auto_resolve_captcha.isChecked()
-        cfg.move_captcha_delta_width_rate = self.doublespinbox_move_captcha_delta_width_rate.value()
+        cfg.move_captcha_delta_width_rate_v2 = self.doublespinbox_move_captcha_delta_width_rate_v2.value()
 
         cfg.max_retry_count = self.spinbox_max_retry_count.value()
         cfg.retry_wait_time = self.spinbox_retry_wait_time.value()

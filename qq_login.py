@@ -1151,7 +1151,9 @@ class QQLogin:
             xinyue_access_token=self.get_cookie("xinyue_access_token"),
         )
 
-    def get_switch_to_login_frame_fn(self, appid, daid, s_url, style=34, theme=2):
+    default_login_style = 20
+
+    def get_switch_to_login_frame_fn(self, appid, daid, s_url, style=default_login_style, theme=2):
         # 参数：appid  daid
         # 21000127      8       普通游戏活动        https://dnf.qq.com/
         # 15000103      5       qq空间             https://act.qzone.qq.com/
@@ -1171,6 +1173,7 @@ class QQLogin:
         # 二维码/快捷/密码 样式二（限定大小）：25
         # 二维码/快捷/密码 样式三（限定大小-格式美化）：34 re: 选用
         # 二维码/快捷/密码 样式四（居中-移动端风格-需要在手机上，且安装手机QQ后才可以）：35/42
+        # 授权登录（需要在手机上使用）：39
 
         # 参数：theme
         # 绿色风格：1
@@ -1179,7 +1182,7 @@ class QQLogin:
         login_url = self.get_login_url(appid, daid, s_url, style, theme)
         self.open_url_on_start(login_url)
 
-    def get_login_url(self, appid, daid, s_url, style=34, theme=2):
+    def get_login_url(self, appid, daid, s_url, style=default_login_style, theme=2):
         return f"https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid={appid}&daid={daid}&s_url={quote_plus(s_url)}&style={style}&theme={theme}&target=self"
 
     def _login_common(self, login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn=None):

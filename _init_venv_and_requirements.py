@@ -31,7 +31,7 @@ def init_venv_and_requirements(
     )
 
     logger.info("尝试更新pip setuptools wheel")
-    douban_op = ["-i", "https://pypi.doubanio.com/simple"]
+    douban_op = ["-i", "https://pypi.tuna.tsinghua.edu.cn/simple"]
     if disable_douban:
         douban_op = []
     subprocess.call(

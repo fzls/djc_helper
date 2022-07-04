@@ -1515,7 +1515,7 @@ class QQLogin:
             drag_block_width = items[1].size["width"] or 54 # 滑块宽度
             missing_block_width = items[2].size["width"] or 50  # 上方缺失方块宽度
 
-            delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate_v2) or 11  # 每次尝试多移动该宽度
+            delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate_v2) or 5  # 每次尝试多移动该宽度
 
             # 获取滑块，方便后面滚动
             drag_button = items[1]  # 滑块

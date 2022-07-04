@@ -54,7 +54,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2022-06-23 00:00:00", "2022-07-22 23:59:59", "qq视频蚊子腿-爱玩"),
-    newNotAmsActInfo("2021-03-31 00:00:00", not_know_end_time____, "会员关怀"),
+    newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "超级会员"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-06-26 23:59:59", "黄钻"),
     newNotAmsActInfo("2022-06-17 00:00:00", "2022-07-13 23:59:59", "集卡"),
@@ -100,6 +100,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
+    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     #
     # 已过期活动
     #
@@ -112,7 +113,6 @@ act_name_to_url = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
-    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/7477_6c7b7f17",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",

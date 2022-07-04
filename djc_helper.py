@@ -593,6 +593,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("KOL", self.dnf_kol),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("会员关怀", self.dnf_vip_mentor),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -605,7 +606,6 @@ class DjcHelper:
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
             ("魔界人探险记", self.mojieren),
-            ("会员关怀", self.dnf_vip_mentor),
             ("组队拜年", self.team_happy_new_year),
             ("新职业预约活动", self.dnf_reserve),
             ("DNF集合站_史诗之路", self.dnf_collection_dup),
@@ -2218,7 +2218,8 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "21535_758e9209"
+        # 礼包二
+        lucky_act_id = "67613_73c7557f"
         self.qzone_act_op("关怀礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "关怀礼包 - 尝试使用配置关怀角色",
@@ -2228,9 +2229,9 @@ class DjcHelper:
             ),
         )
 
-        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "21538_7430ac3a")
+        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "67615_38806738")
         for idx in range_from_one(10):
-            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "21539_14860aae")
+            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "67616_c33730b6")
             if res.get("Data", "") == "":
                 break
 
@@ -10979,4 +10980,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.dnf_vip_mentor()

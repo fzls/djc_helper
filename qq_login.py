@@ -1230,23 +1230,29 @@ class QQLogin:
                 except NoSuchWindowException:
                     logger.debug("这种情况好像不影响登录，可以无视")
                 except BaseException as e:
-                    # 判断是否出现了【手机号码验证】，若是，则把等待时间调长
-                    try:
-                        self.driver.find_element(By.ID, "verify_iframe_mask")
+                    def _check_secure_verify(ctx: str, css_selector: str):
+                        try:
+                            self.driver.find_element(By.CSS_SELECTOR, css_selector)
 
-                        verify_max_wait_time = 600
-                        logger.warning(color("bold_yellow") + f"{self.name} 需要进行手机号码验证，将最多等待 {verify_max_wait_time} 秒")
-                        if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
-                            raise RequireVerifyMessageButInHeadlessMode()
+                            verify_max_wait_time = 600
+                            logger.warning(color("bold_yellow") + f"{self.name} 需要进行 {ctx}，将最多等待 {verify_max_wait_time} 秒")
+                            if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
+                                raise RequireVerifyMessageButInHeadlessMode()
 
-                        WebDriverWait(self.driver, verify_max_wait_time).until(
-                            expected_conditions.invisibility_of_element_located((By.ID, "verify_iframe_mask"))
-                        )
-                    except RequireVerifyMessageButInHeadlessMode as verify_exception:
-                        raise verify_exception
-                    except Exception:
-                        # 如果没有手机验证，则按原样抛出异常
-                        raise e
+                            WebDriverWait(self.driver, verify_max_wait_time).until(
+                                expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, css_selector))
+                            )
+                        except RequireVerifyMessageButInHeadlessMode as verify_exception:
+                            raise verify_exception
+                        except Exception as exc:
+                            pass
+
+                    _check_secure_verify("手机号码验证", "#verify_iframe_mask")
+                    _check_secure_verify("安全验证", "#qlogin > #title_1[style='display: block;']")
+
+                    # 如果没有安全验证验证，则按原样抛出异常
+                    raise e
+
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据

@@ -1637,6 +1637,9 @@ def test():
     cfg.common.login.enable_auto_click_avatar_in_auto_login = False
     cfg.common.login.enable_auto_click_avatar_in_qr_login = False
 
+    cfg.common.login.login_timeout = 5
+    cfg.common.login.retry_wait_time = 10
+
     # 获取登录相关信息
     all_login_types = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_type_")]
     all_login_modes = [getattr(QQLogin, attr) for attr in dir(QQLogin) if attr.startswith("login_mode_")]

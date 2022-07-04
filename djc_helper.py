@@ -7402,10 +7402,13 @@ class DjcHelper:
                 open_url=get_act_url("我的小屋"),
             )
 
-        def try_add_valuable_gift(valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int):
+        def try_add_valuable_gift(valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int, s_uin: str):
             if not gift.is_valuable_gift():
                 # 普通奖励
                 return
+
+            # 打印下有稀有奖励的好友的信息，方便分享给别人
+            logger.info(f"{owner} s_uin={s_uin}")
 
             if int(gift.iUsedNum) >= int(gift.iTimes):
                 # 已超过兑换次数
@@ -7431,7 +7434,7 @@ class DjcHelper:
             for gift in my_gifts:
                 logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
 
-                try_add_valuable_gift(valuable_gifts, gift, "自己", 0)
+                try_add_valuable_gift(valuable_gifts, gift, "自己", 0, "")
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
@@ -7442,7 +7445,7 @@ class DjcHelper:
                 for friend_info in friend_list.data:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
                     for gift in friend_gifts:
-                        try_add_valuable_gift(valuable_gifts, gift, f"好友 {friend_info.sNick}({gift.iUin})", friend_page)
+                        try_add_valuable_gift(valuable_gifts, gift, f"好友 {friend_info.sNick}({gift.iUin})", friend_page, friend_info.sUin)
 
                     time.sleep(0.1)
 

@@ -1472,38 +1472,57 @@ class QQLogin:
 
         account_db = CaptchaDB().with_context(self.name).load()
         try:
+            iframe_id = "tcaptcha_iframe_dy"
             WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
-                expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_iframe"))
+                expected_conditions.visibility_of_element_located((By.ID, iframe_id))
             )
-            tcaptcha_iframe = self.driver.find_element(By.ID, "tcaptcha_iframe")
+            tcaptcha_iframe = self.driver.find_element(By.ID, iframe_id)
             self.driver.switch_to.frame(tcaptcha_iframe)
 
             logger.info(
                 color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）"
             )
 
+            # 新版中，三个组件的位置随机的，需要根据其样式去判断是哪个
+            selectors = [
+                "#tcOperation > div:nth-child(6)",
+                "#tcOperation > div:nth-child(7)",
+                "#tcOperation > div:nth-child(8)",
+            ]
+
             try:
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
-                    expected_conditions.visibility_of_element_located((By.ID, "slide"))
+                    expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, selectors[0]))
                 )
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
-                    expected_conditions.visibility_of_element_located((By.ID, "slideBlock"))
+                    expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, selectors[1]))
                 )
                 WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
-                    expected_conditions.visibility_of_element_located((By.ID, "tcaptcha_drag_button"))
+                    expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, selectors[2]))
                 )
             except Exception as e:
                 logger.warning(f"{self.name} 等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
 
-            drag_tarck_width = self.driver.find_element(By.ID, "slide").size["width"] or 280  # 进度条轨道宽度
-            drag_block_width = self.driver.find_element(By.ID, "slideBlock").size["width"] or 56  # 缺失方块宽度
-            delta_width = int(drag_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
+            # 先获取每个组件
+            items = [
+                self.driver.find_element(By.CSS_SELECTOR, selector)
+                for selector in selectors
+            ]
+            items.sort(key=lambda item: item.size["width"], reverse=True)
 
-            drag_button = self.driver.find_element(By.ID, "tcaptcha_drag_button")  # 进度条按钮
+            # 按照页面里的效果，理论上，宽度从大到小依次为 滑轨、滑块、上方缺失方块，比如测试时的数值分别为 280/54/50
+            drag_tarck_width = items[0].size["width"] or 280  # 进度条轨道宽度
+            drag_block_width = items[1].size["width"] or 54 # 滑块宽度
+            missing_block_width = items[2].size["width"] or 50  # 上方缺失方块宽度
+
+            delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate) or 11  # 每次尝试多移动该宽度
+
+            # 获取滑块，方便后面滚动
+            drag_button = items[1]  # 滑块
 
             # 根据经验，缺失验证码大部分时候出现在右侧，所以从右侧开始尝试
             xoffsets = []
-            init_offset = drag_tarck_width - drag_block_width - delta_width
+            init_offset = drag_tarck_width - missing_block_width - delta_width
             if len(account_db.offset_to_history_succes_count) != 0:
                 # 若有则取其中最频繁的前几个作为优先尝试项
                 mostCommon = Counter(account_db.offset_to_history_succes_count).most_common()
@@ -1513,12 +1532,12 @@ class QQLogin:
             else:
                 # 没有历史数据，只能取默认经验值了
                 # 有几个位置经常出现，如2/4和3/4个滑块处，优先尝试
-                xoffsets.append(init_offset - 2 * (drag_block_width // 4))
-                xoffsets.append(init_offset - 3 * (drag_block_width // 4))
+                xoffsets.append(init_offset - 2 * (missing_block_width // 4))
+                xoffsets.append(init_offset - 3 * (missing_block_width // 4))
 
             logger.info(
                 color("bold_green")
-                + f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)"
+                + f"{self.name} 验证码相关信息：轨道宽度为{drag_tarck_width}，滑块宽度为{drag_block_width}，上方方块宽度为{missing_block_width}，偏移递增量为{delta_width}({self.cfg.login.move_captcha_delta_width_rate:.2f}倍滑块宽度)，初始偏差值为{init_offset}"
             )
 
             # 将普通序列放入其中
@@ -1544,7 +1563,7 @@ class QQLogin:
 
                 captcha_try_count += 1
                 success_xoffset = xoffset
-                distance_rate = (init_offset - xoffset) / drag_block_width
+                distance_rate = (init_offset - xoffset) / missing_block_width
                 logger.info(
                     f"{self.name} 尝试第{captcha_try_count}次拖拽验证码，本次尝试偏移量为{xoffset}，距离右侧初始尝试位置({init_offset})距离相当于{distance_rate:.2f}个滑块宽度(若失败将等待{wait_time}秒)"
                 )

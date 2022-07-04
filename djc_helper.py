@@ -7414,6 +7414,7 @@ class DjcHelper:
                 # 已超过兑换次数
                 return
 
+            logger.info(f"{owner} s_uin={s_uin}")
             if current_points < gift.price_after_discount():
                 # 积分不够
                 logger.warning(

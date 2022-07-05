@@ -4198,6 +4198,13 @@ class DjcHelper:
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
+        # 这里理论上要使用助手的appid 1105742785，但是似乎使用心悦app的好像也可以-。-就直接用心悦的咯
+        appid = "101484782"
+
+        lr = self.fetch_xinyue_login_info("心悦app")
+        access_token = lr.xinyue_access_token
+        openid = lr.openid
+
         common_params = {
             "userId": dnf_helper_info.userId,
             "sPartition": partition,
@@ -4208,6 +4215,9 @@ class DjcHelper:
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
             "date": format_now("%Y-%m-%d"),
+            "appid": appid,
+            "appOpenid": openid,
+            "accessToken": access_token,
         }
 
         # ------ 封装通用接口 ------
@@ -11000,4 +11010,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.dnf_helper_chronicle()

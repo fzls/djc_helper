@@ -541,6 +541,24 @@ class DnfHelperChronicleExchangeGiftInfo(ConfigInterface):
         self.sPic1 = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20201130165705.png?version=5705"
         self.isLock = 0
         self.usedNum = 0
+        self.iLbSel = "1"
+        self.sExpire = ""
+        self.SubGifts: list[DnfHelperChronicleExchangeSubGiftInfo] = []
+        self.iIsOpen = "2"
+        self.sAndroidUrl = ""
+        self.sIOSUrl = ""
+        self.sExperienceNum = "0"
+
+    def fields_to_fill(self):
+        return [
+            ("SubGifts", DnfHelperChronicleExchangeSubGiftInfo),
+        ]
+
+
+class DnfHelperChronicleExchangeSubGiftInfo(ConfigInterface):
+    def __init__(self):
+        self.GiftName = "鬼剑士·女"
+        self.GiftId = " 62"
 
 
 class DnfHelperChronicleBasicAwardList(ConfigInterface):

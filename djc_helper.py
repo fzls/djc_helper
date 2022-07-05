@@ -10875,14 +10875,7 @@ def run_act(
             getattr(djcHelper, act_func_name)()
             return
         except SameAccountTryLoginAtMultipleThreadsException:
-            wait_for(
-                color("bold_yellow")
-                + (
-                    f"[{account_config.name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。"
-                    f"如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
-                ),
-                20,
-            )
+            notify_same_account_try_login_at_multiple_threads(account_config.name)
         except AttributeError as e:
             ctx = f"[{login_retry_count}/{max_login_retry_count}] [{account_config.name}] {act_name}"
             logger.error("{ctx} 出错了", exc_info=e)
@@ -10894,6 +10887,16 @@ def run_act(
 
             wait_for(f"{ctx} 登录检查失败了，等待一会后重试", 5)
             login_retry_count += 1
+
+
+def notify_same_account_try_login_at_multiple_threads(account_name: str):
+    wait_for(
+        color("bold_yellow") + f"[{account_name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。\n"
+        + "\n"
+        + color("bold_cyan") + "如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
+        + "\n",
+        20,
+    )
 
 
 def is_new_version_ark_lottery() -> bool:

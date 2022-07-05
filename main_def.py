@@ -17,7 +17,13 @@ from config import AccountConfig, CommonConfig, Config, config, load_config
 from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
-from djc_helper import DjcHelper, get_prize_names, is_new_version_ark_lottery, run_act
+from djc_helper import (
+    DjcHelper,
+    get_prize_names,
+    is_new_version_ark_lottery,
+    notify_same_account_try_login_at_multiple_threads,
+    run_act,
+)
 from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAccountTryLoginAtMultipleThreadsException
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
@@ -270,14 +276,7 @@ def do_check_all_skey_and_pskey(
 
             return _do_check_all_skey_and_pskey(window_index, account_config, common_config, check_skey_only)
         except SameAccountTryLoginAtMultipleThreadsException:
-            wait_for(
-                color("bold_yellow")
-                + (
-                    f"[{account_config.name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。"
-                    f"如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
-                ),
-                20,
-            )
+            notify_same_account_try_login_at_multiple_threads(account_config.name)
 
 
 def check_all_skey_and_pskey_silently_sync(cfg: Config):

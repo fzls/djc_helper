@@ -4498,10 +4498,17 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
+            this_monday = get_this_week_monday_datetime()
+            # 周 n 的 iRank值为 8-n，可以根据这个倒推出这个奖励是周几
+            gift_day_index = 8 - int(giftInfo.iRank)
+
+            gift_day = this_monday + datetime.timedelta(days=gift_day_index - 1)
+
             res = wang_get(
-                "领取签到奖励",
+                f"领取 {giftInfo.sDays} 签到奖励",
                 "send/sign",
-                amsid=giftInfo.sLbcode,
+                amsid="",
+                date=format_time(gift_day, "%Y-%m-%d"),
                 num=1,
             )
             logger.info(f"领取连续签到 {giftInfo.sDays} 的奖励: {res}")

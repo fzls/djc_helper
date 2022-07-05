@@ -4201,7 +4201,7 @@ class DjcHelper:
         # 这里理论上要使用助手的appid 1105742785，但是似乎使用心悦app的好像也可以-。-就直接用心悦的咯
         appid = "101484782"
 
-        lr = self.fetch_xinyue_login_info("心悦app")
+        lr = self.fetch_xinyue_login_info("借用心悦app的accessToken来完成编年史所需参数")
         access_token = lr.xinyue_access_token
         openid = lr.openid
 

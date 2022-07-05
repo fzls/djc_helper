@@ -4661,7 +4661,7 @@ class DjcHelper:
                 iNum=giftInfo.iNum,
                 isLock=giftInfo.isLock,
             )
-            logger.info(f"{ctx}兑换奖励: {res}")
+            logger.info(f"{ctx}兑换奖励({giftInfo.sName}): {res}")
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def lottery():

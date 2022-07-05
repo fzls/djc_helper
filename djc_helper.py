@@ -7407,12 +7407,12 @@ class DjcHelper:
                 # 普通奖励
                 return
 
-            # 打印下有稀有奖励的好友的信息，方便分享给别人
-            logger.info(f"{owner} s_uin={s_uin}")
-
             if int(gift.iUsedNum) >= int(gift.iTimes):
                 # 已超过兑换次数
                 return
+
+            # 打印下有稀有奖励的好友的信息，方便分享给别人
+            logger.info(f"可分享小屋 {owner} {s_uin} {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes})")
 
             if current_points < gift.price_after_discount():
                 # 积分不够

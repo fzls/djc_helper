@@ -87,7 +87,6 @@ from util import (
     uin2qq,
     use_by_myself,
     wait_a_while,
-    wait_for,
     with_cache,
 )
 from version import author, now_version, ver_time

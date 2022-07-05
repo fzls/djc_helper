@@ -10891,9 +10891,11 @@ def run_act(
 
 def notify_same_account_try_login_at_multiple_threads(account_name: str):
     wait_for(
-        color("bold_yellow") + f"[{account_name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。\n"
+        color("bold_yellow")
+        + f"[{account_name}] 似乎因为skey中途过期，而导致多个进程同时尝试重新登录当前账号，当前进程较迟尝试，因此先等待一段时间，等第一个进程登录完成后再重试。\n"
         + "\n"
-        + color("bold_cyan") + "如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
+        + color("bold_cyan")
+        + "如果一直重复，请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~"
         + "\n",
         20,
     )

@@ -1716,7 +1716,9 @@ class LoginConfigUi(QWidget):
         self.checkbox_auto_resolve_captcha = create_checkbox(cfg.auto_resolve_captcha)
         add_row(form_layout, "启用", self.checkbox_auto_resolve_captcha)
 
-        self.doublespinbox_move_captcha_delta_width_rate_v2 = create_double_spin_box(cfg.move_captcha_delta_width_rate_v2)
+        self.doublespinbox_move_captcha_delta_width_rate_v2 = create_double_spin_box(
+            cfg.move_captcha_delta_width_rate_v2
+        )
         self.doublespinbox_move_captcha_delta_width_rate_v2.setSingleStep(0.01)
         add_row(form_layout, "每次尝试滑动验证码多少倍滑块宽度的偏移值", self.doublespinbox_move_captcha_delta_width_rate_v2)
 

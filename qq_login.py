@@ -1230,12 +1230,15 @@ class QQLogin:
                 except NoSuchWindowException:
                     logger.debug("这种情况好像不影响登录，可以无视")
                 except BaseException as e:
+
                     def _check_secure_verify(ctx: str, css_selector: str):
                         try:
                             self.driver.find_element(By.CSS_SELECTOR, css_selector)
 
                             verify_max_wait_time = 600
-                            logger.warning(color("bold_yellow") + f"{self.name} 需要进行 {ctx}，将最多等待 {verify_max_wait_time} 秒")
+                            logger.warning(
+                                color("bold_yellow") + f"{self.name} 需要进行 {ctx}，将最多等待 {verify_max_wait_time} 秒"
+                            )
                             if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
                                 raise RequireVerifyMessageButInHeadlessMode()
 
@@ -1252,7 +1255,6 @@ class QQLogin:
 
                     # 如果没有安全验证验证，则按原样抛出异常
                     raise e
-
 
                 if idx > 1:
                     # 第idx-1次的重试成功了，尝试更新历史数据
@@ -1504,15 +1506,12 @@ class QQLogin:
                 logger.warning(f"{self.name} 等待验证码相关元素出现失败了,将按照默认宽度进行操作", exc_info=e)
 
             # 先获取每个组件
-            items = [
-                self.driver.find_element(By.CSS_SELECTOR, selector)
-                for selector in selectors
-            ]
+            items = [self.driver.find_element(By.CSS_SELECTOR, selector) for selector in selectors]
             items.sort(key=lambda item: item.size["width"], reverse=True)
 
             # 按照页面里的效果，理论上，宽度从大到小依次为 滑轨、滑块、上方缺失方块，比如测试时的数值分别为 280/54/50
             drag_tarck_width = items[0].size["width"] or 280  # 进度条轨道宽度
-            drag_block_width = items[1].size["width"] or 54 # 滑块宽度
+            drag_block_width = items[1].size["width"] or 54  # 滑块宽度
             missing_block_width = items[2].size["width"] or 50  # 上方缺失方块宽度
 
             delta_width = int(missing_block_width * self.cfg.login.move_captcha_delta_width_rate_v2) or 5  # 每次尝试多移动该宽度

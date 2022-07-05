@@ -1248,7 +1248,7 @@ class QQLogin:
                         except RequireVerifyMessageButInHeadlessMode as verify_exception:
                             raise verify_exception
                         except Exception as exc:
-                            pass
+                            logger.debug("other exception", exc_info=exc)
 
                     _check_secure_verify("手机号码验证", "#verify_iframe_mask")
                     _check_secure_verify("安全验证", "#qlogin > #title_1[style='display: block;']")

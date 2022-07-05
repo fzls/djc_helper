@@ -4216,8 +4216,10 @@ class DjcHelper:
                 ctx,
                 self.urls.dnf_helper_chronicle_wang_xinyue,
                 api=api,
-                **common_params,
-                **extra_params,
+                **{
+                    **common_params,
+                    **extra_params,
+                },
             )
 
         def wegame_post(ctx: str, api: str, **extra_params) -> dict:
@@ -4225,8 +4227,10 @@ class DjcHelper:
                 ctx,
                 self.urls.dnf_helper_chronicle_mwegame,
                 api=api,
-                **common_params,
-                **extra_params,
+                **{
+                    **common_params,
+                    **extra_params,
+                },
             )
 
         def yoyo_post(ctx: str, api: str, **extra_params) -> dict:

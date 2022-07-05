@@ -10983,4 +10983,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_vip_mentor()
+        djcHelper.dnf_my_home()

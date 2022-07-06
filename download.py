@@ -79,6 +79,9 @@ def download_latest_github_release(
 
     # 先加入比较快的几个镜像
     urls = [
+        f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
+        f"https://download.xn--p8jhe.tw/{release_file_path}",
+        f"https://hub.xn--gzu630h.xn--kpry57d/{release_file_path}",
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
         f"https://gh.ddlc.top/https://github.com/{release_file_path}",
     ]

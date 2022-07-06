@@ -7463,7 +7463,7 @@ class DjcHelper:
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
-            share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=-1)
+            share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
             for friend_page in range_from_one(1000):
                 friend_list = query_friend_list(friend_page, share_p_skey)
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")

@@ -901,6 +901,9 @@ enable_auto_match_dnf_chronicle = false
 # dnf助手编年史是否开启抽奖
 chronicle_lottery = false
 
+# 不尝试获取编年史新鉴权参数
+disable_fetch_access_token = false
+
 # dnf助手编年史兑换道具信息，其他奖励信息可打开logs目录中最新运行日志，搜索 可兑换道具列表 即可
 # sLbcode, sName为上述参考配置中的原样字段，count表示每次运行时要尝试领取几次
 #[[account_configs.dnf_helper_info.chronicle_exchange_items]]

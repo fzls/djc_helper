@@ -4198,13 +4198,6 @@ class DjcHelper:
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
-        # 这里理论上要使用助手的appid 1105742785，但是似乎使用心悦app的好像也可以-。-就直接用心悦的咯
-        appid = "101484782"
-
-        lr = self.fetch_xinyue_login_info("借用心悦app的accessToken来完成编年史所需参数")
-        access_token = lr.xinyue_access_token
-        openid = lr.openid
-
         common_params = {
             "userId": dnf_helper_info.userId,
             "sPartition": partition,
@@ -4215,9 +4208,6 @@ class DjcHelper:
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
             "date": format_now("%Y-%m-%d"),
-            "appid": appid,
-            "appOpenid": openid,
-            "accessToken": access_token,
         }
 
         # ------ 封装通用接口 ------
@@ -4726,8 +4716,6 @@ class DjcHelper:
         # 领取任务奖励的经验
         takeTaskAwards()
 
-        # 领取连续签到奖励
-        take_continuous_signin_gifts()
         # note: 下面的流程需要一个额外参数，在这里再进行，避免影响后续流程
         async_message_box(
             (
@@ -4740,14 +4728,34 @@ class DjcHelper:
             show_once=True,
         )
 
-        # 领取基础奖励
-        take_basic_awards()
+        if not self.cfg.dnf_helper_info.disable_fetch_access_token:
+            # 这里理论上要使用助手的appid 1105742785，但是似乎使用心悦app的好像也可以-。-就直接用心悦的咯
+            appid = "101484782"
 
-        # 根据配置兑换奖励
-        exchange_awards()
+            lr = self.fetch_xinyue_login_info("借用心悦app的accessToken来完成编年史所需参数")
+            access_token = lr.xinyue_access_token
+            openid = lr.openid
 
-        # 抽奖
-        lottery()
+            common_params = {
+                **common_params,
+                "appid": appid,
+                "appOpenid": openid,
+                "accessToken": access_token,
+            }
+
+            # 领取连续签到奖励
+            take_continuous_signin_gifts()
+
+            # 领取基础奖励
+            take_basic_awards()
+
+            # 根据配置兑换奖励
+            exchange_awards()
+
+            # 抽奖
+            lottery()
+        else:
+            logger.warning("当前已禁用获取新鉴权参数的功能，将跳过签到、等级奖励、兑换奖励流程")
 
         # 展示进度信息
         def show_user_info(name: str, ui: DnfHelperChronicleUserActivityTopInfo):
@@ -10243,6 +10251,9 @@ class DjcHelper:
                 "answer3",
                 "countsInfo",
                 "power",
+                "appid",
+                "appOpenid",
+                "accessToken",
             ]
         }
 

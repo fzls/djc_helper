@@ -2831,6 +2831,9 @@ class DnfHelperInfoConfigUi(QWidget):
         self.checkbox_chronicle_lottery = create_checkbox(cfg.chronicle_lottery)
         add_row(form_layout, "编年史开启抽奖", self.checkbox_chronicle_lottery)
 
+        self.checkbox_disable_fetch_access_token = create_checkbox(cfg.disable_fetch_access_token)
+        add_row(form_layout, "不尝试获取编年史新鉴权参数", self.checkbox_disable_fetch_access_token)
+
         self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请查看【使用教程/使用文档.docx/获取助手token】")
         add_row(form_layout, "助手生日活动链接", self.lineedit_url)
         self.lineedit_url.textEdited.connect(self.on_url_changed)
@@ -2893,6 +2896,7 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.enable_auto_match_dnf_chronicle = self.checkbox_enable_auto_match_dnf_chronicle.isChecked()
 
         cfg.chronicle_lottery = self.checkbox_chronicle_lottery.isChecked()
+        cfg.disable_fetch_access_token = self.checkbox_disable_fetch_access_token.isChecked()
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         for sLbcode, exchange_item in self.exchange_items.items():

@@ -597,6 +597,9 @@ class DnfHelperInfoConfig(ConfigInterface):
         # dnf助手编年史兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf助手编年史活动_可兑换奖励列表.json
         self.chronicle_exchange_items: list[DnfHelperChronicleExchangeItemConfig] = []
 
+        # 不尝试获取编年史新鉴权参数
+        self.disable_fetch_access_token = False
+
     def fields_to_fill(self):
         return [
             ("chronicle_exchange_items", DnfHelperChronicleExchangeItemConfig),

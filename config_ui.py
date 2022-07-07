@@ -2933,10 +2933,10 @@ class DnfHelperInfoConfigUi(QWidget):
         cfg.move_exchange_item_to_front()
 
     def on_url_changed(self, new_url: str):
-        userId = parse_url_param(new_url, "userId")
-        nickname = parse_url_param(new_url, "nickname")
-        token = parse_url_param(new_url, "token")
-        uniqueRoleId = parse_url_param(new_url, "uniqueRoleId")
+        userId = parse_url_param(new_url, "userId").strip()
+        nickname = parse_url_param(new_url, "nickname").strip()
+        token = parse_url_param(new_url, "token").strip()
+        uniqueRoleId = parse_url_param(new_url, "uniqueRoleId").strip()
 
         self.lineedit_userId.setText(userId)
         self.lineedit_nickName.setText(nickname)

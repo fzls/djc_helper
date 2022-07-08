@@ -7455,7 +7455,7 @@ class DjcHelper:
 
             # 打印下有稀有奖励的好友的信息，方便分享给别人
             logger.info(
-                f"可分享小屋 {owner} {s_uin} {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes})"
+                f"可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
             )
 
             if current_points < gift.price_after_discount():

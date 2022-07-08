@@ -795,6 +795,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_team_happy_new_year = True
         # 是否领取 翻牌 活动
         self.get_dnf_card_flip = True
+        # 是否领取 DNF冒险家之路 活动
+        self.get_dnf_maoxian_road = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

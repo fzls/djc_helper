@@ -97,6 +97,7 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
+    "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     #
     # 已过期活动
     #
@@ -275,6 +276,7 @@ class Urls:
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
+        self.iActivityId_dnf_maoxian_road = "471284"  # DNF冒险家之路
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

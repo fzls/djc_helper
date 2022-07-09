@@ -2384,8 +2384,8 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
 
         # 不同登录类型的活动开关
-        for act_actegory, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
-            for act_name, switch_name in act_desc_swtich_list:
+        for _, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
+            for _, switch_name in act_desc_swtich_list:
                 checkbox_name = f"checkbox_{switch_name}"
                 checkbox = getattr(self, checkbox_name)
 

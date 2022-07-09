@@ -2269,6 +2269,55 @@ class AccountInfoConfigUi(QWidget):
 
 
 class FunctionSwitchesConfigUi(QWidget):
+    skey_activity_list = [
+        ("领取道聚城", "get_djc"),
+        ("道聚城许愿", "make_wish"),
+        ("心悦特权专区", "get_xinyue"),
+        ("腾讯游戏信用相关礼包", "get_credit_xinyue_gift"),
+        ("每月黑钻等级礼包", "get_heizuan_gift"),
+        ("DNF闪光杯第三期", "get_dnf_shanguang"),
+        ("qq视频活动", "get_qq_video"),
+        ("qq视频-AME活动", "get_qq_video_amesvr"),
+        ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
+        ("dnf助手活动（需配置助手userId和token）", "get_dnf_helper"),
+        ("hello语音（皮皮蟹）奖励兑换（需配置hello语音（皮皮蟹）的用户ID）", "get_hello_voice"),
+        ("DNF共创投票", "get_dnf_dianzan"),
+        ("DNF福利中心兑换", "get_dnf_welfare"),
+        ("心悦app理财礼卡", "get_xinyue_financing"),
+        ("心悦猫咪", "get_xinyue_cat"),
+        ("心悦app周礼包", "get_xinyue_weekly_gift"),
+        ("DNF马杰洛的规划", "get_majieluo"),
+        ("dnf论坛签到", "get_dnf_bbs_signin"),
+        ("DNF落地页", "get_dnf_luodiye"),
+        ("WeGame", "get_dnf_wegame"),
+        ("DNF集合站", "get_dnf_collection"),
+        ("DNF福签大作战", "get_dnf_fuqian"),
+        ("DNF奥兹玛竞速", "get_dnf_ozma"),
+        ("colg每日签到和积分领取", "get_colg_signin"),
+        ("心悦app兑换", "get_xinyue_app"),
+        ("DNF格斗大赛", "get_dnf_pk"),
+        ("心悦", "get_dnf_xinyue"),
+        ("DNF强者之路", "get_dnf_strong"),
+        ("DNF漫画", "get_dnf_comic"),
+        ("DNF十三周年庆", "get_dnf_13"),
+        ("我的dnf13周年活动", "get_dnf_my_story"),
+        ("新职业预约活动", "get_dnf_reserve"),
+        ("DNF周年庆登录活动", "get_dnf_anniversary"),
+        ("KOL", "get_dnf_kol"),
+        ("冒险的起点", "get_maoxian_start"),
+        ("勇士的冒险补给", "get_maoxian"),
+        ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
+        ("DNF公会活动", "get_dnf_gonghui"),
+        ("命运的抉择挑战赛", "get_dnf_mingyun_jueze"),
+        ("关怀活动", "get_dnf_guanhuai"),
+        ("轻松之路", "get_dnf_relax_road"),
+        ("虎牙", "get_huya"),
+        ("DNF名人堂", "get_dnf_vote"),
+        ("WeGame活动_新版", "get_wegame_new"),
+        ("魔界人探险记", "get_mojieren"),
+        ("DNF冒险家之路", "get_dnf_maoxian_road"),
+    ]
+
     def __init__(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig, parent=None):
         super().__init__(parent)
 
@@ -2321,143 +2370,12 @@ class FunctionSwitchesConfigUi(QWidget):
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "普通skey")
 
-        self.checkbox_get_djc = create_checkbox(cfg.get_djc)
-        add_row(form_layout, "领取道聚城", self.checkbox_get_djc)
+        for act_name, switch_name in self.skey_activity_list:
+            checkbox_name = f"checkbox_{switch_name}"
+            checkbox = create_checkbox(getattr(cfg, switch_name))
 
-        self.checkbox_make_wish = create_checkbox(cfg.make_wish)
-        add_row(form_layout, "道聚城许愿", self.checkbox_make_wish)
-
-        self.checkbox_get_xinyue = create_checkbox(cfg.get_xinyue)
-        add_row(form_layout, "心悦特权专区", self.checkbox_get_xinyue)
-
-        self.checkbox_get_credit_xinyue_gift = create_checkbox(cfg.get_credit_xinyue_gift)
-        add_row(form_layout, "腾讯游戏信用相关礼包", self.checkbox_get_credit_xinyue_gift)
-
-        self.checkbox_get_heizuan_gift = create_checkbox(cfg.get_heizuan_gift)
-        add_row(form_layout, "每月黑钻等级礼包", self.checkbox_get_heizuan_gift)
-
-        # self.checkbox_get_dnf_shanguang = create_checkbox(cfg.get_dnf_shanguang)
-        # add_row(form_layout, "DNF闪光杯第三期", self.checkbox_get_dnf_shanguang)
-
-        self.checkbox_get_qq_video = create_checkbox(cfg.get_qq_video)
-        add_row(form_layout, "qq视频活动", self.checkbox_get_qq_video)
-
-        self.checkbox_get_qq_video_amesvr = create_checkbox(cfg.get_qq_video_amesvr)
-        add_row(form_layout, "qq视频-AME活动", self.checkbox_get_qq_video_amesvr)
-
-        self.checkbox_get_dnf_helper_chronicle = create_checkbox(cfg.get_dnf_helper_chronicle)
-        add_row(form_layout, "dnf助手编年史（需配置助手userId和token和uniqueRoleId）", self.checkbox_get_dnf_helper_chronicle)
-
-        self.checkbox_get_dnf_helper = create_checkbox(cfg.get_dnf_helper)
-        add_row(form_layout, "dnf助手活动（需配置助手userId和token）", self.checkbox_get_dnf_helper)
-
-        self.checkbox_get_hello_voice = create_checkbox(cfg.get_hello_voice)
-        add_row(form_layout, "hello语音（皮皮蟹）奖励兑换（需配置hello语音（皮皮蟹）的用户ID）", self.checkbox_get_hello_voice)
-
-        self.checkbox_get_dnf_dianzan = create_checkbox(cfg.get_dnf_dianzan)
-        add_row(form_layout, "DNF共创投票", self.checkbox_get_dnf_dianzan)
-
-        self.checkbox_get_dnf_welfare = create_checkbox(cfg.get_dnf_welfare)
-        add_row(form_layout, "DNF福利中心兑换", self.checkbox_get_dnf_welfare)
-
-        self.checkbox_get_xinyue_financing = create_checkbox(cfg.get_xinyue_financing)
-        add_row(form_layout, "心悦app理财礼卡", self.checkbox_get_xinyue_financing)
-
-        self.checkbox_get_xinyue_cat = create_checkbox(cfg.get_xinyue_cat)
-        add_row(form_layout, "心悦猫咪", self.checkbox_get_xinyue_cat)
-
-        self.checkbox_get_xinyue_weekly_gift = create_checkbox(cfg.get_xinyue_weekly_gift)
-        add_row(form_layout, "心悦app周礼包", self.checkbox_get_xinyue_weekly_gift)
-
-        self.checkbox_get_majieluo = create_checkbox(cfg.get_majieluo)
-        add_row(form_layout, "DNF马杰洛的规划", self.checkbox_get_majieluo)
-
-        self.checkbox_get_dnf_bbs_signin = create_checkbox(cfg.get_dnf_bbs_signin)
-        add_row(form_layout, "dnf论坛签到", self.checkbox_get_dnf_bbs_signin)
-
-        self.checkbox_get_dnf_luodiye = create_checkbox(cfg.get_dnf_luodiye)
-        add_row(form_layout, "DNF落地页", self.checkbox_get_dnf_luodiye)
-
-        self.checkbox_get_dnf_wegame = create_checkbox(cfg.get_dnf_wegame)
-        add_row(form_layout, "WeGame", self.checkbox_get_dnf_wegame)
-
-        self.checkbox_get_dnf_collection = create_checkbox(cfg.get_dnf_collection)
-        add_row(form_layout, "DNF集合站", self.checkbox_get_dnf_collection)
-
-        self.checkbox_get_dnf_fuqian = create_checkbox(cfg.get_dnf_fuqian)
-        add_row(form_layout, "DNF福签大作战", self.checkbox_get_dnf_fuqian)
-
-        self.checkbox_get_dnf_ozma = create_checkbox(cfg.get_dnf_ozma)
-        add_row(form_layout, "DNF奥兹玛竞速", self.checkbox_get_dnf_ozma)
-
-        self.checkbox_get_colg_signin = create_checkbox(cfg.get_colg_signin)
-        add_row(form_layout, "colg每日签到和积分领取", self.checkbox_get_colg_signin)
-
-        self.checkbox_get_xinyue_app = create_checkbox(cfg.get_xinyue_app)
-        add_row(form_layout, "心悦app兑换", self.checkbox_get_xinyue_app)
-
-        self.checkbox_get_dnf_pk = create_checkbox(cfg.get_dnf_pk)
-        add_row(form_layout, "DNF格斗大赛", self.checkbox_get_dnf_pk)
-
-        self.checkbox_get_dnf_xinyue = create_checkbox(cfg.get_dnf_xinyue)
-        add_row(form_layout, "心悦", self.checkbox_get_dnf_xinyue)
-
-        self.checkbox_get_dnf_strong = create_checkbox(cfg.get_dnf_strong)
-        add_row(form_layout, "DNF强者之路", self.checkbox_get_dnf_strong)
-
-        self.checkbox_get_dnf_comic = create_checkbox(cfg.get_dnf_comic)
-        add_row(form_layout, "DNF漫画", self.checkbox_get_dnf_comic)
-
-        self.checkbox_get_dnf_13 = create_checkbox(cfg.get_dnf_13)
-        add_row(form_layout, "DNF十三周年庆", self.checkbox_get_dnf_13)
-
-        self.checkbox_get_dnf_my_story = create_checkbox(cfg.get_dnf_my_story)
-        add_row(form_layout, "我的dnf13周年活动", self.checkbox_get_dnf_my_story)
-
-        self.checkbox_get_dnf_reserve = create_checkbox(cfg.get_dnf_reserve)
-        add_row(form_layout, "新职业预约活动", self.checkbox_get_dnf_reserve)
-
-        self.checkbox_get_dnf_anniversary = create_checkbox(cfg.get_dnf_anniversary)
-        add_row(form_layout, "DNF周年庆登录活动", self.checkbox_get_dnf_anniversary)
-
-        self.checkbox_get_dnf_kol = create_checkbox(cfg.get_dnf_kol)
-        add_row(form_layout, "KOL", self.checkbox_get_dnf_kol)
-
-        self.checkbox_get_maoxian_start = create_checkbox(cfg.get_maoxian_start)
-        add_row(form_layout, "冒险的起点", self.checkbox_get_maoxian_start)
-
-        self.checkbox_get_maoxian = create_checkbox(cfg.get_maoxian)
-        add_row(form_layout, "勇士的冒险补给", self.checkbox_get_maoxian)
-
-        self.checkbox_get_xiaojiangyou = create_checkbox(cfg.get_xiaojiangyou)
-        add_row(form_layout, "小酱油周礼包和生日礼包", self.checkbox_get_xiaojiangyou)
-
-        self.checkbox_get_dnf_gonghui = create_checkbox(cfg.get_dnf_gonghui)
-        add_row(form_layout, "DNF公会活动", self.checkbox_get_dnf_gonghui)
-
-        self.checkbox_get_dnf_mingyun_jueze = create_checkbox(cfg.get_dnf_mingyun_jueze)
-        add_row(form_layout, "命运的抉择挑战赛", self.checkbox_get_dnf_mingyun_jueze)
-
-        self.checkbox_get_dnf_guanhuai = create_checkbox(cfg.get_dnf_guanhuai)
-        add_row(form_layout, "关怀活动", self.checkbox_get_dnf_guanhuai)
-
-        self.checkbox_get_dnf_relax_road = create_checkbox(cfg.get_dnf_relax_road)
-        add_row(form_layout, "轻松之路", self.checkbox_get_dnf_relax_road)
-
-        self.checkbox_get_huya = create_checkbox(cfg.get_huya)
-        add_row(form_layout, "虎牙", self.checkbox_get_huya)
-
-        self.checkbox_get_dnf_vote = create_checkbox(cfg.get_dnf_vote)
-        add_row(form_layout, "DNF名人堂", self.checkbox_get_dnf_vote)
-
-        self.checkbox_get_wegame_new = create_checkbox(cfg.get_wegame_new)
-        add_row(form_layout, "WeGame活动_新版", self.checkbox_get_wegame_new)
-
-        self.checkbox_get_mojieren = create_checkbox(cfg.get_mojieren)
-        add_row(form_layout, "魔界人探险记", self.checkbox_get_mojieren)
-
-        self.checkbox_get_dnf_maoxian_road = create_checkbox(cfg.get_dnf_maoxian_road)
-        add_row(form_layout, "DNF冒险家之路", self.checkbox_get_dnf_maoxian_road)
+            setattr(self, checkbox_name, checkbox)
+            add_row(form_layout, act_name, checkbox)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
@@ -2493,52 +2411,11 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.disable_login_mode_guanjia = self.checkbox_disable_login_mode_guanjia.isChecked()
         cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
 
-        cfg.get_djc = self.checkbox_get_djc.isChecked()
-        cfg.make_wish = self.checkbox_make_wish.isChecked()
-        cfg.get_xinyue = self.checkbox_get_xinyue.isChecked()
-        cfg.get_credit_xinyue_gift = self.checkbox_get_credit_xinyue_gift.isChecked()
-        cfg.get_heizuan_gift = self.checkbox_get_heizuan_gift.isChecked()
-        # cfg.get_dnf_shanguang = self.checkbox_get_dnf_shanguang.isChecked()
-        cfg.get_qq_video = self.checkbox_get_qq_video.isChecked()
-        cfg.get_qq_video_amesvr = self.checkbox_get_qq_video_amesvr.isChecked()
-        cfg.get_dnf_helper_chronicle = self.checkbox_get_dnf_helper_chronicle.isChecked()
-        cfg.get_dnf_helper = self.checkbox_get_dnf_helper.isChecked()
-        cfg.get_hello_voice = self.checkbox_get_hello_voice.isChecked()
-        cfg.get_dnf_dianzan = self.checkbox_get_dnf_dianzan.isChecked()
-        cfg.get_dnf_welfare = self.checkbox_get_dnf_welfare.isChecked()
-        cfg.get_xinyue_financing = self.checkbox_get_xinyue_financing.isChecked()
-        cfg.get_xinyue_cat = self.checkbox_get_xinyue_cat.isChecked()
-        cfg.get_xinyue_weekly_gift = self.checkbox_get_xinyue_weekly_gift.isChecked()
-        cfg.get_majieluo = self.checkbox_get_majieluo.isChecked()
-        cfg.get_dnf_bbs_signin = self.checkbox_get_dnf_bbs_signin.isChecked()
-        cfg.get_dnf_luodiye = self.checkbox_get_dnf_luodiye.isChecked()
-        cfg.get_dnf_wegame = self.checkbox_get_dnf_wegame.isChecked()
-        cfg.get_dnf_collection = self.checkbox_get_dnf_collection.isChecked()
-        cfg.get_dnf_fuqian = self.checkbox_get_dnf_fuqian.isChecked()
-        cfg.get_dnf_ozma = self.checkbox_get_dnf_ozma.isChecked()
-        cfg.get_colg_signin = self.checkbox_get_colg_signin.isChecked()
-        cfg.get_xinyue_app = self.checkbox_get_xinyue_app.isChecked()
-        cfg.get_dnf_pk = self.checkbox_get_dnf_pk.isChecked()
-        cfg.get_dnf_xinyue = self.checkbox_get_dnf_xinyue.isChecked()
-        cfg.get_dnf_strong = self.checkbox_get_dnf_strong.isChecked()
-        cfg.get_dnf_comic = self.checkbox_get_dnf_comic.isChecked()
-        cfg.get_dnf_13 = self.checkbox_get_dnf_13.isChecked()
-        cfg.get_dnf_my_story = self.checkbox_get_dnf_my_story.isChecked()
-        cfg.get_dnf_reserve = self.checkbox_get_dnf_reserve.isChecked()
-        cfg.get_dnf_anniversary = self.checkbox_get_dnf_anniversary.isChecked()
-        cfg.get_dnf_kol = self.checkbox_get_dnf_kol.isChecked()
-        cfg.get_maoxian_start = self.checkbox_get_maoxian_start.isChecked()
-        cfg.get_maoxian = self.checkbox_get_maoxian.isChecked()
-        cfg.get_xiaojiangyou = self.checkbox_get_xiaojiangyou.isChecked()
-        cfg.get_dnf_gonghui = self.checkbox_get_dnf_gonghui.isChecked()
-        cfg.get_dnf_mingyun_jueze = self.checkbox_get_dnf_mingyun_jueze.isChecked()
-        cfg.get_dnf_guanhuai = self.checkbox_get_dnf_guanhuai.isChecked()
-        cfg.get_dnf_relax_road = self.checkbox_get_dnf_relax_road.isChecked()
-        cfg.get_huya = self.checkbox_get_huya.isChecked()
-        cfg.get_dnf_vote = self.checkbox_get_dnf_vote.isChecked()
-        cfg.get_wegame_new = self.checkbox_get_wegame_new.isChecked()
-        cfg.get_mojieren = self.checkbox_get_mojieren.isChecked()
-        cfg.get_dnf_maoxian_road = self.checkbox_get_dnf_maoxian_road.isChecked()
+        for _, switch_name in self.skey_activity_list:
+            checkbox_name = f"checkbox_{switch_name}"
+            checkbox = getattr(self, checkbox_name)
+
+            setattr(cfg, switch_name, checkbox.isChecked())
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

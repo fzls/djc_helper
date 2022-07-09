@@ -1331,13 +1331,13 @@ class CommonConfig(ConfigInterface):
             except Exception:
                 pass
 
-        # 备份一份原始配置链接，方便统计来源
-        self.netdisk_link_for_report = self.netdisk_link
-
         # 替换网盘链接中的域名为蓝奏云api中最新的域名
         from lanzou.api import LanZouCloud
 
-        self.netdisk_link = LanZouCloud().get_latest_url(self.netdisk_link)
+        # 随机替换一个可用的域名
+        self.netdisk_link = LanZouCloud().get_latest_url_shuffled(self.netdisk_link)
+        # 上报统计时，为确保固定，替换为shuffle前最新的域名
+        self.netdisk_link_for_report = LanZouCloud().get_latest_url_before_shuffle(self.netdisk_link)
 
 
 class Config(ConfigInterface):

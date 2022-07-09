@@ -164,8 +164,11 @@ class LanZouCloud(object):
 
         return urls
 
-    def get_latest_url(self, url: str) -> str:
+    def get_latest_url_shuffled(self, url: str) -> str:
         return re.sub(r'lanzou\w\.com', self.available_domains_shuffled[0], url)
+
+    def get_latest_url_before_shuffle(self, url: str) -> str:
+        return re.sub(r'lanzou\w\.com', self.available_domains_before_shuffle[0], url)
 
     def ignore_limits(self):
         """解除官方限制"""

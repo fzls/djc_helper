@@ -2456,6 +2456,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_get_mojieren = create_checkbox(cfg.get_mojieren)
         add_row(form_layout, "魔界人探险记", self.checkbox_get_mojieren)
 
+        self.checkbox_get_dnf_maoxian_road = create_checkbox(cfg.get_dnf_maoxian_road)
+        add_row(form_layout, "DNF冒险家之路", self.checkbox_get_dnf_maoxian_road)
+
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "QQ空间pskey")
 
@@ -2535,6 +2538,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.get_dnf_vote = self.checkbox_get_dnf_vote.isChecked()
         cfg.get_wegame_new = self.checkbox_get_wegame_new.isChecked()
         cfg.get_mojieren = self.checkbox_get_mojieren.isChecked()
+        cfg.get_dnf_maoxian_road = self.checkbox_get_dnf_maoxian_road.isChecked()
 
         cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
         cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()

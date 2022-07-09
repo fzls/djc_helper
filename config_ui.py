@@ -2269,54 +2269,66 @@ class AccountInfoConfigUi(QWidget):
 
 
 class FunctionSwitchesConfigUi(QWidget):
-    skey_activity_list = [
-        ("领取道聚城", "get_djc"),
-        ("道聚城许愿", "make_wish"),
-        ("心悦特权专区", "get_xinyue"),
-        ("腾讯游戏信用相关礼包", "get_credit_xinyue_gift"),
-        ("每月黑钻等级礼包", "get_heizuan_gift"),
-        ("DNF闪光杯第三期", "get_dnf_shanguang"),
-        ("qq视频活动", "get_qq_video"),
-        ("qq视频-AME活动", "get_qq_video_amesvr"),
-        ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
-        ("dnf助手活动（需配置助手userId和token）", "get_dnf_helper"),
-        ("hello语音（皮皮蟹）奖励兑换（需配置hello语音（皮皮蟹）的用户ID）", "get_hello_voice"),
-        ("DNF共创投票", "get_dnf_dianzan"),
-        ("DNF福利中心兑换", "get_dnf_welfare"),
-        ("心悦app理财礼卡", "get_xinyue_financing"),
-        ("心悦猫咪", "get_xinyue_cat"),
-        ("心悦app周礼包", "get_xinyue_weekly_gift"),
-        ("DNF马杰洛的规划", "get_majieluo"),
-        ("dnf论坛签到", "get_dnf_bbs_signin"),
-        ("DNF落地页", "get_dnf_luodiye"),
-        ("WeGame", "get_dnf_wegame"),
-        ("DNF集合站", "get_dnf_collection"),
-        ("DNF福签大作战", "get_dnf_fuqian"),
-        ("DNF奥兹玛竞速", "get_dnf_ozma"),
-        ("colg每日签到和积分领取", "get_colg_signin"),
-        ("心悦app兑换", "get_xinyue_app"),
-        ("DNF格斗大赛", "get_dnf_pk"),
-        ("心悦", "get_dnf_xinyue"),
-        ("DNF强者之路", "get_dnf_strong"),
-        ("DNF漫画", "get_dnf_comic"),
-        ("DNF十三周年庆", "get_dnf_13"),
-        ("我的dnf13周年活动", "get_dnf_my_story"),
-        ("新职业预约活动", "get_dnf_reserve"),
-        ("DNF周年庆登录活动", "get_dnf_anniversary"),
-        ("KOL", "get_dnf_kol"),
-        ("冒险的起点", "get_maoxian_start"),
-        ("勇士的冒险补给", "get_maoxian"),
-        ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
-        ("DNF公会活动", "get_dnf_gonghui"),
-        ("命运的抉择挑战赛", "get_dnf_mingyun_jueze"),
-        ("关怀活动", "get_dnf_guanhuai"),
-        ("轻松之路", "get_dnf_relax_road"),
-        ("虎牙", "get_huya"),
-        ("DNF名人堂", "get_dnf_vote"),
-        ("WeGame活动_新版", "get_wegame_new"),
-        ("魔界人探险记", "get_mojieren"),
-        ("DNF冒险家之路", "get_dnf_maoxian_road"),
-    ]
+    act_category_to_act_desc_switch_list = {
+        "普通skey": [
+            ("领取道聚城", "get_djc"),
+            ("道聚城许愿", "make_wish"),
+            ("心悦特权专区", "get_xinyue"),
+            ("腾讯游戏信用相关礼包", "get_credit_xinyue_gift"),
+            ("每月黑钻等级礼包", "get_heizuan_gift"),
+            ("DNF闪光杯第三期", "get_dnf_shanguang"),
+            ("qq视频活动", "get_qq_video"),
+            ("qq视频-AME活动", "get_qq_video_amesvr"),
+            ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
+            ("dnf助手活动（需配置助手userId和token）", "get_dnf_helper"),
+            ("hello语音（皮皮蟹）奖励兑换（需配置hello语音（皮皮蟹）的用户ID）", "get_hello_voice"),
+            ("DNF共创投票", "get_dnf_dianzan"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("心悦app理财礼卡", "get_xinyue_financing"),
+            ("心悦猫咪", "get_xinyue_cat"),
+            ("心悦app周礼包", "get_xinyue_weekly_gift"),
+            ("DNF马杰洛的规划", "get_majieluo"),
+            ("dnf论坛签到", "get_dnf_bbs_signin"),
+            ("DNF落地页", "get_dnf_luodiye"),
+            ("WeGame", "get_dnf_wegame"),
+            ("DNF集合站", "get_dnf_collection"),
+            ("DNF福签大作战", "get_dnf_fuqian"),
+            ("DNF奥兹玛竞速", "get_dnf_ozma"),
+            ("colg每日签到和积分领取", "get_colg_signin"),
+            ("心悦app兑换", "get_xinyue_app"),
+            ("DNF格斗大赛", "get_dnf_pk"),
+            ("心悦", "get_dnf_xinyue"),
+            ("DNF强者之路", "get_dnf_strong"),
+            ("DNF漫画", "get_dnf_comic"),
+            ("DNF十三周年庆", "get_dnf_13"),
+            ("我的dnf13周年活动", "get_dnf_my_story"),
+            ("新职业预约活动", "get_dnf_reserve"),
+            ("DNF周年庆登录活动", "get_dnf_anniversary"),
+            ("KOL", "get_dnf_kol"),
+            ("冒险的起点", "get_maoxian_start"),
+            ("勇士的冒险补给", "get_maoxian"),
+            ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
+            ("DNF公会活动", "get_dnf_gonghui"),
+            ("命运的抉择挑战赛", "get_dnf_mingyun_jueze"),
+            ("关怀活动", "get_dnf_guanhuai"),
+            ("轻松之路", "get_dnf_relax_road"),
+            ("虎牙", "get_huya"),
+            ("DNF名人堂", "get_dnf_vote"),
+            ("WeGame活动_新版", "get_wegame_new"),
+            ("魔界人探险记", "get_mojieren"),
+            ("DNF冒险家之路", "get_dnf_maoxian_road"),
+        ],
+        "QQ空间pskey": [
+            ("集卡", "get_ark_lottery"),
+            ("会员关怀", "get_vip_mentor"),
+            ("超级会员", "get_dnf_super_vip"),
+            ("黄钻", "get_dnf_yellow_diamond"),
+            ("qq会员杯", "get_dnf_club_vip"),
+        ],
+        "安全管家pskey": [
+            ("管家蚊子腿", "get_guanjia"),
+        ],
+    }
 
     def __init__(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig, parent=None):
         super().__init__(parent)
@@ -2368,62 +2380,36 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, "禁用 心悦 登录", self.checkbox_disable_login_mode_xinyue)
 
         # ----------------------------------------------------------
-        add_form_seperator(form_layout, "普通skey")
+        # 不同登录类型的活动开关
+        for act_actegory, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
+            add_form_seperator(form_layout, act_actegory)
 
-        for act_name, switch_name in self.skey_activity_list:
-            checkbox_name = f"checkbox_{switch_name}"
-            checkbox = create_checkbox(getattr(cfg, switch_name))
+            for act_name, switch_name in act_desc_swtich_list:
+                checkbox_name = f"checkbox_{switch_name}"
+                checkbox = create_checkbox(getattr(cfg, switch_name))
 
-            setattr(self, checkbox_name, checkbox)
-            add_row(form_layout, act_name, checkbox)
-
-        # ----------------------------------------------------------
-        add_form_seperator(form_layout, "QQ空间pskey")
-
-        self.checkbox_get_ark_lottery = create_checkbox(cfg.get_ark_lottery)
-        add_row(form_layout, "集卡", self.checkbox_get_ark_lottery)
-
-        self.checkbox_get_vip_mentor = create_checkbox(cfg.get_vip_mentor)
-        add_row(form_layout, "会员关怀", self.checkbox_get_vip_mentor)
-
-        self.checkbox_get_dnf_super_vip = create_checkbox(cfg.get_dnf_super_vip)
-        add_row(form_layout, "超级会员", self.checkbox_get_dnf_super_vip)
-
-        self.checkbox_get_dnf_yellow_diamond = create_checkbox(cfg.get_dnf_yellow_diamond)
-        add_row(form_layout, "黄钻", self.checkbox_get_dnf_yellow_diamond)
-
-        self.checkbox_get_dnf_club_vip = create_checkbox(cfg.get_dnf_club_vip)
-        add_row(form_layout, "qq会员杯", self.checkbox_get_dnf_club_vip)
-
-        # ----------------------------------------------------------
-        add_form_seperator(form_layout, "安全管家pskey")
-
-        self.checkbox_get_guanjia = create_checkbox(cfg.get_guanjia)
-        add_row(form_layout, "管家蚊子腿", self.checkbox_get_guanjia)
+                setattr(self, checkbox_name, checkbox)
+                add_row(form_layout, act_name, checkbox)
 
     def update_config(self, cfg: FunctionSwitchesConfig):
+        # 总控制
         cfg.disable_most_activities_v2 = self.checkbox_disable_most_activities_v2.isChecked()
         cfg.disable_share = self.checkbox_disable_share.isChecked()
 
+        # 登陆方式的开关
         cfg.disable_login_mode_normal = self.checkbox_disable_login_mode_normal.isChecked()
         cfg.disable_login_mode_qzone = self.checkbox_disable_login_mode_qzone.isChecked()
         cfg.disable_login_mode_iwan = self.checkbox_disable_login_mode_iwan.isChecked()
         cfg.disable_login_mode_guanjia = self.checkbox_disable_login_mode_guanjia.isChecked()
         cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
 
-        for _, switch_name in self.skey_activity_list:
-            checkbox_name = f"checkbox_{switch_name}"
-            checkbox = getattr(self, checkbox_name)
+        # 不同登录类型的活动开关
+        for act_actegory, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
+            for act_name, switch_name in act_desc_swtich_list:
+                checkbox_name = f"checkbox_{switch_name}"
+                checkbox = getattr(self, checkbox_name)
 
-            setattr(cfg, switch_name, checkbox.isChecked())
-
-        cfg.get_ark_lottery = self.checkbox_get_ark_lottery.isChecked()
-        cfg.get_vip_mentor = self.checkbox_get_vip_mentor.isChecked()
-        cfg.get_dnf_super_vip = self.checkbox_get_dnf_super_vip.isChecked()
-        cfg.get_dnf_yellow_diamond = self.checkbox_get_dnf_yellow_diamond.isChecked()
-        cfg.get_dnf_club_vip = self.checkbox_get_dnf_club_vip.isChecked()
-
-        cfg.get_guanjia = self.checkbox_get_guanjia.isChecked()
+                setattr(cfg, switch_name, checkbox.isChecked())
 
     def confirm_set_disable_most_activities(self, state: int):
         if state != Qt.Checked:

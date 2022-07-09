@@ -5,13 +5,13 @@ from util import parse_time
 
 def test_is_file_url():
     # 确保每个备案的域名都能正确判定
-    for domain in LanZouCloud().available_domains:
+    for domain in LanZouCloud().available_domains_shuffled:
         assert is_file_url(f"https://pan.{domain}/i1234abcd")
 
 
 def test_is_folder_url():
     # 确保每个备案的域名都能正确判定
-    for domain in LanZouCloud().available_domains:
+    for domain in LanZouCloud().available_domains_shuffled:
         assert is_folder_url(f"https://pan.{domain}/b1234abcd")
 
 

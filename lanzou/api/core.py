@@ -105,19 +105,17 @@ class LanZouCloud(object):
             'lanzouo.com',  # 2021-09-15 鲁ICP备15001327号-8
         ]
 
-        shuffle(quick_domain_list)
-        shuffle(slow_domain_list)
-        shuffle(unavailable_domain_list)
+        self.available_domains_before_shuffle = []
+        self.available_domains_shuffled = []
+        for domain_list in [quick_domain_list, slow_domain_list]:
+            shuffled_domain_list = [*domain_list]
+            shuffle(shuffled_domain_list)
 
-        self.available_domains = [
-            *quick_domain_list,
-            *slow_domain_list,
-
-            # *unavailable_domain_list,
-        ]
+            self.available_domains_before_shuffle.extend(domain_list)
+            self.available_domains_shuffled.extend(shuffled_domain_list)
 
         # 默认链接使用最新的域名
-        latest_domain = self.available_domains[0]
+        latest_domain = self.available_domains_shuffled[0]
         self._host_url = re.sub(r'lanzou\w\.com', latest_domain, 'https://pan.lanzoup.com')
 
     def _get(self, url, **kwargs):
@@ -159,7 +157,7 @@ class LanZouCloud(object):
         urls = [url]
 
         # 然后再尝试其他的
-        for d in self.available_domains:
+        for d in self.available_domains_shuffled:
             new_url = re.sub(r'lanzou\w\.com', d, url)
             if new_url not in urls:
                 urls.append(new_url)
@@ -167,7 +165,7 @@ class LanZouCloud(object):
         return urls
 
     def get_latest_url(self, url: str) -> str:
-        return re.sub(r'lanzou\w\.com', self.available_domains[0], url)
+        return re.sub(r'lanzou\w\.com', self.available_domains_shuffled[0], url)
 
     def ignore_limits(self):
         """解除官方限制"""

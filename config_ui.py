@@ -2297,6 +2297,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("KOL", "get_dnf_kol"),
             ("qq视频活动", "get_qq_video"),
             ("DNF冒险家之路", "get_dnf_maoxian_road"),
+            ("幸运勇士", "get_dnf_lucky_user"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

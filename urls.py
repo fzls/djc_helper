@@ -64,6 +64,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
+    newNotAmsActInfo(month_start_day______, month_end_day________, "幸运勇士"),
 ]
 
 act_name_to_url = {
@@ -98,6 +99,7 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
+    "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     #
     # 已过期活动
     #
@@ -440,7 +442,13 @@ class Urls:
         #   /service/flow/v1/parse/Wand-20211206100115-Fde55ab61e52f?u=7636ee76-dc95-42e2-ac8c-af7f07982dfd&a=10004&ts=1639583575&s=7f2eeec828830f249a7694d09833c50d
         self.wegame_new_host = "https://act.wegame.com.cn"
         self.wegame_new_api = "/service/flow/v1/parse/{flow_id}?u={uuid4}&a=10004&ts={seconds}"
-        self.wegame_new_appkey = "wegame!#act$2020"
+
+        # 幸运勇士
+        self.lucky_user = (
+            "https://nloss.native.qq.com/{api}?iAreaId={iAreaId}&iRoleId={iRoleId}"
+            "&taskId={taskId}&point={point}"
+            "&randomSeed={randomSeed}"
+        )
 
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []

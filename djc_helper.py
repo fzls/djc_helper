@@ -53,6 +53,7 @@ from dao import (
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
     IdeActInfo,
+    LuckyUserInfo,
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
@@ -591,6 +592,7 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("会员关怀", self.dnf_vip_mentor),
             ("DNF冒险家之路", self.dnf_maoxian_road),
+            ("幸运勇士", self.dnf_lucky_user),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -2932,6 +2934,57 @@ class DjcHelper:
             print_res,
             get_act_url("DNF冒险家之路"),
             **extra_params,
+        )
+
+    # --------------------------------------------幸运勇士--------------------------------------------
+    @try_except()
+    def dnf_lucky_user(self):
+        show_head_line("幸运勇士")
+        self.show_not_ams_act_info("幸运勇士")
+
+        if not self.cfg.function_switches.get_dnf_lucky_user or self.disable_most_activities():
+            logger.warning("未启用领取幸运勇士功能，将跳过")
+            return
+
+        def query_info() -> LuckyUserInfo:
+            res = self.dnf_lucky_user_op("查询信息", "getActConf", print_res=False)
+
+            info = LuckyUserInfo().auto_update_config(res["jData"])
+
+            return info
+
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+
+        # 绑定角色
+        self.dnf_lucky_user_op("绑定角色", "setRole", iAreaId=roleinfo.serviceID, iRoleId=roleinfo.roleCode)
+
+        # 签到
+        self.dnf_lucky_user_op("签到", "doSign")
+
+        # 领取任务奖励
+        info = query_info()
+        # 优先尝试积分多的
+        info.taskConf.sort(key=lambda conf: int(conf.point), reverse=True)
+        for task in info.taskConf:
+            time.sleep(5)
+            self.dnf_lucky_user_op(f"领取任务奖励 {task.title} {task.iconName}", "doTask", taskId=task.id)
+
+        # 领取积分奖励
+        for point in info.pointConf:
+            time.sleep(5)
+            self.dnf_lucky_user_op(f"领取积分奖励 {point.sGroupName} {point.iconName}", "doPoint", point=point.point)
+
+        # 打印当前信息
+        info = query_info()
+        logger.info(color("bold_yello") + f"幸运勇士当前积分为 {info.point}, 已签到{info.totalSignNum}天")
+
+    def dnf_lucky_user_op(self, ctx: str, api: str, **params):
+        return self.get(
+            ctx,
+            self.urls.lucky_user,
+            api=api,
+            randomSeed=math.ceil(random.random() * 10000000),
+            **params,
         )
 
     # --------------------------------------------组队拜年--------------------------------------------
@@ -10350,6 +10403,11 @@ class DjcHelper:
                 "appid",
                 "appOpenid",
                 "accessToken",
+                "iAreaId",
+                "iRoleId",
+                "randomSeed",
+                "taskId",
+                "point",
             ]
         }
 
@@ -11132,4 +11190,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_maoxian_road()
+        djcHelper.dnf_lucky_user()

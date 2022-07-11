@@ -1940,6 +1940,106 @@ class MyHomeFriendInfo(ConfigInterface):
         self.sUin = "NzZUL21FStYzZYdz09-1234567890"
 
 
+class LuckyUserInfo(ConfigInterface):
+    def __init__(self):
+        self.lossType = "1"
+        self.point = "2"
+        self.pointConf: list[LuckyUserPointConf] = []
+        self.pointPackFlow = []
+        self.signConf: list[LuckyUserSignConf] = []
+        self.syncDate = "20220711"
+        self.taskConf: list[LuckyUserTaskConf] = []
+        self.taskPackFlow: list[LuckyUserTaskPackFlow] = []
+        self.taskStatus = "1-12"
+        self.todaySignNum = 1
+        self.totalSignNum = 1
+        self.week = "1"
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("pointConf", LuckyUserPointConf),
+            ("signConf", LuckyUserSignConf),
+            ("taskConf", LuckyUserTaskConf),
+            ("taskPackFlow", LuckyUserTaskPackFlow),
+        ]
+
+
+class LuckyUserPointConf(ConfigInterface):
+    def __init__(self):
+        self.editTime = "2022-06-07 15:38:58"
+        self.editUser = "eddyzou"
+        self.iPackageGroupId = "2130655"
+        self.iconName = "王者契约1天*3"
+        self.iconUrl = "//odp-public-1-1256315284.file.myqcloud.com/dnfNoloss/202206/629f00927dc49.png"
+        self.id = "1"
+        self.mrms = "IEGAMS-476084-487803"
+        self.point = "7"
+        self.sGroupName = "7积分兑换奖励"
+        self.serviceType = "dnf"
+        self.status = "0"
+
+
+class LuckyUserSignConf(ConfigInterface):
+    def __init__(self):
+        self.editTime = "2022-06-07 16:05:08"
+        self.editUser = "eddyzou"
+        self.iPackageGroupId = "2130635"
+        self.iconName = "华丽徽章神秘礼盒*1"
+        self.iconUrl = "//odp-public-1-1256315284.file.myqcloud.com/dnfNoloss/202206/629f06b411b75.png"
+        self.id = "1"
+        self.mrms = "IEGAMS-476081-487800"
+        self.num = "1"
+        self.sGroupName = "第一天"
+        self.serviceType = "dnf"
+        self.status = "0"
+
+
+class LuckyUserTaskConf(ConfigInterface):
+    def __init__(self):
+        self.apiId = "2"
+        self.args = "100"
+        self.cmd = "1185"
+        self.editTime = "2022-06-08 20:06:58"
+        self.editUser = "eddyzou"
+        self.iPackageGroupId = "2130618"
+        self.iconName = "王者契约1天*1"
+        self.iconUrl = "//odp-public-1-1256315284.file.myqcloud.com/dnfNoloss/202206/62a090e2913ec.png"
+        self.id = "10"
+        self.isL5 = "0"
+        self.l5 = '{\n    "l5_mod": null,\n    "l5_cmd": null\n}'
+        self.mergeType = "0"
+        self.mrms = "IEGAMS-476067-487787"
+        self.name = "消耗疲劳100点"
+        self.point = "2"
+        self.returnIndex = "&.use_fatigue"
+        self.returns = "100"
+        self.sGroupName = "王者契约1天*1"
+        self.serviceType = "dnf"
+        self.status = "0"
+        self.taskResult = "190"
+        self.title = "消耗疲劳100点"
+        self.type = "2"
+        self.url = ""
+        self.userArgs = '[\n    "area",\n    "charac_no"\n]'
+
+
+class LuckyUserTaskPackFlow(ConfigInterface):
+    def __init__(self):
+        self.addDate = "2022-07-11"
+        self.addTime = "2022-07-11 10:31:43"
+        self.flowAction = "20"
+        self.flowType = "2"
+        self.iArea = "11"
+        self.iRoleId = "71672841"
+        self.iUin = "1054073896"
+        self.id = "505264"
+        self.isDel = "0"
+        self.packInfo = "487787:2130615"
+        self.pointStatus = "1"
+        self.rData = '{"iRet":0,"sMsg":"恭喜您获得了礼包： 共鸣的先兆水晶*15个 ","iPackageGroupId":"2130615","iPackageId":"3293528","iPackageNum":"1","sPackageName":"共鸣的先兆水晶*15个","sAmsSerialNum":"AMS-DNF-0711103143-Wqeapt-98250-98627"}'
+        self.uid = "19010"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

@@ -7538,7 +7538,7 @@ class DjcHelper:
     def dnf_my_home(self):
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("我的小屋")
-        self.show_idesvr_act_info(self.dnf_my_home_op)
+        self.show_not_ams_act_info("我的小屋")
 
         if not self.cfg.function_switches.get_dnf_my_home or self.disable_most_activities():
             logger.warning("未启用领取我的小屋活动功能，将跳过")

@@ -7202,13 +7202,12 @@ class DjcHelper:
     # re: 变更时需要调整这些
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗]
     flowid_majieluo_query_info = "134230"
-    # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入
-    majieluo_DownDate = "2022-07-14 00:00:00"
+    # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入，在 urls.py 的 not_ams_activities 中填写起止时间
 
     @try_except()
     def majieluo(self):
         show_head_line("DNF马杰洛的规划")
-        self.show_idesvr_act_info(self.majieluo_op)
+        self.show_not_ams_act_info("DNF马杰洛的规划")
 
         if not self.cfg.function_switches.get_majieluo or self.disable_most_activities():
             logger.warning("未启用领取DNF马杰洛的规划活动功能，将跳过")
@@ -7296,7 +7295,7 @@ class DjcHelper:
         act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
         sDownDate = act_info.dev.action.sDownDate
         if sDownDate == not_know_end_time____:
-            sDownDate = self.majieluo_DownDate
+            sDownDate = get_not_ams_act("DNF马杰洛的规划").dtEndTime
         endTime = get_today(parse_time(sDownDate))
 
         if get_today() == endTime:

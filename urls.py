@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "幸运勇士"),
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-15 23:59:59", "我的小屋"),
+    newNotAmsActInfo("2022-06-17 00:00:00", "2022-07-14 23:59:59", "DNF马杰洛的规划"),
 ]
 
 act_name_to_url = {

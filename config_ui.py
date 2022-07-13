@@ -97,6 +97,7 @@ from game_info import get_name_2_mobile_game_info_map
 from main_def import (
     _show_head_line,
     disable_flag_file,
+    get_config_backup_dir,
     get_user_buy_info,
     has_any_account_in_normal_run,
     has_buy_auto_updater_dlc,
@@ -336,6 +337,17 @@ class ConfigUi(QFrame):
             show_message("保存成功", "已保存成功\nconfig.toml已不再有注释信息，如有需要，可去config.example.toml查看注释")
             report_click_event("save_config")
 
+    def open_backups(self):
+        config_backup_dir = get_config_backup_dir()
+
+        show_message("使用说明", (
+            "在稍后打开的目录中可看到最近一段时间成功运行后备份的配置，目录名为备份时间，里面为对应配置\n"
+            "可通过左边的【继承旧版本配置】按钮，并将目录指定为你想要还原的时间点的配置的目录，点击继承即可还原配置~"
+        ))
+        report_click_event("open_backups")
+
+        webbrowser.open(os.path.realpath(config_backup_dir))
+
     def load_config(self) -> Config:
         # load_config(local_config_path="", reset_before_load=True)
         load_config(local_config_path="config.toml.local", reset_before_load=True)
@@ -364,15 +376,18 @@ class ConfigUi(QFrame):
         btn_load_old_version = create_pushbutton("继承旧版本配置", "Aquamarine")
         btn_load = create_pushbutton("读取配置", "Aquamarine")
         btn_save = create_pushbutton("保存配置", "Aquamarine")
+        btn_open_backups = create_pushbutton("查看配置备份", "LawnGreen")
 
         btn_load_old_version.clicked.connect(self.load_old_version)
         btn_load.clicked.connect(self.restart_to_load)
         btn_save.clicked.connect(self.save)
+        btn_open_backups.clicked.connect(self.open_backups)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_load_old_version)
         layout.addWidget(btn_load)
         layout.addWidget(btn_save)
+        layout.addWidget(btn_open_backups)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
 

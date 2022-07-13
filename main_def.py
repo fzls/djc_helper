@@ -2055,9 +2055,8 @@ def try_save_configs_to_user_data_dir():
 
 def save_multiple_version_config():
     cwd = os.getcwd()
-    appdata_dir = get_appdata_save_dir()
 
-    config_backup_dir = os.path.join(appdata_dir, "..backups")
+    config_backup_dir = get_config_backup_dir()
     current_backup_dir = os.path.join(config_backup_dir, format_now("%Y-%m-%d %H_%M_%S"))
 
     config_file = "config.toml"
@@ -2120,6 +2119,10 @@ def try_load_old_version_configs_from_user_data_dir():
 
 def get_appdata_save_dir() -> str:
     return os.path.join(get_appdata_dir(), "djc_helper")
+
+
+def get_config_backup_dir() -> str:
+    return os.path.join(get_appdata_save_dir(), "..backups")
 
 
 def check_proxy(cfg: Config):

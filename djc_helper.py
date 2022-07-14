@@ -6033,6 +6033,7 @@ class DjcHelper:
                 show_once=True,
             )
 
+    @try_except(show_exception_info=False, return_val_on_except=[0, 0, 0, 0, 0])
     def query_xinyue_card_counts(self) -> list[int]:
         res = self.dnf_xinyue_op("查询信息", "860785", print_res=False)
         raw_info = parse_amesvr_common_info(res)

@@ -75,8 +75,8 @@ class LanZouCloud(object):
         # 根据最近一次检测的结果，将下列域名分为以下三类
         # 可以快速访问的
         quick_domain_list = [
-            'lanzouu.com',  # 2021-01-17 鲁ICP备15001327号-21
-            'lanzouh.com',  # 2021-01-17 鲁ICP备15001327号-20
+            'lanzouu.com',  # 2022-01-17 鲁ICP备15001327号-21
+            'lanzouh.com',  # 2022-01-17 鲁ICP备15001327号-20
 
             'lanzoup.com',  # 2021-12-10 鲁ICP备15001327号-16
             'lanzout.com',  # 2021-12-10 鲁ICP备15001327号-15

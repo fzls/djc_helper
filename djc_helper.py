@@ -7606,6 +7606,12 @@ class DjcHelper:
                 f"可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
             )
 
+            # 增加上报下稀有小屋信息，活动快结束了，还没兑换的可能不会换了，改为新建一个帖子分享出去
+            increase_counter(
+                ga_category=f"小屋分享-v4-{gift.sPropName}",
+                name=f"{gift.format_discount()} {gift.price_after_discount()} {s_uin} ({gift.iUsedNum}/{gift.iTimes}) {owner} ",
+            )
+
             if current_points < gift.price_after_discount():
                 # 积分不够
                 logger.warning(
@@ -7682,7 +7688,8 @@ class DjcHelper:
         #  兑换道具
         notify_exchange_valuable_gift(current_points)
 
-        lastday = get_today(parse_time("2022-07-15 00:00:00"))
+        act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
+        lastday = get_today(act_endtime)
         if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
             async_message_box(
                 "我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换",
@@ -7696,6 +7703,21 @@ class DjcHelper:
         info = self.my_home_query_info()
         if int(info.iExchange) > 0 and get_now() >= parse_time("2022-06-30 12:00:00"):
             self.dnf_my_home_op("兑换终极道具(次元穿梭光环)", "132491")
+
+        if get_now() <= act_endtime and is_daily_first_run("我的小屋-整合suin"):
+            async_message_box(
+                (
+                    f"我的小屋结束时间为 {act_endtime}，{self.cfg.name} 当前剩余积分为 {current_points}\n"
+                    "为了提高大家在最后两天能兑换到想要的道具的概率，新版本加了个可兑换的稀有道具小屋suin上报~\n"
+                    "在最后两天（7.14/15）晚上十点左右，我会去之前colg发的小屋分享帖将今日上报的新的小屋suin分享出来，大家可以自行取用\n"
+                    "通过suin进入其他人的小屋的方式在帖子开头有写明，基本按步骤操作即可\n"
+                    "点确定后，即可显示对应网页，这两天晚上十点左右可以去瞅瞅-。-"
+                    "\n"
+                    "ps: 如果不想分享出来，请去配置工具关闭我的小屋活动的开关\n"
+                ).replace("\n", "\n\n"),
+                "我的小屋suin分享整合",
+                open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
+            )
 
     def my_home_query_info(self) -> MyHomeInfo:
         raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)

@@ -54,6 +54,7 @@ from dao import (
     HuyaUserTaskInfo,
     IdeActInfo,
     LuckyUserInfo,
+    LuckyUserTaskConf,
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
@@ -2953,6 +2954,17 @@ class DjcHelper:
 
             return info
 
+        def get_task_point(task: LuckyUserTaskConf) -> int:
+            # 协调结晶体往后放
+            for replace_with_point, not_want in [
+                (-2, "闪耀的协调结晶体"),
+                (-1, "王者契约"),
+            ]:
+                if not_want in task.iconName:
+                    return replace_with_point
+
+            return int(task.point)
+
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
 
         # 绑定角色
@@ -2964,10 +2976,10 @@ class DjcHelper:
         # 领取任务奖励
         info = query_info()
         # 优先尝试积分多的
-        info.taskConf.sort(key=lambda conf: int(conf.point), reverse=True)
+        info.taskConf.sort(key=lambda conf: get_task_point(conf), reverse=True)
         for task in info.taskConf:
             time.sleep(5)
-            self.dnf_lucky_user_op(f"领取任务奖励 {task.title} {task.iconName}", "doTask", taskId=task.id)
+            self.dnf_lucky_user_op(f"领取任务奖励 {task.title} {task.iconName} {task.point}积分", "doTask", taskId=task.id)
 
         # 领取积分奖励
         for point in info.pointConf:

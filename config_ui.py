@@ -340,10 +340,10 @@ class ConfigUi(QFrame):
     def open_backups(self):
         config_backup_dir = get_config_backup_dir()
 
-        show_message("使用说明", (
-            "在稍后打开的目录中可看到最近一段时间成功运行后备份的配置，目录名为备份时间，里面为对应配置\n"
-            "可通过左边的【继承旧版本配置】按钮，并将目录指定为你想要还原的时间点的配置的目录，点击继承即可还原配置~"
-        ))
+        show_message(
+            "使用说明",
+            ("在稍后打开的目录中可看到最近一段时间成功运行后备份的配置，目录名为备份时间，里面为对应配置\n" "可通过左边的【继承旧版本配置】按钮，并将目录指定为你想要还原的时间点的配置的目录，点击继承即可还原配置~"),
+        )
         report_click_event("open_backups")
 
         webbrowser.open(os.path.realpath(config_backup_dir))

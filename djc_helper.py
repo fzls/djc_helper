@@ -7645,7 +7645,11 @@ class DjcHelper:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
                     for gift in friend_gifts:
                         try_add_valuable_gift(
-                            valuable_gifts, gift, f"{friend_info.sNick}({friend_info.iUin})", friend_page, friend_info.sUin
+                            valuable_gifts,
+                            gift,
+                            f"{friend_info.sNick}({friend_info.iUin})",
+                            friend_page,
+                            friend_info.sUin,
                         )
 
                     time.sleep(0.1)

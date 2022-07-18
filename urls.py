@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "幸运勇士"),
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-15 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2022-06-17 00:00:00", "2022-07-14 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2022-07-14 00:00:00", "2022-08-10 23:59:59", "DNF马杰洛的规划"),
 ]
 
 act_name_to_url = {
@@ -90,7 +90,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220616index/",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220525dnfmxbj/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220617challenge/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220714summer/",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",
@@ -310,7 +310,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "22_FdBGxj"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "17_rESjqa"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "49_Un4iJS"  # 我的小屋
 

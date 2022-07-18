@@ -102,7 +102,7 @@ scode_list_accept_ask = []
 majieluo_invite_uin_list = []
 
 # 是否弹出支付宝红包活动图片
-enable_alipay_redpacket_v2 = true
+enable_alipay_redpacket_v3 = true
 
 # 心悦相关配置
 [common.xinyue]

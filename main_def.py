@@ -1408,12 +1408,12 @@ def show_ask_message_box_sync(cfg: Config):
         return
 
     if (
-        now_before("2022-03-31 23:59:59")
-        and cfg.common.enable_alipay_redpacket_v2
+        now_before("2022-12-31 23:59:59")
+        and cfg.common.enable_alipay_redpacket_v3
         and is_daily_first_run("支付宝红包活动")
         and not use_by_myself()
     ):
-        title = "支付宝红包活动（v2）"
+        title = "支付宝红包活动（v3）"
         message = (
             "现在支付宝有个红包活动，扫弹出来的这个二维码就可以领取一个红包，在便利店等实体店扫码就可以使用，购买小助手的时候似乎也可以使用。\n"
             "你使用后我会同时领到一个小红包，大家一起白嫖-。-\n"

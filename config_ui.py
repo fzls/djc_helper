@@ -1403,8 +1403,8 @@ class CommonConfigUi(QFrame):
             "其他", top_layout
         )
 
-        self.checkbox_enable_alipay_redpacket_v2 = create_checkbox(cfg.enable_alipay_redpacket_v2)
-        add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v2)
+        self.checkbox_enable_alipay_redpacket_v3 = create_checkbox(cfg.enable_alipay_redpacket_v3)
+        add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v3)
 
         self.checkbox_config_ui_enable_high_dpi = create_checkbox(cfg.config_ui_enable_high_dpi)
         add_row(form_layout, "是否启用高DPI模式（如4k屏，重启生效）", self.checkbox_config_ui_enable_high_dpi)
@@ -1472,7 +1472,7 @@ class CommonConfigUi(QFrame):
         cfg.allow_only_one_instance = self.checkbox_allow_only_one_instance.isChecked()
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
         cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()
-        cfg.enable_alipay_redpacket_v2 = self.checkbox_enable_alipay_redpacket_v2.isChecked()
+        cfg.enable_alipay_redpacket_v3 = self.checkbox_enable_alipay_redpacket_v3.isChecked()
 
         cfg.max_logs_size = self.spinbox_max_logs_size.value()
         cfg.keep_logs_size = self.spinbox_keep_logs_size.value()

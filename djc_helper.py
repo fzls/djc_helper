@@ -566,7 +566,6 @@ class DjcHelper:
             ("黑钻礼包", self.get_heizuan_gift),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
             ("心悦app理财礼卡", self.xinyue_financing),
-            ("心悦猫咪", self.xinyue_cat),
             ("心悦app周礼包", self.xinyue_weekly_gift),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
@@ -577,16 +576,11 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF心悦", self.dnf_xinyue),
             ("DNF闪光杯", self.dnf_shanguang),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("勇士的冒险补给", self.maoxian),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("黄钻", self.dnf_yellow_diamond),
-            ("我的小屋", self.dnf_my_home),
             ("DNF集合站", self.dnf_collection),
-            ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
             ("KOL", self.dnf_kol),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -598,6 +592,12 @@ class DjcHelper:
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
+            ("心悦猫咪", self.xinyue_cat),
+            ("WeGame活动", self.dnf_wegame),
+            ("我的小屋", self.dnf_my_home),
+            ("勇士的冒险补给", self.maoxian),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
             ("冒险的起点", self.maoxian_start),
@@ -11226,4 +11226,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_bbs()

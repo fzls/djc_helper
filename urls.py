@@ -64,9 +64,10 @@ not_ams_activities = [
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
-    newNotAmsActInfo(month_start_day______, month_end_day________, "幸运勇士"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-15 23:59:59", "我的小屋"),
     newNotAmsActInfo("2022-07-14 00:00:00", "2022-08-10 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
 ]
 
 act_name_to_url = {
@@ -77,7 +78,6 @@ act_name_to_url = {
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
@@ -85,17 +85,12 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20220616index/",
-    "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220525dnfmxbj/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220714summer/",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
-    "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
@@ -105,6 +100,12 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
+    "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
+    "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",
+    "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220525dnfmxbj/index.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20220616index/",
+    "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",

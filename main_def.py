@@ -877,8 +877,6 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         "上月",
         "自动匹配",
         "论坛代币券",
-        "心悦集卡",
-        "小屋",
     ]
     colSizes = [
         4,
@@ -898,8 +896,6 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         4,
         8,
         10,
-        15,
-        4,
     ]
 
     logger.info(tableify(heads, colSizes))
@@ -966,14 +962,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     dbq = djcHelper.query_dnf_bbs_dbq()
 
-    card_counts = djcHelper.query_xinyue_card_counts()
-    if card_counts != [0] * len(card_counts):
-        card_count_info = " ".join(f"{count}" for count in card_counts)
-    else:
-        card_count_info = ""
-
-    my_home_points = djcHelper.my_home_query_integral()
-
     return [
         idx,
         account_config.name,
@@ -993,8 +981,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         can_auto_match_dnf_helper_chronicle,
         # majieluo_stone, majieluo_invite_count,
         dbq,
-        card_count_info,
-        my_home_points,
     ]
 
 

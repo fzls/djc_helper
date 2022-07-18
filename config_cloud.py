@@ -40,6 +40,9 @@ class ConfigCloud(ConfigInterface):
         # 是否优先展示卡密界面
         self.show_card_secret_first = False
 
+        # 是否显示支付宝红包图片
+        self.enable_alipay_redpacket = True
+
         # 新增的黑名单
         self.black_list: List[BlackListConfig] = []
 

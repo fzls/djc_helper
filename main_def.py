@@ -14,6 +14,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 import requests
 
 from config import AccountConfig, CommonConfig, Config, config, load_config
+from config_cloud import config_cloud
 from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
@@ -1410,6 +1411,7 @@ def show_ask_message_box_sync(cfg: Config):
     if (
         now_before("2022-12-31 23:59:59")
         and cfg.common.enable_alipay_redpacket_v3
+        and config_cloud().enable_alipay_redpacket
         and is_daily_first_run("支付宝红包活动")
         and not use_by_myself()
     ):

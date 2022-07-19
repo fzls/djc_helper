@@ -205,9 +205,9 @@ def check_djc_role_binding():
             )
 
             _show_head_line("4. 请完成上述操作，然后按任意键再次进行检查")
-            logger.warning(color("bold_red") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
-            logger.warning(color("bold_yellow") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
-            logger.warning(color("bold_blue") + "千万不要进群问这个，会被直接踢的。不欢迎不看文档，也不看提示的人。")
+            logger.warning(color("bold_red") + "如果你真的无法看懂上面到底在说什么，请加群私聊我支付宝账号进行退款，然后手动领取吧-。-")
+            logger.warning(color("bold_yellow") + "如果你真的无法看懂上面到底在说什么，请加群私聊我支付宝账号进行退款，然后手动领取吧-。-")
+            logger.warning(color("bold_blue") + "如果你真的无法看懂上面到底在说什么，请加群私聊我支付宝账号进行退款，然后手动领取吧-。-")
             logger.info("\n\n")
             pause()
 

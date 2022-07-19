@@ -192,14 +192,14 @@ class Uploader:
 
         return match.group(1)
 
-    def download_latest_version(self, download_dir) -> str:
+    def download_latest_version(self, download_dir, show_log=True) -> str:
         """
         下载最新版本压缩包到指定目录，并返回最终压缩包的完整路径
         """
         # note: 如果哪天蓝奏云不可用了，可以尝试使用github的release，对于国内情况，使用其镜像来下载
         #   官网： https://github.com/fzls/djc_helper/releases/download/latest/djc_helper.7z
         #   镜像： https://download.fastgit.org/fzls/djc_helper/releases/download/latest/djc_helper.7z
-        return self.download_file(self.find_latest_version(), download_dir)
+        return self.download_file(self.find_latest_version(), download_dir, show_log=show_log)
 
     def find_latest_version(self) -> FileInFolder:
         """

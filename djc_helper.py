@@ -388,10 +388,10 @@ class DjcHelper:
                 logger.warning(color("fg_bold_yellow") + "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定")
                 binded = False
 
-            if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
-                logger.warning(color("fg_bold_green") + "！！！请注意，我说的是手游，不是DNF！！！")
-                logger.warning(color("fg_bold_green") + "如果不需要做道聚城的手游任务和许愿任务（不做会少豆子），可以在配置工具里将手游名称设为无")
-                binded = False
+            # if self.cfg.mobile_game_role_info.enabled() and not self.check_mobile_game_bind():
+            #     logger.warning(color("fg_bold_green") + "！！！请注意，我说的是手游，不是DNF！！！")
+            #     logger.warning(color("fg_bold_green") + "如果不需要做道聚城的手游任务和许愿任务（不做会少豆子），可以在配置工具里将手游名称设为无")
+            #     binded = False
 
         if binded:
             if self.cfg.function_switches.get_djc:
@@ -400,8 +400,8 @@ class DjcHelper:
                 games = []
                 if "dnf" in self.bizcode_2_bind_role_map:
                     games.append("dnf")
-                if self.cfg.mobile_game_role_info.enabled():
-                    games.append(self.get_mobile_game_info().bizCode)
+                # if self.cfg.mobile_game_role_info.enabled():
+                #     games.append(self.get_mobile_game_info().bizCode)
 
                 for bizcode in games:
                     roleinfo = self.bizcode_2_bind_role_map[bizcode].sRoleInfo
@@ -748,6 +748,7 @@ class DjcHelper:
                 f"账号 {self.cfg.name} 未启用自动完成《有理想》任务功能，如需启用，请打开道聚城许愿功能。不配置，则每日任务的豆子会领不全", "道聚城参数未配置", show_once=True
             )
 
+    @try_except()
     def take_mobile_game_gift(self):
         game_info = self.get_mobile_game_info()
         role_info = self.bizcode_2_bind_role_map[game_info.bizCode].sRoleInfo
@@ -773,6 +774,7 @@ class DjcHelper:
             sRoleName=quote_plus(role_info.roleName),
         )
 
+    @try_except()
     def make_wish(self):
         bizCode = "yxzj"
         if bizCode not in self.bizcode_2_bind_role_map:

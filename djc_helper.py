@@ -588,6 +588,7 @@ class DjcHelper:
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("幸运勇士", self.dnf_lucky_user),
             ("DNF马杰洛的规划", self.majieluo),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -595,7 +596,6 @@ class DjcHelper:
             ("心悦猫咪", self.xinyue_cat),
             ("WeGame活动", self.dnf_wegame),
             ("我的小屋", self.dnf_my_home),
-            ("勇士的冒险补给", self.maoxian),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
@@ -8987,11 +8987,17 @@ class DjcHelper:
 
         self.check_maoxian_dup()
 
-        self.maoxian_op("第一天回流", "863104")
-        self.maoxian_op("第二天回流", "863852")
-        self.maoxian_op("第三天回流", "863855")
-        self.maoxian_op("第四天回流", "863866")
-        self.maoxian_op("第五天回流", "863868")
+        self.maoxian_op("幸运礼包", "872395")
+
+        self.maoxian_op("登录礼包-1", "872397")
+        self.maoxian_op("登录礼包-2", "872398")
+        self.maoxian_op("登录礼包-3", "872399")
+        self.maoxian_op("登录礼包-4", "872400")
+
+        self.maoxian_op("任务礼包-1", "872401")
+        self.maoxian_op("任务礼包-2", "872402")
+        self.maoxian_op("任务礼包-3", "872403")
+        self.maoxian_op("任务礼包-4", "872404")
 
         logger.warning("邀请回归及抽取对应获得的领奖次数，请自行完成")
 
@@ -9000,8 +9006,8 @@ class DjcHelper:
             "勇士的冒险补给",
             get_act_url("勇士的冒险补给"),
             activity_op_func=self.maoxian_op,
-            query_bind_flowid="863845",
-            commit_bind_flowid="863844",
+            query_bind_flowid="872392",
+            commit_bind_flowid="872391",
         )
 
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -9013,12 +9019,13 @@ class DjcHelper:
 
         res = self.amesvr_request(
             ctx,
-            # "x6m5.ams.game.qq.com",
-            # "group_3",
-            # "dnf",
-            "comm.ams.game.qq.com",
-            "group_k",
-            "bb",
+            # note: 如果提示 非法请求，可以看看请求是不是 host变成另一个了
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            # "comm.ams.game.qq.com",
+            # "group_k",
+            # "bb",
             iActivityId,
             iFlowId,
             print_res,
@@ -11226,4 +11233,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bbs()
+        djcHelper.maoxian()

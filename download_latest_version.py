@@ -10,9 +10,14 @@ def main():
     # 供机器人自动上传新版本到群文件使用
     filepath = uploader.download_latest_version(downloads_dir, show_log=False)
 
-    print(json.dumps({
-        "downloaded_path": filepath,
-    }))
+    print(
+        json.dumps(
+            {
+                "downloaded_path": filepath,
+            }
+        )
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

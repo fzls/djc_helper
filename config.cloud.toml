@@ -14,12 +14,12 @@ show_card_secret_first = false
 enable_alipay_redpacket = true
 
 # 新增的黑名单
-#[[black_list]]
-## 封禁于
-#ban_at = "2020-01-01"
-## QQ
-#qq = "1234"
-## 昵称
-#nickname = "拉黑"
-## 原因
-#reason = "测试拉黑"
+[[black_list]]
+# 封禁于
+ban_at = "2022-07-19"
+# QQ
+qq = "787146611"
+# 昵称
+nickname = "Always  miss"
+# 原因
+reason = "不会配置道聚城的手游，退款"

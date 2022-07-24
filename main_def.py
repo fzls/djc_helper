@@ -1437,11 +1437,6 @@ def show_tips(cfg: Config):
         "22.6 公众号签到": (
             "DNF公众号【地下城与勇士】有个新的签到活动，需要自行完成，步骤如下:\n" "关注公众号，每天在公众号发送【签到】，点击回复的活动链接，进去签到即可\n" "累计20天可得增幅书，30天一个灿烂自选-。-"
         ),
-        "22.6 虎牙斗鱼": (
-            "虎牙斗鱼的活动依旧请自行完成，链接如下：\n"
-            "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
-            "斗鱼：https://www.douyu.com/topic/DNFSRH?rid=5324055\n"
-        ),
         "22.6 colg模拟器活动": (
             "colg的模拟器活动请自行参加，15天可领取随机灿烂，流程如下："
             "1. 每天打开模拟器页面，选择装备并保存搭配：https://bbs.colg.cn/colg_activity_new-simulator.html?from_collect\n"
@@ -1454,11 +1449,8 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "22.6 b站联合活动": (
-            "b站出了个DNF周年庆活动，有兴趣的朋友请自行参与：https://www.bilibili.com/blackboard/activity-W9sZ1qMkS9.html#M6SZxUxF66L\n"
-        ),
-        "22.6 快手活动": ("新出了个快手活动，请自行完成~\n" "https://ppg.viviv.com/doodle/YWVPrRSG.html"),
         "22.7 夏日充值": ("夏日充值活动请自行参与：https://dnf.qq.com/cp/a20220714bjz/index.html"),
+        "22.7 Hello语音": "Hello语音的活动请自行在其app中完成：https://dnf.qq.com/cp/a20220720dnf/",
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

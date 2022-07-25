@@ -87,6 +87,7 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         SameAccountTryLoginAtMultipleThreadsException,
     ]:
         msg += format_msg("请关闭当前窗口，然后在配置工具中点击【清除登录状态】按钮后再次运行~")
+        msg += format_msg("如果还不行，可试试关闭后，删除小助手目录中的【.cached】和【.db_v2】这两个目录，再运行")
 
     if show_last_process_result:
         from network import last_response_info

@@ -53,8 +53,13 @@ class LanZouCloud(object):
         self._account_url = 'https://pc.woozooo.com/account.php'
         self._mydisk_url = 'https://pc.woozooo.com/mydisk.php'
         self._cookies = None
+
+        # re: cookie里新增了一个uag参数，登录时服务器会根据浏览器传过去的user-agent计算出这个uag返回set-cookie，这两个必须要匹配才能获取文件列表
+        self._user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+        self._server_uag = "a124634927f586ffbf2efb3f189df0a3"
+
         self._headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+            'user-agent': self._user_agent,
             'Referer': 'https://pc.woozooo.com/mydisk.php',
             'Accept-Language': 'zh-CN,zh;q=0.9',  # 提取直连必需设置这个，否则拿不到数据
         }
@@ -224,6 +229,9 @@ class LanZouCloud(object):
 
     def login_by_cookie(self, cookie: dict) -> int:
         """通过cookie登录"""
+        # 附加一个uag参数
+        cookie["uag"] = self._server_uag
+
         self._session.cookies.update(cookie)
         html = self._get(self._account_url)
         if not html:

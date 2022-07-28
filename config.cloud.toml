@@ -11,7 +11,7 @@ enable_pay_directly = true
 show_card_secret_first = false
 
 # 是否显示支付宝红包图片
-enable_alipay_redpacket = true
+enable_alipay_redpacket = false
 
 # 新增的黑名单
 [[black_list]]

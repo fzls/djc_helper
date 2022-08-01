@@ -85,15 +85,8 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220714summer/",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
-    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
-    "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
-    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
@@ -101,6 +94,13 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
+    "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
+    "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",

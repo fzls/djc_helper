@@ -848,5 +848,15 @@
     "open_url": "",
     "expire_at": "2022-08-01 22:05:20",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "活动周期说明-v2",
+    "message": "前几天闲着无聊统计了下20.8到现在各个活动的时间点，大概下次出活动应该在国庆套的时候，有兴趣可以看看我前几天发的帖子<_<\n\n（简单说就是到出国庆套之前，大概率啥蚊子腿都没有了）\n",
+    "send_at": "2022-08-07 22:24:11",
+    "show_type": "once",
+    "open_url": "https://bbs.colg.cn/thread-8551016-1-1.html",
+    "expire_at": "2022-08-14 22:24:11",
+    "show_only_before_version": ""
   }
 ]

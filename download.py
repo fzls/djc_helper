@@ -5,7 +5,7 @@ import requests
 
 from const import downloads_dir
 from log import color, logger
-from util import get_now, make_sure_dir_exists, show_progress
+from util import get_now, human_readable_size, make_sure_dir_exists, show_progress
 
 user_agent_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
@@ -53,11 +53,17 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
                 f.write(data)
 
                 dl += len(data)
-                show_progress(filename, total_length, dl)
+                used_seconds = (get_now() - start_time).total_seconds()
+                show_progress(filename, total_length, dl, used_seconds)
 
     end_time = get_now()
+    used_time = end_time - start_time
 
-    logger.info(color("bold_yellow") + f"下载完成，耗时 {end_time - start_time}")
+    actual_size = os.stat(target_file_path).st_size
+    speed = actual_size / used_time.total_seconds()
+    human_readable_speed = human_readable_size(speed)
+
+    logger.info(color("bold_yellow") + f"下载完成，耗时 {used_time}({human_readable_speed}/s)")
 
     return target_file_path
 

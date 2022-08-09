@@ -99,26 +99,28 @@ def update(args, uploader):
 
     logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新。一般这种情况是蓝奏云抽风了")
 
-    try:
-        # 首先尝试使用增量更新文件
-        patches_range = uploader.latest_patches_range()
-        logger.info(f"当前可以应用增量补丁更新的版本范围为{patches_range}")
-
-        can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(
-            patches_range[1], args.version
-        )
-        if can_use_patch:
-            logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
-
-            update_ok = incremental_update(args, uploader)
-            if update_ok:
-                logger.info("增量更新完毕")
-                report_dlc_usage("incremental update")
-                return
-            else:
-                logger.warning("增量更新失败，尝试默认的全量更新方案")
-    except BaseException as e:
-        logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
+    # re: 后面再适配基于github release的增量更新方案
+    logger.warning("新版增量更新方案稍后实现，暂时先跳过")
+    # try:
+    #     # 首先尝试使用增量更新文件
+    #     patches_range = uploader.latest_patches_range()
+    #     logger.info(f"当前可以应用增量补丁更新的版本范围为{patches_range}")
+    #
+    #     can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(
+    #         patches_range[1], args.version
+    #     )
+    #     if can_use_patch:
+    #         logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+    #
+    #         update_ok = incremental_update(args, uploader)
+    #         if update_ok:
+    #             logger.info("增量更新完毕")
+    #             report_dlc_usage("incremental update")
+    #             return
+    #         else:
+    #             logger.warning("增量更新失败，尝试默认的全量更新方案")
+    # except BaseException as e:
+    #     logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")
@@ -127,20 +129,12 @@ def update(args, uploader):
     return
 
 
-def full_update(args, uploader):
+def full_update(args, uploader) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath: str
-    try:
-        filepath = uploader.download_latest_version(tmp_dir)
-        report_dlc_usage("full_update_from_netdisk")
-    except BaseException as e:
-        logger.error(f"从蓝奏云下载最新版本失败，将尝试从github及其镜像下载最新版本, exc={e}")
-        logger.debug("", exc_info=e)
-
-        filepath = download_latest_github_release(tmp_dir)
-        report_dlc_usage("full_update_from_github")
+    filepath = download_latest_github_release(tmp_dir)
+    report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)

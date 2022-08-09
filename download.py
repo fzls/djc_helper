@@ -126,10 +126,11 @@ def download_latest_github_release(
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
         try:
-            mirror = extract_mirror_site(url,
-                                         release_file_path,
-                                         "https://github.com/",
-                                         )
+            mirror = extract_mirror_site(
+                url,
+                release_file_path,
+                "https://github.com/",
+            )
             logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)
@@ -206,15 +207,16 @@ def download_github_raw_content(
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
         try:
-            mirror = extract_mirror_site(url,
-                                         "/" + owner,
-                                         "/" + repo_name,
-                                         "/" + branch_name,
-                                         "@" + branch_name,
-                                         "/" + filepath_in_repo,
-                                         "https://github.com/",
-                                         "https://raw.githubusercontent.com/",
-                                         )
+            mirror = extract_mirror_site(
+                url,
+                "/" + owner,
+                "/" + repo_name,
+                "/" + branch_name,
+                "@" + branch_name,
+                "/" + filepath_in_repo,
+                "https://github.com/",
+                "https://raw.githubusercontent.com/",
+            )
             logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)

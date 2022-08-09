@@ -1,25 +1,12 @@
-import json
 import os
 import re
 import webbrowser
 from datetime import datetime
 
-from _build import build
-from _clear_github_artifact import clear_github_artifact
 from _commit_new_version import commit_new_version
-from _create_patches import create_patch
-from _package import package
 from _push_github import push_github
 from log import color, logger
-from upload_lanzouyun import Uploader
-from util import (
-    change_console_window_mode_async,
-    count_down,
-    make_sure_dir_exists,
-    pause_and_exit,
-    range_from_one,
-    show_head_line,
-)
+from util import change_console_window_mode_async, pause_and_exit, show_head_line
 from version import now_version
 
 
@@ -47,10 +34,10 @@ def release():
 
     # 先声明一些需要用到的目录的地址
     dir_src = os.path.realpath(".")
-    dir_all_release = os.path.realpath(os.path.join("releases"))
-    release_dir_name = f"DNF蚊子腿小助手_{version}_by风之凌殇"
-    release_7z_name = f"{release_dir_name}.7z"
-    dir_github_action_artifact = "_github_action_artifact"
+    # dir_all_release = os.path.realpath(os.path.join("releases"))
+    # release_dir_name = f"DNF蚊子腿小助手_{version}_by风之凌殇"
+    # release_7z_name = f"{release_dir_name}.7z"
+    # dir_github_action_artifact = "_github_action_artifact"
 
     show_head_line("实际构建打包流程将在github action中自动执行，本地仅在git打tag", color("bold_yellow"))
 

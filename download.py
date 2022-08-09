@@ -217,4 +217,4 @@ def extract_mirror_site(mirror_download_url: str, *words_to_remove: str) -> str:
 
 if __name__ == "__main__":
     # download_latest_github_release()
-    download_github_raw_content("utils/notices.txt")
+    download_github_raw_content("djc_helper.py")

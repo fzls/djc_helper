@@ -133,7 +133,7 @@ def full_update(args, uploader) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath = download_latest_github_release(tmp_dir)
+    filepath = download_latest_github_release(tmp_dir, connect_timeout=5)
     report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")

@@ -1583,8 +1583,10 @@ def triple_quote(strToQuote: str) -> str:
 def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):
     """显示进度的回调函数"""
     percent = now_size / total_size
+    # 当传输时启用了gzip压缩，可能网络库（如requests）会自动解码，导致应用层计算的总下载大小会大于从服务器获取到的传输文件大小，这里确保方块不会过长
+    bar_percent = min(percent, 1)
     bar_len = 40  # 进度条长总度
-    bar_str = ">" * round(bar_len * percent) + "=" * round(bar_len * (1 - percent))
+    bar_str = ">" * round(bar_len * bar_percent) + "=" * round(bar_len * (1 - bar_percent))
     show_percent = percent * 100
     now_mb = now_size / 1048576
     total_mb = total_size / 1048576

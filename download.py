@@ -92,13 +92,18 @@ def download_latest_github_release(
 
     # 先加入比较快的几个镜像
     urls = [
+        # 11.4MiB/s
         f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-        f"https://download.fastgit.org/{release_file_path}",
-        f"https://ghproxy.com/https://github.com/{release_file_path}",
-        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-        f"https://kgithub.com/{release_file_path}",
-        f"https://github.91chi.fun/https://github.com/{release_file_path}",
+        # 9.9MiB/s
         f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
+        # 8.8MiB/s
+        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+        # 7.5MiB/s
+        f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
+        # 3.3MiB/s
+        f"https://kgithub.com/{release_file_path}",
+        # 1.9MiB/s
+        f"https://github.91chi.fun/https://github.com/{release_file_path}",
     ]
 
     # 随机乱序，确保均匀分布请求
@@ -107,8 +112,13 @@ def download_latest_github_release(
     # 最后加入几个慢的镜像和源站
     urls.extend(
         [
-            f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
+            # 779.1KiB/s
+            f"https://download.fastgit.org/{release_file_path}",
+            # 457.2KiB/s
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # error:429
             f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+            # timeout
             f"https://github.com/{release_file_path}",
         ]
     )

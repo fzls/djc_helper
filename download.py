@@ -56,6 +56,11 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
                 used_seconds = (get_now() - start_time).total_seconds()
                 show_progress(filename, total_length, dl, used_seconds)
 
+            if dl > total_length:
+                # 如果实际写入文件大小比headers中写的要大，一般是因为启用了gzip，传输的内容是压缩后的，但是requests会自动解压缩，所以实际大小会更大
+                # 这种情况会导致上面的进度条没有换行，这里主动换行一下
+                print("")
+
     end_time = get_now()
     used_time = end_time - start_time
 

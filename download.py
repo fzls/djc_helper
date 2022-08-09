@@ -29,7 +29,7 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
 
     target_file_path = os.path.join(download_dir, filename)
 
-    logger.info(f"开始下载 {url} 到 {target_file_path}")
+    logger.info(f"开始下载 {url} 到 {target_file_path}（连接超时为 {connect_timeout} 秒）")
     response = requests.get(url, stream=True, timeout=connect_timeout, headers=user_agent_headers)
 
     if response.status_code != 200:

@@ -1596,7 +1596,7 @@ def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: 
     status_message += f" | {file_name} "
 
     print(status_message, end="")
-    if now_size >= total_size:
+    if now_size == total_size:
         print("")  # 下载完成换行
 
 

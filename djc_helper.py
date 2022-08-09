@@ -582,6 +582,7 @@ class DjcHelper:
             ("幸运勇士", self.dnf_lucky_user),
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -596,7 +597,6 @@ class DjcHelper:
             ("心悦猫咪", self.xinyue_cat),
             ("WeGame活动", self.dnf_wegame),
             ("我的小屋", self.dnf_my_home),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
@@ -8612,7 +8612,9 @@ class DjcHelper:
 
         # ------------ 实际流程 --------------
 
-        self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
+        self.dnf_luodiye_op("领取七天黑钻", "878057")
+
+        # self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
 
         # if not self.cfg.function_switches.disable_share and is_first_run(
         #     f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
@@ -8659,8 +8661,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="860901",
-            commit_bind_flowid="860900",
+            query_bind_flowid="878055",
+            commit_bind_flowid="878054",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -11235,4 +11237,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_luodiye()

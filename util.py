@@ -1580,7 +1580,7 @@ def triple_quote(strToQuote: str) -> str:
     return quote_plus(double_quote(strToQuote))
 
 
-def show_progress(file_name: str, total_size: int, now_size: int):
+def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):
     """显示进度的回调函数"""
     percent = now_size / total_size
     bar_len = 40  # 进度条长总度
@@ -1588,8 +1588,15 @@ def show_progress(file_name: str, total_size: int, now_size: int):
     show_percent = percent * 100
     now_mb = now_size / 1048576
     total_mb = total_size / 1048576
-    print(f"\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB | {file_name} ", end="")
-    if total_size == now_size:
+
+    status_message = f"\r{show_percent:.2f}%\t[{bar_str}] {now_mb:.2f}/{total_mb:.2f}MB"
+    if used_seconds != 0:
+        speed_per_second = human_readable_size(now_size / used_seconds)
+        status_message += f"({speed_per_second}/s)"
+    status_message += f" | {file_name} "
+
+    print(status_message, end="")
+    if now_size >= total_size:
         print("")  # 下载完成换行
 
 

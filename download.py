@@ -152,12 +152,24 @@ def download_github_raw_content(
     """
     # 先加入比较快的几个镜像
     urls = [
-        # 下面这个似乎会缓存很久，不会及时更新，先注释掉
-        # f"https://github.do/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 303.1KiB/s
+        f"https://hk1.monika.love/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 1.7MiB/s
         f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        f"https://raw.連接.台灣/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 711.2KiB/s
         f"https://raw-gh.gcdn.mirr.one/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 489.5KiB/s
+        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 191.0KiB/s
+        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 243.6KiB/s
+        f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        # 373.3KiB/s
+        f"https://kgithub.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
+        # 246.7KiB/s
+        f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 382.5KiB/s
+        f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
     # 随机乱序，确保均匀分布请求
@@ -166,20 +178,17 @@ def download_github_raw_content(
     # 然后加入几个慢的镜像和源站
     urls.extend(
         [
-            f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 33.4KiB/s
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            f"https://ghproxy.futils.com/https://github.com/{owner}/{repo_name}/blob/{branch_name}/{filepath_in_repo}",
+            # 26.7KiB/s
+            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ]
     )
 
     # 最后加入原始地址和一些不可达的
     urls.extend(
         [
-            f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # timeout or 350.7KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
         ]
     )

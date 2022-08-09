@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from collections import Counter
-from datetime import datetime
 
 # 解析活动数据
 act_info_list: list[tuple[str, str]] = []
 
-with open("短期活动统计.csv", "r", encoding="utf-8") as input_file:
+with open("短期活动统计.csv", encoding="utf-8") as input_file:
     input_file.readline()
 
     for line in input_file:
@@ -15,9 +14,9 @@ with open("短期活动统计.csv", "r", encoding="utf-8") as input_file:
         act_info_list.append((date_str, name))
 
 # 统计活动次数
-day_to_act_count = Counter()
-month_to_act_count = Counter()
-for date_str, name in act_info_list:
+day_to_act_count: Counter = Counter()
+month_to_act_count: Counter = Counter()
+for date_str, _ in act_info_list:
     month_str = date_str[:-3]
 
     day_to_act_count[date_str] += 1

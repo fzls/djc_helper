@@ -5,10 +5,10 @@ from typing import List, Optional
 
 from const import downloads_dir
 from data_struct import ConfigInterface, to_raw_type
+from download import download_github_raw_content
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from log import logger
 from update import version_less
-from upload_lanzouyun import Uploader
 from util import format_now, format_time, get_now, is_windows, message_box, parse_time, try_except
 from version import now_version
 
@@ -108,12 +108,8 @@ class NoticeManager:
         logger.info("公告读取完毕")
 
     def download_latest_notices(self):
-        uploader = Uploader()
-
-        dirpath, filename = os.path.dirname(self.cache_path), os.path.basename(self.cache_path)
-        uploader.download_file_in_folder(
-            uploader.folder_online_files, filename, dirpath, try_compressed_version_first=True
-        )
+        dirpath = os.path.dirname(self.cache_path)
+        download_github_raw_content(self.save_path, dirpath)
 
     @try_except()
     def save(self):
@@ -122,14 +118,7 @@ class NoticeManager:
             json.dump(to_raw_type(self.notices), save_file, ensure_ascii=False, indent=2)
             logger.info("公告存盘完毕")
 
-        # 上传到网盘
-        uploader = Uploader()
-        with open("upload_cookie.json") as fp:
-            cookie = json.load(fp)
-        uploader.login(cookie)
-        uploader.upload_to_lanzouyun(
-            self.save_path, uploader.folder_online_files, delete_history_file=True, also_upload_compressed_version=True
-        )
+        logger.warning("稍后请自行提交修改后的公告到github")
 
     @try_except()
     def show_notices(self):
@@ -213,7 +202,7 @@ def main():
 
 
 def test():
-    nm = NoticeManager(load_from_remote=False)
+    nm = NoticeManager(load_from_remote=True)
 
     for notice in nm.notices:
         notice.reset_first_run()

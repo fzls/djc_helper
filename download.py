@@ -134,7 +134,7 @@ def download_latest_github_release(
             logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)
-        except Exception as e:
+        except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)
             continue
@@ -220,7 +220,7 @@ def download_github_raw_content(
             logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)
-        except Exception as e:
+        except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)
             continue

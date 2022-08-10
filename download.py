@@ -131,7 +131,7 @@ def download_latest_github_release(
                 release_file_path,
                 "https://github.com/",
             )
-            logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
+            log_mirror_status(idx, len(urls), mirror)
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)
         except BaseException as e:
@@ -217,7 +217,7 @@ def download_github_raw_content(
                 "https://github.com/",
                 "https://raw.githubusercontent.com/",
             )
-            logger.info(f"{idx + 1}/{len(urls)}: 尝试镜像： {mirror}")
+            log_mirror_status(idx, len(urls), mirror)
 
             return download_file(url, download_dir, connect_timeout=connect_timeout)
         except BaseException as e:
@@ -226,6 +226,10 @@ def download_github_raw_content(
             continue
 
     raise Exception("所有镜像都下载失败")
+
+
+def log_mirror_status(current_index: int, total_count: int, mirror: str):
+    logger.info(f"{current_index + 1}/{total_count}: 尝试镜像： {mirror}" + color("bold_yellow") + "（如果速度较慢，请按 ctrl + c 强制切换下一个镜像）")
 
 
 def extract_mirror_site(mirror_download_url: str, *words_to_remove: str) -> str:

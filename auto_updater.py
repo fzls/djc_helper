@@ -269,7 +269,7 @@ def test():
     args = parse_args()
     uploader = Uploader()
 
-    args.version = "16.13.0"
+    args.version = "18.1.11"
 
     # 进行实际的检查是否需要更新操作
     latest_version = get_latest_version(uploader)

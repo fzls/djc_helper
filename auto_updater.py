@@ -7,6 +7,7 @@ logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
 import argparse
+import msvcrt
 import os
 import subprocess
 from distutils import dir_util
@@ -34,6 +35,18 @@ invalid_cwd = "./invalid_cwd"
 
 TEST_MODE = False
 
+def check_keyboard_interrupt_on_download(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):
+    if not msvcrt.kbhit():
+        return
+
+    print()
+    logger.warning("检测到键盘输入，将尝试切换下一个镜像")
+
+    # 将缓冲区的状态清空，避免影响到下一个镜像
+    while msvcrt.kbhit():
+        msvcrt.getch()
+
+    raise InterruptedError()
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
@@ -92,7 +105,9 @@ def get_latest_version(uploader: Uploader) -> str:
 def update(args, uploader):
     logger.info("需要更新，开始更新流程")
 
-    logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新。一般这种情况是蓝奏云抽风了")
+    logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新，本体仍可正常运行。")
+
+    logger.warning(color("bold_yellow") + "如果下载速度慢，可以按 任意键（比如ctrl+c） 来切换到下一个镜像")
 
     # re: 后面再适配基于github release的增量更新方案
     logger.warning("新版增量更新方案稍后实现，暂时先跳过")
@@ -128,7 +143,7 @@ def full_update(args, uploader) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath = download_latest_github_release(tmp_dir, connect_timeout=5)
+    filepath = download_latest_github_release(tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download)
     report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")

@@ -84,14 +84,9 @@ def parse_args():
 
 
 def get_latest_version(uploader: Uploader) -> str:
-    try:
-        # 默认从网盘获取最新版本
-        logger.debug("尝试使用蓝奏云获取版本号")
-        return uploader.latest_version()
-    except Exception:
-        # 尝试从github获取版本信息
-        cfg = CommonConfig()
-        return get_latest_version_from_github(cfg)
+    # 尝试从github获取版本信息
+    cfg = CommonConfig()
+    return get_latest_version_from_github(cfg)
 
 
 def update(args, uploader):

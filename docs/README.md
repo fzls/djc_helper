@@ -198,7 +198,7 @@ docker run --mount type=bind,source=local/absolute/path/to/config.toml,target=/d
 # 唯一发布地址
 源代码将持续更新于[本仓库](https://github.com/fzls/djc_helper) ，每个版本将通过下面的蓝奏云链接进行发布，请勿于其他地方下载使用，如各种群文件、软件站等，避免使用到被篡改后的版本，以免出问题-。-
 
-# 网盘链接（更新于2020/10/21)
+# 网盘链接（更新于2022/08/10)
 链接: https://docs.qq.com/doc/DYmlqWGNPYWRDcG95 提取码: fzls
 链接: https://docs.qq.com/doc/DYmlqWGNPYWRDcG95 提取码: fzls
 

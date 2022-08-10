@@ -1242,7 +1242,7 @@ class CommonConfig(ConfigInterface):
         # 按月付费购买地址
         self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
         # 网盘地址
-        self.netdisk_link = "https://fzls.lanzoum.com/s/djc-helper"
+        self.netdisk_link = "https://docs.qq.com/doc/DYmlqWGNPYWRDcG95"
         self.netdisk_link_for_report = self.netdisk_link
         # QQ群
         self.qq_group = 791343073

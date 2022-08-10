@@ -1,5 +1,6 @@
 import os
 import random
+from typing import Callable
 
 import requests
 
@@ -11,8 +12,9 @@ user_agent_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
 }
 
+progress_callback_func_type = Callable[[str, int, int, float], None]
 
-def download_file(url: str, download_dir=downloads_dir, filename="", connect_timeout=10) -> str:
+def download_file(url: str, download_dir=downloads_dir, filename="", connect_timeout=10, extra_progress_callback: progress_callback_func_type = None) -> str:
     """
     下载指定url的文件到指定目录
 
@@ -20,6 +22,7 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
     :param download_dir: 保存的目录
     :param filename: 保存的文件名，如果为空，则使用url的文件名
     :param connect_timeout: 连接超时时间
+    :param extra_progress_callback: 每次更新进度时的额外回调，比如可在特定条件下通过抛异常来中断下载
     :return: 下载后的文件绝对路径
     """
     download_dir = os.path.realpath(download_dir)
@@ -56,6 +59,9 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
                 used_seconds = (get_now() - start_time).total_seconds()
                 show_progress(filename, total_length, dl, used_seconds)
 
+                if extra_progress_callback is not None:
+                    extra_progress_callback(filename, total_length, dl, used_seconds)
+
             if dl > total_length:
                 # 如果实际写入文件大小比headers中写的要大，一般是因为启用了gzip，传输的内容是压缩后的，但是requests会自动解压缩，所以实际大小会更大
                 # 这种情况会导致上面的进度条没有换行，这里主动换行一下
@@ -74,7 +80,7 @@ def download_file(url: str, download_dir=downloads_dir, filename="", connect_tim
 
 
 def download_latest_github_release(
-    download_dir=downloads_dir, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper", connect_timeout=10
+    download_dir=downloads_dir, asset_name="djc_helper.7z", owner="fzls", repo_name="djc_helper", connect_timeout=10, extra_progress_callback: progress_callback_func_type = None
 ) -> str:
     """
     从github及其镜像下载指定仓库最新的release中指定资源
@@ -84,6 +90,7 @@ def download_latest_github_release(
     :param owner: 仓库拥有者名称
     :param repo_name: 仓库名称
     :param connect_timeout: 连接超时时间
+    :param extra_progress_callback: 每次更新进度时的额外回调，比如可在特定条件下通过抛异常来中断下载
     :return: 最终下载的本地文件绝对路径
     """
     release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
@@ -133,7 +140,7 @@ def download_latest_github_release(
             )
             log_mirror_status(idx, len(urls), mirror)
 
-            return download_file(url, download_dir, connect_timeout=connect_timeout)
+            return download_file(url, download_dir, connect_timeout=connect_timeout, extra_progress_callback=extra_progress_callback)
         except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)

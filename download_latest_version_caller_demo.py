@@ -4,7 +4,7 @@ py_path = ".\\.venv_dev\\Scripts\\python.exe"
 script_path = ".\\download_latest_version.py"
 
 cmd = [py_path, script_path]
-output = subprocess.check_output(cmd).decode('utf-8').strip()
+output = subprocess.check_output(cmd).decode("utf-8").strip()
 print(output)
 
 boundary_mark = "$$boundary$$"

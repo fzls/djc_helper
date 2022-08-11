@@ -35,6 +35,7 @@ invalid_cwd = "./invalid_cwd"
 
 TEST_MODE = False
 
+
 def check_keyboard_interrupt_on_download(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):
     if not msvcrt.kbhit():
         return
@@ -47,6 +48,7 @@ def check_keyboard_interrupt_on_download(file_name: str, total_size: int, now_si
         msvcrt.getch()
 
     raise InterruptedError()
+
 
 # 自动更新的基本原型，日后想要加这个逻辑的时候再细化接入
 def auto_update():
@@ -143,7 +145,9 @@ def full_update(args, uploader) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath = download_latest_github_release(tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download)
+    filepath = download_latest_github_release(
+        tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
+    )
     report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")

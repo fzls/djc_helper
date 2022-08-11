@@ -1928,6 +1928,9 @@ def try_notify_new_pay_info(
     # 获取上次保存的付费信息，对比是否产生了新的付费
     db = UserBuyInfoDB().with_context(str(qq_accounts)).load()
 
+    # ps: 1999是服务器查询失败时填充的默认值，用于确保服务器异常时不影响正常使用，应排除这种情况
+    fake_month = 1999
+
     # 在有上次保存信息的时候才尝试对比
     if db.file_created:
         # 检查dlc
@@ -1938,7 +1941,10 @@ def try_notify_new_pay_info(
             pass
 
         # 检查是否有新的按月付费
-        if latest_user_buy_info.total_buy_month > db.buy_info.total_buy_month:
+        # 判定条件
+        # 1. 比上次保存的月数多
+        # 2. 上次保存的不是服务器异常时的保底数据
+        if latest_user_buy_info.total_buy_month > db.buy_info.total_buy_month and latest_user_buy_info.total_buy_month != fake_month:
             # 计算新增的按月付费。
             # 基础假设：新增的付费时间靠后，因此只需要计算出比之前计算的按月付费条数多出来的即可。
             old_buy_records = db.buy_info.get_normal_buy_records()
@@ -1955,7 +1961,16 @@ def try_notify_new_pay_info(
                 async_message_box(msg, "到账提醒")
 
     # 保存新的付费信息
-    if new_buy_dlc or len(new_buy_monthly_pay_records) != 0 or not db.file_created:
+    # 以下情况需要保存数据
+    # 1. 新购买了dlc
+    # 2. 有新增购买月份
+    # 3. 第一次保存
+    # 4. 之前保存了服务器异常时的保底数据
+    if (new_buy_dlc
+        or len(new_buy_monthly_pay_records) != 0
+        or not db.file_created
+        or db.buy_info.total_buy_month == fake_month
+    ):
         logger.info("有新的付费记录，更新本地付费记录，用于下次运行时进行对比")
         db.buy_info = latest_user_buy_info
         db.save()

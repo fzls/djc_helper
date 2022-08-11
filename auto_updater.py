@@ -1,3 +1,5 @@
+import platform
+
 from config import CommonConfig
 from log import color, fileHandler, logger, new_file_handler
 from version import now_version, ver_time
@@ -7,7 +9,6 @@ logger.removeHandler(fileHandler)
 logger.addHandler(new_file_handler())
 
 import argparse
-import msvcrt
 import os
 import subprocess
 from distutils import dir_util
@@ -37,6 +38,11 @@ TEST_MODE = False
 
 
 def check_keyboard_interrupt_on_download(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):
+    if platform.system() != "Windows":
+        return
+
+    import msvcrt
+
     if not msvcrt.kbhit():
         return
 

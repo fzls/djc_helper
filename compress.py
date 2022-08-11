@@ -6,6 +6,8 @@ import shutil
 import subprocess
 from os.path import realpath
 
+import py7zr
+
 from log import logger
 
 logger_func = logger.debug
@@ -66,6 +68,40 @@ def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str 
             realpath(compressed_7z_filepath),
         ]
     )
+
+
+def compress_dir_with_py7zr(
+    dirpath: str,
+    compressed_7z_filepath: str = ""
+):
+    """
+    压缩 目录dirpath 到 compressed_7z_filepath
+    """
+    if compressed_7z_filepath == "":
+        compressed_7z_filepath = dirpath + ".7z"
+
+    compressed_7z_filepath = realpath(compressed_7z_filepath)
+    dirpath = realpath(dirpath)
+
+    # 压缩打包
+    logger_func(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
+
+    filters = [{"id": py7zr.FILTER_ZSTD}]
+    with py7zr.SevenZipFile(compressed_7z_filepath, "w", filters=filters) as archive:
+        archive.writeall(dirpath)
+
+
+def decompress_dir_with_py7zr(compressed_7z_filepath: str, dst_parent_folder: str = "."):
+    """
+    自动解压缩 compressed_7z_filepath 到其所在目录
+    """
+    dst_parent_folder = realpath(dst_parent_folder)
+
+    # 尝试解压
+    logger_func(f"开始解压缩 目录 {compressed_7z_filepath} 到 目录 {dst_parent_folder} 下面")
+
+    with py7zr.SevenZipFile(compressed_7z_filepath, mode="r") as z:
+        z.extractall(dst_parent_folder)
 
 
 def get_bz_path(dir_src_path: str = "") -> str:

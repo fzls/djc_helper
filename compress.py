@@ -72,7 +72,8 @@ def decompress_dir_with_bandizip(compressed_7z_filepath: str, dir_src_path: str 
 
 def compress_dir_with_py7zr(
     dirpath: str,
-    compressed_7z_filepath: str = ""
+    compressed_7z_filepath: str = "",
+    filters=None,
 ):
     """
     压缩 目录dirpath 到 compressed_7z_filepath
@@ -86,7 +87,8 @@ def compress_dir_with_py7zr(
     # 压缩打包
     logger_func(f"开始压缩 目录 {dirpath} 为 {compressed_7z_filepath}")
 
-    filters = [{"id": py7zr.FILTER_ZSTD}]
+    if filters is None:
+        filters = [{"id": py7zr.FILTER_ZSTD}]
     with py7zr.SevenZipFile(compressed_7z_filepath, "w", filters=filters) as archive:
         archive.writeall(dirpath)
 

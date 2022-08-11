@@ -125,7 +125,7 @@ def compare_py7zr_compress_filters():
 
     from util import human_readable_size
 
-    target_dir = "D:\_codes\Python\djc_helper_public\.cached\downloads\DNF蚊子腿小助手_v19.0.1_by风之凌殇"
+    target_dir = ".\.cached\downloads\DNF蚊子腿小助手_v19.0.1_by风之凌殇"
     final_7z_path = target_dir + ".7z"
 
     logger.info(f"开始对比不同filters的压缩大小，目标目录为 {target_dir}")

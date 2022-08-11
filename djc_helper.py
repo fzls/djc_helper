@@ -8612,16 +8612,17 @@ class DjcHelper:
 
         # ------------ 实际流程 --------------
 
-        self.dnf_luodiye_op("领取七天黑钻", "878057")
+        self.dnf_luodiye_op("战斗补给", "876264")
+        self.dnf_luodiye_op("战神补给", "876263")
 
         # self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
 
-        # if not self.cfg.function_switches.disable_share and is_first_run(
-        #     f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
-        # ):
-        #     self.dnf_luodiye_op("用户授权(统一授权)", "844965")
-        #     self.dnf_luodiye_op("分享", "844972", sUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
-        #
+        if not self.cfg.function_switches.disable_share and is_first_run(
+            f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
+        ):
+            self.dnf_luodiye_op("用户授权(统一授权)", "876757")
+            self.dnf_luodiye_op("分享", "876858", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+
         # self.dnf_luodiye_op("登录游戏积分", "844938")
         # self.dnf_luodiye_op("分享好友积分", "844952")
         # self.dnf_luodiye_op("登录游戏顾问奖励", "844953")
@@ -8661,8 +8662,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="878055",
-            commit_bind_flowid="878054",
+            query_bind_flowid="876195",
+            commit_bind_flowid="876194",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):

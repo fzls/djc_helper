@@ -3,11 +3,11 @@ import os
 import time
 
 from auto_updater import extract_decompressed_directory_name
-from compress import compress_dir_with_py7zr, decompress_dir_with_py7zr
+from compress import decompress_dir_with_py7zr
 from const import downloads_dir
 from download import download_latest_github_release
 from log import logger
-from util import remove_directory, remove_file
+from util import remove_directory
 
 
 def main():

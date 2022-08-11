@@ -1944,7 +1944,10 @@ def try_notify_new_pay_info(
         # 判定条件
         # 1. 比上次保存的月数多
         # 2. 上次保存的不是服务器异常时的保底数据
-        if latest_user_buy_info.total_buy_month > db.buy_info.total_buy_month and latest_user_buy_info.total_buy_month != fake_month:
+        if (
+            latest_user_buy_info.total_buy_month > db.buy_info.total_buy_month
+            and latest_user_buy_info.total_buy_month != fake_month
+        ):
             # 计算新增的按月付费。
             # 基础假设：新增的付费时间靠后，因此只需要计算出比之前计算的按月付费条数多出来的即可。
             old_buy_records = db.buy_info.get_normal_buy_records()
@@ -1966,7 +1969,8 @@ def try_notify_new_pay_info(
     # 2. 有新增购买月份
     # 3. 第一次保存
     # 4. 之前保存了服务器异常时的保底数据
-    if (new_buy_dlc
+    if (
+        new_buy_dlc
         or len(new_buy_monthly_pay_records) != 0
         or not db.file_created
         or db.buy_info.total_buy_month == fake_month
@@ -2235,7 +2239,7 @@ def demo_pay_info():
     load_config("config.toml")
     cfg = config()
 
-    cfg.account_configs[0].account_info.uin = "o" + "1054073896"
+    cfg.account_configs[0].account_info.uin = "o" + "3597628081"
 
     # cfg.common.log_level = "debug"
     # from config import to_raw_type

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import random
 from typing import Callable
@@ -20,7 +22,7 @@ def download_file(
     download_dir=downloads_dir,
     filename="",
     connect_timeout=10,
-    extra_progress_callback: progress_callback_func_type = None,
+    extra_progress_callback: progress_callback_func_type | None = None,
 ) -> str:
     """
     下载指定url的文件到指定目录
@@ -92,7 +94,7 @@ def download_latest_github_release(
     owner="fzls",
     repo_name="djc_helper",
     connect_timeout=10,
-    extra_progress_callback: progress_callback_func_type = None,
+    extra_progress_callback: progress_callback_func_type | None = None,
 ) -> str:
     """
     从github及其镜像下载指定仓库最新的release中指定资源

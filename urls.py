@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-15 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2022-07-14 00:00:00", "2022-08-10 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2022-08-11 00:00:00", "2022-09-11 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
 ]
 
@@ -85,13 +85,13 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220714summer/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220811index/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220811searching/index.html",
     #
     # 已过期活动
     #
@@ -311,7 +311,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "17_rESjqa"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "42_d48jrO"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "49_Un4iJS"  # 我的小屋
 

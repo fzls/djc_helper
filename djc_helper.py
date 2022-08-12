@@ -7353,7 +7353,9 @@ class DjcHelper:
         #     # self.majieluo_op("分享得好礼", "769008")
 
     def majieluo_permit_social(self):
-        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="MJL", sActivityInfo="a20220811searching")
+        self.dnf_social_relation_permission_op(
+            "更新创建用户授权信息", "108939", sAuthInfo="MJL", sActivityInfo="a20220811searching"
+        )
         return
 
     @try_except()

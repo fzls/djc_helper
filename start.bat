@@ -12,7 +12,7 @@ set pyinstaller_path="%pyscript_path%\pyinstaller"
 :: 更新代码
 ECHO.
 ECHO 更新源代码
-git pull --tags origin master
+git pull origin master --tags
 
 ECHO.
 ECHO 尝试初始化venv

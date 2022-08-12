@@ -1434,14 +1434,6 @@ def show_tips(cfg: Config):
         "绑定手机领666代币券": (
             "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
         ),
-        "22.6 公众号签到": (
-            "DNF公众号【地下城与勇士】有个新的签到活动，需要自行完成，步骤如下:\n" "关注公众号，每天在公众号发送【签到】，点击回复的活动链接，进去签到即可\n" "累计20天可得增幅书，30天一个灿烂自选-。-"
-        ),
-        "22.6 colg模拟器活动": (
-            "colg的模拟器活动请自行参加，15天可领取随机灿烂，流程如下："
-            "1. 每天打开模拟器页面，选择装备并保存搭配：https://bbs.colg.cn/colg_activity_new-simulator.html?from_collect\n"
-            "2. 保存后在活动页面点击签到领取奖励：https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
-        ),
         "22.6 肥腙与井盖小游戏": (
             "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
             "其实就是选择关卡后不停循环点四个技能按钮，所以可以用按键精灵、autojs等工具做一个简单的脚本，循环点这四个位置就好了- -有兴趣可以自行折腾~\n"
@@ -1450,7 +1442,11 @@ def show_tips(cfg: Config):
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
         "22.7 夏日充值": ("夏日充值活动请自行参与：https://dnf.qq.com/cp/a20220714bjz/index.html"),
-        "22.7 Hello语音": "Hello语音的活动请自行在其app中完成：https://dnf.qq.com/cp/a20220720dnf/",
+        "22.8 斗鱼虎牙": (
+            "斗鱼虎牙活动请自行参与\n"
+            "斗鱼： https://www.douyu.com/topic/DNFZDY?rid=5324055\n"
+            "虎牙： https://www.huya.com/g/2#cate-1-5483\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

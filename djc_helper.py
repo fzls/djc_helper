@@ -2339,7 +2339,9 @@ class DjcHelper:
                 for card_id, count in card_counts.items():
                     if count >= lottery_idx:
                         res = self.lottery_using_card(f"{lottery_idx}/{count}", card_id)
-                        if res.get("Msg", "") == "中了用户总限制":
+                        # 中了用户总限制
+                        # 中了用户日限制
+                        if "限制" in res.get("Msg", ""):
                             logger.warning("当前已达到最大抽奖次数上限，将停止抽奖~")
                             return
         else:

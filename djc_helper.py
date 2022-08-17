@@ -4827,7 +4827,11 @@ class DjcHelper:
 
             # 本地保存一份，方便配置工具那边查询
             db = DnfHelperChronicleExchangeListDB().load()
-            db.exchange_list = exchangeList
+            if len(exchangeList.gifts) != 0:
+                db.exchange_list = exchangeList
+            else:
+                logger.warning("本次查询兑换列表失败，将使用之前保存的版本~")
+                exchangeList = db.exchange_list
             db.save()
 
             exchangeGiftMap = {}

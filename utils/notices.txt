@@ -858,5 +858,15 @@
     "open_url": "https://bbs.colg.cn/thread-8551016-1-1.html",
     "expire_at": "2022-08-14 22:24:11",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "编年史鉴权调整提示",
+    "message": "编年史似乎又调整了鉴权参数，目前小助手不能正常执行相关操作了，得再研究下-。-\n在我搞定这个，发布新版本之前，请各位先手动去助手app去领取每日的任务经验，以及等级奖励\n\nPS：未适配的版本为v19.0.3（包含）及更老版本\n",
+    "send_at": "2022-08-17 11:00:06",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-08-24 11:00:06",
+    "show_only_before_version": ""
   }
 ]

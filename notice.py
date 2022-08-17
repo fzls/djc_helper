@@ -179,12 +179,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "活动周期说明-v2"
-    message = """前几天闲着无聊统计了下20.8到现在各个活动的时间点，大概下次出活动应该在国庆套的时候，有兴趣可以看看我前几天发的帖子<_<
+    title = "编年史鉴权调整提示"
+    message = """编年史似乎又调整了鉴权参数，目前小助手不能正常执行相关操作了，得再研究下-。-
+在我搞定这个，发布新版本之前，请各位先手动去助手app去领取每日的任务经验，以及等级奖励
 
-（简单说就是到出国庆套之前，大概率啥蚊子腿都没有了）
+PS：未适配的版本为v19.0.3（包含）及更老版本
 """
-    open_url = "https://bbs.colg.cn/thread-8551016-1-1.html"
+    open_url = ""
     show_only_before_version = ""
 
     if title != "":

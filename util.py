@@ -1274,6 +1274,9 @@ ignore_caller_names = {
     "temporary_change_bind_and_do",
     "try_do_with_lucky_role_and_normal_role",
     "try_request",
+    "wang_get",
+    "wegame_post",
+    "yoyo_post",
 }
 
 ignore_prefixes = [

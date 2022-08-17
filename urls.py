@@ -85,7 +85,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
@@ -95,6 +94,7 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "qq视频蚊子腿-爱玩": "https://magic.iwan.qq.com/magic-act/t8etxryix0lzux9za01l1cdssg/index_index.html",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",

@@ -4373,7 +4373,6 @@ class DjcHelper:
             "toUin": self.qq(),
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
-            "date": format_now("%Y-%m-%d"),
         }
 
         hmac_sha1_secret = "nKJH89hh@8yoHJ98y&IOhIUt9hbOh98ht"
@@ -4732,7 +4731,7 @@ class DjcHelper:
                 f"领取 {giftInfo.sDays} 签到奖励",
                 "send/sign",
                 amsid="",
-                date=format_time(gift_day, "%Y-%m-%d"),
+                date_chronicle_sign_in=format_time(gift_day, "%Y-%m-%d"),
                 num=1,
             )
             logger.info(f"领取连续签到 {giftInfo.sDays} 的奖励: {res}")
@@ -10522,6 +10521,7 @@ class DjcHelper:
                 "cRand",
                 "tghappid",
                 "sig",
+                "date_chronicle_sign_in",
             ]
         }
 

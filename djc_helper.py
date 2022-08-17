@@ -13,7 +13,7 @@ import uuid
 from multiprocessing import Pool
 from typing import Any, Callable
 from urllib import parse
-from urllib.parse import quote, quote_plus, unquote_plus
+from urllib.parse import parse_qsl, quote, quote_plus, unquote_plus, urlparse
 
 import requests
 
@@ -103,6 +103,7 @@ from db import (
     FireCrackersDB,
     WelfareDB,
 )
+from encrypt import make_dnf_helper_signature, make_dnf_helper_signature_data
 from exceptions_def import (
     ArkLotteryTargetQQSendByRequestReachMaxCount,
     DnfHelperChronicleTokenExpiredOrWrongException,
@@ -4375,41 +4376,98 @@ class DjcHelper:
             "date": format_now("%Y-%m-%d"),
         }
 
+        hmac_sha1_secret = "nKJH89hh@8yoHJ98y&IOhIUt9hbOh98ht"
+
         # ------ 封装通用接口 ------
+        def append_signature_to_data(
+            data: dict[str, any],
+            http_method: str,
+            api_path: str,
+        ):
+            # 补充参数
+            data["tghappid"] = "1000045"
+            data["cRand"] = get_millsecond_timestamps()
+
+            # 构建用于签名的请求字符串
+            post_data = make_dnf_helper_signature_data(data)
+
+            # 计算签名
+            signature = make_dnf_helper_signature(http_method, api_path, post_data, hmac_sha1_secret)
+
+            # 添加签名
+            data["sig"] = signature
+            return
+
+        def get_millsecond_timestamps() -> int:
+            return int(datetime.datetime.now().timestamp() * 1000)
+
+
+        def get_api_path(url_template: str, **params) -> str:
+            full_url = self.format(url_template, **params)
+            api_path = urlparse(full_url).path
+
+            return api_path
+
+        def get_url_query_data(url_template: str, **params) -> dict[str, str]:
+            full_url = self.format(url_template, **params)
+            query_string = urlparse(full_url).query
+
+            query_data = dict(parse_qsl(query_string, keep_blank_values=True))
+
+            return query_data
+
         def wang_get(ctx: str, api: str, **extra_params) -> dict:
-            return self.get(
+            data = {
+                **common_params,
+                **extra_params,
+            }
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue,api=api, **data)
+            actual_query_data = get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue,api=api, **data)
+
+            append_signature_to_data(actual_query_data, "GET", api_path)
+
+            res = self.get(
                 ctx,
                 self.urls.dnf_helper_chronicle_wang_xinyue,
                 api=api,
                 **{
-                    **common_params,
-                    **extra_params,
-                },
+                    **data,
+                    **actual_query_data,
+                }
             )
+            return res
 
         def wegame_post(ctx: str, api: str, **extra_params) -> dict:
-            return self.post(
+            data = {
+                **common_params,
+                **extra_params,
+            }
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_mwegame,api=api, **data)
+            append_signature_to_data(data, "POST", api_path)
+
+            res = self.post(
                 ctx,
                 self.urls.dnf_helper_chronicle_mwegame,
                 api=api,
-                **{
-                    **common_params,
-                    **extra_params,
-                },
+                **data,
             )
+            return res
 
         def yoyo_post(ctx: str, api: str, **extra_params) -> dict:
-            return self.post(
+            data = {
+                **common_params,
+                **extra_params,
+            }
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_yoyo,api=api)
+            append_signature_to_data(data, "POST", api_path)
+
+            res = self.post(
                 ctx,
                 self.urls.dnf_helper_chronicle_yoyo,
                 api=api,
-                data=post_json_to_data(
-                    {
-                        **common_params,
-                        **extra_params,
-                    }
-                ),
+                data=post_json_to_data(data),
             )
+            return res
 
         # ------ 自动绑定 ------
         @try_except(return_val_on_except=None)
@@ -4555,7 +4613,8 @@ class DjcHelper:
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
         def _getUserTaskList() -> dict:
-            return wegame_post("任务信息", "getUserTaskList")
+            result = wegame_post("任务信息", "getUserTaskList")
+            return result
 
         def getUserTaskList() -> DnfHelperChronicleUserTaskList:
             res = _getUserTaskList()
@@ -10460,6 +10519,9 @@ class DjcHelper:
                 "randomSeed",
                 "taskId",
                 "point",
+                "cRand",
+                "tghappid",
+                "sig",
             ]
         }
 
@@ -11242,4 +11304,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_helper_chronicle()

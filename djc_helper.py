@@ -4400,7 +4400,6 @@ class DjcHelper:
         def get_millsecond_timestamps() -> int:
             return int(datetime.datetime.now().timestamp() * 1000)
 
-
         def get_api_path(url_template: str, **params) -> str:
             full_url = self.format(url_template, **params)
             api_path = urlparse(full_url).path
@@ -4420,8 +4419,8 @@ class DjcHelper:
                 **common_params,
                 **extra_params,
             }
-            api_path = get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue,api=api, **data)
-            actual_query_data = get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue,api=api, **data)
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
+            actual_query_data = get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
 
             append_signature_to_data(actual_query_data, "GET", api_path)
 
@@ -4432,7 +4431,7 @@ class DjcHelper:
                 **{
                     **data,
                     **actual_query_data,
-                }
+                },
             )
             return res
 
@@ -4441,7 +4440,7 @@ class DjcHelper:
                 **common_params,
                 **extra_params,
             }
-            api_path = get_api_path(self.urls.dnf_helper_chronicle_mwegame,api=api, **data)
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_mwegame, api=api, **data)
             append_signature_to_data(data, "POST", api_path)
 
             res = self.post(
@@ -4457,7 +4456,7 @@ class DjcHelper:
                 **common_params,
                 **extra_params,
             }
-            api_path = get_api_path(self.urls.dnf_helper_chronicle_yoyo,api=api)
+            api_path = get_api_path(self.urls.dnf_helper_chronicle_yoyo, api=api)
             append_signature_to_data(data, "POST", api_path)
 
             res = self.post(

@@ -1451,6 +1451,11 @@ def show_tips(cfg: Config):
             "在活动页面购买超级会员和其他会员，最低可以三十元兑换一个红10券+12次抽奖机会，如果平常有购买QQ视频或者QQ音乐的话，可以考虑下这个活动~\n"
             "如果有需要，可以在活动页面自行参与这部分: https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7\n"
         ),
+        "22.8 colg模拟器签到": (
+            "colg模拟器签到活动开放了第二期，签到15天可以领取一个随机灿烂，有兴趣可自行参与\n"
+            "第一步：在模拟器页面使用模拟器 https://bbs.colg.cn/colg_activity_new-simulator.html/index\n"
+            "第二步：点击右侧礼包按钮，领取每日礼包进行签到 https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

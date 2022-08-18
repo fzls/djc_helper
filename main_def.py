@@ -1447,6 +1447,10 @@ def show_tips(cfg: Config):
             "斗鱼： https://www.douyu.com/topic/DNFZDY?rid=5324055\n"
             "虎牙： https://www.huya.com/g/2#cate-1-5483\n"
         ),
+        "22.8 超级会员": (
+            "在活动页面购买超级会员和其他会员，最低可以三十元兑换一个红10券+12次抽奖机会，如果平常有购买QQ视频或者QQ音乐的话，可以考虑下这个活动~\n"
+            "如果有需要，可以在活动页面自行参与这部分: https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

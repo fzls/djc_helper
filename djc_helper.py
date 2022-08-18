@@ -583,6 +583,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF马杰洛的规划", self.majieluo),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -592,7 +593,6 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("DNF集合站", self.dnf_collection),
             ("黄钻", self.dnf_yellow_diamond),
-            ("超级会员", self.dnf_super_vip),
             ("colg每日签到", self.colg_signin),
             ("DNF闪光杯", self.dnf_shanguang),
             ("心悦猫咪", self.xinyue_cat),
@@ -2130,7 +2130,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "66551_3dae8177"
+        lucky_act_id = "73337_3660adfc"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2139,20 +2139,20 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "66552_521b4320")
+        self.qzone_act_op("勇士见面礼", "73338_bd4c2ebe")
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         ):
             self.qzone_act_op(
                 "分享给自己",
-                "66553_778d6b88",
+                "73043_c6fd6bf4",
                 act_req_data={
                     "receivers": [
                         self.qq(),
                     ]
                 },
             )
-        self.qzone_act_op("分享领取礼包", "66554_ddb83bef")
+        self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下
@@ -11307,4 +11307,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_super_vip()

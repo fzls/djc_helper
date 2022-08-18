@@ -55,7 +55,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2022-06-23 00:00:00", "2022-07-22 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
-    newNotAmsActInfo("2021-05-24 00:00:00", "2022-07-30 23:59:59", "超级会员"),
+    newNotAmsActInfo("2021-08-18 00:00:00", "2022-09-19 23:59:59", "超级会员"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-07-30 23:59:59", "黄钻"),
     newNotAmsActInfo("2022-06-17 00:00:00", "2022-08-15 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
@@ -91,6 +91,7 @@ act_name_to_url = {
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220811index/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220811searching/index.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7",
     #
     # 已过期活动
     #
@@ -99,7 +100,6 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/41780_d2fc9a48",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)

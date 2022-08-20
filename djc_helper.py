@@ -584,12 +584,12 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("集卡", self.dnf_ark_lottery),
-            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("KOL", self.dnf_kol),
             ("DNF集合站", self.dnf_collection),
             ("黄钻", self.dnf_yellow_diamond),
@@ -3845,9 +3845,9 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
 
-        self.qq_video_iwan_op("幸运勇士礼包", "qXcsHHmOg")
-        self.qq_video_iwan_op("全民大礼包", "2hiHF_yAf")
-        # self.qq_video_iwan_op("勇士见面礼", "ur5nh8ZiM")
+        self.qq_video_iwan_op("幸运勇士礼包", "6hCWninbMu")
+        # self.qq_video_iwan_op("全民大礼包", "2hiHF_yAf")
+        self.qq_video_iwan_op("勇士见面礼", "ri6rVEbq45")
         # self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "fj174odxr")
         # self.qq_video_iwan_op("在线30分钟签到", "1X7VUbqgr")
         # self.qq_video_iwan_op("累计 3 天", "ql8qD9_NH")
@@ -11307,4 +11307,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.qq_video_iwan()

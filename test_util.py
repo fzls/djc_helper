@@ -379,6 +379,7 @@ def test_with_cache_v2():
     cache_duration = 2
 
     def f() -> float:
+        time.sleep(0.05)
         return get_now().timestamp()
 
     test_key = f"test_with_cache_key_{random.random()}"

@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import webbrowser
 from datetime import datetime
 
@@ -56,6 +57,8 @@ def release():
 
     # ---------------查看github action
     show_head_line("请在稍后打开的github action中查看打包结果", color("bold_yellow"))
+    logger.info("等待两秒，确保action已开始处理，不必再手动刷新页面")
+    time.sleep(2)
     webbrowser.open("https://github.com/fzls/djc_helper/actions/workflows/package.yml")
 
     # ---------------结束

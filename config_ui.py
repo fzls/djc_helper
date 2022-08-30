@@ -880,9 +880,7 @@ class ConfigUi(QFrame):
 
             # 自动更新购买完成后提示去网盘下载
             if card.startswith("auto_update"):
-                show_message(
-                    "提示", "自动更新已激活，下次启动小助手时将自动生效，具体操作流程请看【付费指引/付费指引.docx】"
-                )
+                show_message("提示", "自动更新已激活，下次启动小助手时将自动生效，具体操作流程请看【付费指引/付费指引.docx】")
 
             self.report_use_card_secret(card)
         else:

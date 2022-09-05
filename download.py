@@ -140,6 +140,12 @@ def download_latest_github_release(
             # error:429
             f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
             # timeout
+            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # timeout
+            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # timeout
+            f"https://cdn.githubjs.cf/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # timeout
             f"https://github.com/{release_file_path}",
         ]
     )

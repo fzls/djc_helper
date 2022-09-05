@@ -86,9 +86,7 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
-    "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
-    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220811index/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220811searching/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7",
@@ -96,6 +94,8 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
+    "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/42163_27b8ff61",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",

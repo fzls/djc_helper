@@ -21,7 +21,7 @@ def download_file(
     url: str,
     download_dir=downloads_dir,
     filename="",
-    connect_timeout=10,
+    connect_timeout=5,
     extra_progress_callback: progress_callback_func_type | None = None,
 ) -> str:
     """
@@ -93,7 +93,7 @@ def download_latest_github_release(
     asset_name="djc_helper.7z",
     owner="fzls",
     repo_name="djc_helper",
-    connect_timeout=10,
+    connect_timeout=5,
     extra_progress_callback: progress_callback_func_type | None = None,
 ) -> str:
     """
@@ -171,7 +171,7 @@ def download_github_raw_content(
     owner="fzls",
     repo_name="djc_helper",
     branch_name="master",
-    connect_timeout=10,
+    connect_timeout=5,
 ) -> str:
     """
     从github及其镜像下载指定仓库的指定分支的指定文件到本地指定目录

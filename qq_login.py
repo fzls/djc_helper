@@ -795,7 +795,7 @@ class QQLogin:
                         msg += f"\n\t当前网址为 {current_url}"
                         logger.exception(msg, exc_info=login_exception)
                         if type(login_exception) is RequireVerifyMessageButInHeadlessMode:
-                            logger.info(color("bold_yellow") + "检测到需要验证手机，将立即开始第二次慢速重试，且显示浏览器界面")
+                            logger.info(color("bold_yellow") + f"检测到需要手动验证流程（{login_exception}），将立即开始第二次慢速重试，且显示浏览器界面")
                             wait_time = 1
 
                         count_down(f"{truncate(self.name, 20):20s} 重试", wait_time)
@@ -1241,13 +1241,13 @@ class QQLogin:
                                 color("bold_yellow") + f"{self.name} 需要进行 {ctx}，将最多等待 {verify_max_wait_time} 秒"
                             )
                             if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
-                                raise RequireVerifyMessageButInHeadlessMode()
+                                raise RequireVerifyMessageButInHeadlessMode(ctx)
 
                             WebDriverWait(self.driver, verify_max_wait_time).until(
                                 expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, css_selector))
                             )
-                        except RequireVerifyMessageButInHeadlessMode as verify_exception:
-                            raise verify_exception
+                        except RequireVerifyMessageButInHeadlessMode:
+                            raise
                         except Exception as exc:
                             logger.debug("other exception", exc_info=exc)
 
@@ -1267,8 +1267,8 @@ class QQLogin:
                     )
 
                 break
-            except RequireVerifyMessageButInHeadlessMode as verify_exception:
-                raise verify_exception
+            except RequireVerifyMessageButInHeadlessMode:
+                raise
             except Exception as e:
                 login_mode_name = self.login_mode_to_description[self.login_mode]
 
@@ -1455,6 +1455,8 @@ class QQLogin:
     def try_auto_resolve_captcha(self):
         try:
             self._try_auto_resolve_captcha()
+        except RequireVerifyMessageButInHeadlessMode:
+            raise
         except Exception as e:
             msg = f"ver {now_version} {ver_time} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群{get_config().common.qq_group}反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
@@ -1485,6 +1487,11 @@ class QQLogin:
             logger.info(
                 color("bold_green") + f"{self.name} 检测到了滑动验证码，将开始自动处理。（若验证码完毕会出现短信验证，请去配置文件关闭本功能，目前暂不支持带短信验证的情况）"
             )
+
+            logger.warning(color("bold_yellow") + "新版滑动验证码限制最大滑动次数为3次，之前的暴力尝试策略不再可用，请先手动操作。待日后有空时，会改用图像识别的方式来进行处理")
+            if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
+                raise RequireVerifyMessageButInHeadlessMode("新版滑动验证码")
+            return
 
             # 新版中，三个组件的位置随机的，需要根据其样式去判断是哪个
             selectors = [

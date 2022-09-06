@@ -18,6 +18,11 @@ def make_dnf_helper_signature(
     hash_bytes = hmac.new(secret.encode(), data.encode(), hashlib.sha1).digest()
 
     signature = base64.b64encode(hash_bytes).decode()
+
+    # 对于get请求，由于签名字段要放到query string中，需要做下url编码
+    if http_method == "GET":
+        signature = quote_plus(signature)
+
     return signature
 
 

@@ -11307,4 +11307,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_helper_chronicle()

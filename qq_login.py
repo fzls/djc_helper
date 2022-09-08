@@ -524,6 +524,9 @@ class QQLogin:
         def login_with_account_and_password():
             logger.info(color("bold_green") + f"{name} 当前为自动登录模式，请不要手动操作网页，否则可能会导致登录流程失败")
 
+            # 等待页面加载
+            self.wait_for_login_page_loaded()
+
             logger.info("由于账号密码登录有可能会触发短信验证，因此优先尝试点击头像来登录~")
             login_by_click_avatar_success = self.try_auto_click_avatar(account, name, self.login_type_auto_login)
 
@@ -531,13 +534,6 @@ class QQLogin:
                 logger.info("使用头像点击登录成功")
             else:
                 logger.warning("点击头像登录失败，尝试输入账号密码来进行登录")
-
-                # 切换到自动登录界面
-                logger.info(f"{name} 等待#switcher_plogin加载完毕")
-                time.sleep(self.cfg.login.open_url_wait_time)
-                WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
-                    expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
-                )
 
                 # 选择密码登录
                 self.driver.find_element(By.ID, "switcher_plogin").click()
@@ -632,14 +628,23 @@ class QQLogin:
                 logger.debug("", exc_info=e)
 
         def login_with_qr_code():
-            logger.info(color("bold_yellow") + f"请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
+            logger.info(color("bold_yellow") + f"{name} 当前为扫码登录模式，请在{self.get_login_timeout(True)}s内完成扫码登录操作或快捷登录操作")
+
+            self.wait_for_login_page_loaded()
 
             replace_qr_code_tip()
 
-            logger.info(color("bold_green") + "尝试自动点击头像进行登录")
+            logger.info(color("bold_green") + f"{name} 尝试自动点击头像进行登录")
             self.try_auto_click_avatar(account, name, self.login_type_qr_login)
 
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
+
+    def wait_for_login_page_loaded(self):
+        logger.info(f"{self.name} 等待 登录框#switcher_plogin 加载完毕")
+        time.sleep(self.cfg.login.open_url_wait_time)
+        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+            expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
+        )
 
     def try_auto_click_avatar(self, account: str, name: str, login_type: str) -> bool:
         # 检测功能开关

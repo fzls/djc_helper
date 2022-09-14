@@ -1090,6 +1090,8 @@ class LoginConfig(ConfigInterface):
         self.login_timeout = 60
         # 等待登录完成的超时时间，以活动结束的按钮弹出来标志
         self.login_finished_timeout = 60
+        # 等待点击头像登录完成的超时时间，以登录窗口消失为标志
+        self.login_by_click_avatar_finished_timeout = 5
 
         # 自动处理滑动验证码
         self.auto_resolve_captcha = True

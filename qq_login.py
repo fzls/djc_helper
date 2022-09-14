@@ -682,8 +682,18 @@ class QQLogin:
                     """
                 )
 
-                time.sleep(1)
-                login_success = not self.driver.find_elements(By.ID, "switcher_plogin")
+                # 由于有时候这个登录框可能会迟一点消失，这里改为多次尝试，减小误判的情况
+                logger.info(f"判断点击头像登录是否成功，最大等待 {self.cfg.login.login_by_click_avatar_finished_timeout} 秒")
+
+                login_success = False
+                try:
+                    WebDriverWait(self.driver, self.cfg.login.login_by_click_avatar_finished_timeout).until(
+                        expected_conditions.invisibility_of_element((By.ID, "switcher_plogin"))
+                    )
+                    login_success = True
+                except Exception:
+                    login_success = False
+
                 logger.info(color("bold_green") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
             elif login_type == self.login_type_qr_login:
                 async_message_box("现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True)

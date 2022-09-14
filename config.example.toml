@@ -175,6 +175,8 @@ load_login_iframe_timeout = 8
 login_timeout = 60
 # 等待登录完成的超时时间，以活动结束的按钮弹出来标志
 login_finished_timeout = 60
+# 等待点击头像登录完成的超时时间，以登录窗口消失为标志
+login_by_click_avatar_finished_timeout = 5
 # 自动处理滑动验证码
 auto_resolve_captcha = true
 # 每次尝试滑动验证码的偏移值，为相对值，填倍数，表示相当于该倍数的滑块宽度

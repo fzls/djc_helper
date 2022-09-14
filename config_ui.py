@@ -1758,6 +1758,11 @@ class LoginConfigUi(QWidget):
         self.spinbox_login_finished_timeout = create_spin_box(cfg.login_finished_timeout)
         add_row(form_layout, "等待登录完成的超时时间", self.spinbox_login_finished_timeout)
 
+        self.spinbox_login_by_click_avatar_finished_timeout = create_spin_box(
+            cfg.login_by_click_avatar_finished_timeout
+        )
+        add_row(form_layout, "等待点击头像登录完成的超时时间", self.spinbox_login_by_click_avatar_finished_timeout)
+
     def update_config(self, cfg: LoginConfig):
         cfg.enable_auto_click_avatar_in_auto_login = self.checkbox_enable_auto_click_avatar_in_auto_login.isChecked()
         cfg.enable_auto_click_avatar_in_qr_login = self.checkbox_enable_auto_click_avatar_in_qr_login.isChecked()
@@ -1772,6 +1777,7 @@ class LoginConfigUi(QWidget):
         cfg.load_login_iframe_timeout = self.spinbox_load_login_iframe_timeout.value()
         cfg.login_timeout = self.spinbox_login_timeout.value()
         cfg.login_finished_timeout = self.spinbox_login_finished_timeout.value()
+        cfg.login_by_click_avatar_finished_timeout = self.spinbox_login_by_click_avatar_finished_timeout.value()
 
 
 class RetryConfigUi(QWidget):

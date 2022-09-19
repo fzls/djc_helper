@@ -1450,6 +1450,11 @@ def show_tips(cfg: Config):
             "第一步：在模拟器页面使用模拟器 https://bbs.colg.cn/colg_activity_new-simulator.html/index\n"
             "第二步：点击右侧礼包按钮，领取每日礼包进行签到 https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
         ),
+        "22.9 心悦充值": (
+            "心悦出了个充值活动，在页面充值50/300/500元，可以领取一些小奖励，如果充点券来买国庆套的话，可以看看这个活动。\n"
+            "因为这个活动用了套新东西，但是实际上只有那三个充值的奖励还可以，其他的基本可以忽略，所以本次就不加入了-。-请自行参与，链接如下：\n"
+            "https://xinyue.qq.com/act/a202208016DNFactivity/index.html"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

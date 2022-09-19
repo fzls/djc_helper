@@ -1441,12 +1441,6 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "22.7 夏日充值": ("夏日充值活动请自行参与：https://dnf.qq.com/cp/a20220714bjz/index.html"),
-        "22.8 斗鱼虎牙": (
-            "斗鱼虎牙活动请自行参与\n"
-            "斗鱼： https://www.douyu.com/topic/DNFZDY?rid=5324055\n"
-            "虎牙： https://www.huya.com/g/2#cate-1-5483\n"
-        ),
         "22.8 超级会员": (
             "在活动页面购买超级会员和其他会员，最低可以三十元兑换一个红10券+12次抽奖机会，如果平常有购买QQ视频或者QQ音乐的话，可以考虑下这个活动~\n"
             "如果有需要，可以在活动页面自行参与这部分: https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7\n"

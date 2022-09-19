@@ -579,10 +579,10 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("会员关怀", self.dnf_vip_mentor),
             ("幸运勇士", self.dnf_lucky_user),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF马杰洛的规划", self.majieluo),
             ("超级会员", self.dnf_super_vip),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8677,16 +8677,21 @@ class DjcHelper:
 
         # ------------ 实际流程 --------------
 
-        self.dnf_luodiye_op("战斗补给", "876264")
-        self.dnf_luodiye_op("战神补给", "876263")
+        self.dnf_luodiye_op("登录领取（1038439）", "890629")
 
         # self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
 
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
         ):
-            self.dnf_luodiye_op("用户授权(统一授权)", "876757")
-            self.dnf_luodiye_op("分享", "876858", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+            self.dnf_luodiye_op("用户授权(统一授权)", "890630")
+            self.dnf_luodiye_op("分享", "890795", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+
+        can_take_time = parse_time("2022-09-22 11:00:00")
+        if get_now() >= can_take_time:
+            self.dnf_luodiye_op("分享或通关副本（19509）", "890631")
+        else:
+            logger.warning(f"尚未到领取时间 {can_take_time}, 跳过领取限定龙宠")
 
         # self.dnf_luodiye_op("登录游戏积分", "844938")
         # self.dnf_luodiye_op("分享好友积分", "844952")
@@ -8727,8 +8732,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="876195",
-            commit_bind_flowid="876194",
+            query_bind_flowid="891234",
+            commit_bind_flowid="891233",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -11307,4 +11312,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_luodiye()

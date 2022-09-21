@@ -1455,6 +1455,11 @@ def show_tips(cfg: Config):
             "因为这个活动用了套新东西，但是实际上只有那三个充值的奖励还可以，其他的基本可以忽略，所以本次就不加入了-。-请自行参与，链接如下：\n"
             "https://xinyue.qq.com/act/a202208016DNFactivity/index.html"
         ),
+        "22.9 斗鱼虎牙": (
+            "斗鱼和虎牙活动请自行完成\n"
+            "斗鱼：https://www.douyu.com/topic/jqjt?rid=5324055\n"
+            "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

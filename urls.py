@@ -90,6 +90,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220922index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/43854_4fb03cca",
+    "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
     #
     # 已过期活动
     #
@@ -104,7 +105,6 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
-    "WeGame活动": "https://dnf.qq.com/lbact/a20220616wegame/index.html",
     "我的小屋": "https://dnf.qq.com/cp/a20220616home/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
@@ -250,7 +250,7 @@ class Urls:
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "500126"  # DNF落地页活动需求
-        self.iActivityId_dnf_wegame = "477739"  # WeGame活动
+        self.iActivityId_dnf_wegame = "498852"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
@@ -302,7 +302,7 @@ class Urls:
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
-            "&countsInfo={countsInfo}&power={power}"
+            "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}"
         )
 
         # ide通用活动

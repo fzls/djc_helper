@@ -1873,16 +1873,6 @@ class MyHomeInfo(ConfigInterface):
         self.isUser = 1
 
 
-class MyHomeFarmList(ConfigInterface):
-    def __init__(self):
-        super().__init__()
-
-        self.list: dict[str, MyHomeFarmInfo] = {}
-
-    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
-        return [("list", MyHomeFarmInfo)]
-
-
 class MyHomeFarmInfo(ConfigInterface):
     def __init__(self):
         self.sFarmland = "a1Vqam1HM2FqSnBPenNENGs3OUQ3QTk4UmxXNzdJSlJOY0VVTEdQTnpUbz0."

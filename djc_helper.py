@@ -58,7 +58,7 @@ from dao import (
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
-    MyHomeFarmList,
+    MyHomeFarmInfo,
     MyHomeFriendList,
     MyHomeGift,
     MyHomeGiftList,
@@ -7753,10 +7753,20 @@ class DjcHelper:
             # 提醒兑换奖励
             notify_valuable_gifts(current_points, valuable_gifts)
 
-        def query_farm_info() -> MyHomeFarmList:
+        def query_farm_dict() -> dict[str, MyHomeFarmInfo]:
             res = self.dnf_my_home_op("农田初始化(查询信息）", "145364", print_res=False)
 
-            farm_list = MyHomeFarmList().auto_update_config(res["jData"])
+            data = res["jData"]["list"]
+
+            # 在低于8个田时，返回的是dict，满了的时候是list，所以这里需要特殊处理下
+            farm_list: dict[str, MyHomeFarmInfo] = {}
+            if type(data) is dict:
+                for index, value in data.items():
+                    farm_list[str(index)] = MyHomeFarmInfo().auto_update_config(value)
+            else:
+                for index, value in enumerate(data):
+                    farm_list[str(index)] = MyHomeFarmInfo().auto_update_config(value)
+
             return farm_list
 
         # 初始化
@@ -7781,24 +7791,24 @@ class DjcHelper:
 
         # 种田
         # 解锁
-        farm_info = query_farm_info()
+        farm_dict = query_farm_dict()
         for iFarmland in range(0, 7 + 1):
             id = str(iFarmland)
-            if id not in farm_info.list:
+            if id not in farm_dict:
                 self.dnf_my_home_op(f"尝试解锁农田 - {iFarmland}", "145278", iFarmland=iFarmland)
 
         # 尝试浇水和收割
-        farm_info = query_farm_info()
+        farm_dict = query_farm_dict()
         MAX_FARM_FIELD_COUNT = 8
 
         for iFarmland in range(0, 7 + 1):
             id = str(iFarmland)
-            if id not in farm_info.list:
+            if id not in farm_dict:
                 continue
-            fData = farm_info.list[id]
+            fData = farm_dict[id]
 
             # 如果所有田地都已经解锁，此时积分只能用来浇水了
-            if len(farm_info.list) >= MAX_FARM_FIELD_COUNT:
+            if len(farm_dict) >= MAX_FARM_FIELD_COUNT:
                 self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
 
             self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
@@ -11316,7 +11326,7 @@ if __name__ == "__main__":
     RunAll = False
     indexes = []
     indexes.extend([1])
-    # indexes.extend([4 + 1])
+    # indexes.extend([4 + 3])
     # indexes.extend([4 + idx for idx in range(1, 7 + 1)])
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]

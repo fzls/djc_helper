@@ -585,6 +585,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("勇士的冒险补给", self.maoxian),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -607,7 +608,6 @@ class DjcHelper:
             ("DNF共创投票", self.dnf_dianzan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("dnf助手活动", self.dnf_helper),
             ("翻牌活动", self.dnf_card_flip),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
@@ -4113,45 +4113,58 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动')}")
             return
 
-        def query_lottery_count() -> int:
-            raw_res = self.dnf_helper_op("查询抽奖次数", "850836", print_res=False)
-            info = parse_amesvr_common_info(raw_res)
+        # def query_lottery_count() -> int:
+        #     raw_res = self.dnf_helper_op("查询抽奖次数", "850836", print_res=False)
+        #     info = parse_amesvr_common_info(raw_res)
+        #
+        #     return int(info.sOutValue3)
+        #
+        # def query_current_week_index() -> int:
+        #     raw_res = self.dnf_helper_op("查询周序号", "850836", print_res=False)
+        #     info = parse_amesvr_common_info(raw_res)
+        #
+        #     week_status_list = info.sOutValue6.split(";")
+        #     for idx, status in enumerate(week_status_list):
+        #         if status == "0":
+        #             return idx
+        #
+        #     return len(week_status_list) - 1
+        #
+        # self.dnf_helper_op("每日抽奖积分", "850973")
+        # self.dnf_helper_op("完成任务赠送", "851051")
+        #
+        # lottery_count = query_lottery_count()
+        # logger.info(f"当前剩余抽奖次数为 {lottery_count}")
+        # for idx in range_from_one(lottery_count):
+        #     self.dnf_helper_op(f"{idx}/{lottery_count} 每日抽奖", "850957")
+        #     time.sleep(5)
+        #
+        # week_awards = [
+        #     ("累签奖励", "850975"),
+        #     ("累签奖励2", "852938"),
+        #     ("累签奖励3", "852939"),
+        #     ("累签奖励4", "852940"),
+        #     ("累签奖励5", "852941"),
+        # ]
+        # week_index = query_current_week_index()
+        # logger.info(f"当前为第 {week_index + 1} 周")
+        #
+        # name, flowid = week_awards[week_index]
+        # for actSign in range_from_one(5):
+        #     self.dnf_helper_op(f"{name} - {flowid} - 第 {actSign} 天", flowid, actSign=actSign)
 
-            return int(info.sOutValue3)
+        self.dnf_helper_op("抽奖", "890568")
 
-        def query_current_week_index() -> int:
-            raw_res = self.dnf_helper_op("查询周序号", "850836", print_res=False)
-            info = parse_amesvr_common_info(raw_res)
+        self.dnf_helper_op("领取龙息", "891009")
 
-            week_status_list = info.sOutValue6.split(";")
-            for idx, status in enumerate(week_status_list):
-                if status == "0":
-                    return idx
-
-            return len(week_status_list) - 1
-
-        self.dnf_helper_op("每日抽奖积分", "850973")
-        self.dnf_helper_op("完成任务赠送", "851051")
-
-        lottery_count = query_lottery_count()
-        logger.info(f"当前剩余抽奖次数为 {lottery_count}")
-        for idx in range_from_one(lottery_count):
-            self.dnf_helper_op(f"{idx}/{lottery_count} 每日抽奖", "850957")
-            time.sleep(5)
-
-        week_awards = [
-            ("累签奖励", "850975"),
-            ("累签奖励2", "852938"),
-            ("累签奖励3", "852939"),
-            ("累签奖励4", "852940"),
-            ("累签奖励5", "852941"),
-        ]
-        week_index = query_current_week_index()
-        logger.info(f"当前为第 {week_index + 1} 周")
-
-        name, flowid = week_awards[week_index]
-        for actSign in range_from_one(5):
-            self.dnf_helper_op(f"{name} - {flowid} - 第 {actSign} 天", flowid, actSign=actSign)
+        self.dnf_helper_op("火龙挑战基础", "891018")
+        self.dnf_helper_op("火龙挑战进阶", "891019")
+        self.dnf_helper_op("金龙挑战基础", "891025")
+        self.dnf_helper_op("金龙挑战进阶", "891026")
+        self.dnf_helper_op("真龙挑战基础", "891027")
+        self.dnf_helper_op("真龙挑战进阶", "891028")
+        self.dnf_helper_op("黑龙挑战基础", "891029")
+        self.dnf_helper_op("黑龙挑战进阶", "891030")
 
     # def check_dnf_helper(self):
     #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
@@ -11322,4 +11335,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.dnf_helper()

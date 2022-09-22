@@ -95,6 +95,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220922fight/index.html",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220913DNFYSDL/index.html",
     #
     # 已过期活动
     #
@@ -116,7 +117,6 @@ act_name_to_url = {
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220407present/index.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
@@ -244,7 +244,7 @@ class Urls:
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
-        self.iActivityId_dnf_helper = "461270"  # DNF助手活动
+        self.iActivityId_dnf_helper = "500121"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "451819"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

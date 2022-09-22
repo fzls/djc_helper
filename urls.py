@@ -94,13 +94,13 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220922fight/index.html",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
+    "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",
     #
     # 已过期活动
     #
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/tyLTAfBMNndfo1bBvBsDkyDzfb/index_page1.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
-    "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
@@ -270,7 +270,7 @@ class Urls:
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
         self.iActivityId_maoxian_start = "473752"  # 冒险的起点
-        self.iActivityId_maoxian = "485630"  # 勇士的冒险补给
+        self.iActivityId_maoxian = "500114"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动

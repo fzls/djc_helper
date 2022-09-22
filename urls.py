@@ -91,13 +91,13 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/43854_4fb03cca",
     "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220922fight/index.html",
     #
     # 已过期活动
     #
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/tyLTAfBMNndfo1bBvBsDkyDzfb/index_page1.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220811searching/index.html",
     "勇士的冒险补给": "https://dnf.qq.com/lbact/a20220704lbw7fcn/indexm.html",
     "DNF冒险家之路": "http://dnf.qq.com/cp/a20220429MX/",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
@@ -311,7 +311,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "42_d48jrO"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "1_Idqvtn"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "49_Un4iJS"  # 我的小屋
 

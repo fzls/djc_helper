@@ -582,6 +582,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -589,7 +590,6 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
-            ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("KOL", self.dnf_kol),
@@ -7277,7 +7277,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     # re: 变更时需要调整这些
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗] [初始化]
-    flowid_majieluo_query_info = "141619"
+    flowid_majieluo_query_info = "147926"
     # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入，在 urls.py 的 not_ams_activities 中填写起止时间
 
     @try_except()
@@ -7298,7 +7298,7 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "141612")
+            self.majieluo_op("领取见面礼", "147561")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -7308,16 +7308,19 @@ class DjcHelper:
             take_gift(self.get_dnf_bind_role_copy())
 
         # 马杰洛的特殊任务
-        self.majieluo_op("选择阵营", "141618", iType=2)
+        # self.majieluo_op("选择阵营", "141618", iType=2)
 
         tasks = [
-            ("每日登录礼包", "141613"),
-            ("每日通关礼包", "141616"),
-            ("每日在线礼包", "141625"),
-            ("累计登录10天", "141632"),
-            ("累计登录20天", "141633"),
-            ("累计邀请10人", "141634"),
-            ("累计邀请20人", "141635"),
+            ("每日在线礼包", "147622"),
+            ("每日邀请礼包", "147624"),
+            ("每日登录礼包", "147574"),
+            ("每日通关礼包", "147615"),
+            ("特殊任务-通关伊斯大陆", "147784"),
+            ("特殊任务-登录游戏10天", "147792"),
+            ("特殊任务-邀请2位幸运好友", "147793"),
+            ("特殊任务-邀请4位幸运好友", "147794"),
+            ("特殊任务-邀请15位好友", "147796"),
+            ("特殊任务-通关30次推荐地下城", "147804"),
         ]
         for name, flowid in tasks:
             self.majieluo_op(name, flowid)
@@ -11326,4 +11329,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.majieluo()

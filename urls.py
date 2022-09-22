@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-06-16 00:00:00", "2022-07-15 23:59:59", "我的小屋"),
     newNotAmsActInfo("2022-08-11 00:00:00", "2022-09-11 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
+    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
 ]
 
 act_name_to_url = {
@@ -92,6 +93,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/43854_4fb03cca",
     "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220922fight/index.html",
+    "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     #
     # 已过期活动
     #
@@ -121,7 +123,6 @@ act_name_to_url = {
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
-    "DNF集合站_史诗之路": "https://dnf.qq.com/lbact/a20211028jhye/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
@@ -314,13 +315,14 @@ class Urls:
         self.ide_iActivityId_majieluo = "1_Idqvtn"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "49_Un4iJS"  # 我的小屋
+        self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (
             "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}"
             "&sRoleId={sRoleId}&sRoleName={sRoleName}&sArea={sArea}&sMd5str={sMd5str}&sCheckparam={sCheckparam}&roleJob={roleJob}&sAreaName={sAreaName}"
             "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
-            "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}"
+            "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
         )
 
         # DNF共创投票

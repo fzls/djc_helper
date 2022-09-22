@@ -583,6 +583,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("WeGame活动", self.dnf_wegame),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF集合站_ide", self.dnf_collection_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -613,7 +614,6 @@ class DjcHelper:
             ("魔界人探险记", self.mojieren),
             ("组队拜年", self.team_happy_new_year),
             ("新职业预约活动", self.dnf_reserve),
-            ("DNF集合站_史诗之路", self.dnf_collection_dup),
             ("WeGame活动_新版", self.wegame_new),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF公会活动", self.dnf_gonghui),
@@ -9488,55 +9488,51 @@ class DjcHelper:
             **extra_params,
         )
 
-    # --------------------------------------------DNF集合站--------------------------------------------
+    # --------------------------------------------DNF集合站_ide--------------------------------------------
     @try_except()
-    def dnf_collection_dup(self):
-        show_head_line("DNF集合站")
-        self.show_amesvr_act_info(self.dnf_collection_dup_op)
+    def dnf_collection_ide(self):
+        show_head_line("DNF集合站_ide")
+        self.show_not_ams_act_info("DNF集合站_ide")
 
         if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
             logger.warning("未启用领取DNF集合站功能，将跳过")
             return
 
-        self.check_dnf_collection_dup()
+        self.check_dnf_collection_ide()
 
-        def query_signin_days():
-            res = self.dnf_collection_dup_op("查询签到天数-condOutput", "815383", print_res=False)
-            return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
+        self.dnf_collection_ide_op("全民参与礼包", "145889")
+        self.dnf_collection_ide_op("幸运party礼包", "145832")
 
-        self.dnf_collection_dup_op("勇士礼包", "815366")
-        self.dnf_collection_dup_op("全民参与礼包", "815369")
-        self.dnf_collection_dup_op("公会礼包按钮2", "818925")
+        self.dnf_collection_ide_op("每日在线赢好礼", "145801")
 
-        self.dnf_collection_dup_op("在线30分钟按钮 - 签到", "818733")
-        time.sleep(5)
-        self.dnf_collection_dup_op("在线30分钟按钮 - 领奖", "818733")
-        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
-        self.dnf_collection_dup_op("累计登录3天按钮2", "818926")
-        self.dnf_collection_dup_op("累计登录7天按钮2", "818927")
-        self.dnf_collection_dup_op("累计登录15天按钮2", "818928")
-        self.dnf_collection_dup_op("累计登录21天按钮2", "818929")
+        for count in [3, 7, 15]:
+            self.dnf_collection_ide_op(f"累计签到 {count} 天", "146052", dayNum=count)
 
-    def check_dnf_collection_dup(self):
-        self.check_bind_account(
-            "DNF集合站",
-            get_act_url("DNF集合站周年庆"),
-            activity_op_func=self.dnf_collection_dup_op,
-            query_bind_flowid="815363",
-            commit_bind_flowid="815362",
+    def check_dnf_collection_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF集合站_ide",
+            get_act_url("DNF集合站_ide"),
+            activity_op_func=self.dnf_collection_ide_op,
+            sAuthInfo="WDXW",
+            sActivityInfo="469853",
         )
 
-    def dnf_collection_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_collection_dup
-        return self.amesvr_request(
+    def dnf_collection_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_collection
+
+        return self.ide_request(
             ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
+            "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("DNF集合站周年庆"),
+            get_act_url("DNF集合站_ide"),
             **extra_params,
         )
 
@@ -10547,6 +10543,7 @@ class DjcHelper:
                 "crossTime",
                 "getLv105",
                 "use_fatigue",
+                "dayNum",
             ]
         }
 
@@ -11329,4 +11326,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_collection_ide()

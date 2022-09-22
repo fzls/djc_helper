@@ -802,6 +802,8 @@ show_color = ""
 10005 = false
 # 2022.06.17 破界新生 满级突破
 10006 = false
+# 2022.09.22 逐龙军团出征 决战鼎盛龙族
+10007 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

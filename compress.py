@@ -107,60 +107,60 @@ def decompress_dir_with_py7zr(compressed_7z_filepath: str, dst_parent_folder: st
         z.extractall(dst_parent_folder)
 
 
-def compare_py7zr_compress_filters():
-    from py7zr import (
-        FILTER_ARM,
-        FILTER_BROTLI,
-        FILTER_BZIP2,
-        FILTER_CRYPTO_AES256_SHA256,
-        FILTER_DEFLATE,
-        FILTER_DELTA,
-        FILTER_LZMA,
-        FILTER_LZMA2,
-        FILTER_PPMD,
-        FILTER_X86,
-        FILTER_ZSTD,
-        PRESET_DEFAULT,
-    )
-
-    from util import human_readable_size
-
-    target_dir = ".\\.cached\\downloads\\DNF蚊子腿小助手_v19.0.1_by风之凌殇"
-    final_7z_path = target_dir + ".7z"
-
-    logger.info(f"开始对比不同filters的压缩大小，目标目录为 {target_dir}")
-
-    # https://py7zr.readthedocs.io/en/latest/api.html#possible-filters-value
-    for name, filters in [
-        ("LZMA2 + Delta", [{"id": FILTER_DELTA}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
-        ("LZMA2 + BCJ", [{"id": FILTER_X86}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
-        ("LZMA2 + ARM", [{"id": FILTER_ARM}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
-        ("LZMA + BCJ", [{"id": FILTER_X86}, {"id": FILTER_LZMA}]),
-        ("LZMA2", [{"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
-        ("LZMA", [{"id": FILTER_LZMA}]),
-        ("BZip2", [{"id": FILTER_BZIP2}]),
-        ("Deflate", [{"id": FILTER_DEFLATE}]),
-        ("ZStandard", [{"id": FILTER_ZSTD, "level": 3}]),
-        ("PPMd-24", [{"id": FILTER_PPMD, "order": 6, "mem": 24}]),
-        ("PPMd-16", [{"id": FILTER_PPMD, "order": 6, "mem": "16m"}]),
-        ("Brolti", [{"id": FILTER_BROTLI, "level": 11}]),
-        (
-            "7zAES + LZMA2 + Delta",
-            [{"id": FILTER_DELTA}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}, {"id": FILTER_CRYPTO_AES256_SHA256}],
-        ),
-        (
-            "7zAES + LZMA2 + BCJ",
-            [{"id": FILTER_X86}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}, {"id": FILTER_CRYPTO_AES256_SHA256}],
-        ),
-        ("7zAES + LZMA", [{"id": FILTER_LZMA}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
-        ("7zAES + Deflate", [{"id": FILTER_DEFLATE}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
-        ("7zAES + BZip2", [{"id": FILTER_BZIP2}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
-        ("7zAES + ZStandard", [{"id": FILTER_ZSTD}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
-    ]:
-        compress_dir_with_py7zr(target_dir, final_7z_path, filters=filters, show_log=False)
-
-        filesize = human_readable_size(os.stat(final_7z_path).st_size)
-        logger.info(f"{name}: {filesize}")
+# def compare_py7zr_compress_filters():
+#     from py7zr import (
+#         FILTER_ARM,
+#         FILTER_BROTLI,
+#         FILTER_BZIP2,
+#         FILTER_CRYPTO_AES256_SHA256,
+#         FILTER_DEFLATE,
+#         FILTER_DELTA,
+#         FILTER_LZMA,
+#         FILTER_LZMA2,
+#         FILTER_PPMD,
+#         FILTER_X86,
+#         FILTER_ZSTD,
+#         PRESET_DEFAULT,
+#     )
+#
+#     from util import human_readable_size
+#
+#     target_dir = ".\\.cached\\downloads\\DNF蚊子腿小助手_v19.0.1_by风之凌殇"
+#     final_7z_path = target_dir + ".7z"
+#
+#     logger.info(f"开始对比不同filters的压缩大小，目标目录为 {target_dir}")
+#
+#     # https://py7zr.readthedocs.io/en/latest/api.html#possible-filters-value
+#     for name, filters in [
+#         ("LZMA2 + Delta", [{"id": FILTER_DELTA}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
+#         ("LZMA2 + BCJ", [{"id": FILTER_X86}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
+#         ("LZMA2 + ARM", [{"id": FILTER_ARM}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
+#         ("LZMA + BCJ", [{"id": FILTER_X86}, {"id": FILTER_LZMA}]),
+#         ("LZMA2", [{"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]),
+#         ("LZMA", [{"id": FILTER_LZMA}]),
+#         ("BZip2", [{"id": FILTER_BZIP2}]),
+#         ("Deflate", [{"id": FILTER_DEFLATE}]),
+#         ("ZStandard", [{"id": FILTER_ZSTD, "level": 3}]),
+#         ("PPMd-24", [{"id": FILTER_PPMD, "order": 6, "mem": 24}]),
+#         ("PPMd-16", [{"id": FILTER_PPMD, "order": 6, "mem": "16m"}]),
+#         ("Brolti", [{"id": FILTER_BROTLI, "level": 11}]),
+#         (
+#             "7zAES + LZMA2 + Delta",
+#             [{"id": FILTER_DELTA}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}, {"id": FILTER_CRYPTO_AES256_SHA256}],
+#         ),
+#         (
+#             "7zAES + LZMA2 + BCJ",
+#             [{"id": FILTER_X86}, {"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}, {"id": FILTER_CRYPTO_AES256_SHA256}],
+#         ),
+#         ("7zAES + LZMA", [{"id": FILTER_LZMA}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
+#         ("7zAES + Deflate", [{"id": FILTER_DEFLATE}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
+#         ("7zAES + BZip2", [{"id": FILTER_BZIP2}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
+#         ("7zAES + ZStandard", [{"id": FILTER_ZSTD}, {"id": FILTER_CRYPTO_AES256_SHA256}]),
+#     ]:
+#         compress_dir_with_py7zr(target_dir, final_7z_path, filters=filters, show_log=False)
+#
+#         filesize = human_readable_size(os.stat(final_7z_path).st_size)
+#         logger.info(f"{name}: {filesize}")
 
 
 def get_bz_path(dir_src_path: str = "") -> str:
@@ -260,4 +260,5 @@ def test():
 
 if __name__ == "__main__":
     # test()
-    compare_py7zr_compress_filters()
+    # compare_py7zr_compress_filters()
+    pass

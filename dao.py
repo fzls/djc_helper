@@ -1858,16 +1858,37 @@ class MyHomeInfo(ConfigInterface):
     def __init__(self):
         self.iRet = "0"
         self.sMsg = "ok"
-        self.iAuth = "1"
-        self.isFirst = 0
-        self.iIntegral = "1045"
-        self.iExchange = "0"
+        self.isLogin = 1
+        self.sNick = "风***呢"
+        self.iJoin = True
+        self.iTask = "0"
+        self.iRice = "0"
         self.iRefresh = "0"
+        self.iOnline = 0
+        self.iPassed = "0"
+        self.iFatigue = 0
+        self.iOpenPoints = "10"
+        self.iLuckyNum = "9"
+        self.iLucky = "0"
         self.isUser = 1
-        self.iHasRare = "1"
-        self.sNick = "风***呀"
-        self.isOpen = 1
-        self.iInviteNum = "0"
+
+
+class MyHomeFarmList(ConfigInterface):
+    def __init__(self):
+        super().__init__()
+
+        self.list: dict[str, MyHomeFarmInfo] = {}
+
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [("list", MyHomeFarmInfo)]
+
+
+class MyHomeFarmInfo(ConfigInterface):
+    def __init__(self):
+        self.sFarmland = "a1Vqam1HM2FqSnBPenNENGs3OUQ3QTk4UmxXNzdJSlJOY0VVTEdQTnpUbz0."
+        self.iNum = "10"
+        self.iUsedNum = "0"
+        self.dtMatureTime = 1663900268000
 
 
 class MyHomeGiftList(ConfigInterface):

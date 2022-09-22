@@ -58,6 +58,7 @@ from dao import (
     MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
+    MyHomeFarmList,
     MyHomeFriendList,
     MyHomeGift,
     MyHomeGiftList,
@@ -586,6 +587,7 @@ class DjcHelper:
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("勇士的冒险补给", self.maoxian),
             ("dnf助手活动", self.dnf_helper),
+            ("我的小屋", self.dnf_my_home),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -599,7 +601,6 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF闪光杯", self.dnf_shanguang),
             ("心悦猫咪", self.xinyue_cat),
-            ("我的小屋", self.dnf_my_home),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
@@ -7752,19 +7753,24 @@ class DjcHelper:
             # 提醒兑换奖励
             notify_valuable_gifts(current_points, valuable_gifts)
 
+        def query_farm_info() -> MyHomeFarmList:
+            res = self.dnf_my_home_op("农田初始化(查询信息）", "145364", print_res=False)
+
+            farm_list = MyHomeFarmList().auto_update_config(res["jData"])
+            return farm_list
+
         # 初始化
-        self.dnf_my_home_op("任务状态与资格", "133680")
-        self.dnf_my_home_op("更新访问日期", "133320")
-        self.dnf_my_home_op("开通小屋", "132689")
-        self.dnf_my_home_op("刷新宝箱道具", "132469")
+        info = self.my_home_query_info()
+        if int(info.isUser) != 1:
+            self.dnf_my_home_op("开通农场", "145251")
 
         # 每日任务
         tasks = [
-            ("登录游戏（10积分）", "130906"),
-            ("分享个人小屋（10积分）", "131017"),
-            ("游戏在线时长30分钟（15积分）", "131009"),
-            ("通关推荐地下城1次（15积分）", "131018"),
-            ("消耗30点疲劳值（20积分）", "131033"),
+            ("每日登录礼包", "145178"),
+            ("分享礼包", "145236"),
+            ("在线时长礼包", "145232"),
+            ("通关推荐地下城", "145237"),
+            ("疲劳消耗礼包", "145245"),
         ]
         for name, flowid in tasks:
             self.dnf_my_home_op(name, flowid)
@@ -7773,16 +7779,39 @@ class DjcHelper:
         current_points = self.my_home_query_integral()
         logger.info(color("bold_yellow") + f"当前积分为 {current_points}")
 
-        # 邀请好友
-        async_message_box("邀请好友可以额外获得一些积分，如果有需要，请自行完成", "我的小屋-邀请好友任务", show_once=True, open_url=get_act_url("我的小屋"))
-        # self.dnf_my_home_op("邀请好友", "131806")
-        # self.dnf_my_home_op("接受邀请", "131838")
-        # self.dnf_my_home_op("好友小屋列表", "131196")
-        # self.dnf_my_home_op("好友邀请列表", "131338")
-        # self.dnf_my_home_op("好友小屋道具信息", "132038")
+        # 种田
+        # 解锁
+        farm_info = query_farm_info()
+        for iFarmland in range(0, 7 + 1):
+            id = str(iFarmland)
+            if id not in farm_info.list:
+                self.dnf_my_home_op(f"尝试解锁农田 - {iFarmland}", "145278", iFarmland=iFarmland)
+
+        # 尝试浇水和收割
+        farm_info = query_farm_info()
+        MAX_FARM_FIELD_COUNT = 8
+
+        for iFarmland in range(0, 7 + 1):
+            id = str(iFarmland)
+            if id not in farm_info.list:
+                continue
+            fData = farm_info.list[id]
+
+            # 如果所有田地都已经解锁，此时积分只能用来浇水了
+            if len(farm_info.list) >= MAX_FARM_FIELD_COUNT:
+                self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
+
+            self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
+
+        # 邀请好友可以获取刷新次数，这里就不弄了
+        # self.dnf_my_home_op("邀请好友开通农场", "145781")
+        # self.dnf_my_home_op("接受好友邀请", "145784")
+        # self.dnf_my_home_op("待邀请好友列表", "145695")
+        # self.dnf_my_home_op("好友已开通农场列表", "145827")
 
         #  兑换道具
-        notify_exchange_valuable_gift(current_points)
+        # re: 这个等下适配下
+        # notify_exchange_valuable_gift(current_points)
 
         act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
         lastday = get_today(act_endtime)
@@ -7792,31 +7821,25 @@ class DjcHelper:
                 "我的小屋兑换提醒-每周一次或最后一天",
                 open_url=get_act_url("我的小屋"),
             )
-        # self.dnf_my_home_op("兑换本身小屋道具", "132421")
-        # self.dnf_my_home_op("兑换他人小屋道具", "132449")
+        # self.dnf_my_home_op("兑换商城道具", "145644")
+        # self.dnf_my_home_op("兑换好友商城道具", "145665")
 
-        # 兑换光环, 6月30日12点开启兑换通道
-        info = self.my_home_query_info()
-        if int(info.iExchange) > 0 and get_now() >= parse_time("2022-06-30 12:00:00"):
-            self.dnf_my_home_op("兑换终极道具(次元穿梭光环)", "132491")
+        # 抽天3
+        res = self.dnf_my_home_op("幸运大奖抽奖", "146374")
+        packge_id = int(res["jData"]["iPackageId"] or -1)
+        if packge_id == 3486107:
+            info = self.my_home_query_info()
+            async_message_box(f"{self.cfg.name} 抽到了 天3套装礼盒 的兑换资格，可用2000稻谷进行兑换，当前拥有 {info.iRice} 个", "抽到大奖了")
+        self.dnf_my_home_op("兑换幸运大奖", "146392")
 
-        if get_now() <= act_endtime and is_daily_first_run("我的小屋-整合suin"):
-            async_message_box(
-                (
-                    f"我的小屋结束时间为 {act_endtime}，{self.cfg.name} 当前剩余积分为 {current_points}\n"
-                    "为了提高大家在最后两天能兑换到想要的道具的概率，新版本加了个可兑换的稀有道具小屋suin上报~\n"
-                    "在最后两天（7.14/15）晚上十点左右，我会去之前colg发的小屋分享帖将今日上报的新的小屋suin分享出来，大家可以自行取用\n"
-                    "通过suin进入其他人的小屋的方式在帖子开头有写明，基本按步骤操作即可\n"
-                    "点确定后，即可显示对应网页，这两天晚上十点左右可以去瞅瞅-。-"
-                    "\n"
-                    "ps: 如果不想分享出来，请去配置工具关闭我的小屋活动的开关\n"
-                ).replace("\n", "\n\n"),
-                "我的小屋suin分享整合",
-                open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
-            )
+        # 增加数据统计，看看有没有人抽到
+        increase_counter(
+            ga_category="小屋抽天3套装结果",
+            name=str(packge_id),
+        )
 
     def my_home_query_info(self) -> MyHomeInfo:
-        raw_res = self.dnf_my_home_op("个人信息", "132493", print_res=False)
+        raw_res = self.dnf_my_home_op("个人信息", "145985", print_res=False)
 
         return MyHomeInfo().auto_update_config(raw_res["jData"])
 
@@ -7824,7 +7847,7 @@ class DjcHelper:
     def my_home_query_integral(self) -> int:
         info = self.my_home_query_info()
 
-        return int(info.iIntegral)
+        return int(info.iTask)
 
     def check_dnf_my_home(self, **extra_params):
         return self.ide_check_bind_account(
@@ -8786,7 +8809,7 @@ class DjcHelper:
 
         self.check_dnf_wegame()
 
-        jifen_flowid = "864315"
+        # jifen_flowid = "864315"
 
         def query_counts() -> tuple[int, int]:
             res = self.dnf_wegame_op("查询各种数据", "889255", print_res=False)
@@ -10553,6 +10576,9 @@ class DjcHelper:
                 "getLv105",
                 "use_fatigue",
                 "dayNum",
+                "iFarmland",
+                "fieldId",
+                "sRice",
             ]
         }
 
@@ -11335,4 +11361,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper()
+        djcHelper.dnf_my_home()

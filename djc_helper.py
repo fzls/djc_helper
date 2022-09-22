@@ -6374,7 +6374,7 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        welfare_version = "v4"
+        welfare_version = "v5"
         db = WelfareDB().with_context(welfare_version).load()
         account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.name}").load()
 
@@ -6427,18 +6427,16 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNF生日快乐",
-            "曹操出行打车便宜",
-            "电脑数码万店齐发",
-            "DNFJQR",
+            "DNFQKF",
+            "DNFGFLT",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
         for sContent in sContents:
             exchange_package(sContent)
 
-        # 分享礼包
-        self.dnf_welfare_op("分享奖励领取", "863948", siActivityId=query_siActivityId())
+        # # 分享礼包
+        # self.dnf_welfare_op("分享奖励领取", "863948", siActivityId=query_siActivityId())
 
         # # 登陆游戏领福利
         # self.dnf_welfare_login_gifts_op("1月20 - 22日登录礼包", "831262")
@@ -11312,4 +11310,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_welfare()

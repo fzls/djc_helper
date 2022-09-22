@@ -85,6 +85,7 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220922index/index.html",
     #
@@ -117,7 +118,6 @@ act_name_to_url = {
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",

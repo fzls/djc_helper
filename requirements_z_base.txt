@@ -7,4 +7,3 @@ colorlog==6.7.0
 psutil==5.9.2
 leancloud==2.9.11
 werkzeug<2.0.0
-py7zr==0.20.0

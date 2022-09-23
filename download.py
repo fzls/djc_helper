@@ -169,6 +169,9 @@ def download_latest_github_release(
         ]
     )
 
+    if TEST_SPEED_MODE:
+        logger.info(color("bold_cyan") + f"当前全部镜像如下:\n" + "\n".join(urls) + "\n")
+
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
         try:
@@ -266,6 +269,9 @@ def download_github_raw_content(
             f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ]
     )
+
+    if TEST_SPEED_MODE:
+        logger.info(color("bold_cyan") + f"当前全部镜像如下:\n" + "\n".join(urls) + "\n")
 
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):

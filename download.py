@@ -16,6 +16,10 @@ user_agent_headers = {
 
 progress_callback_func_type = Callable[[str, int, int, float], None]
 
+# 测速模式开关，开启后将对比各个不同镜像的下载速度
+TEST_SPEED_MODE = True
+MAX_TEST_SECONDS = 10
+
 
 def download_file(
     url: str,
@@ -71,6 +75,10 @@ def download_file(
                 if extra_progress_callback is not None:
                     extra_progress_callback(filename, total_length, dl, used_seconds)
 
+                if TEST_SPEED_MODE and used_seconds >= MAX_TEST_SECONDS:
+                    logger.warning(f"当前为测试模式，仅最多尝试 {MAX_TEST_SECONDS} 秒，避免测试时间过久")
+                    return ""
+
             if dl > total_length:
                 # 如果实际写入文件大小比headers中写的要大，一般是因为启用了gzip，传输的内容是压缩后的，但是requests会自动解压缩，所以实际大小会更大
                 # 这种情况会导致上面的进度条没有换行，这里主动换行一下
@@ -107,6 +115,9 @@ def download_latest_github_release(
     :param extra_progress_callback: 每次更新进度时的额外回调，比如可在特定条件下通过抛异常来中断下载
     :return: 最终下载的本地文件绝对路径
     """
+    if TEST_SPEED_MODE:
+        logger.warning("当前为测速模式，将禁用洗牌流程，并依次尝试各个镜像，从而进行对比")
+
     release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
 
     # note: 手动测试下载速度时，使用 IDM / 迅雷 等测试，不要直接用chrome测试，速度差很多
@@ -127,8 +138,9 @@ def download_latest_github_release(
         f"https://github.91chi.fun/https://github.com/{release_file_path}",
     ]
 
-    # 随机乱序，确保均匀分布请求
-    random.shuffle(urls)
+    if not TEST_SPEED_MODE:
+        # 随机乱序，确保均匀分布请求
+        random.shuffle(urls)
 
     # 最后加入几个慢的镜像和源站
     urls.extend(
@@ -160,9 +172,12 @@ def download_latest_github_release(
             )
             log_mirror_status(idx, len(urls), mirror)
 
-            return download_file(
+            file_path = download_file(
                 url, download_dir, connect_timeout=connect_timeout, extra_progress_callback=extra_progress_callback
             )
+
+            if not TEST_SPEED_MODE:
+                return file_path
         except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)
@@ -171,6 +186,7 @@ def download_latest_github_release(
     raise Exception("所有镜像都下载失败")
 
 
+# re: 部分镜像好像不好使了，重新更新下 @2022-09-23 11:14:55 By Chen Ji
 def download_github_raw_content(
     filepath_in_repo: str,
     download_dir=downloads_dir,
@@ -190,6 +206,9 @@ def download_github_raw_content(
     :param connect_timeout: 连接超时
     :return: 最终下载的本地文件绝对路径
     """
+    if TEST_SPEED_MODE:
+        logger.warning("当前为测速模式，将禁用洗牌流程，并依次尝试各个镜像，从而进行对比")
+
     # 先加入比较快的几个镜像
     urls = [
         # 1.8MiB/s
@@ -212,8 +231,9 @@ def download_github_raw_content(
         f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
-    # 随机乱序，确保均匀分布请求
-    random.shuffle(urls)
+    if not TEST_SPEED_MODE:
+        # 随机乱序，确保均匀分布请求
+        random.shuffle(urls)
 
     # 然后加入几个慢的镜像和源站
     urls.extend(
@@ -246,7 +266,10 @@ def download_github_raw_content(
             )
             log_mirror_status(idx, len(urls), mirror)
 
-            return download_file(url, download_dir, connect_timeout=connect_timeout)
+            file_path = download_file(url, download_dir, connect_timeout=connect_timeout)
+
+            if not TEST_SPEED_MODE:
+                return file_path
         except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)

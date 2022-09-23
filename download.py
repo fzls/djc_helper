@@ -211,23 +211,17 @@ def download_github_raw_content(
 
     # 先加入比较快的几个镜像
     urls = [
-        # 1.8MiB/s
+        # 503.9KiB/s
         f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 377.8KiB/s
+        # 250.7KiB/s
         f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 1.2MiB/s
+        # 287.7KiB/s
         f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 197.2KiB/s
-        f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 647.3KiB/s
+        # 1016.6KiB/s
         f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 802.3KiB/s
+        # 441.3KiB/s
         f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 765.4KiB/s
-        f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 774.1KiB/s
-        f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 761.3KiB/s
+        # 419.1KiB/s
         f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
@@ -238,7 +232,13 @@ def download_github_raw_content(
     # 然后加入几个慢的镜像和源站
     urls.extend(
         [
-            # 246.7KiB/s
+            # 131.3KiB/s
+            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 115.5KiB/s
+            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 186.7KiB/s
+            f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 169.0KiB/s
             f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ]
     )

@@ -6,7 +6,7 @@ import shutil
 import subprocess
 from os.path import realpath
 
-from log import get_log_func, logger
+from log import logger
 
 logger_func = logger.debug
 if os.path.exists(".use_by_myself"):

@@ -170,7 +170,7 @@ def download_latest_github_release(
     )
 
     if TEST_SPEED_MODE:
-        logger.info(color("bold_cyan") + f"当前全部镜像如下:\n" + "\n".join(urls) + "\n")
+        logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")
 
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):
@@ -271,7 +271,7 @@ def download_github_raw_content(
     )
 
     if TEST_SPEED_MODE:
-        logger.info(color("bold_cyan") + f"当前全部镜像如下:\n" + "\n".join(urls) + "\n")
+        logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")
 
     # 开始依次下载，直到成功下载
     for idx, url in enumerate(urls):

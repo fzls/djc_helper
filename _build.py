@@ -78,6 +78,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
     # 实际编译流程
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", [], []),
+        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "utils/icons/config_ui.ico", ".", [], ["--noconsole"]),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
         (
             "ark_lottery_special_version.py",
@@ -87,7 +88,6 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
             ["PyQt5"],
             [],
         ),
-        ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "utils/icons/config_ui.ico", ".", [], ["--noconsole"]),
     ]
 
     for idx, config in enumerate(build_configs):

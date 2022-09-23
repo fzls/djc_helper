@@ -694,7 +694,7 @@ class QQLogin:
                 except Exception:
                     login_success = False
 
-                logger.info(color("bold_green") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
+                logger.info(color("bold_cyan") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
             elif login_type == self.login_type_qr_login:
                 async_message_box("现已支持扫码模式下自动点击头像进行登录，不过需要填写QQ号码，可使用配置工具填写QQ号码即可体验本功能", "扫码自动点击头像功能提示", show_once=True)
 

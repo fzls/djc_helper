@@ -76,18 +76,13 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
             shutil.move(path, backup_path)
 
     # 实际编译流程
+    ark_icon = "utils/icons/ark_lottery_special_version.ico"
+
     build_configs = [
         ("main.py", "DNF蚊子腿小助手.exe", "utils/icons/DNF蚊子腿小助手.ico", ".", [], []),
         ("config_ui.py", "DNF蚊子腿小助手配置工具.exe", "utils/icons/config_ui.ico", ".", [], ["--noconsole"]),
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
-        (
-            "ark_lottery_special_version.py",
-            "DNF蚊子腿小助手_集卡特别版.exe",
-            "utils/icons/ark_lottery_special_version.ico",
-            ".",
-            ["PyQt5"],
-            [],
-        ),
+        ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", ark_icon, ".", ["PyQt5"], []),
     ]
 
     for idx, config in enumerate(build_configs):

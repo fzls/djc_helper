@@ -241,18 +241,24 @@ def download_github_raw_content(
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             # 115.5KiB/s
             f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 186.7KiB/s
-            f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 169.0KiB/s
-            f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ]
     )
 
-    # 最后加入原始地址和一些不可达的
+    # 再加入原始地址、一些不可达的
     urls.extend(
         [
             # timeout or 485.3KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
+        ]
+    )
+
+    # 再加入缓存过时内容的镜像，作为最后备选
+    urls.extend(
+        [
+            # 186.7KiB/s
+            f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 169.0KiB/s
+            f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ]
     )
 

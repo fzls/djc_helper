@@ -2,12 +2,17 @@ import json
 import os
 import time
 
-from auto_updater import extract_decompressed_directory_name
-from compress import decompress_dir_with_py7zr
+from config import CommonConfig
 from const import downloads_dir
 from download import download_latest_github_release
 from log import logger
-from util import remove_directory
+from update import get_latest_version_from_github
+
+
+def get_latest_version() -> str:
+    # 尝试从github获取版本信息
+    cfg = CommonConfig()
+    return get_latest_version_from_github(cfg)
 
 
 def main():
@@ -17,15 +22,13 @@ def main():
     github_7z_filepath = download_latest_github_release(downloads_dir)
     logger.info(f"最新版本路径为 {github_7z_filepath}")
 
-    logger.info("解压出里面带版本号的目录，从而获得实际的名称")
-    decompress_dir_with_py7zr(github_7z_filepath, dst_parent_folder=downloads_dir)
-    target_dir = extract_decompressed_directory_name(github_7z_filepath)
-    remove_directory(target_dir)
+    logger.info("获取最新版本号，重命名压缩包")
+    latest_version = get_latest_version()
 
-    final_7z_path = target_dir + ".7z"
-    actual_directory_name = os.path.basename(final_7z_path)
+    final_7z_name = f"DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z"
+    final_7z_path = os.path.join(os.path.dirname(github_7z_filepath), final_7z_name)
 
-    logger.info(f"将压缩包重命名为实际的名称: {actual_directory_name}")
+    logger.info(f"将压缩包重命名为实际的名称: {final_7z_name}")
     if os.path.exists(final_7z_path):
         os.remove(final_7z_path)
     os.rename(github_7z_filepath, final_7z_path)

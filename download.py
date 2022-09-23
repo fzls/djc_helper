@@ -129,18 +129,26 @@ def download_latest_github_release(
 
     # 先加入比较快的几个镜像
     urls = [
-        # 11.4MiB/s
-        f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-        # 9.9MiB/s
-        f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
-        # 8.8MiB/s
+        # 19.3MiB/s
+        f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
+        # 19.1MiB/s
+        f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+        # 19.1MiB/s
+        f"https://cdn.githubjs.cf/fzls/djc_helper/releases/latest/download/{asset_name}",
+        # 19.0MiB/s
         f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-        # 7.5MiB/s
-        f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
-        # 3.3MiB/s
-        f"https://kgithub.com/{release_file_path}",
-        # 1.9MiB/s
+        # 17.6MiB/s
+        f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+        # 15.9MiB/s
+        f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
+        # 15.9MiB/s
+        f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+        # 15.7MiB/s
         f"https://github.91chi.fun/https://github.com/{release_file_path}",
+        # 12.7MiB/s
+        f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
+        # 11.0MiB/s
+        f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
     ]
 
     if not TEST_SPEED_MODE:
@@ -150,18 +158,12 @@ def download_latest_github_release(
     # 最后加入几个慢的镜像和源站
     urls.extend(
         [
-            # 779.1KiB/s
-            f"https://download.fastgit.org/{release_file_path}",
-            # 457.2KiB/s
+            # 7.9MiB/s
             f"https://ghproxy.com/https://github.com/{release_file_path}",
-            # error:429
-            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-            # timeout
-            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-            # timeout
-            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-            # timeout
-            f"https://cdn.githubjs.cf/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # 980.7KiB/s
+            f"https://download.fastgit.org/{release_file_path}",
+            # 54.2KiB/s
+            f"https://kgithub.com/{release_file_path}",
             # timeout
             f"https://github.com/{release_file_path}",
         ]

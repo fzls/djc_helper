@@ -1713,6 +1713,10 @@ def get_user_buy_info(
 ) -> BuyInfo:
     logger.info(f"如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：{config().common.netdisk_link}")
 
+    if len(qq_accounts) == 0:
+        # 没有传入QQ号的话，直接返回默认值
+        return BuyInfo()
+
     logger.debug("尝试由服务器代理查询付费信息，请稍候片刻~")
     user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
 

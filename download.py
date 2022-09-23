@@ -171,7 +171,6 @@ def download_latest_github_release(
     raise Exception("所有镜像都下载失败")
 
 
-# re: 部分镜像好像不好使了，重新更新下 @2022-09-23 11:14:55 By Chen Ji
 def download_github_raw_content(
     filepath_in_repo: str,
     download_dir=downloads_dir,

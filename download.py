@@ -218,17 +218,17 @@ def download_github_raw_content(
 
     # 先加入比较快的几个镜像
     urls = [
-        # 503.9KiB/s
-        f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 250.7KiB/s
+        # 1023.6KiB/s
+        f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 279.9KiB/s
         f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 287.7KiB/s
+        # 257.2KiB/s
         f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 1016.6KiB/s
+        # 144.4KiB/s
         f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 441.3KiB/s
+        # 154.4KiB/s
         f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 419.1KiB/s
+        # 836.5KiB/s
         f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
@@ -239,9 +239,11 @@ def download_github_raw_content(
     # 然后加入几个慢的镜像和源站
     urls.extend(
         [
-            # 131.3KiB/s
+            # 130.3KiB/s
+            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 48.6KiB/s
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 115.5KiB/s
+            # 52.1KiB/s
             f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ]
     )
@@ -249,7 +251,7 @@ def download_github_raw_content(
     # 再加入原始地址、一些不可达的
     urls.extend(
         [
-            # timeout or 485.3KiB/s
+            # timeout or 69.4KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
         ]
     )
@@ -257,9 +259,9 @@ def download_github_raw_content(
     # 再加入缓存过时内容的镜像，作为最后备选
     urls.extend(
         [
-            # 186.7KiB/s
+            # 448.1KiB/s
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 169.0KiB/s
+            # 54.6KiB/s
             f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ]
     )

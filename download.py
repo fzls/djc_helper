@@ -183,6 +183,8 @@ def download_latest_github_release(
 
             if not TEST_SPEED_MODE:
                 return file_path
+            else:
+                logger.warning("\n")
         except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)
@@ -281,6 +283,8 @@ def download_github_raw_content(
 
             if not TEST_SPEED_MODE:
                 return file_path
+            else:
+                logger.warning("\n")
         except BaseException as e:
             logger.error(f"{idx + 1}/{len(urls)}: 下载失败，异常内容： {e}，将继续尝试下一个github镜像")
             logger.debug("详细异常信息", exc_info=e)

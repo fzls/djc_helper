@@ -45,6 +45,7 @@ _update_temp_dir/
 
 .use_by_myself
 .sync_configs_done
+.run_env
 
 ark_lottery_special_version_customized.py
 

@@ -831,6 +831,8 @@ class AccountConfig(ConfigInterface):
         self.enable_in_github_action = True
         # 是否处于安全模式，也就是登录的时候需要滑动验证码或者发送短信
         self.in_safe_mode = False
+        # 在这些环境中禁用（通过 .run_env 文件来备注环境，用来实现在家里和公司等地方运行不同的账号子集）
+        self.disable_in_run_env_list: list[str] = []
         # 账号名称，仅用于区分不同账号
         self.name = "默认账号名-1"
         # 登录模式
@@ -921,6 +923,13 @@ class AccountConfig(ConfigInterface):
             # 若当前在github action环境中运行，且设定为不在该环境中使用该QQ，则认为未启用
             logger.warning(f"账号 {self.name} 设定为不在github action中运行，将跳过，如需启用请修改 enable_in_github_action 配置")
             return False
+
+        run_env_file = ".run_env"
+        if os.path.isfile(run_env_file):
+            run_env = open(".run_env", encoding="utf-8").read().strip()
+            if run_env in self.disable_in_run_env_list:
+                logger.warning(f"账号 {self.name} 设定为在 {run_env} 环境下禁用，将跳过，如需启用请修改 disable_in_run_env_list 配置")
+                return False
 
         return self.enable
 

@@ -14,6 +14,7 @@ reversi_images
 .coverage
 .use_by_myself
 .sync_configs_done
+.run_env
 config.toml.github_action*
 config.toml.local
 coverage.xml

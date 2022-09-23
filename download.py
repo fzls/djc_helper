@@ -17,7 +17,7 @@ user_agent_headers = {
 progress_callback_func_type = Callable[[str, int, int, float], None]
 
 # 测速模式开关，开启后将对比各个不同镜像的下载速度
-TEST_SPEED_MODE = True
+TEST_SPEED_MODE = False
 MAX_TEST_SECONDS = 10
 
 

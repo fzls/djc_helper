@@ -1935,20 +1935,24 @@ class MyHomeFriendList(ConfigInterface):
     def __init__(self):
         self.iRet = "0"
         self.sMsg = "ok"
-        self.total = "9"
-        self.data: list[MyHomeFriendInfo] = []
+        self.total = "22"
+        self.iPage = "1"
+        self.list: list[MyHomeFriendInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
-            ("data", MyHomeFriendInfo),
+            ("list", MyHomeFriendInfo),
         ]
 
 
 class MyHomeFriendInfo(ConfigInterface):
     def __init__(self):
-        self.iUin = "24***71"
-        self.sNick = "I***r"
-        self.sUin = "NzZUL21FStYzZYdz09-1234567890"
+        self.id = "724663"
+        self.iUin = "32***07"
+        self.sNick = "风***鬼"
+        self.dDate = "2022-09-26"
+        self.dtCreateAt = "2022-09-26 19:35:04"
+        self.sUin = "UjNWMGVkMGVVQlZZTnlrOVFHQ1MwZz09"
 
 
 class LuckyUserInfo(ConfigInterface):

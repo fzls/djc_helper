@@ -7639,20 +7639,20 @@ class DjcHelper:
         self.check_dnf_my_home()
 
         def query_gifts() -> list[MyHomeGift]:
-            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "132338", print_res=False)
+            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "145628", print_res=False)
             gifts = MyHomeGiftList().auto_update_config(raw_res)
 
             return gifts.jData
 
-        def query_friend_list(iPage: int, share_p_skey: str) -> MyHomeFriendList:
+        def query_friend_list(iPage: int) -> MyHomeFriendList:
             raw_res = self.dnf_my_home_op(
-                "好友小屋列表", "131196", iPage=iPage, extra_cookies=f"p_skey={share_p_skey}", print_res=False
+                "好友小屋列表", "145827", iPage=iPage, print_res=False
             )
 
             return MyHomeFriendList().auto_update_config(raw_res["jData"])
 
         def query_friend_gift_info(sUin: str) -> list[MyHomeGift]:
-            raw_res = self.dnf_my_home_op("好友小屋道具信息", "132038", type=1, sUin=sUin, print_res=False)
+            raw_res = self.dnf_my_home_op("好友小屋道具信息", "145664", sUin=sUin, print_res=False)
             if raw_res["ret"] != 0:
                 return []
 
@@ -7684,7 +7684,7 @@ class DjcHelper:
             )
 
         def try_add_valuable_gift(
-            valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int, s_uin: str
+            current_points: int, valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int, s_uin: str
         ):
             if not gift.is_valuable_gift():
                 # 普通奖励
@@ -7701,7 +7701,7 @@ class DjcHelper:
 
             # 增加上报下稀有小屋信息，活动快结束了，还没兑换的可能不会换了，改为新建一个帖子分享出去
             increase_counter(
-                ga_category=f"小屋分享-v4-{gift.sPropName}",
+                ga_category=f"小屋分享-v6-{gift.sPropName}",
                 name=f"{gift.format_discount()} {gift.price_after_discount()} {s_uin} ({gift.iUsedNum}/{gift.iTimes}) {owner} ",
             )
 
@@ -7725,18 +7725,19 @@ class DjcHelper:
             for gift in my_gifts:
                 logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
 
-                try_add_valuable_gift(valuable_gifts, gift, "自己", 0, "")
+                try_add_valuable_gift(current_points, valuable_gifts, gift, "自己", 0, "")
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
-            share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
+            # share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
             for friend_page in range_from_one(1000):
-                friend_list = query_friend_list(friend_page, share_p_skey)
+                friend_list = query_friend_list(friend_page)
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
-                for friend_info in friend_list.data:
+                for friend_info in friend_list.list:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
                     for gift in friend_gifts:
                         try_add_valuable_gift(
+                            current_points,
                             valuable_gifts,
                             gift,
                             f"{friend_info.sNick}({friend_info.iUin})",
@@ -7786,8 +7787,8 @@ class DjcHelper:
             self.dnf_my_home_op(name, flowid)
             time.sleep(5)
 
-        current_points = self.my_home_query_integral()
-        logger.info(color("bold_yellow") + f"当前积分为 {current_points}")
+        points = self.my_home_query_integral()
+        logger.info(color("bold_yellow") + f"当前积分为 {points}")
 
         # 种田
         # 解锁
@@ -7824,8 +7825,7 @@ class DjcHelper:
         logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
 
         #  兑换道具
-        # re: 这个等下适配下
-        # notify_exchange_valuable_gift(rice_count)
+        notify_exchange_valuable_gift(rice_count)
 
         act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
         lastday = get_today(act_endtime)

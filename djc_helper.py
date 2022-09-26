@@ -7819,9 +7819,13 @@ class DjcHelper:
         # self.dnf_my_home_op("待邀请好友列表", "145695")
         # self.dnf_my_home_op("好友已开通农场列表", "145827")
 
+        # 统计最新信息
+        rice_count = self.my_home_query_rice()
+        logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
+
         #  兑换道具
         # re: 这个等下适配下
-        # notify_exchange_valuable_gift(current_points)
+        # notify_exchange_valuable_gift(rice_count)
 
         act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
         lastday = get_today(act_endtime)
@@ -7858,6 +7862,12 @@ class DjcHelper:
         info = self.my_home_query_info()
 
         return int(info.iTask)
+
+    @try_except(return_val_on_except=0, show_exception_info=False)
+    def my_home_query_rice(self) -> int:
+        info = self.my_home_query_info()
+
+        return int(info.iRice)
 
     def check_dnf_my_home(self, **extra_params):
         return self.ide_check_bind_account(

@@ -7645,9 +7645,7 @@ class DjcHelper:
             return gifts.jData
 
         def query_friend_list(iPage: int) -> MyHomeFriendList:
-            raw_res = self.dnf_my_home_op(
-                "好友小屋列表", "145827", iPage=iPage, print_res=False
-            )
+            raw_res = self.dnf_my_home_op("好友小屋列表", "145827", iPage=iPage, print_res=False)
 
             return MyHomeFriendList().auto_update_config(raw_res["jData"])
 
@@ -7684,7 +7682,12 @@ class DjcHelper:
             )
 
         def try_add_valuable_gift(
-            current_points: int, valuable_gifts: list[MyHomeValueGift], gift: MyHomeGift, owner: str, page: int, s_uin: str
+            current_points: int,
+            valuable_gifts: list[MyHomeValueGift],
+            gift: MyHomeGift,
+            owner: str,
+            page: int,
+            s_uin: str,
         ):
             if not gift.is_valuable_gift():
                 # 普通奖励
@@ -7854,7 +7857,6 @@ class DjcHelper:
                     open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
                     show_once_daily=True,
                 )
-
 
         # 抽天3
         res = self.dnf_my_home_op("幸运大奖抽奖", "146374")

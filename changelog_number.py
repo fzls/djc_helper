@@ -27,7 +27,7 @@ def format_changelog(changelog_text: str) -> str:
     return "\n".join(formatted_items)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     changelog_text = """
 1. 更新内容 - 1
 7. 更新内容 - 2

@@ -2066,7 +2066,7 @@ if __name__ == "__main__":
         BuyRecord().auto_update_config({"buy_at": "2020-02-06 12:30:15"}),
         BuyRecord().auto_update_config({"buy_at": "2021-02-08 12:30:15", "buy_month": 2}),
     ]
-    a.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 3))
+    a.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 3))  # type: ignore
 
     b = BuyInfo()
     b.qq = "11"
@@ -2076,7 +2076,7 @@ if __name__ == "__main__":
         BuyRecord().auto_update_config({"buy_at": "2020-02-06 12:30:15"}),
         BuyRecord().auto_update_config({"buy_at": "2021-02-08 12:30:15"}),
     ]
-    b.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 2))
+    b.expire_at = format_time(parse_time("2020-02-06 12:30:15") + timedelta(days=31 * 2))  # type: ignore
 
     print(a)
     print(b)

@@ -7833,11 +7833,12 @@ class DjcHelper:
                 continue
             fData = farm_dict[id]
 
-            # 如果所有田地都已经解锁，此时积分只能用来浇水了
-            if len(farm_dict) >= MAX_FARM_FIELD_COUNT:
-                self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
-
-            self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
+            if not fData.is_mature():
+                # 如果所有田地都已经解锁，此时积分只能用来浇水了
+                if len(farm_dict) >= MAX_FARM_FIELD_COUNT:
+                    self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
+            else:
+                self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
 
         # 邀请好友可以获取刷新次数，这里就不弄了
         # self.dnf_my_home_op("邀请好友开通农场", "145781")

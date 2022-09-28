@@ -1880,6 +1880,11 @@ class MyHomeFarmInfo(ConfigInterface):
         self.iUsedNum = "0"
         self.dtMatureTime = 1663900268000
 
+    def is_mature(self) -> bool:
+        now_unix_mills = int(datetime.now().timestamp() * 1000)
+
+        return now_unix_mills >= self.dtMatureTime
+
 
 class MyHomeGiftList(ConfigInterface):
     def __init__(self):

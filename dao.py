@@ -1955,6 +1955,13 @@ class MyHomeFriendInfo(ConfigInterface):
         self.sUin = "UjNWMGVkMGVVQlZZTnlrOVFHQ1MwZz09"
 
 
+class MyHomeFriendDetail(ConfigInterface):
+    def __init__(self):
+        self.page = 1
+        self.info = MyHomeFriendInfo()
+        self.gifts: list[MyHomeGift] = []
+
+
 class LuckyUserInfo(ConfigInterface):
     def __init__(self):
         self.lossType = "1"

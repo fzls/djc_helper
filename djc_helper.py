@@ -59,6 +59,7 @@ from dao import (
     MobileGameGiftInfo,
     MoJieRenInfo,
     MyHomeFarmInfo,
+    MyHomeFriendDetail,
     MyHomeFriendList,
     MyHomeGift,
     MyHomeGiftList,
@@ -7658,6 +7659,38 @@ class DjcHelper:
 
             return gifts.jData
 
+        def get_friend_qq_to_detail_dict() -> dict[str, MyHomeFriendDetail]:
+            friend_qq_to_detail_dict: dict[str, MyHomeFriendDetail] = {}
+
+            logger.info("开始查询各个好友的具体信息，方便后续使用")
+            # share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
+            for friend_page in range_from_one(1000):
+                friend_list = query_friend_list(friend_page)
+                logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
+                for friend_info in friend_list.list:
+                    friend_gifts = query_friend_gift_info(friend_info.sUin)
+                    if len(friend_gifts) == 0:
+                        continue
+
+                    friend_qq = friend_gifts[0].iUin
+
+                    detail = MyHomeFriendDetail()
+                    detail.page = friend_page
+                    detail.info = friend_info
+                    detail.gifts = friend_gifts
+
+                    friend_qq_to_detail_dict[friend_qq] = detail
+
+                    time.sleep(0.1)
+
+                if friend_page >= int(friend_list.total):
+                    # 已是最后一页
+                    break
+
+            logger.info(f"总计获取到 {len(friend_qq_to_detail_dict)} 个好友的小屋信息")
+
+            return friend_qq_to_detail_dict
+
         def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
             if len(valuable_gifts) == 0:
                 return
@@ -7718,7 +7751,7 @@ class DjcHelper:
             valuable_gifts.append(MyHomeValueGift(page, owner, gift))
 
         @try_except()
-        def notify_exchange_valuable_gift(current_points: int):
+        def notify_exchange_valuable_gift(current_points: int, friend_qq_to_detail_dict: dict[str, MyHomeFriendDetail]):
             # 需要提醒的稀有奖励列表
             valuable_gifts: list[MyHomeValueGift] = []
 
@@ -7731,28 +7764,17 @@ class DjcHelper:
                 try_add_valuable_gift(current_points, valuable_gifts, gift, "自己", 0, "")
 
             # 然后看看好友的稀有奖励
-            logger.info("开始看看好友的小屋里是否有可以兑换的好东西（可能需要等待一会）")
-            # share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
-            for friend_page in range_from_one(1000):
-                friend_list = query_friend_list(friend_page)
-                logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
-                for friend_info in friend_list.list:
-                    friend_gifts = query_friend_gift_info(friend_info.sUin)
-                    for gift in friend_gifts:
-                        try_add_valuable_gift(
-                            current_points,
-                            valuable_gifts,
-                            gift,
-                            f"{friend_info.sNick}({friend_info.iUin})",
-                            friend_page,
-                            friend_info.sUin,
-                        )
-
-                    time.sleep(0.1)
-
-                if friend_page >= int(friend_list.total):
-                    # 已是最后一页
-                    break
+            logger.info("开始看看好友的小屋里是否有可以兑换的好东西")
+            for detail in friend_qq_to_detail_dict.values():
+                for gift in detail.gifts:
+                    try_add_valuable_gift(
+                        current_points,
+                        valuable_gifts,
+                        gift,
+                        f"{detail.info.sNick}({detail.info.iUin})",
+                        detail.page,
+                        detail.info.sUin,
+                    )
 
             # 提醒兑换奖励
             notify_valuable_gifts(current_points, valuable_gifts)
@@ -7823,12 +7845,15 @@ class DjcHelper:
         # self.dnf_my_home_op("待邀请好友列表", "145695")
         # self.dnf_my_home_op("好友已开通农场列表", "145827")
 
+        # 预先查询好友信息，方便后续使用
+        friend_qq_to_detail_dict = get_friend_qq_to_detail_dict()
+
         # 统计最新信息
         rice_count = self.my_home_query_rice()
         logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
 
-        #  兑换道具
-        notify_exchange_valuable_gift(rice_count)
+        # 提示兑换道具
+        notify_exchange_valuable_gift(rice_count, friend_qq_to_detail_dict)
 
         act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
         lastday = get_today(act_endtime)

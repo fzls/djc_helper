@@ -7659,8 +7659,8 @@ class DjcHelper:
 
             return gifts.jData
 
-        def get_friend_qq_to_detail_dict() -> dict[str, MyHomeFriendDetail]:
-            friend_qq_to_detail_dict: dict[str, MyHomeFriendDetail] = {}
+        def get_friend_detail_list() -> list[MyHomeFriendDetail]:
+            friend_detail_list: list[MyHomeFriendDetail] = []
 
             logger.info("开始查询各个好友的具体信息，方便后续使用")
             # share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
@@ -7669,17 +7669,13 @@ class DjcHelper:
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
                 for friend_info in friend_list.list:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
-                    if len(friend_gifts) == 0:
-                        continue
-
-                    friend_qq = friend_gifts[0].iUin
 
                     detail = MyHomeFriendDetail()
                     detail.page = friend_page
                     detail.info = friend_info
                     detail.gifts = friend_gifts
 
-                    friend_qq_to_detail_dict[friend_qq] = detail
+                    friend_detail_list.append(detail)
 
                     time.sleep(0.1)
 
@@ -7687,9 +7683,33 @@ class DjcHelper:
                     # 已是最后一页
                     break
 
-            logger.info(f"总计获取到 {len(friend_qq_to_detail_dict)} 个好友的小屋信息")
+            logger.info(f"总计获取到 {len(friend_detail_list)} 个好友的小屋信息")
 
-            return friend_qq_to_detail_dict
+            return friend_detail_list
+
+        @try_except()
+        def steal_friend_rice(points: int, friend_detail_list: list[MyHomeFriendDetail]):
+            logger.info("去小号的菜地里看看是否可以偷水稻")
+
+            myhome_steal_xiaohao_qq_list = self.cfg.myhome_steal_xiaohao_qq_list
+
+            for detail in friend_detail_list:
+                qq = detail.get_qq()
+                if qq not in myhome_steal_xiaohao_qq_list:
+                    continue
+
+                farm_dict = query_friend_farm_dict(qq, detail.info.sUin)
+
+                for index, farm_info in farm_dict.items():
+                    if not farm_info.is_mature():
+                        # 未成熟，尝试浇水，方便多偷一次
+                        # 规则：6）单账号每日最多可采摘好友水稻3+1次（其中3次每日自动获得，剩下1次通过当日给好友水稻浇水获得），次数与账号绑定；
+                        if points >= 10:
+                            self.dnf_my_home_op(f"尝试帮 小号({qq}) 浇水，从而增加一次偷水稻的机会", "145467", sRice=farm_info.sFarmland)
+                    else:
+                        # 已成熟，如果还能被偷，就尝试偷一下
+                        if farm_info.iNum >= 6:
+                            self.dnf_my_home_op(f"尝试偷 小号({qq}) 的水稻", "145489", fieldId=index, sRice=farm_info.sFarmland)
 
         def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
             if len(valuable_gifts) == 0:
@@ -7751,7 +7771,7 @@ class DjcHelper:
             valuable_gifts.append(MyHomeValueGift(page, owner, gift))
 
         @try_except()
-        def notify_exchange_valuable_gift(current_points: int, friend_qq_to_detail_dict: dict[str, MyHomeFriendDetail]):
+        def notify_exchange_valuable_gift(current_points: int, friend_detail_list: list[MyHomeFriendDetail]):
             # 需要提醒的稀有奖励列表
             valuable_gifts: list[MyHomeValueGift] = []
 
@@ -7765,7 +7785,7 @@ class DjcHelper:
 
             # 然后看看好友的稀有奖励
             logger.info("开始看看好友的小屋里是否有可以兑换的好东西")
-            for detail in friend_qq_to_detail_dict.values():
+            for detail in friend_detail_list:
                 for gift in detail.gifts:
                     try_add_valuable_gift(
                         current_points,
@@ -7782,7 +7802,16 @@ class DjcHelper:
         def query_farm_dict() -> dict[str, MyHomeFarmInfo]:
             res = self.dnf_my_home_op("农田初始化(查询信息）", "145364", print_res=False)
 
-            data = res["jData"]["list"]
+            return parse_farm_dict(res)
+
+        def query_friend_farm_dict(qq:str,  suin: str) -> dict[str, MyHomeFarmInfo]:
+            res = self.dnf_my_home_op(f"查询好友 {qq} 的农田", "149975", sUin=suin, print_res=False)
+
+            return parse_farm_dict(res)
+
+
+        def parse_farm_dict(raw_res: dict) ->  dict[str, MyHomeFarmInfo]:
+            data = raw_res["jData"]["list"]
 
             # 在低于8个田时，返回的是dict，满了的时候是list，所以这里需要特殊处理下
             farm_list: dict[str, MyHomeFarmInfo] = {}
@@ -7833,9 +7862,12 @@ class DjcHelper:
                 continue
             fData = farm_dict[id]
 
-            if not fData.is_mature():
+            mature = fData.is_mature()
+            logger.info(f"第 {iFarmland} 块田地是否已成熟: {mature}")
+
+            if not mature:
                 # 如果所有田地都已经解锁，此时积分只能用来浇水了
-                if len(farm_dict) >= MAX_FARM_FIELD_COUNT:
+                if len(farm_dict) >= MAX_FARM_FIELD_COUNT and points >= 10:
                     self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
             else:
                 self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
@@ -7847,14 +7879,18 @@ class DjcHelper:
         # self.dnf_my_home_op("好友已开通农场列表", "145827")
 
         # 预先查询好友信息，方便后续使用
-        friend_qq_to_detail_dict = get_friend_qq_to_detail_dict()
+        friend_detail_list = get_friend_detail_list()
+
+        # 去偷菜
+        points = self.my_home_query_integral()
+        steal_friend_rice(points, friend_detail_list)
 
         # 统计最新信息
         rice_count = self.my_home_query_rice()
         logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
 
         # 提示兑换道具
-        notify_exchange_valuable_gift(rice_count, friend_qq_to_detail_dict)
+        notify_exchange_valuable_gift(rice_count, friend_detail_list)
 
         act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
         lastday = get_today(act_endtime)

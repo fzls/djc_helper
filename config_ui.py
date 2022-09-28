@@ -2007,6 +2007,11 @@ class AccountConfigUi(QWidget):
             "其他", top_layout
         )
 
+        self.lineedit_myhome_steal_xiaohao_qq_list = create_lineedit(
+            list_to_str(cfg.myhome_steal_xiaohao_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789"
+        )
+        add_row(form_layout, "我的小屋偷水稻的小号qq列表，本qq会尝试去偷这些小号的水稻", self.lineedit_myhome_steal_xiaohao_qq_list)
+
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(
             list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号"
         )
@@ -2065,6 +2070,7 @@ class AccountConfigUi(QWidget):
         cfg.account_info.account = self.lineedit_account.text()
         cfg.cannot_bind_dnf_v2 = self.checkbox_cannot_bind_dnf_v2.isChecked()
 
+        cfg.myhome_steal_xiaohao_qq_list = str_to_list(self.lineedit_myhome_steal_xiaohao_qq_list.text())
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
         cfg.gonghui_rolename_huizhang = self.lineedit_gonghui_rolename_huizhang.text()
         cfg.gonghui_rolename_huiyuan = self.lineedit_gonghui_rolename_huiyuan.text()

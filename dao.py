@@ -1966,6 +1966,12 @@ class MyHomeFriendDetail(ConfigInterface):
         self.info = MyHomeFriendInfo()
         self.gifts: list[MyHomeGift] = []
 
+    def get_qq(self) -> str:
+        if len(self.gifts) == 0:
+            return ""
+
+        return self.gifts[0].iUin
+
 
 class LuckyUserInfo(ConfigInterface):
     def __init__(self):

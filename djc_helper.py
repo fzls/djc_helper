@@ -589,6 +589,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("dnf助手活动", self.dnf_helper),
             ("我的小屋", self.dnf_my_home),
+            ("DNF冒险家之路", self.dnf_maoxian_road),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -596,7 +597,6 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
-            ("DNF冒险家之路", self.dnf_maoxian_road),
             ("KOL", self.dnf_kol),
             ("DNF集合站", self.dnf_collection),
             ("黄钻", self.dnf_yellow_diamond),
@@ -2861,61 +2861,80 @@ class DjcHelper:
 
         self.check_dnf_maoxian_road()
 
-        def query_info() -> tuple[int, int, int]:
-            res = self.dnf_maoxian_road_op("查询信息", "859633", print_res=False)
+        def query_info() -> tuple[bool, int]:
+            res = self.dnf_maoxian_road_op("查询信息", "891421", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            remaining_day = int(raw_info.sOutValue8)
-            finished_tasks = int(raw_info.sOutValue2)
-            points = int(raw_info.sOutValue3)
+            is_lucky_user = raw_info.sOutValue1 != "0"
 
-            return remaining_day, finished_tasks, points
+            temp = raw_info.sOutValue8.split("|")
+            ticket = int(temp[0] or 0)
 
-        self.dnf_maoxian_road_op("校验是否为渠道流失玩家", "858938")
-        self.dnf_maoxian_road_op("幸运冒险家礼包", "858918")
+            return is_lucky_user, ticket
 
-        # 每日可完成一个任务，每周刷新次数
+        self.dnf_maoxian_road_op("非冒险家一天验证一次", "892232")
+        self.dnf_maoxian_road_op("幸运冒险家礼包", "890939")
+
+        is_lucky_user, _ = query_info()
+        if not is_lucky_user:
+            logger.warning("为抽取到幸运资格，将跳过后续流程")
+            return
+
+        # 完成任务
         tasks = [
-            ("任务5—通关任意地下城5次(3积分)", "858585"),
-            ("任务9—消耗疲劳100点(3积分)", "858590"),
-            ("任务11—通关：荆棘乐园/德洛斯矿山外围/绝望摇篮/远古墓地任意1次(3积分)", "858592"),
-            ("任务12—通关希洛克1次(3积分)", "858593"),
-            ("任务3—通关任意地下城1次(2积分)", "858552"),
-            ("任务4—通关任意地下城3次(2积分)", "858584"),
-            ("任务6—累计在线30分钟(2积分)", "858586"),
-            ("任务8—消耗疲劳50点(2积分)", "858589"),
-            ("任务1—登录游戏(1积分)", "858479"),
-            ("任务2—累计在线10分钟(1积分)", "858549"),
-            ("任务7—消耗疲劳10点(1积分)", "858588"),
-            ("任务10—完成游戏内任意一个任务(1积分)", "858591"),
+            # 每日任务
+            ("核心用户完成每日任务1", "890887"),
+            ("核心用户完成每日任务2", "890888"),
+            ("核心用户完成每日任务3", "890897"),
+            ("核心用户完成每日任务4", "890898"),
+            ("次核心用户完成每日任务1", "890906"),
+            ("次核心用户完成每日任务2", "890907"),
+            ("次核心用户完成每日任务3", "890918"),
+            ("次核心用户完成每日任务4", "890919"),
+            ("外围用户完成每日任务1", "890920"),
+            ("外围用户完成每日任务2", "890923"),
+            ("外围用户完成每日任务3", "890935"),
+            ("外围用户完成每日任务4", "890936"),
+
+            # 累计任务
+            ("核心累计进行属性成长/传送/转移10次", "891112"),
+            ("核心累计通关任意难度高级地下城3次", "891113"),
+            ("核心累计在地下城中获取Lv105史诗装备10件", "891272"),
+            ("核心累计通关任意难度高级地下城3天", "891276"),
+            ("次核心累计进行属性成长/传送/转移8", "891278"),
+            ("次核心累计通关任意难度高级地下城2天", "891279"),
+            ("次核心累计通关任意难度110级地下城20次", "891281"),
+            ("次核心累计通关任意难度110及地下城3天", "891282"),
+            ("外围累计进行属性成长/传送/转移5", "891283"),
+            ("外围累计在地下城中获取Lv105史诗装备5", "891284"),
+            ("外围累计通关任意难度110级地下城15", "891285"),
+            ("外围累计通关任意难度地下城3天", "891287"),
         ]
         for task_name, flowid in tasks:
             self.dnf_maoxian_road_op(task_name, flowid)
 
-        remaining_day, finished_tasks, points = query_info()
+        _, ticket = query_info()
         logger.info(
-            color("bold_green") + f"{self.cfg.name} 冒险家之路 剩余天数={remaining_day} 已完成任务数={finished_tasks} 当前积分={points}"
+            color("bold_green") + f"{self.cfg.name} 冒险家之路 当前图章={ticket}"
         )
 
         awards = [
-            ("兑换1—灿烂的徽章神秘礼盒—15图章（限1次）", "858889"),
-            ("兑换4—次元玄晶碎片礼袋—5图章（限2次）", "858894"),
-            ("兑换2—+7装备增幅券—10图章（限1次）", "858892"),
-            ("兑换5—装备提升礼盒—3图章（限2次）", "858895"),
-            ("兑换3—华丽的徽章神秘礼盒—5图章（限2次）", "858893"),
-            ("兑换6—装备品级调整箱（1个）—3图章（限3次）", "858896"),
-            ("兑换7—一次性材质转换器材—2图章（限2次）", "858897"),
-            ("兑换8—一次性继承装置—2图章（限2次）", "858898"),
-            ("兑换9—神秘契约礼包—1图章（限3次）", "858899"),
-            ("兑换10—本职业稀有护石神秘礼盒—1图章（限5次）", "858904"),
-            ("兑换11—闪亮的雷米援助礼盒（5个）—1图章（限5次）", "858905"),
-            ("兑换12—复活币礼盒 (1个)—1图章（限3次）", "858906"),
-            ("兑换13—成长胶囊 (5百分比)—1图章（限5次）", "858907"),
-            ("兑换14—宠物饲料礼袋 (10个)—1图章（限5次）", "858910"),
-            ("兑换15—黑钻1天—2图章（限3次）", "858911"),
+            ("兑换5—装备提升礼盒—3图章（限2次）", "891293", 5),
+            ("兑换1—灿烂的徽章神秘礼盒—25图章（限1次）", "891293", 1),
+            ("兑换2—+7装备增幅券—15图章（限1次）", "891293", 2),
+            ("兑换6—装备品级调整箱礼盒—3图章（限3次）", "891293", 6),
+            # ("兑换3—华丽的徽章神秘礼盒—15图章（限2次）", "891293", 3),
+            # ("兑换4—王者契约（1天）—10图章（限2次）", "891293", 4),
+
+            ("兑换1—一次性材质转换器—3图章", "891388", 1),
+            # ("兑换2—一次性继承装置—2图章", "891388", 2),
+            # ("兑换3—黑钻会员1天—2图章", "891388", 3),
+            # ("兑换4—复活币礼盒（1个）—1图章", "891388", 4),
+            # ("兑换5—宠物饲料礼袋（10个）—1图章", "891388", 5),
+            # ("兑换6—闪亮的雷米援助礼盒—1图章", "891388", 6),
         ]
-        for award_name, flowid in awards:
-            res = self.dnf_maoxian_road_op(award_name, flowid)
+        for award_name, flowid, exchangeId in awards:
+            res = self.dnf_maoxian_road_op(award_name, flowid, sChannel="vip", exchangeId=exchangeId)
             code = int(res["ret"])
             if code == 700:
                 logger.info("当前积分不足以兑换该奖励，将跳过尝试后续优先级更低的奖励")
@@ -2926,8 +2945,8 @@ class DjcHelper:
             "DNF冒险家之路",
             get_act_url("DNF冒险家之路"),
             activity_op_func=self.dnf_maoxian_road_op,
-            query_bind_flowid="858475",
-            commit_bind_flowid="858474",
+            query_bind_flowid="890886",
+            commit_bind_flowid="890885",
         )
 
     def dnf_maoxian_road_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -10681,6 +10700,8 @@ class DjcHelper:
                 "iFarmland",
                 "fieldId",
                 "sRice",
+                "exchangeId",
+                "sChannel",
             ]
         }
 
@@ -11463,4 +11484,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.dnf_maoxian_road()

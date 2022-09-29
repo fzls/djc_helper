@@ -590,6 +590,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("我的小屋", self.dnf_my_home),
             ("DNF冒险家之路", self.dnf_maoxian_road),
+            ("超享玩", self.super_core),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10438,6 +10439,64 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------超享玩--------------------------------------------
+    @try_except()
+    def super_core(self):
+        show_head_line("超享玩")
+        self.show_not_ams_act_info("超享玩")
+
+        if not self.cfg.function_switches.get_super_core or self.disable_most_activities():
+            logger.warning("未启用领取超享玩功能，将跳过")
+            return
+
+        # re: 下面两个openid需要增加登录这个活动页面来获取，可参考 爱玩 活动
+        openid = "TODO"
+        access_token = "TODO"
+
+        self.super_core_extra_headers = {
+            "t-account-type": "qc",
+            "t-mode": "true",
+            "t-appid": "101813972",
+            "t-openid": openid,
+            "t-access-token": access_token,
+        }
+
+        self.super_core_op("邀请函-发送邀约", 40968)
+
+        # re: 跑通后补齐后续活动流程
+
+    def super_core_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        qq = self.qq()
+
+        json_data = {
+            "biz_id": "supercore",
+            "act_id": 11055,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc"
+            },
+            "data": "{\"ceiba_plat_id\":\"android\",\"user_attach\":\"{\\\"nickName\\\":\\\"" + qq + "\\\",\\\"avatar\\\":\\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\\"}\",\"cExtData\":{}}"
+        }
+
+        return self.post(
+            ctx,
+            self.urls.super_core_api,
+            json=json_data,
+            print_res=print_res,
+            flowId=flow_id,
+            extra_headers=self.super_core_extra_headers,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10702,6 +10761,7 @@ class DjcHelper:
                 "sRice",
                 "exchangeId",
                 "sChannel",
+                "flow_id",
             ]
         }
 
@@ -11484,4 +11544,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_maoxian_road()
+        djcHelper.super_core()

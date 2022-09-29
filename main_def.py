@@ -1450,11 +1450,6 @@ def show_tips(cfg: Config):
             "在活动页面购买超级会员和其他会员，最低可以三十元兑换一个红10券+12次抽奖机会，如果平常有购买QQ视频或者QQ音乐的话，可以考虑下这个活动~\n"
             "如果有需要，可以在活动页面自行参与这部分: https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7\n"
         ),
-        "22.8 colg模拟器签到": (
-            "colg模拟器签到活动开放了第二期，签到15天可以领取一个随机灿烂，有兴趣可自行参与\n"
-            "第一步：在模拟器页面使用模拟器 https://bbs.colg.cn/colg_activity_new-simulator.html/index\n"
-            "第二步：点击右侧礼包按钮，领取每日礼包进行签到 https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
-        ),
         "22.9 心悦充值": (
             "心悦出了个充值活动，在页面充值50/300/500元，可以领取一些小奖励，如果充点券来买国庆套的话，可以看看这个活动。\n"
             "因为这个活动用了套新东西，但是实际上只有那三个充值的奖励还可以，其他的基本可以忽略，所以本次就不加入了-。-请自行参与，链接如下：\n"
@@ -1464,6 +1459,11 @@ def show_tips(cfg: Config):
             "斗鱼和虎牙活动请自行完成\n"
             "斗鱼：https://www.douyu.com/topic/jqjt?rid=5324055\n"
             "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
+        ),
+        "22.9 colg模拟器签到": (
+            "colg模拟器签到活动开放了第三期，签到15天可以领取一个随机灿烂，有兴趣可自行参与\n"
+            "第一步：在模拟器页面使用模拟器 https://bbs.colg.cn/colg_activity_new-simulator.html/index\n"
+            "第二步：点击右侧礼包按钮，领取每日礼包进行签到 https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
         ),
     }
 

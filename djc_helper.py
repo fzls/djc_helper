@@ -7711,24 +7711,22 @@ class DjcHelper:
 
         @try_except()
         def steal_friend_rice(points: int, friend_detail_list: list[MyHomeFriendDetail]):
-            logger.info("去小号的菜地里看看是否可以偷水稻")
+            logger.info("去好友的菜地里看看是否可以偷水稻，目前仅偷下列两种\n1. 小号\n2. 没有开满8个田地的，确保不会影响到正常参与的好友")
 
             myhome_steal_xiaohao_qq_list = self.cfg.myhome_steal_xiaohao_qq_list
 
             for detail in friend_detail_list:
-                qq = detail.get_qq()
-                if qq not in myhome_steal_xiaohao_qq_list:
-                    continue
-
-                farm_dict = query_friend_farm_dict(qq, detail.info.sUin)
-
-                for index, farm_info in farm_dict.items():
+                for index, farm_info in detail.farm_dict.items():
                     if not farm_info.is_mature():
                         # 未成熟，尝试浇水，方便多偷一次
                         # 规则：6）单账号每日最多可采摘好友水稻3+1次（其中3次每日自动获得，剩下1次通过当日给好友水稻浇水获得），次数与账号绑定；
                         if points >= 10:
-                            self.dnf_my_home_op(f"尝试帮 小号({qq}) 浇水，从而增加一次偷水稻的机会", "145467", sRice=farm_info.sFarmland)
+                            self.dnf_my_home_op(f"尝试帮 好友({detail.info.description()}) 浇水，从而增加一次偷水稻的机会", "145467", sRice=farm_info.sFarmland)
                     else:
+                        # 仅尝试偷自己的小号或者未开满八块地的好友
+                        if detail.get_qq() not in myhome_steal_xiaohao_qq_list or len(detail.farm_dict) < 8:
+                            continue
+
                         # 已成熟，如果还能被偷，就尝试偷一下
                         if int(farm_info.iNum) >= 6:
                             self.dnf_my_home_op(f"尝试偷 好友({detail.info.description()}) 的水稻", "145489", fieldId=index, sRice=farm_info.sFarmland)
@@ -7826,13 +7824,12 @@ class DjcHelper:
 
             return parse_farm_dict(res)
 
-        def query_friend_farm_dict(qq:str,  suin: str) -> dict[str, MyHomeFarmInfo]:
-            res = self.dnf_my_home_op(f"查询好友 {qq} 的农田", "149975", sUin=suin, print_res=False)
+        def query_friend_farm_dict(friend: str, suin: str) -> dict[str, MyHomeFarmInfo]:
+            res = self.dnf_my_home_op(f"查询好友 {friend} 的农田", "149975", sUin=suin, print_res=False)
 
             return parse_farm_dict(res)
 
-
-        def parse_farm_dict(raw_res: dict) ->  dict[str, MyHomeFarmInfo]:
+        def parse_farm_dict(raw_res: dict) -> dict[str, MyHomeFarmInfo]:
             data = raw_res["jData"]["list"]
 
             # 在低于8个田时，返回的是dict，满了的时候是list，所以这里需要特殊处理下

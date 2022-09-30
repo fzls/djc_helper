@@ -8940,13 +8940,13 @@ class DjcHelper:
             return int(key_count), int(lottery_count)
 
         def query_open_box_times():
-            return -1, query_counts()[0]
+            return -1, query_counts()[1]
 
             # res = self.dnf_wegame_op("查询开盒子次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "469")
 
         def query_daily_lottery_times():
-            return -1, query_counts()[1]
+            return -1, query_counts()[0]
 
             # res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "470")

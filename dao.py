@@ -1885,6 +1885,11 @@ class MyHomeFarmInfo(ConfigInterface):
 
         return now_unix_mills >= self.dtMatureTime
 
+    def mature_time(self) -> str:
+        from util import format_timestamp
+
+        return format_timestamp(self.dtMatureTime / 1000)
+
 
 class MyHomeGiftList(ConfigInterface):
     def __init__(self):

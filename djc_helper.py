@@ -7882,10 +7882,9 @@ class DjcHelper:
                 continue
             fData = farm_dict[id]
 
-            mature = fData.is_mature()
-            logger.info(f"第 {iFarmland} 块田地是否已成熟: {mature}")
+            logger.info(f"第 {iFarmland} 块田地成熟时间为 {fData.mature_time()} （是否已成熟: {fData.is_mature()}）")
 
-            if not mature:
+            if not fData.is_mature():
                 # 如果所有田地都已经解锁，此时积分只能用来浇水了
                 if len(farm_dict) >= MAX_FARM_FIELD_COUNT and points >= 10:
                     self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)

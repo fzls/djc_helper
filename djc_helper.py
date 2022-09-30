@@ -7689,11 +7689,13 @@ class DjcHelper:
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
                 for friend_info in friend_list.list:
                     friend_gifts = query_friend_gift_info(friend_info.sUin)
+                    farm_dict = query_friend_farm_dict(friend_info.description(), friend_info.sUin)
 
                     detail = MyHomeFriendDetail()
                     detail.page = friend_page
                     detail.info = friend_info
                     detail.gifts = friend_gifts
+                    detail.farm_dict = farm_dict
 
                     friend_detail_list.append(detail)
 

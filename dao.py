@@ -1970,6 +1970,7 @@ class MyHomeFriendDetail(ConfigInterface):
         self.page = 1
         self.info = MyHomeFriendInfo()
         self.gifts: list[MyHomeGift] = []
+        self.farm_dict: dict[str, MyHomeFarmInfo] = {}
 
     def get_qq(self) -> str:
         if len(self.gifts) == 0:

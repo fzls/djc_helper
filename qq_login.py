@@ -9,7 +9,6 @@ import shutil
 import threading
 import time
 from collections import Counter
-from typing import Dict, Optional
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
@@ -174,7 +173,7 @@ class QQLogin:
 
     def __init__(self, common_config, window_index=1):
         self.cfg: CommonConfig = common_config
-        self.driver: Optional[WebDriver] = None
+        self.driver: WebDriver | None = None
         self.window_title = ""
         self.time_start_login = datetime.datetime.now()
 
@@ -204,7 +203,7 @@ class QQLogin:
 
         self.cookies = self.driver.get_cookies()
 
-    def prepare_chrome_windows(self, caps: Dict[str, str], login_type: str, login_url: str):
+    def prepare_chrome_windows(self, caps: dict[str, str], login_type: str, login_url: str):
         inited = False
         try:
             if not self.cfg.force_use_portable_chrome:
@@ -275,7 +274,7 @@ class QQLogin:
             )
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
-    def prepare_chrome_linux(self, caps: Dict[str, str], login_type: str, login_url: str):
+    def prepare_chrome_linux(self, caps: dict[str, str], login_type: str, login_url: str):
         # linux下只尝试使用系统安装的chrome
         options = Options()
         options.binary_location = self.chrome_binary_location_linux()
@@ -1415,7 +1414,7 @@ class QQLogin:
         logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
         self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
 
-        vuserid, = self._wait_for_cookies("vuserid")
+        (vuserid,) = self._wait_for_cookies("vuserid")
         self.add_cookie("vuserid", vuserid)
 
     def fetch_apps_p_skey(self):
@@ -1423,7 +1422,7 @@ class QQLogin:
         self.driver.get("https://apps.game.qq.com/")
         time.sleep(1)
 
-        p_skey, = self._wait_for_cookies("p_skey")
+        (p_skey,) = self._wait_for_cookies("p_skey")
         self.add_cookie("apps_p_skey", p_skey)
 
     def fetch_xinyue_openid_access_token(self):
@@ -1436,7 +1435,7 @@ class QQLogin:
         self.add_cookie("xinyue_access_token", access_token)
 
     def wait_for_IED_LOG_INFO2_QC(self):
-        userinfo, = self._wait_for_cookies("uInfo101478239")
+        (userinfo,) = self._wait_for_cookies("uInfo101478239")
 
     def fetch_iwan_openid_access_token(self):
         logger.info(f"{self.name} 获取爱玩的openid和access_token，用于腾讯视频蚊子腿相关操作")

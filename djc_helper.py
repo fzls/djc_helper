@@ -2896,7 +2896,6 @@ class DjcHelper:
             ("外围用户完成每日任务2", "890923"),
             ("外围用户完成每日任务3", "890935"),
             ("外围用户完成每日任务4", "890936"),
-
             # 累计任务
             ("核心累计进行属性成长/传送/转移10次", "891112"),
             ("核心累计通关任意难度高级地下城3次", "891113"),
@@ -2915,9 +2914,7 @@ class DjcHelper:
             self.dnf_maoxian_road_op(task_name, flowid)
 
         _, ticket = query_info()
-        logger.info(
-            color("bold_green") + f"{self.cfg.name} 冒险家之路 当前图章={ticket}"
-        )
+        logger.info(color("bold_green") + f"{self.cfg.name} 冒险家之路 当前图章={ticket}")
 
         awards = [
             ("兑换5—装备提升礼盒—3图章（限2次）", "891293", 5),
@@ -2926,7 +2923,6 @@ class DjcHelper:
             ("兑换6—装备品级调整箱礼盒—3图章（限3次）", "891293", 6),
             # ("兑换3—华丽的徽章神秘礼盒—15图章（限2次）", "891293", 3),
             # ("兑换4—王者契约（1天）—10图章（限2次）", "891293", 4),
-
             ("兑换1—一次性材质转换器—3图章", "891388", 1),
             # ("兑换2—一次性继承装置—2图章", "891388", 2),
             # ("兑换3—黑钻会员1天—2图章", "891388", 3),
@@ -7721,7 +7717,11 @@ class DjcHelper:
                         # 未成熟，尝试浇水，方便多偷一次
                         # 规则：6）单账号每日最多可采摘好友水稻3+1次（其中3次每日自动获得，剩下1次通过当日给好友水稻浇水获得），次数与账号绑定；
                         if points >= 10:
-                            self.dnf_my_home_op(f"尝试帮 好友({detail.info.description()}) 浇水，从而增加一次偷水稻的机会", "145467", sRice=farm_info.sFarmland)
+                            self.dnf_my_home_op(
+                                f"尝试帮 好友({detail.info.description()}) 浇水，从而增加一次偷水稻的机会",
+                                "145467",
+                                sRice=farm_info.sFarmland,
+                            )
                     else:
                         # 仅尝试偷自己的小号或者未开满八块地的好友
                         if detail.get_qq() not in myhome_steal_xiaohao_qq_list or len(detail.farm_dict) < 8:
@@ -7729,7 +7729,12 @@ class DjcHelper:
 
                         # 已成熟，如果还能被偷，就尝试偷一下
                         if int(farm_info.iNum) >= 6:
-                            self.dnf_my_home_op(f"尝试偷 好友({detail.info.description()}) 的水稻", "145489", fieldId=index, sRice=farm_info.sFarmland)
+                            self.dnf_my_home_op(
+                                f"尝试偷 好友({detail.info.description()}) 的水稻",
+                                "145489",
+                                fieldId=index,
+                                sRice=farm_info.sFarmland,
+                            )
 
         def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
             if len(valuable_gifts) == 0:
@@ -10482,9 +10487,11 @@ class DjcHelper:
                 "partition_name": base64_str(roleinfo.serviceName),
                 "role_id": roleinfo.roleCode,
                 "role_name": base64_str(roleinfo.roleName),
-                "device": "pc"
+                "device": "pc",
             },
-            "data": "{\"ceiba_plat_id\":\"android\",\"user_attach\":\"{\\\"nickName\\\":\\\"" + qq + "\\\",\\\"avatar\\\":\\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\\"}\",\"cExtData\":{}}"
+            "data": '{"ceiba_plat_id":"android","user_attach":"{\\"nickName\\":\\"'
+            + qq
+            + '\\",\\"avatar\\":\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\"}","cExtData":{}}',
         }
 
         return self.post(

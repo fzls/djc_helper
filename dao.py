@@ -1964,6 +1964,9 @@ class MyHomeFriendInfo(ConfigInterface):
         self.dtCreateAt = "2022-09-26 19:35:04"
         self.sUin = "UjNWMGVkMGVVQlZZTnlrOVFHQ1MwZz09"
 
+    def description(self) -> str:
+        return f"{self.sNick}({self.iUin})"
+
 
 class MyHomeFriendDetail(ConfigInterface):
     def __init__(self):

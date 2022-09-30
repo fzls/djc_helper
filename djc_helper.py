@@ -7730,8 +7730,8 @@ class DjcHelper:
                             self.dnf_my_home_op(f"尝试帮 小号({qq}) 浇水，从而增加一次偷水稻的机会", "145467", sRice=farm_info.sFarmland)
                     else:
                         # 已成熟，如果还能被偷，就尝试偷一下
-                        if farm_info.iNum >= 6:
-                            self.dnf_my_home_op(f"尝试偷 小号({qq}) 的水稻", "145489", fieldId=index, sRice=farm_info.sFarmland)
+                        if int(farm_info.iNum) >= 6:
+                            self.dnf_my_home_op(f"尝试偷 好友({detail.info.description()}) 的水稻", "145489", fieldId=index, sRice=farm_info.sFarmland)
 
         def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
             if len(valuable_gifts) == 0:

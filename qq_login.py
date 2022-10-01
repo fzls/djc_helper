@@ -74,6 +74,8 @@ class LoginResult(ConfigInterface):
         qc_nickname="",
         iwan_openid="",
         iwan_access_token="",
+        common_openid="",
+        common_access_token="",
     ):
         super().__init__()
         # 使用炎炎夏日活动界面得到
@@ -100,6 +102,10 @@ class LoginResult(ConfigInterface):
         self.iwan_openid = iwan_openid
         self.iwan_access_token = iwan_access_token
 
+        # 后续需要登录特定网页获取的openid和access-token都放在这里
+        self.common_openid = common_openid
+        self.common_access_token = common_access_token
+
         self.guanjia_skey_version = 0
 
 
@@ -114,6 +120,7 @@ class QQLogin:
     login_mode_wegame = "wegame"
     login_mode_club_vip = "club_vip"
     login_mode_iwan = "iwan"
+    login_mode_supercore = "supercore"
 
     login_mode_to_description = {
         login_mode_normal: "普通",
@@ -123,6 +130,7 @@ class QQLogin:
         login_mode_wegame: "Wegame",
         login_mode_club_vip: "club.vip",
         login_mode_iwan: "爱玩",
+        login_mode_supercore: "超享玩",
     }
 
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
@@ -170,6 +178,11 @@ class QQLogin:
 
     default_window_width = 390
     default_window_height = 360
+
+    mobile_emulation_qq = {
+        "deviceMetrics": {"width": 420, "height": 780},
+        "userAgent": "Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440"
+    }
 
     def __init__(self, common_config, window_index=1):
         self.cfg: CommonConfig = common_config
@@ -329,6 +342,10 @@ class QQLogin:
         options.add_experimental_option(
             "prefs", {"credentials_enable_service": False, "profile": {"password_manager_enabled": False}}
         )
+
+        if self.login_mode == self.login_mode_supercore:
+            logger.info("当前是超享玩登录，将设置设备信息为手机qq，否则不能正常登录")
+            options.add_experimental_option("mobileEmulation", self.mobile_emulation_qq)
 
     def destroy_chrome(self):
         logger.info(f"{self.name} 释放chrome实例")
@@ -518,6 +535,8 @@ class QQLogin:
         :rtype: LoginResult
         """
         self.name = name
+        self.account = account
+        self.password = password
         self.window_title = f"将登录 {name}({account}) - {login_mode}"
         logger.info(f"{name} 即将开始自动登录，无需任何手动操作，等待其完成即可")
         logger.info(f"{name} 如果出现报错，可以尝试调高相关超时时间然后重新执行脚本")
@@ -566,6 +585,8 @@ class QQLogin:
         """
         logger.info("即将开始扫码登录，请在弹出的网页中扫码登录~")
         self.name = name
+        self.account = ""
+        self.password = ""
         self.window_title = f"请扫码 {name} - {login_mode}"
 
         def replace_qr_code_tip():
@@ -759,6 +780,11 @@ class QQLogin:
                     self._login_iwan,
                     "爱玩",
                     "https://iwan.qq.com/g/gift",
+                ),
+                self.login_mode_supercore: (
+                    self._login_supercore,
+                    "超享玩",
+                    "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
                 ),
             }[login_mode]
 
@@ -1015,6 +1041,102 @@ class QQLogin:
             iwan_access_token=self.get_cookie("vqq_access_token"),
         )
 
+    def _login_supercore(self, login_type, login_action_fn=None):
+        """
+        登录超享玩活动页面，获取需要的一些参数
+        :rtype: LoginResult
+        """
+        s_url = "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html"
+
+        def switch_to_login_frame_fn():
+            if self.need_reopen_url(login_type):
+                logger.info("打开活动界面")
+                self.open_url_on_start("https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html")
+
+            # 这里大小与设备信息中的一致
+            size = self.mobile_emulation_qq["deviceMetrics"]
+            self.set_window_size(size["width"], size["height"])
+
+            logger.info("等待登录按钮出来，确保加载完成")
+            id_login = "ptLoginBtn"
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                expected_conditions.element_to_be_clickable((By.ID, id_login))
+            )
+
+            logger.info("等待3秒，确保加载完成")
+            time.sleep(3)
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.ID, id_login).click()
+            time.sleep(3)
+
+        def assert_login_finished_fn():
+            logger.info(f"{self.name} 请等待网页切换为目标网页，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.url_contains(s_url)
+            )
+
+        # 超享玩这个页面必须使用手机QQ的user-agent才能登录，而这种情况下出现的登录框与以往的样式不同，且不能调整，因此这里需要自定义下
+        def login_with_account_and_password():
+            if self.account != "":
+                logger.info(color("bold_green") + f"{self.name} 开始账号密码登录")
+
+                # 输入账号
+                self.driver.find_element(By.ID, "u").clear()
+                self.driver.find_element(By.ID, "u").send_keys(self.account)
+                # 输入密码
+                self.driver.find_element(By.ID, "p").clear()
+                self.driver.find_element(By.ID, "p").send_keys(self.password)
+
+                logger.info(f"{self.name} 等待一会，确保登录键可以点击")
+                time.sleep(3)
+
+                # 发送登录请求
+                self.driver.find_element(By.ID, "go").click()
+
+                # 尝试自动处理验证码
+                self.try_auto_resolve_captcha()
+            else:
+                logger.info(color("bold_yellow") + f"{self.name} 当前设置的是扫码登录，但是这个 超享玩 活动只能输入账号密码登录，请手动完成登录")
+
+                @try_except()
+                def try_click_login_after_filled_in():
+                    start_time = time.time()
+                    max_wait_seconds = self.get_login_timeout(True)
+
+                    last_qq = ""
+                    last_password = ""
+
+                    while True:
+                        qq = self.driver.find_element(By.ID, "u").get_attribute("value")
+                        password = self.driver.find_element(By.ID, "p").get_attribute("value")
+
+                        if qq != "" and password != "" and qq == last_qq and password == last_password:
+                            logger.info("检测到qq没有发生变化，尝试帮点一下登录")
+                            self.driver.find_element(By.ID, "go").click()
+                            break
+
+                        # 如果超时了，也直接跳出
+                        if time.time() - start_time >= max_wait_seconds:
+                            logger.warning(f"已超过最大等待时长 {max_wait_seconds}秒，将不再尝试帮忙点击登录按钮")
+                            break
+
+                        last_qq = qq
+                        last_password = password
+                        time.sleep(2)
+
+                # 因为有时候这个不能点登录按钮，这里尝试帮忙点一下
+                try_click_login_after_filled_in()
+
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_with_account_and_password)
+
+        # 从cookie中获取openid
+        return LoginResult(
+            common_openid=self.get_cookie("openid"),
+            common_access_token=self.get_cookie("access_token"),
+        )
+
     def _login_guanjia(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
@@ -1241,8 +1363,12 @@ class QQLogin:
                     + f"[快速重试阶段] [{idx}/{quick_retry_max_count}] {self.name} 尝试等待登录按钮消失~ 最大等待 {wait_time} 秒, retry_timeouts={retry_timeouts}"
                 )
                 try:
+                    login_button_id = "login"
+                    if self.login_mode == self.login_mode_supercore:
+                        login_button_id = "go"
+
                     WebDriverWait(self.driver, wait_time).until(
-                        expected_conditions.invisibility_of_element_located((By.ID, "login"))
+                        expected_conditions.invisibility_of_element_located((By.ID, login_button_id))
                     )
                 except NoSuchWindowException:
                     logger.debug("这种情况好像不影响登录，可以无视")
@@ -1355,6 +1481,8 @@ class QQLogin:
             self.wait_for_IED_LOG_INFO2_QC()
         if self.login_mode in [self.login_mode_iwan]:
             self.fetch_iwan_openid_access_token()
+        if self.login_mode in [self.login_mode_supercore]:
+            self.wait_for_openid_access_token()
 
         self.print_cookie()
 
@@ -1440,6 +1568,10 @@ class QQLogin:
     def fetch_iwan_openid_access_token(self):
         logger.info(f"{self.name} 获取爱玩的openid和access_token，用于腾讯视频蚊子腿相关操作")
         openid, access_token = self._wait_for_cookies("vqq_openid", "vqq_access_token")
+
+    def wait_for_openid_access_token(self):
+        logger.info(f"{self.name} 等待openid和access_token出现")
+        self._wait_for_cookies("openid", "access_token")
 
     def _wait_for_cookies(self, *cookie_names: str, max_try: int = 5) -> list[dict | None]:
         values: list[dict | None] = []
@@ -1599,9 +1731,9 @@ class QQLogin:
         except (TimeoutException, NoSuchWindowException):
             logger.info(f"{self.name} 看上去没有出现验证码")
 
-    def set_window_size(self):
-        logger.info("浏览器设为1936x1056")
-        self.driver.set_window_size(1936, 1056)
+    def set_window_size(self, width: int=1936, height: int = 1056):
+        logger.info(f"浏览器设为 {width} * {height}")
+        self.driver.set_window_size(width, height)
 
     def add_cookies(self, cookies):
         to_add = []

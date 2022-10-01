@@ -731,7 +731,7 @@ class QQLogin:
                     self.get_login_url(21000127, 8, "https://dnf.qq.com/"),
                 ),
                 self.login_mode_xinyue: (
-                    self._login_xinyue_real,
+                    self._login_xinyue,
                     "心悦",
                     get_act_url("DNF地下城与勇士心悦特权专区"),
                 ),
@@ -756,7 +756,7 @@ class QQLogin:
                     self.get_login_url(8000212, 18, "https://club.vip.qq.com/qqvip/acts2021/dnf"),
                 ),
                 self.login_mode_iwan: (
-                    self._login_iwan_real,
+                    self._login_iwan,
                     "爱玩",
                     "https://iwan.qq.com/g/gift",
                 ),
@@ -936,7 +936,7 @@ class QQLogin:
             p_skey=self.get_cookie("p_skey"),
         )
 
-    def _login_iwan_real(self, login_type, login_action_fn=None):
+    def _login_iwan(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult
@@ -1103,7 +1103,7 @@ class QQLogin:
         # 从cookie中获取uin和skey
         return LoginResult(uin=self.get_cookie("uin"), skey=self.get_cookie("skey"), p_skey=self.get_cookie("p_skey"))
 
-    def _login_xinyue_real(self, login_type, login_action_fn=None):
+    def _login_xinyue(self, login_type, login_action_fn=None):
         """
         通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
         :rtype: LoginResult

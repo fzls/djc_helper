@@ -10453,10 +10453,14 @@ class DjcHelper:
             logger.warning("未启用领取超享玩功能，将跳过")
             return
 
-        # re: 下面两个openid需要增加登录这个活动页面来获取，可参考 爱玩 活动
-        openid = "TODO"
-        access_token = "TODO"
+        lr = self.fetch_supercore_login_info("获取超享玩所需的access_token")
+        self.super_core_set_openid_accesstoken(lr.common_openid, lr.common_access_token)
 
+        self.super_core_op("邀请函-发送邀约", 40968)
+
+        # re: 跑通后补齐后续活动流程
+
+    def super_core_set_openid_accesstoken(self, openid: str, access_token: str):
         self.super_core_extra_headers = {
             "t-account-type": "qc",
             "t-mode": "true",
@@ -10465,12 +10469,7 @@ class DjcHelper:
             "t-access-token": access_token,
         }
 
-        self.super_core_op("邀请函-发送邀约", 40968)
-
-        # re: 跑通后补齐后续活动流程
-
     def super_core_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
-
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
         qq = self.qq()
 
@@ -11329,6 +11328,26 @@ class DjcHelper:
             print_res=False,
         )
         return res["code"] != 10001
+
+    def fetch_supercore_login_info(self, ctx) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_supercore:
+            logger.warning(f"禁用了爱玩登录模式，将不会尝试更新爱玩 access_token: {ctx}")
+            return LoginResult()
+
+        def is_login_info_valid(lr: LoginResult) -> bool:
+            self.super_core_set_openid_accesstoken(lr.common_openid, lr.common_access_token)
+
+            # {"data": {}, "msg": "login status verification failed: access token check failed", "ret": 7001}
+            res = self.super_core_op(
+                "检测access token过期",
+                40968,
+                print_res=False,
+            )
+            return res["ret"] != 7001
+
+        return self.fetch_login_result(
+            ctx, QQLogin.login_mode_supercore, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
+        )
 
     def parse_condOutput(self, res: dict, cond_id: str) -> int:
         """

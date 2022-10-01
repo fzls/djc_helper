@@ -8,5 +8,15 @@
     "open_url": "",
     "expire_at": "2022-09-05 19:38:54",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "魔界人跳一跳半自动小工具分享",
+    "message": "前些天闲着无聊，抽空摸了个魔界人跳一跳的半自动小工具，分享出来给大家，可以简化获取到各关累计给的一年黑钻的难度，大家如果有需要可以自取哈哈\n",
+    "send_at": "2022-10-02 03:48:37",
+    "show_type": "once",
+    "open_url": "https://bbs.colg.cn/thread-8615377-1-1.html",
+    "expire_at": "2022-10-09 03:48:37",
+    "show_only_before_version": ""
   }
 ]

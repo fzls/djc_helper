@@ -7711,17 +7711,21 @@ class DjcHelper:
 
             myhome_steal_xiaohao_qq_list = self.cfg.myhome_steal_xiaohao_qq_list
 
+            water_reach_max = False
+
             for detail in friend_detail_list:
                 for index, farm_info in detail.farm_dict.items():
                     if not farm_info.is_mature():
                         # 未成熟，尝试浇水，方便多偷一次
                         # 规则：6）单账号每日最多可采摘好友水稻3+1次（其中3次每日自动获得，剩下1次通过当日给好友水稻浇水获得），次数与账号绑定；
-                        if points >= 10:
-                            self.dnf_my_home_op(
+                        if points >= 10 and not water_reach_max:
+                            res = self.dnf_my_home_op(
                                 f"尝试帮 好友({detail.info.description()}) 浇水，从而增加一次偷水稻的机会",
                                 "145467",
                                 sRice=farm_info.sFarmland,
                             )
+                            if res["ret"] == 10003:
+                                water_reach_max = True
                     else:
                         # 仅尝试偷自己的小号或者未开满八块地的好友
                         if detail.get_qq() not in myhome_steal_xiaohao_qq_list or len(detail.farm_dict) < 8:

@@ -10460,9 +10460,54 @@ class DjcHelper:
         lr = self.fetch_supercore_login_info("获取超享玩所需的access_token")
         self.super_core_set_openid_accesstoken(lr.common_openid, lr.common_access_token)
 
-        self.super_core_op("邀请函-发送邀约", 40968)
+        self.super_core_op("发送邀约", 40968)
+        self.super_core_op("领取邀请奖励", 40979)
 
-        # re: 跑通后补齐后续活动流程
+        self.super_core_op("解锁进阶战令", 40980)
+
+        return_user_flows = [
+            ("我要回归", 44198),
+            ("领取回归福利", 40973),
+            ("回归玩家解锁进阶战令", 40995),
+        ]
+        for name, flowid in return_user_flows:
+            self.super_core_op(name, flowid)
+            time.sleep(3)
+
+        self.super_core_op("每日签到（立即探索）", 40987)
+
+        sign_flows = {
+            "普通战令": [
+                (1, 40996),
+                (3, 41833),
+                (5, 41834),
+                (7, 41835),
+                (10, 41844),
+                (12, 41850),
+                (14, 41851),
+            ],
+            "进阶战令": [
+                (1, 40993),
+                (2, 41837),
+                (4, 41838),
+                (6, 41840),
+                (8, 41857),
+                (9, 41860),
+                (13, 41890),
+                (15, 41893),
+            ],
+        }
+        for bp_name, flow_configs in sign_flows.items():
+            for count, flowid in flow_configs:
+                res = self.super_core_op(f"尝试领取 {bp_name} 探索 {count} 次 奖励", flowid)
+                time.sleep(1)
+
+                if res["msg"] == "探索次数未满足":
+                    break
+
+        self.super_core_op("每充值100元获取一把冒险要是", 42322)
+        self.super_core_op("抽奖", 42468)
+
 
     def super_core_set_openid_accesstoken(self, openid: str, access_token: str):
         self.super_core_extra_headers = {

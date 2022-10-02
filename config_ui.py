@@ -2323,6 +2323,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("qq视频活动", "get_qq_video"),
             ("DNF冒险家之路", "get_dnf_maoxian_road"),
             ("幸运勇士", "get_dnf_lucky_user"),
+            ("超享玩", "get_super_core"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2385,6 +2386,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_disable_login_mode_xinyue = create_checkbox(cfg.disable_login_mode_xinyue)
         add_row(form_layout, "禁用 心悦 登录", self.checkbox_disable_login_mode_xinyue)
 
+        self.checkbox_disable_login_mode_supercore = create_checkbox(cfg.disable_login_mode_supercore)
+        add_row(form_layout, "禁用 超享玩 登录", self.checkbox_disable_login_mode_supercore)
+
         # ----------------------------------------------------------
         # 不同登录类型的活动开关
         for act_actegory, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
@@ -2408,6 +2412,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.disable_login_mode_iwan = self.checkbox_disable_login_mode_iwan.isChecked()
         cfg.disable_login_mode_guanjia = self.checkbox_disable_login_mode_guanjia.isChecked()
         cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
+        cfg.disable_login_mode_supercore = self.checkbox_disable_login_mode_supercore.isChecked()
 
         # 不同登录类型的活动开关
         for _, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():

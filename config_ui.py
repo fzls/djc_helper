@@ -591,8 +591,9 @@ class ConfigUi(QFrame):
 
         self.create_userinfo_tab(cfg)
         self.create_others_tab(cfg)
-        self.create_common_tab(cfg)
         self.create_majieluo_tab(cfg)
+        self.create_mo_jie_ren_tab(cfg)
+        self.create_common_tab(cfg)
         self.create_account_tabs(cfg)
 
         # 设置默认页
@@ -1176,6 +1177,10 @@ class ConfigUi(QFrame):
         self.majieluo = MajieluoConfigUi(cfg.common.majieluo, self)
         # self.tabs.addTab(self.majieluo, "马杰洛小工具")
 
+    def create_mo_jie_ren_tab(self, cfg: Config):
+        self.mo_jie_ren = MoJieRenTab()
+        self.tabs.addTab(self.mo_jie_ren, "跳一跳小工具")
+
     def create_account_tabs(self, cfg: Config):
         self.accounts: list[AccountConfigUi] = []
         for account in cfg.account_configs:
@@ -1705,6 +1710,25 @@ class MajieluoConfigUi(QFrame):
         djcHelper.get_bind_role_list()
 
         return djcHelper.query_invite_count()
+
+
+class MoJieRenTab(QFrame):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # 根据配置初始化ui
+        top_layout = QVBoxLayout()
+
+        btn_open_doc = create_pushbutton("查看跳一跳小工具文档", "Lime")
+        top_layout.addWidget(btn_open_doc)
+
+        btn_open_doc.clicked.connect(self.show_usage)
+
+        self.setLayout(make_scroll_layout(top_layout))
+
+    def show_usage(self):
+        webbrowser.open("https://bbs.colg.cn/thread-8615377-1-1.html")
+        report_click_event("mo_jie_ren_tool")
 
 
 class LoginConfigUi(QWidget):

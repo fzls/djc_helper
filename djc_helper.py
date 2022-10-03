@@ -7744,6 +7744,12 @@ class DjcHelper:
             if len(valuable_gifts) == 0:
                 return
 
+            # 按照折扣排序
+            def sort_by_discount(value_gift: MyHomeValueGift) -> int:
+                return int(value_gift.gift.discount)
+
+            valuable_gifts.sort(key=sort_by_discount)
+
             gift_desc_list = []
             for g in valuable_gifts:
                 gift_desc_list.append(

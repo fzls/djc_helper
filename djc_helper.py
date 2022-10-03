@@ -7712,6 +7712,7 @@ class DjcHelper:
             myhome_steal_xiaohao_qq_list = self.cfg.myhome_steal_xiaohao_qq_list
 
             water_reach_max = False
+            steal_reach_max = False
 
             for detail in friend_detail_list:
                 for index, farm_info in detail.farm_dict.items():
@@ -7732,13 +7733,15 @@ class DjcHelper:
                             continue
 
                         # 已成熟，如果还能被偷，就尝试偷一下
-                        if int(farm_info.iNum) >= 6:
-                            self.dnf_my_home_op(
+                        if int(farm_info.iNum) >= 6 and not steal_reach_max:
+                            res = self.dnf_my_home_op(
                                 f"尝试偷 好友({detail.info.description()}) 的水稻",
                                 "145489",
                                 fieldId=index,
                                 sRice=farm_info.sFarmland,
                             )
+                            if res["ret"] == 10003:
+                                steal_reach_max = True
 
         def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
             if len(valuable_gifts) == 0:

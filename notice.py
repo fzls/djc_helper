@@ -179,10 +179,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "魔界人跳一跳半自动小工具分享"
-    message = """前些天闲着无聊，抽空摸了个魔界人跳一跳的半自动小工具，分享出来给大家，可以简化获取到各关累计给的一年黑钻的难度，大家如果有需要可以自取哈哈
+    title = "超享玩活动说明"
+    message = """目前 超享玩 这个活动只能使用账号密码的方式来进行登录，如果觉得不放心，可以在 配置工具/账号配置/活动开关中 关闭 超享玩 活动即可
 """
-    open_url = "https://bbs.colg.cn/thread-8615377-1-1.html"
+    open_url = ""
     show_only_before_version = ""
 
     if title != "":

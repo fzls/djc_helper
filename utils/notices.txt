@@ -18,5 +18,15 @@
     "open_url": "https://bbs.colg.cn/thread-8615377-1-1.html",
     "expire_at": "2022-10-09 03:48:37",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "超享玩活动说明",
+    "message": "目前 超享玩 这个活动只能使用账号密码的方式来进行登录，如果觉得不放心，可以在 配置工具/账号配置/活动开关中 关闭 超享玩 活动即可\n",
+    "send_at": "2022-10-06 19:22:33",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-10-13 19:22:33",
+    "show_only_before_version": ""
   }
 ]

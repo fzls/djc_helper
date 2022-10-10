@@ -181,7 +181,7 @@ class QQLogin:
 
     mobile_emulation_qq = {
         "deviceMetrics": {"width": 420, "height": 780},
-        "userAgent": "Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440"
+        "userAgent": "Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440",
     }
 
     def __init__(self, common_config, window_index=1):
@@ -1051,7 +1051,9 @@ class QQLogin:
         def switch_to_login_frame_fn():
             if self.need_reopen_url(login_type):
                 logger.info("打开活动界面")
-                self.open_url_on_start("https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html")
+                self.open_url_on_start(
+                    "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html"
+                )
 
             # 这里大小与设备信息中的一致
             size = self.mobile_emulation_qq["deviceMetrics"]
@@ -1128,8 +1130,9 @@ class QQLogin:
                 # 因为有时候这个不能点登录按钮，这里尝试帮忙点一下
                 try_click_login_after_filled_in()
 
-
-        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_with_account_and_password)
+        self._login_common(
+            login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_with_account_and_password
+        )
 
         # 从cookie中获取openid
         return LoginResult(
@@ -1731,7 +1734,7 @@ class QQLogin:
         except (TimeoutException, NoSuchWindowException):
             logger.info(f"{self.name} 看上去没有出现验证码")
 
-    def set_window_size(self, width: int=1936, height: int = 1056):
+    def set_window_size(self, width: int = 1936, height: int = 1056):
         logger.info(f"浏览器设为 {width} * {height}")
         self.driver.set_window_size(width, height)
 

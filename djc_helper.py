@@ -10522,7 +10522,6 @@ class DjcHelper:
         self.super_core_op("每充值100元获取一把冒险要是", 42322)
         self.super_core_op("抽奖", 42468)
 
-
     def super_core_set_openid_accesstoken(self, openid: str, access_token: str):
         self.super_core_extra_headers = {
             "t-account-type": "qc",

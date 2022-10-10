@@ -2034,7 +2034,12 @@ class AccountConfigUi(QWidget):
         self.lineedit_myhome_steal_xiaohao_qq_list = create_lineedit(
             list_to_str(cfg.myhome_steal_xiaohao_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789"
         )
-        add_row(form_layout, "我的小屋偷水稻的小号qq列表，本qq会尝试去偷这些小号的水稻", self.lineedit_myhome_steal_xiaohao_qq_list)
+        add_row(form_layout, "我的小屋偷水稻的小号qq列表", self.lineedit_myhome_steal_xiaohao_qq_list)
+
+        self.lineedit_myhome_extra_wanted_gift_name_list = create_lineedit(
+            list_to_str(cfg.myhome_extra_wanted_gift_name_list), "填写奖励列表，使用英文逗号分开，示例：一次性材质转换器, 黑钻3天, 一次性继承装置"
+        )
+        add_row(form_layout, "我的小屋想要额外提示兑换的奖励名称列表", self.lineedit_myhome_extra_wanted_gift_name_list)
 
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(
             list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号"
@@ -2095,6 +2100,7 @@ class AccountConfigUi(QWidget):
         cfg.cannot_bind_dnf_v2 = self.checkbox_cannot_bind_dnf_v2.isChecked()
 
         cfg.myhome_steal_xiaohao_qq_list = str_to_list(self.lineedit_myhome_steal_xiaohao_qq_list.text())
+        cfg.myhome_extra_wanted_gift_name_list = str_to_list(self.lineedit_myhome_extra_wanted_gift_name_list.text())
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
         cfg.gonghui_rolename_huizhang = self.lineedit_gonghui_rolename_huizhang.text()
         cfg.gonghui_rolename_huiyuan = self.lineedit_gonghui_rolename_huiyuan.text()

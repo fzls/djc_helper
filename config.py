@@ -848,6 +848,8 @@ class AccountConfig(ConfigInterface):
         self.cannot_bind_dnf_v2 = False
         # 我的小屋偷水稻的小号qq列表，本qq会尝试去偷这些小号的水稻
         self.myhome_steal_xiaohao_qq_list: list[str] = []
+        # 我的小屋额外关注的奖励列表
+        self.myhome_extra_wanted_gift_name_list: list[str] = []
         # 漂流瓶每日邀请列表，最多可填8个（不会实际发消息）
         self.drift_send_qq_list: list[str] = []
         # dnf13周年邀请列表，最多可填3个（不会实际发消息）

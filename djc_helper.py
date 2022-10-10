@@ -7780,8 +7780,11 @@ class DjcHelper:
             page: int,
             s_uin: str,
         ):
-            if not gift.is_valuable_gift():
-                # 普通奖励
+            # 提示以下情况的奖励
+            # 1. 稀有奖励
+            # 2. 额外配置想要的的奖励
+            want = gift.is_valuable_gift() or gift.is_extra_wanted(self.cfg.myhome_extra_wanted_gift_name_list)
+            if not want:
                 return
 
             if int(gift.iUsedNum) >= int(gift.iTimes):
@@ -7793,11 +7796,12 @@ class DjcHelper:
                 f"可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
             )
 
-            # 增加上报下稀有小屋信息，活动快结束了，还没兑换的可能不会换了，改为新建一个帖子分享出去
-            increase_counter(
-                ga_category=f"小屋分享-v6-{gift.sPropName}",
-                name=f"{gift.format_discount()} {gift.price_after_discount()} {s_uin} ({gift.iUsedNum}/{gift.iTimes}) {owner} ",
-            )
+            if gift.is_valuable_gift():
+                # 增加上报下稀有小屋信息，活动快结束了，还没兑换的可能不会换了，改为新建一个帖子分享出去
+                increase_counter(
+                    ga_category=f"小屋分享-v6-{gift.sPropName}",
+                    name=f"{gift.format_discount()} {gift.price_after_discount()} {s_uin} ({gift.iUsedNum}/{gift.iTimes}) {owner} ",
+                )
 
             if current_points < gift.price_after_discount():
                 # 积分不够

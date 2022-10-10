@@ -1925,13 +1925,20 @@ class MyHomeGift(ConfigInterface):
         #   4. 原初职业白金徽章礼盒	1800 积分
         return price > 1000
 
+    def is_extra_wanted(self, extra_wanted_gift_name_list: list[str]) -> bool:
+        for gift_name in extra_wanted_gift_name_list:
+            if gift_name in self.sPropName:
+                return True
+
+        return False
+
     def price_after_discount(self) -> int:
         price_after_discount = int(int(self.iPoints) * int(self.discount) / 100)
 
         return price_after_discount
 
     def format_discount(self) -> str:
-        return f"{int(self.discount)//10}折"
+        return f"{int(self.discount) // 10}折"
 
 
 class MyHomeValueGift:

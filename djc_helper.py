@@ -7907,9 +7907,10 @@ class DjcHelper:
 
             if not fData.is_mature():
                 # 如果所有田地都已经解锁，此时积分只能用来浇水了
-                if len(farm_dict) >= MAX_FARM_FIELD_COUNT and points >= 10:
-                    logger.info(f"跳过尝试给第 {iFarmland} 个田里的水稻浇水，因为自己没必要浇水-。-每块田最多种30次，迟早用完，不如留着给好友浇水三次，可以多偷一次")
-                    # self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
+                if len(farm_dict) >= MAX_FARM_FIELD_COUNT and points >= 100:
+                    # 保留一定的积分用于给他人浇水，可以多偷一次
+                    logger.info(f"尝试给第 {iFarmland} 个田里的水稻浇水")
+                    self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
             else:
                 self.dnf_my_home_op(f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland)
 

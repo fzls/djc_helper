@@ -5,6 +5,7 @@ from datetime import datetime
 # 10折 1200 (0/1) 自己
 # 10折 1200 VDMzZFF1T0hKdTRjaEJRMkV0N2xiZz09 (0/3) 舞***影(15***33)
 
+
 def extract_discount(share_str: str) -> int:
     return int(share_str.split(" ")[0][:-1])
 
@@ -26,8 +27,8 @@ def extract_remaining_times(share_str: str) -> int:
 
 
 # 清洗并去重
-with open(".cached/my_home.csv", "r", encoding="utf-8") as f:
-    suin_to_share_str = {}
+with open(".cached/my_home.csv", encoding="utf-8") as f:
+    suin_to_share_str: dict[str, str] = {}
 
     f.readline()
     for line in f:
@@ -54,7 +55,7 @@ for s in suin_to_share_str.values():
 share_str_list.sort(key=lambda s: extract_price(s))
 
 # 统计各个折扣对应数目
-discount_to_count = Counter()
+discount_to_count: Counter = Counter()
 for s in reversed(share_str_list):
     discount = extract_discount(s)
     discount_to_count[discount] += 1

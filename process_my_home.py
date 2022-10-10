@@ -1,4 +1,13 @@
+from collections import Counter
+from datetime import datetime
+
+# 示例数据
+# 10折 1200 (0/1) 自己
 # 10折 1200 VDMzZFF1T0hKdTRjaEJRMkV0N2xiZz09 (0/3) 舞***影(15***33)
+
+def extract_discount(share_str: str) -> int:
+    return int(share_str.split(" ")[0][:-1])
+
 
 def extract_price(share_str: str) -> int:
     return int(share_str.split(" ")[1])
@@ -44,10 +53,23 @@ for s in suin_to_share_str.values():
     share_str_list.append(s)
 share_str_list.sort(key=lambda s: extract_price(s))
 
+# 统计各个折扣对应数目
+discount_to_count = Counter()
+for s in reversed(share_str_list):
+    discount = extract_discount(s)
+    discount_to_count[discount] += 1
+
 # 导出
-from datetime import datetime
 
 with open(".cached/my_home_processed.csv", "w", encoding="utf-8") as f:
-    f.write(f"{datetime.now()} 总计：{len(share_str_list)}个\n")
+    # 导出统计数据
+    f.write(f"{datetime.now()}\n")
+    f.write(f"总计: {len(share_str_list)}\n")
+    for discount in sorted(discount_to_count.keys()):
+        count = discount_to_count[discount]
+        f.write(f"{discount:2d} 折: {count}\n")
+    f.write("-----\n")
+
+    # 导出实际数据
     for share_str in share_str_list:
         f.write(share_str + "\n")

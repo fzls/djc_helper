@@ -662,11 +662,15 @@ class QQLogin:
         return self._login(self.login_type_qr_login, login_action_fn=login_with_qr_code, login_mode=login_mode)
 
     def wait_for_login_page_loaded(self):
-        logger.info(f"{self.name} 等待 登录框#switcher_plogin 加载完毕")
+        logger.info(f"{self.name} 等待页面加载")
         time.sleep(self.cfg.login.open_url_wait_time)
-        WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
-            expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
-        )
+
+        if self.login_type == self.login_type_auto_login:
+            # 仅自动登录模式需要检测窗口是否已经弹出来
+            logger.info(f"{self.name} 等待 登录框#switcher_plogin 加载完毕")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "switcher_plogin"))
+            )
 
     def try_auto_click_avatar(self, account: str, name: str, login_type: str) -> bool:
         # 检测功能开关
@@ -742,6 +746,7 @@ class QQLogin:
                 color("bold_green") + f"[慢速重试阶段] [{idx}/{self.login_slow_retry_max_count}] {self.name} 开始本轮登录流程"
             )
 
+            self.login_type = login_type
             self.login_mode = login_mode
 
             # note: 如果get_login_url的surl变更，代码中确认登录完成的地方也要一起改

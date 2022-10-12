@@ -7945,22 +7945,23 @@ class DjcHelper:
         # self.dnf_my_home_op("兑换商城道具", "145644")
         # self.dnf_my_home_op("兑换好友商城道具", "145665")
 
-        if use_by_myself():
-            # re: 最后五天的时候提醒自己建个帖子，开始共享尚未兑换的稀有道具，方便大家都换到自己想要的
-            #  往上搜索： 小屋分享- 可找到新的谷歌分析的关键词
-            now = get_now()
-            if act_endtime - datetime.timedelta(days=5) <= now <= act_endtime:
-                async_message_box(
-                    (
-                        "活动最后五天了，像之前一样：\n"
-                        "1. 发个帖子，介绍进入他人小屋的办法（在 进入小屋 的按钮上右键得到新的代码）\n"
-                        "2. 发个公告，提前更新文档时间，让大家自行取用\n"
-                        "2. 这几天每晚10点更新上次那个在线文档，共享上报的稀有道具\n"
-                    ),
-                    "（仅自己可见）参照之前例子，我的小屋发个共享帖子和公告",
-                    open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
-                    show_once_daily=True,
-                )
+        # 本期不是好友不能添加，所以这个没多大意义了-。-没必要发帖了
+        # if use_by_myself():
+        #     # re: 最后五天的时候提醒自己建个帖子，开始共享尚未兑换的稀有道具，方便大家都换到自己想要的
+        #     #  往上搜索： 小屋分享- 可找到新的谷歌分析的关键词
+        #     now = get_now()
+        #     if act_endtime - datetime.timedelta(days=5) <= now <= act_endtime:
+        #         async_message_box(
+        #             (
+        #                 "活动最后五天了，像之前一样：\n"
+        #                 "1. 发个帖子，介绍进入他人小屋的办法（在 进入小屋 的按钮上右键得到新的代码）\n"
+        #                 "2. 发个公告，提前更新文档时间，让大家自行取用\n"
+        #                 "2. 这几天每晚10点更新上次那个在线文档，共享上报的稀有道具\n"
+        #             ),
+        #             "（仅自己可见）参照之前例子，我的小屋发个共享帖子和公告",
+        #             open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
+        #             show_once_daily=True,
+        #         )
 
         # 抽天3
         res = self.dnf_my_home_op("幸运大奖抽奖", "146374")

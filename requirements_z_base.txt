@@ -1,5 +1,5 @@
 requests==2.28.1
-requests-toolbelt==0.9.1
+requests-toolbelt==0.10.0
 pycryptodome==3.15.0
 toml==0.10.2
 selenium==4.5.0

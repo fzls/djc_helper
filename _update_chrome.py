@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os.path
 import pathlib
@@ -11,6 +13,7 @@ from bs4 import BeautifulSoup
 from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from download import download_file
 from log import color, logger
+from update import version_to_version_int_list
 from upload_lanzouyun import Uploader
 from util import change_console_window_mode_async, make_sure_dir_exists, pause, remove_directory, remove_file
 
@@ -86,14 +89,20 @@ def create_portable_chrome():
 def get_latest_installed_chrome_version_directory() -> str:
     chrome_dir = os.path.expandvars("%PROGRAMFILES%/Google/Chrome/Application")
 
+    version_and_path_list: list[tuple[str, str]] = []
+
     for entry in pathlib.Path(chrome_dir).glob("*"):
         if not entry.is_dir():
             continue
 
         if re.match(r"\d+\.\d+\.\d+\.\d+", entry.name):
-            return str(entry)
+            version_and_path_list.append((entry.name, str(entry)))
 
-    raise FileNotFoundError("未找到最新安装的chrome目录")
+    if len(version_and_path_list) == 0:
+        raise FileNotFoundError("未找到最新安装的chrome目录")
+
+    version_and_path_list.sort(key=lambda vp: version_to_version_int_list(vp[0]), reverse=True)
+    return version_and_path_list[0][1]
 
 
 def download_chrome_installer():

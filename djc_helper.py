@@ -7793,7 +7793,7 @@ class DjcHelper:
 
             # 打印下有稀有奖励的好友的信息，方便分享给别人
             logger.info(
-                f"可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
+                f"第 {page} 页 可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
             )
 
             if gift.is_valuable_gift():

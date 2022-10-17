@@ -245,6 +245,8 @@ def main_wrapper():
 
     logger.info(color("bold_green") + f"已将工作目录设置为小助手所在目录：{dirpath}，之前为：{old_path}")
 
+    need_close_pool = True
+
     try:
         run_start_time = datetime.datetime.now()
         main()
@@ -270,13 +272,16 @@ def main_wrapper():
         # 按照分钟级别来统计使用时长
         total_minutes = int(total_used_time.total_seconds()) // 60
         increase_counter(ga_category="run_used_time_minutes", name=total_minutes)
+
+        need_close_pool = cfg.common.need_close_pool
     except Exception as e:
         show_unexpected_exception_message(e)
         # 如果在github action，则继续抛出异常
         if is_run_in_github_action():
             raise e
     finally:
-        close_pool()
+        if need_close_pool:
+            close_pool()
         # 暂停一下，方便看结果
         if not disable_pause_after_run() and not is_run_in_github_action():
             pause()

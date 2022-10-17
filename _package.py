@@ -89,6 +89,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             "buy_auto_updater_users.txt",
             "user_monthly_pay_info.txt",
             "notices.txt",
+            "notice_archived.txt",
             *list(path.name for path in pathlib.Path("utils").glob("chrome_portable_*")),
             "upx.exe",
         ],

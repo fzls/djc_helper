@@ -106,13 +106,15 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig)
 
 
 def main():
-    change_title("集卡特别版")
+    special_version_name = "集卡特别版"
+
+    change_title(special_version_name)
 
     # 最大化窗口
     logger.info("尝试调整窗口显示模式，打包exe可能会运行的比较慢")
     change_console_window_mode_async()
 
-    logger.warning(f"开始运行DNF蚊子腿小助手 集卡特别版，ver={now_version} {ver_time}，powered by {author}")
+    logger.warning(f"开始运行DNF蚊子腿小助手 {special_version_name}，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~")
 
     # 读取配置信息
@@ -126,7 +128,7 @@ def main():
 
     init_pool(cfg.get_pool_size())
 
-    change_title("集卡特别版", multiprocessing_pool_size=cfg.get_pool_size())
+    change_title(special_version_name, multiprocessing_pool_size=cfg.get_pool_size())
 
     show_multiprocessing_info(cfg)
 

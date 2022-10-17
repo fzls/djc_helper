@@ -159,6 +159,7 @@ from util import (
     now_in_range,
     padLeftRight,
     parse_time,
+    parse_url_param,
     pause,
     pause_and_exit,
     post_json_to_data,
@@ -2878,7 +2879,7 @@ class DjcHelper:
 
         is_lucky_user, _ = query_info()
         if not is_lucky_user:
-            logger.warning("为抽取到幸运资格，将跳过后续流程")
+            logger.warning("未抽取到幸运资格，将跳过后续流程")
             return
 
         # 完成任务
@@ -2931,7 +2932,7 @@ class DjcHelper:
             # ("兑换6—闪亮的雷米援助礼盒—1图章", "891388", 6),
         ]
         for award_name, flowid, exchangeId in awards:
-            res = self.dnf_maoxian_road_op(award_name, flowid, sChannel="vip", exchangeId=exchangeId)
+            res = self.dnf_maoxian_road_op(award_name, flowid, exchangeId=exchangeId)
             code = int(res["ret"])
             if code == 700:
                 logger.info("当前积分不足以兑换该奖励，将跳过尝试后续优先级更低的奖励")
@@ -2948,6 +2949,10 @@ class DjcHelper:
 
     def dnf_maoxian_road_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_maoxian_road
+
+        act_url = get_act_url("DNF冒险家之路")
+        sChannel = parse_url_param(act_url, "sChannel")
+
         return self.amesvr_request(
             ctx,
             "x6m5.ams.game.qq.com",
@@ -2956,8 +2961,9 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("DNF冒险家之路"),
+            act_url,
             **extra_params,
+            sChannel=sChannel,
         )
 
     # --------------------------------------------幸运勇士--------------------------------------------

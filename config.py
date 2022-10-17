@@ -1507,6 +1507,14 @@ class Config(ConfigInterface):
 
         return None
 
+    def get_enabled_account_count(self) -> int:
+        count = 0
+        for account_config in self.account_configs:
+            if account_config.is_enabled():
+                count += 1
+
+        return count
+
 
 g_config = Config()
 

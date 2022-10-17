@@ -275,10 +275,10 @@ def main_wrapper():
         if is_run_in_github_action():
             raise e
     finally:
-        close_pool()
         # 暂停一下，方便看结果
         if not disable_pause_after_run() and not is_run_in_github_action():
             pause()
+        close_pool()
 
 
 if __name__ == "__main__":

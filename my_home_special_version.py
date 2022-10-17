@@ -140,6 +140,6 @@ if __name__ == "__main__":
     except Exception as e:
         show_unexpected_exception_message(e)
     finally:
-        close_pool()
         # 暂停一下，方便看结果
         pause()
+        close_pool()

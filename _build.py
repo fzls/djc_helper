@@ -82,7 +82,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
         ("auto_updater.py", "auto_updater.exe", "", "utils", ["PyQt5"], []),
         # ("my_home_special_version.py", "DNF蚊子腿小助手_我的小屋特别版.exe", "utils/icons/my_home.ico", ".", ["PyQt5"], []),
     ]
-    
+
     # ark_icon = "utils/icons/ark_lottery_special_version.ico"
     # build_configs.append(
     #     ("ark_lottery_special_version.py", "DNF蚊子腿小助手_集卡特别版.exe", ark_icon, ".", ["PyQt5"], []),

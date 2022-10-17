@@ -12,7 +12,7 @@ from main_def import (
     show_lottery_status,
     show_multiprocessing_info,
 )
-from pool import close_pool, get_pool, init_pool, get_pool_size
+from pool import close_pool, get_pool, get_pool_size, init_pool
 from qq_login import QQLogin
 from util import change_console_window_mode_async, change_title, pause, show_unexpected_exception_message
 from version import author, now_version, ver_time

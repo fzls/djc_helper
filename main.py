@@ -154,9 +154,7 @@ def main():
     pool_size = cfg.get_pool_size()
     init_pool(pool_size)
 
-    change_title(
-        multiprocessing_pool_size=pool_size, enable_super_fast_mode=cfg.common.enable_super_fast_mode
-    )
+    change_title(multiprocessing_pool_size=pool_size, enable_super_fast_mode=cfg.common.enable_super_fast_mode)
 
     show_multiprocessing_info(cfg)
 

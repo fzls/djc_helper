@@ -7695,7 +7695,7 @@ class DjcHelper:
 
                     friend_detail_list.append(detail)
 
-                    time.sleep(0.1)
+                    time.sleep(0.5)
 
                 if friend_page >= int(friend_list.total):
                     # 已是最后一页

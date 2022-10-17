@@ -151,10 +151,11 @@ def main():
     else:
         logger.info("当前允许多个实例同时运行~")
 
-    init_pool(cfg.get_pool_size())
+    pool_size = cfg.get_pool_size()
+    init_pool(pool_size)
 
     change_title(
-        multiprocessing_pool_size=cfg.get_pool_size(), enable_super_fast_mode=cfg.common.enable_super_fast_mode
+        multiprocessing_pool_size=pool_size, enable_super_fast_mode=cfg.common.enable_super_fast_mode
     )
 
     show_multiprocessing_info(cfg)

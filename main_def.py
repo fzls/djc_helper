@@ -29,7 +29,7 @@ from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAcc
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
 from notice import NoticeManager
-from pool import get_pool, init_pool
+from pool import get_pool, get_pool_size, init_pool
 from qq_login import QQLogin
 from qzone_activity import QzoneActivity
 from server import get_pay_server_addr
@@ -229,7 +229,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
         and cfg.is_all_account_auto_login()
     ):
         # 并行登陆
-        logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
+        logger.info(color("bold_yellow") + f"已开启多进程模式({get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         get_pool().starmap(
             do_check_all_skey_and_pskey,
@@ -317,7 +317,7 @@ def auto_send_cards(cfg: Config):
     logger.info("拉取各账号的卡片数据中，请耐心等待...")
     account_data = []
     if cfg.common.enable_multiprocessing:
-        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行拉取数据~")
+        logger.info(f"已开启多进程模式({get_pool_size()})，将并行拉取数据~")
         for data in get_pool().starmap(
             query_account_ark_lottery_info,
             [
@@ -603,7 +603,7 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
     logger.warning("开始获取数据，请耐心等待~")
     rows = []
     if cfg.common.enable_multiprocessing:
-        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行拉取数据~")
+        logger.info(f"已开启多进程模式({get_pool_size()})，将并行拉取数据~")
         for row in get_pool().starmap(
             query_lottery_status,
             [
@@ -838,7 +838,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
     # 获取数据
     rows = []
     if cfg.common.enable_multiprocessing:
-        logger.warning(f"已开启多进程模式({cfg.get_pool_size()})，将开始并行拉取数据，请稍后")
+        logger.warning(f"已开启多进程模式({get_pool_size()})，将开始并行拉取数据，请稍后")
         for row in get_pool().starmap(
             get_account_status,
             [
@@ -1023,7 +1023,7 @@ def run(cfg: Config, user_buy_info: BuyInfo):
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
-        _show_head_line(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
+        _show_head_line(f"已开启多进程模式({get_pool_size()})，将并行运行~")
 
         if is_monthly_first_run("每月提醒：多进程模式可能漏奖励"):
             async_message_box(
@@ -1066,7 +1066,7 @@ PS2：在开启多进程模式的情况下，这个弹窗每月会弹出一次�
                 ],
             )
         else:
-            logger.info(color("bold_cyan") + f"已启用超快速模式，将使用{cfg.get_pool_size()}个进程并发运行各个账号的各个活动，日志将完全不可阅读~")
+            logger.info(color("bold_cyan") + f"已启用超快速模式，将使用{get_pool_size()}个进程并发运行各个账号的各个活动，日志将完全不可阅读~")
             activity_funcs_to_run = get_activity_funcs_to_run(cfg, user_buy_info)
             get_pool().starmap(
                 run_act,
@@ -1260,7 +1260,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
             monthly_pay_info = "按月付费已过期"
     change_title(
         monthly_pay_info=monthly_pay_info,
-        multiprocessing_pool_size=cfg.get_pool_size(),
+        multiprocessing_pool_size=get_pool_size(),
         enable_super_fast_mode=cfg.common.enable_super_fast_mode,
     )
 
@@ -2003,7 +2003,7 @@ def try_notify_new_pay_info(
 def show_multiprocessing_info(cfg: Config):
     msg = ""
     if cfg.common.enable_multiprocessing:
-        msg += f"当前已开启多进程模式，进程池大小为 {cfg.get_pool_size()}"
+        msg += f"当前已开启多进程模式，进程池大小为 {get_pool_size()}"
         if cfg.common.enable_super_fast_mode:
             msg += "\n\n超快速模式已开启，将并行运行各个账号的各个活动~"
         else:
@@ -2024,7 +2024,7 @@ def show_multiprocessing_info(cfg: Config):
     if cfg.common.enable_multiprocessing:
         increase_counter(ga_category="cpu_count", name=cpu_count())
         increase_counter(ga_category="raw_pool_size", name=cfg.common.multiprocessing_pool_size)
-        increase_counter(ga_category="final_pool_size", name=cfg.get_pool_size())
+        increase_counter(ga_category="final_pool_size", name=get_pool_size())
 
 
 def show_notices():

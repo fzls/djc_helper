@@ -4,13 +4,8 @@ from multiprocessing import freeze_support
 from config import AccountConfig, CommonConfig, config, load_config
 from djc_helper import DjcHelper
 from log import color, logger
-from main_def import (
-    _show_head_line,
-    check_proxy,
-    has_any_account_in_normal_run,
-    show_multiprocessing_info,
-)
-from pool import close_pool, get_pool, init_pool
+from main_def import _show_head_line, check_proxy, has_any_account_in_normal_run, show_multiprocessing_info
+from pool import close_pool, get_pool, get_pool_size, init_pool
 from qq_login import QQLogin
 from util import change_console_window_mode_async, change_title, pause, show_unexpected_exception_message
 from version import author, now_version, ver_time
@@ -24,7 +19,7 @@ def check_all_skey_and_pskey(cfg):
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
-        logger.info(color("bold_yellow") + f"已开启多进程模式({cfg.get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
+        logger.info(color("bold_yellow") + f"已开启多进程模式({get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
 
         get_pool().starmap(
             do_check_all_skey_and_pskey,
@@ -63,7 +58,7 @@ def run(cfg):
     start_time = datetime.datetime.now()
 
     if cfg.common.enable_multiprocessing:
-        logger.info(f"已开启多进程模式({cfg.get_pool_size()})，将并行运行~")
+        logger.info(f"已开启多进程模式({get_pool_size()})，将并行运行~")
         get_pool().starmap(
             do_run,
             [

@@ -7681,7 +7681,7 @@ class DjcHelper:
 
             return gifts.jData
 
-        def get_friend_detail_list() -> list[MyHomeFriendDetail]:
+        def get_friend_detail_list(query_farm_info=True) -> list[MyHomeFriendDetail]:
             friend_detail_list: list[MyHomeFriendDetail] = []
 
             logger.info("开始查询各个好友的具体信息，方便后续使用")
@@ -7690,14 +7690,12 @@ class DjcHelper:
                 friend_list = query_friend_list(friend_page)
                 logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
                 for friend_info in friend_list.list:
-                    friend_gifts = query_friend_gift_info(friend_info.sUin)
-                    farm_dict = query_friend_farm_dict(friend_info.description(), friend_info.sUin)
-
                     detail = MyHomeFriendDetail()
                     detail.page = friend_page
                     detail.info = friend_info
-                    detail.gifts = friend_gifts
-                    detail.farm_dict = farm_dict
+                    detail.gifts = query_friend_gift_info(friend_info.sUin)
+                    if query_farm_info:
+                        detail.farm_dict = query_friend_farm_dict(friend_info.description(), friend_info.sUin)
 
                     friend_detail_list.append(detail)
 
@@ -7881,7 +7879,7 @@ class DjcHelper:
             logger.info(color("bold_yellow") + "当前为小屋特别版本，将仅运行提示兑换部分")
 
             # 预先查询好友信息，方便后续使用
-            friend_detail_list = get_friend_detail_list()
+            friend_detail_list = get_friend_detail_list(query_farm_info=False)
 
             # 统计最新信息
             rice_count = self.my_home_query_rice()

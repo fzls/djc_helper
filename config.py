@@ -1224,8 +1224,6 @@ class CommonConfig(ConfigInterface):
         self.enable_multiprocessing = True
         # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。
         self.enable_super_fast_mode = True
-        # 是否运行完毕时关闭进程池（如果发现在这一步的时候wegame双开会失败，可以尝试关闭这个开关）
-        self.need_close_pool = True
         # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
         self.multiprocessing_pool_size = -1
         # 是否启用多进程登录功能，如果分不清哪个号在登录，请关闭该选项

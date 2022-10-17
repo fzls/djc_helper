@@ -1364,9 +1364,6 @@ class CommonConfigUi(QFrame):
         self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
         add_row(form_layout, "是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
 
-        self.checkbox_need_close_pool = create_checkbox(cfg.need_close_pool)
-        add_row(form_layout, "是否运行完毕时关闭进程池（如果发现在这一步的时候wegame双开会失败，可以尝试关闭这个开关）", self.checkbox_need_close_pool)
-
         self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
         add_row(form_layout, "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)", self.spinbox_multiprocessing_pool_size)
 
@@ -1469,7 +1466,6 @@ class CommonConfigUi(QFrame):
         cfg.enable_min_console = self.checkbox_enable_min_console.isChecked()
         cfg.enable_multiprocessing = self.checkbox_enable_multiprocessing.isChecked()
         cfg.enable_super_fast_mode = self.checkbox_enable_super_fast_mode.isChecked()
-        cfg.need_close_pool = self.checkbox_need_close_pool.isChecked()
         cfg.enable_multiprocessing_login = self.checkbox_enable_multiprocessing_login.isChecked()
         cfg.multiprocessing_pool_size = self.spinbox_multiprocessing_pool_size.value()
         cfg.check_update_on_start = self.checkbox_check_update_on_start.isChecked()

@@ -7650,7 +7650,7 @@ class DjcHelper:
 
     # --------------------------------------------我的小屋--------------------------------------------
     @try_except()
-    def dnf_my_home(self):
+    def dnf_my_home(self, run_notify_only: bool = False):
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("我的小屋")
         self.show_not_ams_act_info("我的小屋")
@@ -7875,6 +7875,21 @@ class DjcHelper:
         info = self.my_home_query_info()
         if int(info.isUser) != 1:
             self.dnf_my_home_op("开通农场", "145251")
+
+        if run_notify_only:
+            # 供特别版本使用的特殊流程
+            logger.info(color("bold_yellow") + "当前为小屋特别版本，将仅运行提示兑换部分")
+
+            # 预先查询好友信息，方便后续使用
+            friend_detail_list = get_friend_detail_list()
+
+            # 统计最新信息
+            rice_count = self.my_home_query_rice()
+            logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
+
+            # 提示兑换道具
+            notify_exchange_valuable_gift(rice_count, friend_detail_list)
+            return
 
         # 每日任务
         tasks = [

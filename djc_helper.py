@@ -7695,7 +7695,7 @@ class DjcHelper:
 
                     friend_detail_list.append(detail)
 
-                    time.sleep(0.5)
+                    time.sleep(0.1)
 
                 if friend_page >= int(friend_list.total):
                     # 已是最后一页
@@ -11632,4 +11632,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.super_core()
+        djcHelper.dnf_my_home()

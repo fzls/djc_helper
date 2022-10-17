@@ -126,9 +126,10 @@ def main():
 
     check_proxy(cfg)
 
-    init_pool(cfg.get_pool_size())
+    pool_size = len(cfg.account_configs) if cfg.common.enable_multiprocessing else 0
+    init_pool(pool_size)
 
-    change_title(special_version_name, multiprocessing_pool_size=cfg.get_pool_size())
+    change_title(special_version_name, multiprocessing_pool_size=pool_size)
 
     show_multiprocessing_info(cfg)
 

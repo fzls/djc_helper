@@ -179,8 +179,9 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "超享玩活动说明"
-    message = """目前 超享玩 这个活动只能使用账号密码的方式来进行登录，如果觉得不放心，可以在 配置工具/账号配置/活动开关中 关闭 超享玩 活动即可
+    title = "我的庄园活动"
+    message = """这次的庄园活动与上次小屋活动不同，只能去 好友 的商店，所以不能像上次那样大家共享各自的稀有道具，各取所需了
+因此，有需要的朋友们，请自行在各种论坛（如colg）或者qq群里互换奖励吧
 """
     open_url = ""
     show_only_before_version = ""

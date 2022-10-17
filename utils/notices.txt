@@ -28,5 +28,15 @@
     "open_url": "",
     "expire_at": "2022-10-13 19:22:33",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "我的庄园活动",
+    "message": "这次的庄园活动与上次小屋活动不同，只能去 好友 的商店，所以不能像上次那样大家共享各自的稀有道具，各取所需了\n因此，有需要的朋友们，请自行在各种论坛（如colg）或者qq群里互换奖励吧\n",
+    "send_at": "2022-10-17 10:11:33",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2022-10-24 10:11:33",
+    "show_only_before_version": ""
   }
 ]

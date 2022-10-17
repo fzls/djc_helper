@@ -1295,18 +1295,23 @@ def get_meaningful_call_point_for_log() -> str:
     获取实际有意义的调用处，比如这个日志是在通用的回包处记录的，默认会打印回包的地方，但我们实际感兴趣的是外部调用这个请求的地方
     """
     # 获取除自身外的其他调用处
-    stack_except_this = inspect.stack()[1:]
+    caller_frame = inspect.currentframe().f_back
 
-    for caller_info in stack_except_this:
-        if (
+    while caller_frame:
+        # 这里的context表示读取对应源码附近的行数，填0可以开销小一些，速度更快
+        caller_info = inspect.getframeinfo(caller_frame, context=0)
+
+        # 判断是否是有意义的调用处
+        is_meaningful = not (
             caller_info.function in ignore_caller_names
             or startswith_any(caller_info.function, ignore_prefixes)
             or endswith_any(caller_info.function, ignore_suffixes)
-        ):
-            continue
+        )
+        if is_meaningful:
+            call_at = f"{caller_info.function}:{caller_info.lineno} "
+            return call_at
 
-        call_at = f"{caller_info.function}:{caller_info.lineno} "
-        return call_at
+        caller_frame = caller_frame.f_back
 
     return ""
 

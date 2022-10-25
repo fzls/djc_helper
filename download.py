@@ -149,10 +149,6 @@ def download_latest_github_release(
         f"https://github.91chi.fun/https://github.com/{release_file_path}",
     ])
 
-    if not TEST_SPEED_MODE:
-        # 随机乱序，确保均匀分布请求
-        random.shuffle(urls)
-
     # 最后加入几个慢的镜像和源站
     extend_urls(urls, [
         # timeout
@@ -247,10 +243,6 @@ def download_github_raw_content(
         # 836.5KiB/s
         f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ])
-
-    if not TEST_SPEED_MODE:
-        # 随机乱序，确保均匀分布请求
-        random.shuffle(urls)
 
     # 然后加入几个慢的镜像和源站
     extend_urls(urls, [

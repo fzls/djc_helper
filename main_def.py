@@ -1597,18 +1597,20 @@ def try_auto_update(cfg):
         logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
         for idx in range_from_one(3):
             dlc_path = auto_updater_path()
+            cmd_args = [
+                dlc_path,
+                "--pid",
+                str(pid),
+                "--version",
+                str(now_version),
+                "--cwd",
+                dirpath,
+                "--exe_name",
+                filename,
+            ]
+            logger.debug("dlc指令为" + " ".join(cmd_args))
             p = subprocess.Popen(
-                [
-                    dlc_path,
-                    "--pid",
-                    str(pid),
-                    "--version",
-                    str(now_version),
-                    "--cwd",
-                    dirpath,
-                    "--exe_name",
-                    filename,
-                ],
+                cmd_args,
                 cwd="utils",
                 shell=True,
                 creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS,

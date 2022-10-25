@@ -163,7 +163,14 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
-    # 先尝试从github页面来解析更新信息
+    # 尝试通过raw文件来解析更新信息
+    try:
+        return get_update_info_by_download_raw_file()
+    except Exception as e:
+        logger.warning("尝试下载raw文件来解析更新信息失败")
+        logger.debug("具体信息", exc_info=e)
+
+    # 尝试从github页面来解析更新信息
     changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
     readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
     try:
@@ -171,14 +178,6 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
     except Exception as e:
         # 尝试使用镜像来访问
         logger.warning(f"使用 {changelog_page} 获取更新信息失败 错误={e}")
-        logger.debug("具体信息", exc_info=e)
-
-    # 再尝试通过raw文件来解析更新信息
-    logger.info("改用raw文件解析更新信息")
-    try:
-        return get_update_info_by_download_raw_file()
-    except Exception as e:
-        logger.warning("尝试下载raw文件来解析更新信息失败")
         logger.debug("具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")

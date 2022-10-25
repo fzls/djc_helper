@@ -230,18 +230,10 @@ def download_github_raw_content(
 
     # 先加入比较快的几个镜像
     extend_urls(urls, [
-        # 1023.6KiB/s
-        f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 279.9KiB/s
-        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 257.2KiB/s
-        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         # 144.4KiB/s
         f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         # 154.4KiB/s
         f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 836.5KiB/s
-        f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ])
 
     # 然后加入几个慢的镜像和源站
@@ -260,11 +252,23 @@ def download_github_raw_content(
         f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
     ])
 
+    # 再加入可能已失效的镜像
+    extend_urls(urls, [
+        # 1023.6KiB/s
+        f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 279.9KiB/s
+        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 257.2KiB/s
+        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 836.5KiB/s
+        f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+    ])
+
     # 再加入缓存过时内容的镜像，作为最后备选
     extend_urls(urls, [
         # 448.1KiB/s
         f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 54.6KiB/s
+        # 483.0KiB/s
         f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ])
 

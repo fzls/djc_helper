@@ -135,45 +135,54 @@ def download_latest_github_release(
 
     # note: 手动测试下载速度时，使用 IDM / 迅雷 等测试，不要直接用chrome测试，速度差很多
 
-    urls = []
+    urls: list[str] = []
 
     # 先加入比较快的几个镜像
-    extend_urls(urls, [
-        # 19.3MiB/s
-        f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-        # 7.9MiB/s
-        f"https://ghproxy.com/https://github.com/{release_file_path}",
-        # 15.9MiB/s
-        f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-        # 15.7MiB/s
-        f"https://github.91chi.fun/https://github.com/{release_file_path}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 19.3MiB/s
+            f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
+            # 7.9MiB/s
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # 15.9MiB/s
+            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # 15.7MiB/s
+            f"https://github.91chi.fun/https://github.com/{release_file_path}",
+        ],
+    )
 
     # 最后加入几个慢的镜像和源站
-    extend_urls(urls, [
-        # timeout
-        f"https://github.com/{release_file_path}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # timeout
+            f"https://github.com/{release_file_path}",
+        ],
+    )
 
     # 再保底放入一些可能失效的镜像
-    extend_urls(urls, [
-        # 19.1MiB/s
-        f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-        # 19.0MiB/s
-        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-        # 17.6MiB/s
-        f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-        # 15.9MiB/s
-        f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
-        # 12.7MiB/s
-        f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
-        # 11.0MiB/s
-        f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-        # 980.7KiB/s
-        f"https://download.fastgit.org/{release_file_path}",
-        # 54.2KiB/s
-        f"https://kgithub.com/{release_file_path}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 19.1MiB/s
+            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # 19.0MiB/s
+            f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+            # 17.6MiB/s
+            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+            # 15.9MiB/s
+            f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
+            # 12.7MiB/s
+            f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
+            # 11.0MiB/s
+            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+            # 980.7KiB/s
+            f"https://download.fastgit.org/{release_file_path}",
+            # 54.2KiB/s
+            f"https://kgithub.com/{release_file_path}",
+        ],
+    )
 
     if TEST_SPEED_MODE:
         logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")
@@ -226,51 +235,66 @@ def download_github_raw_content(
     if TEST_SPEED_MODE:
         logger.warning("当前为测速模式，将禁用洗牌流程，并依次尝试各个镜像，从而进行对比")
 
-    urls = []
+    urls: list[str] = []
 
     # 先加入比较快的几个镜像
-    extend_urls(urls, [
-        # 144.4KiB/s
-        f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 154.4KiB/s
-        f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 144.4KiB/s
+            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 154.4KiB/s
+            f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        ],
+    )
 
     # 然后加入几个慢的镜像和源站
-    extend_urls(urls, [
-        # 130.3KiB/s
-        f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 48.6KiB/s
-        f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 52.1KiB/s
-        f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 130.3KiB/s
+            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 48.6KiB/s
+            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 52.1KiB/s
+            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        ],
+    )
 
     # 再加入原始地址、一些不可达的
-    extend_urls(urls, [
-        # timeout or 69.4KiB/s
-        f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # timeout or 69.4KiB/s
+            f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
+        ],
+    )
 
     # 再加入可能已失效的镜像
-    extend_urls(urls, [
-        # 1023.6KiB/s
-        f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 279.9KiB/s
-        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 257.2KiB/s
-        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 836.5KiB/s
-        f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 1023.6KiB/s
+            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 279.9KiB/s
+            f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 257.2KiB/s
+            f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 836.5KiB/s
+            f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        ],
+    )
 
     # 再加入缓存过时内容的镜像，作为最后备选
-    extend_urls(urls, [
-        # 448.1KiB/s
-        f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-        # 483.0KiB/s
-        f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-    ])
+    extend_urls(
+        urls,
+        [
+            # 448.1KiB/s
+            f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 483.0KiB/s
+            f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        ],
+    )
 
     if TEST_SPEED_MODE:
         logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")

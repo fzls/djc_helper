@@ -3,7 +3,6 @@ import random
 import re
 import webbrowser
 from datetime import datetime
-from typing import List, Tuple
 
 import requests
 

@@ -1248,14 +1248,6 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_start = True
         # 是否在程序结束时手动检查更新
         self.check_update_on_end = False
-        self.readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
-        self.changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
-        self.github_mirror_sites = [
-            "api.mtr.pub",
-            "gh.gcdn.mirr.one",
-            "hub.0z.gs",
-            "hub.fastgit.xyz",
-        ]
         # 自动更新dlc购买地址
         self.auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
         # 按月付费购买地址

@@ -163,16 +163,18 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
 
 # 获取最新版本号与下载网盘地址
 def get_update_info(config: CommonConfig) -> UpdateInfo:
-    # 先尝试从github以及镜像网站的页面来解析更新信息
-    for changelog_page, readme_page in get_urls_and_mirrors(config):
-        try:
-            return _get_update_info(changelog_page, readme_page)
-        except Exception as e:
-            # 尝试使用镜像来访问
-            logger.warning(f"使用 {changelog_page} 获取更新信息失败，尝试下一个镜像~ 错误={e}")
-            logger.debug("具体信息", exc_info=e)
+    # 先尝试从github页面来解析更新信息
+    changelog_page = "https://github.com/fzls/djc_helper/blob/master/CHANGELOG.MD"
+    readme_page = "https://github.com/fzls/djc_helper/blob/master/README.MD"
+    try:
+        return _get_update_info(changelog_page, readme_page)
+    except Exception as e:
+        # 尝试使用镜像来访问
+        logger.warning(f"使用 {changelog_page} 获取更新信息失败 错误={e}")
+        logger.debug("具体信息", exc_info=e)
 
     # 再尝试通过raw文件来解析更新信息
+    logger.info("改用raw文件解析更新信息")
     try:
         return get_update_info_by_download_raw_file()
     except Exception as e:
@@ -180,31 +182,6 @@ def get_update_info(config: CommonConfig) -> UpdateInfo:
         logger.debug("具体信息", exc_info=e)
 
     raise Exception("无法获取更新信息")
-
-
-def get_urls_and_mirrors(config: CommonConfig) -> List[Tuple[str, str]]:
-    urls = []
-
-    # 先尝试镜像站
-    for mirror_site in config.github_mirror_sites:
-        urls.append(
-            (
-                get_mirror(config.changelog_page, mirror_site),
-                get_mirror(config.readme_page, mirror_site),
-            )
-        )
-
-    # 镜像站随机顺序
-    random.shuffle(urls)
-
-    # 最后尝试源站
-    urls.append((config.changelog_page, config.readme_page))
-
-    return urls
-
-
-def get_mirror(original_url: str, github_mirror_site: str):
-    return original_url.replace("github.com", github_mirror_site)
 
 
 def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:

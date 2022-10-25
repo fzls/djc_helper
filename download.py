@@ -143,6 +143,10 @@ def download_latest_github_release(
         f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
         # 7.9MiB/s
         f"https://ghproxy.com/https://github.com/{release_file_path}",
+        # 15.9MiB/s
+        f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+        # 15.7MiB/s
+        f"https://github.91chi.fun/https://github.com/{release_file_path}",
     ])
 
     if not TEST_SPEED_MODE:
@@ -165,10 +169,6 @@ def download_latest_github_release(
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
         # 15.9MiB/s
         f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
-        # 15.9MiB/s
-        f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-        # 15.7MiB/s
-        f"https://github.91chi.fun/https://github.com/{release_file_path}",
         # 12.7MiB/s
         f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
         # 11.0MiB/s

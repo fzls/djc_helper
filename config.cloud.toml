@@ -23,3 +23,13 @@ qq = "787146611"
 nickname = "Always  miss"
 # 原因
 reason = "不会配置道聚城的手游，退款"
+
+[[black_list]]
+# 封禁于
+ban_at = "2022-10-28"
+# QQ
+qq = "2663852633"
+# 昵称
+nickname = "画中人"
+# 原因
+reason = "电脑系统使用后会卡住，无法使用，退款"

@@ -228,9 +228,6 @@ def login_using_env() -> str:
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
 
-    # re: 测试完干掉 @2022-10-29 06:44:01
-    logger.warning(f"本地调试日志：os.getenv(ALIST_USERNAME)={username}")
-
     return login(username, password)
 
 

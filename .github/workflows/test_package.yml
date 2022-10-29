@@ -55,13 +55,9 @@ jobs:
 #        run: |
 #          python _package.py
 #
-#      - name: Upload to Alist
-#        run: |
-#          python _upload_to_alist.py
-
-      - name: test
+      - name: Upload to Alist
         env:
           ALIST_USERNAME: ${{ secrets.ALIST_USERNAME }}
           ALIST_PASSWORD: ${{ secrets.ALIST_PASSWORD }}
         run: |
-          python alist.py
+          python _upload_to_alist.py

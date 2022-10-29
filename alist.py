@@ -4,7 +4,8 @@ from urllib.parse import quote
 import requests
 
 from dao import ConfigInterface, to_raw_type
-from util import with_cache
+from log import color, logger
+from util import get_now, human_readable_size, with_cache
 
 SERVER_ADDR = "http://114.132.252.185:5244"
 
@@ -64,12 +65,28 @@ def _login(username: str, password: str, otp_code: str = "") -> str:
     return data.token
 
 
+def format_remote_file_path(remote_file_path: str) -> str:
+    """
+    确保远程路径以 / 开头
+    """
+    if not remote_file_path.startswith("/"):
+        remote_file_path = "/" + remote_file_path
+
+    return remote_file_path
+
+
 def upload(local_file_path: str, remote_file_path: str):
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
 
-    if not remote_file_path.startswith("/"):
-        remote_file_path = "/" + remote_file_path
+    remote_file_path = format_remote_file_path(remote_file_path)
+
+    actual_size = os.stat(local_file_path).st_size
+    file_size = human_readable_size(actual_size)
+
+    logger.info(f"开始上传 {local_file_path} ({file_size}) 到网盘，远程路径为 {remote_file_path}")
+
+    start_time = get_now()
 
     with open(local_file_path, "rb") as file_to_upload:
         raw_res = requests.put(API_UPLOAD, data=file_to_upload, headers={
@@ -82,8 +99,13 @@ def upload(local_file_path: str, remote_file_path: str):
         if res.code != 200:
             raise generate_exception(res, "upload")
 
-        print(raw_res.status_code)
-        print(raw_res.text)
+    end_time = get_now()
+    used_time = end_time - start_time
+
+    speed = actual_size / used_time.total_seconds()
+    human_readable_speed = human_readable_size(speed)
+
+    logger.info(color("bold_yellow") + f"上传完成，耗时 {used_time}({human_readable_speed}/s)")
 
 
 def demo_login():
@@ -99,8 +121,8 @@ def demo_login():
 
 def demo_upload():
     upload(
-        "C:/Users/fzls/Downloads/Everything-1.4.1.1022.x64-Setup.exe",
-        "/Everything-1.4.1.1022.x64-Setup.exe",
+        "C:/Users/fzls/Downloads/chromedriver_102.exe",
+        "/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe",
     )
 
 

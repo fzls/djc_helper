@@ -14,6 +14,7 @@ SERVER_ADDR = "http://114.132.252.185:5244"
 API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
 API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"
 API_LIST = f"{SERVER_ADDR}/api/fs/list"
+API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
 
 
 class CommonResponse(ConfigInterface):
@@ -71,6 +72,12 @@ class Content(ConfigInterface):
         self.sign = ""
         self.thumb = ""
         self.type = 1
+
+
+class RemoveRequest(ConfigInterface):
+    def __init__(self):
+        self.dir = "/"
+        self.names: list[str] = []
 
 
 def login(username: str, password: str, otp_code: str = "") -> str:
@@ -170,6 +177,34 @@ def get_file_list(remote_dir_path: str, password: str = "", page: int = 1, per_p
     return data
 
 
+def remove(remote_file_path: str):
+    username = os.getenv("ALIST_USERNAME")
+    password = os.getenv("ALIST_PASSWORD")
+
+    remote_file_path = format_remote_file_path(remote_file_path)
+
+    dir = os.path.dirname(remote_file_path)
+    file_name = os.path.basename(remote_file_path)
+
+    logger.info(f"开始删除网盘文件 {remote_file_path}")
+
+    req = RemoveRequest()
+    req.path = dir
+    req.names = [
+        file_name,
+    ]
+
+    raw_res = requests.post(API_REMOVE, json=to_raw_type(req), headers={
+        "Authorization": login(username, password),
+    })
+
+    res = CommonResponse().auto_update_config(raw_res.json())
+    if res.code != 200:
+        raise generate_exception(res, "remove")
+
+    logger.info(color("bold_yellow") + f"删除完成")
+
+
 def demo_login():
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
@@ -200,8 +235,13 @@ def demo_list():
     print(res)
 
 
+def demove_remove():
+    remove("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
+
+
 if __name__ == '__main__':
     # demo_login()
     # demo_upload()
     # demo_download()
-    demo_list()
+    # demo_list()
+    demove_remove()

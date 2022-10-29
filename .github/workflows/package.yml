@@ -85,5 +85,8 @@ jobs:
           path: ./releases/_github_action_artifact/djc_helper.7z
 
       - name: Upload to Alist
+        env:
+          ALIST_USERNAME: ${{ secrets.ALIST_USERNAME }}
+          ALIST_PASSWORD: ${{ secrets.ALIST_PASSWORD }}
         run: |
           python _upload_to_alist.py

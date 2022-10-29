@@ -119,9 +119,12 @@ def format_remote_file_path(remote_file_path: str) -> str:
     return remote_file_path
 
 
-def upload(local_file_path: str, remote_file_path: str):
+def upload(local_file_path: str, remote_file_path: str = ""):
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
+
+    if remote_file_path == "":
+        remote_file_path = os.path.basename(local_file_path)
 
     remote_file_path = format_remote_file_path(remote_file_path)
 

@@ -1,4 +1,4 @@
-name: Upload Release Asset
+name: Test Upload Alist
 
 on:
   workflow_dispatch:

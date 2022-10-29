@@ -83,3 +83,7 @@ jobs:
         with:
           name: "djc_helper.7z"
           path: ./releases/_github_action_artifact/djc_helper.7z
+
+      - name: Upload to Alist
+        run: |
+          python _upload_to_alist.py

@@ -108,6 +108,12 @@ def upload(local_file_path: str, remote_file_path: str):
     logger.info(color("bold_yellow") + f"上传完成，耗时 {used_time}({human_readable_speed}/s)")
 
 
+def get_download_url(remote_file_path: str):
+    remote_file_path = format_remote_file_path(remote_file_path)
+
+    return f"{SERVER_ADDR}/d{remote_file_path}"
+
+
 def demo_login():
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
@@ -126,6 +132,14 @@ def demo_upload():
     )
 
 
+def demo_download():
+    url = get_download_url("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
+
+    from download import download_file
+    download_file(url)
+
+
 if __name__ == '__main__':
     # demo_login()
-    demo_upload()
+    # demo_upload()
+    demo_download()

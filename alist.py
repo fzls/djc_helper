@@ -119,7 +119,7 @@ def format_remote_file_path(remote_file_path: str) -> str:
     return remote_file_path
 
 
-def upload(local_file_path: str, remote_file_path: str = ""):
+def upload(local_file_path: str, remote_file_path: str = "", old_version_name_prefix: str = ""):
     if remote_file_path == "":
         remote_file_path = os.path.basename(local_file_path)
 
@@ -129,6 +129,21 @@ def upload(local_file_path: str, remote_file_path: str = ""):
     file_size = human_readable_size(actual_size)
 
     logger.info(f"开始上传 {local_file_path} ({file_size}) 到网盘，远程路径为 {remote_file_path}")
+
+    if old_version_name_prefix != "":
+        remote_dir = os.path.dirname(remote_file_path)
+        logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {old_version_name_prefix} 的文件")
+        dir_file_list_info = get_file_list(remote_dir, refresh=True)
+        for file_info in dir_file_list_info.content:
+            if file_info.is_dir:
+                continue
+
+            if not file_info.name.startswith(old_version_name_prefix):
+                continue
+
+            remove(os.path.join(remote_dir, file_info.name))
+
+        logger.info("旧版本处理完毕，将开始实际上传流程")
 
     start_time = get_now()
 

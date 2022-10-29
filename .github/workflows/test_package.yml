@@ -43,18 +43,18 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt pyinstaller
 
-#      - name: Build
-#        run: |
-#          python _build.py --disable_douban
-#
-#      - name: Clear Old Artifact
-#        run: |
-#          python _clear_github_artifact.py
-#
-#      - name: Package
-#        run: |
-#          python _package.py
-#
+      - name: Build
+        run: |
+          python _build.py --disable_douban
+
+      - name: Clear Old Artifact
+        run: |
+          python _clear_github_artifact.py
+
+      - name: Package
+        run: |
+          python _package.py
+
       - name: Upload to Alist
         env:
           ALIST_USERNAME: ${{ secrets.ALIST_USERNAME }}

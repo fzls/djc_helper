@@ -268,6 +268,6 @@ def demove_remove():
 if __name__ == '__main__':
     # demo_login()
     # demo_upload()
-    # demo_download()
+    demo_download()
     # demo_list()
-    demove_remove()
+    # demove_remove()

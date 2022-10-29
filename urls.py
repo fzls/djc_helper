@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-20 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2022-10-27 00:00:00", "2022-11-23 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
@@ -91,6 +91,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20220922index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221027grow/index.html",
     #
     # 已过期活动
     #
@@ -99,7 +100,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20220913DNFYSDL/index.html",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20220922fight/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/43854_4fb03cca",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7",
@@ -314,7 +314,7 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "1_Idqvtn"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "0_saz3cd"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

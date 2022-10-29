@@ -583,6 +583,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("colg每日签到", self.colg_signin),
             ("DNF冒险家之路", self.dnf_maoxian_road),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -592,7 +593,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("DNF集合站_ide", self.dnf_collection_ide),
-            ("DNF马杰洛的规划", self.majieluo),
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
@@ -7335,7 +7335,7 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "147561")
+            self.majieluo_op("领取见面礼", "153263")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -7348,16 +7348,16 @@ class DjcHelper:
         # self.majieluo_op("选择阵营", "141618", iType=2)
 
         tasks = [
-            ("每日在线礼包", "147622"),
-            ("每日邀请礼包", "147624"),
-            ("每日登录礼包", "147574"),
-            ("每日通关礼包", "147615"),
-            ("特殊任务-通关伊斯大陆", "147784"),
-            ("特殊任务-登录游戏10天", "147792"),
-            ("特殊任务-邀请2位幸运好友", "147793"),
-            ("特殊任务-邀请4位幸运好友", "147794"),
-            ("特殊任务-邀请15位好友", "147796"),
-            ("特殊任务-通关30次推荐地下城", "147804"),
+            ("每日在线礼包", "153266"),
+            ("每日邀请礼包", "153267"),
+            ("每日登录礼包", "153264"),
+            ("每日通关礼包", "153265"),
+            ("特殊任务-通关伊斯大陆", "153268"),
+            ("特殊任务-登录游戏10天", "153269"),
+            ("特殊任务-邀请1位幸运好友", "153270"),
+            ("特殊任务-邀请3位幸运好友", "153271"),
+            ("特殊任务-邀请14位好友", "153272"),
+            ("特殊任务-通关30次推荐地下城", "153273"),
         ]
         for name, flowid in tasks:
             self.majieluo_op(name, flowid)
@@ -11651,4 +11651,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_my_home()
+        djcHelper.majieluo()

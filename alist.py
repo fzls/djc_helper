@@ -10,6 +10,16 @@ SERVER_ADDR = "http://114.132.252.185:5244"
 API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
 
 
+class CommonResponse(ConfigInterface):
+    def __init__(self):
+        self.code = 200
+        self.message = "success"
+        self.data = {}
+
+def generate_exception(res: CommonResponse, ctx: str) -> Exception:
+    return Exception(f"alist {ctx} failed, code={res.code}, message={res.message}")
+
+
 class LoginRequest(ConfigInterface):
     def __init__(self):
         self.username = ""
@@ -18,13 +28,6 @@ class LoginRequest(ConfigInterface):
 
 
 class LoginResponse(ConfigInterface):
-    def __init__(self):
-        self.code = 200
-        self.message = "success"
-        self.data = LoginResponseData()
-
-
-class LoginResponseData(ConfigInterface):
     def __init__(self):
         self.token = ""
 
@@ -49,12 +52,14 @@ def _login(username: str, password: str, otp_code: str = "") -> str:
 
     raw_res = requests.post(API_LOGIN, json=to_raw_type(req))
 
-    res = LoginResponse().auto_update_config(raw_res.json())
-
+    res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
-        raise Exception(f"alist login failed, code={res.code}, message={res.message}")
+        raise generate_exception(res, "login")
 
-    return res.data.token
+    data = LoginResponse().auto_update_config(res.data)
+
+    return data.token
+
 
 
 def demo_login():

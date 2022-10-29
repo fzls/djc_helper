@@ -239,10 +239,10 @@ def demo_login():
     password = os.getenv("ALIST_PASSWORD")
 
     cached_token = login(username, password)
-    print(f"cached_token   = {cached_token}")
+    logger.info(f"cached_token   = {cached_token}")
 
     uncached_token = _login(username, password)
-    print(f"uncached_token = {uncached_token}")
+    logger.info(f"uncached_token = {uncached_token}")
 
 
 def demo_upload():
@@ -261,7 +261,7 @@ def demo_download():
 
 def demo_list():
     res = get_file_list("/", refresh=True)
-    print(res)
+    logger.info(res)
 
 
 def demove_remove():

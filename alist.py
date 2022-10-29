@@ -120,9 +120,6 @@ def format_remote_file_path(remote_file_path: str) -> str:
 
 
 def upload(local_file_path: str, remote_file_path: str = ""):
-    username = os.getenv("ALIST_USERNAME")
-    password = os.getenv("ALIST_PASSWORD")
-
     if remote_file_path == "":
         remote_file_path = os.path.basename(local_file_path)
 
@@ -139,7 +136,7 @@ def upload(local_file_path: str, remote_file_path: str = ""):
         raw_res = requests.put(API_UPLOAD, data=file_to_upload, headers={
             "File-Path": quote(remote_file_path),
             "As-Task": "false",
-            "Authorization": login(username, password),
+            "Authorization": login_using_env(),
         })
 
         res = CommonResponse().auto_update_config(raw_res.json())
@@ -181,9 +178,6 @@ def get_file_list(remote_dir_path: str, password: str = "", page: int = 1, per_p
 
 
 def remove(remote_file_path: str):
-    username = os.getenv("ALIST_USERNAME")
-    password = os.getenv("ALIST_PASSWORD")
-
     remote_file_path = format_remote_file_path(remote_file_path)
 
     dir = os.path.dirname(remote_file_path)
@@ -198,7 +192,7 @@ def remove(remote_file_path: str):
     ]
 
     raw_res = requests.post(API_REMOVE, json=to_raw_type(req), headers={
-        "Authorization": login(username, password),
+        "Authorization": login_using_env(),
     })
 
     res = CommonResponse().auto_update_config(raw_res.json())
@@ -206,6 +200,13 @@ def remove(remote_file_path: str):
         raise generate_exception(res, "remove")
 
     logger.info(color("bold_yellow") + f"删除完成")
+
+
+def login_using_env() -> str:
+    username = os.getenv("ALIST_USERNAME")
+    password = os.getenv("ALIST_PASSWORD")
+
+    return login(username, password)
 
 
 def demo_login():

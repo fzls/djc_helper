@@ -43,18 +43,22 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt pyinstaller
 
-      - name: Build
-        run: |
-          python _build.py --disable_douban
+#      - name: Build
+#        run: |
+#          python _build.py --disable_douban
+#
+#      - name: Clear Old Artifact
+#        run: |
+#          python _clear_github_artifact.py
+#
+#      - name: Package
+#        run: |
+#          python _package.py
+#
+#      - name: Upload to Alist
+#        run: |
+#          python _upload_to_alist.py
 
-      - name: Clear Old Artifact
+      - name: test
         run: |
-          python _clear_github_artifact.py
-
-      - name: Package
-        run: |
-          python _package.py
-
-      - name: Upload to Alist
-        run: |
-          python _upload_to_alist.py
+          python alist.py

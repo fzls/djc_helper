@@ -130,8 +130,8 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
 
     logger.info(f"开始上传 {local_file_path} ({file_size}) 到网盘，远程路径为 {remote_file_path}")
 
+    remote_dir = os.path.dirname(remote_file_path)
     if old_version_name_prefix != "":
-        remote_dir = os.path.dirname(remote_file_path)
         logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {old_version_name_prefix} 的文件")
         dir_file_list_info = get_file_list(remote_dir, refresh=True)
         for file_info in dir_file_list_info.content:
@@ -165,6 +165,9 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     human_readable_speed = human_readable_size(speed)
 
     logger.info(color("bold_yellow") + f"上传完成，耗时 {used_time}({human_readable_speed}/s)")
+
+    logger.info("上传完毕后强制刷新该目录，确保后续访问可以看到新文件")
+    get_file_list(remote_dir, refresh=True)
 
 
 def get_download_url(remote_file_path: str):

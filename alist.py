@@ -181,7 +181,14 @@ def get_file_list(remote_dir_path: str, password: str = "", page: int = 1, per_p
     req.per_page = per_page
     req.refresh = refresh
 
-    raw_res = requests.post(API_LIST, json=to_raw_type(req))
+    headers = {}
+    if refresh:
+        # 刷新需要token
+        headers = {
+            "Authorization": login_using_env(),
+        }
+
+    raw_res = requests.post(API_LIST, json=to_raw_type(req), headers=headers)
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:

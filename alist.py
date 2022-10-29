@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from urllib.parse import quote
 
@@ -11,6 +13,7 @@ SERVER_ADDR = "http://114.132.252.185:5244"
 
 API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
 API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"
+API_LIST = f"{SERVER_ADDR}/api/fs/list"
 
 
 class CommonResponse(ConfigInterface):
@@ -34,6 +37,40 @@ class LoginRequest(ConfigInterface):
 class LoginResponse(ConfigInterface):
     def __init__(self):
         self.token = ""
+
+
+class ListRequest(ConfigInterface):
+    def __init__(self):
+        self.path = ""
+        self.passwrod = ""
+        self.refresh = False
+        self.page = 1
+        self.per_page = 0
+
+
+class ListResponse(ConfigInterface):
+    def __init__(self):
+        self.provider = "189Cloud"
+        self.readme = ""
+        self.write = True
+        self.total = 3
+        self.content: list[Content] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("content", Content),
+        ]
+
+
+class Content(ConfigInterface):
+    def __init__(self):
+        self.name = "自制小工具"
+        self.size = 0
+        self.is_dir = True
+        self.modified = "2022-10-28T10:38:13+08:00"
+        self.sign = ""
+        self.thumb = ""
+        self.type = 1
 
 
 def login(username: str, password: str, otp_code: str = "") -> str:
@@ -114,6 +151,25 @@ def get_download_url(remote_file_path: str):
     return f"{SERVER_ADDR}/d{remote_file_path}"
 
 
+def get_file_list(remote_dir_path: str, password: str = "", page: int = 1, per_page: int = 0, refresh=False) -> ListResponse:
+    req = ListRequest()
+    req.path = remote_dir_path
+    req.passwrod = password
+    req.page = page
+    req.per_page = per_page
+    req.refresh = refresh
+
+    raw_res = requests.post(API_LIST, json=to_raw_type(req))
+
+    res = CommonResponse().auto_update_config(raw_res.json())
+    if res.code != 200:
+        raise generate_exception(res, "list")
+
+    data = ListResponse().auto_update_config(res.data)
+
+    return data
+
+
 def demo_login():
     username = os.getenv("ALIST_USERNAME")
     password = os.getenv("ALIST_PASSWORD")
@@ -139,7 +195,13 @@ def demo_download():
     download_file(url)
 
 
+def demo_list():
+    res = get_file_list("/")
+    print(res)
+
+
 if __name__ == '__main__':
     # demo_login()
     # demo_upload()
-    demo_download()
+    # demo_download()
+    demo_list()

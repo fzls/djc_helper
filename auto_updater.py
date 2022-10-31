@@ -1,4 +1,5 @@
 import platform
+from distutils.errors import DistutilsFileError
 
 from config import CommonConfig
 from log import color, fileHandler, logger, new_file_handler
@@ -25,6 +26,7 @@ from util import (
     exists_flag_file,
     kill_process,
     pause_and_exit,
+    range_from_one,
     show_unexpected_exception_message,
     start_djc_helper,
 )
@@ -142,9 +144,29 @@ def update(args, uploader):
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")
-    full_update(args, uploader)
+    max_retry = 3
+    for idx in range_from_one(max_retry):
+        try:
+            full_update(args, uploader)
+        except DistutilsFileError as e:
+            if is_mirror_compressed_file_incomplete(e):
+                logger.error(f"[{idx}/{max_retry}] 从本次随机到的镜像下载的文件不完整，将重新尝试随机挑选一个镜像来下载")
+                continue
+
+            # 其他情况则继续抛出异常
+            raise
+
     logger.info("全量更新完毕")
     return
+
+
+def is_mirror_compressed_file_incomplete(e: DistutilsFileError) -> bool:
+    """是否从镜像下载的文件不完整"""
+    for msg in e.args:
+        if "not a directory" in msg:
+            return True
+
+    return False
 
 
 def full_update(args, uploader) -> bool:

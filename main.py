@@ -277,8 +277,19 @@ def main_wrapper():
     finally:
         # 暂停一下，方便看结果
         if not disable_pause_after_run() and not is_run_in_github_action():
+            async_call_close_pool_after_some_time()
             pause()
         close_pool()
+
+
+def async_call_close_pool_after_some_time():
+    def _close():
+        wait_time = 10 * 60
+        logger.info(f"{wait_time} 秒后将自动关闭进程池，方便有足够时间查看进程池中触发的弹窗信息")
+        time.sleep(wait_time)
+        close_pool()
+
+    async_call(_close)
 
 
 if __name__ == "__main__":

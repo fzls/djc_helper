@@ -18,12 +18,16 @@ def init_pool(pool_size):
 
 
 def close_pool():
+    global pool
     if pool is None:
         return
 
     pool_size = get_pool_size()
-    pool.close()
     logger.info(color("bold_cyan") + f"程序运行完毕，将清理线程池({pool_size})，释放相应资源")
+
+    pool.close()
+    pool = None
+    logger.info(color("bold_cyan") + "清理完毕")
 
 
 def get_pool_size() -> int:

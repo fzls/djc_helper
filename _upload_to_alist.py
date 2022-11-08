@@ -16,14 +16,15 @@ def upload_to_alist(files_to_upload: list[tuple[str, str]]):
 
 
 def main():
-    dir_src = os.path.realpath(".")
     dir_all_release = os.path.realpath(os.path.join("releases"))
     release_prefix = "DNF蚊子腿小助手_v"
     release_7z_path = os.path.join(dir_all_release, f"{release_prefix}{now_version}_by风之凌殇.7z")
 
-    upload_to_alist([
-        (release_7z_path, release_prefix),
-    ])
+    upload_to_alist(
+        [
+            (release_7z_path, release_prefix),
+        ]
+    )
 
 
 if __name__ == "__main__":

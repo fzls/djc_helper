@@ -85,10 +85,7 @@ def login(username: str, password: str, otp_code: str = "") -> str:
     登录alist，获取上传所需token
     """
     return with_cache(
-        "alist",
-        "login",
-        cache_max_seconds=24 * 60 * 60,
-        cache_miss_func=lambda: _login(username, password, otp_code)
+        "alist", "login", cache_max_seconds=24 * 60 * 60, cache_miss_func=lambda: _login(username, password, otp_code)
     )
 
 
@@ -148,11 +145,15 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     start_time = get_now()
 
     with open(local_file_path, "rb") as file_to_upload:
-        raw_res = requests.put(API_UPLOAD, data=file_to_upload, headers={
-            "File-Path": quote(remote_file_path),
-            "As-Task": "false",
-            "Authorization": login_using_env(),
-        })
+        raw_res = requests.put(
+            API_UPLOAD,
+            data=file_to_upload,
+            headers={
+                "File-Path": quote(remote_file_path),
+                "As-Task": "false",
+                "Authorization": login_using_env(),
+            },
+        )
 
         res = CommonResponse().auto_update_config(raw_res.json())
         if res.code != 200:
@@ -176,7 +177,9 @@ def get_download_url(remote_file_path: str):
     return f"{SERVER_ADDR}/d{remote_file_path}"
 
 
-def get_file_list(remote_dir_path: str, password: str = "", page: int = 1, per_page: int = 0, refresh=False) -> ListResponse:
+def get_file_list(
+    remote_dir_path: str, password: str = "", page: int = 1, per_page: int = 0, refresh=False
+) -> ListResponse:
     req = ListRequest()
     req.path = remote_dir_path
     req.passwrod = password
@@ -216,20 +219,24 @@ def remove(remote_file_path: str):
         file_name,
     ]
 
-    raw_res = requests.post(API_REMOVE, json=to_raw_type(req), headers={
-        "Authorization": login_using_env(),
-    })
+    raw_res = requests.post(
+        API_REMOVE,
+        json=to_raw_type(req),
+        headers={
+            "Authorization": login_using_env(),
+        },
+    )
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
         raise generate_exception(res, "remove")
 
-    logger.info(color("bold_yellow") + f"删除完成")
+    logger.info(color("bold_yellow") + "删除完成")
 
 
 def login_using_env() -> str:
-    username = os.getenv("ALIST_USERNAME")
-    password = os.getenv("ALIST_PASSWORD")
+    username = str(os.getenv("ALIST_USERNAME"))
+    password = str(os.getenv("ALIST_PASSWORD"))
 
     return login(username, password)
 
@@ -256,6 +263,7 @@ def demo_download():
     url = get_download_url("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
 
     from download import download_file
+
     download_file(url)
 
 
@@ -268,7 +276,7 @@ def demove_remove():
     remove("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # demo_login()
     # demo_upload()
     # demo_download()

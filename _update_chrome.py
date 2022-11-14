@@ -10,6 +10,7 @@ import subprocess
 import requests
 from bs4 import BeautifulSoup
 
+from alist import upload
 from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from download import download_file
 from log import color, logger
@@ -149,30 +150,24 @@ def update_linux_version():
     logger.info(f"已将linux更新脚本中的版本替换为 {latest_version}")
 
 
-def upload_all_to_lanzou():
-    uploader = Uploader()
+def upload_all_to_netdisk():
+    wanted_file_regex_list = [
+        r"chromedriver_(\d+).exe",
+        r"chrome_portable_(\d+).7z",
+        r"Chrome_(\d+)\.(\d+)\.(\d+)\.(\d+)_普通安装包_非便携版.exe",
+    ]
 
-    with open(os.path.join(SRC_DIR, "upload_cookie.json")) as fp:
-        cookie = json.load(fp)
-    uploader.login(cookie)
+    files = list(pathlib.Path(".").glob("*"))
+    for wanted_file_regex in wanted_file_regex_list:
+        for file in files:
+            if not re.match(wanted_file_regex, file.name):
+                continue
 
-    if uploader.login_ok:
-        wanted_file_regex_list = [
-            r"chromedriver_(\d+).exe",
-            r"chrome_portable_(\d+).7z",
-            r"Chrome_(\d+)\.(\d+)\.(\d+)\.(\d+)_普通安装包_非便携版.exe",
-        ]
-
-        files = list(pathlib.Path(".").glob("*"))
-        for wanted_file_regex in wanted_file_regex_list:
-            for file in files:
-                if not re.match(wanted_file_regex, file.name):
-                    continue
-
-                logger.info(f"开始上传 {file.name}")
-                uploader.upload_to_lanzouyun(str(file), uploader.folder_djc_helper_tools, delete_history_file=True)
-    else:
-        logger.error(f"登录失败，请手动上传 {TEMP_DIR} 中的文件到蓝奏云")
+            logger.info(f"开始上传 {file.name}")
+            upload(
+                os.path.realpath(str(file)),
+                f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{file.name}"
+            )
 
 
 def update_latest_chrome():
@@ -201,9 +196,8 @@ def update_latest_chrome():
     # 更新linux版的路径
     update_linux_version()
 
-    # re: 这个后续修改为提交到单独的github仓库的release文件中
-    # # 上传到蓝奏云
-    # upload_all_to_lanzou()
+    # 上传到网盘
+    upload_all_to_netdisk()
 
     # 提示确认代码修改是否无误
     logger.info(color("bold_green") + "请检查一遍代码，然后执行一遍 qq_login.py，以确认新的chrome制作无误，然后点击任意键提交git即可完成流程")

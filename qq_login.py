@@ -22,6 +22,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
+from alist import SERVER_ADDR as ALIST_SERVER_ADDR
+from alist import get_download_url
 from compress import decompress_dir_with_bandizip
 from config import AccountConfig, CommonConfig
 from config import config as get_config
@@ -29,6 +31,7 @@ from config import load_config
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
+from download import download_file
 from exceptions_def import (
     GithubActionLoginException,
     RequireVerifyMessageButInHeadlessMode,
@@ -376,7 +379,7 @@ class QQLogin:
     def check_and_download_chrome_ahead_windows(self):
         logger.info(
             color("bold_yellow")
-            + "如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 https://fzls.lanzouo.com/s/djc-tools"
+            + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 {ALIST_SERVER_ADDR}"
         )
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
@@ -385,10 +388,7 @@ class QQLogin:
         logger.info("检查driver是否存在")
         if not os.path.isfile(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
-            uploader = Uploader()
-            uploader.download_file_in_folder(
-                uploader.folder_djc_helper_tools, chrome_driver_exe_name, chrome_root_directory
-            )
+            self.download_chrome_file(chrome_driver_exe_name)
 
         options = Options()
         options.headless = True
@@ -414,8 +414,7 @@ class QQLogin:
         # 尝试从网盘下载合适版本的便携版chrome
         if not os.path.isfile(self.chrome_binary_7z()):
             logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
-            uploader = Uploader()
-            uploader.download_file_in_folder(uploader.folder_djc_helper_tools, zip_name, chrome_root_directory)
+            self.download_chrome_file(zip_name)
 
         # 尝试解压
         if not os.path.isdir(self.chrome_binary_directory()):
@@ -439,21 +438,8 @@ class QQLogin:
 
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
-        uploader = Uploader()
-        uploader.download_file_in_folder(
-            uploader.folder_djc_helper_tools,
-            chrome_driver_exe_name,
-            chrome_root_directory,
-            cache_max_seconds=0,
-            download_only_if_server_version_is_newer=False,
-        )
-        uploader.download_file_in_folder(
-            uploader.folder_djc_helper_tools,
-            zip_name,
-            chrome_root_directory,
-            cache_max_seconds=0,
-            download_only_if_server_version_is_newer=False,
-        )
+        self.download_chrome_file(chrome_driver_exe_name)
+        self.download_chrome_file(zip_name)
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
         decompress_dir_with_bandizip(self.chrome_binary_7z(), dst_parent_folder=chrome_root_directory)
@@ -494,6 +480,15 @@ class QQLogin:
                 )
             )
             pause_and_exit(-1)
+
+    def download_chrome_file(self, filename: str) -> str:
+        return download_file(
+            get_download_url(self.get_path_in_netdisk(filename)),
+            self.chrome_root_directory(),
+        )
+
+    def get_path_in_netdisk(self, filename: str) -> str:
+        return f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{filename}"
 
     def chrome_driver_executable_path(self):
         return os.path.realpath(f"{self.chrome_root_directory()}/chromedriver_{self.get_chrome_major_version()}.exe")
@@ -1884,5 +1879,15 @@ def do_login(
     )
 
 
+def demo_download_chrome():
+    load_config("config.toml", "config.toml.local")
+    cfg = get_config()
+
+    cfg.common.force_use_portable_chrome = True
+
+    QQLogin(cfg.common).check_and_download_chrome_ahead()
+
+
 if __name__ == "__main__":
     test()
+    # demo_download_chrome()

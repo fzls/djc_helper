@@ -234,16 +234,24 @@ def remove(remote_file_path: str):
     logger.info(color("bold_yellow") + "删除完成")
 
 
+def get_username_password_from_env() -> tuple[str, str]:
+    username = str(os.getenv("ALIST_USERNAME", ""))
+    password = str(os.getenv("ALIST_PASSWORD", ""))
+
+    if username == "" or password == "":
+        raise Exception("请在环境变量中设置 ALIST_USERNAME 和 ALIST_PASSWORD，否则将无法登录alist")
+
+    return username, password
+
+
 def login_using_env() -> str:
-    username = str(os.getenv("ALIST_USERNAME"))
-    password = str(os.getenv("ALIST_PASSWORD"))
+    username, password = get_username_password_from_env()
 
     return login(username, password)
 
 
 def demo_login():
-    username = os.getenv("ALIST_USERNAME")
-    password = os.getenv("ALIST_PASSWORD")
+    username, password = get_username_password_from_env()
 
     cached_token = login(username, password)
     logger.info(f"cached_token   = {cached_token}")

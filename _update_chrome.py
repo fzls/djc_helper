@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os.path
 import pathlib
 import re
@@ -15,7 +14,6 @@ from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from download import download_file
 from log import color, logger
 from update import version_to_version_int_list
-from upload_lanzouyun import Uploader
 from util import change_console_window_mode_async, make_sure_dir_exists, pause, remove_directory, remove_file
 
 TEMP_DIR = "utils/chrome_temporary_dir"
@@ -164,10 +162,7 @@ def upload_all_to_netdisk():
                 continue
 
             logger.info(f"开始上传 {file.name}")
-            upload(
-                os.path.realpath(str(file)),
-                f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{file.name}"
-            )
+            upload(os.path.realpath(str(file)), f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{file.name}")
 
 
 def update_latest_chrome():

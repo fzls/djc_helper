@@ -873,18 +873,25 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
     )
 
     # 获取全部日志文件，并按照时间升序排列
-    logs = list(pathlib.Path(dir_name).glob("**/*"))
+    def _get_all_files_sort_by_mtime() -> List[pathlib.Path]:
+        logs = list(pathlib.Path(dir_name).glob("**/*"))
 
-    def sort_key(f: pathlib.Path):
-        return f.stat().st_mtime
+        def sort_key(f: pathlib.Path):
+            return f.stat().st_mtime
 
-    logs.sort(key=sort_key)
+        logs.sort(key=sort_key)
+        return logs
+
+    logs = _get_all_files_sort_by_mtime()
 
     # 清除日志，直至剩余日志大小低于设定值
     remaining_logs_size = logs_size
     remove_log_count = 0
     remove_log_size = 0
     for log_file in logs:
+        if not log_file.is_file():
+            continue
+
         stat = log_file.stat()
         remaining_logs_size -= stat.st_size
         remove_log_count += 1
@@ -902,6 +909,19 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
                 + f"当前剩余日志大小为{hrs(remaining_logs_size)}，将停止日志清理流程~ 本次累计清理{remove_log_count}个日志文件，总大小为{hrs(remove_log_size)}"
             )
             break
+
+    # 清除留下的空目录
+    directories = _get_all_files_sort_by_mtime()
+    for dir in directories:
+        if not dir.is_dir():
+            continue
+
+        if os.listdir(dir):
+            continue
+
+        remove_directory(str(dir))
+        relative_filepath = os.path.relpath(str(dir), dir_name)
+        logger.info(f"顺带移除空目录: {relative_filepath}")
 
 
 def get_file_or_directory_size(target_path: str) -> int:

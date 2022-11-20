@@ -579,15 +579,15 @@ class DjcHelper:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("colg每日签到", self.colg_signin),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
+            ("colg每日签到", self.colg_signin),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF福利中心兑换", self.dnf_welfare),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
             ("dnf助手活动", self.dnf_helper),

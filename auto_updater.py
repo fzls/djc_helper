@@ -14,8 +14,9 @@ import os
 import subprocess
 from distutils import dir_util
 
+from alist import get_download_url
 from compress import decompress_dir_with_bandizip
-from download import download_latest_github_release
+from download import download_file, download_latest_github_release
 from update import get_latest_version_from_github, need_update
 from upload_lanzouyun import Uploader
 from usage_count import increase_counter
@@ -89,7 +90,7 @@ def auto_update():
     logger.info(color("bold_yellow") + f"当前版本为{args.version}，网盘最新版本为{latest_version}")
 
     if need_update(args.version, latest_version):
-        update(args, uploader)
+        update(args, uploader, latest_version)
         start_new_version(args)
     else:
         logger.info("已经是最新版本，不需要更新")
@@ -114,7 +115,7 @@ def get_latest_version(uploader: Uploader) -> str:
     return get_latest_version_from_github(cfg)
 
 
-def update(args, uploader):
+def update(args, uploader, latest_version: str):
     logger.info("需要更新，开始更新流程")
 
     logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新，本体仍可正常运行。")
@@ -172,14 +173,24 @@ def is_mirror_compressed_file_incomplete(e: DistutilsFileError) -> bool:
     return False
 
 
-def full_update(args, uploader) -> bool:
+def full_update(args, uploader, latest_version: str) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载最新版本的压缩包")
-    filepath = download_latest_github_release(
-        tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
-    )
-    report_dlc_usage("full_update_from_github")
+    filepath = ""
+    try:
+        # logger.warning("从github下载失败，改为尝试通过alist下载")
+        download_url = get_download_url(f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z")
+        filepath = download_file(
+            download_url, tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
+        )
+        report_dlc_usage("full_update_from_alist")
+    except Exception:
+        logger.warning("从alist下载失败，改为尝试通过github下载")
+        filepath = download_latest_github_release(
+            tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
+        )
+        report_dlc_usage("full_update_from_github")
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
@@ -326,7 +337,7 @@ def test():
     logger.info(f"当前版本为{args.version}，网盘最新版本为{latest_version}")
 
     if need_update(args.version, latest_version):
-        update(args, uploader)
+        update(args, uploader, latest_version)
         start_new_version(args)
     else:
         logger.info("已经是最新版本，不需要更新")

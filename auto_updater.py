@@ -107,7 +107,9 @@ def parse_args():
 
 
 def get_latest_version(uploader: Uploader) -> str:
-    # 尝试从github获取版本信息
+    """
+    尝试从github获取版本信息，形如 19.1.8
+    """
     cfg = CommonConfig()
     return get_latest_version_from_github(cfg)
 

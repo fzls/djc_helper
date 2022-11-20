@@ -581,6 +581,7 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF娱乐赛", self.dnf_game),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -619,7 +620,6 @@ class DjcHelper:
             ("组队拜年", self.team_happy_new_year),
             ("新职业预约活动", self.dnf_reserve),
             ("WeGame活动_新版", self.wegame_new),
-            ("DNF娱乐赛", self.dnf_game),
             ("DNF公会活动", self.dnf_gonghui),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
@@ -10281,39 +10281,53 @@ class DjcHelper:
 
         self.check_dnf_game()
 
-        self.dnf_game_op("1 VS 1 投票", "819796", iVoteId=random.randint(1, 3))
-        self.dnf_game_op("2 VS 2 投票", "819817", iVoteId=random.randint(4, 6))
-        self.dnf_game_op("4 VS 4 投票", "819818", iVoteId=random.randint(7, 9))
+        vote_list = [
+            ("玩法", 3, [906081, 906476, 906477, 906478, 906479, 906480]),
+            ("流派", 4, [906481, 906493, 906494, 906495, 906496, 906497, 906498, 906499, 906500, 906501, 906502, 906503]),
+            ("词条", 1, [906504, 906505, 906506]),
+            ("增幅", 1, [906507, 906508, 906509]),
+            ("附魔", 1, [906510, 906511, 906512]),
+            ("比分竞猜", 1, [906513, 906514, 906515, 906516, 906517, 906518]),
+        ]
 
-        self.dnf_game_op("比分竞猜", "819833", iResult=random.randint(1, 6))
+        for name, vote_count, flow_id_list in vote_list:
+            ctx = f"{name}{len(flow_id_list)}选{vote_count}"
+            logger.info(f"开始投 {ctx}")
+            chosen = random.sample(flow_id_list, vote_count)
+            for flow_id in chosen:
+                res = self.dnf_game_op(f"{ctx} - {flow_id}", flow_id)
+                time.sleep(1)
 
-        if now_after("2021-12-20 16:00:00"):
-            self.dnf_game_op("猜对比分 红10增幅券", "819805")
+                if res.get("ret", "-1") != "0":
+                    break
+
+        if now_after("2022-11-27 00:00:00"):
+            self.dnf_game_op("猜对比分 红10增幅券", "906521")
 
         for idx in range_from_one(4):
-            res = self.dnf_game_op(f"{idx} 许愿池抽奖", "818859")
+            res = self.dnf_game_op(f"{idx} 许愿池抽奖", "905697")
             if res.get("ret", "-1") != "0":
                 break
             time.sleep(5)
 
-        self.dnf_game_op("查询我的竞猜和投票", "820733")
+        self.dnf_game_op("查询我的竞猜和投票", "906519")
 
     def check_dnf_game(self):
         self.check_bind_account(
             "DNF娱乐赛",
             get_act_url("DNF娱乐赛"),
             activity_op_func=self.dnf_game_op,
-            query_bind_flowid="818536",
-            commit_bind_flowid="818535",
+            query_bind_flowid="906057",
+            commit_bind_flowid="906056",
         )
 
     def dnf_game_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_game
         return self.amesvr_request(
             ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
             iActivityId,
             iFlowId,
             print_res,
@@ -11651,4 +11665,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_game()

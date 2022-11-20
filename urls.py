@@ -89,6 +89,7 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221027grow/index.html",
+    "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     #
     # 已过期活动
     #
@@ -126,7 +127,6 @@ act_name_to_url = {
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
-    "DNF娱乐赛": "https://dnf.qq.com/cp/a20211219dnfyulesai/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
@@ -280,7 +280,7 @@ class Urls:
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "425797"  # DNF预约
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
-        self.iActivityId_dnf_game = "427765"  # DNF娱乐赛
+        self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站

@@ -149,7 +149,8 @@ def update(args, uploader):
     max_retry = 3
     for idx in range_from_one(max_retry):
         try:
-            full_update(args, uploader)
+            full_update(args, uploader, latest_version)
+            break
         except DistutilsFileError as e:
             if is_mirror_compressed_file_incomplete(e):
                 logger.error(f"[{idx}/{max_retry}] 从本次随机到的镜像下载的文件不完整，将重新尝试随机挑选一个镜像来下载")

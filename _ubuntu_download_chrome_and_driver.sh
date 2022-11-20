@@ -9,6 +9,6 @@ sudo apt-get update \
 # 更新地址：
 #   https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
 #   https://chromedriver.storage.googleapis.com/index.html
-wget -N http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_102.0.5005.61-1_amd64.deb
-wget -N https://chromedriver.storage.googleapis.com/102.0.5005.61/chromedriver_linux64.zip
+wget -N http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_107.0.5304.62-1_amd64.deb
+wget -N https://chromedriver.storage.googleapis.com/107.0.5304.62/chromedriver_linux64.zip
 unzip -o chromedriver_linux64.zip

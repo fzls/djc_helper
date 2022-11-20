@@ -127,21 +127,6 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
 
     logger.info(f"开始上传 {local_file_path} ({file_size}) 到网盘，远程路径为 {remote_file_path}")
 
-    remote_dir = os.path.dirname(remote_file_path)
-    if old_version_name_prefix != "":
-        logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {old_version_name_prefix} 的文件")
-        dir_file_list_info = get_file_list(remote_dir, refresh=True)
-        for file_info in dir_file_list_info.content:
-            if file_info.is_dir:
-                continue
-
-            if not file_info.name.startswith(old_version_name_prefix):
-                continue
-
-            remove(os.path.join(remote_dir, file_info.name))
-
-        logger.info("旧版本处理完毕，将开始实际上传流程")
-
     start_time = get_now()
 
     with open(local_file_path, "rb") as file_to_upload:
@@ -166,6 +151,26 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     human_readable_speed = human_readable_size(speed)
 
     logger.info(color("bold_yellow") + f"上传完成，耗时 {used_time}({human_readable_speed}/s)")
+
+    remote_dir = os.path.dirname(remote_file_path)
+    remote_filename = os.path.basename(remote_file_path)
+    if old_version_name_prefix != "":
+        logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {old_version_name_prefix} 的文件")
+        dir_file_list_info = get_file_list(remote_dir, refresh=True)
+        for file_info in dir_file_list_info.content:
+            if file_info.is_dir:
+                continue
+
+            if not file_info.name.startswith(old_version_name_prefix):
+                continue
+
+            if file_info.name == remote_filename:
+                # 不包括最新上传的文件，因为alist会自动覆盖相同名字的文件
+                continue
+
+            remove(os.path.join(remote_dir, file_info.name))
+
+        logger.info("旧版本处理完毕，将开始实际上传流程")
 
     logger.info("上传完毕后强制刷新该目录，确保后续访问可以看到新文件")
     get_file_list(remote_dir, refresh=True)

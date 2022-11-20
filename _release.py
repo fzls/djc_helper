@@ -95,15 +95,17 @@ def release():
         # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
         total_try_count = 1
         for try_index in range_from_one(total_try_count):
-            upload_ok = upload(
-                local_filepath, old_version_name_prefix=history_file_prefix
-            )
-            if upload_ok:
-                break
+            try:
+                upload(
+                    local_filepath, old_version_name_prefix=history_file_prefix
+                )
+            except Exception:
+                logger.warning(f"第{try_index}/{total_try_count}次尝试上传{local_filepath}失败，等待一会后重试")
+                if try_index < total_try_count:
+                    count_down("上传到网盘", 5 * try_index)
+                    continue
 
-            logger.warning(f"第{try_index}/{total_try_count}次尝试上传{local_filepath}失败，等待一会后重试")
-            if try_index < total_try_count:
-                count_down("上传到网盘", 5 * try_index)
+            break
 
     # ---------------推送版本到github
     # 打包完成后git添加标签

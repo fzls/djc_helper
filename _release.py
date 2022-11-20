@@ -80,12 +80,12 @@ def release():
     realpath = os.path.realpath
 
     upload_list = [
-                      (realpath(release_7z_name), "DNF蚊子腿小助手_v"),
-                      (path_in_src("utils/auto_updater.exe"), ""),
-                      (path_in_src("使用教程/使用文档.docx"), ""),
-                      (path_in_src("使用教程/视频教程.txt"), ""),
-                      (path_in_src("付费指引/付费指引.docx"), ""),
-                  ],
+        (realpath(release_7z_name), "DNF蚊子腿小助手_v"),
+        (path_in_src("utils/auto_updater.exe"), ""),
+        (path_in_src("使用教程/使用文档.docx"), ""),
+        (path_in_src("使用教程/视频教程.txt"), ""),
+        (path_in_src("付费指引/付费指引.docx"), ""),
+    ]
 
     logger.info(color("bold_green") + "具体上传列表如下：")
     for local_filepath, _history_file_prefix in upload_list:

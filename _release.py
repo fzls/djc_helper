@@ -96,9 +96,7 @@ def release():
         total_try_count = 1
         for try_index in range_from_one(total_try_count):
             try:
-                upload(
-                    local_filepath, old_version_name_prefix=history_file_prefix
-                )
+                upload(local_filepath, old_version_name_prefix=history_file_prefix)
             except Exception:
                 logger.warning(f"第{try_index}/{total_try_count}次尝试上传{local_filepath}失败，等待一会后重试")
                 if try_index < total_try_count:

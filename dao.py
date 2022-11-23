@@ -217,13 +217,13 @@ XIN_YUE_MIN_LEVEL = 3
 
 class XinYueInfo(DaoObject):
     level_to_name = {
-        "1": '游戏家',
-        "2": '游戏家Pro',
-        "3": '心悦VIP1',
-        "4": '心悦VIP2',
-        "5": '心悦VIP3',
-        "6": '心悦VIP4',
-        "7": '心悦VIP5'
+        "1": "游戏家",
+        "2": "游戏家Pro",
+        "3": "心悦VIP1",
+        "4": "心悦VIP2",
+        "5": "心悦VIP3",
+        "6": "心悦VIP4",
+        "7": "心悦VIP5",
     }
 
     def __init__(self):

@@ -212,9 +212,22 @@ class UpdateInfo(DaoObject):
         self.update_message = ""
 
 
+XIN_YUE_MIN_LEVEL = 3
+
+
 class XinYueInfo(DaoObject):
+    level_to_name = {
+        "1": '游戏家',
+        "2": '游戏家Pro',
+        "3": '心悦VIP1',
+        "4": '心悦VIP2',
+        "5": '心悦VIP3',
+        "6": '心悦VIP4',
+        "7": '心悦VIP5'
+    }
+
     def __init__(self):
-        # 1-4=游戏家G1-4，5-7=心悦VIP1-3
+        # 等级含义见上述描述
         self.xytype = 1
         self.xytype_str = "游戏家G1"
         # 特邀会员
@@ -249,7 +262,7 @@ class XinYueInfo(DaoObject):
             return "打工仔搬砖中"
 
     def is_xinyue_or_special_member(self) -> bool:
-        return self.xytype >= 5 or self.is_special_member
+        return self.xytype >= XIN_YUE_MIN_LEVEL or self.is_special_member
 
 
 class XinYueItemInfo(DaoObject):

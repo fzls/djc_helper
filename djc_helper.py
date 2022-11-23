@@ -22,6 +22,7 @@ from black_list import check_in_black_list
 from config import AccountConfig, CommonConfig, XinYueOperationConfig, config, load_config
 from const import appVersion, cached_dir, guanjia_skey_version, vscode_online_url
 from dao import (
+    XIN_YUE_MIN_LEVEL,
     AmesvrCommonModRet,
     AmesvrQueryFriendsInfo,
     AmesvrQueryRole,
@@ -1153,12 +1154,10 @@ class DjcHelper:
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
-        default_xinyue_operations = [
-            ("747791", "回流礼"),
-        ]
+        default_xinyue_operations = []
 
         # 尝试根据心悦级别领取对应周期礼包
-        if old_info.xytype < 5:
+        if old_info.xytype < XIN_YUE_MIN_LEVEL:
             default_xinyue_operations.extend(
                 [
                     ("747507", "周礼包_特邀会员"),
@@ -1547,15 +1546,13 @@ class DjcHelper:
 
     @try_except(return_val_on_except=XinYueInfo())
     def query_xinyue_info(self, ctx, print_res=True):
-        res = self.xinyue_battle_ground_op(ctx, "748082", print_res=print_res)
+        res = self.xinyue_battle_ground_op(ctx, "767160", print_res=print_res)
         raw_info = parse_amesvr_common_info(res)
 
         info = XinYueInfo()
         info.xytype = int(raw_info.sOutValue1)
-        if info.xytype < 5:
-            info.xytype_str = f"游戏家G{info.xytype}"
-        else:
-            info.xytype_str = f"心悦VIP{info.xytype - 4}"
+        info.xytype_str = info.level_to_name[raw_info.sOutValue1]
+
         info.is_special_member = int(raw_info.sOutValue2) == 1
         if info.is_special_member:
             info.xytype_str = "特邀会员"
@@ -1563,9 +1560,11 @@ class DjcHelper:
         info.username, info.usericon = raw_info.sOutValue4.split("|")
         info.username = unquote_plus(info.username)
         info.login_qq = raw_info.sOutValue5
-        info.work_status = int(raw_info.sOutValue6 or "0")
-        info.work_end_time = int(raw_info.sOutValue7 or "0")
-        info.take_award_end_time = int(raw_info.sOutValue8 or "0")
+
+        work_status, work_end_time, take_award_end_time = raw_info.sOutValue6.split("|")
+        info.work_status = int(work_status or "0")
+        info.work_end_time = int(work_end_time or "0")
+        info.take_award_end_time = int(take_award_end_time or "0")
 
         return info
 
@@ -1632,7 +1631,7 @@ class DjcHelper:
 
     def xinyue_op(self, ctx, iActivityId, iFlowId, package_id="", print_res=True, lqlevel=1, teamid="", **extra_params):
         # 网站上特邀会员不论是游戏家G几，调用doAction(flowId,level)时level一律传1，而心悦会员则传入实际的567对应心悦123
-        if lqlevel < 5:
+        if lqlevel < XIN_YUE_MIN_LEVEL:
             lqlevel = 1
 
         return self.amesvr_request(
@@ -11665,4 +11664,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_game()
+        djcHelper.xinyue_battle_ground()

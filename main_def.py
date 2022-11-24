@@ -1442,25 +1442,11 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "22.8 超级会员": (
-            "在活动页面购买超级会员和其他会员，最低可以三十元兑换一个红10券+12次抽奖机会，如果平常有购买QQ视频或者QQ音乐的话，可以考虑下这个活动~\n"
-            "如果有需要，可以在活动页面自行参与这部分: https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7\n"
-        ),
-        "22.9 心悦充值": (
-            "心悦出了个充值活动，在页面充值50/300/500元，可以领取一些小奖励，如果充点券来买国庆套的话，可以看看这个活动。\n"
-            "因为这个活动用了套新东西，但是实际上只有那三个充值的奖励还可以，其他的基本可以忽略，所以本次就不加入了-。-请自行参与，链接如下：\n"
-            "https://xinyue.qq.com/act/a202208016DNFactivity/index.html"
-        ),
-        "22.9 斗鱼虎牙": (
-            "斗鱼和虎牙活动请自行完成\n"
-            "斗鱼：https://www.douyu.com/topic/jqjt?rid=5324055\n"
-            "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
-        ),
-        "22.9 colg模拟器签到": (
-            "colg模拟器签到活动开放了第三期，签到15天可以领取一个随机灿烂，有兴趣可自行参与\n"
-            "第一步：在模拟器页面使用模拟器 https://bbs.colg.cn/colg_activity_new-simulator.html/index\n"
-            "第二步：点击右侧礼包按钮，领取每日礼包进行签到 https://bbs.colg.cn/colg_activity_new-time.html/simulator\n"
-        ),
+        "22.11 嘉年华h5活动": (
+            "嘉年华的h5活动可以领取7天黑钻，让三个未参与过活动的好友参与的话，可以领取一个伤害字体\n"
+            "由于活动仅一次性，就不添加了，有兴趣请自行参与\n"
+            "https://dnf.qq.com/cp/a20221101carnival/index.html\n"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

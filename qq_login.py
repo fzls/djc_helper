@@ -487,6 +487,8 @@ class QQLogin:
         return f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{filename}"
 
     def chrome_driver_executable_path(self):
+        # re: 这里chromedriver可以使用另一个库来自动为维护，后面可以看看有没有必要调整
+        #   https://pypi.org/project/webdriver-manager/
         return os.path.realpath(f"{self.chrome_root_directory()}/chromedriver_{self.get_chrome_major_version()}.exe")
 
     def chrome_binary_7z(self):

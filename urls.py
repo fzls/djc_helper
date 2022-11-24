@@ -92,6 +92,7 @@ act_name_to_url = {
     "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/44476_ae80050e",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/44453_33dbf629",
+    "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
     #
     # 已过期活动
     #
@@ -108,7 +109,6 @@ act_name_to_url = {
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
-    "DNF集合站": "https://dnf.qq.com/lbact/a20220616jhy/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
@@ -257,7 +257,7 @@ class Urls:
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
-        self.iActivityId_dnf_collection = "478078"  # DNF集合站
+        self.iActivityId_dnf_collection = "511356"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速

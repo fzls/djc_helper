@@ -585,6 +585,7 @@ class DjcHelper:
             ("DNF娱乐赛", self.dnf_game),
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
+            ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -602,7 +603,6 @@ class DjcHelper:
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
             ("KOL", self.dnf_kol),
-            ("DNF集合站", self.dnf_collection),
             ("黄钻", self.dnf_yellow_diamond),
             ("DNF闪光杯", self.dnf_shanguang),
             ("心悦猫咪", self.xinyue_cat),
@@ -9650,23 +9650,23 @@ class DjcHelper:
             res = self.dnf_collection_op("查询签到天数-condOutput", "864509", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_op("全民参与礼包", "864497")
-        self.dnf_collection_op("回归玩家礼包", "864499")
+        self.dnf_collection_op("回归礼包", "902177")
+        self.dnf_collection_op("全民礼包", "902207")
 
-        self.dnf_collection_op("每日签到30分钟礼包按钮", "864500")
-        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+        self.dnf_collection_op("每日在线礼包", "902213")
+        # logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
 
-        self.dnf_collection_op("累积签到3天礼包", "864501")
-        self.dnf_collection_op("累积签到7天礼包", "864502")
-        self.dnf_collection_op("累积签到15天礼包", "864503")
+        self.dnf_collection_op("签到3天礼包", "902241")
+        self.dnf_collection_op("签到7天礼包", "902283")
+        self.dnf_collection_op("签到15天礼包", "902284")
 
     def check_dnf_collection(self):
         self.check_bind_account(
             "DNF集合站",
             get_act_url("DNF集合站"),
             activity_op_func=self.dnf_collection_op,
-            query_bind_flowid="864494",
-            commit_bind_flowid="864493",
+            query_bind_flowid="902094",
+            commit_bind_flowid="902093",
         )
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -11664,4 +11664,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_collection()

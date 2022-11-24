@@ -586,6 +586,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
             ("DNF集合站", self.dnf_collection),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -598,7 +599,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("DNF集合站_ide", self.dnf_collection_ide),
-            ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
@@ -8975,64 +8975,63 @@ class DjcHelper:
         # jifen_flowid = "864315"
 
         def query_counts() -> tuple[int, int]:
-            res = self.dnf_wegame_op("查询各种数据", "889255", print_res=False)
+            res = self.dnf_wegame_op("查询各种数据", "903114", print_res=False)
             info = parse_amesvr_common_info(res)
 
             key_count, lottery_count = info.sOutValue1.split("|")
             return int(key_count), int(lottery_count)
 
         def query_open_box_times():
-            return -1, query_counts()[1]
+            return -1, query_counts()[0]
 
             # res = self.dnf_wegame_op("查询开盒子次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "469")
 
         def query_daily_lottery_times():
-            return -1, query_counts()[0]
+            return -1, query_counts()[1]
 
             # res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "470")
 
         # 全民礼包
-        self.dnf_wegame_op("全民礼包", "889191")
+        self.dnf_wegame_op("Part1-全民礼包", "901554")
 
         # 四选一
-        self.dnf_wegame_op("登录游戏", "891704")
-        self.dnf_wegame_op("在线30分钟", "889229")
-        self.dnf_wegame_op("首次分享", "889233")
+        self.dnf_wegame_op("Part2-在线30分钟", "901644")
+        self.dnf_wegame_op("Part2-登录游戏", "901645")
+        self.dnf_wegame_op("Part2-首次分享", "901666")
 
         totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for idx in range_from_one(remainingLotteryTimes):
-            res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "889237")
+            res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "901722")
             if int(res.get("ret", 0)) != 0:
                 break
+            time.sleep(5)
 
         # 体验新副本
-        for count in [5, 8]:
-            self.dnf_wegame_op(f"累计通关容易难度110级地下城 {count} 次", "889245", crossTime=count)
-
-        for count in [10, 20]:
-            self.dnf_wegame_op(f"累计地下城获得Lv105史诗装备 {count} 件", "889231", getLv105=count)
+        self.dnf_wegame_op("Part3-次元征途好礼-地下城5次", "902816")
+        self.dnf_wegame_op("Part3-次元征途好礼-地下城8次", "902886")
+        self.dnf_wegame_op("Part3-次元征途好礼-lv105装备10件", "902887")
+        self.dnf_wegame_op("Part3-次元征途好礼-lv105装备20件", "902891")
 
         # 抽奖
-        for count in [10, 30]:
-            self.dnf_wegame_op(f"每日消耗疲劳值 {count} 点", "889246", use_fatigue=count)
-
-        self.dnf_wegame_op("每周通关高级地下城-风暴逆鳞", "889249")
+        self.dnf_wegame_op("Part4-次元福利转盘-每日任务-消耗10疲劳值", "902892")
+        self.dnf_wegame_op("Part4-次元福利转盘-每日任务-通关普通【史诗之路2次】", "902898")
+        self.dnf_wegame_op("Part4-次元福利转盘-周任务-通关困难【史诗之路1次】", "902903")
 
         totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
         logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
         for idx in range_from_one(remainingLotteryTimes):
-            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "889253")
+            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "902911")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
             "WeGame活动",
             get_act_url("WeGame活动"),
             activity_op_func=self.dnf_wegame_op,
-            query_bind_flowid="889204",
-            commit_bind_flowid="889203",
+            query_bind_flowid="900505",
+            commit_bind_flowid="900504",
             roleinfo=roleinfo,
             roleinfo_source=roleinfo_source,
         )
@@ -11664,4 +11663,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_collection()
+        djcHelper.dnf_wegame()

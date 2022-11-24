@@ -661,6 +661,8 @@ need_take_awards = false
 10006 = false
 # 2022.09.22 逐龙军团出征 决战鼎盛龙族
 10007 = false
+# 2022.11.24 次元入侵 神话降临 卡片拼图赢+10装备强化券
+10008 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

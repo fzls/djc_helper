@@ -57,7 +57,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-08-18 00:00:00", "2022-10-21 23:59:59", "超级会员"),
     newNotAmsActInfo("2021-05-24 00:00:00", "2022-07-30 23:59:59", "黄钻"),
-    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "集卡"),
+    newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-11-02 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
@@ -90,6 +90,7 @@ act_name_to_url = {
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221027grow/index.html",
     "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/44476_ae80050e",
     #
     # 已过期活动
     #
@@ -102,7 +103,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20220922wegame/index.html",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/43854_4fb03cca",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/43178_623aa5f7",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/tyLTAfBMNndfo1bBvBsDkyDzfb/index_page1.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
@@ -365,7 +365,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10007
+        self.pesudo_ark_lottery_act_id = 10008
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

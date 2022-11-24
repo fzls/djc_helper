@@ -581,12 +581,12 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF冒险家之路", self.dnf_maoxian_road),
-            ("DNF马杰洛的规划", self.majieluo),
             ("DNF娱乐赛", self.dnf_game),
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
             ("DNF集合站", self.dnf_collection),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7334,7 +7334,7 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "153263")
+            self.majieluo_op("领取见面礼", "156931")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
@@ -7347,16 +7347,14 @@ class DjcHelper:
         # self.majieluo_op("选择阵营", "141618", iType=2)
 
         tasks = [
-            ("每日在线礼包", "153266"),
-            ("每日邀请礼包", "153267"),
-            ("每日登录礼包", "153264"),
-            ("每日通关礼包", "153265"),
-            ("特殊任务-通关伊斯大陆", "153268"),
-            ("特殊任务-登录游戏10天", "153269"),
-            ("特殊任务-邀请1位幸运好友", "153270"),
-            ("特殊任务-邀请3位幸运好友", "153271"),
-            ("特殊任务-邀请14位好友", "153272"),
-            ("特殊任务-通关30次推荐地下城", "153273"),
+            ("每日登录礼包", "156932"),
+            ("每日通关礼包", "156933"),
+            ("每日在线礼包", "156934"),
+            ("每日邀请礼包", "156935"),
+            ("特殊任务-史诗之路50装备", "156936"),
+            ("特殊任务-登录游戏15天", "156937"),
+            ("特殊任务-邀请2位幸运好友登录", "156938"),
+            ("特殊任务-邀请10位好友", "156939"),
         ]
         for name, flowid in tasks:
             self.majieluo_op(name, flowid)
@@ -7490,9 +7488,9 @@ class DjcHelper:
 
     @try_except(return_val_on_except=0, show_exception_info=False)
     def query_stone_count(self):
-        res = self.majieluo_op("查询当前时间引导石数量", "138749", print_res=False)
+        res = self.majieluo_op("查询当前时间引导石数量", "156956", print_res=False)
 
-        return int(res["jData"]["iFuqi"])
+        return int(res["jData"]["iExp"])
 
     def check_majieluo(self, **extra_params):
         return self.ide_check_bind_account(
@@ -11663,4 +11661,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.majieluo()

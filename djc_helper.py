@@ -584,6 +584,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF娱乐赛", self.dnf_game),
             ("集卡", self.dnf_ark_lottery),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -597,7 +598,6 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("WeGame活动", self.dnf_wegame),
-            ("超级会员", self.dnf_super_vip),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
@@ -2133,7 +2133,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "73337_3660adfc"
+        lucky_act_id = "78086_6b809893"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2142,20 +2142,20 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "73338_bd4c2ebe")
-        if not self.cfg.function_switches.disable_share and is_first_run(
-            f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
-        ):
-            self.qzone_act_op(
-                "分享给自己",
-                "73043_c6fd6bf4",
-                act_req_data={
-                    "receivers": [
-                        self.qq(),
-                    ]
-                },
-            )
-        self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
+        self.qzone_act_op("勇士见面礼", "78087_9480f80e")
+        # if not self.cfg.function_switches.disable_share and is_first_run(
+        #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
+        # ):
+        #     self.qzone_act_op(
+        #         "分享给自己",
+        #         "73043_c6fd6bf4",
+        #         act_req_data={
+        #             "receivers": [
+        #                 self.qq(),
+        #             ]
+        #         },
+        #     )
+        # self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
     # note: 适配流程如下
@@ -11664,4 +11664,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_super_vip()

@@ -240,7 +240,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
             ],
         )
 
-        logger.info("并行登陆完毕，串行加载缓存的登录信息到cfg变量中")
+        logger.info(color("bold_green") + "并行登陆完毕，串行加载缓存的登录信息到cfg变量中")
         check_all_skey_and_pskey_silently_sync(cfg)
     else:
         # 串行登录

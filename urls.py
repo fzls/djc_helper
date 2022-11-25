@@ -94,6 +94,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20221124wegame/index.html",
     "DNF马杰洛的规划": "http://dnf.qq.com/cp/a20221124luck/index.html",
+    "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     #
     # 已过期活动
     #
@@ -110,7 +111,6 @@ act_name_to_url = {
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "DNF闪光杯": "https://xinyue.qq.com/act/a20220517xyFlashMatchActPC/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
@@ -233,7 +233,7 @@ class Urls:
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
-        self.iActivityId_dnf_shanguang = "474091"  # DNF闪光杯
+        self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
@@ -305,7 +305,7 @@ class Urls:
             "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
-            "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}"
+            "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}"
         )
 
         # ide通用活动

@@ -587,6 +587,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("WeGame活动", self.dnf_wegame),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF闪光杯", self.dnf_shanguang),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -604,7 +605,6 @@ class DjcHelper:
             ("会员关怀", self.dnf_vip_mentor),
             ("KOL", self.dnf_kol),
             ("黄钻", self.dnf_yellow_diamond),
-            ("DNF闪光杯", self.dnf_shanguang),
             ("心悦猫咪", self.xinyue_cat),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
@@ -3466,33 +3466,63 @@ class DjcHelper:
             # wait_for("等待一会", 5)
             # self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "863327", weekDay=the_day_before_last_day)
 
+        def query_luck_coin() -> int:
+            res = self.dnf_shanguang_op("查询积分", "903560", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue3)
+
         # --------------------------------------------------------------------------------
 
         # self.dnf_shanguang_op("报名礼", "724862")
-        self.dnf_shanguang_op("报名礼包", "863329")
-        self.dnf_shanguang_op("app专属礼", "863325")
+        self.dnf_shanguang_op("报名礼包", "903566")
+        self.dnf_shanguang_op("app专属礼", "903585")
         async_message_box("请手动前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
         # # 签到
         # check_in()
 
         # 周赛奖励
-        week_4 = get_today(get_this_thursday_of_dnf())
-        week_4_to_flowid = {
-            "20220623": "864758",
-            "20220630": "864759",
-            "20220707": "864760",
-        }
+        # week_4 = get_today(get_this_thursday_of_dnf())
+        # week_4_to_flowid = {
+        #     "20220623": "864758",
+        #     "20220630": "864759",
+        #     "20220707": "864760",
+        # }
+        #
+        # if week_4 in week_4_to_flowid:
+        #     flow_id = week_4_to_flowid[week_4]
+        #     self.dnf_shanguang_op(f"领取本周的爆装奖励 - {week_4}", flow_id)
+        #     time.sleep(5)
+        for level in range_from_one(10):
+            res = self.dnf_shanguang_op(f"通关难度 {level} 奖励", "907026", **{"pass": level})
+            if int(res["ret"]) == -1:
+                break
+            time.sleep(1)
 
-        if week_4 in week_4_to_flowid:
-            flow_id = week_4_to_flowid[week_4]
-            self.dnf_shanguang_op(f"领取本周的爆装奖励 - {week_4}", flow_id)
+        awards = [
+            ("2022-11-30 23:59:59", "爆装奖励第1期", "907092"),
+            ("2022-12-07 23:59:59", "爆装奖励第2期", "907095"),
+            ("2022-12-14 23:59:59", "爆装奖励第3期", "907096"),
+            ("2022-11-30 23:59:59", "排行榜奖励第1期", "907160"),
+            ("2022-12-07 23:59:59", "排行榜奖励第2期", "907161"),
+            ("2022-12-14 23:59:59", "排行榜奖励第3期", "907162"),
+        ]
+        for endtime, name, flowid in awards:
+            if not now_after(endtime):
+                logger.info(f"{name} 尚未结算，在 {endtime} 之后才能领取，先跳过")
+                continue
+            self.dnf_shanguang_op(f"{name}", flowid)
             time.sleep(5)
 
         # 抽奖
-        self.dnf_shanguang_op("每日登录游戏-送抽奖资格", "861111")
-        for idx in range_from_one(5):
-            res = self.dnf_shanguang_op(f"抽奖 - {idx}", "863330")
+        self.dnf_shanguang_op("每日登录游戏", "903657")
+        self.dnf_shanguang_op("每日登录App", "903665")
+        coin = query_luck_coin()
+        lottery_count = coin // 10
+        logger.info(f"当前积分为 {coin}，可抽奖 {lottery_count} 次")
+        for idx in range_from_one(lottery_count):
+            res = self.dnf_shanguang_op(f"抽奖 - {idx}", "903590")
             if int(res["ret"]) != 0:
                 break
             time.sleep(5)
@@ -3502,8 +3532,8 @@ class DjcHelper:
             "DNF闪光杯",
             get_act_url("DNF闪光杯"),
             activity_op_func=self.dnf_shanguang_op,
-            query_bind_flowid="861102",
-            commit_bind_flowid="861101",
+            query_bind_flowid="884251",
+            commit_bind_flowid="884250",
         )
 
     def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
@@ -10859,6 +10889,7 @@ class DjcHelper:
                 "exchangeId",
                 "sChannel",
                 "flow_id",
+                "pass",
             ]
         }
 
@@ -11661,4 +11692,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_shanguang()

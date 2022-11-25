@@ -1446,7 +1446,10 @@ def show_tips(cfg: Config):
             "嘉年华的h5活动可以领取7天黑钻，让三个未参与过活动的好友参与的话，可以领取一个伤害字体\n"
             "由于活动仅一次性，就不添加了，有兴趣请自行参与\n"
             "https://dnf.qq.com/cp/a20221101carnival/index.html\n"
-        )
+        ),
+        "22.11 斗鱼活动": (
+            "斗鱼活动请自行参与：https://www.douyu.com/topic/plcs?rid=5324055\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

@@ -693,15 +693,23 @@ class DnfHelperChronicleSignList(ConfigInterface):
 
 class DnfHelperChronicleSignGiftInfo(ConfigInterface):
     def __init__(self):
-        self.sIdentifyId = ""
-        self.sName = "时间引导石礼盒 (5个)"
-        self.sLbcode = "sign_0001_1"
-        self.sDays = "第1天"
-        self.sPic1 = "https://mcdn.gtimg.com/bbcdn/dnf/Scorelb/sPic1/icons/20210128145952.png?version=5952"
-        self.iRank = "7"
+        self.sIdentifyId = "20221121"
+        self.sName = "神秘契约礼包 (1天)"
+        self.sLbcode = ""
+        self.sDays = "20221121"
+        self.sPic1 = "https://mcdn.gtimg.com/bbcdn/dnf/Scoresign/sPic1/icons/20221101104652.png?version=4652"
+        self.iRank = ""
         self.iNum = "1"
-        self.status = 2  # 2-未完成，0-已完成未领取，1-已领取
+        self.status = 1
         self.iLbSel = "1"
+        self.sExpire = ""
+        self.iId = "0"
+        self.SubGifts = []
+        self.iIsOpen = "2"
+        self.sAndroidUrl = ""
+        self.sIOSUrl = ""
+        self.num = 1
+        self.date = "2022-11-21"
 
 
 class HelloVoiceDnfRoleInfo(ConfigInterface):

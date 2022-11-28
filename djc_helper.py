@@ -588,13 +588,13 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF闪光杯", self.dnf_shanguang),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
             ("colg每日签到", self.colg_signin),
             ("DNF落地页活动", self.dnf_luodiye),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
             ("dnf助手活动", self.dnf_helper),
@@ -6434,7 +6434,7 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        welfare_version = "v5"
+        welfare_version = "v6"
         db = WelfareDB().with_context(welfare_version).load()
         account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.name}").load()
 
@@ -6487,8 +6487,7 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNFQKF",
-            "DNFGFLT",
+            "冒险，前往新世界！",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -11686,4 +11685,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_welfare()

@@ -1450,6 +1450,10 @@ def show_tips(cfg: Config):
         "22.11 斗鱼活动": (
             "斗鱼活动请自行参与：https://www.douyu.com/topic/plcs?rid=5324055\n"
         ),
+        "22.11 龙人小游戏": (
+            "新出了个无脑空格蓄力的龙人小游戏，累积分享到微信20天可以获取一个自选灿烂，有兴趣的可以自己参与下\n"
+            "https://dnf.qq.com/mingame/fish/index.html\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

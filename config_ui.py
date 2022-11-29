@@ -304,6 +304,7 @@ class NoticeUi(QFrame):
         top_layout = QVBoxLayout()
 
         self.label_title = QLabel("默认标题")
+        self.label_time = QLabel("发送时间")
 
         self.label_content = QTextEdit("默认内容")
         self.label_content.setReadOnly(True)
@@ -311,6 +312,7 @@ class NoticeUi(QFrame):
         self.update_current_notice()
 
         top_layout.addWidget(self.label_title, alignment=Qt.AlignHCenter)
+        top_layout.addWidget(self.label_time, alignment=Qt.AlignHCenter)
         top_layout.addWidget(self.label_content)
 
         layout = QHBoxLayout()
@@ -343,6 +345,7 @@ class NoticeUi(QFrame):
         current_notice = self.notices[idx]
 
         self.label_title.setText(f"[{idx + 1}/{notice_count}] {current_notice.title}")
+        self.label_time.setText(current_notice.send_at)
         self.label_content.setText(current_notice.message)
 
     def show_previous_notice(self, checked=False):

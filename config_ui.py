@@ -36,6 +36,7 @@ from config import (
 from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
 from log import color, fileHandler, logger, new_file_handler
+from notice import Notice, NoticeManager
 from qt_wrapper import (
     MyComboBox,
     QHLine,
@@ -85,6 +86,7 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QStyleFactory,
     QTabWidget,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -269,6 +271,90 @@ class GetBuyInfoThread(QThread):
         self.signal_results.emit("", dlc_info, monthly_pay_info)
 
 
+class NoticeUi(QFrame):
+    def __init__(self, parent=None):
+        super().__init__()
+
+        self.setWindowTitle("历史公告")
+
+        self.resize(540, 390)
+
+        self.load_notices()
+
+        self.init_ui()
+
+    def load_notices(self):
+        self.current_notice_index = 0
+        self.notice_manager = NoticeManager()
+
+    def init_ui(self):
+        top_layout = QVBoxLayout()
+
+        # 按照实际降序排列，先展示最近的
+        self.notice_manager.notices.sort(key=lambda notice: notice.send_at, reverse=True)
+
+        self.label_title = QLabel("默认标题")
+
+        self.label_content = QTextEdit("默认内容")
+        self.label_content.setReadOnly(True)
+
+        self.update_current_notice()
+
+        top_layout.addWidget(self.label_title, alignment=Qt.AlignHCenter)
+        top_layout.addWidget(self.label_content)
+
+        layout = QHBoxLayout()
+
+        btn_previous = create_pushbutton("上一个")
+
+        combobox_notice_title = create_combobox(
+            self.notices()[0].title,
+            [notice.title for notice in self.notices()],
+        )
+
+        btn_next = create_pushbutton("下一个")
+
+        btn_previous.clicked.connect(self.show_previous_notice)
+        combobox_notice_title.currentTextChanged.connect(self.on_select_notice_title)
+        btn_next.clicked.connect(self.show_next_notice)
+
+        layout.addWidget(btn_previous)
+        layout.addWidget(combobox_notice_title)
+        layout.addWidget(btn_next)
+
+        top_layout.addLayout(layout)
+
+        self.setLayout(top_layout)
+
+    def notices(self) -> list[Notice]:
+        return self.notice_manager.notices
+
+    def update_current_notice(self):
+        notice_count = len(self.notices())
+
+        idx = self.current_notice_index
+        current_notice = self.notices()[idx]
+
+        self.label_title.setText(f"[{idx + 1}/{notice_count}] {current_notice.title}")
+        self.label_content.setText(current_notice.message)
+
+    def show_previous_notice(self, checked=False):
+        self.current_notice_index = (self.current_notice_index + len(self.notices()) - 1) % len(self.notices())
+        self.update_current_notice()
+
+    def show_next_notice(self, checked=False):
+        self.current_notice_index = (self.current_notice_index + 1) % len(self.notices())
+        self.update_current_notice()
+
+    def on_select_notice_title(self, title: str):
+        for idx, notice in enumerate(self.notices()):
+            if notice.title == title:
+                self.current_notice_index = idx
+                break
+
+        self.update_current_notice()
+
+
 class ConfigUi(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -415,17 +501,20 @@ class ConfigUi(QFrame):
         btn_open_pay_guide = create_pushbutton("查看付费指引", "SpringGreen")
         btn_open_usage_guide = create_pushbutton("查看使用教程（文字版）", "SpringGreen")
         btn_open_usage_video = create_pushbutton("查看使用教程（视频版）", "SpringGreen")
+        btn_show_notice = create_pushbutton("查看公告", "Lime")
         btn_check_update = create_pushbutton("检查更新", "PaleGreen")
 
         btn_open_pay_guide.clicked.connect(self.open_pay_guide)
         btn_open_usage_guide.clicked.connect(self.open_usage_guide)
         btn_open_usage_video.clicked.connect(self.open_usage_video)
+        btn_show_notice.clicked.connect(self.show_notice)
         btn_check_update.clicked.connect(self.check_update)
 
         layout = QHBoxLayout()
         layout.addWidget(btn_open_pay_guide)
         layout.addWidget(btn_open_usage_guide)
         layout.addWidget(btn_open_usage_video)
+        layout.addWidget(btn_show_notice)
         layout.addWidget(btn_check_update)
         top_layout.addLayout(layout)
         top_layout.addWidget(QHLine())
@@ -456,6 +545,13 @@ class ConfigUi(QFrame):
         self.popen(os.path.realpath("付费指引/支持一下.png"))
 
         report_click_event("support")
+
+    def show_notice(self):
+        if hasattr(self, "notice"):
+            self.notice.close()
+
+        self.notice = NoticeUi(self)
+        self.notice.show()
 
     def check_update(self, checked=False):
         cfg = self.to_config().common

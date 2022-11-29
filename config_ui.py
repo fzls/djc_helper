@@ -285,13 +285,23 @@ class NoticeUi(QFrame):
 
     def load_notices(self):
         self.current_notice_index = 0
+
+        # 当前的公告
         self.notice_manager = NoticeManager(download_only_if_not_exists=True)
 
-    def init_ui(self):
-        top_layout = QVBoxLayout()
+        # 额外加载存档的公告
+        self.notice_manager.file_name = self.notice_manager.archived_notices_file_name
+        self.notice_manager.load(download_only_if_not_exists=True)
 
         # 按照实际降序排列，先展示最近的
         self.notice_manager.notices.sort(key=lambda notice: notice.send_at, reverse=True)
+
+    @property
+    def notices(self) -> list[Notice]:
+        return self.notice_manager.notices
+
+    def init_ui(self):
+        top_layout = QVBoxLayout()
 
         self.label_title = QLabel("默认标题")
 
@@ -308,8 +318,8 @@ class NoticeUi(QFrame):
         btn_previous = create_pushbutton("上一个")
 
         combobox_notice_title = create_combobox(
-            self.notices()[0].title,
-            [notice.title for notice in self.notices()],
+            self.notices[0].title,
+            [notice.title for notice in self.notices],
         )
 
         btn_next = create_pushbutton("下一个")
@@ -326,28 +336,25 @@ class NoticeUi(QFrame):
 
         self.setLayout(top_layout)
 
-    def notices(self) -> list[Notice]:
-        return self.notice_manager.notices
-
     def update_current_notice(self):
-        notice_count = len(self.notices())
+        notice_count = len(self.notices)
 
         idx = self.current_notice_index
-        current_notice = self.notices()[idx]
+        current_notice = self.notices[idx]
 
         self.label_title.setText(f"[{idx + 1}/{notice_count}] {current_notice.title}")
         self.label_content.setText(current_notice.message)
 
     def show_previous_notice(self, checked=False):
-        self.current_notice_index = (self.current_notice_index + len(self.notices()) - 1) % len(self.notices())
+        self.current_notice_index = (self.current_notice_index + len(self.notices) - 1) % len(self.notices)
         self.update_current_notice()
 
     def show_next_notice(self, checked=False):
-        self.current_notice_index = (self.current_notice_index + 1) % len(self.notices())
+        self.current_notice_index = (self.current_notice_index + 1) % len(self.notices)
         self.update_current_notice()
 
     def on_select_notice_title(self, title: str):
-        for idx, notice in enumerate(self.notices()):
+        for idx, notice in enumerate(self.notices):
             if notice.title == title:
                 self.current_notice_index = idx
                 break

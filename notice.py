@@ -77,14 +77,23 @@ class Notice(ConfigInterface):
 
 
 class NoticeManager:
+    current_notices_file_name = "notices.txt"
+    archived_notices_file_name = "notice_archived.txt"
+
     def __init__(self, load_from_remote=True, download_only_if_not_exists=False):
         self.notices: List[Notice] = []
 
-        self.file_name = "notices.txt"
-        self.cache_path = f"{downloads_dir}/{self.file_name}"
-        self.save_path = f"utils/{self.file_name}"
+        self.file_name = self.current_notices_file_name
 
         self.load(load_from_remote, download_only_if_not_exists)
+
+    @property
+    def cache_path(self) -> str:
+        return f"{downloads_dir}/{self.file_name}"
+
+    @property
+    def save_path(self) -> str:
+        return f"utils/{self.file_name}"
 
     @try_except()
     def load(self, from_remote=True, download_only_if_not_exists=False):

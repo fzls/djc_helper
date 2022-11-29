@@ -285,7 +285,7 @@ class NoticeUi(QFrame):
 
     def load_notices(self):
         self.current_notice_index = 0
-        self.notice_manager = NoticeManager()
+        self.notice_manager = NoticeManager(download_only_if_not_exists=True)
 
     def init_ui(self):
         top_layout = QVBoxLayout()

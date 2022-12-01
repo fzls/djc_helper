@@ -148,7 +148,6 @@ from util import (
     get_month,
     get_now,
     get_now_unix,
-    get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
     get_week,

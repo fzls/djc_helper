@@ -1453,12 +1453,9 @@ def show_tips(cfg: Config):
             "由于活动仅一次性，就不添加了，有兴趣请自行参与\n"
             "https://dnf.qq.com/cp/a20221101carnival/index.html\n"
         ),
-        "22.11 斗鱼活动": (
-            "斗鱼活动请自行参与：https://www.douyu.com/topic/plcs?rid=5324055\n"
-        ),
+        "22.11 斗鱼活动": ("斗鱼活动请自行参与：https://www.douyu.com/topic/plcs?rid=5324055\n"),
         "22.11 龙人小游戏": (
-            "新出了个无脑空格蓄力的龙人小游戏，累积分享到微信20天可以获取一个自选灿烂，有兴趣的可以自己参与下\n"
-            "https://dnf.qq.com/mingame/fish/index.html\n"
+            "新出了个无脑空格蓄力的龙人小游戏，累积分享到微信20天可以获取一个自选灿烂，有兴趣的可以自己参与下\n" "https://dnf.qq.com/mingame/fish/index.html\n"
         ),
     }
 

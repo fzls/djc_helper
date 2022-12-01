@@ -198,14 +198,18 @@ def change_console_window_mode(cfg, disable_min_console=False):
 
     if is_running_under_windows_terminal_in_win11():
         logger.info(color("bold_yellow") + "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
-        async_message_box((
-            "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程\n"
-            "此外，在这种情况下，似乎关闭小助手时，会弹出\n"
-            "【应用程序无法启动(0xc0000142)。请点击“确定”关闭应用程序】\n"
-            "的弹窗，且点确认后会再次弹出，只能通过任务管理器来强制关闭\n"
-            "\n"
-            "因此强烈推荐将默认终端改回cmd.exe，具体流程请打开配置工具，点开上方的【查看公告】按钮，找到【win11运行后桌面卡住】这个公告，按照里面的提示去修改系统配置\n"
-        ), "推荐修改WindowsTerminal提示", show_once=True)
+        async_message_box(
+            (
+                "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程\n"
+                "此外，在这种情况下，似乎关闭小助手时，会弹出\n"
+                "【应用程序无法启动(0xc0000142)。请点击“确定”关闭应用程序】\n"
+                "的弹窗，且点确认后会再次弹出，只能通过任务管理器来强制关闭\n"
+                "\n"
+                "因此强烈推荐将默认终端改回cmd.exe，具体流程请打开配置工具，点开上方的【查看公告】按钮，找到【win11运行后桌面卡住】这个公告，按照里面的提示去修改系统配置\n"
+            ),
+            "推荐修改WindowsTerminal提示",
+            show_once=True,
+        )
         return
 
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")

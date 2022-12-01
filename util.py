@@ -170,6 +170,8 @@ def is_running_under_windows_terminal_in_win11() -> bool:
             "目前发现这种情况下启动小助手时，特征是进程列表中会多出一个 WindowsTerminal.exe\n"
             "为了识别这种情况，接下来将使用 psutil.process_iter() 接口来遍历当前的进程列表，从而判断是否是这种情况，若是，则将禁用掉 最大化/最小化窗口 功能，避免桌面卡死\n"
             "\n"
+            "关闭本弹窗后，后续将开始遍历当前运行的进程列表来判定\n"
+            "\n"
             f"如果你觉得这个行为可能侵犯你的隐私，请在小助手目录新建一个名为 {flag_file} 的目录或文件，将禁用该行为，并默认不属于该种情况\n"
             "同时如果你想继续使用这个最大化功能，请打开配置工具，点开上方的【查看公告】按钮，找到【win11运行后桌面卡住】这个公告，按照里面的提示去修改系统配置即可\n"
         ),
@@ -196,6 +198,14 @@ def change_console_window_mode(cfg, disable_min_console=False):
 
     if is_running_under_windows_terminal_in_win11():
         logger.info(color("bold_yellow") + "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
+        async_message_box((
+            "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程\n"
+            "此外，在这种情况下，似乎关闭小助手时，会弹出\n"
+            "【应用程序无法启动(0xc0000142)。请点击“确定”关闭应用程序】\n"
+            "的弹窗，且点确认后会再次弹出\n"
+            "\n"
+            "因此强烈推荐将默认终端改回cmd.exe，具体流程请打开配置工具，点开上方的【查看公告】按钮，找到【win11运行后桌面卡住】这个公告，按照里面的提示去修改系统配置\n"
+        ), "推荐修改WindowsTerminal提示", show_once=True)
         return
 
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")

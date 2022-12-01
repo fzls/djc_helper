@@ -195,7 +195,7 @@ def change_console_window_mode(cfg, disable_min_console=False):
         return
 
     if is_running_under_windows_terminal_in_win11():
-        logger.info("检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
+        logger.info(color("bold_yellow") + "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
         return
 
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")

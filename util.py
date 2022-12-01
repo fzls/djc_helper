@@ -157,9 +157,45 @@ def ensure_cmd_window_buffer_size_for_windows(cfg):
     )
 
 
+def is_running_under_windows_terminal_in_win11() -> bool:
+    is_win11 = platform.system() == "Windows" and platform.release() == "10" and platform.version() >= "10.0.22000"
+    if not is_win11:
+        return False
+
+    flag_file = ".不检测终端"
+
+    message_box(
+        (
+            "当前操作系统是win11，由于某个版本后，会将 WindowsTerminal 设置为系统默认终端，而小助手默认开启的自动最大化功能在这种情况下会导致桌面卡死，同时左下角多出一个 Default IME 的小窗口\n"
+            "目前发现这种情况下启动小助手时，特征是进程列表中会多出一个 WindowsTerminal.exe\n"
+            "为了识别这种情况，接下来将使用 psutil.process_iter() 接口来遍历当前的进程列表，从而判断是否是这种情况，若是，则将禁用掉 最大化/最小化窗口 功能，避免桌面卡死\n"
+            "\n"
+            f"如果你觉得这个行为可能侵犯你的隐私，请在小助手目录新建一个名为 {flag_file} 的目录或文件，将禁用该行为，并默认不属于该种情况\n"
+            "同时如果你想继续使用这个最大化功能，请打开配置工具，点开上方的【查看公告】按钮，找到【win11运行后桌面卡住】这个公告，按照里面的提示去修改系统配置即可\n"
+        ),
+        "提示win11检测终端",
+        show_once=True,
+        follow_flag_file=False,
+    )
+
+    if exists_flag_file(flag_file):
+        logger.warning("当前禁用了检测终端功能，将默认当前系统设置不会因为最大化功能而卡住")
+        return False
+
+    for p in psutil.process_iter():
+        if p.name() == "WindowsTerminal.exe":
+            return True
+
+    return False
+
+
 def change_console_window_mode(cfg, disable_min_console=False):
     if platform.system() != "Windows":
         logger.info(f"当前运行的系统是{platform.system()}，将不尝试 修改窗口大小")
+        return
+
+    if is_running_under_windows_terminal_in_win11():
+        logger.info("检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
         return
 
     logger.info(color("bold_cyan") + "准备最大化运行窗口，请稍候。若想修改该配置，请前往配置工具调整该选项~")

@@ -54,8 +54,7 @@ def do_check_all_skey_and_pskey(idx: int, account_config: AccountConfig, common_
 
     logger.warning(color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------")
     djcHelper = DjcHelper(account_config, common_config)
-    if not is_new_version_ark_lottery():
-        djcHelper.fetch_pskey()
+    djcHelper.fetch_pskey()
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
 

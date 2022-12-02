@@ -588,6 +588,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -599,7 +600,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("DNF集合站_ide", self.dnf_collection_ide),
-            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("幸运勇士", self.dnf_lucky_user),
             ("会员关怀", self.dnf_vip_mentor),
             ("KOL", self.dnf_kol),
@@ -3897,9 +3897,9 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
 
-        self.qq_video_iwan_op("幸运勇士礼包", "6hCWninbMu")
+        self.qq_video_iwan_op("幸运勇士礼包", "VNom2l6fb")
         # self.qq_video_iwan_op("全民大礼包", "2hiHF_yAf")
-        self.qq_video_iwan_op("勇士见面礼", "ri6rVEbq45")
+        self.qq_video_iwan_op("勇士见面礼", "ZuHrb28g6L")
         # self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "fj174odxr")
         # self.qq_video_iwan_op("在线30分钟签到", "1X7VUbqgr")
         # self.qq_video_iwan_op("累计 3 天", "ql8qD9_NH")
@@ -3907,13 +3907,13 @@ class DjcHelper:
         # self.qq_video_iwan_op("累计 10 天", "uBiO594xn")
         # self.qq_video_iwan_op("累计 15 天", "U4urMEDRr")
 
-        act_url = get_act_url("qq视频蚊子腿-爱玩")
-        async_message_box(
-            "QQ视频活动有个专属光环和其他道具可以兑换，不过至少得在页面上充值两个月的QQ视频会员。各位如有需求，可以自行前往活动页面进行购买与兑换~",
-            f"QQ视频活动-光环-{act_url}",
-            open_url=act_url,
-            show_once=True,
-        )
+        # act_url = get_act_url("qq视频蚊子腿-爱玩")
+        # async_message_box(
+        #     "QQ视频活动有个专属光环和其他道具可以兑换，不过至少得在页面上充值两个月的QQ视频会员。各位如有需求，可以自行前往活动页面进行购买与兑换~",
+        #     f"QQ视频活动-光环-{act_url}",
+        #     open_url=act_url,
+        #     show_once=True,
+        # )
 
     def qq_video_iwan_op(self, ctx: str, missionId: str, qq_access_token="", qq_openid="", qq_appid="", print_res=True):
         role = self.get_dnf_bind_role_copy()
@@ -11684,4 +11684,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.qq_video_iwan()

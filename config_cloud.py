@@ -46,6 +46,9 @@ class ConfigCloud(ConfigInterface):
         # 新增的黑名单
         self.black_list: List[BlackListConfig] = []
 
+        # dlc是否优先启用alist
+        self.dlc_prefer_alist = False
+
     def fields_to_fill(self):
         return [
             ("black_list", BlackListConfig),

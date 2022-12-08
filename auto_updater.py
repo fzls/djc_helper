@@ -16,6 +16,7 @@ from distutils import dir_util
 
 from alist import get_download_url
 from compress import decompress_dir_with_bandizip
+from config_cloud import config_cloud
 from download import download_file, download_latest_github_release
 from update import get_latest_version_from_github, need_update
 from upload_lanzouyun import Uploader
@@ -176,21 +177,52 @@ def is_mirror_compressed_file_incomplete(e: DistutilsFileError) -> bool:
 def full_update(args, uploader, latest_version: str) -> bool:
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
-    logger.info("开始下载最新版本的压缩包")
-    filepath = ""
-    try:
+    def download_by_alist() -> str:
         logger.warning("尝试通过alist下载")
         download_url = get_download_url(f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z")
         filepath = download_file(
             download_url, tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
         )
         report_dlc_usage("full_update_from_alist")
-    except Exception:
+
+        return filepath
+
+    def download_by_github() -> str:
         logger.warning("尝试通过github下载")
         filepath = download_latest_github_release(
             tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
         )
         report_dlc_usage("full_update_from_github")
+
+        return filepath
+
+    config = config_cloud()
+
+    logger.info("开始下载最新版本的压缩包")
+    filepath = ""
+    download_functions = []
+    if config.dlc_prefer_alist:
+        logger.info("当前配置为优先alist")
+        download_functions = [
+            download_by_alist,
+            download_by_github,
+        ]
+    else:
+        logger.info("当前配置为优先github")
+        download_functions = [
+            download_by_github,
+            download_by_alist,
+        ]
+
+    for download_function in download_functions:
+        try:
+            filepath = download_function()
+            break
+        except Exception:
+            logger.info("下载失败了，尝试下一个下载方式")
+
+    if filepath == "":
+        raise Exception("所有下载方式都失败了")
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)

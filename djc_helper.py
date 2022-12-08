@@ -3508,7 +3508,9 @@ class DjcHelper:
             self.dnf_shanguang_op(f"{pass_date} 查询结算结果第 {week_index} 周", settle_flow_id)
 
             for level in range_from_one(10):
-                res = self.dnf_shanguang_op(f"{pass_date} 通关难度 {level} 奖励", "907026", **{"pass": level}, pass_date="20221201")
+                res = self.dnf_shanguang_op(
+                    f"{pass_date} 通关难度 {level} 奖励", "907026", **{"pass": level}, pass_date="20221201"
+                )
                 if int(res["ret"]) == -1:
                     break
                 time.sleep(3)

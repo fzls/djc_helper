@@ -195,12 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "闪光杯绑定角色"
-    message = """经反馈发现，部分朋友闪光杯绑定角色与道聚城角色不同的情况下，会卡在这个活动
+    title = "wegame蚊子腿"
+    message = """经他人发现，发现wegame有个活动，轻松就能领取四次抽奖机会，几乎必得QB，我四次分别抽了2/2/2/1QB
 
-可以在配置工具中修改【公共配置/角色绑定与同步/是否强制与道聚城的绑定角色同步】，将这个开关取消勾选即可
+大家可以参考我下面弹出的腾讯文档中的步骤来操作
 """
-    open_url = ""
+    open_url = "https://docs.qq.com/doc/DYkpKWG1jUUNLQUhI"
     show_only_before_version = ""
 
     if title != "":

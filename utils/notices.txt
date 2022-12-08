@@ -62,11 +62,11 @@
   {
     "sender": "风之凌殇",
     "title": "wegame蚊子腿",
-    "message": "经他人发现，发现wegame有个活动，轻松就能领取四次抽奖机会，几乎必得QB，我四次分别抽了2/2/2/1QB\n\n大家可以参考我下面弹出的腾讯文档中的步骤来操作\n",
-    "send_at": "2022-12-08 22:36:17",
+    "message": "经他人分享，发现wegame有个活动，轻松就能领取四次抽奖机会，几乎必得QB，我四次分别抽了2/2/2/1QB\n\n大家可以参考我下面弹出的腾讯文档中的步骤来操作\n",
+    "send_at": "2022-12-08 22:37:41",
     "show_type": "once",
     "open_url": "https://docs.qq.com/doc/DYkpKWG1jUUNLQUhI",
-    "expire_at": "2022-12-15 22:36:17",
+    "expire_at": "2022-12-15 22:37:41",
     "show_only_before_version": ""
   }
 ]

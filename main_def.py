@@ -13,6 +13,8 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 import requests
 
+from alist import get_download_url
+from download import download_file
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from config_cloud import config_cloud
 from const import downloads_dir
@@ -1569,11 +1571,10 @@ def try_auto_update(cfg):
 
                 # 未发现dlc和最新版dlc，尝试从网盘下载
                 logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
-                uploader = Uploader()
-                uploader.download_file_in_folder(
-                    uploader.folder_djc_helper,
-                    os.path.basename(auto_updater_path()),
-                    os.path.dirname(auto_updater_path()),
+
+                download_url = get_download_url(os.path.basename(auto_updater_path()))
+                filepath = download_file(
+                    download_url, os.path.dirname(auto_updater_path())
                 )
 
         # 保底，如果前面的流程都失败了，提示用户自行下载

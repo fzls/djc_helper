@@ -150,14 +150,16 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
             f"    购买了DLC：可能是dlc出了bug，后续版本可能已经修复\n"
             f"    未购买DLC：可能是因网络问题而未能检查更新\n"
             "\n"
-            f"【很可能】已经有新的版本，建议打开小助手目录中的【相关信息/网盘链接】，手动去网盘看看是否有新版本\n"
+            f"【很可能】已经有新的版本，建议在小助手的群公告的置顶公告中找到最新的下载地址，在浏览器中打开看看是否有新版本\n"
+            "\n"
+            "(若未加群，可打开配置工具，点击上方的【加群反馈问题/交流】按钮即可)\n"
             "\n"
             "如果在网盘没有发现更新的版本，说明自这次版本发布至今，没有任何新活动需要添加，也没有bug需要修复，无视本提示即可。\n"
-            "本提示是用于在无法检查更新的情况下，保底提醒更新版本，避免一直使用好几个月以前的版本而无法领到新活动的奖励\n"
+            "本提示是用于在无法检查更新，且当前版本已经发布很久的情况下，每周保底提醒一次更新可能存在的新版本，避免一直使用好几个月以前的版本而无法领到新活动的奖励\n"
         )
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-            async_message_box(msg, "版本太久未更新提示", open_url=config.netdisk_link, print_log=False)
+            async_message_box(msg, "当前版本似乎太老了，请按提示确认是否存在更新的版本", open_url=config.netdisk_link, print_log=False)
 
 
 # 获取最新版本号与下载网盘地址

@@ -14,7 +14,6 @@ from typing import Callable, Dict, List, Optional, Tuple
 import requests
 
 from alist import get_download_url
-from download import download_file
 from config import AccountConfig, CommonConfig, Config, config, load_config
 from config_cloud import config_cloud
 from const import downloads_dir
@@ -27,6 +26,7 @@ from djc_helper import (
     notify_same_account_try_login_at_multiple_threads,
     run_act,
 )
+from download import download_file
 from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAccountTryLoginAtMultipleThreadsException
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
@@ -1450,14 +1450,10 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "22.11 嘉年华h5活动": (
-            "嘉年华的h5活动可以领取7天黑钻，让三个未参与过活动的好友参与的话，可以领取一个伤害字体\n"
-            "由于活动仅一次性，就不添加了，有兴趣请自行参与\n"
-            "https://dnf.qq.com/cp/a20221101carnival/index.html\n"
-        ),
-        "22.11 斗鱼活动": ("斗鱼活动请自行参与：https://www.douyu.com/topic/plcs?rid=5324055\n"),
-        "22.11 龙人小游戏": (
-            "新出了个无脑空格蓄力的龙人小游戏，累积分享到微信20天可以获取一个自选灿烂，有兴趣的可以自己参与下\n" "https://dnf.qq.com/mingame/fish/index.html\n"
+        "22.12 斗鱼虎牙活动": (
+            "斗鱼虎牙活动请自行参与：\n"
+            "斗鱼: https://www.douyu.com/topic/bzbker?rid=5324055\n"
+            "虎牙: https://www.huya.com/g/2#cate-1-5483\n"
         ),
     }
 

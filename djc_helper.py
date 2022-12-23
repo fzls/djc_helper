@@ -583,10 +583,10 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF集合站", self.dnf_collection),
             ("WeGame活动", self.dnf_wegame),
-            ("DNF马杰洛的规划", self.majieluo),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7351,7 +7351,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     # re: 变更时需要调整这些
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗] [初始化]
-    flowid_majieluo_query_info = "147926"
+    flowid_majieluo_query_info = "163897"
     # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入，在 urls.py 的 not_ams_activities 中填写起止时间
 
     @try_except()
@@ -7363,7 +7363,11 @@ class DjcHelper:
             logger.warning("未启用领取DNF马杰洛的规划活动功能，将跳过")
             return
 
-        self.check_majieluo()
+        # re: 根据本次检查绑定具体使用的活动体系决定使用哪个函数
+        # check_func = self.check_majieluo
+        check_func = self.check_majieluo_amesvr
+
+        check_func()
 
         def query_info() -> MaJieLuoInfo:
             raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
@@ -7372,12 +7376,12 @@ class DjcHelper:
 
         # 马杰洛的见面礼
         def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "156931")
+            self.majieluo_op("领取见面礼", "163667")
             return True
 
         logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
         if self.cfg.enable_majieluo_lucky:
-            self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", self.check_majieluo, take_gift)
+            self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", check_func, take_gift)
         else:
             take_gift(self.get_dnf_bind_role_copy())
 
@@ -7385,14 +7389,14 @@ class DjcHelper:
         # self.majieluo_op("选择阵营", "141618", iType=2)
 
         tasks = [
-            ("每日登录礼包", "156932"),
-            ("每日通关礼包", "156933"),
-            ("每日在线礼包", "156934"),
-            ("每日邀请礼包", "156935"),
-            ("特殊任务-史诗之路50装备", "156936"),
-            ("特殊任务-登录游戏15天", "156937"),
-            ("特殊任务-邀请2位幸运好友登录", "156938"),
-            ("特殊任务-邀请10位好友", "156939"),
+            ("每日登录礼包", "163691"),
+            ("每日通关礼包", "163706"),
+            ("每日在线礼包", "163713"),
+            ("每日邀请礼包", "163717"),
+            ("特殊任务-登录游戏15次", "163718"),
+            ("特殊任务-史诗之路50装备", "163719"),
+            ("特殊任务-邀请10位好友", "163728"),
+            ("特殊任务-邀请2位幸运好友登录", "163729"),
         ]
         for name, flowid in tasks:
             self.majieluo_op(name, flowid)
@@ -7574,6 +7578,31 @@ class DjcHelper:
             giftNum=giftNum,
             **extra_params,
             extra_cookies=f"p_skey={p_skey}",
+        )
+
+    def check_majieluo_amesvr(self):
+        """有时候马杰洛活动可能绑定走amesvr系统，活动内容走ide，这里做下特殊处理"""
+        self.check_bind_account(
+            "DNF马杰洛的规划",
+            get_act_url("DNF马杰洛的规划"),
+            activity_op_func=self.majieluo_amesvr_op,
+            query_bind_flowid="914365",
+            commit_bind_flowid="914364",
+        )
+
+    def majieluo_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_majieluo
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF马杰洛的规划"),
+            **extra_params,
         )
 
     # --------------------------------------------魔界人探险记--------------------------------------------
@@ -11701,4 +11730,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang()
+        djcHelper.majieluo()

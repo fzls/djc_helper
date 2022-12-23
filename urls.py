@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-21 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2022-12-22 00:00:00", "2023-01-11 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
@@ -91,9 +91,9 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/44453_33dbf629",
     "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20221124wegame/index.html",
-    "DNF马杰洛的规划": "http://dnf.qq.com/cp/a20221124luck/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/NrvJb8QvgGkW1h7sxBTJBpthz5/index_page2.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221222treasure/",
     #
     # 已过期活动
     #
@@ -245,7 +245,6 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_majieluo = "425557"  # DNF马杰洛的规划
         self.iActivityId_dnf_helper = "500121"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "451819"  # DNF助手活动
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
@@ -314,10 +313,13 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_majieluo = "65_46N41h"  # DNF马杰洛的规划
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
+
+        # re: 部分情况下，马杰洛可能会同时关联ame和ide活动，这里放到一起管理
+        self.iActivityId_majieluo = "520915"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "90_gSohK8"  # DNF马杰洛的规划
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (

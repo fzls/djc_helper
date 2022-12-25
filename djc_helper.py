@@ -579,10 +579,6 @@ class DjcHelper:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("集卡", self.dnf_ark_lottery),
-            ("超级会员", self.dnf_super_vip),
-            ("DNF集合站", self.dnf_collection),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -591,6 +587,10 @@ class DjcHelper:
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
+            ("WeGame活动", self.dnf_wegame),
+            ("DNF集合站", self.dnf_collection),
+            ("超级会员", self.dnf_super_vip),
+            ("集卡", self.dnf_ark_lottery),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("colg每日签到", self.colg_signin),
@@ -3474,8 +3474,8 @@ class DjcHelper:
         # --------------------------------------------------------------------------------
 
         # self.dnf_shanguang_op("报名礼", "724862")
-        self.dnf_shanguang_op("报名礼包", "903566")
-        self.dnf_shanguang_op("app专属礼", "903585")
+        # self.dnf_shanguang_op("报名礼包", "903566")
+        # self.dnf_shanguang_op("app专属礼", "903585")
         async_message_box("请手动前往网页手动报名以及前往心悦app领取一次性礼包", f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}", show_once=True)
 
         # # 签到
@@ -3494,31 +3494,31 @@ class DjcHelper:
         #     self.dnf_shanguang_op(f"领取本周的爆装奖励 - {week_4}", flow_id)
         #     time.sleep(5)
 
-        act_cycle_list = [
-            (1, "20221201", "904587"),
-            (2, "20221208", "906983"),
-            (3, "20221215", "906997"),
-        ]
-        for week_index, pass_date, settle_flow_id in act_cycle_list:
-            date = parse_time(pass_date, "%Y%m%d")
-            if get_now() < date:
-                logger.warning(f"尚未到 {pass_date}，跳过这部分")
-                continue
-
-            self.dnf_shanguang_op(f"{pass_date} 查询结算结果第 {week_index} 周", settle_flow_id)
-
-            for level in range_from_one(10):
-                res = self.dnf_shanguang_op(
-                    f"{pass_date} 通关难度 {level} 奖励", "907026", **{"pass": level}, pass_date="20221201"
-                )
-                if int(res["ret"]) == -1:
-                    break
-                time.sleep(3)
+        # act_cycle_list = [
+        #     (1, "20221201", "904587"),
+        #     (2, "20221208", "906983"),
+        #     (3, "20221215", "906997"),
+        # ]
+        # for week_index, pass_date, settle_flow_id in act_cycle_list:
+        #     date = parse_time(pass_date, "%Y%m%d")
+        #     if get_now() < date:
+        #         logger.warning(f"尚未到 {pass_date}，跳过这部分")
+        #         continue
+        #
+        #     self.dnf_shanguang_op(f"{pass_date} 查询结算结果第 {week_index} 周", settle_flow_id)
+        #
+        #     for level in range_from_one(10):
+        #         res = self.dnf_shanguang_op(
+        #             f"{pass_date} 通关难度 {level} 奖励", "907026", **{"pass": level}, pass_date="20221201"
+        #         )
+        #         if int(res["ret"]) == -1:
+        #             break
+        #         time.sleep(3)
 
         awards = [
-            ("2022-11-30 23:59:59", "爆装奖励第1期", "907092"),
-            ("2022-12-07 23:59:59", "爆装奖励第2期", "907095"),
-            ("2022-12-14 23:59:59", "爆装奖励第3期", "907096"),
+            # ("2022-11-30 23:59:59", "爆装奖励第1期", "907092"),
+            # ("2022-12-07 23:59:59", "爆装奖励第2期", "907095"),
+            # ("2022-12-14 23:59:59", "爆装奖励第3期", "907096"),
             ("2022-11-30 23:59:59", "排行榜奖励第1期", "907160"),
             ("2022-12-07 23:59:59", "排行榜奖励第2期", "907161"),
             ("2022-12-14 23:59:59", "排行榜奖励第3期", "907162"),
@@ -3531,8 +3531,8 @@ class DjcHelper:
             time.sleep(5)
 
         # 抽奖
-        self.dnf_shanguang_op("每日登录游戏", "903657")
-        self.dnf_shanguang_op("每日登录App", "903665")
+        # self.dnf_shanguang_op("每日登录游戏", "903657")
+        # self.dnf_shanguang_op("每日登录App", "903665")
         coin = query_luck_coin()
         lottery_count = coin // 10
         logger.info(f"当前积分为 {coin}，可抽奖 {lottery_count} 次")
@@ -11730,4 +11730,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_shanguang()

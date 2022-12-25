@@ -87,16 +87,16 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/44476_ae80050e",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/44453_33dbf629",
-    "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
-    "WeGame活动": "https://dnf.qq.com/cp/a20221124wegame/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/NrvJb8QvgGkW1h7sxBTJBpthz5/index_page2.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221222treasure/",
     #
     # 已过期活动
     #
+    "WeGame活动": "https://dnf.qq.com/cp/a20221124wegame/index.html",
+    "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/44453_33dbf629",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/44476_ae80050e",
     "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",

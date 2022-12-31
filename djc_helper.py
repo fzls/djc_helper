@@ -10684,7 +10684,6 @@ class DjcHelper:
         self.dnf_xinyue_wpe_op("充值50后抽QB", 60286)
         self.dnf_xinyue_wpe_op("叠加礼", 60287)
 
-
         if now_in_range("2023-01-04 10:00:00", "2023-02-10 23:59:59"):
             async_message_box(
                 "如果春节有充钱，可手动参与心悦春节充值活动的自选奖励活动，以及领取累积奖励，跟往年捞汤圆的活动差不多",
@@ -10724,7 +10723,6 @@ class DjcHelper:
         time.sleep(3)
 
         roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
-        qq = self.qq()
 
         json_data = {
             "biz_id": "tgclub",
@@ -10741,14 +10739,14 @@ class DjcHelper:
                 "role_name": base64_str(roleinfo.roleName),
                 "device": "pc",
             },
-            "data": json.dumps({
-                "num": 1,
-                "ceiba_plat_id": "ios",
-                "user_attach": json.dumps({
-                    "nickName": quote(roleinfo.roleName)
-                }),
-                "cExtData": {},
-            }),
+            "data": json.dumps(
+                {
+                    "num": 1,
+                    "ceiba_plat_id": "ios",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                }
+            ),
         }
 
         return self.post(

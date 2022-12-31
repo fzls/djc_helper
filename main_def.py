@@ -1569,9 +1569,7 @@ def try_auto_update(cfg):
                 logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
 
                 download_url = get_download_url(os.path.basename(auto_updater_path()))
-                filepath = download_file(
-                    download_url, os.path.dirname(auto_updater_path())
-                )
+                download_file(download_url, os.path.dirname(auto_updater_path()))
 
         # 保底，如果前面的流程都失败了，提示用户自行下载
         if not exists_auto_updater_dlc():

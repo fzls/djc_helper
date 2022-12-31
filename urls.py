@@ -70,6 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
+    newNotAmsActInfo("2022-12-29 00:00:00", "2023-02-16 23:59:59", "DNF心悦wpe"),
 ]
 
 act_name_to_url = {
@@ -90,6 +91,7 @@ act_name_to_url = {
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/NrvJb8QvgGkW1h7sxBTJBpthz5/index_page2.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221222treasure/",
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     #
     # 已过期活动
     #
@@ -466,6 +468,8 @@ class Urls:
 
         # 超享玩
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"
+
+        self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex"
 
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []

@@ -583,6 +583,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF马杰洛的规划", self.majieluo),
+            ("DNF心悦", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10661,6 +10662,103 @@ class DjcHelper:
             extra_headers=self.super_core_extra_headers,
         )
 
+    # --------------------------------------------DNF心悦wpe--------------------------------------------
+    @try_except()
+    def dnf_xinyue_wpe(self):
+        show_head_line("DNF心悦wpe")
+        self.show_not_ams_act_info("DNF心悦wpe")
+
+        if not self.cfg.function_switches.get_dnf_xinyue or self.disable_most_activities():
+            logger.warning("未启用领取DNF心悦wpe功能，将跳过")
+            return
+
+        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+
+        self.dnf_xinyue_wpe_op("抽奖", 60266)
+        self.dnf_xinyue_wpe_op("预约", 60267)
+
+        if now_in_range("2023-02-11 10:00:00", "2023-02-16 23:59:59"):
+            self.dnf_xinyue_wpe_op("领取返利勇士币", 60272)
+
+        self.dnf_xinyue_wpe_op("充值50后抽QB", 60286)
+        self.dnf_xinyue_wpe_op("叠加礼", 60287)
+
+
+        if now_in_range("2023-01-04 10:00:00", "2023-02-10 23:59:59"):
+            async_message_box(
+                "如果春节有充钱，可手动参与心悦春节充值活动的自选奖励活动，以及领取累积奖励，跟往年捞汤圆的活动差不多",
+                "23.1 心悦充值活动自选提示",
+                show_once=True,
+            )
+
+        if now_after("2023-01-04 10:00:00"):
+            self.dnf_xinyue_wpe_op("会员等级礼-心悦45", 60299)
+            self.dnf_xinyue_wpe_op("会员等级礼-心悦23", 60298)
+            self.dnf_xinyue_wpe_op("会员等级礼-心悦1", 60297)
+            self.dnf_xinyue_wpe_op("会员等级礼-特邀", 60296)
+
+        self.dnf_xinyue_wpe_op("每日任务-充值66元", 60308)
+        self.dnf_xinyue_wpe_op("每日任务-消耗100疲劳", 60300)
+        self.dnf_xinyue_wpe_op("每日任务-在线120分钟", 60307)
+
+        self.dnf_xinyue_wpe_op("每日签到", 60309)
+        self.dnf_xinyue_wpe_op("累计签到3天", 60310)
+        self.dnf_xinyue_wpe_op("累计签到7天", 60311)
+        self.dnf_xinyue_wpe_op("累计签到10天", 60312)
+        self.dnf_xinyue_wpe_op("累计签到15天", 60313)
+        self.dnf_xinyue_wpe_op("累计签到21天", 60314)
+        self.dnf_xinyue_wpe_op("累计签到28天", 60315)
+
+    def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
+        self.dnf_xinyue_wpe_extra_headers = {
+            "t-account-type": "qc",
+            "t-mode": "true",
+            "t-appid": "101478665",
+            "t-openid": openid,
+            "t-access-token": access_token,
+        }
+
+    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        qq = self.qq()
+
+        json_data = {
+            "biz_id": "tgclub",
+            "act_id": "11937",
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": json.dumps({
+                "num": 1,
+                "ceiba_plat_id": "ios",
+                "user_attach": json.dumps({
+                    "nickName": quote(roleinfo.roleName)
+                }),
+                "cExtData": {},
+            }),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_xinyue_wpe_api,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -11730,4 +11828,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shanguang()
+        djcHelper.dnf_xinyue_wpe()

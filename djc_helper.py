@@ -10846,6 +10846,7 @@ class DjcHelper:
             "rand": random.random(),
             "date": date,
             "rand32": self.rand32(),
+            "djcRequestId": f"{self.cfg.sDeviceID}-{getMillSecondsUnix()}-{random.randint(0, 999)}",
         }
 
         # 无值的默认值

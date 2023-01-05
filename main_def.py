@@ -1619,20 +1619,12 @@ def try_auto_update(cfg):
             last_modify_time = parse_timestamp(os.stat(dlc_path).st_mtime)
             logger.error(color("bold_yellow") + f"第{idx}次尝试DLC出错了，错误码为{p.returncode}，DLC最后一次修改时间为{last_modify_time}")
 
-            uploader = Uploader()
-            netdisk_latest_dlc_info = uploader.find_latest_dlc_version()
-            latest_version_time = parse_time(netdisk_latest_dlc_info.time)
-
-            if latest_version_time <= last_modify_time:
-                # 暂无最新版本，无需重试
-                logger.warning(f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本之前，请耐心等待修复该问题的新版本发布~")
-                break
-
             # 更新新版本，然后重试
             logger.info(
-                color("bold_green") + f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本之后，有可能已经修复dlc的该问题，将尝试更新dlc为最新版本"
+                color("bold_green") + f"网盘中最新版本有可能已经修复dlc的该问题，将尝试更新dlc为最新版本"
             )
-            uploader.download_file(netdisk_latest_dlc_info, os.path.dirname(dlc_path))
+            download_url = get_download_url(os.path.basename(auto_updater_path()))
+            download_file(download_url, os.path.dirname(auto_updater_path()))
 
         logger.info(color("bold_yellow") + "当前版本为最新版本，不需要更新~")
     except Exception as e:

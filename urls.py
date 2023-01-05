@@ -88,13 +88,13 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
-    "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/NrvJb8QvgGkW1h7sxBTJBpthz5/index_page2.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221222treasure/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     #
     # 已过期活动
     #
+    "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/NrvJb8QvgGkW1h7sxBTJBpthz5/index_page2.html",
+    "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20221124wegame/index.html",
     "DNF集合站": "https://dnf.qq.com/cp/sszl20221124jhy/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/44453_33dbf629",

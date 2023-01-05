@@ -1456,7 +1456,8 @@ def show_tips(cfg: Config):
             "虎牙: https://www.huya.com/g/2#cate-1-5483\n"
         ),
         "23.1 春节套预购活动": (
-            "春节套预购活动请自行参与: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_utfj_lottery&pf=__mds_dnf_dy_gw&_wv=1"
+            "春节套预购活动请自行参与: \n"
+            "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_utfj_lottery&pf=__mds_dnf_dy_gw&_wv=1"
         ),
     }
 

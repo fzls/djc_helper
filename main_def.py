@@ -1455,6 +1455,9 @@ def show_tips(cfg: Config):
             "斗鱼: https://www.douyu.com/topic/bzbker?rid=5324055\n"
             "虎牙: https://www.huya.com/g/2#cate-1-5483\n"
         ),
+        "23.1 春节套预购活动": (
+            "春节套预购活动请自行参与: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_utfj_lottery&pf=__mds_dnf_dy_gw&_wv=1"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

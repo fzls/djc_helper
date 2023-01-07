@@ -581,7 +581,7 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF马杰洛的规划", self.majieluo),
-            ("DNF心悦", self.dnf_xinyue_wpe),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:

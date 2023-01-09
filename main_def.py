@@ -1459,6 +1459,11 @@ def show_tips(cfg: Config):
             "春节套预购活动请自行参与: \n"
             "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_utfj_lottery&pf=__mds_dnf_dy_gw&_wv=1"
         ),
+        "23.1 colg年度报告奖励": (
+            "打开网页，登录colg账号后刷新，然后滑动完，点分享，选择复制链接，即可领取若干奖励\n"
+            "由于是一次性的活动，请自行点击参与:\n"
+            "https://bbs.colg.cn/colg_activity_new-colg_report.html/2022"
+        )
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

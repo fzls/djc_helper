@@ -663,6 +663,8 @@ need_take_awards = false
 10007 = false
 # 2022.11.24 次元入侵 神话降临 卡片拼图赢+10装备强化券
 10008 = false
+# 2023.1.12 兔年新气象 福临阿拉德
+10009 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

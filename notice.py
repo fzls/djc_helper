@@ -195,12 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "wegame蚊子腿"
-    message = """经他人分享，发现wegame有个活动，轻松就能领取四次抽奖机会，几乎必得QB，我四次分别抽了2/2/2/1QB
+    title = "今日请先手动操作"
+    message = """由于公司项目临近发版，今日我得加班到晚上十一点-。-今天应该是没希望更新了，大家请先手动在稍后自动打开的云文档中列出的两个集合站中自行点掉今日的奖励，避免亏了一天
 
-大家可以参考我下面弹出的腾讯文档中的步骤来操作
+https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV
 """
-    open_url = "https://docs.qq.com/doc/DYkpKWG1jUUNLQUhI"
+    open_url = "https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV"
     show_only_before_version = ""
 
     if title != "":

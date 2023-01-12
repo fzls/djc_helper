@@ -68,5 +68,15 @@
     "open_url": "https://docs.qq.com/doc/DYkpKWG1jUUNLQUhI",
     "expire_at": "2022-12-09 22:37:41",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "今日请先手动操作",
+    "message": "由于公司项目临近发版，今日我得加班到晚上十一点-。-今天应该是没希望更新了，大家请先手动在稍后自动打开的云文档中列出的两个集合站中自行点掉今日的奖励，避免亏了一天\n\nhttps://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV\n",
+    "send_at": "2023-01-12 19:42:25",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV",
+    "expire_at": "2023-01-13 19:42:25",
+    "show_only_before_version": ""
   }
 ]

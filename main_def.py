@@ -1463,7 +1463,7 @@ def show_tips(cfg: Config):
             "打开网页，登录colg账号后刷新，然后滑动完，点分享，选择复制链接，即可领取若干奖励\n"
             "由于是一次性的活动，请自行点击参与:\n"
             "https://bbs.colg.cn/colg_activity_new-colg_report.html/2022"
-        )
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")
@@ -1625,9 +1625,7 @@ def try_auto_update(cfg):
             logger.error(color("bold_yellow") + f"第{idx}次尝试DLC出错了，错误码为{p.returncode}，DLC最后一次修改时间为{last_modify_time}")
 
             # 更新新版本，然后重试
-            logger.info(
-                color("bold_green") + f"网盘中最新版本有可能已经修复dlc的该问题，将尝试更新dlc为最新版本"
-            )
+            logger.info(color("bold_green") + "网盘中最新版本有可能已经修复dlc的该问题，将尝试更新dlc为最新版本")
             download_url = get_download_url(os.path.basename(auto_updater_path()))
             download_file(download_url, os.path.dirname(auto_updater_path()))
 

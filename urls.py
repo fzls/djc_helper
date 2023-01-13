@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2022-12-22 00:00:00", "2023-01-11 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-08 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
@@ -89,7 +89,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20221222treasure/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/45062_7402a8df",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
@@ -99,6 +98,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/wegame230112/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
     #
     # 已过期活动
     #
@@ -324,7 +324,7 @@ class Urls:
 
         # re: 部分情况下，马杰洛可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "520915"  # DNF马杰洛的规划
-        self.ide_iActivityId_majieluo = "90_gSohK8"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "55_rhYqg6"  # DNF马杰洛的规划
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (
@@ -332,7 +332,7 @@ class Urls:
             "&sRoleId={sRoleId}&sRoleName={sRoleName}&sArea={sArea}&sMd5str={sMd5str}&sCheckparam={sCheckparam}&roleJob={roleJob}&sAreaName={sAreaName}"
             "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
-            "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}"
+            "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
         )
 
         # DNF共创投票

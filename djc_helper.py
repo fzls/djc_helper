@@ -580,7 +580,6 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF马杰洛的规划", self.majieluo),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
@@ -590,6 +589,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7366,133 +7366,171 @@ class DjcHelper:
             return
 
         # re: 根据本次检查绑定具体使用的活动体系决定使用哪个函数
-        # check_func = self.check_majieluo
-        check_func = self.check_majieluo_amesvr
+        check_func = self.check_majieluo
+        # check_func = self.check_majieluo_amesvr
 
         check_func()
 
-        def query_info() -> MaJieLuoInfo:
-            raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
+        request_wait_time = 3
 
-            return MaJieLuoInfo().auto_update_config(raw_res["jData"])
+        self.majieluo_op("每日进入活动页面", "165852")
+        self.majieluo_op("每日登录游戏", "165853")
+        self.majieluo_op("每日通关4次推荐地下城", "165854")
+        self.majieluo_op("每日游戏在线30分钟", "165855")
 
-        # 马杰洛的见面礼
-        def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.majieluo_op("领取见面礼", "163667")
-            return True
+        for idx in range_from_one(10):
+            res = self.majieluo_op(f"抽卡 - {idx}", "165856")
+            if res["ret"] != 0:
+                break
 
-        logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
-        if self.cfg.enable_majieluo_lucky:
-            self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", check_func, take_gift)
-        else:
-            take_gift(self.get_dnf_bind_role_copy())
+            time.sleep(request_wait_time)
 
-        # 马杰洛的特殊任务
-        # self.majieluo_op("选择阵营", "141618", iType=2)
+        for award_name, award_index in [
+            ("邪龙卡组", 3),
+            ("冰龙卡组", 2),
+            ("狂龙卡组", 0),
+            ("爆龙卡组", 1),
+        ]:
+            self.majieluo_op(f"领取集齐奖励 - {award_name}", "166788", packageId=award_index)
+            time.sleep(request_wait_time)
 
-        tasks = [
-            ("每日登录礼包", "163691"),
-            ("每日通关礼包", "163706"),
-            ("每日在线礼包", "163713"),
-            ("每日邀请礼包", "163717"),
-            ("特殊任务-登录游戏15次", "163718"),
-            ("特殊任务-史诗之路50装备", "163719"),
-            ("特殊任务-邀请10位好友", "163728"),
-            ("特殊任务-邀请2位幸运好友登录", "163729"),
-        ]
-        for name, flowid in tasks:
-            self.majieluo_op(name, flowid)
-            time.sleep(5)
+        self.majieluo_op("每日登录领取派遣次数", "167264")
+        for target in range(4):
+            self.majieluo_op(f"{target}: 探险派遣", "165865", targetId=target, myId=target)
+            self.majieluo_op(f"{target}: 完成探险派遣", "166827", targetId=target)
 
-        # # 抽奖
-        # info = query_info()
-        # lottery_times = int(info.iDraw)
-        # logger.info(color("bold_cyan") + f"当前抽奖次数为 {lottery_times}")
-        # for idx in range_from_one(lottery_times):
-        #     self.majieluo_op(f"{idx}/{lottery_times} 幸运抽奖", "141617")
+            # 2是冰龙，好像固定奖励为增幅器盒子
+            self.majieluo_op(f"{target}: boss对战", "165860", targetId=2, myId=target)
 
-        # 赠送礼盒
-        self.majieluo_permit_social()
+            self.majieluo_op(f"{target}: 领取boss奖励", "167303", targetId=target)
 
-        # self.majieluo_send_to_xiaohao([openid])
+            self.majieluo_op(f"{target}: 积累成就领好礼", "165862", id=target)
 
-        # invite_uins = self.common_cfg.majieluo_invite_uin_list
-        # if len(invite_uins) != 0:
-        #     # 假设第一个填写的QQ是主QQ，尝试每个号都先领取这个，其余的则是小号，随机顺序，确保其他qq有同等机会
-        #     main_qq, others = invite_uins[0], invite_uins[1:]
-        #     random.shuffle(others)
-        #     invite_uins = [main_qq, *others]
-        #     for uin in invite_uins:
-        #         self.majieluo_open_box(uin)
+            time.sleep(request_wait_time)
+
+
+        # def query_info() -> MaJieLuoInfo:
+        #     raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
+        #
+        #     return MaJieLuoInfo().auto_update_config(raw_res["jData"])
+        #
+        # # 马杰洛的见面礼
+        # def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
+        #     self.majieluo_op("领取见面礼", "163667")
+        #     return True
+        #
+        # logger.info(f"当前马杰洛尝试使用回归角色领取见面礼的开关状态为：{self.cfg.enable_majieluo_lucky}")
+        # if self.cfg.enable_majieluo_lucky:
+        #     self.try_do_with_lucky_role_and_normal_role("领取马杰洛见面礼", check_func, take_gift)
         # else:
-        #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
-
-        async_message_box(
-            (
-                "本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成赠送宝箱的流程~"
-                # # note: 当uin是qq的时候才显示下面这个，如果是哈希值或加密后的，则放弃显示
-                # "(可以选择配置工具中的马杰洛小助手减少操作量)"
-                "(如果单个好友活动期间只能操作一次，那就只能找若干个人慢慢做了-。-)"
-            ),
-            f"马杰洛赠送提示_{get_act_url('DNF马杰洛的规划')}",
-            show_once=True,
-        )
-        logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次")
-
-        # self.majieluo_op("累计赠送30次礼包", "113887")
-        # self.majieluo_op("冲顶25", "138766")
-        # self.majieluo_op("冲顶40", "138767")
-        # self.majieluo_op("冲顶65", "138768")
-        # self.majieluo_op("冲顶75", "138769")
-
-        # 提取得福利
-        stoneCount = self.query_stone_count()
-        logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
-
-        act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
-        sDownDate = act_info.dev.action.sDownDate
-        if sDownDate == not_know_end_time____:
-            sDownDate = get_not_ams_act("DNF马杰洛的规划").dtEndTime
-        endTime = get_today(parse_time(sDownDate))
-
-        if get_today() == endTime:
-            # # 最后一天再领取仅可领取单次的奖励
-            # self.majieluo_op("晶体礼包", "131561")
-
-            act_url = get_act_url("DNF马杰洛的规划")
-            async_message_box(
-                "本次马杰洛奖励是兑换或者抽奖，所以本次不会自动兑换。今天已是活动最后一天，请自行到活动页面去兑换想要的奖励，或者抽奖",
-                f"手动兑换通知-{act_url}",
-                open_url=act_url,
-            )
-            # self.majieluo_op("幸运抽奖", "134228")
-            #
-            # self.majieluo_op("兑换纯净的增幅书1次", "138754")
-            # self.majieluo_op("兑换黑钻1次", "138755")
-            # self.majieluo_op("兑换一次性继承装置2次", "138756")
-            # self.majieluo_op("兑换装备提升礼盒1次", "138757")
-            # self.majieluo_op("兑换复活币礼盒8次", "138758")
-            # self.majieluo_op("兑换黑钻3天3次", "138759")
-        else:
-            logger.warning(f"当前不是活动最后一天({endTime})，将不会尝试领取 最终大奖")
-
-        # takeStone = False
-        # takeStoneFlowId = "113898"
-        # maxStoneCount = 1500
-        # if stoneCount >= maxStoneCount:
-        #     # 达到上限
-        #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(maxStoneCount // 100))
-        #     takeStone = True
-        # elif get_today() == endTime:
-        #     # 今天是活动最后一天
-        #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(stoneCount // 100))
-        #     takeStone = True
+        #     take_gift(self.get_dnf_bind_role_copy())
+        #
+        # # 马杰洛的特殊任务
+        # # self.majieluo_op("选择阵营", "141618", iType=2)
+        #
+        # tasks = [
+        #     ("每日登录礼包", "163691"),
+        #     ("每日通关礼包", "163706"),
+        #     ("每日在线礼包", "163713"),
+        #     ("每日邀请礼包", "163717"),
+        #     ("特殊任务-登录游戏15次", "163718"),
+        #     ("特殊任务-史诗之路50装备", "163719"),
+        #     ("特殊任务-邀请10位好友", "163728"),
+        #     ("特殊任务-邀请2位幸运好友登录", "163729"),
+        # ]
+        # for name, flowid in tasks:
+        #     self.majieluo_op(name, flowid)
+        #     time.sleep(5)
+        #
+        # # # 抽奖
+        # # info = query_info()
+        # # lottery_times = int(info.iDraw)
+        # # logger.info(color("bold_cyan") + f"当前抽奖次数为 {lottery_times}")
+        # # for idx in range_from_one(lottery_times):
+        # #     self.majieluo_op(f"{idx}/{lottery_times} 幸运抽奖", "141617")
+        #
+        # # 赠送礼盒
+        # self.majieluo_permit_social()
+        #
+        # # self.majieluo_send_to_xiaohao([openid])
+        #
+        # # invite_uins = self.common_cfg.majieluo_invite_uin_list
+        # # if len(invite_uins) != 0:
+        # #     # 假设第一个填写的QQ是主QQ，尝试每个号都先领取这个，其余的则是小号，随机顺序，确保其他qq有同等机会
+        # #     main_qq, others = invite_uins[0], invite_uins[1:]
+        # #     random.shuffle(others)
+        # #     invite_uins = [main_qq, *others]
+        # #     for uin in invite_uins:
+        # #         self.majieluo_open_box(uin)
+        # # else:
+        # #     logger.warning(f"当前未配置接收赠送礼盒的inviteUin，将不会尝试接收礼盒。如需开启，请按照配置工具中-其他-马杰洛赠送uin列表的字段说明进行配置")
+        #
+        # async_message_box(
+        #     (
+        #         "本期马杰洛的深渊礼盒不能绑定固定人，所以请自行完成赠送宝箱的流程~"
+        #         # # note: 当uin是qq的时候才显示下面这个，如果是哈希值或加密后的，则放弃显示
+        #         # "(可以选择配置工具中的马杰洛小助手减少操作量)"
+        #         "(如果单个好友活动期间只能操作一次，那就只能找若干个人慢慢做了-。-)"
+        #     ),
+        #     f"马杰洛赠送提示_{get_act_url('DNF马杰洛的规划')}",
+        #     show_once=True,
+        # )
+        # logger.info(color("bold_green") + f"当前已累计赠送{self.query_invite_count()}次")
+        #
+        # # self.majieluo_op("累计赠送30次礼包", "113887")
+        # # self.majieluo_op("冲顶25", "138766")
+        # # self.majieluo_op("冲顶40", "138767")
+        # # self.majieluo_op("冲顶65", "138768")
+        # # self.majieluo_op("冲顶75", "138769")
+        #
+        # # 提取得福利
+        # stoneCount = self.query_stone_count()
+        # logger.warning(color("bold_yellow") + f"当前共有{stoneCount}个引导石")
+        #
+        # act_info = self.majieluo_op("获取活动信息", "", get_act_info_only=True)
+        # sDownDate = act_info.dev.action.sDownDate
+        # if sDownDate == not_know_end_time____:
+        #     sDownDate = get_not_ams_act("DNF马杰洛的规划").dtEndTime
+        # endTime = get_today(parse_time(sDownDate))
+        #
+        # if get_today() == endTime:
+        #     # # 最后一天再领取仅可领取单次的奖励
+        #     # self.majieluo_op("晶体礼包", "131561")
+        #
+        #     act_url = get_act_url("DNF马杰洛的规划")
+        #     async_message_box(
+        #         "本次马杰洛奖励是兑换或者抽奖，所以本次不会自动兑换。今天已是活动最后一天，请自行到活动页面去兑换想要的奖励，或者抽奖",
+        #         f"手动兑换通知-{act_url}",
+        #         open_url=act_url,
+        #     )
+        #     # self.majieluo_op("幸运抽奖", "134228")
+        #     #
+        #     # self.majieluo_op("兑换纯净的增幅书1次", "138754")
+        #     # self.majieluo_op("兑换黑钻1次", "138755")
+        #     # self.majieluo_op("兑换一次性继承装置2次", "138756")
+        #     # self.majieluo_op("兑换装备提升礼盒1次", "138757")
+        #     # self.majieluo_op("兑换复活币礼盒8次", "138758")
+        #     # self.majieluo_op("兑换黑钻3天3次", "138759")
         # else:
-        #     logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
-
-        # if takeStone:
-        #     self.majieluo_op("提取引导石大于1000礼包", "113902")
-        #     # self.majieluo_op("分享得好礼", "769008")
+        #     logger.warning(f"当前不是活动最后一天({endTime})，将不会尝试领取 最终大奖")
+        #
+        # # takeStone = False
+        # # takeStoneFlowId = "113898"
+        # # maxStoneCount = 1500
+        # # if stoneCount >= maxStoneCount:
+        # #     # 达到上限
+        # #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(maxStoneCount // 100))
+        # #     takeStone = True
+        # # elif get_today() == endTime:
+        # #     # 今天是活动最后一天
+        # #     self.majieluo_op("提取时间引导石", takeStoneFlowId, giftNum=str(stoneCount // 100))
+        # #     takeStone = True
+        # # else:
+        # #     logger.info(f"当前未到最后领取期限（活动结束时-{endTime} 23:59:59），且石头数目({stoneCount})不足{maxStoneCount}，故不尝试提取")
+        #
+        # # if takeStone:
+        # #     self.majieluo_op("提取引导石大于1000礼包", "113902")
+        # #     # self.majieluo_op("分享得好礼", "769008")
 
     def majieluo_permit_social(self):
         self.dnf_social_relation_permission_op(
@@ -11082,6 +11120,10 @@ class DjcHelper:
                 "flow_id",
                 "pass",
                 "pass_date",
+                "packageId",
+                "targetId",
+                "myId",
+                "id",
             ]
         }
 
@@ -11885,4 +11927,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bakaer_map_ide()
+        djcHelper.majieluo()

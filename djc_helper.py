@@ -7542,6 +7542,7 @@ class DjcHelper:
             activity_op_func=self.majieluo_op,
             sAuthInfo="MJL",
             sActivityInfo="MJL13",
+            **extra_params,
         )
 
     def majieluo_op(
@@ -7581,7 +7582,7 @@ class DjcHelper:
             extra_cookies=f"p_skey={p_skey}",
         )
 
-    def check_majieluo_amesvr(self):
+    def check_majieluo_amesvr(self, **extra_params):
         """有时候马杰洛活动可能绑定走amesvr系统，活动内容走ide，这里做下特殊处理"""
         self.check_bind_account(
             "DNF马杰洛的规划",

@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 FROM ubuntu:20.04
 
 # 设置时区
@@ -8,7 +6,7 @@ ENV TZ=Asia/Shanghai \
 
 RUN set -x \
     && apt update \
-    && apt install -y tzdata \
+    && apt install --no-install-recommends -y tzdata \
     && ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata \
@@ -17,7 +15,7 @@ RUN set -x \
 # 安装python3.8
 RUN set -x \
     && apt-get update \
-    && apt-get install -y python3 python3-pip \
+    && apt-get install --no-install-recommends -y python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录
@@ -27,7 +25,7 @@ WORKDIR /djc_helper
 COPY _ubuntu_download_and_install_chrome_and_driver.sh _ubuntu_download_chrome_and_driver.sh _ubuntu_install_chrome_and_driver.sh ./
 RUN set -x \
     && apt-get update \
-    && apt-get install -y sudo \
+    && apt-get install --no-install-recommends -y sudo \
     && rm -rf /var/lib/apt/lists/*
 RUN bash _ubuntu_download_and_install_chrome_and_driver.sh
 
@@ -65,7 +63,7 @@ RUN groupadd -r -g 999 fzls && useradd -r -g fzls -u 999 fzls
 
 RUN set -eux; \
 	apt-get update; \
-	apt-get install -y gosu; \
+	apt-get install --no-install-recommends -y gosu; \
 	rm -rf /var/lib/apt/lists/*; \
     # verify that the binary works
 	gosu nobody true

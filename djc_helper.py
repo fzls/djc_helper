@@ -583,6 +583,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -595,7 +596,6 @@ class DjcHelper:
             ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("colg每日签到", self.colg_signin),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
             ("dnf助手活动", self.dnf_helper),
@@ -8943,21 +8943,22 @@ class DjcHelper:
 
         # ------------ 实际流程 --------------
 
-        self.dnf_luodiye_op("登录领取（1038439）", "890629")
+        self.dnf_luodiye_op("登录领奖", "916994")
+        self.dnf_luodiye_op("副本领奖", "916997")
 
         # self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
 
-        if not self.cfg.function_switches.disable_share and is_first_run(
-            f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
-        ):
-            self.dnf_luodiye_op("用户授权(统一授权)", "890630")
-            self.dnf_luodiye_op("分享", "890795", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
-
-        can_take_time = parse_time("2022-09-22 11:00:00")
-        if get_now() >= can_take_time:
-            self.dnf_luodiye_op("分享或通关副本（19509）", "890631")
-        else:
-            logger.warning(f"尚未到领取时间 {can_take_time}, 跳过领取限定龙宠")
+        # if not self.cfg.function_switches.disable_share and is_first_run(
+        #     f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
+        # ):
+        #     self.dnf_luodiye_op("用户授权(统一授权)", "890630")
+        #     self.dnf_luodiye_op("分享", "890795", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
+        #
+        # can_take_time = parse_time("2022-09-22 11:00:00")
+        # if get_now() >= can_take_time:
+        #     self.dnf_luodiye_op("分享或通关副本（19509）", "890631")
+        # else:
+        #     logger.warning(f"尚未到领取时间 {can_take_time}, 跳过领取限定龙宠")
 
         # self.dnf_luodiye_op("登录游戏积分", "844938")
         # self.dnf_luodiye_op("分享好友积分", "844952")
@@ -8998,8 +8999,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="891234",
-            commit_bind_flowid="891233",
+            query_bind_flowid="916996",
+            commit_bind_flowid="916995",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -11827,4 +11828,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_luodiye()

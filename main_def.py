@@ -1450,19 +1450,14 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "22.12 斗鱼虎牙活动": (
-            "斗鱼虎牙活动请自行参与：\n"
-            "斗鱼: https://www.douyu.com/topic/bzbker?rid=5324055\n"
+        "23.1 自行参与的活动": (
+            "以下活动请自行参与:\n"
+            "colg年度报告: https://bbs.colg.cn/colg_activity_new-colg_report.html/2022\n"
+            "公众号签到: 大概会在1.19号左右开启，在地下城与勇士官方微信公众号中发送 签到 即可\n"
+            "拼团活动: https://club.vip.qq.com/qqvip/acts2023/dnfGroup\n"
+            "礼包补给站（充值活动）: https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_tnxcbjzsjqu_lottery\n"
+            "斗鱼: https://www.douyu.com/topic/xccyzbker\n"
             "虎牙: https://www.huya.com/g/2#cate-1-5483\n"
-        ),
-        "23.1 春节套预购活动": (
-            "春节套预购活动请自行参与: \n"
-            "https://pay.qq.com/h5/activity/vision_new_creator.php?key=dnf_utfj_lottery&pf=__mds_dnf_dy_gw&_wv=1"
-        ),
-        "23.1 colg年度报告奖励": (
-            "打开网页，登录colg账号后刷新，然后滑动完，点分享，选择复制链接，即可领取若干奖励\n"
-            "由于是一次性的活动，请自行点击参与:\n"
-            "https://bbs.colg.cn/colg_activity_new-colg_report.html/2022"
         ),
     }
 

@@ -585,6 +585,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动", self.dnf_luodiye),
             ("colg每日签到", self.colg_signin),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -593,7 +594,6 @@ class DjcHelper:
             ("DNF闪光杯", self.dnf_shanguang),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
-            ("超级会员", self.dnf_super_vip),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("超享玩", self.super_core),
@@ -2133,7 +2133,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "78086_6b809893"
+        lucky_act_id = "80627_483f1130"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2142,7 +2142,7 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "78087_9480f80e")
+        self.qzone_act_op("勇士见面礼", "80628_f8a52c3a")
         # if not self.cfg.function_switches.disable_share and is_first_run(
         #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         # ):
@@ -11828,4 +11828,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_super_vip()

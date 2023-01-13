@@ -2460,6 +2460,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF冒险家之路", "get_dnf_maoxian_road"),
             ("幸运勇士", "get_dnf_lucky_user"),
             ("超享玩", "get_super_core"),
+            ("巴卡尔对战地图", "get_dnf_bakaer_map"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

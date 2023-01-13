@@ -803,6 +803,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_lucky_user = True
         # 是否领取 超享玩 活动
         self.get_super_core = True
+        # 是否领取 巴卡尔对战地图 活动
+        self.get_dnf_bakaer_map = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

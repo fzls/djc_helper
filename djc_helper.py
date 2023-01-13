@@ -589,6 +589,7 @@ class DjcHelper:
             ("DNF集合站", self.dnf_collection),
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9808,6 +9809,50 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------巴卡尔对战地图--------------------------------------------
+    @try_except()
+    def dnf_bakaer_map_ide(self):
+        show_head_line("巴卡尔对战地图")
+        self.show_not_ams_act_info("巴卡尔对战地图")
+
+        if not self.cfg.function_switches.get_dnf_bakaer_map or self.disable_most_activities():
+            logger.warning("未启用领取 巴卡尔对战地图 功能，将跳过")
+            return
+
+        self.check_dnf_bakaer_map_ide()
+
+        self.dnf_bakaer_map_ide_op("领取登录礼包", "164862")
+        self.dnf_bakaer_map_ide_op("领取新春地下城礼包", "164879")
+
+
+    def check_dnf_bakaer_map_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "巴卡尔对战地图",
+            get_act_url("巴卡尔对战地图"),
+            activity_op_func=self.dnf_bakaer_map_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_bakaer_map_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_bakaer_map
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("巴卡尔对战地图"),
+            **extra_params,
+        )
+
     # --------------------------------------------KOL--------------------------------------------
     @try_except()
     def dnf_kol(self):
@@ -11840,4 +11885,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_bakaer_map_ide()

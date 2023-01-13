@@ -71,6 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
     newNotAmsActInfo("2022-12-29 00:00:00", "2023-02-16 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
 ]
 
 act_name_to_url = {
@@ -97,6 +98,7 @@ act_name_to_url = {
     "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/wegame230112/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",
+    "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     #
     # 已过期活动
     #
@@ -318,6 +320,7 @@ class Urls:
         self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
+        self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
 
         # re: 部分情况下，马杰洛可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "520915"  # DNF马杰洛的规划

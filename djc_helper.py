@@ -586,6 +586,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
+            ("DNF集合站", self.dnf_collection),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -593,7 +594,6 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF闪光杯", self.dnf_shanguang),
             ("WeGame活动", self.dnf_wegame),
-            ("DNF集合站", self.dnf_collection),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("超享玩", self.super_core),
@@ -7590,6 +7590,7 @@ class DjcHelper:
             activity_op_func=self.majieluo_amesvr_op,
             query_bind_flowid="914365",
             commit_bind_flowid="914364",
+            **extra_params,
         )
 
     def majieluo_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -9714,26 +9715,35 @@ class DjcHelper:
         self.check_dnf_collection()
 
         def query_signin_days() -> int:
-            res = self.dnf_collection_op("查询签到天数-condOutput", "864509", print_res=False)
+            res = self.dnf_collection_op("查询签到天数-condOutput", "916408", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-        self.dnf_collection_op("回归礼包", "902177")
-        self.dnf_collection_op("全民礼包", "902207")
 
-        self.dnf_collection_op("每日在线礼包", "902213")
+        def take_return_user_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
+            self.dnf_collection_op("回归礼包", "916402")
+            time.sleep(5)
+
+            return True
+
+        self.try_do_with_lucky_role_and_normal_role("领取回归礼包", self.check_dnf_collection, take_return_user_gifts)
+
+        self.dnf_collection_op("全民礼包", "916403")
+
+        self.dnf_collection_op("每日在线礼包", "916404")
         # logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
 
-        self.dnf_collection_op("签到3天礼包", "902241")
-        self.dnf_collection_op("签到7天礼包", "902283")
-        self.dnf_collection_op("签到15天礼包", "902284")
+        self.dnf_collection_op("签到3天礼包", "916405")
+        self.dnf_collection_op("签到7天礼包", "916406")
+        self.dnf_collection_op("签到15天礼包", "916407")
 
-    def check_dnf_collection(self):
+    def check_dnf_collection(self, **extra_params):
         self.check_bind_account(
             "DNF集合站",
             get_act_url("DNF集合站"),
             activity_op_func=self.dnf_collection_op,
-            query_bind_flowid="902094",
-            commit_bind_flowid="902093",
+            query_bind_flowid="916401",
+            commit_bind_flowid="916400",
+            **extra_params,
         )
 
     def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -11829,4 +11839,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_collection()

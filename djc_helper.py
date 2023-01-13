@@ -6450,7 +6450,7 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        welfare_version = "v6"
+        welfare_version = "v7"
         db = WelfareDB().with_context(welfare_version).load()
         account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.name}").load()
 
@@ -6503,7 +6503,7 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "冒险，前往新世界！",
+            "DNFGFLT",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -11827,4 +11827,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_welfare()

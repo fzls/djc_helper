@@ -11151,6 +11151,7 @@ class DjcHelper:
         extra_cookies="",
         show_info_only=False,
         get_act_info_only=False,
+        sIdeToken="",
         **data_extra_params,
     ) -> dict | IdeActInfo | None:
         if show_info_only:
@@ -11159,8 +11160,8 @@ class DjcHelper:
         if get_act_info_only:
             return get_ide_act(iActivityId)
 
-        sIdeToken = ""
-        if iFlowId != "":
+        # 当外部没有显式传入sIdeToken的时候，尝试通过活动id和flowid去查出该信息
+        if sIdeToken == "" and iFlowId != "":
             act_info = get_ide_act(iActivityId)
             sIdeToken = act_info.flows[iFlowId].sIdeToken
 

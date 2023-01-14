@@ -591,6 +591,7 @@ class DjcHelper:
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
+            ("冒险的起点", self.maoxian_start),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -610,7 +611,6 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
-            ("冒险的起点", self.maoxian_start),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF共创投票", self.dnf_dianzan),
             ("dnf助手活动Dup", self.dnf_helper_dup),
@@ -9376,21 +9376,21 @@ class DjcHelper:
             logger.warning("未启用领取冒险的起点功能，将跳过")
             return
 
-        self.maoxian_start_op("1", "860646")
-        self.maoxian_start_op("2", "860648")
-        self.maoxian_start_op("3", "860649")
-        self.maoxian_start_op("4", "860650")
-        self.maoxian_start_op("5", "860651")
-        self.maoxian_start_op("6", "860652")
-        self.maoxian_start_op("7", "860653")
+        self.maoxian_start_op("1", "919254")
+        self.maoxian_start_op("2", "919256")
+        self.maoxian_start_op("3", "919257")
+        self.maoxian_start_op("4", "919258")
+        self.maoxian_start_op("5", "919259")
+        self.maoxian_start_op("6", "919260")
+        self.maoxian_start_op("7", "919261")
 
     def check_maoxian(self):
         self.check_bind_account(
             "冒险的起点",
             get_act_url("冒险的起点"),
             activity_op_func=self.maoxian_start_op,
-            query_bind_flowid="860643",
-            commit_bind_flowid="860642",
+            query_bind_flowid="919251",
+            commit_bind_flowid="919250",
         )
 
     def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -11964,4 +11964,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper()
+        djcHelper.maoxian_start()

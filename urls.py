@@ -100,6 +100,7 @@ act_name_to_url = {
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/",
+    "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     #
     # 已过期活动
     #
@@ -119,7 +120,6 @@ act_name_to_url = {
     "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
-    "冒险的起点": "https://dnf.qq.com/lbact/a20220519lbts01j/indexm.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
@@ -274,7 +274,7 @@ class Urls:
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
-        self.iActivityId_maoxian_start = "473752"  # 冒险的起点
+        self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_maoxian = "500114"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛

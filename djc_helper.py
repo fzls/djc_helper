@@ -592,6 +592,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("冒险的起点", self.maoxian_start),
+            ("魔界人探险记", self.mojieren),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -618,7 +619,6 @@ class DjcHelper:
             ("翻牌活动", self.dnf_card_flip),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("管家蚊子腿", self.guanjia_new),
-            ("魔界人探险记", self.mojieren),
             ("组队拜年", self.team_happy_new_year),
             ("新职业预约活动", self.dnf_reserve),
             ("WeGame活动_新版", self.wegame_new),
@@ -7689,56 +7689,66 @@ class DjcHelper:
     def mojieren(self):
         # note: 对接新版活动时，记得前往 urls.py 调整活动时间
         show_head_line("魔界人探险记")
-        self.show_idesvr_act_info(self.mojieren_op)
+        self.show_not_ams_act_info("魔界人探险记")
 
         if not self.cfg.function_switches.get_mojieren or self.disable_most_activities():
             logger.warning("未启用领取魔界人探险记活动功能，将跳过")
             return
 
+        # re: 根据本次检查绑定具体使用的活动体系决定使用哪个函数
+        # check_func = self.check_mojieren
+        check_func = self.check_mojieren_amesvr
+
         @try_except(return_val_on_except=0)
         def query_info() -> MoJieRenInfo:
             wait_for("查询信息", 5)
-            raw_res = self.mojieren_op("查询信息", "116512", print_res=False)
+            raw_res = self.mojieren_op("查询信息(初始化)", "166441", print_res=False)
 
             return MoJieRenInfo().auto_update_config(raw_res["jData"])
 
-        self.check_mojieren()
+        check_func()
 
-        self.mojieren_op("获取魔方（每日登录）", "115862")
-        self.mojieren_op("幸运勇士魔方", "116434")
+        self.mojieren_op("获取魔方（每日登录）", "165340")
+        self.mojieren_op("幸运勇士魔方", "165341")
 
         for _ in range(10):
             info = query_info()
-            logger.info(color("bold_green") + f"当前位于 第 {info.iCurrRound} 轮 {info.iCurrPos} 格，剩余探索次数为 {info.cubeNum}")
-            if int(info.cubeNum) <= 0:
+            logger.info(color("bold_green") + f"当前位于 第 {info.iCurrRound} 轮 {info.iCurrPos} 格，剩余探索次数为 {info.iMagic}")
+            if int(info.iMagic) <= 0:
                 break
 
-            self.mojieren_op("开始探险", "115979", startPos=info.iCurrPos)
+            self.mojieren_op("开始探险", "165349")
 
-            # self.mojieren_op("更换当前任务", "116292")
-            self.mojieren_op("尝试完成任务", "116293")
+            # self.mojieren_op("更换当前任务", "166416")
+            self.mojieren_op("尝试完成任务", "166355")
 
         info = query_info()
 
-        lottery_times = int(info.lotteryNum)
+        lottery_times = int(info.iTreasure)
         logger.info(color("bold_cyan") + f"当前剩余夺宝次数为 {lottery_times}")
         for idx in range_from_one(lottery_times):
-            self.mojieren_op(f"{idx}/{lottery_times} 奇兵夺宝", "116435")
+            self.mojieren_op(f"{idx}/{lottery_times} 奇兵夺宝", "165342")
 
-        logger.info(color("bold_cyan") + f"当前累计完成 {info.iCurrRound} 轮冒险， {info.iExploreTimes} 次探险")
-        accumulative_award_info = [
-            ("116436", "累计完成1轮冒险", info.hold.round1.iLeftNum, int(info.iCurrRound), 1),
-            ("116437", "累计完成2轮冒险", info.hold.round2.iLeftNum, int(info.iCurrRound), 2),
-            ("116458", "累计完成3轮冒险", info.hold.round3.iLeftNum, int(info.iCurrRound), 3),
-            ("116459", "累计完成30次探险", info.hold.adventure30.iLeftNum, int(info.iExploreTimes), 30 - 1),
-        ]
+        logger.info(color("bold_cyan") + f"当前累计完成 {int(info.iCurrRound) - 1} 轮冒险")
+        self.mojieren_op("累计完成1轮冒险", "165344")
+        self.mojieren_op("累计完成2轮冒险", "165345")
+        self.mojieren_op("累计完成3轮冒险", "165346")
+        self.mojieren_op("累计完成30次挑战", "165348")
 
-        for flowid, name, iLeftNum, current_val, bounds_val in accumulative_award_info:
-            if iLeftNum < 1 or current_val <= bounds_val:
-                logger.warning(f"{name} 条件不满足，当前进度为 {current_val}，剩余领取次数为 {iLeftNum}，需要进度大于 {bounds_val}且有剩余领取次数，将跳过")
-                continue
-
-            self.mojieren_op(name, flowid)
+        # logger.info(color("bold_cyan") + f"当前累计完成 {info.iCurrRound} 轮冒险， {info.iExploreTimes} 次探险")
+        # accumulative_award_info = [
+        #     ("116436", "累计完成1轮冒险", info.jHolds.hold_total_round_1.iLeftNum, int(info.iCurrRound), 1),
+        #     ("116437", "累计完成2轮冒险", info.jHolds.hold_total_round_2.iLeftNum, int(info.iCurrRound), 2),
+        #     ("116458", "累计完成3轮冒险", info.jHolds.hold_total_round_3.iLeftNum, int(info.iCurrRound), 3),
+        #     ("116459", "累计完成30次挑战", info.jHolds.hold_total_adventure.iLeftNum, int(info.iExploreTimes), 30 - 1),
+        # ]
+        #
+        # for flowid, name, iLeftNum, current_val, bounds_val in accumulative_award_info:
+        #     if iLeftNum < 1 or current_val <= bounds_val:
+        #         logger.warning(f"{name} 条件不满足，当前进度为 {current_val}，剩余领取次数为 {iLeftNum}，需要进度大于 {bounds_val}且有剩余领取次数，将跳过")
+        #         continue
+        #
+        #     self.mojieren_op(name, flowid)
 
         logger.warning("分享给流失好友可以获取额外夺宝次数，请自行手动完成")
         # self.mojieren_op("关系链数据脱敏", "115858")
@@ -7789,6 +7799,32 @@ class DjcHelper:
             giftNum=giftNum,
             **extra_params,
             extra_cookies=f"p_skey={p_skey}",
+        )
+
+    def check_mojieren_amesvr(self, **extra_params):
+        """有时候马杰洛活动可能绑定走amesvr系统，活动内容走ide，这里做下特殊处理"""
+        self.check_bind_account(
+            "魔界人探险记",
+            get_act_url("魔界人探险记"),
+            activity_op_func=self.mojieren_amesvr_op,
+            query_bind_flowid="917061",
+            commit_bind_flowid="917060",
+            **extra_params,
+        )
+
+    def mojieren_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_mojieren
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("魔界人探险记"),
+            **extra_params,
         )
 
     # --------------------------------------------我的小屋--------------------------------------------
@@ -11964,4 +12000,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian_start()
+        djcHelper.mojieren()

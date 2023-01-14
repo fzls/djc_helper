@@ -1788,36 +1788,39 @@ class MoJieRenInfo(ConfigInterface):
     def __init__(self):
         self.iRet = "0"
         self.sMsg = "ok"
-        self.cubeNum = "0"
-        self.lotteryNum = "0"
-        self.iCurrPos = "7"
+        self.iCurrPos = "9"
         self.iCurrRound = "1"
-        self.iExploreTimes = "2"
-        self.hold = MoJieRenHoldInfo()
-        self.inviteList = []
-        self.task = {}
+        self.iTaskType = 0
+        self.iMagic = "0"
+        self.iTreasure = "0"
+        self.jHolds = MoJieRenHoldInfo()
+        self.isAuth = "1"
+        self.iTaskStatus = {}
 
     def on_config_update(self, raw_config: dict):
         # 首次查询时，部分字段会是null，需要修改为正确的值，确保后续逻辑无误
         # "iCurrPos": null, "iCurrRound": null, "iExploreTimes": null
         self.iCurrPos = self.iCurrPos or "1"
         self.iCurrRound = self.iCurrRound or "1"
-        self.iExploreTimes = self.iExploreTimes or "0"
+        self.iTaskStatus = self.iTaskStatus or {}
 
 
 class MoJieRenHoldInfo(ConfigInterface):
     def __init__(self):
-        self.round1 = MoJieRenHoldItem()
-        self.round2 = MoJieRenHoldItem()
-        self.round3 = MoJieRenHoldItem()
-        self.adventure30 = MoJieRenHoldItem()
-        self.loginGift = MoJieRenHoldItem()
-        self.returnLoginGift = MoJieRenHoldItem()
+        self.hold_total_round_1 = MoJieRenHoldItem()
+        self.hold_total_round_2 = MoJieRenHoldItem()
+        self.hold_total_round_3 = MoJieRenHoldItem()
+        self.hold_total_adventure = MoJieRenHoldItem()
 
 
 class MoJieRenHoldItem(ConfigInterface):
     def __init__(self):
+        self.iRet = 0
+        self.sMsg = "succ"
         self.iLeftNum = 0
+        self.iUsedNum = 0
+        self.iTotalNum = "0"
+        self.arrExtData = {}
 
 
 class MaJieLuoInfo(ConfigInterface):

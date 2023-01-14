@@ -72,6 +72,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
     newNotAmsActInfo("2022-12-29 00:00:00", "2023-02-16 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
+    newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
 ]
 
 act_name_to_url = {
@@ -101,6 +102,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
+    "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     #
     # 已过期活动
     #
@@ -127,7 +129,6 @@ act_name_to_url = {
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
-    "魔界人探险记": "https://dnf.qq.com/cp/a20220121random/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
@@ -317,14 +318,16 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_mojieren = "86_OLju2H"  # 魔界人探险记
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
 
-        # re: 部分情况下，马杰洛可能会同时关联ame和ide活动，这里放到一起管理
+        # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "520915"  # DNF马杰洛的规划
         self.ide_iActivityId_majieluo = "55_rhYqg6"  # DNF马杰洛的规划
+
+        self.iActivityId_mojieren = "523217"  # 魔界人探险记
+        self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记
 
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = (

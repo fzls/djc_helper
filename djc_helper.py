@@ -593,6 +593,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("冒险的起点", self.maoxian_start),
             ("魔界人探险记", self.mojieren),
+            ("dnf助手活动Dup", self.dnf_helper_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -614,7 +615,6 @@ class DjcHelper:
             ("DNF互动站", self.dnf_interactive),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF共创投票", self.dnf_dianzan),
-            ("dnf助手活动Dup", self.dnf_helper_dup),
             ("DNF漫画预约活动", self.dnf_comic),
             ("翻牌活动", self.dnf_card_flip),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
@@ -4366,41 +4366,25 @@ class DjcHelper:
             )
             return
 
-        self.check_dnf_helper_dup()
+        # re: 有些助手活动可能需要绑定流程，有些不需要，看情况来决定下面这句话是否要注释
+        # self.check_dnf_helper_dup()
 
-        # <option value="1">周一</option>
-        # <option value="2">周二</option>
-        # <option value="3">周三</option>
-        # <option value="4">周四</option>
-        # <option value="5">周五</option>
-        # <option value="6">周末</option>
-        # <option value="7">全部</option>
-        # <option value="8">时间不定</option>
-        if is_daily_first_run(f"打团报名_{self.cfg.name}"):
-            self.dnf_helper_dup_op("报名", "851838", prefer="6")
+        self.dnf_helper_dup_op("110级普通地下城数据", "919560")
+        self.dnf_helper_dup_op("查看贵族机要数据", "919562")
+        self.dnf_helper_dup_op("查看毁坏的寂静城数据", "919563")
+        self.dnf_helper_dup_op("查看机械七站神实验室数据", "919564")
+        self.dnf_helper_dup_op("查看伊斯大陆数据", "919565")
+        self.dnf_helper_dup_op("查看趣味数据", "919566")
 
-            logger.info("等待10秒后再进行下一个操作")
-            time.sleep(10)
-
-        self.dnf_helper_dup_op("周末礼包", "844295")
+        self.dnf_helper_dup_op("分享-1", "921006")
+        self.dnf_helper_dup_op("分享-2", "919567")
 
         async_message_box(
-            "仅尝试报名和领取周末礼包，积分兑换请自行前往dnf助手的活动页面按照个人喜好进行兑换~", "打团活动", show_once=True, open_url=get_act_url("dnf助手活动Dup")
+            "有兴趣的话，可在助手打开稍后出现的网页，来查看2022年在DNF里的相关数据，比如捡了多少金币，使用了多少金绿柱石",
+            "年终总结",
+            show_once=True,
+            open_url=get_act_url("dnf助手活动Dup"),
         )
-        # self.dnf_helper_dup_op("积分兑换--2积分限20次_复活币", "845120")
-        # self.dnf_helper_dup_op("积分兑换--4积分限20次_闪亮", "853815")
-        # self.dnf_helper_dup_op("积分兑换--4积分限20次_王者改镶嵌", "853816")
-        # self.dnf_helper_dup_op("积分兑换--10积分限20次_一次性继承", "853817")
-        # self.dnf_helper_dup_op("积分兑换--8积分限30次每周2_装备", "853818")
-        # self.dnf_helper_dup_op("积分兑换--15积分每周2_华丽", "853819")
-        # self.dnf_helper_dup_op("积分兑换--20积分10次_黑砖15天", "853820")
-        # self.dnf_helper_dup_op("积分兑换--40积分限每月1_+10装备强化", "853821")
-        # self.dnf_helper_dup_op("积分兑换--30积分每周1次_异界", "853822")
-        # self.dnf_helper_dup_op("积分兑换--60积分每周1_纯净", "853823")
-        # self.dnf_helper_dup_op("积分兑换--25积分每周1_次元", "853824")
-        # self.dnf_helper_dup_op("积分兑换--160积分每周1 _ 10装备增幅券", "853825")
-        # self.dnf_helper_dup_op("积分兑换--160积分每周1_灿烂", "853826")
-        # self.dnf_helper_dup_op("积分兑换--240积分每周1_11装备增幅券", "853828")
 
     def check_dnf_helper_dup(self):
         self.check_bind_account(
@@ -12000,4 +11984,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.mojieren()
+        djcHelper.dnf_helper_dup()

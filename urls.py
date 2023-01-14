@@ -100,9 +100,10 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     #
     # 已过期活动
     #
@@ -124,7 +125,6 @@ act_name_to_url = {
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
-    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20220105headerm/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
@@ -251,7 +251,7 @@ class Urls:
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_dnf_helper = "528891"  # DNF助手活动
-        self.iActivityId_dnf_helper_dup = "451819"  # DNF助手活动
+        self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动

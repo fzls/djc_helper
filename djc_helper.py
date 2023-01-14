@@ -590,6 +590,7 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("DNF马杰洛的规划", self.majieluo),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -599,7 +600,6 @@ class DjcHelper:
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
-            ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("幸运勇士", self.dnf_lucky_user),
@@ -4183,6 +4183,22 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动')}")
             return
 
+        self.check_dnf_helper()
+
+        def query_info() -> tuple[int, int, int, int]:
+            raw_res = self.dnf_helper_op("查询信息", "922170", print_res=False)
+            info = parse_amesvr_common_info(raw_res)
+
+
+            # 累计获取抽奖次数，剩余抽奖次数
+            total_lottery_count, current_lottery_count = info.sOutValue3.split(";")
+
+            # 胡萝卜、超级胡萝卜
+            count_hlb, count_cjhlb = info.sOutValue6.split(";")
+
+
+            return int(total_lottery_count), int(current_lottery_count), int(count_hlb), int(count_cjhlb)
+
         # def query_lottery_count() -> int:
         #     raw_res = self.dnf_helper_op("查询抽奖次数", "850836", print_res=False)
         #     info = parse_amesvr_common_info(raw_res)
@@ -4223,22 +4239,43 @@ class DjcHelper:
         # for actSign in range_from_one(5):
         #     self.dnf_helper_op(f"{name} - {flowid} - 第 {actSign} 天", flowid, actSign=actSign)
 
-        self.dnf_helper_op("抽奖", "890568")
+        self.dnf_helper_op("勇士见面礼", "921600")
+        self.dnf_helper_op("见面礼", "921476")
 
-        self.dnf_helper_op("领取龙息", "891009")
+        self.dnf_helper_op("任务1领取", "922024")
+        self.dnf_helper_op("任务2领取", "922025")
+        self.dnf_helper_op("任务3领取", "922026")
+        self.dnf_helper_op("任务4领取", "922027")
+        self.dnf_helper_op("任务5领取", "922028")
 
-        self.dnf_helper_op("火龙挑战基础", "891018")
-        self.dnf_helper_op("火龙挑战进阶", "891019")
-        self.dnf_helper_op("金龙挑战基础", "891025")
-        self.dnf_helper_op("金龙挑战进阶", "891026")
-        self.dnf_helper_op("真龙挑战基础", "891027")
-        self.dnf_helper_op("真龙挑战进阶", "891028")
-        self.dnf_helper_op("黑龙挑战基础", "891029")
-        self.dnf_helper_op("黑龙挑战进阶", "891030")
+        _, _, count_hlb, count_cjhlb = query_info()
+        logger.info(f"当前胡萝卜炮弹={count_hlb}, 超级胡萝卜炮弹={count_cjhlb}")
+        for idx in range_from_one(count_cjhlb):
+            self.dnf_helper_op(f"{idx}: 使用超级胡萝卜炮弹", "921905")
+            time.sleep(3)
 
-    # def check_dnf_helper(self):
-    #     self.check_bind_account("dnf助手活动", get_act_url("dnf助手活动"),
-    #                             activity_op_func=self.dnf_helper_op, query_bind_flowid="736842", commit_bind_flowid="736841")
+        for idx in range_from_one(count_hlb):
+            self.dnf_helper_op(f"{idx}: 使用胡萝卜炮弹", "921898")
+            time.sleep(3)
+
+        self.dnf_helper_op("消灭1次领取", "921909")
+        self.dnf_helper_op("消灭2次领取", "921913")
+        self.dnf_helper_op("消灭3次领取", "921914")
+        self.dnf_helper_op("消灭4次领取", "921915")
+
+        total_lottery_count, current_lottery_count, _, _ = query_info()
+        logger.info(f"目前累计获得{total_lottery_count}次抽奖次数, 剩余抽奖次数为{current_lottery_count}")
+        for idx in range_from_one(current_lottery_count):
+            self.dnf_helper_op(f"{idx}: 抽奖", "921601")
+
+    def check_dnf_helper(self):
+        self.check_bind_account(
+            "dnf助手活动",
+            get_act_url("dnf助手活动"),
+            activity_op_func=self.dnf_helper_op,
+            query_bind_flowid="922169",
+            commit_bind_flowid="922168"
+        )
 
     # def dnf_helper_format_url(self, api: str) -> str:
     #     dnf_helper_info = self.cfg.dnf_helper_info
@@ -11927,4 +11964,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_helper()

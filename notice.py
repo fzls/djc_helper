@@ -195,13 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "今日请先手动操作"
-    message = """由于公司项目临近发版，今日我得加班到晚上十一点-。-今天应该是没希望更新了，大家请先手动在稍后自动打开的云文档中列出的两个集合站中自行点掉今日的奖励，避免亏了一天
-
-https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV
+    title = "巴卡尔大作战组队"
+    message = """-。-如果你巴卡尔大作战还没组队的话，可以在稍后出现的活动页面中加入我的攻坚队（蚊子腿小分队）-。-凑齐12个人可以加快活动进度
 """
-    open_url = "https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV"
+    open_url = "https://dnf.qq.com/cp/a20230112herd/index.html?teamId=f3396f0ebeb7b1d097bf59ae6093136b&e_code=532958"
     show_only_before_version = ""
+    valid_duration = timedelta(days=7)
 
     if title != "":
         nm.add_notice(
@@ -210,7 +209,7 @@ https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV
             send_at=format_now(),
             show_type=NoticeShowType.ONCE,
             open_url=open_url,
-            valid_duration=timedelta(days=7),
+            valid_duration=valid_duration,
             show_only_before_version=show_only_before_version,
         )
 

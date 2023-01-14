@@ -78,5 +78,15 @@
     "open_url": "https://docs.qq.com/doc/DYnh5TWlOSWxiQ2NV",
     "expire_at": "2023-01-13 19:42:25",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "巴卡尔大作战组队",
+    "message": "-。-如果你巴卡尔大作战还没组队的话，可以在稍后出现的活动页面中加入我的攻坚队（蚊子腿小分队）-。-凑齐12个人可以加快活动进度\n",
+    "send_at": "2023-01-14 21:43:08",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20230112herd/index.html?teamId=f3396f0ebeb7b1d097bf59ae6093136b&e_code=532958",
+    "expire_at": "2023-01-17 21:43:08",
+    "show_only_before_version": ""
   }
 ]

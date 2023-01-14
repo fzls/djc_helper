@@ -104,6 +104,7 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
+    "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     #
     # 已过期活动
     #
@@ -289,6 +290,7 @@ class Urls:
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
+        self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -310,6 +312,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
+            "&bossId={bossId}"
         )
 
         # ide通用活动

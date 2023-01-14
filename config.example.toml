@@ -666,6 +666,12 @@ get_guanjia = true
 #count = 1
 #
 #[[account_configs.xinyue_operations]]
+#iFlowId = "912508"
+#package_id = ""
+#sFlowName = "新版装备提升礼盒(需30点勇士币)(每日20次)（可批量兑换）"
+#count = 1
+#
+#[[account_configs.xinyue_operations]]
 #iFlowId = "747741"
 #package_id = "1537692"
 #sFlowName = "抗疲劳秘药（95lv以上,5点,1天1次）(日限3)(需10点勇士币)"

@@ -1196,6 +1196,9 @@ class DjcHelper:
             try_add_op(op)
 
         # 进行相应的心悦操作
+        xinyue_operations = [
+            xinyue_operations[-1],
+        ]
         for op in xinyue_operations:
             self.do_xinyue_op(old_info.xytype, op)
 
@@ -1253,16 +1256,21 @@ class DjcHelper:
         while progress < op.count:
             # 默认每次兑换一个
             exchange_count = 1
-            if op.iFlowId == "821281":
-                # 821281    新版复活币*1(日限100)(需1点勇士币)
-                # 特殊处理复活币
-                remaining = op.count - progress
-                if 1 <= remaining < 5:
-                    exchange_count = 1
-                elif 5 <= remaining < 20:
-                    exchange_count = 5
-                else:
-                    exchange_count = 20
+
+            batch_exchange_list = [
+                ("821281", [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
+                ("912508", [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
+            ]
+            for batch_flowid, batch_count_list in batch_exchange_list:
+                if op.iFlowId == batch_flowid:
+                    # 部分奖励可批量兑换，具体列表可见上面
+                    remaining = op.count - progress
+
+                    for batch_count in batch_count_list:
+                        if remaining >= batch_count and batch_count >= exchange_count:
+                            # 找到批量兑换列表中当前适用的最大值
+                            exchange_count = batch_count
+
             progress += exchange_count
 
             ctx = f"6.2 心悦操作： {op.sFlowName}({progress}/{op.count}) 本次兑换 {exchange_count}个"
@@ -12078,4 +12086,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bakaer_fight()
+        djcHelper.xinyue_battle_ground()

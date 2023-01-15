@@ -56,7 +56,6 @@ from dao import (
     IdeActInfo,
     LuckyUserInfo,
     LuckyUserTaskConf,
-    MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
     MyHomeFarmInfo,
@@ -4195,13 +4194,11 @@ class DjcHelper:
             raw_res = self.dnf_helper_op("查询信息", "922170", print_res=False)
             info = parse_amesvr_common_info(raw_res)
 
-
             # 累计获取抽奖次数，剩余抽奖次数
             total_lottery_count, current_lottery_count = info.sOutValue3.split(";")
 
             # 胡萝卜、超级胡萝卜
             count_hlb, count_cjhlb = info.sOutValue6.split(";")
-
 
             return int(total_lottery_count), int(current_lottery_count), int(count_hlb), int(count_cjhlb)
 
@@ -4280,7 +4277,7 @@ class DjcHelper:
             get_act_url("dnf助手活动"),
             activity_op_func=self.dnf_helper_op,
             query_bind_flowid="922169",
-            commit_bind_flowid="922168"
+            commit_bind_flowid="922168",
         )
 
     # def dnf_helper_format_url(self, api: str) -> str:
@@ -7435,7 +7432,6 @@ class DjcHelper:
 
             time.sleep(request_wait_time)
 
-
         # def query_info() -> MaJieLuoInfo:
         #     raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
         #
@@ -9820,7 +9816,6 @@ class DjcHelper:
             res = self.dnf_collection_op("查询签到天数-condOutput", "916408", print_res=False)
             return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
 
-
         def take_return_user_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
             self.dnf_collection_op("回归礼包", "916402")
             time.sleep(5)
@@ -9924,7 +9919,6 @@ class DjcHelper:
 
         self.dnf_bakaer_map_ide_op("领取登录礼包", "164862")
         self.dnf_bakaer_map_ide_op("领取新春地下城礼包", "164879")
-
 
     def check_dnf_bakaer_map_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -10959,10 +10953,7 @@ class DjcHelper:
 
         # 奖励提示自行领取
         async_message_box(
-            (
-                "巴卡尔大作战活动请自行创建攻坚队，或者加入他人的攻坚队，来完成初始流程，否则活动不能正常操作\n"
-                "另外，该活动的兑换商店中的奖励请在活动末期自行兑换（小助手会完成领取任务奖励、攻坚成功奖励等操作）\n"
-            ),
+            ("巴卡尔大作战活动请自行创建攻坚队，或者加入他人的攻坚队，来完成初始流程，否则活动不能正常操作\n" "另外，该活动的兑换商店中的奖励请在活动末期自行兑换（小助手会完成领取任务奖励、攻坚成功奖励等操作）\n"),
             "巴卡尔大作战活动提示",
             show_once=True,
             open_url=get_act_url("巴卡尔大作战"),
@@ -10971,7 +10962,6 @@ class DjcHelper:
         # self.dnf_bakaer_fight_op("兑换-第二阶段（打败任意小boss）", "918113")
         # self.dnf_bakaer_fight_op("兑换-第三阶段（打败所有小boss/解锁大boss）", "918116")
         # self.dnf_bakaer_fight_op("兑换-第四阶段（打败大boss）", "918117")
-
 
         act_info = self.dnf_bakaer_fight_op("获取活动信息", "", get_act_info_only=True)
         act_endtime = get_today(parse_time(act_info.dtEndTime))

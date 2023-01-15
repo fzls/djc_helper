@@ -1196,9 +1196,6 @@ class DjcHelper:
             try_add_op(op)
 
         # 进行相应的心悦操作
-        xinyue_operations = [
-            xinyue_operations[-1],
-        ]
         for op in xinyue_operations:
             self.do_xinyue_op(old_info.xytype, op)
 

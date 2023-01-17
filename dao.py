@@ -1383,9 +1383,15 @@ class GuanjiaNewLotteryResultData(ConfigInterface):
 
 class ColgBattlePassInfo(ConfigInterface):
     def __init__(self):
+        # 战令ID
         self.activity_id = "4"
+        # 活跃值
         self.lv_score = 0
+        # 兑换币
+        self.conversion = 0
+        # 任务列表
         self.tasks: list[ColgBattlePassTaskInfo] = []
+        # 奖励列表
         self.rewards: list[ColgBattlePassRewardInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:

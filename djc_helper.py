@@ -8735,6 +8735,7 @@ class DjcHelper:
 
             activity_id = extract_between(html, "var activity_id = '", "';", str)
             lv_score = extract_between(html, "var lvScore = ", ";", int)
+            conversion = extract_between(html, "var conversion = ", ";", int)
             tasks = json.loads(extract_between(html, "var tasks = ", ";", str))["list"]
             rewards = json.loads(extract_between(html, "var rewardListData = ", ";", str))
 
@@ -8742,6 +8743,7 @@ class DjcHelper:
                 {
                     "activity_id": activity_id,
                     "lv_score": lv_score,
+                    "conversion": conversion,
                     "tasks": tasks,
                     "rewards": rewards,
                 }
@@ -8810,6 +8812,20 @@ class DjcHelper:
             f"colg社区活跃任务-{info.activity_id}-提示",
             show_once=True,
         )
+
+        conversion_status_message = f"账号 {self.cfg.name} Colg 当前兑换币数量为 {info.conversion}"
+        logger.info(conversion_status_message)
+
+        # 当兑换币足够时，提示兑换限量兑换的奖励
+        limit_award_name = "原初职业白金徽章礼盒"
+        limit_award_require_conversion = 18
+        limit_award_count = 7500
+        if info.conversion >= limit_award_require_conversion:
+            async_message_box(
+                f"{conversion_status_message}，已足够兑换 {limit_award_name}(需{limit_award_require_conversion}兑换币)，该奖励限量{limit_award_count}个，请及时前往兑换。如果已经没有了，可以兑换其他奖励",
+                f"colg社区活跃任务-{info.activity_id}-兑换限量奖励提示",
+                open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
+            )
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -12073,4 +12089,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.colg_signin()

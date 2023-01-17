@@ -73,6 +73,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-12-29 00:00:00", "2023-02-16 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
+    newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
 ]
 
 act_name_to_url = {
@@ -105,6 +106,7 @@ act_name_to_url = {
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
+    "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     #
     # 已过期活动
     #
@@ -444,12 +446,16 @@ class Urls:
         # 心悦猫咪api
         self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"
 
-        # colg
+        # colg-战令
         self.colg_url = "https://bbs.colg.cn/forum-171-1.html"
         self.colg_sign_in_url = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=passUserSign"
         self.colg_take_sign_in_credits = (
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
+        # colg-年终盛典签到
+        self.colg_yearly_signin_url = "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9"
+        self.colg_yearly_signin_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
+        self.colg_yearly_signin_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
 
         # 小酱油
         self.xiaojiangyou_get_role_id = (

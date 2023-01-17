@@ -1443,6 +1443,44 @@ class ColgBattlePassRewardInfo(ConfigInterface):
         self.sort_id = 12
 
 
+class ColgYearlySigninInfo(ConfigInterface):
+    def __init__(self):
+        # 活动id
+        self.activity_id = "9"
+        # 已签到天数
+        self.signin_days = 0
+        # 奖励列表
+        self.rewards: list[ColgYearlySigninRewardInfo] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("rewards", ColgYearlySigninRewardInfo),
+        ]
+
+
+class ColgYearlySigninRewardInfo(ConfigInterface):
+    def __init__(self):
+        # 奖励id
+        self.reward_bag_id = "32"
+        # 奖励名称
+        self.title = "累计签到3天"
+        # 奖励类别
+        self.type = "9"
+        # 签到天数
+        self.days = "3"
+        # 奖励列表
+        self.list = []
+        # 0-可领取 1-已领取 2-不可领取
+        self.status = 1
+
+    def get_reward_name_list(self) -> list[str]:
+        name_list = []
+        for reward in self.list:
+            name_list.append(reward["gift"])
+
+        return name_list
+
+
 class ResponseInfo(ConfigInterface):
     def __init__(self):
         self.status_code = 200

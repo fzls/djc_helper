@@ -29,6 +29,7 @@ from dao import (
     AmesvrUserBindInfo,
     BuyInfo,
     ColgBattlePassInfo,
+    ColgYearlySigninInfo,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
@@ -594,6 +595,7 @@ class DjcHelper:
             ("魔界人探险记", self.mojieren),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
+            ("colg年终盛典签到", self.colg_yearly_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8858,6 +8860,78 @@ class DjcHelper:
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
             )
 
+    # --------------------------------------------colg年终盛典签到--------------------------------------------
+    @try_except()
+    def colg_yearly_signin(self):
+        # https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9
+        show_head_line("colg年终盛典签到")
+        self.show_not_ams_act_info("colg年终盛典签到")
+
+        if not self.cfg.function_switches.get_colg_yearly_signin or self.disable_most_activities():
+            logger.warning("未启用colg年终盛典签到功能，将跳过")
+            return
+
+        if self.cfg.colg_cookie == "":
+            logger.warning("未配置colg的cookie，将跳过（colg相关的配置会配置就配置，不会就不要配置，我不会回答关于这玩意如何获取的问题）")
+            return
+
+        headers = {
+            "accept": "application/json, text/javascript, */*; q=0.01",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "origin": "https://bbs.colg.cn",
+            "referer": get_act_url("colg年终盛典签到"),
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": self.cfg.colg_cookie,
+        }
+
+        session = requests.session()
+        session.headers = headers
+
+        def query_info() -> ColgYearlySigninInfo:
+            res = session.get(self.urls.colg_yearly_signin_url, timeout=10)
+            html = res.text
+
+            activity_id = extract_between(html, 'let activity_id = "', '";', str)
+            signin_days = extract_between(html, 'let dau_count = "', '";', int)
+            rewards = json.loads(extract_between(html, "let reward_list = ", ";", str))
+
+            info = ColgYearlySigninInfo().auto_update_config(
+                {
+                    "activity_id": activity_id,
+                    "signin_days": signin_days,
+                    "rewards": rewards,
+                }
+            )
+
+            return info
+
+        # 签到
+        info = query_info()
+        res = session.post(
+            self.urls.colg_yearly_signin_lottery, data=f"type=2&aid={info.activity_id}", timeout=10
+        )
+        logger.info(color("bold_green") + f"开启每日盲盒，进行签到，结果={res.json()}")
+
+        # 领取累计签到奖励
+        info = query_info()
+        logger.info(f"当前已签到天数为 {info.signin_days} 天")
+        for reward in info.rewards:
+            if reward.status == 1:
+                logger.info(f"{reward.title} 奖励已领取，将跳过")
+                continue
+            if reward.status == 2:
+                logger.info(f"{reward.title} 天数未达到（当前为{info.signin_days}），不可领取，将跳过")
+                continue
+
+            # 尝试领取奖励
+            res = session.post(
+                self.urls.colg_yearly_signin_get_reward, data=f"aid={info.activity_id}&reward_bag_id={reward.reward_bag_id}", timeout=10
+            )
+            logger.info(color("bold_green") + f"领取 {reward.title} 结果={res.json()} 奖励为({reward.get_reward_name_list()})， ")
+
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
     def xiaojiangyou(self):
@@ -12121,4 +12195,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.djc_operations()
+        djcHelper.colg_yearly_signin()

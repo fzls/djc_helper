@@ -2463,6 +2463,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("超享玩", "get_super_core"),
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),
             ("巴卡尔大作战", "get_dnf_bakaer_fight"),
+            ("colg年终盛典签到", "get_colg_yearly_signin"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

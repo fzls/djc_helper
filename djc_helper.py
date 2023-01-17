@@ -710,21 +710,33 @@ class DjcHelper:
         for try_idx in range_from_one(total_try):
             try:
                 # 签到
-                self.post("2.2 签到", self.urls.sign, self.sign_flow_data("96939"))
-                # 领取本日签到赠送的聚豆
+                self.post("2.2 签到", self.urls.sign, self.sign_flow_data("911887"))
+                self.post("2.2 签到补签", self.urls.sign, self.sign_flow_data("912938"))
                 self.post("2.3 领取签到赠送的聚豆", self.urls.sign, self.sign_flow_data("324410"))
 
                 # 尝试领取自动签到的奖励
                 # 查询本月签到的日期列表
-                signinDates = self.post("2.3.1 查询签到日期列表", self.urls.sign, self.sign_flow_data("96938"), print_res=False)
-                month_total_signed_days = len(signinDates["modRet"]["data"])
+                res = self.post("查询签到", self.urls.sign, self.sign_flow_data("321961"), print_res=False)
+                month_total_signed_days = int(res["modRet"]["jData"]["monthNum"])
+                logger.info(f"本月签到次数为 {month_total_signed_days}")
+
                 # 根据本月已签到数，领取符合条件的每月签到若干日的奖励（也就是聚豆页面最上面的那个横条）
+                # ("累计3天领取5聚豆", "322021")
+                # ("累计7天领取15聚豆", "322036")
+                # ("累计10天领取20聚豆", "322037")
+                # ("累计15天领取25聚豆", "322038")
+                # ("累计20天领取30聚豆", "322039")
+                # ("累计25天领取50聚豆", "322040")
                 for sign_reward_rule in self.get("2.3.2 查询连续签到奖励规则", self.urls.sign_reward_rule, print_res=False)[
                     "data"
                 ]:
                     if sign_reward_rule["iCanUse"] == 1 and month_total_signed_days >= int(sign_reward_rule["iDays"]):
                         ctx = f"2.3.3 领取连续签到{sign_reward_rule['iDays']}天奖励"
                         self.post(ctx, self.urls.sign, self.sign_flow_data(str(sign_reward_rule["iFlowId"])))
+
+                # 最短的月为28天，做个保底
+                if month_total_signed_days >= 28:
+                    self.post("2.3.4 累计签到整月-全勤奖", self.urls.sign, self.sign_flow_data("881740"))
 
                 break
             except json.decoder.JSONDecodeError as e:
@@ -734,6 +746,21 @@ class DjcHelper:
 
     def sign_flow_data(self, iFlowId):
         return self.format(self.urls.sign_raw_data, iFlowId=iFlowId)
+
+    def djc_operations_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_djc_operations
+
+        return self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "djc",
+            "dj",
+            iActivityId,
+            iFlowId,
+            print_res,
+            "",
+            **extra_params,
+        )
 
     def complete_tasks(self):
         # 完成《绝不错亿》
@@ -12094,4 +12121,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.djc_operations()

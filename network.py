@@ -9,7 +9,7 @@ from urllib.parse import unquote_plus
 import requests
 
 from config import CommonConfig, RetryConfig
-from const import appVersion
+from const import appVersion, sVersionName
 from dao import ResponseInfo
 from log import color, logger
 from util import check_some_exception, get_meaningful_call_point_for_log
@@ -30,8 +30,9 @@ class Network:
         )
 
         self.base_headers = {
-            "User-Agent": "TencentDaojucheng=v4.1.6.0&appSource=android&appVersion={appVersion}&ch=10003&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName=v4.1.6.0 Mobile GameHelper_1006/2103050005".format(
+            "User-Agent": "TencentDaojucheng={sVersionName}&appSource=android&appVersion={appVersion}&ch=10003&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName={sVersionName} Mobile GameHelper_1006/2103050005".format(
                 appVersion=appVersion,
+                sVersionName=sVersionName,
                 sDeviceID=sDeviceID,
             ),
             "Charset": "UTF-8",

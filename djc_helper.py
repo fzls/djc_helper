@@ -20,7 +20,7 @@ import requests
 import json_parser
 from black_list import check_in_black_list
 from config import AccountConfig, CommonConfig, XinYueOperationConfig, config, load_config
-from const import appVersion, cached_dir, guanjia_skey_version, vscode_online_url
+from const import appVersion, cached_dir, guanjia_skey_version, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
     AmesvrCommonModRet,
@@ -11082,6 +11082,7 @@ class DjcHelper:
         # 有值的默认值
         default_valued_params = {
             "appVersion": appVersion,
+            "sVersionName": sVersionName,
             "p_tk": self.cfg.g_tk,
             "g_tk": self.cfg.g_tk,
             "sDeviceID": self.cfg.sDeviceID,

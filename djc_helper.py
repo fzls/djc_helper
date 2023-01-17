@@ -8822,7 +8822,11 @@ class DjcHelper:
         limit_award_count = 7500
         if info.conversion >= limit_award_require_conversion:
             async_message_box(
-                f"{conversion_status_message}，已足够兑换 {limit_award_name}(需{limit_award_require_conversion}兑换币)，该奖励限量{limit_award_count}个，请及时前往兑换。如果已经没有了，可以兑换其他奖励",
+                (
+                    f"{conversion_status_message}\n"
+                    f"已足够兑换 {limit_award_name}(需{limit_award_require_conversion}兑换币)\n"
+                    f"该奖励限量{limit_award_count}个，请及时前往兑换。如果已经没有了，可以兑换其他奖励\n"
+                ),
                 f"colg社区活跃任务-{info.activity_id}-兑换限量奖励提示",
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
             )

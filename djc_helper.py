@@ -224,24 +224,24 @@ class DjcHelper:
             # 已过期，更新skey
             logger.info("")
             logger.warning(f"账号({self.cfg.name})的skey已过期，即将尝试更新skey")
-            self.update_skey(query_data, window_index=window_index)
+            self.update_skey(window_index=window_index)
 
         # skey获取完毕后，检查是否在黑名单内
         check_in_black_list(self.uin())
 
-    def update_skey(self, query_data, window_index=1):
+    def update_skey(self, window_index=1):
         if self.cfg.function_switches.disable_login_mode_normal:
             logger.warning("禁用了普通登录模式，将不会尝试更新skey")
             return
 
-        login_mode_dict: dict[str, Callable[[dict, int], None]] = {
+        login_mode_dict: dict[str, Callable[[int], None]] = {
             "by_hand": self.update_skey_by_hand,
             "qr_login": self.update_skey_qr_login,
             "auto_login": self.update_skey_auto_login,
         }
-        login_mode_dict[self.cfg.login_mode](query_data, window_index)
+        login_mode_dict[self.cfg.login_mode](window_index)
 
-    def update_skey_by_hand(self, query_data, window_index=1):
+    def update_skey_by_hand(self, window_index=1):
         js_code = """cookies=Object.fromEntries(document.cookie.split(/; */).map(cookie => cookie.split('=', 2)));console.log("uin="+cookies.uin+"\\nskey="+cookies.skey+"\\n");"""
         fallback_js_code = """document.cookie.split(/; */);"""
         logger.error(
@@ -259,7 +259,7 @@ class DjcHelper:
             "4. 填写dnf的区服和手游的区服信息到config.toml中\n"
             "5. 正常使用还需要填写完成后再次运行脚本，获得角色相关信息，并将信息填入到config.toml中\n"
             "\n"
-            f"具体信息为：ret={query_data['ret']} msg={query_data['msg']}"
+            f"具体信息为可见前面的日志"
         )
         # 打开配置界面
         cfgFile = "./config.toml"
@@ -275,14 +275,14 @@ class DjcHelper:
         input("\n完成上述操作后点击回车键即可退出程序，重新运行即可...")
         pause_and_exit(-1)
 
-    def update_skey_qr_login(self, query_data, window_index=1):
+    def update_skey_qr_login(self, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
         loginResult = qqLogin.qr_login(
             QQLogin.login_mode_normal, name=self.cfg.name, account=self.cfg.account_info.account
         )
         self.save_uin_skey(loginResult.uin, loginResult.skey, loginResult.vuserid)
 
-    def update_skey_auto_login(self, query_data, window_index=1):
+    def update_skey_auto_login(self, window_index=1):
         qqLogin = QQLogin(self.common_cfg, window_index=window_index)
         ai = self.cfg.account_info
         loginResult = qqLogin.login(ai.account, ai.password, QQLogin.login_mode_normal, name=self.cfg.name)

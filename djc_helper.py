@@ -8910,9 +8910,7 @@ class DjcHelper:
 
         # 签到
         info = query_info()
-        res = session.post(
-            self.urls.colg_yearly_signin_lottery, data=f"type=2&aid={info.activity_id}", timeout=10
-        )
+        res = session.post(self.urls.colg_yearly_signin_lottery, data=f"type=2&aid={info.activity_id}", timeout=10)
         logger.info(color("bold_green") + f"开启每日盲盒，进行签到，结果={res.json()}")
 
         # 领取累计签到奖励
@@ -8928,9 +8926,13 @@ class DjcHelper:
 
             # 尝试领取奖励
             res = session.post(
-                self.urls.colg_yearly_signin_get_reward, data=f"aid={info.activity_id}&reward_bag_id={reward.reward_bag_id}", timeout=10
+                self.urls.colg_yearly_signin_get_reward,
+                data=f"aid={info.activity_id}&reward_bag_id={reward.reward_bag_id}",
+                timeout=10,
             )
-            logger.info(color("bold_green") + f"领取 {reward.title} 结果={res.json()} 奖励为({reward.get_reward_name_list()})， ")
+            logger.info(
+                color("bold_green") + f"领取 {reward.title} 结果={res.json()} 奖励为({reward.get_reward_name_list()})， "
+            )
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()

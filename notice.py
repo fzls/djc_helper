@@ -195,10 +195,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "巴卡尔大作战组队"
-    message = """-。-如果你巴卡尔大作战还没组队的话，可以在稍后出现的活动页面中加入我的攻坚队（蚊子腿小分队）-。-凑齐12个人可以加快活动进度
+    title = "巴卡尔大作战活动自助组队"
+    message = """之前我发的巴卡尔大作战活动的队伍已经组满了，不少人加不进来，自己创建又组不齐人，所以我刚建了一个大家都可以编辑的在线表单，大家可以利用这个完成组队。
+
+具体操作流程查看稍后打开的页面中最上方的说明即可
+https://docs.qq.com/sheet/DYlJjaElRREpueUFP?tab=BB08J2
 """
-    open_url = "https://dnf.qq.com/cp/a20230112herd/index.html?teamId=f3396f0ebeb7b1d097bf59ae6093136b&e_code=532958"
+    open_url = "https://docs.qq.com/sheet/DYlJjaElRREpueUFP?tab=BB08J2"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

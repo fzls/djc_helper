@@ -8747,8 +8747,8 @@ class DjcHelper:
             "accept-language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "origin": "https://bbs.colg.cn",
-            "referer": "https://bbs.colg.cn/forum-171-1.html",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+            "referer": get_act_url("colg每日签到"),
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
             "x-requested-with": "XMLHttpRequest",
             "cookie": self.cfg.colg_cookie,
         }

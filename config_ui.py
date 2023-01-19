@@ -716,6 +716,13 @@ class ConfigUi(QFrame):
         top_layout = QVBoxLayout()
         top_layout.setAlignment(Qt.AlignCenter)
 
+        # 一些共用的字段描述和提示，避免卡密和直接购买的地方各写一遍，导致难以维护
+        label_name_qq = "主QQ"
+        placeholder_text_qq = "形如 1234567"
+
+        label_name_game_qqs = "其他要使用的QQ（新增）"
+        placeholder_text_game_qqs = "最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
+
         # -------------- 区域：购买卡密 --------------
         self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout(
             "购买卡密(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse"
@@ -756,12 +763,12 @@ class ConfigUi(QFrame):
         )
         form_layout.addRow("卡密", self.lineedit_secret)
 
-        self.lineedit_qq = create_lineedit("", placeholder_text="形如 1234567")
-        form_layout.addRow("主QQ", self.lineedit_qq)
+        self.lineedit_qq = create_lineedit("", placeholder_text=placeholder_text_qq)
+        form_layout.addRow(label_name_qq, self.lineedit_qq)
 
-        self.lineedit_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
+        self.lineedit_game_qqs = create_lineedit("", placeholder_text=placeholder_text_game_qqs)
         self.lineedit_game_qqs.setValidator(QQListValidator())
-        form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_game_qqs)
+        form_layout.addRow(label_name_game_qqs, self.lineedit_game_qqs)
 
         btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务（二十分钟内生效）", "MediumSpringGreen")
         vbox_layout.addWidget(btn_pay_by_card_and_secret)
@@ -779,17 +786,17 @@ class ConfigUi(QFrame):
         form_layout = QFormLayout()
         vbox_layout.addLayout(form_layout)
 
-        self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text="形如 1234567")
-        form_layout.addRow("主QQ", self.lineedit_pay_directly_qq)
+        self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text=placeholder_text_qq)
+        form_layout.addRow(label_name_qq, self.lineedit_pay_directly_qq)
         # 如果首个账号设置了qq，则直接填入作为主QQ默认值，简化操作
         if len(cfg.account_configs) != 0:
             account_cfg = cfg.account_configs[0]
             if account_cfg.account_info.has_set_account():
                 self.lineedit_pay_directly_qq.setText(cfg.account_configs[0].account_info.account)
 
-        self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text="最多5个，使用英文逗号分隔，形如 123,456,789,12,13")
+        self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text=placeholder_text_game_qqs)
         self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
-        form_layout.addRow("其他要使用的QQ（新增）", self.lineedit_pay_directly_game_qqs)
+        form_layout.addRow(label_name_game_qqs, self.lineedit_pay_directly_game_qqs)
 
         form_layout.addWidget(QHLine())
 

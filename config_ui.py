@@ -41,6 +41,7 @@ from qt_wrapper import (
     MyComboBox,
     QHLine,
     QQListValidator,
+    QQValidator,
     add_form_seperator,
     add_row,
     add_vbox_seperator,
@@ -179,6 +180,7 @@ class PayRequest(ConfigInterface):
         self.card_secret = CardSecret()  # 卡密信息
         self.qq = ""  # 使用QQ
         self.game_qqs = ""  # 附属游戏QQ
+        self.recommender_qq = ""  # 推荐人QQ
 
 
 class PayResponse(ConfigInterface):
@@ -190,6 +192,7 @@ class SubmitOrderRequest(ConfigInterface):
     def __init__(self):
         self.qq = ""  # 使用QQ
         self.game_qqs = []  # 附属游戏QQ
+        self.recommender_qq = ""  # 推荐人QQ
 
         self.pay_type = "alipay"
         self.item_name = "按月付费1个月"
@@ -723,6 +726,9 @@ class ConfigUi(QFrame):
         label_name_game_qqs = "其他要使用的QQ（新增）"
         placeholder_text_game_qqs = "最多5个，使用英文逗号分隔，形如 123,456,789,12,13"
 
+        label_name_recommender_qq = "推荐人QQ（若有可填写）"
+        placeholder_text_recommender_qq = "完成首次购买按月付费时，推荐人将会获得一个月的小助手使用时长作为奖励"
+
         # -------------- 区域：购买卡密 --------------
         self.collapsible_box_buy_card_secret = create_collapsible_box_add_to_parent_layout(
             "购买卡密(点击展开)(不会操作或无法支付可点击左上方的【查看付费指引】按钮)", top_layout, title_backgroup_color="Chartreuse"
@@ -770,6 +776,10 @@ class ConfigUi(QFrame):
         self.lineedit_game_qqs.setValidator(QQListValidator())
         form_layout.addRow(label_name_game_qqs, self.lineedit_game_qqs)
 
+        self.lineedit_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
+        self.lineedit_recommender_qq.setValidator(QQValidator())
+        form_layout.addRow(label_name_recommender_qq, self.lineedit_recommender_qq)
+
         btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务（二十分钟内生效）", "MediumSpringGreen")
         vbox_layout.addWidget(btn_pay_by_card_and_secret)
 
@@ -797,6 +807,10 @@ class ConfigUi(QFrame):
         self.lineedit_pay_directly_game_qqs = create_lineedit("", placeholder_text=placeholder_text_game_qqs)
         self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
         form_layout.addRow(label_name_game_qqs, self.lineedit_pay_directly_game_qqs)
+
+        self.lineedit_pay_directly_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
+        self.lineedit_pay_directly_recommender_qq.setValidator(QQValidator())
+        form_layout.addRow(label_name_recommender_qq, self.lineedit_pay_directly_recommender_qq)
 
         form_layout.addWidget(QHLine())
 
@@ -912,8 +926,9 @@ class ConfigUi(QFrame):
         secret = self.lineedit_secret.text().strip()
         qq = self.lineedit_qq.text().strip()
         game_qqs = str_to_list(self.lineedit_game_qqs.text().strip())
+        recommender_qq = self.lineedit_recommender_qq.text().strip()
 
-        msg = self.check_pay_params(card, secret, qq, game_qqs)
+        msg = self.check_pay_params(card, secret, qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
             show_message("出错了", msg)
             return
@@ -925,6 +940,7 @@ class ConfigUi(QFrame):
                 "\n"
                 f"主QQ：       {format_qq_for_message_box(qq)}\n"
                 f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
+                f"推荐人QQ：    {format_qq_for_message_box(recommender_qq)}\n"
             ),
         )
         if ret == QMessageBox.Cancel:
@@ -938,7 +954,7 @@ class ConfigUi(QFrame):
             return
 
         try:
-            self.do_pay_request(card, secret, qq, game_qqs)
+            self.do_pay_request(card, secret, qq, game_qqs, recommender_qq)
         except Exception as e:
             show_message("出错了", (f"请求出现异常，报错如下:\n" "\n" f"{e}\n" "\n" "可以试试使用付款方式二进行付款~\n"))
 
@@ -946,20 +962,20 @@ class ConfigUi(QFrame):
         reset_cache(cache_name_download)
         reset_cache(cache_name_user_buy_info)
 
-    def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: list[str]) -> str:
+    def check_pay_params(self, card: str, secret: str, qq: str, game_qqs: list[str], recommender_qq) -> str:
         if len(card.split("-")) != 3:
             return "无效的卡号"
 
         if len(secret) != 32:
             return "无效的卡密"
 
-        msg = self.check_qqs(qq, game_qqs)
+        msg = self.check_qqs(qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
             return msg
 
         return CHECK_RESULT_OK
 
-    def check_qqs(self, qq: str, game_qqs: list[str]) -> str:
+    def check_qqs(self, qq: str, game_qqs: list[str], recommender_qq: str) -> str:
         for qq_to_check in [qq, *game_qqs]:
             if not is_valid_qq(qq_to_check):
                 return f"无效的QQ：{qq_to_check}"
@@ -967,14 +983,22 @@ class ConfigUi(QFrame):
         if len(game_qqs) > 5:
             return "最多五个QQ哦，如果有更多QQ，建议用配置工具添加多个账号一起使用（任意一个有权限就可以），无需全部填写~"
 
+        if recommender_qq != "":
+            if not is_valid_qq(recommender_qq):
+                return f"推荐人QQ不是有效的QQ：{recommender_qq}"
+
+            if recommender_qq == qq:
+                return f"推荐人QQ不能与当前主QQ一样：{recommender_qq}"
+
         return CHECK_RESULT_OK
 
-    def do_pay_request(self, card: str, secret: str, qq: str, game_qqs: list[str]):
+    def do_pay_request(self, card: str, secret: str, qq: str, game_qqs: list[str], recommender_qq: str):
         req = PayRequest()
         req.card_secret.card = card
         req.card_secret.secret = secret
         req.qq = qq
         req.game_qqs = game_qqs
+        req.recommender_qq = recommender_qq
 
         server_addr = self.get_pay_server_addr()
         raw_res = requests.post(f"{server_addr}/pay", json=to_raw_type(req), timeout=20)
@@ -1008,6 +1032,7 @@ class ConfigUi(QFrame):
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
         game_qqs = str_to_list(self.lineedit_pay_directly_game_qqs.text().strip())
+        recommender_qq = self.lineedit_pay_directly_recommender_qq.text().strip()
         item_name = self.push_button_grid_layout_item_name.get_active_radio_text()
         pay_type_name = self.push_button_grid_layout_pay_type_name.get_active_radio_text()
 
@@ -1017,7 +1042,7 @@ class ConfigUi(QFrame):
         if not self.check_pay_type_name(pay_type_name):
             return
 
-        msg = self.check_qqs(qq, game_qqs)
+        msg = self.check_qqs(qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
             show_message("出错了", msg)
             return
@@ -1029,6 +1054,7 @@ class ConfigUi(QFrame):
                 "\n"
                 f"主QQ：       {format_qq_for_message_box(qq)}\n"
                 f"其他QQ列表： {format_qq_list_for_message_box(game_qqs)}\n"
+                f"推荐人QQ：   {format_qq_for_message_box(recommender_qq)}\n"
                 "\n"
                 f"付费内容：   {item_name}\n"
                 f"付款方式：   {pay_type_name}\n"
@@ -1049,7 +1075,7 @@ class ConfigUi(QFrame):
             return
 
         try:
-            self.do_pay_directly_request(item_name, pay_type, qq, game_qqs)
+            self.do_pay_directly_request(item_name, pay_type, qq, game_qqs, recommender_qq)
         except Exception as e:
             self.show_card_secret()
             self.collapsible_box_pay_directly.setVisible(False)
@@ -1116,10 +1142,11 @@ class ConfigUi(QFrame):
             disabled_seconds=5,
         )
 
-    def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: list[str]):
+    def do_pay_directly_request(self, item_name: str, pay_type: str, qq: str, game_qqs: list[str], recommender_qq: str):
         req = SubmitOrderRequest()
         req.qq = qq
         req.game_qqs = game_qqs
+        req.recommender_qq = recommender_qq
 
         req.pay_type = pay_type
         req.item_name = item_name
@@ -1138,6 +1165,7 @@ class ConfigUi(QFrame):
             # 使用成功
             self.lineedit_pay_directly_qq.clear()
             self.lineedit_pay_directly_game_qqs.clear()
+            self.lineedit_pay_directly_recommender_qq.clear()
 
             logging.info(f"订单链接为 {res.order_url}")
             webbrowser.open(res.order_url)

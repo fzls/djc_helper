@@ -771,6 +771,11 @@ class ConfigUi(QFrame):
 
         self.lineedit_qq = create_lineedit("", placeholder_text=placeholder_text_qq)
         form_layout.addRow(label_name_qq, self.lineedit_qq)
+        # 如果首个账号设置了qq，则直接填入作为主QQ默认值，简化操作
+        if len(cfg.account_configs) != 0:
+            account_cfg = cfg.account_configs[0]
+            if account_cfg.account_info.has_set_account():
+                self.lineedit_qq.setText(cfg.account_configs[0].account_info.account)
 
         self.lineedit_game_qqs = create_lineedit("", placeholder_text=placeholder_text_game_qqs)
         self.lineedit_game_qqs.setValidator(QQListValidator())

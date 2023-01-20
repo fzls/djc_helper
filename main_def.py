@@ -1333,6 +1333,11 @@ def show_recommend_reward_tips(user_buy_info: BuyInfo):
         # 未付费过的用户不提示该信息
         return
 
+    remote_config = config_cloud()
+    if not remote_config.enable_recommend_reward:
+        # 未启用推荐功能的情况下，不展示该提示
+        return
+
     async_message_box(
         (
             "Hello~ 你已经累积使用小助手一段时间啦，希望小助手为你节省了些时间和精力(●—●)\n"

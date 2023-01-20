@@ -719,6 +719,8 @@ class ConfigUi(QFrame):
         top_layout = QVBoxLayout()
         top_layout.setAlignment(Qt.AlignCenter)
 
+        remote_config = config_cloud()
+
         # 一些共用的字段描述和提示，避免卡密和直接购买的地方各写一遍，导致难以维护
         label_name_qq = "主QQ"
         placeholder_text_qq = "形如 1234567"
@@ -781,9 +783,10 @@ class ConfigUi(QFrame):
         self.lineedit_game_qqs.setValidator(QQListValidator())
         form_layout.addRow(label_name_game_qqs, self.lineedit_game_qqs)
 
-        self.lineedit_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
-        self.lineedit_recommender_qq.setValidator(QQValidator())
-        form_layout.addRow(label_name_recommender_qq, self.lineedit_recommender_qq)
+        if remote_config.enable_recommend_reward:
+            self.lineedit_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
+            self.lineedit_recommender_qq.setValidator(QQValidator())
+            form_layout.addRow(label_name_recommender_qq, self.lineedit_recommender_qq)
 
         btn_pay_by_card_and_secret = create_pushbutton("使用卡密购买对应服务（二十分钟内生效）", "MediumSpringGreen")
         vbox_layout.addWidget(btn_pay_by_card_and_secret)
@@ -813,9 +816,10 @@ class ConfigUi(QFrame):
         self.lineedit_pay_directly_game_qqs.setValidator(QQListValidator())
         form_layout.addRow(label_name_game_qqs, self.lineedit_pay_directly_game_qqs)
 
-        self.lineedit_pay_directly_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
-        self.lineedit_pay_directly_recommender_qq.setValidator(QQValidator())
-        form_layout.addRow(label_name_recommender_qq, self.lineedit_pay_directly_recommender_qq)
+        if remote_config.enable_recommend_reward:
+            self.lineedit_pay_directly_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
+            self.lineedit_pay_directly_recommender_qq.setValidator(QQValidator())
+            form_layout.addRow(label_name_recommender_qq, self.lineedit_pay_directly_recommender_qq)
 
         form_layout.addWidget(QHLine())
 
@@ -931,7 +935,9 @@ class ConfigUi(QFrame):
         secret = self.lineedit_secret.text().strip()
         qq = self.lineedit_qq.text().strip()
         game_qqs = str_to_list(self.lineedit_game_qqs.text().strip())
-        recommender_qq = self.lineedit_recommender_qq.text().strip()
+        recommender_qq = ""
+        if hasattr(self, "lineedit_recommender_qq"):
+            recommender_qq = self.lineedit_recommender_qq.text().strip()
 
         msg = self.check_pay_params(card, secret, qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
@@ -1037,7 +1043,9 @@ class ConfigUi(QFrame):
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
         game_qqs = str_to_list(self.lineedit_pay_directly_game_qqs.text().strip())
-        recommender_qq = self.lineedit_pay_directly_recommender_qq.text().strip()
+        recommender_qq = ""
+        if hasattr(self, "lineedit_pay_directly_recommender_qq"):
+            recommender_qq = self.lineedit_pay_directly_recommender_qq.text().strip()
         item_name = self.push_button_grid_layout_item_name.get_active_radio_text()
         pay_type_name = self.push_button_grid_layout_pay_type_name.get_active_radio_text()
 
@@ -1170,7 +1178,8 @@ class ConfigUi(QFrame):
             # 使用成功
             self.lineedit_pay_directly_qq.clear()
             self.lineedit_pay_directly_game_qqs.clear()
-            self.lineedit_pay_directly_recommender_qq.clear()
+            if hasattr(self, "lineedit_pay_directly_recommender_qq"):
+                self.lineedit_pay_directly_recommender_qq.clear()
 
             logging.info(f"订单链接为 {res.order_url}")
             webbrowser.open(res.order_url)

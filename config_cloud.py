@@ -49,6 +49,9 @@ class ConfigCloud(ConfigInterface):
         # dlc是否优先启用alist
         self.dlc_prefer_alist = False
 
+        # 是否启用推荐奖励
+        self.enable_recommend_reward = True
+
     def fields_to_fill(self):
         return [
             ("black_list", BlackListConfig),

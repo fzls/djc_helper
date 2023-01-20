@@ -1197,6 +1197,11 @@ class ConfigUi(QFrame):
 
     @try_except(return_val_on_except=False)
     def report_fill_recommender_qq(self, recommender_qq: str):
+        remote_config = config_cloud()
+        if not remote_config.enable_recommend_reward:
+            # 未开启推荐奖励的情况下，不尝试上报数据，避免扰乱结果
+            return
+
         increase_counter(ga_category="fill_recommender_qq", name=recommender_qq != "")
 
     @try_except(return_val_on_except=False)

@@ -16,6 +16,9 @@ enable_alipay_redpacket = false
 # dlc是否优先启用alist
 dlc_prefer_alist = true
 
+# 是否启用推荐奖励
+enable_recommend_reward = true
+
 # 新增的黑名单
 [[black_list]]
 # 封禁于

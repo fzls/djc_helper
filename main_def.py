@@ -1811,7 +1811,7 @@ def get_user_buy_info_from_netdisk(
 
                 buy_users: Dict[str, BuyInfo] = {}
 
-                def update_if_longer(qq: str, info: BuyInfo):
+                def update_if_longer(qq: str, info: BuyInfo, buy_users: Dict[str, BuyInfo]):
                     if qq not in buy_users:
                         buy_users[qq] = info
                     else:
@@ -1824,9 +1824,9 @@ def get_user_buy_info_from_netdisk(
                     raw_infos = json.load(data_file)
                     for qq, raw_info in raw_infos.items():
                         info = BuyInfo().auto_update_config(raw_info)
-                        update_if_longer(qq, info)
+                        update_if_longer(qq, info, buy_users)
                         for game_qq in info.game_qqs:
-                            update_if_longer(game_qq, info)
+                            update_if_longer(game_qq, info, buy_users)
 
                 if len(buy_users) != 0:
                     has_no_users = False

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 from Crypto.Cipher import AES
 
@@ -48,6 +48,10 @@ class AESCipher:
 # 如果配置的值是dict，可以用ConfigInterface自行实现对应结构，将会自动解析
 # 如果配置的值是list/set/tuple，则需要实现ConfigInterface，同时重写auto_update_config，在调用过基类的该函数后，再自行处理这三类结果
 class ConfigInterface(metaclass=ABCMeta):
+    @abstractmethod
+    def __init__(self):
+        pass
+
     def auto_update_config(self, raw_config: dict):
         if type(raw_config) is not dict:
             logger.warning(f"raw_config={raw_config} is not dict")

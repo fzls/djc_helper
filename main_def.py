@@ -1328,6 +1328,25 @@ def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
         os.popen("付费指引/付费指引.docx")
 
 
+def show_recommend_reward_tips(user_buy_info: BuyInfo):
+    if user_buy_info.total_buy_month == 0:
+        # 未付费过的用户不提示该信息
+        return
+
+    async_message_box(
+        (
+            "Hello~ 你已经累积使用小助手一段时间啦，希望小助手为你节省了些时间和精力(●—●)\n"
+            "\n"
+            "如果你觉得小助手好用的话，可以推荐给你的小伙伴们\n"
+            "你的小伙伴在首次购买按月付费时，可在推荐人处填写你的主QQ\n"
+            "当他完成购买时，你将获得一个月的小助手使用时长作为奖励0-0\n"
+        ),
+        "推荐奖励",
+        show_once=True,
+        color_name="bold_green",
+    )
+
+
 def check_update(cfg):
     if is_run_in_github_action():
         logger.info("当前在github action环境下运行，无需检查更新")

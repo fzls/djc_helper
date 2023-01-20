@@ -37,6 +37,7 @@ from main_def import (
     show_multiprocessing_info,
     show_notices,
     show_pay_info,
+    show_recommend_reward_tips,
     try_auto_update,
     try_join_xinyue_team,
     try_load_old_version_configs_from_user_data_dir,
@@ -219,6 +220,8 @@ def main():
         show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
     show_pay_info(cfg)
+
+    show_recommend_reward_tips(user_buy_info)
 
     # 显示小助手的使用概览
     if cfg.common._show_usage:

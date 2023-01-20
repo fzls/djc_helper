@@ -1039,7 +1039,7 @@ class ConfigUi(QFrame):
     @try_except(return_val_on_except=False)
     def report_use_card_secret(self, card: str, recommender_qq: str):
         increase_counter(ga_category="use_card_secret", name=card.split("-")[0])
-        increase_counter(ga_category="fill_recommend_qq", name=recommender_qq != "")
+        self.report_fill_recommender_qq(recommender_qq)
 
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
@@ -1193,7 +1193,11 @@ class ConfigUi(QFrame):
     @try_except(return_val_on_except=False)
     def report_pay_directly(self, item_name: str, recommender_qq: str):
         increase_counter(ga_category="pay_directly", name=item_name)
-        increase_counter(ga_category="fill_recommend_qq", name=recommender_qq != "")
+        self.report_fill_recommender_qq(recommender_qq)
+
+    @try_except(return_val_on_except=False)
+    def report_fill_recommender_qq(self, recommender_qq: str):
+        increase_counter(ga_category="fill_recommender_qq", name=recommender_qq != "")
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:

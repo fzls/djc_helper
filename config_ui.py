@@ -817,7 +817,9 @@ class ConfigUi(QFrame):
         form_layout.addRow(label_name_game_qqs, self.lineedit_pay_directly_game_qqs)
 
         if remote_config.enable_recommend_reward:
-            self.lineedit_pay_directly_recommender_qq = create_lineedit("", placeholder_text=placeholder_text_recommender_qq)
+            self.lineedit_pay_directly_recommender_qq = create_lineedit(
+                "", placeholder_text=placeholder_text_recommender_qq
+            )
             self.lineedit_pay_directly_recommender_qq.setValidator(QQValidator())
             form_layout.addRow(label_name_recommender_qq, self.lineedit_pay_directly_recommender_qq)
 

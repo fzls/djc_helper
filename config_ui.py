@@ -1031,14 +1031,15 @@ class ConfigUi(QFrame):
             if card.startswith("auto_update"):
                 show_message("提示", "自动更新已激活，下次启动小助手时将自动生效，具体操作流程请看【付费指引/付费指引.docx】")
 
-            self.report_use_card_secret(card)
+            self.report_use_card_secret(card, recommender_qq)
         else:
             # 使用失败
             show_message("使用失败", res.msg)
 
     @try_except(return_val_on_except=False)
-    def report_use_card_secret(self, card: str):
+    def report_use_card_secret(self, card: str, recommender_qq: str):
         increase_counter(ga_category="use_card_secret", name=card.split("-")[0])
+        increase_counter(ga_category="fill_recommend_qq", name=recommender_qq != "")
 
     def pay_directly(self, checked=False):
         qq = self.lineedit_pay_directly_qq.text().strip()
@@ -1184,14 +1185,15 @@ class ConfigUi(QFrame):
             logging.info(f"订单链接为 {res.order_url}")
             webbrowser.open(res.order_url)
 
-            self.report_pay_directly(item_name)
+            self.report_pay_directly(item_name, recommender_qq)
         else:
             # 使用失败
             show_message("使用失败", res.msg)
 
     @try_except(return_val_on_except=False)
-    def report_pay_directly(self, item_name: str):
+    def report_pay_directly(self, item_name: str, recommender_qq: str):
         increase_counter(ga_category="pay_directly", name=item_name)
+        increase_counter(ga_category="fill_recommend_qq", name=recommender_qq != "")
 
     @try_except(return_val_on_except=False)
     def check_pay_server(self) -> bool:

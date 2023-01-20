@@ -1521,7 +1521,7 @@ def show_tip_for_myself(msg: str, title: str):
 def try_auto_update(cfg):
     try:
         if not cfg.common.auto_update_on_start:
-            logger.info(color("bold_cyan") + "已关闭自动更新功能，将跳过。可在配置工具的公共配置区域进行配置")
+            show_head_line("当前已配置已关闭自动更新功能，将跳过。可在【配置工具/公共配置/更新】进行调整", color("bold_cyan"))
             return
 
         pid = os.getpid()

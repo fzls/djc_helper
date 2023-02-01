@@ -195,13 +195,14 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "巴卡尔大作战活动自助组队"
-    message = """之前我发的巴卡尔大作战活动的队伍已经组满了，不少人加不进来，自己创建又组不齐人，所以我刚建了一个大家都可以编辑的在线表单，大家可以利用这个完成组队。
+    title = "助手token抓包新工具分享"
+    message = """前两天有个小伙伴分享了一个安卓上的抓包工具给我，说是非root机器也可以抓到助手的请求，配置和操作都比较简单。
+我这两天用我的两台机器试了下，root和非root的情况下，都可以比较方便的抓到助手的请求，比小黄鸟（HttpCanary）的门槛要低。
+整理了下，录了个视频教程，并添加了相关介绍到 获取助手token 的在线文档中了，大家之前抓包失败的可以再尝试下这个，应该可以比较方便的抓取到
 
-具体操作流程查看稍后打开的页面中最上方的说明即可
-https://docs.qq.com/sheet/DYlJjaElRREpueUFP?tab=BB08J2
+（使用iOS的朋友如果搜了一些iOS的抓包方案都弄不来，可以用安卓模拟器来完成操作，不过后续就不能用iOS手机来登录这个qq的助手了，不然会把登录状态清除掉，就白抓了。使用这个方案，后续想手动点编年史或者看个人装备啥的，得在模拟器上点，自己可以权衡下）
 """
-    open_url = "https://docs.qq.com/sheet/DYlJjaElRREpueUFP?tab=BB08J2"
+    open_url = "https://docs.qq.com/doc/DYmN0UldUbmxITkFj"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

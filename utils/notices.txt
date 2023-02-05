@@ -108,5 +108,15 @@
     "open_url": "https://docs.qq.com/doc/DYmN0UldUbmxITkFj",
     "expire_at": "2023-02-08 20:17:21",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "助手抓取多个QQ的token的方法",
+    "message": "前两天有个小伙伴在群里分享了一个不用多开或者多台设备就能抓取多个QQ的token的方法，刚刚有空试了下，确实可以\n\n有兴趣的可以点开稍后后自动弹出的 助手token教程 在线文档，查看新增的【同时抓取多个QQ的助手token】章节\n",
+    "send_at": "2023-02-06 00:39:47",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYmN0UldUbmxITkFj",
+    "expire_at": "2023-02-13 00:39:47",
+    "show_only_before_version": ""
   }
 ]

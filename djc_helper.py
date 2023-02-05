@@ -577,6 +577,7 @@ class DjcHelper:
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的not_ams_activities
+        # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),

@@ -2202,51 +2202,51 @@ class AccountConfigUi(QWidget):
         self.lineedit_myhome_steal_xiaohao_qq_list = create_lineedit(
             list_to_str(cfg.myhome_steal_xiaohao_qq_list), "填写qq号列表，使用英文逗号分开，示例：123, 456, 789"
         )
-        add_row(form_layout, "我的小屋偷水稻的小号qq列表", self.lineedit_myhome_steal_xiaohao_qq_list)
+        # add_row(form_layout, "我的小屋偷水稻的小号qq列表", self.lineedit_myhome_steal_xiaohao_qq_list)
 
         self.lineedit_myhome_extra_wanted_gift_name_list = create_lineedit(
             list_to_str(cfg.myhome_extra_wanted_gift_name_list), "填写奖励列表，使用英文逗号分开，示例：一次性材质转换器, 黑钻3天, 一次性继承装置"
         )
-        add_row(form_layout, "我的小屋想要额外提示兑换的奖励名称列表", self.lineedit_myhome_extra_wanted_gift_name_list)
+        # add_row(form_layout, "我的小屋想要额外提示兑换的奖励名称列表", self.lineedit_myhome_extra_wanted_gift_name_list)
 
         self.lineedit_ozma_ignored_rolename_list = create_lineedit(
             list_to_str(cfg.ozma_ignored_rolename_list), "填写角色名列表，使用英文逗号分开，示例：卢克奶妈一号, 卢克奶妈二号, 卢克奶妈三号"
         )
-        add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
+        # add_row(form_layout, "不参与奥兹玛竞速活动切换角色的角色名列表", self.lineedit_ozma_ignored_rolename_list)
 
         self.lineedit_gonghui_rolename_huizhang = create_lineedit(
             cfg.gonghui_rolename_huizhang, "公会活动-会长角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）"
         )
-        add_row(form_layout, "公会活动-会长角色名称", self.lineedit_gonghui_rolename_huizhang)
+        # add_row(form_layout, "公会活动-会长角色名称", self.lineedit_gonghui_rolename_huizhang)
 
         self.lineedit_gonghui_rolename_huiyuan = create_lineedit(
             cfg.gonghui_rolename_huiyuan, "公会活动-会员角色名称，如果不设置，则尝试符合条件的角色（优先当前角色）"
         )
-        add_row(form_layout, "公会活动-会员角色名称", self.lineedit_gonghui_rolename_huiyuan)
+        # add_row(form_layout, "公会活动-会员角色名称", self.lineedit_gonghui_rolename_huiyuan)
 
         self.checkbox_comic_lottery = create_checkbox(cfg.comic_lottery)
-        add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_comic_lottery)
+        # add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_comic_lottery)
 
         self.checkbox_enable_majieluo_lucky = create_checkbox(cfg.enable_majieluo_lucky)
-        add_row(form_layout, "马杰洛活动是否尝试用配置的集卡回归角色领取见面礼", self.checkbox_enable_majieluo_lucky)
+        # add_row(form_layout, "马杰洛活动是否尝试用配置的集卡回归角色领取见面礼", self.checkbox_enable_majieluo_lucky)
 
         self.checkbox_dnf_gonghui_enable_lottery = create_checkbox(cfg.function_switches.dnf_gonghui_enable_lottery)
-        add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
+        # add_row(form_layout, "公会活动是否进行积分抽奖", self.checkbox_dnf_gonghui_enable_lottery)
 
         self.combobox_take_award_34c_server_name = create_combobox(
             dnf_server_id_to_name(cfg.take_award_34c_server_id), dnf_server_name_list()
         )
-        add_row(form_layout, "wegame活动的34C角色 区服名称", self.combobox_take_award_34c_server_name)
+        # add_row(form_layout, "wegame活动的34C角色 区服名称", self.combobox_take_award_34c_server_name)
 
         self.lineedit_take_award_34c_role_id = create_lineedit(
             cfg.take_award_34c_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
         )
-        add_row(form_layout, "wegame活动的34C角色 角色ID", self.lineedit_take_award_34c_role_id)
+        # add_row(form_layout, "wegame活动的34C角色 角色ID", self.lineedit_take_award_34c_role_id)
 
         self.role_selector = RoleSelector(
             "幸运勇士", self.combobox_take_award_34c_server_name, self.lineedit_take_award_34c_role_id, cfg, self.common_cfg
         )
-        add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
+        # add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
 
         # -------------- 区域：活动开关 --------------
         (

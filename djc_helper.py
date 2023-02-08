@@ -216,8 +216,11 @@ class DjcHelper:
         self.network = Network(self.cfg.sDeviceID, self.uin(), self.cfg.account_info.skey, self.common_cfg)
 
     def check_skey_expired(self, window_index=1):
-        query_data = self.query_balance("判断skey是否过期", print_res=False)
-        if str(query_data["ret"]) == "0":
+        # 这个是查询心悦战场信息的接口，应该比较稳定
+        # 未过期: {"flowRet": ..., "ret": "0", "msg": ""}
+        # 已过期: {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
+        xinyue_info_result = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
+        if str(xinyue_info_result["ret"]) == "0":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
             account_info = self.cfg.account_info
             self.save_uin_skey(account_info.uin, account_info.skey, self.get_vuserid())

@@ -54,9 +54,12 @@ class Network:
         extra_cookies="",
         check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
+        use_this_cookies="",
     ) -> dict:
 
         cookies = self.base_cookies + extra_cookies
+        if use_this_cookies != "":
+            cookies = use_this_cookies
         get_headers = {
             **self.base_headers,
             **{
@@ -90,9 +93,12 @@ class Network:
         check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
+        use_this_cookies="",
     ) -> dict:
 
         cookies = self.base_cookies + extra_cookies
+        if use_this_cookies != "":
+            cookies = use_this_cookies
         content_type = "application/x-www-form-urlencoded"
         if data is None and json is not None:
             content_type = "application/json"

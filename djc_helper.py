@@ -11134,6 +11134,7 @@ class DjcHelper:
         extra_cookies="",
         check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
+        use_this_cookies="",
         **params,
     ) -> dict:
         return self.network.get(
@@ -11147,6 +11148,7 @@ class DjcHelper:
             extra_cookies,
             check_fn,
             extra_headers,
+            use_this_cookies,
         )
 
     def post(
@@ -11164,6 +11166,7 @@ class DjcHelper:
         check_fn: Callable[[requests.Response], Exception | None] | None = None,
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
+        use_this_cookies="",
         **params,
     ) -> dict:
         return self.network.post(
@@ -11180,6 +11183,7 @@ class DjcHelper:
             check_fn,
             extra_headers,
             disable_retry,
+            use_this_cookies,
         )
 
     def format(self, url, **params):

@@ -475,6 +475,10 @@ class DjcHelper:
             else:
                 logger.warning("当前账号未启用道聚城相关功能")
 
+        if self.cfg.bind_role.has_config():
+            # 若本地配置了领奖角色，则强制认为已绑定
+            binded = True
+
         return binded
 
     def check_mobile_game_bind(self):

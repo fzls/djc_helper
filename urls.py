@@ -78,7 +78,7 @@ not_ams_activities = [
 
 act_name_to_url = {
     # 长期免费活动
-    "道聚城": "https://daoju.qq.com/mall/ 下载app",
+    "道聚城": "https://daoju.qq.com/mall/",
     "DNF地下城与勇士心悦特权专区": "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",

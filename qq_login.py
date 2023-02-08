@@ -123,6 +123,7 @@ class QQLogin:
     login_mode_club_vip = "club_vip"
     login_mode_iwan = "iwan"
     login_mode_supercore = "supercore"
+    login_mode_djc = "djc"
 
     login_mode_to_description = {
         login_mode_normal: "普通",
@@ -133,6 +134,7 @@ class QQLogin:
         login_mode_club_vip: "club.vip",
         login_mode_iwan: "爱玩",
         login_mode_supercore: "超享玩",
+        login_mode_djc: "道聚城",
     }
 
     bandizip_executable_path = os.path.realpath("./utils/bandizip_portable/bz.exe")
@@ -784,6 +786,11 @@ class QQLogin:
                     "超享玩",
                     "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
                 ),
+                self.login_mode_djc: (
+                    self._login_djc,
+                    "道聚城",
+                    get_act_url("道聚城"),
+                ),
             }[login_mode]
 
             ctx = f"{login_type}-{suffix}"
@@ -1291,6 +1298,70 @@ class QQLogin:
             xinyue_access_token=self.get_cookie("xinyue_access_token"),
         )
 
+    def _login_djc(self, login_type, login_action_fn=None):
+        """
+        通用登录逻辑，并返回登陆后的cookie中包含的uin、skey数据
+        :rtype: LoginResult
+        """
+
+        def switch_to_login_frame_fn():
+            if self.need_reopen_url(login_type):
+                logger.info("打开活动界面")
+                self.open_url_on_start(get_act_url("道聚城"))
+
+            self.set_window_size()
+
+            logger.info("等待登录按钮#unlogin出来，确保加载完成")
+            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
+                expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, "#unlogin"))
+            )
+
+            logger.info("等待5秒，确保加载完成")
+            time.sleep(5)
+
+            logger.info("点击登录按钮")
+            self.driver.find_element(By.CSS_SELECTOR, "#unlogin > a").click()
+
+            logger.info("等待2秒，确保#loginframe显示出来并切换")
+            time.sleep(2)
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe"))
+            )
+            login_frame = self.driver.find_element(By.CLASS_NAME, "loginframe")
+            self.driver.switch_to.frame(login_frame)
+
+            logger.info("等待#loginframe#ptlogin_iframe加载完毕并切换")
+            WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "ptlogin_iframe"))
+            )
+            ptlogin_iframe = self.driver.find_element(By.ID, "ptlogin_iframe")
+            self.driver.switch_to.frame(ptlogin_iframe)
+
+        def assert_login_finished_fn():
+            logger.info(f"{self.name} 请等待#logined可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.visibility_of_element_located((By.ID, "logined"))
+            )
+
+            logger.info("等待1s，确认获取openid的请求完成")
+            time.sleep(1)
+
+            # 确保openid已设置
+            for t in range(1, 3 + 1):
+                if self.driver.get_cookie("openid") is None:
+                    logger.info(f"第{t}/3未在道聚城的cookie中找到openid，等一秒再试")
+                    time.sleep(1)
+                    continue
+                break
+
+        self._login_common(login_type, switch_to_login_frame_fn, assert_login_finished_fn, login_action_fn)
+
+        # 从cookie中获取openid
+        return LoginResult(
+            common_openid=self.get_cookie("openid"),
+            common_access_token=self.get_cookie("access_token"),
+        )
+
     default_login_style = 20
 
     def get_switch_to_login_frame_fn(self, appid, daid, s_url, style=default_login_style, theme=2):
@@ -1484,6 +1555,8 @@ class QQLogin:
             self.fetch_iwan_openid_access_token()
         if self.login_mode in [self.login_mode_supercore]:
             self.wait_for_openid_access_token()
+        if self.login_mode in [self.login_mode_djc]:
+            self.fetch_djc_openid_access_token()
 
         self.print_cookie()
 
@@ -1569,6 +1642,10 @@ class QQLogin:
     def fetch_iwan_openid_access_token(self):
         logger.info(f"{self.name} 获取爱玩的openid和access_token，用于腾讯视频蚊子腿相关操作")
         openid, access_token = self._wait_for_cookies("vqq_openid", "vqq_access_token")
+
+    def fetch_djc_openid_access_token(self):
+        logger.info(f"{self.name} 获取道聚城的openid和access_token，用于道聚城相关操作")
+        openid, access_token = self._wait_for_cookies("openid", "access_token")
 
     def wait_for_openid_access_token(self):
         logger.info(f"{self.name} 等待openid和access_token出现")

@@ -685,6 +685,8 @@ class DjcHelper:
             logger.warning("未启用领取道聚城功能，将跳过")
             return
 
+        self.fetch_djc_login_info("获取道聚城登录信息")
+
         # ------------------------------初始工作------------------------------
         old_info = self.query_balance("1. 操作前：查询余额")["data"]
         old_allin, old_balance = int(old_info["allin"]), int(old_info["balance"])
@@ -711,8 +713,8 @@ class DjcHelper:
             + f"账号 {self.cfg.name} 本次道聚城操作共获得 {delta} 个豆子（历史总获取： {old_allin} -> {new_allin}  余额： {old_balance} -> {new_balance} ）"
         )
 
-    def query_balance(self, ctx, print_res=True, use_this_cookies=""):
-        return self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=use_this_cookies)
+    def query_balance(self, ctx, print_res=True):
+        return self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
 
     def query_money_flow(self, ctx):
         return self.get(ctx, self.urls.money_flow)
@@ -721,8 +723,8 @@ class DjcHelper:
     @try_except()
     def sign_in_and_take_awards(self):
         # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
-        self.get("2.1.1 发送imsdk登录事件", self.urls.imsdk_login)
-        self.get("2.1.2 发送app登录事件", self.urls.user_login_event)
+        self.get("2.1.1 发送imsdk登录事件", self.urls.imsdk_login, use_this_cookies=self.djc_custom_cookies)
+        self.get("2.1.2 发送app登录事件", self.urls.user_login_event, use_this_cookies=self.djc_custom_cookies)
 
         total_try = self.common_cfg.retry.max_retry_count
         for try_idx in range_from_one(total_try):
@@ -782,7 +784,7 @@ class DjcHelper:
 
     def complete_tasks(self):
         # 完成《绝不错亿》
-        self.get("3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center")
+        self.get("3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center", use_this_cookies=self.djc_custom_cookies)
 
         if self.cfg.mobile_game_role_info.enabled():
             # 完成《礼包达人》
@@ -824,6 +826,7 @@ class DjcHelper:
             channelKey=role_info.channelKey,
             roleCode=role_info.roleCode,
             sRoleName=quote_plus(role_info.roleName),
+            use_this_cookies=self.djc_custom_cookies,
         )
 
     @try_except()
@@ -855,7 +858,7 @@ class DjcHelper:
         propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
 
         # 查询许愿列表
-        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq())
+        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies)
 
         # 删除已经许愿的列表，确保许愿成功
         for wish_info in wish_list_res["data"]["list"]:
@@ -896,7 +899,7 @@ class DjcHelper:
         param["sRoleName"] = quote_plus(roleModel.roleName)
         param["sGetterDream"] = quote_plus("不要888！不要488！9.98带回家")
 
-        wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish, **param)
+        wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish, **param, use_this_cookies=self.djc_custom_cookies)
         # 检查是否不支持许愿
         # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
         if wish_res["ret"] == "-8735":
@@ -1134,7 +1137,7 @@ class DjcHelper:
     def get_mobile_game_gifts(self):
         game_info = self.get_mobile_game_info()
         data = self.get(
-            f"查询{game_info}礼包信息", self.urls.query_game_gift_bags, bizcode=game_info.bizCode, print_res=False
+            f"查询{game_info}礼包信息", self.urls.query_game_gift_bags, bizcode=game_info.bizCode, print_res=False, use_this_cookies=self.djc_custom_cookies
         )
 
         sign_in_gifts = []
@@ -12010,7 +12013,6 @@ class DjcHelper:
             query_data = self.query_balance(
                 "判断skey是否过期",
                 print_res=False,
-                use_this_cookies=self.djc_custom_cookies,
             )
             return str(query_data["ret"]) == "0"
 

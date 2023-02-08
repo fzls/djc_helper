@@ -14,6 +14,7 @@ from config import (
     AccountConfig,
     AccountInfoConfig,
     ArkLotteryConfig,
+    BindRoleConfig,
     CommonConfig,
     Config,
     DnfHelperChronicleExchangeItemConfig,
@@ -2073,6 +2074,13 @@ class AccountConfigUi(QWidget):
         # -------------- 区域：选填和必填分割线 --------------
         add_vbox_seperator(top_layout, "以下内容为选填内容，不填仍可正常运行，不过部分活动将无法领取")
 
+        # -------------- 区域：角色绑定 --------------
+        (
+            self.collapsible_box_vip_mentor,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("角色绑定（若不配置，则使用道聚城中绑定的角色）", top_layout)
+        self.bind_role = BindRoleConfigUi(form_layout, cfg.bind_role, cfg, self.common_cfg)
+
         # -------------- 区域：道聚城 --------------
         self.collapsible_box_djc, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
             "道聚城", top_layout
@@ -2313,6 +2321,7 @@ class AccountConfigUi(QWidget):
 
         self.ark_lottery.update_config(cfg.ark_lottery)
         self.vip_mentor.update_config(cfg.vip_mentor)
+        self.bind_role.update_config(cfg.bind_role)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         self.hello_voice.update_config(cfg.hello_voice)
 
@@ -2816,6 +2825,47 @@ class VipMentorConfigUi(QWidget):
         cfg.guanhuai_dnf_role_id = self.lineedit_guanhuai_dnf_role_id.text()
 
 
+class BindRoleConfigUi(QWidget):
+    def __init__(
+        self,
+        form_layout: QFormLayout,
+        cfg: BindRoleConfig,
+        account_cfg: AccountConfig,
+        common_cfg: CommonConfig,
+        parent=None,
+    ):
+        super().__init__(parent)
+
+        self.account_cfg = account_cfg
+        self.common_cfg = common_cfg
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: BindRoleConfig):
+        self.combobox_dnf_server_name = create_combobox(
+            dnf_server_id_to_name(cfg.dnf_server_id), dnf_server_name_list()
+        )
+        add_row(form_layout, "领奖角色区服名称", self.combobox_dnf_server_name)
+
+        self.lineedit_dnf_role_id = create_lineedit(
+            cfg.dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录，若卡住请先运行一遍本体来完成登录流程再操作）"
+        )
+        add_row(form_layout, "领奖角色角色ID", self.lineedit_dnf_role_id)
+
+        self.role_selector = RoleSelector(
+            "领奖角色",
+            self.combobox_dnf_server_name,
+            self.lineedit_dnf_role_id,
+            self.account_cfg,
+            self.common_cfg,
+        )
+        add_row(form_layout, "查询角色（需要登录）", self.role_selector.combobox_role_name)
+
+    def update_config(self, cfg: BindRoleConfig):
+        cfg.dnf_server_id = dnf_server_name_to_id(self.combobox_dnf_server_name.currentText())
+        cfg.dnf_role_id = self.lineedit_dnf_role_id.text()
+
+
 class RoleSelector(QWidget):
     combobox_role_name_placeholder = "点我查询当前服务器的角色列表，可能会卡一会（一直卡的话，建议先运行一遍本体，完成登录后再进行这个操作）"
 
@@ -2856,9 +2906,7 @@ class RoleSelector(QWidget):
             logger.info("需要查询角色信息")
 
             djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
-            djcHelper.fetch_pskey()
             djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list()
 
             self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
 

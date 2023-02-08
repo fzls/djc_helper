@@ -49,6 +49,15 @@ class AccountInfoConfig(ConfigInterface):
         return self.account != self.default_account
 
 
+class BindRoleConfig(ConfigInterface):
+    def __init__(self):
+        # 用于领取奖励的区服ID和角色ID，若不配置，则使用道聚城绑定的dnf角色信息
+        self.dnf_server_id = (
+            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        )
+        self.dnf_role_id = ""
+
+
 class MobileGameRoleInfoConfig(ConfigInterface):
     def __init__(self):
         # 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
@@ -899,6 +908,8 @@ class AccountConfig(ConfigInterface):
 
         # 腾讯系网页登录通用账号凭据与token
         self.account_info = AccountInfoConfig()
+        # 角色绑定相关配置，若不配置，则默认使用道聚城绑定的角色
+        self.bind_role = BindRoleConfig()
         # 各功能开关
         self.function_switches = FunctionSwitchesConfig()
         # 完成《礼包达人》任务所需的手游的名称信息

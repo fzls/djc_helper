@@ -100,6 +100,7 @@ from dao import (
 )
 from data_struct import to_raw_type
 from db import (
+    CacheInfo,
     DianzanDB,
     DnfHelperChronicleExchangeListDB,
     DnfHelperChronicleUserActivityTopInfoDB,
@@ -363,8 +364,22 @@ class DjcHelper:
 
         # 查询全部绑定角色信息
         res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False, use_this_cookies=self.djc_custom_cookies)
+
+        roleinfo_list = res.get("data", [])
+
+        db = CacheInfo()
+        db.with_context(f"绑定角色缓存/{self.cfg.name}").load()
+        if len(roleinfo_list) != 0:
+            # 成功请求时，保存一份数据到本地
+            db.value = roleinfo_list
+            db.save()
+        else:
+            logger.warning("获取绑定角色失败了，尝试使用本地缓存的角色信息")
+            logger.debug(f"缓存的信息为 {db.value}")
+            roleinfo_list = db.value or []
+
         self.bizcode_2_bind_role_map = {}
-        for roleinfo_dict in res.get("data", []):
+        for roleinfo_dict in roleinfo_list:
             role_info = GameRoleInfo().auto_update_config(roleinfo_dict)
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 

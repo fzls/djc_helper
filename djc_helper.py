@@ -971,7 +971,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
             return
 
@@ -992,7 +992,7 @@ class DjcHelper:
                     break
 
     def exchange_item(self, ctx, iGoodsSeqId):
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         return self.get(
             ctx,
             self.urls.exchangeItems,
@@ -1063,7 +1063,7 @@ class DjcHelper:
     def query_dnf_rolelist_for_temporary_change_bind(
         self, base_force_name="", role_name=""
     ) -> list[TemporaryChangeBindRoleInfo]:
-        djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        djc_roleinfo = self.get_dnf_bind_role()
 
         temp_change_bind_roles = []
 
@@ -2177,7 +2177,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -2201,7 +2201,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -2251,7 +2251,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -2296,7 +2296,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -2359,7 +2359,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
 
         # 增加次数
@@ -2406,7 +2406,7 @@ class DjcHelper:
         if self.enable_cost_all_cards_and_do_lottery():
             if print_warning:
                 logger.warning(color("fg_bold_cyan") + "已开启消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能")
-            if "dnf" not in self.bizcode_2_bind_role_map:
+            if self.get_dnf_bind_role() is None:
                 if print_warning:
                     logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
                 return
@@ -2644,7 +2644,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -2747,7 +2747,7 @@ class DjcHelper:
             roleinfo = RoleInfo()
             roleinfo.roleCode = "123456"
             try:
-                roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+                roleinfo = self.get_dnf_bind_role()
             except Exception:
                 pass
             act_req_data = {
@@ -3069,7 +3069,7 @@ class DjcHelper:
 
             return int(task.point)
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
 
         # 绑定角色
         self.dnf_lucky_user_op("绑定角色", "setRole", iAreaId=roleinfo.serviceID, iRoleId=roleinfo.roleCode)
@@ -3695,7 +3695,7 @@ class DjcHelper:
             return True
 
         def query_level_100_roles(ignore_rolename_list: list[str]) -> list[TemporaryChangeBindRoleInfo]:
-            djc_roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+            djc_roleinfo = self.get_dnf_bind_role()
 
             valid_roles = []
 
@@ -3719,7 +3719,7 @@ class DjcHelper:
         self.dnf_ozma_op("周年庆登录礼包", "770194")
         self.dnf_ozma_op("周年庆130元充值礼", "770201")
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         checkInfo = self.get_dnf_roleinfo()
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
         self.dnf_ozma_op(
@@ -4045,7 +4045,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -4073,7 +4073,7 @@ class DjcHelper:
     def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -4147,7 +4147,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -4200,7 +4200,7 @@ class DjcHelper:
         iActivityId = self.urls.iActivityId_dnf_rank
         iFlowId = "723192"
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -4247,7 +4247,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -4352,7 +4352,7 @@ class DjcHelper:
 
     # def dnf_helper_format_url(self, api: str) -> str:
     #     dnf_helper_info = self.cfg.dnf_helper_info
-    #     roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+    #     roleinfo = self.get_dnf_bind_role()
     #
     #     url = self.format(
     #         self.urls.dnf_helper,
@@ -4378,7 +4378,7 @@ class DjcHelper:
     def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -4426,7 +4426,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -4471,7 +4471,7 @@ class DjcHelper:
     def dnf_helper_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper_dup
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -4531,13 +4531,13 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
         # 为了不与其他函数名称冲突，且让函数名称短一些，写到函数内部~
         dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
@@ -5191,7 +5191,7 @@ class DjcHelper:
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
@@ -5211,7 +5211,7 @@ class DjcHelper:
     def query_dnf_helper_chronicle_user_task_list(self) -> DnfHelperChronicleUserTaskList:
         url_mwegame = self.urls.dnf_helper_chronicle_mwegame
         dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         partition = roleinfo.serviceID
         roleid = roleinfo.roleCode
 
@@ -5313,7 +5313,7 @@ class DjcHelper:
 
     def guanjia_op(self, ctx, api_name, act_id, giftId="", print_res=True):
         api = f"{api_name}_{act_id}"
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         extra_cookies = f"__qc__openid={self.guanjia_lr.qc_openid}; __qc__k={self.guanjia_lr.qc_k};"
         return self.get(
             ctx,
@@ -5568,7 +5568,7 @@ class DjcHelper:
         domain_name="sdi.m.qq.com",
         print_res=True,
     ):
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
 
         openid = self.guanjia_lr.qc_openid
         nickname = self.guanjia_lr.qc_nickname
@@ -5630,7 +5630,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             if print_warning:
                 logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
@@ -6645,7 +6645,7 @@ class DjcHelper:
     def dnf_welfare_login_gifts_op(self, ctx, iFlowId, siActivityId="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_welfare_login_gifts
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         checkInfo = self.get_dnf_roleinfo()
 
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
@@ -9093,7 +9093,7 @@ class DjcHelper:
     def xjy_prepare_env(self):
         logger.info("准备小酱油所需的各个参数，可能会需要几秒~")
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
 
         uin_skey_cookie = f"uin={self.cfg.account_info.uin}; skey={self.cfg.account_info.skey}; "
         roleNameUnquote = roleinfo.roleName
@@ -9170,7 +9170,7 @@ class DjcHelper:
             return
 
         # 检查是否已在道聚城绑定
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
@@ -9270,7 +9270,7 @@ class DjcHelper:
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_luodiye
 
-        # roleinfo = self.bizcode_2_bind_role_map['dnf'].sRoleInfo
+        # roleinfo = self.get_dnf_bind_role()
         # checkInfo = self.get_dnf_roleinfo()
         #
         # checkparam = quote_plus(quote_plus(checkInfo.checkparam))
@@ -9533,7 +9533,7 @@ class DjcHelper:
             logger.warning("未启用领取我的dnf13周年活动功能，将跳过")
             return
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
 
         self.dnf_my_story_op("查询历史回顾数据", "769681", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
         self.dnf_my_story_op("领取奖励（854922）", "770900", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
@@ -9627,7 +9627,7 @@ class DjcHelper:
     def maoxian_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_maoxian
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -9703,7 +9703,7 @@ class DjcHelper:
     def dnf_reserve_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_reserve
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         checkInfo = self.get_dnf_roleinfo()
 
         checkparam = quote_plus(quote_plus(checkInfo.checkparam))
@@ -10946,7 +10946,7 @@ class DjcHelper:
         }
 
     def super_core_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
         qq = self.qq()
 
         json_data = {
@@ -11038,7 +11038,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+        roleinfo = self.get_dnf_bind_role()
 
         json_data = {
             "biz_id": "tgclub",
@@ -11664,7 +11664,7 @@ class DjcHelper:
             area_info = dnf_server_id_to_area_info(server_id)
 
             # 复刻一份道聚城绑定角色信息，用于临时修改，同时确保不会影响到其他活动
-            take_lottery_count_role_info = self.bizcode_2_bind_role_map["dnf"].sRoleInfo.clone()
+            take_lottery_count_role_info = self.get_dnf_bind_role().clone()
             take_lottery_count_role_info.roleCode = role_id
             take_lottery_count_role_info.roleName = role_info.rolename
             take_lottery_count_role_info.serviceID = server_id
@@ -11718,7 +11718,7 @@ class DjcHelper:
             elif self.common_cfg.force_sync_bind_with_djc:
                 if roleinfo is None:
                     # 若未从外部传入roleinfo，则使用道聚城绑定的信息
-                    roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+                    roleinfo = self.get_dnf_bind_role()
                 bindinfo = AmesvrUserBindInfo().auto_update_config(res["modRet"]["jData"]["data"])
 
                 if roleinfo.serviceID != bindinfo.Farea or roleinfo.roleCode != bindinfo.FroleId:
@@ -11764,11 +11764,11 @@ class DjcHelper:
             and activity_op_func is not None
             and commit_bind_flowid != ""
         ):
-            if "dnf" in self.bizcode_2_bind_role_map:
+            if self.get_dnf_bind_role() is not None:
                 # 若道聚城已绑定dnf角色，则尝试绑定这个角色
                 if roleinfo is None:
                     # 若未从外部传入roleinfo，则使用道聚城绑定的信息
-                    roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+                    roleinfo = self.get_dnf_bind_role()
                 checkInfo = self.get_dnf_roleinfo(roleinfo)
 
                 logger.warning(
@@ -11852,7 +11852,7 @@ class DjcHelper:
         elif self.common_cfg.force_sync_bind_with_djc:
             if roleinfo is None:
                 # 若未从外部传入roleinfo，则使用道聚城绑定的信息
-                roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+                roleinfo = self.get_dnf_bind_role()
             bindinfo = AmesvrUserBindInfo().auto_update_config(query_bind_res["jData"]["bindarea"])
 
             if roleinfo.serviceID != bindinfo.Farea or roleinfo.roleCode != bindinfo.FroleId:
@@ -11872,14 +11872,14 @@ class DjcHelper:
             # 未开启自动绑定
             return
 
-        if "dnf" not in self.bizcode_2_bind_role_map:
+        if self.get_dnf_bind_role() is None:
             # 道聚城未绑定DNF角色
             return
 
         # 若道聚城已绑定dnf角色，则尝试绑定这个角色
         if roleinfo is None:
             # 若未从外部传入roleinfo，则使用道聚城绑定的信息
-            roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+            roleinfo = self.get_dnf_bind_role()
         checkInfo = self.get_dnf_roleinfo(roleinfo)
         role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(roleinfo.serviceID, roleinfo.roleCode)
 
@@ -11905,7 +11905,7 @@ class DjcHelper:
 
     def get_dnf_roleinfo(self, roleinfo: RoleInfo | None = None):
         if roleinfo is None:
-            roleinfo = self.bizcode_2_bind_role_map["dnf"].sRoleInfo
+            roleinfo = self.get_dnf_bind_role()
 
         res = self.get(
             "查询角色信息",

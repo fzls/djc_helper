@@ -359,8 +359,10 @@ class DjcHelper:
 
     @with_retry(max_retry_count=3)
     def get_bind_role_list(self, print_warning=True):
+        self.fetch_djc_login_info("获取绑定角色列表")
+
         # 查询全部绑定角色信息
-        res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False)
+        res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False, use_this_cookies=self.djc_custom_cookies)
         self.bizcode_2_bind_role_map = {}
         for roleinfo_dict in res.get("data", []):
             role_info = GameRoleInfo().auto_update_config(roleinfo_dict)

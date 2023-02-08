@@ -2590,6 +2590,9 @@ class FunctionSwitchesConfigUi(QWidget):
         self.checkbox_disable_login_mode_supercore = create_checkbox(cfg.disable_login_mode_supercore)
         add_row(form_layout, "禁用 超享玩 登录", self.checkbox_disable_login_mode_supercore)
 
+        self.checkbox_disable_login_mode_djc = create_checkbox(cfg.disable_login_mode_djc)
+        add_row(form_layout, "禁用 道聚城 登录", self.checkbox_disable_login_mode_djc)
+
         # ----------------------------------------------------------
         # 不同登录类型的活动开关
         for act_actegory, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():
@@ -2614,6 +2617,7 @@ class FunctionSwitchesConfigUi(QWidget):
         cfg.disable_login_mode_guanjia = self.checkbox_disable_login_mode_guanjia.isChecked()
         cfg.disable_login_mode_xinyue = self.checkbox_disable_login_mode_xinyue.isChecked()
         cfg.disable_login_mode_supercore = self.checkbox_disable_login_mode_supercore.isChecked()
+        cfg.disable_login_mode_djc = self.checkbox_disable_login_mode_djc.isChecked()
 
         # 不同登录类型的活动开关
         for _, act_desc_swtich_list in self.act_category_to_act_desc_switch_list.items():

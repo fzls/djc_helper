@@ -667,6 +667,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.disable_login_mode_xinyue = False
         # 是否禁用 超享玩 登录
         self.disable_login_mode_supercore = False
+        # 是否禁用 道聚城 登录
+        self.disable_login_mode_djc = False
 
         # ------------ 普通skey（需要登录 炎炎夏日 活动页面 获取） ------------
         # 是否领取道聚城

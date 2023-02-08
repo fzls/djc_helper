@@ -175,7 +175,7 @@ def get_act_url(act_name: str) -> str:
 class Urls:
     def __init__(self):
         # 余额
-        self.balance = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.bean.balance&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&iAppId=1001&_app_id=1001&method=balance&page=0&w_ver=23&w_id=45&djcRequestId={djcRequestId}&osVersion=Android-28&ch=10003&sVersionName={sVersionName}&appSource=android"
+        self.balance = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.bean.balance&appVersion={appVersion}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&iAppId=1001&_app_id=1001&method=balance&page=0&w_ver=23&w_id=45&djcRequestId={djcRequestId}&osVersion=Android-28&ch=10003&sVersionName={sVersionName}&appSource=android"
         self.money_flow = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.bean.water&appVersion={appVersion}&p_tk={p_tk}&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&page=1&starttime={starttime}&endtime={endtime}&osVersion=Android-28&ch=10003&sVersionName={sVersionName}&appSource=android"
 
         # 每日登录事件：imsdk登录

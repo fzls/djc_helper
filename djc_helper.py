@@ -709,8 +709,8 @@ class DjcHelper:
             + f"账号 {self.cfg.name} 本次道聚城操作共获得 {delta} 个豆子（历史总获取： {old_allin} -> {new_allin}  余额： {old_balance} -> {new_balance} ）"
         )
 
-    def query_balance(self, ctx, print_res=True):
-        return self.get(ctx, self.urls.balance, print_res=print_res)
+    def query_balance(self, ctx, print_res=True, use_this_cookies=""):
+        return self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=use_this_cookies)
 
     def query_money_flow(self, ctx):
         return self.get(ctx, self.urls.money_flow)
@@ -11994,6 +11994,30 @@ class DjcHelper:
         return self.fetch_login_result(
             ctx, QQLogin.login_mode_supercore, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
         )
+
+    def fetch_djc_login_info(self, ctx) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_djc:
+            logger.warning(f"禁用了道聚城登录模式，将不会尝试更新道聚城登陆信息: {ctx}")
+            return LoginResult()
+
+        def is_login_info_valid(lr: LoginResult) -> bool:
+            self.djc_set_custom_cookies(lr.common_openid, lr.common_access_token)
+
+            # {"ret": 0, "msg": "ok"...}}
+            # {..."msg": "对不起，您的登录态无效！", "ret": "-990301"...}
+            query_data = self.query_balance(
+                "判断skey是否过期",
+                print_res=False,
+                use_this_cookies=self.djc_custom_cookies,
+            )
+            return str(query_data["ret"]) == "0"
+
+        return self.fetch_login_result(
+            ctx, QQLogin.login_mode_djc, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
+        )
+
+    def djc_set_custom_cookies(self, openid: str, access_token: str):
+        self.djc_custom_cookies = f"djc_appSource=android; djc_appVersion=138; acctype=qc; appid=1101958653; openid={openid}; access_token={access_token}"
 
     def parse_condOutput(self, res: dict, cond_id: str) -> int:
         """

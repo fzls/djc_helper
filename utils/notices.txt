@@ -118,5 +118,15 @@
     "open_url": "https://docs.qq.com/doc/DYmN0UldUbmxITkFj",
     "expire_at": "2023-02-13 00:39:47",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "道聚城绑定角色提示失败",
+    "message": "如果突然开始提示未绑定账号，请下载最新版本 19.4.7（因此步骤在自动更新之前，所以请手动更新下-。-）\n\n原因：道聚城修改了鉴权体系，由uin+skey转为openid+access_token，因此会导致请求绑定角色信息失败。\n后续将会考虑改为类似活动网页中一样，手动在配置工具中选择一次绑定角色，并保存到配置文件中，这样后续就不依赖道聚城的接口了。\n",
+    "send_at": "2023-02-08 23:56:15",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-02-15 23:56:15",
+    "show_only_before_version": ""
   }
 ]

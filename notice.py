@@ -195,12 +195,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "助手抓取多个QQ的token的方法"
-    message = """前两天有个小伙伴在群里分享了一个不用多开或者多台设备就能抓取多个QQ的token的方法，刚刚有空试了下，确实可以
+    title = "道聚城绑定角色提示失败"
+    message = """如果突然开始提示未绑定账号，请下载最新版本 19.4.7（因此步骤在自动更新之前，所以请手动更新下-。-）
 
-有兴趣的可以点开稍后后自动弹出的 助手token教程 在线文档，查看新增的【同时抓取多个QQ的助手token】章节
+原因：道聚城修改了鉴权体系，由uin+skey转为openid+access_token，因此会导致请求绑定角色信息失败。
+后续将会考虑改为类似活动网页中一样，手动在配置工具中选择一次绑定角色，并保存到配置文件中，这样后续就不依赖道聚城的接口了。
 """
-    open_url = "https://docs.qq.com/doc/DYmN0UldUbmxITkFj"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

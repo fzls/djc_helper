@@ -389,9 +389,30 @@ class DjcHelper:
     def get_dnf_bind_role(self) -> RoleInfo | None:
         roleinfo = None
 
-        game_name = "dnf"
-        if game_name in self.bizcode_2_bind_role_map:
-            roleinfo = self.bizcode_2_bind_role_map[game_name].sRoleInfo
+        if self.cfg.bind_role.has_config():
+            # 如果配置了绑定角色，则优先使用这个
+            server_id, role_id = self.cfg.bind_role.dnf_server_id, self.cfg.bind_role.dnf_role_id
+
+            role_info_from_web = self.query_dnf_role_info_by_serverid_and_roleid(server_id, role_id)
+            server_name = dnf_server_id_to_name(server_id)
+            area_info = dnf_server_id_to_area_info(server_id)
+
+            # 构造一份道聚城绑定角色信息，简化改动
+            djc_role_info = RoleInfo()
+            djc_role_info.roleCode = role_id
+            djc_role_info.roleName = role_info_from_web.rolename
+            djc_role_info.serviceID = server_id
+            djc_role_info.serviceName = server_name
+            djc_role_info.areaID = area_info.v
+            djc_role_info.areaName = area_info.t
+
+            logger.debug("使用本地配置的角色来领奖")
+            roleinfo = djc_role_info
+        else:
+            # 否则尝试使用道聚城绑定的角色信息
+            game_name = "dnf"
+            if game_name in self.bizcode_2_bind_role_map:
+                roleinfo = self.bizcode_2_bind_role_map[game_name].sRoleInfo
 
         return roleinfo
 

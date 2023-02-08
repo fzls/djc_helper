@@ -57,6 +57,9 @@ class BindRoleConfig(ConfigInterface):
         )
         self.dnf_role_id = ""
 
+    def has_config(self) -> bool:
+        return self.dnf_server_id != "" and self.dnf_role_id != ""
+
 
 class MobileGameRoleInfoConfig(ConfigInterface):
     def __init__(self):

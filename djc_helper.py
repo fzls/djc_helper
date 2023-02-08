@@ -384,7 +384,16 @@ class DjcHelper:
             self.bizcode_2_bind_role_map[role_info.sBizCode] = role_info
 
     def get_dnf_bind_role_copy(self) -> RoleInfo:
-        return self.bizcode_2_bind_role_map["dnf"].sRoleInfo.clone()
+        return self.get_dnf_bind_role().clone()
+
+    def get_dnf_bind_role(self) -> RoleInfo | None:
+        roleinfo = None
+
+        game_name = "dnf"
+        if game_name in self.bizcode_2_bind_role_map:
+            roleinfo = self.bizcode_2_bind_role_map[game_name].sRoleInfo
+
+        return roleinfo
 
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个

@@ -12014,6 +12014,8 @@ class DjcHelper:
         )
 
     def fetch_djc_login_info(self, ctx) -> LoginResult:
+        self.djc_custom_cookies = ""
+
         if self.cfg.function_switches.disable_login_mode_djc:
             logger.warning(f"禁用了道聚城登录模式，将不会尝试更新道聚城登陆信息: {ctx}")
             return LoginResult()

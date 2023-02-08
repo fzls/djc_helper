@@ -309,6 +309,16 @@ class DjcHelper:
             json.dump(loginResult, sf)
             logger.debug(f"本地保存skey信息，具体内容如下：{loginResult}")
 
+        logger.debug("同时由于在pskey的缓存中也有一份skey数据, 去读取过来更新这部分字段，确保两边最终一致")
+        cached_pskey = self.load_uin_pskey()
+        if cached_pskey is not None:
+            self.save_uin_pskey(
+                cached_pskey["p_uin"],
+                cached_pskey["p_skey"],
+                skey,
+                vuserid,
+            )
+
     def local_load_uin_skey(self):
         # 仅二维码登录和自动登录模式需要尝试在本地获取缓存的信息
         if self.cfg.login_mode not in ["qr_login", "auto_login"]:

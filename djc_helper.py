@@ -722,8 +722,6 @@ class DjcHelper:
     # urls.sign签到接口偶尔会报 401 Unauthorized，因此需要加一层保护，确保不影响其他流程
     @try_except()
     def sign_in_and_take_awards(self):
-        # 发送登录事件，否则无法领取签到赠送的聚豆，报：对不起，请在掌上道聚城app内进行签到
-        self.get("2.1.1 发送imsdk登录事件", self.urls.imsdk_login, use_this_cookies=self.djc_custom_cookies)
         self.get("2.1.2 发送app登录事件", self.urls.user_login_event, use_this_cookies=self.djc_custom_cookies)
 
         total_try = self.common_cfg.retry.max_retry_count

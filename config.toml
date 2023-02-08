@@ -203,6 +203,12 @@ skey = "@a1b2c3d4e"
 account = "123456789"
 password = "使用账号密码自动登录有风险_请理解这个功能到底如何使用你的账号密码后再决定是否使用"
 
+# 角色绑定相关配置，若不配置，则默认使用道聚城绑定的角色
+[account_configs.bind_role]
+# 用于领取奖励的区服ID和角色ID，若不配置，则使用道聚城绑定的dnf角色信息
+dnf_server_id = "" # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
+
 # 完成《礼包达人》任务所需的手游的名称信息
 [account_configs.mobile_game_role_info]
 # 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表

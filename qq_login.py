@@ -1266,7 +1266,7 @@ class QQLogin:
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
-            logger.info(f"{self.name} 请等待#btn_wxqclogin可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
+            logger.info(f"{self.name} 请等待#btn_wxqclogin不可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
                 expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin"))
             )

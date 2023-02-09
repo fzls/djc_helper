@@ -118,7 +118,9 @@ def get_latest_installed_chrome_version_directory() -> str:
 
 
 def download_chrome_installer():
-    download_page = requests.get("https://www.iplaysoft.com/tools/chrome/").text
+    download_page = requests.get("https://www.iplaysoft.com/tools/chrome/", headers={
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+    }).text
 
     soup = BeautifulSoup(download_page, "html.parser")
 

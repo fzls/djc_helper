@@ -1525,9 +1525,18 @@ def show_tip_for_myself(msg: str, title: str):
     message_box(msg, f"给自己看的提示 - {title}")
 
 
-def try_auto_update(cfg):
+def try_auto_update_ignore_permission_on_special_case(cfg: Config):
+    remote_config = config_cloud()
+    if not remote_config.try_auto_update_ignore_permission.can_ignore():
+        return
+
+    # 发生了某种特殊情况，将无视权限进行自动更新
+    try_auto_update(cfg, ignore_permission=True)
+
+
+def try_auto_update(cfg: Config, ignore_permission=False):
     try:
-        if not cfg.common.auto_update_on_start:
+        if not cfg.common.auto_update_on_start and not ignore_permission:
             show_head_line("当前已配置已关闭自动更新功能，将跳过。可在【配置工具/公共配置/更新】进行调整", color("bold_cyan"))
             return
 
@@ -1543,32 +1552,16 @@ def try_auto_update(cfg):
             logger.info("当前在非windows系统运行，自动更新功能将不启用~请自行定期自行更新")
             return
 
-        has_buy_dlc, query_ok = has_buy_auto_updater_dlc_and_query_ok(cfg.get_qq_accounts())
+        query_ok = True
+        if not ignore_permission:
+            # 需要检查是否购买dlc的使用权限
+            has_buy_dlc, query_ok = has_buy_auto_updater_dlc_and_query_ok(cfg.get_qq_accounts())
+            if not has_buy_dlc:
+                if exists_auto_updater_dlc():
+                    logger.warning(color("bold_cyan") + "当前未购买自动更新DLC，将跳过自动更新流程~")
+                return
 
-        if not has_buy_dlc:
-            if exists_auto_updater_dlc():
-                msg = (
-                    "经对比，本地所有账户均未购买DLC，似乎是从其他人手中获取的，或者是没有购买直接从网盘和群文件下载了=、=\n"
-                    "\n"
-                    f"目前已登录的账号列表为：{cfg.get_qq_accounts()}，这些QQ均没有DLC权限\n"
-                    "\n"
-                    "小助手本体已经免费提供了，自动更新功能只是锦上添花而已。如果觉得价格不合适，可以选择手动更新，请不要在未购买的情况下使用自动更新DLC。\n"
-                    "目前只会跳过自动更新流程，日后若发现这类行为很多，可能会考虑将这样做的人加入本工具的黑名单，后续版本将不再允许其使用。\n"
-                    "\n"
-                    "请对照下列列表，确认是否属于以下情况\n"
-                    "1. 未购买，也没有从别人那边拿过来，可能是之前查询失败时默认有权限自动下载到本地的。对策：直接将utils目录下的auto_updater.exe删除即可\n"
-                    "2. 其他QQ购买了DLC，这个QQ没买。对策：请点击配置工具左上角的【添加账号】，把有权限的QQ也添加上，一起运行即可\n"
-                    "3. 已购买，以前也能正常运行，但突然不行了。对策：很可能是网盘出问题了，过段时间再试试？\n"
-                    "4. 已购买按月付费。对策：自动更新dlc与按月付费不是同一个东西，具体区别请阅读[付费指引/付费指引.docx]进行了解。如果无需该功能，直接将utils目录下的auto_updater.exe删除即可\n"
-                )
-                message_box(msg, "未购买自动更新DLC", color_name="bold_yellow")
-            else:
-                logger.warning(color("bold_cyan") + "当前未购买自动更新DLC，将跳过自动更新流程~")
-
-            return
-
-        # 已购买dlc的流程
-
+        # 可使用dlc的流程
         if os.path.isfile(auto_updater_latest_path()):
             # 如果存在auto_updater_latest.exe，且与auto_updater.exe不同，则覆盖更新
             need_copy = False
@@ -1596,7 +1589,7 @@ def try_auto_update(cfg):
                 shutil.copy2(auto_updater_latest_path(), auto_updater_path())
         else:
             if not exists_auto_updater_dlc():
-                if not query_ok:
+                if not query_ok and not ignore_permission:
                     logger.debug("当前应该是查询dlc失败后全部放行的情况，这种情况下若本地没有dlc，则不尝试自动下载，避免后续查询功能恢复正常后提示没有权限，需要手动删除")
                     return
 

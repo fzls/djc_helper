@@ -39,6 +39,7 @@ from main_def import (
     show_pay_info,
     show_recommend_reward_tips,
     try_auto_update,
+    try_auto_update_ignore_permission_on_special_case,
     try_join_xinyue_team,
     try_load_old_version_configs_from_user_data_dir,
     try_report_usage_info,
@@ -134,6 +135,8 @@ def main():
 
     if len(cfg.account_configs) == 0:
         raise Exception("未找到有效的账号配置，请检查是否正确配置。ps：多账号版本配置与旧版本不匹配，请重新配置")
+
+    try_auto_update_ignore_permission_on_special_case(cfg)
 
     notify_manual_check_update_on_release_too_long(cfg.common)
 

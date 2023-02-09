@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from os import path
 from typing import List
 
@@ -8,8 +8,9 @@ from const import downloads_dir
 from data_struct import ConfigInterface
 from download import download_github_raw_content
 from first_run import is_first_run_in
-from log import logger
-from util import async_call, try_except
+from log import color, logger
+from update import version_less
+from util import async_call, get_now, parse_time, try_except
 
 
 class BlackListConfig(ConfigInterface):
@@ -23,6 +24,26 @@ class BlackListConfig(ConfigInterface):
         # 原因
         self.reason = ""
 
+
+class TryAutoUpdateIgnorePermissionConfig(ConfigInterface):
+    def __init__(self):
+        # 最新已修复bug的版本。当填写该值后，早于该版本的小助手可无视权限触发dlc
+        self.latest_bug_fixed_version = ""
+        # 指定时间段内可无视权限触发dlc
+        self.period_list: list[tuple[str, str]] = []
+
+    def can_ignore(self, current_version: str, now: datetime) -> bool:
+        if self.latest_bug_fixed_version != "" and version_less(current_version, self.latest_bug_fixed_version):
+            logger.info(color("bold_yellow") + f"当前版本为 {current_version}, 低于最新修复bug版本 {self.latest_bug_fixed_version}，可无视权限触发dlc")
+            return True
+
+        for str_begin, str_end in self.period_list:
+            begin, end = parse_time(str_begin), parse_time(str_end)
+            if begin <= now <= end:
+                logger.info(color("bold_yellow") + f"当前时间为 {now}, 在指定时间段内[{begin}, {end}]，可无视权限触发dlc")
+                return True
+
+        return False
 
 # 远程配置，方便动态调整部分配置
 class ConfigCloud(ConfigInterface):
@@ -51,6 +72,9 @@ class ConfigCloud(ConfigInterface):
 
         # 是否启用推荐奖励
         self.enable_recommend_reward = True
+
+        # 无视权限进行自动更新的条件
+        self.try_auto_update_ignore_permission = TryAutoUpdateIgnorePermissionConfig()
 
     def fields_to_fill(self):
         return [

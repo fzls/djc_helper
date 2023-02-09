@@ -37,3 +37,6 @@ jobs:
           # static_list: 'repo_name,repo_name2'
           # black_list: 'repo_name,repo_name2'
           # white_list: 'repo_name,repo_name2'
+          # 开启强制更新，因为gitee仓库仅用于备份，不会主动提交代码，不用担心有提交被意外覆盖
+          force_update: true
+          debug: true

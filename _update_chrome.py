@@ -14,7 +14,14 @@ from compress import compress_dir_with_bandizip, decompress_dir_with_bandizip
 from download import download_file
 from log import color, logger
 from update import version_to_version_int_list
-from util import change_console_window_mode_async, make_sure_dir_exists, pause, remove_directory, remove_file
+from util import (
+    change_console_window_mode_async,
+    make_sure_dir_exists,
+    pause,
+    remove_directory,
+    remove_file,
+    try_except,
+)
 
 TEMP_DIR = "utils/chrome_temporary_dir"
 SRC_DIR = os.path.realpath(".")
@@ -171,6 +178,7 @@ def upload_all_to_netdisk():
             upload(os.path.realpath(str(file)), f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{file.name}")
 
 
+@try_except()
 def update_latest_chrome():
     # 最大化窗口
     change_console_window_mode_async(disable_min_console=True)

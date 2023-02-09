@@ -637,7 +637,6 @@ class DjcHelper:
             ("黑钻礼包", self.get_heizuan_gift),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
             ("心悦app理财礼卡", self.xinyue_financing),
-            ("心悦app周礼包", self.xinyue_weekly_gift),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
@@ -657,17 +656,18 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
-            ("DNF马杰洛的规划", self.majieluo),
             ("dnf助手活动", self.dnf_helper),
             ("冒险的起点", self.maoxian_start),
             ("魔界人探险记", self.mojieren),
-            ("dnf助手活动Dup", self.dnf_helper_dup),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("colg年终盛典签到", self.colg_yearly_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         return [
+            ("dnf助手活动Dup", self.dnf_helper_dup),
+            ("DNF马杰洛的规划", self.majieluo),
+            ("心悦app周礼包", self.xinyue_weekly_gift),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),

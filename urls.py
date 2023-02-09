@@ -84,7 +84,6 @@ act_name_to_url = {
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
     #
@@ -100,16 +99,17 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/wegame230112/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
-    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     #
     # 已过期活动
     #
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230112card/index.html",
+    "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",

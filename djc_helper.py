@@ -363,7 +363,9 @@ class DjcHelper:
         self.fetch_djc_login_info("获取绑定角色列表")
 
         # 查询全部绑定角色信息
-        res = self.get("获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False, use_this_cookies=self.djc_custom_cookies)
+        res = self.get(
+            "获取道聚城各游戏的绑定角色列表", self.urls.query_bind_role_list, print_res=False, use_this_cookies=self.djc_custom_cookies
+        )
 
         roleinfo_list = res.get("data", [])
 
@@ -831,7 +833,9 @@ class DjcHelper:
 
     def complete_tasks(self):
         # 完成《绝不错亿》
-        self.get("3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center", use_this_cookies=self.djc_custom_cookies)
+        self.get(
+            "3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center", use_this_cookies=self.djc_custom_cookies
+        )
 
         if self.cfg.mobile_game_role_info.enabled():
             # 完成《礼包达人》
@@ -905,7 +909,9 @@ class DjcHelper:
         propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
 
         # 查询许愿列表
-        wish_list_res = self.get("3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies)
+        wish_list_res = self.get(
+            "3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies
+        )
 
         # 删除已经许愿的列表，确保许愿成功
         for wish_info in wish_list_res["data"]["list"]:
@@ -1184,7 +1190,11 @@ class DjcHelper:
     def get_mobile_game_gifts(self):
         game_info = self.get_mobile_game_info()
         data = self.get(
-            f"查询{game_info}礼包信息", self.urls.query_game_gift_bags, bizcode=game_info.bizCode, print_res=False, use_this_cookies=self.djc_custom_cookies
+            f"查询{game_info}礼包信息",
+            self.urls.query_game_gift_bags,
+            bizcode=game_info.bizCode,
+            print_res=False,
+            use_this_cookies=self.djc_custom_cookies,
         )
 
         sign_in_gifts = []

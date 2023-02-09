@@ -212,7 +212,10 @@ def check_djc_role_binding():
             logger.warning(color("bold_blue") + "如果你真的无法看懂上面到底在说什么，请加群私聊我支付宝账号进行退款，然后手动领取吧-。-")
 
             _show_head_line("5. 异常状态")
-            logger.warning(color("bold_yellow") + "如果之前曾设置过，但最近突然开始一直弹这个，而且去道聚城app里看确实已经绑定。那么大概率是道聚城修改了接口，这种情况下，请在qq群私聊我的小号告知我，我会尽快尝试修复~")
+            logger.warning(
+                color("bold_yellow")
+                + "如果之前曾设置过，但最近突然开始一直弹这个，而且去道聚城app里看确实已经绑定。那么大概率是道聚城修改了接口，这种情况下，请在qq群私聊我的小号告知我，我会尽快尝试修复~"
+            )
             logger.warning(color("bold_cyan") + "也可以尝试通过 配置工具/账号配置/角色绑定 来本地配置领奖角色，避免因为道聚城的改动而影响领奖")
             logger.info("\n\n")
             pause()

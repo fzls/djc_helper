@@ -66,6 +66,7 @@ from util import (
     format_now,
     format_time,
     get_appdata_dir,
+    get_now,
     is_run_in_github_action,
     is_windows,
     make_sure_dir_exists,
@@ -1527,7 +1528,7 @@ def show_tip_for_myself(msg: str, title: str):
 
 def try_auto_update_ignore_permission_on_special_case(cfg: Config):
     remote_config = config_cloud()
-    if not remote_config.try_auto_update_ignore_permission.can_ignore():
+    if not remote_config.try_auto_update_ignore_permission.can_ignore(now_version, get_now()):
         return
 
     # 发生了某种特殊情况，将无视权限进行自动更新

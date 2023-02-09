@@ -24,7 +24,8 @@ CHROME_DRIVER_EXE = "chromedriver.exe"
 
 def download_latest_chrome_driver():
     latest_version = get_latest_chrome_driver_version()
-    windows_zip = "chromedriver_win32.zip"
+    windows_zip_name = "chromedriver_win32"
+    windows_zip = f"{windows_zip_name}.zip"
 
     latest_download_url = f"https://chromedriver.storage.googleapis.com/{latest_version}/{windows_zip}"
 
@@ -35,6 +36,11 @@ def download_latest_chrome_driver():
 
     # 移除临时文件
     remove_file(zip_file)
+
+    # 有时候解压出来会在子目录中，这里移动出来
+    if os.path.isdir(windows_zip_name):
+        shutil.move(f"{windows_zip_name}/{CHROME_DRIVER_EXE}", CHROME_DRIVER_EXE)
+        shutil.rmtree(windows_zip_name)
 
     # 重命名
     major_version = parse_major_version(latest_version)

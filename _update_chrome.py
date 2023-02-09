@@ -20,6 +20,7 @@ from util import (
     pause,
     remove_directory,
     remove_file,
+    show_head_line,
     try_except,
 )
 
@@ -196,29 +197,29 @@ def update_latest_chrome():
     logger.info(f"临时切换到 {TEMP_DIR}，方便后续操作")
     os.chdir(TEMP_DIR)
 
-    # 下载chrome driver
+    show_head_line("从官方网站下载最新版chrome driver")
     download_latest_chrome_driver()
 
-    # 制作chrome便携版
+    show_head_line("开始利用本机chrome下载的更新包制作便携版")
     create_portable_chrome()
 
-    # 下载chrome安装包
+    show_head_line("从 果核剥壳网 下载最新离线安装包")
     download_chrome_installer()
 
-    # 修改 qq_login.py 中的版本号为新的主版本号
+    show_head_line("修改 qq_login.py 中的版本号为新的主版本号")
     update_qq_login_version()
 
-    # 更新linux版的路径
+    show_head_line("更新linux版的路径")
     update_linux_version()
 
-    # 提示确认代码修改是否无误
+    show_head_line("提示确认代码修改是否无误")
     logger.info(color("bold_green") + "请检查一遍代码，然后执行一遍 qq_login.py，以确认新的chrome制作无误，然后点击任意键提交git即可完成流程")
     pause()
 
-    # 上传到网盘
+    show_head_line("上传到网盘")
     upload_all_to_netdisk()
 
-    # git commit 相关代码
+    show_head_line("git commit 相关代码")
     os.chdir(SRC_DIR)
     latest_version = get_latest_chrome_driver_version()
     subprocess.call(
@@ -235,7 +236,7 @@ def update_latest_chrome():
     logger.info(f"更新完毕，清理临时目录 {TEMP_DIR}")
     remove_directory(TEMP_DIR)
 
-    # 最后暂停下，方便确认结果
+    show_head_line("最后暂停下，方便确认结果")
     pause()
 
 

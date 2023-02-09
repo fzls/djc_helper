@@ -4,8 +4,6 @@
 .tox/
 releases/
 test/
-付费指引/
-使用教程/
 .idea/
 _update_temp_dir/
 card_secrets/

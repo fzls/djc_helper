@@ -136,7 +136,7 @@ class GoodsValiDateInfo(ConfigInterface):
         self.left = "0"
         self.bought = "0"
         self.todayBought = 0
-        self.award = {"list": []}
+        self.award: dict[str, list] = {"list": []}
         self.isFunc = 0
         self.beanCut = 0
         self.maxBeanCutPrice = 0
@@ -640,12 +640,12 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
         self.levelExp = 5
         self.giftImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233235fbfbcb30af65.png"
 
-    def get_level_info_and_points_to_show(self) -> tuple[str, str]:
+    def get_level_info_and_points_to_show(self) -> tuple[str, int]:
         levelInfo = f"LV{self.level}({self.currentExp}/{self.levelExp})"
         chronicle_points = self.point
         if self.totalExp == 0:
             levelInfo = ""
-            chronicle_points = ""
+            chronicle_points = 0
 
         return levelInfo, chronicle_points
 
@@ -1132,8 +1132,8 @@ class IdeActionInfo(ConfigInterface):
         from urls import not_know_end_time____, not_know_start_time__
 
         self.sName = "无法获取活动名称"
-        self.sUpDate = not_know_start_time__
-        self.sDownDate = not_know_end_time____
+        self.sUpDate: str = not_know_start_time__
+        self.sDownDate: str = not_know_end_time____
 
 
 class IdeFlowInfo(ConfigInterface):

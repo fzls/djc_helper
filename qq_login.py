@@ -1172,10 +1172,9 @@ class QQLogin:
             logger.info("等待2秒，确保#login_ifr显示出来并切换")
             time.sleep(2)
             loginIframe = list(
-                filter(
-                    lambda iframe: "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property("src"),
-                    self.driver.find_elements(by=By.TAG_NAME, value="iframe"),
-                )
+                iframe
+                for iframe in self.driver.find_elements(by=By.TAG_NAME, value="iframe")
+                if "https://graph.qq.com/oauth2.0/authorize" in iframe.get_property("src")
             )[0]
             self.driver.switch_to.frame(loginIframe)
 

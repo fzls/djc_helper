@@ -1804,8 +1804,8 @@ class DjcHelper:
         old_gpoints = self.query_gpoints()
 
         for op in self.cfg.xinyue_app_operations:
-            res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers, timeout=10)
-            logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content}")
+            res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers, timeout=10)  # type: ignore
+            logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content!r}")
 
         new_gpoints = self.query_gpoints()
 
@@ -2783,7 +2783,9 @@ class DjcHelper:
             roleinfo = RoleInfo()
             roleinfo.roleCode = "123456"
             try:
-                roleinfo = self.get_dnf_bind_role()
+                _v = self.get_dnf_bind_role()
+                assert _v is not None
+                roleinfo = _v
             except Exception:
                 pass
             act_req_data = {
@@ -4592,7 +4594,7 @@ class DjcHelper:
 
         # ------ 封装通用接口 ------
         def append_signature_to_data(
-            data: dict[str, any],
+            data: dict[str, Any],
             http_method: str,
             api_path: str,
         ):
@@ -4641,7 +4643,7 @@ class DjcHelper:
                 ctx,
                 self.urls.dnf_helper_chronicle_wang_xinyue,
                 api=api,
-                **{
+                **{  # type: ignore
                     **data,
                     **actual_query_data,
                 },
@@ -4660,7 +4662,7 @@ class DjcHelper:
                 ctx,
                 self.urls.dnf_helper_chronicle_mwegame,
                 api=api,
-                **data,
+                **data,  # type: ignore
             )
             return res
 
@@ -4869,7 +4871,7 @@ class DjcHelper:
 
             logger.info("与心悦战场类似，即使未展示在接取列表内的任务，只要满足条件就可以领取奖励。因此接下来尝试领取其余任务(ps：这种情况下日志提示未完成也有可能是因为已经领取过~）")
             logger.warning("曾经可以尝试未接到身上的任务，好像现在不可以了-。-，日后可以再试试，暂时先不尝试了 @2022.4.14")
-            all_task = (
+            all_task: tuple[tuple[str, int, str, int, str]] = (  # type: ignore
                 # ("001", 8, "013", 4, "DNF助手签到"),
                 # ("002", 11, "014", 6, "浏览资讯详情页"),
                 # ("003", 9, "015", 5, "浏览动态详情页"),
@@ -5257,7 +5259,7 @@ class DjcHelper:
             "sRoleId": roleid,
             "print_res": False,
         }
-        res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)
+        res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)  # type: ignore
         return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
     @try_except(return_val_on_except=False)
@@ -8656,7 +8658,7 @@ class DjcHelper:
 
         @try_except()
         def try_exchange():
-            operations = [
+            operations: list[tuple[str, str, int, str, Callable]] = [
                 # ("10", "788270", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v2),
                 # ("10", "821327", 1, "灿烂的徽章自选礼盒【50代币券】", self.dnf_bbs_op_v1),
                 # ("9", "788270", 1, "灿烂的徽章神秘礼盒【25代币券】", self.dnf_bbs_op_v2),
@@ -8833,7 +8835,7 @@ class DjcHelper:
         }
 
         session = requests.session()
-        session.headers = headers
+        session.headers = headers  # type: ignore
 
         def query_info() -> ColgBattlePassInfo:
             res = session.get(self.urls.colg_url, timeout=10)
@@ -8965,7 +8967,7 @@ class DjcHelper:
         }
 
         session = requests.session()
-        session.headers = headers
+        session.headers = headers  # type: ignore
 
         def query_info() -> ColgYearlySigninInfo:
             res = session.get(self.urls.colg_yearly_signin_url, timeout=10)
@@ -11975,7 +11977,9 @@ class DjcHelper:
         cache_validate_func: Callable[[Any], bool] | None = None,
         print_warning=True,
     ) -> LoginResult:
-        get_logger_func(print_warning)(color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
+        get_logger_func(print_warning)(
+            color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
+        )
 
         return with_cache(
             "登录信息",
@@ -12078,7 +12082,11 @@ class DjcHelper:
             return str(query_data["ret"]) == "0"
 
         lr = self.fetch_login_result(
-            ctx, QQLogin.login_mode_djc, cache_max_seconds=-1, cache_validate_func=is_login_info_valid, print_warning=print_warning,
+            ctx,
+            QQLogin.login_mode_djc,
+            cache_max_seconds=-1,
+            cache_validate_func=is_login_info_valid,
+            print_warning=print_warning,
         )
 
         self.djc_set_custom_cookies(lr.common_openid, lr.common_access_token)

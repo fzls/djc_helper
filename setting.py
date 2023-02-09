@@ -6,7 +6,7 @@ from settings import ark_lottery, dnf_server_list
 
 
 def zzconfig():
-    return ArkLotteryZzConfig().auto_update_config(ark_lottery.setting["zzconfig"])
+    return ArkLotteryZzConfig().auto_update_config(ark_lottery.setting["zzconfig"])  # type: ignore
 
 
 def parse_card_group_info_map(cfg: ArkLotteryZzConfig):

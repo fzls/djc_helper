@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import json
 import os
 import re
 from collections import namedtuple
 from datetime import datetime, timedelta
-from typing import List, Optional
 
 from compress import compress_file_with_lzma, decompress_file_with_lzma
 from const import compressed_temp_dir, downloads_dir
@@ -75,9 +76,9 @@ class Uploader:
 
         self.lzy._timeout = 5
 
-    def login(self, cookie: str = ""):
+    def login(self, cookie: dict | None = None):
         # 仅上传需要登录
-        if cookie == "":
+        if cookie is None:
             with open("upload_cookie.json") as fp:
                 cookie = json.load(fp)
 
@@ -271,7 +272,7 @@ class Uploader:
         cache_max_seconds=600,
         download_only_if_server_version_is_newer=True,
         return_none_on_exception=False,
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         下载网盘指定文件夹的指定文件到本地指定目录，并返回最终本地文件的完整路径
         """
@@ -455,7 +456,7 @@ class Uploader:
 
         return LanZouCloud.FAILED
 
-    def all_possiable_urls(self, lanzouyun_url: str) -> List[str]:
+    def all_possiable_urls(self, lanzouyun_url: str) -> list[str]:
         return self.lzy._all_possible_urls(lanzouyun_url)
 
 

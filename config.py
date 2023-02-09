@@ -137,7 +137,7 @@ class XinYueAppOperationConfig(ConfigInterface):
         # 也就是说，下面两种格式都支持
         # encrypted_raw_http_body = [0x58, 0x59, 0x01, 0x00]
         # encrypted_raw_http_body = "58 59 01 00"
-        self.encrypted_raw_http_body = [
+        self.encrypted_raw_http_body: list[int] | str = [
             0x58,
             0x59,
             0x01,

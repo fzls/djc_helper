@@ -1170,7 +1170,6 @@ def with_cache(
                 cache_info.get_update_at() + datetime.timedelta(seconds=cache_max_seconds) >= get_now()
                 or cache_max_seconds == never_expired_cache_seconds
             ):
-
                 if cache_validate_func is None or cache_validate_func(cache_info.value):
                     logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
 

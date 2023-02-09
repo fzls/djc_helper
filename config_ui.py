@@ -180,7 +180,7 @@ class PayRequest(ConfigInterface):
     def __init__(self):
         self.card_secret = CardSecret()  # 卡密信息
         self.qq = ""  # 使用QQ
-        self.game_qqs = ""  # 附属游戏QQ
+        self.game_qqs = []  # 附属游戏QQ
         self.recommender_qq = ""  # 推荐人QQ
 
 
@@ -562,7 +562,7 @@ class ConfigUi(QFrame):
 
     def show_notice(self):
         if hasattr(self, "notice"):
-            self.notice.close()
+            self.notice.close()  # type: ignore
 
         self.notice = NoticeUi(self)
         self.notice.show()
@@ -2709,7 +2709,7 @@ class XinYueAppOperationConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig):
         self.lineedit_encrypted_raw_http_body = create_lineedit(
-            bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00"
+            bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00"  # type: ignore
         )
         add_row(form_layout, f"{cfg.name}", self.lineedit_encrypted_raw_http_body)
 

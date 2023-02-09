@@ -56,7 +56,6 @@ class Network:
         extra_headers: dict[str, str] | None = None,
         use_this_cookies="",
     ) -> dict:
-
         cookies = self.base_cookies + extra_cookies
         if use_this_cookies != "":
             cookies = use_this_cookies
@@ -95,7 +94,6 @@ class Network:
         disable_retry=False,
         use_this_cookies="",
     ) -> dict:
-
         cookies = self.base_cookies + extra_cookies
         if use_this_cookies != "":
             cookies = use_this_cookies

@@ -221,7 +221,9 @@ def test():
     _test(DemoDB(), 1, 10)
 
     # 测试设置context
-    _test(DemoDB().with_context("test"), 2, 20)
+    db = DemoDB()
+    db.with_context("test")
+    _test(db, 2, 20)
 
 
 def test_filepath_db():

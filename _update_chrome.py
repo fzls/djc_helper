@@ -207,12 +207,12 @@ def update_latest_chrome():
     # 更新linux版的路径
     update_linux_version()
 
-    # 上传到网盘
-    upload_all_to_netdisk()
-
     # 提示确认代码修改是否无误
     logger.info(color("bold_green") + "请检查一遍代码，然后执行一遍 qq_login.py，以确认新的chrome制作无误，然后点击任意键提交git即可完成流程")
     pause()
+
+    # 上传到网盘
+    upload_all_to_netdisk()
 
     # git commit 相关代码
     os.chdir(SRC_DIR)

@@ -118,16 +118,20 @@ def get_latest_installed_chrome_version_directory() -> str:
 
 
 def download_chrome_installer():
-    download_page = requests.get("https://www.iplaysoft.com/tools/chrome/", headers={
+    download_page = requests.get("https://www.ghxi.com/pcchrome.html", headers={
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
     }).text
 
     soup = BeautifulSoup(download_page, "html.parser")
 
-    latest_version_soup = soup.find("div", class_="ui segment")
+    latest_version_soup = soup.find("h1", class_="entry-title")
 
-    download_url = latest_version_soup.find("a", class_="ui positive button").get("href")
-    latest_version = latest_version_soup.find("code").text[1:]
+    # 'Google Chrome v110.0.5481.78 正式版 离线安装包'
+    reg_version = r"Google Chrome v([0-9.]+) 正式版 离线安装包"
+    match = re.match(reg_version, latest_version_soup.text)
+    latest_version = match.group(1)
+
+    download_url = "http://redirector.gvt1.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise64.msi"
 
     logger.info(f"最新版本的下载链接为: {download_url}")
     download_file(download_url, ".", f"Chrome_{latest_version}_普通安装包_非便携版.exe")

@@ -1698,6 +1698,12 @@ def demo_remove_chrome():
     remove_old_version_portable_chrome_files(current_chrome_version)
 
 
+def get_logger_func(print_warning: bool, logger_func=None):
+    if logger_func is None:
+        logger_func = logger.warning
+    return logger_func if print_warning else logger.debug
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

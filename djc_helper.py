@@ -145,6 +145,7 @@ from util import (
     format_now,
     format_time,
     get_last_week_monday_datetime,
+    get_logger_func,
     get_meaningful_call_point_for_log,
     get_month,
     get_now,
@@ -360,7 +361,7 @@ class DjcHelper:
 
     @with_retry(max_retry_count=3)
     def get_bind_role_list(self, print_warning=True):
-        self.fetch_djc_login_info("获取绑定角色列表")
+        self.fetch_djc_login_info("获取绑定角色列表", print_warning)
 
         # 查询全部绑定角色信息
         res = self.get(
@@ -376,7 +377,7 @@ class DjcHelper:
             db.value = roleinfo_list
             db.save()
         else:
-            logger.warning("获取绑定角色失败了，尝试使用本地缓存的角色信息")
+            get_logger_func(print_warning)("获取绑定角色失败了，尝试使用本地缓存的角色信息")
             logger.debug(f"缓存的信息为 {db.value}")
             roleinfo_list = db.value or []
 
@@ -11972,8 +11973,9 @@ class DjcHelper:
         login_mode: str,
         cache_max_seconds: int = 0,
         cache_validate_func: Callable[[Any], bool] | None = None,
+        print_warning=True,
     ) -> LoginResult:
-        logger.warning(color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
+        get_logger_func(print_warning)(color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~")
 
         return with_cache(
             "登录信息",
@@ -11982,7 +11984,7 @@ class DjcHelper:
             cache_validate_func=cache_validate_func,
             cache_max_seconds=cache_max_seconds,
             cache_value_unmarshal_func=LoginResult().auto_update_config,
-            cache_hit_func=lambda lr: logger.info(f"使用缓存的登录信息: {lr}"),
+            cache_hit_func=lambda lr: get_logger_func(print_warning, logger.info)(f"使用缓存的登录信息: {lr}"),
         )
 
     def update_login_info(self, login_mode: str) -> LoginResult:
@@ -12057,11 +12059,11 @@ class DjcHelper:
             ctx, QQLogin.login_mode_supercore, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
         )
 
-    def fetch_djc_login_info(self, ctx) -> LoginResult:
+    def fetch_djc_login_info(self, ctx, print_warning=True) -> LoginResult:
         self.djc_custom_cookies = ""
 
         if self.cfg.function_switches.disable_login_mode_djc:
-            logger.warning(f"禁用了道聚城登录模式，将不会尝试更新道聚城登陆信息: {ctx}")
+            get_logger_func(print_warning)(f"禁用了道聚城登录模式，将不会尝试更新道聚城登陆信息: {ctx}")
             return LoginResult()
 
         def is_login_info_valid(lr: LoginResult) -> bool:
@@ -12076,7 +12078,7 @@ class DjcHelper:
             return str(query_data["ret"]) == "0"
 
         lr = self.fetch_login_result(
-            ctx, QQLogin.login_mode_djc, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
+            ctx, QQLogin.login_mode_djc, cache_max_seconds=-1, cache_validate_func=is_login_info_valid, print_warning=print_warning,
         )
 
         self.djc_set_custom_cookies(lr.common_openid, lr.common_access_token)

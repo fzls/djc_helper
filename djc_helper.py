@@ -12065,9 +12065,13 @@ class DjcHelper:
             )
             return str(query_data["ret"]) == "0"
 
-        return self.fetch_login_result(
+        lr = self.fetch_login_result(
             ctx, QQLogin.login_mode_djc, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
         )
+
+        self.djc_set_custom_cookies(lr.common_openid, lr.common_access_token)
+
+        return lr
 
     def djc_set_custom_cookies(self, openid: str, access_token: str):
         self.djc_custom_cookies = f"djc_appSource=android; djc_appVersion=138; acctype=qc; appid=1101958653; openid={openid}; access_token={access_token}"

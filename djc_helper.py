@@ -371,7 +371,7 @@ class DjcHelper:
         roleinfo_list = res.get("data", [])
 
         db = CacheInfo()
-        db.with_context(f"绑定角色缓存/{self.cfg.name}").load()
+        db.with_context(f"绑定角色缓存/{self.cfg.get_account_cache_key()}").load()
         if len(roleinfo_list) != 0:
             # 成功请求时，保存一份数据到本地
             db.value = roleinfo_list
@@ -4174,7 +4174,7 @@ class DjcHelper:
         reset_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
 
     def get_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str) -> str:
-        return f"show_dnf_helper_info_guide_{self.cfg.name}_{show_message_box_once_key}"
+        return f"show_dnf_helper_info_guide_{self.cfg.get_account_cache_key()}_{show_message_box_once_key}"
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):
@@ -6585,7 +6585,7 @@ class DjcHelper:
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
         welfare_version = "v7"
         db = WelfareDB().with_context(welfare_version).load()
-        account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.name}").load()
+        account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.get_account_cache_key()}").load()
 
         def exchange_package(sContent: str):
             # 检查是否已经兑换过
@@ -6798,7 +6798,7 @@ class DjcHelper:
 
     def old_version_dianzan(self):
         db = DianzanDB().load()
-        account_db = DianzanDB().with_context(self.cfg.name).load()
+        account_db = DianzanDB().with_context(self.cfg.get_account_cache_key()).load()
 
         def query_dnf_dianzan():
             res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
@@ -10252,7 +10252,7 @@ class DjcHelper:
             if act_info is not None and act_info.is_last_day():
                 is_last_day = True
 
-            if not is_last_day and not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.name}"):
+            if not is_last_day and not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.get_account_cache_key()}"):
                 logger.warning("本周已运行过领取邀请奖励，暂不继续领取~")
                 return
 
@@ -10378,7 +10378,7 @@ class DjcHelper:
 
             return invited_friends
 
-        account_db = FireCrackersDB().with_context(self.cfg.name).load()
+        account_db = FireCrackersDB().with_context(self.cfg.get_account_cache_key()).load()
 
         def qeury_not_invited_friends_with_cache():
             invited_friends = query_invited_friends()
@@ -11847,7 +11847,7 @@ class DjcHelper:
             )
         else:
             msg = (
-                f"当前账号【{self.cfg.name}】{bind_reason}，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
+                f"当前账号【{self.cfg.get_account_cache_key()}】{bind_reason}，且未开启自动绑定模式，请点击右下角的【确定】按钮后，在自动弹出的【{activity_name}】活动页面进行绑定，然后按任意键继续\n"
                 "\n"
                 "若默认浏览器打不开该页面，请自行在手机或其他浏览器打开下面的页面\n"
                 f"{activity_url}\n"

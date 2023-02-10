@@ -1112,6 +1112,16 @@ class AccountConfig(ConfigInterface):
 
         return True
 
+    def get_account_cache_key(self) -> str:
+        if self.account_info.has_login():
+            # 由于有些用户会通过一个个登陆账号来运行多个账号，不使用多账号配置功能
+            # 这种情况下，如果以配置名称为key，会导致这些账号获取到同样的登陆缓存信息
+            # 因此如果用户登录了，这里使用实际登录的qq来作为缓存key，确保不会混起来
+            return self.qq()
+        else:
+            # 未登录则使用本地配置的账号名称
+            return self.name
+
 
 class LoginConfig(ConfigInterface):
     def __init__(self):

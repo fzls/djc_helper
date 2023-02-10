@@ -178,7 +178,7 @@ class QQLogin:
     #       chrome_portable_{ver}.7z
     #       _centos_download_and_install_chrome_and_driver.sh
     #       _ubuntu_download_chrome_and_driver.sh
-    chrome_major_version = 110
+    chrome_major_version = 107
 
     default_window_width = 390
     default_window_height = 360

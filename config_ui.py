@@ -622,7 +622,13 @@ class ConfigUi(QFrame):
     def clear_login_status(self, checked=False):
         clear_login_status()
 
-        show_message("清除完毕", "登录状态已经清除完毕，可使用新账号重新运行~")
+        show_message("清除完毕", (
+            "登录状态已经清除完毕，可使用新账号重新运行~\n"
+            "\n"
+            "友情提示：清除登录状态是否是为了登录另外一个qq来领取奖励？\n"
+            "如果是这样，推荐使用小助手已有的多账号配置功能，可实现领取多个账号的需求~\n"
+            "具体配置方法请点击【查看使用教程 文字版】，查看其中的【添加多个账号】章节，按步骤操作即可\n"
+        ))
         report_click_event("clear_login_status")
 
     def join_group(self, checked=False):

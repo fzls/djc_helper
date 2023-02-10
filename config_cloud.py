@@ -10,7 +10,7 @@ from download import download_github_raw_content
 from first_run import is_first_run_in
 from log import color, logger
 from update import version_less
-from util import async_call, get_now, parse_time, try_except
+from util import async_call, parse_time, try_except
 
 
 class BlackListConfig(ConfigInterface):
@@ -45,6 +45,15 @@ class TryAutoUpdateIgnorePermissionConfig(ConfigInterface):
 
         return False
 
+
+class ChromeVersionReplaceRule(ConfigInterface):
+    def __init__(self):
+        # 有问题的chrome大版本列表，如110版本在部分win7电脑上无法正常使用
+        self.troublesome_major_version_list: list[int] = []
+        # 用于替换的可用chrome大版本
+        self.valid_chrome_version: int = 0
+
+
 # 远程配置，方便动态调整部分配置
 class ConfigCloud(ConfigInterface):
     def __init__(self):
@@ -75,6 +84,9 @@ class ConfigCloud(ConfigInterface):
 
         # 无视权限进行自动更新的条件
         self.try_auto_update_ignore_permission = TryAutoUpdateIgnorePermissionConfig()
+
+        # chrome版本强制更换，用于处理新升级chrome后，部分电脑上无法正常使用的情况下可以远程降级为可用的其他版本，在新版本发布前减少影响
+        self.chrome_version_replace_rule = ChromeVersionReplaceRule()
 
     def fields_to_fill(self):
         return [

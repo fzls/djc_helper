@@ -28,6 +28,7 @@ from compress import decompress_dir_with_bandizip
 from config import AccountConfig, CommonConfig
 from config import config as get_config
 from config import load_config
+from config_cloud import config_cloud
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
@@ -516,11 +517,22 @@ class QQLogin:
     def chrome_root_directory(self):
         return os.path.realpath("./utils")
 
-    def get_chrome_major_version(self):
+    def get_chrome_major_version(self) -> int:
+        version = self.chrome_major_version
+
         if self.cfg is None or self.cfg.force_use_chrome_major_version == 0:
-            return self.chrome_major_version
+            rule = config_cloud().chrome_version_replace_rule
+            if self.chrome_major_version in rule.troublesome_major_version_list and rule.valid_chrome_version != 0:
+                # 当前chrome版本在部分系统可能无法正常使用，替换为远程配置的可用版本
+                version = rule.valid_chrome_version
+            else:
+                # 使用默认的版本
+                version = self.chrome_major_version
         else:
-            return self.cfg.force_use_chrome_major_version
+            # 使用本地配置的版本
+            version = self.cfg.force_use_chrome_major_version
+
+        return version
 
     def login(self, account, password, login_mode: str, name=""):
         """

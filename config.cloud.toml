@@ -28,6 +28,13 @@ period_list = [
 #    ["2023-02-05 00:00:00", "2023-02-15 00:00:00"]
 ]
 
+# chrome版本强制更换，用于处理新升级chrome后，部分电脑上无法正常使用的情况下可以远程降级为可用的其他版本，在新版本发布前减少影响
+[chrome_version_replace_rule]
+# 有问题的chrome大版本列表，如110版本在部分win7电脑上无法正常使用
+troublesome_major_version_list = []
+# 用于替换的可用chrome大版本
+valid_chrome_version = 0
+
 # 新增的黑名单
 [[black_list]]
 # 封禁于

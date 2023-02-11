@@ -2511,13 +2511,12 @@ class FunctionSwitchesConfigUi(QWidget):
     act_category_to_act_desc_switch_list = {
         "普通skey": [
             # 免费活动
-            ("领取道聚城", "get_djc"),
-            ("道聚城许愿", "make_wish"),
-            ("心悦特权专区", "get_xinyue"),
-            ("每月黑钻等级礼包", "get_heizuan_gift"),
-            ("腾讯游戏信用相关礼包", "get_credit_xinyue_gift"),
+            ("道聚城", "get_djc"),
+            ("DNF地下城与勇士心悦特权专区", "get_xinyue"),
+            ("心悦app", "get_xinyue_app"),
+            ("黑钻礼包", "get_heizuan_gift"),
+            ("腾讯游戏信用礼包", "get_credit_xinyue_gift"),
             ("心悦app理财礼卡", "get_xinyue_financing"),
-            ("心悦猫咪", "get_xinyue_cat"),
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             # 收费活动

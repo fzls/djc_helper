@@ -128,5 +128,15 @@
     "open_url": "",
     "expire_at": "2023-02-15 23:56:15",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "巴卡妮补刀小群",
+    "message": "巴卡妮打金补刀队友好难找-。-因此我建了个补刀群 578610397，有兴趣的小伙伴可以加进来互相补刀\n",
+    "send_at": "2023-02-11 15:19:33",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-02-18 15:19:33",
+    "show_only_before_version": ""
   }
 ]

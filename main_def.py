@@ -1947,7 +1947,7 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
 
 def try_notify_new_pay_info(
     qq_accounts: List[str], latest_user_buy_info: BuyInfo, show_message_box=True
-) -> Tuple[bool, List[BuyRecord]]:
+) -> Tuple[bool, bool, List[BuyRecord]]:
     new_buy_dlc = False
     new_buy_monthly_pay = False
     new_buy_monthly_pay_records: List[BuyRecord] = []
@@ -2011,7 +2011,7 @@ def try_notify_new_pay_info(
         db.buy_info = latest_user_buy_info
         db.save()
 
-    return new_buy_dlc, new_buy_monthly_pay_records
+    return new_buy_dlc, new_buy_monthly_pay, new_buy_monthly_pay_records
 
 
 def show_multiprocessing_info(cfg: Config):

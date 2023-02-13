@@ -24,13 +24,16 @@ def test_try_notify_new_pay_info():
 
     # 清空数据
     UserBuyInfoDB().with_context(str(qq_accounts)).reset()
+    for qq in qq_accounts:
+        UserBuyInfoDB().with_context(qq).reset()
 
     # 执行第一次查询
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(
+    new_buy_dlc, new_buy_monthly_pay, new_buy_monthly_pay_records = try_notify_new_pay_info(
         qq_accounts, user_buy_info, show_message_box=False
     )
     # 在没有数据的情况下不应产生通知
     assert new_buy_dlc is False
+    assert new_buy_monthly_pay is False
     assert len(new_buy_monthly_pay_records) == 0
 
     # 增加1个月付费和购买dlc，再次执行查询
@@ -50,19 +53,38 @@ def test_try_notify_new_pay_info():
             ),
         ]
     )
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(
+    new_buy_dlc, new_buy_monthly_pay, new_buy_monthly_pay_records = try_notify_new_pay_info(
         qq_accounts, user_buy_info, show_message_box=False
     )
     # 确保通知有dlc和新的普通按月付费
     assert new_buy_dlc is True
+    assert new_buy_monthly_pay is True
     assert new_buy_monthly_pay_records == delta_normal_months
 
     # 不做任何操作，再次执行操作
-    new_buy_dlc, new_buy_monthly_pay_records = try_notify_new_pay_info(
+    new_buy_dlc, new_buy_monthly_pay, new_buy_monthly_pay_records = try_notify_new_pay_info(
         qq_accounts, user_buy_info, show_message_box=False
     )
     # 确保未发生变化
     assert new_buy_dlc is False
+    assert new_buy_monthly_pay is False
+    assert len(new_buy_monthly_pay_records) == 0
+
+    # 所属主qq发生变化，缺且该qq之前没有过记录时不应有新增
+    other_main_qq_user_buy_info = BuyInfo()
+    other_main_qq_user_buy_info.qq = qq_accounts[1]
+    other_main_qq_user_buy_info.game_qqs = [qq_accounts[0], qq_accounts[2]]
+    other_main_qq_user_buy_info.append_records_and_recompute(
+        [
+            BuyRecord().auto_update_config({"buy_month": user_buy_info.total_buy_month+1, "buy_at": "2021-10-03 12:30:15", "reason": "购买"}),
+        ]
+    )
+
+    new_buy_dlc, new_buy_monthly_pay, new_buy_monthly_pay_records = try_notify_new_pay_info(
+        qq_accounts, other_main_qq_user_buy_info, show_message_box=False
+    )
+    assert new_buy_dlc is False
+    assert new_buy_monthly_pay is False
     assert len(new_buy_monthly_pay_records) == 0
 
 

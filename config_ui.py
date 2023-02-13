@@ -2523,18 +2523,11 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
-            ("集卡", "get_ark_lottery"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg每日签到", "get_colg_signin"),
-            ("超级会员", "get_dnf_super_vip"),
-            ("DNF集合站", "get_dnf_collection"),
-            ("WeGame活动", "get_dnf_wegame"),
-            ("qq视频蚊子腿-爱玩", "get_qq_video"),
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),
             ("dnf助手活动", "get_dnf_helper"),
             ("冒险的起点", "get_maoxian_start"),
-            ("魔界人探险记", "get_mojieren"),
-            ("巴卡尔大作战", "get_dnf_bakaer_fight"),
             ("colg年终盛典签到", "get_colg_yearly_signin"),
         ],
         "QQ空间pskey": [
@@ -2547,6 +2540,19 @@ class FunctionSwitchesConfigUi(QWidget):
         "安全管家pskey": [
             ("管家蚊子腿", "get_guanjia"),
         ],
+    }
+
+    # 已过期的活动，方便快速加回去
+    expired_act_category_to_act_desc_switch_list = {
+        "普通skey": [
+            ("巴卡尔大作战", "get_dnf_bakaer_fight"),
+            ("魔界人探险记", "get_mojieren"),
+            ("qq视频蚊子腿-爱玩", "get_qq_video"),
+            ("WeGame活动", "get_dnf_wegame"),
+            ("DNF集合站", "get_dnf_collection"),
+            ("超级会员", "get_dnf_super_vip"),
+            ("集卡", "get_ark_lottery"),
+        ]
     }
 
     def __init__(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig, parent=None):

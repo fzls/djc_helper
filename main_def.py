@@ -1949,10 +1949,13 @@ def try_notify_new_pay_info(
     qq_accounts: List[str], latest_user_buy_info: BuyInfo, show_message_box=True
 ) -> Tuple[bool, List[BuyRecord]]:
     new_buy_dlc = False
+    new_buy_monthly_pay = False
     new_buy_monthly_pay_records: List[BuyRecord] = []
 
     # 获取上次保存的付费信息，对比是否产生了新的付费
-    db = UserBuyInfoDB().with_context(str(qq_accounts)).load()
+    # note: 这里的key改成最新查询到的购买记录的主QQ
+    #   这样即使因为新的购买，导致这次购买所属的主QQ与上次不一样时，也不会因实际对比对象完全不同，而导致展示的结果很奇怪
+    db = UserBuyInfoDB().with_context(latest_user_buy_info.qq).load()
 
     # ps: 1999是服务器查询失败时填充的默认值，用于确保服务器异常时不影响正常使用，应排除这种情况
     fake_month = 1999
@@ -1980,7 +1983,10 @@ def try_notify_new_pay_info(
             latest_buy_records = latest_user_buy_info.get_normal_buy_records()
 
             new_months = latest_user_buy_info.total_buy_month - db.buy_info.total_buy_month
+
+            new_buy_monthly_pay = True
             new_buy_monthly_pay_records = latest_buy_records[len(old_buy_records) :]
+
             msg = f"新购买的 {new_months} 月 按月付费已到账，详情如下"
             msg += "\n购买详情如下：\n" + "\n".join(
                 "\t" + f"{record.buy_at} {record.reason} {record.buy_month} 月" for record in new_buy_monthly_pay_records
@@ -1992,12 +1998,12 @@ def try_notify_new_pay_info(
     # 保存新的付费信息
     # 以下情况需要保存数据
     # 1. 新购买了dlc
-    # 2. 有新增购买月份
+    # 2. 有新购买按月付费
     # 3. 第一次保存
     # 4. 之前保存了服务器异常时的保底数据
     if (
         new_buy_dlc
-        or len(new_buy_monthly_pay_records) != 0
+        or new_buy_monthly_pay
         or not db.file_created
         or db.buy_info.total_buy_month == fake_month
     ):

@@ -138,5 +138,15 @@
     "open_url": "",
     "expire_at": "2023-02-18 15:19:33",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "活动提示",
+    "message": "春节版本的蚊子腿大部分截止日期都是2.10（也就是前几天），因此可能最近会没啥东西，这是正常现象，不是bug~\n",
+    "send_at": "2023-02-13 21:49:24",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-02-20 21:49:24",
+    "show_only_before_version": ""
   }
 ]

@@ -195,8 +195,8 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "巴卡妮补刀小群"
-    message = """巴卡妮打金补刀队友好难找-。-因此我建了个补刀群 578610397，有兴趣的小伙伴可以加进来互相补刀
+    title = "活动提示"
+    message = """春节版本的蚊子腿大部分截止日期都是2.10（也就是前几天），因此可能最近会没啥东西，这是正常现象，不是bug~
 """
     open_url = ""
     show_only_before_version = ""

@@ -11960,7 +11960,7 @@ class DjcHelper:
         )
         return AmesvrQueryRole().auto_update_config(res)
 
-    def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 0) -> str:
+    def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 600) -> str:
         if self.cfg.function_switches.disable_login_mode_normal:
             logger.warning(f"禁用了普通登录模式，将不会尝试获取分享用的p_skey: {ctx}")
             return ""

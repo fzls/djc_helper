@@ -195,8 +195,8 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "活动提示"
-    message = """春节版本的蚊子腿大部分截止日期都是2.10（也就是前几天），因此可能最近会没啥东西，这是正常现象，不是bug~
+    title = "bug提示"
+    message = """如果弹出【不支持的16位应用程序 由于与64位版本的Windows不兼容 ...】这样的弹窗，请下载20.0.2版本。
 """
     open_url = ""
     show_only_before_version = ""

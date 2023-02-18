@@ -148,5 +148,15 @@
     "open_url": "",
     "expire_at": "2023-02-20 21:49:24",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "bug提示",
+    "message": "如果弹出【不支持的16位应用程序 由于与64位版本的Windows不兼容 ...】这样的弹窗，请下载20.0.2版本。\n",
+    "send_at": "2023-02-18 16:01:37",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-02-25 16:01:37",
+    "show_only_before_version": ""
   }
 ]

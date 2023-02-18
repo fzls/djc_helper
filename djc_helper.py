@@ -57,6 +57,7 @@ from dao import (
     IdeActInfo,
     LuckyUserInfo,
     LuckyUserTaskConf,
+    MaJieLuoInfo,
     MobileGameGiftInfo,
     MoJieRenInfo,
     MyHomeFarmInfo,
@@ -642,7 +643,7 @@ class DjcHelper:
         ]
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
-        # re: 更新新的活动时记得更新urls.py的not_ams_activities
+        # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
@@ -654,6 +655,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("冒险的起点", self.maoxian_start),
             ("colg年终盛典签到", self.colg_yearly_signin),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -667,7 +669,6 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
             ("dnf助手活动Dup", self.dnf_helper_dup),
-            ("DNF马杰洛的规划", self.majieluo),
             ("心悦app周礼包", self.xinyue_weekly_gift),
             ("DNF闪光杯", self.dnf_shanguang),
             ("DNF娱乐赛", self.dnf_game),
@@ -7486,7 +7487,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     # re: 变更时需要调整这些
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗] [初始化]
-    flowid_majieluo_query_info = "163897"
+    flowid_majieluo_query_info = "170976"
     # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入，在 urls.py 的 not_ams_activities 中填写起止时间
 
     @try_except()
@@ -7504,48 +7505,71 @@ class DjcHelper:
 
         check_func()
 
+
+        def query_info() -> MaJieLuoInfo:
+            raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
+
+            return MaJieLuoInfo().auto_update_config(raw_res["jData"])
+
+
         request_wait_time = 3
 
-        self.majieluo_op("每日进入活动页面", "165852")
-        self.majieluo_op("每日登录游戏", "165853")
-        self.majieluo_op("每日通关4次推荐地下城", "165854")
-        self.majieluo_op("每日游戏在线30分钟", "165855")
+        self.majieluo_op("领取见面礼", "171007")
+
+        self.majieluo_op("每日进入活动页面", "171065")
+        self.majieluo_op("每日登录游戏", "171066")
+        self.majieluo_op("每日通关4次推荐地下城", "171067")
+        self.majieluo_op("每日游戏在线30分钟", "171068")
 
         for idx in range_from_one(10):
-            res = self.majieluo_op(f"抽卡 - {idx}", "165856")
+            res = self.majieluo_op(f"抽卡 - {idx}", "171009")
             if res["ret"] != 0:
                 break
 
             time.sleep(request_wait_time)
 
-        for award_name, award_index in [
-            ("邪龙卡组", 3),
-            ("冰龙卡组", 2),
-            ("狂龙卡组", 0),
-            ("爆龙卡组", 1),
-        ]:
-            self.majieluo_op(f"领取集齐奖励 - {award_name}", "166788", packageId=award_index)
-            time.sleep(request_wait_time)
+        boss_type_list = [
+            (3, "暴龙王巴卡尔"),
+            (2, "冰龙斯卡萨"),
+            (1, "邪龙斯皮兹"),
+            (0, "狂龙赫斯"),
+        ]
 
-        self.majieluo_op("每日登录领取派遣次数", "167264")
-        for target in range(4):
-            self.majieluo_op(f"{target}: 探险派遣", "165865", targetId=target, myId=target)
-            self.majieluo_op(f"{target}: 完成探险派遣", "166827", targetId=target)
+        card_type_list = [
+            (0, "狂龙赫斯"),
+            (1, "邪龙斯皮兹"),
+            (2, "冰龙斯卡萨"),
+            (3, "巴卡尔·人形"),
+            (4, "巴卡尔·龙形"),
+        ]
 
-            # 2是冰龙，好像固定奖励为增幅器盒子
-            self.majieluo_op(f"{target}: boss对战", "165860", targetId=2, myId=target)
+        info = query_info()
 
-            self.majieluo_op(f"{target}: 领取boss奖励", "167303", targetId=target)
+        for card_type, card_name in card_type_list:
+            card_count = info.get_card_count(card_type)
+            logger.info(f"{card_name}: {card_count}")
 
-            self.majieluo_op(f"{target}: 积累成就领好礼", "165862", id=target)
+        def do_chllange():
+            for boss_type, boss_name in boss_type_list:
+                for card_type, card_name in card_type_list:
+                    card_count = info.get_card_count(card_type)
+                    if card_count > 0:
+                        res = self.majieluo_op(f"剧情BOSS挑战-挑战 {boss_name}-使用卡牌 {card_name}", "171020", iType=boss_type, iCardId=card_type)
+                        if res["ret"] == 10002:
+                            # "ret": 10002, "iRet": 10002, "sMsg": "抱歉，您今天已挑战过！"
+                            return
 
-            time.sleep(request_wait_time)
+                        time.sleep(request_wait_time)
 
-        # def query_info() -> MaJieLuoInfo:
-        #     raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
-        #
-        #     return MaJieLuoInfo().auto_update_config(raw_res["jData"])
-        #
+        do_chllange()
+
+        self.majieluo_op("领取集齐奖励", "171011")
+
+        self.majieluo_op("完成对决25次", "171308")
+        self.majieluo_op("完成胜利14次", "171309")
+        self.majieluo_op("完成所有剧情模式", "171311")
+
+
         # # 马杰洛的见面礼
         # def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
         #     self.majieluo_op("领取见面礼", "163667")
@@ -11478,6 +11502,7 @@ class DjcHelper:
                 "myId",
                 "id",
                 "bossId",
+                "iCardId",
             ]
         }
 
@@ -12317,4 +12342,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_yearly_signin()
+        djcHelper.majieluo()

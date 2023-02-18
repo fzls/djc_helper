@@ -1867,6 +1867,15 @@ class MoJieRenHoldItem(ConfigInterface):
         self.arrExtData = {}
 
 
+card_id_to_action_id = {
+    0: "566",
+    1: "565",
+    2: "564",
+    3: "567",
+    4: "568",
+}
+
+
 class MaJieLuoInfo(ConfigInterface):
     def __init__(self):
         self.iRet = "0"
@@ -1880,6 +1889,13 @@ class MaJieLuoInfo(ConfigInterface):
         self.iFuqi = "40"
         self.iPassed = "0"
         self.iLuck = "0"
+        self.aCards = {}
+
+    def get_card_count(self, card_type: int) -> int:
+        action_id = card_id_to_action_id[card_type]
+        card_count = self.aCards[action_id]["ticket"]
+
+        return int(card_count)
 
 
 class VoteWorkList(ConfigInterface):

@@ -13,6 +13,7 @@ SERVER_ADDR = "http://114.132.252.185:5244"
 
 API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
 API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"
+API_DOWNLOAD = f"{SERVER_ADDR}/api/fs/get"
 API_LIST = f"{SERVER_ADDR}/api/fs/list"
 API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
 
@@ -72,6 +73,27 @@ class Content(ConfigInterface):
         self.sign = ""
         self.thumb = ""
         self.type = 1
+
+
+class DownloadRequest(ConfigInterface):
+    def __init__(self):
+        self.path = ""
+        self.passwrod = ""
+
+
+class DownloadResponse(ConfigInterface):
+    def __init__(self):
+        self.name = "DNF蚊子腿小助手_v20.0.1_by风之凌殇.7z"
+        self.size = 51111681
+        self.is_dir = False
+        self.modified = "2022-10-28T10:38:13+08:00"
+        self.sign = "h9zSwqaagxTsodawAGF53ICbv19t0_y9FJP2qj2gjhA=:0"
+        self.thumb = ""
+        self.type = 0
+        self.raw_url = ""
+        self.readme = ""
+        self.provider = "Aliyundrive"
+        self.related = None
 
 
 class RemoveRequest(ConfigInterface):
@@ -176,10 +198,22 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     get_file_list(remote_dir, refresh=True)
 
 
-def get_download_url(remote_file_path: str):
+def get_download_info(remote_file_path: str) -> DownloadResponse:
     remote_file_path = format_remote_file_path(remote_file_path)
 
-    return f"{SERVER_ADDR}/d{remote_file_path}"
+    req = DownloadRequest()
+    req.path = remote_file_path
+    req.passwrod = ""
+
+    raw_res = requests.post(API_DOWNLOAD, json=to_raw_type(req))
+
+    res = CommonResponse().auto_update_config(raw_res.json())
+    if res.code != 200:
+        raise generate_exception(res, "download")
+
+    data = DownloadResponse().auto_update_config(res.data)
+
+    return data
 
 
 def get_file_list(
@@ -273,11 +307,11 @@ def demo_upload():
 
 
 def demo_download():
-    url = get_download_url("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
+    download_info = get_download_info("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
 
     from download import download_file
 
-    download_file(url)
+    download_file(download_info.raw_url, filename=download_info.name)
 
 
 def demo_list():
@@ -292,6 +326,6 @@ def demove_remove():
 if __name__ == "__main__":
     # demo_login()
     # demo_upload()
-    # demo_download()
-    demo_list()
+    demo_download()
+    # demo_list()
     # demove_remove()

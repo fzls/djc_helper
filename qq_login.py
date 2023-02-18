@@ -42,8 +42,10 @@ from first_run import is_first_run_in
 from log import color, logger
 from urls import get_act_url
 from util import (
+    MiB,
     async_message_box,
     count_down,
+    get_file_or_directory_size,
     get_screen_size,
     is_run_in_github_action,
     is_windows,
@@ -385,7 +387,7 @@ class QQLogin:
         chrome_root_directory = self.chrome_root_directory()
 
         logger.info("检查driver是否存在")
-        if not os.path.isfile(self.chrome_driver_executable_path()):
+        if not self.is_valid_chrome_file(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
             self.download_chrome_file(chrome_driver_exe_name)
 
@@ -411,7 +413,7 @@ class QQLogin:
             logger.info("当前配置为强制使用便携版chrome")
 
         # 尝试从网盘下载合适版本的便携版chrome
-        if not os.path.isfile(self.chrome_binary_7z()):
+        if not self.is_valid_chrome_file(self.chrome_binary_7z()):
             logger.info(color("bold_yellow") + f"本地未发现便携版chrome的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
             self.download_chrome_file(zip_name)
 
@@ -518,6 +520,18 @@ class QQLogin:
 
     def chrome_root_directory(self):
         return os.path.realpath("./utils")
+
+    def is_valid_chrome_file(self, chrome_filepath) -> bool:
+        if not os.path.isfile(chrome_filepath):
+            # 文件不存在
+            return False
+
+        invalid_filesize = 1 * MiB
+        if get_file_or_directory_size(chrome_filepath) <= invalid_filesize:
+            # 文件大小太小了，很有可能是没下载完全，或者下载报错了
+            return False
+
+        return True
 
     def get_chrome_major_version(self) -> int:
         version = self.chrome_major_version

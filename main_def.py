@@ -1598,7 +1598,7 @@ def try_auto_update(cfg: Config, ignore_permission=False):
                 logger.info(color("bold_yellow") + f"未发现自动更新DLC({auto_updater_path()})，将尝试从网盘下载")
 
                 download_info = get_download_info(os.path.basename(auto_updater_path()))
-                download_file(download_info.raw_url, os.path.dirname(auto_updater_path()), download_info.name)
+                download_file(download_info.get_url(), os.path.dirname(auto_updater_path()), download_info.name)
 
         # 保底，如果前面的流程都失败了，提示用户自行下载
         if not exists_auto_updater_dlc():
@@ -1647,7 +1647,7 @@ def try_auto_update(cfg: Config, ignore_permission=False):
             # 更新新版本，然后重试
             logger.info(color("bold_green") + "网盘中最新版本有可能已经修复dlc的该问题，将尝试更新dlc为最新版本")
             download_info = get_download_info(os.path.basename(auto_updater_path()))
-            download_file(download_info.raw_url, os.path.dirname(auto_updater_path()), download_info.name)
+            download_file(download_info.get_url(), os.path.dirname(auto_updater_path()), download_info.name)
 
         logger.info(color("bold_yellow") + "当前版本为最新版本，不需要更新~")
     except Exception as e:

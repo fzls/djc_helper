@@ -485,7 +485,7 @@ class QQLogin:
     def download_chrome_file(self, filename: str) -> str:
         download_info = get_download_info(self.get_path_in_netdisk(filename))
         return download_file(
-            download_info.raw_url,
+            download_info.get_url(),
             self.chrome_root_directory(),
             download_info.name,
         )

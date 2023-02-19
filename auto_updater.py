@@ -181,7 +181,7 @@ def full_update(args, uploader, latest_version: str) -> bool:
         logger.warning("尝试通过alist下载")
         download_info = get_download_info(f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z")
         filepath = download_file(
-            download_info.raw_url, tmp_dir, download_info.name, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
+            download_info.get_url(), tmp_dir, download_info.name, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
         )
         report_dlc_usage("full_update_from_alist")
 

@@ -323,7 +323,7 @@ def demo_download():
 
     from download import download_file
 
-    download_file(download_info.raw_url, filename=download_info.name)
+    download_file(download_info.get_url(), filename=download_info.name)
 
 
 def demo_list():

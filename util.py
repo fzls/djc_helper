@@ -1446,6 +1446,9 @@ def sync_configs(source_dir: str, target_dir: str):
     """
     将指定的配置相关文件从 源目录 覆盖到 目标目录
     """
+    from config import config
+    from qq_login import QQLogin
+
     sync_config_list = [
         # 配置文件
         "config.toml",
@@ -1460,6 +1463,14 @@ def sync_configs(source_dir: str, target_dir: str):
         # # 自动更新DLC
         # "utils/auto_updater.exe"
     ]
+
+    cfg = config()
+    current_chrome_version = QQLogin(cfg.common).get_chrome_major_version()
+    sync_config_list.extend([
+        # chrome相关文件，避免反复下载
+        f"utils/chrome_portable_{current_chrome_version}.7z",
+        f"utils/chromedriver_{current_chrome_version}.exe",
+    ])
 
     logger.debug(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
 

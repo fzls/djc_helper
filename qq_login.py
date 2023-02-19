@@ -45,6 +45,7 @@ from util import (
     MiB,
     async_message_box,
     count_down,
+    download_chrome_driver,
     get_file_or_directory_size,
     get_screen_size,
     is_run_in_github_action,
@@ -390,7 +391,7 @@ class QQLogin:
         logger.info("检查driver是否存在")
         if not self.is_valid_chrome_file(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
-            self.download_chrome_file(chrome_driver_exe_name)
+            self.download_chrome_driver(chrome_driver_exe_name)
 
         options = Options()
         options.headless = True
@@ -440,7 +441,7 @@ class QQLogin:
 
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
-        self.download_chrome_file(chrome_driver_exe_name)
+        self.download_chrome_driver(chrome_driver_exe_name)
         self.download_chrome_file(zip_name)
 
         shutil.rmtree(self.chrome_binary_directory(), ignore_errors=True)
@@ -490,6 +491,13 @@ class QQLogin:
             self.chrome_root_directory(),
             download_info.name,
         )
+
+    def download_chrome_driver(self, chrome_driver_exe_name: str) -> str:
+        try:
+            return download_chrome_driver(self.chrome_driver_version, "utils", ".")
+        except Exception as e:
+            logger.error("从chrome官网下载driver失败，尝试从网盘下载", exc_info=e)
+            return self.download_chrome_file(chrome_driver_exe_name)
 
     def get_path_in_netdisk(self, filename: str) -> str:
         return f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{filename}"

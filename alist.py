@@ -95,6 +95,16 @@ class DownloadResponse(ConfigInterface):
         self.provider = "Aliyundrive"
         self.related = None
 
+        # 用于构建下载链接的参数，使用时设置
+        self.remote_file_path = ""
+
+    def get_url(self) -> str:
+        if self.sign != "" and self.remote_file_path != "":
+            # 尽量使用alist的下载接口做中转，这样服务器日志方便查看下载情况
+            return f"{SERVER_ADDR}/d{self.remote_file_path}?sign={self.sign}"
+
+        return self.raw_url
+
 
 class RemoveRequest(ConfigInterface):
     def __init__(self):
@@ -212,6 +222,8 @@ def get_download_info(remote_file_path: str) -> DownloadResponse:
         raise generate_exception(res, "download")
 
     data = DownloadResponse().auto_update_config(res.data)
+
+    data.remote_file_path = remote_file_path
 
     return data
 

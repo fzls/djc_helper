@@ -140,11 +140,13 @@ def download_chrome_installer():
 
 def update_qq_login_version():
     major_version = get_latest_major_version()
+    latest_chrome_driver_version = get_latest_chrome_driver_version()
 
     qq_login_file = os.path.join(SRC_DIR, "qq_login.py")
 
     replace_text_in_file(qq_login_file, r"chrome_major_version = (\d+)", f"chrome_major_version = {major_version}")
-    logger.info(f"已将 {qq_login_file} 中的 chrome_major_version 修改为 {major_version}")
+    replace_text_in_file(qq_login_file, r'chrome_driver_version = "[0-9.]+"', f'chrome_driver_version = "{latest_chrome_driver_version}"')
+    logger.info(f"已将 {qq_login_file} 中的 chrome_major_version 修改为 {major_version}, chrome_driver_version 修改为 {latest_chrome_driver_version}")
 
 
 def replace_text_in_file(filepath: str, pattern: str, repl: str):

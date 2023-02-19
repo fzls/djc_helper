@@ -1703,11 +1703,8 @@ def get_logger_func(print_warning: bool, logger_func=None):
     return logger_func if print_warning else logger.debug
 
 
-def download_chrome_driver(version: str, download_dir: str, dir_src_path: str):
+def download_chrome_driver(version: str, download_dir: str, dir_src_path: str) -> str:
     from download import download_file
-
-    old_cwd = os.getcwd()
-    os.chdir(download_dir)
 
     windows_zip_name = "chromedriver_win32"
     windows_zip = f"{windows_zip_name}.zip"
@@ -1716,27 +1713,29 @@ def download_chrome_driver(version: str, download_dir: str, dir_src_path: str):
 
     logger.info(f"指定的chrome driver版本为: {version}，下载地址为 {latest_download_url}")
 
-    zip_file = download_file(latest_download_url, ".")
-    decompress_dir_with_bandizip(zip_file, dir_src_path=dir_src_path)
+    zip_file = download_file(latest_download_url, download_dir)
+    decompress_dir_with_bandizip(zip_file, dir_src_path=dir_src_path, dst_parent_folder=download_dir)
 
     # 移除临时文件
     remove_file(zip_file)
 
     # 有时候解压出来会在子目录中，这里移动出来
-    if os.path.isdir(windows_zip_name):
-        shutil.move(f"{windows_zip_name}/chromedriver.exe", "chromedriver.exe")
-        shutil.rmtree(windows_zip_name)
+    windows_zip_name_dir = os.path.join(download_dir, windows_zip_name)
+    if os.path.isdir(windows_zip_name_dir):
+        shutil.move(f"{windows_zip_name_dir}/chromedriver.exe", "chromedriver.exe")
+        shutil.rmtree(windows_zip_name_dir)
 
     # 重命名
     major_version = parse_major_version(version)
-    chrome_driver = f"chromedriver_{major_version}.exe"
-    os.rename("chromedriver.exe", chrome_driver)
+    chrome_driver = f"{download_dir}/chromedriver_{major_version}.exe"
+    os.rename(f"{download_dir}/chromedriver.exe", chrome_driver)
     logger.info(f"重命名为 {chrome_driver}")
 
-    version_info = subprocess.check_output([os.path.realpath(chrome_driver), "--version"]).decode("utf-8")
+    final_path = os.path.realpath(chrome_driver)
+    version_info = subprocess.check_output([final_path, "--version"]).decode("utf-8")
     logger.info(color("bold_green") + f"chrome获取完毕，chrome driver版本为 {version_info}")
 
-    os.chdir(old_cwd)
+    return final_path
 
 
 def parse_major_version(latest_version: str) -> int:

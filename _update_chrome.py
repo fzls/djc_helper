@@ -16,7 +16,9 @@ from log import color, logger
 from update import version_to_version_int_list
 from util import (
     change_console_window_mode_async,
+    download_chrome_driver,
     make_sure_dir_exists,
+    parse_major_version,
     pause,
     remove_directory,
     remove_file,
@@ -27,47 +29,17 @@ from util import (
 TEMP_DIR = "utils/chrome_temporary_dir"
 SRC_DIR = os.path.realpath(".")
 
-CHROME_DRIVER_EXE = "chromedriver.exe"
-
 
 def download_latest_chrome_driver():
     latest_version = get_latest_chrome_driver_version()
-    windows_zip_name = "chromedriver_win32"
-    windows_zip = f"{windows_zip_name}.zip"
 
-    latest_download_url = f"https://chromedriver.storage.googleapis.com/{latest_version}/{windows_zip}"
-
-    logger.info(f"最新版本的chrome driver为: {latest_version}，下载地址为 {latest_download_url}")
-
-    zip_file = download_file(latest_download_url, ".")
-    decompress_dir_with_bandizip(zip_file, dir_src_path=SRC_DIR)
-
-    # 移除临时文件
-    remove_file(zip_file)
-
-    # 有时候解压出来会在子目录中，这里移动出来
-    if os.path.isdir(windows_zip_name):
-        shutil.move(f"{windows_zip_name}/{CHROME_DRIVER_EXE}", CHROME_DRIVER_EXE)
-        shutil.rmtree(windows_zip_name)
-
-    # 重命名
-    major_version = parse_major_version(latest_version)
-    chrome_driver = f"chromedriver_{major_version}.exe"
-    os.rename(CHROME_DRIVER_EXE, chrome_driver)
-    logger.info(f"重命名为 {chrome_driver}")
-
-    version_info = subprocess.check_output([os.path.realpath(chrome_driver), "--version"]).decode("utf-8")
-    logger.info(color("bold_green") + f"chrome获取完毕，chrome driver版本为 {version_info}")
+    download_chrome_driver(latest_version, ".", SRC_DIR)
 
 
 def get_latest_chrome_driver_version() -> str:
     res = requests.get("https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
 
     return res.text
-
-
-def parse_major_version(latest_version: str) -> int:
-    return int(latest_version.split(".")[0])
 
 
 def get_latest_major_version() -> int:

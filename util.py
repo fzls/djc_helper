@@ -32,7 +32,7 @@ import selenium.common.exceptions
 import toml
 import urllib3.exceptions
 
-from compress import compress_in_memory_with_lzma, decompress_in_memory_with_lzma
+from compress import compress_in_memory_with_lzma, decompress_dir_with_bandizip, decompress_in_memory_with_lzma
 from const import cached_dir, db_top_dir
 from db import CacheDB, CacheInfo
 from exceptions_def import SameAccountTryLoginAtMultipleThreadsException
@@ -1701,6 +1701,46 @@ def get_logger_func(print_warning: bool, logger_func=None):
     if logger_func is None:
         logger_func = logger.warning
     return logger_func if print_warning else logger.debug
+
+
+def download_chrome_driver(version: str, download_dir: str, dir_src_path: str):
+    from download import download_file
+
+    old_cwd = os.getcwd()
+    os.chdir(download_dir)
+
+    windows_zip_name = "chromedriver_win32"
+    windows_zip = f"{windows_zip_name}.zip"
+
+    latest_download_url = f"https://chromedriver.storage.googleapis.com/{version}/{windows_zip}"
+
+    logger.info(f"指定的chrome driver版本为: {version}，下载地址为 {latest_download_url}")
+
+    zip_file = download_file(latest_download_url, ".")
+    decompress_dir_with_bandizip(zip_file, dir_src_path=dir_src_path)
+
+    # 移除临时文件
+    remove_file(zip_file)
+
+    # 有时候解压出来会在子目录中，这里移动出来
+    if os.path.isdir(windows_zip_name):
+        shutil.move(f"{windows_zip_name}/chromedriver.exe", "chromedriver.exe")
+        shutil.rmtree(windows_zip_name)
+
+    # 重命名
+    major_version = parse_major_version(version)
+    chrome_driver = f"chromedriver_{major_version}.exe"
+    os.rename("chromedriver.exe", chrome_driver)
+    logger.info(f"重命名为 {chrome_driver}")
+
+    version_info = subprocess.check_output([os.path.realpath(chrome_driver), "--version"]).decode("utf-8")
+    logger.info(color("bold_green") + f"chrome获取完毕，chrome driver版本为 {version_info}")
+
+    os.chdir(old_cwd)
+
+
+def parse_major_version(latest_version: str) -> int:
+    return int(latest_version.split(".")[0])
 
 
 if __name__ == "__main__":

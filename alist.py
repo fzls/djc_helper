@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import os
 from urllib.parse import quote
 
@@ -16,6 +17,9 @@ API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"
 API_DOWNLOAD = f"{SERVER_ADDR}/api/fs/get"
 API_LIST = f"{SERVER_ADDR}/api/fs/list"
 API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
+
+alist_session = requests.session()
+alist_session.request = functools.partial(alist_session.request, timeout=8)
 
 
 class CommonResponse(ConfigInterface):
@@ -127,7 +131,7 @@ def _login(username: str, password: str, otp_code: str = "") -> str:
     req.password = password
     req.otp_code = otp_code
 
-    raw_res = requests.post(API_LOGIN, json=to_raw_type(req))
+    raw_res = alist_session.post(API_LOGIN, json=to_raw_type(req))
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -162,7 +166,7 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     start_time = get_now()
 
     with open(local_file_path, "rb") as file_to_upload:
-        raw_res = requests.put(
+        raw_res = alist_session.put(
             API_UPLOAD,
             data=file_to_upload,
             headers={
@@ -215,7 +219,7 @@ def get_download_info(remote_file_path: str) -> DownloadResponse:
     req.path = remote_file_path
     req.passwrod = ""
 
-    raw_res = requests.post(API_DOWNLOAD, json=to_raw_type(req))
+    raw_res = alist_session.post(API_DOWNLOAD, json=to_raw_type(req))
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -245,7 +249,7 @@ def get_file_list(
             "Authorization": login_using_env(),
         }
 
-    raw_res = requests.post(API_LIST, json=to_raw_type(req), headers=headers)
+    raw_res = alist_session.post(API_LIST, json=to_raw_type(req), headers=headers)
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -270,7 +274,7 @@ def remove(remote_file_path: str):
         file_name,
     ]
 
-    raw_res = requests.post(
+    raw_res = alist_session.post(
         API_REMOVE,
         json=to_raw_type(req),
         headers={

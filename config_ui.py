@@ -2530,6 +2530,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("冒险的起点", "get_maoxian_start"),
             ("colg年终盛典签到", "get_colg_yearly_signin"),
             ("DNF马杰洛的规划", "get_majieluo"),
+            ("和谐补偿活动", "get_dnf_compensate"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

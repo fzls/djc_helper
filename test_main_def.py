@@ -76,7 +76,9 @@ def test_try_notify_new_pay_info():
     other_main_qq_user_buy_info.game_qqs = [qq_accounts[0], qq_accounts[2]]
     other_main_qq_user_buy_info.append_records_and_recompute(
         [
-            BuyRecord().auto_update_config({"buy_month": user_buy_info.total_buy_month+1, "buy_at": "2021-10-03 12:30:15", "reason": "购买"}),
+            BuyRecord().auto_update_config(
+                {"buy_month": user_buy_info.total_buy_month + 1, "buy_at": "2021-10-03 12:30:15", "reason": "购买"}
+            ),
         ]
     )
 

@@ -196,7 +196,7 @@ def process_result(
         data = jsonp2json(res.text, is_normal_jsonp, need_unquote)
     else:
         json_text = res.text
-        for idx in range(10):
+        for _ in range(10):
             try:
                 data = json.loads(json_text)
                 break
@@ -204,7 +204,7 @@ def process_result(
                 if e.msg == "Extra data":
                     # {"ret":0,"msg":"ok",...}{"ret":-5507,"msg":"很抱歉，系统繁忙，请等待10秒后再试！"...}
                     logger.debug(f"道聚城似乎又抽风了，末尾多加了一个json串，尝试移除最后一个左括号及之后的内容，修改前 json_text 为 {json_text}")
-                    json_text = json_text[:json_text.rindex("{")]
+                    json_text = json_text[: json_text.rindex("{")]
                     logger.debug(f"修改后 json_text 为 {json_text}")
                 else:
                     # 其他情况则继续抛出异常

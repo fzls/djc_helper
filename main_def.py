@@ -2001,12 +2001,7 @@ def try_notify_new_pay_info(
     # 2. 有新购买按月付费
     # 3. 第一次保存
     # 4. 之前保存了服务器异常时的保底数据
-    if (
-        new_buy_dlc
-        or new_buy_monthly_pay
-        or not db.file_created
-        or db.buy_info.total_buy_month == fake_month
-    ):
+    if new_buy_dlc or new_buy_monthly_pay or not db.file_created or db.buy_info.total_buy_month == fake_month:
         logger.info("有新的付费记录，更新本地付费记录，用于下次运行时进行对比")
         db.buy_info = latest_user_buy_info
         db.save()

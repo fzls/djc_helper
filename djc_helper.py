@@ -7506,12 +7506,10 @@ class DjcHelper:
 
         check_func()
 
-
         def query_info() -> MaJieLuoInfo:
             raw_res = self.majieluo_op("查询信息", self.flowid_majieluo_query_info, print_res=False)
 
             return MaJieLuoInfo().auto_update_config(raw_res["jData"])
-
 
         request_wait_time = 3
 
@@ -7555,7 +7553,9 @@ class DjcHelper:
                 for card_type, card_name in card_type_list:
                     card_count = info.get_card_count(card_type)
                     if card_count > 0:
-                        res = self.majieluo_op(f"剧情BOSS挑战-挑战 {boss_name}-使用卡牌 {card_name}", "171020", iType=boss_type, iCardId=card_type)
+                        res = self.majieluo_op(
+                            f"剧情BOSS挑战-挑战 {boss_name}-使用卡牌 {card_name}", "171020", iType=boss_type, iCardId=card_type
+                        )
                         if res["ret"] == 10002:
                             # "ret": 10002, "iRet": 10002, "sMsg": "抱歉，您今天已挑战过！"
                             return
@@ -7569,7 +7569,6 @@ class DjcHelper:
         self.majieluo_op("完成对决25次", "171308")
         self.majieluo_op("完成胜利14次", "171309")
         self.majieluo_op("完成所有剧情模式", "171311")
-
 
         # # 马杰洛的见面礼
         # def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
@@ -10327,7 +10326,9 @@ class DjcHelper:
             if act_info is not None and act_info.is_last_day():
                 is_last_day = True
 
-            if not is_last_day and not is_weekly_first_run(f"fuqian_take_invite_awards_{self.cfg.get_account_cache_key()}"):
+            if not is_last_day and not is_weekly_first_run(
+                f"fuqian_take_invite_awards_{self.cfg.get_account_cache_key()}"
+            ):
                 logger.warning("本周已运行过领取邀请奖励，暂不继续领取~")
                 return
 

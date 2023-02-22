@@ -1466,11 +1466,13 @@ def sync_configs(source_dir: str, target_dir: str):
 
     cfg = config()
     current_chrome_version = QQLogin(cfg.common).get_chrome_major_version()
-    sync_config_list.extend([
-        # chrome相关文件，避免反复下载
-        f"utils/chrome_portable_{current_chrome_version}.7z",
-        f"utils/chromedriver_{current_chrome_version}.exe",
-    ])
+    sync_config_list.extend(
+        [
+            # chrome相关文件，避免反复下载
+            f"utils/chrome_portable_{current_chrome_version}.7z",
+            f"utils/chromedriver_{current_chrome_version}.exe",
+        ]
+    )
 
     logger.debug(f"将以下配置从{source_dir} 复制并覆盖到 {target_dir}")
 

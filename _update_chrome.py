@@ -91,9 +91,12 @@ def get_latest_installed_chrome_version_directory() -> str:
 
 
 def download_chrome_installer():
-    download_page = requests.get("https://www.ghxi.com/pcchrome.html", headers={
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-    }).text
+    download_page = requests.get(
+        "https://www.ghxi.com/pcchrome.html",
+        headers={
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+        },
+    ).text
 
     soup = BeautifulSoup(download_page, "html.parser")
 
@@ -117,8 +120,12 @@ def update_qq_login_version():
     qq_login_file = os.path.join(SRC_DIR, "qq_login.py")
 
     replace_text_in_file(qq_login_file, r"chrome_major_version = (\d+)", f"chrome_major_version = {major_version}")
-    replace_text_in_file(qq_login_file, r'chrome_driver_version = "[0-9.]+"', f'chrome_driver_version = "{latest_chrome_driver_version}"')
-    logger.info(f"已将 {qq_login_file} 中的 chrome_major_version 修改为 {major_version}, chrome_driver_version 修改为 {latest_chrome_driver_version}")
+    replace_text_in_file(
+        qq_login_file, r'chrome_driver_version = "[0-9.]+"', f'chrome_driver_version = "{latest_chrome_driver_version}"'
+    )
+    logger.info(
+        f"已将 {qq_login_file} 中的 chrome_major_version 修改为 {major_version}, chrome_driver_version 修改为 {latest_chrome_driver_version}"
+    )
 
 
 def replace_text_in_file(filepath: str, pattern: str, repl: str):

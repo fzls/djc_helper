@@ -34,7 +34,10 @@ class TryAutoUpdateIgnorePermissionConfig(ConfigInterface):
 
     def can_ignore(self, current_version: str, now: datetime) -> bool:
         if self.latest_bug_fixed_version != "" and version_less(current_version, self.latest_bug_fixed_version):
-            logger.info(color("bold_yellow") + f"当前版本为 {current_version}, 低于最新修复bug版本 {self.latest_bug_fixed_version}，可无视权限触发dlc")
+            logger.info(
+                color("bold_yellow")
+                + f"当前版本为 {current_version}, 低于最新修复bug版本 {self.latest_bug_fixed_version}，可无视权限触发dlc"
+            )
             return True
 
         for str_begin, str_end in self.period_list:

@@ -19,7 +19,7 @@ API_LIST = f"{SERVER_ADDR}/api/fs/list"
 API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
 
 alist_session = requests.session()
-alist_session.request = functools.partial(alist_session.request, timeout=8)
+alist_session.request = functools.partial(alist_session.request, timeout=8)  # type: ignore
 
 
 class CommonResponse(ConfigInterface):

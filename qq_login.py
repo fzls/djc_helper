@@ -383,7 +383,7 @@ class QQLogin:
             self.check_and_download_chrome_ahead_linux()
 
     def check_and_download_chrome_ahead_windows(self):
-        logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去网盘下载该内容到utils目录下 {ALIST_SERVER_ADDR}")
+        logger.info(color("bold_yellow") + f"如果自动下载失败，可能是网络问题，请根据提示下载的内容，自行去备用网盘下载该内容到utils目录下 https://docs.qq.com/doc/DYmdpaUthQnp4Rnpy")
         chrome_driver_exe_name = os.path.basename(self.chrome_driver_executable_path())
         zip_name = os.path.basename(self.chrome_binary_7z())
         chrome_root_directory = self.chrome_root_directory()

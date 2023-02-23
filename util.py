@@ -416,8 +416,8 @@ def show_quick_edit_mode_tip():
     )
 
 
-def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False):
-    if dlc_info == "" and exists_auto_updater_dlc():
+def change_title(dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False, may_have_buy_dlc=True):
+    if dlc_info == "" and exists_auto_updater_dlc() and may_have_buy_dlc:
         dlc_info = " 自动更新豪华升级版"
 
     pool_info = ""

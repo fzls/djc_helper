@@ -1267,6 +1267,7 @@ def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=Tru
         monthly_pay_info=monthly_pay_info,
         multiprocessing_pool_size=get_pool_size(),
         enable_super_fast_mode=cfg.common.enable_super_fast_mode,
+        may_have_buy_dlc=user_buy_info.infer_has_buy_dlc(),
     )
 
     if need_show_message_box:

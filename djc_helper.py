@@ -648,13 +648,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("colg每日签到", self.colg_signin),
-            ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
-            ("dnf助手活动", self.dnf_helper),
             ("冒险的起点", self.maoxian_start),
-            ("colg年终盛典签到", self.colg_yearly_signin),
             ("DNF马杰洛的规划", self.majieluo),
             ("和谐补偿活动", self.dnf_compensate),
         ]
@@ -662,6 +656,12 @@ class DjcHelper:
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("colg年终盛典签到", self.colg_yearly_signin),
+            ("dnf助手活动", self.dnf_helper),
+            ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
+            ("colg每日签到", self.colg_signin),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),

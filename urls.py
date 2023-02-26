@@ -90,18 +90,18 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
-    "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
     #
     # 已过期活动
     #
+    "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
+    "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",

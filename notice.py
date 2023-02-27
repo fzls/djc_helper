@@ -195,8 +195,8 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "bug提示"
-    message = """如果弹出【不支持的16位应用程序 由于与64位版本的Windows不兼容 ...】这样的弹窗，请下载20.0.2版本。
+    title = "助手编年史经验包"
+    message = """二月只有28天，部分朋友的编年史满级可能比较吃力，今天助手编年史的【兑换】页面增加了一个248的经验包，1个碎片就能兑换，大家缺经验的话记得去领取下~
 """
     open_url = ""
     show_only_before_version = ""

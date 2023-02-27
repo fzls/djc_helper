@@ -158,5 +158,15 @@
     "open_url": "",
     "expire_at": "2023-02-25 16:01:37",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "助手编年史经验包",
+    "message": "二月只有28天，部分朋友的编年史满级可能比较吃力，今天助手编年史的【兑换】页面增加了一个248的经验包，1个碎片就能兑换，大家缺经验的话记得去领取下~\n",
+    "send_at": "2023-02-27 19:11:24",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-02-28 23:59:59",
+    "show_only_before_version": ""
   }
 ]

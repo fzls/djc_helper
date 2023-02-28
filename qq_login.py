@@ -22,7 +22,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
-from alist import get_download_info
+from alist import download_from_alist
 from compress import decompress_dir_with_bandizip
 from config import AccountConfig, CommonConfig
 from config import config as get_config
@@ -487,12 +487,7 @@ class QQLogin:
             pause_and_exit(-1)
 
     def download_chrome_file(self, filename: str) -> str:
-        download_info = get_download_info(self.get_path_in_netdisk(filename))
-        return download_file(
-            download_info.get_url(),
-            self.chrome_root_directory(),
-            download_info.name,
-        )
+        return download_from_alist(self.get_path_in_netdisk(filename), self.chrome_root_directory())
 
     def download_chrome_driver(self, chrome_driver_exe_name: str) -> str:
         try:

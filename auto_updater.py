@@ -14,7 +14,7 @@ import os
 import subprocess
 from distutils import dir_util
 
-from alist import get_download_info
+from alist import download_from_alist
 from compress import decompress_dir_with_bandizip
 from config_cloud import config_cloud
 from download import download_file, download_latest_github_release
@@ -179,11 +179,9 @@ def full_update(args, uploader, latest_version: str) -> bool:
 
     def download_by_alist() -> str:
         logger.warning("尝试通过alist下载")
-        download_info = get_download_info(f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z")
-        filepath = download_file(
-            download_info.get_url(),
+        filepath = download_from_alist(
+            f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z",
             tmp_dir,
-            download_info.name,
             connect_timeout=5,
             extra_progress_callback=check_keyboard_interrupt_on_download,
         )

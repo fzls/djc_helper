@@ -310,8 +310,8 @@ get_dnf_fuqian = true
 get_dnf_collection = true
 # 是否领取 燃放爆竹 活动
 get_firecrackers = true
-# 是否领取 DNF奥兹玛竞速 活动
-get_dnf_ozma = true
+# 是否领取 DNF巴卡尔竞速 活动
+get_dnf_bakaer = true
 # 是否领取 colg每日签到和积分领取 活动
 get_colg_signin = true
 # 是否领取 心悦app 活动

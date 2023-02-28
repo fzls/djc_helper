@@ -93,6 +93,7 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
+    "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     #
     # 已过期活动
     #
@@ -162,7 +163,6 @@ act_name_to_url = {
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
-    "DNF奥兹玛竞速": "https://xinyue.qq.com/act/a20210526znqhd/index.html",
     "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
@@ -267,7 +267,7 @@ class Urls:
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
-        self.iActivityId_dnf_ozma = "382419"  # DNF奥兹玛竞速
+        self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "473842"  # DNF心悦
@@ -315,7 +315,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}"
+            "&bossId={bossId}&today={today}&anchor={anchor}"
         )
 
         # ide通用活动

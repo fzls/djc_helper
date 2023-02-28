@@ -751,8 +751,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_collection = True
         # 是否领取 燃放爆竹 活动
         self.get_firecrackers = True
-        # 是否领取 DNF奥兹玛竞速 活动
-        self.get_dnf_ozma = True
+        # 是否领取 DNF巴卡尔竞速 活动
+        self.get_dnf_bakaer = True
         # 是否自动进行colg每日签到和积分领取（其他需自行操作~）
         self.get_colg_signin = True
         # 是否进行 心悦app 相关操作

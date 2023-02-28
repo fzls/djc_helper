@@ -651,6 +651,7 @@ class DjcHelper:
             ("冒险的起点", self.maoxian_start),
             ("DNF马杰洛的规划", self.majieluo),
             ("和谐补偿活动", self.dnf_compensate),
+            ("DNF巴卡尔竞速", self.dnf_bakaer),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -723,7 +724,6 @@ class DjcHelper:
             ("DNF强者之路", self.dnf_strong),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
-            ("DNF奥兹玛竞速", self.dnf_ozma),
             ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
             ("qq视频-AME活动", self.qq_video_amesvr),
@@ -3685,147 +3685,114 @@ class DjcHelper:
             **extra_params,
         )
 
-    # --------------------------------------------DNF奥兹玛竞速--------------------------------------------
+    # --------------------------------------------DNF巴卡尔竞速--------------------------------------------
     @try_except()
-    def dnf_ozma(self):
-        show_head_line("DNF奥兹玛竞速")
-        self.show_amesvr_act_info(self.dnf_ozma_op)
+    def dnf_bakaer(self):
+        show_head_line("DNF巴卡尔竞速")
+        self.show_amesvr_act_info(self.dnf_bakaer_op)
 
-        if not self.cfg.function_switches.get_dnf_ozma or self.disable_most_activities():
-            logger.warning("未启用领取DNF奥兹玛竞速活动合集功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_bakaer or self.disable_most_activities():
+            logger.warning("未启用领取DNF巴卡尔竞速活动合集功能，将跳过")
             return
 
-        self.check_dnf_ozma()
+        self.check_dnf_bakaer()
 
-        def query_info():
-            res = self.dnf_ozma_op("查询信息", "770021", print_res=False)
+        def query_info() -> tuple[int, int]:
+            res = self.dnf_bakaer_op("查询信息", "928267", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            info = DnfHeiyaInfo()
-            info.lottery_count = int(raw_info.sOutValue1)
-            info.box_score = int(raw_info.sOutValue2)
+            totat_lottery, current_lottery = raw_info.sOutValue3.split("|")
 
-            return info
+            return int(totat_lottery), int(current_lottery)
 
-        def take_lottery_counts():
-            if not (self.common_cfg.try_auto_bind_new_activity and self.common_cfg.force_sync_bind_with_djc):
-                logger.info("未开启自动绑定活动和强制同步功能，将不尝试切换角色来领取抽奖券")
-                self.dnf_ozma_op("领取通关奥兹玛赠送抽奖券", "770026")
-                return
-
-            ignore_rolename_list = self.cfg.ozma_ignored_rolename_list
-            valid_roles = query_level_100_roles(ignore_rolename_list)
-
-            logger.info(
-                color("bold_green")
-                + f"尝试使用当前区服的所有100级角色来领取抽奖次数，目前配置为不参与尝试的角色列表为 {ignore_rolename_list}，如需变更可修改配置工具中当前账号的该选项"
-            )
-            self.temporary_change_bind_and_do(
-                "领取本周通关奥兹玛可获取的抽奖次数", valid_roles, self.check_dnf_ozma, take_lottery_count_op
-            )
-
-        def take_lottery_count_op(take_lottery_count_role_info: RoleInfo) -> bool:
-            # 领奖
-            idx = 0
-            while True:
-                idx += 1
-                res = self.dnf_ozma_op(f"当前临时切换角色 本周第{idx}次 通关奥兹玛赠送抽奖券", "770026")
-                if int(res["ret"]) != 0:
-                    break
-
-            return True
-
-        def query_level_100_roles(ignore_rolename_list: list[str]) -> list[TemporaryChangeBindRoleInfo]:
-            djc_roleinfo = self.get_dnf_bind_role()
-
-            valid_roles = []
-
-            roles = self.query_dnf_rolelist(djc_roleinfo.serviceID)
-            for role in roles:
-                if role.level < 100:
-                    # 未到100级必定不可能通关奥兹玛
-                    continue
-
-                if role.rolename in ignore_rolename_list:
-                    # 设置为忽略的也跳过
-                    continue
-
-                change_bind_role = TemporaryChangeBindRoleInfo()
-                change_bind_role.serviceID = djc_roleinfo.serviceID
-                change_bind_role.roleCode = role.roleid
-                valid_roles.append(change_bind_role)
-
-            return valid_roles
-
-        self.dnf_ozma_op("周年庆登录礼包", "770194")
-        self.dnf_ozma_op("周年庆130元充值礼", "770201")
-
-        roleinfo = self.get_dnf_bind_role()
-        checkInfo = self.get_dnf_roleinfo()
-        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
-        self.dnf_ozma_op(
-            "报名礼包",
-            "770017",
-            sArea=roleinfo.serviceID,
-            sPartition=roleinfo.serviceID,
-            sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
-            sRoleId=roleinfo.roleCode,
-            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-            md5str=checkInfo.md5str,
-            ams_checkparam=checkparam,
-            checkparam=checkparam,
+        async_message_box(
+            "请手动前往 巴卡尔竞速赛 活动页面进行报名~",
+            "巴卡尔竞赛报名",
+            open_url=get_act_url("DNF巴卡尔竞速"),
+            show_once=True,
         )
 
-        take_lottery_counts()
+        today = get_today()
+        self.dnf_bakaer_op(f"7天签到 - {today}", "928281", today=today)
 
-        info = query_info()
-        logger.info(f"当前有{info.lottery_count}张抽奖券")
-        for idx in range(info.lottery_count):
-            self.dnf_ozma_op(f"第{idx + 1}/{info.lottery_count}次抽奖", "770027")
-            if idx != info.lottery_count:
+        self.dnf_bakaer_op("见面礼", "928270")
+        self.dnf_bakaer_op("回流礼", "928446")
+        self.dnf_bakaer_op("心悦专属礼", "929712")
+
+        self.dnf_bakaer_op("绑定送竞猜票", "929213")
+
+        # 投票时间：3月3日0:00-3月17日23:59
+        if now_in_range("2023-03-03 00:00:00", "2023-03-10 00:00:00"):
+            async_message_box(
+                "当前处于巴卡尔竞速赛投票前半段时间，可手动前往活动页面选择你认为会是对应跨区冠军的主播或玩家。若未选择，将会在后半段投票时间随机投票",
+                "巴卡尔竞速赛投票提示",
+                open_url=get_act_url("DNF巴卡尔竞速"),
+                show_once=True,
+            )
+        elif now_in_range("2023-03-10 00:00:00", "2023-03-17 23:59:59"):
+            vote_id_name_list = [
+                # 斗鱼主播
+                (1, "银雪"),
+                (2, "亭宝"),
+                (3, "墨羽狼"),
+                (4, "素颜"),
+                (5, "泣雨"),
+                (6, "CEO"),
+                (7, "似雨幽离"),
+                (8, "丛雨"),
+                # 虎牙主播
+                (9, "狂人"),
+                (10, "小古子"),
+                (11, "小炜"),
+                (12, "云彩上的翅膀"),
+                (13, "东二梦想"),
+                (14, "猪猪侠神之手"),
+                (15, "仙哥哥"),
+                (16, "小勇"),
+                # 游戏家俱乐部
+                (17, "夜茶会"),
+                (18, "清幽茶语"),
+                (19, "今夕何年"),
+                (20, "黑色恋人"),
+                (21, "星梦"),
+                (22, "朝九晚五"),
+                (23, "天使赞歌"),
+                (24, "挚友"),
+            ]
+            id, name = random.choice(vote_id_name_list)
+            logger.info(f"当前到达投票后半段时间，将尝试自动随机投一个 {id} {name}")
+            self.dnf_bakaer_op("竞猜", "928617", anchor=id)
+
+        # 领取时间：3月20日10:00~3月22日23:59
+        if now_in_range("2023-03-20 00:00:00", "2023-03-22 23:59:59"):
+            self.dnf_bakaer_op("竞猜礼包", "928628")
+
+        self.dnf_bakaer_op("登录DNF客户端", "928277")
+        self.dnf_bakaer_op("登录心悦俱乐部App", "928559")
+        self.dnf_bakaer_op("DNF在线时长30分钟", "928563")
+        self.dnf_bakaer_op("分享活动页面", "928570")
+        self.dnf_bakaer_op("进入活动页面", "928606")
+
+        totat_lottery, current_lottery = query_info()
+        logger.info(f"当前有{current_lottery}张抽奖券, 累积获得 {totat_lottery}")
+        for idx in range(current_lottery):
+            self.dnf_bakaer_op(f"第{idx + 1}/{current_lottery}次抽奖", "928273")
+            if idx != current_lottery:
                 time.sleep(5)
 
-        self.dnf_ozma_op("每日登录游戏送开箱积分", "770028")
-        self.dnf_ozma_op("每日登录心悦APP送开箱积分", "770029")
-        self.dnf_ozma_op("每日网吧登录送开箱积分", "770030")
-
-        info = query_info()
-        logger.info(color("bold_cyan") + f"当前开箱积分为{info.box_score}。PS：最高级宝箱需要60分~")
-        # 不确定是否跟勇者征集令一样宝箱互斥，保底期间，最后一天再全领，在这之前则是先只尝试领取第五个
-        # 青铜宝箱 4-19分
-        # 白银宝箱 20-29分
-        # 黄金宝箱 30-44分
-        # 钻石宝箱 45-59分
-        # 泰拉宝箱 60分
-        act_info = self.dnf_ozma_op("获取活动信息", "", get_act_info_only=True)
-        endTime = get_today(parse_time(act_info.dtEndTime))
-
-        need_take = info.box_score >= 60
-        if get_today() == endTime:
-            need_take = True
-            logger.info("已到活动最后一天，尝试从高到低领取每个宝箱")
-
-        if need_take:
-            for level in range(5, 0, -1):
-                self.dnf_ozma_op(f"开启宝箱-level={level}", "770031", level=level)
-                if level != 1:
-                    time.sleep(5)
-
-        self.dnf_ozma_op("登录心悦APP送礼包", "770032")
-
-    def check_dnf_ozma(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
+    def check_dnf_bakaer(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
-            "DNF奥兹玛竞速",
-            get_act_url("DNF奥兹玛竞速"),
-            activity_op_func=self.dnf_ozma_op,
-            query_bind_flowid="770020",
-            commit_bind_flowid="770019",
+            "DNF巴卡尔竞速",
+            get_act_url("DNF巴卡尔竞速"),
+            activity_op_func=self.dnf_bakaer_op,
+            query_bind_flowid="928266",
+            commit_bind_flowid="928265",
             roleinfo=roleinfo,
             roleinfo_source=roleinfo_source,
         )
 
-    def dnf_ozma_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_ozma
+    def dnf_bakaer_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bakaer
 
         return self.amesvr_request(
             ctx,
@@ -3835,7 +3802,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("DNF奥兹玛竞速"),
+            get_act_url("DNF巴卡尔竞速"),
             **extra_params,
         )
 
@@ -11555,6 +11522,8 @@ class DjcHelper:
                 "id",
                 "bossId",
                 "iCardId",
+                "today",
+                "anchor",
             ]
         }
 
@@ -12394,4 +12363,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_compensate()
+        djcHelper.dnf_bakaer()

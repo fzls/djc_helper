@@ -31,7 +31,6 @@ from config_cloud import config_cloud
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
-from download import download_file
 from exceptions_def import (
     GithubActionLoginException,
     RequireVerifyMessageButInHeadlessMode,

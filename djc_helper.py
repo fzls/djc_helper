@@ -35,7 +35,6 @@ from dao import (
     DnfChronicleMatchServerRequestUserRequest,
     DnfChronicleMatchServerRequestUserResponse,
     DnfCollectionInfo,
-    DnfHeiyaInfo,
     DnfHelperChronicleBasicAwardInfo,
     DnfHelperChronicleBasicAwardList,
     DnfHelperChronicleBindInfo,

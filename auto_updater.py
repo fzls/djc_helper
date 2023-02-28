@@ -17,7 +17,7 @@ from distutils import dir_util
 from alist import download_from_alist
 from compress import decompress_dir_with_bandizip
 from config_cloud import config_cloud
-from download import download_file, download_latest_github_release
+from download import download_latest_github_release
 from update import get_latest_version_from_github, need_update
 from upload_lanzouyun import Uploader
 from usage_count import increase_counter

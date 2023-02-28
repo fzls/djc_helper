@@ -26,7 +26,6 @@ from djc_helper import (
     notify_same_account_try_login_at_multiple_threads,
     run_act,
 )
-from download import download_file
 from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAccountTryLoginAtMultipleThreadsException
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import os
+from datetime import timedelta
 from urllib.parse import quote
 
 import requests
@@ -10,7 +11,7 @@ from const import downloads_dir
 from dao import ConfigInterface, to_raw_type
 from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_func_type
 from log import color, logger
-from util import get_now, human_readable_size, with_cache
+from util import KiB, get_now, human_readable_size, with_cache
 
 SERVER_ADDR = "http://114.132.252.185:5244"
 
@@ -246,7 +247,11 @@ def download_from_alist(
     if filename == "":
         filename = download_info.name
 
-    return download_file(download_info.get_url(), download_dir, filename)
+    guess_speed = 300 * KiB
+    guess_time = timedelta(seconds=download_info.size / guess_speed)
+
+    extra_info = f"文件大小为 {human_readable_size(download_info.size)}（进度条可能不会显示，请耐心等待。若下载速度为 {human_readable_size(guess_speed)}/s 预计耗时 {guess_time}）"
+    return download_file(download_info.get_url(), download_dir, filename, extra_info=extra_info)
 
 
 def get_file_list(

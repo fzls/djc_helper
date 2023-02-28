@@ -6,7 +6,9 @@ from urllib.parse import quote
 
 import requests
 
+from const import downloads_dir
 from dao import ConfigInterface, to_raw_type
+from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_func_type
 from log import color, logger
 from util import get_now, human_readable_size, with_cache
 
@@ -232,6 +234,21 @@ def get_download_info(remote_file_path: str) -> DownloadResponse:
     return data
 
 
+def download_from_alist(
+    remote_file_path: str,
+    download_dir=downloads_dir,
+    filename="",
+    connect_timeout=DOWNLOAD_CONNECT_TIMEOUT,
+    extra_progress_callback: progress_callback_func_type | None = None,
+) -> str:
+    download_info = get_download_info(remote_file_path)
+
+    if filename == "":
+        filename = download_info.name
+
+    return download_file(download_info.get_url(), download_dir, filename)
+
+
 def get_file_list(
     remote_dir_path: str, password: str = "", page: int = 1, per_page: int = 0, refresh=False
 ) -> ListResponse:
@@ -323,11 +340,8 @@ def demo_upload():
 
 
 def demo_download():
-    download_info = get_download_info("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
-
-    from download import download_file
-
-    download_file(download_info.get_url(), filename=download_info.name)
+    filepath = download_from_alist("/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/chromedriver_102.exe")
+    logger.info(f"最终下载路径为 {filepath}")
 
 
 def demo_list():

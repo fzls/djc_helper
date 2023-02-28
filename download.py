@@ -32,6 +32,7 @@ def download_file(
     filename="",
     connect_timeout=DOWNLOAD_CONNECT_TIMEOUT,
     extra_progress_callback: progress_callback_func_type | None = None,
+    extra_info="",
 ) -> str:
     """
     下载指定url的文件到指定目录
@@ -51,6 +52,8 @@ def download_file(
     target_file_path = os.path.join(download_dir, filename)
 
     logger.info(f"开始下载 {url} 到 {target_file_path}（连接超时为 {connect_timeout} 秒）")
+    if extra_info != "":
+        logger.info(extra_info)
     response = requests.get(url, stream=True, timeout=connect_timeout, headers=user_agent_headers)
 
     if response.status_code != 200:

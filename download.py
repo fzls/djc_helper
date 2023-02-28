@@ -246,10 +246,18 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 144.4KiB/s
-            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 154.4KiB/s
+            # 794.8KiB/s
+            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 758.8KiB/s
+            f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 285.6KiB/s
             f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 284.1KiB/s
+            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 282.8KiB/s
+            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 146.3KiB/s
+            f"https://jsd.cdn.zzko.cn/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -257,11 +265,9 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 130.3KiB/s
-            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 48.6KiB/s
+            # 1.2KiB/s
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 52.1KiB/s
+            # 8.5KiB/s
             f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -279,14 +285,10 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 1023.6KiB/s
-            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 279.9KiB/s
+            # timeout
             f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 257.2KiB/s
+            # 403
             f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 836.5KiB/s
-            f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -294,9 +296,9 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 448.1KiB/s
+            # 189.2KiB/s
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 483.0KiB/s
+            # 46.6KiB/s
             f"https://cdn.staticaly.com/gh/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )

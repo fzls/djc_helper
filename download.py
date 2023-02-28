@@ -16,10 +16,8 @@ user_agent_headers = {
 
 progress_callback_func_type = Callable[[str, int, int, float], None]
 
-
 # 默认连接超时
 DOWNLOAD_CONNECT_TIMEOUT = 8
-
 
 # 测速模式开关，开启后将对比各个不同镜像的下载速度
 TEST_SPEED_MODE = False
@@ -144,14 +142,18 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 19.3MiB/s
+            # 9.6MiB/s
+            f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+            # 6.1MiB/s
+            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+            # 3.9MiB/s
             f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-            # 7.9MiB/s
-            f"https://ghproxy.com/https://github.com/{release_file_path}",
-            # 15.9MiB/s
-            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-            # 15.7MiB/s
-            f"https://github.91chi.fun/https://github.com/{release_file_path}",
+            # 3.2MiB/s
+            f"https://kgithub.com/{release_file_path}",
+            # 561.7KiB/s
+            f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
+            # 259.7KiB/s
+            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
         ],
     )
 
@@ -159,6 +161,14 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
+            # 161.7KiB/s
+            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # 153.4KiB/s
+            f"https://download.nuaa.cf/{release_file_path}",
+            # 37.5KiB/s
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # 26.6KiB/s
+            f"https://download.fastgit.org/{release_file_path}",
             # timeout
             f"https://github.com/{release_file_path}",
         ],
@@ -168,22 +178,14 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 19.1MiB/s
-            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-            # 19.0MiB/s
-            f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-            # 17.6MiB/s
-            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-            # 15.9MiB/s
+            # 523
+            f"https://github.91chi.fun/https://github.com/{release_file_path}",
+            # 500
             f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
-            # 12.7MiB/s
+            # timeout
+            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+            # timeout
             f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
-            # 11.0MiB/s
-            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-            # 980.7KiB/s
-            f"https://download.fastgit.org/{release_file_path}",
-            # 54.2KiB/s
-            f"https://kgithub.com/{release_file_path}",
         ],
     )
 

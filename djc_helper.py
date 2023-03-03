@@ -4831,9 +4831,15 @@ class DjcHelper:
 
             logger.info("首先尝试完成接到身上的任务")
             normal_tasks = set()
+
+            logger.info("先尝试领取自己的任务经验")
             for task in taskInfo.taskList:
                 takeTaskAward_op("自己", task.name, task.mActionId, task.mStatus, task.mExp)
                 normal_tasks.add(task.mActionId)
+
+            logger.info("然后尝试领取队友的任务经验（因为部分任务只有在自己的完成后，队友的才会显示为已完成状态，所以需要重新查询一次）")
+            taskInfo = getUserTaskList()
+            for task in taskInfo.taskList:
                 if taskInfo.hasPartner:
                     takeTaskAward_op("队友", task.name, task.pActionId, task.pStatus, task.pExp)
                     normal_tasks.add(task.pActionId)

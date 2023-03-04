@@ -4528,7 +4528,7 @@ class DjcHelper:
     #   4.3 参数信息：可搜索 common_params 中的对应key
     #   4.4 接口代码：搜索 对应接口的api名称，如 list/exchange
     @try_except()
-    def dnf_helper_chronicle(self):
+    def dnf_helper_chronicle(self, take_task_award_only=False):
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
         self.show_not_ams_act_info("DNF助手编年史")
@@ -5125,6 +5125,8 @@ class DjcHelper:
 
         # 领取任务奖励的经验
         takeTaskAwards()
+        if take_task_award_only:
+            return
 
         # note: 下面的流程需要一个额外参数，在这里再进行，避免影响后续流程
         async_message_box(

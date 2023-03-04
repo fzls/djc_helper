@@ -1326,6 +1326,8 @@ class CommonConfig(ConfigInterface):
         self.majieluo_invite_uin_list: list[str] = []
         # 是否弹出支付宝红包活动图片
         self.enable_alipay_redpacket_v3 = True
+        # 是否在全部账号运行完毕后再次领取编年史任务奖励，从而当本地两个号设置为搭档时可以领取到对方的经验，而不需要再运行一次
+        self.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once = False
 
         # 登录各个阶段的最大等待时间，单位秒（仅二维码登录和自动登录需要配置，数值越大容错性越好）
         self.login = LoginConfig()

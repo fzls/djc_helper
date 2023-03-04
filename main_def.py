@@ -1179,6 +1179,41 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig,
 
 
 @try_except()
+def try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once(cfg: Config, user_buy_info: BuyInfo):
+    if not cfg.common.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once:
+        return
+
+    if not has_any_account_in_normal_run(cfg):
+        return
+    if not user_buy_info.is_active():
+        return
+
+    _show_head_line("尝试在全部账号运行完毕后再次领取编年史任务奖励，从而当本地两个号设置为搭档时可以领取到对方的经验，而不需要再运行一次")
+
+    # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
+    for idx, account_config in enumerate(cfg.account_configs):
+        idx += 1
+        if not account_config.is_enabled():
+            # 未启用的账户的账户不走该流程
+            continue
+
+        logger.info("")
+        logger.warning(
+            color("fg_bold_green") + f"------------开始尝试为第{idx}个账户({account_config.name})再次领取编年史任务奖励------------"
+        )
+
+        if not account_config.function_switches.get_dnf_helper_chronicle:
+            logger.warning("未启用领取编年史功能，将跳过")
+            continue
+
+        djcHelper = DjcHelper(account_config, cfg.common)
+        djcHelper.check_skey_expired()
+        djcHelper.get_bind_role_list()
+
+        djcHelper.dnf_helper_chronicle(take_task_award_only=True)
+
+
+@try_except()
 def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return

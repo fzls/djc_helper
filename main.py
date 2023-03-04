@@ -44,7 +44,7 @@ from main_def import (
     try_load_old_version_configs_from_user_data_dir,
     try_report_usage_info,
     try_save_configs_to_user_data_dir,
-    try_take_xinyue_team_award,
+    try_take_xinyue_team_award, try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once,
 )
 from pool import close_pool, init_pool
 from qq_login import QQLogin
@@ -203,6 +203,8 @@ def main():
 
     # 正式进行流程
     run(cfg, user_buy_info)
+
+    try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once(cfg, user_buy_info)
 
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg, user_buy_info)

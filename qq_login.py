@@ -639,7 +639,7 @@ class QQLogin:
             try:
                 # 提示点击头像登录
                 tip_id = "qlogin_tips"
-                tip = f"请点击头像授权登录 {name} - 多余两个账号可以点击两侧箭头切换"
+                tip = f"请点击头像授权登录 {name} - 多于两个账号可以点击两侧箭头切换"
 
                 logger.info(color("bold_green") + f"准备修改二维码上方 点击头像提示文字 为 {tip}")
                 WebDriverWait(self.driver, qr_js_wait_time).until(

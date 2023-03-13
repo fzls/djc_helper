@@ -7530,9 +7530,13 @@ class DjcHelper:
                         res = self.majieluo_op(
                             f"剧情BOSS挑战-挑战 {boss_name}-使用卡牌 {card_name}", "171020", iType=boss_type, iCardId=card_type
                         )
-                        if res["ret"] == 10002:
+                        if "您今天已挑战过" in res["sMsg"]:
                             # "ret": 10002, "iRet": 10002, "sMsg": "抱歉，您今天已挑战过！"
                             return
+
+                        if "请先挑战" in res["sMsg"]:
+                            # "ret": 10002, "iRet": 10002, "sMsg": "抱歉，请先挑战邪龙剧情！"
+                            break
 
                         time.sleep(request_wait_time)
 
@@ -12370,4 +12374,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bakaer()
+        djcHelper.majieluo()

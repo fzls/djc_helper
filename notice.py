@@ -195,8 +195,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "助手编年史经验包"
-    message = """二月只有28天，部分朋友的编年史满级可能比较吃力，今天助手编年史的【兑换】页面增加了一个248的经验包，1个碎片就能兑换，大家缺经验的话记得去领取下~
+    title = "活动周期说明-v4"
+    message = """也许各位会注意到小助手很久没更新了-。-这是因为最近都没活动，按照往年的数据，大概率会在四月中旬，也就是五一版本才会出新活动。
+
+有兴趣的可以看看我之前发的统计帖子：20.8~22.8 网页蚊子腿大致统计
+https://bbs.colg.cn/thread-8551016-1-1.html
 """
     open_url = ""
     show_only_before_version = ""

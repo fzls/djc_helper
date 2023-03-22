@@ -168,5 +168,15 @@
     "open_url": "",
     "expire_at": "2023-02-28 23:59:59",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "活动周期说明-v4",
+    "message": "也许各位会注意到小助手很久没更新了-。-这是因为最近都没活动，按照往年的数据，大概率会在四月中旬，也就是五一版本才会出新活动。\n\n有兴趣的可以看看我之前发的统计帖子：20.8~22.8 网页蚊子腿大致统计\nhttps://bbs.colg.cn/thread-8551016-1-1.html\n",
+    "send_at": "2023-03-22 16:33:47",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-03-29 16:33:47",
+    "show_only_before_version": ""
   }
 ]

@@ -65,3 +65,13 @@ qq = "1278714436"
 nickname = "我们好可爱哦"
 # 原因
 reason = "不符合使用需求，退款"
+
+[[black_list]]
+# 封禁于
+ban_at = "2023-03-22"
+# QQ
+qq = "775144092"
+# 昵称
+nickname = "Oogway Yj"
+# 原因
+reason = "退坑了，不再使用，退款"

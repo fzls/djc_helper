@@ -14,7 +14,7 @@ show_card_secret_first = false
 enable_alipay_redpacket = false
 
 # dlc是否优先启用alist
-dlc_prefer_alist = false
+dlc_prefer_alist = true
 
 # 是否启用推荐奖励
 enable_recommend_reward = true

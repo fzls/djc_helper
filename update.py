@@ -156,6 +156,9 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
             "\n"
             "如果在网盘没有发现更新的版本，说明自这次版本发布至今，没有任何新活动需要添加，也没有bug需要修复，无视本提示即可。\n"
             "本提示是用于在无法检查更新，且当前版本已经发布很久的情况下，每周保底提醒一次更新可能存在的新版本，避免一直使用好几个月以前的版本而无法领到新活动的奖励\n"
+            "\n"
+            "关于活动的发布周期，可以参考我之前统计的一个帖子，里面有过去几年各个月份蚊子腿活动发布的时间点：\n"
+            "https://docs.qq.com/sheet/DYkNUemlxT2pibHNs\n"
         )
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):

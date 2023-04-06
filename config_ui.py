@@ -2519,6 +2519,7 @@ class FunctionSwitchesConfigUi(QWidget):
         "普通skey": [
             # 免费活动
             ("道聚城", "get_djc"),
+            ("道聚城许愿", "make_wish"),
             ("DNF地下城与勇士心悦特权专区", "get_xinyue"),
             ("心悦app", "get_xinyue_app"),
             ("黑钻礼包", "get_heizuan_gift"),

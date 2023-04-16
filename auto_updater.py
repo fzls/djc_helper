@@ -1,6 +1,7 @@
 import platform
 from distutils.errors import DistutilsFileError
 
+from _create_patches import get_patch_7z_filename
 from config import CommonConfig
 from log import color, fileHandler, logger, new_file_handler
 from version import now_version, ver_time
@@ -14,7 +15,7 @@ import os
 import subprocess
 from distutils import dir_util
 
-from alist import download_from_alist
+from alist import download_from_alist, is_file_in_folder
 from compress import decompress_dir_with_bandizip
 from config_cloud import config_cloud
 from download import download_latest_github_release
@@ -123,28 +124,24 @@ def update(args, uploader, latest_version: str):
 
     logger.warning(color("bold_yellow") + "如果下载速度慢，可以按 任意键（比如ctrl+c） 来切换到下一个镜像")
 
-    # re: 后面再适配基于github release的增量更新方案
-    logger.warning("新版增量更新方案稍后实现，暂时先跳过")
-    # try:
-    #     # 首先尝试使用增量更新文件
-    #     patches_range = uploader.latest_patches_range()
-    #     logger.info(f"当前可以应用增量补丁更新的版本范围为{patches_range}")
-    #
-    #     can_use_patch = not need_update(args.version, patches_range[0]) and not need_update(
-    #         patches_range[1], args.version
-    #     )
-    #     if can_use_patch:
-    #         logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
-    #
-    #         update_ok = incremental_update(args, uploader)
-    #         if update_ok:
-    #             logger.info("增量更新完毕")
-    #             report_dlc_usage("incremental update")
-    #             return
-    #         else:
-    #             logger.warning("增量更新失败，尝试默认的全量更新方案")
-    # except BaseException as e:
-    #     logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
+    logger.info(color("bold_yellow") + "尝试增量更新")
+    try:
+        # 首先尝试使用增量更新文件
+        patch_7z_filename = get_patch_7z_filename(args.version, latest_version)
+
+        can_use_patch = is_file_in_folder("/", patch_7z_filename)
+        if can_use_patch:
+            logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+
+            update_ok = incremental_update(args, uploader, latest_version)
+            if update_ok:
+                logger.info("增量更新完毕")
+                report_dlc_usage("incremental update")
+                return
+            else:
+                logger.warning("增量更新失败，尝试默认的全量更新方案")
+    except BaseException as e:
+        logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")
@@ -272,19 +269,19 @@ def extract_decompressed_directory_name(filepath: str) -> str:
     return target_dir
 
 
-def incremental_update(args, uploader):
+def incremental_update(args, uploader, latest_version: str):
     remove_temp_dir("更新前，先移除临时目录，避免更新失败时这个目录会越来越大")
 
     logger.info("开始下载增量更新包")
-    filepath = uploader.download_latest_patches(tmp_dir)
+    patch_7z_filename = get_patch_7z_filename(args.version, latest_version)
+    filepath = download_from_alist(patch_7z_filename, tmp_dir)
 
     logger.info("下载完毕，开始解压缩")
     decompress(filepath, tmp_dir)
 
     kill_original_process(args.pid)
 
-    target_dir = filepath.replace(".7z", "")
-    target_patch = os.path.join(target_dir, f"{args.version}.patch")
+    target_patch = filepath.replace(".7z", "")
     logger.info(f"开始应用补丁 {target_patch}")
     if not TEST_MODE:
         # hpatchz.exe -C-diff -f . "%target_patch_file%" .

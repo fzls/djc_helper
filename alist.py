@@ -219,6 +219,16 @@ def remove_file_startswith_prefix(remote_dir: str, name_prefix: str, except_file
         remove(os.path.join(remote_dir, file_info.name))
 
 
+def is_file_in_folder(remote_dir: str, filename: str) -> bool:
+    remote_filepath = os.path.join(remote_dir, filename)
+
+    try:
+        get_download_info(remote_filepath)
+        return True
+    except Exception:
+        return False
+
+
 def get_download_info(remote_file_path: str) -> DownloadResponse:
     remote_file_path = format_remote_file_path(remote_file_path)
 

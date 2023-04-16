@@ -117,6 +117,7 @@ def download_latest_github_release(
     repo_name="djc_helper",
     connect_timeout=DOWNLOAD_CONNECT_TIMEOUT,
     extra_progress_callback: progress_callback_func_type | None = None,
+    version="",
 ) -> str:
     """
     从github及其镜像下载指定仓库最新的release中指定资源
@@ -127,12 +128,15 @@ def download_latest_github_release(
     :param repo_name: 仓库名称
     :param connect_timeout: 连接超时时间
     :param extra_progress_callback: 每次更新进度时的额外回调，比如可在特定条件下通过抛异常来中断下载
+    :param version: 指定的版本号，形如 20.1.2，若未指定则下载最新版本
     :return: 最终下载的本地文件绝对路径
     """
     if TEST_SPEED_MODE:
         logger.warning("当前为测速模式，将禁用洗牌流程，并依次尝试各个镜像，从而进行对比")
 
     release_file_path = f"{owner}/{repo_name}/releases/latest/download/{asset_name}"
+    if version != "":
+        release_file_path = f"{owner}/{repo_name}/releases/download/v{version}/{asset_name}"
 
     # note: 手动测试下载速度时，使用 IDM / 迅雷 等测试，不要直接用chrome测试，速度差很多
 

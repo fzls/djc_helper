@@ -7,9 +7,10 @@ from datetime import datetime
 from _build import build
 from _clear_github_artifact import clear_github_artifact
 from _commit_new_version import commit_new_version
+from _create_patches import create_patch
 from _package import package
 from _push_github import push_github
-from alist import upload
+from alist import remove_file_startswith_prefix, upload
 from log import color, logger
 from util import (
     change_console_window_mode_async,
@@ -65,6 +66,24 @@ def release():
     os.chdir(dir_src)
     package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact)
 
+    # ---------------构建增量补丁
+    create_patch_for_latest_n_version = 3
+
+    # ---------------构建增量包
+    os.chdir(dir_all_release)
+    show_head_line(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁", color("bold_yellow"))
+    create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
+
+    # ---------------获取补丁地址（分开方便调试）
+    os.chdir(dir_all_release)
+    patch_file_name_list = create_patch(
+        dir_src,
+        dir_all_release,
+        create_patch_for_latest_n_version,
+        dir_github_action_artifact,
+        get_final_patch_path_only=True,
+    )
+
     # ---------------标记新版本
     show_head_line("提交版本和版本变更说明，并同步到docs目录，用于生成github pages", color("bold_yellow"))
     os.chdir(dir_src)
@@ -79,12 +98,19 @@ def release():
 
     realpath = os.path.realpath
 
+    # 先清理掉旧版本的增量更新文件
+    remove_file_startswith_prefix("/", "DNF蚊子腿小助手_增量更新文件_")
+
     upload_list = [
         (realpath(release_7z_name), "DNF蚊子腿小助手_v"),
         (path_in_src("utils/auto_updater.exe"), ""),
         (path_in_src("使用教程/使用文档.docx"), ""),
         (path_in_src("使用教程/视频教程.txt"), ""),
         (path_in_src("付费指引/付费指引.docx"), ""),
+
+        *[
+            (realpath(patch_file_name), "") for patch_file_name in patch_file_name_list
+        ],
     ]
 
     logger.info(color("bold_green") + "具体上传列表如下：")

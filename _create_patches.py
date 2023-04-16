@@ -56,7 +56,7 @@ def create_patch(
     temp_dir = "patches_temp"
 
     patch_filepath_list = list([
-        os.path.join(patches_dir, f"DNF蚊子腿小助手_增量更新文件_v{version}_to_v{latest_version}.patch.7z") for version in old_version_list
+        os.path.join(patches_dir, get_patch_7z_filename(version, latest_version)) for version in old_version_list
     ])
     if get_final_patch_path_only:
         return patch_filepath_list
@@ -107,7 +107,7 @@ def create_patch(
     preprocess_before_patch(temp_path(target_version_dir))
 
     for idx, version in enumerate(old_version_list):
-        patch_file = f"{patches_dir}/DNF蚊子腿小助手_增量更新文件_v{version}_to_v{latest_version}.patch"
+        patch_file = f"{patches_dir}/{get_patch_filename(version, latest_version)}"
 
         logger.info("-" * 80)
         logger.info(
@@ -143,6 +143,13 @@ def create_patch(
     os.chdir(old_cwd)
 
     return patch_filepath_list
+
+
+def get_patch_filename(version: str, latest_version: str):
+    return f"DNF蚊子腿小助手_增量更新文件_v{version}_to_v{latest_version}.patch"
+
+def get_patch_7z_filename(version: str, latest_version: str):
+    return get_patch_filename(version, latest_version) + ".7z"
 
 
 if __name__ == "__main__":

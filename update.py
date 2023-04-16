@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import platform
 import random
 import re
@@ -328,15 +330,22 @@ def get_netdisk_addr(config: CommonConfig):
 @try_except(return_val_on_except="1.0.0")
 def get_version_from_gitee() -> str:
     logger.info("尝试从gitee获取更新信息")
+
+    version_list = get_version_list_from_gitee()
+    return version_list[0]
+
+
+def get_version_list_from_gitee() -> list[str]:
     api = "https://gitee.com/api/v5/repos/fzls/djc_helper/tags"
     res = requests.get(api, timeout=10).json()
 
     reg_version = r"v\d+(\.\d+)*"
     res = filter(lambda tag_info: re.match(reg_version, tag_info["name"]) is not None, res)
 
-    latest_version_info = max(res, key=lambda x: version_to_version_int_list(x["name"][1:]))
+    version_list = list([tag_info["name"][1:] for tag_info in res])
+    version_list.sort(key=version_to_version_int_list, reverse=True)
 
-    return latest_version_info["name"][1:]
+    return version_list
 
 
 if __name__ == "__main__":

@@ -194,25 +194,29 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     remote_dir = os.path.dirname(remote_file_path)
     remote_filename = os.path.basename(remote_file_path)
     if old_version_name_prefix != "":
-        logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {old_version_name_prefix} 的文件")
-        dir_file_list_info = get_file_list(remote_dir, refresh=True)
-        for file_info in dir_file_list_info.content:
-            if file_info.is_dir:
-                continue
-
-            if not file_info.name.startswith(old_version_name_prefix):
-                continue
-
-            if file_info.name == remote_filename:
-                # 不包括最新上传的文件，因为alist会自动覆盖相同名字的文件
-                continue
-
-            remove(os.path.join(remote_dir, file_info.name))
+        remove_file_startswith_prefix(remote_dir, old_version_name_prefix, [remote_filename])
 
         logger.info("旧版本处理完毕，将开始实际上传流程")
 
     logger.info("上传完毕后强制刷新该目录，确保后续访问可以看到新文件")
     get_file_list(remote_dir, refresh=True)
+
+
+def remove_file_startswith_prefix(remote_dir: str, name_prefix: str, except_filename_list: list[str] = None):
+    logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {name_prefix} 的文件")
+    dir_file_list_info = get_file_list(remote_dir, refresh=True)
+    for file_info in dir_file_list_info.content:
+        if file_info.is_dir:
+            continue
+
+        if not file_info.name.startswith(name_prefix):
+            continue
+
+        if except_filename_list is not None and file_info.name in except_filename_list:
+            # 不包括最新上传的文件，因为alist会自动覆盖相同名字的文件
+            continue
+
+        remove(os.path.join(remote_dir, file_info.name))
 
 
 def get_download_info(remote_file_path: str) -> DownloadResponse:

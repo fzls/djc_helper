@@ -82,6 +82,9 @@ class ConfigCloud(ConfigInterface):
         # dlc是否优先启用alist
         self.dlc_prefer_alist = False
 
+        # dlc是否启用增量更新
+        self.dlc_enable_incremental_update = True
+
         # 是否启用推荐奖励
         self.enable_recommend_reward = True
 

@@ -16,6 +16,9 @@ enable_alipay_redpacket = false
 # dlc是否优先启用alist
 dlc_prefer_alist = true
 
+# dlc是否启用增量更新
+dlc_enable_incremental_update = true
+
 # 是否启用推荐奖励
 enable_recommend_reward = true
 

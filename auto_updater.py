@@ -125,23 +125,28 @@ def update(args, uploader, latest_version: str):
     logger.warning(color("bold_yellow") + "如果下载速度慢，可以按 任意键（比如ctrl+c） 来切换到下一个镜像")
 
     logger.info(color("bold_yellow") + "尝试增量更新")
-    try:
-        # 首先尝试使用增量更新文件
-        patch_7z_filename = get_patch_7z_filename(args.version, latest_version)
 
-        can_use_patch = is_file_in_folder("/", patch_7z_filename)
-        if can_use_patch:
-            logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+    config = config_cloud()
+    if config.dlc_enable_incremental_update:
+        try:
+            # 首先尝试使用增量更新文件
+            patch_7z_filename = get_patch_7z_filename(args.version, latest_version)
 
-            update_ok = incremental_update(args, uploader, latest_version)
-            if update_ok:
-                logger.info("增量更新完毕")
-                report_dlc_usage("incremental update")
-                return
-            else:
-                logger.warning("增量更新失败，尝试默认的全量更新方案")
-    except BaseException as e:
-        logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
+            can_use_patch = is_file_in_folder("/", patch_7z_filename)
+            if can_use_patch:
+                logger.info(color("bold_yellow") + "当前版本可使用增量补丁，尝试进行增量更新")
+
+                update_ok = incremental_update(args, uploader, latest_version)
+                if update_ok:
+                    logger.info("增量更新完毕")
+                    report_dlc_usage("incremental update")
+                    return
+                else:
+                    logger.warning("增量更新失败，尝试默认的全量更新方案")
+        except BaseException as e:
+            logger.exception("增量更新失败，尝试默认的全量更新方案", exc_info=e)
+    else:
+        logger.info(color("bold_yellow") + "当前已在云端禁用增量更新功能，将跳过")
 
     # 保底使用全量更新
     logger.info(color("bold_yellow") + "尝试全量更新")

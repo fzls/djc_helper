@@ -90,13 +90,14 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
-    "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
-    "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
+    "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
+    "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
+    "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
@@ -115,7 +116,6 @@ act_name_to_url = {
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
     "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",

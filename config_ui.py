@@ -2530,10 +2530,6 @@ class FunctionSwitchesConfigUi(QWidget):
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
-            ("冒险的起点", "get_maoxian_start"),
-            ("DNF马杰洛的规划", "get_majieluo"),
-            ("和谐补偿活动", "get_dnf_compensate"),
-            ("DNF巴卡尔竞速", "get_dnf_bakaer"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2550,6 +2546,10 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("冒险的起点", "get_maoxian_start"),
+            ("DNF巴卡尔竞速", "get_dnf_bakaer"),
+            ("和谐补偿活动", "get_dnf_compensate"),
+            ("DNF马杰洛的规划", "get_majieluo"),
             ("colg年终盛典签到", "get_colg_yearly_signin"),
             ("dnf助手活动", "get_dnf_helper"),
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),

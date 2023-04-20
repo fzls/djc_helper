@@ -202,7 +202,7 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     get_file_list(remote_dir, refresh=True)
 
 
-def remove_file_startswith_prefix(remote_dir: str, name_prefix: str, except_filename_list: list[str] = None):
+def remove_file_startswith_prefix(remote_dir: str, name_prefix: str, except_filename_list: list[str] | None = None):
     logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {name_prefix} 的文件")
     dir_file_list_info = get_file_list(remote_dir, refresh=True)
     for file_info in dir_file_list_info.content:

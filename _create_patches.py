@@ -11,7 +11,6 @@ import multiprocessing
 import os
 import shutil
 import subprocess
-from typing import List
 
 from compress import compress_file_with_lzma, decompress_dir_with_bandizip
 from download import download_latest_github_release
@@ -38,7 +37,7 @@ def create_patch(
     if not get_final_patch_path_only:
         logger.info(f"尝试从github查找在{latest_version}版本之前最近{create_patch_for_latest_n_version}个版本的信息")
 
-    old_version_list: List[str] = []
+    old_version_list: list[str] = []
 
     version_list = get_version_list_from_gitee()
     for version in version_list:
@@ -55,9 +54,9 @@ def create_patch(
     patches_dir = f"DNF蚊子腿小助手_增量更新文件_v{patch_oldest_version}_to_v{patch_newest_version}"
     temp_dir = "patches_temp"
 
-    patch_filepath_list = list([
-        os.path.join(patches_dir, get_patch_7z_filename(version, latest_version)) for version in old_version_list
-    ])
+    patch_filepath_list = list(
+        [os.path.join(patches_dir, get_patch_7z_filename(version, latest_version)) for version in old_version_list]
+    )
     if get_final_patch_path_only:
         return patch_filepath_list
 
@@ -147,6 +146,7 @@ def create_patch(
 
 def get_patch_filename(version: str, latest_version: str):
     return f"DNF蚊子腿小助手_增量更新文件_v{version}_to_v{latest_version}.patch"
+
 
 def get_patch_7z_filename(version: str, latest_version: str):
     return get_patch_filename(version, latest_version) + ".7z"

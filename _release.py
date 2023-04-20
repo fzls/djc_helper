@@ -107,10 +107,7 @@ def release():
         (path_in_src("使用教程/使用文档.docx"), ""),
         (path_in_src("使用教程/视频教程.txt"), ""),
         (path_in_src("付费指引/付费指引.docx"), ""),
-
-        *[
-            (realpath(patch_file_name), "") for patch_file_name in patch_file_name_list
-        ],
+        *[(realpath(patch_file_name), "") for patch_file_name in patch_file_name_list],
     ]
 
     logger.info(color("bold_green") + "具体上传列表如下：")

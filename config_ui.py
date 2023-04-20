@@ -1584,8 +1584,14 @@ class CommonConfigUi(QFrame):
             "其他", top_layout
         )
 
-        self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once = create_checkbox(cfg.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once)
-        add_row(form_layout, "是否在全部账号运行完毕后再次领取编年史任务奖励\n（从而当本地两个号设置为搭档时可以领取到对方的经验，而不需要再运行一次）", self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once)
+        self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once = create_checkbox(
+            cfg.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once
+        )
+        add_row(
+            form_layout,
+            "是否在全部账号运行完毕后再次领取编年史任务奖励\n（从而当本地两个号设置为搭档时可以领取到对方的经验，而不需要再运行一次）",
+            self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once,
+        )
 
         self.checkbox_enable_alipay_redpacket_v3 = create_checkbox(cfg.enable_alipay_redpacket_v3)
         add_row(form_layout, "是否弹出支付宝红包活动图片", self.checkbox_enable_alipay_redpacket_v3)
@@ -1657,7 +1663,9 @@ class CommonConfigUi(QFrame):
         cfg.try_auto_bind_new_activity = self.checkbox_try_auto_bind_new_activity.isChecked()
         cfg.force_sync_bind_with_djc = self.checkbox_force_sync_bind_with_djc.isChecked()
         cfg.enable_alipay_redpacket_v3 = self.checkbox_enable_alipay_redpacket_v3.isChecked()
-        cfg.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once = self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once.isChecked()
+        cfg.try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once = (
+            self.checkbox_try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once.isChecked()
+        )
 
         cfg.max_logs_size = self.spinbox_max_logs_size.value()
         cfg.keep_logs_size = self.spinbox_keep_logs_size.value()

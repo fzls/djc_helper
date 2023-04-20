@@ -70,7 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
-    newNotAmsActInfo("2022-12-29 00:00:00", "2023-02-16 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2023-04-20 00:00:00", "2023-05-19 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
@@ -92,6 +92,7 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
     #
     # 已过期活动
     #
@@ -103,7 +104,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",

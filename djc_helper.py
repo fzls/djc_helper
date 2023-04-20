@@ -648,6 +648,7 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -661,7 +662,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("colg每日签到", self.colg_signin),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -11064,39 +11064,47 @@ class DjcHelper:
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        self.dnf_xinyue_wpe_op("抽奖", 60266)
-        self.dnf_xinyue_wpe_op("预约", 60267)
+        def query_lottery_times() -> tuple[int, int]:
+            res = self.dnf_xinyue_wpe_op("查询抽奖次数", 80507, print_res=False)
 
-        if now_in_range("2023-02-11 10:00:00", "2023-02-16 23:59:59"):
-            self.dnf_xinyue_wpe_op("领取返利勇士币", 60272)
+            raw_data = res["data"]
+            data = json.loads(raw_data)
 
-        self.dnf_xinyue_wpe_op("充值50后抽QB", 60286)
-        self.dnf_xinyue_wpe_op("叠加礼", 60287)
+            return int(data["remain"]), int(data["total"])
 
-        if now_in_range("2023-01-04 10:00:00", "2023-02-10 23:59:59"):
-            async_message_box(
-                "如果春节有充钱，可手动参与心悦春节充值活动的自选奖励活动，以及领取累积奖励，跟往年捞汤圆的活动差不多",
-                "23.1 心悦充值活动自选提示",
-                show_once=True,
-            )
+        if now_in_range("2023-05-20 00:00:00", "2023-05-31 23:59:59"):
+            self.dnf_xinyue_wpe_op("领取勇士币返利", 80474)
 
-        if now_after("2023-01-04 10:00:00"):
-            self.dnf_xinyue_wpe_op("会员等级礼-心悦45", 60299)
-            self.dnf_xinyue_wpe_op("会员等级礼-心悦23", 60298)
-            self.dnf_xinyue_wpe_op("会员等级礼-心悦1", 60297)
-            self.dnf_xinyue_wpe_op("会员等级礼-特邀", 60296)
+        self.dnf_xinyue_wpe_op("抽取优惠券或QB", 80496)
 
-        self.dnf_xinyue_wpe_op("每日任务-充值66元", 60308)
-        self.dnf_xinyue_wpe_op("每日任务-消耗100疲劳", 60300)
-        self.dnf_xinyue_wpe_op("每日任务-在线120分钟", 60307)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-288元", 80499)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-466元", 80503)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-699元", 80504)
 
-        self.dnf_xinyue_wpe_op("每日签到", 60309)
-        self.dnf_xinyue_wpe_op("累计签到3天", 60310)
-        self.dnf_xinyue_wpe_op("累计签到7天", 60311)
-        self.dnf_xinyue_wpe_op("累计签到10天", 60312)
-        self.dnf_xinyue_wpe_op("累计签到15天", 60313)
-        self.dnf_xinyue_wpe_op("累计签到21天", 60314)
-        self.dnf_xinyue_wpe_op("累计签到28天", 60315)
+        remain, total = query_lottery_times()
+        logger.info(f"当前剩余抽奖次数为 {remain}，累计获得 {total}")
+        for idx in range_from_one(remain):
+            self.dnf_xinyue_wpe_op("抽奖", 80506)
+
+        async_message_box(
+            "心悦充值活动页面新出了一个宠物（水瓶座），如果喜欢其外观，或者想给小号兑换，可以到活动页面使用成就点进行兑换~",
+            "23.4心悦充值活动新宠物",
+            show_once=True,
+        )
+
+        self.dnf_xinyue_wpe_op("每日签到", 80518)
+        self.dnf_xinyue_wpe_op("签到1天", 80524)
+        self.dnf_xinyue_wpe_op("签到3天", 80525)
+        self.dnf_xinyue_wpe_op("签到7天", 80526)
+        self.dnf_xinyue_wpe_op("签到15天", 80527)
+        self.dnf_xinyue_wpe_op("签到15天暴击成就点", 80529)
+
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP4-5", 80517)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP2-3", 80516)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP1", 80510)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 特邀会员", 80508)
+
+        logger.info(color("bold_yellow") + f"心悦app中打开活动页面可以领取额外的四个小东西（非常mini），请自行决定是否前往app进行领取")
 
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
         self.dnf_xinyue_wpe_extra_headers = {
@@ -11115,7 +11123,7 @@ class DjcHelper:
 
         json_data = {
             "biz_id": "tgclub",
-            "act_id": "11937",
+            "act_id": "13042",
             "flow_id": flow_id,
             "role": {
                 "game_open_id": self.qq(),
@@ -12072,16 +12080,11 @@ class DjcHelper:
         if qq_appid == "" or openid == "" or access_token == "":
             return False
 
-        # {"code": 10001, "msg": "登陆态失效，请重新登录！", "operateGuide": {"operateType": "", "content": "", "isReceiveLimit": false, "isPassCondition": false, "isPassTask": false, "cdKeyInfo": null}}
-        res = self.qq_video_iwan_op(
-            "检测access token过期",
-            "asfYkZs4q",
-            qq_access_token=access_token,
-            qq_openid=openid,
-            qq_appid=qq_appid,
-            print_res=False,
-        )
-        return res["code"] != 10001
+        self.dnf_xinyue_wpe_set_openid_accesstoken(openid, access_token)
+
+        # {'data': {}, 'msg': 'login status verification failed: access token check failed', 'ret': 7001}
+        res = self.dnf_xinyue_wpe_op("查询抽奖次数", 80507, print_res=False)
+        return res["ret"] != 7001
 
     def fetch_supercore_login_info(self, ctx) -> LoginResult:
         if self.cfg.function_switches.disable_login_mode_supercore:
@@ -12356,4 +12359,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_xinyue_wpe()

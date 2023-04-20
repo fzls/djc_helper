@@ -92,6 +92,7 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             "notice_archived.txt",
             *list(path.name for path in pathlib.Path("utils").glob("chrome_portable_*")),
             *list(path.name for path in pathlib.Path("utils").glob("chromedriver_*")),
+            "chromedriver.exe",
             "upx.exe",
         ],
     }

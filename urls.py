@@ -91,6 +91,7 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
     #
     # 已过期活动
     #
@@ -102,7 +103,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20221217dnf/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
@@ -259,7 +259,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "523417"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "544662"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "523121"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
@@ -315,7 +315,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}"
         )
 
         # ide通用活动

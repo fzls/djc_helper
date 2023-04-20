@@ -647,6 +647,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -660,7 +661,6 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("colg每日签到", self.colg_signin),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
@@ -9234,78 +9234,59 @@ class DjcHelper:
 
         self.check_dnf_luodiye()
 
+        def query_open_box_times() -> int:
+            res = self.dnf_luodiye_op("查询信息", "938086", print_res=False)
+
+            return int(res["modRet"]["jData"]["iOpen"])
+
         def query_lottery_times() -> int:
-            res = self.dnf_luodiye_op("查询信息", "831510", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+            res = self.dnf_luodiye_op("查询信息", "938086", print_res=False)
 
-            return int(raw_info.sOutValue3)
-
-        def already_duihuan() -> bool:
-            res = self.dnf_luodiye_op("查询信息", "831510", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-
-            return int(raw_info.sOutValue5) == 1
+            return int(res["modRet"]["jData"]["iLottery"])
 
         # ------------ 实际流程 --------------
+        self.dnf_luodiye_op("回归礼包见面礼", "941756")
+        self.dnf_luodiye_op("全民礼包见面礼", "937392")
 
-        self.dnf_luodiye_op("登录领奖", "916994")
-        self.dnf_luodiye_op("副本领奖", "916997")
+        self.dnf_luodiye_op("登录游戏", "937395")
+        self.dnf_luodiye_op("分享活动", "937404")
 
-        # self.dnf_luodiye_op("答问卷，并领奖", "860904", answer1=1, answer2=3, answer3=5)
+        open_box_times = query_open_box_times()
+        logger.info(f"当前剩余开启聚宝盆次数为: {open_box_times}")
+        for idx in range_from_one(open_box_times):
+            self.dnf_luodiye_op(f"{idx}/{open_box_times} 开启聚宝盆", "937418")
 
-        # if not self.cfg.function_switches.disable_share and is_first_run(
-        #     f"dnf_luodiye_分享_{self.uin()}_{get_act_url('DNF落地页活动')}"
-        # ):
-        #     self.dnf_luodiye_op("用户授权(统一授权)", "890630")
-        #     self.dnf_luodiye_op("分享", "890795", iReceiveUin=self.qq(), p_skey=self.fetch_share_p_skey("领取分享奖励"))
-        #
-        # can_take_time = parse_time("2022-09-22 11:00:00")
-        # if get_now() >= can_take_time:
-        #     self.dnf_luodiye_op("分享或通关副本（19509）", "890631")
-        # else:
-        #     logger.warning(f"尚未到领取时间 {can_take_time}, 跳过领取限定龙宠")
+        # self.dnf_luodiye_op("好友列表脱敏数据", "937720")
+        # self.dnf_luodiye_op("发送ark消息", "937721")
+        # self.dnf_luodiye_op("接受好友邀请", "937722")
+        # self.dnf_luodiye_op("邀请好友礼包", "937454")
+        async_message_box(
+            "邀请回归玩家可以兑换高级装扮券和红10增幅券，有需要的话可以自行在活动页面进行邀请（比如用自己的小号）",
+            "23-04落地页活动拉回流",
+            show_once=True,
+        )
 
-        # self.dnf_luodiye_op("登录游戏积分", "844938")
-        # self.dnf_luodiye_op("分享好友积分", "844952")
-        # self.dnf_luodiye_op("登录游戏顾问奖励", "844953")
-        # self.dnf_luodiye_op("分享好友店长奖励", "844959")
+        self.dnf_luodiye_op("每日消耗10疲劳值礼包", "937467")
+        self.dnf_luodiye_op("每日消耗30疲劳值礼包", "937926")
+        self.dnf_luodiye_op("每周任意难度副本10次", "937469")
 
-        # lottery_times = query_lottery_times()
-        # logger.info(f"当前可抽卡次数为 {lottery_times}")
-        # for idx in range_from_one(lottery_times):
-        #     self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽取卡面", "831320")
-        #
-        # if not already_duihuan():
-        #     self.dnf_luodiye_op("五虎卡面集齐奖励", "831322")
-        # else:
-        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="401")
-        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="402")
-        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="403")
-        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="404")
-        #     self.dnf_luodiye_op("卡面抽奖", "831375", pointID="405")
+        lottery_times = query_lottery_times()
+        logger.info(f"当前可抽奖次数为 {lottery_times}")
+        for idx in range_from_one(lottery_times):
+            self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "937462")
 
-        #
-        # gift_list = [
-        #     ("1815653", "抗疲劳秘药（30点）"),
-        #     ("1823301", "黑钻7天"),
-        #     ("1815675", "一次性继承装置"),
-        #     ("1823317", "一次性材质转换器"),
-        #     ("1815702", "闪亮的雷米援助礼盒（10个）"),
-        #     ("1815667", "王者契约礼包（1天）"),
-        #     ("1823312", "普通材料礼盒"),
-        #     ("1823318", "[期限]时间引导石礼盒（10个）"),
-        # ]
-        # for gift_id, gift_name in gift_list:
-        #     self.dnf_luodiye_op(f"领取自选道具 - {gift_name}", "812226", giftId=gift_id)
-        #     time.sleep(1)
+        self.dnf_luodiye_op("自选礼包确认", "937473", sNum="0,2,3")
+        self.dnf_luodiye_op("自选通关任意难度次元回廊", "937502")
+        self.dnf_luodiye_op("累计获取史诗装备10", "937520")
+        self.dnf_luodiye_op("累计获取史诗装备20", "937521")
 
     def check_dnf_luodiye(self):
         self.check_bind_account(
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="916996",
-            commit_bind_flowid="916995",
+            query_bind_flowid="937241",
+            commit_bind_flowid="937240",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -11535,6 +11516,7 @@ class DjcHelper:
                 "iCardId",
                 "today",
                 "anchor",
+                "sNum",
             ]
         }
 
@@ -12374,4 +12356,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_luodiye()

@@ -91,7 +91,7 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230112index/",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
     #
     # 已过期活动
     #

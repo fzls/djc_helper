@@ -39,6 +39,7 @@ utils/chrome_temporary_dir/
 
 utils/chrome_portable_*.7z
 utils/chromedriver_*.exe
+utils/chromedriver.exe
 
 _update_temp_dir/
 

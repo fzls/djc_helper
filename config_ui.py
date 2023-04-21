@@ -36,6 +36,7 @@ from config import (
 )
 from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
+from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from notice import Notice, NoticeManager
 from qt_wrapper import (
@@ -3146,16 +3147,14 @@ def report_click_event(event: str):
 
 
 def show_notices():
-    # if use_new_pay_method() and is_first_run("新版界面隐藏卡密提示"):
-    #     show_message(
-    #         "付费界面调整",
-    #         (
-    #             "目前已启用了新版的付费界面，原有的卡密界面已被隐藏，望周知。\n"
-    #             "\n"
-    #             "如新版无法正常使用，或者所选择的付费渠道在维护中，可以在【其他】tab中点击【显示原来的卡密支付界面】按钮来临时显示卡密界面\n"
-    #         ),
-    #         disabled_seconds=5,
-    #     )
+    if is_first_run("新增微信支付"):
+        show_message(
+            "新增微信支付",
+            (
+                "这几天新接入了银联微信通道，配置工具的购买界面可以使用微信支付了，各位习惯使用微信支付的朋友下次购买的时候可以试试看~"
+            ),
+            disabled_seconds=5,
+        )
 
     pass
 

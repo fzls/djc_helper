@@ -1283,10 +1283,6 @@ class CommonConfig(ConfigInterface):
         self.check_update_on_start = True
         # 是否在程序结束时手动检查更新
         self.check_update_on_end = False
-        # 自动更新dlc购买地址
-        self.auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
-        # 按月付费购买地址
-        self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
         # 网盘地址
         self.netdisk_link = "https://docs.qq.com/doc/DYmlqWGNPYWRDcG95"
         self.netdisk_link_for_report = self.netdisk_link
@@ -1366,20 +1362,6 @@ class CommonConfig(ConfigInterface):
         # 所以这里做下兼容，强制转换为str
         self.auto_send_card_target_qqs = [str(qq) for qq in self.auto_send_card_target_qqs]
         self.sailiyam_visit_target_qqs = [str(qq) for qq in self.sailiyam_visit_target_qqs]
-
-        url_config_filepath = get_url_config_path()
-        if os.path.isfile(url_config_filepath):
-            try:
-                with open(url_config_filepath, encoding="utf-8-sig") as url_config_file:
-                    url_config = toml.load(url_config_file)
-                    if "auto_updater_dlc_purchase_url" in url_config:
-                        self.auto_updater_dlc_purchase_url = url_config["auto_updater_dlc_purchase_url"]
-                    if "pay_by_month_purchase_url" in url_config:
-                        self.pay_by_month_purchase_url = url_config["pay_by_month_purchase_url"]
-                    if "netdisk_link" in url_config:
-                        self.netdisk_link = url_config["netdisk_link"]
-            except Exception:
-                pass
 
         # 替换网盘链接中的域名为蓝奏云api中最新的域名
         from lanzou.api import LanZouCloud
@@ -1748,8 +1730,6 @@ if __name__ == "__main__":
     logger.info(config().common.account_count)
 
     cfg = config()
-    print(cfg.common.auto_updater_dlc_purchase_url)
-    print(cfg.common.pay_by_month_purchase_url)
     print(cfg.common.netdisk_link)
     print(cfg.common.qq_group)
 

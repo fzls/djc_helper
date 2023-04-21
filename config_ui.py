@@ -906,7 +906,8 @@ class ConfigUi(QFrame):
         if not self.check_pay_server():
             return
 
-        webbrowser.open(self.load_config().common.auto_updater_dlc_purchase_url)
+        cfg = config_cloud()
+        webbrowser.open(cfg.auto_updater_dlc_purchase_url)
         increase_counter(ga_category="open_pay_webpage", name="auto_updater_dlc")
 
     def confirm_buy_auto_updater(self) -> bool:
@@ -939,7 +940,8 @@ class ConfigUi(QFrame):
         if not self.check_pay_server():
             return
 
-        webbrowser.open(self.load_config().common.pay_by_month_purchase_url)
+        cfg = config_cloud()
+        webbrowser.open(cfg.pay_by_month_purchase_url)
         increase_counter(ga_category="open_pay_webpage", name="pay_buy_month")
 
     def pay_by_card_and_secret(self, checked=False):

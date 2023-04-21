@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from os import path
 from typing import List
@@ -10,7 +11,7 @@ from download import download_github_raw_content
 from first_run import is_first_run_in
 from log import color, logger
 from update import version_less
-from util import async_call, parse_time, try_except
+from util import async_call, get_url_config_path, parse_time, try_except
 
 
 class BlackListConfig(ConfigInterface):
@@ -94,10 +95,30 @@ class ConfigCloud(ConfigInterface):
         # chrome版本强制更换，用于处理新升级chrome后，部分电脑上无法正常使用的情况下可以远程降级为可用的其他版本，在新版本发布前减少影响
         self.chrome_version_replace_rule = ChromeVersionReplaceRule()
 
+        # 自动更新dlc购买地址
+        self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.com/purchasing?link=auto-updater"
+        # 按月付费购买地址
+        self.pay_by_month_purchase_url = "https://www.kuaifaka.com/purchasing?link=pay-by-month"
+
     def fields_to_fill(self):
         return [
             ("black_list", BlackListConfig),
         ]
+
+    def on_config_update(self, raw_config: dict):
+        url_config_filepath = get_url_config_path()
+        if os.path.isfile(url_config_filepath):
+            try:
+                with open(url_config_filepath, encoding="utf-8-sig") as url_config_file:
+                    url_config = toml.load(url_config_file)
+                    if "auto_updater_dlc_purchase_url" in url_config:
+                        self.auto_updater_dlc_purchase_url = url_config["auto_updater_dlc_purchase_url"]
+                    if "pay_by_month_purchase_url" in url_config:
+                        self.pay_by_month_purchase_url = url_config["pay_by_month_purchase_url"]
+                    if "netdisk_link" in url_config:
+                        self.netdisk_link = url_config["netdisk_link"]
+            except Exception:
+                pass
 
 
 # 配置保存路径
@@ -145,6 +166,10 @@ def async_update_config_cloud():
 if __name__ == "__main__":
     load_config_cloud()
     logger.info(f"{g_config_cloud}")
+
+    cfg = config_cloud()
+    print(cfg.auto_updater_dlc_purchase_url)
+    print(cfg.pay_by_month_purchase_url)
 
     from util import pause
 

@@ -22,6 +22,11 @@ dlc_enable_incremental_update = true
 # 是否启用推荐奖励
 enable_recommend_reward = true
 
+# 自动更新dlc购买地址
+auto_updater_dlc_purchase_url = "https://www.kuaifaka.com/purchasing?link=auto-updater"
+# 按月付费购买地址
+pay_by_month_purchase_url = "https://www.kuaifaka.com/purchasing?link=pay-by-month"
+
 # 无视权限进行自动更新的条件
 [try_auto_update_ignore_permission]
 # 最新已修复bug的版本。当填写该值后，早于该版本的小助手可无视权限触发dlc

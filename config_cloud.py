@@ -96,9 +96,9 @@ class ConfigCloud(ConfigInterface):
         self.chrome_version_replace_rule = ChromeVersionReplaceRule()
 
         # 自动更新dlc购买地址
-        self.auto_updater_dlc_purchase_url = "https://www.kuaifaka.com/purchasing?link=auto-updater"
+        self.auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
         # 按月付费购买地址
-        self.pay_by_month_purchase_url = "https://www.kuaifaka.com/purchasing?link=pay-by-month"
+        self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
 
     def fields_to_fill(self):
         return [

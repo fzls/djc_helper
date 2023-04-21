@@ -23,9 +23,9 @@ dlc_enable_incremental_update = true
 enable_recommend_reward = true
 
 # 自动更新dlc购买地址
-auto_updater_dlc_purchase_url = "https://www.kuaifaka.com/purchasing?link=auto-updater"
+auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
 # 按月付费购买地址
-pay_by_month_purchase_url = "https://www.kuaifaka.com/purchasing?link=pay-by-month"
+pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
 
 # 无视权限进行自动更新的条件
 [try_auto_update_ignore_permission]

@@ -93,6 +93,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
+    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     #
     # 已过期活动
     #
@@ -101,7 +102,6 @@ act_name_to_url = {
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20230106cjzh/index.html",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
@@ -253,7 +253,7 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_dnf_helper = "528891"  # DNF助手活动
+        self.iActivityId_dnf_helper = "536697"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

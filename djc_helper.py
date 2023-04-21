@@ -649,6 +649,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -659,7 +660,6 @@ class DjcHelper:
             ("和谐补偿活动", self.dnf_compensate),
             ("DNF马杰洛的规划", self.majieluo),
             ("colg年终盛典签到", self.colg_yearly_signin),
-            ("dnf助手活动", self.dnf_helper),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("colg每日签到", self.colg_signin),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
@@ -4267,94 +4267,67 @@ class DjcHelper:
 
         self.check_dnf_helper()
 
-        def query_info() -> tuple[int, int, int, int]:
-            raw_res = self.dnf_helper_op("查询信息", "922170", print_res=False)
-            info = parse_amesvr_common_info(raw_res)
+        self.dnf_helper_op("报名", "932465", prefer=6)
+        self.dnf_helper_op("报名领取奖励", "936765")
 
-            # 累计获取抽奖次数，剩余抽奖次数
-            total_lottery_count, current_lottery_count = info.sOutValue3.split(";")
+        self.dnf_helper_op("周末打团(周六)", "930195")
 
-            # 胡萝卜、超级胡萝卜
-            count_hlb, count_cjhlb = info.sOutValue6.split(";")
-
-            return int(total_lottery_count), int(current_lottery_count), int(count_hlb), int(count_cjhlb)
-
-        # def query_lottery_count() -> int:
-        #     raw_res = self.dnf_helper_op("查询抽奖次数", "850836", print_res=False)
-        #     info = parse_amesvr_common_info(raw_res)
-        #
-        #     return int(info.sOutValue3)
-        #
-        # def query_current_week_index() -> int:
-        #     raw_res = self.dnf_helper_op("查询周序号", "850836", print_res=False)
-        #     info = parse_amesvr_common_info(raw_res)
-        #
-        #     week_status_list = info.sOutValue6.split(";")
-        #     for idx, status in enumerate(week_status_list):
-        #         if status == "0":
-        #             return idx
-        #
-        #     return len(week_status_list) - 1
-        #
-        # self.dnf_helper_op("每日抽奖积分", "850973")
-        # self.dnf_helper_op("完成任务赠送", "851051")
-        #
-        # lottery_count = query_lottery_count()
-        # logger.info(f"当前剩余抽奖次数为 {lottery_count}")
-        # for idx in range_from_one(lottery_count):
-        #     self.dnf_helper_op(f"{idx}/{lottery_count} 每日抽奖", "850957")
-        #     time.sleep(5)
-        #
-        # week_awards = [
-        #     ("累签奖励", "850975"),
-        #     ("累签奖励2", "852938"),
-        #     ("累签奖励3", "852939"),
-        #     ("累签奖励4", "852940"),
-        #     ("累签奖励5", "852941"),
-        # ]
-        # week_index = query_current_week_index()
-        # logger.info(f"当前为第 {week_index + 1} 周")
-        #
-        # name, flowid = week_awards[week_index]
-        # for actSign in range_from_one(5):
-        #     self.dnf_helper_op(f"{name} - {flowid} - 第 {actSign} 天", flowid, actSign=actSign)
-
-        self.dnf_helper_op("勇士见面礼", "921600")
-        self.dnf_helper_op("见面礼", "921476")
-
-        self.dnf_helper_op("任务1领取", "922024")
-        self.dnf_helper_op("任务2领取", "922025")
-        self.dnf_helper_op("任务3领取", "922026")
-        self.dnf_helper_op("任务4领取", "922027")
-        self.dnf_helper_op("任务5领取", "922028")
-
-        _, _, count_hlb, count_cjhlb = query_info()
-        logger.info(f"当前胡萝卜炮弹={count_hlb}, 超级胡萝卜炮弹={count_cjhlb}")
-        for idx in range_from_one(count_cjhlb):
-            self.dnf_helper_op(f"{idx}: 使用超级胡萝卜炮弹", "921905")
+        lottery_cfg = [
+            ("团长抽奖", "936715"),
+            ("团员抽奖", "936741"),
+        ]
+        for name, flowid in lottery_cfg:
             time.sleep(3)
+            self.dnf_helper_op(name, flowid)
 
-        for idx in range_from_one(count_hlb):
-            self.dnf_helper_op(f"{idx}: 使用胡萝卜炮弹", "921898")
+        leader_exchange_cfg = [
+            ("团长兑换奖励--神秘契约礼包", "936319"),
+            ("团长兑换奖励--黑钻", "936487"),
+            ("团长兑换奖励--王者契约礼包", "936498"),
+            ("团长兑换奖励--镶嵌栏开启装置", "936507"),
+            ("团长兑换奖励--一次性继承装置", "936526"),
+            ("团长兑换奖励--异界气息净化书", "936533"),
+            ("团长兑换奖励--次元玄晶碎片礼袋", "936534"),
+            ("团长兑换奖励--+10装备强化券", "936548"),
+            ("团长兑换奖励--+7装备增幅券", "936598"),
+            ("团长兑换奖励--纯净的增幅书", "936600"),
+            ("团长兑换奖励--雪人盲盒", "936711"),
+            ("团长兑换奖励--炽热的团魂礼盒", "936712"),
+        ]
+        for name, flowid in reversed(leader_exchange_cfg):
             time.sleep(3)
+            res = self.dnf_helper_op(name, flowid)
+            if res["ret"] == "700" and "余额不足" in res["flowRet"]["sMsg"]:
+                # 积分不够，跳过尝试后续的奖励
+                break
 
-        self.dnf_helper_op("消灭1次领取", "921909")
-        self.dnf_helper_op("消灭2次领取", "921913")
-        self.dnf_helper_op("消灭3次领取", "921914")
-        self.dnf_helper_op("消灭4次领取", "921915")
-
-        total_lottery_count, current_lottery_count, _, _ = query_info()
-        logger.info(f"目前累计获得{total_lottery_count}次抽奖次数, 剩余抽奖次数为{current_lottery_count}")
-        for idx in range_from_one(current_lottery_count):
-            self.dnf_helper_op(f"{idx}: 抽奖", "921601")
+        member_exchange_cfg = [
+            ("团员兑换奖励--编年币", "936716"),
+            ("团员兑换奖励--复活币", "936718"),
+            ("团员兑换奖励--闪亮的雷米援助礼盒5个", "936719"),
+            ("团员兑换奖励--闪亮的雷米援助礼盒10个", "936720"),
+            ("团员兑换奖励--王者契约礼包", "936721"),
+            ("团员兑换奖励--黑钻", "936722"),
+            ("团员兑换奖励--装备品级调整箱", "936723"),
+            ("团员兑换奖励-异界气息净化书", "936724"),
+            ("团员兑换奖励-华丽的徽章自选礼盒", "936737"),
+            ("团员兑换奖励-纯净的增幅书", "936738"),
+            ("团员兑换奖励-+7装备增幅券", "936739"),
+        ]
+        for name, flowid in reversed(member_exchange_cfg):
+            time.sleep(3)
+            res = self.dnf_helper_op(name, flowid)
+            if res["ret"] == "700" and "余额不足" in res["flowRet"]["sMsg"]:
+                # 积分不够，跳过尝试后续的奖励
+                break
 
     def check_dnf_helper(self):
         self.check_bind_account(
             "dnf助手活动",
             get_act_url("dnf助手活动"),
             activity_op_func=self.dnf_helper_op,
-            query_bind_flowid="922169",
-            commit_bind_flowid="922168",
+            query_bind_flowid="929705",
+            commit_bind_flowid="929704",
         )
 
     # def dnf_helper_format_url(self, api: str) -> str:
@@ -12359,4 +12332,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_helper()

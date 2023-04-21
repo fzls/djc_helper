@@ -11061,7 +11061,7 @@ class DjcHelper:
         remain, total = query_lottery_times()
         logger.info(f"当前剩余抽奖次数为 {remain}，累计获得 {total}")
         for idx in range_from_one(remain):
-            self.dnf_xinyue_wpe_op("抽奖", 80506)
+            self.dnf_xinyue_wpe_op(f"{idx}/{remain} 抽奖", 80506)
 
         async_message_box(
             "心悦充值活动页面新出了一个宠物（水瓶座），如果喜欢其外观，或者想给小号兑换，可以到活动页面使用成就点进行兑换~",
@@ -11081,7 +11081,7 @@ class DjcHelper:
         self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP1", 80510)
         self.dnf_xinyue_wpe_op("会员等级礼 - 特邀会员", 80508)
 
-        logger.info(color("bold_yellow") + f"心悦app中打开活动页面可以领取额外的四个小东西（非常mini），请自行决定是否前往app进行领取")
+        logger.info(color("bold_yellow") + "心悦app中打开活动页面可以领取额外的四个小东西（非常mini），请自行决定是否前往app进行领取")
 
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
         self.dnf_xinyue_wpe_extra_headers = {

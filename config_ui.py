@@ -1151,7 +1151,9 @@ class ConfigUi(QFrame):
     def check_pay_type_name(self, pay_type_name: str) -> bool:
         cfg = config_cloud()
         if pay_type_name in cfg.maintaining_payment_name_list:
-            other_pay_type_list = list(pay_type for pay_type in all_pay_type_names if pay_type not in cfg.maintaining_payment_name_list)
+            other_pay_type_list = list(
+                pay_type for pay_type in all_pay_type_names if pay_type not in cfg.maintaining_payment_name_list
+            )
             other_pay_type_tip = "或者".join(other_pay_type_list)
 
             self.show_pay_type_in_maintain(pay_type_name, other_pay_type_tip)
@@ -3150,9 +3152,7 @@ def show_notices():
     if is_first_run("新增微信支付"):
         show_message(
             "新增微信支付",
-            (
-                "这几天新接入了银联微信通道，配置工具的购买界面可以使用微信支付了，各位习惯使用微信支付的朋友下次购买的时候可以试试看~"
-            ),
+            ("这几天新接入了银联微信通道，配置工具的购买界面可以使用微信支付了，各位习惯使用微信支付的朋友下次购买的时候可以试试看~"),
             disabled_seconds=5,
         )
 

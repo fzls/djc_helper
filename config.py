@@ -19,7 +19,6 @@ from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import (
     async_message_box,
     get_config_from_env,
-    get_url_config_path,
     is_run_in_github_action,
     pause_and_exit,
     show_file_content_info,

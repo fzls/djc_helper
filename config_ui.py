@@ -1148,12 +1148,12 @@ class ConfigUi(QFrame):
         return True
 
     def check_pay_type_name(self, pay_type_name: str) -> bool:
-        # if pay_type_name == "微信支付":
-        #     self.show_pay_type_in_maintain("微信支付", "支付宝或者QQ钱包")
-        #     return False
+        cfg = config_cloud()
+        if pay_type_name in cfg.maintaining_payment_name_list:
+            other_pay_type_list = list(pay_type for pay_type in all_pay_type_names if pay_type not in cfg.maintaining_payment_name_list)
+            other_pay_type_tip = "或者".join(other_pay_type_list)
 
-        if pay_type_name == "QQ钱包":
-            self.show_pay_type_in_maintain("QQ钱包", "支付宝或者微信支付")
+            self.show_pay_type_in_maintain(pay_type_name, other_pay_type_tip)
             return False
 
         return True

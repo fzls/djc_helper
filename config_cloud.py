@@ -100,6 +100,13 @@ class ConfigCloud(ConfigInterface):
         # 按月付费购买地址
         self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
 
+        # 维护中的支付方式
+        self.maintaining_payment_name_list: List[str] = [
+            # "支付宝",
+            # "微信支付",
+            "QQ钱包",
+        ]
+
     def fields_to_fill(self):
         return [
             ("black_list", BlackListConfig),

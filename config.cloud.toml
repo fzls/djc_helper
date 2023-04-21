@@ -22,6 +22,9 @@ dlc_enable_incremental_update = true
 # 是否启用推荐奖励
 enable_recommend_reward = true
 
+# 维护中的支付方式
+maintaining_payment_name_list = ["QQ钱包"]
+
 # 自动更新dlc购买地址
 auto_updater_dlc_purchase_url = "https://www.kami.vip/purchasing?link=auto-updater"
 # 按月付费购买地址

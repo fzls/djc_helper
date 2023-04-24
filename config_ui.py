@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import random
 import shutil
 import subprocess
 import sys
@@ -857,6 +858,10 @@ class ConfigUi(QFrame):
         self.btn_toggle_card_secret.clicked.connect(self.toggle_card_secret)
         top_layout.addWidget(self.btn_toggle_card_secret)
 
+        self.btn_alipay_redpacket = create_pushbutton("领取支付宝小红包（若使用支付宝支付可以先扫码领一下）", "Lime")
+        self.btn_alipay_redpacket.clicked.connect(self.alipay_redpacket)
+        top_layout.addWidget(self.btn_alipay_redpacket)
+
         top_layout.addWidget(QHLine())
 
         # -------------- 区域：查询信息 --------------
@@ -1285,6 +1290,12 @@ class ConfigUi(QFrame):
         else:
             self.hide_card_secret()
             self.btn_toggle_card_secret.setText("显示原来的卡密支付界面")
+
+    def alipay_redpacket(self, checked=False):
+        image_path = random.choice(["付费指引/支付宝红包活动.jpg", "付费指引/支付宝红包活动_实体版.jpg"])
+        os.popen(os.path.realpath(image_path))
+
+        report_click_event("alipay_redpacket")
 
     def adjust_pay_window(self):
         logger.info("根据配置情况，调整付费界面")

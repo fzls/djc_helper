@@ -13,7 +13,7 @@ from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_
 from log import color, logger
 from util import KiB, get_now, human_readable_size, with_cache
 
-SERVER_ADDR = "http://114.132.252.185:5244"
+SERVER_ADDR = "http://101.43.54.94:5244"
 
 API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
 API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"

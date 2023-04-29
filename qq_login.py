@@ -275,7 +275,7 @@ class QQLogin:
                     msg,
                     f"你没有{self.get_chrome_major_version()}版本的chrome浏览器，需要安装完整版或下载便携版",
                     icon=win32con.MB_ICONERROR,
-                    open_url="http://114.132.252.185:5244/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E3%80%81chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E3%80%81autojs%E3%80%81HttpCanary%E7%AD%89%E5%B0%8F%E5%B7%A5%E5%85%B7",
+                    open_url="http://101.43.54.94:5244/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E3%80%81chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E3%80%81autojs%E3%80%81HttpCanary%E7%AD%89%E5%B0%8F%E5%B7%A5%E5%85%B7",
                 )
                 pause_and_exit(-1)
 

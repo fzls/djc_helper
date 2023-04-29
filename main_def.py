@@ -1493,7 +1493,7 @@ def show_tips(cfg: Config):
     tips = {
         "工具下载": (
             "如需下载chrome、autojs、HttpCanary、vscode、bandizip等小工具，可前往网盘自助下载：\n"
-            "http://114.132.252.185:5244/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E3%80%81chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E3%80%81autojs%E3%80%81HttpCanary%E7%AD%89%E5%B0%8F%E5%B7%A5%E5%85%B7\n"
+            "http://101.43.54.94:5244/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E3%80%81chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E3%80%81autojs%E3%80%81HttpCanary%E7%AD%89%E5%B0%8F%E5%B7%A5%E5%85%B7\n"
         ),
         "查看历史公告": (
             "目前部分信息会通过小助手的公告机制来告知大家，比如最近升级win11后可能会桌面卡住的解决方案\n"

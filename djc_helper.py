@@ -6223,7 +6223,7 @@ class DjcHelper:
         # self.dnf_xinyue_op("报名礼包PVP", "944783")
         async_message_box(
             "心悦格斗大赛报名报名奖励请自行打开活动页面报名并领取（打开活动页面后，分别点击 PVE 和 PVP 标签，然后点击报名礼右侧的领取按钮，进行报名步骤然后领取即可）",
-            "23.5 心悦格斗大赛报名",
+            "23.5 心悦格斗大赛报名-v2",
             open_url=get_act_url("DNF心悦"),
             show_once=True,
         )

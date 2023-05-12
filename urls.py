@@ -94,6 +94,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20230426combat/index.html",
     #
     # 已过期活动
     #
@@ -125,7 +126,6 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
-    "DNF心悦": "https://xinyue.qq.com/act/a20220527dnfz/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",

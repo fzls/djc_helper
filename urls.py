@@ -270,7 +270,7 @@ class Urls:
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "473842"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "551591"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
@@ -315,7 +315,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}"
         )
 
         # ide通用活动

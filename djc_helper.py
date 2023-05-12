@@ -651,6 +651,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -683,7 +684,6 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("黄钻", self.dnf_yellow_diamond),
             ("心悦猫咪", self.xinyue_cat),
-            ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
             ("DNF格斗大赛", self.dnf_pk),
@@ -6192,103 +6192,68 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
-        def has_bind_friend() -> bool:
-            res = self.dnf_xinyue_op("查询信息", "860785", print_res=True)
+        def query_lottery_times() -> int:
+            res = self.dnf_xinyue_op("输出数据", "944563", print_res=False)
             raw_info = parse_amesvr_common_info(res)
 
-            return "@@" in raw_info.sOutValue3
+            left = int(raw_info.sOutValue5)
+            return left
 
-        @try_except()
-        def draw_card():
-            raw_res = self.dnf_xinyue_op("每日登录游戏抽卡", "861017")
-            if raw_res["ret"] != "0":
-                return
+        first_day = parse_time("2023-05-11 00:00:00")
+        today_index = (get_now() - first_day).days
+        week_index = today_index // 7 + 1
+        weekday_index = today_index % 7
 
-            card_name = raw_res["modRet"]["sPackageName"]
-            if card_name == "14":
-                async_message_box(f"{self.cfg.name} 抽到了 心悦集卡的 14，运气真不错-。-可以兑换天三，或者去闲鱼卖掉，现在好像可以卖五六百了", "心悦集卡欧皇提示")
+        logger.info(f"今天是第{week_index}周，本周期内第 {weekday_index} 天(从0开始计算)")
 
-            # 统计一下每天使用小助手的人抽到的卡片的分布情况，方便有个直观了解
-            increase_counter(ga_category="心悦集卡-抽卡结果", name=card_name)
+        week_index_to_act_info = {
+            1: ("7天签到第1周", "944572"),
+            2: ("7天签到第2周", "944858"),
+            3: ("7天签到第3周", "944859"),
+            4: ("7天签到第4周", "944860"),
+        }
+        flow_name, flow_id = week_index_to_act_info[week_index]
+        self.dnf_xinyue_op(f"{flow_name} - 第{weekday_index+1}天", flow_id, today=weekday_index)
 
-        def show_card_summary(card_counts: list[int]):
-            logger.info(f"当前卡片概览为: {card_counts}")
+        self.dnf_xinyue_op("见面礼", "944566")
+        self.dnf_xinyue_op("回流礼", "944575")
+        self.dnf_xinyue_op("心悦专属礼", "944583")
 
-            card_names = ["14", "周", "年", "狂", "欢"]
-            for idx, count in enumerate(card_counts):
-                name = card_names[idx]
-                logger.info(f"{name}: {count}")
+        # self.dnf_xinyue_op("报名礼包PVE", "944564")
+        # self.dnf_xinyue_op("报名礼包PVP", "944783")
+        async_message_box(
+            "心悦格斗大赛报名报名奖励请自行打开活动页面报名并领取（打开活动页面后，分别点击 PVE 和 PVP 标签，然后点击报名礼右侧的领取按钮，进行报名步骤然后领取即可）",
+            "23.5 心悦格斗大赛报名",
+            open_url=get_act_url("DNF心悦"),
+            show_once=True,
+        )
 
-                # 为了对全局存量有个了解，增加统计各个卡牌的存量信息
-                increase_counter(ga_category=f"心悦集卡-存量-{name}", name=count)
-                time.sleep(1)
+        # self.dnf_xinyue_op("PVE每周排名前10", "944786", week=week_index)
+        self.dnf_xinyue_op("PVE超越之战加码礼", "944788", week=week_index)
+        self.dnf_xinyue_op("PVE每周竞速通关礼", "944833", week=week_index)
 
-        self.dnf_xinyue_op("特邀等级礼", "861002")
-        self.dnf_xinyue_op("V1等级礼", "860777")
-        self.dnf_xinyue_op("V2等级礼", "861003")
-        self.dnf_xinyue_op("V3等级礼", "861004")
+        logger.info(color("bold_yellow") + "pvp大赛的晋级奖励大部分人不会有资格，所以请参与大赛的朋友们自行领取~")
+        # self.dnf_xinyue_op("PVP奖励领取", "946034")
 
-        self.dnf_xinyue_op("登录有礼", "861007")
-        self.dnf_xinyue_op("充值礼", "861011")
-        self.dnf_xinyue_op("App专属礼", "861012")
-        if now_after("2022-06-16 18:00:00"):
-            async_message_box("心悦活动可在app领取一次性奖励，请自行打开app在DNF专区领取~", "22.6心悦活动-app礼包", show_once=True)
+        self.dnf_xinyue_op("登录DNF客户端（每日登录游戏）", "944571")
+        self.dnf_xinyue_op("登录心悦俱乐部App", "944576")
+        self.dnf_xinyue_op("消耗30点疲劳", "944577")
+        self.dnf_xinyue_op("加入游戏家俱乐部", "944578")
+        self.dnf_xinyue_op("参与一次PK", "944579")
 
-        self.dnf_xinyue_op("加群送亲密值", "861908")
-
-        draw_card()
-        # self.dnf_xinyue_op("超级大奖-集卡领天三", "861016")
-
-        card_counts = self.query_xinyue_card_counts()
-        show_card_summary(card_counts)
-
-        send_to_qq = self.common_cfg.xinyue_send_card_target_qq
-        if send_to_qq != "" and self.qq() != send_to_qq:
-            logger.info(f"当前配置了心悦周年集卡赠送目标QQ({send_to_qq})，将尝试赠送给该QQ")
-            for idx, count in enumerate(card_counts):
-                if count == 0:
-                    continue
-
-                card_index = idx + 1
-                self.dnf_xinyue_op(
-                    f"{self.qq()} 尝试赠送卡 {card_index} 给 {send_to_qq}", "861085", card=card_index, sendQQ=send_to_qq
-                )
-
-        if send_to_qq == "":
-            async_message_box("如果本地配置了多个账号，且其中有每日上线的账号，可以配置", "22.6心悦活动-设置赠送目标", show_once=True)
-
-        for count in [40, 100, 140]:
+        lottery_times = query_lottery_times()
+        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {lottery_times} 次")
+        for idx in range_from_one(lottery_times):
+            self.dnf_xinyue_op(f"{idx}/{lottery_times} 抽奖", "944569")
             time.sleep(5)
-            self.dnf_xinyue_op(f"亲密值领取-{count}", "860783", num=count)
-
-        if not has_bind_friend():
-            async_message_box(
-                f"{self.cfg.name} 当前未绑定心悦活动的紧密好友，部分奖励可能无法领取，请手动在活动页面进行领取~",
-                "22.6心悦活动-绑定好友",
-                open_url=get_act_url("DNF心悦"),
-                show_once=True,
-            )
-
-    @try_except(show_exception_info=False, return_val_on_except=[0, 0, 0, 0, 0])
-    def query_xinyue_card_counts(self) -> list[int]:
-        res = self.dnf_xinyue_op("查询信息", "860785", print_res=False)
-        raw_info = parse_amesvr_common_info(res)
-
-        card_counts = []
-        for raw_card_info in raw_info.sOutValue6.split("|")[1:-1]:
-            card_count = int(raw_card_info.strip().split(" ")[2])
-
-            card_counts.append(card_count)
-
-        return card_counts
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
             "DNF心悦",
             get_act_url("DNF心悦"),
             activity_op_func=self.dnf_xinyue_op,
-            query_bind_flowid="860768",
-            commit_bind_flowid="860767",
+            query_bind_flowid="944562",
+            commit_bind_flowid="944561",
         )
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -11502,6 +11467,7 @@ class DjcHelper:
                 "today",
                 "anchor",
                 "sNum",
+                "week",
             ]
         }
 
@@ -12336,4 +12302,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.dnf_xinyue()

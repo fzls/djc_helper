@@ -11,7 +11,7 @@ from const import downloads_dir
 from dao import ConfigInterface, to_raw_type
 from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_func_type
 from log import color, logger
-from util import KiB, get_now, human_readable_size, with_cache
+from util import KiB, get_now, human_readable_size, reset_cache, with_cache
 
 SERVER_ADDR = "http://101.43.54.94:5244"
 
@@ -289,6 +289,9 @@ def get_file_list(
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
+        if res.code == 401 and "expired" in res.message:
+            reset_cache("alist")
+
         raise generate_exception(res, "list")
 
     data = ListResponse().auto_update_config(res.data)

@@ -308,7 +308,7 @@ def remove(remote_file_path: str):
     logger.info(f"开始删除网盘文件 {remote_file_path}")
 
     req = RemoveRequest()
-    req.path = dir
+    req.dir = dir
     req.names = [
         file_name,
     ]

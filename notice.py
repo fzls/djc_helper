@@ -195,12 +195,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "支付宝红包临时开启"
-    message = """支付宝的红包活动又开启了，试了下基本1.5-3元范围，因此临时开启弹出支付宝红包码几天-。-等红包变回几毛的时候就会关掉啦~
-
-如果不喜欢，可以取消勾选 公共配置/其他/是否弹出支付宝红包活动图片，就不再会弹出了
+    title = "弓箭手预约活动"
+    message = """新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行在点击确认后弹出的网页中进行领取~
 """
-    open_url = ""
+    open_url = "https://dnf.qq.com/cp/a20230615dnf/index.html"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

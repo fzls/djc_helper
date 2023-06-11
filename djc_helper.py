@@ -6551,7 +6551,10 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNFGFLT",
+            "DNF15周年生日快乐",
+            "摘星奇旅",
+            "勇士新征程元气初相见",
+            "格斗无限超越",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -12302,4 +12305,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_welfare()

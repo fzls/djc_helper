@@ -1521,6 +1521,10 @@ def show_tips(cfg: Config):
             "新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行复制并打开下方网页中进行领取~\n"
             "https://dnf.qq.com/cp/a20230615dnf/index.html\n"
         ),
+        "23.7 斗鱼活动": (
+            "斗鱼活动请自行参与，活动链接如下:\n"
+            "https://www.douyu.com/topic/DNF15th?rid=5551065"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

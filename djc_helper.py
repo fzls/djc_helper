@@ -636,7 +636,6 @@ class DjcHelper:
             ("心悦app", self.xinyue_app_operations),
             ("黑钻礼包", self.get_heizuan_gift),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
-            ("心悦app理财礼卡", self.xinyue_financing),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
         ]
@@ -647,16 +646,17 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动", self.dnf_helper),
-            ("勇士的冒险补给", self.maoxian),
-            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("勇士的冒险补给", self.maoxian),
+            ("心悦app理财礼卡", self.xinyue_financing),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("DNF心悦", self.dnf_xinyue),
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),
             ("和谐补偿活动", self.dnf_compensate),

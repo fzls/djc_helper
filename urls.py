@@ -83,7 +83,6 @@ act_name_to_url = {
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
-    "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
     #
@@ -91,13 +90,14 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20230426combat/index.html",
     #
     # 已过期活动
     #
+    "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20230426combat/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",

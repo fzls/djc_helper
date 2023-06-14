@@ -9170,6 +9170,13 @@ class DjcHelper:
         self.dnf_luodiye_op("自选奖池领奖-任务2-史诗装备10件", "953055")
         self.dnf_luodiye_op("自选奖池领奖-任务3-史诗装备20件", "953056")
 
+        async_message_box(
+            "周年庆落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~",
+            "23周年庆落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动"),
+        )
+
     def check_dnf_luodiye(self):
         self.check_bind_account(
             "DNF落地页活动",

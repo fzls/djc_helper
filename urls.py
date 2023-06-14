@@ -94,12 +94,12 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230615index/",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
+    "DNF心悦": "https://xinyue.qq.com/act/a20230531dnf/index.html",
     #
     # 已过期活动
     #
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
-    "DNF心悦": "https://xinyue.qq.com/act/a20230426combat/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
@@ -271,7 +271,7 @@ class Urls:
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "551591"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "558995"  # DNF心悦
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
@@ -316,7 +316,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}"
         )
 
         # ide通用活动

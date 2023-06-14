@@ -649,6 +649,7 @@ class DjcHelper:
             ("dnf助手活动", self.dnf_helper),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -657,7 +658,6 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("DNF心悦", self.dnf_xinyue),
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),
             ("和谐补偿活动", self.dnf_compensate),
@@ -6192,68 +6192,44 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
+
         def query_lottery_times() -> int:
-            res = self.dnf_xinyue_op("输出数据", "944563", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+            # res = self.dnf_xinyue_op("输出数据", "944563", print_res=False)
+            # raw_info = parse_amesvr_common_info(res)
+            #
+            # left = int(raw_info.sOutValue5)
+            # return left
+            return 1
 
-            left = int(raw_info.sOutValue5)
-            return left
+        self.dnf_xinyue_op("开箱子", "951825")
+        for idx in range_from_one(16):
+            self.dnf_xinyue_op("领取格子奖励", "951859", position=idx)
+            time.sleep(5)
 
-        first_day = parse_time("2023-05-11 00:00:00")
-        today_index = (get_now() - first_day).days
-        week_index = today_index // 7 + 1
-        weekday_index = today_index % 7
-
-        logger.info(f"今天是第{week_index}周，本周期内第 {weekday_index} 天(从0开始计算)")
-
-        week_index_to_act_info = {
-            1: ("7天签到第1周", "944572"),
-            2: ("7天签到第2周", "944858"),
-            3: ("7天签到第3周", "944859"),
-            4: ("7天签到第4周", "944860"),
-        }
-        flow_name, flow_id = week_index_to_act_info[week_index]
-        self.dnf_xinyue_op(f"{flow_name} - 第{weekday_index+1}天", flow_id, today=weekday_index)
-
-        self.dnf_xinyue_op("见面礼", "944566")
-        self.dnf_xinyue_op("回流礼", "944575")
-        self.dnf_xinyue_op("心悦专属礼", "944583")
-
-        # self.dnf_xinyue_op("报名礼包PVE", "944564")
-        # self.dnf_xinyue_op("报名礼包PVP", "944783")
-        async_message_box(
-            "心悦格斗大赛报名报名奖励请自行打开活动页面报名并领取（打开活动页面后，分别点击 PVE 和 PVP 标签，然后点击报名礼右侧的领取按钮，进行报名步骤然后领取即可）",
-            "23.5 心悦格斗大赛报名-v2",
-            open_url=get_act_url("DNF心悦"),
-            show_once=True,
-        )
-
-        # self.dnf_xinyue_op("PVE每周排名前10", "944786", week=week_index)
-        self.dnf_xinyue_op("PVE超越之战加码礼", "944788", week=week_index)
-        self.dnf_xinyue_op("PVE每周竞速通关礼", "944833", week=week_index)
-
-        logger.info(color("bold_yellow") + "pvp大赛的晋级奖励大部分人不会有资格，所以请参与大赛的朋友们自行领取~")
-        # self.dnf_xinyue_op("PVP奖励领取", "946034")
-
-        self.dnf_xinyue_op("登录DNF客户端（每日登录游戏）", "944571")
-        self.dnf_xinyue_op("登录心悦俱乐部App", "944576")
-        self.dnf_xinyue_op("消耗30点疲劳", "944577")
-        self.dnf_xinyue_op("加入游戏家俱乐部", "944578")
-        self.dnf_xinyue_op("参与一次PK", "944579")
-
+        # todo: 活动开启后，根据实际数据格式，获取实际抽奖次数
         lottery_times = query_lottery_times()
         logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {lottery_times} 次")
         for idx in range_from_one(lottery_times):
-            self.dnf_xinyue_op(f"{idx}/{lottery_times} 抽奖", "944569")
+            self.dnf_xinyue_op(f"{idx}/{lottery_times} 抽奖", "951984")
             time.sleep(5)
+
+        self.dnf_xinyue_op("激活幸运冒险家", "952233")
+        self.dnf_xinyue_op("当日充值6元", "951991")
+        self.dnf_xinyue_op("当日消耗疲劳值30", "951990")
+        self.dnf_xinyue_op("当日激活幸运冒险家", "951986")
+
+        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=7)
+        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=6)
+        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=5)
+        self.dnf_xinyue_op("等级礼-特邀会员", "951993")
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
             "DNF心悦",
             get_act_url("DNF心悦"),
             activity_op_func=self.dnf_xinyue_op,
-            query_bind_flowid="944562",
-            commit_bind_flowid="944561",
+            query_bind_flowid="951808",
+            commit_bind_flowid="951807",
         )
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -11478,6 +11454,7 @@ class DjcHelper:
                 "anchor",
                 "sNum",
                 "week",
+                "position",
             ]
         }
 
@@ -12312,4 +12289,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary()
+        djcHelper.dnf_xinyue()

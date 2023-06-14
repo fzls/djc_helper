@@ -91,11 +91,11 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230615index/",
     #
     # 已过期活动
     #
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230420index/",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20230426combat/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
@@ -259,7 +259,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "544662"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "560122"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "523121"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战

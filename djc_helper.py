@@ -648,6 +648,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("dnf助手活动", self.dnf_helper),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -684,7 +685,6 @@ class DjcHelper:
             ("KOL", self.dnf_kol),
             ("黄钻", self.dnf_yellow_diamond),
             ("心悦猫咪", self.xinyue_cat),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF互动站", self.dnf_interactive),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF共创投票", self.dnf_dianzan),
@@ -9722,14 +9722,13 @@ class DjcHelper:
     @try_except()
     def dnf_anniversary(self):
         show_head_line("DNF周年庆登录活动")
-        self.show_amesvr_act_info(self.dnf_anniversary_op)
 
-        if now_in_range("2022-06-18 06:00:00", "2022-06-20 05:59:59") and is_daily_first_run("DNF周年庆登录活动_提示登录"):
+        if now_in_range("2023-06-17 06:00:00", "2023-06-19 05:59:59") and is_daily_first_run("2023_DNF周年庆登录活动_提示登录"):
             async_message_box(
                 (
                     "周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~\n"
-                    "\n"
-                    "此外在6.16到7.28期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
+                    # "\n"
+                    # "此外在6.17到6.19期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
                 ),
                 "周年庆登录",
                 open_url=get_act_url("DNF周年庆登录活动"),
@@ -9739,21 +9738,28 @@ class DjcHelper:
             logger.warning("未启用领取DNF周年庆登录活动功能，将跳过")
             return
 
-        self.check_dnf_anniversary()
+        # self.show_amesvr_act_info(self.dnf_anniversary_op)
+        # self.check_dnf_anniversary()
+
+        self.show_not_ams_act_info("DNF周年庆登录活动")
+        self.check_dnf_anniversary_ide()
 
         gifts = [
-            ("第一弹", "862311", "2022-06-23 16:00:00"),
-            ("第二弹", "862313", "2022-06-24 00:00:00"),
-            ("第三弹", "862314", "2022-06-25 00:00:00"),
-            ("第四弹", "862431", "2022-06-26 00:00:00"),
+            ("第一弹", "192166", "2023-06-22 16:00:00"),
+            ("第二弹", "192182", "2023-06-23 00:00:00"),
+            ("第三弹", "192183", "2023-06-24 00:00:00"),
+            ("第四弹", "192184", "2023-06-25 00:00:00"),
         ]
 
         now = get_now()
         for name, flowid, can_take_time in gifts:
             if now >= parse_time(can_take_time):
-                self.dnf_anniversary_op(name, flowid)
+                self.dnf_anniversary_ide_op(name, flowid)
             else:
                 logger.warning(f"当前未到{can_take_time}，无法领取{name}")
+
+        self.dnf_anniversary_ide_op("周末登录礼包", "192598")
+        self.dnf_anniversary_ide_op("更新后首次登录游戏礼包", "193034")
 
     def check_dnf_anniversary(self):
         self.check_bind_account(
@@ -9771,6 +9777,34 @@ class DjcHelper:
             "x6m5.ams.game.qq.com",
             "group_3",
             "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF周年庆登录活动"),
+            **extra_params,
+        )
+
+    def check_dnf_anniversary_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF周年庆登录活动",
+            get_act_url("DNF周年庆登录活动"),
+            activity_op_func=self.dnf_anniversary_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_anniversary_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_anniversary
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
             print_res,
@@ -12278,4 +12312,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_anniversary()

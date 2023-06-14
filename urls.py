@@ -74,6 +74,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
+    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
 ]
 
 act_name_to_url = {
@@ -92,6 +93,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230615index/",
+    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     #
     # 已过期活动
     #
@@ -126,7 +128,6 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
-    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20220616gift/",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
@@ -327,6 +328,7 @@ class Urls:
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
+        self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "532852"  # DNF马杰洛的规划

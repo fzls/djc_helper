@@ -6192,25 +6192,38 @@ class DjcHelper:
 
         self.check_dnf_xinyue()
 
+        def jfAction(str_info, num):
+            str_arr = str_info.split("|")[1:-1]
 
-        def query_lottery_times() -> int:
-            # res = self.dnf_xinyue_op("输出数据", "944563", print_res=False)
-            # raw_info = parse_amesvr_common_info(res)
-            #
-            # left = int(raw_info.sOutValue5)
-            # return left
-            return 1
+            result_list = []
+
+            for part in str_arr:
+                result_list.append(part.strip().split(" ")[num])
+
+            return result_list
+
+        def query_info() -> tuple[int, int, int]:
+            res = self.dnf_xinyue_op("输出数据", "952002", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            xy_type = int(raw_info.sOutValue1)
+
+            temp_list = jfAction(raw_info.sOutValue2, 2)
+            total_step = int(temp_list[0]) # 总的步数
+            cj_ticket = int(temp_list[1]) # 抽奖券
+
+            return xy_type, total_step, cj_ticket
 
         self.dnf_xinyue_op("开箱子", "951825")
         for idx in range_from_one(16):
-            self.dnf_xinyue_op("领取格子奖励", "951859", position=idx)
+            self.dnf_xinyue_op(f"领取格子奖励 - {idx}/16", "951859", position=idx)
             time.sleep(5)
 
-        # todo: 活动开启后，根据实际数据格式，获取实际抽奖次数
-        lottery_times = query_lottery_times()
-        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {lottery_times} 次")
-        for idx in range_from_one(lottery_times):
-            self.dnf_xinyue_op(f"{idx}/{lottery_times} 抽奖", "951984")
+        xy_type, _, cj_ticket = query_info()
+
+        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {cj_ticket} 次")
+        for idx in range_from_one(cj_ticket):
+            self.dnf_xinyue_op(f"{idx}/{cj_ticket} 抽奖", "951984")
             time.sleep(5)
 
         self.dnf_xinyue_op("激活幸运冒险家", "952233")
@@ -6218,10 +6231,10 @@ class DjcHelper:
         self.dnf_xinyue_op("当日消耗疲劳值30", "951990")
         self.dnf_xinyue_op("当日激活幸运冒险家", "951986")
 
-        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=7)
-        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=6)
-        self.dnf_xinyue_op("等级礼-心悦会员", "951994", lqlevel=5)
-        self.dnf_xinyue_op("等级礼-特邀会员", "951993")
+        if xy_type < XIN_YUE_MIN_LEVEL:
+            self.dnf_xinyue_op("等级礼-特邀会员", "951993")
+        else:
+            self.dnf_xinyue_op(f"等级礼-心悦会员-xy_type={xy_type}", "951994", lqlevel=xy_type)
 
     def check_dnf_xinyue(self):
         self.check_bind_account(
@@ -12310,4 +12323,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary()
+        djcHelper.dnf_xinyue()

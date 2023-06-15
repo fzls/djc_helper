@@ -9788,6 +9788,15 @@ class DjcHelper:
     ):
         iActivityId = self.urls.ide_iActivityId_dnf_anniversary
 
+        roleinfo = self.get_dnf_bind_role()
+
+        bindData = {
+            "iAreaId": roleinfo.serviceID,
+            "sArea": roleinfo.serviceID,  # 大区号
+            "sRole": roleinfo.roleCode,  # 角色ID
+            "sRoleName": quote_plus(quote_plus(roleinfo.roleName)),  # 角色名称
+        }
+
         return self.ide_request(
             ctx,
             "comm.ams.game.qq.com",
@@ -9795,6 +9804,7 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("DNF周年庆登录活动"),
+            **bindData,
             **extra_params,
         )
 
@@ -12300,4 +12310,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_anniversary()

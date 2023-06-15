@@ -344,7 +344,7 @@ class Urls:
             "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
-            "&iCardId={iCardId}"
+            "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}"
         )
 
         # DNF共创投票

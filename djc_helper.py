@@ -29,6 +29,7 @@ from dao import (
     AmesvrUserBindInfo,
     BuyInfo,
     ColgBattlePassInfo,
+    ColgBattlePassQueryInfo,
     ColgYearlySigninInfo,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
@@ -651,6 +652,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF心悦", self.dnf_xinyue),
             ("超级会员", self.dnf_super_vip),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -665,7 +667,6 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("colg年终盛典签到", self.colg_yearly_signin),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
-            ("colg每日签到", self.colg_signin),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -8770,15 +8771,25 @@ class DjcHelper:
         session = requests.session()
         session.headers = headers  # type: ignore
 
+        def query_task_info() -> ColgBattlePassQueryInfo:
+            res = session.get(self.urls.colg_task_info_url, timeout=10)
+            raw_info = res.json()
+
+            task_info = ColgBattlePassQueryInfo().auto_update_config(raw_info["data"])
+            return task_info
+
         def query_info() -> ColgBattlePassInfo:
             res = session.get(self.urls.colg_url, timeout=10)
             html = res.text
 
             activity_id = extract_between(html, "var activity_id = '", "';", str)
-            lv_score = extract_between(html, "var lvScore = ", ";", int)
-            conversion = extract_between(html, "var conversion = ", ";", int)
-            tasks = json.loads(extract_between(html, "var tasks = ", ";", str))["list"]
-            rewards = json.loads(extract_between(html, "var rewardListData = ", ";", str))
+
+            task_info = query_task_info()
+
+            lv_score = int(task_info.user_credit)
+            conversion = int(task_info.cm_token)
+            tasks = to_raw_type(task_info.user_task_list.list)
+            rewards = to_raw_type(task_info.user_reward_list)
 
             info = ColgBattlePassInfo().auto_update_config(
                 {
@@ -12323,4 +12334,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.colg_signin()

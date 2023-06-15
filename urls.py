@@ -59,7 +59,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-26 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
@@ -96,6 +96,7 @@ act_name_to_url = {
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "DNF心悦": "https://xinyue.qq.com/act/a20230531dnf/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -107,7 +108,6 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/by5MLwW8hWtCY5pAED7RxefaWM/index_index.html",
@@ -452,6 +452,7 @@ class Urls:
 
         # colg-战令
         self.colg_url = "https://bbs.colg.cn/forum-171-1.html"
+        self.colg_task_info_url = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getTask&fid=171"
         self.colg_sign_in_url = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=passUserSign"
         self.colg_take_sign_in_credits = (
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"

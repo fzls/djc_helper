@@ -1381,6 +1381,36 @@ class GuanjiaNewLotteryResultData(ConfigInterface):
         self.comment = "抗疲劳秘药(5点)（LV80-100)*1"
 
 
+class ColgBattlePassQueryInfo(ConfigInterface):
+    def __init__(self):
+        # 兑换币
+        self.cm_token = 0
+        # 商城链接
+        self.cmall_url = ""
+        # 活跃值
+        self.user_credit = 0
+        # 奖励列表
+        self.user_reward_list: list[ColgBattlePassRewardInfo] = []
+        # 任务列表
+        self.user_task_list = ColgBattlePassUserTaskList()
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("user_reward_list", ColgBattlePassRewardInfo),
+        ]
+
+
+class ColgBattlePassUserTaskList(ConfigInterface):
+    def __init__(self):
+        # 任务列表
+        self.list: list[ColgBattlePassTaskInfo] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("list", ColgBattlePassTaskInfo),
+        ]
+
+
 class ColgBattlePassInfo(ConfigInterface):
     def __init__(self):
         # 战令ID

@@ -9162,10 +9162,13 @@ class DjcHelper:
 
         lottery_times = 3
         for idx in range_from_one(lottery_times):
-            self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "952676")
+            res = self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "952676")
+            if res["ret"] == "700":
+                break
             time.sleep(5)
 
-        self.dnf_luodiye_op("道具5选3", "953000", sNum="0,2,3")
+        # 0, 1, 3
+        self.dnf_luodiye_op("道具5选3", "953000", packages="4245057,4245064,4245066")
         self.dnf_luodiye_op("自选奖池领奖-任务1-次元回廊地下城", "953018")
         self.dnf_luodiye_op("自选奖池领奖-任务2-史诗装备10件", "953055")
         self.dnf_luodiye_op("自选奖池领奖-任务3-史诗装备20件", "953056")
@@ -11462,6 +11465,7 @@ class DjcHelper:
                 "sNum",
                 "week",
                 "position",
+                "packages",
             ]
         }
 
@@ -12296,4 +12300,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.dnf_luodiye()

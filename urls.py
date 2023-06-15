@@ -316,7 +316,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}"
         )
 
         # ide通用活动

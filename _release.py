@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import time
 import webbrowser
 from datetime import datetime
@@ -51,6 +52,7 @@ def release():
     release_dir_name = f"DNF蚊子腿小助手_{version}_by风之凌殇"
     release_7z_name = f"{release_dir_name}.7z"
     dir_github_action_artifact = "_github_action_artifact"
+    dir_upload_files = "_upload_files"
 
     # ---------------构建
     # 调用构建脚本
@@ -101,6 +103,9 @@ def release():
     # 先清理掉旧版本的增量更新文件
     remove_file_startswith_prefix("/", "DNF蚊子腿小助手_增量更新文件_")
 
+    shutil.rmtree(dir_upload_files, ignore_errors=True)
+    os.mkdir(dir_upload_files)
+
     upload_list = [
         (realpath(release_7z_name), "DNF蚊子腿小助手_v"),
         (path_in_src("utils/auto_updater.exe"), ""),
@@ -114,11 +119,17 @@ def release():
     for local_filepath, _history_file_prefix in upload_list:
         logger.info(f"\t\t{local_filepath}")
 
+    # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
     for local_filepath, history_file_prefix in reversed(upload_list):
-        # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
+        # 先复制一份要上传的文件到本地临时目录，方便出错时可以手动上传
+        backup_filepath = os.path.join(dir_upload_files, os.path.basename(local_filepath))
+        shutil.copy2(local_filepath, backup_filepath)
+        logger.info(f"复制{local_filepath}到{backup_filepath}，方便出错时手动上传")
+
         total_try_count = 1
         for try_index in range_from_one(total_try_count):
             try:
+                # 然后再实际上传
                 upload(local_filepath, old_version_name_prefix=history_file_prefix)
             except Exception:
                 logger.warning(f"第{try_index}/{total_try_count}次尝试上传{local_filepath}失败，等待一会后重试")

@@ -677,6 +677,8 @@ need_take_awards = false
 10008 = false
 # 2023.1.12 兔年新气象 福临阿拉德
 10009 = false
+# 2023.6.15 DNF15周年全新职业 弓箭手闪亮登场 集超萌表情包 赢梦想白金徽章礼盒
+10010 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

@@ -214,7 +214,7 @@ def main():
     # try_xinyue_sailiyam_start_work(cfg)
 
     # 活动开启关闭时调这个开关即可
-    enable_card_lottery = False
+    enable_card_lottery = True
 
     if enable_card_lottery:
         auto_send_cards(cfg)

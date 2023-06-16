@@ -75,6 +75,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
+    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-16 23:59:59", "勇士的冒险补给"),
 ]
 
 act_name_to_url = {
@@ -100,6 +101,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
+    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
     #
     # 已过期活动
     #
@@ -122,7 +124,6 @@ act_name_to_url = {
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
-    "勇士的冒险补给": "https://mwegame.qq.com/act/dnf/a20220908zhpc/",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
@@ -490,6 +491,7 @@ class Urls:
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"
 
         self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex"
+        self.maoxian_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
 
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []

@@ -2560,6 +2560,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg每日签到", "get_colg_signin"),
             ("DNF马杰洛的规划", "get_majieluo"),
             ("dnf周年拉好友", "get_dnf_anniversary_friend"),
+            ("勇士的冒险补给", "get_maoxian"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2576,7 +2577,6 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
-            ("勇士的冒险补给", "get_maoxian"),
             ("心悦app理财礼卡", "get_xinyue_financing"),
             ("DNF心悦", "get_dnf_xinyue"),
             ("冒险的起点", "get_maoxian_start"),

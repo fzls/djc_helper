@@ -1521,10 +1521,13 @@ def show_tips(cfg: Config):
             "新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行复制并打开下方网页中进行领取~\n"
             "https://dnf.qq.com/cp/a20230615dnf/index.html\n"
         ),
-        "23.7 斗鱼虎牙活动": (
+        "23.6 斗鱼虎牙活动": (
             "斗鱼虎牙活动请自行参与，活动链接如下:\n"
             "斗鱼：https://www.douyu.com/topic/DNF15th?rid=5551065\n"
             "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
+        ),
+        "23.6 Colg答题王": (
+            "colg答题王活动请自行参与，活动链接如下: https://bbs.colg.cn/colg_activity_new-colg_answer.html?aid=12#/"
         ),
     }
 

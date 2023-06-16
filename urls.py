@@ -99,6 +99,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
+    "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     #
     # 已过期活动
     #
@@ -164,7 +165,6 @@ act_name_to_url = {
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
-    "我的dnf13周年活动": "https://dnf.qq.com/cp/a20210604history/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
@@ -275,7 +275,7 @@ class Urls:
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
-        self.iActivityId_dnf_my_story = "382161"  # 我的dnf13周年活动
+        self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "472448"  # DNF KOL

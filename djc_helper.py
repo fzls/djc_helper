@@ -656,6 +656,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
             ("DNF马杰洛的规划", self.majieluo),
+            ("dnf周年拉好友", self.dnf_anniversary_friend),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -725,7 +726,6 @@ class DjcHelper:
             ("DNF强者之路", self.dnf_strong),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
-            ("我的dnf13周年活动", self.dnf_my_story),
             ("集卡_旧版", self.ark_lottery),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("qq会员杯", self.dnf_club_vip),
@@ -9449,23 +9449,47 @@ class DjcHelper:
             extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey};",
         )
 
-    # --------------------------------------------我的dnf13周年活动--------------------------------------------
+    # --------------------------------------------dnf周年拉好友--------------------------------------------
     @try_except()
-    def dnf_my_story(self):
-        show_head_line("我的dnf13周年活动")
-        self.show_amesvr_act_info(self.dnf_my_story_op)
+    def dnf_anniversary_friend(self):
+        show_head_line("dnf周年拉好友")
+        self.show_amesvr_act_info(self.dnf_anniversary_friend_op)
 
-        if not self.cfg.function_switches.get_dnf_my_story or self.disable_most_activities():
-            logger.warning("未启用领取我的dnf13周年活动功能，将跳过")
+        if not self.cfg.function_switches.get_dnf_anniversary_friend or self.disable_most_activities():
+            logger.warning("未启用领取dnf周年拉好友功能，将跳过")
             return
 
-        roleinfo = self.get_dnf_bind_role()
+        self.check_dnf_anniversary_friend()
 
-        self.dnf_my_story_op("查询历史回顾数据", "769681", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
-        self.dnf_my_story_op("领取奖励（854922）", "770900", sArea=roleinfo.serviceID, sRole=roleinfo.roleCode)
+        self.dnf_anniversary_friend_op("分享领黑钻", "951475")
 
-    def dnf_my_story_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_my_story
+        self.dnf_anniversary_friend_op("开启新旅程-领取同行奖励（主态）", "952931")
+
+        self.dnf_anniversary_friend_op("抽取光环", "952651")
+
+        self.dnf_anniversary_friend_op("每日任务-通关任意难度【110级地下城】1次", "951752")
+        self.dnf_anniversary_friend_op("每日任务-通关任意难度【110级地下城】3次", "952159")
+        self.dnf_anniversary_friend_op("每周任务-累计地下城获得【Lv105史诗装备】5件", "952160")
+
+        max_try_count = 4
+        for idx in range_from_one(max_try_count):
+            res = self.dnf_anniversary_friend_op(f"[{idx}/{max_try_count}] 抽奖", "952537")
+            if res["ret"] != "0":
+                break
+
+        self.dnf_anniversary_friend_op("随机点亮勇士印记", "952041")
+
+    def check_dnf_anniversary_friend(self):
+        self.check_bind_account(
+            "dnf周年拉好友",
+            get_act_url("dnf周年拉好友"),
+            activity_op_func=self.dnf_anniversary_friend_op,
+            query_bind_flowid="951473",
+            commit_bind_flowid="951472",
+        )
+
+    def dnf_anniversary_friend_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_anniversary_friend
         return self.amesvr_request(
             ctx,
             "x6m5.ams.game.qq.com",
@@ -9474,7 +9498,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("我的dnf13周年活动"),
+            get_act_url("dnf周年拉好友"),
             **extra_params,
         )
 
@@ -12314,4 +12338,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.dnf_anniversary_friend()

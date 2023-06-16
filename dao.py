@@ -1910,22 +1910,12 @@ class MaJieLuoInfo(ConfigInterface):
     def __init__(self):
         self.iRet = "0"
         self.sMsg = "ok"
+        self.iTeamId = "0"
+        self.iDamage = "0"
+        self.iLucky = "4"
+        self.iAttack = "0"
         self.jHolds = {}
-        self.iLogined = "1"
-        self.iSend = "0"
-        self.iOpen = "0"
-        self.iDrawed = "0"
-        self.iDraw = "0"
-        self.iFuqi = "40"
-        self.iPassed = "0"
-        self.iLuck = "0"
-        self.aCards = {}
-
-    def get_card_count(self, card_type: int) -> int:
-        action_id = card_id_to_action_id[card_type]
-        card_count = self.aCards[action_id]["ticket"]
-
-        return int(card_count)
+        self.sCode = "YUltZ0RPUnFzVnM0SG9jVWpkdWhXQT09"
 
 
 class VoteWorkList(ConfigInterface):

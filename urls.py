@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2023-02-16 00:00:00", "2023-03-16 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-13 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
@@ -98,6 +98,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
     #
     # 已过期活动
     #
@@ -106,7 +107,6 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230216card/",
     "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
@@ -331,8 +331,8 @@ class Urls:
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
-        self.iActivityId_majieluo = "532852"  # DNF马杰洛的规划
-        self.ide_iActivityId_majieluo = "53_G0ycQL"  # DNF马杰洛的规划
+        self.iActivityId_majieluo = "559579"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "40_hR5p11"  # DNF马杰洛的规划
 
         self.iActivityId_mojieren = "523217"  # 魔界人探险记
         self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记

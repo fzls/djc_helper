@@ -195,10 +195,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "弓箭手预约活动"
-    message = """新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行在点击确认后弹出的网页中进行领取~
+    title = "卡在chrome环节"
+    message = """最近有个别使用小助手的朋友反馈这几天突然会卡在chrome登录的地方，以前都可以正常用，今天远程了一个朋友的电脑，发现一个可能的原因，大家可以在稍后弹出的在线文档中看看是否能解决该问题
 """
-    open_url = "https://dnf.qq.com/cp/a20230615dnf/index.html"
+    open_url = "https://docs.qq.com/doc/DYnpZZGZOQWhvZWZF"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

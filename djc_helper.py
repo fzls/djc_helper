@@ -55,7 +55,6 @@ from dao import (
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
     IdeActInfo,
-    IdeTPLInfo,
     LuckyUserInfo,
     LuckyUserTaskConf,
     MaJieLuoInfo,
@@ -6212,8 +6211,8 @@ class DjcHelper:
             xy_type = int(raw_info.sOutValue1)
 
             temp_list = jfAction(raw_info.sOutValue2, 2)
-            total_step = int(temp_list[0]) # 总的步数
-            cj_ticket = int(temp_list[1]) # 抽奖券
+            total_step = int(temp_list[0])  # 总的步数
+            cj_ticket = int(temp_list[1])  # 抽奖券
 
             return xy_type, total_step, cj_ticket
 
@@ -6262,7 +6261,6 @@ class DjcHelper:
             get_act_url("DNF心悦"),
             **extra_params,
         )
-
 
     # --------------------------------------------DNF心悦Dup--------------------------------------------
     @try_except()
@@ -6339,7 +6337,6 @@ class DjcHelper:
             get_act_url("DNF心悦Dup"),
             **extra_params,
         )
-
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):

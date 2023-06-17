@@ -1518,17 +1518,14 @@ def show_tips(cfg: Config):
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
         "23.6 弓箭手预约活动": (
-            "新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行复制并打开下方网页中进行领取~\n"
-            "https://dnf.qq.com/cp/a20230615dnf/index.html\n"
+            "新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行复制并打开下方网页中进行领取~\n" "https://dnf.qq.com/cp/a20230615dnf/index.html\n"
         ),
         "23.6 斗鱼虎牙活动": (
             "斗鱼虎牙活动请自行参与，活动链接如下:\n"
             "斗鱼：https://www.douyu.com/topic/DNF15th?rid=5551065\n"
             "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
         ),
-        "23.6 Colg答题王": (
-            "colg答题王活动请自行参与，活动链接如下: https://bbs.colg.cn/colg_activity_new-colg_answer.html?aid=12#/"
-        ),
+        "23.6 Colg答题王": ("colg答题王活动请自行参与，活动链接如下: https://bbs.colg.cn/colg_activity_new-colg_answer.html?aid=12#/"),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

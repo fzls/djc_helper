@@ -131,9 +131,9 @@ def release():
             try:
                 # 然后再实际上传
                 upload(local_filepath, old_version_name_prefix=history_file_prefix)
-            except Exception:
+            except Exception as e:
                 local_filename = os.path.basename(local_filepath)
-                logger.warning(color("bold_yellow") + f"第{try_index}/{total_try_count}次尝试上传 {local_filename} 失败，等待一会后重试")
+                logger.warning(color("bold_yellow") + f"第{try_index}/{total_try_count}次尝试上传 {local_filename} 失败，等待一会后重试", exc_info=e)
                 if try_index < total_try_count:
                     count_down("上传到网盘", 5 * try_index)
                     continue

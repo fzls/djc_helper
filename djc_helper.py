@@ -658,6 +658,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("勇士的冒险补给", self.maoxian),
+            ("DNF心悦Dup", self.dnf_xinyue_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6261,6 +6262,84 @@ class DjcHelper:
             get_act_url("DNF心悦"),
             **extra_params,
         )
+
+
+    # --------------------------------------------DNF心悦Dup--------------------------------------------
+    @try_except()
+    def dnf_xinyue_dup(self):
+        show_head_line("DNF心悦Dup")
+        self.show_amesvr_act_info(self.dnf_xinyue_dup_op)
+
+        if not self.cfg.function_switches.get_dnf_xinyue or self.disable_most_activities():
+            logger.warning("未启用领取DNF心悦Dup活动合集功能，将跳过")
+            return
+
+        self.check_dnf_xinyue_dup()
+
+        def query_info() -> tuple[int, int, int, bool]:
+            res = self.dnf_xinyue_dup_op("输出数据", "952766", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            lottery_ticket = int(raw_info.sOutValue3)
+
+            has_team = int(raw_info.sOutValue4) != 0
+
+            qdweek = raw_info.sOutValue5.split("|")
+            normal_sign_days = int(qdweek[0])
+            lucky_sign_days = int(qdweek[1])
+
+            return lottery_ticket, normal_sign_days, lucky_sign_days, has_team
+
+        _, normal_sign_days, lucky_sign_days, has_team = query_info()
+        if not has_team:
+            async_message_box(
+                "心悦俱乐部签到活动需要组队进行，请创建队伍或加入其他人的队伍。也可以按照稍后弹出的在线文档中的指引，与其他使用小助手的朋友进行组队~",
+                "23.6 心悦签到组队提醒",
+                show_once=True,
+                open_url="https://docs.qq.com/sheet/DYlNmcVhHQ2VXalhj?tab=BB08J2",
+            )
+        else:
+            self.dnf_xinyue_dup_op(f"7天签到 - {normal_sign_days}", "952789", today=normal_sign_days)
+            self.dnf_xinyue_dup_op(f"7天签到buff奖励 - {lucky_sign_days}", "952790", today=lucky_sign_days)
+
+        self.dnf_xinyue_dup_op("回流礼", "952777")
+        self.dnf_xinyue_dup_op("当日消耗疲劳值30", "953312")
+        self.dnf_xinyue_dup_op("当日充值6元", "953326")
+
+        self.dnf_xinyue_dup_op("登录DNF客户端", "952774")
+        self.dnf_xinyue_dup_op("消耗30点疲劳", "952779")
+        self.dnf_xinyue_dup_op("加入游戏家俱乐部", "952780")
+
+        lottery_ticket, _, _, _ = query_info()
+        logger.info(color("bold_cyan") + f"当前抽奖次数为 {lottery_ticket}")
+        for idx in range_from_one(lottery_ticket):
+            self.dnf_xinyue_dup_op(f"{idx}/{lottery_ticket} 抽奖", "952772")
+            time.sleep(5)
+
+    def check_dnf_xinyue_dup(self):
+        self.check_bind_account(
+            "DNF心悦Dup",
+            get_act_url("DNF心悦Dup"),
+            activity_op_func=self.dnf_xinyue_dup_op,
+            query_bind_flowid="952765",
+            commit_bind_flowid="952764",
+        )
+
+    def dnf_xinyue_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_xinyue_dup
+
+        return self.amesvr_request(
+            ctx,
+            "act.game.qq.com",
+            "xinyue",
+            "tgclub",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF心悦Dup"),
+            **extra_params,
+        )
+
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):
@@ -12405,4 +12484,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.dnf_xinyue_dup()

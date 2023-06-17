@@ -102,6 +102,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
+    "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     #
     # 已过期活动
     #
@@ -273,6 +274,7 @@ class Urls:
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "558995"  # DNF心悦
+        self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点

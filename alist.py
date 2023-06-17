@@ -21,8 +21,11 @@ API_DOWNLOAD = f"{SERVER_ADDR}/api/fs/get"
 API_LIST = f"{SERVER_ADDR}/api/fs/list"
 API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
 
+NORMAL_TIMEOUT = 8
+UPLOAD_TIMEOUT = 60 * 5
+
 alist_session = requests.session()
-alist_session.request = functools.partial(alist_session.request, timeout=8)  # type: ignore
+alist_session.request = functools.partial(alist_session.request, timeout=NORMAL_TIMEOUT)  # type: ignore
 
 
 class CommonResponse(ConfigInterface):
@@ -177,6 +180,7 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
                 "As-Task": "false",
                 "Authorization": login_using_env(),
             },
+            timeout=UPLOAD_TIMEOUT,
         )
 
         res = CommonResponse().auto_update_config(raw_res.json())

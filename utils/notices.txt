@@ -198,5 +198,15 @@
     "open_url": "https://docs.qq.com/doc/DYnpZZGZOQWhvZWZF",
     "expire_at": "2023-06-24 18:01:13",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "编年史新角色1000经验",
+    "message": "助手编年史这次新增了一个特别兑换奖励，可以直接领取1000经验，如果你做了新角色的升级活动，并弄到110级了，可以按照稍后的在线文档的说明去操作~\n",
+    "send_at": "2023-06-20 19:19:02",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYnJ1Qk1VcUR6R1ZX",
+    "expire_at": "2023-07-01 00:00:00",
+    "show_only_before_version": ""
   }
 ]

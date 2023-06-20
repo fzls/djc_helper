@@ -195,12 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "卡在chrome环节"
-    message = """最近有个别使用小助手的朋友反馈这几天突然会卡在chrome登录的地方，以前都可以正常用，今天远程了一个朋友的电脑，发现一个可能的原因，大家可以在稍后弹出的在线文档中看看是否能解决该问题
+    title = "编年史新角色1000经验"
+    message = """助手编年史这次新增了一个特别兑换奖励，可以直接领取1000经验，如果你做了新角色的升级活动，并弄到110级了，可以按照稍后的在线文档的说明去操作~
 """
-    open_url = "https://docs.qq.com/doc/DYnpZZGZOQWhvZWZF"
+    open_url = "https://docs.qq.com/doc/DYnJ1Qk1VcUR6R1ZX"
     show_only_before_version = ""
-    valid_duration = timedelta(days=7)
+    valid_duration = timedelta(days=11)
 
     if title != "":
         nm.add_notice(

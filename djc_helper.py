@@ -9975,8 +9975,10 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("DNF周年庆登录活动"),
-            **bindData,
-            **extra_params,
+            **{
+                **bindData,
+                **extra_params,
+            }
         )
 
     # --------------------------------------------新春福袋大作战--------------------------------------------

@@ -70,7 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
-    newNotAmsActInfo("2023-04-20 00:00:00", "2023-05-19 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2023-07-06 00:00:00", "2023-08-02 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
@@ -103,11 +103,11 @@ act_name_to_url = {
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230626dnf/index.html",
     #
     # 已过期活动
     #
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230419dnf/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",

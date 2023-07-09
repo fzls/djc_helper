@@ -12438,7 +12438,7 @@ if __name__ == "__main__":
     RunAll = False
     indexes = []
     indexes.extend([1])
-    # indexes.extend([4 + 3])
+    # indexes.extend([4 + 7])
     # indexes.extend([4 + idx for idx in range(1, 7 + 1)])
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
@@ -12469,6 +12469,10 @@ if __name__ == "__main__":
 
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
+
+        # 为了方便测试，特殊设置一些配置，确保正常执行
+        account_config.disable_in_run_env_list = []
+        account_config.function_switches.disable_login_mode_xinyue = False
 
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}({account_config.qq()})]", color("fg_bold_yellow"))
 

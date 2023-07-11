@@ -8821,7 +8821,7 @@ class DjcHelper:
             "referer": get_act_url("colg每日签到"),
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
             "x-requested-with": "XMLHttpRequest",
-            "cookie": self.cfg.colg_cookie,
+            "cookie": json.dumps(self.cfg.colg_cookie, ensure_ascii=True),
         }
 
         session = requests.session()

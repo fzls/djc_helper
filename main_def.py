@@ -61,6 +61,7 @@ from util import (
     clean_dir_to_size,
     clear_login_status,
     exists_auto_updater_dlc,
+    exists_auto_updater_dlc_and_not_empty,
     exists_flag_file,
     format_now,
     format_time,
@@ -1602,10 +1603,10 @@ def try_auto_update(cfg: Config, ignore_permission=False):
             # 如果存在auto_updater_latest.exe，且与auto_updater.exe不同，则覆盖更新
             need_copy = False
             reason = ""
-            if not exists_auto_updater_dlc():
-                # 不存在dlc，直接复制
+            if not exists_auto_updater_dlc_and_not_empty():
+                # 不存在dlc，或dlc为空文件，直接复制
                 need_copy = True
-                reason = "当前不存在dlc，但存在最新版dlc，将复制使用该dlc"
+                reason = "当前不存在dlc，或dlc为空文件，但存在最新版dlc，将复制使用该dlc"
             else:
                 # 存在dlc，判断版本是否不同
                 latest_md5 = md5_file(auto_updater_latest_path())
@@ -1624,7 +1625,7 @@ def try_auto_update(cfg: Config, ignore_permission=False):
                 logger.info(color("bold_green") + f"{reason}，将复制{auto_updater_latest_path()}到{auto_updater_path()}")
                 shutil.copy2(auto_updater_latest_path(), auto_updater_path())
         else:
-            if not exists_auto_updater_dlc():
+            if not exists_auto_updater_dlc_and_not_empty():
                 if not query_ok and not ignore_permission:
                     logger.debug("当前应该是查询dlc失败后全部放行的情况，这种情况下若本地没有dlc，则不尝试自动下载，避免后续查询功能恢复正常后提示没有权限，需要手动删除")
                     return
@@ -1635,8 +1636,8 @@ def try_auto_update(cfg: Config, ignore_permission=False):
                 download_from_alist(os.path.basename(auto_updater_path()), os.path.dirname(auto_updater_path()))
 
         # 保底，如果前面的流程都失败了，提示用户自行下载
-        if not exists_auto_updater_dlc():
-            logger.warning(color("bold_cyan") + "未发现自动更新DLC（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
+        if not exists_auto_updater_dlc_and_not_empty():
+            logger.warning(color("bold_cyan") + "未发现自动更新DLC，或DLC为空文件（预期应放在utils/auto_updater.exe路径，但是木有发现嗷），将跳过自动更新流程~")
             logger.warning(color("bold_green") + "如果已经购买过DLC，请先打开目录中的[付费指引/付费指引.docx]，找到自动更新DLC的使用说明，按照教程操作一番即可")
             return
 

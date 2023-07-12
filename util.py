@@ -1550,6 +1550,10 @@ def exists_auto_updater_dlc():
     return os.path.isfile(auto_updater_path())
 
 
+def exists_auto_updater_dlc_and_not_empty() -> bool:
+    return exists_auto_updater_dlc() and os.stat(auto_updater_path()).st_size > 0
+
+
 def auto_updater_path():
     return os.path.realpath("utils/auto_updater.exe")
 

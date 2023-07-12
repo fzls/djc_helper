@@ -1743,7 +1743,7 @@ def download_chrome_driver(version: str, download_dir: str, dir_src_path: str) -
     # 重命名
     major_version = parse_major_version(version)
     chrome_driver = f"{download_dir}/chromedriver_{major_version}.exe"
-    os.rename(f"{download_dir}/chromedriver.exe", chrome_driver)
+    shutil.move(f"{download_dir}/chromedriver.exe", chrome_driver)
     logger.info(f"重命名为 {chrome_driver}")
 
     final_path = os.path.realpath(chrome_driver)

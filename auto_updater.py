@@ -181,7 +181,6 @@ def full_update(args, uploader, latest_version: str) -> bool:
 
     def download_by_alist() -> str:
         logger.warning("尝试通过alist下载")
-        logger.info(color("bold_cyan") + "如果一直在这不动，应该是在慢慢下载，就是速度比较慢而已。如果急着用，可以去群文件或群公告里的网盘自行下载最新版本")
         filepath = download_from_alist(
             f"/DNF蚊子腿小助手_v{latest_version}_by风之凌殇.7z",
             tmp_dir,
@@ -204,6 +203,7 @@ def full_update(args, uploader, latest_version: str) -> bool:
     config = config_cloud()
 
     logger.info("开始下载最新版本的压缩包")
+    logger.info(color("bold_cyan") + "如果一直在这不动，应该是在慢慢下载，就是速度比较慢而已。如果急着用，可以去群文件或群公告里的网盘自行下载最新版本")
     filepath = ""
     download_functions = []
     if config.dlc_prefer_alist:

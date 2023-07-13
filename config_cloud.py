@@ -80,7 +80,7 @@ class ConfigCloud(ConfigInterface):
         # 新增的黑名单
         self.black_list: List[BlackListConfig] = []
 
-        # dlc是否优先启用alist
+        # dlc全量更新是否优先启用alist
         self.dlc_prefer_alist = False
 
         # dlc是否启用增量更新

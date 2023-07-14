@@ -541,11 +541,11 @@ class ConfigUi(QFrame):
         top_layout.addWidget(QHLine())
 
     def open_pay_guide(self):
-        webbrowser.open(os.path.realpath("付费指引/付费指引.docx"))
+        webbrowser.open(os.path.realpath("付费指引/付费指引.url"))
         report_click_event("open_pay_guide")
 
     def open_usage_guide(self):
-        webbrowser.open(os.path.realpath("使用教程/使用文档.docx"))
+        webbrowser.open(os.path.realpath("使用教程/使用文档.url"))
         report_click_event("open_usage_guide")
 
     def open_usage_video(self):

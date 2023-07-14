@@ -8,6 +8,7 @@ import subprocess
 import sys
 import threading
 import time
+import webbrowser
 from multiprocessing import cpu_count, freeze_support
 from typing import Callable, Dict, List, Optional, Tuple
 
@@ -1369,7 +1370,7 @@ def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
         if not use_by_myself() or force_message_box:
             win32api.MessageBox(0, message, "付费提示(〃'▽'〃)", win32con.MB_OK)
         # os.popen("付费指引/支持一下.png")
-        os.popen("付费指引/付费指引.docx")
+        webbrowser.open(os.path.realpath("付费指引/付费指引.url"))
 
 
 def show_recommend_reward_tips(user_buy_info: BuyInfo):

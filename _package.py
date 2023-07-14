@@ -94,6 +94,8 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
             *list(path.name for path in pathlib.Path("utils").glob("chromedriver_*")),
             "chromedriver.exe",
             "upx.exe",
+            "chrome_temporary_dir",
+            "新建文件夹",
         ],
     }
     for dir_path, filenames in dir_to_filenames_need_remove.items():

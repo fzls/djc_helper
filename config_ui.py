@@ -121,6 +121,7 @@ from util import (
     hex_str_to_bytes_arr,
     is_valid_qq,
     kill_process,
+    open_with_default_app,
     parse_scode,
     parse_url_param,
     range_from_one,
@@ -448,7 +449,7 @@ class ConfigUi(QFrame):
         )
         report_click_event("open_backups")
 
-        webbrowser.open(os.path.realpath(config_backup_dir))
+        open_with_default_app(config_backup_dir)
 
     def load_config(self) -> Config:
         # load_config(local_config_path="", reset_before_load=True)
@@ -541,15 +542,15 @@ class ConfigUi(QFrame):
         top_layout.addWidget(QHLine())
 
     def open_pay_guide(self):
-        webbrowser.open(os.path.realpath("付费指引/付费指引.url"))
+        open_with_default_app("付费指引/付费指引.url")
         report_click_event("open_pay_guide")
 
     def open_usage_guide(self):
-        webbrowser.open(os.path.realpath("使用教程/使用文档.url"))
+        open_with_default_app("使用教程/使用文档.url")
         report_click_event("open_usage_guide")
 
     def open_usage_video(self):
-        webbrowser.open(os.path.realpath("使用教程/视频教程_合集.url"))
+        open_with_default_app("使用教程/视频教程_合集.url")
         report_click_event("open_usage_video")
 
     def open_autojs(self):

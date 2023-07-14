@@ -74,6 +74,7 @@ from util import (
     md5_file,
     message_box,
     now_before,
+    open_with_default_app,
     padLeftRight,
     parse_time,
     parse_timestamp,
@@ -1370,7 +1371,7 @@ def show_buy_info_sync(ctx: str, cfg: Config, force_message_box=False):
         if not use_by_myself() or force_message_box:
             win32api.MessageBox(0, message, "付费提示(〃'▽'〃)", win32con.MB_OK)
         # os.popen("付费指引/支持一下.png")
-        webbrowser.open(os.path.realpath("付费指引/付费指引.url"))
+        open_with_default_app("付费指引/付费指引.url")
 
 
 def show_recommend_reward_tips(user_buy_info: BuyInfo):

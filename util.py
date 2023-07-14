@@ -1761,6 +1761,10 @@ def parse_major_version(latest_version: str) -> int:
     return int(latest_version.split(".")[0])
 
 
+def open_with_default_app(file_path: str):
+    webbrowser.open(os.path.realpath(file_path))
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

@@ -392,7 +392,9 @@ class QQLogin:
         logger.info("检查driver是否存在")
         if not self.is_valid_chrome_file(self.chrome_driver_executable_path()):
             logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 {chrome_driver_exe_name} ，将尝试从网盘下载")
-            logger.info(color("bold_cyan") + f"如果速度实在太慢，可以去QQ群文件里面下载 {chrome_driver_exe_name}，然后原样放到小助手的 utils 目录中，再重新启动即可")
+            logger.info(
+                color("bold_cyan") + f"如果速度实在太慢，可以去QQ群文件里面下载 {chrome_driver_exe_name}，然后原样放到小助手的 utils 目录中，再重新启动即可"
+            )
             self.download_chrome_driver(chrome_driver_exe_name)
 
         options = Options()
@@ -418,7 +420,9 @@ class QQLogin:
 
         # 尝试从网盘下载合适版本的便携版chrome
         if not self.is_valid_chrome_file(self.chrome_binary_7z()):
-            logger.info(color("bold_yellow") + f"未在小助手utils目录里发现 便携版chrome 的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候")
+            logger.info(
+                color("bold_yellow") + f"未在小助手utils目录里发现 便携版chrome 的压缩包，尝试自动从网盘下载 {zip_name}，需要下载大概80MB的压缩包，请耐心等候"
+            )
             logger.info(color("bold_cyan") + f"如果速度实在太慢，可以去QQ群文件里面下载 {zip_name}，然后原样放到小助手的 utils 目录中，再重新启动即可")
             self.download_chrome_file(zip_name)
 
@@ -444,7 +448,10 @@ class QQLogin:
 
         # 走到这里，大概率是多线程并行下载导致文件出错了，尝试重新下载
         logger.info(color("bold_yellow") + "似乎chrome相关文件损坏了，尝试重新下载并解压")
-        logger.info(color("bold_cyan") + f"如果速度实在太慢，可以去QQ群文件里面下载 {zip_name} 和 {chrome_driver_exe_name}，然后原样放到小助手的 utils 目录中，再重新启动即可")
+        logger.info(
+            color("bold_cyan")
+            + f"如果速度实在太慢，可以去QQ群文件里面下载 {zip_name} 和 {chrome_driver_exe_name}，然后原样放到小助手的 utils 目录中，再重新启动即可"
+        )
         self.download_chrome_driver(chrome_driver_exe_name)
         self.download_chrome_file(zip_name)
 

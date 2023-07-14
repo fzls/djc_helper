@@ -1,11 +1,8 @@
 # 构建发布压缩包
 import os
-import pathlib
-import re
 import shutil
 
 from compress import compress_dir_with_bandizip
-from const import db_top_dir
 from log import color, logger
 from util import human_readable_size, make_sure_dir_exists, show_head_line
 from version import now_version
@@ -27,25 +24,25 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
     logger.info(color("bold_yellow") + f"将部分内容从 {dir_src} 复制到 {dir_current_release} ")
     # 需要复制的文件与目录
     files_to_copy = [
+        # 最外层文件
         "config.toml",
         "config.example.toml",
         "DNF蚊子腿小助手.exe",
         "DNF蚊子腿小助手配置工具.exe",
         "DNF蚊子腿小助手配置文件.bat",
         "DNF蚊子腿小助手交流群群二维码.png",
-
+        # 复制完后要移动或重命名到其他路径的文件
         "CHANGELOG.MD",
         "README.MD",
-
+        "utils/auto_updater.exe",
+        # 其他文件
         "使用教程",
         "付费指引",
         "相关信息",
-
         "utils/bandizip_portable",
         "utils/icons",
         "utils/reference_data",
         "utils/auto_updater_changelog.MD",
-        "utils/auto_updater.exe",
         "utils/hdiffz.exe",
         "utils/hpatchz.exe",
         "utils/不要下载增量更新文件_这个是给自动更新工具使用的.txt",

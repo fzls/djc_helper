@@ -8,7 +8,6 @@ import subprocess
 import sys
 import threading
 import time
-import webbrowser
 from multiprocessing import cpu_count, freeze_support
 from typing import Callable, Dict, List, Optional, Tuple
 

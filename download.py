@@ -146,18 +146,17 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 9.6MiB/s
+            # 1.7MiB/s
+            f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # 1.0MiB/s
+            f"https://js.xxooo.ml/https://github.com/{release_file_path}",
+            # 944.0KiB/s
             f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-            # 6.1MiB/s
-            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-            # 3.9MiB/s
-            f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-            # 3.2MiB/s
-            f"https://kgithub.com/{release_file_path}",
-            # 561.7KiB/s
-            f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
-            # 259.7KiB/s
-            f"https://cors.isteed.cc/github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
+            # 843.7KiB/s
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # 532.2KiB/s
+            f"https://download.nuaa.cf/{release_file_path}",
+
         ],
     )
 
@@ -165,16 +164,16 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 161.7KiB/s
-            f"https://proxy.zyun.vip/https://github.com/fzls/djc_helper/releases/latest/download/{asset_name}",
-            # 153.4KiB/s
-            f"https://download.nuaa.cf/{release_file_path}",
-            # 37.5KiB/s
-            f"https://ghproxy.com/https://github.com/{release_file_path}",
-            # 26.6KiB/s
-            f"https://download.fastgit.org/{release_file_path}",
-            # timeout
-            f"https://github.com/{release_file_path}",
+            # 364.5KiB/s
+            f"https://download.yzuu.cf/{release_file_path}",
+            # 278.4KiB/s
+            f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
+            # 261.8KiB/s
+            f"https://ghps.cc/https://github.com/{release_file_path}",
+            # 233.3KiB/s
+            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+            # 86.0KiB/s
+            f"https://download.fastgit.ixmu.net/{release_file_path}",
         ],
     )
 
@@ -182,14 +181,16 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 523
-            f"https://github.91chi.fun/https://github.com/{release_file_path}",
-            # 500
-            f"https://gh2.yanqishui.work/https://github.com/{release_file_path}",
             # timeout
+            f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
+            # timeout
+            f"https://download.fastgit.org/{release_file_path}",
+            # timeout
+            f"https://github.com/{release_file_path}",
+            # timeout
+            f"https://kgithub.com/{release_file_path}",
+            # 5.5KiB/s
             f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-            # timeout
-            f"https://gh-proxy-misakano7545.koyeb.app/https://github.com/{release_file_path}",
         ],
     )
 

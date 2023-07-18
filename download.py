@@ -156,7 +156,6 @@ def download_latest_github_release(
             f"https://ghproxy.com/https://github.com/{release_file_path}",
             # 532.2KiB/s
             f"https://download.nuaa.cf/{release_file_path}",
-
         ],
     )
 

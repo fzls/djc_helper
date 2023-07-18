@@ -212,27 +212,23 @@ class QQLogin:
         )
         self.login_url = login_url
         logger.info(color("bold_green") + f"{self.name} {ctx} 登录链接为: {login_url}")
-        caps = DesiredCapabilities().CHROME
-        # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
-        caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
 
         if is_windows():
-            self.prepare_chrome_windows(caps, login_type, login_url)
+            self.prepare_chrome_windows(login_type, login_url)
         else:
-            self.prepare_chrome_linux(caps, login_type, login_url)
+            self.prepare_chrome_linux(login_type, login_url)
 
         self.cookies = self.driver.get_cookies()
 
-    def prepare_chrome_windows(self, caps: dict[str, str], login_type: str, login_url: str):
+    def prepare_chrome_windows(self, login_type: str, login_url: str):
         inited = False
         try:
             if not self.cfg.force_use_portable_chrome:
                 # 如果未强制使用便携版chrome，则首先尝试使用系统安装的chrome
-                options = Options()
+                options = self.new_options()
                 self.append_common_options(options, login_type, login_url)
                 self.driver = webdriver.Chrome(
                     service=Service(executable_path=self.chrome_driver_executable_path()),
-                    desired_capabilities=caps,
                     options=options,
                 )
                 logger.info(color("bold_yellow") + f"{self.name} 使用自带chrome")
@@ -280,7 +276,7 @@ class QQLogin:
                 pause_and_exit(-1)
 
             # 然后使用本地的chrome来初始化driver对象
-            options = Options()
+            options = self.new_options()
             options.binary_location = self.chrome_binary_location()
             options.add_argument("--no-sandbox")
             options.add_argument("--no-default-browser-check")
@@ -289,14 +285,13 @@ class QQLogin:
 
             self.driver = webdriver.Chrome(
                 service=Service(executable_path=self.chrome_driver_executable_path()),
-                desired_capabilities=caps,
                 options=options,
             )
             logger.info(color("bold_yellow") + f"{self.name} 使用便携版chrome")
 
-    def prepare_chrome_linux(self, caps: dict[str, str], login_type: str, login_url: str):
+    def prepare_chrome_linux(self, login_type: str, login_url: str):
         # linux下只尝试使用系统安装的chrome
-        options = Options()
+        options = self.new_options()
         options.binary_location = self.chrome_binary_location_linux()
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
@@ -306,10 +301,20 @@ class QQLogin:
 
         self.driver = webdriver.Chrome(
             service=Service(executable_path=self.chrome_driver_executable_path_linux()),
-            desired_capabilities=caps,
             options=options,
         )
         logger.info(color("bold_yellow") + f"{self.name} Linux环境下使用自带chrome")
+
+    def new_options(self) -> Options:
+        options = Options()
+
+        caps = DesiredCapabilities().CHROME
+        # caps["pageLoadStrategy"] = "normal"  #  Waits for full page load
+        caps["pageLoadStrategy"] = "none"  # Do not wait for full page load
+        for k, v in caps.items():
+            options.set_capability(k, v)
+
+        return options
 
     def append_common_options(self, options: Options, login_type: str, login_url: str):
         options.add_argument(f"window-position={self.window_position_x},{self.window_position_y}")
@@ -397,7 +402,7 @@ class QQLogin:
             )
             self.download_chrome_driver(chrome_driver_exe_name)
 
-        options = Options()
+        options = self.new_options()
         options.headless = True
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if not self.cfg.force_use_portable_chrome:

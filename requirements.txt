@@ -2,6 +2,6 @@
 # note: 日后有需求可以改写成 基于pip-compile-multi 来管理依赖，可以在手动维护各个环境的直接依赖的基础上，同时自动生成对应环境的所有间接依赖的固定版本列表，确保可重现
 -r requirements_z_base.txt
 
-PyQt5==5.15.7
+PyQt5==5.15.9
 PyQt5-stubs==5.15.6.0
 pywin32==305

@@ -208,5 +208,15 @@
     "open_url": "https://docs.qq.com/doc/DYnJ1Qk1VcUR6R1ZX",
     "expire_at": "2023-07-01 00:00:00",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "活动周期说明-v5",
+    "message": "也许各位会注意到最近几天运行完小助手没收到啥邮件-。-这是因为周年庆的网页活动基本都在前几天到期了。\n按照往年的数据，大概率会在国庆版本才会出新活动。\n\n有兴趣的可以看看我之前发的统计帖子：20.8~22.8 网页蚊子腿大致统计\nhttps://bbs.colg.cn/thread-8551016-1-1.html\n",
+    "send_at": "2023-07-24 11:34:25",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-07-31 11:34:25",
+    "show_only_before_version": ""
   }
 ]

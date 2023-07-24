@@ -195,12 +195,16 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "编年史新角色1000经验"
-    message = """助手编年史这次新增了一个特别兑换奖励，可以直接领取1000经验，如果你做了新角色的升级活动，并弄到110级了，可以按照稍后的在线文档的说明去操作~
+    title = "活动周期说明-v5"
+    message = """也许各位会注意到最近几天运行完小助手没收到啥邮件-。-这是因为周年庆的网页活动基本都在前几天到期了。
+按照往年的数据，大概率会在国庆版本才会出新活动。
+
+有兴趣的可以看看我之前发的统计帖子：20.8~22.8 网页蚊子腿大致统计
+https://bbs.colg.cn/thread-8551016-1-1.html
 """
-    open_url = "https://docs.qq.com/doc/DYnJ1Qk1VcUR6R1ZX"
+    open_url = ""
     show_only_before_version = ""
-    valid_duration = timedelta(days=11)
+    valid_duration = timedelta(days=7)
 
     if title != "":
         nm.add_notice(

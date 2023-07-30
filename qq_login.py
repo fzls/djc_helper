@@ -31,6 +31,7 @@ from config_cloud import config_cloud
 from dao import GuanJiaUserInfo
 from data_struct import ConfigInterface
 from db import CaptchaDB, LoginRetryDB
+from download import download_latest_github_release
 from exceptions_def import (
     GithubActionLoginException,
     RequireVerifyMessageButInHeadlessMode,
@@ -501,7 +502,31 @@ class QQLogin:
             pause_and_exit(-1)
 
     def download_chrome_file(self, filename: str) -> str:
-        return download_from_alist(self.get_path_in_netdisk(filename), self.chrome_root_directory())
+        def download_by_github() -> str:
+            logger.warning("尝试通过github下载")
+            return download_latest_github_release(
+                "utils",
+                filename,
+                "fzls",
+                "djc_helper_chrome",
+            )
+
+        def download_by_alist() -> str:
+            logger.warning("尝试通过alist下载")
+            return download_from_alist(self.get_path_in_netdisk(filename), self.chrome_root_directory())
+
+        download_functions = [
+            download_by_github,
+            download_by_alist,
+        ]
+
+        for download_function in download_functions:
+            try:
+                return download_function()
+            except Exception:
+                logger.info("下载失败了，尝试下一个下载方式")
+
+        raise Exception("所有下载方式都失败了")
 
     def download_chrome_driver(self, chrome_driver_exe_name: str) -> str:
         try:
@@ -509,6 +534,14 @@ class QQLogin:
         except Exception as e:
             logger.error("从chrome官网下载driver失败，尝试从网盘下载", exc_info=e)
             return self.download_chrome_file(chrome_driver_exe_name)
+
+    def download_from_github(self, filename: str) -> str:
+        return download_latest_github_release(
+            "utils",
+            filename,
+            "fzls",
+            "djc_helper_chrome",
+        )
 
     def get_path_in_netdisk(self, filename: str) -> str:
         return f"/文本编辑器、chrome浏览器、autojs、HttpCanary等小工具/{filename}"

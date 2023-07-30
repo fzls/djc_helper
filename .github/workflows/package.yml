@@ -46,36 +46,24 @@ jobs:
         run: |
           python _package.py
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Changelog For GitHub Release
+        run: |
+          python _gen_changelog_for_github_release.py
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./releases/_github_action_artifact/djc_helper.7z
-          asset_name: djc_helper.7z
-          asset_content_type: application/7z
+          body_path: ./releases/_github_action_artifact/changelog-github.txt
+          generate_release_notes: true
+          files: |
+            ./releases/_github_action_artifact/djc_helper.7z
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: "djc_helper.7z"
           path: ./releases/_github_action_artifact/djc_helper.7z
-
-#      - name: Upload to Alist
-#        env:
-#          ALIST_USERNAME: ${{ secrets.ALIST_USERNAME }}
-#          ALIST_PASSWORD: ${{ secrets.ALIST_PASSWORD }}
-#        run: |
-#          python _upload_to_alist.py

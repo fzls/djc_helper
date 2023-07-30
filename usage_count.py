@@ -66,10 +66,10 @@ def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category:
                 ga_category, name = parts
             else:
                 ga_category = "counter"
-        ga.track_event(ga_category, name, ga_misc_params)
+        # ga.track_event(ga_category, name, ga_misc_params)
         ga4.track_event(ga_category, name)
     elif ga_type == ga.GA_REPORT_TYPE_PAGE_VIEW:
-        ga.track_page(name, ga_misc_params)
+        # ga.track_page(name, ga_misc_params)
         ga4.track_event("page_view", name)
     else:
         logger.error(f"unknow ga_type={ga_type}")

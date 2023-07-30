@@ -41,5 +41,5 @@ def gen_changelog():
         output_file.write("\n".join(update_message_list))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     gen_changelog()

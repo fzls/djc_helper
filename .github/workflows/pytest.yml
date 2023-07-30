@@ -16,22 +16,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
-
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-
-      - name: pip cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          python-version-file: '.python-version'
+          cache: 'pip'
+          cache-dependency-path: '**/requirements*.txt'
 
       - name: Install Requirements
         run: |
@@ -55,29 +44,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
-
-      - name: Set time zone
-        uses: szenius/set-timezone@v1.0
-        with:
-          timezoneLinux: "Asia/Shanghai"
-          timezoneMacos: "Asia/Shanghai"
-          timezoneWindows: "China Standard Time"
-
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-
-      - name: pip cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}-${{ hashFiles('**/requirements_linux_dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          python-version-file: '.python-version'
 
       - name: Install Requirements Windows
         if: startsWith(matrix.os, 'windows')
@@ -91,19 +60,26 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements_linux_dev.txt
 
+      - name: Set time zone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Shanghai"
+          timezoneMacos: "Asia/Shanghai"
+          timezoneWindows: "China Standard Time"
+
       - name: Test for CodeCov
         run: |
           pytest -n auto --cov=./ --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           verbose: true
 
       - name: Upload Codecov artifact
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: "coverage.xml"
           path: ./coverage.xml

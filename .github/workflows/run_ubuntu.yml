@@ -19,38 +19,27 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
-
-      - name: Set time zone
-        uses: szenius/set-timezone@v1.0
-        with:
-          timezoneLinux: "Asia/Shanghai"
-          timezoneMacos: "Asia/Shanghai"
-          timezoneWindows: "China Standard Time"
-
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-
-      - name: pip cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_linux.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          python-version-file: '.python-version'
+          cache: 'pip'
+          cache-dependency-path: '**/requirements*.txt'
 
       - name: Install Requirements Ubuntu
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements_linux.txt
 
+      - name: Set time zone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Shanghai"
+          timezoneMacos: "Asia/Shanghai"
+          timezoneWindows: "China Standard Time"
+
       - name: Chrome And Driver Cache On Ubuntu
         id: chrome-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             google-chrome*.deb

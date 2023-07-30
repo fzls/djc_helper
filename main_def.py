@@ -1098,6 +1098,9 @@ PS2：在开启多进程模式的情况下，这个弹窗每月会弹出一次�
 
 @try_except(show_exception_info=False)
 def try_report_usage_info(cfg: Config):
+    # 方便ga4统计新用户数目
+    increase_counter("first_visit")
+
     # 整体使用次数
     increase_counter(this_version_global_usage_counter_name)
     increase_counter(global_usage_counter_name)

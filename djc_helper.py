@@ -646,24 +646,24 @@ class DjcHelper:
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("DNF福利中心兑换", self.dnf_welfare),
-            ("dnf助手活动", self.dnf_helper),
-            ("DNF落地页活动", self.dnf_luodiye),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("DNF心悦", self.dnf_xinyue),
-            ("超级会员", self.dnf_super_vip),
-            ("colg每日签到", self.colg_signin),
-            ("集卡", self.dnf_ark_lottery),
-            ("DNF马杰洛的规划", self.majieluo),
-            ("dnf周年拉好友", self.dnf_anniversary_friend),
-            ("勇士的冒险补给", self.maoxian),
-            ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("DNF心悦Dup", self.dnf_xinyue_dup),
+            ("勇士的冒险补给", self.maoxian),
+            ("dnf周年拉好友", self.dnf_anniversary_friend),
+            ("DNF马杰洛的规划", self.majieluo),
+            ("集卡", self.dnf_ark_lottery),
+            ("colg每日签到", self.colg_signin),
+            ("超级会员", self.dnf_super_vip),
+            ("DNF心悦", self.dnf_xinyue),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF落地页活动", self.dnf_luodiye),
+            ("dnf助手活动", self.dnf_helper),
+            ("DNF福利中心兑换", self.dnf_welfare),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),

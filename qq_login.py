@@ -335,13 +335,13 @@ class QQLogin:
         if self.cfg.run_in_headless_mode:
             if login_type == self.login_type_auto_login:
                 logger.warning(f"{self.name} 已配置在自动登录模式时使用headless模式运行chrome")
-                options.add_argument('--headless')
+                options.add_argument("--headless")
             else:
                 logger.warning(f"{self.name} 扫码登录模式不使用headless模式")
 
         # 特殊处理linux环境
         if not is_windows():
-            options.add_argument('--headless')
+            options.add_argument("--headless")
             logger.warning(f"{self.name} 在linux环境下强制使用headless模式运行chrome")
 
         # 隐藏提示：Chrome 正收到自动测试软件的控制。
@@ -403,7 +403,7 @@ class QQLogin:
             self.download_chrome_driver(chrome_driver_exe_name)
 
         options = self.new_options()
-        options.add_argument('--headless')
+        options.add_argument("--headless")
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         if not self.cfg.force_use_portable_chrome:
             try:

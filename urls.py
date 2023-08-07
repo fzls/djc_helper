@@ -91,10 +91,10 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230626dnf/index.html",
     #
     # 已过期活动
     #
+    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230626dnf/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",

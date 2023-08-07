@@ -646,12 +646,12 @@ class DjcHelper:
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("勇士的冒险补给", self.maoxian),
             ("dnf周年拉好友", self.dnf_anniversary_friend),

@@ -30,7 +30,6 @@ from dao import (
     BuyInfo,
     ColgBattlePassInfo,
     ColgBattlePassQueryInfo,
-    ColgYearlySigninInfo,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
@@ -8997,7 +8996,7 @@ class DjcHelper:
 
         session.get(self.urls.colg_other_act_url, timeout=10)
 
-        res = session.post(self.urls.colg_other_act_lottery, data=f"type=2&aid=13", timeout=10)
+        res = session.post(self.urls.colg_other_act_lottery, data="type=2&aid=13", timeout=10)
         logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------

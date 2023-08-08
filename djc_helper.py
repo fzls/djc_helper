@@ -11911,6 +11911,7 @@ class DjcHelper:
         try_auto_bind=True,
         roleinfo: RoleInfo | None = None,
         roleinfo_source="道聚城所绑定的角色",
+        act_can_change_bind=True,
     ):
         while True:
             res = activity_op_func(f"查询是否绑定-尝试自动({try_auto_bind})", query_bind_flowid, print_res=False)
@@ -11921,7 +11922,7 @@ class DjcHelper:
                 # 未绑定角色
                 need_bind = True
                 bind_reason = "未绑定角色"
-            elif self.common_cfg.force_sync_bind_with_djc:
+            elif act_can_change_bind and self.common_cfg.force_sync_bind_with_djc:
                 if roleinfo is None:
                     # 若未从外部传入roleinfo，则使用道聚城绑定的信息
                     roleinfo = self.get_dnf_bind_role()

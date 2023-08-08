@@ -647,6 +647,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF心悦", self.dnf_xinyue),
+            ("colg其他活动", self.colg_other_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -668,7 +669,6 @@ class DjcHelper:
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),
             ("和谐补偿活动", self.dnf_compensate),
-            ("colg年终盛典签到", self.colg_yearly_signin),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
@@ -8965,15 +8965,15 @@ class DjcHelper:
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
             )
 
-    # --------------------------------------------colg年终盛典签到--------------------------------------------
+    # --------------------------------------------colg其他活动--------------------------------------------
     @try_except()
-    def colg_yearly_signin(self):
-        # https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9
-        show_head_line("colg年终盛典签到")
-        self.show_not_ams_act_info("colg年终盛典签到")
+    def colg_other_act(self):
+        # https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13
+        show_head_line("colg其他活动")
+        self.show_not_ams_act_info("colg其他活动")
 
-        if not self.cfg.function_switches.get_colg_yearly_signin or self.disable_most_activities():
-            logger.warning("未启用colg年终盛典签到功能，将跳过")
+        if not self.cfg.function_switches.get_colg_other_act or self.disable_most_activities():
+            logger.warning("未启用colg其他活动功能，将跳过")
             return
 
         if self.cfg.colg_cookie == "":
@@ -8986,7 +8986,7 @@ class DjcHelper:
             "accept-language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7,en-GB;q=0.6,ja;q=0.5",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "origin": "https://bbs.colg.cn",
-            "referer": get_act_url("colg年终盛典签到"),
+            "referer": get_act_url("colg其他活动"),
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
             "x-requested-with": "XMLHttpRequest",
             "cookie": json.dumps(self.cfg.colg_cookie, ensure_ascii=True),
@@ -8995,49 +8995,10 @@ class DjcHelper:
         session = requests.session()
         session.headers = headers  # type: ignore
 
-        def query_info() -> ColgYearlySigninInfo:
-            res = session.get(self.urls.colg_yearly_signin_url, timeout=10)
-            html = res.text
+        session.get(self.urls.colg_other_act_url, timeout=10)
 
-            activity_id = extract_between(html, 'let activity_id = "', '";', str)
-            signin_days = extract_between(html, 'let dau_count = "', '";', int)
-            rewards = json.loads(extract_between(html, "let reward_list = ", ";", str))
-
-            info = ColgYearlySigninInfo().auto_update_config(
-                {
-                    "activity_id": activity_id,
-                    "signin_days": signin_days,
-                    "rewards": rewards,
-                }
-            )
-
-            return info
-
-        # 签到
-        info = query_info()
-        res = session.post(self.urls.colg_yearly_signin_lottery, data=f"type=2&aid={info.activity_id}", timeout=10)
-        logger.info(color("bold_green") + f"开启每日盲盒，进行签到，结果={res.json()}")
-
-        # 领取累计签到奖励
-        info = query_info()
-        logger.info(f"当前已签到天数为 {info.signin_days} 天")
-        for reward in info.rewards:
-            if reward.status == 1:
-                logger.info(f"{reward.title} 奖励已领取，将跳过")
-                continue
-            if reward.status == 2:
-                logger.info(f"{reward.title} 天数未达到（当前为{info.signin_days}），不可领取，将跳过")
-                continue
-
-            # 尝试领取奖励
-            res = session.post(
-                self.urls.colg_yearly_signin_get_reward,
-                data=f"aid={info.activity_id}&reward_bag_id={reward.reward_bag_id}",
-                timeout=10,
-            )
-            logger.info(
-                color("bold_green") + f"领取 {reward.title} 结果={res.json()} 奖励为({reward.get_reward_name_list()})， "
-            )
+        res = session.post(self.urls.colg_other_act_lottery, data=f"type=2&aid=13", timeout=10)
+        logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -12510,4 +12471,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue()
+        djcHelper.colg_other_act()

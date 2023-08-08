@@ -2584,7 +2584,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("冒险的起点", "get_maoxian_start"),
             ("DNF巴卡尔竞速", "get_dnf_bakaer"),
             ("和谐补偿活动", "get_dnf_compensate"),
-            ("colg年终盛典签到", "get_colg_yearly_signin"),
+            ("colg其他活动", "get_colg_other_act"),
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),
             ("巴卡尔大作战", "get_dnf_bakaer_fight"),
             ("魔界人探险记", "get_mojieren"),

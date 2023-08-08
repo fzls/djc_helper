@@ -73,7 +73,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-07-06 00:00:00", "2023-08-02 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
-    newNotAmsActInfo("2023-01-11 00:00:00", "2023-02-23 23:59:59", "colg年终盛典签到"),
+    newNotAmsActInfo("2023-08-03 15:00:00", "2023-09-06 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-16 23:59:59", "勇士的冒险补给"),
 ]
@@ -92,6 +92,7 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
+    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
     #
     # 已过期活动
     #
@@ -111,7 +112,6 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
-    "colg年终盛典签到": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
@@ -460,10 +460,10 @@ class Urls:
         self.colg_take_sign_in_credits = (
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
-        # colg-年终盛典签到
-        self.colg_yearly_signin_url = "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=9"
-        self.colg_yearly_signin_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
-        self.colg_yearly_signin_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
+        # colg其他活动
+        self.colg_other_act_url = "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13"
+        self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
+        self.colg_other_act_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
 
         # 小酱油
         self.xiaojiangyou_get_role_id = (

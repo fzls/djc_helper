@@ -646,6 +646,7 @@ class DjcHelper:
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
+            ("DNF心悦", self.dnf_xinyue),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -659,7 +660,6 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
-            ("DNF心悦", self.dnf_xinyue),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动", self.dnf_luodiye),
             ("dnf助手活动", self.dnf_helper),
@@ -6216,35 +6216,61 @@ class DjcHelper:
 
             return xy_type, total_step, cj_ticket
 
-        self.dnf_xinyue_op("开箱子", "951825")
-        for idx in range_from_one(16):
-            self.dnf_xinyue_op(f"领取格子奖励 - {idx}/16", "951859", position=idx)
+        async_message_box(
+            "请手动前往 DPL职业联赛 活动页面进行报名PVP和PVE，可领取几个一次性的蚊子腿~。如果后续实际要参与鼻塞，对应周的排行奖励请自行领取",
+            "DPL职业联赛 报名",
+            open_url=get_act_url("DNF心悦"),
+            show_once=True,
+        )
+        # self.dnf_xinyue_op("报名礼包PVE", "964191")
+        # self.dnf_xinyue_op("报名礼包PVP", "964209")
+        self.dnf_xinyue_op("回流礼", "964201")
+        self.dnf_xinyue_op("心悦专属礼", "964206")
+
+        # self.dnf_xinyue_op("排行第1周", "964788")
+        # self.dnf_xinyue_op("排行第2周", "966444")
+        # self.dnf_xinyue_op("排行第3周", "966445")
+        # self.dnf_xinyue_op("排行第4周", "966446")
+        # self.dnf_xinyue_op("PVE排名奖励S", "966896")
+        # self.dnf_xinyue_op("PVE排名奖励A", "966910")
+        # self.dnf_xinyue_op("PVE排名奖励B", "966911")
+
+        if use_by_myself() and now_after("2023-08-17 00:00:00"):
+            async_message_box(
+                "DPL联赛页面的怪物乱斗部分开放了，看看是否能加到蚊子腿里",
+                "DPL职业联赛 怪物乱斗 接入",
+                open_url=get_act_url("DNF心悦"),
+            )
+        # self.dnf_xinyue_op("通关领取", "964218")
+        # self.dnf_xinyue_op("全图鉴达成B级", "964219")
+        # self.dnf_xinyue_op("全图鉴达成A级", "964778")
+        # self.dnf_xinyue_op("全图鉴达成S级", "964780")
+        # self.dnf_xinyue_op("达成10个A级图鉴", "964781")
+        # self.dnf_xinyue_op("达成8个S级图鉴", "964782")
+
+        self.dnf_xinyue_op("参与一次怪物乱斗", "964198")
+        self.dnf_xinyue_op("登录心悦俱乐部App", "964202")
+        self.dnf_xinyue_op("消耗30点疲劳", "964203")
+        self.dnf_xinyue_op("加入游戏家俱乐部", "964204")
+
+        max_try = 4
+        for idx in range_from_one(max_try):
+            res = self.dnf_xinyue_op(f"{idx}/{max_try} 抽奖", "964196")
+            if res["ret"] == "700":
+                break
             time.sleep(5)
-
-        xy_type, _, cj_ticket = query_info()
-
-        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {cj_ticket} 次")
-        for idx in range_from_one(cj_ticket):
-            self.dnf_xinyue_op(f"{idx}/{cj_ticket} 抽奖", "951984")
-            time.sleep(5)
-
-        self.dnf_xinyue_op("激活幸运冒险家", "952233")
-        self.dnf_xinyue_op("当日充值6元", "951991")
-        self.dnf_xinyue_op("当日消耗疲劳值30", "951990")
-        self.dnf_xinyue_op("当日激活幸运冒险家", "951986")
-
-        if xy_type < XIN_YUE_MIN_LEVEL:
-            self.dnf_xinyue_op("等级礼-特邀会员", "951993")
-        else:
-            self.dnf_xinyue_op(f"等级礼-心悦会员-xy_type={xy_type}", "951994", lqlevel=xy_type)
 
     def check_dnf_xinyue(self):
+        # re: 部分心悦活动，如DPL职业联赛报名后就不能修改绑定角色了，所以这里设定在已有绑定且与道聚城不一致的情况下，则不尝试修改绑定
+        act_can_change_bind = False
+
         self.check_bind_account(
             "DNF心悦",
             get_act_url("DNF心悦"),
             activity_op_func=self.dnf_xinyue_op,
-            query_bind_flowid="951808",
-            commit_bind_flowid="951807",
+            query_bind_flowid="964189",
+            commit_bind_flowid="964188",
+            act_can_change_bind=act_can_change_bind,
         )
 
     def dnf_xinyue_op(self, ctx, iFlowId, print_res=True, **extra_params):
@@ -12484,4 +12510,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_xinyue()

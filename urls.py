@@ -91,6 +91,7 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
+    "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     #
     # 已过期活动
     #
@@ -102,7 +103,6 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
-    "DNF心悦": "https://xinyue.qq.com/act/a20230531dnf/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230615index/",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
@@ -273,7 +273,7 @@ class Urls:
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "558995"  # DNF心悦
+        self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动

@@ -2341,6 +2341,17 @@ def demo_show_tips():
     pause()
 
 
+def demo_try_auto_update_ignore_permission_on_special_case():
+    remote_config = config_cloud()
+
+    now_version = "20.4.0"
+
+    can_ignore = remote_config.try_auto_update_ignore_permission.can_ignore(now_version, get_now())
+
+    logger.info(f"当前版本为 {now_version}，是否可以忽略权限检查：{can_ignore}")
+    pause()
+
+
 if __name__ == "__main__":
     freeze_support()
 
@@ -2351,3 +2362,4 @@ if __name__ == "__main__":
     # demo_show_activities_summary()
 
     # demo_show_tips()
+    # demo_try_auto_update_ignore_permission_on_special_case()

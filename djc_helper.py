@@ -2738,13 +2738,15 @@ class DjcHelper:
         return lucky_req_data
 
     def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True):
+        g_tk = getACSRFTokenForAMS(self.lr.p_skey)
+        url = self.urls.qzone_activity_new.format(g_tk=g_tk)
         body = {
             "SubActId": sub_act_id,
             "ActReqData": json.dumps(self.get_qzone_act_req_data(act_req_data, extra_act_req_data)),
-            "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
+            "g_tk": g_tk,
         }
 
-        return self._qzone_act_op(ctx, self.urls.qzone_activity_new, body, print_res)
+        return self._qzone_act_op(ctx, url, body, print_res)
 
     def club_qzone_act_op(
         self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True
@@ -2809,13 +2811,15 @@ class DjcHelper:
         return act_req_data
 
     def qzone_act_query_op(self, ctx: str, sub_act_id: str, print_res=True):
+        g_tk = getACSRFTokenForAMS(self.lr.p_skey)
+        url = self.urls.qzone_activity_new_query.format(g_tk=g_tk)
         body = {
             "Id": sub_act_id,
-            "g_tk": getACSRFTokenForAMS(self.lr.p_skey),
+            "g_tk": g_tk,
             "ExtInfo": {"0": ""},
         }
 
-        return self._qzone_act_op(ctx, self.urls.qzone_activity_new_query, body, print_res)
+        return self._qzone_act_op(ctx, url, body, print_res)
 
     def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True) -> dict:
         extra_cookies = f"p_skey={self.lr.p_skey}; "

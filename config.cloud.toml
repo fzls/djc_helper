@@ -33,7 +33,7 @@ pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
 # 无视权限进行自动更新的条件
 [try_auto_update_ignore_permission]
 # 最新已修复bug的版本。当填写该值后，早于该版本的小助手可无视权限触发dlc
-latest_bug_fixed_version = "20.0.3"
+latest_bug_fixed_version = "20.4.1"
 # 指定时间段内可无视权限触发dlc
 period_list = [
 #    ["2023-02-05 00:00:00", "2023-02-15 00:00:00"]

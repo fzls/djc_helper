@@ -218,5 +218,15 @@
     "open_url": "",
     "expire_at": "2023-07-31 11:34:25",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "重复登录",
+    "message": "大概8.16下午开始使用小助手时会一直重复登录，刚调试了下，发现qq空间系列的活动多了个参数。\n各位朋友等我晚上九点回家发个新版本，十点后再等自动更新到新版本使用\n",
+    "send_at": "2023-08-16 19:16:09",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-08-23 19:16:09",
+    "show_only_before_version": ""
   }
 ]

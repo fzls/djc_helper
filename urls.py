@@ -93,6 +93,7 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230817index/index.html",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230615index/",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
@@ -262,7 +262,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "560122"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "576022"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "523121"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战

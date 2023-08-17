@@ -155,19 +155,23 @@ def load_config_cloud():
     except Exception as e:
         logger.debug("读取远程配置失败", exc_info=e)
 
-    async_update_config_cloud()
+    try_update_config_cloud()
 
     # 标记为已经初始化完毕
     g_config_cloud.loaded = True
 
 
 @try_except()
-def async_update_config_cloud():
+def try_update_config_cloud(async_update=True):
     if not is_first_run_in("同步远程配置", timedelta(minutes=10)):
         return
 
-    logger.info("尝试异步从github下载最新的远程配置，供下次读取使用（主要是为了避免影响其他流程）")
-    async_call(download_github_raw_content, cloud_config_filename, save_dir)
+    if async_update:
+        logger.info("尝试异步从github下载最新的远程配置，供下次读取使用（主要是为了避免影响其他流程）")
+        async_call(download_github_raw_content, cloud_config_filename, save_dir)
+    else:
+        logger.info("尝试同步从github下载最新的远程配置，方便立即使用")
+        download_github_raw_content(cloud_config_filename, save_dir)
 
 
 if __name__ == "__main__":

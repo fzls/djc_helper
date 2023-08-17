@@ -15,7 +15,7 @@ import requests
 
 from alist import download_from_alist
 from config import AccountConfig, CommonConfig, Config, config, load_config
-from config_cloud import config_cloud
+from config_cloud import config_cloud, try_update_config_cloud
 from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
@@ -1568,6 +1568,9 @@ def show_tip_for_myself(msg: str, title: str):
 
 
 def try_auto_update_ignore_permission_on_special_case(cfg: Config):
+    # 尝试同步更新下云配置，方便立刻生效
+    try_update_config_cloud(async_update=False)
+
     remote_config = config_cloud()
     if not remote_config.try_auto_update_ignore_permission.can_ignore(now_version, get_now()):
         return

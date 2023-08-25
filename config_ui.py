@@ -2555,6 +2555,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("DNF心悦", "get_dnf_xinyue"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("绑定手机活动", "get_dnf_bind_phone"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

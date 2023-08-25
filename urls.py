@@ -94,6 +94,7 @@ act_name_to_url = {
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230817index/index.html",
+    "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     #
     # 已过期活动
     #
@@ -298,6 +299,7 @@ class Urls:
         self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
+        self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType
@@ -319,7 +321,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}&selectNo={selectNo}"
         )
 
         # ide通用活动

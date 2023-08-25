@@ -648,6 +648,7 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("colg其他活动", self.colg_other_act),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("绑定手机活动", self.dnf_bind_phone),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9285,6 +9286,70 @@ class DjcHelper:
             extra_cookies=f"p_skey={p_skey}",
         )
 
+    # --------------------------------------------绑定手机活动--------------------------------------------
+    @try_except()
+    def dnf_bind_phone(self):
+        show_head_line("绑定手机活动")
+        self.show_amesvr_act_info(self.dnf_bind_phone_op)
+
+        if not self.cfg.function_switches.get_dnf_bind_phone or self.disable_most_activities():
+            logger.warning("未启用领取绑定手机活动功能，将跳过")
+            return
+
+        self.check_dnf_bind_phone()
+
+        def query_info():
+            res = self.dnf_bind_phone_op("查询信息", "971619", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            isGetBindGift = int(raw_info.sOutValue1) == 1
+            bindPhone = raw_info.sOutValue2
+            exchangeTickets = int(raw_info.sOutValue3)
+            isSettlement = int(raw_info.sOutValue4) == 1
+
+            return isGetBindGift, bindPhone, exchangeTickets, isSettlement
+
+        isGetBindGift, bindPhone, exchangeTickets, isSettlement = query_info()
+        if bindPhone == "0":
+            async_message_box(
+                "当前账号尚未绑定手机，可前往活动页面绑定手机，绑定后可以领取666代币券，同时每月可以领取积分来兑换其他蚊子腿",
+                f"绑定手机-{self.cfg.name}",
+                open_url=get_act_url("绑定手机活动"),
+                show_once=is_monthly_first_run(f"绑定手机-{self.cfg.name}"),
+            )
+
+        if not isGetBindGift:
+            self.dnf_bind_phone_op("领取豪礼（新）", "970721")
+
+        if not isSettlement:
+            self.dnf_bind_phone_op("发放兑换积分", "970838")
+
+        if exchangeTickets > 2:
+            self.dnf_bind_phone_op("兑换-增肥器-4", "970763", selectNo="4")
+
+    def check_dnf_bind_phone(self):
+        self.check_bind_account(
+            "绑定手机活动",
+            get_act_url("绑定手机活动"),
+            activity_op_func=self.dnf_bind_phone_op,
+            query_bind_flowid="970815",
+            commit_bind_flowid="970814",
+        )
+
+    def dnf_bind_phone_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bind_phone
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("绑定手机活动"),
+            **extra_params,
+        )
+
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame(self):
@@ -11637,6 +11702,7 @@ class DjcHelper:
                 "week",
                 "position",
                 "packages",
+                "selectNo",
             ]
         }
 
@@ -12476,4 +12542,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_bind_phone()

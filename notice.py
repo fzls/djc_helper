@@ -195,11 +195,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "重复登录"
-    message = """大概8.16下午开始使用小助手时会一直重复登录，刚调试了下，发现qq空间系列的活动多了个参数。
-各位朋友等我晚上九点回家发个新版本，十点后再等自动更新到新版本使用
+    title = "聆心计划领黑钻"
+    message = """官方的广州见面会活动预约界面输入手机号、验证码可以领取7天黑钻和增肥器，由于需要手机验证码，所以需要在点击确认弹出的网页中自行完成操作~
 """
-    open_url = ""
+    open_url = "https://dnf.qq.com/cp/a20230815jmh/live.html"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

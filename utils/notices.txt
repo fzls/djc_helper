@@ -228,5 +228,15 @@
     "open_url": "",
     "expire_at": "2023-08-23 19:16:09",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "聆心计划领黑钻",
+    "message": "官方的广州见面会活动预约界面输入手机号、验证码可以领取7天黑钻和增肥器，由于需要手机验证码，所以需要在点击确认弹出的网页中自行完成操作~\n",
+    "send_at": "2023-09-03 18:37:47",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20230815jmh/live.html",
+    "expire_at": "2023-09-10 18:37:47",
+    "show_only_before_version": ""
   }
 ]

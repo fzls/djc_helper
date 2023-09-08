@@ -6239,12 +6239,6 @@ class DjcHelper:
         # self.dnf_xinyue_op("PVE排名奖励A", "966910")
         # self.dnf_xinyue_op("PVE排名奖励B", "966911")
 
-        if use_by_myself() and now_after("2023-08-17 00:00:00"):
-            async_message_box(
-                "DPL联赛页面的怪物乱斗部分开放了，看看是否能加到蚊子腿里",
-                "DPL职业联赛 怪物乱斗 接入",
-                open_url=get_act_url("DNF心悦"),
-            )
         # self.dnf_xinyue_op("通关领取", "964218")
         # self.dnf_xinyue_op("全图鉴达成B级", "964219")
         # self.dnf_xinyue_op("全图鉴达成A级", "964778")

@@ -195,10 +195,10 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "聆心计划领黑钻"
-    message = """官方的广州见面会活动预约界面输入手机号、验证码可以领取7天黑钻和增肥器，由于需要手机验证码，所以需要在点击确认弹出的网页中自行完成操作~
+    title = "安卓使用logcat获取助手token"
+    message = """小助手群友分享了一个通过logcat来获取助手token的方法，试了下比其他抓包方案简单很多，整理了下，大家可以试一试
 """
-    open_url = "https://dnf.qq.com/cp/a20230815jmh/live.html"
+    open_url = "https://docs.qq.com/doc/DYnNmWFJFeExiaFFF"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

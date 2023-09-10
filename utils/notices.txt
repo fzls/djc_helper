@@ -238,5 +238,15 @@
     "open_url": "https://dnf.qq.com/cp/a20230815jmh/live.html",
     "expire_at": "2023-09-10 18:37:47",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "安卓使用logcat获取助手token",
+    "message": "小助手群友分享了一个通过logcat来获取助手token的方法，试了下比其他抓包方案简单很多，整理了下，大家可以试一试\n",
+    "send_at": "2023-09-10 17:09:11",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYnNmWFJFeExiaFFF",
+    "expire_at": "2023-09-17 17:09:11",
+    "show_only_before_version": ""
   }
 ]

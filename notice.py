@@ -195,10 +195,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "安卓使用logcat获取助手token"
-    message = """小助手群友分享了一个通过logcat来获取助手token的方法，试了下比其他抓包方案简单很多，整理了下，大家可以试一试
+    title = "请个小假"
+    message = """因下周要出国旅游，下周六（9.23）晚上回国，因此预计下周日小助手才能更新国庆版本可能会出的一些新网页蚊子腿。
+各位下周4/5/6三天请先通过dnf助手app来手动点击领取（左下角 资讯tab/ 右上角 活动标签）。
+
+情况特殊，正好跟国庆版本撞期，实在是不好意思。
 """
-    open_url = "https://docs.qq.com/doc/DYnNmWFJFeExiaFFF"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

@@ -248,5 +248,15 @@
     "open_url": "https://docs.qq.com/doc/DYnNmWFJFeExiaFFF",
     "expire_at": "2023-09-17 17:09:11",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "请个小假",
+    "message": "因下周要出国旅游，下周六（9.23）晚上回国，因此预计下周日小助手才能更新国庆版本可能会出的一些新网页蚊子腿。\n各位下周4/5/6三天请先通过dnf助手app来手动点击领取（左下角 资讯tab/ 右上角 活动标签）。\n\n情况特殊，正好跟国庆版本撞期，实在是不好意思。\n",
+    "send_at": "2023-09-17 16:00:46",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-09-24 16:00:46",
+    "show_only_before_version": ""
   }
 ]

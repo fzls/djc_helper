@@ -653,6 +653,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
+            ("dnf助手活动wpe", self.dnf_helper_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -4495,6 +4496,73 @@ class DjcHelper:
             raise RuntimeError("dnf助手token过期，请重试获取")
 
         return res
+
+    # --------------------------------------------dnf助手活动wpe--------------------------------------------
+    @try_except()
+    def dnf_helper_wpe(self):
+        show_head_line("dnf助手活动wpe")
+        self.show_not_ams_act_info("dnf助手活动wpe")
+
+        if not self.cfg.function_switches.get_dnf_helper_wpe or self.disable_most_activities():
+            logger.warning("未启用领取dnf助手活动wpe功能，将跳过")
+            return
+
+        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+
+        self.dnf_helper_wpe_op("盖波加的每日补给", 118151)
+
+        self.dnf_helper_wpe_op("盖波加的初级秘宝-基础", 118155)
+        self.dnf_helper_wpe_op("盖波加的初级秘宝-挑战", 118156)
+        self.dnf_helper_wpe_op("盖波加的中级秘宝-基础", 118157)
+        self.dnf_helper_wpe_op("盖波加的中级秘宝-挑战", 118158)
+        self.dnf_helper_wpe_op("盖波加的进阶秘宝-基础", 118159)
+        self.dnf_helper_wpe_op("盖波加的进阶秘宝-挑战", 118160)
+        self.dnf_helper_wpe_op("盖波加的珍藏秘宝-基础", 118161)
+        self.dnf_helper_wpe_op("盖波加的珍藏秘宝-挑战", 118162)
+
+    def dnf_helper_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        roleinfo = self.get_dnf_bind_role()
+
+        act_id = 14853
+
+        json_data = {
+            "biz_id": "bb",
+            "act_id": act_id,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": json.dumps(
+                {
+                    "num": 1,
+                    "ceiba_plat_id": "ios",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_helper_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
 
     # --------------------------------------------dnf助手编年史活动--------------------------------------------
     # note: 测试流程
@@ -12514,4 +12582,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.dnf_helper_wpe()

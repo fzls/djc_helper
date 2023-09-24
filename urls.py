@@ -76,6 +76,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-08-03 15:00:00", "2023-09-06 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
+    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "dnf助手活动wpe"),
 ]
 
 act_name_to_url = {
@@ -99,6 +100,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
+    "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
     #
     # 已过期活动
     #
@@ -491,11 +493,17 @@ class Urls:
             "&randomSeed={randomSeed}"
         )
 
+        # re: wpe类活动的接入办法为：
+        #   1. 随便点击一个按钮，在其请求记录中复制对应的flowid
+        #   2. 在Search标签中搜索该值，会找到一行json定义，复制出来，并格式化
+        #   3. 后续在想要查看的按钮右键 Inspect，复制其上层div对应的id的值，然后在json中搜索，上面configurationData的flowID即为我们要找的值
+
         # 超享玩
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"
 
         self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex"
         self.maoxian_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
+        self.dnf_helper_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
 
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []

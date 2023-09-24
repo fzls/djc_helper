@@ -1513,9 +1513,6 @@ def show_tips(cfg: Config):
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
-        "绑定手机领666代币券": (
-            "之前春节短暂上线又鸽掉的绑手机领666欢乐代币券活动又回来了，大家可以去点一点: \n" "https://dnf.qq.com/cp/a20211230info/index.html\n"
-        ),
         "22.6 肥腙与井盖小游戏": (
             "周年庆多了个肥腙小游戏，与之前的井盖小游戏一样，请自行完成~\n"
             "其实就是选择关卡后不停循环点四个技能按钮，所以可以用按键精灵、autojs等工具做一个简单的脚本，循环点这四个位置就好了- -有兴趣可以自行折腾~\n"
@@ -1523,15 +1520,11 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "23.6 弓箭手预约活动": (
-            "新出了一个弓箭手预约活动，需要填写手机短信验证码来领取，因此请自行复制并打开下方网页中进行领取~\n" "https://dnf.qq.com/cp/a20230615dnf/index.html\n"
-        ),
-        "23.6 斗鱼虎牙活动": (
+        "23.9 斗鱼虎牙活动": (
             "斗鱼虎牙活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/DNF15th?rid=5551065\n"
+            "斗鱼：https://www.douyu.com/topic/DNFjqjxzs\n"
             "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
         ),
-        "23.6 Colg答题王": ("colg答题王活动请自行参与，活动链接如下: https://bbs.colg.cn/colg_activity_new-colg_answer.html?aid=12#/"),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

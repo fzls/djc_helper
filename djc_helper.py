@@ -646,6 +646,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -653,7 +654,6 @@ class DjcHelper:
         return [
             ("DNF心悦", self.dnf_xinyue),
             ("colg其他活动", self.colg_other_act),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("勇士的冒险补给", self.maoxian),
@@ -9217,32 +9217,33 @@ class DjcHelper:
         self.check_dnf_luodiye()
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_op("全民礼包", "970846")
-        self.dnf_luodiye_op("幸运勇士礼包", "971010")
-        self.dnf_luodiye_op("幸运回归礼包", "971012")
+        self.dnf_luodiye_op("见面礼", "978172")
 
-        self.dnf_luodiye_op("每日任务一", "971021")
-        self.dnf_luodiye_op("每日任务二", "971023")
-        self.dnf_luodiye_op("每周任务一", "971028")
-        self.dnf_luodiye_op("每周任务二", "971029")
+        self.dnf_luodiye_op("噩梦回廊礼包", "978192")
+
+        self.dnf_luodiye_op("每日任务一", "978197")
+        self.dnf_luodiye_op("每日任务二", "978198")
+        self.dnf_luodiye_op("每周任务一", "978199")
+        self.dnf_luodiye_op("每周任务二", "978200")
 
         lottery_times = 4
         for idx in range_from_one(lottery_times):
-            res = self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "971030")
-            if res["ret"] == "700":
+            res = self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "978824")
+            if res["ret"] == "700" or (res["ret"] == "0" and res["modRet"]["ret"] == 10001):
                 break
             time.sleep(5)
 
-        # 0, 1, 2
-        self.dnf_luodiye_op("道具5选3", "971204", sNum="0|1|2")
+        # 1, 3, 4
+        self.dnf_luodiye_op("道具5选3", "978851", sNum="1|3|4")
 
-        self.dnf_luodiye_op("累计通过风暴逆鳞", "971208")
-        self.dnf_luodiye_op("通关任意高级地下城10次", "971209")
-        self.dnf_luodiye_op("累计获得史诗装备", "971210")
+        self.dnf_luodiye_op("通关任意难度盖加波", "978852")
+        self.dnf_luodiye_op("累计获得史诗10件", "978853")
+        self.dnf_luodiye_op("累计获得史诗20件", "978854")
 
+        self.dnf_luodiye_op("首次邀请领黑钻礼包", "978268")
         async_message_box(
-            "周年庆落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~",
-            "817 落地页拉回归活动",
+            "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~",
+            "921 落地页拉回归活动",
             show_once=True,
             open_url=get_act_url("DNF落地页活动"),
         )
@@ -9252,8 +9253,8 @@ class DjcHelper:
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="970766",
-            commit_bind_flowid="970765",
+            query_bind_flowid="977897",
+            commit_bind_flowid="977896",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -12536,4 +12537,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bind_phone()
+        djcHelper.dnf_luodiye()

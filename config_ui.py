@@ -2554,6 +2554,7 @@ class FunctionSwitchesConfigUi(QWidget):
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2571,7 +2572,6 @@ class FunctionSwitchesConfigUi(QWidget):
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
             ("DNF心悦", "get_dnf_xinyue"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF心悦Dup", "get_dnf_xinyue"),
             ("勇士的冒险补给", "get_maoxian"),
             ("dnf周年拉好友", "get_dnf_anniversary_friend"),

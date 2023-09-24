@@ -1908,14 +1908,22 @@ card_id_to_action_id = {
 
 class MaJieLuoInfo(ConfigInterface):
     def __init__(self):
-        self.iRet = "0"
-        self.sMsg = "ok"
-        self.iTeamId = "0"
-        self.iDamage = "0"
-        self.iLucky = "4"
-        self.iAttack = "0"
-        self.jHolds = {}
-        self.sCode = "YUltZ0RPUnFzVnM0SG9jVWpkdWhXQT09"
+        self.iRet =  "0"
+        self.sMsg =  "ok"
+        self.luckCard =  "0"
+        self.hitCard =  "0"
+        self.itemInfo = []
+        self.totalCard =  None
+        self.isLuck =  "1"
+        self.itemUin =  "1054073896"
+        self.isAuth =  "1"
+        self.jHolds =  {}
+        self.isLogin =  1
+        self.isLive =  0
+        self.iPass =  "0"
+        self.isBakar =  "0"
+        self.isDimensional =  "0"
+        self.isNightmare =  "0"
 
 
 class VoteWorkList(ConfigInterface):

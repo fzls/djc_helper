@@ -651,6 +651,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -661,7 +662,6 @@ class DjcHelper:
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("勇士的冒险补给", self.maoxian),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
-            ("DNF马杰洛的规划", self.majieluo),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("dnf助手活动", self.dnf_helper),
             ("DNF福利中心兑换", self.dnf_welfare),
@@ -7494,7 +7494,7 @@ class DjcHelper:
     # --------------------------------------------DNF马杰洛的规划--------------------------------------------
     # re: 变更时需要调整这些
     # note: 查询马杰洛信息的id [查询引导石数量和资格消耗] [初始化]
-    flowid_majieluo_query_info = "195900"
+    flowid_majieluo_query_info = "222972"
     # note: 马杰洛过期时间，最近的活动查询到的信息里都不会给出，需要自己填入，在 urls.py 的 not_ams_activities 中填写起止时间
 
     @try_except()
@@ -7507,8 +7507,8 @@ class DjcHelper:
             return
 
         # re: 根据本次检查绑定具体使用的活动体系决定使用哪个函数
-        # check_func = self.check_majieluo
-        check_func = self.check_majieluo_amesvr
+        check_func = self.check_majieluo
+        # check_func = self.check_majieluo_amesvr
 
         check_func()
 
@@ -7519,45 +7519,36 @@ class DjcHelper:
 
         request_wait_time = 3
 
-        self.majieluo_op("领取见面礼", "196322")
+        self.majieluo_op("次元见面礼", "222973")
 
-        self.majieluo_op("每日进入活动页面", "196324")
-        self.majieluo_op("每日登录游戏", "196326")
-        self.majieluo_op("每日游戏在线30分钟", "196327")
-        self.majieluo_op("每日通关4次推荐地下城", "196328")
+        self.majieluo_op("次元任务-进入活动页", "222974")
+        self.majieluo_op("次元任务-游戏在线30分钟", "224200")
+        self.majieluo_op("次元任务-每日登录", "224392")
+        self.majieluo_op("次元任务-每日通关4次推荐地下城", "224415")
 
-        self.majieluo_op("每日完成所有任务", "196601")
+        self.majieluo_op("次元任务-每周通关噩梦回廊地下城一次", "224475")
+        self.majieluo_op("次元任务-每周通关次元回廊地下城一次", "224613")
+        self.majieluo_op("次元任务-每周通关巴卡尔攻坚战一次", "224645")
 
         info = query_info()
 
-        if info.iTeamId == "0":
+        if len(info.itemInfo) <= 1:
             async_message_box(
-                "卡牌次元活动中部分内容需要组队进行，请创建队伍或加入其他人的队伍。也可以按照稍后弹出的在线文档中的指引，与其他使用小助手的朋友进行组队~",
-                "23.6 卡牌次元组队提醒",
+                "卡牌次元活动中部分内容需要组队进行，请创建队伍或加入其他人的队伍。(PS：与之前几次一样，几乎需要队伍成员全部满勤才能领到最高的奖励，所以自行决定是否需要折腾~)",
+                "23.9 卡牌次元组队提醒",
                 show_once=True,
-                open_url="https://docs.qq.com/sheet/DYlN4ckdIemdWVVZs?tab=BB08J2",
             )
-        else:
-            logger.info(f"当前的攻击卡牌数目为 {info.iAttack}")
-            for idx in range_from_one(int(info.iAttack)):
-                self.majieluo_op(f"[{idx}/{info.iAttack}] 攻击巴卡尔", "196805")
 
-            self.majieluo_op("累计伤害3点", "196351")
-            self.majieluo_op("累计伤害6点", "196352")
-            self.majieluo_op("累计伤害14点", "196353")
-            self.majieluo_op("累计伤害21点", "196354")
+        self.majieluo_op("领取反击卡达标15奖励", "225050")
+        self.majieluo_op("领取反击卡达标30奖励", "225102")
+        self.majieluo_op("领取反击卡达标40奖励", "225103")
+        self.majieluo_op("领取反击卡达标50奖励", "225104")
 
-            self.majieluo_op("攻坚成功奖励", "196356")
-
-        lottery_times = int(info.iLucky) // 3
-        logger.info(f"当前的幸运卡牌数目为 {info.iLucky}，可以抽奖 {lottery_times} 次")
+        lottery_times = int(info.luckCard) // 3
+        logger.info(f"当前的幸运卡牌数目为 {info.luckCard}，可以抽奖 {lottery_times} 次")
         for idx in range_from_one(lottery_times):
-            self.majieluo_op(f"[{idx}/{lottery_times}] 抽奖", "196357")
+            self.majieluo_op(f"[{idx}/{lottery_times}] 抽奖", "224651")
             time.sleep(request_wait_time)
-
-        self.majieluo_op("成就一：队伍人数2人以上", "196358")
-        self.majieluo_op("成就二：队伍人数满8人", "196359")
-        self.majieluo_op("成就三：队伍有幸运勇士", "196360")
 
         # # 马杰洛的见面礼
         # def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
@@ -12536,4 +12527,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.majieluo()

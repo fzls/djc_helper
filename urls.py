@@ -57,7 +57,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
-    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-14 23:59:59", "集卡"),
+    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-20 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-11-15 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
@@ -95,6 +95,7 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230921index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/47701_d2c4f10f",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
@@ -389,7 +389,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10010
+        self.pesudo_ark_lottery_act_id = 10011
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

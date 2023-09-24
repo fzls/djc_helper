@@ -11,7 +11,7 @@ enable_pay_directly = true
 show_card_secret_first = false
 
 # 是否显示支付宝红包图片
-enable_alipay_redpacket = false
+enable_alipay_redpacket = true
 
 # dlc全量更新是否优先启用alist
 dlc_prefer_alist = false

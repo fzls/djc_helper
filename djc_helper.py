@@ -652,6 +652,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF马杰洛的规划", self.majieluo),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -660,7 +661,6 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("colg其他活动", self.colg_other_act),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
-            ("勇士的冒险补给", self.maoxian),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("dnf助手活动", self.dnf_helper),
@@ -9666,7 +9666,7 @@ class DjcHelper:
     @try_except()
     def maoxian(self):
         show_head_line("勇士的冒险补给")
-        self.show_amesvr_act_info(self.maoxian_op)
+        self.show_not_ams_act_info("勇士的冒险补给")
 
         if not self.cfg.function_switches.get_maoxian or self.disable_most_activities():
             logger.warning("未启用领取勇士的冒险补给功能，将跳过")
@@ -9677,26 +9677,13 @@ class DjcHelper:
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        self.maoxian_wpe_op("幸运礼包", 94711)
+        self.maoxian_wpe_op("幸运礼包", 118439)
 
-        self.maoxian_wpe_op("每日在线30分钟", 94610)
-
-        self.maoxian_wpe_op("累积3次领取奖励", 94532)
-        self.maoxian_wpe_op("累积5次领取奖励", 94534)
-        self.maoxian_wpe_op("累积6次领取奖励", 94535)
-        self.maoxian_wpe_op("累积8次领取奖励", 94536)
-        self.maoxian_wpe_op("累积10次领取奖励", 94537)
-        self.maoxian_wpe_op("累积11次领取奖励", 94538)
-        self.maoxian_wpe_op("累积15次领取奖励", 94539)
-        self.maoxian_wpe_op("累积20次领取奖励", 94540)
-        self.maoxian_wpe_op("累积25次领取奖励", 94541)
-
-        self.maoxian_wpe_op("回归-消耗50点疲劳", 94544)
-        self.maoxian_wpe_op("回归-通关推荐地下城5次", 94599)
-        self.maoxian_wpe_op("回归-在线60分钟", 94606)
-        self.maoxian_wpe_op("回归-通关高级地下城1次", 94607)
-        self.maoxian_wpe_op("回归-消耗150点疲劳", 94608)
-        self.maoxian_wpe_op("回归-完成装备成长5次", 94609)
+        self.maoxian_wpe_op("回归-通关推荐地下城3次", 119655)
+        self.maoxian_wpe_op("回归-通关代号：盖波加", 120020)
+        self.maoxian_wpe_op("回归-进行勋章升级1次", 120021)
+        self.maoxian_wpe_op("回归-进行勋章强化1次", 120022)
+        self.maoxian_wpe_op("回归-进行守护珠升级1次", 120023)
 
         # self.maoxian_op("幸运礼包", "942257")
         #
@@ -9773,7 +9760,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 13688
+        act_id = 14859
 
         json_data = {
             "biz_id": "bb",
@@ -12527,4 +12514,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.majieluo()
+        djcHelper.maoxian()

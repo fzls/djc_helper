@@ -55,7 +55,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
-    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-14 23:59:59", "超级会员"),
+    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-14 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
@@ -94,6 +94,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230921index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
     #
     # 已过期活动
     #
@@ -105,7 +106,6 @@ act_name_to_url = {
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",

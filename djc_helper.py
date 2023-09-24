@@ -650,6 +650,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -657,7 +658,6 @@ class DjcHelper:
         return [
             ("DNF心悦", self.dnf_xinyue),
             ("colg其他活动", self.colg_other_act),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("勇士的冒险补给", self.maoxian),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
@@ -11238,38 +11238,37 @@ class DjcHelper:
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
         def query_lottery_times() -> tuple[int, int]:
-            res = self.dnf_xinyue_wpe_op("查询抽奖次数", 98120, print_res=False)
+            res = self.dnf_xinyue_wpe_op("查询抽奖次数", 117953, print_res=False)
 
             raw_data = res["data"]
             data = json.loads(raw_data)
 
             return int(data["remain"]), int(data["total"])
 
-        if now_in_range("2023-08-03 00:00:00", "2023-08-08 23:59:59"):
-            self.dnf_xinyue_wpe_op("领取勇士币返利", 98119)
+        if now_in_range("2023-10-21 00:00:00", "2023-10-31 23:59:59"):
+            self.dnf_xinyue_wpe_op("领取勇士币返利", 117964)
 
-        self.dnf_xinyue_wpe_op("抽取优惠券或QB", 98146)
-
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-288元", 98125)
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-466元", 98127)
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-699元", 98141)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-288元", 117941)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-466元", 117951)
+        self.dnf_xinyue_wpe_op("领取累计充值礼包-699元", 117962)
 
         remain, total = query_lottery_times()
         logger.info(f"当前剩余抽奖次数为 {remain}，累计获得 {total}")
         for idx in range_from_one(remain):
-            self.dnf_xinyue_wpe_op(f"{idx}/{remain} 抽奖", 98131)
+            self.dnf_xinyue_wpe_op(f"{idx}/{remain} 抽奖", 117943)
 
-        self.dnf_xinyue_wpe_op("每日签到", 98152)
-        self.dnf_xinyue_wpe_op("签到1天", 98149)
-        self.dnf_xinyue_wpe_op("签到3天", 98155)
-        self.dnf_xinyue_wpe_op("签到7天", 98143)
-        self.dnf_xinyue_wpe_op("签到15天", 98126)
-        self.dnf_xinyue_wpe_op("签到15天暴击成就点", 98136)
+        self.dnf_xinyue_wpe_op("每日签到", 117950)
 
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP4-5", 98148)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP2-3", 98154)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP1", 98132)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 特邀会员", 98142)
+        self.dnf_xinyue_wpe_op("签到1天", 117963)
+        self.dnf_xinyue_wpe_op("签到3天", 117952)
+        self.dnf_xinyue_wpe_op("签到7天", 117938)
+        self.dnf_xinyue_wpe_op("签到15天", 117942)
+        self.dnf_xinyue_wpe_op("签到15天暴击成就点", 117937)
+
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP4-5", 117949)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP2-3", 117940)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP1", 117935)
+        self.dnf_xinyue_wpe_op("会员等级礼 - 特邀会员", 117948)
 
         logger.info(color("bold_yellow") + "心悦app中打开活动页面可以领取额外的四个小东西（非常mini），请自行决定是否前往app进行领取")
 
@@ -11286,7 +11285,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "13902"
+        act_id = "14837"
 
         roleinfo = self.get_dnf_bind_role()
 
@@ -12537,4 +12536,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_xinyue_wpe()

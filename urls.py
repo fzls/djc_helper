@@ -70,7 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
-    newNotAmsActInfo("2023-07-06 00:00:00", "2023-08-02 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2023-09-21 10:00:00", "2023-10-31 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-08-03 15:00:00", "2023-09-06 23:59:59", "colg其他活动"),
@@ -96,12 +96,12 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/47701_d2c4f10f",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
     #
     # 已过期活动
     #
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
-    "DNF心悦wpe": "https://xinyue.qq.com/act/a20230626dnf/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",

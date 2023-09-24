@@ -2555,6 +2555,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("colg每日签到", "get_colg_signin"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2576,7 +2577,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("勇士的冒险补给", "get_maoxian"),
             ("dnf周年拉好友", "get_dnf_anniversary_friend"),
             ("DNF马杰洛的规划", "get_majieluo"),
-            ("colg每日签到", "get_colg_signin"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
             ("dnf助手活动", "get_dnf_helper"),

@@ -59,7 +59,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-14 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-26 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2023-09-21 00:00:00", "2023-11-15 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
@@ -93,6 +93,7 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20230921index/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -104,7 +105,6 @@ act_name_to_url = {
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230615card/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/46870_430b23f4",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/46873_0f08603e",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",

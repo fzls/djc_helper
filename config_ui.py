@@ -2553,8 +2553,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
-            ("DNF心悦", "get_dnf_xinyue"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("绑定手机活动", "get_dnf_bind_phone"),
         ],
         "QQ空间pskey": [
@@ -2572,6 +2570,8 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("DNF心悦", "get_dnf_xinyue"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF心悦Dup", "get_dnf_xinyue"),
             ("勇士的冒险补给", "get_maoxian"),
             ("dnf周年拉好友", "get_dnf_anniversary_friend"),

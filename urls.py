@@ -91,13 +91,13 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
-    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230817index/index.html",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     #
     # 已过期活动
     #
+    "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
+    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230817index/index.html",
     "DNF心悦wpe": "https://xinyue.qq.com/act/a20230626dnf/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a81984f06c27741609c1d9898aa09934f/index.html",

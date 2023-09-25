@@ -174,6 +174,8 @@ def download_latest_github_release(
             f"https://download.yzuu.cf/{release_file_path}",
             # 257.5KiB/s
             f"https://ghps.cc/https://github.com/{release_file_path}",
+            # timeout
+            f"https://download.fastgit.org/{release_file_path}",
         ],
     )
 
@@ -183,8 +185,6 @@ def download_latest_github_release(
         [
             # timeout
             f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
-            # timeout
-            f"https://download.fastgit.org/{release_file_path}",
             # timeout
             f"https://github.com/{release_file_path}",
             # timeout

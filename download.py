@@ -5,6 +5,8 @@ import random
 from typing import Callable
 
 import requests
+from urllib3 import disable_warnings
+from urllib3.exceptions import InsecureRequestWarning
 
 from const import downloads_dir
 from log import color, logger
@@ -13,6 +15,9 @@ from util import get_now, human_readable_size, make_sure_dir_exists, show_progre
 user_agent_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
 }
+
+# 全局禁用 SSL 警告
+disable_warnings(InsecureRequestWarning)
 
 progress_callback_func_type = Callable[[str, int, int, float], None]
 

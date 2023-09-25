@@ -52,7 +52,7 @@ def download_file(
     logger.info(f"开始下载 {url} 到 {target_file_path}（连接超时为 {connect_timeout} 秒）")
     if extra_info != "":
         logger.info(extra_info)
-    response = requests.get(url, stream=True, timeout=connect_timeout, headers=user_agent_headers)
+    response = requests.get(url, stream=True, timeout=connect_timeout, headers=user_agent_headers, verify=False)
 
     if response.status_code != 200:
         raise Exception(f"下载失败，状态码 {response.status_code}")

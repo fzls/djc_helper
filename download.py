@@ -255,15 +255,17 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 460.6KiB/s
+            # 165.0KiB/s
+            f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 207.6KiB/s
             f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 405.6KiB/s
+            # 210.4KiB/s
             f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 400.6KiB/s
+            # 199.0KiB/s
             f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 359.7KiB/s
+            # 133.3KiB/s
             f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 212.7KiB/s
+            # 329.9KiB/s
             f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -272,9 +274,9 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 78.6KiB/s
+            # 35.9KiB/s
             f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 23.9KiB/s
+            # 22.2KiB/s
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -283,7 +285,7 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # timeout
+            # 75.5KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -292,15 +294,15 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # timeout
+            # 267.8KiB/s
             f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 404
             f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 388.8KiB/s
+            # 404
             f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 63.3KiB/s
+            # 404
             f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 213.7KiB/s
+            # 193.0KiB/s
             f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -309,9 +311,9 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 239.9KiB/s
+            # 278.9KiB/s
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 2.8MiB/s
+            # 215.1KiB/s
             f"https://jsd.cdn.zzko.cn/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )

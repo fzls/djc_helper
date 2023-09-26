@@ -1470,10 +1470,9 @@ def show_ask_message_box_sync(cfg: Config):
         return
 
     if (
-        now_before("2022-12-31 23:59:59")
-        and cfg.common.enable_alipay_redpacket_v3
+        cfg.common.enable_alipay_redpacket_v3
         and config_cloud().enable_alipay_redpacket
-        and is_daily_first_run("支付宝红包活动")
+        and is_weekly_first_run("支付宝红包活动")
         and not use_by_myself()
     ):
         title = "支付宝红包活动（v3）"

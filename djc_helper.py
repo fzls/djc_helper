@@ -654,6 +654,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("勇士的冒险补给", self.maoxian),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
+            ("dnf助手活动", self.dnf_helper),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -664,7 +665,6 @@ class DjcHelper:
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("dnf助手活动", self.dnf_helper),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("冒险的起点", self.maoxian_start),
@@ -4272,61 +4272,41 @@ class DjcHelper:
             self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动')}")
             return
 
-        self.check_dnf_helper()
+        # re: 根据本次是否需要手动绑定决定是否需要下面这行
+        # self.check_dnf_helper()
 
-        self.dnf_helper_op("报名", "932465", prefer=6)
-        self.dnf_helper_op("报名领取奖励", "936765")
+        def query_heart() -> tuple[int, int]:
+            res = self.dnf_helper_op("查询", "977070", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
 
-        self.dnf_helper_op("周末打团(周六)", "930195")
+            remaining, total = raw_info.sOutValue3.split(";")
 
-        lottery_cfg = [
-            ("团长抽奖", "936715"),
-            ("团员抽奖", "936741"),
-        ]
-        for name, flowid in lottery_cfg:
+            return int(remaining), int(total)
+
+        self.dnf_helper_op("加好友-关注老搬", "977071")
+
+        self.dnf_helper_op("20000", "977045")
+        self.dnf_helper_op("50000", "977066")
+        self.dnf_helper_op("120000", "977067")
+        self.dnf_helper_op("200000", "977068")
+        self.dnf_helper_op("400000", "977069")
+
+        self.dnf_helper_op("浏览作品", "977603")
+        self.dnf_helper_op("浏览动态", "977604")
+        self.dnf_helper_op("发帖", "977605")
+        self.dnf_helper_op("分享", "977606")
+
+        self.dnf_helper_op("浏览老搬作品", "977599")
+        self.dnf_helper_op("浏览老搬动态", "977600")
+        self.dnf_helper_op("老搬宠粉发帖", "977601")
+        self.dnf_helper_op("分享此活动", "977602")
+        self.dnf_helper_op("绑定50爱心-邀请流失勇士关注老搬", "982386")
+
+        remaining, total = query_heart()
+        logger.info(f"爱心目前拥有：{remaining}，总计 {total}")
+        for idx in range_from_one(remaining):
+            self.dnf_helper_op(f"{idx}/{remaining} 献出爱心&返回排名", "977789")
             time.sleep(3)
-            self.dnf_helper_op(name, flowid)
-
-        leader_exchange_cfg = [
-            ("团长兑换奖励--神秘契约礼包", "936319"),
-            ("团长兑换奖励--黑钻", "936487"),
-            ("团长兑换奖励--王者契约礼包", "936498"),
-            ("团长兑换奖励--镶嵌栏开启装置", "936507"),
-            ("团长兑换奖励--一次性继承装置", "936526"),
-            ("团长兑换奖励--异界气息净化书", "936533"),
-            ("团长兑换奖励--次元玄晶碎片礼袋", "936534"),
-            ("团长兑换奖励--+10装备强化券", "936548"),
-            ("团长兑换奖励--+7装备增幅券", "936598"),
-            ("团长兑换奖励--纯净的增幅书", "936600"),
-            ("团长兑换奖励--雪人盲盒", "936711"),
-            ("团长兑换奖励--炽热的团魂礼盒", "936712"),
-        ]
-        for name, flowid in reversed(leader_exchange_cfg):
-            time.sleep(3)
-            res = self.dnf_helper_op(name, flowid)
-            if res["ret"] == "700" and "余额不足" in res["flowRet"]["sMsg"]:
-                # 积分不够，跳过尝试后续的奖励
-                break
-
-        member_exchange_cfg = [
-            ("团员兑换奖励--编年币", "936716"),
-            ("团员兑换奖励--复活币", "936718"),
-            ("团员兑换奖励--闪亮的雷米援助礼盒5个", "936719"),
-            ("团员兑换奖励--闪亮的雷米援助礼盒10个", "936720"),
-            ("团员兑换奖励--王者契约礼包", "936721"),
-            ("团员兑换奖励--黑钻", "936722"),
-            ("团员兑换奖励--装备品级调整箱", "936723"),
-            ("团员兑换奖励-异界气息净化书", "936724"),
-            ("团员兑换奖励-华丽的徽章自选礼盒", "936737"),
-            ("团员兑换奖励-纯净的增幅书", "936738"),
-            ("团员兑换奖励-+7装备增幅券", "936739"),
-        ]
-        for name, flowid in reversed(member_exchange_cfg):
-            time.sleep(3)
-            res = self.dnf_helper_op(name, flowid)
-            if res["ret"] == "700" and "余额不足" in res["flowRet"]["sMsg"]:
-                # 积分不够，跳过尝试后续的奖励
-                break
 
     def check_dnf_helper(self):
         self.check_bind_account(
@@ -12582,4 +12562,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_wpe()
+        djcHelper.dnf_helper()

@@ -101,6 +101,7 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
     "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
+    "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     #
     # 已过期活动
     #
@@ -109,7 +110,6 @@ act_name_to_url = {
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
-    "dnf助手活动": "https://mwegame.qq.com/act/dnf/a20221216bkelstpc/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
@@ -259,7 +259,7 @@ class Urls:
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
-        self.iActivityId_dnf_helper = "536697"  # DNF助手活动
+        self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

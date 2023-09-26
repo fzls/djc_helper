@@ -1,6 +1,7 @@
 # 初始化依赖脚本
 import argparse
 import os
+import shutil
 import subprocess
 
 from log import color, logger
@@ -18,6 +19,9 @@ def init_venv_and_requirements(
     pyscript_path = os.path.join(venv_path, "Scripts")
     py_path = os.path.join(pyscript_path, "python")
     pip_path = os.path.join(pyscript_path, "pip")
+
+    show_head_line("先清空原来的环境，确保每次从头开始准备环境，避免莫名其妙的问题", color("bold_yellow"))
+    shutil.rmtree(venv_path, ignore_errors=True)
 
     show_head_line("尝试初始化venv环境", color("bold_yellow"))
 

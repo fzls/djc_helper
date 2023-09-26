@@ -72,7 +72,6 @@ from util import (
     make_sure_dir_exists,
     md5_file,
     message_box,
-    now_before,
     open_with_default_app,
     padLeftRight,
     parse_time,

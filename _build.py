@@ -29,7 +29,7 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
         clear_file("test.py")
 
     # 初始化venv和依赖
-    init_venv_and_requirements(".venv", "requirements.txt", disable_douban, enable_proxy, True)
+    init_venv_and_requirements(".venv", "requirements.txt", disable_douban, enable_proxy, False)
 
     show_head_line("将使用.venv环境进行编译", color("bold_yellow"))
 

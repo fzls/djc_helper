@@ -5,4 +5,4 @@
 PyQt5==5.15.9
 PyQt5-stubs==5.15.6.0
 # note: 这个版本就固定在 305 了，因为 306 打包的版本，在部分人的电脑上会报 dll load failed while importing win32api 而无法打开
-pywin32==305
+pywin32==306

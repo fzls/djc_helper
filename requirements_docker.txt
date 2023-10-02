@@ -1,4 +1,4 @@
 -r requirements_z_base.txt
 
 # 因为2.0.0开始依赖werkzeug>2.0.0，会与leancloud冲突，因此设置此版本限制。flask仅用于给腾讯云函数中转用，不是最新版本问题不大。
-flask<2.0.0
+flask<4.0.0

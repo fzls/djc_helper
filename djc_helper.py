@@ -2826,7 +2826,25 @@ class DjcHelper:
     def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True) -> dict:
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
-        return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)
+        def _check(response: requests.Response) -> Exception | None:
+            if response.status_code == 504 and "504 Gateway Time-out" in response.text:
+                # status_code=504 reason=Gateway Time-out
+                #
+                # <html>
+                # <head><title>504 Gateway Time-out</title></head>
+                # <body>
+                # <center><h1>504 Gateway Time-out</h1></center>
+                # <hr><center>stgw</center>
+                # </body>
+                # </html>
+                wait_seconds = 0.1 + random.random()
+                logger.warning(get_meaningful_call_point_for_log() + f"网关超时，等待{wait_seconds:.2f}秒后重试")
+                time.sleep(wait_seconds)
+                return Exception("网关超时")
+
+            return None
+
+        return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res, check_fn=_check)
 
     def _qzone_act_get_op(self, ctx: str, url: str, p_skey: str = "", print_res=True, **params):
         p_skey = p_skey or self.lr.p_skey

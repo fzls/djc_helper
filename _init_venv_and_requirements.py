@@ -96,4 +96,6 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    init_venv_and_requirements(args.venv_path, args.requirements_path, args.disable_douban, args.enable_proxy, args.reset_venv)
+    init_venv_and_requirements(
+        args.venv_path, args.requirements_path, args.disable_douban, args.enable_proxy, args.reset_venv
+    )

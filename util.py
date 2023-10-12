@@ -281,6 +281,7 @@ def async_message_box(
     color_name="bold_cyan",
     open_image="",
     show_once_daily=False,
+    show_once_monthly=False,
 ):
     async_call(
         message_box,
@@ -295,6 +296,7 @@ def async_message_box(
         open_image,
         show_once_daily,
         call_from_async=True,
+        show_once_monthly=show_once_monthly,
     )
 
 
@@ -311,18 +313,21 @@ def message_box(
     show_once_daily=False,
     use_qt_messagebox=False,
     call_from_async=False,
+    show_once_monthly=False,
 ):
     get_log_func(logger.warning, print_log)(color(color_name) + msg.replace("\n\n", "\n"))
 
     if is_run_in_github_action():
         return
 
-    from first_run import is_daily_first_run, is_first_run
+    from first_run import is_daily_first_run, is_first_run, is_monthly_first_run
 
     show_message_box = True
     if show_once and not is_first_run(f"message_box_{title}"):
         show_message_box = False
     if show_once_daily and not is_daily_first_run(f"daily_message_box_{title}"):
+        show_message_box = False
+    if show_once_monthly and not is_monthly_first_run(f"daily_message_box_{title}"):
         show_message_box = False
     if follow_flag_file and exists_flag_file(".no_message_box"):
         show_message_box = False

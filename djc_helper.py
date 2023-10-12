@@ -9367,7 +9367,7 @@ class DjcHelper:
                 "当前账号尚未绑定手机，可前往活动页面绑定手机，绑定后可以领取666代币券，同时每月可以领取积分来兑换其他蚊子腿",
                 f"绑定手机-{self.cfg.name}",
                 open_url=get_act_url("绑定手机活动"),
-                show_once=is_monthly_first_run(f"绑定手机-{self.cfg.name}"),
+                show_once_monthly=True,
             )
 
         if not isGetBindGift:

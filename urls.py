@@ -92,11 +92,11 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231026index/index.html",
     #
     # 已过期活动
     #
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",

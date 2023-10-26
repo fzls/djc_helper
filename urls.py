@@ -84,8 +84,6 @@ act_name_to_url = {
     "道聚城": "https://daoju.qq.com/mall/",
     "DNF地下城与勇士心悦特权专区": "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
     "心悦app": "https://xinyue.qq.com/beta/#/download",
-    "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
-    "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
     #
@@ -93,18 +91,20 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20230921index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/47701_d2c4f10f",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
-    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
-    "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
-    "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     #
     # 已过期活动
     #
+    "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
+    "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
+    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/47701_d2c4f10f",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20230921index/index.html",
+    "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
+    "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",

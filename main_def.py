@@ -1518,10 +1518,9 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "23.9 斗鱼虎牙活动": (
-            "斗鱼虎牙活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/DNFjqjxzs\n"
-            "虎牙：https://www.huya.com/g/2#cate-1-5483\n"
+        "23.10 斗鱼活动": (
+            "斗鱼活动请自行参与，活动链接如下:\n"
+            "斗鱼：https://www.douyu.com/topic/DNFLDATM\n"
         ),
         "23.9 微信游戏圈": ("打开官方公众号（地下城与勇士），点开下方的游戏圈子，选择微信游戏圈，点击最上方的 勇士集结 迎战盖波加\n" "按照提示领取其中的一次性奖励即可\n"),
     }

@@ -2350,11 +2350,11 @@ def demo_try_auto_update_ignore_permission_on_special_case():
 if __name__ == "__main__":
     freeze_support()
 
-    # demo_main()
-    demo_pay_info()
-
     # demo_show_notices()
     # demo_show_activities_summary()
 
     # demo_show_tips()
     # demo_try_auto_update_ignore_permission_on_special_case()
+
+    # demo_main()
+    demo_pay_info()

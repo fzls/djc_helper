@@ -18,6 +18,7 @@ import ga
 from check_first_run import check_first_run_async
 from config import config, load_config
 from db_def import try_migrate_db
+from djc_helper import is_ark_lottery_enabled
 from first_run import is_weekly_first_run
 from log import color, log_directory, logger
 from main_def import (
@@ -213,8 +214,7 @@ def main():
     # # 尝试派赛利亚出去打工
     # try_xinyue_sailiyam_start_work(cfg)
 
-    # 活动开启关闭时调这个开关即可
-    enable_card_lottery = False
+    enable_card_lottery = is_ark_lottery_enabled()
 
     if enable_card_lottery:
         auto_send_cards(cfg)

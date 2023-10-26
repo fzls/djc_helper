@@ -2347,6 +2347,13 @@ def demo_try_auto_update_ignore_permission_on_special_case():
     pause()
 
 
+def demo_is_ark_lottery_enabled():
+    from djc_helper import is_ark_lottery_enabled
+
+    enabled = is_ark_lottery_enabled()
+    logger.info(f"is_ark_lottery_enabled={enabled}")
+
+
 if __name__ == "__main__":
     freeze_support()
 

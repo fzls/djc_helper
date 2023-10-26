@@ -1983,15 +1983,12 @@ class DjcHelper:
         #   1.2 填写新链接   在 urls.py 中，替换self.ark_lottery_page 的值为新版抽卡活动的链接（理论上应该只有 zz 和 verifyid 参数的值会变动，而且大概率是+1）
         #   1.3 重新启用代码
         #   1.3.1 在 djc_helper.py 中将 ark_lottery 的调用处从 expired_activities 移到 payed_activities
-        #   1.3.2 在 main.py 中将 main 函数中将 enable_card_lottery 设置为true
-        #   1.3.3 在 config.toml 和 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
+        #   1.3.2 在 config.toml 和 config.example.toml 中 act_id_to_cost_all_cards_and_do_lottery 中增加新集卡活动的默认开关
         #   1.4 更新 urls.py 中 not_ams_activities 中集卡活动的时间
-        #   1.5 发布版本后同时上传集卡特别版
         #
         # hack:
         #   2. 废弃
         #   2.1 在 djc_helper.py 中将 ark_lottery 的调用处从 normal_run 移到 expired_activities
-        #   2.2 在 main.py 中将main函数中将 enable_card_lottery 设置为 false
 
         # get_act_url("集卡")
         show_head_line(f"QQ空间集卡 - {self.zzconfig.actid}_{self.zzconfig.actName}")
@@ -2364,8 +2361,14 @@ class DjcHelper:
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
     def is_new_version_ark_lottery(self) -> bool:
+        """是否是新版集卡活动"""
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
         return self.dnf_ark_lottery in enabled_payed_act_funcs
+
+    def is_ark_lottery_enabled(self) -> bool:
+        """当前生效的付费活动中是否包含集卡活动，用于判断主流程中是否需要进行自动赠送卡片以及展示集卡信息等流程"""
+        enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
+        return self.dnf_ark_lottery in enabled_payed_act_funcs or self.ark_lottery in enabled_payed_act_funcs
 
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
@@ -12465,6 +12468,10 @@ def notify_same_account_try_login_at_multiple_threads(account_name: str):
 
 def is_new_version_ark_lottery() -> bool:
     return fake_djc_helper().is_new_version_ark_lottery()
+
+
+def is_ark_lottery_enabled() -> bool:
+    return fake_djc_helper().is_ark_lottery_enabled()
 
 
 def get_prize_names() -> list[str]:

@@ -1518,10 +1518,7 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "23.10 斗鱼活动": (
-            "斗鱼活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/DNFLDATM\n"
-        ),
+        "23.10 斗鱼活动": ("斗鱼活动请自行参与，活动链接如下:\n" "斗鱼：https://www.douyu.com/topic/DNFLDATM\n"),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

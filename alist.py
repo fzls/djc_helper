@@ -11,15 +11,35 @@ from const import downloads_dir
 from dao import ConfigInterface, to_raw_type
 from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_func_type
 from log import color, logger
+from server import get_alist_server_addr
 from util import KiB, get_now, human_readable_size, reset_cache, with_cache
 
-SERVER_ADDR = "http://101.43.54.94:5244"
+fn_SERVER_ADDR = get_alist_server_addr
 
-API_LOGIN = f"{SERVER_ADDR}/api/auth/login"
-API_UPLOAD = f"{SERVER_ADDR}/api/fs/put"
-API_DOWNLOAD = f"{SERVER_ADDR}/api/fs/get"
-API_LIST = f"{SERVER_ADDR}/api/fs/list"
-API_REMOVE = f"{SERVER_ADDR}/api/fs/remove"
+
+def _make_api(api_name="/") -> str:
+    return f"{fn_SERVER_ADDR()}{api_name}"
+
+
+def fn_API_LOGIN():
+    return _make_api("/api/auth/login")
+
+
+def fn_API_UPLOAD():
+    return _make_api("/api/fs/put")
+
+
+def fn_API_DOWNLOAD():
+    return _make_api("/api/fs/get")
+
+
+def fn_API_LIST():
+    return _make_api("/api/fs/list")
+
+
+def fn_API_REMOVE():
+    return _make_api("/api/fs/remove")
+
 
 NORMAL_TIMEOUT = 8
 UPLOAD_TIMEOUT = 60 * 5
@@ -111,7 +131,7 @@ class DownloadResponse(ConfigInterface):
     def get_url(self) -> str:
         if self.sign != "" and self.remote_file_path != "":
             # 尽量使用alist的下载接口做中转，这样服务器日志方便查看下载情况
-            return f"{SERVER_ADDR}/d{self.remote_file_path}?sign={self.sign}"
+            return f"{fn_SERVER_ADDR()}/d{self.remote_file_path}?sign={self.sign}"
 
         return self.raw_url
 
@@ -137,7 +157,7 @@ def _login(username: str, password: str, otp_code: str = "") -> str:
     req.password = password
     req.otp_code = otp_code
 
-    raw_res = alist_session.post(API_LOGIN, json=to_raw_type(req))
+    raw_res = alist_session.post(fn_API_LOGIN(), json=to_raw_type(req))
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -173,7 +193,7 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
 
     with open(local_file_path, "rb") as file_to_upload:
         raw_res = alist_session.put(
-            API_UPLOAD,
+            fn_API_UPLOAD(),
             data=file_to_upload,
             headers={
                 "File-Path": quote(remote_file_path),
@@ -240,7 +260,7 @@ def get_download_info(remote_file_path: str) -> DownloadResponse:
     req.path = remote_file_path
     req.passwrod = ""
 
-    raw_res = alist_session.post(API_DOWNLOAD, json=to_raw_type(req))
+    raw_res = alist_session.post(fn_API_DOWNLOAD(), json=to_raw_type(req))
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -289,7 +309,7 @@ def get_file_list(
             "Authorization": login_using_env(),
         }
 
-    raw_res = alist_session.post(API_LIST, json=to_raw_type(req), headers=headers)
+    raw_res = alist_session.post(fn_API_LIST(), json=to_raw_type(req), headers=headers)
 
     res = CommonResponse().auto_update_config(raw_res.json())
     if res.code != 200:
@@ -318,7 +338,7 @@ def remove(remote_file_path: str):
     ]
 
     raw_res = alist_session.post(
-        API_REMOVE,
+        fn_API_REMOVE(),
         json=to_raw_type(req),
         headers={
             "Authorization": login_using_env(),

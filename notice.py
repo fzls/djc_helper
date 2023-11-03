@@ -195,14 +195,14 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "自动更新小bug"
-    message = """目前版本的自动更新有个小bug，部分人可能打开的时候会获取到过期的缓存，无法检查到新版本，导致没更新到最新的版本。预计将于 下个版本 20.5.1 进行修复
-
-请各位瞅一眼你的标题栏，如果上面的版本是 20.4.2，说明你就遇到这个问题了，请先手动去群里或网盘下载下最新版本来手动更新下（把旧的config.toml复制到新的目录中即可）
+    title = "23.11 嘉年华预约奖励"
+    message = """嘉年华预约页面绑定手机后可领取 7天黑钻+1增肥礼盒
+点击【预约直播领好礼】，右下角绑定手机，然后左上角领取即可。各位请点击确定，然后在自动打开的网页内参与
+https://dnf.qq.com/act/a20231031fiesta/
 """
-    open_url = ""
+    open_url = "https://dnf.qq.com/act/a20231031fiesta/"
     show_only_before_version = ""
-    valid_duration = timedelta(days=7)
+    valid_duration = timedelta(days=15)
 
     if title != "":
         nm.add_notice(

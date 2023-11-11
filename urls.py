@@ -93,6 +93,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231026index/index.html",
+    "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     #
     # 已过期活动
     #
@@ -147,7 +148,6 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
-    "DNF预约": "https://dnf.qq.com/cp/a20211115dnf/",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
@@ -292,7 +292,7 @@ class Urls:
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
-        self.iActivityId_dnf_reservation = "425797"  # DNF预约
+        self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年

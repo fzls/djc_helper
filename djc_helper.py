@@ -646,6 +646,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("colg每日签到", self.colg_signin),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF预约", self.dnf_reservation),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
             ("DNF公会活动", self.dnf_gonghui),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
-            ("DNF预约", self.dnf_reservation),
             ("DNF名人堂", self.dnf_vote),
             ("qq视频蚊子腿", self.qq_video),
             ("WeGameDup", self.dnf_wegame_dup),
@@ -10886,7 +10886,45 @@ class DjcHelper:
             logger.warning("未启用领取DNF预约功能，将跳过")
             return
 
-        self.dnf_reservation_op("预约礼包-七天黑钻", "817582")
+        self.check_dnf_reservation()
+
+        def query_info() -> tuple[int, int]:
+            res = self.dnf_reservation_op("查询信息", "985029", print_res=False)
+            raw_info = res["modRet"]["jData"]
+
+            iFragments = int(raw_info["iFragments"])
+            iTeamNum = int(raw_info["iTeamNum"])
+
+            return iFragments, iTeamNum
+
+        iFragments, iTeamNum = query_info()
+
+        self.dnf_reservation_op("见面礼", "985043")
+        for idx in range_from_one(4):
+            if idx <= iFragments:
+                logger.info(f"碎片-{idx} 已获取，跳过")
+                continue
+
+            self.dnf_reservation_op(f"获取碎片-{idx}", "986607", iNum=idx)
+        self.dnf_reservation_op("灯塔礼包", "985293")
+        self.dnf_reservation_op("组队奖励", "985108")
+
+        if iTeamNum < 3:
+            async_message_box(
+                "嘉年华组成3人小队后可以在16号后领取到彩虹内裤装扮，有兴趣的小伙伴可以在稍后弹出的云表单中加入他人的队伍，若均已满，可在后面加上自己的队伍",
+                "嘉年华组队",
+                show_once=True,
+                open_url="https://docs.qq.com/sheet/DYlJoSFFBblpWV3JI",
+            )
+
+    def check_dnf_reservation(self):
+        self.check_bind_account(
+            "DNF预约",
+            get_act_url("DNF预约"),
+            activity_op_func=self.dnf_reservation_op,
+            query_bind_flowid="985027",
+            commit_bind_flowid="985026",
+        )
 
     def dnf_reservation_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_reservation
@@ -12585,4 +12623,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_reservation()

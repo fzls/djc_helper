@@ -195,14 +195,13 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "23.11 嘉年华预约奖励"
-    message = """嘉年华预约页面绑定手机后可领取 7天黑钻+1增肥礼盒
-点击【预约直播领好礼】，右下角绑定手机，然后左上角领取即可。各位请点击确定，然后在自动打开的网页内参与
-https://dnf.qq.com/act/a20231031fiesta/
+    title = "23.11 斗鱼嘉年华预约奖励"
+    message = """斗鱼嘉年华页面可以领取一些小东西，各位请点击确定，然后在自动打开的网页内参与
+部分东西可以直接领取，比如点预约后可以直接领3个增幅器，部分则需要额外操作下
 """
-    open_url = "https://dnf.qq.com/act/a20231031fiesta/"
+    open_url = "https://www.douyu.com/topic/DNFCarnival?rid=9940062"
     show_only_before_version = ""
-    valid_duration = timedelta(days=15)
+    valid_duration = timedelta(days=7)
 
     if title != "":
         nm.add_notice(

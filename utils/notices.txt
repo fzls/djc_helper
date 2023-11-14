@@ -278,5 +278,15 @@
     "open_url": "https://dnf.qq.com/act/a20231031fiesta/",
     "expire_at": "2023-11-18 22:10:15",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "23.11 斗鱼嘉年华预约奖励",
+    "message": "斗鱼嘉年华页面可以领取一些小东西，各位请点击确定，然后在自动打开的网页内参与\n部分东西可以直接领取，比如点预约后可以直接领3个增幅器，部分则需要额外操作下\n",
+    "send_at": "2023-11-14 22:04:31",
+    "show_type": "once",
+    "open_url": "https://www.douyu.com/topic/DNFCarnival?rid=9940062",
+    "expire_at": "2023-12-13 22:04:31",
+    "show_only_before_version": ""
   }
 ]

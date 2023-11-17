@@ -649,6 +649,7 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF娱乐赛", self.dnf_game),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
+            ("dnf助手活动wpe", self.dnf_helper_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -656,7 +657,6 @@ class DjcHelper:
         return [
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动", self.dnf_helper),
-            ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("勇士的冒险补给", self.maoxian),
             ("DNF马杰洛的规划", self.majieluo),
             ("集卡", self.dnf_ark_lottery),
@@ -4511,16 +4511,26 @@ class DjcHelper:
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        self.dnf_helper_wpe_op("盖波加的每日补给", 118151)
+        self.dnf_helper_wpe_op("见面礼", 132329)
 
-        self.dnf_helper_wpe_op("盖波加的初级秘宝-基础", 118155)
-        self.dnf_helper_wpe_op("盖波加的初级秘宝-挑战", 118156)
-        self.dnf_helper_wpe_op("盖波加的中级秘宝-基础", 118157)
-        self.dnf_helper_wpe_op("盖波加的中级秘宝-挑战", 118158)
-        self.dnf_helper_wpe_op("盖波加的进阶秘宝-基础", 118159)
-        self.dnf_helper_wpe_op("盖波加的进阶秘宝-挑战", 118160)
-        self.dnf_helper_wpe_op("盖波加的珍藏秘宝-基础", 118161)
-        self.dnf_helper_wpe_op("盖波加的珍藏秘宝-挑战", 118162)
+        self.dnf_helper_wpe_op("分享活动", 134214)
+        self.dnf_helper_wpe_op("通关一次巴卡尔", 134319)
+        self.dnf_helper_wpe_op("今日登录游戏", 134321)
+        self.dnf_helper_wpe_op("今日消耗疲劳100点", 134331)
+        # self.dnf_helper_wpe_op("史诗之路获得10件史诗", uuuu)
+
+
+        for idx in range_from_one(6):
+            res = self.dnf_helper_wpe_op(f"迎风起航-{idx}", 133955)
+            if "消耗殆尽" in res["msg"]:
+                break
+            time.sleep(5)
+
+        self.dnf_helper_wpe_op("回归-今日登录游戏", 132336)
+        self.dnf_helper_wpe_op("回归-今日在线60分钟", 132327)
+        self.dnf_helper_wpe_op("回归-通关推荐地下城3次", 132350)
+        self.dnf_helper_wpe_op("回归-消耗100点疲劳", 132340)
+        self.dnf_helper_wpe_op("回归-装备属性成长3次", 132328)
 
     def dnf_helper_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
@@ -4528,7 +4538,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 14853
+        act_id = 15590
 
         json_data = {
             "biz_id": "bb",
@@ -12671,4 +12681,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.qq_video_iwan()
+        djcHelper.dnf_helper_wpe()

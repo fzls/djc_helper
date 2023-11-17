@@ -76,7 +76,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-08-03 15:00:00", "2023-09-06 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
-    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "dnf助手活动wpe"),
+    newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-17 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
 ]
 
@@ -97,12 +97,12 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
+    "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     #
     # 已过期活动
     #
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20230912dnf/index_pc.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
-    "dnf助手活动wpe": "https://act.xinyue.qq.com/bb/act/ab129d32407a74e78ad5c34c4affa5136/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/47701_d2c4f10f",
@@ -499,6 +499,8 @@ class Urls:
         #   1. 随便点击一个按钮，在其请求记录中复制对应的flowid
         #   2. 在Search标签中搜索该值，会找到一行json定义，复制出来，并格式化
         #   3. 后续在想要查看的按钮右键 Inspect，复制其上层div对应的id的值，然后在json中搜索，上面configurationData的flowID即为我们要找的值
+        #
+        # note: 如果手机抓包没法获取到活动链接，但是可以抓包的情况下，可以完成抓包设置后，依次点击对应按钮，然后在抓包结果中搜索 actid ，最下面的请求的参数中的 flowid 就是我们需要的参数
 
         # 超享玩
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"

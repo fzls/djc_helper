@@ -92,8 +92,8 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF落地页活动": "https://dnf.qq.com/cp/a20231026index/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
+    "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     #
     # 已过期活动
     #
@@ -265,7 +265,7 @@ class Urls:
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
-        self.iActivityId_dnf_luodiye = "591161"  # DNF落地页活动需求
+        self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "523121"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
@@ -323,7 +323,7 @@ class Urls:
             "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
             "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
             "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}&selectNo={selectNo}"
+            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}&selectNo={selectNo}&targetQQ={targetQQ}"
         )
 
         # ide通用活动

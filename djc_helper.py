@@ -645,8 +645,8 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
             ("colg每日签到", self.colg_signin),
-            ("DNF落地页活动", self.dnf_luodiye),
             ("DNF预约", self.dnf_reservation),
+            ("DNF落地页活动", self.dnf_luodiye),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9276,17 +9276,23 @@ class DjcHelper:
 
         self.check_dnf_luodiye()
 
-        # ------------ 实际流程 --------------
-        self.dnf_luodiye_op("见面礼", "985661")
+        def query_scode() -> str:
+            res = self.dnf_luodiye_op("初始化", "990073")
+            raw_info = res["modRet"]["jData"]
 
-        self.dnf_luodiye_op("每日任务一", "985683")
-        self.dnf_luodiye_op("每日任务二", "985684")
-        self.dnf_luodiye_op("每周任务一", "985685")
-        self.dnf_luodiye_op("每周任务二", "985686")
+            return raw_info["sCode"]
+
+        # ------------ 实际流程 --------------
+        self.dnf_luodiye_op("见面礼", "989287")
+
+        self.dnf_luodiye_op("每日任务一", "989304")
+        self.dnf_luodiye_op("每日任务二", "989305")
+        self.dnf_luodiye_op("每周任务一", "989306")
+        self.dnf_luodiye_op("每周任务二", "989307")
 
         lottery_times = 6
         for idx in range_from_one(lottery_times):
-            res = self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "985687")
+            res = self.dnf_luodiye_op(f"{idx}/{lottery_times} 抽奖", "989308")
             if res["ret"] == "700" or (res["ret"] == "0" and res["modRet"]["ret"] == 10001):
                 break
             time.sleep(5)
@@ -9297,22 +9303,35 @@ class DjcHelper:
         # self.dnf_luodiye_op("通关任意难度盖加波", "978852")
         # self.dnf_luodiye_op("累计获得史诗10件", "978853")
         # self.dnf_luodiye_op("累计获得史诗20件", "978854")
-        #
-        # self.dnf_luodiye_op("首次邀请领黑钻礼包", "978268")
-        # async_message_box(
-        #     "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~",
-        #     "921 落地页拉回归活动",
-        #     show_once=True,
-        #     open_url=get_act_url("DNF落地页活动"),
-        # )
+
+
+        self.dnf_social_relation_permission_op(
+            "更新创建用户授权信息", "108939", sAuthInfo="LDY", sActivityInfo="a20231116index"
+        )
+
+        if not self.cfg.function_switches.disable_share and is_first_run(
+            f"dnf_luodiye_{get_act_url('DNF落地页活动')}_分享_{self.uin()}_v2"
+        ):
+            p_skey = self.fetch_share_p_skey("落地页邀请")
+            my_scode = query_scode()
+            self.dnf_luodiye_op("发送ark消息给自己", "989316", targetQQ=my_scode, p_skey=p_skey)
+
+        self.dnf_luodiye_op("首次邀请领黑钻礼包", "989318")
+
+        async_message_box(
+            "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+            "1117 落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动"),
+        )
 
     def check_dnf_luodiye(self):
         self.check_bind_account(
             "DNF落地页活动",
             get_act_url("DNF落地页活动"),
             activity_op_func=self.dnf_luodiye_op,
-            query_bind_flowid="985569",
-            commit_bind_flowid="985568",
+            query_bind_flowid="993001",
+            commit_bind_flowid="993000",
         )
 
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
@@ -11780,6 +11799,7 @@ class DjcHelper:
                 "position",
                 "packages",
                 "selectNo",
+                "targetQQ",
             ]
         }
 
@@ -12623,4 +12643,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reservation()
+        djcHelper.dnf_luodiye()

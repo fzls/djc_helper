@@ -1525,6 +1525,7 @@ def show_tips(cfg: Config):
             "https://dnf.qq.com/act/a20231031fiesta/\n"
         ),
         "23.11 斗鱼嘉年华预约奖励": ("斗鱼活动请自行参与，活动链接如下:\n" "斗鱼：https://www.douyu.com/topic/DNFCarnival?rid=9940062\n"),
+        "23.11 微信公众号盖楼": ("微信关注官方公众号【地下城与勇士】，发送【嘉年华盖楼】，点击回复的链接，在里面可以领取奖励。每天可以操作一次\n"),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

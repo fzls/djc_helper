@@ -1078,7 +1078,7 @@ class QQLogin:
 
             try:
                 logger.info("等待登录按钮出来，确保加载完成")
-                xpath_login = "//div[contains(text(), '点击登录')]"
+                xpath_login = "//div[contains(text(), '未登录')]"
                 WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
                     expected_conditions.element_to_be_clickable((By.XPATH, xpath_login))
                 )
@@ -1113,8 +1113,8 @@ class QQLogin:
                 logger.warning("爱玩处理 切换登录iframe 流程失败了，可能是已经处理成功了")
 
         def assert_login_finished_fn():
-            logger.info("等待 切换登录账号 按钮出来，确保加载完成")
-            xpath_switch_login = "//span[contains(text(), '切换登录账号')]"
+            logger.info("等待 切换账号 按钮出来，确保加载完成")
+            xpath_switch_login = "//span[contains(text(), '切换账号')]"
             WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
                 expected_conditions.visibility_of_element_located((By.XPATH, xpath_switch_login))
             )

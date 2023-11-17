@@ -2556,6 +2556,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF预约", "get_dnf_reservation"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF娱乐赛", "get_dnf_game"),
+            ("qq视频蚊子腿-爱玩", "get_qq_video"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2592,7 +2593,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),
             ("巴卡尔大作战", "get_dnf_bakaer_fight"),
             ("魔界人探险记", "get_mojieren"),
-            ("qq视频蚊子腿-爱玩", "get_qq_video"),
             ("WeGame活动", "get_dnf_wegame"),
             ("DNF集合站", "get_dnf_collection"),
             ("超级会员", "get_dnf_super_vip"),

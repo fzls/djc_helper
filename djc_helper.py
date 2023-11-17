@@ -648,6 +648,7 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF娱乐赛", self.dnf_game),
+            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -675,7 +676,6 @@ class DjcHelper:
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
-            ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("dnf助手活动Dup", self.dnf_helper_dup),
@@ -4025,9 +4025,9 @@ class DjcHelper:
 
         logger.warning(color("bold_yellow") + "如果下面的请求提示 【登陆态失效，请重新登录！】，很有可能是你的号不能参与这个活动。手动登录这个活动的网页，然后点击领取，应该也会弹相同的提示")
 
-        self.qq_video_iwan_op("幸运勇士礼包", "-8h99Ofnm")
+        self.qq_video_iwan_op("幸运勇士礼包", "xjN0qL0uZE")
         # self.qq_video_iwan_op("全民大礼包", "2hiHF_yAf")
-        self.qq_video_iwan_op("勇士见面礼", "rtKsUTxs0E")
+        self.qq_video_iwan_op("勇士见面礼", "a69YMxiANa")
         # self.qq_video_iwan_op("每日抽奖（需要在页面开视频会员）", "fj174odxr")
         # self.qq_video_iwan_op("在线30分钟签到", "1X7VUbqgr")
         # self.qq_video_iwan_op("累计 3 天", "ql8qD9_NH")
@@ -12671,4 +12671,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_game()
+        djcHelper.qq_video_iwan()

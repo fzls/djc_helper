@@ -77,6 +77,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "dnf助手活动wpe"),
+    newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
 ]
 
 act_name_to_url = {
@@ -94,6 +95,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
+    "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     #
     # 已过期活动
     #
@@ -125,7 +127,6 @@ act_name_to_url = {
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
-    "DNF娱乐赛": "https://mwegame.qq.com/act/dnf/a20221110chylpc/",
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
@@ -336,6 +337,7 @@ class Urls:
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
+        self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "582481"  # DNF马杰洛的规划
@@ -351,7 +353,7 @@ class Urls:
             "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
-            "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}"
+            "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}"
         )
 
         # DNF共创投票

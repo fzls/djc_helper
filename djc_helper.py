@@ -647,6 +647,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF预约", self.dnf_reservation),
             ("DNF落地页活动", self.dnf_luodiye),
+            ("DNF娱乐赛", self.dnf_game),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -680,7 +681,6 @@ class DjcHelper:
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("心悦app周礼包", self.xinyue_weekly_gift),
             ("DNF闪光杯", self.dnf_shanguang),
-            ("DNF娱乐赛", self.dnf_game),
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
@@ -11001,44 +11001,41 @@ class DjcHelper:
     @try_except()
     def dnf_game(self):
         show_head_line("DNF娱乐赛")
-        self.show_amesvr_act_info(self.dnf_game_op)
+        self.show_not_ams_act_info("DNF娱乐赛")
 
         if not self.cfg.function_switches.get_dnf_game or self.disable_most_activities():
             logger.warning("未启用领取DNF娱乐赛功能，将跳过")
             return
 
-        self.check_dnf_game()
+        self.check_dnf_game_ide()
 
         vote_list = [
-            ("玩法", 3, [906081, 906476, 906477, 906478, 906479, 906480]),
-            ("流派", 4, [906481, 906493, 906494, 906495, 906496, 906497, 906498, 906499, 906500, 906501, 906502, 906503]),
-            ("词条", 1, [906504, 906505, 906506]),
-            ("增幅", 1, [906507, 906508, 906509]),
-            ("附魔", 1, [906510, 906511, 906512]),
-            ("比分竞猜", 1, [906513, 906514, 906515, 906516, 906517, 906518]),
+            ("惩罚饮料", "233409", "drinksId", 5, [1, 2, 3, 4, 5, 6, 7, 8]),
+            ("游戏", "242670", "gameId", 3, [1, 2, 3, 4, 5]),
+            ("比分", "233411", "score", 1, ["3:0", "2:1", "1:2", "0:3"]),
         ]
 
-        for name, vote_count, flow_id_list in vote_list:
-            ctx = f"{name}{len(flow_id_list)}选{vote_count}"
+        for name, flow_id, param_key_name, vote_count, choice_id_list in vote_list:
+            ctx = f"{name}{len(choice_id_list)}选{vote_count}"
             logger.info(f"开始投 {ctx}")
-            chosen = random.sample(flow_id_list, vote_count)
-            for flow_id in chosen:
-                res = self.dnf_game_op(f"{ctx} - {flow_id}", flow_id)
+            chosen = random.sample(choice_id_list, vote_count)
+            for choice_id in chosen:
+                res = self.dnf_game_ide_op(f"{ctx} - {choice_id}", flow_id, **{param_key_name: choice_id})
                 time.sleep(1)
 
-                if res.get("ret", "-1") != "0":
+                if res["sMsg"] in [f"您的投票次数已满{vote_count}次", "您已投票"]:
                     break
 
-        if now_after("2022-11-27 00:00:00"):
-            self.dnf_game_op("猜对比分 红10增幅券", "906521")
+        if now_after("2023-11-20 12:00:00"):
+            self.dnf_game_ide_op("猜对比分 红10增幅券", "233417")
 
-        for idx in range_from_one(4):
-            res = self.dnf_game_op(f"{idx} 许愿池抽奖", "905697")
-            if res.get("ret", "-1") != "0":
+        for idx in range_from_one(6):
+            res = self.dnf_game_ide_op(f"{idx} 许愿池抽奖", "233412")
+            if res["ret"] != 0:
                 break
             time.sleep(5)
 
-        self.dnf_game_op("查询我的竞猜和投票", "906519")
+        self.dnf_game_ide_op("查询我的竞猜和投票", "233282")
 
     def check_dnf_game(self):
         self.check_bind_account(
@@ -11056,6 +11053,34 @@ class DjcHelper:
             "comm.ams.game.qq.com",
             "group_k",
             "bb",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF娱乐赛"),
+            **extra_params,
+        )
+
+    def check_dnf_game_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF娱乐赛",
+            get_act_url("DNF娱乐赛"),
+            activity_op_func=self.dnf_game_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_game_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_game
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
             print_res,
@@ -11800,6 +11825,9 @@ class DjcHelper:
                 "packages",
                 "selectNo",
                 "targetQQ",
+                "drinksId",
+                "gameId",
+                "score",
             ]
         }
 
@@ -12643,4 +12671,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye()
+        djcHelper.dnf_game()

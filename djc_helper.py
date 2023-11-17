@@ -4519,7 +4519,6 @@ class DjcHelper:
         self.dnf_helper_wpe_op("今日消耗疲劳100点", 134331)
         # self.dnf_helper_wpe_op("史诗之路获得10件史诗", uuuu)
 
-
         for idx in range_from_one(6):
             res = self.dnf_helper_wpe_op(f"迎风起航-{idx}", 133955)
             if "消耗殆尽" in res["msg"]:
@@ -9314,10 +9313,7 @@ class DjcHelper:
         # self.dnf_luodiye_op("累计获得史诗10件", "978853")
         # self.dnf_luodiye_op("累计获得史诗20件", "978854")
 
-
-        self.dnf_social_relation_permission_op(
-            "更新创建用户授权信息", "108939", sAuthInfo="LDY", sActivityInfo="a20231116index"
-        )
+        self.dnf_social_relation_permission_op("更新创建用户授权信息", "108939", sAuthInfo="LDY", sActivityInfo="a20231116index")
 
         if not self.cfg.function_switches.disable_share and is_first_run(
             f"dnf_luodiye_{get_act_url('DNF落地页活动')}_分享_{self.uin()}_v2"

@@ -4521,7 +4521,7 @@ class DjcHelper:
 
         for idx in range_from_one(6):
             res = self.dnf_helper_wpe_op(f"迎风起航-{idx}", 133955)
-            if "消耗殆尽" in res["msg"]:
+            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"]:
                 break
             time.sleep(5)
 

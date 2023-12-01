@@ -298,5 +298,15 @@
     "open_url": "https://docs.qq.com/doc/DYnJDaXRXanN5Z3Vl",
     "expire_at": "2023-12-20 21:11:59",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "23.12 支付宝红包",
+    "message": "各位朋友如果最近要用支付宝续费小助手，可以先在 配置工具/付费相关 中点一下 绿色的【领取支付宝小红包】按钮，扫码后可以领到一个平均在2.5元左右的红包，续费的时候应该可以使用\nPS1：因为双12，12.1开始这几天，这个红包从之前几分钱变成现在几块钱\nPS2：你领了并使用后，我也会得到一个差不多大小的小红包\n",
+    "send_at": "2023-12-01 10:05:29",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2023-12-08 10:05:29",
+    "show_only_before_version": ""
   }
 ]

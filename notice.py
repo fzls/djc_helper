@@ -195,10 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "23.11 无法快捷登录"
-    message = """最近有不少朋友反馈在更新QQ后不能点击头像快捷登录了，如遇到此问题，请点击确定，按照弹出的云文档中的流程操作即可
+    title = "23.12 支付宝红包"
+    message = """各位朋友如果最近要用支付宝续费小助手，可以先在 配置工具/付费相关 中点一下 绿色的【领取支付宝小红包】按钮，扫码后可以领到一个平均在2.5元左右的红包，续费的时候应该可以使用
+PS1：因为双12，12.1开始这几天，这个红包从之前几分钱变成现在几块钱
+PS2：你领了并使用后，我也会得到一个差不多大小的小红包
 """
-    open_url = "https://docs.qq.com/doc/DYnJDaXRXanN5Z3Vl"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

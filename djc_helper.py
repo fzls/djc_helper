@@ -649,13 +649,13 @@ class DjcHelper:
             ("DNF娱乐赛", self.dnf_game),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
             ("colg每日签到", self.colg_signin),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("DNF马杰洛的规划", self.majieluo),
@@ -11370,40 +11370,34 @@ class DjcHelper:
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        def query_lottery_times() -> tuple[int, int]:
-            res = self.dnf_xinyue_wpe_op("查询抽奖次数", 117953, print_res=False)
+        self.dnf_xinyue_wpe_op("报名", 129649, extra_data={"equipmentCamp": "恩特"})
+        self.dnf_xinyue_wpe_op("立即领取报名礼", 129665)
 
-            raw_data = res["data"]
-            data = json.loads(raw_data)
+        # 这个不弄了，不影响后面抽奖
+        # self.dnf_xinyue_wpe_op("立即选择词条", yyyy)
+        self.dnf_xinyue_wpe_op("一键领取排行榜奖励", 129666)
 
-            return int(data["remain"]), int(data["total"])
+        self.dnf_xinyue_wpe_op("见面礼", 129657)
+        self.dnf_xinyue_wpe_op("回流礼", 129659)
 
-        if now_in_range("2023-10-21 00:00:00", "2023-10-31 23:59:59"):
-            self.dnf_xinyue_wpe_op("领取勇士币返利", 117964)
+        self.dnf_xinyue_wpe_op("签到1天", 130232)
+        self.dnf_xinyue_wpe_op("签到2天", 130622)
+        self.dnf_xinyue_wpe_op("签到3天", 130624)
+        self.dnf_xinyue_wpe_op("签到4天", 130626)
+        self.dnf_xinyue_wpe_op("签到5天", 130628)
+        self.dnf_xinyue_wpe_op("签到6天", 130630)
+        self.dnf_xinyue_wpe_op("签到7天", 130632)
 
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-288元", 117941)
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-466元", 117951)
-        self.dnf_xinyue_wpe_op("领取累计充值礼包-699元", 117962)
+        self.dnf_xinyue_wpe_op("通过一次异次元万年雪山", 130633)
+        self.dnf_xinyue_wpe_op("每日游戏在线30分钟", 130634)
+        self.dnf_xinyue_wpe_op("加入DNF俱乐部", 130635)
+        self.dnf_xinyue_wpe_op("每日访问俱乐部广场", 130636)
 
-        remain, total = query_lottery_times()
-        logger.info(f"当前剩余抽奖次数为 {remain}，累计获得 {total}")
-        for idx in range_from_one(remain):
-            self.dnf_xinyue_wpe_op(f"{idx}/{remain} 抽奖", 117943)
-
-        self.dnf_xinyue_wpe_op("每日签到", 117950)
-
-        self.dnf_xinyue_wpe_op("签到1天", 117963)
-        self.dnf_xinyue_wpe_op("签到3天", 117952)
-        self.dnf_xinyue_wpe_op("签到7天", 117938)
-        self.dnf_xinyue_wpe_op("签到15天", 117942)
-        self.dnf_xinyue_wpe_op("签到15天暴击成就点", 117937)
-
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP4-5", 117949)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP2-3", 117940)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 心悦VIP1", 117935)
-        self.dnf_xinyue_wpe_op("会员等级礼 - 特邀会员", 117948)
-
-        logger.info(color("bold_yellow") + "心悦app中打开活动页面可以领取额外的四个小东西（非常mini），请自行决定是否前往app进行领取")
+        max_try = 4
+        for idx in range_from_one(max_try):
+            res = self.dnf_xinyue_wpe_op(f"{idx}/{max_try} 抽奖", 129679)
+            if "抽奖次数不足" in res["msg"]:
+                break
 
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
         self.dnf_xinyue_wpe_extra_headers = {
@@ -11414,13 +11408,15 @@ class DjcHelper:
             "t-access-token": access_token,
         }
 
-    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict=None, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "14837"
-
+        act_id = "15456"
         roleinfo = self.get_dnf_bind_role()
+
+        if extra_data is None:
+            extra_data = {}
 
         json_data = {
             "biz_id": "tgclub",
@@ -11443,6 +11439,7 @@ class DjcHelper:
                     "ceiba_plat_id": "ios",
                     "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
                     "cExtData": {},
+                    **extra_data,
                 }
             ),
         }
@@ -12677,4 +12674,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_wpe()
+        djcHelper.dnf_xinyue_wpe()

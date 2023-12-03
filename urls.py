@@ -94,13 +94,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
-    "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
     #
     # 已过期活动
     #
+    "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",

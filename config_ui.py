@@ -351,9 +351,13 @@ class NoticeUi(QFrame):
         idx = self.current_notice_index
         current_notice = self.notices[idx]
 
+        message = current_notice.message
+        if current_notice.open_url != "" and current_notice.open_url not in message:
+            message += "\n" + current_notice.open_url
+
         self.label_title.setText(f"[{idx + 1}/{notice_count}] {current_notice.title}")
         self.label_time.setText(current_notice.send_at)
-        self.label_content.setText(current_notice.message)
+        self.label_content.setText(message)
 
     def show_previous_notice(self, checked=False):
         self.current_notice_index = (self.current_notice_index + len(self.notices) - 1) % len(self.notices)

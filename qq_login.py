@@ -12,7 +12,12 @@ from collections import Counter
 from urllib.parse import quote_plus, unquote_plus
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchWindowException, StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import (
+    InvalidArgumentException,
+    NoSuchWindowException,
+    StaleElementReferenceException,
+    TimeoutException,
+)
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -793,8 +798,13 @@ class QQLogin:
                         expected_conditions.invisibility_of_element((By.ID, "switcher_plogin"))
                     )
                     login_success = True
-                except Exception:
+                except InvalidArgumentException as e:
+                    #  如果已经刷新到新页面，则会报这个异常，说明也是成功了
+                    logger.info(color("bold_yellow") + f"{ctx} 跳转到新的页面了，导致无法定位到登录按钮，这说明登录也成功了")
+                    login_success = True
+                except Exception as e:
                     login_success = False
+                    logger.debug("头像登录出错了", exc_info=e)
 
                 logger.info(color("bold_cyan") + f"{ctx} 点击头像登录的结果为: {'成功' if login_success else '失败'}")
             elif login_type == self.login_type_qr_login:

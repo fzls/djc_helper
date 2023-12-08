@@ -1518,14 +1518,12 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "23.11 嘉年华预约奖励": (
-            "嘉年华预约页面绑定手机后可领取 7天黑钻+1增肥礼盒\n"
-            "点击【预约直播领好礼】，右下角绑定手机，然后左上角领取即可\n"
-            "活动链接如下\n"
-            "https://dnf.qq.com/act/a20231031fiesta/\n"
-        ),
         "23.11 斗鱼嘉年华预约奖励": ("斗鱼活动请自行参与，活动链接如下:\n" "斗鱼：https://www.douyu.com/topic/DNFCarnival?rid=9940062\n"),
         "23.11 微信公众号盖楼": ("微信关注官方公众号【地下城与勇士】，发送【嘉年华盖楼】，点击回复的链接，在里面可以领取奖励。每天可以操作一次\n"),
+        "23.12 colg年度大选": (
+            "colg有个投票活动，累计投票若干次可以领取一些小奖励，有兴趣的可自行参与\n"
+            "https://bbs.colg.cn/colg_activity_new-annual_ceremony.html/2023\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

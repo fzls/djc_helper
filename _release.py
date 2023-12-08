@@ -155,6 +155,10 @@ def release():
     time.sleep(2)
     webbrowser.open("https://github.com/fzls/djc_helper/actions/workflows/package.yml")
 
+    # ---------------查看本地上传目录
+    show_head_line("打开本地的上传目录，方便手动上传新版本到QQ群文件", color("bold_yellow"))
+    webbrowser.open(os.path.join(dir_all_release, dir_upload_files))
+
     # ---------------结束
     logger.info("+" * 40)
     logger.info(color("bold_yellow") + f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请等待github action的构建打包流程完成")

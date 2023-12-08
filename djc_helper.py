@@ -641,6 +641,7 @@ class DjcHelper:
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
+        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),

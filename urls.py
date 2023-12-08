@@ -471,7 +471,9 @@ class Urls:
         # ------- colg其他活动 --------
         self.colg_other_act_id = 16
         # 活动页面
-        self.colg_other_act_url = f"https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid={self.colg_other_act_id}"
+        self.colg_other_act_url = (
+            f"https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid={self.colg_other_act_id}"
+        )
         # 累计登录领奖
         self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
         # 每日抽奖

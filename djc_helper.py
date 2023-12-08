@@ -9068,36 +9068,40 @@ class DjcHelper:
         session.get(self.urls.colg_other_act_url, timeout=10)
 
         reward_list = [
-             {
-                  "reward_bag_id": "60",
-                  "title": "累计签到3天",
-             },
-             {
-                  "reward_bag_id": "61",
-                  "title": "累计签到7天",
-             },
-             {
-                  "reward_bag_id": "62",
-                  "title": "累计签到10天",
-             },
-             {
-                  "reward_bag_id": "63",
-                  "title": "累计签到15天",
-             },
-             {
-                  "reward_bag_id": "64",
-                  "title": "累计签到21天",
-             },
-             {
-                  "reward_bag_id": "65",
-                  "title": "累计签到28天",
-             }
+            {
+                "reward_bag_id": "60",
+                "title": "累计签到3天",
+            },
+            {
+                "reward_bag_id": "61",
+                "title": "累计签到7天",
+            },
+            {
+                "reward_bag_id": "62",
+                "title": "累计签到10天",
+            },
+            {
+                "reward_bag_id": "63",
+                "title": "累计签到15天",
+            },
+            {
+                "reward_bag_id": "64",
+                "title": "累计签到21天",
+            },
+            {
+                "reward_bag_id": "65",
+                "title": "累计签到28天",
+            },
         ]
         for reward in reward_list:
             reward_bag_id = reward["reward_bag_id"]
             title = reward["title"]
 
-            res = session.post(self.urls.colg_other_act_get_reward, data=f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}", timeout=10)
+            res = session.post(
+                self.urls.colg_other_act_get_reward,
+                data=f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}",
+                timeout=10,
+            )
             res_json = res.json()
             logger.info(color("bold_green") + f"{title}，结果={res_json}")
 
@@ -9105,7 +9109,9 @@ class DjcHelper:
                 logger.warning("累积天数不足，跳过尝试后续")
                 break
 
-        res = session.post(self.urls.colg_other_act_lottery, data=f"type=2&aid={self.urls.colg_other_act_id}", timeout=10)
+        res = session.post(
+            self.urls.colg_other_act_lottery, data=f"type=2&aid={self.urls.colg_other_act_id}", timeout=10
+        )
         logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
@@ -11449,7 +11455,7 @@ class DjcHelper:
             "t-access-token": access_token,
         }
 
-    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict=None, **extra_params):
+    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict = None, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 

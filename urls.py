@@ -97,6 +97,7 @@ act_name_to_url = {
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
+    "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     #
     # 已过期活动
     #
@@ -303,6 +304,7 @@ class Urls:
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
+        self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
 
         # amesvr通用活动系统配置
         # 需要手动额外传入参数：sMiloTag, sServiceDepartment, sServiceType

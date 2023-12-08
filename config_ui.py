@@ -2561,6 +2561,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("qq视频蚊子腿-爱玩", "get_qq_video"),
             ("dnf助手活动wpe", "get_dnf_helper_wpe"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
+            ("神界预热", "get_dnf_shenjie_yure"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

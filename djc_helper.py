@@ -158,6 +158,7 @@ from util import (
     md5,
     message_box,
     now_after,
+    now_before,
     now_in_range,
     padLeftRight,
     parse_time,
@@ -650,6 +651,7 @@ class DjcHelper:
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("神界预热", self.dnf_shenjie_yure),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -11541,6 +11543,53 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------神界预热--------------------------------------------
+    def dnf_shenjie_yure(self):
+        show_head_line("神界预热")
+        self.show_amesvr_act_info(self.dnf_shenjie_yure_op)
+
+        if not self.cfg.function_switches.get_dnf_shenjie_yure or self.disable_most_activities():
+            logger.warning("未启用领取神界预热活动合集功能，将跳过")
+            return
+
+        self.check_dnf_shenjie_yure()
+
+        gifts = [
+            ("2023-12-07 10:00:00", "2023-12-14 05:59:59", "997992", "登录游戏"),
+            ("2023-12-14 06:00:00", "2023-12-21 05:59:59", "997996", "更新前 登录游戏"),
+            ("2023-12-21 06:00:00", "2024-02-01 05:59:59", "997997", "更新前 登录游戏"),
+        ]
+        for start_time, end_time, flowid, name in gifts:
+            if now_before(start_time):
+                logger.info(f"当前时间 {get_now()} 未到 {name} 开始时间 {start_time}，将跳过")
+                continue
+
+            self.dnf_shenjie_yure_op(f"{start_time} {name} 礼包", flowid)
+
+    def check_dnf_shenjie_yure(self):
+        self.check_bind_account(
+            "神界预热",
+            get_act_url("神界预热"),
+            activity_op_func=self.dnf_shenjie_yure_op,
+            query_bind_flowid="997793",
+            commit_bind_flowid="997792",
+        )
+
+    def dnf_shenjie_yure_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_shenjie_yure
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("神界预热"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -12675,4 +12724,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_shenjie_yure()

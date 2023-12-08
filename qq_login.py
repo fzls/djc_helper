@@ -802,6 +802,7 @@ class QQLogin:
                     #  如果已经刷新到新页面，则会报这个异常，说明也是成功了
                     logger.info(color("bold_yellow") + f"{ctx} 跳转到新的页面了，导致无法定位到登录按钮，这说明登录也成功了")
                     login_success = True
+                    logger.debug("保存下异常信息", exc_info=e)
                 except Exception as e:
                     login_success = False
                     logger.debug("头像登录出错了", exc_info=e)

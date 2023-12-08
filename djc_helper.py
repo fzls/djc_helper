@@ -11062,7 +11062,7 @@ class DjcHelper:
 
         self.check_dnf_game_ide()
 
-        vote_list = [
+        vote_list: list[tuple[str, str, str, int, list[int] | list[str]]] = [
             ("惩罚饮料", "233409", "drinksId", 5, [1, 2, 3, 4, 5, 6, 7, 8]),
             ("游戏", "242670", "gameId", 3, [1, 2, 3, 4, 5]),
             ("比分", "233411", "score", 1, ["3:0", "2:1", "1:2", "0:3"]),
@@ -11455,7 +11455,7 @@ class DjcHelper:
             "t-access-token": access_token,
         }
 
-    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict = None, **extra_params):
+    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
@@ -11608,7 +11608,7 @@ class DjcHelper:
                 logger.info(f"当前时间 {get_now()} 未到 {name} 开始时间 {start_time}，将跳过")
                 continue
 
-            self.dnf_shenjie_yure_op(f"{start_time} {name} 礼包", flowid)
+            self.dnf_shenjie_yure_op(f"{start_time} ~ {end_time} {name} 礼包", flowid)
 
     def check_dnf_shenjie_yure(self):
         self.check_bind_account(

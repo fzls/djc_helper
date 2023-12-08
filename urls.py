@@ -73,7 +73,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-30 10:00:00", "2023-12-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
-    newNotAmsActInfo("2023-08-03 15:00:00", "2023-09-06 23:59:59", "colg其他活动"),
+    newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-17 23:59:59", "dnf助手活动wpe"),
@@ -98,6 +98,7 @@ act_name_to_url = {
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
+    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     #
     # 已过期活动
     #
@@ -111,7 +112,6 @@ act_name_to_url = {
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
-    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
@@ -468,9 +468,13 @@ class Urls:
         self.colg_take_sign_in_credits = (
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
-        # colg其他活动
-        self.colg_other_act_url = "https://bbs.colg.cn/colg_activity_new-dpl_competition.html?aid=13"
+        # ------- colg其他活动 --------
+        self.colg_other_act_id = 16
+        # 活动页面
+        self.colg_other_act_url = f"https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid={self.colg_other_act_id}"
+        # 累计登录领奖
         self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
+        # 每日抽奖
         self.colg_other_act_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
 
         # 小酱油

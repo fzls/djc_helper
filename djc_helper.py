@@ -420,6 +420,18 @@ class DjcHelper:
 
         return roleinfo
 
+    def get_fz_bind_role(self) -> RoleInfo | None:
+        """
+        获取命运方舟的绑定角色信息
+        """
+        roleinfo = None
+
+        game_name = "fz"
+        if game_name in self.bizcode_2_bind_role_map:
+            roleinfo = self.bizcode_2_bind_role_map[game_name].sRoleInfo
+
+        return roleinfo
+
     def get_mobile_game_info(self):
         # 如果游戏名称设置为【任意手游】，则从绑定的手游中随便挑一个
         if self.cfg.mobile_game_role_info.use_any_binded_mobile_game():
@@ -1050,16 +1062,38 @@ class DjcHelper:
                     time.sleep(retryCfg.request_wait_time)
                     break
 
-    def exchange_item(self, ctx, iGoodsSeqId):
-        roleinfo = self.get_dnf_bind_role()
-        return self.get(
-            ctx,
-            self.urls.exchangeItems,
-            iGoodsSeqId=iGoodsSeqId,
-            rolename=quote_plus(roleinfo.roleName),
-            lRoleId=roleinfo.roleCode,
-            iZone=roleinfo.serviceID,
-        )
+    def exchange_item(self, ctx: str, iGoodsSeqId: str, iActionId: str = "", iActionType: str = "", bizcode = "dnf"):
+        if bizcode == "dnf":
+            # note: dnf仍使用旧的兑换接口，目前仍可用，没必要切换为下面新的，真不能用时再改成用下面的接口
+            roleinfo = self.get_dnf_bind_role()
+
+            return self.get(
+                ctx,
+                self.urls.exchangeItems,
+                iGoodsSeqId=iGoodsSeqId,
+                rolename=quote_plus(roleinfo.roleName),
+                lRoleId=roleinfo.roleCode,
+                iZone=roleinfo.serviceID,
+            )
+
+        elif bizcode == "fz":
+            roleinfo = self.get_fz_bind_role()
+
+            return self.get(
+                ctx,
+                self.urls.new_exchangeItems,
+                iGoodsSeqId=iGoodsSeqId,
+                iActionId=iActionId,
+                iActionType=iActionType,
+                bizcode=bizcode,
+                platid=roleinfo.platid,
+                iZone=roleinfo.area,
+                partition=roleinfo.partition,
+                lRoleId=roleinfo.roleCode,
+                rolename=quote_plus(roleinfo.roleName),
+
+                use_this_cookies=self.djc_custom_cookies,
+            )
 
     def query_all_extra_info(self, dnfServerId: str):
         """

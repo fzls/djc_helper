@@ -1010,12 +1010,8 @@ class DjcHelper:
         self.take_task_award("4.3.1", "327091", "兑换有礼")
 
     def take_task_award(self, prefix, iRuleId, taskName=""):
-        ctx = f"{prefix} 查询当前任务状态"
-        taskinfo = self.get(ctx, self.urls.usertask, print_res=False)
-
-        if self.can_take_task_award(taskinfo, iRuleId):
-            ctx = f"{prefix} 领取任务-{taskName}-奖励"
-            self.get(ctx, self.urls.take_task_reward, iruleId=iRuleId)
+        ctx = f"{prefix} 领取任务-{taskName}-奖励"
+        self.get(ctx, self.urls.take_task_reward, iruleId=iRuleId)
 
     # 尝试领取每日任务奖励
     def can_take_task_award(self, taskinfo, iRuleId):

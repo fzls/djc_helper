@@ -76,6 +76,7 @@ class ExchangeItemConfig(ConfigInterface):
     """
     @see dnf_exchange_list.json5 fz_exchange_list.json5
     """
+
     def __init__(self):
         self.iGoodsId = "753"
         self.sGoodsName = "装备品级调整箱（5个）"

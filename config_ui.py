@@ -2152,7 +2152,9 @@ class AccountConfigUi(QWidget):
         (
             self.collapsible_box_djc_exchange,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换（填 0 就是不兑换）（已支持 命运方舟）", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
+            "道聚城兑换（填 0 就是不兑换）（已支持 命运方舟）", top_layout
+        )
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = {}
@@ -2418,7 +2420,7 @@ class AccountConfigUi(QWidget):
             all_item_biz_ids.add((item.sBizCode, item.iGoodsId))
 
         # 特殊处理下道聚城兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来
-        biz_to_default_item_info = {
+        biz_to_default_item_info: dict[str, dict[str, str | list[tuple[str, str]]]] = {
             "dnf": {
                 "iActionId": "",
                 "iType": "",
@@ -2435,7 +2437,7 @@ class AccountConfigUi(QWidget):
                     ("381", "复活币（每天限兑2次）"),
                     ("754", "装扮属性调整箱（高级）（1个）（每天限兑1次）"),
                     ("383", "闪亮的雷米援助(15个)"),
-                ]
+                ],
             },
             "fz": {
                 "iActionId": "29657",
@@ -2447,7 +2449,7 @@ class AccountConfigUi(QWidget):
                     ("4374", "复活羽毛x5（每日限兑1次）"),
                     ("4373", "跳跃精华x5（每日限兑1次）"),
                     ("4389", "命运方舟惊喜抽奖宝箱（每日限兑5次）"),
-                ]
+                ],
             },
         }
         for sBizCode, default_item_info in biz_to_default_item_info.items():
@@ -2462,11 +2464,10 @@ class AccountConfigUi(QWidget):
                 item.iGoodsId = iGoodsId
                 item.sGoodsName = sGoodsName
                 item.count = 0
-                item.iActionId = iActionId
-                item.iType =iType
+                item.iActionId = iActionId  # type: ignore
+                item.iType = iType  # type: ignore
                 item.sBizCode = sBizCode
                 cfg.exchange_items.append(item)
-
 
     def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig):
         all_item_keys = set()

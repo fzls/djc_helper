@@ -238,7 +238,11 @@ class Urls:
         # 兑换道具，需要手动额外传入参数：iGoodsSeqId、rolename、lRoleId、iZone(roleinfo.serviceID)
         self.exchangeItems = "https://apps.game.qq.com/cgi-bin/daoju/v3/hs/i_buy.cgi?&weexVersion=0.9.4&appVersion={appVersion}&iGoodsSeqId={iGoodsSeqId}&iZone={iZone}&lRoleId={lRoleId}&rolename={rolename}&&sDeviceID={sDeviceID}&sDjcSign={sDjcSign}&platform=android&deviceModel=MIX%202&&&_output_fmt=1&_plug_id=9800&_from=app&iActionId=2594&iActionType=26&_biz_code=dnf&biz=dnf&appid=1003&_app_id=1003&_cs=2&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
         # 新的兑换道具接口，新接入的游戏都用这个（其实dnf也可以用这个，不过得先在app里兑换一次，使绑定角色信息刷新为新的格式），需要手动额外传入参数：iGoodsSeqId、iActionId、iActionType、bizcode、platid、iZone、partition、lRoleId、rolename
-        self.new_exchangeItems = "https://djcapp.game.qq.com/daoju/igw/main/?_service=buy.plug.swoole.judou&iAppId=1001&_app_id=1003&_output_fmt=1&_plug_id=9800&_from=app&iGoodsSeqId={iGoodsSeqId}&iActionId={iActionId}&iActionType={iActionType}&_biz_code={bizcode}&biz={bizcode}&platid={platid}&iZone={iZone}&partition={partition}&lRoleId={lRoleId}&rolename={rolename}&p_tk={p_tk}&_cs=2&w_ver=156&w_id=4&sDeviceID={sDeviceID}&djcRequestId={djcRequestId}&appVersion={appVersion}&p_tk={p_tk}&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android&sDjcSign={sDjcSign}"
+        self.new_exchangeItems = (
+            "https://djcapp.game.qq.com/daoju/igw/main/?_service=buy.plug.swoole.judou&iAppId=1001&_app_id=1003&_output_fmt=1&_plug_id=9800&_from=app&iGoodsSeqId={iGoodsSeqId}&iActionId={iActionId}&iActionType={iActionType}"
+            "&_biz_code={bizcode}&biz={bizcode}&platid={platid}&iZone={iZone}&partition={partition}&lRoleId={lRoleId}&rolename={rolename}&p_tk={p_tk}&_cs=2&w_ver=156&w_id=4&sDeviceID={sDeviceID}&djcRequestId={djcRequestId}"
+            "&appVersion={appVersion}&p_tk={p_tk}&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android&sDjcSign={sDjcSign}"
+        )
         # 获取所有可兑换的道具的列表
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/{bizcode}_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
 

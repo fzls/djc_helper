@@ -825,7 +825,6 @@ class DjcHelper:
                     ("累计15天领取25聚豆", "322038"),
                     ("累计20天领取30聚豆", "322039"),
                     ("累计25天领取50聚豆", "322040"),
-
                     ("累计签到整月-全勤奖", "881740"),
                 ]
                 for ctx, iFlowId in sign_reward_rule_list:
@@ -938,7 +937,11 @@ class DjcHelper:
 
         # 查询许愿列表
         wish_list_res = self.get(
-            "3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies, print_res=False
+            "3.3.1 查询许愿列表",
+            self.urls.query_wish,
+            appUid=self.qq(),
+            use_this_cookies=self.djc_custom_cookies,
+            print_res=False,
         )
 
         # 删除已经许愿的列表，确保许愿成功
@@ -1001,7 +1004,6 @@ class DjcHelper:
 
             break
 
-
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
         # 领取《礼包达人》
@@ -1050,7 +1052,13 @@ class DjcHelper:
         for ei in self.cfg.exchange_items:
             for _i in range(ei.count):
                 for try_index in range(retryCfg.max_retry_count):
-                    res = self.exchange_item(f"4.2 兑换 【{ei.get_biz_name()}】 {ei.sGoodsName}", ei.iGoodsId, ei.iActionId, ei.iType, ei.sBizCode)
+                    res = self.exchange_item(
+                        f"4.2 兑换 【{ei.get_biz_name()}】 {ei.sGoodsName}",
+                        ei.iGoodsId,
+                        ei.iActionId,
+                        ei.iType,
+                        ei.sBizCode,
+                    )
                     if int(res.get("ret", "0")) == -9905:
                         logger.warning(
                             f"兑换 {ei.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})"
@@ -1062,7 +1070,7 @@ class DjcHelper:
                     time.sleep(retryCfg.request_wait_time)
                     break
 
-    def exchange_item(self, ctx: str, iGoodsSeqId: str, iActionId: str = "", iActionType: str = "", bizcode = "dnf"):
+    def exchange_item(self, ctx: str, iGoodsSeqId: str, iActionId: str = "", iActionType: str = "", bizcode="dnf"):
         if bizcode == "dnf":
             # note: dnf仍使用旧的兑换接口，目前仍可用，没必要切换为下面新的，真不能用时再改成用下面的接口
             roleinfo = self.get_dnf_bind_role()
@@ -1091,7 +1099,6 @@ class DjcHelper:
                 partition=roleinfo.partition,
                 lRoleId=roleinfo.roleCode,
                 rolename=quote_plus(roleinfo.roleName),
-
                 use_this_cookies=self.djc_custom_cookies,
             )
 
@@ -1246,7 +1253,7 @@ class DjcHelper:
             f"请使用网页版vscode或者下载个本地版的vscode打开【{server_list_file}】文件来查看手游的相关信息~", "提示", open_url=vscode_online_url
         )
 
-    def query_game_gifts(self, biz_code = "dnf"):
+    def query_game_gifts(self, biz_code="dnf"):
         self.get(f"查询 {biz_code} 可兑换道具列表", self.urls.show_exchange_item_list, bizcode=biz_code)
 
     def get_mobile_game_gifts(self):

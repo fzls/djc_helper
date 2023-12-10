@@ -1,8 +1,8 @@
 import os
 
 # 一些常数
-appVersion = 137
-sVersionName = "v4.1.6.0"
+appVersion = 149
+sVersionName = "v4.7.3.0"
 guanjia_skey_version = 2
 
 tmp_path = "/tmp/"

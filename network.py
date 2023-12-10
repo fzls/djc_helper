@@ -30,7 +30,7 @@ class Network:
         )
 
         self.base_headers = {
-            "User-Agent": "TencentDaojucheng={sVersionName}&appSource=android&appVersion={appVersion}&ch=10003&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName={sVersionName} Mobile GameHelper_1006/2103050005".format(
+            "User-Agent": "TencentDaojucheng={sVersionName}&appSource=android&appVersion={appVersion}&ch=10000&sDeviceID={sDeviceID}&firmwareVersion=9&phoneBrand=Xiaomi&phoneVersion=MIX+2&displayMetrics=1080 * 2030&cpu=AArch64 Processor rev 1 (aarch64)&net=wifi&sVersionName={sVersionName} Mobile GameHelper_1006/2103050005".format(
                 appVersion=appVersion,
                 sVersionName=sVersionName,
                 sDeviceID=sDeviceID,

@@ -972,7 +972,7 @@ class AccountConfig(ConfigInterface):
 
     def on_config_update(self, raw_config: dict):
         self.sDeviceID = self.getSDeviceID()
-        self.aes_key = "84e6c6dc0f9p4a56"
+        self.aes_key = "se35d32s63r7m23m"
         self.rsa_public_key_file = "utils/reference_data/public_key.der"
 
         self.updateUinSkey(self.account_info.uin, self.account_info.skey)
@@ -1066,9 +1066,13 @@ class AccountConfig(ConfigInterface):
         self.account_info.skey = skey
 
         self.g_tk = str(getACSRFTokenForAMS(self.account_info.skey))
-        self.sDjcSign = getDjcSignParams(
+
+    def get_sDjcSign(self) -> str:
+        sDjcSign = getDjcSignParams(
             self.aes_key, self.rsa_public_key_file, uin2qq(self.account_info.uin), self.sDeviceID, appVersion
         )
+
+        return sDjcSign
 
     def getSDeviceID(self):
         sDeviceIdFileName = os.path.join(cached_dir, f".sDeviceID.{self.name}.txt")

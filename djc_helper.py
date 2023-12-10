@@ -788,8 +788,14 @@ class DjcHelper:
         for try_idx in range_from_one(total_try):
             try:
                 # 签到
-                self.post("2.2 签到", self.urls.sign, self.sign_flow_data("911887"))
-                self.post("2.2 签到补签", self.urls.sign, self.sign_flow_data("912938"))
+                # note: 如果提示下面这行这样的日志，则尝试下载最新apk包，解包后确认下 aes_key 与 djc_rsa_public_key_new.der 是否有变动，若有变动，则替换为新的
+                #   目前访问人数过多！请稍后再试！谢谢！
+                # note:
+                #   aes_key: 用 jadx-gui 反编译apk包后，搜索 sDjcSign，在这行里那个字符串就是
+                #   djc_rsa_public_key_new.der: 解压apk包后，在 assets 目录里可以找到这个，用 HxD 等二进制对比工具看看是否与 utils/reference_data/public_key.der 的目录一直
+                #
+                # 签到流程@see assets/homepage_recommend_follow.js 搜索 自动签到的workflow
+                self.post("2.2 签到", self.urls.sign, self.sign_flow_data("96939"))
                 self.post("2.3 领取签到赠送的聚豆", self.urls.sign, self.sign_flow_data("324410"))
 
                 # 尝试领取自动签到的奖励
@@ -799,23 +805,22 @@ class DjcHelper:
                 logger.info(f"本月签到次数为 {month_total_signed_days}")
 
                 # 根据本月已签到数，领取符合条件的每月签到若干日的奖励（也就是聚豆页面最上面的那个横条）
-                # ("累计3天领取5聚豆", "322021")
-                # ("累计7天领取15聚豆", "322036")
-                # ("累计10天领取20聚豆", "322037")
-                # ("累计15天领取25聚豆", "322038")
-                # ("累计20天领取30聚豆", "322039")
-                # ("累计25天领取50聚豆", "322040")
-                for sign_reward_rule in self.get("2.3.2 查询连续签到奖励规则", self.urls.sign_reward_rule, print_res=False)[
-                    "data"
-                ]:
-                    if sign_reward_rule["iCanUse"] == 1 and month_total_signed_days >= int(sign_reward_rule["iDays"]):
-                        ctx = f"2.3.3 领取连续签到{sign_reward_rule['iDays']}天奖励"
-                        self.post(ctx, self.urls.sign, self.sign_flow_data(str(sign_reward_rule["iFlowId"])))
 
-                # 最短的月为28天，做个保底
-                if month_total_signed_days >= 28:
-                    self.post("2.3.4 累计签到整月-全勤奖", self.urls.sign, self.sign_flow_data("881740"))
+                sign_reward_rule_list = [
+                    ("累计3天领取5聚豆", "322021"),
+                    ("累计7天领取15聚豆", "322036"),
+                    ("累计10天领取20聚豆", "322037"),
+                    ("累计15天领取25聚豆", "322038"),
+                    ("累计20天领取30聚豆", "322039"),
+                    ("累计25天领取50聚豆", "322040"),
 
+                    ("累计签到整月-全勤奖", "881740"),
+                ]
+                for ctx, iFlowId in sign_reward_rule_list:
+                    res = self.post(ctx, self.urls.sign, self.sign_flow_data(iFlowId))
+                    # 你的签到次数不够，请继续努力哦~
+                    if "签到次数不够" in res["flowRet"]["sMsg"]:
+                        break
                 break
             except json.decoder.JSONDecodeError as e:
                 logger.error(f"第 {try_idx}/{total_try} 次尝试道聚城签到相关操作失败了，等待一会重试", exc_info=e)
@@ -11711,7 +11716,7 @@ class DjcHelper:
             "p_tk": self.cfg.g_tk,
             "g_tk": self.cfg.g_tk,
             "sDeviceID": self.cfg.sDeviceID,
-            "sDjcSign": self.cfg.sDjcSign,
+            "sDjcSign": self.cfg.get_sDjcSign(),
             "callback": jsonp_callback_flag,
             "month": self.get_month(),
             "starttime": self.getMoneyFlowTime(
@@ -12768,4 +12773,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_other_act()
+        djcHelper.djc_operations()

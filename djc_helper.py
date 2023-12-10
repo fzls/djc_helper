@@ -1071,7 +1071,7 @@ class DjcHelper:
         self.query_mobile_game_rolelist()
 
         # # 显示所有可以兑换的道具列表，note：当不知道id时调用
-        # self.query_dnf_gifts()
+        # self.query_game_gifts("dnf")
 
     def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> list[DnfRoleInfo]:
         ctx = f"获取账号({self.cfg.name})在服务器({dnf_server_id_to_name(dnfServerId)})的dnf角色列表"
@@ -1212,8 +1212,8 @@ class DjcHelper:
             f"请使用网页版vscode或者下载个本地版的vscode打开【{server_list_file}】文件来查看手游的相关信息~", "提示", open_url=vscode_online_url
         )
 
-    def query_dnf_gifts(self):
-        self.get("查询可兑换道具列表", self.urls.show_exchange_item_list)
+    def query_game_gifts(self, biz_code = "dnf"):
+        self.get(f"查询 {biz_code} 可兑换道具列表", self.urls.show_exchange_item_list, bizcode=biz_code)
 
     def get_mobile_game_gifts(self):
         game_info = self.get_mobile_game_info()

@@ -852,7 +852,7 @@ class DjcHelper:
         )
 
         if self.cfg.mobile_game_role_info.enabled():
-            # todo: 完成《礼包达人》
+            # 完成《礼包达人》
             self.take_mobile_game_gift()
         else:
             async_message_box(
@@ -882,6 +882,8 @@ class DjcHelper:
         dayIndex = datetime.datetime.now().weekday()  # 0-周一...6-周日，恰好跟下标对应
         giftInfo = giftInfos[dayIndex]
 
+        # 很抱歉，您的请求签名校验未通过，请稍后再试哦！
+        # fixme: 这个会提示签名不对，但是看了代码，暂时没发现是为啥，先不管了，以后能弄懂再解决这个
         self.get(
             f"3.2 一键领取{role_info.gameName}日常礼包-{giftInfo.sTask}",
             self.urls.receive_game_gift,

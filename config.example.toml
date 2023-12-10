@@ -308,7 +308,7 @@ dnf_role_id = "" # 角色ID，不知道时可以填写区服ID，该数值留空
 # 手游名称: 无/任意手游/剑网3:指尖江湖/和平精英/王者荣耀/QQ飞车手游/天天酷跑/其他任意游戏，可参考djc_biz_list.json获取完整列表
 game_name = "任意手游"
 
-# 兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf_exchange_list.json
+# 兑换道具信息，其他奖励信息可查阅utils/reference_data/dnf_exchange_list.json5
 [[account_configs.exchange_items]]
 # 兑换两次调整箱
 iGoodsId = "753"

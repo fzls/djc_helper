@@ -924,8 +924,6 @@ class DjcHelper:
             )
             return
 
-        propModel = GoodsInfo().auto_update_config(query_wish_item_list_res["data"]["goods"][0])
-
         # 查询许愿列表
         wish_list_res = self.get(
             "3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies, print_res=False
@@ -936,45 +934,61 @@ class DjcHelper:
             ctx = f"3.3.2 删除已有许愿-{wish_info['bizName']}-{wish_info['sGoodsName']}"
             self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"], use_this_cookies=self.djc_custom_cookies)
 
-        # 许愿
-        param = {
-            "iActionId": propModel.type,
-            "iGoodsId": propModel.valiDate[0].code,
-            "sBizCode": roleModel.bizCode,
-        }
-        if roleModel.type == "0":
-            # 端游
-            if roleModel.serviceID != "":
-                param["iZoneId"] = roleModel.serviceID
+        for raw_propModel in query_wish_item_list_res["data"]["goods"]:
+            propModel = GoodsInfo()
+            propModel.auto_update_config(raw_propModel)
+
+            # 许愿
+            param = {
+                "iActionId": propModel.type,
+                "iGoodsId": propModel.valiDate[0].code,
+                "sBizCode": roleModel.bizCode,
+            }
+            if roleModel.type == "0":
+                # 端游
+                if roleModel.serviceID != "":
+                    param["iZoneId"] = roleModel.serviceID
+                else:
+                    param["iZoneId"] = roleModel.areaID
+                param["sZoneDesc"] = quote_plus(roleModel.serviceName)
             else:
-                param["iZoneId"] = roleModel.areaID
-            param["sZoneDesc"] = quote_plus(roleModel.serviceName)
-        else:
-            # 手游
-            if roleModel.serviceID != "" and roleModel.serviceID != "0":
-                param["partition"] = roleModel.serviceID
-            elif roleModel.areaID != "" and roleModel.areaID != "0":
-                param["partition"] = roleModel.areaID
-            param["iZoneId"] = roleModel.channelID
-            if int(roleModel.systemID) < 0:
-                param["platid"] = 0
+                # 手游
+                if roleModel.serviceID != "" and roleModel.serviceID != "0":
+                    param["partition"] = roleModel.serviceID
+                elif roleModel.areaID != "" and roleModel.areaID != "0":
+                    param["partition"] = roleModel.areaID
+                param["iZoneId"] = roleModel.channelID
+                if int(roleModel.systemID) < 0:
+                    param["platid"] = 0
+                else:
+                    param["platid"] = roleModel.systemID
+                param["sZoneDesc"] = quote_plus(roleModel.serviceName)
+
+            if roleModel.bizCode == "lol" and roleModel.accountId != "":
+                param["sRoleId"] = roleModel.accountId
             else:
-                param["platid"] = roleModel.systemID
-            param["sZoneDesc"] = quote_plus(roleModel.serviceName)
+                param["sRoleId"] = roleModel.roleCode
 
-        if roleModel.bizCode == "lol" and roleModel.accountId != "":
-            param["sRoleId"] = roleModel.accountId
-        else:
-            param["sRoleId"] = roleModel.roleCode
+            param["sRoleName"] = quote_plus(roleModel.roleName)
+            param["sGetterDream"] = quote_plus("不要888！不要488！9.98带回家")
 
-        param["sRoleName"] = quote_plus(roleModel.roleName)
-        param["sGetterDream"] = quote_plus("不要888！不要488！9.98带回家")
+            wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish, **param, use_this_cookies=self.djc_custom_cookies)
 
-        wish_res = self.get("3.3.3 完成许愿任务", self.urls.make_wish, **param, use_this_cookies=self.djc_custom_cookies)
-        # 检查是否不支持许愿
-        # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
-        if wish_res["ret"] == "-8735":
-            logger.warning(f"游戏【{roleModel.gameName}】暂未开放许愿，请换个道聚城许愿界面中支持的游戏来进行许愿哦，比如王者荣耀~")
+            # 检查许愿结果
+            ret = wish_res["ret"]
+            # 部分情况需要继续尝试下一个
+            if ret in ["-6114"]:
+                # {"ret": "-6114", "msg": "您在该区服下未拥有对应英雄，无法购买[露娜-霜月吟]皮肤，如已购买英雄，请等待5分钟再购买皮肤！"}
+                logger.info(f"游戏【{roleModel.gameName}】当前道具 {propModel.propName} 不满足许愿条件，尝试下一个")
+                continue
+
+            # 其他情况则不再尝试后续的
+            if ret == "-8735":
+                # {"ret": "-8735", "msg": "该业务暂未开放许愿", "sandbox": false, "serverTime": 1601375249, "event_id": "DJC-DJ-0929182729-P8DDy9-3-534144", "data": []}
+                logger.warning(f"游戏【{roleModel.gameName}】暂未开放许愿，请换个道聚城许愿界面中支持的游戏来进行许愿哦，比如王者荣耀~")
+
+            break
+
 
     def take_task_awards_and_exchange_items(self):
         # 领取奖励

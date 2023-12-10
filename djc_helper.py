@@ -846,13 +846,13 @@ class DjcHelper:
         )
 
     def complete_tasks(self):
-        # 完成《绝不错亿》
+        # 完成《打卡活动中心》
         self.get(
             "3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center", use_this_cookies=self.djc_custom_cookies
         )
 
         if self.cfg.mobile_game_role_info.enabled():
-            # 完成《礼包达人》
+            # todo: 完成《礼包达人》
             self.take_mobile_game_gift()
         else:
             async_message_box(
@@ -860,12 +860,14 @@ class DjcHelper:
             )
 
         if self.cfg.function_switches.make_wish:
-            # 完成《有理想》
+            # todo: 完成《有理想》
             self.make_wish()
         else:
             async_message_box(
                 f"账号 {self.cfg.name} 未启用自动完成《有理想》任务功能，如需启用，请打开道聚城许愿功能。不配置，则每日任务的豆子会领不全", "道聚城参数未配置", show_once=True
             )
+
+        # todo: 浏览3个活动
 
     @try_except()
     def take_mobile_game_gift(self):

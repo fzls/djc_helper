@@ -2152,7 +2152,7 @@ class AccountConfigUi(QWidget):
         (
             self.collapsible_box_djc_exchange,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换（填 0 就是不兑换）", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("道聚城兑换（填 0 就是不兑换）（已支持 命运方舟）", top_layout)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = {}
@@ -2413,34 +2413,60 @@ class AccountConfigUi(QWidget):
         )
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
-        all_item_ids = set()
+        all_item_biz_ids = set()
         for item in cfg.exchange_items:
-            all_item_ids.add(item.iGoodsId)
+            all_item_biz_ids.add((item.sBizCode, item.iGoodsId))
 
-        # 特殊处理下道聚城兑换，若相应配置不存在，咋加上默认不领取的配置，确保界面显示出来
-        default_items = [
-            # ("111", "高级装扮兑换券（无期限）（活动期间5次）"),
-            # ("753", "装备品级调整箱（5个）（每天限兑2次）"),
-            # ("755", "魔界抗疲劳秘药（10点）（每天限兑1次）"),
-            ("3089", "高级装扮兑换券（7天）（每周限量1次）"),
-            ("3120", "魔界抗疲劳秘药（10点）（每周限量1次）"),
-            ("3088", "装备品级调整箱（2个）（每月限兑1次）"),
-            ("110", "成长之契约（3天）（每年限兑5次）"),
-            ("107", "达人之契约（3天）（每天限兑2次）"),
-            ("382", "晶之契约（3天）（每天限兑2次）"),
-            ("381", "复活币（每天限兑2次）"),
-            ("754", "装扮属性调整箱（高级）（1个）（每天限兑1次）"),
-            ("383", "闪亮的雷米援助(15个)"),
-        ]
-        for iGoodsId, sGoodsName in default_items:
-            if iGoodsId in all_item_ids:
-                continue
+        # 特殊处理下道聚城兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来
+        biz_to_default_item_info = {
+            "dnf": {
+                "iActionId": "",
+                "iType": "",
+                "default_items": [
+                    # ("111", "高级装扮兑换券（无期限）（活动期间5次）"),
+                    # ("753", "装备品级调整箱（5个）（每天限兑2次）"),
+                    # ("755", "魔界抗疲劳秘药（10点）（每天限兑1次）"),
+                    ("3089", "高级装扮兑换券（7天）（每周限量1次）"),
+                    ("3120", "魔界抗疲劳秘药（10点）（每周限量1次）"),
+                    ("3088", "装备品级调整箱（2个）（每月限兑1次）"),
+                    ("110", "成长之契约（3天）（每年限兑5次）"),
+                    ("107", "达人之契约（3天）（每天限兑2次）"),
+                    ("382", "晶之契约（3天）（每天限兑2次）"),
+                    ("381", "复活币（每天限兑2次）"),
+                    ("754", "装扮属性调整箱（高级）（1个）（每天限兑1次）"),
+                    ("383", "闪亮的雷米援助(15个)"),
+                ]
+            },
+            "fz": {
+                "iActionId": "29657",
+                "iType": "26",
+                "default_items": [
+                    ("4376", "[每周]艾芙娜委托 1（1个）（每月限兑1次）"),
+                    ("4377", "[每日]艾芙娜委托完成券（3个）（每周限兑1次）"),
+                    ("4375", "交易牌x5（每日限兑1次）"),
+                    ("4374", "复活羽毛x5（每日限兑1次）"),
+                    ("4373", "跳跃精华x5（每日限兑1次）"),
+                    ("4389", "命运方舟惊喜抽奖宝箱（每日限兑5次）"),
+                ]
+            },
+        }
+        for sBizCode, default_item_info in biz_to_default_item_info.items():
+            iActionId = default_item_info["iActionId"]
+            iType = default_item_info["iType"]
 
-            item = ExchangeItemConfig()
-            item.iGoodsId = iGoodsId
-            item.sGoodsName = sGoodsName
-            item.count = 0
-            cfg.exchange_items.append(item)
+            for iGoodsId, sGoodsName in default_item_info["default_items"]:
+                if (sBizCode, iGoodsId) in all_item_biz_ids:
+                    continue
+
+                item = ExchangeItemConfig()
+                item.iGoodsId = iGoodsId
+                item.sGoodsName = sGoodsName
+                item.count = 0
+                item.iActionId = iActionId
+                item.iType =iType
+                item.sBizCode = sBizCode
+                cfg.exchange_items.append(item)
+
 
     def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig):
         all_item_keys = set()

@@ -1050,7 +1050,7 @@ class DjcHelper:
         for ei in self.cfg.exchange_items:
             for _i in range(ei.count):
                 for try_index in range(retryCfg.max_retry_count):
-                    res = self.exchange_item(f"4.2 兑换 {ei.sGoodsName}", ei.iGoodsId)
+                    res = self.exchange_item(f"4.2 兑换 【{ei.get_biz_name()}】 {ei.sGoodsName}", ei.iGoodsId, ei.iActionId, ei.iType, ei.sBizCode)
                     if int(res.get("ret", "0")) == -9905:
                         logger.warning(
                             f"兑换 {ei.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})"

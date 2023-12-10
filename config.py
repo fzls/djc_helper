@@ -73,10 +73,26 @@ class MobileGameRoleInfoConfig(ConfigInterface):
 
 
 class ExchangeItemConfig(ConfigInterface):
+    """
+    @see dnf_exchange_list.json5 fz_exchange_list.json5
+    """
     def __init__(self):
         self.iGoodsId = "753"
         self.sGoodsName = "装备品级调整箱（5个）"
         self.count = 0
+
+        # 以下字段是新版的道具兑换接口所需的额外参数
+        self.iActionId = ""
+        self.iType = ""
+        self.sBizCode = "dnf"
+
+    def get_biz_name(self) -> str:
+        if self.sBizCode == "dnf":
+            return "地下城与勇士"
+        elif self.sBizCode == "fz":
+            return "命运方舟"
+        else:
+            return self.sBizCode
 
 
 class DnfHelperChronicleExchangeItemConfig(ConfigInterface):

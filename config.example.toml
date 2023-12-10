@@ -321,6 +321,55 @@ count = 2
 #sGoodsName = "魔界抗疲劳秘药（10点）"
 ## 下面的1表示领取一次，改成0并保存就是不领取。如果任何人在任何场所问我这个疲劳药怎么取消，我将直接踢出群聊并拉入本工具的黑名单，不论语气如何。
 #count = 1
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4376"
+#sGoodsName = "[每周]艾芙娜委托 1（1个）（每月限兑1次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4377"
+#sGoodsName = "[每日]艾芙娜委托完成券（3个）（每周限兑1次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4375"
+#sGoodsName = "交易牌x5（每日限兑1次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4374"
+#sGoodsName = "复活羽毛x5（每日限兑1次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4373"
+#sGoodsName = "跳跃精华x5（每日限兑1次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+#
+#[[account_configs.exchange_items]]
+#iGoodsId = "4389"
+#sGoodsName = "命运方舟惊喜抽奖宝箱（每日限兑5次）"
+#count = 0
+#iActionId = "29657"
+#iType = "26"
+#sBizCode = "fz"
+
 
 # 各功能开关，true表示开启，false表示关闭
 # 示例如下：

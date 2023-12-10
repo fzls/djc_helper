@@ -210,7 +210,7 @@ class Urls:
         # 查询许愿列表，额外参数：appUid
         self.query_wish = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.demand.user.demand&&weexVersion=0.9.4&platform=android&deviceModel=MIX%202&_app_id=1001&_biz_code=&pn=1&ps=5&appUid={appUid}&sDeviceID={sDeviceID}&appVersion={appVersion}&&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android&sDjcSign={sDjcSign}"
         # 删除许愿，额外参数：sKeyId
-        self.delete_wish = "https://apps.game.qq.com/daoju/djcapp/v5/demand/DemandDelete.php?output_format=jsonp&iAppId=1001&_app_id=1001&&output_format=json&_output_fmt=json&sKeyId={sKeyId}&sDeviceID={sDeviceID}&appVersion={appVersion}&&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
+        self.delete_wish = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.demand.delete&output_format=jsonp&iAppId=1001&_app_id=1001&sKeyId={sKeyId}&w_ver=2&w_id=89&sDeviceID={sDeviceID}&djcRequestId={djcRequestId}&appVersion={appVersion}&p_tk={p_tk}&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android&sDjcSign={sDjcSign}"
         # 许愿 ，需要手动额外传入参数：iActionId, iGoodsId, sBizCode, partition, iZoneId, platid, sZoneDesc, sRoleId, sRoleName, sGetterDream
         self.make_wish = "https://djcapp.game.qq.com/daoju/igw/main/?_service=app.demand.create&&iActionId={iActionId}&iGoodsId={iGoodsId}&sBizCode={sBizCode}&partition={partition}&iZoneId={iZoneId}&platid={platid}&sZoneDesc={sZoneDesc}&sRoleId={sRoleId}&sRoleName={sRoleName}&sGetterDream={sGetterDream}&sDeviceID={sDeviceID}&appVersion={appVersion}&&sDjcSign={sDjcSign}&iAppId=1001&_app_id=1001&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
 

@@ -928,13 +928,13 @@ class DjcHelper:
 
         # 查询许愿列表
         wish_list_res = self.get(
-            "3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies
+            "3.3.1 查询许愿列表", self.urls.query_wish, appUid=self.qq(), use_this_cookies=self.djc_custom_cookies, print_res=False
         )
 
         # 删除已经许愿的列表，确保许愿成功
         for wish_info in wish_list_res["data"]["list"]:
             ctx = f"3.3.2 删除已有许愿-{wish_info['bizName']}-{wish_info['sGoodsName']}"
-            self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"])
+            self.get(ctx, self.urls.delete_wish, sKeyId=wish_info["sKeyId"], use_this_cookies=self.djc_custom_cookies)
 
         # 许愿
         param = {

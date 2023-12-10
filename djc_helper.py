@@ -846,7 +846,7 @@ class DjcHelper:
         )
 
     def complete_tasks(self):
-        # 完成《打卡活动中心》
+        # 完成《打卡活动中心》 @see assets\activity_home.js 搜索 activity_center
         self.get(
             "3.1 模拟点开活动中心", self.urls.task_report, task_type="activity_center", use_this_cookies=self.djc_custom_cookies
         )

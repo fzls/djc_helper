@@ -785,11 +785,14 @@ class DjcHelper:
 
     @try_except(return_val_on_except=(0, 0))
     def query_balance(self, ctx, print_res=True) -> tuple[int, int]:
-        res = self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
+        res = self.raw_query_balance(ctx, print_res)
 
         info = res["data"]
         allin, balance = int(info["allin"]), int(info["balance"])
         return allin, balance
+
+    def raw_query_balance(self, ctx, print_res=True):
+        return self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
 
     def query_money_flow(self, ctx):
         return self.get(ctx, self.urls.money_flow)
@@ -12630,7 +12633,7 @@ class DjcHelper:
 
             # {"ret": 0, "msg": "ok"...}}
             # {..."msg": "对不起，您的登录态无效！", "ret": "-990301"...}
-            query_data = self.query_balance(
+            query_data = self.raw_query_balance(
                 "判断skey是否过期",
                 print_res=False,
             )

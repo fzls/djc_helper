@@ -19,7 +19,7 @@ import requests
 
 import json_parser
 from black_list import check_in_black_list
-from config import AccountConfig, CommonConfig, XinYueOperationConfig, config, load_config
+from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperationConfig, config, load_config
 from const import appVersion, cached_dir, guanjia_skey_version, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
@@ -1018,7 +1018,7 @@ class DjcHelper:
         self.take_task_award("4.1.5", "100002", "活跃度金宝箱")
 
         # 兑换所需道具
-        self.exchange_items()
+        self.exchange_djc_items()
 
         # 领取《兑换有礼》
         self.take_task_award("4.3.1", "327091", "兑换有礼")
@@ -1038,42 +1038,54 @@ class DjcHelper:
 
         return False
 
-    def exchange_items(self):
+    def exchange_djc_items(self):
         if len(self.cfg.exchange_items) == 0:
-            logger.warning("未配置dnf的兑换道具，跳过该流程")
+            logger.warning("未配置兑换道具，跳过该流程")
             return
 
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，却配置了兑换dnf道具，请移除配置或前往绑定")
-            return
-
-        retryCfg = self.common_cfg.retry
         for ei in self.cfg.exchange_items:
-            for _i in range(ei.count):
-                for try_index in range(retryCfg.max_retry_count):
-                    res = self.exchange_item(
-                        f"4.2 兑换 【{ei.get_biz_name()}】 {ei.sGoodsName}",
-                        ei.iGoodsId,
-                        ei.iActionId,
-                        ei.iType,
-                        ei.sBizCode,
+            self.exchange_one_type_of_djc_item(ei)
+
+    def exchange_one_type_of_djc_item(self, ei: ExchangeItemConfig):
+        retryCfg = self.common_cfg.retry
+        for _i in range(ei.count):
+            for try_index in range(retryCfg.max_retry_count):
+                res = self.exchange_djc_item(f"4.2 兑换 【{ei.get_biz_name()}】 {ei.sGoodsName}", ei)
+                if res is None:
+                    # 如果对应角色不存在，则跳过本道具
+                    logger.info(f"【{ei.get_biz_name()}】未绑定角色，无法领取 {ei.sGoodsName} 将尝试下一个")
+                    return
+
+                if int(res.get("ret", "0")) == -9905:
+                    logger.warning(
+                        f"兑换 {ei.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})"
                     )
-                    if int(res.get("ret", "0")) == -9905:
-                        logger.warning(
-                            f"兑换 {ei.sGoodsName} 时提示 {res.get('msg')} ，等待{retryCfg.retry_wait_time}s后重试（{try_index + 1}/{retryCfg.max_retry_count})"
-                        )
-                        time.sleep(retryCfg.retry_wait_time)
-                        continue
+                    time.sleep(retryCfg.retry_wait_time)
+                    continue
 
-                    logger.debug(f"领取 {ei.sGoodsName} ok，等待{retryCfg.request_wait_time}s，避免请求过快报错")
-                    time.sleep(retryCfg.request_wait_time)
-                    break
+                logger.debug(f"领取 {ei.sGoodsName} ok，等待{retryCfg.request_wait_time}s，避免请求过快报错")
+                time.sleep(retryCfg.request_wait_time)
+                break
 
-    def exchange_item(self, ctx: str, iGoodsSeqId: str, iActionId: str = "", iActionType: str = "", bizcode="dnf"):
+    def exchange_djc_item(self, ctx: str, ei: ExchangeItemConfig):
+        iGoodsSeqId, iActionId, iActionType, bizcode, sGoodsName = (
+            ei.iGoodsId,
+            ei.iActionId,
+            ei.iType,
+            ei.sBizCode,
+            ei.sGoodsName,
+        )
+
         if bizcode == "dnf":
             # note: dnf仍使用旧的兑换接口，目前仍可用，没必要切换为下面新的，真不能用时再改成用下面的接口
             roleinfo = self.get_dnf_bind_role()
+
+            # 检查是否已在道聚城绑定
+            if roleinfo is None:
+                async_message_box(
+                    f"账号 {self.cfg.name} 未在道聚城绑定dnf角色信息，却配置了兑换dnf道具({sGoodsName})，请移除配置或前往绑定", "道聚城兑换未绑定对应游戏角色"
+                )
+                return
 
             return self.get(
                 ctx,
@@ -1086,6 +1098,13 @@ class DjcHelper:
 
         elif bizcode == "fz":
             roleinfo = self.get_fz_bind_role()
+
+            # 检查是否已在道聚城绑定
+            if roleinfo is None:
+                async_message_box(
+                    f"账号 {self.cfg.name} 未在道聚城绑定命运方舟角色信息，却配置了兑换命运方舟道具({sGoodsName})，请移除配置或前往绑定", "道聚城兑换未绑定对应游戏角色"
+                )
+                return
 
             return self.get(
                 ctx,

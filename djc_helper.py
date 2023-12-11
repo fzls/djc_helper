@@ -1102,14 +1102,18 @@ class DjcHelper:
             # 命运方舟的兑换功能仅在付费期间可以使用
             if not self.user_buy_info.is_active():
                 async_message_box(
-                    f"目前小助手的命运方舟兑换功能仅在付费期间可使用，目前已过期或未付费。账号 {self.cfg.name} 配置了兑换命运方舟道具({sGoodsName})，请移除配置或购买按月付费", "仅付费期间可兑换命运方舟"
+                    f"目前小助手的命运方舟兑换功能仅在付费期间可使用，目前已过期或未付费。账号 {self.cfg.name} 配置了兑换命运方舟道具({sGoodsName})，请移除配置或购买按月付费",
+                    "仅付费期间可兑换命运方舟",
+                    open_url="https://docs.qq.com/doc/DYkFReHNvVkFEYXJk",
                 )
                 return
 
             # 检查是否已在道聚城绑定
             if roleinfo is None:
                 async_message_box(
-                    f"账号 {self.cfg.name} 未在道聚城绑定命运方舟角色信息，却配置了兑换命运方舟道具({sGoodsName})，请移除配置或前往绑定", "道聚城兑换未绑定对应游戏角色"
+                    f"账号 {self.cfg.name} 未在道聚城绑定命运方舟角色信息，却配置了兑换命运方舟道具({sGoodsName})，请移除配置或前往绑定",
+                    "道聚城兑换未绑定对应游戏角色",
+                    open_url="https://docs.qq.com/doc/DYkFReHNvVkFEYXJk",
                 )
                 return
 

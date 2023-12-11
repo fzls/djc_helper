@@ -921,8 +921,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
 
-    djc_info = djcHelper.query_balance("查询聚豆概览", print_res=False)["data"]
-    _, djc_balance = int(djc_info["allin"]), int(djc_info["balance"])
+    _, djc_balance = djcHelper.query_balance("查询聚豆概览", print_res=False)
 
     xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
     teaminfo = djcHelper.query_xinyue_teaminfo()

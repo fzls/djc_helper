@@ -760,8 +760,7 @@ class DjcHelper:
         self.fetch_djc_login_info("获取道聚城登录信息")
 
         # ------------------------------初始工作------------------------------
-        old_info = self.query_balance("1. 操作前：查询余额")["data"]
-        old_allin, old_balance = int(old_info["allin"]), int(old_info["balance"])
+        old_allin, old_balance = self.query_balance("1. 操作前：查询余额")
         # self.query_money_flow("1.1 操作前：查一遍流水")
 
         # ------------------------------核心逻辑------------------------------
@@ -775,8 +774,7 @@ class DjcHelper:
         self.take_task_awards_and_exchange_items()
 
         # ------------------------------清理工作------------------------------
-        new_info = self.query_balance("5. 操作全部完成后：查询余额")["data"]
-        new_allin, new_balance = int(new_info["allin"]), int(new_info["balance"])
+        new_allin, new_balance = self.query_balance("5. 操作全部完成后：查询余额")
         # self.query_money_flow("5.1 操作全部完成后：查一遍流水")
 
         delta = new_allin - old_allin
@@ -785,8 +783,12 @@ class DjcHelper:
             + f"账号 {self.cfg.name} 本次道聚城操作共获得 {delta} 个豆子（历史总获取： {old_allin} -> {new_allin}  余额： {old_balance} -> {new_balance} ）"
         )
 
-    def query_balance(self, ctx, print_res=True):
-        return self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
+    def query_balance(self, ctx, print_res=True) -> tuple[int, int]:
+        res = self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
+
+        info = res["data"]
+        allin, balance = int(info["allin"]), int(info["balance"])
+        return allin, balance
 
     def query_money_flow(self, ctx):
         return self.get(ctx, self.urls.money_flow)

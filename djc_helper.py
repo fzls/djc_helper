@@ -783,6 +783,7 @@ class DjcHelper:
             + f"账号 {self.cfg.name} 本次道聚城操作共获得 {delta} 个豆子（历史总获取： {old_allin} -> {new_allin}  余额： {old_balance} -> {new_balance} ）"
         )
 
+    @try_except(return_val_on_except=(0, 0))
     def query_balance(self, ctx, print_res=True) -> tuple[int, int]:
         res = self.get(ctx, self.urls.balance, print_res=print_res, use_this_cookies=self.djc_custom_cookies)
 
@@ -1006,6 +1007,7 @@ class DjcHelper:
 
             break
 
+    @try_except()
     def take_task_awards_and_exchange_items(self):
         # 领取奖励
         # 领取《礼包达人》
@@ -1029,6 +1031,7 @@ class DjcHelper:
 
         self.take_djc_boxes("兑换道具前后再尝试一次")
 
+    @try_except()
     def take_djc_boxes(self, ctx):
         logger.info(color("bold_green") + ctx)
 
@@ -1037,6 +1040,7 @@ class DjcHelper:
         # 领取《活跃度金宝箱》
         self.take_task_award("4.1.5", "100002", "活跃度金宝箱")
 
+    @try_except()
     def take_task_award(self, prefix, iRuleId, taskName=""):
         ctx = f"{prefix} 领取任务-{taskName}-奖励"
         self.get(ctx, self.urls.take_task_reward, iruleId=iRuleId)
@@ -1052,6 +1056,7 @@ class DjcHelper:
 
         return False
 
+    @try_except()
     def exchange_djc_items(self):
         if len(self.cfg.exchange_items) == 0:
             logger.warning("未配置兑换道具，跳过该流程")
@@ -1060,6 +1065,7 @@ class DjcHelper:
         for ei in self.cfg.exchange_items:
             self.exchange_one_type_of_djc_item(ei)
 
+    @try_except()
     def exchange_one_type_of_djc_item(self, ei: ExchangeItemConfig):
         retryCfg = self.common_cfg.retry
         for _i in range(ei.count):
@@ -1081,6 +1087,7 @@ class DjcHelper:
                 time.sleep(retryCfg.request_wait_time)
                 break
 
+    @try_except()
     def exchange_djc_item(self, ctx: str, ei: ExchangeItemConfig):
         iGoodsSeqId, iActionId, iActionType, bizcode, sGoodsName = (
             ei.iGoodsId,

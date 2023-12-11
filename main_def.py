@@ -1524,6 +1524,11 @@ def show_tips(cfg: Config):
             "colg有个投票活动，累计投票若干次可以领取一些小奖励，有兴趣的可自行参与\n"
             "https://bbs.colg.cn/colg_activity_new-annual_ceremony.html/2023\n"
         ),
+        "23.12 命运方舟兑换": (
+            "最近不少同时在玩命运方舟的朋友问我能否支持道聚城兑换命运方舟的道具，之前一直没空，就搁置着了。\n"
+            "上周末花了些时间倒腾了下，修复了道聚城部分获取聚豆的接口，同时新增支持可以兑换命运方舟的道具，目前仅限按月付费期间使用，有兴趣的朋友可以看看下面的指引文档\n"
+            "https://docs.qq.com/doc/DYkFReHNvVkFEYXJk\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

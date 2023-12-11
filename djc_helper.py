@@ -1017,11 +1017,23 @@ class DjcHelper:
         # 领取《活跃度金宝箱》
         self.take_task_award("4.1.5", "100002", "活跃度金宝箱")
 
+        self.take_djc_boxes("兑换道具前先尝试领取一次宝箱")
+
         # 兑换所需道具
         self.exchange_djc_items()
 
         # 领取《兑换有礼》
         self.take_task_award("4.3.1", "327091", "兑换有礼")
+
+        self.take_djc_boxes("兑换道具前后再尝试一次")
+
+    def take_djc_boxes(self, ctx):
+        logger.info(color("bold_green") + ctx)
+
+        # 领取《活跃度银宝箱》
+        self.take_task_award("4.1.4", "100001", "活跃度银宝箱")
+        # 领取《活跃度金宝箱》
+        self.take_task_award("4.1.5", "100002", "活跃度金宝箱")
 
     def take_task_award(self, prefix, iRuleId, taskName=""):
         ctx = f"{prefix} 领取任务-{taskName}-奖励"

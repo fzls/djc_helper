@@ -1353,6 +1353,9 @@ ignore_caller_names = {
     "wang_get",
     "wegame_post",
     "yoyo_post",
+    "fetch_login_result",
+    "<lambda>",
+    "with_cache",
 }
 
 ignore_prefixes = [

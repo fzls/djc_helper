@@ -1352,6 +1352,7 @@ ignore_caller_names = {
     "yoyo_post",
     "<lambda>",
     "with_cache",
+    "get_bind_role_list",
 }
 
 ignore_prefixes = [

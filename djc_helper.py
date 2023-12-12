@@ -12507,8 +12507,10 @@ class DjcHelper:
         cache_validate_func: Callable[[Any], bool] | None = None,
         print_warning=True,
     ) -> LoginResult:
+        meaingful_caller = get_meaningful_call_point_for_log()
+
         get_logger_func(print_warning)(
-            color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
+            color("bold_green") + meaingful_caller + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
         )
 
         return with_cache(
@@ -12518,7 +12520,7 @@ class DjcHelper:
             cache_validate_func=cache_validate_func,
             cache_max_seconds=cache_max_seconds,
             cache_value_unmarshal_func=LoginResult().auto_update_config,
-            cache_hit_func=lambda lr: get_logger_func(print_warning, logger.info)(f"使用缓存的登录信息: {lr}"),
+            cache_hit_func=lambda lr: get_logger_func(print_warning, logger.info)(meaingful_caller + f"使用缓存的登录信息: {lr}"),
         )
 
     def update_login_info(self, login_mode: str) -> LoginResult:

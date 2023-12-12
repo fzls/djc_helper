@@ -1178,7 +1178,7 @@ class DjcHelper:
             f"query_dnf_rolelist_{dnfServerId}_{self.cfg.get_account_cache_key()}",
             cache_miss_func=functools.partial(self.query_dnf_rolelist_without_cache_wrapped, dnfServerId, need_print),
             cache_validate_func=lambda role_info_list: len(role_info_list.role_list) != 0,
-            cache_max_seconds=60*60,
+            cache_max_seconds=60 * 60,
             cache_value_unmarshal_func=DnfRoleInfoList().auto_update_config,
         )
 

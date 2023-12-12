@@ -184,6 +184,7 @@ class GoodsCategoryInfo(ConfigInterface):
         self.mainCategory = "170"
         self.subCategory = "0"
 
+
 class DnfRoleInfoList(ConfigInterface):
     def __init__(self):
         self.role_list: list[DnfRoleInfo] = []

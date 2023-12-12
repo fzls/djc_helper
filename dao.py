@@ -186,10 +186,16 @@ class GoodsCategoryInfo(ConfigInterface):
 
 
 class DnfRoleInfo(DaoObject):
-    def __init__(self, roleid, rolename, forceid, level):
+    def __init__(self):
+        self.roleid = "0"
+        self.rolename = "风之凌殇"
+        # 已知：0-男鬼剑，3-女魔法师，13-男枪士，14-女圣职者
+        self.forceid = 0
+        self.level = 110
+
+    def update_params(self, roleid: str, rolename: str, forceid: str, level: str):
         self.roleid = str(roleid)
         self.rolename = str(rolename)
-        # 已知：0-男鬼剑，3-女魔法师，13-男枪士，14-女圣职者
         self.forceid = int(forceid)
         self.level = int(level)
 

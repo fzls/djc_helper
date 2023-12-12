@@ -12,7 +12,10 @@ def parse_role_list(jsonRes) -> List[DnfRoleInfo]:
         if re.match(role_reg, item):
             roleid, rolename, forceid, level = item.split(" ")
             if roleid not in rolemap:
-                rolemap[roleid] = DnfRoleInfo(roleid, rolename, forceid, level)
+                role_info = DnfRoleInfo()
+                role_info.update_params(roleid, rolename, forceid, level)
+
+                rolemap[roleid] = role_info
 
     return list(rolemap.values())
 

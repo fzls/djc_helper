@@ -12702,7 +12702,7 @@ def run_act(
             djcHelper = DjcHelper(account_config, common_config, user_buy_info)
             djcHelper.fetch_pskey()
             djcHelper.check_skey_expired()
-            djcHelper.get_bind_role_list()
+            djcHelper.get_bind_role_list(print_warning=False)
 
             getattr(djcHelper, act_func_name)()
             return

@@ -12510,7 +12510,7 @@ class DjcHelper:
         meaingful_caller = get_meaningful_call_point_for_log()
 
         get_logger_func(print_warning)(
-            color("bold_green") + meaingful_caller + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
+            meaingful_caller + color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
         )
 
         return with_cache(

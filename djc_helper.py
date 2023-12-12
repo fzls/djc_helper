@@ -12523,7 +12523,9 @@ class DjcHelper:
             cache_validate_func=cache_validate_func,
             cache_max_seconds=cache_max_seconds,
             cache_value_unmarshal_func=LoginResult().auto_update_config,
-            cache_hit_func=lambda lr: get_logger_func(print_warning, logger.info)(meaingful_caller + f"使用缓存的登录信息: {lr}"),
+            cache_hit_func=lambda lr: get_logger_func(print_warning, logger.info)(
+                meaingful_caller + f"使用缓存的登录信息: {lr}"
+            ),
         )
 
     def update_login_info(self, login_mode: str) -> LoginResult:

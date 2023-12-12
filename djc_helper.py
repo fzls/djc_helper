@@ -117,7 +117,7 @@ from exceptions_def import (
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from game_info import get_game_info, get_game_info_by_bizcode
 from log import color, logger
-from network import Network, extract_qq_video_message, jsonp_callback_flag
+from network import Network, check_tencent_game_common_status_code, extract_qq_video_message, jsonp_callback_flag
 from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from server import get_match_server_api
@@ -2946,25 +2946,7 @@ class DjcHelper:
     def _qzone_act_op(self, ctx: str, url: str, body: dict, print_res=True) -> dict:
         extra_cookies = f"p_skey={self.lr.p_skey}; "
 
-        def _check(response: requests.Response) -> Exception | None:
-            if response.status_code == 504 and "504 Gateway Time-out" in response.text:
-                # status_code=504 reason=Gateway Time-out
-                #
-                # <html>
-                # <head><title>504 Gateway Time-out</title></head>
-                # <body>
-                # <center><h1>504 Gateway Time-out</h1></center>
-                # <hr><center>stgw</center>
-                # </body>
-                # </html>
-                wait_seconds = 0.1 + random.random()
-                logger.warning(get_meaningful_call_point_for_log() + f"网关超时，等待{wait_seconds:.2f}秒后重试")
-                time.sleep(wait_seconds)
-                return Exception("网关超时")
-
-            return None
-
-        return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res, check_fn=_check)
+        return self.post(ctx, url, json=body, extra_cookies=extra_cookies, print_res=print_res)
 
     def _qzone_act_get_op(self, ctx: str, url: str, p_skey: str = "", print_res=True, **params):
         p_skey = p_skey or self.lr.p_skey
@@ -11759,7 +11741,7 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         use_this_cookies="",
         **params,
@@ -11790,7 +11772,7 @@ class DjcHelper:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         use_this_cookies="",
@@ -12107,27 +12089,6 @@ class DjcHelper:
         if append_raw_data != "":
             data = f"{data}&{append_raw_data}"
 
-        def _check(response: requests.Response) -> Exception | None:
-            if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
-                # res.status=401, Unauthorized <Response [401]>
-                #
-                # <html>
-                # <head><title>Tencent Game 401</title></head>
-                # <meta charset="utf-8" />
-                # <body bgcolor="white">
-                # <center><h1>Welcome Tencent Game 401</h1></center>
-                # <center><h1>您的速度过快或参数非法，请重试哦</h1></center>
-                # <hr><center>Welcome Tencent Game</center>
-                # </body>
-                # </html>
-                #
-                wait_seconds = 0.1 + random.random()
-                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
-                time.sleep(wait_seconds)
-                return Exception("请求过快")
-
-            return None
-
         return self.post(
             ctx,
             self.urls.amesvr,
@@ -12139,7 +12100,6 @@ class DjcHelper:
             sMiloTag=self.make_s_milo_tag(iActivityId, iFlowId),
             print_res=print_res,
             extra_cookies=extra_cookies,
-            check_fn=_check,
         )
 
     def ide_request(
@@ -12183,27 +12143,6 @@ class DjcHelper:
             **data_extra_params,
         )
 
-        def _check(response: requests.Response) -> Exception | None:
-            if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
-                # res.status=401, Unauthorized <Response [401]>
-                #
-                # <html>
-                # <head><title>Tencent Game 401</title></head>
-                # <meta charset="utf-8" />
-                # <body bgcolor="white">
-                # <center><h1>Welcome Tencent Game 401</h1></center>
-                # <center><h1>您的速度过快或参数非法，请重试哦</h1></center>
-                # <hr><center>Welcome Tencent Game</center>
-                # </body>
-                # </html>
-                #
-                wait_seconds = 0.1 + random.random()
-                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
-                time.sleep(wait_seconds)
-                return Exception("请求过快")
-
-            return None
-
         return self.post(
             ctx,
             self.urls.ide,
@@ -12211,7 +12150,6 @@ class DjcHelper:
             ide_host=ide_host,
             print_res=print_res,
             extra_cookies=extra_cookies,
-            check_fn=_check,
         )
 
     def preprocess_eas_url(self, eas_url: str) -> str:

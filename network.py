@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import random
 import time
 import traceback
 from typing import Callable
@@ -15,6 +16,45 @@ from log import color, logger
 from util import check_some_exception, get_meaningful_call_point_for_log
 
 jsonp_callback_flag = "jsonp_callback"
+
+
+def check_tencent_game_common_status_code(response: requests.Response) -> Exception | None:
+    """
+    检查是否属于腾讯游戏接口返回请求过快的情况
+    """
+    if response.status_code == 401 and "您的速度过快或参数非法，请重试哦" in response.text:
+        # res.status=401, Unauthorized <Response [401]>
+        #
+        # <html>
+        # <head><title>Tencent Game 401</title></head>
+        # <meta charset="utf-8" />
+        # <body bgcolor="white">
+        # <center><h1>Welcome Tencent Game 401</h1></center>
+        # <center><h1>您的速度过快或参数非法，请重试哦</h1></center>
+        # <hr><center>Welcome Tencent Game</center>
+        # </body>
+        # </html>
+        #
+        wait_seconds = 0.1 + random.random()
+        logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
+        time.sleep(wait_seconds)
+        return Exception("请求过快")
+    elif response.status_code == 504 and "504 Gateway Time-out" in response.text:
+        # status_code=504 reason=Gateway Time-out
+        #
+        # <html>
+        # <head><title>504 Gateway Time-out</title></head>
+        # <body>
+        # <center><h1>504 Gateway Time-out</h1></center>
+        # <hr><center>stgw</center>
+        # </body>
+        # </html>
+        wait_seconds = 0.1 + random.random()
+        logger.warning(get_meaningful_call_point_for_log() + f"网关超时，等待{wait_seconds:.2f}秒后重试")
+        time.sleep(wait_seconds)
+        return Exception("网关超时")
+
+    return None
 
 
 class Network:
@@ -52,7 +92,7 @@ class Network:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         use_this_cookies="",
     ) -> dict:
@@ -89,7 +129,7 @@ class Network:
         is_normal_jsonp=False,
         need_unquote=True,
         extra_cookies="",
-        check_fn: Callable[[requests.Response], Exception | None] | None = None,
+        check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         use_this_cookies="",
@@ -129,7 +169,7 @@ class Network:
 def try_request(
     request_fn: Callable[[], requests.Response],
     retryCfg: RetryConfig,
-    check_fn: Callable[[requests.Response], Exception | None] | None = None,
+    check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
 ) -> requests.Response | None:
     """
     :param check_fn: func(requests.Response) -> bool

@@ -9230,6 +9230,9 @@ class DjcHelper:
             res_json = res.json()
             logger.info(color("bold_green") + f"{title}，结果={res_json}")
 
+            # 等一会，避免请求太快
+            time.sleep(1)
+
             if "累积签到天数不足" in res_json["msg"]:
                 logger.warning("累积天数不足，跳过尝试后续")
                 break

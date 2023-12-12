@@ -184,8 +184,17 @@ class GoodsCategoryInfo(ConfigInterface):
         self.mainCategory = "170"
         self.subCategory = "0"
 
+class DnfRoleInfoList(ConfigInterface):
+    def __init__(self):
+        self.role_list: list[DnfRoleInfo] = []
 
-class DnfRoleInfo(DaoObject):
+    def fields_to_fill(self):
+        return [
+            ("role_list", DnfRoleInfo),
+        ]
+
+
+class DnfRoleInfo(ConfigInterface):
     def __init__(self):
         self.roleid = "0"
         self.rolename = "风之凌殇"

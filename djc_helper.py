@@ -46,6 +46,7 @@ from dao import (
     DnfHelperChronicleUserActivityTopInfo,
     DnfHelperChronicleUserTaskList,
     DnfRoleInfo,
+    DnfRoleInfoList,
     GameRoleInfo,
     GoodsInfo,
     GuanjiaNewLotteryResult,
@@ -1169,6 +1170,34 @@ class DjcHelper:
         # self.query_game_gifts("dnf")
 
     def query_dnf_rolelist(self, dnfServerId: str, need_print=True) -> list[DnfRoleInfo]:
+        """
+        使用原来的查询接口名称，但内部改为使用缓存，避免短时间内每次调用都实际发送请求，而导致服务器返回请求过于频繁
+        """
+        warapped_role_info_list: DnfRoleInfoList = with_cache(
+            "查询角色列表",
+            f"query_dnf_rolelist_{dnfServerId}_{self.cfg.get_account_cache_key()}",
+            cache_miss_func=functools.partial(self.query_dnf_rolelist_without_cache_wrapped, dnfServerId, need_print),
+            cache_validate_func=lambda role_info_list: len(role_info_list.role_list) != 0,
+            cache_max_seconds=60*60,
+            cache_value_unmarshal_func=DnfRoleInfoList().auto_update_config,
+        )
+
+        # 由于缓存时为了方便序列化，套了一层，这里解除这层
+        return warapped_role_info_list.role_list
+
+    def query_dnf_rolelist_without_cache_wrapped(self, dnfServerId: str, need_print=True) -> DnfRoleInfoList:
+        """
+        多套一层这个，方便在缓存时使用 ConfigInterface 提供的序列化功能
+        """
+        warapped_role_info_list = DnfRoleInfoList()
+        warapped_role_info_list.role_list = self.query_dnf_rolelist_without_cache(dnfServerId, need_print)
+
+        return warapped_role_info_list
+
+    def query_dnf_rolelist_without_cache(self, dnfServerId: str, need_print=True) -> list[DnfRoleInfo]:
+        """
+        向腾讯服务器查询dnf角色列表
+        """
         ctx = f"获取账号({self.cfg.name})在服务器({dnf_server_id_to_name(dnfServerId)})的dnf角色列表"
         game_info = get_game_info("地下城与勇士")
 

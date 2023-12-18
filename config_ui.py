@@ -2590,6 +2590,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("神界预热", "get_dnf_shenjie_yure"),
             ("colg其他活动", "get_colg_other_act"),
+            ("WeGame活动", "get_dnf_wegame"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2626,7 +2627,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("巴卡尔对战地图", "get_dnf_bakaer_map"),
             ("巴卡尔大作战", "get_dnf_bakaer_fight"),
             ("魔界人探险记", "get_mojieren"),
-            ("WeGame活动", "get_dnf_wegame"),
             ("DNF集合站", "get_dnf_collection"),
             ("超级会员", "get_dnf_super_vip"),
             ("集卡", "get_ark_lottery"),

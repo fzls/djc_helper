@@ -655,7 +655,7 @@ class DjcHelper:
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
-        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.js -.css  -.ico
+        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.js -.css  -.ico -data:image
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
@@ -666,6 +666,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("神界预热", self.dnf_shenjie_yure),
             ("colg其他活动", self.colg_other_act),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -692,7 +693,6 @@ class DjcHelper:
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("魔界人探险记", self.mojieren),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF集合站", self.dnf_collection),
             ("dnf助手活动Dup", self.dnf_helper_dup),
             ("心悦app周礼包", self.xinyue_weekly_gift),
@@ -9636,45 +9636,51 @@ class DjcHelper:
             # res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "470")
 
-        # 全民礼包
-        self.dnf_wegame_op("Part1-全民礼包", "916635")
+        self.dnf_wegame_op("预约", "998406")
 
-        # 四选一
-        self.dnf_wegame_op("Part2-首次登录游戏", "916731")
-        self.dnf_wegame_op("Part2-首次在线30分钟", "916732")
-        self.dnf_wegame_op("Part2-首次分享", "916733")
+        self.dnf_wegame_op("三选一然后领取奖励", "999238")
 
-        totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
-        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for idx in range_from_one(remainingLotteryTimes):
-            res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "916735")
-            if int(res.get("ret", 0)) != 0:
-                break
-            time.sleep(5)
+        # todo: 实际领取的奖励以及后续部分等到21号后再添加
 
-        # 体验新副本
-        self.dnf_wegame_op("Part3-110地下城5次", "916738")
-        self.dnf_wegame_op("Part3-110地下城8次", "916748")
-        self.dnf_wegame_op("Part3-lv105装备10件", "916749")
-        self.dnf_wegame_op("Part3-lv105装备20件", "916752")
-
-        # 抽奖
-        self.dnf_wegame_op("Part4-每日任务-消耗10疲劳值", "916805")
-        self.dnf_wegame_op("Part4-每日任务-通关副本", "916807")
-        self.dnf_wegame_op("Part4-周任务-新春副本", "916810")
-
-        totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
-        logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        for idx in range_from_one(remainingLotteryTimes):
-            self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "916812")
+        # # 全民礼包
+        # self.dnf_wegame_op("Part1-全民礼包", "916635")
+        #
+        # # 四选一
+        # self.dnf_wegame_op("Part2-首次登录游戏", "916731")
+        # self.dnf_wegame_op("Part2-首次在线30分钟", "916732")
+        # self.dnf_wegame_op("Part2-首次分享", "916733")
+        #
+        # totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
+        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        # for idx in range_from_one(remainingLotteryTimes):
+        #     res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "916735")
+        #     if int(res.get("ret", 0)) != 0:
+        #         break
+        #     time.sleep(5)
+        #
+        # # 体验新副本
+        # self.dnf_wegame_op("Part3-110地下城5次", "916738")
+        # self.dnf_wegame_op("Part3-110地下城8次", "916748")
+        # self.dnf_wegame_op("Part3-lv105装备10件", "916749")
+        # self.dnf_wegame_op("Part3-lv105装备20件", "916752")
+        #
+        # # 抽奖
+        # self.dnf_wegame_op("Part4-每日任务-消耗10疲劳值", "916805")
+        # self.dnf_wegame_op("Part4-每日任务-通关副本", "916807")
+        # self.dnf_wegame_op("Part4-周任务-新春副本", "916810")
+        #
+        # totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
+        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
+        # for idx in range_from_one(remainingLotteryTimes):
+        #     self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "916812")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
             "WeGame活动",
             get_act_url("WeGame活动"),
             activity_op_func=self.dnf_wegame_op,
-            query_bind_flowid="916712",
-            commit_bind_flowid="916711",
+            query_bind_flowid="998404",
+            commit_bind_flowid="998403",
             roleinfo=roleinfo,
             roleinfo_source=roleinfo_source,
         )
@@ -12856,4 +12862,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.djc_operations()
+        djcHelper.dnf_wegame()

@@ -2583,10 +2583,7 @@ class FunctionSwitchesConfigUi(QWidget):
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
-            ("DNF预约", "get_dnf_reservation"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("qq视频蚊子腿-爱玩", "get_qq_video"),
-            ("dnf助手活动wpe", "get_dnf_helper_wpe"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("神界预热", "get_dnf_shenjie_yure"),
             ("colg其他活动", "get_colg_other_act"),
@@ -2607,6 +2604,9 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("dnf助手活动wpe", "get_dnf_helper_wpe"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
+            ("DNF预约", "get_dnf_reservation"),
             ("DNF娱乐赛", "get_dnf_game"),
             ("colg每日签到", "get_colg_signin"),
             ("dnf助手活动", "get_dnf_helper"),

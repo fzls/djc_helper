@@ -78,6 +78,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-17 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
+    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
 ]
 
 act_name_to_url = {
@@ -98,6 +99,7 @@ act_name_to_url = {
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
     #
     # 已过期活动
     #
@@ -346,6 +348,7 @@ class Urls:
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
+        self.ide_iActivityId_dnf_luodiye = "43_Xb4e98"  # DNF落地页
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "582481"  # DNF马杰洛的规划

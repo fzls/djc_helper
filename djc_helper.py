@@ -666,6 +666,7 @@ class DjcHelper:
             ("colg其他活动", self.colg_other_act),
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9540,6 +9541,74 @@ class DjcHelper:
             extra_cookies=f"p_skey={p_skey}",
         )
 
+    # --------------------------------------------DNF落地页活动_ide--------------------------------------------
+    @try_except()
+    def dnf_luodiye_ide(self):
+        show_head_line("DNF落地页活动_ide")
+        self.show_not_ams_act_info("DNF落地页活动_ide")
+
+        if not self.cfg.function_switches.get_dnf_luodiye or self.disable_most_activities():
+            logger.warning("未启用领取DNF落地页活动_ide功能，将跳过")
+            return
+
+        self.check_dnf_luodiye_ide()
+
+        def query_scode() -> str:
+            res = self.dnf_luodiye_ide_op("初始化", "247252")
+            raw_info = res["modRet"]["jData"]
+
+            return raw_info["sCode"]
+
+        # ------------ 实际流程 --------------
+        self.dnf_luodiye_ide_op("见面礼", "247300")
+
+        self.dnf_luodiye_ide_op("每日任务一", "247301")
+        self.dnf_luodiye_ide_op("每日任务二", "247302")
+        self.dnf_luodiye_ide_op("每周任务一", "247304")
+        self.dnf_luodiye_ide_op("每周任务二", "247305")
+
+        lottery_times = 6
+        for idx in range_from_one(lottery_times):
+            res = self.dnf_luodiye_ide_op(f"{idx}/{lottery_times} 抽奖", "247252")
+            if res["ret"] == "700" or (res["ret"] == "0" and res["modRet"]["ret"] == 10001):
+                break
+            time.sleep(5)
+
+        async_message_box(
+            "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+            "1221 落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动_ide"),
+        )
+
+    def check_dnf_luodiye_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF落地页活动_ide",
+            get_act_url("DNF落地页活动_ide"),
+            activity_op_func=self.dnf_luodiye_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_luodiye_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_luodiye
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF落地页活动_ide"),
+            **extra_params,
+        )
+
     # --------------------------------------------绑定手机活动--------------------------------------------
     @try_except()
     def dnf_bind_phone(self):
@@ -12863,4 +12932,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_luodiye_ide()

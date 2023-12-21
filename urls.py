@@ -79,6 +79,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-17 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
 ]
 
 act_name_to_url = {
@@ -102,6 +103,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
+    "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     #
     # 已过期活动
     #
@@ -142,7 +144,6 @@ act_name_to_url = {
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
-    "DNF漫画预约活动": "https://dnf.qq.com/lbact/a20210617comic/",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
@@ -349,6 +350,7 @@ class Urls:
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
         self.ide_iActivityId_dnf_luodiye = "43_Xb4e98"  # DNF落地页
+        self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

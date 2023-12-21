@@ -1771,6 +1771,14 @@ def open_with_default_app(file_path: str):
     webbrowser.open(os.path.realpath(file_path))
 
 
+def get_first_exists_dict_value(kv: dict, *keys: str) -> Any:
+    for key in keys:
+        if key in kv:
+            return kv[key]
+
+    return None
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

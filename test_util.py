@@ -38,6 +38,7 @@ from util import (
     format_timestamp,
     get_cid,
     get_current,
+    get_first_exists_dict_value,
     get_last_month,
     get_last_n_days,
     get_last_week_monday,
@@ -493,20 +494,20 @@ def test_get_cid():
 
 def test_parse_scode():
     assert (
-        parse_scode("MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
-        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+            parse_scode("MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0=")
+            == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
     )
     assert (
-        parse_scode(
-            "https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
-        )
-        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+            parse_scode(
+                "https://dnf.qq.com/cp/a20210730care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+            )
+            == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
     )
     assert (
-        parse_scode(
-            "https://dnf.qq.com/cp/a20210911care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
-        )
-        == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+            parse_scode(
+                "https://dnf.qq.com/cp/a20210911care/index.html?sCode=MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
+            )
+            == "MDJKQ0t5dDJYazlMVmMrc2ZXV0tVT0xsZitZMi9YOXZUUFgxMW1PcnQ2Yz0="
     )
 
 
@@ -545,3 +546,19 @@ def test_parse_url_param():
     assert parse_url_param(url, "a") == a
     assert parse_url_param(url, "b") == b
     assert parse_url_param(url, "c") == c
+
+
+def test_get_first_exists_dict_value():
+    old_k = "k1"
+    new_k = "K1"
+    kv = {
+        old_k: old_k,
+    }
+
+    assert get_first_exists_dict_value(kv, old_k) == old_k
+    assert get_first_exists_dict_value(kv, new_k) is None
+
+    del kv[old_k]
+    kv[new_k] = old_k
+    assert get_first_exists_dict_value(kv, old_k) is None
+    assert get_first_exists_dict_value(kv, new_k) == old_k

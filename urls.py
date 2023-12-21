@@ -94,8 +94,6 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
-    "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index.html",
@@ -107,6 +105,8 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
+    "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",

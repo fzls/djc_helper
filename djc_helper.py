@@ -12814,7 +12814,7 @@ if __name__ == "__main__":
     indexes = []
     indexes.extend([1])
     # indexes.extend([4 + 7])
-    # indexes.extend([4 + idx for idx in range(1, 7 + 1)])
+    # indexes.extend([4 + idx for idx in range(2, 7 + 1)])
     if RunAll:
         indexes = [i + 1 for i in range(len(cfg.account_configs))]
 

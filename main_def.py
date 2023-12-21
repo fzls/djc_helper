@@ -1517,7 +1517,6 @@ def show_tips(cfg: Config):
             "肥腙小游戏（横版RPG）：https://dnf.qq.com/mingame/adventure/index.html\n"
             "井盖小游戏（跳一跳）：https://dnf.qq.com/mingame/jump/index.html\n"
         ),
-        "23.11 斗鱼嘉年华预约奖励": ("斗鱼活动请自行参与，活动链接如下:\n" "斗鱼：https://www.douyu.com/topic/DNFCarnival?rid=9940062\n"),
         "23.11 微信公众号盖楼": ("微信关注官方公众号【地下城与勇士】，发送【嘉年华盖楼】，点击回复的链接，在里面可以领取奖励。每天可以操作一次\n"),
         "23.12 colg年度大选": (
             "colg有个投票活动，累计投票若干次可以领取一些小奖励，有兴趣的可自行参与\n"
@@ -1527,6 +1526,11 @@ def show_tips(cfg: Config):
             "最近不少同时在玩命运方舟的朋友问我能否支持道聚城兑换命运方舟的道具，之前一直没空，就搁置着了。\n"
             "上周末花了些时间倒腾了下，修复了道聚城部分获取聚豆的接口，同时新增支持可以兑换命运方舟的道具，目前仅限按月付费期间使用，有兴趣的朋友可以看看下面的指引文档\n"
             "https://docs.qq.com/doc/DYkFReHNvVkFEYXJk\n"
+        ),
+        "23.12 斗鱼虎牙": (
+            "斗鱼虎牙活动请自行参与，活动链接如下:\n"
+            "斗鱼：https://www.douyu.com/topic/DNFSJQD?rid=66666\n"
+            "虎牙：https://www.huya.com/kuangren\n"
         ),
     }
 

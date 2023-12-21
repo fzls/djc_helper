@@ -66,7 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
-    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-18 23:59:59", "DNF马杰洛的规划"),
+    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
@@ -101,6 +101,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
+    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     #
     # 已过期活动
     #
@@ -111,7 +112,6 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
-    "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
@@ -351,8 +351,8 @@ class Urls:
         self.ide_iActivityId_dnf_luodiye = "43_Xb4e98"  # DNF落地页
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
-        self.iActivityId_majieluo = "582481"  # DNF马杰洛的规划
-        self.ide_iActivityId_majieluo = "14_jixZoE"  # DNF马杰洛的规划
+        self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划
+        self.ide_iActivityId_majieluo = "16_S86Tjb"  # DNF马杰洛的规划
 
         self.iActivityId_mojieren = "523217"  # 魔界人探险记
         self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记
@@ -364,7 +364,7 @@ class Urls:
             "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
-            "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}"
+            "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
         )
 
         # DNF共创投票

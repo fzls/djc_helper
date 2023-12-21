@@ -668,6 +668,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("超级会员", self.dnf_super_vip),
+            ("DNF马杰洛的规划", self.majieluo),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -680,7 +681,6 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
-            ("DNF马杰洛的规划", self.majieluo),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
             ("黑钻礼包", self.get_heizuan_gift),
             ("DNF心悦", self.dnf_xinyue),
@@ -7727,36 +7727,45 @@ class DjcHelper:
 
         request_wait_time = 3
 
-        self.majieluo_op("次元见面礼", "222973")
+        self.majieluo_op("领取次元见面礼", "248079")
 
-        self.majieluo_op("次元任务-进入活动页", "222974")
-        self.majieluo_op("次元任务-游戏在线30分钟", "224200")
-        self.majieluo_op("次元任务-每日登录", "224392")
-        self.majieluo_op("次元任务-每日通关4次推荐地下城", "224415")
+        self.majieluo_op("领取抽奖机会礼包", "248082")
+        self.majieluo_op("幸运抽奖", "248353")
 
-        self.majieluo_op("次元任务-每周通关噩梦回廊地下城一次", "224475")
-        self.majieluo_op("次元任务-每周通关次元回廊地下城一次", "224613")
-        self.majieluo_op("次元任务-每周通关巴卡尔攻坚战一次", "224645")
+        # self.majieluo_op("领取邀请好友礼包", "248359", inviteNum=1)
 
-        info = query_info()
+        for day in [1,3,5,7]:
+            self.majieluo_op(f"流失用户领取登录游戏礼包-{day}", "248360", loginDays=day)
+            time.sleep(5)
 
-        if len(info.itemInfo) <= 1:
-            async_message_box(
-                "卡牌次元活动中部分内容需要组队进行，请创建队伍或加入其他人的队伍。(PS：与之前几次一样，几乎需要队伍成员全部满勤才能领到最高的奖励，所以自行决定是否需要折腾~)",
-                "23.9 卡牌次元组队提醒",
-                show_once=True,
-            )
-
-        self.majieluo_op("领取反击卡达标15奖励", "225050")
-        self.majieluo_op("领取反击卡达标30奖励", "225102")
-        self.majieluo_op("领取反击卡达标40奖励", "225103")
-        self.majieluo_op("领取反击卡达标50奖励", "225104")
-
-        lottery_times = int(info.luckCard) // 3
-        logger.info(f"当前的幸运卡牌数目为 {info.luckCard}，可以抽奖 {lottery_times} 次")
-        for idx in range_from_one(lottery_times):
-            self.majieluo_op(f"[{idx}/{lottery_times}] 抽奖", "224651")
-            time.sleep(request_wait_time)
+        # self.majieluo_op("次元任务-进入活动页", "222974")
+        # self.majieluo_op("次元任务-游戏在线30分钟", "224200")
+        # self.majieluo_op("次元任务-每日登录", "224392")
+        # self.majieluo_op("次元任务-每日通关4次推荐地下城", "224415")
+        #
+        # self.majieluo_op("次元任务-每周通关噩梦回廊地下城一次", "224475")
+        # self.majieluo_op("次元任务-每周通关次元回廊地下城一次", "224613")
+        # self.majieluo_op("次元任务-每周通关巴卡尔攻坚战一次", "224645")
+        #
+        # info = query_info()
+        #
+        # if len(info.itemInfo) <= 1:
+        #     async_message_box(
+        #         "卡牌次元活动中部分内容需要组队进行，请创建队伍或加入其他人的队伍。(PS：与之前几次一样，几乎需要队伍成员全部满勤才能领到最高的奖励，所以自行决定是否需要折腾~)",
+        #         "23.9 卡牌次元组队提醒",
+        #         show_once=True,
+        #     )
+        #
+        # self.majieluo_op("领取反击卡达标15奖励", "225050")
+        # self.majieluo_op("领取反击卡达标30奖励", "225102")
+        # self.majieluo_op("领取反击卡达标40奖励", "225103")
+        # self.majieluo_op("领取反击卡达标50奖励", "225104")
+        #
+        # lottery_times = int(info.luckCard) // 3
+        # logger.info(f"当前的幸运卡牌数目为 {info.luckCard}，可以抽奖 {lottery_times} 次")
+        # for idx in range_from_one(lottery_times):
+        #     self.majieluo_op(f"[{idx}/{lottery_times}] 抽奖", "224651")
+        #     time.sleep(request_wait_time)
 
         # # 马杰洛的见面礼
         # def take_gift(take_lottery_count_role_info: RoleInfo) -> bool:
@@ -12129,6 +12138,7 @@ class DjcHelper:
                 "drinksId",
                 "gameId",
                 "score",
+                "loginDays",
             ]
         }
 
@@ -12932,4 +12942,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.majieluo()

@@ -729,6 +729,8 @@ need_take_awards = false
 10010 = false
 # 2023.9.21 DNF金秋爽玩季 集齐BOSS卡面，赢+7装备增幅券等超值豪礼
 10011 = false
+# 2023.12.21 DNF飞跃天穹 登临神界 集卡赢+10装备增幅券、梦想白金徽章
+10012 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

@@ -145,6 +145,7 @@ from util import (
     filter_unused_params_catch_exception,
     format_now,
     format_time,
+    get_first_exists_dict_value,
     get_last_week_monday_datetime,
     get_logger_func,
     get_meaningful_call_point_for_log,
@@ -2774,7 +2775,7 @@ class DjcHelper:
         返回 剩余卡片数，总计获得卡片数
         """
         res = self.qzone_act_query_op("查询抽卡次数", self.ark_lottery_sub_act_id_draw_card, print_res=False)
-        raw_data = json.loads(res.get("Data"))
+        raw_data = json.loads(get_first_exists_dict_value(res, "data", "Data"))
 
         info = NewArkLotteryLotteryCountInfo().auto_update_config(
             raw_data["check_rule"]["prefer_rule_group"]["coins"][0]

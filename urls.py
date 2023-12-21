@@ -55,7 +55,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
-    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-20 23:59:59", "超级会员"),
+    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "超级会员"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
@@ -100,6 +100,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
     #
     # 已过期活动
     #
@@ -111,7 +112,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20230921card/",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/47736_6b7bb94e",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",

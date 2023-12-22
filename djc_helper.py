@@ -2569,7 +2569,27 @@ class DjcHelper:
 
     def dnf_ark_lottery_add_ark_lottery_times(self):
         self.qzone_act_op("增加抽卡次数-每日登陆游戏", self.ark_lottery_sub_act_id_login)
-        self.qzone_act_op("增加抽卡次数-每日活动分享", self.ark_lottery_sub_act_id_share)
+
+        # 先尝试直接领取活动分享的次数
+        self.qzone_act_op("增加抽卡次数-每日活动分享（不实际发送请求）", self.ark_lottery_sub_act_id_share)
+        # 然后尝试发送给自己来领取
+        if not self.cfg.function_switches.disable_share:
+            async_message_box(
+                "这次的集卡需要实际发送分享请求才能领取2次抽卡次数，这里尝试给自己发送分享链接，自己会收到自己发的一条卡片消息。如果无法忍受这个，可以去 配置工具/当前账号配置/活动开关/禁用分享功能 ，勾选这个就不会再尝试实际发送分享请求了，但代价是可能领不到这两次-。-",
+                "集卡分享提示",
+                show_once=True,
+            )
+            self.qzone_act_op(
+                "增加抽卡次数-每日活动分享（给自己）",
+                self.ark_lottery_sub_act_id_share,
+                act_req_data={
+                    "receivers": [
+                        self.qq(),
+                    ],
+                    "send_type": 0,
+                },
+            )
+
         self.qzone_act_op(
             "增加抽卡次数-幸运勇士-尝试使用配置的幸运角色",
             self.ark_lottery_sub_act_id_lucky,
@@ -13002,4 +13022,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_ark_lottery()

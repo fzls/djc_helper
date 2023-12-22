@@ -651,6 +651,7 @@ class DjcHelper:
             ("心悦app", self.xinyue_app_operations),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
@@ -688,7 +689,6 @@ class DjcHelper:
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),
@@ -6763,7 +6763,7 @@ class DjcHelper:
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        welfare_version = "v7"
+        welfare_version = "v8"
         db = WelfareDB().with_context(welfare_version).load()
         account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.get_account_cache_key()}").load()
 
@@ -6786,6 +6786,10 @@ class DjcHelper:
                 res = self.dnf_welfare_op(
                     f"兑换口令-{sContent}", "558229", sContent=quote_plus(quote_plus(quote_plus(sContent)))
                 )
+
+            # 每次请求间隔一秒
+            time.sleep(3)
+
             if int(res["ret"]) != 0 or int(res["modRet"]["iRet"]) != 0:
                 return
 
@@ -6816,10 +6820,12 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "DNF15周年生日快乐",
-            "摘星奇旅",
-            "勇士新征程元气初相见",
-            "格斗无限超越",
+            "看直播畅游神界",
+            "扬帆苍穹之上",
+            "DNF全职业百科",
+            "1221神界来啦",
+            "明星导师神界教学",
+            "职业教学有手就行",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -12908,4 +12914,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_comic()
+        djcHelper.dnf_welfare()

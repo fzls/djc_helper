@@ -2580,6 +2580,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("心悦app", "get_xinyue_app"),
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
@@ -2619,7 +2620,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦Dup", "get_dnf_xinyue"),
             ("dnf周年拉好友", "get_dnf_anniversary_friend"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("心悦app理财礼卡", "get_xinyue_financing"),
             ("冒险的起点", "get_maoxian_start"),
             ("DNF巴卡尔竞速", "get_dnf_bakaer"),

@@ -89,6 +89,7 @@ act_name_to_url = {
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 短期付费活动
     #
@@ -120,7 +121,6 @@ act_name_to_url = {
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",

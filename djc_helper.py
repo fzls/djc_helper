@@ -3504,17 +3504,16 @@ class DjcHelper:
 
         self.check_dnf_comic_ide()
 
-        def query_star_count():
-            res = self.dnf_comic_ide_op("查询星星数目", "774820", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+        def query_star_count() -> int:
+            res = self.dnf_comic_ide_op("查询星星数目", "248455", print_res=False)
 
-            for info in raw_info.sOutValue1.split("|"):
-                count_id, total_get, current = info.split(":")
-                if int(count_id) == 324:
-                    return int(total_get), int(current)
+            star_count = int(res["jData"]["starNum"])
+            return star_count
 
-            return 0, 0
-
+        # self.dnf_comic_ide_op("发送短信验证码（绑定）", "248526")
+        # self.dnf_comic_ide_op("绑定手机，领取预约礼包", "248528")
+        # self.dnf_comic_ide_op("发送短信验证码（解绑）", "248830")
+        # self.dnf_comic_ide_op("解绑手机", "248941")
         async_message_box(
             "漫画预约活动需要绑定手机验证码才能领取，可获得3天黑钻和一个增肥器，有兴趣的朋友请在稍后打开的页面中自行绑定",
             "漫画预约",
@@ -3522,58 +3521,73 @@ class DjcHelper:
             show_once=True,
         )
 
-        # self.dnf_comic_ide_op("预约资格领取", "774765")
-        # self.dnf_comic_ide_op("预约资格消耗", "774768")
-        #
-        # self.dnf_comic_ide_op("13件福利任你抽", "774817")
-        #
-        # watch_comic_flowids = [
-        #     # "774769",
-        #     # "774770",
-        #     # "774771",
-        # ]
-        # # note: 当前更新至（定期刷新这个值）
-        #
-        # base_time = parse_time("2021-09-03 00:00:00")
-        # base_updated = 20
-        #
-        # # 每周五更新一集，因此可以用一个基准时间来计算当前更新到第几集了
-        # pass_days = (get_now() - base_time).days
-        # newly_updated = pass_days // 7
-        #
-        # current_updated = base_updated + newly_updated
-        # logger.info(f"当前预计更新到 第{current_updated}/{len(watch_comic_flowids)} 集")
-        #
-        # for _idx, flowid in enumerate(watch_comic_flowids):
-        #     idx = _idx + 1
-        #     if idx > current_updated:
-        #         logger.info(color("bold_yellow") + f"当前活动页面更新至第{current_updated}，不执行后续部分，避免被钓鱼<_<")
-        #         break
-        #
-        #     if is_weekly_first_run(f"comic_watch_{self.uin()}_{idx}"):
-        #         self.dnf_comic_ide_op(f"观看资格领取_第{idx}话", flowid)
-        #         time.sleep(1)
-        #
-        # self.dnf_comic_ide_op("观看礼包资格消耗", "775253")
-        #
-        # self.dnf_comic_ide_op("每日在线好礼", "774826")
-        #
-        # total_get, star_count = query_star_count()
-        # msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星（累积获得{total_get}颗），因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
-        # logger.info(color("bold_yellow") + msg)
-        #
-        # if star_count > 0 and is_weekly_first_run("提示领道具") and not use_by_myself():
-        #     async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
-        #
-        # if use_by_myself():
-        #     # 我自己进行兑换~
-        #     self.dnf_comic_ide_op("兑换-装备提升礼盒", "774806")
-        #     self.dnf_comic_ide_op("兑换-灿烂的徽章神秘礼盒", "774803")
-        #
-        # if self.cfg.comic_lottery or use_by_myself():
-        #     logger.info("已开启自动抽奖，将开始抽奖流程~")
-        #     for idx in range_from_one(star_count):
-        #         self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "774818")
+        actual_start_time = "2023-12-27 00:00:00"
+        if not now_after(actual_start_time):
+            logger.info(f"漫画活动实际尚未开始，跳过后续流程，开始时间为 {actual_start_time}")
+            return
+
+        if use_by_myself():
+            async_message_box(
+                "（仅自己可见）漫画活动已经正式开始了，去网页看看 观看漫画领星星 和 兑换道具 接口实际参数是怎样的，接一下",
+                "漫画活动后续接入",
+            )
+
+        self.dnf_comic_ide_op("领取观看礼包", "248947")
+        self.dnf_comic_ide_op("抽奖（13件福利任抽）", "248953")
+        self.dnf_comic_ide_op("每周在线礼包", "248990")
+
+        watch_comic_flowids = [
+            # "774769",
+            # "774770",
+            # "774771",
+        ]
+        # note: 当前更新至（定期刷新这个值）
+
+        base_time = parse_time("2021-09-03 00:00:00")
+        base_updated = 20
+
+        # 每周五更新一集，因此可以用一个基准时间来计算当前更新到第几集了
+        pass_days = (get_now() - base_time).days
+        newly_updated = pass_days // 7
+
+        current_updated = base_updated + newly_updated
+        logger.info(f"当前预计更新到 第{current_updated}/{len(watch_comic_flowids)} 集")
+
+        for _idx, flowid in enumerate(watch_comic_flowids):
+            idx = _idx + 1
+            if idx > current_updated:
+                logger.info(color("bold_yellow") + f"当前活动页面更新至第{current_updated}，不执行后续部分，避免被钓鱼<_<")
+                break
+
+            if is_weekly_first_run(f"comic_watch_{self.uin()}_{idx}"):
+                # re: 本次的观看领取星星接口好像也是单个了
+                # self.dnf_comic_ide_op("观看漫画，领取星星", "248950")
+
+                # self.dnf_comic_ide_op(f"观看资格领取_第{idx}话", flowid)
+                time.sleep(1)
+
+        star_count = query_star_count()
+        msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星，因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
+        logger.info(color("bold_yellow") + msg)
+
+        if star_count > 0 and is_weekly_first_run(f"{self.cfg.name}_漫画活动_提示领道具") and not use_by_myself():
+            async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
+
+        if use_by_myself():
+            # 我自己进行兑换~
+
+            ## re: 本次实际的兑换接口是单个，到时候看看参数
+            # self.dnf_comic_ide_op("兑换", "249077")
+
+            # # self.dnf_comic_ide_op("兑换-装备提升礼盒", "774806")
+            # # self.dnf_comic_ide_op("兑换-灿烂的徽章神秘礼盒", "774803")
+            pass
+
+        if self.cfg.comic_lottery:
+            logger.info("已开启自动抽奖，将开始抽奖流程~")
+            for idx in range_from_one(star_count):
+                self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "248988")
+                time.sleep(3)
 
     def check_dnf_comic(self):
         self.check_bind_account(
@@ -12888,4 +12902,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_comic()

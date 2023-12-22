@@ -9687,43 +9687,17 @@ class DjcHelper:
             # res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
             # return self.parse_jifenOutput(res, "470")
 
-        self.dnf_wegame_op("预约", "998406")
+        # self.dnf_wegame_op("预约", "998406")
+        self.dnf_wegame_op("预约后玩家是否点击过收取礼包按钮", "999238")
 
-        self.dnf_wegame_op("三选一然后领取奖励", "999238")
+        # self.dnf_wegame_op("接受邀请（二期）", "998612")
+        # self.dnf_wegame_op("我的邀请列表（二期）", "998708")
+        self.dnf_wegame_op("抽奖（二期）", "998719")
 
-        # todo: 实际领取的奖励以及后续部分等到21号后再添加
+        self.dnf_wegame_op("给巴卡尔造成伤害（二期）", "998712")
+        self.dnf_wegame_op("巴卡尔宝藏（二期）", "998726")
 
-        # # 全民礼包
-        # self.dnf_wegame_op("Part1-全民礼包", "916635")
-        #
-        # # 四选一
-        # self.dnf_wegame_op("Part2-首次登录游戏", "916731")
-        # self.dnf_wegame_op("Part2-首次在线30分钟", "916732")
-        # self.dnf_wegame_op("Part2-首次分享", "916733")
-        #
-        # totalLotteryTimes, remainingLotteryTimes = query_open_box_times()
-        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        # for idx in range_from_one(remainingLotteryTimes):
-        #     res = self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 开启补给箱-4礼包抽奖", "916735")
-        #     if int(res.get("ret", 0)) != 0:
-        #         break
-        #     time.sleep(5)
-        #
-        # # 体验新副本
-        # self.dnf_wegame_op("Part3-110地下城5次", "916738")
-        # self.dnf_wegame_op("Part3-110地下城8次", "916748")
-        # self.dnf_wegame_op("Part3-lv105装备10件", "916749")
-        # self.dnf_wegame_op("Part3-lv105装备20件", "916752")
-        #
-        # # 抽奖
-        # self.dnf_wegame_op("Part4-每日任务-消耗10疲劳值", "916805")
-        # self.dnf_wegame_op("Part4-每日任务-通关副本", "916807")
-        # self.dnf_wegame_op("Part4-周任务-新春副本", "916810")
-        #
-        # totalLotteryTimes, remainingLotteryTimes = query_daily_lottery_times()
-        # logger.info(color("bold_yellow") + f"累计获得{totalLotteryTimes}次抽奖次数，目前剩余{remainingLotteryTimes}次抽奖次数")
-        # for idx in range_from_one(remainingLotteryTimes):
-        #     self.dnf_wegame_op(f"{idx}/{remainingLotteryTimes} 次抽奖", "916812")
+        self.dnf_wegame_op("预约期礼包兑换（二期）", "998716")
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
@@ -12914,4 +12888,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_wegame()

@@ -97,7 +97,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
-    "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",

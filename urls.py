@@ -80,6 +80,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
+    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
 ]
 
 act_name_to_url = {
@@ -103,6 +104,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
+    "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     #
     # 已过期活动
     #
@@ -351,6 +353,7 @@ class Urls:
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
         self.ide_iActivityId_dnf_luodiye = "43_Xb4e98"  # DNF落地页
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
+        self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划
@@ -367,6 +370,7 @@ class Urls:
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
             "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
+            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}"
         )
 
         # DNF共创投票

@@ -2590,6 +2590,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF马杰洛的规划", "get_majieluo"),
             ("DNF漫画预约活动", "get_dnf_comic"),
+            ("拯救赛利亚", "get_dnf_save_sailiyam"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

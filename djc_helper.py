@@ -657,7 +657,7 @@ class DjcHelper:
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
-        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.js -.css  -.ico -data:image
+        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
@@ -669,6 +669,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF漫画预约活动", self.dnf_comic),
+            ("拯救赛利亚", self.dnf_save_sailiyam),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10603,6 +10604,105 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------拯救赛利亚--------------------------------------------
+    @try_except()
+    def dnf_save_sailiyam(self):
+        show_head_line("拯救赛利亚")
+        self.show_not_ams_act_info("拯救赛利亚")
+
+        if not self.cfg.function_switches.get_dnf_save_sailiyam or self.disable_most_activities():
+            logger.warning("未启用领取 拯救赛利亚 功能，将跳过")
+            return
+
+        self.check_dnf_save_sailiyam()
+
+        self.dnf_save_sailiyam_op("勇士冒险礼", "247186")
+
+        self.dnf_save_sailiyam_op("复活币-每日登录游戏", "247190")
+        self.dnf_save_sailiyam_op("复活币-每日分享", "247194")
+        # self.dnf_save_sailiyam_op("复活币-好友列表", "247588")
+        # self.dnf_save_sailiyam_op("复活币-发送ark消息", "247589")
+        # self.dnf_save_sailiyam_op("复活币-助力", "247619")
+
+        @try_except()
+        def game_1():
+            res = self.dnf_save_sailiyam_op("游戏分支1-开始", "250322")
+            iGameId = res["jData"]["iGameId"]
+            self.dnf_save_sailiyam_op("刷新数据", "252655")
+            time.sleep(5)
+
+            # 1-成功 2-失败
+            self.dnf_save_sailiyam_op("游戏分支1-结束", "250351", iSuccess=1, iGameId=iGameId)
+            time.sleep(1)
+
+            self.dnf_save_sailiyam_op("游戏分支1-领奖", "250368")
+            self.dnf_save_sailiyam_op("刷新数据", "252655")
+            time.sleep(3)
+
+        @try_except()
+        def game_2():
+            res = self.dnf_save_sailiyam_op("游戏分支2-开始", "250382")
+            iGameId = res["jData"]["iGameId"]
+            self.dnf_save_sailiyam_op("刷新数据", "252655")
+            time.sleep(5)
+
+            self.dnf_save_sailiyam_op("游戏分支2-结束", "250383", sAnswer="0101", iSuccess=1, iGameId=iGameId)
+            time.sleep(1)
+
+            self.dnf_save_sailiyam_op("游戏分支2-领奖", "250393")
+            self.dnf_save_sailiyam_op("刷新数据", "252655")
+            time.sleep(3)
+
+
+        game_1()
+        game_2()
+
+        # self.dnf_save_sailiyam_op("游戏分支3-开始", "250405")
+        # self.dnf_save_sailiyam_op("游戏分支3-校验", "250407")
+        # self.dnf_save_sailiyam_op("游戏分支3-领奖", "250428")
+
+        async_message_box(
+            "拯救赛丽亚的小游戏第三个游戏和第四个游戏比较麻烦，请自行在手机里完成-。-",
+            f"拯救赛丽亚邀请好友_{self.cfg.name}",
+            show_once=True,
+            open_url=get_act_url("拯救赛利亚"),
+        )
+        # self.dnf_save_sailiyam_op("游戏分支4-好友列表", "251268")
+        # self.dnf_save_sailiyam_op("游戏分支4-发送ark消息", "251298")
+        # self.dnf_save_sailiyam_op("游戏分支4-接受召唤", "251361")
+        # self.dnf_save_sailiyam_op("游戏分支4-召唤好友列表", "251512")
+        self.dnf_save_sailiyam_op("游戏分支4-领奖", "251372")
+
+        self.dnf_save_sailiyam_op("游戏终极大奖", "251373")
+
+    def check_dnf_save_sailiyam(self, **extra_params):
+        return self.ide_check_bind_account(
+            "拯救赛利亚",
+            get_act_url("拯救赛利亚"),
+            activity_op_func=self.dnf_save_sailiyam_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_save_sailiyam_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_save_sailiyam
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("拯救赛利亚"),
+            **extra_params,
+        )
+
     # --------------------------------------------巴卡尔对战地图--------------------------------------------
     @try_except()
     def dnf_bakaer_map_ide(self):
@@ -12099,6 +12199,8 @@ class DjcHelper:
                 "gameId",
                 "score",
                 "loginDays",
+                "iSuccess",
+                "sAnswer",
             ]
         }
 
@@ -12902,4 +13004,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_comic()
+        djcHelper.dnf_save_sailiyam()

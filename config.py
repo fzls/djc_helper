@@ -847,6 +847,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_helper_wpe = True
         # 是否领取 神界预热 活动
         self.get_dnf_shenjie_yure = True
+        # 是否领取 拯救赛利亚 活动
+        self.get_dnf_save_sailiyam = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

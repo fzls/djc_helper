@@ -670,6 +670,7 @@ class DjcHelper:
             ("DNF马杰洛的规划", self.majieluo),
             ("DNF漫画预约活动", self.dnf_comic),
             ("拯救赛利亚", self.dnf_save_sailiyam),
+            ("dnf助手活动wpe", self.dnf_helper_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -677,7 +678,6 @@ class DjcHelper:
         return [
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
@@ -4610,6 +4610,7 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手活动wpe--------------------------------------------
+    # re: 接入流程 搜： wpe类活动的接入办法为
     @try_except()
     def dnf_helper_wpe(self):
         show_head_line("dnf助手活动wpe")
@@ -4622,25 +4623,22 @@ class DjcHelper:
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        self.dnf_helper_wpe_op("见面礼", 132329)
+        self.dnf_helper_wpe_op("见面礼", 143111)
 
-        self.dnf_helper_wpe_op("分享活动", 134214)
-        self.dnf_helper_wpe_op("通关一次巴卡尔", 134319)
-        self.dnf_helper_wpe_op("今日登录游戏", 134321)
-        self.dnf_helper_wpe_op("今日消耗疲劳100点", 134331)
-        # self.dnf_helper_wpe_op("史诗之路获得10件史诗", uuuu)
+        self.dnf_helper_wpe_op("登录领取", 144574)
 
         for idx in range_from_one(6):
-            res = self.dnf_helper_wpe_op(f"迎风起航-{idx}", 133955)
-            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"]:
+            # note: 对应搜索 lotteryFlowID
+            res = self.dnf_helper_wpe_op(f"立即抽奖-{idx}", 143109)
+            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"] or "不足" in res["msg"]:
                 break
             time.sleep(5)
 
-        self.dnf_helper_wpe_op("回归-今日登录游戏", 132336)
-        self.dnf_helper_wpe_op("回归-今日在线60分钟", 132327)
-        self.dnf_helper_wpe_op("回归-通关推荐地下城3次", 132350)
-        self.dnf_helper_wpe_op("回归-消耗100点疲劳", 132340)
-        self.dnf_helper_wpe_op("回归-装备属性成长3次", 132328)
+        self.dnf_helper_wpe_op("回归-今日登录游戏", 143093)
+        self.dnf_helper_wpe_op("回归-今日在线60分钟", 144510)
+        self.dnf_helper_wpe_op("回归-通关推荐地下城3次", 144511)
+        self.dnf_helper_wpe_op("回归-消耗100点疲劳", 144512)
+        self.dnf_helper_wpe_op("回归-今日通关巴卡尔副本1次", 144515)
 
     def dnf_helper_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
@@ -4648,7 +4646,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 15590
+        act_id = 16096
 
         json_data = {
             "biz_id": "bb",
@@ -13004,4 +13002,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_save_sailiyam()
+        djcHelper.dnf_helper_wpe()

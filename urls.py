@@ -76,7 +76,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
-    newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-17 23:59:59", "dnf助手活动wpe"),
+    newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
@@ -105,12 +105,12 @@ act_name_to_url = {
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
+    "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     #
     # 已过期活动
     #
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
     "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
-    "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231116/index.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
@@ -519,9 +519,16 @@ class Urls:
         )
 
         # re: wpe类活动的接入办法为：
-        #   1. 随便点击一个按钮，在其请求记录中复制对应的flowid
+        #   1. 随便选一个按钮，右键查看该元素，复制其上层div对应的id的值
         #   2. 在Search标签中搜索该值，会找到一行json定义，复制出来，并格式化
         #   3. 后续在想要查看的按钮右键 Inspect，复制其上层div对应的id的值，然后在json中搜索，上面configurationData的flowID即为我们要找的值
+        #
+        # note: PS：获得该json后，将最上方的 activity_id 的值替换到对应 op函数 的 act_id中
+        #
+        # undone: 或者尝试搜索下列关键词也能定位到该json
+        #   configurationData
+        #   flowID
+        #
         #
         # note: 如果手机抓包没法获取到活动链接，但是可以抓包的情况下，可以完成抓包设置后，依次点击对应按钮，然后在抓包结果中搜索 actid ，最下面的请求的参数中的 flowid 就是我们需要的参数
 

@@ -1707,7 +1707,8 @@ class QQLogin:
         self.add_cookie("apps_p_skey", p_skey)
 
     def fetch_xinyue_openid_access_token(self):
-        logger.info(f"{self.name} 跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        logger.info(f"{self.name} 先等待1秒，然后跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        time.sleep(1)
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
 

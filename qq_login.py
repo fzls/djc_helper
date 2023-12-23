@@ -1337,6 +1337,7 @@ class QQLogin:
 
             self.set_window_size()
 
+            logger.info("等待#loginframe加载完毕")
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
                 expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe"))
             )

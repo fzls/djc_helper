@@ -1406,11 +1406,10 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        self.check_xinyue_battle_ground()
+        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
-        # self.xinyue_battle_ground_op("周期获奖记录", "747508")
-        # self.xinyue_battle_ground_op("花园获奖记录", "747563")
-        # self.xinyue_battle_ground_op("充值获奖记录", "747719")
+        return
 
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
@@ -1913,6 +1912,50 @@ class DjcHelper:
             lqlevel=lqlevel,
             teamid=teamid,
             **extra_params,
+        )
+
+    def xinyue_battle_ground_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        act_id = "15488"
+        roleinfo = self.get_dnf_bind_role()
+
+        if extra_data is None:
+            extra_data = {}
+
+        json_data = {
+            "biz_id": "tgclub",
+            "act_id": act_id,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": json.dumps(
+                {
+                    "num": 1,
+                    "ceiba_plat_id": "ios",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                    **extra_data,
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_xinyue_wpe_api,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
         )
 
     # --------------------------------------------心悦app--------------------------------------------

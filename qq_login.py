@@ -1337,19 +1337,6 @@ class QQLogin:
 
             self.set_window_size()
 
-            logger.info("等待登录按钮#login-btn出来，确保加载完成")
-            WebDriverWait(self.driver, self.cfg.login.load_page_timeout).until(
-                expected_conditions.text_to_be_present_in_element((By.ID, "login-btn"), "登录")
-            )
-
-            logger.info("等待5秒，确保加载完成")
-            time.sleep(5)
-
-            logger.info("点击登录按钮")
-            self.driver.find_element(By.ID, "login-btn").click()
-
-            logger.info("等待2秒，确保#loginframe显示出来并切换")
-            time.sleep(2)
             WebDriverWait(self.driver, self.cfg.login.load_login_iframe_timeout).until(
                 expected_conditions.visibility_of_element_located((By.CLASS_NAME, "loginframe"))
             )
@@ -1364,9 +1351,9 @@ class QQLogin:
             self.driver.switch_to.frame(ptlogin_iframe)
 
         def assert_login_finished_fn():
-            logger.info(f"{self.name} 请等待#btn_wxqclogin不可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
+            logger.info(f"{self.name} 请等待#login-box不可见，则说明已经登录完成了，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
-                expected_conditions.invisibility_of_element_located((By.ID, "btn_wxqclogin"))
+                expected_conditions.invisibility_of_element_located((By.ID, "login-box"))
             )
 
             logger.info("等待1s，确认获取openid的请求完成")

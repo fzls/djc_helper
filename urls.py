@@ -86,7 +86,7 @@ not_ams_activities = [
 act_name_to_url = {
     # 长期免费活动
     "道聚城": "https://daoju.qq.com/mall/",
-    "DNF地下城与勇士心悦特权专区": "https://xinyue.qq.com/act/a20210317dnf/index_pc.html",
+    "DNF地下城与勇士心悦特权专区": "https://act.xinyue.qq.com/act/a20231103dnf/index.html",
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",

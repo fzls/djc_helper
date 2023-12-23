@@ -1406,6 +1406,9 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
+        logger.warning("心悦战场改版正在接入中，暂时先屏蔽")
+        return
+
         lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 

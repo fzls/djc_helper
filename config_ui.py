@@ -2593,6 +2593,9 @@ class AccountConfigUi(QWidget):
 
             cfg.xinyue_operations_v2.append(item)
 
+        self.sort_xinyue_exchange_items(cfg, default_items)
+
+    def sort_xinyue_exchange_items(self, cfg: AccountConfig, default_items:  list[tuple[int, str]]):
         # 调整下配置的顺序，使其更加直观
         config_file_flow_id_to_index: dict[int, int] = {}
         for idx, item in enumerate(cfg.xinyue_operations_v2):

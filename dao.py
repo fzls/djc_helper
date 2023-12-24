@@ -309,6 +309,12 @@ class XinYueInfo(DaoObject):
     def is_xinyue_or_special_member(self) -> bool:
         return self.xytype >= XIN_YUE_MIN_LEVEL or self.is_special_member
 
+    def is_xinyue_level(self, *levels: int) -> bool:
+        for level in levels:
+            if self.xytype == XIN_YUE_MIN_LEVEL + level - 1:
+                return True
+
+        return False
 
 class XinYueItemInfo(DaoObject):
     def __init__(

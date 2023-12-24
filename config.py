@@ -127,7 +127,7 @@ class FirecrackersExchangeItemConfig(ConfigInterface):
 
 class XinYueOperationConfig(ConfigInterface):
     def __init__(self):
-        self.iFlowId = "512411"
+        self.iFlowId = 512411
         self.package_id = ""  # 仅礼包兑换需要这个参数，如兑换【勇者宝库】的【装备提升礼盒】的package_id为702218
         self.sFlowName = "输出我的任务积分"
         self.count = 1

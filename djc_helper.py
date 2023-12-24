@@ -1420,18 +1420,32 @@ class DjcHelper:
         default_xinyue_operations = []
 
         # 尝试根据心悦级别领取对应周期礼包
-        if old_info.xytype < XIN_YUE_MIN_LEVEL:
+        if old_info.xytype < XIN_YUE_MIN_LEVEL or old_info.is_special_member:
             default_xinyue_operations.extend(
                 [
-                    ("747507", "周礼包_特邀会员"),
-                    ("747539", "月礼包_特邀会员"),
+                    (130718, "周礼包_特邀会员"),
+                    (130745, "月礼包_特邀会员"),
                 ]
             )
-        else:
+        elif old_info.is_xinyue_level(1):
             default_xinyue_operations.extend(
                 [
-                    ("747534", "周礼包_心悦会员"),
-                    ("747541", "月礼包_心悦会员"),
+                    (130742, "周礼包_心悦会员1"),
+                    (130746, "月礼包_心悦会员1"),
+                ]
+            )
+        elif old_info.is_xinyue_level(2, 3):
+            default_xinyue_operations.extend(
+                [
+                    (130743, "周礼包_心悦会员2-3"),
+                    (130785, "月礼包_心悦会员2-3"),
+                ]
+            )
+        elif old_info.is_xinyue_level(4, 5):
+            default_xinyue_operations.extend(
+                [
+                    (130744, "周礼包_心悦会员4-5"),
+                    (130786, "月礼包_心悦会员4-5"),
                 ]
             )
 
@@ -1452,34 +1466,36 @@ class DjcHelper:
             op.count = 1
             try_add_op(op)
 
-        # 与配置文件中配置的去重后叠加
-        for op in self.cfg.xinyue_operations:
-            try_add_op(op)
+        # fixme: 接入兑换功能时，再取消注释下面这行
+        # # 与配置文件中配置的去重后叠加
+        # for op in self.cfg.xinyue_operations:
+        #     try_add_op(op)
 
         # 进行相应的心悦操作
         for op in xinyue_operations:
-            self.do_xinyue_op(old_info.xytype, op)
+            self.do_xinyue_battle_ground_op(old_info.xytype, op)
 
-        # ------------ 赛利亚打工 -----------------
-        info = self.query_xinyue_info("查询打工信息", print_res=False)
-        # 可能的状态如下
-        # 工作状态 描述 结束时间 领取结束时间 可进行操作
-        #    -2   待机    0                  可打工（若本周总次数未用完），之后状态变为2
-        #    2    打工中  a         b        在结束时间a之前，不能进行任何操作，a之后状态变为1
-        #    1    领工资  a         b        在结束时间b之前，可以领取奖励。领取后状态变为-2
-        if info.work_status == -2:
-            self.xinyue_battle_ground_op("打工仔去打工", "748050")
-        elif info.work_status == 2:
-            logger.info(color("bold_green") + f"赛利亚正在打工中~ 结束时间为{datetime.datetime.fromtimestamp(info.work_end_time)}")
-        elif info.work_status == 1:
-            self.xinyue_battle_ground_op("搬砖人领工资", "748077")
-            self.xinyue_battle_ground_op("打工仔去打工", "748050")
-
-        # 然后尝试抽奖
-        info = self.query_xinyue_info("查询抽奖次数", print_res=False)
-        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
-        for idx in range(info.ticket):
-            self.xinyue_battle_ground_op(f"第{idx + 1}次抽奖券抽奖", "749081")
+        # fixme: 赛利亚打工变成荣耀镖局了，后面再接入
+        # # ------------ 赛利亚打工 -----------------
+        # info = self.query_xinyue_info("查询打工信息", print_res=False)
+        # # 可能的状态如下
+        # # 工作状态 描述 结束时间 领取结束时间 可进行操作
+        # #    -2   待机    0                  可打工（若本周总次数未用完），之后状态变为2
+        # #    2    打工中  a         b        在结束时间a之前，不能进行任何操作，a之后状态变为1
+        # #    1    领工资  a         b        在结束时间b之前，可以领取奖励。领取后状态变为-2
+        # if info.work_status == -2:
+        #     self.xinyue_battle_ground_op("打工仔去打工", "748050")
+        # elif info.work_status == 2:
+        #     logger.info(color("bold_green") + f"赛利亚正在打工中~ 结束时间为{datetime.datetime.fromtimestamp(info.work_end_time)}")
+        # elif info.work_status == 1:
+        #     self.xinyue_battle_ground_op("搬砖人领工资", "748077")
+        #     self.xinyue_battle_ground_op("打工仔去打工", "748050")
+        #
+        # # 然后尝试抽奖
+        # info = self.query_xinyue_info("查询抽奖次数", print_res=False)
+        # logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
+        # for idx in range(info.ticket):
+        #     self.xinyue_battle_ground_op(f"第{idx + 1}次抽奖券抽奖", "749081")
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")
@@ -1492,18 +1508,18 @@ class DjcHelper:
             color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前是 {new_info.xytype_str} , 最新勇士币数目为 {new_info.ysb}"
         )
 
-        # 查询下心悦组队进度
-        teaminfo = self.query_xinyue_teaminfo()
-        if teaminfo.id != "":
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {teaminfo.award_summary}")
-        else:
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
+        # fixme: 组队信息也等到接入荣耀镖局的时候处理
+        # # 查询下心悦组队进度
+        # teaminfo = self.query_xinyue_teaminfo()
+        # if teaminfo.id != "":
+        #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {teaminfo.award_summary}")
+        # else:
+        #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
     @try_except()
-    def do_xinyue_op(self, xytype, op):
+    def do_xinyue_battle_ground_op(self, xytype: int, op: XinYueOperationConfig):
         """
-        执行具体的心悦操作
-        :type op: XinYueOperationConfig
+        执行具体的心悦战场相关的领奖或兑换操作
         """
         retryCfg = self.common_cfg.retry
         # 设置最少等待时间
@@ -1515,9 +1531,10 @@ class DjcHelper:
             # 默认每次兑换一个
             exchange_count = 1
 
+            # fixme: 接入兑换部分的时候，确认下，下面两个兑换项是否还能批量兑换
             batch_exchange_list = [
-                ("821281", [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
-                ("912508", [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
+                # ("821281", [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
+                # ("912508", [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
             ]
             for batch_flowid, batch_count_list in batch_exchange_list:
                 if op.iFlowId == batch_flowid:
@@ -1534,18 +1551,24 @@ class DjcHelper:
             ctx = f"6.2 心悦操作： {op.sFlowName}({progress}/{op.count}) 本次兑换 {exchange_count}个"
 
             for _try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_op(
-                    ctx, op.iFlowId, package_id=op.package_id, lqlevel=xytype, dhnums=exchange_count
+                res = self.xinyue_battle_ground_wpe_op(
+                    ctx, op.iFlowId,
+                    # fixme: 接入兑换的时候，确认下下面的参数是否还需要
+                    # package_id=op.package_id, lqlevel=xytype,
+                    # dhnums=exchange_count
                 )
                 if op.count > 1:
-                    if res["ret"] == "700" and "操作过于频繁" in res["flowRet"]["sMsg"]:
-                        logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
-                        time.sleep(retry_wait_time)
-                        continue
-
-                    if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
-                        logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
-                        return
+                    # fixme: 下面的流程暂时注释掉，等后面实际触发后，再根据实际的回复结果适配
+                    # {"ret": 0, "msg": "...", "data": "{...}", "serialId": "..."}
+                    # if res["ret"] == "700" and "操作过于频繁" in res["flowRet"]["sMsg"]:
+                    #     logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
+                    #     time.sleep(retry_wait_time)
+                    #     continue
+                    #
+                    # if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
+                    #     logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
+                    #     return
+                    pass
 
                 logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
                 time.sleep(wait_time)
@@ -1987,7 +2010,7 @@ class DjcHelper:
         json_data = {
             "biz_id": "tgclub",
             "act_id": act_id,
-            "flow_id": flow_id,
+            "flow_id": int(flow_id),
             "role": {
                 "game_open_id": self.qq(),
                 "game_app_id": "",

@@ -1417,7 +1417,9 @@ class DjcHelper:
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 
-        default_xinyue_operations = []
+        default_xinyue_operations = [
+            (131143, "尝试领取可领的返利勇士币"),
+        ]
 
         # 尝试根据心悦级别领取对应周期礼包
         if old_info.xytype < XIN_YUE_MIN_LEVEL or old_info.is_special_member:

@@ -1900,6 +1900,10 @@ class DjcHelper:
 
         # 实际逻辑
 
+        if self.cfg.function_switches.disable_login_mode_xinyue:
+            get_logger_func(print_res)(f"已禁用心悦登录模式，将使用旧版接口查询心悦信息")
+            return self._old_query_xinyue_info(ctx, print_res)
+
         # 确保请求所需参数已准备好
         self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场信息", replace_if_exists=False)
 

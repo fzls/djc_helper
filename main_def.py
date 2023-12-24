@@ -999,7 +999,7 @@ def try_join_xinyue_team(cfg, user_buy_info: BuyInfo):
         return
     _show_head_line("尝试加入心悦固定队")
 
-    logger.warning("心悦战场改版正在接入中，暂时先屏蔽")
+    logger.warning(color("fg_bold_yellow") + "心悦战场改版正在接入中，暂时先屏蔽荣耀镖局相关内容")
     return
 
     for idx, account_config in enumerate(cfg.account_configs):
@@ -1226,7 +1226,7 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
         return
     _show_head_line("尝试领取心悦组队奖励")
 
-    logger.warning("心悦战场改版正在接入中，暂时先屏蔽")
+    logger.warning(color("fg_bold_yellow") + "心悦战场改版正在接入中，暂时先屏蔽荣耀镖局相关内容")
     return
 
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励

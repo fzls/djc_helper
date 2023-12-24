@@ -2573,6 +2573,7 @@ class AccountConfigUi(QWidget):
         for item in cfg.xinyue_operations_v2:
             all_item_keys.add(item.unique_key())
 
+        # 将不存在的部分添加到配置后面
         for iFlowId, sFlowName in default_items:
             item = XinYueOperationConfig()
             item.iFlowId = iFlowId

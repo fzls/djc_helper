@@ -2578,9 +2578,15 @@ class AccountConfigUi(QWidget):
             item.sFlowName = sFlowName
             item.count = 0
 
-            if item.unique_key() in all_item_keys:
+            key = item.unique_key()
+            if key in all_item_keys:
+                # 如果配置文件中的对应条目的名字与这里不一样，则改为这里的，这样偶尔填错了名字，也可以在后续通过代码内修正为正确的名字
+                item_cfg_from_config_file = cfg.get_xinyue_exchange_item_by_unique_key(key)
+                if item_cfg_from_config_file.sFlowName != item.sFlowName:
+                    item_cfg_from_config_file.sFlowName = item.sFlowName
+
                 continue
-            all_item_keys.add(item.unique_key())
+            all_item_keys.add(key)
 
             cfg.xinyue_operations_v2.append(item)
 

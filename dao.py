@@ -316,6 +316,7 @@ class XinYueInfo(DaoObject):
 
         return False
 
+
 class XinYueItemInfo(DaoObject):
     def __init__(
         self,

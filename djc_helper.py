@@ -1553,9 +1553,7 @@ class DjcHelper:
             ctx = f"6.2 心悦操作： {op.sFlowName}({progress}/{op.count}) 本次兑换 {exchange_count}个"
 
             for _try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_wpe_op(
-                    ctx, op.iFlowId,
-                )
+                res = self.xinyue_battle_ground_wpe_op(ctx, op.iFlowId)
                 if op.count > 1:
                     # fixme: 下面的流程暂时注释掉，等后面实际触发后，再根据实际的回复结果适配
                     # {"ret": 0, "msg": "...", "data": "{...}", "serialId": "..."}
@@ -1996,7 +1994,9 @@ class DjcHelper:
             **extra_params,
         )
 
-    def xinyue_battle_ground_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params):
+    def xinyue_battle_ground_wpe_op(
+        self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params
+    ):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         # note: 心悦这个先不等待看看，确认下是否是例外
         # time.sleep(3)
@@ -2026,13 +2026,15 @@ class DjcHelper:
                 {
                     "num": 1,
                     "ceiba_plat_id": "ios",
-                    "user_attach": json.dumps({
-                        "nickName": quote(roleinfo.roleName),
-                        ## fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
-                        ##   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
-                        ##   https://bgw.xinyue.qq.com/website/website/user/info
-                        # "avatar": "http://thirdqq.qlogo.cn/ek_qqapp/.../40",
-                    }),
+                    "user_attach": json.dumps(
+                        {
+                            "nickName": quote(roleinfo.roleName),
+                            ## fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
+                            ##   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
+                            ##   https://bgw.xinyue.qq.com/website/website/user/info
+                            # "avatar": "http://thirdqq.qlogo.cn/ek_qqapp/.../40",
+                        }
+                    ),
                     "cExtData": {},
                     **extra_data,
                 }
@@ -7871,7 +7873,7 @@ class DjcHelper:
 
         # self.majieluo_op("领取邀请好友礼包", "248359", inviteNum=1)
 
-        for day in [1,3,5,7]:
+        for day in [1, 3, 5, 7]:
             self.majieluo_op(f"流失用户领取登录游戏礼包-{day}", "248360", loginDays=day)
             time.sleep(5)
 
@@ -10802,7 +10804,6 @@ class DjcHelper:
             self.dnf_save_sailiyam_op("游戏分支2-领奖", "250393")
             self.dnf_save_sailiyam_op("刷新数据", "252655")
             time.sleep(3)
-
 
         game_1()
         game_2()

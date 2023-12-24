@@ -1406,8 +1406,7 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取 心悦战场wpe 所需的access_token")
-        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+        self.prepare_wpe_act_openid_accesstoken("心悦战场wpe")
 
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
@@ -4778,8 +4777,7 @@ class DjcHelper:
             logger.warning("未启用领取dnf助手活动wpe功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取 dnf助手活动wpe 所需的access_token")
-        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+        self.prepare_wpe_act_openid_accesstoken("dnf助手活动wpe")
 
         self.dnf_helper_wpe_op("见面礼", 143111)
 
@@ -10143,8 +10141,7 @@ class DjcHelper:
 
         # self.check_maoxian_dup()
 
-        lr = self.fetch_xinyue_login_info("获取 勇士的冒险补给wpe 所需的access_token")
-        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+        self.prepare_wpe_act_openid_accesstoken("勇士的冒险补给wpe")
 
         self.maoxian_wpe_op("幸运礼包", 118439)
 
@@ -11842,8 +11839,7 @@ class DjcHelper:
             logger.warning("未启用领取DNF心悦wpe功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取 DNF心悦wpe 所需的access_token")
-        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+        self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         self.dnf_xinyue_wpe_op("报名", 129649, extra_data={"equipmentCamp": "恩特"})
         self.dnf_xinyue_wpe_op("立即领取报名礼", 129665)
@@ -11874,7 +11870,13 @@ class DjcHelper:
             if "抽奖次数不足" in res["msg"]:
                 break
 
+    def prepare_wpe_act_openid_accesstoken(self, ctx: str):
+        """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
+        lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token")
+        self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
+
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
+        """wpe类型的活动请求时需要这串额外的headers"""
         self.dnf_xinyue_wpe_extra_headers = {
             "t-account-type": "qc",
             "t-mode": "true",

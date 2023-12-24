@@ -1892,6 +1892,11 @@ class DjcHelper:
 
             return int(raw_info["remain"])
 
+        # 实际逻辑
+
+        # 确保请求所需参数已准备好
+        self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场信息", replace_if_exists=False)
+
         info = XinYueInfo()
 
         xytype = _query_xytype()
@@ -11870,8 +11875,12 @@ class DjcHelper:
             if "抽奖次数不足" in res["msg"]:
                 break
 
-    def prepare_wpe_act_openid_accesstoken(self, ctx: str):
+    def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
+        if not replace_if_exists and hasattr(self, "dnf_xinyue_wpe_extra_headers"):
+            logger.info(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
+            return
+
         lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 

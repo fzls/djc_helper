@@ -2348,7 +2348,7 @@ class AccountConfigUi(QWidget):
 
             exchange_item.update_config(item_cfg)
 
-        self.try_set_default_xinyue_exchange_items_for_cfg(cfg)
+        self.try_set_default_xinyue_exchange_items_for_cfg(cfg, remove_fake_id_items=True)
         for unique_key, xinyue_exchange_item in self.xinyue_exchange_items.items():
             xinyue_item_cfg = cfg.get_xinyue_exchange_item_by_unique_key(unique_key)
             if xinyue_item_cfg is None:
@@ -2470,10 +2470,27 @@ class AccountConfigUi(QWidget):
                 item.sBizCode = sBizCode
                 cfg.exchange_items.append(item)
 
-    def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig):
+    def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig, remove_fake_id_items: bool = False):
+        _minus_id = 0
+        def gen_fake_default_item_with_decrease_minus_id(item_name: str) -> tuple[int, str]:
+            nonlocal _minus_id
+            _minus_id = _minus_id - 1
+
+            marker = "-"* 5
+
+            return (_minus_id, f"{marker} {item_name} {marker}")
+
+        def is_fake_id_for_display(xyop_cfg: XinYueOperationConfig) -> bool:
+            """
+            为了配置工具更加美观，在配置工具展示时，会添加一些id为负数，名称为接下来条目的类别的条目
+            在启动初始化时，会添加这些虚假配置，并参数排序，从而看起来比较直观
+            在保存前，会从配置中移除，而界面部分会继续显示，从而不影响实际操作
+            """
+            return xyop_cfg.iFlowId < 0
+
         # 特殊处理下心悦兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来，方便用户进行配置
         default_items = [
-            # 一些优先展示的道具
+            gen_fake_default_item_with_decrease_minus_id("以上为已配置兑换的道具，优先展示"),
             (131708, "抗疲劳秘药30*1-（日限3）-成就点：30"),
             (130822, "抗疲劳秘药5-（每日3次）-10勇士币"),
             (130823, "抗疲劳秘药10-（每日3次）-20勇士币"),
@@ -2489,7 +2506,7 @@ class AccountConfigUi(QWidget):
             #
             # 其他的可兑换条目，则按照对应页面的处理流程来操作
             # hack: 下面不需要过滤掉上面优先展示的条目，因为后续添加配置的代码中，会确保按顺序处理，且不重复添加
-            # 普通兑换
+            gen_fake_default_item_with_decrease_minus_id("普通兑换"),
             (130788, "复活币礼盒（1个）-（每日100次）-1勇士币"),
             (130819, "一次性材质转化器-（每日1次）-28勇士币"),
             (130820, "神秘契约礼包-（每日20次）-10勇士币"),
@@ -2504,7 +2521,7 @@ class AccountConfigUi(QWidget):
             (130831, "升级券（50-109）-（每月1次）-100勇士币"),
             (130832, "金库升级工具-（限200次）-400勇士币"),
             #
-            # 心悦兑换
+            gen_fake_default_item_with_decrease_minus_id("心悦兑换"),
             (130833, "骑士贞德*1-600勇士币"),
             (130956, "巫女桔梗*1-600勇士币"),
             (130957, "女仆十六夜*1-600勇士币"),
@@ -2518,8 +2535,8 @@ class AccountConfigUi(QWidget):
             (131045, "沙滩排球*1-600勇士币"),
             (131046, "小柳树*1-600勇士币"),
             #
-            # 成就点兑换
-            # #镖局宝库
+            gen_fake_default_item_with_decrease_minus_id("成就点兑换"),
+            gen_fake_default_item_with_decrease_minus_id(" 镖局宝库"),
             (131671, "复活币礼盒*3-（日限10）-成就点：8"),
             (131695, "神器符文自选礼盒-（日限20）-成就点：8"),
             (131696, "一次性材质转化器-（日限1）-成就点：10"),
@@ -2528,7 +2545,7 @@ class AccountConfigUi(QWidget):
             (131699, "华丽的徽章神秘礼盒-（日限20）-成就点：20"),
             (131708, "抗疲劳秘药30*1-（日限3）-成就点：30"),
             (131709, "升级券（50-109）-（月限1）-成就点：50"),
-            # #专属光环
+            gen_fake_default_item_with_decrease_minus_id(" 专属光环"),
             (132380, "腾龙光环（心悦1）-330成就点"),
             (133120, "腾龙光环（心悦2-3）-330成就点"),
             (133123, "腾龙光环（心悦4-5）-330成就点"),
@@ -2541,7 +2558,7 @@ class AccountConfigUi(QWidget):
             (133135, "星愿天蝎（心悦1）-330成就点"),
             (133137, "星愿天蝎（心悦2-3）-330成就点"),
             (133138, "星愿天蝎（心悦4-5）-330成就点"),
-            # #专属宠物
+            gen_fake_default_item_with_decrease_minus_id(" 专属宠物"),
             (133139, "天小蝎（心悦1）-260成就点"),
             (133141, "天小蝎（心悦2-3）-260成就点"),
             (133142, "天小蝎（心悦4-5）-260成就点"),
@@ -2563,7 +2580,7 @@ class AccountConfigUi(QWidget):
             (133160, "水小瓶（心悦1）-260成就点"),
             (133161, "水小瓶（心悦2-3）-260成就点"),
             (133162, "水小瓶（心悦4-5）-260成就点"),
-            # #专属称号
+            gen_fake_default_item_with_decrease_minus_id(" 专属称号"),
             (133163, "最强战王（心悦1）-260成就点"),
             (133164, "最强战皇（心悦2-3）-260成就点"),
             (133165, "最强战神（心悦4-5）-260成就点"),
@@ -2592,6 +2609,10 @@ class AccountConfigUi(QWidget):
             all_item_keys.add(key)
 
             cfg.xinyue_operations_v2.append(item)
+
+        if remove_fake_id_items:
+            # 移除仅用于展示的虚假条目（如实际保存的时候）
+            cfg.xinyue_operations_v2 = [item for item in cfg.xinyue_operations_v2 if not is_fake_id_for_display(item)]
 
         self.sort_xinyue_exchange_items(cfg, default_items)
 

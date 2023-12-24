@@ -1345,7 +1345,7 @@ class DjcHelper:
     def get_mobile_game_gifts(self):
         game_info = self.get_mobile_game_info()
         data = self.get(
-            f"查询{game_info}礼包信息",
+            f"查询 {game_info.bizName} 礼包信息",
             self.urls.query_game_gift_bags,
             bizcode=game_info.bizCode,
             print_res=False,
@@ -1355,7 +1355,7 @@ class DjcHelper:
         if int(data["ret"]) != 0:
             # fixme: 后面有空处理下下面这个情况
             #   {'msg': '对不起，手Q互联登录态校验失败！', 'ret': '-9908'}
-            logger.warning(f"查询{game_info}礼包信息失败，res={data}")
+            logger.warning(f"查询 {game_info.bizName} 礼包信息失败，res=\n{data}")
             return []
 
         sign_in_gifts = []

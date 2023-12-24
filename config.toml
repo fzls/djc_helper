@@ -619,7 +619,7 @@ get_guanjia = true
 #
 #[[account_configs.xinyue_operations_v2]]
 #iFlowId = 131696
-#sFlowName = "神器符文自选礼盒-（日限20）-成就点：8"
+#sFlowName = "一次性材质转化器-（日限1）-成就点：10"
 #count = 1
 #
 #[[account_configs.xinyue_operations_v2]]

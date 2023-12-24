@@ -426,256 +426,410 @@ get_dnf_club_vip = true
 get_guanjia = true
 
 # 心悦相关操作信息
-# note: 周期礼包目前在代码中根据心悦级别和白名单信息来自动判定该领取哪一类，无需手动操作，若发现有问题，也可以手动取消注释下列内容来手动启用对应礼包
+## ++++++++++返利++++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131143
+#sFlowName = "尝试领取可领的返利勇士币"
+#count = 1
+#
+## note: 周期礼包目前在代码中根据心悦级别和白名单信息来自动判定该领取哪一类，无需手动操作，若发现有问题，也可以手动取消注释下列内容来手动启用对应礼包
 ## ++++++++++周期礼包++++++++++++
-#[[account_configs.xinyue_operations]]
-## 尝试领取每周礼包（特邀会员）
-#iFlowId = "747507"
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130718
 #sFlowName = "周礼包_特邀会员"
 #count = 1
 #
-#[[account_configs.xinyue_operations]]
-## 尝试领取每月礼包（特邀会员）
-#iFlowId = "747539"
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130745
 #sFlowName = "月礼包_特邀会员"
 #count = 1
 #
-#[[account_configs.xinyue_operations]]
-## 尝试领取每周礼包（心悦会员）
-#iFlowId = "747534"
-#sFlowName = "周礼包_心悦会员"
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130742
+#sFlowName = "周礼包_心悦会员1"
 #count = 1
 #
-#[[account_configs.xinyue_operations]]
-## 尝试领取每月礼包（心悦会员）
-#iFlowId = "747541"
-#sFlowName = "月礼包_心悦会员"
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130746
+#sFlowName = "月礼包_心悦会员1"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130743
+#sFlowName = "周礼包_心悦会员2-3"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130785
+#sFlowName = "月礼包_心悦会员2-3"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130744
+#sFlowName = "周礼包_心悦会员4-5"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130786
+#sFlowName = "月礼包_心悦会员4-5"
+#count = 1
+#
+## 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换
+#
+## ++++++++++普通兑换++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130788
+#sFlowName = "复活币礼盒（1个）-（每日100次）-1勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130819
+#sFlowName = "一次性材质转化器-（每日1次）-28勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130820
+#sFlowName = "神秘契约礼包-（每日20次）-10勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130821
+#sFlowName = "装备提升礼盒-（每日20次）-30勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130822
+#sFlowName = "抗疲劳秘药5-（每日3次）-10勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130823
+#sFlowName = "抗疲劳秘药10-（每日3次）-20勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130824
+#sFlowName = "抗疲劳秘药20*1-（每日3次）-40勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130825
+#sFlowName = "抗疲劳秘药30*1-（每日3次）-60勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130826
+#sFlowName = "物品栏扩展券-（限制200次）-150勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130827
+#sFlowName = "高级装扮兑换券-（每月1次）-400勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130829
+#sFlowName = "华丽的徽章自选礼盒-（每周3次）-150勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130831
+#sFlowName = "升级券（50-109）-（每月1次）-100勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130832
+#sFlowName = "金库升级工具-（限200次）-400勇士币"
+#count = 1
+#
+#
+## ++++++++++心悦兑换++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130833
+#sFlowName = "骑士贞德*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130956
+#sFlowName = "巫女桔梗*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130957
+#sFlowName = "女仆十六夜*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130958
+#sFlowName = "忍者千代火舞*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130959
+#sFlowName = "帅帅小木偶*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130960
+#sFlowName = "美美小木偶*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 130961
+#sFlowName = "咕咕鸡*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131042
+#sFlowName = "铜色皮特兰猪*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131043
+#sFlowName = "霓裳仙子*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131044
+#sFlowName = "枯灵*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131045
+#sFlowName = "沙滩排球*1-600勇士币"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131046
+#sFlowName = "小柳树*1-600勇士币"
+#count = 1
+#
+#
+## ++++++++++成就点兑换++++++++++
+### ++++++++++镖局宝库++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131671
+#sFlowName = "复活币礼盒*3-（日限10）-成就点：8"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131695
+#sFlowName = "神器符文自选礼盒-（日限20）-成就点：8"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131696
+#sFlowName = "神器符文自选礼盒-（日限20）-成就点：8"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131697
+#sFlowName = "神秘契约礼包（1天）-（日限20）-成就点：20"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131698
+#sFlowName = "装备提升礼盒-（日限20）-成就点：10"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131699
+#sFlowName = "华丽的徽章神秘礼盒-（日限20）-成就点：20"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131708
+#sFlowName = "抗疲劳秘药30*1-（日限3）-成就点：30"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 131709
+#sFlowName = "升级券（50-109）-（月限1）-成就点：50"
+#count = 1
+#
+### ++++++++++专属光环++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 132380
+#sFlowName = "腾龙光环（心悦1）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133120
+#sFlowName = "腾龙光环（心悦2-3）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133123
+#sFlowName = "腾龙光环（心悦4-5）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133124
+#sFlowName = "星空射手光环（心悦1）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133125
+#sFlowName = "星空射手光环（心悦2-3）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133127
+#sFlowName = "星空射手光环（心悦4-5）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133128
+#sFlowName = "星恋双鱼（心悦1）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133131
+#sFlowName = "星恋双鱼（心悦2-3）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133133
+#sFlowName = "星恋双鱼（心悦4-5）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133135
+#sFlowName = "星愿天蝎（心悦1）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133137
+#sFlowName = "星愿天蝎（心悦2-3）-330成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133138
+#sFlowName = "星愿天蝎（心悦4-5）-330成就点"
+#count = 1
+#
+### ++++++++++专属宠物++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133139
+#sFlowName = "天小蝎（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133141
+#sFlowName = "天小蝎（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133142
+#sFlowName = "天小蝎（心悦4-5）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133143
+#sFlowName = "羊小咩（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133144
+#sFlowName = "羊小咩（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133147
+#sFlowName = "羊小咩（心悦4-5）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133148
+#sFlowName = "牛小哞（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133149
+#sFlowName = "牛小哞（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133150
+#sFlowName = "牛小哞（心悦4-5）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133151
+#sFlowName = "弓小弦（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133152
+#sFlowName = "弓小弦（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133153
+#sFlowName = "弓小弦（心悦4-5）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133154
+#sFlowName = "甜小鱼（心悦1）-360成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133155
+#sFlowName = "甜小鱼（心悦2-3）-360成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133156
+#sFlowName = "甜小鱼（心悦4-5）-360成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133157
+#sFlowName = "星小双（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133158
+#sFlowName = "星小双（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133159
+#sFlowName = "星小双（心悦4-5）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133160
+#sFlowName = "水小瓶（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133161
+#sFlowName = "水小瓶（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133162
+#sFlowName = "水小瓶（心悦4-5）-260成就点"
+#count = 1
+#
+### ++++++++++专属称号++++++++++
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133163
+#sFlowName = "最强战王（心悦1）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133164
+#sFlowName = "最强战皇（心悦2-3）-260成就点"
+#count = 1
+#
+#[[account_configs.xinyue_operations_v2]]
+#iFlowId = 133165
+#sFlowName = "最强战神（心悦4-5）-260成就点"
 #count = 1
 
-# 下面是可供兑换的道具，默认不开启，可根据需要自行取消注释来启用自动兑换
-## --------------- 荣耀战场-勇者宝库（成就点兑换） --------------------
-## ++++++++++特邀会员++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747596"
-#sFlowName = "特邀会员兑换心悦称号（最强战王称号）(需260成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747562"
-#sFlowName = "特邀会员兑换腾龙光环(需330成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747588"
-#sFlowName = "特邀会员兑换星空射手光环(需330成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747599"
-#sFlowName = "特邀会员兑换星恋双鱼光环(需330成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747592"
-#sFlowName = "特邀会员兑换心悦宠物_牛小哞(需260成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747593"
-#sFlowName = "特邀会员兑换心悦宠物_羊小咩(需260成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747597"
-#sFlowName = "特邀会员兑换心悦宠物_弓小弦(需260成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747598"
-#sFlowName = "特邀会员兑换心悦宠物_甜小鱼(需280成就点)"
-#count = 1
-#
-#
-## ++++++++++心悦会员++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747657"
-#sFlowName = "心悦会员兑换心悦称号（1-最强战王/2-最强战皇/3-最强战神）(需220成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747644"
-#sFlowName = "心悦会员兑换腾龙光环(需280成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747652"
-#sFlowName = "心悦会员兑换星空射手光环(需280成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747665"
-#sFlowName = "心悦会员兑换星恋双鱼光环(需280成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747653"
-#sFlowName = "心悦会员兑换心悦宠物_牛小哞(需220成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747654"
-#sFlowName = "心悦会员兑换心悦宠物_羊小咩(需220成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747659"
-#sFlowName = "心悦会员兑换心悦宠物_弓小弦(需220成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747664"
-#sFlowName = "心悦会员兑换心悦宠物_甜小鱼(需220成就点)"
-#count = 1
-#
-## ++++++++++宝库兑换++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747672"
-#sFlowName = "复活币礼袋(日限10)(需8成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747681"
-#sFlowName = "[活动]时间引导石礼盒 (10个)(日限5)(需10成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747684"
-#sFlowName = "抗疲劳秘药30点（95lv以上，1天1次）(日限3)(需30成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747690"
-#sFlowName = "升级券（50-99）(月限1)(需50成就点)"
-#count = 1
-#
-## ++++++++++礼包兑换++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747693"
-#package_id = "1537762"
-#sFlowName = "符文原石随机礼盒（高级~稀有）(需8点成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747693"
-#package_id = "1537764"
-#sFlowName = "超级远古精灵秘药(需10点成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747693"
-#package_id = "1537765"
-#sFlowName = "神秘契约礼袋(需20点成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747693"
-#package_id = "1537766"
-#sFlowName = "装备提升礼盒(需10点成就点)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747693"
-#package_id = "1537767"
-#sFlowName = "华丽徽章随机礼盒(需20点成就点)"
-#count = 1
-#
-#
-## --------------- 充值权益（勇士币兑换） --------------------
-## ++++++++++普通兑换专场（特邀会员以及心悦会员可兑换）++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "821281"
-#sFlowName = "新版复活币*1(日限100)(需1点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747738"
-#sFlowName = "[活动]时间引导石礼盒 (10个)(日限10)(需28点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747759"
-#package_id = "1537689"
-#sFlowName = "神秘契约礼袋（适用1日）(需10点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747759"
-#package_id = "1537690"
-#sFlowName = "装备提升礼盒(需30点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "912508"
-#package_id = ""
-#sFlowName = "新版装备提升礼盒(需30点勇士币)(每日20次)（可批量兑换）"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747741"
-#package_id = "1537692"
-#sFlowName = "抗疲劳秘药（95lv以上,5点,1天1次）(日限3)(需10点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747741"
-#package_id = "1537693"
-#sFlowName = "抗疲劳秘药（95lv以上,<br>10点,1天1次）(日限3)(需20点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747741"
-#package_id = "1537694"
-#sFlowName = "抗疲劳秘药（95lv以上,<br>20点,1天1次）(日限3)(需40点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747741"
-#package_id = "1537695"
-#sFlowName = "抗疲劳秘药（95lv以上,<br>30点,1天1次）(日限3)(需60点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747759"
-#package_id = "1537696"
-#sFlowName = "超级远古精灵秘药（持续30分钟）(需25点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "749075"
-#sFlowName = "高级装扮兑换券(需400点勇士币)（每月1次）"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "749076"
-#sFlowName = "华丽的徽章自选礼盒(需150点勇士币)（每周3次）"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "747758"
-#sFlowName = "升级券（50-99）(需100点勇士币)（每月1次）"
-#count = 1
-#
-#
-## ++++++++++心悦兑换专场（心悦会员可兑换）++++++++++++
-#[[account_configs.xinyue_operations]]
-#iFlowId = "749162"
-#sFlowName = "霓裳仙子(需600点勇士币)"
-#count = 1
-#
-#[[account_configs.xinyue_operations]]
-#iFlowId = "749175"
-#sFlowName = "塑身教练先生(需600点勇士币)"
-#count = 1
 
 # 抽卡相关配置
 [account_configs.ark_lottery]

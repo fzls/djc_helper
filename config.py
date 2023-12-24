@@ -128,12 +128,11 @@ class FirecrackersExchangeItemConfig(ConfigInterface):
 class XinYueOperationConfig(ConfigInterface):
     def __init__(self):
         self.iFlowId = 512411
-        self.package_id = ""  # 仅礼包兑换需要这个参数，如兑换【勇者宝库】的【装备提升礼盒】的package_id为702218
         self.sFlowName = "输出我的任务积分"
         self.count = 1
 
     def unique_key(self) -> str:
-        return f"{self.iFlowId}_{self.package_id}"
+        return f"{self.iFlowId}"
 
 
 class XinYueAppOperationConfig(ConfigInterface):
@@ -946,7 +945,7 @@ class AccountConfig(ConfigInterface):
         # 兑换道具信息
         self.exchange_items: list[ExchangeItemConfig] = []
         # 心悦相关操作信息
-        self.xinyue_operations: list[XinYueOperationConfig] = []
+        self.xinyue_operations_v2: list[XinYueOperationConfig] = []
         # 心悦app相关操作
         self.xinyue_app_operations: list[XinYueAppOperationConfig] = []
         # 抽卡相关配置
@@ -965,7 +964,7 @@ class AccountConfig(ConfigInterface):
     def fields_to_fill(self):
         return [
             ("exchange_items", ExchangeItemConfig),
-            ("xinyue_operations", XinYueOperationConfig),
+            ("xinyue_operations_v2", XinYueOperationConfig),
             ("xinyue_app_operations", XinYueAppOperationConfig),
             ("wegame_guoqing_exchange_items", WegameGuoqingExchangeItemConfig),
         ]
@@ -1025,51 +1024,6 @@ class AccountConfig(ConfigInterface):
                     "禁用活动开关已开启提示",
                 )
 
-        # 移除改版前的心悦战场的周期礼包和日常任务，避免继续执行，浪费时间
-        deprecated_xinyue_operations: dict[tuple[str, str], str] = {
-            ("513581", ""): "Y600周礼包_特邀会员",
-            ("673270", ""): "月礼包_特邀会员_20200610后使用",
-            ("513573", ""): "Y600周礼包",
-            ("673269", ""): "月礼包_20200610后使用",
-            ("673262", ""): "周礼包_白名单用户",
-            ("673264", ""): "月礼包_白名单用户",
-            ("513585", ""): "累计宝箱",
-            ("512408", ""): "每月赠送双倍积分卡（仅心悦会员）",
-            ("512432", ""): "充值DNF3000点券_双倍（成就点=6）",
-            ("512435", ""): "游戏内消耗疲劳值120_双倍（成就点=6）",
-            ("512437", ""): "游戏内在线时长40_双倍（成就点=6）",
-            ("512441", ""): "游戏内PK3次_双倍（成就点=6）",
-            ("512396", ""): "充值DNF3000点券（成就点=3）",
-            ("512398", ""): "游戏内在线时长40（成就点=3）",
-            ("512400", ""): "游戏内消耗疲劳值120（成就点=3）",
-            ("512402", ""): "游戏内PK3次（成就点=3）",
-            ("512490", ""): "领取每周免做卡",
-            ("512415", ""): "充值DNF3000点券_免做（成就点=3）",
-            ("512418", ""): "游戏内消耗疲劳值120_免做（成就点=3）",
-            ("512421", ""): "游戏内在线时长40_免做（成就点=3）",
-            ("512424", ""): "游戏内PK3次_免做（成就点=3）",
-            ("512395", ""): "充值DNF2000点券（成就点=2）",
-            ("512397", ""): "游戏内在线时长30（成就点=2）",
-            ("512399", ""): "游戏内消耗疲劳值50（成就点=2）",
-            ("512401", ""): "游戏内PK2次（成就点=2）",
-            ("512393", ""): "邮箱无未读邮件（成就点=2）",
-            ("578321", ""): "精英赛投票（成就点=未知）",
-            ("512388", ""): "充值DNF1000点券（成就点=1）",
-            ("512389", ""): "游戏内在线时长15（成就点=1）",
-            ("512390", ""): "游戏内消耗疲劳值10（成就点=1）",
-            ("512391", ""): "游戏内PK1次（成就点=1）",
-        }
-
-        xinyue_operations: list[XinYueOperationConfig] = []
-        for op in self.xinyue_operations:
-            if (op.iFlowId, op.package_id) in deprecated_xinyue_operations:
-                # 已废弃
-                continue
-
-            xinyue_operations.append(op)
-
-        self.xinyue_operations = xinyue_operations
-
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():
             async_message_box(
@@ -1119,7 +1073,7 @@ class AccountConfig(ConfigInterface):
         return None
 
     def get_xinyue_exchange_item_by_unique_key(self, unique_key: str) -> XinYueOperationConfig | None:
-        for exchange_item in self.xinyue_operations:
+        for exchange_item in self.xinyue_operations_v2:
             if exchange_item.unique_key() == unique_key:
                 return exchange_item
 

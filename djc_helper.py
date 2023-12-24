@@ -1397,7 +1397,7 @@ class DjcHelper:
     def xinyue_battle_ground(self):
         """
         根据配置进行心悦相关操作
-        具体活动信息可以查阅config.example.toml中xinyue_operations
+        具体活动信息可以查阅 config.example.toml 中 xinyue_operations_v2
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
         self.show_amesvr_act_info(self.xinyue_battle_ground_op)
@@ -1469,7 +1469,7 @@ class DjcHelper:
             try_add_op(op)
 
         # 与配置文件中配置的去重后叠加
-        for op in self.cfg.xinyue_operations:
+        for op in self.cfg.xinyue_operations_v2:
             try_add_op(op)
 
         # 进行相应的心悦操作

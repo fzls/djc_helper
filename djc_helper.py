@@ -1468,14 +1468,13 @@ class DjcHelper:
             op.count = 1
             try_add_op(op)
 
-        # fixme: 接入兑换功能时，再取消注释下面这行
-        # # 与配置文件中配置的去重后叠加
-        # for op in self.cfg.xinyue_operations:
-        #     try_add_op(op)
+        # 与配置文件中配置的去重后叠加
+        for op in self.cfg.xinyue_operations:
+            try_add_op(op)
 
         # 进行相应的心悦操作
         for op in xinyue_operations:
-            self.do_xinyue_battle_ground_op(old_info.xytype, op)
+            self.do_xinyue_battle_ground_op(op)
 
         # fixme: 赛利亚打工变成荣耀镖局了，后面再接入
         # # ------------ 赛利亚打工 -----------------
@@ -1519,7 +1518,7 @@ class DjcHelper:
         #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
     @try_except()
-    def do_xinyue_battle_ground_op(self, xytype: int, op: XinYueOperationConfig):
+    def do_xinyue_battle_ground_op(self, op: XinYueOperationConfig):
         """
         执行具体的心悦战场相关的领奖或兑换操作
         """
@@ -1533,7 +1532,7 @@ class DjcHelper:
             # 默认每次兑换一个
             exchange_count = 1
 
-            # fixme: 接入兑换部分的时候，确认下，下面两个兑换项是否还能批量兑换
+            # note: 这次新版心悦活动这俩没有批量兑换的功能，了，先注释掉这部分，后续加回来的话再适配
             batch_exchange_list = [
                 # ("821281", [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
                 # ("912508", [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
@@ -1555,9 +1554,6 @@ class DjcHelper:
             for _try_index in range(retryCfg.max_retry_count):
                 res = self.xinyue_battle_ground_wpe_op(
                     ctx, op.iFlowId,
-                    # fixme: 接入兑换的时候，确认下下面的参数是否还需要
-                    # package_id=op.package_id, lqlevel=xytype,
-                    # dhnums=exchange_count
                 )
                 if op.count > 1:
                     # fixme: 下面的流程暂时注释掉，等后面实际触发后，再根据实际的回复结果适配
@@ -2028,7 +2024,13 @@ class DjcHelper:
                 {
                     "num": 1,
                     "ceiba_plat_id": "ios",
-                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "user_attach": json.dumps({
+                        "nickName": quote(roleinfo.roleName),
+                        ## fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
+                        ##   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
+                        ##   https://bgw.xinyue.qq.com/website/website/user/info
+                        # "avatar": "http://thirdqq.qlogo.cn/ek_qqapp/.../40",
+                    }),
                     "cExtData": {},
                     **extra_data,
                 }

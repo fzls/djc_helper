@@ -1902,7 +1902,7 @@ class DjcHelper:
         # 实际逻辑
 
         if self.cfg.function_switches.disable_login_mode_xinyue:
-            get_logger_func(print_res)(f"已禁用心悦登录模式，将使用旧版接口查询心悦信息")
+            get_logger_func(print_res)("已禁用心悦登录模式，将使用旧版接口查询心悦信息")
             return self._old_query_xinyue_info(ctx, print_res)
 
         # 确保请求所需参数已准备好
@@ -12872,7 +12872,11 @@ class DjcHelper:
             return LoginResult()
 
         return self.fetch_login_result(
-            ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid, print_warning=print_res,
+            ctx,
+            QQLogin.login_mode_xinyue,
+            cache_max_seconds=-1,
+            cache_validate_func=self.is_xinyue_login_info_valid,
+            print_warning=print_res,
         )
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:

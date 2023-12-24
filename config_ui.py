@@ -2470,10 +2470,6 @@ class AccountConfigUi(QWidget):
                 cfg.exchange_items.append(item)
 
     def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig):
-        all_item_keys = set()
-        for item in cfg.xinyue_operations_v2:
-            all_item_keys.add(item.unique_key())
-
         # 特殊处理下心悦兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来，方便用户进行配置
         default_items = [
             # 一些优先展示的道具
@@ -2571,6 +2567,11 @@ class AccountConfigUi(QWidget):
             (133164, "最强战皇（心悦2-3）-260成就点"),
             (133165, "最强战神（心悦4-5）-260成就点"),
         ]
+
+        # 记录下已有的配置的信息，方便去重
+        all_item_keys = set()
+        for item in cfg.xinyue_operations_v2:
+            all_item_keys.add(item.unique_key())
 
         for iFlowId, sFlowName in default_items:
             item = XinYueOperationConfig()

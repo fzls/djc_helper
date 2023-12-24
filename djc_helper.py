@@ -1905,7 +1905,7 @@ class DjcHelper:
             return self._old_query_xinyue_info(ctx, print_res)
 
         # 确保请求所需参数已准备好
-        self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场信息", replace_if_exists=False)
+        self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场信息", replace_if_exists=False, print_res=print_res)
 
         info = XinYueInfo()
 
@@ -11885,13 +11885,13 @@ class DjcHelper:
             if "抽奖次数不足" in res["msg"]:
                 break
 
-    def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True):
+    def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
         if not replace_if_exists and hasattr(self, "dnf_xinyue_wpe_extra_headers"):
-            logger.info(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
+            get_logger_func(print_res, logger.info)(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
             return
 
-        lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token")
+        lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
@@ -12865,13 +12865,13 @@ class DjcHelper:
 
         return lr
 
-    def fetch_xinyue_login_info(self, ctx) -> LoginResult:
+    def fetch_xinyue_login_info(self, ctx: str, print_res=True) -> LoginResult:
         if self.cfg.function_switches.disable_login_mode_xinyue:
-            logger.warning(f"禁用了心悦登录模式，将不会尝试更新心悦登录信息: {ctx}")
+            get_logger_func(print_res, logger.warning)(f"禁用了心悦登录模式，将不会尝试更新心悦登录信息: {ctx}")
             return LoginResult()
 
         return self.fetch_login_result(
-            ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid
+            ctx, QQLogin.login_mode_xinyue, cache_max_seconds=-1, cache_validate_func=self.is_xinyue_login_info_valid, print_warning=print_res,
         )
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:

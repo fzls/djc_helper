@@ -1352,6 +1352,12 @@ class DjcHelper:
             use_this_cookies=self.djc_custom_cookies,
         )
 
+        if int(data["ret"]) != 0:
+            # fixme: 后面有空处理下下面这个情况
+            #   {'msg': '对不起，手Q互联登录态校验失败！', 'ret': '-9908'}
+            logger.warning(f"查询{game_info}礼包信息失败，res={data}")
+            return []
+
         sign_in_gifts = []
         for raw_gift in data["data"]["list"]["data"]:
             # iCategory 0-普通礼包 1- 签到礼包 2 -等级礼包  3-登录礼包 4- 任务礼包 5-新版本福利 6-新手礼包 7-道聚城专属礼包 9-抽奖礼包 10-新版签到礼包（支持聚豆补签、严格对应周一到周日）11-好友助力礼包 12-预约中的礼包 13-上线后的礼包

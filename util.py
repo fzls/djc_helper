@@ -1356,6 +1356,7 @@ ignore_caller_names = {
     "<lambda>",
     "with_cache",
     "get_bind_role_list",
+    "prepare_wpe_act_openid_accesstoken",
 }
 
 ignore_prefixes = [

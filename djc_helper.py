@@ -1813,13 +1813,22 @@ class DjcHelper:
             return teamidInfo["remote_teamid"]
 
     @try_except(return_val_on_except=XinYueInfo())
-    def query_xinyue_info(self, ctx, print_res=True):
+    def query_xinyue_info(self, ctx, print_res=True, use_new_version=True):
+        if use_new_version:
+            return self._new_query_xinyue_info(ctx, print_res)
+        else:
+            return self._old_query_xinyue_info(ctx, print_res)
+
+    def _old_query_xinyue_info(self, ctx, print_res=True):
         res = self.xinyue_battle_ground_op(ctx, "767160", print_res=print_res)
         raw_info = parse_amesvr_common_info(res)
 
         info = XinYueInfo()
-        info.xytype = int(raw_info.sOutValue1)
-        info.xytype_str = info.level_to_name[raw_info.sOutValue1]
+
+        xytype = int(raw_info.sOutValue1)
+
+        info.xytype = xytype
+        info.xytype_str = info.level_to_name[xytype]
 
         info.is_special_member = int(raw_info.sOutValue2) == 1
         if info.is_special_member:
@@ -1833,6 +1842,54 @@ class DjcHelper:
         info.work_status = int(work_status or "0")
         info.work_end_time = int(work_end_time or "0")
         info.take_award_end_time = int(take_award_end_time or "0")
+
+        return info
+
+    def _new_query_xinyue_info(self, ctx, print_res=True):
+        def _query_xytype() -> int:
+            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询心悦会员类型", 131053, print_res=print_res)
+            raw_info = json.loads(res["data"])
+
+            return raw_info["value"]
+
+        def _query_ysb() -> int:
+            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询勇士币", 131050, print_res=print_res)
+            raw_info = json.loads(res["data"])
+
+            return int(raw_info["remain"])
+
+        def _query_score() -> int:
+            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询成就点", 131049, print_res=print_res)
+            raw_info = json.loads(res["data"])
+
+            return int(raw_info["remain"])
+
+        def _query_ticket() -> int:
+            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询成就点", 131051, print_res=print_res)
+            raw_info = json.loads(res["data"])
+
+            return int(raw_info["remain"])
+
+        info = XinYueInfo()
+
+        xytype = _query_xytype()
+
+        info.xytype = xytype
+        info.xytype_str = info.level_to_name[xytype]
+
+        info.is_special_member = xytype == info.SPECIAL_MEMBER_LEVEL
+        if info.is_special_member:
+            info.xytype_str = "特邀会员"
+
+        info.ysb, info.score, info.ticket = _query_ysb(), _query_score(), _query_ticket()
+        # info.username, info.usericon = raw_info.sOutValue4.split("|")
+        # info.username = unquote_plus(info.username)
+        # info.login_qq = raw_info.sOutValue5
+
+        # work_status, work_end_time, take_award_end_time = raw_info.sOutValue6.split("|")
+        # info.work_status = int(work_status or "0")
+        # info.work_end_time = int(work_end_time or "0")
+        # info.take_award_end_time = int(take_award_end_time or "0")
 
         return info
 
@@ -13068,4 +13125,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.xinyue_battle_ground()

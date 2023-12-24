@@ -258,20 +258,23 @@ XIN_YUE_MIN_LEVEL = 3
 
 
 class XinYueInfo(DaoObject):
+    SPECIAL_MEMBER_LEVEL = 10
+
     level_to_name = {
-        "1": "游戏家",
-        "2": "游戏家Pro",
-        "3": "心悦VIP1",
-        "4": "心悦VIP2",
-        "5": "心悦VIP3",
-        "6": "心悦VIP4",
-        "7": "心悦VIP5",
+        1: "游戏家",
+        2: "游戏家PRO",
+        3: "心悦VIP1",
+        4: "心悦VIP2",
+        5: "心悦VIP3",
+        6: "心悦VIP4",
+        7: "心悦VIP5",
+        SPECIAL_MEMBER_LEVEL: "特邀会员",
     }
 
     def __init__(self):
         # 等级含义见上述描述
         self.xytype = 1
-        self.xytype_str = "游戏家G1"
+        self.xytype_str = "游戏家"
         # 特邀会员
         self.is_special_member = False
         # 勇士币

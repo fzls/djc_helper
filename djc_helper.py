@@ -1997,7 +1997,8 @@ class DjcHelper:
 
     def xinyue_battle_ground_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
-        time.sleep(3)
+        # note: 心悦这个先不等待看看，确认下是否是例外
+        # time.sleep(3)
 
         act_id = "15488"
         roleinfo = self.get_dnf_bind_role()

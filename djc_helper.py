@@ -1534,9 +1534,9 @@ class DjcHelper:
             exchange_count = 1
 
             # note: 这次新版心悦活动这俩没有批量兑换的功能，了，先注释掉这部分，后续加回来的话再适配
-            batch_exchange_list = [
-                # ("821281", [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
-                # ("912508", [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
+            batch_exchange_list: list[tuple[int, list[int]]] = [
+                # (821281, [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
+                # (912508, [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
             ]
             for batch_flowid, batch_count_list in batch_exchange_list:
                 if op.iFlowId == batch_flowid:
@@ -1556,6 +1556,9 @@ class DjcHelper:
                 res = self.xinyue_battle_ground_wpe_op(ctx, op.iFlowId)
                 if op.count > 1:
                     # fixme: 下面的流程暂时注释掉，等后面实际触发后，再根据实际的回复结果适配
+                    # hack: 这俩变量先留着，这样引用一下避免 linter 报错
+                    _ = res
+                    _ = retry_wait_time
                     # {"ret": 0, "msg": "...", "data": "{...}", "serialId": "..."}
                     # if res["ret"] == "700" and "操作过于频繁" in res["flowRet"]["sMsg"]:
                     #     logger.warning(f"心悦操作 {op.sFlowName} 操作过快，可能是由于其他并行运行的心悦活动请求过多而引起，等待{retry_wait_time}s后重试")
@@ -2029,9 +2032,9 @@ class DjcHelper:
                     "user_attach": json.dumps(
                         {
                             "nickName": quote(roleinfo.roleName),
-                            ## fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
-                            ##   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
-                            ##   https://bgw.xinyue.qq.com/website/website/user/info
+                            # # fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
+                            # #   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
+                            # #   https://bgw.xinyue.qq.com/website/website/user/info
                             # "avatar": "http://thirdqq.qlogo.cn/ek_qqapp/.../40",
                         }
                     ),
@@ -3691,7 +3694,7 @@ class DjcHelper:
         self.dnf_comic_ide_op("抽奖（13件福利任抽）", "248953")
         self.dnf_comic_ide_op("每周在线礼包", "248990")
 
-        watch_comic_flowids = [
+        watch_comic_flowids: list[str] = [
             # "774769",
             # "774770",
             # "774771",
@@ -3718,6 +3721,7 @@ class DjcHelper:
                 # re: 本次的观看领取星星接口好像也是单个了
                 # self.dnf_comic_ide_op("观看漫画，领取星星", "248950")
 
+                _ = flowid
                 # self.dnf_comic_ide_op(f"观看资格领取_第{idx}话", flowid)
                 time.sleep(1)
 
@@ -3731,7 +3735,7 @@ class DjcHelper:
         if use_by_myself():
             # 我自己进行兑换~
 
-            ## re: 本次实际的兑换接口是单个，到时候看看参数
+            # # re: 本次实际的兑换接口是单个，到时候看看参数
             # self.dnf_comic_ide_op("兑换", "249077")
 
             # # self.dnf_comic_ide_op("兑换-装备提升礼盒", "774806")
@@ -7864,8 +7868,6 @@ class DjcHelper:
 
             return MaJieLuoInfo().auto_update_config(raw_res["jData"])
 
-        request_wait_time = 3
-
         self.majieluo_op("领取次元见面礼", "248079")
 
         self.majieluo_op("领取抽奖机会礼包", "248082")
@@ -7877,6 +7879,8 @@ class DjcHelper:
             self.majieluo_op(f"流失用户领取登录游戏礼包-{day}", "248360", loginDays=day)
             time.sleep(5)
 
+        # request_wait_time = 3
+        #
         # self.majieluo_op("次元任务-进入活动页", "222974")
         # self.majieluo_op("次元任务-游戏在线30分钟", "224200")
         # self.majieluo_op("次元任务-每日登录", "224392")

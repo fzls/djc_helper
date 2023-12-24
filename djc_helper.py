@@ -1406,7 +1406,7 @@ class DjcHelper:
             logger.warning("未启用领取心悦特权专区功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        lr = self.fetch_xinyue_login_info("获取 心悦战场wpe 所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
         # 查询成就点信息
@@ -4778,7 +4778,7 @@ class DjcHelper:
             logger.warning("未启用领取dnf助手活动wpe功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        lr = self.fetch_xinyue_login_info("获取 dnf助手活动wpe 所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
         self.dnf_helper_wpe_op("见面礼", 143111)
@@ -10143,7 +10143,7 @@ class DjcHelper:
 
         # self.check_maoxian_dup()
 
-        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        lr = self.fetch_xinyue_login_info("获取 勇士的冒险补给wpe 所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
         self.maoxian_wpe_op("幸运礼包", 118439)
@@ -11842,7 +11842,7 @@ class DjcHelper:
             logger.warning("未启用领取DNF心悦wpe功能，将跳过")
             return
 
-        lr = self.fetch_xinyue_login_info("获取DNF心悦wpe所需的access_token")
+        lr = self.fetch_xinyue_login_info("获取 DNF心悦wpe 所需的access_token")
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)
 
         self.dnf_xinyue_wpe_op("报名", 129649, extra_data={"equipmentCamp": "恩特"})

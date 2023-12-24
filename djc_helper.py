@@ -1477,6 +1477,12 @@ class DjcHelper:
             self.do_xinyue_battle_ground_op(op)
 
         # fixme: 赛利亚打工变成荣耀镖局了，后面再接入
+        async_message_box(
+            "新版心悦战场中，原有的赛利亚打工的流程改为了荣耀镖局，需要点时间来接入，大概几天内会搞定，在那之前，可自行前往心悦战场页面去完成这部分",
+            "新版心悦战场荣耀镖局",
+            show_once=True,
+            open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
+        )
         # # ------------ 赛利亚打工 -----------------
         # info = self.query_xinyue_info("查询打工信息", print_res=False)
         # # 可能的状态如下

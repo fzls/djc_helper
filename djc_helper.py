@@ -1562,8 +1562,8 @@ class DjcHelper:
 
         logger.info(f"当前账号的队伍组队配置为{group_info}")
 
-        # 检查角色绑定
-        self.check_xinyue_battle_ground()
+        # # 检查角色绑定
+        # self.check_xinyue_battle_ground()
 
         # 检查当前是否已有队伍
         teaminfo = self.query_xinyue_teaminfo(print_res=True)

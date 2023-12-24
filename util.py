@@ -315,7 +315,10 @@ def message_box(
     call_from_async=False,
     show_once_monthly=False,
 ):
-    get_log_func(logger.warning, print_log)(color(color_name) + msg.replace("\n\n", "\n"))
+    log_message = msg.replace("\n\n", "\n")
+    if open_url != "" and open_url not in log_message:
+        log_message = log_message + f"\n\n需打开的网页链接为：{open_url}"
+    get_log_func(logger.warning, print_log)(color(color_name) + log_message)
 
     if is_run_in_github_action():
         return

@@ -4799,12 +4799,26 @@ class DjcHelper:
 
         self.dnf_helper_wpe_op("登录领取", 144574)
 
-        for idx in range_from_one(6):
-            # note: 对应搜索 lotteryFlowID
-            res = self.dnf_helper_wpe_op(f"立即抽奖-{idx}", 143109)
-            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"] or "不足" in res["msg"]:
-                break
-            time.sleep(5)
+        act_info = get_not_ams_act("dnf助手活动wpe")
+        async_message_box(
+            (
+                "助手活动扬帆苍穹之上活动邀请回归玩家可以获得印记，用于领取+10增幅券（需邀请3个回归才能解锁），同时每周登录4次也可以领取一个印记\n"
+                f"为了避免影响想邀请回归领取+10券的朋友，同时不做这部分的也不会浪费，小助手将会在活动最后一天({act_info.get_endtime()})自动抽奖，所以请想要做的朋友在最后一天前完成兑换，避免被自动抽掉"
+            ),
+            "助手专属活动邀请回归玩家",
+            show_once=True,
+            open_url=get_act_url("dnf助手活动wpe"),
+        )
+        if not act_info.is_last_day():
+            logger.warning(f"当前未到活动最后一天({act_info.get_endtime()})，将不会尝试自动抽奖")
+        else:
+            logger.warning(f"当前是活动最后一天({act_info.get_endtime()})，将尝试自动抽奖，避免印记被浪费掉")
+            for idx in range_from_one(30):
+                # note: 对应搜索 lotteryFlowID
+                res = self.dnf_helper_wpe_op(f"立即抽奖-{idx}", 143109)
+                if "消耗殆尽" in res["msg"] or "已用完" in res["msg"] or "不足" in res["msg"]:
+                    break
+                time.sleep(5)
 
         self.dnf_helper_wpe_op("回归-今日登录游戏", 143093)
         self.dnf_helper_wpe_op("回归-今日在线60分钟", 144510)

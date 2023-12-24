@@ -1888,7 +1888,7 @@ class DjcHelper:
             return int(raw_info["remain"])
 
         def _query_ticket() -> int:
-            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询成就点", 131051, print_res=print_res)
+            res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询抽奖次数", 131051, print_res=print_res)
             raw_info = json.loads(res["data"])
 
             return int(raw_info["remain"])

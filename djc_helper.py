@@ -1790,47 +1790,6 @@ class DjcHelper:
 
         return self.query_xinyue_teaminfo()
 
-    def parse_teaminfo(self, jdata) -> XinYueMyTeamInfo:
-        teamInfo = XinYueMyTeamInfo()
-        teamInfo.result = jdata["result"]
-        if teamInfo.result == 0:
-            teamInfo.ttl_time = jdata.get("ttl_time", 0)
-            teamInfo.id = jdata.get("code", "")  # 根据code查询时从这获取
-
-            # 解析队伍信息
-            for member_json_str in jdata["team_list"]:
-                member = XinYueTeamMember().auto_update_config(json.loads(member_json_str))
-                teamInfo.members.append(member)
-                if member.code != "":
-                    teamInfo.id = member.code  # 而查询自己的队伍信息时，则需要从队员信息中获取
-
-            # 解析奖励状态
-            awardIdToName = {
-                "2373983": "大",  # 20
-                "2373988": "中",  # 15
-                "2373987": "小",  # 10
-            }
-
-            award_summarys = []
-            for member in teamInfo.members:
-                # 尚未有奖励时将会是false
-                if member.pak == "" or member.pak is False:
-                    continue
-
-                award_names = []
-
-                pak_list = member.pak.split("|")
-                for pak in pak_list:
-                    award_id, idx = pak.split("_")
-                    award_name = awardIdToName[award_id]
-
-                    award_names.append(award_name)
-
-                award_summarys.append("".join(award_names))
-            teamInfo.award_summary = "|".join(award_summarys)
-
-        return teamInfo
-
     def save_teamid(self, fixed_teamid: str, remote_teamid: str):
         fname = self.local_saved_teamid_file.format(fixed_teamid)
         with open(fname, "w", encoding="utf-8") as sf:

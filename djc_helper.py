@@ -1490,6 +1490,7 @@ class DjcHelper:
         logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
         for idx in range(info.ticket):
             self.xinyue_battle_ground_wpe_op(f"第{idx + 1}次抽奖券抽奖", 131324)
+            time.sleep(3)
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")

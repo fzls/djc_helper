@@ -1739,6 +1739,12 @@ class DjcHelper:
 
         return awards
 
+    def query_xinyue_my_team_id(self) -> str:
+        res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)
+        raw_data = json.loads(res["data"])
+
+        return raw_data["code"]
+
     @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueTeamInfo:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)

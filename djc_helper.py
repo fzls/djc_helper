@@ -1812,7 +1812,7 @@ class DjcHelper:
 
         return teamInfo
 
-    def save_teamid(self, fixed_teamid, remote_teamid):
+    def save_teamid(self, fixed_teamid: str, remote_teamid: str):
         fname = self.local_saved_teamid_file.format(fixed_teamid)
         with open(fname, "w", encoding="utf-8") as sf:
             teamidInfo = {

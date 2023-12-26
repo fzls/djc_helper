@@ -1606,6 +1606,7 @@ class DjcHelper:
         # 尝试加入远程队伍
         if remote_teamid != "":
             logger.info(f"尝试加入远程队伍id={remote_teamid}")
+            # fixme: 需要确定新版的这个如果对方队伍已解散会怎么处理
             summary_teaminfo = self.query_xinyue_summary_team_info_by_id(remote_teamid)
             # 如果队伍仍有效则加入
             if summary_teaminfo.teamCode == remote_teamid:

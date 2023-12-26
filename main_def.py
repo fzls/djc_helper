@@ -994,13 +994,10 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
 
 @try_except()
-def try_join_xinyue_team(cfg, user_buy_info: BuyInfo):
+def try_join_xinyue_team(cfg: Config, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
-    _show_head_line("尝试加入心悦固定队")
-
-    logger.warning(color("fg_bold_yellow") + "心悦战场改版正在接入中，暂时先屏蔽荣耀镖局相关内容")
-    return
+    _show_head_line("尝试加入心悦固定队或在线匹配")
 
     for idx, account_config in enumerate(cfg.account_configs):
         idx += 1
@@ -1225,9 +1222,6 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
     if not has_any_account_in_normal_run(cfg):
         return
     _show_head_line("尝试领取心悦组队奖励")
-
-    logger.warning(color("fg_bold_yellow") + "心悦战场改版正在接入中，暂时先屏蔽荣耀镖局相关内容")
-    return
 
     # 所有账号运行完毕后，尝试领取一次心悦组队奖励，避免出现前面角色还没完成，后面的完成了，前面的却没领奖励
     for idx, account_config in enumerate(cfg.account_configs):

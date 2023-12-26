@@ -1583,12 +1583,13 @@ class DjcHelper:
 
         # 检查当前是否已有队伍
         teaminfo = self.query_xinyue_teaminfo(print_res=True)
-        if teaminfo.id != "":
-            logger.info(f"目前已有队伍={teaminfo}")
+        team_id = self.query_xinyue_my_team_id()
+        if team_id != "":
+            logger.info(f"目前已有队伍={teaminfo} team_id={team_id}")
             # 本地保存一下
-            self.save_teamid(group_info.team_name, teaminfo.id)
+            self.save_teamid(group_info.team_name, team_id)
 
-            self.try_report_xinyue_remote_teamid_to_server("早已创建的队伍，但仍为单人", group_info, teaminfo)
+            self.try_report_xinyue_remote_teamid_to_server("早已创建的队伍，但仍为单人", group_info, teaminfo, team_id)
             increase_counter(ga_category="xinyue_team_auto_match", name="report_again")
             return
 
@@ -1620,10 +1621,11 @@ class DjcHelper:
 
         # 尝试创建小队并保存到本地
         teaminfo = self.create_xinyue_team()
-        self.save_teamid(group_info.team_name, teaminfo.id)
-        logger.info(f"{self.cfg.name} 创建小队并保存到本地成功，队伍信息={teaminfo}")
+        team_id = self.query_xinyue_my_team_id()
+        self.save_teamid(group_info.team_name, team_id)
+        logger.info(f"{self.cfg.name} 创建小队并保存到本地成功，队伍信息={teaminfo}, team_id={team_id}")
 
-        self.try_report_xinyue_remote_teamid_to_server("新创建的队伍", group_info, teaminfo)
+        self.try_report_xinyue_remote_teamid_to_server("新创建的队伍", group_info, teaminfo, team_id)
         increase_counter(ga_category="xinyue_team_auto_match", name="report_first")
 
     def get_xinyue_team_group_info(self, user_buy_info: BuyInfo) -> XinYueTeamGroupInfo:
@@ -1739,6 +1741,7 @@ class DjcHelper:
 
         return awards
 
+    @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)
         raw_data = json.loads(res["data"])
@@ -1930,7 +1933,7 @@ class DjcHelper:
         return info
 
     def try_report_xinyue_remote_teamid_to_server(
-        self, ctx: str, group_info: XinYueTeamGroupInfo, teaminfo: XinYueTeamInfo
+        self, ctx: str, group_info: XinYueTeamGroupInfo, teaminfo: XinYueTeamInfo, team_code: str
     ):
         # 只有远程匹配模式需要尝试上报
         if group_info.is_local:
@@ -1940,9 +1943,9 @@ class DjcHelper:
         if teaminfo.is_team_full():
             return
 
-        logger.info(f"因为 {ctx}，将尝试上报 {self.cfg.name} 创建的心悦远程队伍 {teaminfo.id} 到服务器")
+        logger.info(f"因为 {ctx}，将尝试上报 {self.cfg.name} 创建的心悦远程队伍 {team_code} 到服务器")
 
-        self.report_xinyue_remote_teamid_to_server(teaminfo.id)
+        self.report_xinyue_remote_teamid_to_server(team_code)
 
     @try_except()
     def report_xinyue_remote_teamid_to_server(self, remote_team_id: str):

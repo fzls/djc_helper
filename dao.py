@@ -357,6 +357,11 @@ class XinYueTeamInfo(ConfigInterface):
         self.list: list[XinYueTeamMember] =  []
         self.teamAllOpenId = "1054073896,qq_2"
 
+        # self.result = 0
+        # self.id = "" # note:新版的这个id需要通过查询 131104（自己队伍ID） 来获取
+        # self.award_summary = "大大小|小中大"
+        # self.members: list[XinYueTeamMember] = []
+
     def fields_to_fill(self):
         return [
             ("list", XinYueTeamMember),
@@ -385,6 +390,13 @@ class XinYueTeamMember(ConfigInterface):
             "game_appid": "",
             "device": "pc",
         }
+
+        # self.headurl = "http://thirdqq.qlogo.cn/g?b=oidb&k=KJKNiasFOwe0EGjTyHI7CLg&s=640&t=1556481203"
+        # self.nickname = "%E6%9C%88%E4%B9%8B%E7%8E%84%E6%AE%87"
+        # self.qq = ""
+        # self.captain = 0
+        # self.pak = ""
+        # self.code = ""
 
 
 class SailiyamWorkInfo(ConfigInterface):

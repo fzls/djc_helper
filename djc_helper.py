@@ -2067,6 +2067,16 @@ class DjcHelper:
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
         )
 
+    def query_xinyue_bgw_user_info(self, ctx: str, print_res=True):
+        lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
+
+        return self.get(
+            ctx,
+            self.urls.dnf_xinyue_bgw_user_info_api,
+            print_res=print_res,
+            use_this_cookies=f"acctype=qc; appid=101478665; openid={lr.openid}; access_token={lr.xinyue_access_token}; ",
+        )
+
     # --------------------------------------------心悦app--------------------------------------------
     @try_except()
     def xinyue_app_operations(self):

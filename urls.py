@@ -539,6 +539,9 @@ class Urls:
         self.maoxian_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
         self.dnf_helper_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
 
+        # 查询心悦用户信息，目前用于获取头像信息
+        self.dnf_xinyue_bgw_user_info_api = "https://bgw.xinyue.qq.com/website/website/user/info"
+
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []
 

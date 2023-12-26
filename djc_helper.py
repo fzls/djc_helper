@@ -1407,7 +1407,7 @@ class DjcHelper:
         具体活动信息可以查阅 config.example.toml 中 xinyue_operations_v2
         """
         show_head_line("DNF地下城与勇士心悦特权专区")
-        self.show_amesvr_act_info(self.xinyue_battle_ground_op)
+        self.show_not_ams_act_info("DNF地下城与勇士心悦特权专区")
 
         if not self.cfg.function_switches.get_xinyue:
             logger.warning("未启用领取心悦特权专区功能，将跳过")

@@ -81,6 +81,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
+    newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
 ]
 
 act_name_to_url = {

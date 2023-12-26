@@ -2069,20 +2069,34 @@ class DjcHelper:
         )
 
     @try_except(return_val_on_except=XinYueBgwUserInfo())
-    def query_xinyue_bgw_user_info(self, ctx: str, print_res=True) -> XinYueBgwUserInfo:
-        lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
+    def query_xinyue_bgw_user_info(self, ctx: str, print_res=False) -> XinYueBgwUserInfo:
+        def _do_query() -> XinYueBgwUserInfo:
+            lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
 
-        raw_res =  self.get(
-            ctx,
-            self.urls.dnf_xinyue_bgw_user_info_api,
-            print_res=print_res,
-            use_this_cookies=f"acctype=qc; appid=101478665; openid={lr.openid}; access_token={lr.xinyue_access_token}; ",
+            raw_res =  self.get(
+                ctx,
+                self.urls.dnf_xinyue_bgw_user_info_api,
+                print_res=print_res,
+                use_this_cookies=f"acctype=qc; appid=101478665; openid={lr.openid}; access_token={lr.xinyue_access_token}; ",
+            )
+
+            user_info = XinYueBgwUserInfo()
+            user_info.auto_update_config(raw_res["data"])
+
+            return user_info
+
+        meaingful_caller = get_meaningful_call_point_for_log()
+
+        return with_cache(
+            "查询心悦用户信息",
+            self.cfg.get_account_cache_key(),
+            cache_miss_func=_do_query,
+            cache_max_seconds=24*60*60,
+            cache_value_unmarshal_func=XinYueBgwUserInfo().auto_update_config,
+            cache_hit_func=lambda lr: get_logger_func(print_res, logger.info)(
+                meaingful_caller + f"使用缓存的心悦用户信息: {lr}"
+            ),
         )
-
-        user_info = XinYueBgwUserInfo()
-        user_info.auto_update_config(raw_res["data"])
-
-        return user_info
 
     # --------------------------------------------心悦app--------------------------------------------
     @try_except()

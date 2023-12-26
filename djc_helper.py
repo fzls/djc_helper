@@ -1677,11 +1677,13 @@ class DjcHelper:
             return False
 
         # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
-        take_award_count = self.query_last_week_xinyue_team_take_award_count()
-        if take_award_count < 3:
-            if print_waring:
-                logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
-            return False
+        # note: 由于心悦战场于2023.12.21改版，因此先在改版后的3周内，不检查领取次数的条件，之后强制要求这个
+        if now_after("2024-01-15 00:00:00"):
+            take_award_count = self.query_last_week_xinyue_team_take_award_count()
+            if take_award_count < 3:
+                if print_waring:
+                    logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
+                return False
 
         return True
 

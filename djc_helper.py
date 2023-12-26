@@ -1740,10 +1740,13 @@ class DjcHelper:
 
     @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueTeamInfo:
-        data = self.xinyue_battle_ground_op("查询我的心悦队伍信息", "748075", print_res=print_res)
-        jdata = data["modRet"]["jData"]
+        res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)
+        raw_data = json.loads(res["data"])
 
-        return self.parse_teaminfo(jdata)
+        team_info = XinYueTeamInfo()
+        team_info.auto_update_config(raw_data)
+
+        return team_info
 
     def query_xinyue_teaminfo_by_id(self, remote_teamid):
         # 748071	传入小队ID查询队伍信息

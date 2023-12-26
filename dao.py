@@ -352,23 +352,39 @@ class XinYueItemInfo(DaoObject):
 
 class XinYueTeamInfo(ConfigInterface):
     def __init__(self):
-        self.result = 0
-        self.id = ""
-        self.award_summary = "大大小|小中大"
-        self.members: list[XinYueTeamMember] = []
+        self.ret =  0
+        self.num =  2
+        self.list: list[XinYueTeamMember] =  []
+        self.teamAllOpenId = "1054073896,qq_2"
+
+    def fields_to_fill(self):
+        return [
+            ("list", XinYueTeamMember),
+        ]
 
     def is_team_full(self) -> bool:
-        return len(self.members) == 2
+        return self.num == 2
 
 
 class XinYueTeamMember(ConfigInterface):
     def __init__(self):
-        self.headurl = "http://thirdqq.qlogo.cn/g?b=oidb&k=KJKNiasFOwe0EGjTyHI7CLg&s=640&t=1556481203"
-        self.nickname = "%E6%9C%88%E4%B9%8B%E7%8E%84%E6%AE%87"
-        self.qq = ""
-        self.captain = 0
-        self.pak = ""
-        self.code = ""
+        self.activityId =  "15488"
+        self.teamId =  166396
+        self.isCaptain =  1
+        self.avatar =  "http://thirdqq.qlogo.cn/ek_qqapp/AQWLTKahHNrg5aEvmT7Y1ySCaia3aCJmJjicmcib1xYGR85uY9jTCAeNiaIHhHCAPYtApfXdoBMQ/40"
+        self.nickName =  "%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87"
+        self.uid =  "1054073896"
+        self.role =  {
+            "area_id": 11,
+            "partition_id": 11,
+            "role_id": "71672841",
+            "role_name": "",
+            "plat_id": 2,
+            "game_openid": "1054073896",
+            "g_openid": "",
+            "game_appid": "",
+            "device": "pc",
+        }
 
 
 class SailiyamWorkInfo(ConfigInterface):

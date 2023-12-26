@@ -2253,6 +2253,19 @@ class LuckyUserTaskPackFlow(ConfigInterface):
         self.uid = "19010"
 
 
+class XinYueBgwUserInfo(ConfigInterface):
+    def __init__(self):
+        self.gfen = 4441
+        self.mobile = ""
+        self.nickname = "风之凌殇"
+        self.point = 23315
+        self.type = 2
+        self.gender = 1
+        self.headimgurl = "http://thirdqq.qlogo.cn/ek_qqapp/AQWLTKahHNrg5aEvmT7Y1ySCaia3aCJmJjicmcib1xYGR85uY9jTCAeNiaIHhHCAPYtApfXdoBMQ/100"
+        self.country = "中国"
+        self.province = "广东"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

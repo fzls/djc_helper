@@ -350,7 +350,7 @@ class XinYueItemInfo(DaoObject):
         self.used_refresh = used_refresh
 
 
-class XinYueTeamInfo(ConfigInterface):
+class XinYueMyTeamInfo(ConfigInterface):
     def __init__(self):
         self.ret =  0
         self.num =  2
@@ -397,6 +397,14 @@ class XinYueTeamMember(ConfigInterface):
         # self.captain = 0
         # self.pak = ""
         # self.code = ""
+
+
+class XinYueSummaryTeamInfo(ConfigInterface):
+    def __init__(self):
+        self.teamCode = "DNF1703518043CC8D6Z"
+        self.teamName = "%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87"
+        self.teamLimit = 2
+        self.teamMemberNum = 2
 
 
 class SailiyamWorkInfo(ConfigInterface):

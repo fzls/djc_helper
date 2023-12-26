@@ -92,9 +92,10 @@ from dao import (
     XinYueMatchServerCommonResponse,
     XinYueMatchServerRequestTeamRequest,
     XinYueMatchServerRequestTeamResponse,
+    XinYueMyTeamInfo,
+    XinYueSummaryTeamInfo,
     XinYueTeamAwardInfo,
     XinYueTeamGroupInfo,
-    XinYueTeamInfo,
     XinYueTeamMember,
     XinyueWeeklyGiftInfo,
     XinyueWeeklyGPointsInfo,
@@ -1605,9 +1606,9 @@ class DjcHelper:
         # 尝试加入远程队伍
         if remote_teamid != "":
             logger.info(f"尝试加入远程队伍id={remote_teamid}")
-            teaminfo = self.query_xinyue_teaminfo_by_id(remote_teamid)
+            summary_teaminfo = self.query_xinyue_summary_team_info_by_id(remote_teamid)
             # 如果队伍仍有效则加入
-            if teaminfo.id == remote_teamid:
+            if summary_teaminfo.teamCode == remote_teamid:
                 teaminfo = self.join_xinyue_team(remote_teamid)
                 if teaminfo is not None:
                     logger.info(f"成功加入远程队伍，队伍信息为{teaminfo}")
@@ -1748,22 +1749,25 @@ class DjcHelper:
 
         return raw_data["code"]
 
-    @try_except(return_val_on_except=XinYueTeamInfo(), show_exception_info=False)
-    def query_xinyue_teaminfo(self, print_res=False) -> XinYueTeamInfo:
+    @try_except(return_val_on_except=XinYueMyTeamInfo(), show_exception_info=False)
+    def query_xinyue_teaminfo(self, print_res=False) -> XinYueMyTeamInfo:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)
         raw_data = json.loads(res["data"])
 
-        team_info = XinYueTeamInfo()
+        team_info = XinYueMyTeamInfo()
         team_info.auto_update_config(raw_data)
 
         return team_info
 
-    def query_xinyue_teaminfo_by_id(self, remote_teamid):
-        # 748071	传入小队ID查询队伍信息
-        data = self.xinyue_battle_ground_op("查询特定id的心悦队伍信息", "748071", teamid=remote_teamid)
-        jdata = data["modRet"]["jData"]
-        teaminfo = self.parse_teaminfo(jdata)
-        return teaminfo
+    def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
+        # 传入小队ID查询队伍信息
+        res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode" : remote_teamid})
+        raw_data = json.loads(res["data"])
+
+        one_team_info = XinYueSummaryTeamInfo()
+        one_team_info.auto_update_config(raw_data["teamInfo"])
+
+        return one_team_info
 
     def join_xinyue_team(self, remote_teamid):
         # 748069	加入小队
@@ -1774,14 +1778,14 @@ class DjcHelper:
 
         return self.query_xinyue_teaminfo()
 
-    def create_xinyue_team(self) -> XinYueTeamInfo:
+    def create_xinyue_team(self) -> XinYueMyTeamInfo:
         # 748052	创建小队
         self.xinyue_battle_ground_op("尝试创建小队", "748052")
 
         return self.query_xinyue_teaminfo()
 
-    def parse_teaminfo(self, jdata) -> XinYueTeamInfo:
-        teamInfo = XinYueTeamInfo()
+    def parse_teaminfo(self, jdata) -> XinYueMyTeamInfo:
+        teamInfo = XinYueMyTeamInfo()
         teamInfo.result = jdata["result"]
         if teamInfo.result == 0:
             teamInfo.ttl_time = jdata.get("ttl_time", 0)
@@ -1933,7 +1937,7 @@ class DjcHelper:
         return info
 
     def try_report_xinyue_remote_teamid_to_server(
-        self, ctx: str, group_info: XinYueTeamGroupInfo, teaminfo: XinYueTeamInfo, team_code: str
+        self, ctx: str, group_info: XinYueTeamGroupInfo, teaminfo: XinYueMyTeamInfo, team_code: str
     ):
         # 只有远程匹配模式需要尝试上报
         if group_info.is_local:

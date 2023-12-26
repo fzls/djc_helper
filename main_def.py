@@ -926,8 +926,9 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
     teaminfo = djcHelper.query_xinyue_teaminfo()
     team_award_summary = "无队伍"
-    if teaminfo.id != "":
-        team_award_summary = teaminfo.award_summary
+    # fixme: 这段流程后面再处理
+    # if teaminfo.id != "":
+    #     team_award_summary = teaminfo.award_summary
 
     last_week_xinyue_take_award_count = djcHelper.query_last_week_xinyue_team_take_award_count()
     can_auto_match_xinyue_team = ""

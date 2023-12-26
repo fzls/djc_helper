@@ -1609,9 +1609,9 @@ class DjcHelper:
             summary_teaminfo = self.query_xinyue_summary_team_info_by_id(remote_teamid)
             # 如果队伍仍有效则加入
             if summary_teaminfo.teamCode == remote_teamid:
-                teaminfo = self.join_xinyue_team(remote_teamid)
-                if teaminfo is not None:
-                    logger.info(f"成功加入远程队伍，队伍信息为{teaminfo}")
+                remote_summary_teaminfo = self.join_xinyue_team(remote_teamid)
+                if remote_summary_teaminfo is not None:
+                    logger.info(f"成功加入远程队伍，队伍信息为{remote_summary_teaminfo}")
 
                     if not group_info.is_local:
                         increase_counter(ga_category="xinyue_team_auto_match", name="join_ok")

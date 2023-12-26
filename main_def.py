@@ -1256,7 +1256,7 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
             logger.warning(color("fg_yellow") + "当前启用了云端自动组队功能，但仍未组到队。因为组队前获取的奖励不会计入默契福利，暂时不尝试领取心悦奖励")
             continue
 
-        djcHelper.xinyue_battle_ground_op("领取默契奖励点", "749229")
+        djcHelper.xinyue_battle_ground_wpe_op("领取队伍3次运镖幸运加成", 131432)
 
 
 def try_xinyue_sailiyam_start_work(cfg):

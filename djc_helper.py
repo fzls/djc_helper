@@ -1477,34 +1477,19 @@ class DjcHelper:
         for op in xinyue_operations:
             self.do_xinyue_battle_ground_op(op)
 
-        # fixme: 赛利亚打工变成荣耀镖局了，后面再接入
-        logger.warning(color("fg_bold_yellow") + "心悦战场改版正在接入中，暂时先屏蔽荣耀镖局相关内容")
-        async_message_box(
-            "新版心悦战场中，原有的赛利亚打工的流程改为了荣耀镖局，需要点时间来接入，大概几天内会搞定，在那之前，可自行前往心悦战场页面去完成这部分",
-            "新版心悦战场荣耀镖局",
-            show_once=True,
-            open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
-        )
-        # # ------------ 赛利亚打工 -----------------
-        # info = self.query_xinyue_info("查询打工信息", print_res=False)
-        # # 可能的状态如下
-        # # 工作状态 描述 结束时间 领取结束时间 可进行操作
-        # #    -2   待机    0                  可打工（若本周总次数未用完），之后状态变为2
-        # #    2    打工中  a         b        在结束时间a之前，不能进行任何操作，a之后状态变为1
-        # #    1    领工资  a         b        在结束时间b之前，可以领取奖励。领取后状态变为-2
-        # if info.work_status == -2:
-        #     self.xinyue_battle_ground_op("打工仔去打工", "748050")
-        # elif info.work_status == 2:
-        #     logger.info(color("bold_green") + f"赛利亚正在打工中~ 结束时间为{datetime.datetime.fromtimestamp(info.work_end_time)}")
-        # elif info.work_status == 1:
-        #     self.xinyue_battle_ground_op("搬砖人领工资", "748077")
-        #     self.xinyue_battle_ground_op("打工仔去打工", "748050")
-        #
-        # # 然后尝试抽奖
-        # info = self.query_xinyue_info("查询抽奖次数", print_res=False)
-        # logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
-        # for idx in range(info.ticket):
-        #     self.xinyue_battle_ground_op(f"第{idx + 1}次抽奖券抽奖", "749081")
+        # ------------ 荣耀镖局 -----------------
+        # 尝试完成运镖任务
+        self.xinyue_battle_ground_wpe_op("开始高级运镖（消耗疲劳100点）（成就点*20，抽奖券*3）", 131323)
+        self.xinyue_battle_ground_wpe_op("开始中级运镖（消耗疲劳50点）（成就点*15，抽奖券*2）", 131322)
+        self.xinyue_battle_ground_wpe_op("开始初级运镖（在线30分钟）（成就点*10，抽奖券*1）", 131305)
+
+        self.xinyue_battle_ground_wpe_op("领取队伍3次运镖幸运加成", 131432)
+
+        # 然后尝试抽奖
+        info = self.query_xinyue_info("查询抽奖次数", print_res=False)
+        logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
+        for idx in range(info.ticket):
+            self.xinyue_battle_ground_wpe_op(f"第{idx + 1}次抽奖券抽奖", 131324)
 
         # 再次查询成就点信息，展示本次操作得到的数目
         new_info = self.query_xinyue_info("6.3 操作完成后查询成就点信息")

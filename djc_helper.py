@@ -1831,7 +1831,7 @@ class DjcHelper:
             json.dump(teamidInfo, sf)
             logger.debug(f"本地保存固定队信息，具体内容如下：{teamidInfo}")
 
-    def load_teamid(self, fixed_teamid):
+    def load_teamid(self, fixed_teamid: str) -> str:
         fname = self.local_saved_teamid_file.format(fixed_teamid)
 
         if not os.path.isfile(fname):

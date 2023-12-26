@@ -1581,6 +1581,7 @@ class DjcHelper:
 
         # # 检查角色绑定
         # self.check_xinyue_battle_ground()
+        self.prepare_wpe_act_openid_accesstoken("心悦战场wpe-自动组队", replace_if_exists=False)
 
         # 检查当前是否已有队伍
         teaminfo = self.query_xinyue_teaminfo(print_res=True)

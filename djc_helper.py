@@ -1478,7 +1478,7 @@ class DjcHelper:
 
         # 进行相应的心悦操作
         for op in xinyue_operations:
-            self.do_xinyue_battle_ground_op(op)
+            self.do_xinyue_battle_ground_wpe_op(op)
 
         # ------------ 荣耀镖局 -----------------
         # 尝试完成运镖任务
@@ -1515,7 +1515,7 @@ class DjcHelper:
         #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
     @try_except()
-    def do_xinyue_battle_ground_op(self, op: XinYueOperationConfig):
+    def do_xinyue_battle_ground_wpe_op(self, op: XinYueOperationConfig):
         """
         执行具体的心悦战场相关的领奖或兑换操作
         """

@@ -1698,27 +1698,30 @@ class DjcHelper:
 
         take_count = 0
         for award in last_week_awards:
-            # 判断领取宝箱里的成就点的次数
-            if award.iPackageGroupId == "1537727":
+            # 判断是否是高级运镖令
+            # fixme: 暂时先用名称来判断，后面等下一周，三个奖励的ID都有了，再换成ID
+            # 高级运镖令奖励
+            if "运镖令" in award.gift_name:
                 take_count += 1
 
         return take_count
 
     def query_last_week_xinyue_team_awards(self) -> list[XinYueTeamAwardInfo]:
-        # 假设过去两周每天兑换40个道具（比如装备提升礼盒），每页为4个
-        two_week_max_page = 40 * 7 * 2 // 4
+        # 假设过去两周每天兑换40个道具（比如装备提升礼盒），每页为10个
+        page_size = 10
+        two_week_max_page = 40 * 7 * 2 // page_size
 
         last_monday = get_last_week_monday_datetime()
         this_monday = get_this_week_monday_datetime()
 
         last_week_awards = []
         for page in range_from_one(two_week_max_page):
-            awards = self.query_xinyue_team_awards(page)
+            awards = self.query_xinyue_team_awards(page, page_size)
             if len(awards) == 0:
                 break
 
             for award in awards:
-                take_at = parse_time(award.dtGetPackageTime)
+                take_at = parse_time(award.gift_time)
                 if take_at >= this_monday:
                     # 跳过本周的
                     continue
@@ -1732,13 +1735,27 @@ class DjcHelper:
         return last_week_awards
 
     @try_except(return_val_on_except=[])
-    def query_xinyue_team_awards(self, iPageNow=1, iPageSize=4) -> list[XinYueTeamAwardInfo]:
-        raw_res = self.xinyue_battle_ground_op(
-            f"查询心悦组队奖励-{iPageNow}-{iPageSize}", "747563", iPageNow=iPageNow, iPageSize=iPageSize, print_res=False
+    def query_xinyue_team_awards(self, iPageNow: int, iPageSize: int) -> list[XinYueTeamAwardInfo]:
+        self.prepare_wpe_act_openid_accesstoken("查询心悦组队奖励记录", replace_if_exists=False, print_res=False)
+
+        json_data = {
+            "game_code": "dnf",
+            "page_size": iPageSize,
+            "page_index": iPageNow,
+            "activity_id": "15488",
+            "business_id": "tgclub",
+        }
+
+        raw_res =  self.post(
+            f"查询心悦组队奖励-{iPageNow}-{iPageSize}",
+            self.urls.dnf_xinyue_query_gift_record_api,
+            json=json_data,
+            print_res=False,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
         )
 
         awards: list[XinYueTeamAwardInfo] = []
-        for raw_award in raw_res["modRet"]["myGiftList"]:
+        for raw_award in raw_res["records"]:
             award = XinYueTeamAwardInfo().auto_update_config(raw_award)
             awards.append(award)
 

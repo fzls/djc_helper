@@ -96,7 +96,6 @@ from dao import (
     XinYueSummaryTeamInfo,
     XinYueTeamAwardInfo,
     XinYueTeamGroupInfo,
-    XinYueTeamMember,
     XinyueWeeklyGiftInfo,
     XinyueWeeklyGPointsInfo,
     parse_amesvr_common_info,
@@ -1748,7 +1747,7 @@ class DjcHelper:
             "business_id": "tgclub",
         }
 
-        raw_res =  self.post(
+        raw_res = self.post(
             f"查询心悦组队奖励-{iPageNow}-{iPageSize}",
             self.urls.dnf_xinyue_query_gift_record_api,
             json=json_data,
@@ -1779,7 +1778,6 @@ class DjcHelper:
                     task_state_list.append(task_name)
 
             return "".join(task_state_list)
-
 
         self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场队伍任务状态", replace_if_exists=False, print_res=False)
 
@@ -1820,7 +1818,7 @@ class DjcHelper:
 
     def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
         # 传入小队ID查询队伍信息
-        res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode" : remote_teamid})
+        res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode": remote_teamid})
         raw_data = json.loads(res["data"])
 
         one_team_info = XinYueSummaryTeamInfo()
@@ -2102,7 +2100,7 @@ class DjcHelper:
         def _do_query() -> XinYueBgwUserInfo:
             lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
 
-            raw_res =  self.get(
+            raw_res = self.get(
                 ctx,
                 self.urls.dnf_xinyue_bgw_user_info_api,
                 print_res=print_res,
@@ -2120,11 +2118,9 @@ class DjcHelper:
             "查询心悦用户信息",
             self.cfg.get_account_cache_key(),
             cache_miss_func=_do_query,
-            cache_max_seconds=24*60*60,
+            cache_max_seconds=24 * 60 * 60,
             cache_value_unmarshal_func=XinYueBgwUserInfo().auto_update_config,
-            cache_hit_func=lambda lr: get_logger_func(print_res, logger.info)(
-                meaingful_caller + f"使用缓存的心悦用户信息: {lr}"
-            ),
+            cache_hit_func=lambda lr: get_logger_func(print_res, logger.info)(meaingful_caller + f"使用缓存的心悦用户信息: {lr}"),
         )
 
     # --------------------------------------------心悦app--------------------------------------------

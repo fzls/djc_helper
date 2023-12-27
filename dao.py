@@ -352,10 +352,10 @@ class XinYueItemInfo(DaoObject):
 
 class XinYueMyTeamInfo(ConfigInterface):
     def __init__(self):
-        self.ret =  0
-        self.num =  0
-        self.list: list[XinYueTeamMember] =  []
-        self.teamAllOpenId = "" # "1054073896,qq_2"
+        self.ret = 0
+        self.num = 0
+        self.list: list[XinYueTeamMember] = []
+        self.teamAllOpenId = ""  # "1054073896,qq_2"
 
         # self.result = 0
         # self.id = "" # note:新版的这个id需要通过查询 131104（自己队伍ID） 来获取
@@ -373,13 +373,13 @@ class XinYueMyTeamInfo(ConfigInterface):
 
 class XinYueTeamMember(ConfigInterface):
     def __init__(self):
-        self.activityId =  "15488"
-        self.teamId =  166396
-        self.isCaptain =  1
-        self.avatar =  "http://thirdqq.qlogo.cn/ek_qqapp/AQWLTKahHNrg5aEvmT7Y1ySCaia3aCJmJjicmcib1xYGR85uY9jTCAeNiaIHhHCAPYtApfXdoBMQ/40"
-        self.nickName =  "%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87"
-        self.uid =  "1054073896"
-        self.role =  {
+        self.activityId = "15488"
+        self.teamId = 166396
+        self.isCaptain = 1
+        self.avatar = "http://thirdqq.qlogo.cn/ek_qqapp/AQWLTKahHNrg5aEvmT7Y1ySCaia3aCJmJjicmcib1xYGR85uY9jTCAeNiaIHhHCAPYtApfXdoBMQ/40"
+        self.nickName = "%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87"
+        self.uid = "1054073896"
+        self.role = {
             "area_id": 11,
             "partition_id": 11,
             "role_id": "71672841",
@@ -1791,7 +1791,6 @@ class XinYueTeamAwardInfo(ConfigInterface):
         self.gift_id = "4748280"
         self.package_cdkey = ""
         self.req_serial = "sm-cm5hrgo7n68iksapqlrg"
-
 
         # self.dtGetPackageTime = "2021-10-29 21:32:38"
         # self.iBroadcastFlag = "0"

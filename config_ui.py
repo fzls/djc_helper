@@ -2472,11 +2472,12 @@ class AccountConfigUi(QWidget):
 
     def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig, remove_fake_id_items: bool = False):
         _minus_id = 0
+
         def gen_fake_default_item_with_decrease_minus_id(item_name: str) -> tuple[int, str]:
             nonlocal _minus_id
             _minus_id = _minus_id - 1
 
-            marker = "-"* 5
+            marker = "-" * 5
 
             return (_minus_id, f"{marker} {item_name} {marker}")
 
@@ -2616,7 +2617,7 @@ class AccountConfigUi(QWidget):
 
         self.sort_xinyue_exchange_items(cfg, default_items)
 
-    def sort_xinyue_exchange_items(self, cfg: AccountConfig, default_items:  list[tuple[int, str]]):
+    def sort_xinyue_exchange_items(self, cfg: AccountConfig, default_items: list[tuple[int, str]]):
         # 调整下配置的顺序，使其更加直观
         config_file_flow_id_to_index: dict[int, int] = {}
         for idx, item in enumerate(cfg.xinyue_operations_v2):
@@ -2633,7 +2634,9 @@ class AccountConfigUi(QWidget):
             # 排序顺序优先级如下
             if left.count > 0 and right.count > 0:
                 # 两者配置了兑换次数的，则按照当前配置文件中的顺序（这里不需要9999，但为了安全起见，也放着）
-                return config_file_flow_id_to_index.get(left.iFlowId, 9999) - config_file_flow_id_to_index.get(right.iFlowId, 9999)
+                return config_file_flow_id_to_index.get(left.iFlowId, 9999) - config_file_flow_id_to_index.get(
+                    right.iFlowId, 9999
+                )
             elif left.count > 0:
                 # 只有左边配置了兑换次数的，优先左边
                 return -1
@@ -2642,7 +2645,9 @@ class AccountConfigUi(QWidget):
                 return 1
             else:
                 # 两者都未配置兑换次数，则按照默认配置的顺序（若其中一个不在其中，如设置了周常月常那几个，则对应条目排在后面（也就是给一个很大的值9999））
-                return default_flow_id_to_index.get(left.iFlowId, 9999) - default_flow_id_to_index.get(right.iFlowId, 9999)
+                return default_flow_id_to_index.get(left.iFlowId, 9999) - default_flow_id_to_index.get(
+                    right.iFlowId, 9999
+                )
 
         cfg.xinyue_operations_v2.sort(key=functools.cmp_to_key(cmp_func))
 

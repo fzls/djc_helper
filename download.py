@@ -281,9 +281,6 @@ def download_github_raw_content(
             f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 203.6KiB/s
             f"https://mirror.ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-
-
-
         ],
     )
 

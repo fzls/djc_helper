@@ -1744,6 +1744,42 @@ class DjcHelper:
 
         return awards
 
+    @try_except(return_val_on_except="获取失败")
+    def query_xinyue_team_this_week_award_summary(self) -> str:
+        def _query_task_finsihed(task_flow_id: int) -> bool:
+            res = self.xinyue_battle_ground_wpe_op(f"查询队伍任务状态-{task_flow_id}", task_flow_id, print_res=False)
+            raw_info = json.loads(res["data"])
+
+            return raw_info["ret"] == 0 and raw_info["remain"] > 0
+
+        def _query_member_task_list_summary(tasks: list[tuple[str, int]]) -> str:
+            task_state_list = []
+            for task_name, flow_id in tasks:
+                finished = _query_task_finsihed(flow_id)
+                if finished:
+                    task_state_list.append(task_name)
+
+            return "".join(task_state_list)
+
+
+        self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场队伍任务状态", replace_if_exists=False, print_res=False)
+
+        mine_tasks = [
+            ("初", 131664),
+            ("中", 131665),
+            ("高", 131666),
+        ]
+        teammate_flow_ids = [
+            ("初", 131667),
+            ("中", 131669),
+            ("高", 131670),
+        ]
+
+        mine_summary = _query_member_task_list_summary(mine_tasks)
+        teammate_summary = _query_member_task_list_summary(teammate_flow_ids)
+
+        return f"{mine_summary}|{teammate_summary}"
+
     @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)

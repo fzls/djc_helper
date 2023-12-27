@@ -151,18 +151,22 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 1001.7KiB/s
-            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
-            # 4.9MiB/s
-            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
-            # 225.4KiB/s
-            f"https://cors.isteed.cc/github.com/{release_file_path}",
-            # 1.4MiB/s
+            # 8.2MiB/s
+            f"https://dl.ghpig.top/https://github.com/{release_file_path}",
+            # 3.4MiB/s
+            f"https://download.yzuu.cf/{release_file_path}",
+            # 2.6MiB/s
+            f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # 2.5MiB/s
+            f"https://download.fastgit.org/{release_file_path}",
+            # 2.4MiB/s
             f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-            # 821.8KiB/s
-            f"https://ghproxy.com/https://github.com/{release_file_path}",
-            # 173.7KiB/s
+            # 2.2MiB/s
+            f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # 2.1MiB/s
             f"https://download.nuaa.cf/{release_file_path}",
+            # 926.3KiB/s
+            f"https://ghps.cc/https://github.com/{release_file_path}",
         ],
     )
 
@@ -170,12 +174,14 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 2.0MiB/s
-            f"https://download.yzuu.cf/{release_file_path}",
-            # 257.5KiB/s
-            f"https://ghps.cc/https://github.com/{release_file_path}",
-            # timeout
-            f"https://download.fastgit.org/{release_file_path}",
+            # 375.0KiB/s
+            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
+            # 236.8KiB/s
+            f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
+            # 87.6KiB/s
+            f"https://download.fgit.cf/{release_file_path}",
+            # 27.0KiB/s
+            f"https://ghproxy.net/https://github.com/{release_file_path}",
         ],
     )
 
@@ -183,19 +189,25 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
+            # 5.5KiB/s
+            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
+            # ConnectionResetError
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # timeout
+            f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
             # timeout
             f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
-            # timeout
+            # 181.5B/s
             f"https://github.com/{release_file_path}",
             # timeout
             f"https://kgithub.com/{release_file_path}",
-            # 5.5KiB/s
+            # 429
             f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
             # 404
             f"https://js.xxooo.ml/https://github.com/{release_file_path}",
             # 404
             f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-            # 404
+            # 1.3KiB/s
             f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
             # 404
             f"https://download.fastgit.ixmu.net/{release_file_path}",

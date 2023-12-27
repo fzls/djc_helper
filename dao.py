@@ -353,9 +353,9 @@ class XinYueItemInfo(DaoObject):
 class XinYueMyTeamInfo(ConfigInterface):
     def __init__(self):
         self.ret =  0
-        self.num =  2
+        self.num =  0
         self.list: list[XinYueTeamMember] =  []
-        self.teamAllOpenId = "1054073896,qq_2"
+        self.teamAllOpenId = "" # "1054073896,qq_2"
 
         # self.result = 0
         # self.id = "" # note:新版的这个id需要通过查询 131104（自己队伍ID） 来获取

@@ -1756,9 +1756,10 @@ class DjcHelper:
         )
 
         awards: list[XinYueTeamAwardInfo] = []
-        for raw_award in raw_res["records"]:
-            award = XinYueTeamAwardInfo().auto_update_config(raw_award)
-            awards.append(award)
+        if raw_res["ret"] == 0:
+            for raw_award in raw_res["records"]:
+                award = XinYueTeamAwardInfo().auto_update_config(raw_award)
+                awards.append(award)
 
         return awards
 

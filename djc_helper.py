@@ -226,6 +226,8 @@ class DjcHelper:
         # 这个是查询心悦战场信息的接口，应该比较稳定
         # 未过期: {"flowRet": ..., "ret": "0", "msg": ""}
         # 已过期: {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
+        # fixme: 这个是2023-12-21之前的心悦战场的接口，目前这个页面已经废弃，但这个接口似乎仍可用来判断，先继续维持现状
+        #   https://xinyue.qq.com/act/a20210317dnf/index_pc.html
         xinyue_info_result = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
         if str(xinyue_info_result["ret"]) == "0":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况

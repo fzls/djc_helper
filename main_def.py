@@ -895,7 +895,6 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         6,
         6,
         16,
-        12,
         8,
         8,
         8,

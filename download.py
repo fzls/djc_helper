@@ -155,8 +155,6 @@ def download_latest_github_release(
             f"https://dl.ghpig.top/https://github.com/{release_file_path}",
             # 3.4MiB/s
             f"https://download.yzuu.cf/{release_file_path}",
-            # 2.6MiB/s
-            f"https://gh-proxy.com/https://github.com/{release_file_path}",
             # 2.5MiB/s
             f"https://download.fastgit.org/{release_file_path}",
             # 2.4MiB/s
@@ -211,6 +209,8 @@ def download_latest_github_release(
             f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
             # 404
             f"https://download.fastgit.ixmu.net/{release_file_path}",
+            # # 2.6MiB/s 这个返回的文件可能压根不是
+            # f"https://gh-proxy.com/https://github.com/{release_file_path}",
         ],
     )
 
@@ -271,8 +271,6 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 2.4MiB/s
-            f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 521.4KiB/s
             f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 556.3KiB/s
@@ -324,6 +322,8 @@ def download_github_raw_content(
             f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 404
             f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # # 2.4MiB/s 这个返回的文件可能压根不是
+            # f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 

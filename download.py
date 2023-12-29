@@ -151,6 +151,8 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
+            # 8.4MiB/s
+            f"https://gh.con.sh/https://github.com/{release_file_path}",
             # 8.2MiB/s
             f"https://dl.ghpig.top/https://github.com/{release_file_path}",
             # 3.4MiB/s
@@ -161,6 +163,8 @@ def download_latest_github_release(
             f"https://gh.ddlc.top/https://github.com/{release_file_path}",
             # 2.2MiB/s
             f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # 2.1MiB/s
+            f"https://download.njuu.cf/{release_file_path}",
             # 2.1MiB/s
             f"https://download.nuaa.cf/{release_file_path}",
             # 926.3KiB/s
@@ -174,8 +178,6 @@ def download_latest_github_release(
         [
             # 375.0KiB/s
             f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
-            # 236.8KiB/s
-            f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
             # 87.6KiB/s
             f"https://download.fgit.cf/{release_file_path}",
             # 27.0KiB/s
@@ -209,8 +211,10 @@ def download_latest_github_release(
             f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
             # 404
             f"https://download.fastgit.ixmu.net/{release_file_path}",
-            # # 2.6MiB/s 这个返回的文件可能压根不是
+            # # 100mb.test
             # f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # # 100mb.test
+            # f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
         ],
     )
 

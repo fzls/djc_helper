@@ -2315,6 +2315,7 @@ class XinYueBgwUserInfo(ConfigInterface):
 
 class ComicDataList(ConfigInterface):
     """额外封装一层，方便cache时序列化"""
+
     def __init__(self):
         self.comic_list: list[ComicData] = []
 

@@ -3743,7 +3743,13 @@ class DjcHelper:
 
         def query_comic_data() -> ComicDataList:
             def _do_query() -> ComicDataList:
-                res = self.get("查询漫画更新数据", self.urls.dnf_comic_update_api, print_res=False, prefix_to_remove="var DNF_2023COMIC_DATA=", suffix_to_remove=";")
+                res = self.get(
+                    "查询漫画更新数据",
+                    self.urls.dnf_comic_update_api,
+                    print_res=False,
+                    prefix_to_remove="var DNF_2023COMIC_DATA=",
+                    suffix_to_remove=";",
+                )
 
                 comic_data_list = ComicDataList()
                 comic_data_list.auto_update_config({"comic_list": res})

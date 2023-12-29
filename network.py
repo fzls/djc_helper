@@ -117,7 +117,9 @@ class Network:
 
         logger.debug(f"{ctx} cookies = {cookies}")
 
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove)
+        return process_result(
+            ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove
+        )
 
     def post(
         self,
@@ -167,7 +169,9 @@ class Network:
         logger.debug(f"{ctx} json = {json}")
         logger.debug(f"{ctx} cookies = {cookies}")
 
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove)
+        return process_result(
+            ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove
+        )
 
 
 def try_request(

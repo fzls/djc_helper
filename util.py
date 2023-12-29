@@ -1574,7 +1574,7 @@ def auto_updater_latest_path():
 
 def remove_prefix(input_string: str, prefix: str) -> str:
     if prefix and input_string.startswith(prefix):
-        return input_string[len(prefix):]
+        return input_string[len(prefix) :]
     return input_string
 
 

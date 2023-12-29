@@ -2313,6 +2313,16 @@ class XinYueBgwUserInfo(ConfigInterface):
         self.province = "广东"
 
 
+class ComicData(ConfigInterface):
+    def __init__(self):
+        self.id = "1"
+        self.updateStatus = "1"
+        self.comicUrl = "https://ac.qq.com/ComicView/index/id/654947/seqno/2"
+
+    def has_updated(self) -> bool:
+        return self.updateStatus == "1"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

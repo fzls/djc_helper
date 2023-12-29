@@ -30,6 +30,7 @@ from dao import (
     BuyInfo,
     ColgBattlePassInfo,
     ColgBattlePassQueryInfo,
+    ComicData,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
@@ -3739,6 +3740,18 @@ class DjcHelper:
 
             star_count = int(res["jData"]["starNum"])
             return star_count
+
+        def query_comic_data() -> list[ComicData]:
+            res = self.get("查询漫画更新数据", self.urls.dnf_comic_update_api, print_res=False, prefix_to_remove="var DNF_2023COMIC_DATA=", suffix_to_remove=";")
+
+            comic_data_list: list[ComicData] = []
+            for raw_comic_data in res:
+                info = ComicData()
+                info.auto_update_config(raw_comic_data)
+
+                comic_data_list.append(info)
+
+            return comic_data_list
 
         # self.dnf_comic_ide_op("发送短信验证码（绑定）", "248526")
         # self.dnf_comic_ide_op("绑定手机，领取预约礼包", "248528")

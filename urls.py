@@ -545,6 +545,9 @@ class Urls:
         # 查询心悦战场领奖信息
         self.dnf_xinyue_query_gift_record_api = "https://agw.xinyue.qq.com/amp2.MrmsSrv/GetGiftRecord"
 
+        # 漫画更新数据
+        self.dnf_comic_update_api = "https://game.gtimg.cn/images/amside/ide_timer/249678_comicDetail.js"
+
     def show_current_valid_act_infos(self):
         acts: List[ActCommonInfo] = []
 

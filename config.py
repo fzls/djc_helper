@@ -921,7 +921,7 @@ class AccountConfig(ConfigInterface):
         # 虎牙 cookie
         self.huya_cookie = ""
         # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）
-        self.comic_lottery = False
+        self.enable_comic_lottery_v2 = False
         # wegame活动的34C角色 服务器id
         self.take_award_34c_server_id = ""
         # wegame活动的34C角色 id

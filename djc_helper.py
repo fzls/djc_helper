@@ -3822,7 +3822,7 @@ class DjcHelper:
             # # self.dnf_comic_ide_op("兑换-灿烂的徽章神秘礼盒", "774803")
             pass
 
-        if self.cfg.comic_lottery:
+        if self.cfg.enable_comic_lottery_v2:
             logger.info("已开启自动抽奖，将开始抽奖流程~")
             for idx in range_from_one(star_count):
                 self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "248988")

@@ -272,7 +272,7 @@ colg_cookie = ""
 huya_cookie = ""
 
 # 漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）
-comic_lottery = false
+enable_comic_lottery_v2 = false
 
 # wegame活动的34C角色 服务器id
 take_award_34c_server_id = ""

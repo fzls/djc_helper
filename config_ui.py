@@ -2277,8 +2277,8 @@ class AccountConfigUi(QWidget):
         )
         # add_row(form_layout, "公会活动-会员角色名称", self.lineedit_gonghui_rolename_huiyuan)
 
-        self.checkbox_comic_lottery = create_checkbox(cfg.comic_lottery)
-        # add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_comic_lottery)
+        self.checkbox_enable_comic_lottery_v2 = create_checkbox(cfg.enable_comic_lottery_v2)
+        add_row(form_layout, "漫画活动是否自动抽奖（建议手动领完需要的活动后开启该开关）", self.checkbox_enable_comic_lottery_v2)
 
         self.checkbox_enable_majieluo_lucky = create_checkbox(cfg.enable_majieluo_lucky)
         # add_row(form_layout, "马杰洛活动是否尝试用配置的集卡回归角色领取见面礼", self.checkbox_enable_majieluo_lucky)
@@ -2325,7 +2325,7 @@ class AccountConfigUi(QWidget):
         cfg.ozma_ignored_rolename_list = str_to_list(self.lineedit_ozma_ignored_rolename_list.text())
         cfg.gonghui_rolename_huizhang = self.lineedit_gonghui_rolename_huizhang.text()
         cfg.gonghui_rolename_huiyuan = self.lineedit_gonghui_rolename_huiyuan.text()
-        cfg.comic_lottery = self.checkbox_comic_lottery.isChecked()
+        cfg.enable_comic_lottery_v2 = self.checkbox_enable_comic_lottery_v2.isChecked()
         cfg.enable_majieluo_lucky = self.checkbox_enable_majieluo_lucky.isChecked()
         cfg.function_switches.dnf_gonghui_enable_lottery = self.checkbox_dnf_gonghui_enable_lottery.isChecked()
         cfg.enable_auto_match_xinyue_team = self.checkbox_enable_auto_match_xinyue_team.isChecked()

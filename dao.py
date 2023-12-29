@@ -2313,6 +2313,17 @@ class XinYueBgwUserInfo(ConfigInterface):
         self.province = "广东"
 
 
+class ComicDataList(ConfigInterface):
+    """额外封装一层，方便cache时序列化"""
+    def __init__(self):
+        self.comic_list: list[ComicData] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("comic_list", ComicData),
+        ]
+
+
 class ComicData(ConfigInterface):
     def __init__(self):
         self.id = "1"

@@ -30,7 +30,7 @@ from dao import (
     BuyInfo,
     ColgBattlePassInfo,
     ColgBattlePassQueryInfo,
-    ComicData,
+    ComicDataList,
     DnfChronicleMatchServerAddUserRequest,
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
@@ -3741,15 +3741,11 @@ class DjcHelper:
             star_count = int(res["jData"]["starNum"])
             return star_count
 
-        def query_comic_data() -> list[ComicData]:
+        def query_comic_data() -> ComicDataList:
             res = self.get("查询漫画更新数据", self.urls.dnf_comic_update_api, print_res=False, prefix_to_remove="var DNF_2023COMIC_DATA=", suffix_to_remove=";")
 
-            comic_data_list: list[ComicData] = []
-            for raw_comic_data in res:
-                info = ComicData()
-                info.auto_update_config(raw_comic_data)
-
-                comic_data_list.append(info)
+            comic_data_list = ComicDataList()
+            comic_data_list.auto_update_config({"comic_list": res})
 
             return comic_data_list
 

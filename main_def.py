@@ -1537,6 +1537,11 @@ def show_tips(cfg: Config):
             "如果你之前未注册过COLG，或者最近刚注册过COLG（个人页面的UID在4885797之后），那么你可以打开下面这个页面，在三天内分别可以领到7+3+7天的黑钻\n"
             "活动链接： https://bbs.colg.cn/colg_activity_new-novice_gift.html?aid=15&click_from=thread\n"
         ),
+        "23.12 colg年度报告": (
+            "如果你有注册过colg的账号，可以打开下面这个年度报告页面，在后面可以领取 DNF道具、Q币、实物奖励、colg积分 之一的奖励\n"
+            "有兴趣的朋友可以点击下面的活动自行参与下\n"
+            "https://bbs.colg.cn/colg_activity_new-colg_report.html/2023?click_from=thread&click_from=thread\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

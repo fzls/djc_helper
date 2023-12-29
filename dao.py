@@ -2323,6 +2323,15 @@ class ComicDataList(ConfigInterface):
             ("comic_list", ComicData),
         ]
 
+    def get_current_update_progress(self) -> int:
+        """获取当前更新进度"""
+        update_count = 0
+        for comic in self.comic_list:
+            if comic.has_updated():
+                update_count += 1
+
+        return update_count
+
 
 class ComicData(ConfigInterface):
     def __init__(self):

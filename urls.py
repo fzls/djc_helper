@@ -371,7 +371,7 @@ class Urls:
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
             "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
-            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}"
+            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}"
         )
 
         # DNF共创投票

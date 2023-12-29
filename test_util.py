@@ -75,6 +75,7 @@ from util import (
     printed_width,
     remove_invalid_unicode_escape_string,
     remove_none_from_list,
+    remove_prefix,
     remove_suffix,
     start_and_end_date_of_a_month,
     startswith_any,
@@ -481,6 +482,11 @@ def test_start_and_end_date_of_a_month():
     start_date, end_date = start_and_end_date_of_a_month(now_for_test)
     assert start_date == datetime.datetime(now_for_test.year, now_for_test.month, 1, 0, 0, 0)
     assert end_date == datetime.datetime(now_for_test.year, now_for_test.month, 31, 23, 59, 59)
+
+
+def test_remove_prefix():
+    assert remove_prefix("prefix_test", "prefix_") == "test"
+    assert remove_prefix("prefix_test", "not_exist_prefix") == "prefix_test"
 
 
 def test_remove_suffix():

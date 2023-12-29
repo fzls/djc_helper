@@ -3742,12 +3742,21 @@ class DjcHelper:
             return star_count
 
         def query_comic_data() -> ComicDataList:
-            res = self.get("查询漫画更新数据", self.urls.dnf_comic_update_api, print_res=False, prefix_to_remove="var DNF_2023COMIC_DATA=", suffix_to_remove=";")
+            def _do_query() -> ComicDataList:
+                res = self.get("查询漫画更新数据", self.urls.dnf_comic_update_api, print_res=False, prefix_to_remove="var DNF_2023COMIC_DATA=", suffix_to_remove=";")
 
-            comic_data_list = ComicDataList()
-            comic_data_list.auto_update_config({"comic_list": res})
+                comic_data_list = ComicDataList()
+                comic_data_list.auto_update_config({"comic_list": res})
 
-            return comic_data_list
+                return comic_data_list
+
+            return with_cache(
+                "账号共用缓存",
+                "查询漫画更新数据",
+                cache_miss_func=_do_query,
+                cache_max_seconds=24 * 60 * 60,
+                cache_value_unmarshal_func=ComicDataList().auto_update_config,
+            )
 
         # self.dnf_comic_ide_op("发送短信验证码（绑定）", "248526")
         # self.dnf_comic_ide_op("绑定手机，领取预约礼包", "248528")

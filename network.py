@@ -13,7 +13,7 @@ from config import CommonConfig, RetryConfig
 from const import appVersion, sVersionName
 from dao import ResponseInfo
 from log import color, logger
-from util import check_some_exception, get_meaningful_call_point_for_log
+from util import check_some_exception, get_meaningful_call_point_for_log, remove_prefix, remove_suffix
 
 jsonp_callback_flag = "jsonp_callback"
 
@@ -95,6 +95,8 @@ class Network:
         check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         use_this_cookies="",
+        prefix_to_remove="",
+        suffix_to_remove="",
     ) -> dict:
         cookies = self.base_cookies + extra_cookies
         if use_this_cookies != "":
@@ -115,7 +117,7 @@ class Network:
 
         logger.debug(f"{ctx} cookies = {cookies}")
 
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove)
 
     def post(
         self,
@@ -133,6 +135,8 @@ class Network:
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         use_this_cookies="",
+        prefix_to_remove="",
+        suffix_to_remove="",
     ) -> dict:
         cookies = self.base_cookies + extra_cookies
         if use_this_cookies != "":
@@ -163,7 +167,7 @@ class Network:
         logger.debug(f"{ctx} json = {json}")
         logger.debug(f"{ctx} cookies = {cookies}")
 
-        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote)
+        return process_result(ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove)
 
 
 def try_request(
@@ -225,7 +229,15 @@ last_process_result: dict | None = None
 
 
 def process_result(
-    ctx, res, pretty=False, print_res=True, is_jsonp=False, is_normal_jsonp=False, need_unquote=True
+    ctx,
+    res,
+    pretty=False,
+    print_res=True,
+    is_jsonp=False,
+    is_normal_jsonp=False,
+    need_unquote=True,
+    prefix_to_remove="",
+    suffix_to_remove="",
 ) -> dict:
     fix_encoding(res)
 
@@ -236,6 +248,14 @@ def process_result(
         data = jsonp2json(res.text, is_normal_jsonp, need_unquote)
     else:
         json_text = res.text
+
+        # 某些时候需要从一些 xx.js 的链接中获取数据，这类情况会返回一串js代码，定义一个数据变量，形如 var xxx = {...};
+        # 这时候我们需要移除特定的前缀和后缀，来吧数据部分提取出来
+        if prefix_to_remove != "":
+            json_text = remove_prefix(json_text, prefix_to_remove)
+        if suffix_to_remove != "":
+            json_text = remove_suffix(json_text, suffix_to_remove)
+
         for _ in range(10):
             try:
                 data = json.loads(json_text)

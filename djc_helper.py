@@ -12169,6 +12169,8 @@ class DjcHelper:
         check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
         extra_headers: dict[str, str] | None = None,
         use_this_cookies="",
+        prefix_to_remove="",
+        suffix_to_remove="",
         **params,
     ) -> dict:
         return self.network.get(
@@ -12183,6 +12185,8 @@ class DjcHelper:
             check_fn,
             extra_headers,
             use_this_cookies,
+            prefix_to_remove,
+            suffix_to_remove,
         )
 
     def post(
@@ -12201,6 +12205,8 @@ class DjcHelper:
         extra_headers: dict[str, str] | None = None,
         disable_retry=False,
         use_this_cookies="",
+        prefix_to_remove="",
+        suffix_to_remove="",
         **params,
     ) -> dict:
         return self.network.post(
@@ -12218,6 +12224,8 @@ class DjcHelper:
             extra_headers,
             disable_retry,
             use_this_cookies,
+            prefix_to_remove,
+            suffix_to_remove,
         )
 
     def format(self, url, **params):

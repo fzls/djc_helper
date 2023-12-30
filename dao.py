@@ -274,7 +274,7 @@ class XinYueInfo(DaoObject):
     def __init__(self):
         # 等级含义见上述描述
         self.xytype = 1
-        self.xytype_str = "游戏家"
+        self.xytype_str = "获取失败"
         # 特邀会员
         self.is_special_member = False
         # 勇士币

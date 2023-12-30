@@ -1878,13 +1878,14 @@ class DjcHelper:
             return teamidInfo["remote_teamid"]
 
     @try_except(return_val_on_except=XinYueInfo())
-    def query_xinyue_info(self, ctx, print_res=True, use_new_version=True):
+    def query_xinyue_info(self, ctx, print_res=True, use_new_version=True) -> XinYueInfo:
         if use_new_version:
             return self._new_query_xinyue_info(ctx, print_res)
         else:
             return self._old_query_xinyue_info(ctx, print_res)
 
-    def _old_query_xinyue_info(self, ctx, print_res=True):
+    def _old_query_xinyue_info(self, ctx, print_res=True) -> XinYueInfo:
+        """已废弃"""
         res = self.xinyue_battle_ground_op(ctx, "767160", print_res=print_res)
         raw_info = parse_amesvr_common_info(res)
 
@@ -1910,7 +1911,7 @@ class DjcHelper:
 
         return info
 
-    def _new_query_xinyue_info(self, ctx, print_res=True):
+    def _new_query_xinyue_info(self, ctx, print_res=True) -> XinYueInfo:
         def _query_xytype() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询心悦会员类型", 131053, print_res=print_res)
             raw_info = json.loads(res["data"])
@@ -1938,8 +1939,8 @@ class DjcHelper:
         # 实际逻辑
 
         if self.cfg.function_switches.disable_login_mode_xinyue:
-            get_logger_func(print_res)("已禁用心悦登录模式，将使用旧版接口查询心悦信息")
-            return self._old_query_xinyue_info(ctx, print_res)
+            get_logger_func(print_res)("已禁用心悦登录模式，将直接返回默认值")
+            return XinYueInfo()
 
         # 确保请求所需参数已准备好
         self.prepare_wpe_act_openid_accesstoken("查询新版心悦战场信息", replace_if_exists=False, print_res=print_res)

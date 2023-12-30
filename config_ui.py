@@ -3201,7 +3201,13 @@ class DnfHelperInfoConfigUi(QWidget):
         add_row(form_layout, "编年史开启抽奖", self.checkbox_chronicle_lottery)
 
         self.checkbox_disable_fetch_access_token = create_checkbox(cfg.disable_fetch_access_token)
-        add_row(form_layout, "不尝试获取编年史新鉴权参数", self.checkbox_disable_fetch_access_token)
+        add_row(form_layout, (
+            "不尝试获取编年史新鉴权参数\n"
+            "（勾选后以下等功能将无法完成）\n"
+            "   1. 签到奖励\n"
+            "   2. 领取等级奖励\n"
+            "   3. 兑换奖励"
+        ), self.checkbox_disable_fetch_access_token)
 
         self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请查看【使用教程/使用文档.docx/获取助手token】")
         add_row(form_layout, "助手生日活动链接", self.lineedit_url)

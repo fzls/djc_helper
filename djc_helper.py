@@ -797,6 +797,10 @@ class DjcHelper:
     def query_balance(self, ctx, print_res=True) -> tuple[int, int]:
         res = self.raw_query_balance(ctx, print_res)
 
+        if int(res["ret"]) != 0:
+            logger.warning(color("bold_cyan") + f"查询聚豆余额异常，返回结果为 {res}")
+            return 0, 0
+
         info = res["data"]
         allin, balance = int(info["allin"]), int(info["balance"])
         return allin, balance

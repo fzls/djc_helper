@@ -223,13 +223,15 @@ class DjcHelper:
         self.network = Network(self.cfg.sDeviceID, self.uin(), self.cfg.account_info.skey, self.common_cfg)
 
     def check_skey_expired(self, window_index=1):
-        # 这个是查询心悦战场信息的接口，应该比较稳定
-        # 未过期: {"flowRet": ..., "ret": "0", "msg": ""}
-        # 已过期: {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
-        # fixme: 这个是2023-12-21之前的心悦战场的接口，目前这个页面已经废弃，但这个接口似乎仍可用来判断，先继续维持现状
-        #   https://xinyue.qq.com/act/a20210317dnf/index_pc.html
-        xinyue_info_result = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
-        if str(xinyue_info_result["ret"]) == "0":
+        # note: 使用一些长期有效的活动（如旧版心悦战场、福利中心）的接口来判断skey是否过期
+        #   未过期:
+        #       {"flowRet": {...}, "modRet": {...}, "ret": "0", "msg": ""}
+        #       {"ret": "-1", "msg": "目前访问人数过多！请稍后再试！谢谢！", "flowRet": {...}}
+        #   已过期:
+        #     {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
+        # res = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
+        res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=False)
+        if str(res["ret"]) != "101":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
             account_info = self.cfg.account_info
             self.save_uin_skey(account_info.uin, account_info.skey, self.get_vuserid())

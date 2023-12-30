@@ -2804,10 +2804,10 @@ class FunctionSwitchesConfigUi(QWidget):
                 "\n"
                 "    勾选后将几乎不能领取任何活动，主要是给【QQ空间集卡】工具人小号使用的\n"
                 "    以下活动需要单独关闭\n"
-                "    1. 领取道聚城\n"
-                "    2. 道聚城许愿\n"
-                "    3. 心悦特权专区\n"
-                "    4. 集卡"
+                "       1. 领取道聚城\n"
+                "       2. 道聚城许愿\n"
+                "       3. 心悦特权专区\n"
+                "       4. 集卡"
             ),
             self.checkbox_disable_most_activities_v2,
         )

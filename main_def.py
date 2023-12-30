@@ -1578,8 +1578,9 @@ def show_tip_for_myself(msg: str, title: str):
 
 
 def try_auto_update_ignore_permission_on_special_case(cfg: Config):
-    # 尝试同步更新下云配置，方便立刻生效
-    try_update_config_cloud(async_update=False)
+    # 尝试触发下更新云配置，方便尽快生效
+    # hack: 这里不使用之前的 async_update=False 来同步触发，是为了避免某些情况下，下载接口有问题而导致主流程卡住的情况。缺点是，在上次更新后的缓存时间内，可能不会获取到最新的配置
+    try_update_config_cloud()
 
     remote_config = config_cloud()
     if not remote_config.try_auto_update_ignore_permission.can_ignore(now_version, get_now()):

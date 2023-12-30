@@ -2813,32 +2813,44 @@ class FunctionSwitchesConfigUi(QWidget):
         )
         self.checkbox_disable_most_activities_v2.stateChanged.connect(self.confirm_set_disable_most_activities)
 
+        from util import padLeftRight
+
+        def _pad(name: str) -> str:
+            return padLeftRight(name, 8, pad_char="  ")
+
+        def make_title(name: str, influence: str) -> str:
+            title = f"【禁用 {_pad(name)} 功能】"
+            if influence != "":
+                title = f"{title}    {influence}"
+
+            return title
+
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
-        add_row(form_layout, "禁用分享功能", self.checkbox_disable_share)
+        add_row(form_layout, make_title("分享", "影响各种活动中需要实际分享才能领奖的部分"), self.checkbox_disable_share)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "登录类型开关")
 
         self.checkbox_disable_login_mode_normal = create_checkbox(cfg.disable_login_mode_normal)
-        add_row(form_layout, "禁用 普通 登录", self.checkbox_disable_login_mode_normal)
+        add_row(form_layout, make_title("普通", "绝大部分活动"), self.checkbox_disable_login_mode_normal)
 
         self.checkbox_disable_login_mode_qzone = create_checkbox(cfg.disable_login_mode_qzone)
-        add_row(form_layout, "禁用 QQ空间 登录", self.checkbox_disable_login_mode_qzone)
+        add_row(form_layout, make_title("QQ空间", "集卡、QQ会员、黄钻、会员关怀等"), self.checkbox_disable_login_mode_qzone)
 
         self.checkbox_disable_login_mode_iwan = create_checkbox(cfg.disable_login_mode_iwan)
-        add_row(form_layout, "禁用 爱玩 登录", self.checkbox_disable_login_mode_iwan)
+        add_row(form_layout, make_title("爱玩", "qq视频蚊子腿-爱玩"), self.checkbox_disable_login_mode_iwan)
 
         self.checkbox_disable_login_mode_guanjia = create_checkbox(cfg.disable_login_mode_guanjia)
-        add_row(form_layout, "禁用 安全管家 登录", self.checkbox_disable_login_mode_guanjia)
+        add_row(form_layout, make_title("安全管家", "安全管家"), self.checkbox_disable_login_mode_guanjia)
 
         self.checkbox_disable_login_mode_xinyue = create_checkbox(cfg.disable_login_mode_xinyue)
-        add_row(form_layout, "禁用 心悦 登录", self.checkbox_disable_login_mode_xinyue)
+        add_row(form_layout, make_title("心悦", "查询心悦信息、编年史签到、等级、兑换、心悦app、\n    心悦战场、dnf助手专属活动、心悦等各类wpe活动"), self.checkbox_disable_login_mode_xinyue)
 
         self.checkbox_disable_login_mode_supercore = create_checkbox(cfg.disable_login_mode_supercore)
-        add_row(form_layout, "禁用 超享玩 登录", self.checkbox_disable_login_mode_supercore)
+        add_row(form_layout, make_title("超享玩", "超享玩"), self.checkbox_disable_login_mode_supercore)
 
         self.checkbox_disable_login_mode_djc = create_checkbox(cfg.disable_login_mode_djc)
-        add_row(form_layout, "禁用 道聚城 登录", self.checkbox_disable_login_mode_djc)
+        add_row(form_layout, make_title("道聚城", "道聚城任务、兑换、查询道聚城绑定角色信息"), self.checkbox_disable_login_mode_djc)
 
         # ----------------------------------------------------------
         # 不同登录类型的活动开关

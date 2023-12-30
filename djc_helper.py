@@ -13031,11 +13031,13 @@ class DjcHelper:
 
             # {"ret": 0, "msg": "ok"...}}
             # {..."msg": "对不起，您的登录态无效！", "ret": "-990301"...}
+            # {..."msg": "对不起，手Q互联登录态校验失败！", "ret": "-9908"...}
+            # {..."msg": "积分余额查询失败", "ret": -53526...}
             query_data = self.raw_query_balance(
-                "判断skey是否过期",
+                "判断道聚城鉴权信息是否过期",
                 print_res=False,
             )
-            return str(query_data["ret"]) == "0"
+            return str(query_data["ret"]) not in ["-990301", "-9908"]
 
         lr = self.fetch_login_result(
             ctx,

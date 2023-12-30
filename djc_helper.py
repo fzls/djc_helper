@@ -9831,7 +9831,7 @@ class DjcHelper:
         lottery_times = 6
         for idx in range_from_one(lottery_times):
             res = self.dnf_luodiye_ide_op(f"{idx}/{lottery_times} 抽奖", "247306")
-            if res["ret"] == "700" or (res["ret"] == "0" and res["modRet"]["ret"] == 10001):
+            if res["ret"] == 10001:
                 break
             time.sleep(5)
 

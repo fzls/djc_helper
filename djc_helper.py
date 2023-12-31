@@ -1705,10 +1705,11 @@ class DjcHelper:
 
         take_count = 0
         for award in last_week_awards:
-            # 判断是否是高级运镖令
-            # fixme: 暂时先用名称来判断，后面等下一周，三个奖励的ID都有了，再换成ID
-            # 高级运镖令奖励
-            if "运镖令" in award.gift_name:
+            # 判断是否是运镖令奖励
+            # 初级运镖令奖励   4748214
+            # 中级运镖令奖励   4748279
+            # 高级运镖令奖励   4748280
+            if award.gift_id in ["4748214", "4748279", "4748280"] or "运镖令" in award.gift_name:
                 take_count += 1
 
         return take_count

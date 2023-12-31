@@ -1512,13 +1512,12 @@ class DjcHelper:
             color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前是 {new_info.xytype_str} , 最新勇士币数目为 {new_info.ysb}"
         )
 
-        # fixme: 组队信息也等到接入荣耀镖局的时候处理
-        # # 查询下心悦组队进度
-        # teaminfo = self.query_xinyue_teaminfo()
-        # if teaminfo.id != "":
-        #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {teaminfo.award_summary}")
-        # else:
-        #     logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
+        # 查询下心悦组队进度
+        teaminfo = self.query_xinyue_teaminfo()
+        if teaminfo.is_team_full():
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {self.query_xinyue_team_this_week_award_summary()}")
+        else:
+            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
     @try_except()
     def do_xinyue_battle_ground_wpe_op(self, op: XinYueOperationConfig):
@@ -13290,4 +13289,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_comic()
+        djcHelper.xinyue_battle_ground()

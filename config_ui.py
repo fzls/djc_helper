@@ -2416,10 +2416,6 @@ class AccountConfigUi(QWidget):
         )
 
     def try_set_default_exchange_items_for_cfg(self, cfg: AccountConfig):
-        all_item_biz_ids = set()
-        for item in cfg.exchange_items:
-            all_item_biz_ids.add((item.sBizCode, item.iGoodsId))
-
         # 特殊处理下道聚城兑换，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来
         biz_to_default_item_info: dict[str, dict[str, str | list[tuple[str, str]]]] = {
             "dnf": {
@@ -2453,6 +2449,12 @@ class AccountConfigUi(QWidget):
                 ],
             },
         }
+
+        # 记录下已有的配置的信息，方便去重
+        all_item_biz_ids = set()
+        for item in cfg.exchange_items:
+            all_item_biz_ids.add((item.sBizCode, item.iGoodsId))
+
         for sBizCode, default_item_info in biz_to_default_item_info.items():
             iActionId = default_item_info["iActionId"]
             iType = default_item_info["iType"]
@@ -2460,6 +2462,7 @@ class AccountConfigUi(QWidget):
             for iGoodsId, sGoodsName in default_item_info["default_items"]:
                 if (sBizCode, iGoodsId) in all_item_biz_ids:
                     continue
+                all_item_biz_ids.add((sBizCode, iGoodsId))
 
                 item = ExchangeItemConfig()
                 item.iGoodsId = iGoodsId

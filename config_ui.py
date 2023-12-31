@@ -3255,9 +3255,16 @@ class DnfHelperInfoConfigUi(QWidget):
             "   3. 兑换奖励"
         ), self.checkbox_disable_fetch_access_token)
 
-        self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请查看【使用教程/使用文档.docx/获取助手token】")
-        add_row(form_layout, "助手生日活动链接", self.lineedit_url)
+        self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请点击右侧按钮")
         self.lineedit_url.textEdited.connect(self.on_url_changed)
+
+        btn_show_token_doc = create_pushbutton("查看文档", "cyan")
+        btn_show_token_doc.clicked.connect(self.show_token_doc)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.lineedit_url)
+        layout.addWidget(btn_show_token_doc)
+        add_row(form_layout, "助手生日活动链接", layout)
 
         self.lineedit_userId = create_lineedit(cfg.userId, "dnf助手->我的->编辑->社区ID")
         add_row(form_layout, "社区ID(userId)", self.lineedit_userId)
@@ -3363,6 +3370,10 @@ class DnfHelperInfoConfigUi(QWidget):
         self.lineedit_nickName.setText(nickname)
         self.lineedit_token.setText(token)
         self.lineedit_uniqueRoleId.setText(uniqueRoleId)
+
+    def show_token_doc(self):
+        webbrowser.open("https://docs.qq.com/doc/DYmN0UldUbmxITkFj")
+        report_click_event("token_doc")
 
 
 class DnfHelperChronicleExchangeItemConfigUi(QWidget):

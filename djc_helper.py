@@ -3744,12 +3744,6 @@ class DjcHelper:
 
         self.check_dnf_comic_ide()
 
-        def query_star_count() -> int:
-            res = self.dnf_comic_ide_op("查询星星数目", "248455", print_res=False)
-
-            star_count = int(res["jData"]["starNum"])
-            return star_count
-
         def query_comic_data() -> ComicDataList:
             def _do_query() -> ComicDataList:
                 res = self.get(
@@ -3820,7 +3814,7 @@ class DjcHelper:
         # 需要观看（也就是领取一集漫画的星星）后才能领取，所以放到领取星星之后
         self.dnf_comic_ide_op("领取观看礼包", "248947")
 
-        star_count = query_star_count()
+        star_count = self.query_dnf_comic_star_count()
         msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星，因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
         logger.info(color("bold_yellow") + msg)
 
@@ -3842,6 +3836,13 @@ class DjcHelper:
             for idx in range_from_one(star_count):
                 self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "248988")
                 time.sleep(3)
+
+    @try_except(return_val_on_except=0)
+    def query_dnf_comic_star_count(self) -> int:
+        res = self.dnf_comic_ide_op("查询星星数目", "248455", print_res=False)
+
+        star_count = int(res["jData"]["starNum"])
+        return star_count
 
     def check_dnf_comic(self):
         self.check_bind_account(
@@ -13292,4 +13293,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.dnf_comic()

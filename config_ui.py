@@ -1383,8 +1383,10 @@ class ConfigUi(QFrame):
 
     def create_account_tabs(self, cfg: Config):
         self.accounts: list[AccountConfigUi] = []
+
+        common_cfg = self.to_config().common
         for account in cfg.account_configs:
-            account_ui = AccountConfigUi(account, self.to_config().common)
+            account_ui = AccountConfigUi(account, common_cfg)
             self.add_account_tab(account_ui)
 
     def add_account_tab(self, account_ui: AccountConfigUi):

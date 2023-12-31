@@ -2226,14 +2226,28 @@ class AccountConfigUi(QWidget):
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
         self.lineedit_dnf_bbs_cookie = create_lineedit(
-            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看【使用教程/使用文档.docx/其他功能/DNF官方论坛Cookie获取方式】"
+            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮"
         )
-        add_row(form_layout, "dnf论坛cookie", self.lineedit_dnf_bbs_cookie)
+
+        btn_show_dnf_bbs_cookies_doc = create_pushbutton("查看文档", "cyan")
+        btn_show_dnf_bbs_cookies_doc.clicked.connect(self.show_dnf_bbs_cookies_doc)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.lineedit_dnf_bbs_cookie)
+        layout.addWidget(btn_show_dnf_bbs_cookies_doc)
+        add_row(form_layout, "dnf论坛cookie", layout)
 
         self.lineedit_colg_cookie = create_lineedit(
-            cfg.colg_cookie, "请填写论坛请求的完整cookie串，具体获取方式请看【使用教程/使用文档.docx/其他功能/colg论坛Cookie获取方式】"
+            cfg.colg_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮"
         )
-        add_row(form_layout, "colg cookie", self.lineedit_colg_cookie)
+
+        btn_show_colg_cookies_doc = create_pushbutton("查看文档", "cyan")
+        btn_show_colg_cookies_doc.clicked.connect(self.show_colg_cookies_doc)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.lineedit_colg_cookie)
+        layout.addWidget(btn_show_colg_cookies_doc)
+        add_row(form_layout, "colg cookie", layout)
 
         # -------------- 区域：会员关怀 --------------
         (
@@ -2718,6 +2732,14 @@ class AccountConfigUi(QWidget):
             self.collapsible_box_account_password.setHidden(disable)
         self.collapsible_box_account_password.set_fold(disable)
         self.account_info.setDisabled(disable)
+
+    def show_dnf_bbs_cookies_doc(self):
+        webbrowser.open("https://docs.qq.com/doc/DYlVnT1ZVVUlKYWpJ")
+        report_click_event("dnf_bbs_cookies_doc")
+
+    def show_colg_cookies_doc(self):
+        webbrowser.open("https://docs.qq.com/doc/DYnZXenZRbkxWbE1O")
+        report_click_event("colg_cookies_doc")
 
 
 class AccountInfoConfigUi(QWidget):

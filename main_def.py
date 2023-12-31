@@ -886,6 +886,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         "上月",
         "自动匹配",
         "论坛代币券",
+        "漫画星星",
     ]
     colSizes = [
         4,
@@ -904,6 +905,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         4,
         8,
         10,
+        8,
     ]
 
     logger.info(tableify(heads, colSizes))
@@ -969,6 +971,8 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     dbq = djcHelper.query_dnf_bbs_dbq()
 
+    comic_start_count = djcHelper.query_dnf_comic_star_count()
+
     return [
         idx,
         account_config.name,
@@ -987,6 +991,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         can_auto_match_dnf_helper_chronicle,
         # majieluo_stone, majieluo_invite_count,
         dbq,
+        comic_start_count,
     ]
 
 

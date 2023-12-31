@@ -95,6 +95,9 @@ class ExchangeItemConfig(ConfigInterface):
         else:
             return self.sBizCode
 
+    def unique_key(self) -> str:
+        return f"{self.sBizCode}_{self.iGoodsId}"
+
 
 class DnfHelperChronicleExchangeItemConfig(ConfigInterface):
     def __init__(self):
@@ -1065,9 +1068,9 @@ class AccountConfig(ConfigInterface):
 
         return sDeviceID
 
-    def get_exchange_item_by_iGoodsId(self, iGoodsId: str) -> ExchangeItemConfig | None:
+    def get_exchange_item_by_unique_key(self, unique_key: str) -> ExchangeItemConfig | None:
         for exchange_item in self.exchange_items:
-            if exchange_item.iGoodsId == iGoodsId:
+            if exchange_item.unique_key() == unique_key:
                 return exchange_item
 
         return None

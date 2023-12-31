@@ -2160,7 +2160,7 @@ class AccountConfigUi(QWidget):
         self.try_set_default_exchange_items_for_cfg(cfg)
         self.exchange_items = {}
         for exchange_item in cfg.exchange_items:
-            self.exchange_items[exchange_item.iGoodsId] = ExchangeItemConfigUi(form_layout, exchange_item)
+            self.exchange_items[exchange_item.unique_key()] = ExchangeItemConfigUi(form_layout, exchange_item)
 
         # -------------- 区域：心悦组队 --------------
         (
@@ -2341,8 +2341,8 @@ class AccountConfigUi(QWidget):
         self.mobile_game_role_info.update_config(cfg.mobile_game_role_info)
 
         self.try_set_default_exchange_items_for_cfg(cfg)
-        for iGoodsId, exchange_item in self.exchange_items.items():
-            item_cfg = cfg.get_exchange_item_by_iGoodsId(iGoodsId)
+        for unique_key, exchange_item in self.exchange_items.items():
+            item_cfg = cfg.get_exchange_item_by_unique_key(unique_key)
             if item_cfg is None:
                 continue
 

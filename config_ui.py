@@ -2423,10 +2423,7 @@ class AccountConfigUi(QWidget):
             "dnf": {
                 "iActionId": "",
                 "iType": "",
-                "default_items": [
-                    # ("111", "高级装扮兑换券（无期限）（活动期间5次）"),
-                    # ("753", "装备品级调整箱（5个）（每天限兑2次）"),
-                    # ("755", "魔界抗疲劳秘药（10点）（每天限兑1次）"),
+                "items": [
                     ("3089", "高级装扮兑换券（7天）（每周限量1次）"),
                     ("3120", "魔界抗疲劳秘药（10点）（每周限量1次）"),
                     ("3088", "装备品级调整箱（2个）（每月限兑1次）"),
@@ -2441,7 +2438,7 @@ class AccountConfigUi(QWidget):
             "fz": {
                 "iActionId": "29657",
                 "iType": "26",
-                "default_items": [
+                "items": [
                     ("4376", "[每周]艾芙娜委托 1（1个）（每月限兑1次）"),
                     ("4377", "[每日]艾芙娜委托完成券（3个）（每周限兑1次）"),
                     ("4375", "交易牌x5（每日限兑1次）"),
@@ -2451,17 +2448,47 @@ class AccountConfigUi(QWidget):
                 ],
             },
         }
+        # 已经废弃的道具信息
+        biz_to_deprecated_item_info: dict[str, dict[str, str | list[tuple[str, str]]]] = {
+            "dnf": {
+                "iActionId": "",
+                "iType": "",
+                "items": [
+                    ("111", "高级装扮兑换券（无期限）（活动期间5次）"),
+                    ("753", "装备品级调整箱（5个）（每天限兑2次）"),
+                    ("755", "魔界抗疲劳秘药（10点）（每天限兑1次）"),
+                ],
+            },
+        }
+
+        exchange_items: list[ExchangeItemConfig] = []
+
+        # 初始化列表，剔除已废弃的道具
+        for item in cfg.exchange_items:
+            deprecated = False
+            for sBizCode, default_item_info in biz_to_deprecated_item_info.items():
+                if item.sBizCode != sBizCode:
+                    continue
+
+                for iGoodsId, sGoodsName in default_item_info["items"]:
+                    if item.iGoodsId == iGoodsId:
+                        deprecated = True
+                        logger.warning(color("bold_yellow") + f"道聚城道具 {sGoodsName} {iGoodsId} 已废弃，将从配置中移除")
+                        break
+
+            if not deprecated:
+                exchange_items.append(item)
 
         # 记录下已有的配置的信息，方便去重
         all_item_biz_ids = set()
-        for item in cfg.exchange_items:
+        for item in exchange_items:
             all_item_biz_ids.add((item.sBizCode, item.iGoodsId))
 
         for sBizCode, default_item_info in biz_to_default_item_info.items():
             iActionId = default_item_info["iActionId"]
             iType = default_item_info["iType"]
 
-            for iGoodsId, sGoodsName in default_item_info["default_items"]:
+            for iGoodsId, sGoodsName in default_item_info["items"]:
                 if (sBizCode, iGoodsId) in all_item_biz_ids:
                     continue
                 all_item_biz_ids.add((sBizCode, iGoodsId))
@@ -2473,7 +2500,9 @@ class AccountConfigUi(QWidget):
                 item.iActionId = iActionId  # type: ignore
                 item.iType = iType  # type: ignore
                 item.sBizCode = sBizCode
-                cfg.exchange_items.append(item)
+                exchange_items.append(item)
+
+        cfg.exchange_items = exchange_items
 
     def try_set_default_xinyue_exchange_items_for_cfg(self, cfg: AccountConfig, remove_fake_id_items: bool = False):
         _minus_id = 0

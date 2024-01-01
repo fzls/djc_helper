@@ -64,6 +64,8 @@ def download_file(
 
     make_sure_dir_exists(download_dir)
 
+    check_cloudflare_100mb_test(response)
+
     with open(target_file_path, "wb") as f:
         total_length_optional = response.headers.get("content-length")
 
@@ -105,6 +107,15 @@ def download_file(
     logger.info(color("bold_yellow") + f"下载完成，耗时 {used_time}({human_readable_speed}/s)")
 
     return target_file_path
+
+
+def check_cloudflare_100mb_test(response: requests.Response):
+    content_type = response.headers.get("content-type")
+    content_length = response.headers.get("content-length")
+    server = response.headers.get("server")
+
+    if content_type == 'application/x-tar' and content_length == '104857600' and server == 'cloudflare':
+        raise Exception("镜像返回了cf的拦截文件100mb.test，跳过当前镜像")
 
 
 def extend_urls(current_urls: list[str], new_urls: list[str]):

@@ -1547,6 +1547,9 @@ def show_tips(cfg: Config):
             "有兴趣的朋友可以点击下面的活动自行参与下\n"
             "https://bbs.colg.cn/colg_activity_new-colg_report.html/2023?click_from=thread&click_from=thread\n"
         ),
+        "24.1 漫画兑换": (
+            "小助手现已支持漫画活动的兑换功能，各位可打开配置工具【账号配置/漫画】，配置需要兑换的道具（如黑钻）\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

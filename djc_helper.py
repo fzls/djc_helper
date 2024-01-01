@@ -3836,6 +3836,16 @@ class DjcHelper:
             for idx in range_from_one(star_count):
                 self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "248988")
                 time.sleep(3)
+        else:
+            star_count = self.query_dnf_comic_star_count()
+            if star_count > 0:
+                msg = f"账号 {self.cfg.name} 已配置的兑换道具操作完后，仍有{star_count}颗星星，可考虑打开配置工具【漫画】，设置更多兑换道具，或打开抽奖开关，启用自动抽奖功能~}"
+                async_message_box(
+                    msg,
+                    f"{self.cfg.name}_漫画活动_提示抽奖",
+                    open_url=get_act_url("DNF漫画预约活动"),
+                    show_once_weekly=True,
+                )
 
     @try_except(return_val_on_except=0)
     def query_dnf_comic_star_count(self) -> int:

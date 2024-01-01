@@ -103,6 +103,7 @@ from dao import (
 )
 from data_struct import to_raw_type
 from db import (
+    CacheDB,
     CacheInfo,
     DianzanDB,
     DnfHelperChronicleExchangeListDB,
@@ -13055,6 +13056,8 @@ class DjcHelper:
             get_logger_func(print_res, logger.warning)(f"禁用了心悦登录模式，将不会尝试更新心悦登录信息: {ctx}")
             return LoginResult()
 
+        self.check_xinyue_login_cache_not_duplicate()
+
         return self.fetch_login_result(
             ctx,
             QQLogin.login_mode_xinyue,
@@ -13062,6 +13065,45 @@ class DjcHelper:
             cache_validate_func=self.is_xinyue_login_info_valid,
             print_warning=print_res,
         )
+
+    @try_except()
+    def check_xinyue_login_cache_not_duplicate(self):
+        cache_category, cache_key = self.get_login_cache_category_and_key(QQLogin.login_mode_xinyue)
+
+        db = CacheDB()
+        db.with_context(cache_category).load()
+
+        if cache_key not in db.cache:
+            return
+
+        cache_info = db.cache[cache_key]
+        lr = LoginResult()
+        lr.auto_update_config(cache_info.value)
+
+        same_open_id_key_list: list[str] = []
+        for k, v in db.cache.items():
+            if k == cache_key:
+                continue
+
+            other_lr = LoginResult()
+            other_lr.auto_update_config(v.value)
+            if other_lr.openid == lr.openid:
+                # 有另外一个号与本号的openid一样，大概率是使用了同一个QQ来扫码登录心悦页面，会导致后续都以该账号来操作心悦，遇到这种情况则移除它
+                same_open_id_key_list.append(k)
+
+        if len(same_open_id_key_list) == 0:
+            return
+
+        async_message_box(
+            f"当前发现本地缓存的其他账号的心悦信息与当前账号一致，可能是都使用了同一个QQ来扫描。将移除当前QQ和这些QQ的缓存信息，稍后重新登录心悦。{cache_key} {same_open_id_key_list}",
+            "心悦登录信息重复检测",
+        )
+        db.cache.pop(cache_key)
+        for k in same_open_id_key_list:
+            db.cache.pop(k)
+
+        db.save()
+
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
         return self._is_openid_login_info_valid("101478665", lr.openid, lr.xinyue_access_token)

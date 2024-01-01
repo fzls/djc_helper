@@ -2188,22 +2188,12 @@ class AccountConfigUi(QWidget):
                 form_layout, xinyue_exchange_item
             )
 
-        # -------------- 区域：心悦app --------------
+        # -------------- 区域：dnf助手 --------------
         (
-            self.collapsible_box_xinyue_app,
+            self.collapsible_box_dnf_helper_info,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦app", top_layout)
-
-        self.btn_show_xinyue_app_guide = create_pushbutton(
-            "点击查看心悦app的加密http请求体获取方式（相当复杂，建议手动打开app领取，不信邪可以点开试试-。-）", "cyan"
-        )
-        self.btn_show_xinyue_app_guide.clicked.connect(self.show_xinyue_app_guide)
-        add_row(form_layout, "", self.btn_show_xinyue_app_guide)
-
-        self.try_set_default_xinyue_app_operations_for_cfg(cfg)
-        self.xinyue_app_operations = {}
-        for operation in cfg.xinyue_app_operations:
-            self.xinyue_app_operations[operation.name] = XinYueAppOperationConfigUi(form_layout, operation)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
+        self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
 
         # -------------- 区域：集卡 --------------
         (
@@ -2211,13 +2201,6 @@ class AccountConfigUi(QWidget):
             form_layout,
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("集卡", top_layout)
         self.ark_lottery = ArkLotteryConfigUi(form_layout, cfg.ark_lottery, cfg, self.common_cfg)
-
-        # -------------- 区域：dnf助手 --------------
-        (
-            self.collapsible_box_dnf_helper_info,
-            form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
-        self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
 
         # -------------- 区域：dnf论坛 --------------
         (
@@ -2248,6 +2231,23 @@ class AccountConfigUi(QWidget):
         layout.addWidget(self.lineedit_colg_cookie)
         layout.addWidget(btn_show_colg_cookies_doc)
         add_row(form_layout, "colg cookie", layout)
+
+        # -------------- 区域：心悦app --------------
+        (
+            self.collapsible_box_xinyue_app,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦app", top_layout)
+
+        self.btn_show_xinyue_app_guide = create_pushbutton(
+            "点击查看心悦app的加密http请求体获取方式（相当复杂，建议手动打开app领取，不信邪可以点开试试-。-）", "cyan"
+        )
+        self.btn_show_xinyue_app_guide.clicked.connect(self.show_xinyue_app_guide)
+        add_row(form_layout, "", self.btn_show_xinyue_app_guide)
+
+        self.try_set_default_xinyue_app_operations_for_cfg(cfg)
+        self.xinyue_app_operations = {}
+        for operation in cfg.xinyue_app_operations:
+            self.xinyue_app_operations[operation.name] = XinYueAppOperationConfigUi(form_layout, operation)
 
         # -------------- 区域：会员关怀 --------------
         (

@@ -2099,12 +2099,28 @@ class DjcHelper:
             ),
         }
 
+        def _check_fn(response: requests.Response) -> Exception | None:
+            """
+            检查是否属于腾讯游戏接口返回请求过快的情况
+            """
+            res = response.json()
+
+            if res["ret"] == "50003":
+                # {"ret": 50003, "msg": "网络繁忙，请稍后再试", "data": "", "serialId": "..."}
+                wait_seconds = 3 + random.random()
+                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
+                time.sleep(wait_seconds)
+                return Exception("请求过快")
+
+            return check_tencent_game_common_status_code(response)
+
         return self.post(
             ctx,
             self.urls.dnf_xinyue_wpe_api,
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
+            check_fn=_check_fn,
         )
 
     @try_except(return_val_on_except=XinYueBgwUserInfo())

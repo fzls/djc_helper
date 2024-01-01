@@ -673,6 +673,37 @@ class FirecrackersConfig(ConfigInterface):
         ]
 
 
+class ComicConfig(ConfigInterface):
+    def __init__(self):
+        # 是否开启抽奖，建议兑换完所有道具后再开启
+        self.enable_lottery = False
+        # 兑换道具信息
+        self.exchange_items: list[ComicExchangeItemConfig] = []
+
+    def fields_to_fill(self):
+        return [
+            ("exchange_items", ComicExchangeItemConfig),
+        ]
+
+    def get_exchange_item_by_index(self, index: int) -> ComicExchangeItemConfig | None:
+        for exchange_item in self.exchange_items:
+            if exchange_item.index == index:
+                return exchange_item
+
+        return None
+
+    def move_exchange_item_to_front(self):
+        self.exchange_items.sort(key=lambda item: item.count > 0, reverse=True)
+
+
+class ComicExchangeItemConfig(ConfigInterface):
+    def __init__(self):
+        self.index = 1
+        self.name = "黑钻15天"
+        self.need_star = 20
+        self.count = 1
+
+
 class FunctionSwitchesConfig(ConfigInterface):
     def __init__(self):
         # ------------ 全局禁用开关 ------------
@@ -963,6 +994,8 @@ class AccountConfig(ConfigInterface):
         self.hello_voice = HelloVoiceInfoConfig()
         # 燃放爆竹相关配置
         self.firecrackers = FirecrackersConfig()
+        # 漫画相关配置
+        self.comic = ComicConfig()
 
     def fields_to_fill(self):
         return [

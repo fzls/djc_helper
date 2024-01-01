@@ -1225,6 +1225,94 @@ enable_lottery = false
 #need_points = 4
 #count = 1
 
+# 漫画活动相关配置
+[account_configs.comic]
+# 是否开启抽奖，建议兑换完所有道具后再开启
+enable_lottery = false
+
+## 兑换道具信息，将按照配置的顺序去尝试兑换，只有在前面的兑换完次数后才会尝试兑换后面的。
+## index: 奖励index
+## name：奖励名称
+## need_star: 需要的星星
+## count: 每次尝试兑换的数目
+#[[account_configs.comic.exchange_items]]
+#index = 1
+#name = "黑钻15天"
+#need_star = 20
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 2
+#name = "黑钻7天"
+#need_star = 10
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 3
+#name = "黑钻3天"
+#need_star = 6
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 4
+#name = "灿烂的徽章神秘礼盒"
+#need_star = 6
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 5
+#name = "升级券(Lv50~109)"
+#need_star = 5
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 6
+#name = "抗疲劳药（10点）"
+#need_star = 4
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 7
+#name = "华丽的徽章神秘礼盒"
+#need_star = 4
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 8
+#name = "凯丽的强化器"
+#need_star = 2
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 9
+#name = "顶级灵药组合包"
+#need_star = 2
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 10
+#name = "宠物饲料礼袋(20个)"
+#need_star = 2
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 11
+#name = "抗疲劳秘药(5点)"
+#need_star = 2
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 12
+#name = "镶嵌栏开启装置"
+#need_star = 1
+#count = 1
+#
+#[[account_configs.comic.exchange_items]]
+#index = 13
+#name = "神秘契约礼包(1天)"
+#need_star = 1
+#count = 1
+
 # ---------------------------第1个账号相关配置结束-----------------------------
 
 

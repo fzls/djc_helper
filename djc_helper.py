@@ -13126,7 +13126,7 @@ class DjcHelper:
         return lr
 
     def djc_set_custom_cookies(self, openid: str, access_token: str):
-        self.djc_custom_cookies = f"djc_appSource=android; djc_appVersion=138; acctype=qc; appid=1101958653; openid={openid}; access_token={access_token}"
+        self.djc_custom_cookies = f"djc_appSource=android; djc_appVersion={appVersion}; acctype=qc; appid=1101958653; openid={openid}; access_token={access_token}"
 
     def parse_condOutput(self, res: dict, cond_id: str) -> int:
         """

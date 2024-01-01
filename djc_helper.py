@@ -19,7 +19,15 @@ import requests
 
 import json_parser
 from black_list import check_in_black_list
-from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperationConfig, config, load_config
+from config import (
+    AccountConfig,
+    ComicExchangeItemConfig,
+    CommonConfig,
+    ExchangeItemConfig,
+    XinYueOperationConfig,
+    config,
+    load_config,
+)
 from const import appVersion, cached_dir, guanjia_skey_version, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
@@ -3815,28 +3823,20 @@ class DjcHelper:
         self.dnf_comic_ide_op("领取观看礼包", "248947")
 
         star_count = self.query_dnf_comic_star_count()
-        msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星，因为兑换道具比较多，请自行定期来活动页面确定领取啥，或者是用于抽奖~ {get_act_url('DNF漫画预约活动')}"
+        msg = f"账号 {self.cfg.name} 当前共有{star_count}颗星星"
         logger.info(color("bold_yellow") + msg)
 
-        if star_count > 0 and is_weekly_first_run(f"{self.cfg.name}_漫画活动_提示领道具") and not use_by_myself():
-            async_message_box(msg, "漫画活动提示", open_url=get_act_url("DNF漫画预约活动"))
-
-        if use_by_myself():
-            # 我自己进行兑换~
-
-            # # re: 本次实际的兑换接口是单个，到时候看看参数
-            # self.dnf_comic_ide_op("兑换", "249077")
-
-            # # self.dnf_comic_ide_op("兑换-装备提升礼盒", "774806")
-            # # self.dnf_comic_ide_op("兑换-灿烂的徽章神秘礼盒", "774803")
-            pass
+        # 兑换道具
+        star_not_enough = self.comic_exchange_items()
+        logger.info(f"道具兑换完毕，是否是因星星不足而中断: {star_not_enough}")
 
         if self.cfg.comic.enable_lottery:
             logger.info("已开启自动抽奖，将开始抽奖流程~")
             for idx in range_from_one(star_count):
                 self.dnf_comic_ide_op(f"第{idx}/{star_count}次星星夺宝", "248988")
                 time.sleep(3)
-        else:
+        elif not star_not_enough:
+            # 如果兑换道具不是因为星星不够而停止的，那么若还有星星，则尝试提示下
             star_count = self.query_dnf_comic_star_count()
             if star_count > 0:
                 msg = f"账号 {self.cfg.name} 已配置的兑换道具操作完后，仍有{star_count}颗星星，可考虑打开配置工具【漫画】，设置更多兑换道具，或打开抽奖开关，启用自动抽奖功能~"
@@ -3853,6 +3853,60 @@ class DjcHelper:
 
         star_count = int(res["jData"]["starNum"])
         return star_count
+
+    @try_except()
+    def comic_exchange_items(self) -> bool:
+        retryCfg = self.common_cfg.retry
+        # 设置最少等待时间
+        wait_time = max(retryCfg.request_wait_time, 10)
+        retry_wait_time = max(retryCfg.retry_wait_time, 5)
+
+        star_not_enough = False
+
+        for ei in self.cfg.comic.exchange_items:
+            # 是否立即尝试下一个道具
+            try_next_item_now = False
+
+            for progress in range_from_one(ei.count):
+                ctx = f"漫画兑换 {ei.name}({progress}/{ei.count})"
+
+                for _try_index in range(retryCfg.max_retry_count):
+                    res = self.dnf_comic_ide_op("兑换", "249077", index=ei.index)
+
+                    ret = res["ret"]
+                    sMsg = res["sMsg"]
+
+                    if ret == 400001:
+                        # { "ret": 400001, "iRet":400001, "sMsg": "抱歉，您当前剩余的星星数量不足", ...}
+                        logger.info("当前星星不够，不再尝试兑换后续道具")
+                        star_not_enough = True
+                        return star_not_enough
+                    elif ret == 100001:
+                        # 次数上限
+                        logger.info("兑换次数已达上限，尝试下一个道具")
+                        try_next_item_now = True
+                        break
+                    elif ret != 0:
+                        if use_by_myself():
+                            async_message_box(
+                                f"【仅自己可见】漫画活动 ret={ret}, 增加处理下这种情况，具体res如下\n{res}",
+                                "漫画兑换其他错误码",
+                            )
+
+                        try_next_item_now = True
+                        break
+
+
+                    # 成功 {"ret": 0, "iRet": 0, "sMsg": "ok", ...}
+                    logger.debug(f"漫画兑换 {ei.name} ok，等待{wait_time}s，避免请求过快报错")
+                    time.sleep(wait_time)
+                    break
+
+                if try_next_item_now:
+                    time.sleep(wait_time)
+                    break
+
+        return star_not_enough
 
     def check_dnf_comic(self):
         self.check_bind_account(

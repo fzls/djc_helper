@@ -2192,7 +2192,7 @@ class AccountConfigUi(QWidget):
         (
             self.collapsible_box_dnf_helper_info,
             form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手", top_layout)
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手（每月的编年史）", top_layout)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
 
         # -------------- 区域：集卡 --------------

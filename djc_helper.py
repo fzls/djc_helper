@@ -5042,29 +5042,6 @@ class DjcHelper:
                     "accessToken": access_token,
                 }
 
-                # 领取连续签到奖励
-                take_continuous_signin_gifts()
-
-                # 领取基础奖励
-                take_basic_awards()
-
-                # 根据配置兑换奖励
-                exchange_awards()
-
-                # 抽奖
-                lottery()
-            else:
-                async_message_box(
-                    (
-                        "2022.7开始，编年史需要两个新的参数，恰好这两个参数可以通过心悦专区登录后来获取，因此稍后会尝试登录心悦专区\n"
-                        "\n"
-                        "如果你这个登录一直失败，可以去配置工具打开开关【账号配置/dnf助手/不尝试获取编年史新鉴权参数】，禁用掉这个功能\n"
-                        "这样的话，在填写了token等参数的情况下，将仅尝试领取任务经验。而每次签到奖励、领取等级奖励、兑换奖励等功能，则因为没有这个新的参数，将无法执行~\n"
-                    ),
-                    "借用心悦来获取编年史所需的新鉴权参数_{self.cfg.name}",
-                    show_once=True,
-                )
-
         def get_millsecond_timestamps() -> int:
             return int(datetime.datetime.now().timestamp() * 1000)
 
@@ -5612,8 +5589,32 @@ class DjcHelper:
         if take_task_award_only:
             return
 
-        # note: 下面的流程需要一个额外参数，在这里再进行，避免影响后续流程
-        try_fetch_xinyue_openid_access_token()
+        if not self.cfg.dnf_helper_info.disable_fetch_access_token:
+            # note: 下面的流程需要一个额外参数，在这里再进行，避免影响后续流程
+            try_fetch_xinyue_openid_access_token()
+
+            # 领取连续签到奖励
+            take_continuous_signin_gifts()
+
+            # 领取基础奖励
+            take_basic_awards()
+
+            # 根据配置兑换奖励
+            exchange_awards()
+
+            # 抽奖
+            lottery()
+        else:
+            async_message_box(
+                (
+                    "2022.7开始，编年史需要两个新的参数，恰好这两个参数可以通过心悦专区登录后来获取，因此稍后会尝试登录心悦专区\n"
+                    "\n"
+                    "如果你这个登录一直失败，可以去配置工具打开开关【账号配置/dnf助手/不尝试获取编年史新鉴权参数】，禁用掉这个功能\n"
+                    "这样的话，在填写了token等参数的情况下，将仅尝试领取任务经验。而每次签到奖励、领取等级奖励、兑换奖励等功能，则因为没有这个新的参数，将无法执行~\n"
+                ),
+                "借用心悦来获取编年史所需的新鉴权参数_{self.cfg.name}",
+                show_once=True,
+            )
 
         # 展示进度信息
         def show_user_info(name: str, ui: DnfHelperChronicleUserActivityTopInfo):

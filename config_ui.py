@@ -17,6 +17,8 @@ from config import (
     AccountInfoConfig,
     ArkLotteryConfig,
     BindRoleConfig,
+    ComicConfig,
+    ComicExchangeItemConfig,
     CommonConfig,
     Config,
     DnfHelperChronicleExchangeItemConfig,
@@ -2195,6 +2197,13 @@ class AccountConfigUi(QWidget):
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf助手（每月的编年史）", top_layout)
         self.dnf_helper_info = DnfHelperInfoConfigUi(form_layout, cfg.dnf_helper_info)
 
+        # -------------- 区域：漫画 --------------
+        (
+            self.collapsible_box_comic,
+            form_layout,
+        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("漫画", top_layout)
+        self.comic = ComicConfigUi(form_layout, cfg.comic)
+
         # -------------- 区域：集卡 --------------
         (
             self.collapsible_box_ark_lottery,
@@ -2385,6 +2394,7 @@ class AccountConfigUi(QWidget):
         self.bind_role.update_config(cfg.bind_role)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
         # self.hello_voice.update_config(cfg.hello_voice)
+        self.comic.update_config(cfg.comic)
 
     def confirm_set_cannot_bind_dnf(self, state: int):
         if state != Qt.Checked:
@@ -3409,6 +3419,101 @@ class DnfHelperChronicleExchangeItemConfigUi(QWidget):
         add_row(form_layout, f"{cfg.iLevel:2} {cfg.iCard:3} {cfg.iNum:2} {cfg.sName}", self.spinbox_count)
 
     def update_config(self, cfg: DnfHelperChronicleExchangeItemConfig):
+        cfg.count = self.spinbox_count.value()
+
+
+class ComicConfigUi(QWidget):
+    def __init__(self, form_layout: QFormLayout, cfg: ComicConfig, parent=None):
+        super().__init__(parent)
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: ComicConfig):
+        self.checkbox_enable_lottery = create_checkbox(cfg.enable_lottery)
+        add_row(form_layout, "是否自动抽奖（建议领完需要的奖励后开启该开关）", self.checkbox_enable_lottery)
+
+        self.try_set_default_exchange_items_for_cfg(cfg)
+        if len(cfg.exchange_items) != 0:
+            add_row(form_layout, "---- 要兑换的道具 ----", QHLine())
+            add_row(form_layout, "优先换前面的已配置兑换次数的奖励", QHLine())
+            add_row(form_layout, "如果前面的星星不够，不会尝试兑换排在后面的", QHLine())
+        self.exchange_items = {}
+        for exchange_item in cfg.exchange_items:
+            self.exchange_items[exchange_item.index] = ComicExchangeItemConfigUi(
+                form_layout, exchange_item
+            )
+
+    def update_config(self, cfg: ComicConfig):
+        cfg.enable_lottery = self.checkbox_enable_lottery.isChecked()
+
+        self.try_set_default_exchange_items_for_cfg(cfg)
+        for index, exchange_item in self.exchange_items.items():
+            item_cfg = cfg.get_exchange_item_by_index(index)
+            if item_cfg is None:
+                continue
+
+            exchange_item.update_config(item_cfg)
+
+        # 排下序，已设置了兑换次数的放到前面
+        cfg.move_exchange_item_to_front()
+
+    def try_set_default_exchange_items_for_cfg(self, cfg: ComicConfig):
+        # 特殊处理下，若相应配置不存在，则加上默认不领取的配置，确保界面显示出来，方便用户进行配置
+        default_items: list[tuple[int, str, int]] = [
+            (1, "黑钻15天", 20),
+            (2, "黑钻7天", 10),
+            (3, "黑钻3天", 6),
+            (4, "灿烂的徽章神秘礼盒", 6),
+            (5, "升级券(Lv50~109)", 5),
+            (6, "抗疲劳药（10点）", 4),
+            (7, "华丽的徽章神秘礼盒", 4),
+            (8, "凯丽的强化器", 2),
+            (9, "顶级灵药组合包", 2),
+            (10, "宠物饲料礼袋(20个)", 2),
+            (11, "抗疲劳秘药(5点)", 2),
+            (12, "镶嵌栏开启装置", 1),
+            (13, "神秘契约礼包(1天)", 1),
+        ]
+
+        # 记录下已有的配置的信息，方便去重
+        all_item_keys = set()
+        for item in cfg.exchange_items:
+            all_item_keys.add(item.index)
+
+        # 将不存在的部分添加到配置后面
+        for index, name, need_star in default_items:
+            item = ComicExchangeItemConfig()
+            item.index = index
+            item.name = name
+            item.need_star = need_star
+            item.count = 0
+
+            if index in all_item_keys:
+                # 如果配置文件中的对应条目的名字与这里不一样，则改为这里的，这样偶尔填错了名字，也可以在后续通过代码内修正为正确的名字
+                item_cfg_from_config_file = cfg.get_exchange_item_by_index(index)
+                if item_cfg_from_config_file is not None and item_cfg_from_config_file.name != item.name:
+                    item_cfg_from_config_file.name = item.name
+
+                continue
+            all_item_keys.add(index)
+
+            cfg.exchange_items.append(item)
+
+        # 排下序，已设置了兑换次数的放到前面
+        cfg.move_exchange_item_to_front()
+
+
+class ComicExchangeItemConfigUi(QWidget):
+    def __init__(self, form_layout: QFormLayout, cfg: ComicExchangeItemConfig, parent=None):
+        super().__init__(parent)
+
+        self.from_config(form_layout, cfg)
+
+    def from_config(self, form_layout: QFormLayout, cfg: ComicExchangeItemConfig):
+        self.spinbox_count = create_spin_box(cfg.count, 99)
+        add_row(form_layout, f"{cfg.name} - 星星*{cfg.need_star}", self.spinbox_count)
+
+    def update_config(self, cfg: ComicExchangeItemConfig):
         cfg.count = self.spinbox_count.value()
 
 

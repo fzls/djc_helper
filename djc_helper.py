@@ -13095,7 +13095,12 @@ class DjcHelper:
             return
 
         async_message_box(
-            f"当前发现本地缓存的其他账号的心悦信息与当前账号一致，可能是都使用了同一个QQ来扫描。将移除当前QQ和这些QQ的缓存信息，稍后重新登录心悦。{cache_key} {same_open_id_key_list}",
+            (
+                "当前发现本地缓存的其他账号的心悦信息与当前账号一致，可能是都使用了同一个QQ来扫描。将移除当前QQ和这些QQ的缓存信息，稍后重新登录心悦\n"
+                "\n"
+                f"{cache_key}\n"
+                f"{same_open_id_key_list}\n"
+            ),
             "心悦登录信息重复检测",
         )
         db.cache.pop(cache_key)

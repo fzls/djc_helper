@@ -13021,9 +13021,10 @@ class DjcHelper:
             meaingful_caller + color("bold_green") + f"{self.cfg.name} 开启了 {ctx} 功能，因此需要登录活动页面来更新登录票据（skey或p_skey），请稍候~"
         )
 
+        cache_category, cache_key = self.get_login_cache_category_and_key(login_mode)
         return with_cache(
-            f"登录信息_{login_mode}",
-            self.cfg.get_account_cache_key(),
+            cache_category,
+            cache_key,
             cache_miss_func=functools.partial(self.update_login_info, login_mode),
             cache_validate_func=cache_validate_func,
             cache_max_seconds=cache_max_seconds,
@@ -13032,6 +13033,9 @@ class DjcHelper:
                 meaingful_caller + f"使用缓存的登录信息: {lr}"
             ),
         )
+
+    def get_login_cache_category_and_key(self, login_mode: str) -> tuple[str, str]:
+        return f"登录信息_{login_mode}", self.cfg.get_account_cache_key(),
 
     def update_login_info(self, login_mode: str) -> LoginResult:
         logger.warning("登陆信息已过期，将重新获取")

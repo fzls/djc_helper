@@ -3844,7 +3844,7 @@ class DjcHelper:
                     msg,
                     f"{self.cfg.name}_漫画活动_提示抽奖",
                     open_url=get_act_url("DNF漫画预约活动"),
-                    show_once_weekly=True,
+                    show_once_monthly=True,
                 )
 
     @try_except(return_val_on_except=0)

@@ -19,15 +19,7 @@ import requests
 
 import json_parser
 from black_list import check_in_black_list
-from config import (
-    AccountConfig,
-    ComicExchangeItemConfig,
-    CommonConfig,
-    ExchangeItemConfig,
-    XinYueOperationConfig,
-    config,
-    load_config,
-)
+from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperationConfig, config, load_config
 from const import appVersion, cached_dir, guanjia_skey_version, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
@@ -1521,7 +1513,10 @@ class DjcHelper:
         # 查询下心悦组队进度
         teaminfo = self.query_xinyue_teaminfo()
         if teaminfo.is_team_full():
-            logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前队伍奖励概览 {self.query_xinyue_team_this_week_award_summary()}")
+            logger.warning(
+                color("fg_bold_yellow")
+                + f"账号 {self.cfg.name} 当前队伍奖励概览 {self.query_xinyue_team_this_week_award_summary()}"
+            )
         else:
             logger.warning(color("fg_bold_yellow") + f"账号 {self.cfg.name} 当前尚无有效心悦队伍，可考虑加入或查看文档使用本地心悦组队功能")
 
@@ -3869,10 +3864,10 @@ class DjcHelper:
                 ctx = f"漫画兑换 {ei.name}({progress}/{ei.count})"
 
                 for _try_index in range(retryCfg.max_retry_count):
-                    res = self.dnf_comic_ide_op("兑换", "249077", index=ei.index)
+                    res = self.dnf_comic_ide_op(ctx, "249077", index=ei.index)
 
                     ret = res["ret"]
-                    sMsg = res["sMsg"]
+                    # sMsg = res["sMsg"]
 
                     if ret == 400001:
                         # { "ret": 400001, "iRet":400001, "sMsg": "抱歉，您当前剩余的星星数量不足", ...}
@@ -3891,9 +3886,9 @@ class DjcHelper:
                                 "漫画兑换其他错误码",
                             )
 
+                        _ = retry_wait_time
                         try_next_item_now = True
                         break
-
 
                     # 成功 {"ret": 0, "iRet": 0, "sMsg": "ok", ...}
                     logger.debug(f"漫画兑换 {ei.name} ok，等待{wait_time}s，避免请求过快报错")
@@ -5023,7 +5018,7 @@ class DjcHelper:
     #   4.3 参数信息：可搜索 common_params 中的对应key
     #   4.4 接口代码：搜索 对应接口的api名称，如 list/exchange
     @try_except()
-    def dnf_helper_chronicle(self, take_task_award_only=False):
+    def dnf_helper_chronicle(self, take_task_award_only=False):  # noqa: C901
         # dnf助手左侧栏
         show_head_line("dnf助手编年史")
         self.show_not_ams_act_info("DNF助手编年史")

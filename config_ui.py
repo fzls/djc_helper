@@ -2217,9 +2217,7 @@ class AccountConfigUi(QWidget):
             form_layout,
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("dnf论坛", top_layout)
 
-        self.lineedit_dnf_bbs_cookie = create_lineedit(
-            cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮"
-        )
+        self.lineedit_dnf_bbs_cookie = create_lineedit(cfg.dnf_bbs_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮")
 
         btn_show_dnf_bbs_cookies_doc = create_pushbutton("查看文档", "cyan")
         btn_show_dnf_bbs_cookies_doc.clicked.connect(self.show_dnf_bbs_cookies_doc)
@@ -2229,9 +2227,7 @@ class AccountConfigUi(QWidget):
         layout.addWidget(btn_show_dnf_bbs_cookies_doc)
         add_row(form_layout, "dnf论坛cookie", layout)
 
-        self.lineedit_colg_cookie = create_lineedit(
-            cfg.colg_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮"
-        )
+        self.lineedit_colg_cookie = create_lineedit(cfg.colg_cookie, "请填写论坛请求的完整cookie串，获取方式请点击右侧按钮")
 
         btn_show_colg_cookies_doc = create_pushbutton("查看文档", "cyan")
         btn_show_colg_cookies_doc.clicked.connect(self.show_colg_cookies_doc)
@@ -2906,7 +2902,11 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, make_title("安全管家", "安全管家"), self.checkbox_disable_login_mode_guanjia)
 
         self.checkbox_disable_login_mode_xinyue = create_checkbox(cfg.disable_login_mode_xinyue)
-        add_row(form_layout, make_title("心悦", "查询心悦信息、编年史签到、等级、兑换、心悦app、\n    心悦战场、dnf助手专属活动、心悦等各类wpe活动"), self.checkbox_disable_login_mode_xinyue)
+        add_row(
+            form_layout,
+            make_title("心悦", "查询心悦信息、编年史签到、等级、兑换、心悦app、\n    心悦战场、dnf助手专属活动、心悦等各类wpe活动"),
+            self.checkbox_disable_login_mode_xinyue,
+        )
 
         self.checkbox_disable_login_mode_supercore = create_checkbox(cfg.disable_login_mode_supercore)
         add_row(form_layout, make_title("超享玩", "超享玩"), self.checkbox_disable_login_mode_supercore)
@@ -3275,13 +3275,11 @@ class DnfHelperInfoConfigUi(QWidget):
         add_row(form_layout, "编年史开启抽奖", self.checkbox_chronicle_lottery)
 
         self.checkbox_disable_fetch_access_token = create_checkbox(cfg.disable_fetch_access_token)
-        add_row(form_layout, (
-            "不尝试获取编年史新鉴权参数\n"
-            "（勾选后以下等功能将无法完成）\n"
-            "   1. 签到奖励\n"
-            "   2. 领取等级奖励\n"
-            "   3. 兑换奖励"
-        ), self.checkbox_disable_fetch_access_token)
+        add_row(
+            form_layout,
+            ("不尝试获取编年史新鉴权参数\n" "（勾选后以下等功能将无法完成）\n" "   1. 签到奖励\n" "   2. 领取等级奖励\n" "   3. 兑换奖励"),
+            self.checkbox_disable_fetch_access_token,
+        )
 
         self.lineedit_url = create_lineedit("", "填入助手生日活动链接，即可自动解析下面四个参数。获取方式请点击右侧按钮")
         self.lineedit_url.textEdited.connect(self.on_url_changed)
@@ -3435,9 +3433,7 @@ class ComicConfigUi(QWidget):
             add_row(form_layout, "如果前面的星星不够，不会尝试兑换排在后面的", QHLine())
         self.exchange_items = {}
         for exchange_item in cfg.exchange_items:
-            self.exchange_items[exchange_item.index] = ComicExchangeItemConfigUi(
-                form_layout, exchange_item
-            )
+            self.exchange_items[exchange_item.index] = ComicExchangeItemConfigUi(form_layout, exchange_item)
 
     def update_config(self, cfg: ComicConfig):
         cfg.enable_lottery = self.checkbox_enable_lottery.isChecked()

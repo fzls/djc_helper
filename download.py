@@ -114,7 +114,7 @@ def check_cloudflare_100mb_test(response: requests.Response):
     content_length = response.headers.get("content-length")
     server = response.headers.get("server")
 
-    if content_type == 'application/x-tar' and content_length == '104857600' and server == 'cloudflare':
+    if content_type == "application/x-tar" and content_length == "104857600" and server == "cloudflare":
         raise Exception("镜像返回了cf的拦截文件100mb.test，跳过当前镜像")
 
 

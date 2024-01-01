@@ -2256,12 +2256,12 @@ class AccountConfigUi(QWidget):
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("会员关怀", top_layout)
         self.vip_mentor = VipMentorConfigUi(form_layout, cfg.vip_mentor, cfg, self.common_cfg)
 
-        # -------------- 区域：hello语音（皮皮蟹） --------------
-        (
-            self.collapsible_box_hello_voice,
-            form_layout,
-        ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音（皮皮蟹）", top_layout)
-        self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
+        # # -------------- 区域：hello语音（皮皮蟹） --------------
+        # (
+        #     self.collapsible_box_hello_voice,
+        #     form_layout,
+        # ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("hello语音（皮皮蟹）", top_layout)
+        # self.hello_voice = HelloVoiceInfoConfigUi(form_layout, cfg.hello_voice)
 
         # -------------- 区域：其他 --------------
         self.collapsible_box_others, form_layout = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout(
@@ -2384,7 +2384,7 @@ class AccountConfigUi(QWidget):
         self.vip_mentor.update_config(cfg.vip_mentor)
         self.bind_role.update_config(cfg.bind_role)
         self.dnf_helper_info.update_config(cfg.dnf_helper_info)
-        self.hello_voice.update_config(cfg.hello_voice)
+        # self.hello_voice.update_config(cfg.hello_voice)
 
     def confirm_set_cannot_bind_dnf(self, state: int):
         if state != Qt.Checked:

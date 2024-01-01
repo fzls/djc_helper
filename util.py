@@ -36,7 +36,6 @@ from compress import compress_in_memory_with_lzma, decompress_dir_with_bandizip,
 from const import cached_dir, db_top_dir
 from db import CacheDB, CacheInfo
 from exceptions_def import SameAccountTryLoginAtMultipleThreadsException
-from first_run import is_weekly_first_run
 from log import asciiReset, color, get_log_func, logger
 from version import now_version, ver_time
 
@@ -327,7 +326,7 @@ def message_box(
     if is_run_in_github_action():
         return
 
-    from first_run import is_daily_first_run, is_first_run, is_monthly_first_run
+    from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 
     show_message_box = True
     if show_once and not is_first_run(f"message_box_{title}"):

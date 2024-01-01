@@ -3839,7 +3839,7 @@ class DjcHelper:
         else:
             star_count = self.query_dnf_comic_star_count()
             if star_count > 0:
-                msg = f"账号 {self.cfg.name} 已配置的兑换道具操作完后，仍有{star_count}颗星星，可考虑打开配置工具【漫画】，设置更多兑换道具，或打开抽奖开关，启用自动抽奖功能~}"
+                msg = f"账号 {self.cfg.name} 已配置的兑换道具操作完后，仍有{star_count}颗星星，可考虑打开配置工具【漫画】，设置更多兑换道具，或打开抽奖开关，启用自动抽奖功能~"
                 async_message_box(
                     msg,
                     f"{self.cfg.name}_漫画活动_提示抽奖",

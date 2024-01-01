@@ -13022,8 +13022,8 @@ class DjcHelper:
         )
 
         return with_cache(
-            "登录信息",
-            f"{login_mode}_{self.cfg.get_account_cache_key()}",
+            f"登录信息_{login_mode}",
+            self.cfg.get_account_cache_key(),
             cache_miss_func=functools.partial(self.update_login_info, login_mode),
             cache_validate_func=cache_validate_func,
             cache_max_seconds=cache_max_seconds,

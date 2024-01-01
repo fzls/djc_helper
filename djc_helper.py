@@ -1855,7 +1855,7 @@ class DjcHelper:
     def create_xinyue_team(self) -> XinYueMyTeamInfo:
         # 创建小队
         roleinfo = self.get_dnf_bind_role()
-        self.xinyue_battle_ground_wpe_op("尝试创建小队", 131103, extra_data={"team_name": base64_str(roleinfo.roleName)})
+        self.xinyue_battle_ground_wpe_op("尝试创建小队", 131103, extra_data={"team_name": roleinfo.roleName})
 
         return self.query_xinyue_teaminfo()
 

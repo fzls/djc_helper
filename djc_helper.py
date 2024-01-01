@@ -1371,8 +1371,6 @@ class DjcHelper:
         )
 
         if int(data["ret"]) != 0:
-            # fixme: 后面有空处理下下面这个情况
-            #   {'msg': '对不起，手Q互联登录态校验失败！', 'ret': '-9908'}
             logger.warning(f"查询 {game_info.bizName} 礼包信息失败，res=\n{data}")
             return []
 

@@ -4952,9 +4952,13 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("dnf助手活动wpe")
 
-        self.dnf_helper_wpe_op("见面礼", 143111)
+        self.dnf_helper_wpe_op("扬帆见面礼", 143111)
+        self.dnf_helper_wpe_op("幸运见面礼", 143100)
 
-        self.dnf_helper_wpe_op("登录领取", 144574)
+        self.dnf_helper_wpe_op("每周登录领取-1", 144574)
+        self.dnf_helper_wpe_op("每周登录领取-2", 144745)
+        self.dnf_helper_wpe_op("每周登录领取-3", 144746)
+        self.dnf_helper_wpe_op("每周登录领取-4", 144747)
 
         act_info = get_not_ams_act("dnf助手活动wpe")
         async_message_box(
@@ -13422,4 +13426,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_comic()
+        djcHelper.dnf_helper_wpe()

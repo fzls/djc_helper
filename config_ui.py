@@ -2882,15 +2882,15 @@ class FunctionSwitchesConfigUi(QWidget):
         def _pad(name: str) -> str:
             return padLeftRight(name, 8, pad_char="  ")
 
-        def make_title(name: str, influence: str) -> str:
-            title = f"【禁用 {_pad(name)} 功能】"
+        def make_title(name: str, influence: str, suffix: str = "登录") -> str:
+            title = f"【禁用 {_pad(name)} {suffix}】"
             if influence != "":
                 title = f"{title}    {influence}"
 
             return title
 
         self.checkbox_disable_share = create_checkbox(cfg.disable_share)
-        add_row(form_layout, make_title("分享", "影响各种活动中需要实际分享才能领奖的部分"), self.checkbox_disable_share)
+        add_row(form_layout, make_title("分享", "影响各种活动中需要实际分享才能领奖的部分", "功能"), self.checkbox_disable_share)
 
         # ----------------------------------------------------------
         add_form_seperator(form_layout, "登录类型开关")

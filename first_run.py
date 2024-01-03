@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from typing import Optional
 
@@ -29,6 +31,16 @@ duration_func_map = {
     FirstRunType.MONTHLY: get_month,
     FirstRunType.YEARLY: get_year,
 }
+
+first_run_runtime_set: set[str] = set()
+
+
+def is_first_run_in_runtime(key: str) -> bool:
+    if key in first_run_runtime_set:
+        return False
+
+    first_run_runtime_set.add(key)
+    return True
 
 
 def is_first_run(key) -> bool:

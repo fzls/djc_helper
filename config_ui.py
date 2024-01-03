@@ -2178,9 +2178,9 @@ class AccountConfigUi(QWidget):
         ) = create_collapsible_box_with_sub_form_layout_and_add_to_parent_layout("心悦组队", top_layout)
 
         self.checkbox_enable_auto_match_xinyue_team = create_checkbox(cfg.enable_auto_match_xinyue_team)
-        add_row(form_layout, "是否心悦自动匹配组队", self.checkbox_enable_auto_match_xinyue_team)
+        add_row(form_layout, "是否心悦自动匹配组队\n  （在同时配置本地组队的情况下，若勾选本开关且满足下列条件，会优先在线匹配）", self.checkbox_enable_auto_match_xinyue_team)
 
-        add_row(form_layout, "需要满足这些条件", QLabel("1. 在付费生效期间\n" "2. 当前QQ是特邀会员或者心悦会员\n" "3. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次\n"))
+        add_row(form_layout, "需要满足这些条件", QLabel("1. 在付费生效期间\n" "2. 当前QQ是特邀会员或者心悦会员\n" "3. 上周心悦战场荣耀镖局并成功完成运镖 3 次\n"))
 
         # -------------- 区域：心悦特权专区兑换 --------------
         (

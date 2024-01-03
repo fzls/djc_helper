@@ -1039,6 +1039,12 @@ class AccountConfig(ConfigInterface):
         if not self.check_role_id("关怀活动", self.vip_mentor.guanhuai_dnf_role_id):
             self.vip_mentor.guanhuai_dnf_role_id = ""
 
+        if not self.check_role_id("wegame活动的34C角色", self.take_award_34c_role_id):
+            self.take_award_34c_role_id = ""
+
+        if not self.check_role_id("角色绑定", self.bind_role.dnf_role_id):
+            self.bind_role.dnf_role_id = ""
+
         if self.cannot_bind_dnf_v2 and not self.function_switches.disable_most_activities_v2:
             if is_monthly_first_run(f"每月提示绑定dnf与活动开关不匹配-{self.name}"):
                 async_message_box(
@@ -1061,7 +1067,7 @@ class AccountConfig(ConfigInterface):
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():
             async_message_box(
-                f"账号 {self.name} 的{ctx}幸运角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作",
+                f"账号 {self.name} 的{ctx}的角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作",
                 "配置有误",
             )
             return False

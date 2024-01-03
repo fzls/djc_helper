@@ -13,7 +13,7 @@ import toml
 from const import appVersion, cached_dir
 from dao import DnfHelperChronicleExchangeGiftInfo
 from data_struct import ConfigInterface, to_raw_type
-from first_run import is_monthly_first_run
+from first_run import is_first_run_in_runtime, is_monthly_first_run
 from log import color, consoleHandler, consoleLogFormatter, logger
 from sign import getACSRFTokenForAMS, getDjcSignParams
 from util import (
@@ -1066,10 +1066,13 @@ class AccountConfig(ConfigInterface):
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():
-            async_message_box(
-                f"账号 {self.name} 的{ctx}的角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作",
-                "配置有误",
-            )
+            if is_first_run_in_runtime(f"检查角色ID-{ctx}-{role_id}"):
+                # 为避免弹窗多次，这里单个id最多弹一次窗
+                async_message_box(
+                    f"账号 {self.name} 的{ctx}的角色ID似乎填的是昵称（{role_id}），这里需要填的是角色id，形如1282822。本次配置将置空，如需使用该功能，请在配置工具中将该字段清空，然后按照显示出来的提示操作",
+                    "配置有误",
+                )
+
             return False
 
         return True

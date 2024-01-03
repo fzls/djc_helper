@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import Optional
 
 from db import FirstRunDB
 from log import logger
@@ -47,7 +46,7 @@ def is_first_run(key) -> bool:
     return _is_first_run(FirstRunType.ONCE, key)
 
 
-def is_first_run_in(key="", duration: Optional[timedelta] = None) -> bool:
+def is_first_run_in(key="", duration: timedelta | None = None) -> bool:
     duration = duration or timedelta(days=1)
 
     return _is_first_run(FirstRunType.DURATION, key, duration=duration)
@@ -70,7 +69,7 @@ def is_yearly_first_run(key="") -> bool:
 
 
 @try_except(return_val_on_except=True)
-def _is_first_run(first_run_type: str, key="", duration: Optional[timedelta] = None) -> bool:
+def _is_first_run(first_run_type: str, key="", duration: timedelta | None = None) -> bool:
     duration = duration or timedelta(days=1)
 
     def cb(first_run_data: FirstRunDB) -> bool:

@@ -13038,7 +13038,10 @@ class DjcHelper:
         )
 
     def get_login_cache_category_and_key(self, login_mode: str) -> tuple[str, str]:
-        return f"登录信息_{login_mode}", self.cfg.get_account_cache_key(),
+        return (
+            f"登录信息_{login_mode}",
+            self.cfg.get_account_cache_key(),
+        )
 
     def update_login_info(self, login_mode: str) -> LoginResult:
         logger.warning("登陆信息已过期，将重新获取")
@@ -13110,7 +13113,6 @@ class DjcHelper:
             db.cache.pop(k)
 
         db.save()
-
 
     def is_xinyue_login_info_valid(self, lr: LoginResult) -> bool:
         return self._is_openid_login_info_valid("101478665", lr.openid, lr.xinyue_access_token)

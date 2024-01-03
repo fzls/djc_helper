@@ -81,6 +81,17 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         e: FileNotFoundError
         # FileNotFoundError: [Errno 2] No such file or directory: 'config.toml'
         msg += format_msg(f"文件 {e.filename} 不见了，很有可能是被杀毒软件删除了，请重新解压一份小助手来使用，同时最好将小助手所在文件夹添加到杀毒软件的白名单中")
+        if e.filename == "config.toml":
+            msg += format_msg(
+                f"  被删除的这个文件({e.filename})是小助手的配置文件，如果之前运行过，可以在稍后自动打开的目录中，找到一个最近的备份，然后将这个文件复制回小助手的目录即可",
+                "bold_cyan",
+            )
+
+            from main_def import get_config_backup_dir
+
+            config_backup_dir = get_config_backup_dir()
+            open_with_default_app(config_backup_dir)
+
     elif type(e) in [
         selenium.common.exceptions.TimeoutException,
     ]:

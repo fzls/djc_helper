@@ -793,6 +793,7 @@ class ConfigUi(QFrame):
         form_layout.addRow("卡密", self.lineedit_secret)
 
         self.lineedit_qq = create_lineedit("", placeholder_text=placeholder_text_qq)
+        self.lineedit_qq.setValidator(QQValidator())
         form_layout.addRow(label_name_qq, self.lineedit_qq)
         # 如果首个账号设置了qq，则直接填入作为主QQ默认值，简化操作
         if len(cfg.account_configs) != 0:
@@ -826,6 +827,7 @@ class ConfigUi(QFrame):
         vbox_layout.addLayout(form_layout)
 
         self.lineedit_pay_directly_qq = create_lineedit("", placeholder_text=placeholder_text_qq)
+        self.lineedit_pay_directly_qq.setValidator(QQValidator())
         form_layout.addRow(label_name_qq, self.lineedit_pay_directly_qq)
         # 如果首个账号设置了qq，则直接填入作为主QQ默认值，简化操作
         if len(cfg.account_configs) != 0:
@@ -1537,6 +1539,7 @@ class CommonConfigUi(QFrame):
         )
 
         self.lineedit_xinyue_send_card_target_qq = create_lineedit(cfg.xinyue_send_card_target_qq)
+        self.lineedit_xinyue_send_card_target_qq.setValidator(QQValidator())
         add_row(form_layout, "心悦集卡赠送卡片目标QQ(这个QQ将接收来自其他QQ赠送的卡片)", self.lineedit_xinyue_send_card_target_qq)
 
         self.fixed_teams = []
@@ -2106,6 +2109,7 @@ class AccountConfigUi(QWidget):
         self.lineedit_account = create_lineedit(
             cfg.account_info.account, "账号密码模式下用于配置QQ信息，扫码模式下填写将尝试触发自动点击头像登录（若对应QQ客户端已登录）"
         )
+        self.lineedit_account.setValidator(QQValidator())
         add_row(form_layout, "QQ账号", self.lineedit_account)
 
         # -------------- 区域：QQ信息 --------------

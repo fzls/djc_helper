@@ -240,6 +240,15 @@ class QQValidator(QValidator):
         return (QValidator.Acceptable, text, pos)
 
 
+class DNFRoleIdValidator(QValidator):
+    def validate(self, text: str, pos: int) -> tuple[QValidator.State, str, int]:
+        role_id = text
+        if role_id != "" and not role_id.isnumeric():
+            return (QValidator.Invalid, text, pos)
+
+        return (QValidator.Acceptable, text, pos)
+
+
 def show_message(title: str, text: str, disabled_seconds=0, is_text_selectable=False, show_log=True):
     if show_log:
         logger.info(f"{title} {text}")

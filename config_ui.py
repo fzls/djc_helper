@@ -44,6 +44,7 @@ from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from notice import Notice, NoticeManager
 from qt_wrapper import (
+    DNFRoleIdValidator,
     MyComboBox,
     QHLine,
     QQListValidator,
@@ -2312,6 +2313,7 @@ class AccountConfigUi(QWidget):
         self.lineedit_take_award_34c_role_id = create_lineedit(
             cfg.take_award_34c_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
         )
+        self.lineedit_take_award_34c_role_id.setValidator(DNFRoleIdValidator())
         # add_row(form_layout, "wegame活动的34C角色 角色ID", self.lineedit_take_award_34c_role_id)
 
         self.role_selector = RoleSelector(
@@ -3054,6 +3056,7 @@ class ArkLotteryConfigUi(QWidget):
         self.lineedit_lucky_dnf_role_id = create_lineedit(
             cfg.lucky_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
         )
+        self.lineedit_lucky_dnf_role_id.setValidator(DNFRoleIdValidator())
         add_row(form_layout, "幸运勇士角色ID", self.lineedit_lucky_dnf_role_id)
 
         self.role_selector = RoleSelector(
@@ -3119,6 +3122,7 @@ class VipMentorConfigUi(QWidget):
         self.lineedit_guanhuai_dnf_role_id = create_lineedit(
             cfg.guanhuai_dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录）"
         )
+        self.lineedit_guanhuai_dnf_role_id.setValidator(DNFRoleIdValidator())
         add_row(form_layout, "关怀礼包角色角色ID", self.lineedit_guanhuai_dnf_role_id)
 
         self.role_selector = RoleSelector(
@@ -3162,6 +3166,7 @@ class BindRoleConfigUi(QWidget):
         self.lineedit_dnf_role_id = create_lineedit(
             cfg.dnf_role_id, "角色ID（不是角色名称！！！），形如 1282822，可以点击下面的选项框来选择角色（需登录，若卡住请先运行一遍本体来完成登录流程再操作）"
         )
+        self.lineedit_dnf_role_id.setValidator(DNFRoleIdValidator())
         add_row(form_layout, "领奖角色角色ID", self.lineedit_dnf_role_id)
 
         self.role_selector = RoleSelector(

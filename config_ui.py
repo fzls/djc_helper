@@ -2905,12 +2905,12 @@ class FunctionSwitchesConfigUi(QWidget):
         add_row(form_layout, make_title("爱玩", "qq视频蚊子腿-爱玩"), self.checkbox_disable_login_mode_iwan)
 
         self.checkbox_disable_login_mode_guanjia = create_checkbox(cfg.disable_login_mode_guanjia)
-        add_row(form_layout, make_title("安全管家", "安全管家"), self.checkbox_disable_login_mode_guanjia)
+        add_row(form_layout, make_title(" 安全管家 ", "安全管家"), self.checkbox_disable_login_mode_guanjia)
 
         self.checkbox_disable_login_mode_xinyue = create_checkbox(cfg.disable_login_mode_xinyue)
         add_row(
             form_layout,
-            make_title("心悦", "查询心悦信息、编年史签到、等级、兑换、心悦app、\n    心悦战场、dnf助手专属活动、心悦等各类wpe活动"),
+            make_title("心悦", "dnf助手专属、编年史、心悦战场等各类wpe活动"),
             self.checkbox_disable_login_mode_xinyue,
         )
 

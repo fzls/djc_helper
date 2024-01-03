@@ -225,7 +225,7 @@ class QQListValidator(QValidator):
         sl = str_to_list(text)
 
         for qq in sl:
-            if not qq.isnumeric():
+            if not qq.isdigit():
                 return (QValidator.Invalid, text, pos)
 
         return (QValidator.Acceptable, text, pos)
@@ -234,7 +234,7 @@ class QQListValidator(QValidator):
 class QQValidator(QValidator):
     def validate(self, text: str, pos: int) -> tuple[QValidator.State, str, int]:
         qq = text
-        if qq != "" and not qq.isnumeric():
+        if qq != "" and not qq.isdigit():
             return (QValidator.Invalid, text, pos)
 
         return (QValidator.Acceptable, text, pos)
@@ -243,7 +243,7 @@ class QQValidator(QValidator):
 class DNFRoleIdValidator(QValidator):
     def validate(self, text: str, pos: int) -> tuple[QValidator.State, str, int]:
         role_id = text
-        if role_id != "" and not role_id.isnumeric():
+        if role_id != "" and not role_id.isdigit():
             return (QValidator.Invalid, text, pos)
 
         return (QValidator.Acceptable, text, pos)

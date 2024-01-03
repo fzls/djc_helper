@@ -352,7 +352,7 @@ def is_request_ok(data) -> bool:
                     # 特殊处理 status
                     val = data[key]
                     if key == "status":
-                        if type(val) is str and not val.isnumeric():
+                        if type(val) is str and not val.isdigit():
                             success = False
                         else:
                             success = int(val) in [0, 1, 200]

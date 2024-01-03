@@ -468,7 +468,7 @@ def uin2qq(uin):
 
 
 def is_valid_qq(qq: str) -> bool:
-    return qq.isnumeric()
+    return qq.isdigit()
 
 
 def exists_flag_file(flag_file_name: str) -> bool:

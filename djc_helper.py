@@ -1286,6 +1286,7 @@ class DjcHelper:
         return temp_change_bind_roles
 
     def query_dnf_role_info_by_serverid_and_roleid(self, server_id: str, role_id: str) -> DnfRoleInfo | None:
+        logger.debug(f"查询dnf角色信息，server_id={server_id} role_id={role_id}")
         for role in self.query_dnf_rolelist(server_id, False):
             if role.roleid == role_id:
                 return role

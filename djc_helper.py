@@ -1829,10 +1829,12 @@ class DjcHelper:
     @try_except(return_val_on_except=XinYueMyTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueMyTeamInfo:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)
-        raw_data = json.loads(res["data"])
 
         team_info = XinYueMyTeamInfo()
-        team_info.auto_update_config(raw_data)
+
+        if res["ret"] == 0:
+            raw_data = json.loads(res["data"])
+            team_info.auto_update_config(raw_data)
 
         return team_info
 
@@ -1854,14 +1856,17 @@ class DjcHelper:
         # 加入小队
         res = self.xinyue_battle_ground_wpe_op("尝试加入小队", 131113, extra_data={"invitationCode": remote_teamid})
 
-        if res["ret"] != 0:
+        one_team_info = None
+
+        if res["ret"] == 0:
+            raw_data = json.loads(res["data"])
+
+            one_team_info = XinYueSummaryTeamInfo()
+            one_team_info.auto_update_config(raw_data["teamInfo"])
+        else:
             # 小队已经解散
-            return None
+            pass
 
-        raw_data = json.loads(res["data"])
-
-        one_team_info = XinYueSummaryTeamInfo()
-        one_team_info.auto_update_config(raw_data["teamInfo"])
 
         return one_team_info
 
@@ -1930,27 +1935,47 @@ class DjcHelper:
     def _new_query_xinyue_info(self, ctx, print_res=True) -> XinYueInfo:
         def _query_xytype() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询心悦会员类型", 131053, print_res=print_res)
-            raw_info = json.loads(res["data"])
 
-            return raw_info["value"]
+            count = 0
+
+            if res["ret"] == 0:
+                raw_info = json.loads(res["data"])
+                count = raw_info["value"]
+
+            return count
 
         def _query_ysb() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询勇士币", 131050, print_res=print_res)
-            raw_info = json.loads(res["data"])
 
-            return int(raw_info["remain"])
+            count = 0
+
+            if res["ret"] == 0:
+                raw_info = json.loads(res["data"])
+                count = raw_info["remain"]
+
+            return count
 
         def _query_score() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询成就点", 131049, print_res=print_res)
-            raw_info = json.loads(res["data"])
 
-            return int(raw_info["remain"])
+            count = 0
+
+            if res["ret"] == 0:
+                raw_info = json.loads(res["data"])
+                count = raw_info["remain"]
+
+            return count
 
         def _query_ticket() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询抽奖次数", 131051, print_res=print_res)
-            raw_info = json.loads(res["data"])
 
-            return int(raw_info["remain"])
+            count = 0
+
+            if res["ret"] == 0:
+                raw_info = json.loads(res["data"])
+                count = raw_info["remain"]
+
+            return count
 
         # 实际逻辑
 

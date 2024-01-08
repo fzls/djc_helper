@@ -2113,8 +2113,9 @@ class DjcHelper:
             """
             res = response.json()
 
-            if res["ret"] == "50003":
+            if res["ret"] == 50003 or "请稍后再试" in res["msg"]:
                 # {"ret": 50003, "msg": "网络繁忙，请稍后再试", "data": "", "serialId": "..."}
+                # {"ret": 0, "msg": "操作过于频繁，请稍后再试", "data": "{\"msg\":\"操作过于频繁，请稍后再试\",\"ret\":40006}", "serialId": "..."}
                 wait_seconds = 3 + random.random()
                 logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
                 time.sleep(wait_seconds)

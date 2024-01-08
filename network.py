@@ -192,6 +192,8 @@ def try_request(
     :type retryCfg: RetryConfig
     """
     for i in range(retryCfg.max_retry_count):
+        check_exception = None
+
         try:
             response: requests.Response = request_fn()
             fix_encoding(response)
@@ -213,16 +215,21 @@ def try_request(
                 else:
                     return log_func
 
+            retry_wait_time = retryCfg.retry_wait_time
+            if check_exception is not None:
+                # 如果是由检查回调返回的异常，则默认里面进行了必要的超时等待，外侧不再尝试等待
+                retry_wait_time = 0
+
             extra_info = check_some_exception(exc)
             get_log_func(exc, logger.exception)("request failed, detail as below:" + extra_info, exc_info=exc)
             stack_info = color("bold_black") + "".join(traceback.format_stack())
             get_log_func(exc, logger.error)(f"full call stack=\n{stack_info}")
             get_log_func(exc, logger.warning)(
                 color("thin_yellow")
-                + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retryCfg.retry_wait_time}s。异常补充说明如下：{extra_info}"
+                + f"{i + 1}/{retryCfg.max_retry_count}: request failed, wait {retry_wait_time}s。异常补充说明如下：{extra_info}"
             )
             if i + 1 != retryCfg.max_retry_count:
-                time.sleep(retryCfg.retry_wait_time)
+                time.sleep(retry_wait_time)
 
     logger.error(f"重试{retryCfg.max_retry_count}次后仍失败")
     return None

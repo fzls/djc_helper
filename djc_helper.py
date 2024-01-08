@@ -1815,8 +1815,6 @@ class DjcHelper:
 
     @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:
-        time.sleep(3)
-        logger.debug("心悦查询队伍相关接口前等待3秒，避免返回网络繁忙提示")
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)
         if res["ret"] != 0:
             return ""
@@ -1836,8 +1834,6 @@ class DjcHelper:
 
     def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
         # 传入小队ID查询队伍信息
-        time.sleep(3)
-        logger.debug("心悦查询队伍相关接口前等待3秒，避免返回网络繁忙提示")
         res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode": remote_teamid})
 
         one_team_info = XinYueSummaryTeamInfo()
@@ -2068,9 +2064,19 @@ class DjcHelper:
         self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params
     ):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
-        wait_time = 0.5 + 1 * random.random()
-        logger.debug(f"心悦战场请求 {ctx} 先随机等待 {wait_time:.2f} 秒，避免请求过快")
-        time.sleep(wait_time)
+        # note: 心悦这个大部分查询接口是不需要，部分接口（如组队相关的）在下方特判进行处理，并在返回请求过快的情况下，等待一会再重试
+        wait_time = 2 + 1 * random.random()
+        # logger.debug(f"心悦战场请求 {ctx} 先随机等待 {wait_time:.2f} 秒，避免请求过快")
+        # time.sleep(wait_time)
+
+        need_wait_flow_ids = {
+            131104, # 查询我的心悦队伍ID
+            131114, # 查询特定id的心悦队伍信息
+        }
+        if flow_id in need_wait_flow_ids:
+            # note: 部分接口有调用频率限制
+            logger.debug(f"心悦战场请求 {ctx} {flow_id} 有调用频率限制，等待 {wait_time:.2f} 秒后再尝试请求")
+            time.sleep(wait_time)
 
         act_id = "15488"
         roleinfo = self.get_dnf_bind_role()

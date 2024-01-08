@@ -2118,12 +2118,16 @@ class DjcHelper:
             """
             res = response.json()
 
-            if res["ret"] == 50003 or "请稍后再试" in res["msg"]:
-                # {"ret": 50003, "msg": "网络繁忙，请稍后再试", "data": "", "serialId": "..."}
+            if res["msg"] == "操作过于频繁，请稍后再试":
+                # re: 使用flowid=131104测试发现，这里的请求过快判定时间似乎是1.8秒，在这种情况下，放宽一点，等待2-3秒
                 # {"ret": 0, "msg": "操作过于频繁，请稍后再试", "data": "{\"msg\":\"操作过于频繁，请稍后再试\",\"ret\":40006}", "serialId": "..."}
-                wait_seconds = 3 + random.random()
-                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待{wait_seconds:.2f}秒后重试")
-                time.sleep(wait_seconds)
+                #
+                # note: 下面这个虽然看起来很像是请求过快，实际并不是这个含义，似乎是对应数据不存在的情况下返回，这里备注下
+                #           比如本周还未创建队伍，也未加入队伍的情况下，尝试查询自己的队伍ID
+                # {"ret": 50003, "msg": "网络繁忙，请稍后再试", "data": "", "serialId": "..."}
+
+                logger.warning(get_meaningful_call_point_for_log() + f"请求过快，等待 {wait_time:.2f} 秒后重试")
+                time.sleep(wait_time)
                 return Exception("请求过快")
 
             return check_tencent_game_common_status_code(response)

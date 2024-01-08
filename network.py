@@ -165,7 +165,7 @@ class Network:
         actual_cookies = post_headers["Cookie"]
 
         logger.debug(f"{ctx} data = {data}")
-        logger.debug(f"{ctx} json = {json}")
+        logger.debug(f"{ctx} json = {pretty_json(json)}")
         logger.debug(f"{ctx} cookies = {actual_cookies}")
 
         if not disable_retry:
@@ -412,6 +412,9 @@ def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True) -> dict:
 
 
 def pretty_json(data, pretty=False, need_unquote=True) -> str:
+    if data is None:
+        return str(data)
+
     if pretty:
         jsonStr = json.dumps(data, ensure_ascii=False, indent=2)
     else:

@@ -1816,11 +1816,16 @@ class DjcHelper:
     @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)
-        if res["ret"] != 0:
-            return ""
-        raw_data = json.loads(res["data"])
 
-        return raw_data["code"]
+        code = ""
+
+        # 正常结果：{"ret": 0, "msg": "", "data": "{\"ret\":0,\"errCode\":0,\"code\":\"DNF1704679425RLDV6I\"}", "serialId": "..."}
+        # 没有队伍（如到第二周了队伍解散、尚未创建队伍等）：{"ret":50003,"msg":"网络繁忙，请稍后再试","data":"","serialId":"..."}
+        if res["ret"] == 0:
+            raw_data = json.loads(res["data"])
+            code = raw_data["code"]
+
+        return code
 
     @try_except(return_val_on_except=XinYueMyTeamInfo(), show_exception_info=False)
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueMyTeamInfo:

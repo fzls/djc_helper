@@ -1872,7 +1872,6 @@ class DjcHelper:
             # 小队已经解散
             pass
 
-
         return one_team_info
 
     def create_xinyue_team(self) -> XinYueMyTeamInfo:
@@ -2109,8 +2108,8 @@ class DjcHelper:
         # time.sleep(wait_time)
 
         need_wait_flow_ids = {
-            131104, # 查询我的心悦队伍ID
-            131114, # 查询特定id的心悦队伍信息
+            131104,  # 查询我的心悦队伍ID
+            131114,  # 查询特定id的心悦队伍信息
         }
         if flow_id in need_wait_flow_ids:
             # note: 部分接口有调用频率限制

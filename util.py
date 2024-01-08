@@ -109,7 +109,9 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
 
         if last_response_info is not None:
             lr = last_response_info
-            msg += format_msg(f"最近一次收到的请求结果为：status_code={lr.status_code} reason={lr.reason} \n{lr.text}\n", "bold_cyan")
+            msg += format_msg(
+                f"最近一次收到的请求结果为：status_code={lr.status_code} reason={lr.reason} \n{lr.text}\n", "bold_cyan"
+            )
 
             text = parse_unicode_escape_string(lr.text)
             logger.debug(f"最近一次收到的请求结果 文本after unicode-escape:\n{text}")

@@ -188,6 +188,9 @@ def try_request(
             response: requests.Response = request_fn()
             fix_encoding(response)
 
+            if response is not None:
+                set_last_response_info(response.status_code, response.reason, response.text)
+
             if check_fn is not None:
                 check_exception = check_fn(response)
                 if check_exception is not None:

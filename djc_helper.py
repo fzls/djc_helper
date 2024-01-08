@@ -1826,7 +1826,7 @@ class DjcHelper:
 
         return code
 
-    @try_except(return_val_on_except=XinYueMyTeamInfo(), show_exception_info=False)
+    @try_except(return_val_on_except=XinYueMyTeamInfo())
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueMyTeamInfo:
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)
 
@@ -1838,6 +1838,7 @@ class DjcHelper:
 
         return team_info
 
+    @try_except(return_val_on_except=XinYueSummaryTeamInfo())
     def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
         # 传入小队ID查询队伍信息
         res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode": remote_teamid})
@@ -1933,6 +1934,7 @@ class DjcHelper:
         return info
 
     def _new_query_xinyue_info(self, ctx, print_res=True) -> XinYueInfo:
+        @try_except(return_val_on_except=0)
         def _query_xytype() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询心悦会员类型", 131053, print_res=print_res)
 
@@ -1944,6 +1946,7 @@ class DjcHelper:
 
             return count
 
+        @try_except(return_val_on_except=0)
         def _query_ysb() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询勇士币", 131050, print_res=print_res)
 
@@ -1955,6 +1958,7 @@ class DjcHelper:
 
             return count
 
+        @try_except(return_val_on_except=0)
         def _query_score() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询成就点", 131049, print_res=print_res)
 
@@ -1966,6 +1970,7 @@ class DjcHelper:
 
             return count
 
+        @try_except(return_val_on_except=0)
         def _query_ticket() -> int:
             res = self.xinyue_battle_ground_wpe_op(f"{ctx}-查询抽奖次数", 131051, print_res=print_res)
 

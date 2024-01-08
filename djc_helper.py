@@ -1828,6 +1828,10 @@ class DjcHelper:
 
     @try_except(return_val_on_except=XinYueMyTeamInfo())
     def query_xinyue_teaminfo(self, print_res=False) -> XinYueMyTeamInfo:
+        if self.cfg.function_switches.disable_login_mode_xinyue:
+            get_logger_func(print_res)("已禁用心悦登录模式，将直接返回默认值")
+            return XinYueMyTeamInfo()
+
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍信息", 131111, print_res=print_res)
 
         team_info = XinYueMyTeamInfo()

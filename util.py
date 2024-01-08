@@ -1379,6 +1379,8 @@ ignore_caller_names = {
     "with_cache",
     "get_bind_role_list",
     "prepare_wpe_act_openid_accesstoken",
+    "message_box",
+    "async_message_box",
 }
 
 ignore_prefixes = [

@@ -113,9 +113,9 @@ class Network:
         def request_fn() -> requests.Response:
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
-        res = try_request(request_fn, self.common_cfg.retry, check_fn)
-
         logger.debug(f"{ctx} cookies = {cookies}")
+
+        res = try_request(request_fn, self.common_cfg.retry, check_fn)
 
         return process_result(
             ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove
@@ -160,14 +160,14 @@ class Network:
         def request_fn() -> requests.Response:
             return requests.post(url, data=data, json=json, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
+        logger.debug(f"{ctx} data = {data}")
+        logger.debug(f"{ctx} json = {json}")
+        logger.debug(f"{ctx} cookies = {cookies}")
+
         if not disable_retry:
             res = try_request(request_fn, self.common_cfg.retry, check_fn)
         else:
             res = request_fn()
-
-        logger.debug(f"{ctx} data = {data}")
-        logger.debug(f"{ctx} json = {json}")
-        logger.debug(f"{ctx} cookies = {cookies}")
 
         return process_result(
             ctx, res, pretty, print_res, is_jsonp, is_normal_jsonp, need_unquote, prefix_to_remove, suffix_to_remove

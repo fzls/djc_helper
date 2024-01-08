@@ -2989,7 +2989,7 @@ class MobileGameRoleInfoConfigUi(QWidget):
         self.combobox_game_name = create_combobox(
             cfg.game_name, ["无", "任意手游", *sorted(get_name_2_mobile_game_info_map().keys())]
         )
-        add_row(form_layout, "完成礼包达人任务的手游名称（不玩手游可直接选 无）", self.combobox_game_name)
+        add_row(form_layout, "完成礼包达人任务的手游名称（不玩手游可直接选 无）（PS：目前这个任务暂时无法自动完成）", self.combobox_game_name)
 
     def update_config(self, cfg: MobileGameRoleInfoConfig):
         cfg.game_name = self.combobox_game_name.currentText()

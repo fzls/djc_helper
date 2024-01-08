@@ -1815,6 +1815,8 @@ class DjcHelper:
 
     @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:
+        time.sleep(3)
+        logger.debug("心悦查询队伍相关接口前等待3秒，避免返回网络繁忙提示")
         res = self.xinyue_battle_ground_wpe_op("查询我的心悦队伍ID", 131104, print_res=False)
         if res["ret"] != 0:
             return ""
@@ -1834,6 +1836,8 @@ class DjcHelper:
 
     def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
         # 传入小队ID查询队伍信息
+        time.sleep(3)
+        logger.debug("心悦查询队伍相关接口前等待3秒，避免返回网络繁忙提示")
         res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode": remote_teamid})
 
         one_team_info = XinYueSummaryTeamInfo()

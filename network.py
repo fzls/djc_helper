@@ -113,7 +113,9 @@ class Network:
         def request_fn() -> requests.Response:
             return requests.get(url, headers=get_headers, timeout=self.common_cfg.http_timeout)
 
-        logger.debug(f"{ctx} cookies = {cookies}")
+        actual_cookies = get_headers["Cookie"]
+
+        logger.debug(f"{ctx} cookies = {actual_cookies}")
 
         res = try_request(request_fn, self.common_cfg.retry, check_fn)
 
@@ -160,9 +162,11 @@ class Network:
         def request_fn() -> requests.Response:
             return requests.post(url, data=data, json=json, headers=post_headers, timeout=self.common_cfg.http_timeout)
 
+        actual_cookies = post_headers["Cookie"]
+
         logger.debug(f"{ctx} data = {data}")
         logger.debug(f"{ctx} json = {json}")
-        logger.debug(f"{ctx} cookies = {cookies}")
+        logger.debug(f"{ctx} cookies = {actual_cookies}")
 
         if not disable_retry:
             res = try_request(request_fn, self.common_cfg.retry, check_fn)

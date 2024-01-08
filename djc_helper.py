@@ -2063,7 +2063,7 @@ class DjcHelper:
         self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params
     ):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
-        wait_time = 0.1 + 1 * random.random()
+        wait_time = 0.5 + 1 * random.random()
         logger.debug(f"心悦战场请求 {ctx} 先随机等待 {wait_time:.2f} 秒，避免请求过快")
         time.sleep(wait_time)
 

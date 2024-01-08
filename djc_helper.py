@@ -1854,11 +1854,12 @@ class DjcHelper:
     def join_xinyue_team(self, remote_teamid: str) -> XinYueSummaryTeamInfo | None:
         # 加入小队
         res = self.xinyue_battle_ground_wpe_op("尝试加入小队", 131113, extra_data={"invitationCode": remote_teamid})
-        raw_data = json.loads(res["data"])
 
-        if raw_data["ret"] != 0:
+        if res["ret"] != 0:
             # 小队已经解散
             return None
+
+        raw_data = json.loads(res["data"])
 
         one_team_info = XinYueSummaryTeamInfo()
         one_team_info.auto_update_config(raw_data["teamInfo"])

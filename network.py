@@ -116,6 +116,8 @@ class Network:
         actual_cookies = get_headers["Cookie"]
 
         logger.debug(f"{ctx} cookies = {actual_cookies}")
+        if extra_headers is not None:
+            logger.debug(f"{ctx} extra_headers = {pretty_json(extra_headers)}")
 
         res = try_request(request_fn, self.common_cfg.retry, check_fn)
 
@@ -167,6 +169,8 @@ class Network:
         logger.debug(f"{ctx} data = {data}")
         logger.debug(f"{ctx} json = {pretty_json(json)}")
         logger.debug(f"{ctx} cookies = {actual_cookies}")
+        if extra_headers is not None:
+            logger.debug(f"{ctx} extra_headers = {pretty_json(extra_headers)}")
 
         if not disable_retry:
             res = try_request(request_fn, self.common_cfg.retry, check_fn)

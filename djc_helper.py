@@ -1835,12 +1835,13 @@ class DjcHelper:
     def query_xinyue_summary_team_info_by_id(self, remote_teamid: str) -> XinYueSummaryTeamInfo:
         # 传入小队ID查询队伍信息
         res = self.xinyue_battle_ground_wpe_op("查询特定id的心悦队伍信息", 131114, extra_data={"teamCode": remote_teamid})
-        raw_data = json.loads(res["data"])
 
         one_team_info = XinYueSummaryTeamInfo()
+
         # 正常结果：{"ret":0,"msg":"","data":"{\"ret\":0,\"teamInfo\":{\"teamCode\":\"DNF1703518043CC8D6Z\",\"teamName\":\"%E9%A3%8E%E4%B9%8B%E5%87%8C%E6%AE%87\",\"teamLimit\":2,\"teamMemberNum\":2}}","serialId":"..."}
         # 找不到队伍信息时（如到第二周了）：{"ret":50003,"msg":"网络繁忙，请稍后再试","data":"","serialId":"..."}
-        if raw_data["ret"] == 0:
+        if res["ret"] == 0:
+            raw_data = json.loads(res["data"])
             one_team_info.auto_update_config(raw_data["teamInfo"])
 
         return one_team_info

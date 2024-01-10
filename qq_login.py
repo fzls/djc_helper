@@ -896,7 +896,9 @@ class QQLogin:
 
                 self.prepare_chrome(ctx, login_type, login_url)
 
-                return login_fn(ctx, login_action_fn=login_action_fn)
+                lr = login_fn(ctx, login_action_fn=login_action_fn)
+                logger.debug(f"{self.name} 登录结果为 {lr}")
+                return lr
             except Exception as e:
                 login_exception = e
             finally:

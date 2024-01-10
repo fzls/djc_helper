@@ -12135,6 +12135,7 @@ class DjcHelper:
 
     def dnf_xinyue_wpe_set_openid_accesstoken(self, openid: str, access_token: str):
         """wpe类型的活动请求时需要这串额外的headers"""
+        logger.debug(f"更新心悦鉴权信息 openid={openid} access_token={access_token}")
         self.dnf_xinyue_wpe_extra_headers = {
             "t-account-type": "qc",
             "t-mode": "true",

@@ -1373,8 +1373,8 @@ class QQLogin:
         # 从cookie中获取openid
         return LoginResult(
             openid=self.get_cookie("openid"),
-            xinyue_openid=self.get_cookie("xinyue_openid"),
-            xinyue_access_token=self.get_cookie("xinyue_access_token"),
+            xinyue_openid=self.get_cookie("xinyue_openid") or self.get_cookie("openid"),
+            xinyue_access_token=self.get_cookie("xinyue_access_token") or self.get_cookie("access_token"),
         )
 
     def _login_djc(self, login_type, login_action_fn=None):

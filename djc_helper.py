@@ -12127,8 +12127,15 @@ class DjcHelper:
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
         if not replace_if_exists and hasattr(self, "dnf_xinyue_wpe_extra_headers"):
-            get_logger_func(print_res, logger.info)(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
-            return
+            openid = self.dnf_xinyue_wpe_extra_headers.get("t-openid", "")
+            access_token = self.dnf_xinyue_wpe_extra_headers.get("t-access-token", "")
+
+            # 仅在已设置的两个参数都不为空时，才尝试跳过
+            if openid != "" and access_token != "":
+                get_logger_func(print_res, logger.info)(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
+                return
+            else:
+                logger.debug(f"尽管已设置心悦鉴权信息，但数据不全，将重新进行获取。dnf_xinyue_wpe_extra_headers={self.dnf_xinyue_wpe_extra_headers}")
 
         lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)

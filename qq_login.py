@@ -1917,7 +1917,8 @@ class QQLogin:
         logger.warning(f"{self.name} add_cookie {cookie['domain']} {cookie['name']} {cookie['value']}")
 
     def get_cookie(self, name):
-        for cookie in self.cookies:
+        # 这里倒着遍历，从而优先获取后添加进去的
+        for cookie in reversed(self.cookies):
             if cookie["name"] == name and cookie["value"] != "":
                 return cookie["value"]
         return ""

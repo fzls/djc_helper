@@ -1707,7 +1707,14 @@ class QQLogin:
         self.add_cookie("apps_p_skey", p_skey)
 
     def fetch_xinyue_openid_access_token(self):
-        logger.info(f"{self.name} 先等待1秒，然后跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        # 先尝试使用活动页面的cookie
+        logger.info(f"{self.name} 先尝试使用act活动页面 {self.driver.current_url}，用于获取该域名下的openid和access_token，用于心悦相关操作")
+        openid, access_token = self._wait_for_cookies("openid", "access_token")
+        self.add_cookie("xinyue_openid", openid)
+        self.add_cookie("xinyue_access_token", access_token)
+
+        # 然后跳转到心悦域名，若该页面也能获取到相关cookie，则优先使用该cookie
+        logger.info(f"{self.name} 再等待1秒，然后跳转到xinyue.qq.com，用于获取该域名下的openid和access_token，用于心悦相关操作")
         time.sleep(1)
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
@@ -1911,7 +1918,7 @@ class QQLogin:
 
     def get_cookie(self, name):
         for cookie in self.cookies:
-            if cookie["name"] == name:
+            if cookie["name"] == name and cookie["value"] != "":
                 return cookie["value"]
         return ""
 

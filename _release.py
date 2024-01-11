@@ -126,7 +126,7 @@ def release():
         shutil.copy2(local_filepath, backup_filepath)
         logger.warning(f"复制到{backup_filepath}，方便出错时手动上传")
 
-        total_try_count = 1
+        total_try_count = 3
         for try_index in range_from_one(total_try_count):
             try:
                 # 然后再实际上传

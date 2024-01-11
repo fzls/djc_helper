@@ -12131,7 +12131,9 @@ class DjcHelper:
                 get_logger_func(print_res, logger.info)(color("bold_cyan") + f"当前请求设置为不覆盖，而且已存在 {ctx} 所需的登录态，将跳过该流程")
                 return
             else:
-                logger.debug(f"尽管已设置心悦鉴权信息，但数据不全，将重新进行获取。dnf_xinyue_wpe_extra_headers={self.dnf_xinyue_wpe_extra_headers}")
+                logger.debug(
+                    f"尽管已设置心悦鉴权信息，但数据不全，将重新进行获取。dnf_xinyue_wpe_extra_headers={self.dnf_xinyue_wpe_extra_headers}"
+                )
 
         lr = self.fetch_xinyue_login_info(f"获取 {ctx} 所需的access_token", print_res=print_res)
         self.dnf_xinyue_wpe_set_openid_accesstoken(lr.openid, lr.xinyue_access_token)

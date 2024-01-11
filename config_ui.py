@@ -2811,6 +2811,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("拯救赛利亚", "get_dnf_save_sailiyam"),
             ("dnf助手活动wpe", "get_dnf_helper_wpe"),
             ("colg每日签到", "get_colg_signin"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2828,7 +2829,6 @@ class FunctionSwitchesConfigUi(QWidget):
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
             ("qq视频蚊子腿-爱玩", "get_qq_video"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF娱乐赛", "get_dnf_game"),
             ("dnf助手活动", "get_dnf_helper"),

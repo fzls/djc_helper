@@ -679,13 +679,13 @@ class DjcHelper:
             ("拯救赛利亚", self.dnf_save_sailiyam),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("colg每日签到", self.colg_signin),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
@@ -12096,34 +12096,29 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
-        self.dnf_xinyue_wpe_op("报名", 129649, extra_data={"equipmentCamp": "恩特"})
-        self.dnf_xinyue_wpe_op("立即领取报名礼", 129665)
+        async_message_box(
+            (
+                "心悦活动页面可参与拼团活动，如果准备购买年套，可以在心悦这个页面拼团充值，领取额外的一些蚊子腿。\n"
+                "每累计充值200元，可以在活动页面开一次盲盒\n"
+                "同时，也能参与到游戏内的累积充值活动\n"
+                "\n"
+                "有兴趣的朋友可以点确认后在弹出的活动页面中参与\n"
+            ),
+            "心悦拼团",
+            open_url=get_act_url("DNF心悦wpe"),
+            show_once=True,
+        )
 
-        # 这个不弄了，不影响后面抽奖
-        # self.dnf_xinyue_wpe_op("立即选择词条", yyyy)
-        self.dnf_xinyue_wpe_op("一键领取排行榜奖励", 129666)
+        self.dnf_xinyue_wpe_op("心悦VIP4-5礼包", 151021)
+        self.dnf_xinyue_wpe_op("心悦VIP2-3礼包", 151020)
+        self.dnf_xinyue_wpe_op("心悦VIP1礼包", 151009)
+        self.dnf_xinyue_wpe_op("特邀会员礼包", 151007)
 
-        self.dnf_xinyue_wpe_op("见面礼", 129657)
-        self.dnf_xinyue_wpe_op("回流礼", 129659)
-
-        self.dnf_xinyue_wpe_op("签到1天", 130232)
-        self.dnf_xinyue_wpe_op("签到2天", 130622)
-        self.dnf_xinyue_wpe_op("签到3天", 130624)
-        self.dnf_xinyue_wpe_op("签到4天", 130626)
-        self.dnf_xinyue_wpe_op("签到5天", 130628)
-        self.dnf_xinyue_wpe_op("签到6天", 130630)
-        self.dnf_xinyue_wpe_op("签到7天", 130632)
-
-        self.dnf_xinyue_wpe_op("通过一次异次元万年雪山", 130633)
-        self.dnf_xinyue_wpe_op("每日游戏在线30分钟", 130634)
-        self.dnf_xinyue_wpe_op("加入DNF俱乐部", 130635)
-        self.dnf_xinyue_wpe_op("每日访问俱乐部广场", 130636)
-
-        max_try = 4
-        for idx in range_from_one(max_try):
-            res = self.dnf_xinyue_wpe_op(f"{idx}/{max_try} 抽奖", 129679)
-            if "抽奖次数不足" in res["msg"]:
-                break
+        self.dnf_xinyue_wpe_op("每日签到", 151024)
+        self.dnf_xinyue_wpe_op("签到 3 天", 151025)
+        self.dnf_xinyue_wpe_op("签到 5 天", 151026)
+        self.dnf_xinyue_wpe_op("签到 6 天", 151027)
+        self.dnf_xinyue_wpe_op("签到 12 天", 151028)
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -12156,7 +12151,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "15456"
+        act_id = "16382"
         roleinfo = self.get_dnf_bind_role()
 
         if extra_data is None:
@@ -13494,4 +13489,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_xinyue_wpe()

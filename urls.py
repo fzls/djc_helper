@@ -70,7 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "dnf论坛签到"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
-    newNotAmsActInfo("2023-11-30 10:00:00", "2023-12-20 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
@@ -108,11 +108,11 @@ act_name_to_url = {
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     #
     # 已过期活动
     #
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
-    "DNF心悦wpe": "https://xinyue.qq.com/xinyue_app/tgclub_dnf_flash_club/#/",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",

@@ -678,6 +678,7 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("拯救赛利亚", self.dnf_save_sailiyam),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -688,7 +689,6 @@ class DjcHelper:
             ("DNF落地页活动", self.dnf_luodiye),
             ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
-            ("colg每日签到", self.colg_signin),
             ("dnf助手活动", self.dnf_helper),
             ("勇士的冒险补给", self.maoxian),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
@@ -9552,15 +9552,16 @@ class DjcHelper:
         logger.info(conversion_status_message)
 
         # 当兑换币足够时，提示兑换限量兑换的奖励
-        limit_award_name = "原初职业白金徽章礼盒"
-        limit_award_require_conversion = 18
-        limit_award_count = 7500
+        limit_award_name = "黑钻30天"
+        limit_award_require_conversion = 12
+        # limit_award_count = 7500
         if info.conversion >= limit_award_require_conversion:
             async_message_box(
                 (
                     f"{conversion_status_message}\n"
                     f"已足够兑换 {limit_award_name}(需{limit_award_require_conversion}兑换币)\n"
-                    f"该奖励限量{limit_award_count}个，请及时前往兑换。如果已经没有了，可以兑换其他奖励\n"
+                    # f"该奖励限量{limit_award_count}个，"
+                    f"请及时前往兑换。如果已经没有了，可以兑换其他奖励\n"
                 ),
                 f"colg社区活跃任务-{info.activity_id}-兑换限量奖励提示",
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
@@ -13493,4 +13494,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_wpe()
+        djcHelper.colg_signin()

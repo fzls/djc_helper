@@ -59,7 +59,7 @@ not_ams_activities = [
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2023-09-21 00:00:00", "2023-11-15 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2024-01-11 00:00:00", "2024-02-28 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
@@ -107,6 +107,7 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -115,7 +116,6 @@ act_name_to_url = {
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",

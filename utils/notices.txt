@@ -328,5 +328,15 @@
     "open_url": "",
     "expire_at": "2024-01-10 11:20:12",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "心悦拼团自助组队",
+    "message": "部分朋友可能想参与新出的心悦拼团活动，但是找不到其他人拼团。跟以往一样，我建了一个在线表单，有需求的朋友可以上去参与其他人的拼团，或者将自己的拼团链接发布上去~\n",
+    "send_at": "2024-01-12 20:48:11",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/sheet/DYlprUmRpR2ZYcUNF",
+    "expire_at": "2024-01-26 20:48:11",
+    "show_only_before_version": ""
   }
 ]

@@ -12282,6 +12282,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------神界预热--------------------------------------------
+    @try_except()
     def dnf_shenjie_yure(self):
         show_head_line("神界预热")
         self.show_amesvr_act_info(self.dnf_shenjie_yure_op)

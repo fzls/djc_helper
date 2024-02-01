@@ -78,7 +78,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
-    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2024-02-01 12:00:00", "2024-03-01 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
@@ -102,13 +102,13 @@ act_name_to_url = {
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240201gift/index.html",
     #
     # 已过期活动
     #
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20231221index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
@@ -352,7 +352,7 @@ class Urls:
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "43_Xb4e98"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "16_oT6IBj"  # DNF落地页
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
 

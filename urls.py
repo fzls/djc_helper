@@ -82,6 +82,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
+    newNotAmsActInfo("2024-02-01 12:00:00", "2024-02-29 23:59:59", "DNF年货铺"),
 ]
 
 act_name_to_url = {
@@ -103,6 +104,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240201gift/index.html",
+    "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     #
     # 已过期活动
     #
@@ -355,6 +357,7 @@ class Urls:
         self.ide_iActivityId_dnf_luodiye = "16_oT6IBj"  # DNF落地页
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
+        self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

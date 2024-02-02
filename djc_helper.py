@@ -664,7 +664,7 @@ class DjcHelper:
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
-        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report
+        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
@@ -674,6 +674,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF年货铺", self.dnf_nianhuopu),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10036,6 +10037,88 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF年货铺--------------------------------------------
+    @try_except()
+    def dnf_nianhuopu(self):
+        show_head_line("DNF年货铺")
+        self.show_not_ams_act_info("DNF年货铺")
+
+        if not self.cfg.function_switches.get_dnf_nianhuopu or self.disable_most_activities():
+            logger.warning("未启用领取DNF年货铺功能，将跳过")
+            return
+
+        self.check_dnf_nianhuopu()
+
+        def query_info() -> int:
+            res = self.dnf_nianhuopu_op("初始化", "260625", print_res=False)
+            raw_info = res["jData"]
+
+            # 普通积分
+            ticket_num = int(raw_info["iExchange"])
+
+            return ticket_num
+
+        self.dnf_nianhuopu_op("每日任务一 | 通关神界任意普通地下城1次，可获得年货券x1", "261559")
+        self.dnf_nianhuopu_op("每日任务二 | 累计游戏内消耗50疲劳值，可获得年货券x1", "261560")
+        self.dnf_nianhuopu_op("每周任务一 | 通关深渊地下城【均衡仲裁者】2次，可获得年货券x2", "261562")
+        self.dnf_nianhuopu_op("每周任务二 | 通关任意难度高级地下城*2次，可获得年货券x4", "261563")
+        self.dnf_nianhuopu_op("每周任务三 | 进行装备属性成长*10次，可获得年货券x2", "261649")
+        self.dnf_nianhuopu_op("每周任务四 | 进行装备属性成长*10次，可获得年货券x2", "261650")
+
+        self.dnf_nianhuopu_op("语音电话奖励", "261711")
+        self.dnf_nianhuopu_op("除夕分享奖励", "261717")
+        self.dnf_nianhuopu_op("房间图片分享", "261721")
+
+        # self.dnf_nianhuopu_op("获取灯谜", "261976")
+        # self.dnf_nianhuopu_op("回答灯谜", "262012")
+        #
+        # self.dnf_nianhuopu_op("灯谜抽奖", "262048")
+
+        # self.dnf_nianhuopu_op("好友列表", "261866")
+        # self.dnf_nianhuopu_op("发送ark消息", "261867")
+        # self.dnf_nianhuopu_op("新增好友", "261868")
+        # self.dnf_nianhuopu_op("接受邀请", "261945")
+        # self.dnf_nianhuopu_op("邀请好友奖励", "264630")
+
+        ticket_num = query_info()
+        async_message_box(
+            (
+                f"当前年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"
+            ),
+            f"年货铺兑换_每周提示_{self.cfg.name}",
+            open_url=get_act_url("DNF年货铺"),
+            show_once_weekly=True,
+        )
+        # self.dnf_nianhuopu_op("兑换年货", "261666")
+
+    def check_dnf_nianhuopu(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF年货铺",
+            get_act_url("DNF年货铺"),
+            activity_op_func=self.dnf_nianhuopu_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_nianhuopu_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_nianhuopu
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF年货铺"),
+            **extra_params,
+        )
+
     # --------------------------------------------绑定手机活动--------------------------------------------
     @try_except()
     def dnf_bind_phone(self):
@@ -13514,4 +13597,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_nianhuopu()

@@ -1518,6 +1518,10 @@ def show_tips(cfg: Config):
             "https://docs.qq.com/doc/DYkFReHNvVkFEYXJk\n"
         ),
         "24.1 漫画兑换": ("小助手现已支持漫画活动的兑换功能，各位可打开配置工具【账号配置/漫画】，配置需要兑换的道具（如黑钻）\n"),
+        "24.2 动画活动": (
+            "新出了个 《破界少女》 的动画，观看15分钟可以领取三个蚊子腿，每集观看20分钟可以抽奖一次，有兴趣的朋友请自行参与\n"
+            "https://film.video.qq.com/magic-act/0i2g5zpoaeo4k5aogoh3guwlcl/index_6fe12.html?ovscroll=0&page=6fe12&__no_magic_qrcode=1\n"
+        ),
     }
 
     logger.info(color("bold_green") + "如果看上去卡在这了，请看看任务是否有弹窗的图标，把他们一个个按掉就能继续了（活动此时已经运行完毕）")

@@ -1148,6 +1148,17 @@ class DjcHelper:
                 )
                 return
 
+            if is_first_run("仅运行命运方舟提示"):
+                async_message_box(
+                    (
+                        "观察到你配置了命运方舟的道具兑换，因此弹出下面这个提示\n"
+                        "部分朋友可能不玩DNF，只想运行命运方舟相关的部分，如有此需求，请点击确认，查看弹出的在线文档中的【仅运行命运方舟相关内容（可选）】节内容进行配置"
+                    ),
+                    "仅运行命运方舟的提示",
+                    show_once=True,
+                    open_url="https://docs.qq.com/doc/DYkFReHNvVkFEYXJk",
+                )
+
             # 检查是否已在道聚城绑定
             if roleinfo is None:
                 async_message_box(

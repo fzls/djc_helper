@@ -10082,9 +10082,7 @@ class DjcHelper:
 
         ticket_num = query_info()
         async_message_box(
-            (
-                f"当前年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"
-            ),
+            (f"当前年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"),
             f"年货铺兑换_每周提示_{self.cfg.name}",
             open_url=get_act_url("DNF年货铺"),
             show_once_weekly=True,

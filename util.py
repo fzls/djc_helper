@@ -24,7 +24,7 @@ from functools import lru_cache, wraps
 from multiprocessing import cpu_count
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 from urllib import parse
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, unquote_plus
 
 import psutil
 import requests.exceptions
@@ -1710,12 +1710,16 @@ def use_new_pay_method() -> bool:
     return not os.path.isfile(get_url_config_path())
 
 
-def double_quote(strToQuote: str) -> str:
-    return quote_plus(quote_plus(strToQuote))
+def double_quote(str_to_quote: str) -> str:
+    return quote_plus(quote_plus(str_to_quote))
 
 
-def triple_quote(strToQuote: str) -> str:
-    return quote_plus(double_quote(strToQuote))
+def triple_quote(str_to_quote: str) -> str:
+    return quote_plus(double_quote(str_to_quote))
+
+
+def double_unquote(str_to_unquote: str) -> str:
+    return unquote_plus(unquote_plus(str_to_unquote))
 
 
 def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: float = 0.0):

@@ -2344,6 +2344,54 @@ class ComicData(ConfigInterface):
         return self.updateStatus == "1"
 
 
+class ShenJieGrowUpInfo(ConfigInterface):
+    def __init__(self):
+        self.curStageData = ShenJieGrowUpCurStageData()
+        self.allStagePack: list[ShenJieGrowUpStagePack] = []
+        self.taskData: dict[str, ShenJieGrowUpTaskData] = {}
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("allStagePack", ShenJieGrowUpStagePack),
+        ]
+
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [("taskData", ShenJieGrowUpTaskData)]
+
+
+class ShenJieGrowUpCurStageData(ConfigInterface):
+    def __init__(self):
+        self.id = "233464"
+        self.iUin = "1054073896"
+        self.iAreaId = "11"
+        self.sRoleId = "45230145"
+        self.sRoleName = "%25E9%25A3%258E%25E4%25B9%258B%25E5%2587%258C%25E6%25AE%2587%25E5%2596%25B5"
+        self.roleJob = "350"
+        self.stage = "2"
+        self.stageTask = "0"
+        self.stagePack = "0"
+        self.task1 = "0"
+        self.task2 = "0"
+        self.task3 = "0"
+        self.task4 = "0"
+        self.task5 = "0"
+        self.lastTaskDoneTime = "1970-01-01 00:00:00"
+        self.initDateTime = "2024-02-08 00:00:18"
+        self.initPeriodSday = "20240208"
+
+
+class ShenJieGrowUpStagePack(ConfigInterface):
+    def __init__(self):
+        self.stage = "2"
+        self.packStatus = 0
+
+
+class ShenJieGrowUpTaskData(ConfigInterface):
+    def __init__(self):
+        self.doneNum = 0
+        self.needNum = 1
+        self.giftStatus = "0"
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

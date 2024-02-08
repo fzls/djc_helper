@@ -83,6 +83,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-02-29 23:59:59", "DNF年货铺"),
+    newNotAmsActInfo("2024-02-01 12:00:00", "2024-06-30 23:59:59", "DNF神界成长之路"),
 ]
 
 act_name_to_url = {
@@ -105,6 +106,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240201gift/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
+    "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
     #
     # 已过期活动
     #
@@ -358,6 +360,7 @@ class Urls:
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
         self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺
+        self.ide_iActivityId_dnf_shenjie_grow_up = "34_DA6bLu"  # DNF神界成长之路
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划
@@ -374,7 +377,7 @@ class Urls:
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
             "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
-            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}"
+            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}&u_stage={u_stage}&u_task_index={u_task_index}&u_stage_index={u_stage_index}"
         )
 
         # DNF共创投票

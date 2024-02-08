@@ -76,6 +76,10 @@ from dao import (
     RankUserInfo,
     RoleInfo,
     SailiyamWorkInfo,
+    ShenJieGrowUpCurStageData,
+    ShenJieGrowUpInfo,
+    ShenJieGrowUpStagePack,
+    ShenJieGrowUpTaskData,
     SpringFuDaiInfo,
     TemporaryChangeBindRoleInfo,
     VoteEndWorkInfo,
@@ -144,6 +148,7 @@ from util import (
     async_message_box,
     base64_str,
     double_quote,
+    double_unquote,
     extract_between,
     filter_unused_params_catch_exception,
     format_now,
@@ -675,6 +680,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF年货铺", self.dnf_nianhuopu),
+            ("DNF神界成长之路", self.dnf_shenjie_grow_up),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10128,6 +10134,145 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF神界成长之路--------------------------------------------
+    @try_except()
+    def dnf_shenjie_grow_up(self):
+        show_head_line("DNF神界成长之路")
+        self.show_not_ams_act_info("DNF神界成长之路")
+
+        if not self.cfg.function_switches.get_dnf_shenjie_grow_up or self.disable_most_activities():
+            logger.warning("未启用领取DNF神界成长之路功能，将跳过")
+            return
+
+        # 这个活动让用户自己去选择绑定的角色，因为关系到角色绑定的奖励领取到哪个角色上
+        # self.check_dnf_shenjie_grow_up()
+
+        def query_has_bind_role() -> bool:
+            bind_config = self.dnf_shenjie_grow_up_op("查询活动信息 - DNF神界成长之路", "", get_act_info_only=True).get_bind_config()
+
+            query_bind_res = self.dnf_shenjie_grow_up_op("查询绑定", bind_config.query_map_id, print_res=False)
+
+            has_bind = query_bind_res["jData"]["bindarea"] is not None
+
+            return has_bind
+
+        def query_info() -> ShenJieGrowUpInfo:
+            res = self.dnf_shenjie_grow_up_op("初始化用户及查询", "263027", print_res=False)
+
+            info = ShenJieGrowUpInfo()
+            info.auto_update_config(res["jData"]["userData"])
+
+            return info
+
+        @try_except()
+        def take_task_rewards(curStageData: ShenJieGrowUpCurStageData, taskData: dict[str, ShenJieGrowUpTaskData]):
+            task_index_to_name = {
+                "1": "通关代号：盖波加",
+                "2": "通关白云溪谷或索利达里斯",
+                "3": "通关任意难度机械崛起：巴卡尔攻坚战",
+                "4": "通关任意难度军团地下城：幽暗岛",
+                "5": "通关均衡仲裁者",
+            }
+
+            for task_index, task_info in taskData.items():
+                task_name = task_index_to_name[task_index]
+
+                if int(task_info.giftStatus) == 1:
+                    logger.info(f"已领取任务 {task_name} 奖励")
+                else:
+                    if task_info.needNum > task_info.doneNum:
+                        logger.info(f"未完成任务 {task_name}，当前进度为 {task_info.doneNum}/{task_info.needNum}")
+                    else:
+                        logger.info(f"已完成任务 {task_name}，尝试领取奖励")
+
+                        self.dnf_shenjie_grow_up_op(
+                            f"领取任务奖励 - {task_name}",
+                            "263070",
+                            u_stage=curStageData.stage,
+                            u_task_index=task_index,
+                        )
+
+                # note: 理论上，按照js代码中的说明（如下），5-8阶段是对应另外的逻辑，不过这里先都按上面的处理，遇到这个阶段的时候给自己提示下，到时候再看看咋弄
+                #   // TODO  5-8 阶段 对应另外一个区域的id
+                if int(curStageData.stage) > 4:
+                    if use_by_myself():
+                        async_message_box(
+                            "5-8阶段的在2.8时，代码里还未看到怎么写的，到时候看到提示再弄下",
+                            "（仅自己可见）大百变活动5-8阶段需要处理下"
+                        )
+
+        @try_except()
+        def take_stage_rewards(curStageData: ShenJieGrowUpCurStageData, allStagePack: list[ShenJieGrowUpStagePack]):
+            for stage_pack in allStagePack:
+                if stage_pack.packStatus == 1:
+                    logger.info(f"阶段{stage_pack.stage} 奖励已领取")
+                else:
+                    logger.info(f"阶段{stage_pack.stage} 奖励未领取, 尝试领取")
+                    self.dnf_shenjie_grow_up_op(f"领取 阶段{stage_pack.stage} 奖励", "263107", u_stage_index=stage_pack.stage)
+
+
+
+        has_bind_role = query_has_bind_role()
+        logger.info(f"DNF神界成长之路是否已绑定角色: {has_bind_role}")
+
+        if not has_bind_role:
+            async_message_box(
+                (
+                    f"当前账号 {self.cfg.name} {self.qq()} 尚未在大百变活动（神界成长之路）中绑定角色\n"
+                    "\n"
+                    "请打开游戏，进入你想要绑定的角色，点击游戏右下角对应的按钮完成绑定流程\n"
+                ),
+                "大百变活动未绑定",
+                show_once_weekly=True,
+            )
+            return
+
+        info = query_info()
+        curStageData = info.curStageData
+        taskData = info.taskData
+        allStagePack = info.allStagePack
+
+        role_name = double_unquote(curStageData.sRoleName)
+        server_name = dnf_server_id_to_name(curStageData.iAreaId)
+
+        logger.info(f"角色昵称: {role_name}")
+        logger.info(f"绑定大区: {server_name}")
+        logger.info(f"当前任务阶段: {curStageData.stage}/8")
+
+        self.dnf_shenjie_grow_up_op("领取大百变", "263051")
+
+        take_task_rewards(curStageData, taskData)
+
+        take_stage_rewards(curStageData, allStagePack)
+
+    def check_dnf_shenjie_grow_up(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF神界成长之路",
+            get_act_url("DNF神界成长之路"),
+            activity_op_func=self.dnf_shenjie_grow_up_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_shenjie_grow_up_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_shenjie_grow_up
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF神界成长之路"),
+            **extra_params,
+        )
+
     # --------------------------------------------绑定手机活动--------------------------------------------
     @try_except()
     def dnf_bind_phone(self):
@@ -12745,6 +12890,9 @@ class DjcHelper:
                 "loginDays",
                 "iSuccess",
                 "sAnswer",
+                "u_stage",
+                "u_task_index",
+                "u_stage_index",
             ]
         }
 
@@ -13606,4 +13754,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_nianhuopu()
+        djcHelper.dnf_shenjie_grow_up()

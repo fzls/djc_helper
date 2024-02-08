@@ -10148,7 +10148,9 @@ class DjcHelper:
         # self.check_dnf_shenjie_grow_up()
 
         def query_has_bind_role() -> bool:
-            bind_config = self.dnf_shenjie_grow_up_op("查询活动信息 - DNF神界成长之路", "", get_act_info_only=True).get_bind_config()
+            bind_config = self.dnf_shenjie_grow_up_op(
+                "查询活动信息 - DNF神界成长之路", "", get_act_info_only=True
+            ).get_bind_config()
 
             query_bind_res = self.dnf_shenjie_grow_up_op("查询绑定", bind_config.query_map_id, print_res=False)
 
@@ -10196,10 +10198,7 @@ class DjcHelper:
                 #   // TODO  5-8 阶段 对应另外一个区域的id
                 if int(curStageData.stage) > 4:
                     if use_by_myself():
-                        async_message_box(
-                            "5-8阶段的在2.8时，代码里还未看到怎么写的，到时候看到提示再弄下",
-                            "（仅自己可见）大百变活动5-8阶段需要处理下"
-                        )
+                        async_message_box("5-8阶段的在2.8时，代码里还未看到怎么写的，到时候看到提示再弄下", "（仅自己可见）大百变活动5-8阶段需要处理下")
 
         @try_except()
         def take_stage_rewards(curStageData: ShenJieGrowUpCurStageData, allStagePack: list[ShenJieGrowUpStagePack]):
@@ -10209,8 +10208,6 @@ class DjcHelper:
                 else:
                     logger.info(f"阶段{stage_pack.stage} 奖励未领取, 尝试领取")
                     self.dnf_shenjie_grow_up_op(f"领取 阶段{stage_pack.stage} 奖励", "263107", u_stage_index=stage_pack.stage)
-
-
 
         has_bind_role = query_has_bind_role()
         logger.info(f"DNF神界成长之路是否已绑定角色: {has_bind_role}")

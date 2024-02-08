@@ -2392,6 +2392,7 @@ class ShenJieGrowUpTaskData(ConfigInterface):
         self.needNum = 1
         self.giftStatus = "0"
 
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

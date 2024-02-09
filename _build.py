@@ -24,7 +24,10 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
     # 确保test.py内容为空，避免出现异常状况
     if os.path.isfile("test.py") and os.stat("test.py").st_size != 0:
         with open("test.py", encoding="utf-8") as f:
-            async_message_box(f"test.py内容不为空，未避免构建过程中执行产生副作用，将清空其内容，其内容如下:\n\n{f.read()}", "警告：test.py的测试代码未移除")
+            async_message_box(
+                f"test.py内容不为空，未避免构建过程中执行产生副作用，将清空其内容，其内容如下:\n\n{f.read()}",
+                "警告：test.py的测试代码未移除",
+            )
 
         clear_file("test.py")
 
@@ -58,7 +61,10 @@ def build(disable_douban=False, enable_proxy=False, use_upx=True):
             "platforms/qwebgl.dll",
         ],
     }
-    logger.info(color("bold_green") + f"开始编译前先尝试移动这些确定用不到的库文件到临时目录 {temp_remove_file_dir}，从而尽可能减少最终编译的大小")
+    logger.info(
+        color("bold_green")
+        + f"开始编译前先尝试移动这些确定用不到的库文件到临时目录 {temp_remove_file_dir}，从而尽可能减少最终编译的大小"
+    )
     for parent_directory, file_or_directory_name_list in dep_files_to_remove_during_build.items():
         for file_or_directory_name in file_or_directory_name_list:
             path = os.path.join(site_packages_path, parent_directory, file_or_directory_name)

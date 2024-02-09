@@ -194,7 +194,10 @@ def update_latest_chrome():
     update_linux_version()
 
     show_head_line("提示确认代码修改是否无误")
-    logger.info(color("bold_green") + "请检查一遍代码，然后执行一遍 qq_login.py，以确认新的chrome制作无误，然后点击任意键提交git即可完成流程")
+    logger.info(
+        color("bold_green")
+        + "请检查一遍代码，然后执行一遍 qq_login.py，以确认新的chrome制作无误，然后点击任意键提交git即可完成流程"
+    )
     pause()
 
     show_head_line("上传到网盘")

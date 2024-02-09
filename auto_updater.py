@@ -74,7 +74,9 @@ def auto_update():
 
     # note: 工作目录预期为小助手的exe所在目录
     if args.cwd == invalid_cwd:
-        logger.error("请不要直接双击打开自动更新工具，正确的用法是放到utils目录后，照常双击【DNF蚊子腿小助手.exe】来使用，小助手会自行调用自动更新DLC的")
+        logger.error(
+            "请不要直接双击打开自动更新工具，正确的用法是放到utils目录后，照常双击【DNF蚊子腿小助手.exe】来使用，小助手会自行调用自动更新DLC的"
+        )
         os.system("PAUSE")
         return
 
@@ -120,7 +122,9 @@ def get_latest_version(uploader: Uploader) -> str:
 def update(args, uploader, latest_version: str):
     logger.info("需要更新，开始更新流程")
 
-    logger.warning(color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新，本体仍可正常运行。")
+    logger.warning(
+        color("bold_cyan") + "如果卡住了，可以 按ctrl+c 或者 点击右上角的X 强制跳过自动更新，本体仍可正常运行。"
+    )
 
     logger.warning(color("bold_yellow") + "如果下载速度慢，可以按 任意键（比如ctrl+c） 来切换到下一个镜像")
 
@@ -157,7 +161,9 @@ def update(args, uploader, latest_version: str):
             break
         except DistutilsFileError as e:
             if is_mirror_compressed_file_incomplete(e):
-                logger.error(f"[{idx}/{max_retry}] 从本次随机到的镜像下载的文件不完整，将重新尝试随机挑选一个镜像来下载")
+                logger.error(
+                    f"[{idx}/{max_retry}] 从本次随机到的镜像下载的文件不完整，将重新尝试随机挑选一个镜像来下载"
+                )
                 continue
 
             # 其他情况则继续抛出异常
@@ -203,7 +209,10 @@ def full_update(args, uploader, latest_version: str) -> bool:
     config = config_cloud()
 
     logger.info("开始下载最新版本的压缩包")
-    logger.info(color("bold_cyan") + "如果一直在这不动，应该是在慢慢下载，就是速度比较慢而已。如果急着用，可以去群文件或群公告里的网盘自行下载最新版本")
+    logger.info(
+        color("bold_cyan")
+        + "如果一直在这不动，应该是在慢慢下载，就是速度比较慢而已。如果急着用，可以去群文件或群公告里的网盘自行下载最新版本"
+    )
     filepath = ""
     download_functions = []
     if config.dlc_prefer_alist:

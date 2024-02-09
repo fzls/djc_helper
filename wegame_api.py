@@ -193,7 +193,9 @@ class WegameApi:
 
     def _post(self, api_name, json_data=None, need_role_info=True, print_res=True):
         if need_role_info and len(self.role_name) == 0:
-            logger.warning("调用除查询角色列表外任意接口前请先调用set_role_info设置角色信息，若不知道角色信息，可以调用get_player_role_list获取角色信息")
+            logger.warning(
+                "调用除查询角色列表外任意接口前请先调用set_role_info设置角色信息，若不知道角色信息，可以调用get_player_role_list获取角色信息"
+            )
             exit(-1)
 
         base_json_data = {

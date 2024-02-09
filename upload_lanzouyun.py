@@ -327,11 +327,15 @@ class Uploader:
                 if need_decompress:
                     decompress_file_with_lzma(compressed_filepath, target_path)
                 else:
-                    get_log_func(logger.info, show_log)(f"{compressed_filepath}未发生改变，且目标文件已存在，无需尝试解压缩")
+                    get_log_func(logger.info, show_log)(
+                        f"{compressed_filepath}未发生改变，且目标文件已存在，无需尝试解压缩"
+                    )
                 # 返回解压缩的文件路径
                 return target_path
             except Exception as e:
-                get_log_func(logger.error, show_log)(f"下载压缩版本 {compressed_filename} 失败，将尝试普通版本~", exc_info=e)
+                get_log_func(logger.error, show_log)(
+                    f"下载压缩版本 {compressed_filename} 失败，将尝试普通版本~", exc_info=e
+                )
 
         # 下载普通版本
         return _download(name)

@@ -51,9 +51,7 @@ class AccountInfoConfig(ConfigInterface):
 class BindRoleConfig(ConfigInterface):
     def __init__(self):
         # 用于领取奖励的区服ID和角色ID，若不配置，则使用道聚城绑定的dnf角色信息
-        self.dnf_server_id = (
-            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
-        )
+        self.dnf_server_id = ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
         self.dnf_role_id = ""
 
     def has_config(self) -> bool:
@@ -554,10 +552,10 @@ class ArkLotteryAwardConfig(ConfigInterface):
 class ArkLotteryConfig(ConfigInterface):
     def __init__(self):
         # 用于完成幸运勇士的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
-        self.lucky_dnf_server_id = (
-            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.lucky_dnf_server_id = ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.lucky_dnf_role_id = (
+            ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         )
-        self.lucky_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         # 是否领取礼包（建议仅大号开启这个功能）
         self.need_take_awards = False
 
@@ -585,10 +583,10 @@ class VipMentorConfig(ConfigInterface):
         # 领取第几个关怀礼包，可填1/2/3，一般是第二个最好
         self.take_index = 2
         # 用于完成关怀礼包的区服ID和角色ID，若服务器ID留空，则使用道聚城绑定的dnf角色信息
-        self.guanhuai_dnf_server_id = (
-            ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.guanhuai_dnf_server_id = ""  # 区服id可查阅utils/reference_data/dnf_server_list.js，具体值为每一个服务器配置中的v字段，如{t: "广东三区", v: "22"}表示广东三区的区服ID为"22"
+        self.guanhuai_dnf_role_id = (
+            ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
         )
-        self.guanhuai_dnf_role_id = ""  # 角色ID，不知道时可以填写区服ID，该数值留空，这样处理到抽卡的时候会用黄色字体打印出来信息
 
 
 class DnfHelperInfoConfig(ConfigInterface):
@@ -1014,14 +1012,18 @@ class AccountConfig(ConfigInterface):
 
         if is_run_in_github_action() and not self.enable_in_github_action:
             # 若当前在github action环境中运行，且设定为不在该环境中使用该QQ，则认为未启用
-            logger.warning(f"账号 {self.name} 设定为不在github action中运行，将跳过，如需启用请修改 enable_in_github_action 配置")
+            logger.warning(
+                f"账号 {self.name} 设定为不在github action中运行，将跳过，如需启用请修改 enable_in_github_action 配置"
+            )
             return False
 
         run_env_file = ".run_env"
         if os.path.isfile(run_env_file):
             run_env = open(".run_env", encoding="utf-8").read().strip()
             if run_env in self.disable_in_run_env_list:
-                logger.warning(f"账号 {self.name} 设定为在 {run_env} 环境下禁用，将跳过，如需启用请修改 disable_in_run_env_list 配置")
+                logger.warning(
+                    f"账号 {self.name} 设定为在 {run_env} 环境下禁用，将跳过，如需启用请修改 disable_in_run_env_list 配置"
+                )
                 return False
 
         return self.enable
@@ -1439,7 +1441,10 @@ class Config(ConfigInterface):
                 #   2. 启用了多进程功能
                 #   3. 未启用超快速模式
                 #   4. 不存在config.toml.local文件
-                logger.info(color("bold_green") + "当前仅有一个账号，没必要开启多进程模式，且未开启超快速模式，将关闭多进程模式~")
+                logger.info(
+                    color("bold_green")
+                    + "当前仅有一个账号，没必要开启多进程模式，且未开启超快速模式，将关闭多进程模式~"
+                )
                 self.common.enable_multiprocessing = False
 
     def check(self) -> bool:
@@ -1455,14 +1460,16 @@ class Config(ConfigInterface):
             # 检查QQ号是否填写格式不对，若末尾带有换行符，会导致登录时，通过js设置标题栏时，报错：selenium.common.exceptions.JavascriptException: Message: javascript error: Invalid or unexpected token
             if account.login_mode == account.login_mode_auto_login and account.account_info.account.endswith("\n"):
                 logger.error(
-                    color("fg_bold_red") + f"第 {idx} 个账号 {account.name} 配置为账号密码登录，但QQ号末尾有多余换行符，请重新输入QQ，不要输入额外字符，如换行符。"
+                    color("fg_bold_red")
+                    + f"第 {idx} 个账号 {account.name} 配置为账号密码登录，但QQ号末尾有多余换行符，请重新输入QQ，不要输入额外字符，如换行符。"
                 )
                 return False
 
             # 检查名称是否重复
             if account.name in name2index:
                 logger.error(
-                    color("fg_bold_red") + f"第{idx}个账号的名称 {account.name} 与第{name2index[account.name]}个账号的名称重复，请调整为不同的名字"
+                    color("fg_bold_red")
+                    + f"第{idx}个账号的名称 {account.name} 与第{name2index[account.name]}个账号的名称重复，请调整为不同的名字"
                 )
                 return False
             name2index[account.name] = idx
@@ -1576,13 +1583,15 @@ def load_config(config_path="config.toml", local_config_path="config.toml.local"
         g_config.auto_update_config(raw_config)
     except UnicodeDecodeError as error:
         logger.error(
-            color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
+            color("fg_bold_yellow")
+            + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
         )
         raise error
     except Exception as error:
         if encoding_error_str in str(error):
             logger.error(
-                color("fg_bold_yellow") + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
+                color("fg_bold_yellow")
+                + f"{config_path}的编码格式有问题，应为utf-8，如果使用系统自带记事本的话，请下载vscode等文本编辑器\n错误信息：{error}\n"
             )
             raise error
 
@@ -1681,7 +1690,9 @@ def gen_config_for_github_action():
     account_configs = []
     for account_cfg in cfg.account_configs:
         if not account_cfg.enable_in_github_action:
-            logger.warning(color("bold_yellow") + f"{account_cfg.name} 配置为不在github action环境中启用，将不尝试导出该账号")
+            logger.warning(
+                color("bold_yellow") + f"{account_cfg.name} 配置为不在github action环境中启用，将不尝试导出该账号"
+            )
             continue
 
         account_configs.append(account_cfg)

@@ -26,7 +26,10 @@ def check_all_skey_and_pskey(cfg):
     QQLogin(cfg.common).check_and_download_chrome_ahead()
 
     if cfg.common.enable_multiprocessing and cfg.is_all_account_auto_login():
-        logger.info(color("bold_yellow") + f"已开启多进程模式({get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式")
+        logger.info(
+            color("bold_yellow")
+            + f"已开启多进程模式({get_pool_size()})，并检测到所有账号均使用自动登录模式，将开启并行登录模式"
+        )
 
         get_pool().starmap(
             do_check_all_skey_and_pskey,
@@ -115,7 +118,10 @@ def main():
     change_console_window_mode_async()
 
     logger.warning(f"开始运行DNF蚊子腿小助手 {special_version_name}，ver={now_version} {ver_time}，powered by {author}")
-    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~")
+    logger.warning(
+        color("fg_bold_cyan")
+        + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~"
+    )
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

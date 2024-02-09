@@ -54,7 +54,9 @@ class QzoneActivity:
 
     def ark_lottery(self):
         if self.roleinfo is None:
-            logger.warning("未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。")
+            logger.warning(
+                "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。"
+            )
 
         # 增加次数
         self.add_ark_lottery_times()
@@ -127,17 +129,22 @@ class QzoneActivity:
                     self.do_ark_lottery(api, award.name, award.ruleid, gameid=self.zzconfig.gameid)
         else:
             if print_warning:
-                logger.warning(f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~")
+                logger.warning(
+                    f"未配置领取集卡礼包奖励，如果账号【{self.cfg.name}】不是小号的话，建议去配置文件打开领取功能【need_take_awards】~"
+                )
 
     def try_lottery_using_cards(self, print_warning=True):
         if self.enable_cost_all_cards_and_do_lottery():
             if print_warning:
                 logger.warning(
-                    color("fg_bold_cyan") + f"已开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能"
+                    color("fg_bold_cyan")
+                    + f"已开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，若尚未兑换完所有奖励，不建议开启这个功能"
                 )
             if self.roleinfo is None:
                 if print_warning:
-                    logger.warning(color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖")
+                    logger.warning(
+                        color("fg_bold_cyan") + f"账号 【{self.cfg.name}】 未在道聚城绑定DNF角色信息，无法进行集卡抽奖"
+                    )
                 return
 
             card_counts = self.get_card_counts()
@@ -146,7 +153,8 @@ class QzoneActivity:
         else:
             if print_warning:
                 logger.warning(
-                    color("fg_bold_cyan") + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。"
+                    color("fg_bold_cyan")
+                    + f"尚未开启抽卡活动({self.zzconfig.actid})消耗所有卡片来抽奖的功能，建议所有礼包都兑换完成后开启该功能，从而充分利用卡片。"
                 )
 
     def enable_cost_all_cards_and_do_lottery(self):
@@ -296,7 +304,9 @@ class QzoneActivity:
         getPrize("购买vip奖励", rule.buyVipPrize)
 
         remaining_lottery_times = self.dnf_warriors_call_data.boss.left.get(str(zz.actbossZige.lottery), 0)
-        logger.info(f"剩余抽奖次数为{remaining_lottery_times}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)")
+        logger.info(
+            f"剩余抽奖次数为{remaining_lottery_times}次\n(ps: 每周通关两次希洛克可分别获取2次抽奖次数；每天通关一次深渊，可以获得1次抽奖次数)"
+        )
         for i in range(remaining_lottery_times):
             lottery(f"抽奖-第{i + 1}次")
 
@@ -411,17 +421,25 @@ class QzoneActivity:
             server_id, roleid = "", ""
             if cfg.guanhuai_dnf_server_id == "":
                 logger.warning("未配置会员关怀礼包的区服和角色信息，将使用道聚城绑定的角色信息")
-                logger.warning(color("bold_cyan") + "如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的关怀活动和集卡活动都可以拿这个来获取回归相关的领取资格")
+                logger.warning(
+                    color("bold_cyan")
+                    + "如果大号经常玩，建议去其他跨区建一个小号，然后不再登录，这样日后的关怀活动和集卡活动都可以拿这个来获取回归相关的领取资格"
+                )
             else:
                 if cfg.guanhuai_dnf_role_id == "":
-                    logger.warning(f"配置了会员关怀礼包的区服ID为{cfg.guanhuai_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表")
+                    logger.warning(
+                        f"配置了会员关怀礼包的区服ID为{cfg.guanhuai_dnf_server_id}，但未配置角色ID，将打印该服所有角色信息如下，请将合适的角色ID填到配置表"
+                    )
                     self.djc_helper.query_dnf_rolelist(cfg.guanhuai_dnf_server_id)
                 else:
                     logger.info("使用配置的区服和角色信息来进行领取会员关怀礼包")
                     server_id, roleid = cfg.guanhuai_dnf_server_id, cfg.guanhuai_dnf_role_id
 
             if guanhuai_distinctActive == "0":
-                logger.warning(color("bold_cyan") + "本次会员关怀活动不允许获取资格和领取奖励的账号不同，因此若当前QQ未被判定为幸运玩家，则不会领取成功~")
+                logger.warning(
+                    color("bold_cyan")
+                    + "本次会员关怀活动不允许获取资格和领取奖励的账号不同，因此若当前QQ未被判定为幸运玩家，则不会领取成功~"
+                )
 
             return _game_award(
                 ctx, guanhuai_gift.act_name, guanhuai_gift.ruleid, area=server_id, partition=server_id, roleid=roleid

@@ -108,7 +108,9 @@ def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_git
 
     # 打印最终大小
     filesize = os.path.getsize(release_7z_name)
-    logger.info(color("bold_green") + f"打包结束，最终大小为{human_readable_size(filesize)}，最终路径为 {release_7z_name}")
+    logger.info(
+        color("bold_green") + f"打包结束，最终大小为{human_readable_size(filesize)}，最终路径为 {release_7z_name}"
+    )
 
     os.chdir(old_cwd)
 

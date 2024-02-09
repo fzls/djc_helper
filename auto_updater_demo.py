@@ -8,7 +8,10 @@ from version import now_version
 
 
 def demo():
-    logger.info(color("bold_yellow") + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）")
+    logger.info(
+        color("bold_yellow")
+        + "尝试启动更新器，等待其执行完毕。若版本有更新，则会干掉这个进程并下载更新文件，之后重新启动进程...(请稍作等待）"
+    )
 
     dlc_path = os.path.realpath("auto_updater.py")
     p = subprocess.Popen(
@@ -46,7 +49,9 @@ def demo():
             )
             uploader.download_file(netdisk_latest_dlc_info, "utils")
         else:
-            logger.warning(f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本最后修改时间{last_modify_time}之前，请耐心等待修复该问题的新版本发布~")
+            logger.warning(
+                f"网盘中最新版本dlc上传于{latest_version_time}左右，在当前版本最后修改时间{last_modify_time}之前，请耐心等待修复该问题的新版本发布~"
+            )
 
 
 if __name__ == "__main__":

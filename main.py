@@ -98,7 +98,9 @@ def prepare_env():
     if args.wait_for_pid_exit != 0:
         # 通过配置工具打开
         increase_counter(ga_category="open_by", name="config_tool", ga_misc_params={"dr": "config_tool"})
-        logger.info(f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒")
+        logger.info(
+            f"等待pid为{args.wait_for_pid_exit}的配置工具退出运行，从而确保可能有的自动更新能够正常进行，最大将等待{args.max_wait_time}秒"
+        )
 
         wait_time = 0.0
         retry_time = 0.1
@@ -129,7 +131,10 @@ def main():
     print_update_message_on_first_run_new_version()
 
     logger.warning(f"开始运行DNF蚊子腿小助手，ver={now_version} {ver_time}，powered by {author}")
-    logger.warning(color("fg_bold_cyan") + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~")
+    logger.warning(
+        color("fg_bold_cyan")
+        + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~"
+    )
 
     # 读取配置信息
     load_config("config.toml", "config.toml.local")

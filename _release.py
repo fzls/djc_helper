@@ -73,7 +73,9 @@ def release():
 
     # ---------------构建增量包
     os.chdir(dir_all_release)
-    show_head_line(f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁", color("bold_yellow"))
+    show_head_line(
+        f"开始构建增量包，最多包含过去{create_patch_for_latest_n_version}个版本到最新版本的补丁", color("bold_yellow")
+    )
     create_patch(dir_src, dir_all_release, create_patch_for_latest_n_version, dir_github_action_artifact)
 
     # ---------------获取补丁地址（分开方便调试）
@@ -134,7 +136,8 @@ def release():
             except Exception as e:
                 local_filename = os.path.basename(local_filepath)
                 logger.warning(
-                    color("bold_yellow") + f"第{try_index}/{total_try_count}次尝试上传 {local_filename} 失败，等待一会后重试",
+                    color("bold_yellow")
+                    + f"第{try_index}/{total_try_count}次尝试上传 {local_filename} 失败，等待一会后重试",
                     exc_info=e,
                 )
                 if try_index < total_try_count:
@@ -150,7 +153,9 @@ def release():
     push_github(version)
 
     # ---------------查看github action
-    show_head_line("为了保底，在github action同时打包发布一份，请在稍后打开的github action中查看打包结果", color("bold_yellow"))
+    show_head_line(
+        "为了保底，在github action同时打包发布一份，请在稍后打开的github action中查看打包结果", color("bold_yellow")
+    )
     logger.info("等待两秒，确保action已开始处理，不必再手动刷新页面")
     time.sleep(2)
     webbrowser.open("https://github.com/fzls/djc_helper/actions/workflows/package.yml")
@@ -161,7 +166,10 @@ def release():
 
     # ---------------结束
     logger.info("+" * 40)
-    logger.info(color("bold_yellow") + f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请等待github action的构建打包流程完成")
+    logger.info(
+        color("bold_yellow")
+        + f"{version} 发布完成，共用时{datetime.now() - run_start_time}，请等待github action的构建打包流程完成"
+    )
     logger.info("+" * 40)
 
     os.system("PAUSE")

@@ -1,4 +1,5 @@
 """将CHANGELOG.MD中的本次更新信息提取出来，供github release流程使用"""
+
 from __future__ import annotations
 
 import os.path

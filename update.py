@@ -76,7 +76,9 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
 
         ask_update = True
         if platform.system() == "Windows":
-            message = f"当前版本为{now_version}，已有最新版本{ui.latest_version}. 你需要更新吗?\n" f"{ui.update_message}"
+            message = (
+                f"当前版本为{now_version}，已有最新版本{ui.latest_version}. 你需要更新吗?\n" f"{ui.update_message}"
+            )
             res = win32api.MessageBox(0, message, "更新", win32con.MB_OKCANCEL)
             if res == win32con.IDOK:
                 ask_update = True
@@ -89,7 +91,9 @@ def try_manaual_update(ui: UpdateInfo) -> bool:
         if ask_update:
             if not is_shared_content_blocked(ui.netdisk_link):
                 webbrowser.open(ui.netdisk_link)
-                win32api.MessageBox(0, f"蓝奏云网盘提取码为： {ui.netdisk_passcode}", "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION)
+                win32api.MessageBox(
+                    0, f"蓝奏云网盘提取码为： {ui.netdisk_passcode}", "蓝奏云网盘提取码", win32con.MB_ICONINFORMATION
+                )
             else:
                 # 如果分享的网盘链接被系统屏蔽了，写日志并弹窗提示
                 logger.warning(f"网盘链接={ui.netdisk_link}又被系统干掉了=-=")
@@ -165,7 +169,9 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
         )
         logger.warning(color("bold_yellow") + msg)
         if is_weekly_first_run(f"notify_manual_update_if_can_not_connect_github_v{now_version}"):
-            async_message_box(msg, "当前版本似乎太老了，请按提示确认是否存在更新的版本", open_url=config.netdisk_link, print_log=False)
+            async_message_box(
+                msg, "当前版本似乎太老了，请按提示确认是否存在更新的版本", open_url=config.netdisk_link, print_log=False
+            )
 
 
 # 获取最新版本号与下载网盘地址
@@ -236,7 +242,11 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
                 f"{idx + 1}. {message}" for idx, message in enumerate(update_messages)
             )
     else:
-        async_message_box("走到这里说明提取更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0", "检查更新出错了", show_once_daily=True)
+        async_message_box(
+            "走到这里说明提取更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0",
+            "检查更新出错了",
+            show_once_daily=True,
+        )
 
     logger.info(
         f"netdisk_address_matches={netdisk_address_matches}, selected=({update_info.netdisk_link}, {update_info.netdisk_passcode})"
@@ -281,11 +291,17 @@ def get_update_info_by_download_raw_file() -> UpdateInfo:
             break
 
     # 尝试提取更新信息
-    update_message_matches = re.search(r"(?<=更新公告)\s*(?P<update_message>(\s|\S)+?)\n\n", changelog_txt, re.MULTILINE)
+    update_message_matches = re.search(
+        r"(?<=更新公告)\s*(?P<update_message>(\s|\S)+?)\n\n", changelog_txt, re.MULTILINE
+    )
     if update_message_matches is not None:
         update_info.update_message = update_message_matches.groupdict()["update_message"]
     else:
-        async_message_box("走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0", "检查更新出错了", show_once_daily=True)
+        async_message_box(
+            "走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0",
+            "检查更新出错了",
+            show_once_daily=True,
+        )
 
     logger.info(
         f"netdisk_address_matches={netdisk_address_matches}, selected=({update_info.netdisk_link}, {update_info.netdisk_passcode})"

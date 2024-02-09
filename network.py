@@ -285,7 +285,9 @@ def process_result(
             except json.JSONDecodeError as e:
                 if e.msg == "Extra data":
                     # {"ret":0,"msg":"ok",...}{"ret":-5507,"msg":"很抱歉，系统繁忙，请等待10秒后再试！"...}
-                    logger.debug(f"道聚城似乎又抽风了，末尾多加了一个json串，尝试移除最后一个左括号及之后的内容，修改前 json_text 为 {json_text}")
+                    logger.debug(
+                        f"道聚城似乎又抽风了，末尾多加了一个json串，尝试移除最后一个左括号及之后的内容，修改前 json_text 为 {json_text}"
+                    )
                     json_text = json_text[: json_text.rindex("{")]
                     logger.debug(f"修改后 json_text 为 {json_text}")
                 else:

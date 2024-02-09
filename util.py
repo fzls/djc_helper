@@ -63,7 +63,9 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         requests.exceptions.ConnectTimeout,
         requests.exceptions.ReadTimeout,
     ]:
-        msg += format_msg("网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<（不用管，会自动重试的）")
+        msg += format_msg(
+            "网络超时了，一般情况下是因为网络问题，也有可能是因为对应网页的服务器不太行，多试几次就好了<_<（不用管，会自动重试的）"
+        )
     elif type(e) in [
         PermissionError,
     ]:
@@ -77,12 +79,16 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
         e: OSError  # type: ignore
 
         if e.winerror == 1455:
-            msg += format_msg(f"当前电脑内存不足，请调小多进程相关配置。可将【配置工具/公共配置/多进程】调整为当前cpu的一半（{cpu_count() / 2}），或者其他合适的数值，或者关闭。")
+            msg += format_msg(
+                f"当前电脑内存不足，请调小多进程相关配置。可将【配置工具/公共配置/多进程】调整为当前cpu的一半（{cpu_count() / 2}），或者其他合适的数值，或者关闭。"
+            )
     elif type(e) is FileNotFoundError:
         # FileNotFoundError: [Errno 2] No such file or directory: 'config.toml'
         e: FileNotFoundError  # type: ignore
 
-        msg += format_msg(f"文件 {e.filename} 不见了，很有可能是被杀毒软件删除了，请重新解压一份小助手来使用，同时最好将小助手所在文件夹添加到杀毒软件的白名单中")
+        msg += format_msg(
+            f"文件 {e.filename} 不见了，很有可能是被杀毒软件删除了，请重新解压一份小助手来使用，同时最好将小助手所在文件夹添加到杀毒软件的白名单中"
+        )
         if e.filename == "config.toml":
             msg += format_msg(
                 f"  被删除的这个文件({e.filename})是小助手的配置文件，如果之前运行过，可以在稍后自动打开的目录中，找到一个最近的备份，然后将这个文件复制回小助手的目录即可",
@@ -97,7 +103,9 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
     elif type(e) in [
         selenium.common.exceptions.TimeoutException,
     ]:
-        msg += format_msg("浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间")
+        msg += format_msg(
+            "浏览器等待对应元素超时了，很常见的。如果一直超时导致无法正常运行，可去config.example.toml将登录超时相关配置加到config.toml中，并调大超时时间"
+        )
     elif type(e) in [
         SameAccountTryLoginAtMultipleThreadsException,
     ]:
@@ -216,7 +224,9 @@ def change_console_window_mode(cfg, disable_min_console=False):
         return
 
     if is_running_under_windows_terminal_in_win11():
-        logger.info(color("bold_yellow") + "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程")
+        logger.info(
+            color("bold_yellow") + "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程"
+        )
         async_message_box(
             (
                 "检测到当前默认终端是 WindowsTerminal，为避免桌面卡住，将跳过最大化/最小化流程\n"
@@ -416,12 +426,16 @@ def show_unexpected_exception_message(e: Exception):
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
     logger.warning(color("fg_bold_green") + "如果要反馈，请把整个窗口都截图下来- -不要只截一部分")
-    logger.warning(color("fg_bold_yellow") + "不要自动无视上面这三句话哦，写出来是让你看的呀<_<不知道出啥问题的时候就按提示去看看是否有新版本哇，而不是不管三七二十一就来群里问嗷")
+    logger.warning(
+        color("fg_bold_yellow")
+        + "不要自动无视上面这三句话哦，写出来是让你看的呀<_<不知道出啥问题的时候就按提示去看看是否有新版本哇，而不是不管三七二十一就来群里问嗷"
+    )
     logger.warning(color("fg_bold_cyan") + f"链接：{cfg.common.netdisk_link}")
 
     if run_from_src():
         show_head_line(
-            "目前使用的是源码版本，出现任何问题请自行调试或google解决，这是使用源码版本的前提。另外，在出问题时，建议先尝试更新依赖库，确保与依赖配置中的版本匹配。", color("bold_yellow")
+            "目前使用的是源码版本，出现任何问题请自行调试或google解决，这是使用源码版本的前提。另外，在出问题时，建议先尝试更新依赖库，确保与依赖配置中的版本匹配。",
+            color("bold_yellow"),
         )
 
 
@@ -433,7 +447,10 @@ def disable_quick_edit_mode():
     def _cb():
         ENABLE_EXTENDED_FLAGS = 0x0080
 
-        logger.info(color("bold_green") + "将禁用命令行的快速编辑模式，避免鼠标误触时程序暂停，若需启用，请去配置文件取消禁用快速编辑模式~")
+        logger.info(
+            color("bold_green")
+            + "将禁用命令行的快速编辑模式，避免鼠标误触时程序暂停，若需启用，请去配置文件取消禁用快速编辑模式~"
+        )
         show_quick_edit_mode_tip()
         kernel32 = ctypes.windll.kernel32
         kernel32.SetConsoleMode(kernel32.GetStdHandle(win32api.STD_INPUT_HANDLE), ENABLE_EXTENDED_FLAGS)
@@ -443,7 +460,8 @@ def disable_quick_edit_mode():
 
 def show_quick_edit_mode_tip():
     logger.info(
-        color("bold_blue") + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
+        color("bold_blue")
+        + "当前已禁用快速编辑，如需复制链接，请先按 CTRL+M 临时开启选择功能，然后选择要复制的区域，按 CTRL+C 进行复制\n"
         "（如果点击后会退出，也可以点击命令栏左上角图标，编辑->标记，然后选择复制区域来复制即可）"
     )
 
@@ -895,7 +913,9 @@ def remove_old_version_portable_chrome_files(current_chrome_version: int):
     2. chrome_portable_{ver}.7z
     3. chrome_portable_{ver}
     """
-    logger.info(color("bold_green") + f"开始尝试清理非当前版本的便携版chrome相关文件，当前chrome版本为{current_chrome_version}")
+    logger.info(
+        color("bold_green") + f"开始尝试清理非当前版本的便携版chrome相关文件，当前chrome版本为{current_chrome_version}"
+    )
 
     chrome_file_regex = [
         r"chromedriver_(?P<version>\d+)\.exe",
@@ -1195,7 +1215,9 @@ def with_cache(
 
         if cache_value_unmarshal_func is not None:
             cache_info.value = cache_value_unmarshal_func(cache_info.value)
-            logger.debug(f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}")
+            logger.debug(
+                f"{cache_category} {cache_key} 提供了反序列化函数，将对缓存数据进行转换，结果为 {cache_info.value}"
+            )
 
         cached_value = cache_info.value
 
@@ -1205,7 +1227,9 @@ def with_cache(
                 or cache_max_seconds == never_expired_cache_seconds
             ):
                 if cache_validate_func is None or cache_validate_func(cache_info.value):
-                    logger.debug(f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}")
+                    logger.debug(
+                        f"{cache_category} {cache_key} 本地缓存尚未过期，且检验有效，将使用缓存内容。缓存信息为 {cache_info}"
+                    )
 
                     if cache_hit_func:
                         cache_hit_func(cache_info.value)

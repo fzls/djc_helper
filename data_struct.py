@@ -83,7 +83,7 @@ class ConfigInterface(metaclass=ABCMeta):
         with open(filepath, encoding="utf-8") as f:
             raw_config = json.load(f)
 
-        if type(raw_config) != dict:
+        if type(raw_config) is not dict:
             logger.warning(f"raw_config={raw_config} load from {filepath} is not dict")
             return
 

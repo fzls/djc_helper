@@ -15,6 +15,7 @@ class BlackListInfo:
         return f"{self.qq}({self.nickname})在{self.ban_at}因[{self.reason}]被本工具拉入黑名单"
 
 
+# fmt: off
 black_list = {
     "823985815": BlackListInfo("2021-01-05", "823985815", "章鱼宝宝。", "伸手党，不看提示直接开问"),
     "1531659746": BlackListInfo("2021-01-20", "1531659746", "北望", "别人图氛围说继续发红包时，骂别人网络乞丐，然后被踢后，加我说我是傻逼罢了"),
@@ -29,6 +30,7 @@ black_list = {
     "79608835": BlackListInfo("2021-12-11", "79608835", "                      . ", "私聊问问题，问完来一句：那你没用了。没有一点点基本的礼貌"),
     "741038971": BlackListInfo("2021-12-31", "741038971", "㞢卄", "进群里发【我咋能明白的/集卡链接/去你妈的一群Sb】，然后自己退群，莫名其妙"),
 }
+# fmt: on
 
 
 def try_update_black_list():

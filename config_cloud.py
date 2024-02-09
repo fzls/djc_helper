@@ -44,7 +44,9 @@ class TryAutoUpdateIgnorePermissionConfig(ConfigInterface):
         for str_begin, str_end in self.period_list:
             begin, end = parse_time(str_begin), parse_time(str_end)
             if begin <= now <= end:
-                logger.info(color("bold_yellow") + f"当前时间为 {now}, 在指定时间段内[{begin}, {end}]，可无视权限触发dlc")
+                logger.info(
+                    color("bold_yellow") + f"当前时间为 {now}, 在指定时间段内[{begin}, {end}]，可无视权限触发dlc"
+                )
                 return True
 
         return False

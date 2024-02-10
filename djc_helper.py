@@ -10293,13 +10293,22 @@ class DjcHelper:
         # self.dnf_nianhuopu_op("邀请好友奖励", "264630")
 
         ticket_num = query_info()
+
+        tips = f"当前年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"
+        title = f"年货铺兑换_每周提示_{self.cfg.name}"
+        show_once_weekly = True
+
+        act_info = get_not_ams_act("DNF年货铺")
+        if act_info.is_last_day():
+            tips = f"当前已是活动最后一天，年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"
+            title = f"年货铺兑换_最后一天提示_{self.cfg.name}"
+            show_once_weekly = False
+
         async_message_box(
-            (
-                f"当前年货券为 {ticket_num}, 请自行前往点击确认弹出的网页中进行兑换奖品(次元穿梭光环、高级装扮、增幅书等）\n"
-            ),
-            f"年货铺兑换_每周提示_{self.cfg.name}",
+            tips,
+            title,
             open_url=get_act_url("DNF年货铺"),
-            show_once_weekly=True,
+            show_once_weekly=show_once_weekly,
         )
         # self.dnf_nianhuopu_op("兑换年货", "261666")
 

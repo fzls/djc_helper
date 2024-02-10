@@ -10392,7 +10392,9 @@ class DjcHelper:
                 else:
                     if task_info.needNum > task_info.doneNum:
                         logger.info(f"未完成任务 {task_name}，当前进度为 {task_info.doneNum}/{task_info.needNum}")
-                        not_finished_task_desc_list.append(f"    {task_index} {task_name} {task_info.doneNum}/{task_info.needNum}")
+                        not_finished_task_desc_list.append(
+                            f"    {task_index} {task_name} {task_info.doneNum}/{task_info.needNum}"
+                        )
                     else:
                         logger.info(f"已完成任务 {task_name}，尝试领取奖励")
 
@@ -10430,7 +10432,10 @@ class DjcHelper:
                 tips = ""
                 tips = tips + f"当前账号：{self.cfg.name} {self.qq()}\n"
                 tips = tips + f"绑定角色：{server_name} {role_name}\n"
-                tips = tips + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                tips = (
+                    tips
+                    + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                )
                 tips = tips + "\n"
                 tips = tips + "\n".join(not_finished_task_desc_list)
 

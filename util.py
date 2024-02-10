@@ -312,6 +312,7 @@ def async_message_box(
     show_once_daily=False,
     show_once_monthly=False,
     show_once_weekly=False,
+    do_not_show_message_box=False,
 ):
     async_call(
         message_box,
@@ -328,6 +329,7 @@ def async_message_box(
         call_from_async=True,
         show_once_monthly=show_once_monthly,
         show_once_weekly=show_once_weekly,
+        do_not_show_message_box=do_not_show_message_box,
     )
 
 
@@ -346,6 +348,7 @@ def message_box(
     call_from_async=False,
     show_once_monthly=False,
     show_once_weekly=False,
+    do_not_show_message_box=False,
 ):
     log_message = msg.replace("\n\n", "\n")
     if open_url != "" and open_url not in log_message:
@@ -367,6 +370,9 @@ def message_box(
     if show_once_weekly and not is_weekly_first_run(f"weekly_message_box_{title}"):
         show_message_box = False
     if follow_flag_file and exists_flag_file(".no_message_box"):
+        show_message_box = False
+    if do_not_show_message_box:
+        # 部分情况下，在外部控制一些特定的条件下不显示弹窗，而其他时候继续显示，同时希望一直打印日志，那么在那些特定的条件下可以使用这个参数来临时取消弹窗
         show_message_box = False
 
     if show_message_box and is_windows():

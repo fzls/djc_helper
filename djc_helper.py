@@ -10372,6 +10372,8 @@ class DjcHelper:
                 "5": "通关均衡仲裁者",
             }
 
+            not_finished_task_desc_list = []
+
             for task_index, task_info in taskData.items():
                 task_name = task_index_to_name[task_index]
 
@@ -10380,6 +10382,7 @@ class DjcHelper:
                 else:
                     if task_info.needNum > task_info.doneNum:
                         logger.info(f"未完成任务 {task_name}，当前进度为 {task_info.doneNum}/{task_info.needNum}")
+                        not_finished_task_desc_list.append(f"    {task_index} {task_name} {task_info.doneNum}/{task_info.needNum}")
                     else:
                         logger.info(f"已完成任务 {task_name}，尝试领取奖励")
 
@@ -10398,6 +10401,28 @@ class DjcHelper:
                             "5-8阶段的在2.8时，代码里还未看到怎么写的，到时候看到提示再弄下",
                             "（仅自己可见）大百变活动5-8阶段需要处理下",
                         )
+
+            # 提示当前未完成的任务
+            if len(not_finished_task_desc_list) > 0:
+                # re: 改为仅周6/7/1/2/3提示 @2024-02-10 03:38:48 By Chen Ji
+                role_name = double_unquote(curStageData.sRoleName)
+                server_name = dnf_server_id_to_name(curStageData.iAreaId)
+
+                total_task = len(taskData)
+                done_task = total_task - len(not_finished_task_desc_list)
+
+                tips = ""
+                tips = tips + f"当前账号：{self.cfg.name} {self.qq()}\n"
+                tips = tips + f"绑定角色：{server_name} {role_name}\n"
+                tips = tips + f"当前为本周期第 XXX 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                tips = tips + "\n"
+                tips = tips + "\n".join(not_finished_task_desc_list)
+
+                async_message_box(
+                    tips,
+                    f"{self.cfg.name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}",
+                    show_once_daily=True,
+                )
 
         @try_except()
         def take_stage_rewards(curStageData: ShenJieGrowUpCurStageData, allStagePack: list[ShenJieGrowUpStagePack]):

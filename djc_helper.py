@@ -160,6 +160,7 @@ from util import (
     get_month,
     get_now,
     get_now_unix,
+    get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
     get_week,
@@ -10404,7 +10405,13 @@ class DjcHelper:
 
             # 提示当前未完成的任务
             if len(not_finished_task_desc_list) > 0:
-                # re: 改为仅周6/7/1/2/3提示 @2024-02-10 03:38:48 By Chen Ji
+                # 周期的前半段，也就是正常可以完成对应任务内容的456三天不弹窗提示进度，之后几天，若仍有任务未完成，则每天尝试提示一次
+                now = get_now()
+                do_not_show_message_box = now.isoweekday() in [4, 5, 6]
+
+                cycle_start_thursday = get_this_thursday_of_dnf()
+                day_index_in_cycle = (now - cycle_start_thursday).days + 1
+
                 role_name = double_unquote(curStageData.sRoleName)
                 server_name = dnf_server_id_to_name(curStageData.iAreaId)
 
@@ -10414,14 +10421,15 @@ class DjcHelper:
                 tips = ""
                 tips = tips + f"当前账号：{self.cfg.name} {self.qq()}\n"
                 tips = tips + f"绑定角色：{server_name} {role_name}\n"
-                tips = tips + f"当前为本周期第 XXX 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                tips = tips + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
                 tips = tips + "\n"
                 tips = tips + "\n".join(not_finished_task_desc_list)
 
                 async_message_box(
                     tips,
-                    f"{self.cfg.name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}",
+                    f"{self.cfg.name} {role_name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}",
                     show_once_daily=True,
+                    do_not_show_message_box=do_not_show_message_box,
                 )
 
         @try_except()

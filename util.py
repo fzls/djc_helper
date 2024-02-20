@@ -350,7 +350,7 @@ def message_box(
     show_once_weekly=False,
     do_not_show_message_box=False,
 ):
-    log_message = msg.replace("\n\n", "\n")
+    log_message = title + "\n" + msg.replace("\n\n", "\n")
     if open_url != "" and open_url not in log_message:
         log_message = log_message + f"\n\n需打开的网页链接为：{open_url}"
     get_log_func(logger.warning, print_log)(color(color_name) + log_message)

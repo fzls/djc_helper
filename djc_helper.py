@@ -10431,12 +10431,19 @@ class DjcHelper:
             tips = ""
             tips = tips + f"当前账号：{self.cfg.name} {self.qq()}\n"
             tips = tips + f"绑定角色：{server_name} {role_name}\n"
-            tips = (
-                tips
-                + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
-            )
-            tips = tips + "\n"
-            tips = tips + "\n".join(not_finished_task_desc_list)
+
+            if len(not_finished_task_desc_list) > 0:
+                tips = (
+                    tips
+                    + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（大百变与8周锁2）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                )
+                tips = tips + "\n"
+                tips = tips + "\n".join(not_finished_task_desc_list)
+            else:
+                tips = (
+                    tips
+                    + f"当前为本周期第 {day_index_in_cycle} 天，本周任务均已完成\n"
+                )
 
             show_head_line("大百变活动进度", msg_color=color("bold_yellow"))
             async_message_box(

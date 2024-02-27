@@ -10381,6 +10381,9 @@ class DjcHelper:
                 "4": "通关任意难度军团地下城：幽暗岛",
                 "5": "通关均衡仲裁者",
             }
+            if int(curStageData.stage) >= 5:
+                # 阶段 5及以后  第三个任务变更了
+                task_index_to_name["3"] = "通关任意难度异面边界"
 
             not_finished_task_desc_list = []
 

@@ -5250,8 +5250,17 @@ class DjcHelper:
             return remain, total
 
         def query_is_chaohe() -> bool:
+            # {"data": {}, "ret": 7001, "msg": "login status verification failed: 参数无效，检查请求参数"}
+            # {"ret": 0, "msg": "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。", "data": "{\"msg\":\"抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。\",\"ret\":40006}", "serialId": "ceiba-supercore-16726-157132-1709393654494-8ea5639454"}
             res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 157132)
-            return res["msg"] != "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。"
+
+            is_chaohe = not (
+                # 不是超核
+                (res["ret"] == 0 and res["msg"] == "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。") or
+                # 登录参数有误
+                (res["ret"] == 7001 and res["msg"] == "login status verification failed: 参数无效，检查请求参数")
+            )
+            return is_chaohe
 
         is_chaohe = query_is_chaohe()
         if not is_chaohe:

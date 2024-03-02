@@ -699,6 +699,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
+            ("超核勇士wpe", self.dnf_chaohe_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5220,6 +5221,140 @@ class DjcHelper:
         return self.post(
             ctx,
             self.urls.dnf_helper_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
+
+    # --------------------------------------------超核勇士wpe--------------------------------------------
+    @try_except()
+    def dnf_chaohe_wpe(self):
+        show_head_line("超核勇士wpe")
+        self.show_not_ams_act_info("超核勇士wpe")
+
+        if not self.cfg.function_switches.get_dnf_chaohe_wpe or self.disable_most_activities():
+            logger.warning("未启用领取超核勇士wpe功能，将跳过")
+            return
+
+        self.prepare_wpe_act_openid_accesstoken("超核勇士wpe")
+
+        def query_count(ctx: str, flow_id: int) -> tuple[int, int]:
+            res = self.dnf_chaohe_wpe_op(ctx, flow_id, print_res=False)
+            data = json.loads(res["data"])
+
+            remain = data["remain"]
+            total = data["total"]
+
+            return remain, total
+
+        def query_is_chaohe() -> bool:
+            res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 157132)
+            return res["msg"] != "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。"
+
+        is_chaohe = query_is_chaohe()
+        if not is_chaohe:
+            logger.warning(color("bold_yellow") + "当前账号不是超核玩家，将跳过超核勇士wpe活动")
+            return
+
+        # 成长系列任务
+        self.dnf_chaohe_wpe_op("1、活动期间累积登录游戏3天（超能积分+50） ", 157132)
+        self.dnf_chaohe_wpe_op("2、活动期间累积登录游戏6天（超能积分+50）", 157133)
+        self.dnf_chaohe_wpe_op("3、活动期间累积登录游戏12天（超能积分+100）", 157134)
+        self.dnf_chaohe_wpe_op("4、活动期间累积登录游戏18天（超能积分+200）", 157135)
+        self.dnf_chaohe_wpe_op("5、活动期间累积登录游戏24天（超能积分+400）", 157136)
+        self.dnf_chaohe_wpe_op("6、活动期间强化或增幅成功装备≥3次（超能积分+100）", 157137)
+        self.dnf_chaohe_wpe_op("7、活动期间强化或增幅成功装备≥6次（超能积分+200）", 157138)
+        self.dnf_chaohe_wpe_op("8、活动期间强化或增幅成功装备≥9次（超能积分+300）", 157139)
+        self.dnf_chaohe_wpe_op("9、激战均衡仲裁者系列任务当月通关100次（超能积分+300）", 157140)
+        self.dnf_chaohe_wpe_op("10、激战均衡仲裁者系列任务当月通关200次（超能积分+600）", 157141)
+        self.dnf_chaohe_wpe_op("11、挑战幽暗岛系列任务当月通关4次（超能积分+1000）", 157142)
+        self.dnf_chaohe_wpe_op("12、盖波加系列任务当月通关4次（超能积分+500）", 157143)
+        self.dnf_chaohe_wpe_op("13、巴卡尔系列任务当月通关4次（超能积分+800）", 157144)
+
+        # 挑战系列任务
+        self.dnf_chaohe_wpe_op("1、活动期间账号内1个角色达到5.3万名望（超能积分+600）", 157145)
+        self.dnf_chaohe_wpe_op("2、活动期间账号内2个角色达到5.3万名望（超能积分+600）", 157146)
+        self.dnf_chaohe_wpe_op("3、活动期间账号内3个角色达到5.3万名望（超能积分+600）", 157147)
+        self.dnf_chaohe_wpe_op("4、活动期间帐号充值点券数量≥100000（超能积分+500）", 157148)
+        self.dnf_chaohe_wpe_op("5、活动期间帐号充值点券数量≥200000（超能积分+500）", 157149)
+        self.dnf_chaohe_wpe_op("6、活动期间帐号充值点券数量≥300000（超能积分+500）", 157150)
+        self.dnf_chaohe_wpe_op("7、活动期间帐号充值点券数量≥400000（超能积分+500）", 157151)
+        self.dnf_chaohe_wpe_op("8、活动期间帐号充值点券数量≥500000（超能积分+500）", 157152)
+        self.dnf_chaohe_wpe_op("9、活动期间帐号充值点券数量≥1000000（超能积分+1000）", 157153)
+        self.dnf_chaohe_wpe_op("10、活动期间帐号充值点券数量≥2000000（超能积分+2000）", 157154)
+
+        # 超能成长礼
+        remain_point, total_point = query_count("查询 当前已获得超能积分", 157131)
+        logger.info(f"超能积分 目前剩余：{remain_point}，累计获得 {total_point}")
+
+        self.dnf_chaohe_wpe_op("雏鹰勇士 1500积分", 158781)
+        self.dnf_chaohe_wpe_op("潜能勇士 3000积分", 158788)
+        self.dnf_chaohe_wpe_op("飞升勇士 4500积分", 158789)
+        self.dnf_chaohe_wpe_op("领航勇士 6000积分", 158790)
+        self.dnf_chaohe_wpe_op("缔造勇士 7500积分", 158791)
+        self.dnf_chaohe_wpe_op("光辉勇士 9000积分", 158792)
+        self.dnf_chaohe_wpe_op("圣光勇士 10500积分", 158793)
+        self.dnf_chaohe_wpe_op("神迹勇士 12000积分", 158794)
+        self.dnf_chaohe_wpe_op("传奇勇士 13500积分", 158795)
+
+        # 超能幸运礼
+        remain_lottery_times, total_lottery_times = query_count("查询 当前已获得抽奖次数", 158867)
+        logger.info(f"抽奖次数 目前剩余：{remain_lottery_times}，累计获得 {total_lottery_times}")
+        for idx in range_from_one(remain_lottery_times):
+            self.dnf_chaohe_wpe_op(f"[{idx}/{remain_lottery_times}] 开启礼盒", 158877)
+            time.sleep(3)
+
+        # 超能聚宝阁
+        remain_exchange_point, total_exchange_point = query_count("查询 当前已获得兑换积分", 158876)
+        logger.info(f"兑换积分 目前剩余：{remain_exchange_point}，累计获得 {total_exchange_point}")
+        if remain_exchange_point > 0:
+            async_message_box(
+                f"当前拥有兑换积分 {remain_exchange_point}，可点击确认前往活动页面兑换 +11增幅券（6000积分）、梦想白金（6000积分）等道具",
+                "超核勇士活动兑换道具",
+                show_once_weekly=True,
+                open_url=get_act_url("超核勇士wpe"),
+            )
+
+
+    def dnf_chaohe_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        roleinfo = self.get_dnf_bind_role()
+
+        act_id = 16726
+
+        json_data = {
+            "biz_id": "supercore",
+            "act_id": act_id,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": json.dumps(
+                {
+                    "ceiba_plat_id": "ios",
+                    "gid": "1",
+                    "c_bind_club_id": "",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_chaohe_wpe_api,
             flowId=flow_id,
             actId=act_id,
             json=json_data,
@@ -14051,4 +14186,4 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shenjie_grow_up()
+        djcHelper.dnf_chaohe_wpe()

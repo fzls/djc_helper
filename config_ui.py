@@ -2916,6 +2916,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
+            ("超核勇士wpe", "get_dnf_chaohe_wpe"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

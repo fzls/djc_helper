@@ -10448,14 +10448,23 @@ class DjcHelper:
                     + f"当前为本周期第 {day_index_in_cycle} 天，本周任务均已完成\n"
                 )
 
+            title = f"{self.cfg.name} {role_name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}"
+
             show_head_line("大百变活动进度", msg_color=color("bold_yellow"))
             async_message_box(
                 tips,
-                f"{self.cfg.name} {role_name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}",
+                title,
                 show_once_daily=True,
                 do_not_show_message_box=do_not_show_message_box,
                 color_name="bold_yellow",
             )
+
+            # 自己使用时，若尚未完成，则每次运行都弹提示，更加直观
+            if use_by_myself() and len(not_finished_task_desc_list) > 0:
+                async_message_box(
+                    tips,
+                    title,
+                )
 
         @try_except()
         def take_stage_rewards(curStageData: ShenJieGrowUpCurStageData, allStagePack: list[ShenJieGrowUpStagePack]):

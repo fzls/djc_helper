@@ -697,19 +697,19 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("colg其他活动", self.colg_other_act),
             ("DNF漫画预约活动", self.dnf_comic),
-            ("dnf助手活动wpe", self.dnf_helper_wpe),
-            ("colg每日签到", self.colg_signin),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("DNF年货铺", self.dnf_nianhuopu),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("DNF年货铺", self.dnf_nianhuopu),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("colg每日签到", self.colg_signin),
+            ("dnf助手活动wpe", self.dnf_helper_wpe),
+            ("colg其他活动", self.colg_other_act),
             ("拯救赛利亚", self.dnf_save_sailiyam),
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),

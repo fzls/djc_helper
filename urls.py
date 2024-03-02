@@ -99,17 +99,17 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
-    "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240201gift/index.html",
-    "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
     #
     # 已过期活动
     #
+    "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240201gift/index.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
+    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/48646_432375e2",

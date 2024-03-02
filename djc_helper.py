@@ -5255,10 +5255,10 @@ class DjcHelper:
             res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 157132)
 
             is_chaohe = not (
-                # 不是超核
-                (res["ret"] == 0 and res["msg"] == "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。") or
-                # 登录参数有误
-                (res["ret"] == 7001 and res["msg"] == "login status verification failed: 参数无效，检查请求参数")
+                (res["ret"] == 0 and res["msg"] == "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。")  # 不是超核
+                or (
+                    res["ret"] == 7001 and res["msg"] == "login status verification failed: 参数无效，检查请求参数"
+                )  # 登录参数有误
             )
             return is_chaohe
 
@@ -5325,7 +5325,6 @@ class DjcHelper:
                 show_once_weekly=True,
                 open_url=get_act_url("超核勇士wpe"),
             )
-
 
     def dnf_chaohe_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
@@ -10578,10 +10577,7 @@ class DjcHelper:
                 tips = tips + "\n"
                 tips = tips + "\n".join(not_finished_task_desc_list)
             else:
-                tips = (
-                    tips
-                    + f"当前为本周期第 {day_index_in_cycle} 天，本周任务均已完成\n"
-                )
+                tips = tips + f"当前为本周期第 {day_index_in_cycle} 天，本周任务均已完成\n"
 
             title = f"{self.cfg.name} {role_name} 大百变活动进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}"
 

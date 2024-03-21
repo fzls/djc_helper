@@ -882,6 +882,8 @@ need_take_awards = false
 10011 = false
 # 2023.12.21 DNF飞跃天穹 登临神界 集卡赢+10装备增幅券、梦想白金徽章
 10012 = false
+# 2024.03.21 DNF雾神的记忆
+10013 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

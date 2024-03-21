@@ -700,13 +700,13 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
             ("DNF年货铺", self.dnf_nianhuopu),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("colg每日签到", self.colg_signin),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
@@ -10314,52 +10314,50 @@ class DjcHelper:
 
         self.check_dnf_luodiye_ide()
 
-        def query_info() -> tuple[int, int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "257329", print_res=False)
+        def query_info() -> int:
+            res = self.dnf_luodiye_ide_op("初始化", "274512", print_res=False)
             raw_info = res["jData"]
 
-            # 普通积分
-            iOrdinary = int(raw_info["iOrdinary"])
-            # 豪华积分
-            iLuxury = int(raw_info["iLuxury"])
-            # 春节每日签到抽奖次数
+            # 抽奖次数
             iLottery = int(raw_info["iLottery"])
 
-            return iOrdinary, iLuxury, iLottery
+            return iLottery
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("新春福利", "258499")
+        self.dnf_luodiye_ide_op("见面礼", "274590")
 
-        self.dnf_luodiye_ide_op("每日任务", "258558")
-        self.dnf_luodiye_ide_op("每周任务", "258559")
-
-        iOrdinary, iLuxury, iLottery = query_info()
-        async_message_box(
-            (
-                f"当前普通积分为 {iOrdinary}, 豪华积分为{iLuxury}，请自行前往点击确认弹出的网页中进行兑换奖品\n"
-                "其中完成任务后还有需要进行分享完成的普通积分礼包和豪华积分礼包，如有兴趣，请自行完成\n"
-            ),
-            f"官网新春签到活动_每周提示_{self.cfg.name}",
-            open_url=get_act_url("DNF落地页活动_ide"),
-            show_once_weekly=True,
-        )
-
-        logger.info(f"当前抽奖次数为 {iLottery}")
-        for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 新春登录好礼（抽奖）", "259932")
-            if res["ret"] == 10001:
-                break
+        tasks = [
+            ("每日任务一", "274596"),
+            ("每日任务二", "274597"),
+            ("每周任务一", "274611"),
+            ("每周任务二", "274633"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_luodiye_ide_op(name, flowid)
             time.sleep(5)
 
+        # iTicket, iLottery = query_info()
         # async_message_box(
-        #     "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
-        #     "1221 落地页拉回归活动",
-        #     show_once=True,
+        #     (
+        #         f"当前好友积分为{iTicket}，请自行前往点击确认弹出的网页中进行兑换奖品\n"
+        #         "其中完成任务后还有需要进行分享完成的普通积分礼包和豪华积分礼包，如有兴趣，请自行完成\n"
+        #     ),
+        #     f"官网新春签到活动_每周提示_{self.cfg.name}",
         #     open_url=get_act_url("DNF落地页活动_ide"),
+        #     show_once_weekly=True,
         # )
+
+        iLottery = query_info()
+        logger.info(f"当前抽奖次数为 {iLottery}")
+        for idx in range_from_one(iLottery):
+            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 抽奖", "274634")
+            # if res["ret"] == 10001:
+            #     break
+            time.sleep(5)
+
         async_message_box(
-            "落地页活动页面有个分享好友答题的活动，如有兴趣请自行完成",
-            "24.2 落地页拉回归活动",
+            "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+            "24.3 落地页拉回归活动",
             show_once=True,
             open_url=get_act_url("DNF落地页活动_ide"),
         )
@@ -14191,4 +14189,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_chaohe_wpe()
+        djcHelper.dnf_luodiye_ide()
+
+    pause()

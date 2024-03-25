@@ -1616,32 +1616,9 @@ class DjcHelper:
         wait_time = max(retryCfg.request_wait_time, 10)
         retry_wait_time = max(retryCfg.retry_wait_time, 5)
 
-        progress = 0
-        while progress < op.count:
-            # 默认每次兑换一个
-            exchange_count = 1
-
-            # note: 这次新版心悦活动这俩没有批量兑换的功能，了，先注释掉这部分，后续加回来的话再适配
-            batch_exchange_list: list[tuple[int, list[int]]] = [
-                # (821281, [1, 5, 20]),  # 新版复活币*1(日限100)(需1点勇士币)
-                # (912508, [1, 5, 10]),  # 新版装备提升礼盒(需30点勇士币)(每日20次)
-            ]
-            for batch_flowid, batch_count_list in batch_exchange_list:
-                if op.iFlowId == batch_flowid:
-                    # 部分奖励可批量兑换，具体列表可见上面
-                    remaining = op.count - progress
-
-                    for batch_count in batch_count_list:
-                        if remaining >= batch_count and batch_count >= exchange_count:
-                            # 找到批量兑换列表中当前适用的最大值
-                            exchange_count = batch_count
-
-            progress += exchange_count
-
-            ctx = f"6.2 心悦操作： {op.sFlowName}({progress}/{op.count}) 本次兑换 {exchange_count}个"
-
+        def _try_exchange(ctx: str, pNum: int):
             for _try_index in range(retryCfg.max_retry_count):
-                res = self.xinyue_battle_ground_wpe_op(ctx, op.iFlowId)
+                res = self.xinyue_battle_ground_wpe_op(ctx, op.iFlowId, pNum=pNum)
                 if op.count > 1:
                     # fixme: 下面的流程暂时注释掉，等后面实际触发后，再根据实际的回复结果适配
                     # hack: 这俩变量先留着，这样引用一下避免 linter 报错
@@ -1661,6 +1638,29 @@ class DjcHelper:
                 logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
                 time.sleep(wait_time)
                 break
+
+        flow_id_to_max_batch_exchange_count: dict[int, int] = {
+            130788: 100,  # 复活币礼盒（1个）-（每日100次）-1勇士币
+            130820: 20,  # 神秘契约礼包-（每日20次）-10勇士币
+            130821: 20,  # 装备提升礼盒-（每日20次）-30勇士币
+        }
+        if op.iFlowId not in flow_id_to_max_batch_exchange_count:
+            # 不支持批量兑换，一个个兑换
+            for idx in range_from_one(op.count):
+                ctx = f"6.2 心悦操作： {op.sFlowName}({idx}/{op.count})"
+                _try_exchange(ctx, 1)
+        else:
+            # 如果是支持批量兑换的道具，则特殊处理下
+            max_batch_exchange_count = flow_id_to_max_batch_exchange_count[op.iFlowId]
+
+            exchange_count = op.count
+            if exchange_count > max_batch_exchange_count:
+                exchange_count = max_batch_exchange_count
+                logger.warning(f"{op.sFlowName} 配置了兑换{op.count}个， 最多支持批量兑换{max_batch_exchange_count}个，且期限内总上限也为该数值，将仅尝试批量兑换该数目")
+
+            ctx = f"6.2 心悦操作： {op.sFlowName} 批量兑换 {exchange_count}个"
+            _try_exchange(ctx, exchange_count)
+
 
     @try_except(show_exception_info=False)
     def try_join_xinyue_team(self, user_buy_info: BuyInfo):
@@ -2188,7 +2188,7 @@ class DjcHelper:
         )
 
     def xinyue_battle_ground_wpe_op(
-        self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params
+        self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, pNum: int = 1, **extra_params
     ):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         # note: 心悦这个大部分查询接口是不需要，部分接口（如组队相关的）在下方特判进行处理，并在返回请求过快的情况下，等待一会再重试
@@ -2228,7 +2228,7 @@ class DjcHelper:
             },
             "data": json.dumps(
                 {
-                    "num": 1,
+                    "pNum": pNum,
                     "ceiba_plat_id": "ios",
                     "user_attach": json.dumps(
                         {
@@ -14189,6 +14189,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.xinyue_battle_ground()
 
     pause()

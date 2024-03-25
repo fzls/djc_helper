@@ -1656,11 +1656,12 @@ class DjcHelper:
             exchange_count = op.count
             if exchange_count > max_batch_exchange_count:
                 exchange_count = max_batch_exchange_count
-                logger.warning(f"{op.sFlowName} 配置了兑换{op.count}个， 最多支持批量兑换{max_batch_exchange_count}个，且期限内总上限也为该数值，将仅尝试批量兑换该数目")
+                logger.warning(
+                    f"{op.sFlowName} 配置了兑换{op.count}个， 最多支持批量兑换{max_batch_exchange_count}个，且期限内总上限也为该数值，将仅尝试批量兑换该数目"
+                )
 
             ctx = f"6.2 心悦操作： {op.sFlowName} 批量兑换 {exchange_count}个"
             _try_exchange(ctx, exchange_count)
-
 
     @try_except(show_exception_info=False)
     def try_join_xinyue_team(self, user_buy_info: BuyInfo):
@@ -10351,6 +10352,7 @@ class DjcHelper:
         logger.info(f"当前抽奖次数为 {iLottery}")
         for idx in range_from_one(iLottery):
             res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 抽奖", "274634")
+            _ = res
             # if res["ret"] == 10001:
             #     break
             time.sleep(5)

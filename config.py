@@ -886,6 +886,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_shenjie_grow_up = True
         # 是否领取 超核勇士wpe 活动
         self.get_dnf_chaohe_wpe = True
+        # 是否领取 9163补偿 活动
+        self.get_dnf_9163_apologize = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

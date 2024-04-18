@@ -2916,9 +2916,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
-            ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("DNF落地页活动", "get_dnf_luodiye"),
-            ("9163补偿", "get_dnf_9163_apologize"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2935,6 +2933,8 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("9163补偿", "get_dnf_9163_apologize"),
+            ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("DNF年货铺", "get_dnf_nianhuopu"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("colg每日签到", "get_colg_signin"),

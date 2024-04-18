@@ -102,13 +102,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
-    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49471_47cecde4",
-    "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
     #
     # 已过期活动
     #
+    "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
+    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",

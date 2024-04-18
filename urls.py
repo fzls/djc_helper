@@ -105,6 +105,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49471_47cecde4",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
     #
     # 已过期活动
     #
@@ -117,7 +118,6 @@ act_name_to_url = {
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/48574_0a047002",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",

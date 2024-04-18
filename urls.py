@@ -84,6 +84,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-02-29 23:59:59", "DNF年货铺"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-06-30 23:59:59", "DNF神界成长之路"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-07-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-02-05 12:00:00", "2024-03-31 23:59:59", "超核勇士wpe"),
 ]
 
@@ -101,11 +102,12 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
-    "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
+    "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
+    "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
     #
     # 已过期活动
     #
@@ -367,6 +369,7 @@ class Urls:
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
         self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺
         self.ide_iActivityId_dnf_shenjie_grow_up = "34_DA6bLu"  # DNF神界成长之路
+        self.ide_iActivityId_dnf_shenjie_grow_up_v2 = "22_ylD5VE"  # DNF神界成长之路二期
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

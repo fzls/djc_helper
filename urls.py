@@ -86,6 +86,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-06-30 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-07-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-02-05 12:00:00", "2024-03-31 23:59:59", "超核勇士wpe"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-17 23:59:59", "DNFxSNK"),
 ]
 
 act_name_to_url = {
@@ -108,6 +109,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
+    "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     #
     # 已过期活动
     #
@@ -370,6 +372,7 @@ class Urls:
         self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺
         self.ide_iActivityId_dnf_shenjie_grow_up = "34_DA6bLu"  # DNF神界成长之路
         self.ide_iActivityId_dnf_shenjie_grow_up_v2 = "22_ylD5VE"  # DNF神界成长之路二期
+        self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

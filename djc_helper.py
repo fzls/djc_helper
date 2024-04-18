@@ -705,6 +705,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
+            ("DNFxSNK", self.dnf_snk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -12119,6 +12120,56 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNFxSNK--------------------------------------------
+    @try_except()
+    def dnf_snk(self):
+        show_head_line("DNFxSNK")
+        self.show_not_ams_act_info("DNFxSNK")
+
+        if not self.cfg.function_switches.get_dnf_snk or self.disable_most_activities():
+            logger.warning("未启用领取 DNFxSNK 功能，将跳过")
+            return
+
+        self.check_dnf_snk()
+
+        self.dnf_snk_op("每日登录", "277763")
+        self.dnf_snk_op("每日分享", "277768")
+
+        self.dnf_snk_op("见面礼", "277788")
+
+        # todo: 这部分后周末弄
+        # self.dnf_snk_op("胜利成就奖励", "277794")
+        # self.dnf_snk_op("失败成就奖励", "277802")
+        # self.dnf_snk_op("兑换奖励", "277807")
+
+    def check_dnf_snk(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNFxSNK",
+            get_act_url("DNFxSNK"),
+            activity_op_func=self.dnf_snk_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_snk_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_snk
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNFxSNK"),
+            **extra_params,
+        )
+
     # --------------------------------------------KOL--------------------------------------------
     @try_except()
     def dnf_kol(self):
@@ -14530,6 +14581,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shenjie_grow_up_v2()
+        djcHelper.dnf_snk()
 
     pause()

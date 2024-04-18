@@ -884,6 +884,8 @@ need_take_awards = false
 10012 = false
 # 2024.03.21 DNF雾神的记忆
 10013 = false
+# 2024.04.18 DNFxSNK联动 格斗不朽
+10014 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

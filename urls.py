@@ -57,7 +57,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "超级会员"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
-    newNotAmsActInfo("2024-03-21 00:00:00", "2024-04-20 23:59:59", "集卡"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-17 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2024-01-11 00:00:00", "2024-02-28 23:59:59", "colg每日签到"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "小酱油周礼包和生日礼包"),
@@ -103,9 +103,9 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49471_47cecde4",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
     #
     # 已过期活动
     #
@@ -423,7 +423,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10013
+        self.pesudo_ark_lottery_act_id = 10014
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

@@ -700,9 +700,9 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("超级会员", self.dnf_super_vip),
+            ("集卡", self.dnf_ark_lottery),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -2918,18 +2918,18 @@ class DjcHelper:
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
     # note: 以下几个页面右键点击对应按钮即可，与上方黄钻完全一致，参照其流程即可
-    ark_lottery_sub_act_id_login = "102889_b7fae2f1"  # 增加抽卡次数-每日登陆游戏
-    ark_lottery_sub_act_id_share = "102883_02ca1a4f"  # 增加抽卡次数-每日活动分享
-    ark_lottery_sub_act_id_lucky = "102884_a283c944"  # 增加抽卡次数-幸运勇士
-    ark_lottery_sub_act_id_draw_card = "102885_52d32970"  # 抽卡
-    ark_lottery_sub_act_id_award_1 = "102886_8b990d40"  # 领取奖励-第一排
-    ark_lottery_sub_act_id_award_2 = "102887_7028e9de"  # 领取奖励-第二排
-    ark_lottery_sub_act_id_award_3 = "102888_3ae4f531"  # 领取奖励-第三排
-    ark_lottery_sub_act_id_award_all = "102891_0b3b7e89"  # 领取奖励-十二张
-    ark_lottery_sub_act_id_lottery = "102890_3a7c6f6f"  # 消耗卡片来抽奖
+    ark_lottery_sub_act_id_login = "105522_793c1450"  # 增加抽卡次数-每日登陆游戏
+    ark_lottery_sub_act_id_share = "105516_7f02f218"  # 增加抽卡次数-每日活动分享
+    ark_lottery_sub_act_id_lucky = "105517_d91754e7"  # 增加抽卡次数-幸运勇士
+    ark_lottery_sub_act_id_draw_card = "105518_4a699cf5"  # 抽卡
+    ark_lottery_sub_act_id_award_1 = "105519_09b1d762"  # 领取奖励-第一排
+    ark_lottery_sub_act_id_award_2 = "105520_bc348930"  # 领取奖励-第二排
+    ark_lottery_sub_act_id_award_3 = "105521_83933ad6"  # 领取奖励-第三排
+    ark_lottery_sub_act_id_award_all = "105524_323de45b"  # 领取奖励-十二张
+    ark_lottery_sub_act_id_lottery = "105523_7bcde825"  # 消耗卡片来抽奖
 
     # note: 清空抓包数据，按f5刷新后，搜索  QueryItems  (hack: 其实就是活动链接的 最后一部分)
-    ark_lottery_packet_id_card = "49471_47cecde4"  # 查询当前卡片数目
+    ark_lottery_packet_id_card = "49704_39901887"  # 查询当前卡片数目
 
     # note: xxx. 修改 urls.py 中的 pesudo_ark_lottery_act_id ，将其加一即可
 
@@ -2952,6 +2952,15 @@ class DjcHelper:
             logger.warning(
                 "未在道聚城绑定【地下城与勇士】的角色信息，请前往道聚城app进行绑定，否则每日登录游戏和幸运勇士的增加抽卡次数将无法成功进行。"
             )
+
+        # hack: 两个集卡版本时间重叠时的临时补丁
+        if now_before("2024-04-20 23:59:59"):
+            async_message_box(
+                "新的集卡活动与上次的集卡活动在4.18到4.20这三天重叠了，上传了一个仅包含旧版本集卡活动的特别版本到群里了，请各位自行去下载过来，放到小助手目录里每天手动点击运行一下即可，21号及以后就不需要运行了",
+                "集卡时间重叠",
+                show_once_daily=True,
+            )
+            pass
 
         # 增加次数
         self.dnf_ark_lottery_add_ark_lottery_times()
@@ -14330,6 +14339,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_ark_lottery()
 
     pause()

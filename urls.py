@@ -104,6 +104,7 @@ act_name_to_url = {
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49471_47cecde4",
+    "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     #
     # 已过期活动
     #
@@ -361,6 +362,7 @@ class Urls:
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
         self.ide_iActivityId_dnf_luodiye = "5_pVxphR"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
         self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺

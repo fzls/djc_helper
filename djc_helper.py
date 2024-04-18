@@ -701,6 +701,7 @@ class DjcHelper:
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10393,6 +10394,97 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF落地页活动_ide_dup--------------------------------------------
+    @try_except()
+    def dnf_luodiye_ide_dup(self):
+        show_head_line("DNF落地页活动_ide_dup")
+        self.show_not_ams_act_info("DNF落地页活动_ide_dup")
+
+        if not self.cfg.function_switches.get_dnf_luodiye or self.disable_most_activities():
+            logger.warning("未启用领取DNF落地页活动_ide_dup功能，将跳过")
+            return
+
+        self.check_dnf_luodiye_ide_dup()
+
+        def query_info() -> int:
+            res = self.dnf_luodiye_ide_dup_op("初始化", "280105", print_res=False)
+            raw_info = res["jData"]
+
+            # 抽奖次数
+            iLottery = int(raw_info["iLottery"])
+
+            return iLottery
+
+        # ------------ 实际流程 --------------
+        self.dnf_luodiye_ide_dup_op("回流礼包", "280254")
+        time.sleep(5)
+        self.dnf_luodiye_ide_dup_op("全民礼包", "280247")
+
+        tasks = [
+            ("每日任务一", "280256"),
+            ("每日任务二", "280257"),
+            ("每周任务一", "280258"),
+            ("每周任务二", "280259"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_luodiye_ide_dup_op(name, flowid)
+            time.sleep(5)
+
+        # iTicket, iLottery = query_info()
+        # async_message_box(
+        #     (
+        #         f"当前好友积分为{iTicket}，请自行前往点击确认弹出的网页中进行兑换奖品\n"
+        #         "其中完成任务后还有需要进行分享完成的普通积分礼包和豪华积分礼包，如有兴趣，请自行完成\n"
+        #     ),
+        #     f"官网新春签到活动_每周提示_{self.cfg.name}",
+        #     open_url=get_act_url("DNF落地页活动_ide_dup"),
+        #     show_once_weekly=True,
+        # )
+
+        iLottery = query_info()
+        logger.info(f"当前抽奖次数为 {iLottery}")
+        for idx in range_from_one(iLottery):
+            res = self.dnf_luodiye_ide_dup_op(f"{idx}/{iLottery} 抽奖", "280260")
+            _ = res
+            # if res["ret"] == 10001:
+            #     break
+            time.sleep(5)
+
+        async_message_box(
+            "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+            "24.4 落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动_ide_dup"),
+        )
+
+    def check_dnf_luodiye_ide_dup(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF落地页活动_ide_dup",
+            get_act_url("DNF落地页活动_ide_dup"),
+            activity_op_func=self.dnf_luodiye_ide_dup_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_luodiye_ide_dup_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_luodiye_dup
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF落地页活动_ide_dup"),
+            **extra_params,
+        )
+
     # --------------------------------------------DNF年货铺--------------------------------------------
     @try_except()
     def dnf_nianhuopu(self):
@@ -14238,6 +14330,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_9163_apologize()
+        djcHelper.dnf_luodiye_ide_dup()
 
     pause()

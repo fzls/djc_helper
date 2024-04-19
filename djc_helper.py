@@ -12146,10 +12146,15 @@ class DjcHelper:
 
         self.dnf_snk_op("见面礼", "277788")
 
-        # todo: 这部分后周末弄
         # self.dnf_snk_op("胜利成就奖励", "277794")
         # self.dnf_snk_op("失败成就奖励", "277802")
         # self.dnf_snk_op("兑换奖励", "277807")
+        async_message_box(
+            "联动snk的网页小游戏需要邀请好友一起玩才能对战，胜利或失败指定次数可以领取一些奖励，对局获得的硬币可以兑换红10券等东西，有兴趣的朋友请在点击确认打开的网页中自行玩",
+            "DNFxSNK网页小游戏",
+            show_once=True,
+            open_url=get_act_url("DNFxSNK"),
+        )
 
     def check_dnf_snk(self, **extra_params):
         return self.ide_check_bind_account(

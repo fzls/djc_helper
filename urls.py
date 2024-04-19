@@ -75,7 +75,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
-    newNotAmsActInfo("2023-09-21 00:00:00", "2023-10-21 23:59:59", "勇士的冒险补给"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-19 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2024-03-21 11:00:00", "2024-04-20 23:59:59", "DNF落地页活动_ide"),
@@ -110,6 +110,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
+    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
     #
     # 已过期活动
     #
@@ -129,7 +130,6 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
-    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a10f4329690fa4eedbaf577d7123d9422/index.html",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",

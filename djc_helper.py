@@ -706,6 +706,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNFxSNK", self.dnf_snk),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -726,7 +727,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
             ("dnf助手活动", self.dnf_helper),
-            ("勇士的冒险补给", self.maoxian),
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
             ("黑钻礼包", self.get_heizuan_gift),
             ("DNF心悦", self.dnf_xinyue),
@@ -2192,6 +2192,7 @@ class DjcHelper:
             **extra_params,
         )
 
+    # re: 搜 wpe类活动的接入办法为
     def xinyue_battle_ground_wpe_op(
         self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, pNum: int = 1, **extra_params
     ):
@@ -5152,7 +5153,7 @@ class DjcHelper:
         return res
 
     # --------------------------------------------dnf助手活动wpe--------------------------------------------
-    # re: 接入流程 搜： wpe类活动的接入办法为
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def dnf_helper_wpe(self):
         show_head_line("dnf助手活动wpe")
@@ -5243,6 +5244,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------超核勇士wpe--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def dnf_chaohe_wpe(self):
         show_head_line("超核勇士wpe")
@@ -11340,6 +11342,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------勇士的冒险补给--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def maoxian(self):
         show_head_line("勇士的冒险补给")
@@ -11353,13 +11356,19 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("勇士的冒险补给wpe")
 
-        self.maoxian_wpe_op("幸运礼包", 118439)
+        self.maoxian_wpe_op("勇士见面礼", 172287)
 
-        self.maoxian_wpe_op("回归-通关推荐地下城3次", 119655)
-        self.maoxian_wpe_op("回归-通关代号：盖波加", 120020)
-        self.maoxian_wpe_op("回归-进行勋章升级1次", 120021)
-        self.maoxian_wpe_op("回归-进行勋章强化1次", 120022)
-        self.maoxian_wpe_op("回归-进行守护珠升级1次", 120023)
+        # 冒险之路
+        self.maoxian_wpe_op("每日消耗30点疲劳-签到", 172318)
+        self.maoxian_wpe_op("选择 - 累计获得28枚冒险印记", 174484)
+        self.maoxian_wpe_op("领取 - 累计获得28枚冒险印记", 174516)
+
+        # 勇士回归礼
+        self.maoxian_wpe_op("今日通关推荐地下城5次", 172278)
+        self.maoxian_wpe_op("今日通关推荐地下城3次", 172291)
+        self.maoxian_wpe_op("今日消耗疲劳30点", 172286)
+        self.maoxian_wpe_op("今日在线30分钟", 172277)
+        self.maoxian_wpe_op("今日登录游戏", 172283)
 
         # self.maoxian_op("幸运礼包", "942257")
         #
@@ -11436,7 +11445,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 14859
+        act_id = 17463
 
         json_data = {
             "biz_id": "bb",
@@ -13012,6 +13021,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------超享玩--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def super_core(self):
         show_head_line("超享玩")
@@ -13115,6 +13125,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------DNF心悦wpe--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def dnf_xinyue_wpe(self):
         show_head_line("DNF心悦wpe")
@@ -14581,6 +14592,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_snk()
+        djcHelper.maoxian()
 
     pause()

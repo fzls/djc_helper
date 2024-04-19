@@ -1566,6 +1566,10 @@ def show_tips(cfg: Config):
             "斗鱼：https://www.douyu.com/topic/aldgdxh?rid=5169209\n"
             "虎牙：https://www.huya.com/kuangren\n"
         ),
+        "24.4 充值活动": (
+            "在DNF助手app中充值可额外获得奖励，有兴趣的朋友请自行参与，活动链接如下:\n"
+            "https://mwegame.qq.com/act/dnf/20240418act/index.html\n"
+        ),
     }
 
     logger.info(

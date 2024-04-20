@@ -55,7 +55,7 @@ not_ams_activities = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
-    newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "超级会员"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-31 23:59:59", "超级会员"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-17 23:59:59", "集卡"),
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),

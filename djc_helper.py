@@ -10815,14 +10815,10 @@ class DjcHelper:
                 "3": "通关盖波加1次",
                 "4": "通关异面边界1次",
             }
-            if int(curStageData.stage) >= 5:
-                # # 阶段 5及以后  第三个任务变更了
-                # task_index_to_name["3"] = "通关任意难度异面边界"
-                if use_by_myself():
-                    async_message_box(
-                        "二期的5-8阶段的在4.18时，代码里还未看到怎么写的，到时候看到提示再弄下",
-                        "（仅自己可见）大百变活动5-8阶段需要处理下",
-                    )
+            if int(curStageData.stage) >= 2:
+                # 阶段2以后，后面俩任务条件有所变化
+                task_index_to_name["3"] = "通关异面边界1次"
+                task_index_to_name["4"] = "通关幽暗岛1次"
 
             not_finished_task_desc_list = []
 
@@ -14597,6 +14593,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.dnf_shenjie_grow_up_v2()
 
     pause()

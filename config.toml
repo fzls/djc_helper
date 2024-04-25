@@ -39,6 +39,9 @@ try_auto_bind_new_activity = true
 # 开启后可以实现在道聚城修改绑定角色后，所有其他自动绑定的活动也将同步修改为该角色
 force_sync_bind_with_djc = true
 
+# 是否禁用在检测到重复登录时清除全部账号登录状态的功能，若为True，则仅弹出一个提示，不做额外处理
+disable_clear_login_status_when_duplicate_login = false
+
 # 提前多少天提示付费过期
 notify_pay_expired_in_days = 7
 

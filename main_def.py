@@ -280,10 +280,30 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
 
             qq = uin2qq(djcHelper.cfg.account_info.uin)
             if qq in qq2index:
-                msg = f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n\n点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~"
-                message_box(msg, "重复登录", color_name="fg_bold_red")
-                clear_login_status()
-                sys.exit(-1)
+                if not cfg.common.disable_clear_login_status_when_duplicate_login:
+                    msg = (
+                        f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n"
+                        "\n"
+                        "点击确认后，程序将清除本地登录记录，并退出运行。请重新运行并按顺序登录正确的账号~\n"
+                        "\n"
+                        "若不想启用该功能，请在 配置工具/公共配置/其他 中找到禁用重复登录时清空状态的选项，勾选上即可\n"
+                    )
+                    message_box(msg, "重复登录", color_name="fg_bold_red")
+                    clear_login_status()
+                    sys.exit(-1)
+                else:
+                    msg = (
+                        f"第{idx}个账号的实际登录QQ {qq} 与第{qq2index[qq]}个账号的qq重复，是否重复扫描了？\n"
+                        "\n"
+                        "由于当前禁用了重复登录时清空状态的功能，将不会清除登录状态，仅提示告知\n"
+                        "若需单独手动去清除重复登录的账号，请在.cached目录中找到重复账号对应的两个文件，形如 .saved_pskey.你的账号名字.json .saved_skey.你的账号名字.json ，将其删除后再运行即可\n"
+                        "\n"
+                        "若想启用该功能，请在 配置工具/公共配置/其他 中找到禁用重复登录时清空状态的选项，取消勾选即可\n"
+                    )
+                    async_message_box(
+                        msg,
+                        "账号登录串号提醒",
+                    )
 
             qq2index[qq] = idx
 

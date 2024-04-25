@@ -1334,6 +1334,8 @@ class CommonConfig(ConfigInterface):
         # 是否强制与道聚城的绑定角色同步，也就是说当活动角色与道聚城绑定角色不一致时，将强制修改为道聚城绑定的角色。
         # 开启后可以实现在道聚城修改绑定角色后，所有其他自动绑定的活动也将同步修改为该角色
         self.force_sync_bind_with_djc = True
+        # 是否禁用在检测到重复登录时清除全部账号登录状态的功能，若为True，则仅弹出一个提示，不做额外处理
+        self.disable_clear_login_status_when_duplicate_login = False
         # 提前多少天提示付费过期
         self.notify_pay_expired_in_days = 7
         # 马杰洛新春版本赠送卡片目标QQ

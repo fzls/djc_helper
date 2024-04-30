@@ -5,6 +5,6 @@ pytest-xdist[psutil]==3.5.0
 flake8==7.0.0
 isort==5.13.2
 coverage==6.5.0
-coveralls==3.3.1
+coveralls==4.0.0
 tox==4.12.1
 beautifulsoup4==4.12.3

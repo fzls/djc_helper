@@ -236,8 +236,21 @@ class DjcHelper:
         #       {"ret": "-1", "msg": "目前访问人数过多！请稍后再试！谢谢！", "flowRet": {...}}
         #   已过期:
         #     {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
+        # re:
+        #   活动本身结束，无法判断skey是否过期
+        #     {"ret": "301", "msg": "非常抱歉，该活动已经结束！", "flowRet": ...}
         # res = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
-        res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=False)
+        # res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=True)
+
+        res = self.dnf_comic_ide_op("判断skey是否过期", "248455", print_res=True)
+
+        if use_by_myself():
+            if str(res["ret"]) == "301":
+                async_message_box(
+                    "用于判断skey是否过期的活动本身已经结束，需要看下是否需要换个新活动来判断",
+                    "(仅自己可见)skey活动结束",
+                )
+
         if str(res["ret"]) != "101":
             # skey尚未过期，则重新刷一遍，主要用于从qq空间获取的情况
             account_info = self.cfg.account_info

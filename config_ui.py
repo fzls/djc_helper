@@ -2915,7 +2915,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("心悦app", "get_xinyue_app"),
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
@@ -2923,8 +2922,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg每日签到", "get_colg_signin"),
-            ("DNFxSNK", "get_dnf_snk"),
-            ("勇士的冒险补给", "get_maoxian"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2941,6 +2938,9 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("勇士的冒险补给", "get_maoxian"),
+            ("DNFxSNK", "get_dnf_snk"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("9163补偿", "get_dnf_9163_apologize"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("DNF年货铺", "get_dnf_nianhuopu"),

@@ -96,7 +96,6 @@ act_name_to_url = {
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 短期付费活动
     #
@@ -104,16 +103,17 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
-    "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
-    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
     #
     # 已过期活动
     #
+    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
+    "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",

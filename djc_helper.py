@@ -240,9 +240,9 @@ class DjcHelper:
         #   活动本身结束，无法判断skey是否过期
         #     {"ret": "301", "msg": "非常抱歉，该活动已经结束！", "flowRet": ...}
         # res = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)
-        # res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=True)
+        # res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=False)
 
-        res = self.dnf_comic_ide_op("判断skey是否过期", "248455", print_res=True)
+        res = self.dnf_comic_ide_op("判断skey是否过期", "248455", print_res=False)
 
         if use_by_myself():
             if str(res["ret"]) == "301":

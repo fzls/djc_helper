@@ -1780,7 +1780,18 @@ class DjcHelper:
         # 在按月付费期间
         if not user_buy_info.is_active(bypass_run_from_src=False):
             if print_waring:
-                logger.warning(f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍")
+                async_message_box(
+                    (
+                        f"{self.cfg.name} 未付费，将不会尝试自动匹配心悦队伍\n"
+                        "\n"
+                        "重新充值小助手后，且满足其余条件，则下次运行时可以参与自动匹配心悦队伍\n"
+                        "\n"
+                        "若无需心悦自动匹配功能，可前往当前账号的配置tab，取消勾选 心悦组队/自动匹配 即可\n"
+                    ),
+                    "心悦战场无法自动匹配（每周弹一次）",
+                    show_once_weekly=True,
+                    open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
+                )
             return False
 
         # 当前QQ是特邀会员或者心悦会员
@@ -1800,12 +1811,22 @@ class DjcHelper:
 
         # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
         # note: 由于心悦战场于2023.12.21改版，因此先在改版后的3周内，不检查领取次数的条件，之后强制要求这个
-        if now_after("2024-01-15 00:00:00"):
-            take_award_count = self.query_last_week_xinyue_team_take_award_count()
-            if take_award_count < 3:
-                if print_waring:
-                    logger.warning(f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，将不会尝试自动匹配心悦队伍")
-                return False
+        take_award_count = self.query_last_week_xinyue_team_take_award_count()
+        if take_award_count < 3:
+            if print_waring:
+                async_message_box(
+                    (
+                        f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，少于需求的三次，将不会尝试自动匹配心悦队伍\n"
+                        "\n"
+                        "本周请自行前往心悦特权专区加入队伍并完成三次任务的条件（当日完成条件后小助手会自动帮你领取），下周即可重新自动匹配\n"
+                        "\n"
+                        "若无需心悦自动匹配功能，可前往当前账号的配置tab，取消勾选 心悦组队/自动匹配 即可\n"
+                    ),
+                    "心悦战场上周未完成三次任务（每周弹一次）",
+                    show_once_weekly=True,
+                    open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
+                )
+            return False
 
         return True
 

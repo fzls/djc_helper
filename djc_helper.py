@@ -86,6 +86,8 @@ from dao import (
     VoteEndWorkList,
     XiaojiangyouInfo,
     XiaojiangyouPackageInfo,
+    XinYueBattleGroundWpeBindRole,
+    XinYueBattleGroundWpeGetBindRoleResult,
     XinYueBgwUserInfo,
     XinyueCatInfo,
     XinyueCatInfoFromApp,
@@ -1692,7 +1694,6 @@ class DjcHelper:
         logger.info(f"当前账号的队伍组队配置为{group_info}")
 
         # # 检查角色绑定
-        # self.check_xinyue_battle_ground()
         self.prepare_wpe_act_openid_accesstoken("心悦战场wpe-自动组队", replace_if_exists=False)
 
         # 检查当前是否已有队伍
@@ -2205,6 +2206,86 @@ class DjcHelper:
             **extra_params,
         )
 
+    def check_xinyue_battle_ground_wpe(self) -> XinYueBattleGroundWpeBindRole:
+        """检查心悦战场的绑定信息，并返回绑定信息"""
+        # 运行期间仅尝试获取一次
+        if not hasattr(self, "dnf_xinyue_wpe_bind_role"):
+            # 查询心悦的绑定信息
+            bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
+            if bind_role is None:
+                # 若未绑定，则尝试使用道聚城的绑定角色进行绑定
+                ok = self.xinyue_battle_ground_wpe_bind_role()
+                logger.info(f"心悦战场未绑定角色，将使用道聚城的绑定角色，绑定角色结果={ok}")
+
+                # 绑定完后再次尝试查询
+                bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
+
+            # 将查询结果保存到内存中，方便后续使用
+            self.dnf_xinyue_wpe_bind_role = bind_role
+
+        return self.dnf_xinyue_wpe_bind_role
+
+    def xinyue_battle_ground_wpe_query_bind_role(self) -> XinYueBattleGroundWpeBindRole | None:
+        """查询心悦战场的绑定信息"""
+        json_data = {
+            "game_code": "dnf",
+            "device": "pc",
+            "scene": "tgclub_act_15488"
+        }
+
+        raw_res = self.post(
+            "查询心悦绑定信息",
+            self.urls.dnf_xinyue_wpe_get_bind_role_api,
+            json=json_data,
+            print_res=False,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+            # check_fn=_check_fn,
+        )
+
+        res = XinYueBattleGroundWpeGetBindRoleResult()
+        res.auto_update_config(raw_res)
+
+        # {"ret": 300015, "msg": "无绑定区服或最近登陆的区服信息", "roles": [], "next_page_no": -1, "game_info": null}
+        # {"ret": 0, "msg": "", "roles": [{...}], "next_page_no": -1, "game_info": null}
+        if res.ret != 0 or len(res.roles) == 0:
+            return None
+
+        return res.roles[0]
+
+
+    def xinyue_battle_ground_wpe_bind_role(self) -> bool:
+        """绑定心悦战场为道聚城的绑定角色"""
+        # 使用道聚城的绑定信息去绑定心悦战场
+        roleinfo = self.get_dnf_bind_role()
+
+        json_data = {
+            "game_code": "dnf",
+            "device": "pc",
+            "scene": "tgclub_act_15488",
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+        }
+
+        raw_res = self.post(
+            "心悦战场绑定角色",
+            self.urls.dnf_xinyue_wpe_bind_role_api,
+            json=json_data,
+            print_res=False,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+            # check_fn=_check_fn,
+        )
+
+        return raw_res["ret"] == 0
+
     # re: 搜 wpe类活动的接入办法为
     def xinyue_battle_ground_wpe_op(
         self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, pNum: int = 1, **extra_params
@@ -2225,7 +2306,9 @@ class DjcHelper:
             time.sleep(wait_time)
 
         act_id = "15488"
-        roleinfo = self.get_dnf_bind_role()
+
+        djc_roleinfo = self.get_dnf_bind_role()
+        roleinfo = self.check_xinyue_battle_ground_wpe()
 
         if extra_data is None:
             extra_data = {}
@@ -2234,24 +2317,14 @@ class DjcHelper:
             "biz_id": "tgclub",
             "act_id": act_id,
             "flow_id": int(flow_id),
-            "role": {
-                "game_open_id": self.qq(),
-                "game_app_id": "",
-                "area_id": int(roleinfo.serviceID),
-                "plat_id": 2,
-                "partition_id": int(roleinfo.serviceID),
-                "partition_name": base64_str(roleinfo.serviceName),
-                "role_id": roleinfo.roleCode,
-                "role_name": base64_str(roleinfo.roleName),
-                "device": "pc",
-            },
+            "role": to_raw_type(roleinfo),
             "data": json.dumps(
                 {
                     "pNum": pNum,
                     "ceiba_plat_id": "ios",
                     "user_attach": json.dumps(
                         {
-                            "nickName": quote(roleinfo.roleName),
+                            "nickName": quote(djc_roleinfo.roleName),
                             # # fixme: 这里还有个avatar，通过下面两个接口应该都能获得，暂时先不弄，后面如果必须要的话再处理
                             # #   https://ams.game.qq.com/ams/userLoginSvr?callback=jsonp93&acctype=qc&appid=101478665&openid=...&access_token=...&game=xinyue
                             # #   https://bgw.xinyue.qq.com/website/website/user/info
@@ -14606,6 +14679,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shenjie_grow_up_v2()
+        djcHelper.xinyue_battle_ground()
 
     pause()

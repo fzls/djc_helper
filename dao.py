@@ -2395,6 +2395,33 @@ class ShenJieGrowUpTaskData(ConfigInterface):
         self.giftStatus = "0"
 
 
+class XinYueBattleGroundWpeGetBindRoleResult(ConfigInterface):
+    def __init__(self):
+        self.ret = 0
+        self.msg = ""
+        self.roles: list[XinYueBattleGroundWpeBindRole] = []
+        self.next_page_no = -1
+        self.game_info = None
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("roles", XinYueBattleGroundWpeBindRole),
+        ]
+
+
+class XinYueBattleGroundWpeBindRole(ConfigInterface):
+    def __init__(self):
+        self.game_open_id = "1054073896"
+        self.game_app_id = ""
+        self.area_id = 11
+        self.plat_id = 2
+        self.partition_id = 11
+        self.partition_name = "5rWZ5rGf5LiA5Yy6"
+        self.role_id = "45230145"
+        self.role_name = "6aOO5LmL5YeM5q6H5Za1"
+        self.device = "pc"
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

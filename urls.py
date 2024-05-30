@@ -555,6 +555,9 @@ class Urls:
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"
 
         self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex"
+        self.dnf_xinyue_wpe_get_bind_role_api = "https://agw.xinyue.qq.com/amp2.RoleSrv/GetBindRole"
+        self.dnf_xinyue_wpe_bind_role_api = "https://agw.xinyue.qq.com/amp2.RoleSrv/BindRole"
+
         self.maoxian_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
         self.dnf_helper_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
         self.dnf_chaohe_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"

@@ -103,12 +103,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
-    "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/49692_718184ac",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
     #
     # 已过期活动
     #
+    "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
@@ -118,7 +119,6 @@ act_name_to_url = {
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",

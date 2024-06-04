@@ -338,5 +338,15 @@
     "open_url": "https://docs.qq.com/sheet/DYlprUmRpR2ZYcUNF",
     "expire_at": "2024-01-26 20:48:11",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "win11无法打开配置工具",
+    "message": "部分使用win11的朋友最近可能遇到突然无法打开配置工具，但小助手本体可以正常运行的情况\n目前暂时没有定位到具体原因\n但是经过一个群友的测试发现，将 DNF蚊子腿小助手配置工具.exe 的文件名改为随便一个英文名（比如 config.exe 、 sxs.exe）似乎就可以正常运行了\n\n大家可以试试这个方法，看看是否可以正常运行了\n",
+    "send_at": "2024-06-04 22:37:48",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYk1NcnNOQkRhUVJD",
+    "expire_at": "2024-06-18 22:37:48",
+    "show_only_before_version": ""
   }
 ]

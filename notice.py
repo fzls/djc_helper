@@ -195,10 +195,14 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "心悦拼团自助组队"
-    message = """部分朋友可能想参与新出的心悦拼团活动，但是找不到其他人拼团。跟以往一样，我建了一个在线表单，有需求的朋友可以上去参与其他人的拼团，或者将自己的拼团链接发布上去~
+    title = "win11无法打开配置工具"
+    message = """部分使用win11的朋友最近可能遇到突然无法打开配置工具，但小助手本体可以正常运行的情况
+目前暂时没有定位到具体原因
+但是经过一个群友的测试发现，将 DNF蚊子腿小助手配置工具.exe 的文件名改为随便一个英文名（比如 config.exe 、 sxs.exe）似乎就可以正常运行了
+
+大家可以试试这个方法，看看是否可以正常运行了
 """
-    open_url = ""
+    open_url = "https://docs.qq.com/doc/DYk1NcnNOQkRhUVJD"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

@@ -348,5 +348,15 @@
     "open_url": "https://docs.qq.com/doc/DYk1NcnNOQkRhUVJD",
     "expire_at": "2024-06-18 22:37:48",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "24.6 预约转职活动",
+    "message": "弓箭手新转职的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~\n\n打开页面后，点击【预约新职业领限定装扮】，完成登录并绑定角色后，在弹出的窗口中输入手机号和验证码即可领取\n",
+    "send_at": "2024-06-07 19:46:35",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20240528brand/index.html",
+    "expire_at": "2024-07-03 23:59:59",
+    "show_only_before_version": ""
   }
 ]

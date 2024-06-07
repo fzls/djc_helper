@@ -195,14 +195,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "win11无法打开配置工具"
-    message = """部分使用win11的朋友最近可能遇到突然无法打开配置工具，但小助手本体可以正常运行的情况
-目前暂时没有定位到具体原因
-但是经过一个群友的测试发现，将 DNF蚊子腿小助手配置工具.exe 的文件名改为随便一个英文名（比如 config.exe 、 sxs.exe）似乎就可以正常运行了
+    title = "24.6 预约转职活动"
+    message = """弓箭手新转职的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~
 
-大家可以试试这个方法，看看是否可以正常运行了
+打开页面后，点击【预约新职业领限定装扮】，完成登录并绑定角色后，在弹出的窗口中输入手机号和验证码即可领取
 """
-    open_url = "https://docs.qq.com/doc/DYk1NcnNOQkRhUVJD"
+    open_url = "https://dnf.qq.com/cp/a20240528brand/index.html"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

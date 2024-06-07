@@ -702,6 +702,7 @@ class DjcHelper:
             ("心悦app", self.xinyue_app_operations),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
@@ -726,7 +727,6 @@ class DjcHelper:
             ("DNFxSNK", self.dnf_snk),
             ("集卡", self.dnf_ark_lottery),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("9163补偿", self.dnf_9163_apologize),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF年货铺", self.dnf_nianhuopu),
@@ -7681,12 +7681,10 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "看直播畅游神界",
-            "扬帆苍穹之上",
-            "DNF全职业百科",
-            "1221神界来啦",
-            "明星导师神界教学",
-            "职业教学有手就行",
+            "万物有灵守护不息",
+            "DNF16周年生日快乐",
+            "冲云破雾一路横扫",
+            "6月13日登录领好礼",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -14700,6 +14698,7 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.dnf_welfare()
 
     pause()
+

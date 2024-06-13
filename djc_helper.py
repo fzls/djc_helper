@@ -10461,7 +10461,7 @@ class DjcHelper:
 
         self.dnf_luodiye_ide_op("每日登录礼包", "295044")
 
-        login_gifts_list = {
+        login_gifts_list = [
             (1, 3),
             (2, 5),
             (3, 7),
@@ -10469,7 +10469,7 @@ class DjcHelper:
             (5, 14),
             (6, 21),
             (7, 28),
-        }
+        ]
         _, iLoginTotal = query_info()
         logger.info(f"累计登录天数为 {iLoginTotal}")
         for gift_index, require_login_days in login_gifts_list:
@@ -14818,7 +14818,7 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_kanina()
+        djcHelper.dnf_luodiye_ide()
 
     pause()
 

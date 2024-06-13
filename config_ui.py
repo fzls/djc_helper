@@ -1738,8 +1738,14 @@ class CommonConfigUi(QFrame):
 
         self.retry = RetryConfigUi(form_layout, cfg.retry)
 
-        self.checkbox_disable_clear_login_status_when_duplicate_login = create_checkbox(cfg.disable_clear_login_status_when_duplicate_login)
-        add_row(form_layout, "是否禁用在检测到重复登录时清除全部账号登录状态的功能", self.checkbox_disable_clear_login_status_when_duplicate_login)
+        self.checkbox_disable_clear_login_status_when_duplicate_login = create_checkbox(
+            cfg.disable_clear_login_status_when_duplicate_login
+        )
+        add_row(
+            form_layout,
+            "是否禁用在检测到重复登录时清除全部账号登录状态的功能",
+            self.checkbox_disable_clear_login_status_when_duplicate_login,
+        )
 
         self.setLayout(make_scroll_layout(top_layout))
 
@@ -1781,7 +1787,9 @@ class CommonConfigUi(QFrame):
             self.checkbox_cost_all_cards_and_do_lottery_on_last_day.isChecked()
         )
 
-        cfg.disable_clear_login_status_when_duplicate_login = self.checkbox_disable_clear_login_status_when_duplicate_login.isChecked()
+        cfg.disable_clear_login_status_when_duplicate_login = (
+            self.checkbox_disable_clear_login_status_when_duplicate_login.isChecked()
+        )
 
         self.login.update_config(cfg.login)
         self.retry.update_config(cfg.retry)

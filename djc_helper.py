@@ -2228,7 +2228,7 @@ class DjcHelper:
             **extra_params,
         )
 
-    def check_xinyue_battle_ground_wpe(self) -> XinYueBattleGroundWpeBindRole:
+    def check_xinyue_battle_ground_wpe(self) -> XinYueBattleGroundWpeBindRole | None:
         """检查心悦战场的绑定信息，并返回绑定信息"""
         # 运行期间仅尝试获取一次
         if not hasattr(self, "dnf_xinyue_wpe_bind_role"):
@@ -2249,11 +2249,7 @@ class DjcHelper:
 
     def xinyue_battle_ground_wpe_query_bind_role(self) -> XinYueBattleGroundWpeBindRole | None:
         """查询心悦战场的绑定信息"""
-        json_data = {
-            "game_code": "dnf",
-            "device": "pc",
-            "scene": "tgclub_act_15488"
-        }
+        json_data = {"game_code": "dnf", "device": "pc", "scene": "tgclub_act_15488"}
 
         raw_res = self.post(
             "查询心悦绑定信息",
@@ -2273,7 +2269,6 @@ class DjcHelper:
             return None
 
         return res.roles[0]
-
 
     def xinyue_battle_ground_wpe_bind_role(self) -> bool:
         """绑定心悦战场为道聚城的绑定角色"""
@@ -12353,7 +12348,9 @@ class DjcHelper:
 
         # self.dnf_kanina_op("打开彩蛋", "296684")
         for take_cash_success_people_count in [5000, 10000, 30000]:
-            self.dnf_kanina_op(f"全服提现达标奖励 - {take_cash_success_people_count}人", "296906", index=take_cash_success_people_count)
+            self.dnf_kanina_op(
+                f"全服提现达标奖励 - {take_cash_success_people_count}人", "296906", index=take_cash_success_people_count
+            )
             time.sleep(5)
         # self.dnf_kanina_op("新职业角色任务", "296966")
 
@@ -14821,4 +14818,3 @@ if __name__ == "__main__":
         djcHelper.dnf_luodiye_ide()
 
     pause()
-

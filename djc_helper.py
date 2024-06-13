@@ -12320,48 +12320,65 @@ class DjcHelper:
             **extra_params,
         )
 
-    # --------------------------------------------dnf_kanina--------------------------------------------
+    # --------------------------------------------DNF卡妮娜的心愿摇奖机--------------------------------------------
     @try_except()
     def dnf_kanina(self):
-        show_head_line("dnf_kanina")
-        self.show_not_ams_act_info("dnf_kanina")
+        show_head_line("DNF卡妮娜的心愿摇奖机")
+        self.show_not_ams_act_info("DNF卡妮娜的心愿摇奖机")
 
         if not self.cfg.function_switches.get_dnf_kanina or self.disable_most_activities():
-            logger.warning("未启用领取 dnf_kanina 功能，将跳过")
+            logger.warning("未启用领取 DNF卡妮娜的心愿摇奖机 功能，将跳过")
             return
 
         self.check_dnf_kanina()
 
-        self.dnf_kanina_op("见面礼", "296547")
+        self.dnf_kanina_op("见面礼(15天黑钻)", "296547")
 
         self.dnf_kanina_op("更新访问", "297056")
         self.dnf_kanina_op("跑马灯", "297036", print_res=False)
 
         # self.dnf_kanina_op("每日分享", "294436")
+
         # self.dnf_kanina_op("好友列表（阶段一）", "294510")
         # self.dnf_kanina_op("发送ark消息（阶段一）", "295009")
         # self.dnf_kanina_op("接受邀请（阶段一）", "295010")
         # self.dnf_kanina_op("开奖（阶段一）", "295012")
+
         # self.dnf_kanina_op("刷新任务", "295166")
         # self.dnf_kanina_op("完成心愿任务", "296093")
         # self.dnf_kanina_op("领取奖励", "296375")
         # self.dnf_kanina_op("好友列表（阶段二）", "296501")
         # self.dnf_kanina_op("发送ark消息（阶段二）", "296505")
         # self.dnf_kanina_op("接受邀请（阶段二）", "296507")
+
         # self.dnf_kanina_op("打开彩蛋", "296684")
-        # self.dnf_kanina_op("全服提现达标奖励", "296906")
+        for take_cash_success_people_count in [5000, 10000, 30000]:
+            self.dnf_kanina_op(f"全服提现达标奖励 - {take_cash_success_people_count}人", "296906", index=take_cash_success_people_count)
+            time.sleep(5)
         # self.dnf_kanina_op("新职业角色任务", "296966")
-        # self.dnf_kanina_op("跑马灯", "297036")
+
         # self.dnf_kanina_op("好友获奖数据", "297048")
-        # self.dnf_kanina_op("更新访问", "297056")
         # self.dnf_kanina_op("新增好友", "297141")
         # self.dnf_kanina_op("刷新轮次", "297443")
         # self.dnf_kanina_op("随机刷新S级别道具", "297969")
 
+        async_message_box(
+            (
+                "卡妮娜摇奖机活动小助手仅领取见面礼（15天黑钻部分），后续部分实际上是拼多多砍一刀玩法，如有兴趣，请自行参与\n"
+                "\n"
+                "大致规则就是分为两阶段\n"
+                "一阶段：抽取10次，确定奖池。而抽奖次数则需要每天分享（每天1次）和邀请他人来获得（每天2次，单个QQ最多帮一次）\n"
+                "二阶段：变成抽任务，通过完成抽到的任务来获得进度值，从而兑换奖池里的东西。而这个抽任务似乎也需要拉人头？\n"
+            ),
+            "卡妮娜心愿摇奖机活动",
+            show_once=True,
+            open_url=get_act_url("DNF卡妮娜的心愿摇奖机"),
+        )
+
     def check_dnf_kanina(self, **extra_params):
         return self.ide_check_bind_account(
-            "dnf_kanina",
-            get_act_url("dnf_kanina"),
+            "DNF卡妮娜的心愿摇奖机",
+            get_act_url("DNF卡妮娜的心愿摇奖机"),
             activity_op_func=self.dnf_kanina_op,
             sAuthInfo="",
             sActivityInfo="",
@@ -12382,7 +12399,7 @@ class DjcHelper:
             iActivityId,
             iFlowId,
             print_res,
-            get_act_url("dnf_kanina"),
+            get_act_url("DNF卡妮娜的心愿摇奖机"),
             **extra_params,
         )
 

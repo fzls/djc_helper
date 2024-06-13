@@ -719,6 +719,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -12319,6 +12320,73 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------dnf_kanina--------------------------------------------
+    @try_except()
+    def dnf_kanina(self):
+        if True:
+            # fixme: 这个活动有点问题，先放着
+            return
+
+        show_head_line("dnf_kanina")
+        self.show_not_ams_act_info("dnf_kanina")
+
+        if not self.cfg.function_switches.get_dnf_kanina or self.disable_most_activities():
+            logger.warning("未启用领取 dnf_kanina 功能，将跳过")
+            return
+
+        self.check_dnf_kanina()
+
+        self.dnf_kanina_op("见面礼", "296547")
+
+        # self.dnf_kanina_op("每日分享", "294436")
+        # self.dnf_kanina_op("好友列表（阶段一）", "294510")
+        # self.dnf_kanina_op("发送ark消息（阶段一）", "295009")
+        # self.dnf_kanina_op("接受邀请（阶段一）", "295010")
+        # self.dnf_kanina_op("开奖（阶段一）", "295012")
+        # self.dnf_kanina_op("刷新任务", "295166")
+        # self.dnf_kanina_op("完成心愿任务", "296093")
+        # self.dnf_kanina_op("领取奖励", "296375")
+        # self.dnf_kanina_op("好友列表（阶段二）", "296501")
+        # self.dnf_kanina_op("发送ark消息（阶段二）", "296505")
+        # self.dnf_kanina_op("接受邀请（阶段二）", "296507")
+        # self.dnf_kanina_op("打开彩蛋", "296684")
+        # self.dnf_kanina_op("全服提现达标奖励", "296906")
+        # self.dnf_kanina_op("新职业角色任务", "296966")
+        # self.dnf_kanina_op("跑马灯", "297036")
+        # self.dnf_kanina_op("好友获奖数据", "297048")
+        # self.dnf_kanina_op("更新访问", "297056")
+        # self.dnf_kanina_op("新增好友", "297141")
+        # self.dnf_kanina_op("刷新轮次", "297443")
+        # self.dnf_kanina_op("随机刷新S级别道具", "297969")
+
+    def check_dnf_kanina(self, **extra_params):
+        return self.ide_check_bind_account(
+            "dnf_kanina",
+            get_act_url("dnf_kanina"),
+            activity_op_func=self.dnf_kanina_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_kanina_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_kanina
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("dnf_kanina"),
+            **extra_params,
+        )
+
     # --------------------------------------------KOL--------------------------------------------
     @try_except()
     def dnf_kol(self):
@@ -14734,7 +14802,7 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_kanina()
 
     pause()
 

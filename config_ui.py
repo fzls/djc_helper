@@ -2923,6 +2923,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
+            ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

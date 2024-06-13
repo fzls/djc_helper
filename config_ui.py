@@ -2916,6 +2916,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
@@ -2937,7 +2938,6 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg每日签到", "get_colg_signin"),
             ("勇士的冒险补给", "get_maoxian"),
             ("DNFxSNK", "get_dnf_snk"),

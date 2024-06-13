@@ -78,7 +78,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-19 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
-    newNotAmsActInfo("2024-03-21 11:00:00", "2024-04-20 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF地下城与勇士心悦特权专区"),
@@ -105,6 +105,7 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
     #
     # 已过期活动
     #
@@ -114,7 +115,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/49704_39901887",
-    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240321index/index.html",
     "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
@@ -365,7 +365,7 @@ class Urls:
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "5_pVxphR"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "61_TpRquT"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
@@ -389,7 +389,7 @@ class Urls:
             "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
             "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
-            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}&u_stage={u_stage}&u_task_index={u_task_index}&u_stage_index={u_stage_index}"
+            "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}&u_stage={u_stage}&u_task_index={u_task_index}&u_stage_index={u_stage_index}&num={num}"
         )
 
         # DNF共创投票

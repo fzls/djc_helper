@@ -74,7 +74,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2023-06-15 00:00:00", "2023-07-06 23:59:59", "DNF周年庆登录活动"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-19 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
@@ -106,6 +106,7 @@ act_name_to_url = {
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
+    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
     #
     # 已过期活动
     #
@@ -135,7 +136,6 @@ act_name_to_url = {
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
-    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20230615gift/index.html",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
@@ -363,7 +363,7 @@ class Urls:
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
-        self.ide_iActivityId_dnf_anniversary = "95_qMy8bp"  # DNF周年庆登录活动
+        self.ide_iActivityId_dnf_anniversary = "15_s0hJrQ"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
         self.ide_iActivityId_dnf_luodiye = "61_TpRquT"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
@@ -390,6 +390,7 @@ class Urls:
             "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
             "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
             "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}&u_stage={u_stage}&u_task_index={u_task_index}&u_stage_index={u_stage_index}&num={num}"
+            "&sPartition={sPartition}&sPlatId={sPlatId}&source={source}"
         )
 
         # DNF共创投票

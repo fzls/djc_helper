@@ -716,6 +716,7 @@ class DjcHelper:
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -747,7 +748,6 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
             ("心悦app理财礼卡", self.xinyue_financing),
             ("冒险的起点", self.maoxian_start),
             ("DNF巴卡尔竞速", self.dnf_bakaer),
@@ -11721,8 +11721,8 @@ class DjcHelper:
     def dnf_anniversary(self):
         show_head_line("DNF周年庆登录活动")
 
-        if now_in_range("2023-06-17 06:00:00", "2023-06-19 05:59:59") and is_daily_first_run(
-            "2023_DNF周年庆登录活动_提示登录"
+        if now_in_range("2024-06-15 06:00:00", "2024-06-17 05:59:59") and is_daily_first_run(
+            "2024_DNF周年庆登录活动_提示登录"
         ):
             async_message_box(
                 (
@@ -11744,22 +11744,23 @@ class DjcHelper:
         self.show_not_ams_act_info("DNF周年庆登录活动")
         self.check_dnf_anniversary_ide()
 
+        self.dnf_anniversary_ide_op("【H5】更新后首次登录", "294601")
+        self.dnf_anniversary_ide_op("【H5】周末登录礼包", "294618")
+
         gifts = [
-            ("第一弹", "192166", "2023-06-22 16:00:00"),
-            ("第二弹", "192182", "2023-06-23 00:00:00"),
-            ("第三弹", "192183", "2023-06-24 00:00:00"),
-            ("第四弹", "192184", "2023-06-25 00:00:00"),
+            ("第一弹", "294661", "2024-06-20 16:00:00"),
+            ("第二弹", "294662", "2024-06-21 00:00:00"),
+            ("第三弹", "294663", "2024-06-22 00:00:00"),
+            ("第四弹", "294664", "2024-06-23 00:00:00"),
+            ("第五弹", "294665", "2024-06-24 00:00:00"),
         ]
 
         now = get_now()
         for name, flowid, can_take_time in gifts:
             if now >= parse_time(can_take_time):
-                self.dnf_anniversary_ide_op(name, flowid)
+                self.dnf_anniversary_ide_op(f"领取{name}周年庆礼包", flowid)
             else:
                 logger.warning(f"当前未到{can_take_time}，无法领取{name}")
-
-        self.dnf_anniversary_ide_op("周末登录礼包", "192598")
-        self.dnf_anniversary_ide_op("更新后首次登录游戏礼包", "193034")
 
     def check_dnf_anniversary(self):
         self.check_bind_account(
@@ -11807,8 +11808,11 @@ class DjcHelper:
         bindData = {
             "iAreaId": roleinfo.serviceID,
             "sArea": roleinfo.serviceID,  # 大区号
+            "sPartition": roleinfo.serviceID,
+            "sPlatId": roleinfo.serviceID,
             "sRole": roleinfo.roleCode,  # 角色ID
             "sRoleName": quote_plus(quote_plus(roleinfo.roleName)),  # 角色名称
+            "source": "pc",
         }
 
         return self.ide_request(
@@ -13854,6 +13858,8 @@ class DjcHelper:
                 "u_task_index",
                 "u_stage_index",
                 "u_confirm",
+                "sPlatId",
+                "source",
             ]
         }
 
@@ -14720,7 +14726,7 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_anniversary()
 
     pause()
 

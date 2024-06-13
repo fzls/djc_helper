@@ -12323,10 +12323,6 @@ class DjcHelper:
     # --------------------------------------------dnf_kanina--------------------------------------------
     @try_except()
     def dnf_kanina(self):
-        if True:
-            # fixme: 这个活动有点问题，先放着
-            return
-
         show_head_line("dnf_kanina")
         self.show_not_ams_act_info("dnf_kanina")
 
@@ -12337,6 +12333,9 @@ class DjcHelper:
         self.check_dnf_kanina()
 
         self.dnf_kanina_op("见面礼", "296547")
+
+        self.dnf_kanina_op("更新访问", "297056")
+        self.dnf_kanina_op("跑马灯", "297036", print_res=False)
 
         # self.dnf_kanina_op("每日分享", "294436")
         # self.dnf_kanina_op("好友列表（阶段一）", "294510")

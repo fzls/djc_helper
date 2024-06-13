@@ -717,12 +717,12 @@ class DjcHelper:
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
-            ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("colg每日签到", self.colg_signin),
             ("勇士的冒险补给", self.maoxian),
@@ -2902,7 +2902,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "105390_5d8a7a2b"
+        lucky_act_id = "108950_c9642198"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2911,7 +2911,15 @@ class DjcHelper:
                 "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
             ),
         )
-        self.qzone_act_op("勇士见面礼", "105391_4bd43abb")
+
+        self.qzone_act_op("勇士见面礼", "108951_e97c298f")
+
+        self.qzone_act_op("签到", "108958_e94aed5e")
+        self.qzone_act_op("累计签到1天", "108953_be8ca73e")
+        self.qzone_act_op("累计签到3天", "108954_c68b71b5")
+        self.qzone_act_op("累计签到7天", "108955_2b7866d9")
+        self.qzone_act_op("累计签到14天", "108956_aa6e02ba")
+
         # if not self.cfg.function_switches.disable_share and is_first_run(
         #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         # ):
@@ -2930,7 +2938,7 @@ class DjcHelper:
     # note: 适配流程如下
     #   0. 电脑chrome中设置Network conditions中的User agent为手机QQ的： Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440
     #   1. 获取子活动id   chrome设置为手机qq UA后，登录活动页面 get_act_url("黄钻") ，然后在幸运勇士、勇士见面礼等按钮上右键Inspect，然后在Sources中搜索其vt-itemid(如xcubeItem_4)，
-    #       在结果中双击main.bundle.js结果，点击格式化后搜索【default.methods.xcubeItem_4】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
+    #       在结果中双击main.bundle.js结果，点击格式化后搜索【default.methods.xcubeItem_4=】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
     #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("黄钻")的值为新的网页链接，并把活动时间改为最新
     #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
     @try_except()
@@ -14726,7 +14734,7 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary()
+        djcHelper.dnf_super_vip()
 
     pause()
 

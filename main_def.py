@@ -1581,14 +1581,10 @@ def show_tips(cfg: Config):
             "新出了个 《破界少女》 的动画，观看15分钟可以领取三个蚊子腿，每集观看20分钟可以抽奖一次，有兴趣的朋友请自行参与\n"
             "https://film.video.qq.com/magic-act/0i2g5zpoaeo4k5aogoh3guwlcl/index_6fe12.html?ovscroll=0&page=6fe12&__no_magic_qrcode=1\n"
         ),
-        "24.4 斗鱼虎牙": (
+        "24.6 斗鱼虎牙": (
             "斗鱼虎牙活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/aldgdxh?rid=5169209\n"
-            "虎牙：https://www.huya.com/kuangren\n"
-        ),
-        "24.4 充值活动": (
-            "在DNF助手app中充值可额外获得奖励，有兴趣的朋友请自行参与，活动链接如下:\n"
-            "https://mwegame.qq.com/act/dnf/20240418act/index.html\n"
+            "斗鱼：https://www.douyu.com/topic/DNF16th?rid=9940062\n"
+            "虎牙：https://www.huya.com/131415\n"
         ),
     }
 

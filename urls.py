@@ -75,7 +75,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
-    newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-19 23:59:59", "勇士的冒险补给"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
@@ -112,11 +112,11 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50140_591877ab",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     #
     # 已过期活动
     #
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
-    "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a0eb28ac738254d1bbd6276b2ff57c645/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",

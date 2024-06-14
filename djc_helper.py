@@ -721,13 +721,13 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("colg每日签到", self.colg_signin),
+            ("勇士的冒险补给", self.maoxian),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
-            ("勇士的冒险补给", self.maoxian),
             ("DNFxSNK", self.dnf_snk),
             ("9163补偿", self.dnf_9163_apologize),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
@@ -11469,7 +11469,7 @@ class DjcHelper:
         )
 
     # --------------------------------------------勇士的冒险补给--------------------------------------------
-    # re: 搜 wpe类活动的接入办法为
+    # re: 先抓包获取链接，然后搜 wpe类活动的接入办法为
     @try_except()
     def maoxian(self):
         show_head_line("勇士的冒险补给")
@@ -11483,19 +11483,19 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("勇士的冒险补给wpe")
 
-        self.maoxian_wpe_op("勇士见面礼", 172287)
+        self.maoxian_wpe_op("勇士见面礼", 190505)
 
-        # 冒险之路
-        self.maoxian_wpe_op("每日消耗30点疲劳-签到", 172318)
-        self.maoxian_wpe_op("选择 - 累计获得28枚冒险印记", 174484)
-        self.maoxian_wpe_op("领取 - 累计获得28枚冒险印记", 174516)
+        # # 冒险之路
+        # self.maoxian_wpe_op("每日消耗30点疲劳-签到", 172318)
+        # self.maoxian_wpe_op("选择 - 累计获得28枚冒险印记", 174484)
+        # self.maoxian_wpe_op("领取 - 累计获得28枚冒险印记", 174516)
 
         # 勇士回归礼
-        self.maoxian_wpe_op("今日通关推荐地下城5次", 172278)
-        self.maoxian_wpe_op("今日通关推荐地下城3次", 172291)
-        self.maoxian_wpe_op("今日消耗疲劳30点", 172286)
-        self.maoxian_wpe_op("今日在线30分钟", 172277)
-        self.maoxian_wpe_op("今日登录游戏", 172283)
+        self.maoxian_wpe_op("今日登录游戏", 190501)
+        self.maoxian_wpe_op("今日在线30分钟", 190495)
+        self.maoxian_wpe_op("今日消耗疲劳30点", 190504)
+        self.maoxian_wpe_op("今日通关推荐地下城3次", 190509)
+        self.maoxian_wpe_op("今日通关推荐地下城5次", 190496)
 
         # self.maoxian_op("幸运礼包", "942257")
         #
@@ -11572,7 +11572,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 17463
+        act_id = 18213
 
         json_data = {
             "biz_id": "bb",
@@ -14815,6 +14815,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.maoxian()
 
     pause()

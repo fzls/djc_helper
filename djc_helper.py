@@ -720,13 +720,13 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
-            ("colg每日签到", self.colg_signin),
             ("勇士的冒险补给", self.maoxian),
             ("DNFxSNK", self.dnf_snk),
             ("9163补偿", self.dnf_9163_apologize),
@@ -14815,6 +14815,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.colg_signin()
 
     pause()

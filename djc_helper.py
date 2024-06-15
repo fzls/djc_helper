@@ -13719,26 +13719,11 @@ class DjcHelper:
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
         date = get_today()
 
-        # 无值的默认值
         # fmt: off
-        default_empty_params = {
-            key: ""
-            for key in [
-                "package_id", "lqlevel", "teamid", "weekDay", "sArea", "serverId", "areaId", "nickName", "sRoleId", "sRoleName", "uin", "skey", "userId", "token", "iActionId", "iGoodsId", "sBizCode",
-                "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream", "dzid", "page", "iPackageId", "isLock", "amsid", "iLbSel1", "num", "mold", "exNum", "iCard", "iNum", "actionId", "plat",
-                "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam", "checkparam", "type", "moduleId", "giftId", "acceptId", "sendQQ", "cardType", "giftNum",
-                "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl", "inviteUin", "user_area", "user_partition", "user_areaName", "user_roleId",
-                "user_roleName", "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId", "cz", "dj", "siActivityId", "needADD", "dateInfo", "sId", "userNum", "index", "pageNow",
-                "pageSize", "clickTime", "skin_id", "decoration_id", "adLevel", "adPower", "username", "petId", "fuin", "sCode", "sNickName", "iId", "sendPage", "hello_id", "prize", "qd", "iReceiveUin",
-                "map1", "map2", "len", "itemIndex", "sRole", "loginNum", "level", "iGuestUin", "ukey", "iGiftID", "iInviter", "iPageNow", "iPageSize", "pUserId", "isBind", "iType", "iWork", "iPage",
-                "sNick", "iMatchId", "iGameId", "iIPId", "iVoteId", "iResult", "personAct", "teamAct", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo",
-                "sActivityInfo", "openid", "param", "dhnums", "sUin", "pointID", "startPos", "workId", "isSort", "jobName", "title", "toUin", "actSign", "prefer", "card", "answer1", "answer2", "answer3",
-                "countsInfo", "power", "appid", "appOpenid", "accessToken", "iAreaId", "iRoleId", "randomSeed", "taskId", "point", "cRand", "tghappid", "sig", "date_chronicle_sign_in", "crossTime",
-                "getLv105", "use_fatigue", "dayNum", "iFarmland", "fieldId", "sRice", "exchangeId", "sChannel", "flow_id", "pass", "pass_date", "packageId", "targetId", "myId", "id", "bossId", "iCardId",
-                "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "drinksId", "gameId", "score", "loginDays", "iSuccess", "sAnswer", "u_stage", "u_task_index",
-                "u_stage_index", "u_confirm", "sPlatId", "source",
-            ]
-        }
+
+        # 无值的默认值
+        # ps: 这个列表改为挪到 urls.py 中进行维护，跳转过去可以查看详情
+        default_empty_params = self.urls.default_empty_params
 
         # 有值的默认值
         default_valued_params = {

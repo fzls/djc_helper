@@ -267,6 +267,8 @@ class Urls:
         # 获取所有可兑换的道具的列表
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/{bizcode}_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
 
+        # fmt: off
+
         # 一些参数列表
         # 默认填充的空参数
         # ame的参数列表
@@ -302,6 +304,8 @@ class Urls:
                 *self.other_default_empty_params_list,
             ]
         }
+
+        # fmt: on
 
         # amesvr通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID，{last_three}替换为活动ID最后三位
@@ -370,9 +374,11 @@ class Urls:
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
         self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿
 
+        # fmt: off
         # amesvr活动
         self.amesvr = "https://{amesvr_host}/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType={sServiceType}&iActivityId={iActivityId}&sServiceDepartment={sServiceDepartment}&isXhrPost=true"
         self.amesvr_raw_data = "xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&e_code=0&g_code=0&xhr=1" + "&" + generate_raw_data_template(self.amesvr_default_params_list)
+        # fmt: on
 
         # ide通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID

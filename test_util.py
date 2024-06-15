@@ -549,6 +549,8 @@ def test_generate_raw_data_template():
     assert generate_raw_data_template(["a"]) == "a={a}"
     assert generate_raw_data_template(["a", "b", "c"]) == "a={a}&b={b}&c={c}"
 
+    # fmt: off
+
     # 以下为改造为新的写法时，新版与旧版的数据
     # 新写法
     amesvr_default_params_list = [
@@ -629,6 +631,8 @@ def test_generate_raw_data_template():
     old_default_set = set(default_params_list_old_version)
     # 确保旧的默认值集合是新合集的子集
     assert new_union.intersection(old_default_set) == old_default_set
+
+    # fmt: on
 
 
 def test_parse_url_param():

@@ -267,6 +267,27 @@ class Urls:
         # 获取所有可兑换的道具的列表
         self.show_exchange_item_list = "https://app.daoju.qq.com/jd/js/{bizcode}_index_list_dj_info_json.js?&weexVersion=0.9.4&appVersion={appVersion}&&sDeviceID={sDeviceID}&platform=android&deviceModel=MIX%202&&osVersion=Android-28&ch=10000&sVersionName={sVersionName}&appSource=android"
 
+        # 一些参数列表
+        # 默认填充的空参数
+        # ame的参数列表
+        self.amesvr_default_params_list = [
+            "iActivityId", "g_tk", "iFlowId", "package_id", "lqlevel", "teamid", "weekDay", "eas_url", "sServiceDepartment", "sServiceType", "sArea", "sRoleId", "uin", "userId", "token", "sRoleName",
+            "serverId", "areaId", "skey", "nickName", "date", "dzid", "page", "iPackageId", "plat", "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam",
+            "checkparam", "type", "moduleId", "giftId", "acceptId", "invitee", "giftNum", "sendQQ", "receiver", "receiverName", "inviterName", "user_area", "user_partition", "user_areaName",
+            "user_roleId", "user_roleName", "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId", "cz", "dj", "siActivityId", "needADD", "dateInfo", "sId", "userNum",
+            "cardType", "inviteId", "sendName", "receiveUin", "receiverUrl", "index", "pageNow", "pageSize", "clickTime", "username", "petId", "skin_id", "decoration_id", "fuin", "sCode", "sNickName",
+            "iId", "sendPage", "hello_id", "prize", "qd", "iReceiveUin", "map1", "map2", "len", "itemIndex", "sRole", "loginNum", "level", "inviteUin", "iGuestUin", "ukey", "iGiftID", "iInviter",
+            "iPageNow", "iPageSize", "iType", "iWork", "iPage", "sNick", "iMatchId", "iGameId", "iIPId", "iVoteId", "iResult", "personAct", "teamAct", "param", "dhnums", "sUin", "pointID", "workId",
+            "isSort", "jobName", "title", "actSign", "iNum", "prefer", "card", "answer1", "answer2", "answer3", "countsInfo", "power", "crossTime", "getLv105", "use_fatigue", "exchangeId", "sChannel",
+            "pass", "pass_date", "bossId", "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "u_confirm",
+        ]
+        # ide的参数列表
+        self.ide_default_params_list = [
+            "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
+            "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
+            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source",
+        ]
+
         # amesvr通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID，{last_three}替换为活动ID最后三位
         # https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js
@@ -334,19 +355,8 @@ class Urls:
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
         self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿
 
-        # amesvr通用活动系统配置
+        # amesvr活动
         self.amesvr = "https://{amesvr_host}/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType={sServiceType}&iActivityId={iActivityId}&sServiceDepartment={sServiceDepartment}&isXhrPost=true"
-        self.amesvr_default_params_list = [
-            "iActivityId", "g_tk", "iFlowId", "package_id", "lqlevel", "teamid", "weekDay", "eas_url", "sServiceDepartment", "sServiceType", "sArea", "sRoleId", "uin", "userId", "token", "sRoleName",
-            "serverId", "areaId", "skey", "nickName", "date", "dzid", "page", "iPackageId", "plat", "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam",
-            "checkparam", "type", "moduleId", "giftId", "acceptId", "invitee", "giftNum", "sendQQ", "receiver", "receiverName", "inviterName", "user_area", "user_partition", "user_areaName",
-            "user_roleId", "user_roleName", "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId", "cz", "dj", "siActivityId", "needADD", "dateInfo", "sId", "userNum",
-            "cardType", "inviteId", "sendName", "receiveUin", "receiverUrl", "index", "pageNow", "pageSize", "clickTime", "username", "petId", "skin_id", "decoration_id", "fuin", "sCode", "sNickName",
-            "iId", "sendPage", "hello_id", "prize", "qd", "iReceiveUin", "map1", "map2", "len", "itemIndex", "sRole", "loginNum", "level", "inviteUin", "iGuestUin", "ukey", "iGiftID", "iInviter",
-            "iPageNow", "iPageSize", "iType", "iWork", "iPage", "sNick", "iMatchId", "iGameId", "iIPId", "iVoteId", "iResult", "personAct", "teamAct", "param", "dhnums", "sUin", "pointID", "workId",
-            "isSort", "jobName", "title", "actSign", "iNum", "prefer", "card", "answer1", "answer2", "answer3", "countsInfo", "power", "crossTime", "getLv105", "use_fatigue", "exchangeId", "sChannel",
-            "pass", "pass_date", "bossId", "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "u_confirm",
-        ]
         self.amesvr_raw_data = "xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&e_code=0&g_code=0&xhr=1" + "&" + generate_raw_data_template(self.amesvr_default_params_list)
 
         # ide通用活动
@@ -377,12 +387,8 @@ class Urls:
         self.iActivityId_mojieren = "523217"  # 魔界人探险记
         self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记
 
+        # ide活动
         self.ide = "https://{ide_host}/ide/"
-        self.ide_default_params_list = [
-            "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
-            "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
-            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source",
-        ]
         self.ide_raw_data = "e_code=0&g_code=0" + "&" + generate_raw_data_template(self.ide_default_params_list)
 
         # DNF共创投票

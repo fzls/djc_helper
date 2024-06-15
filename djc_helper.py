@@ -13719,33 +13719,6 @@ class DjcHelper:
         startTime = endTime - datetime.timedelta(days=int(365 / 12 * 5))
         date = get_today()
 
-        # 有值的默认值
-        default_valued_params = {
-            "appVersion": appVersion,
-            "sVersionName": sVersionName,
-            "p_tk": self.cfg.g_tk,
-            "g_tk": self.cfg.g_tk,
-            "sDeviceID": self.cfg.sDeviceID,
-            "sDjcSign": self.cfg.get_sDjcSign(),
-            "callback": jsonp_callback_flag,
-            "month": self.get_month(),
-            "starttime": self.getMoneyFlowTime(
-                startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, startTime.second
-            ),
-            "endtime": self.getMoneyFlowTime(
-                endTime.year, endTime.month, endTime.day, endTime.hour, endTime.minute, endTime.second
-            ),
-            "sSDID": str(uuid.uuid4()).replace("-", ""),
-            "uuid": uuid.uuid4(),
-            "uuid4": uuid.uuid4(),
-            "millseconds": getMillSecondsUnix(),
-            "seconds": int(time.time()),
-            "rand": random.random(),
-            "date": date,
-            "rand32": self.rand32(),
-            "djcRequestId": f"{self.cfg.sDeviceID}-{getMillSecondsUnix()}-{random.randint(0, 999)}",
-        }
-
         # 无值的默认值
         # fmt: off
         default_empty_params = {
@@ -13766,10 +13739,33 @@ class DjcHelper:
                 "u_stage_index", "u_confirm", "sPlatId", "source",
             ]
         }
+
+        # 有值的默认值
+        default_valued_params = {
+            "appVersion": appVersion,
+            "sVersionName": sVersionName,
+            "p_tk": self.cfg.g_tk,
+            "g_tk": self.cfg.g_tk,
+            "sDeviceID": self.cfg.sDeviceID,
+            "sDjcSign": self.cfg.get_sDjcSign(),
+            "callback": jsonp_callback_flag,
+            "month": self.get_month(),
+            "starttime": self.getMoneyFlowTime(startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, startTime.second),
+            "endtime": self.getMoneyFlowTime(endTime.year, endTime.month, endTime.day, endTime.hour, endTime.minute, endTime.second),
+            "sSDID": str(uuid.uuid4()).replace("-", ""),
+            "uuid": uuid.uuid4(),
+            "uuid4": uuid.uuid4(),
+            "millseconds": getMillSecondsUnix(),
+            "seconds": int(time.time()),
+            "rand": random.random(),
+            "date": date,
+            "rand32": self.rand32(),
+            "djcRequestId": f"{self.cfg.sDeviceID}-{getMillSecondsUnix()}-{random.randint(0, 999)}",
+        }
         # fmt: on
 
         # 整合得到所有默认值
-        default_params = {**default_valued_params, **default_empty_params}
+        default_params = {**default_empty_params, **default_valued_params}
 
         # 首先将默认参数添加进去，避免format时报错
         merged_params = {**default_params, **params}

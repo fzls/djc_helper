@@ -584,6 +584,25 @@ def test_generate_raw_data_template():
     # 需要确保此时使用该函数生成的结果与原来是等价的（也就是基于 & 分割后的列表经过排序后完全一致）
     assert sorted(amesvr_raw_data.split("&")) == sorted(amesvr_raw_data_old_version.split("&"))
 
+    # 同样的，下面是ide活动参数改造时的测试数据
+    ide_default_params_list = [
+        "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
+        "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
+        "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source",
+    ]
+    ide_raw_data = "e_code=0&g_code=0" + "&" + generate_raw_data_template(ide_default_params_list)
+    ide_raw_data_old_version = (
+        "iChartId={iChartId}&iSubChartId={iSubChartId}&sIdeToken={sIdeToken}"
+        "&sRoleId={sRoleId}&sRoleName={sRoleName}&sArea={sArea}&sMd5str={sMd5str}&sCheckparam={sCheckparam}&roleJob={roleJob}&sAreaName={sAreaName}"
+        "&sAuthInfo={sAuthInfo}&sActivityInfo={sActivityInfo}&openid={openid}&sCode={sCode}&startPos={startPos}"
+        "&e_code=0&g_code=0&eas_url={eas_url}&eas_refer={eas_refer}&iType={iType}&iPage={iPage}&type={type}&sUin={sUin}&dayNum={dayNum}"
+        "&iFarmland={iFarmland}&fieldId={fieldId}&sRice={sRice}&packageId={packageId}&targetId={targetId}&myId={myId}&id={id}"
+        "&iCardId={iCardId}&iAreaId={iAreaId}&sRole={sRole}&drinksId={drinksId}&gameId={gameId}&score={score}&loginDays={loginDays}"
+        "&iSuccess={iSuccess}&iGameId={iGameId}&sAnswer={sAnswer}&index={index}&u_stage={u_stage}&u_task_index={u_task_index}&u_stage_index={u_stage_index}&num={num}"
+        "&sPartition={sPartition}&sPlatId={sPlatId}&source={source}"
+    )
+    assert sorted(ide_raw_data.split("&")) == sorted(ide_raw_data_old_version.split("&"))
+
 
 def test_parse_url_param():
     a = "1"

@@ -10,6 +10,7 @@ from log import color, logger
 from util import (
     exists_flag_file,
     format_time,
+    generate_raw_data_template,
     get_now,
     get_past_time,
     get_remaining_time,
@@ -335,23 +336,18 @@ class Urls:
 
         # amesvr通用活动系统配置
         self.amesvr = "https://{amesvr_host}/ams/ame/amesvr?ameVersion=0.3&sSDID={sSDID}&sMiloTag={sMiloTag}&sServiceType={sServiceType}&iActivityId={iActivityId}&sServiceDepartment={sServiceDepartment}&isXhrPost=true"
-        self.amesvr_raw_data = (
-            "iActivityId={iActivityId}&g_tk={g_tk}&iFlowId={iFlowId}&package_id={package_id}&xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&lqlevel={lqlevel}"
-            "&teamid={teamid}&weekDay={weekDay}&e_code=0&g_code=0&eas_url={eas_url}&xhr=1&sServiceDepartment={sServiceDepartment}&sServiceType={sServiceType}&sArea={sArea}&sRoleId={sRoleId}&uin={uin}"
-            "&userId={userId}&token={token}&sRoleName={sRoleName}&serverId={serverId}&areaId={areaId}&skey={skey}&nickName={nickName}&date={date}&dzid={dzid}&page={page}&iPackageId={iPackageId}&plat={plat}"
-            "&extraStr={extraStr}&sContent={sContent}&sPartition={sPartition}&sAreaName={sAreaName}&md5str={md5str}&ams_md5str={ams_md5str}&ams_checkparam={ams_checkparam}&checkparam={checkparam}&type={type}&moduleId={moduleId}"
-            "&giftId={giftId}&acceptId={acceptId}&invitee={invitee}&giftNum={giftNum}&sendQQ={sendQQ}&receiver={receiver}&receiverName={receiverName}&inviterName={inviterName}&user_area={user_area}"
-            "&user_partition={user_partition}&user_areaName={user_areaName}&user_roleId={user_roleId}&user_roleName={user_roleName}&user_roleLevel={user_roleLevel}&user_checkparam={user_checkparam}"
-            "&user_md5str={user_md5str}&user_sex={user_sex}&user_platId={user_platId}&cz={cz}&dj={dj}&siActivityId={siActivityId}&needADD={needADD}&dateInfo={dateInfo}&sId={sId}&userNum={userNum}"
-            "&cardType={cardType}&inviteId={inviteId}&sendName={sendName}&receiveUin={receiveUin}&receiverUrl={receiverUrl}&index={index}&pageNow={pageNow}&pageSize={pageSize}&clickTime={clickTime}"
-            "&username={username}&petId={petId}&skin_id={skin_id}&decoration_id={decoration_id}&fuin={fuin}&sCode={sCode}&sNickName={sNickName}&iId={iId}&sendPage={sendPage}&hello_id={hello_id}"
-            "&prize={prize}&qd={qd}&iReceiveUin={iReceiveUin}&map1={map1}&map2={map2}&len={len}&itemIndex={itemIndex}&sRole={sRole}&loginNum={loginNum}&level={level}&inviteUin={inviteUin}"
-            "&iGuestUin={iGuestUin}&ukey={ukey}&iGiftID={iGiftID}&iInviter={iInviter}&iPageNow={iPageNow}&iPageSize={iPageSize}&iType={iType}&iWork={iWork}&iPage={iPage}&sNick={sNick}"
-            "&iMatchId={iMatchId}&iGameId={iGameId}&iIPId={iIPId}&iVoteId={iVoteId}&iResult={iResult}&personAct={personAct}&teamAct={teamAct}&param={param}&dhnums={dhnums}&sUin={sUin}&pointID={pointID}"
-            "&workId={workId}&isSort={isSort}&jobName={jobName}&title={title}&actSign={actSign}&iNum={iNum}&prefer={prefer}&card={card}&answer1={answer1}&answer2={answer2}&answer3={answer3}"
-            "&countsInfo={countsInfo}&power={power}&crossTime={crossTime}&getLv105={getLv105}&use_fatigue={use_fatigue}&exchangeId={exchangeId}&sChannel={sChannel}&pass={pass}&pass_date={pass_date}"
-            "&bossId={bossId}&today={today}&anchor={anchor}&sNum={sNum}&week={week}&position={position}&packages={packages}&selectNo={selectNo}&targetQQ={targetQQ}&u_confirm={u_confirm}"
-        )
+        self.amesvr_default_params_list = [
+            "iActivityId", "g_tk", "iFlowId", "package_id", "lqlevel", "teamid", "weekDay", "eas_url", "sServiceDepartment", "sServiceType", "sArea", "sRoleId", "uin", "userId", "token", "sRoleName",
+            "serverId", "areaId", "skey", "nickName", "date", "dzid", "page", "iPackageId", "plat", "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam",
+            "checkparam", "type", "moduleId", "giftId", "acceptId", "invitee", "giftNum", "sendQQ", "receiver", "receiverName", "inviterName", "user_area", "user_partition", "user_areaName",
+            "user_roleId", "user_roleName", "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId", "cz", "dj", "siActivityId", "needADD", "dateInfo", "sId", "userNum",
+            "cardType", "inviteId", "sendName", "receiveUin", "receiverUrl", "index", "pageNow", "pageSize", "clickTime", "username", "petId", "skin_id", "decoration_id", "fuin", "sCode", "sNickName",
+            "iId", "sendPage", "hello_id", "prize", "qd", "iReceiveUin", "map1", "map2", "len", "itemIndex", "sRole", "loginNum", "level", "inviteUin", "iGuestUin", "ukey", "iGiftID", "iInviter",
+            "iPageNow", "iPageSize", "iType", "iWork", "iPage", "sNick", "iMatchId", "iGameId", "iIPId", "iVoteId", "iResult", "personAct", "teamAct", "param", "dhnums", "sUin", "pointID", "workId",
+            "isSort", "jobName", "title", "actSign", "iNum", "prefer", "card", "answer1", "answer2", "answer3", "countsInfo", "power", "crossTime", "getLv105", "use_fatigue", "exchangeId", "sChannel",
+            "pass", "pass_date", "bossId", "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "u_confirm",
+        ]
+        self.amesvr_raw_data = "xhrPostKey=xhr_{millseconds}&eas_refer=http%3A%2F%2Fnoreferrer%2F%3Freqid%3D{uuid}%26version%3D23&e_code=0&g_code=0&xhr=1" + "&" + generate_raw_data_template(self.amesvr_default_params_list)
 
         # ide通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID

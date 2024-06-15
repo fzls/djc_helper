@@ -603,6 +603,33 @@ def test_generate_raw_data_template():
     )
     assert sorted(ide_raw_data.split("&")) == sorted(ide_raw_data_old_version.split("&"))
 
+    # 将原来的空值默认中中包含在上面两个列表中的移除，得到剩余部分。确保这个与ame和ide的合集中，包含原来默认空值的全部值（允许超出，因为ame和ide中部分值是在调用时传入，或者是有值的默认值）
+    other_default_params_list = [
+        "iActionId", "iGoodsId", "sBizCode", "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream", "isLock", "amsid", "iLbSel1", "mold", "exNum", "iCard", "actionId",
+        "adLevel", "adPower", "pUserId", "isBind", "toUin", "appid", "appOpenid", "accessToken", "iRoleId", "randomSeed", "taskId", "point", "cRand", "tghappid", "sig",
+        "date_chronicle_sign_in", "flow_id",
+    ]
+    default_params_list_old_version = [
+        "package_id", "lqlevel", "teamid", "weekDay", "sArea", "serverId", "areaId", "nickName", "sRoleId", "sRoleName", "uin", "skey", "userId", "token", "iActionId", "iGoodsId", "sBizCode",
+        "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream", "dzid", "page", "iPackageId", "isLock", "amsid", "iLbSel1", "num", "mold", "exNum", "iCard", "iNum", "actionId", "plat",
+        "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam", "checkparam", "type", "moduleId", "giftId", "acceptId", "sendQQ", "cardType", "giftNum",
+        "inviteId", "inviterName", "sendName", "invitee", "receiveUin", "receiver", "receiverName", "receiverUrl", "inviteUin", "user_area", "user_partition", "user_areaName", "user_roleId",
+        "user_roleName", "user_roleLevel", "user_checkparam", "user_md5str", "user_sex", "user_platId", "cz", "dj", "siActivityId", "needADD", "dateInfo", "sId", "userNum", "index", "pageNow",
+        "pageSize", "clickTime", "skin_id", "decoration_id", "adLevel", "adPower", "username", "petId", "fuin", "sCode", "sNickName", "iId", "sendPage", "hello_id", "prize", "qd", "iReceiveUin",
+        "map1", "map2", "len", "itemIndex", "sRole", "loginNum", "level", "iGuestUin", "ukey", "iGiftID", "iInviter", "iPageNow", "iPageSize", "pUserId", "isBind", "iType", "iWork", "iPage",
+        "sNick", "iMatchId", "iGameId", "iIPId", "iVoteId", "iResult", "personAct", "teamAct", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo",
+        "sActivityInfo", "openid", "param", "dhnums", "sUin", "pointID", "startPos", "workId", "isSort", "jobName", "title", "toUin", "actSign", "prefer", "card", "answer1", "answer2", "answer3",
+        "countsInfo", "power", "appid", "appOpenid", "accessToken", "iAreaId", "iRoleId", "randomSeed", "taskId", "point", "cRand", "tghappid", "sig", "date_chronicle_sign_in", "crossTime",
+        "getLv105", "use_fatigue", "dayNum", "iFarmland", "fieldId", "sRice", "exchangeId", "sChannel", "flow_id", "pass", "pass_date", "packageId", "targetId", "myId", "id", "bossId", "iCardId",
+        "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "drinksId", "gameId", "score", "loginDays", "iSuccess", "sAnswer", "u_stage", "u_task_index",
+        "u_stage_index", "u_confirm", "sPlatId", "source",
+    ]
+
+    new_union = set().union(set(other_default_params_list), set(amesvr_default_params_list), set(ide_default_params_list))
+    old_default_set = set(default_params_list_old_version)
+    # 确保旧的默认值集合是新合集的子集
+    assert new_union.intersection(old_default_set) == old_default_set
+
 
 def test_parse_url_param():
     a = "1"

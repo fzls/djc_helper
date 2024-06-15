@@ -24,7 +24,7 @@ import uuid
 import webbrowser
 from functools import lru_cache, wraps
 from multiprocessing import cpu_count
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type
+from typing import Any, Callable
 from urllib import parse
 from urllib.parse import quote_plus, unquote_plus
 
@@ -267,9 +267,9 @@ def try_set_console_window_mode(show_mode: int, mode_name: str, mode_enabled: bo
     parents = get_parents(current_pid)
 
     # 找到所有窗口中在该当前进程到进程树的顶端之间路径的窗口
-    candidates_index_to_hwnd: Dict[int, int] = {}
+    candidates_index_to_hwnd: dict[int, int] = {}
 
-    def max_current_console(hwnd: int, argument: Dict[int, int]):
+    def max_current_console(hwnd: int, argument: dict[int, int]):
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
         if pid in parents:
             # 记录下他们在进程树路径的下标
@@ -400,7 +400,7 @@ def message_box(
             os.popen(os.path.realpath(open_image))
 
 
-def get_screen_size() -> Tuple[int, int]:
+def get_screen_size() -> tuple[int, int]:
     """
     :return: 屏幕宽度和高度
     """
@@ -524,7 +524,7 @@ def printed_width(msg):
     return sum(1 if ord(c) < 128 else 2 for c in msg)
 
 
-def split_by_printed_width(msg: str, expect_width: int) -> Tuple[str, str]:
+def split_by_printed_width(msg: str, expect_width: int) -> tuple[str, str]:
     if printed_width(msg) <= expect_width:
         return msg, ""
 
@@ -627,25 +627,25 @@ def get_now() -> datetime.datetime:
     return datetime.datetime.now()
 
 
-def get_this_week_monday(now: Optional[datetime.datetime] = None) -> str:
+def get_this_week_monday(now: datetime.datetime | None = None) -> str:
     return get_this_week_monday_datetime(now).strftime("%Y%m%d")
 
 
-def get_last_week_monday(now: Optional[datetime.datetime] = None) -> str:
+def get_last_week_monday(now: datetime.datetime | None = None) -> str:
     return get_last_week_monday_datetime(now).strftime("%Y%m%d")
 
 
-def get_this_week_monday_datetime(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+def get_this_week_monday_datetime(now: datetime.datetime | None = None) -> datetime.datetime:
     now = now or get_now()
     monday = now - datetime.timedelta(days=now.weekday())
     return monday.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def get_last_week_monday_datetime(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+def get_last_week_monday_datetime(now: datetime.datetime | None = None) -> datetime.datetime:
     return get_this_week_monday_datetime(now) - datetime.timedelta(days=7)
 
 
-def get_this_thursday_of_dnf(now: Optional[datetime.datetime] = None) -> datetime.datetime:
+def get_this_thursday_of_dnf(now: datetime.datetime | None = None) -> datetime.datetime:
     # 计算本周所属的那个周四，以dnf的周期计算（不过以0点计算，不以六点）
     now = now or get_now()
 
@@ -672,37 +672,37 @@ def now_in_range(left="2000-01-01 00:00:00", right="3000-01-01 00:00:00"):
     return now_after(left) and now_before(right)
 
 
-def get_now_unix(now: Optional[datetime.datetime] = None) -> int:
+def get_now_unix(now: datetime.datetime | None = None) -> int:
     now = now or get_now()
     return int(now.timestamp())
 
 
-def get_current(t: Optional[datetime.datetime] = None) -> str:
+def get_current(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     return t.strftime("%Y%m%d%H%M%S")
 
 
-def get_today(t: Optional[datetime.datetime] = None) -> str:
+def get_today(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     return t.strftime("%Y%m%d")
 
 
-def get_last_n_days(n, now: Optional[datetime.datetime] = None) -> List[str]:
+def get_last_n_days(n, now: datetime.datetime | None = None) -> list[str]:
     now = now or get_now()
     return [(now - datetime.timedelta(i)).strftime("%Y%m%d") for i in range(1, n + 1)]
 
 
-def get_week(t: Optional[datetime.datetime] = None) -> str:
+def get_week(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     return t.strftime("%Y-week-%W")
 
 
-def get_month(t: Optional[datetime.datetime] = None) -> str:
+def get_month(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     return t.strftime("%Y%m")
 
 
-def get_last_month(t: Optional[datetime.datetime] = None) -> str:
+def get_last_month(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     this_month_first_day, _ = start_and_end_date_of_a_month(t)
     last_month_last_day = this_month_first_day - datetime.timedelta(days=1)
@@ -710,7 +710,7 @@ def get_last_month(t: Optional[datetime.datetime] = None) -> str:
     return last_month_last_day.strftime("%Y%m")
 
 
-def get_year(t: Optional[datetime.datetime] = None) -> str:
+def get_year(t: datetime.datetime | None = None) -> str:
     t = t or get_now()
     return t.strftime("%Y")
 
@@ -828,26 +828,26 @@ def with_retry(max_retry_count=3, retry_wait_time=5, show_exception_info=True) -
     return decorator
 
 
-def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> bool:
+def is_act_expired(end_time: str, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None = None) -> bool:
     now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) < now
 
 
 def will_act_expired_in(
-    end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None
+    end_time: str, duration: datetime.timedelta, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None = None
 ) -> bool:
     now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) < now + duration
 
 
 def get_remaining_time(
-    end_time, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None
+    end_time, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None = None
 ) -> datetime.timedelta:
     now = now or get_now()
     return datetime.datetime.strptime(end_time, time_fmt) - now
 
 
-def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> datetime.timedelta:
+def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None = None) -> datetime.timedelta:
     now = now or get_now()
     return now - datetime.datetime.strptime(t, time_fmt)
 
@@ -880,7 +880,7 @@ def format_time(dt, time_fmt="%Y-%m-%d %H:%M:%S") -> str:
     return dt.strftime(time_fmt)
 
 
-def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: Optional[datetime.datetime] = None) -> str:
+def format_now(time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None = None) -> str:
     now = now or get_now()
     return format_time(now, time_fmt=time_fmt)
 
@@ -985,7 +985,7 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
     )
 
     # 获取全部日志文件，并按照时间升序排列
-    def _get_all_files_sort_by_mtime() -> List[pathlib.Path]:
+    def _get_all_files_sort_by_mtime() -> list[pathlib.Path]:
         logs = list(pathlib.Path(dir_name).glob("**/*"))
 
         def sort_key(f: pathlib.Path):
@@ -1195,11 +1195,11 @@ def with_cache(
     cache_category: str,
     cache_key: str,
     cache_miss_func: Callable[[], Any],
-    cache_validate_func: Optional[Callable[[Any], bool]] = None,
+    cache_validate_func: Callable[[Any], bool] | None = None,
     cache_max_seconds=600,
     force_update=False,
-    cache_value_unmarshal_func: Optional[Callable[[Any], Any]] = None,
-    cache_hit_func: Optional[Callable[[Any], None]] = None,
+    cache_value_unmarshal_func: Callable[[Any], Any] | None = None,
+    cache_hit_func: Callable[[Any], None] | None = None,
     return_none_on_exception=False,
 ):
     """
@@ -1455,7 +1455,7 @@ def get_meaningful_call_point_for_log() -> str:
     return ""
 
 
-def startswith_any(string: str, prefixes: List[str]) -> bool:
+def startswith_any(string: str, prefixes: list[str]) -> bool:
     for prefix in prefixes:
         if string.startswith(prefix):
             return True
@@ -1463,7 +1463,7 @@ def startswith_any(string: str, prefixes: List[str]) -> bool:
     return False
 
 
-def endswith_any(string: str, suffixes: List[str]) -> bool:
+def endswith_any(string: str, suffixes: list[str]) -> bool:
     for suffix in suffixes:
         if string.endswith(suffix):
             return True
@@ -1471,7 +1471,7 @@ def endswith_any(string: str, suffixes: List[str]) -> bool:
     return False
 
 
-def extract_between(html: str, prefix: str, suffix: str, typ: Type) -> Any:
+def extract_between(html: str, prefix: str, suffix: str, typ: type) -> Any:
     prefix_idx = html.index(prefix) + len(prefix)
     suffix_idx = html.index(suffix, prefix_idx)
 
@@ -1571,7 +1571,7 @@ def sync_configs(source_dir: str, target_dir: str):
             shutil.copyfile(source, destination)
 
 
-def start_and_end_date_of_a_month(date: datetime.datetime) -> Tuple[datetime.datetime, datetime.datetime]:
+def start_and_end_date_of_a_month(date: datetime.datetime) -> tuple[datetime.datetime, datetime.datetime]:
     """
     返回对应时间所在月的起始和结束时间点，形如 2021-07-01 00:00:00 和 2021-07-31 23:59:59
     """
@@ -1708,14 +1708,14 @@ def pause_and_exit(code=-1):
     sys.exit(code)
 
 
-def bytes_arr_to_hex_str(bytes_arr: List[int]) -> str:
+def bytes_arr_to_hex_str(bytes_arr: list[int]) -> str:
     """
     [0x58, 0x59, 0x01, 0x00, 0x00] => "0x58, 0x59, 0x01, 0x00, 0x00"
     """
     return ", ".join("0x%02x" % b for b in bytes_arr)
 
 
-def hex_str_to_bytes_arr(bytes_str: str) -> List[int]:
+def hex_str_to_bytes_arr(bytes_str: str) -> list[int]:
     """
     "0x58, 0x59, 0x01, 0x00, 0x00" => [0x58, 0x59, 0x01, 0x00, 0x00]
     """
@@ -1776,7 +1776,7 @@ def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: 
         print("")  # 下载完成换行
 
 
-def post_json_to_data(json_data: Dict[str, Any]) -> str:
+def post_json_to_data(json_data: dict[str, Any]) -> str:
     return "&".join([f"{k}={v}" for k, v in json_data.items()])
 
 

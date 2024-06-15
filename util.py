@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import ctypes
 import datetime
@@ -1776,6 +1778,16 @@ def show_progress(file_name: str, total_size: int, now_size: int, used_seconds: 
 
 def post_json_to_data(json_data: Dict[str, Any]) -> str:
     return "&".join([f"{k}={v}" for k, v in json_data.items()])
+
+
+def generate_raw_data_template(param_name_list: list[str]) -> str:
+    """
+    ["a", "b", "c"] => "a={a}&b={b}&c={c}"
+
+    :param param_name_list: post raw data 的参数列表
+    :return: 生成对应的post data的模板字符串
+    """
+    return "&".join([f"{param_name}={{{param_name}}}" for param_name in param_name_list])
 
 
 def clear_file(file_path: str):

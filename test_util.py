@@ -36,6 +36,7 @@ from util import (
     format_now,
     format_time,
     format_timestamp,
+    generate_raw_data_template,
     get_cid,
     get_current,
     get_first_exists_dict_value,
@@ -541,6 +542,12 @@ def test_post_json_to_data():
     assert post_json_to_data({}) == ""
     assert post_json_to_data({"k": "v"}) == "k=v"
     assert post_json_to_data({"k1": "v1", "k2": "v2"}) == "k1=v1&k2=v2"
+
+
+def test_generate_raw_data_template():
+    assert generate_raw_data_template([]) == ""
+    assert generate_raw_data_template(["a"]) == "a={a}"
+    assert generate_raw_data_template(["a", "b", "c"]) == "a={a}&b={b}&c={c}"
 
 
 def test_parse_url_param():

@@ -722,6 +722,7 @@ class DjcHelper:
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("colg每日签到", self.colg_signin),
             ("勇士的冒险补给", self.maoxian),
+            ("colg其他活动", self.colg_other_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -734,7 +735,6 @@ class DjcHelper:
             ("DNF年货铺", self.dnf_nianhuopu),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
-            ("colg其他活动", self.colg_other_act),
             ("拯救赛利亚", self.dnf_save_sailiyam),
             ("WeGame活动", self.dnf_wegame),
             ("DNF马杰洛的规划", self.majieluo),
@@ -10047,7 +10047,7 @@ class DjcHelper:
     # --------------------------------------------colg其他活动--------------------------------------------
     @try_except()
     def colg_other_act(self):
-        # 年终盛典 https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16
+        # 首页右上角 签到福利 https://bbs.colg.cn/forum-171-1.html
         show_head_line("colg其他活动")
         self.show_not_ams_act_info("colg其他活动")
 
@@ -10076,57 +10076,70 @@ class DjcHelper:
         session = requests.session()
         session.headers = headers  # type: ignore
 
-        session.get(self.urls.colg_other_act_url, timeout=10)
-
-        reward_list = [
-            {
-                "reward_bag_id": "60",
-                "title": "累计签到3天",
-            },
-            {
-                "reward_bag_id": "61",
-                "title": "累计签到7天",
-            },
-            {
-                "reward_bag_id": "62",
-                "title": "累计签到10天",
-            },
-            {
-                "reward_bag_id": "63",
-                "title": "累计签到15天",
-            },
-            {
-                "reward_bag_id": "64",
-                "title": "累计签到21天",
-            },
-            {
-                "reward_bag_id": "65",
-                "title": "累计签到28天",
-            },
-        ]
-        for reward in reward_list:
-            reward_bag_id = reward["reward_bag_id"]
-            title = reward["title"]
-
-            res = session.post(
-                self.urls.colg_other_act_get_reward,
-                data=f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}",
-                timeout=10,
-            )
-            res_json = res.json()
-            logger.info(color("bold_green") + f"{title}，结果={res_json}")
-
-            # 等一会，避免请求太快
-            time.sleep(1)
-
-            if "累积签到天数不足" in res_json["msg"]:
-                logger.warning("累积天数不足，跳过尝试后续")
-                break
+        # session.get(self.urls.colg_other_act_url, timeout=10)
+        #
+        # reward_list = [
+        #     {
+        #         "reward_bag_id": "60",
+        #         "title": "累计签到3天",
+        #     },
+        #     {
+        #         "reward_bag_id": "61",
+        #         "title": "累计签到7天",
+        #     },
+        #     {
+        #         "reward_bag_id": "62",
+        #         "title": "累计签到10天",
+        #     },
+        #     {
+        #         "reward_bag_id": "63",
+        #         "title": "累计签到15天",
+        #     },
+        #     {
+        #         "reward_bag_id": "64",
+        #         "title": "累计签到21天",
+        #     },
+        #     {
+        #         "reward_bag_id": "65",
+        #         "title": "累计签到28天",
+        #     },
+        # ]
+        # for reward in reward_list:
+        #     reward_bag_id = reward["reward_bag_id"]
+        #     title = reward["title"]
+        #
+        #     res = session.post(
+        #         self.urls.colg_other_act_get_reward,
+        #         data=f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}",
+        #         timeout=10,
+        #     )
+        #     res_json = res.json()
+        #     logger.info(color("bold_green") + f"{title}，结果={res_json}")
+        #
+        #     # 等一会，避免请求太快
+        #     time.sleep(1)
+        #
+        #     if "累积签到天数不足" in res_json["msg"]:
+        #         logger.warning("累积天数不足，跳过尝试后续")
+        #         break
 
         res = session.post(
-            self.urls.colg_other_act_lottery, data=f"type=2&aid={self.urls.colg_other_act_id}", timeout=10
+            self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10
         )
-        logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
+        logger.info(color("bold_green") + f"福利签到，结果={res.json()}")
+
+        # 5、本期限时抽奖开放时间为2024.6.13-7.31
+        if now_in_range("2024-06-13 00:00:00", "2024-07-31 23:59:59"):
+            res = session.post(
+                self.urls.colg_other_act_lottery, data=f"type={self.urls.colg_other_act_type}&aid={self.urls.colg_other_act_id}", timeout=10
+            )
+            logger.info(color("bold_green") + f"每日盲盒，结果={res.json()}")
+        else:
+            async_message_box(
+                "（移除前每天弹窗）确认下这个签到抽奖活动是否还能继续抽奖，如果还可以，把这里改为继续运行，发个新版本，否则干掉这个分支的弹窗"
+                "（仅自己可见）colg签到抽奖活动",
+                open_url="https://bbs.colg.cn/forum-171-1.html",
+            )
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -14613,6 +14626,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.maoxian()
+        djcHelper.colg_other_act()
 
     pause()

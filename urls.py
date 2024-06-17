@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-10 23:59:59", "DNF卡妮娜的心愿摇奖机"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     #
     # 已过期活动
     #
@@ -89,7 +90,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
-    newNotAmsActInfo("2023-12-05 00:00:00", "2024-02-24 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
@@ -530,13 +530,12 @@ class Urls:
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
         # ------- colg其他活动 --------
-        self.colg_other_act_id = 16
+        self.colg_other_act_type = 3
+        self.colg_other_act_id = 1
         # 活动页面
-        self.colg_other_act_url = (
-            f"https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid={self.colg_other_act_id}"
-        )
-        # 累计登录领奖
-        self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
+        self.colg_other_act_url = "https://bbs.colg.cn/colg_check_in_activity-check_in.html/checkIn"
+        # # 累计登录领奖
+        # self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
         # 每日抽奖
         self.colg_other_act_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
 

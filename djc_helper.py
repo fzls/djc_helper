@@ -723,6 +723,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("勇士的冒险补给", self.maoxian),
             ("colg其他活动", self.colg_other_act),
+            ("DNF格斗大赛", self.dnf_pk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -770,7 +771,6 @@ class DjcHelper:
             ("黄钻", self.dnf_yellow_diamond),
             ("心悦猫咪", self.xinyue_cat),
             ("DNF互动站", self.dnf_interactive),
-            ("DNF格斗大赛", self.dnf_pk),
             ("DNF共创投票", self.dnf_dianzan),
             ("翻牌活动", self.dnf_card_flip),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
@@ -6848,38 +6848,80 @@ class DjcHelper:
         )
 
     # --------------------------------------------DNF格斗大赛--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
     @try_except()
     def dnf_pk(self):
-        show_head_line("DNF格斗大赛功能")
-        self.show_amesvr_act_info(self.dnf_pk_op)
+        show_head_line("DNF格斗大赛")
+        self.show_not_ams_act_info("DNF格斗大赛")
 
         if not self.cfg.function_switches.get_dnf_pk or self.disable_most_activities():
-            logger.warning("未启用DNF格斗大赛功能，将跳过")
+            logger.warning("未启用 DNF格斗大赛 功能，将跳过")
             return
 
-        self.check_dnf_pk()
+        # self.check_dnf_pk()
 
-        def query_ticket_count():
-            res = self.dnf_pk_op("查询数据", "852125", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+        self.prepare_wpe_act_openid_accesstoken("DNF格斗大赛")
 
-            return int(raw_info.sOutValue1)
+        def query_ticket_count() -> int:
+            res = self.dnf_pk_wpe_op("查询抽奖次数", 196037, print_res=False)
+            raw_info = json.loads(res["data"])
 
-        self.dnf_pk_op("每日在线30分钟（977156）", "852098")
-        self.dnf_pk_op("每日PK（977162）", "852102")
-        self.dnf_pk_op("回流（977167）", "852107")
+            # "{\"ret\":0,\"limit\":0}"
+            return raw_info["limit"]
+
+        self.dnf_pk_wpe_op("见面礼", 195914)
+        self.dnf_pk_wpe_op("幸运勇士礼包", 195916)
+        self.dnf_pk_wpe_op("总决赛预约礼", 195917)
+
+        signin_flowid_list = [
+            195923,
+            195926,
+            195928,
+            195930,
+            195932,
+            195934,
+            195936,
+        ]
+        for idx, flowid in enumerate(signin_flowid_list):
+            res = self.dnf_pk_wpe_op(f"签到第 {idx+1} 天", flowid)
+            if "今日已签到" in res["msg"]:
+                logger.info(color("bold_yellow") + f"今日已签到，将跳过尝试后续天数签到")
+                break
+
+            time.sleep(3)
+
+        async_message_box(
+            (
+                "格斗大赛的部分奖励需要报名后才能领取，请有兴趣的朋友打开点确认后弹出的页面，在最上方登录后报名即可\n"
+                "\n"
+                "包括报名礼、雾隐之地通关奖励（每周一次）、雾隐之地困难模式单次奖励（按概率从三档中抽取奖励，最高是格斗大赛装扮和转职光环）"
+            ),
+            f"格斗大赛报名 - {self.cfg.name}",
+            show_once=True,
+            open_url=get_act_url("DNF格斗大赛"),
+        )
+
+        # PVE
+        self.dnf_pk_wpe_op("PVE 报名礼", 195918)
+        self.dnf_pk_wpe_op("雾隐之地通关", 196041)
+        self.dnf_pk_wpe_op("雾隐之地困难模式通关", 196042)
+
+        # PVP
+        self.dnf_pk_wpe_op("PVP 报名礼", 195919)
+
+        # 抽奖
+        self.dnf_pk_wpe_op("每日登录游戏", 195950)
+        self.dnf_pk_wpe_op("每日消耗50疲劳值", 196035)
+        self.dnf_pk_wpe_op("每日在线30分钟", 196036)
 
         ticket = query_ticket_count()
         logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
         for idx in range_from_one(ticket):
-            self.dnf_pk_op(f"[{idx}/{ticket}]幸运夺宝", "852109")
+            # 搜：callJsToStart 或者点一下试试
+            self.dnf_pk_wpe_op(f"[{idx}/{ticket}] 幸运夺宝", 195949)
             if idx != ticket:
                 time.sleep(5)
 
-        # self.dnf_pk_op("海选普发奖励（977173）", "852113")
-        # self.dnf_pk_op("周赛晋级奖励（977176）", "852115")
-        # self.dnf_pk_op("决赛普发奖励（977180）", "852123")
-        # self.dnf_pk_op("决赛冠军奖励（977181）", "852124")
 
     def check_dnf_pk(self):
         self.check_bind_account(
@@ -6903,6 +6945,49 @@ class DjcHelper:
             print_res,
             "http://dnf.qq.com/cp/a20210405pk/",
             **extra_params,
+        )
+
+    def dnf_pk_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        roleinfo = self.get_dnf_bind_role()
+
+        act_id = "18386"
+
+        json_data = {
+            "biz_id": "tgclub",
+            "act_id": act_id,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": json.dumps(
+                {
+                    "num": 1,
+                    "ceiba_plat_id": "ios",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_xinyue_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
         )
 
     # --------------------------------------------DNF强者之路--------------------------------------------
@@ -14626,6 +14711,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_other_act()
+        djcHelper.dnf_pk()
 
     pause()

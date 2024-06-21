@@ -69,6 +69,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
+    newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
     #
     # 已过期活动
     #
@@ -121,6 +122,7 @@ act_name_to_url = {
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
+    "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     #
     # 已过期活动
     #
@@ -167,7 +169,6 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
-    "DNF格斗大赛": "https://dnf.qq.com/cp/a20220402pk/index.htm",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",

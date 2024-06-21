@@ -1586,6 +1586,9 @@ def show_tips(cfg: Config):
             "斗鱼：https://www.douyu.com/topic/DNF16th?rid=9940062\n"
             "虎牙：https://www.huya.com/131415\n"
         ),
+        "24.6 wegame下载活动": (
+            "wegame的dnf启动按钮左侧有个下载活动按钮，点开可以领取三个一次性的小奖励，有兴趣的朋友可以自行参与"
+        ),
     }
 
     logger.info(

@@ -6885,7 +6885,7 @@ class DjcHelper:
         for idx, flowid in enumerate(signin_flowid_list):
             res = self.dnf_pk_wpe_op(f"签到第 {idx+1} 天", flowid)
             if "今日已签到" in res["msg"]:
-                logger.info(color("bold_yellow") + f"今日已签到，将跳过尝试后续天数签到")
+                logger.info(color("bold_yellow") + "今日已签到，将跳过尝试后续天数签到")
                 break
 
             time.sleep(3)
@@ -10220,7 +10220,7 @@ class DjcHelper:
             logger.info(color("bold_green") + f"每日盲盒，结果={res.json()}")
         else:
             async_message_box(
-                "（移除前每天弹窗）确认下这个签到抽奖活动是否还能继续抽奖，如果还可以，把这里改为继续运行，发个新版本，否则干掉这个分支的弹窗"
+                "（移除前每天弹窗）确认下这个签到抽奖活动是否还能继续抽奖，如果还可以，把这里改为继续运行，发个新版本，否则干掉这个分支的弹窗",
                 "（仅自己可见）colg签到抽奖活动",
                 open_url="https://bbs.colg.cn/forum-171-1.html",
             )

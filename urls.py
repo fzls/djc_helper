@@ -200,7 +200,6 @@ act_name_to_url = {
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
-    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
 }
 
 

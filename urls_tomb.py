@@ -11,6 +11,7 @@ not_ams_activities_tomb = [
 
 
 act_name_to_url_bomb = {
+    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
 

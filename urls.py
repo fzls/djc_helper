@@ -195,7 +195,6 @@ act_name_to_url = {
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
-    "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
 }
 
 
@@ -347,7 +346,6 @@ class Urls:
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
-        self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动

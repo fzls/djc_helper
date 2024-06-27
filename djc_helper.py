@@ -798,7 +798,6 @@ class DjcHelper:
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
             ("会员关怀", self.vip_mentor),
-            ("DNF强者之路", self.dnf_strong),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -6317,65 +6316,6 @@ class DjcHelper:
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
-        )
-
-    # --------------------------------------------DNF强者之路--------------------------------------------
-    @try_except()
-    def dnf_strong(self):
-        show_head_line("DNF强者之路功能")
-        self.show_amesvr_act_info(self.dnf_strong_op)
-
-        if not self.cfg.function_switches.get_dnf_strong or self.disable_most_activities():
-            logger.warning("未启用DNF强者之路功能，将跳过")
-            return
-
-        self.check_dnf_strong()
-
-        def query_ticket_count():
-            res = self.dnf_strong_op("查询数据", "747206", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-
-            return int(raw_info.sOutValue2)
-
-        self.dnf_strong_op("领取报名礼包", "747207")
-        self.dnf_strong_op("领取排行礼包", "747208")
-
-        self.dnf_strong_op("每日在线30分钟", "747222")
-        self.dnf_strong_op("通关一次强者之路 （试炼模式）", "747227")
-        self.dnf_strong_op("每日特权网吧登陆", "747228")
-
-        ticket = query_ticket_count()
-        logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
-        for idx in range_from_one(ticket):
-            self.dnf_strong_op(f"[{idx}/{ticket}]幸运夺宝", "747209")
-            if idx != ticket:
-                time.sleep(5)
-
-        self.dnf_strong_op("决赛普发礼包", "761894")
-        self.dnf_strong_op("决赛冠军礼包", "761893")
-
-    def check_dnf_strong(self):
-        self.check_bind_account(
-            "DNF强者之路",
-            get_act_url("DNF强者之路"),
-            activity_op_func=self.dnf_strong_op,
-            query_bind_flowid="747146",
-            commit_bind_flowid="747145",
-        )
-
-    def dnf_strong_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_strong
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF强者之路"),
-            **extra_params,
         )
 
     # --------------------------------------------命运的抉择挑战赛--------------------------------------------

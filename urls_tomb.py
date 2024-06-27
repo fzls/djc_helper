@@ -16,6 +16,7 @@ act_name_to_url_bomb = {
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
+    "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
 }
 
 
@@ -24,6 +25,7 @@ class UrlsTomb:
         # amesvr通用活动
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
+        self.iActivityId_dnf_strong = "366330"  # DNF强者之路
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

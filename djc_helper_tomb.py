@@ -18,11 +18,11 @@ from dao import (
     GuanjiaNewQueryLotteryInfo,
     GuanjiaNewRequest,
     RoleInfo,
-    parse_amesvr_common_info, AmesvrQueryFriendsInfo,
+    parse_amesvr_common_info, AmesvrQueryFriendsInfo, SpringFuDaiInfo,
 )
 from data_struct import to_raw_type
 from db import FireCrackersDB
-from first_run import is_weekly_first_run
+from first_run import is_weekly_first_run, is_first_run
 from log import color, logger
 from network import check_tencent_game_common_status_code
 from qq_login import LoginResult, QQLogin
@@ -31,7 +31,7 @@ from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS
 from urls import get_act_url, search_act
 from urls_tomb import UrlsTomb
-from util import base64_str, json_compact, range_from_one, show_head_line, try_except, show_end_time
+from util import base64_str, json_compact, range_from_one, show_head_line, try_except, show_end_time, async_message_box
 
 
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数
@@ -73,7 +73,190 @@ class DjcHelperTomb:
             ("会员关怀", self.dnf_vip_mentor),
             ("DNF福签大作战", self.dnf_fuqian),
             ("燃放爆竹活动", self.firecrackers),
+            ("新春福袋大作战", self.spring_fudai),
         ]
+
+    # --------------------------------------------新春福袋大作战--------------------------------------------
+    @try_except()
+    def spring_fudai(self):
+        show_head_line("新春福袋大作战")
+        self.show_amesvr_act_info(self.spring_fudai_op)
+
+        if not self.cfg.function_switches.get_spring_fudai or self.disable_most_activities():
+            logger.warning("未启用领取新春福袋大作战功能，将跳过")
+            return
+
+        self.check_spring_fudai()
+
+        inviter_sid = "0252c9b811d66dc1f0c9c6284b378e40"
+        if is_first_run("fudai_invite"):
+            msg = (
+                "Hello~，可否在稍后弹出的福袋大作战活动页面点一下确认接收哇（不会损失任何东西）\n"
+                "(〃'▽'〃)"
+                "（本消息只会弹出一次）\n"
+            )
+            async_message_box(msg, "帮忙点一点", open_url=f"{get_act_url('新春福袋大作战')}?type=2&sId={inviter_sid}")
+
+        def query_info():
+            # {"sOutValue1": "1|1|0", "sOutValue2": "1", "sOutValue3": "0", "sOutValue4": "0",
+            # "sOutValue5": "0252c9b811d66dc1f0c9c6284b378e40", "sOutValue6": "", "sOutValue7": "0", "sOutValue8": "4"}
+            res = self.spring_fudai_op("查询各种数据", "733432", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+            info = SpringFuDaiInfo()
+
+            temp = raw_info.sOutValue1.split("|")
+            info.today_has_take_fudai = temp[0] == "1"
+            info.fudai_count = int(raw_info.sOutValue4)
+            info.has_take_bind_award = raw_info.sOutValue2 == "1"
+            info.invited_ok_liushi_friends = int(raw_info.sOutValue7)
+            info.has_take_share_award = temp[1] == "1"
+            info.total_lottery_times = int(raw_info.sOutValue3)
+            info.lottery_times = info.total_lottery_times - int(temp[2])
+            info.date_info = int(raw_info.sOutValue8)
+
+            return info
+
+        info = query_info()
+
+        def send_friend_invitation(typStr, flowid, dayLimit):
+            if len(self.cfg.spring_fudai_receiver_qq_list) == 0:
+                return
+
+            spring_fudai_pskey = self.fetch_share_p_skey("赠送福袋")
+
+            send_count = 0
+            for sendQQ in self.cfg.spring_fudai_receiver_qq_list:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+                res = self.spring_fudai_op(
+                    f"发送{typStr}好友邀请-{sendQQ}赠送2积分",
+                    flowid,
+                    sendQQ=sendQQ,
+                    dateInfo=str(info.date_info),
+                    p_skey=spring_fudai_pskey,
+                )
+
+                send_count += 1
+                if int(res["ret"]) != 0 or send_count >= dayLimit:
+                    logger.warning(f"已达到本日邀请上限({dayLimit})，将停止邀请")
+                    return
+
+        def take_friend_awards(typStr, type, take_points_flowid):
+            page = 1
+            while True:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+
+                queryRes = self.spring_fudai_op(f"拉取接受的{typStr}好友列表", "733413", page=str(page), type=type)
+                if int(queryRes["ret"]) != 0 or queryRes["modRet"]["jData"]["iTotal"] == 0:
+                    logger.warning("没有更多接收邀请的好友了，停止领取积分")
+                    return
+
+                for friend_info in queryRes["modRet"]["jData"]["jData"]:
+                    takeRes = self.spring_fudai_op(
+                        f"邀请人领取{typStr}邀请{friend_info['iUin']}的积分",
+                        take_points_flowid,
+                        acceptId=friend_info["id"],
+                        needADD="2",
+                    )
+                    if int(takeRes["ret"]) != 0:
+                        logger.warning("似乎已达到今日上限，停止领取")
+                        return
+                    if takeRes["modRet"]["iRet"] != 0:
+                        logger.warning("出错了，停止领取，具体原因请看上一行的sMsg")
+                        return
+
+                page += 5
+
+        if not info.has_take_share_award:
+            self.spring_fudai_op("分享领取礼包", "733412")
+
+        # 邀请普通玩家（福袋）
+        if not info.has_take_bind_award:
+            self.spring_fudai_op("绑定大区获得1次获取福袋机会", "732406")
+        if not info.today_has_take_fudai:
+            self.spring_fudai_op("打开一个福袋", "732405")
+
+        self.spring_fudai_op(f"赠送好友福袋-{inviter_sid}", "733380", sId=inviter_sid)
+
+        send_friend_invitation("普通", "732407", 8)
+        take_friend_awards("普通", "1", "732550")
+        self.spring_fudai_op("普通好友接受邀请", "732548", sId=inviter_sid)
+        # 更新下数据
+        info = query_info()
+        logger.info(color("bold_yellow") + f"当前拥有{info.fudai_count}个福袋")
+
+        # 邀请流失玩家和领奖
+        self.spring_fudai_op("流失用户领取礼包", "732597")
+        self.spring_fudai_op("流失好友接受邀请", "732635", sId=inviter_sid)
+        for num in range(1, 6 + 1):
+            self.spring_fudai_op(f"邀请人领取邀请{num}个流失用户的接受礼包", "733369", userNum=str(num))
+        # 更新下数据
+        info = query_info()
+        logger.info(color("bold_yellow") + f"已成功邀请{info.invited_ok_liushi_friends}个流失好友")
+
+        # 抽奖
+        logger.info(
+            color("bold_yellow")
+            + f"当前共有{info.lottery_times}抽奖积分，历史累计获取数目为{info.total_lottery_times}抽奖积分"
+        )
+        for i in range(info.lottery_times):
+            self.spring_fudai_op(f"第{i + 1}次积分抽奖", "733411")
+
+        # 签到
+        self.spring_fudai_op("在线30min礼包", "732400", needADD="1")
+        self.spring_fudai_op("累计3天礼包", "732404", giftId="1470919")
+        self.spring_fudai_op("累计7天礼包", "732404", giftId="1470920")
+        self.spring_fudai_op("累计15天礼包", "732404", giftId="1470921")
+
+    def check_spring_fudai(self):
+        self.check_bind_account(
+            "新春福袋大作战",
+            get_act_url("新春福袋大作战"),
+            activity_op_func=self.spring_fudai_op,
+            query_bind_flowid="732399",
+            commit_bind_flowid="732398",
+        )
+
+    def spring_fudai_op(
+        self,
+        ctx,
+        iFlowId,
+        needADD="0",
+        page="",
+        type="",
+        dateInfo="",
+        sendQQ="",
+        sId="",
+        acceptId="",
+        userNum="",
+        giftId="",
+        p_skey="",
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.iActivityId_spring_fudai
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("新春福袋大作战"),
+            needADD=needADD,
+            page=page,
+            type=type,
+            dateInfo=dateInfo,
+            sendQQ=sendQQ,
+            sId=sId,
+            acceptId=acceptId,
+            userNum=userNum,
+            giftId=giftId,
+            **extra_params,
+            extra_cookies=f"p_skey={p_skey}",
+        )
 
     # --------------------------------------------燃放爆竹活动--------------------------------------------
     @try_except()

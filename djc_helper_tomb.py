@@ -12,17 +12,19 @@ import requests
 from config import AccountConfig, CommonConfig
 from const import cached_dir, guanjia_skey_version
 from dao import (
+    AmesvrQueryFriendsInfo,
     BuyInfo,
     DnfCollectionInfo,
     GuanjiaNewLotteryResult,
     GuanjiaNewQueryLotteryInfo,
     GuanjiaNewRequest,
     RoleInfo,
-    parse_amesvr_common_info, AmesvrQueryFriendsInfo, SpringFuDaiInfo,
+    SpringFuDaiInfo,
+    parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
 from db import FireCrackersDB
-from first_run import is_weekly_first_run, is_first_run
+from first_run import is_first_run, is_weekly_first_run
 from log import color, logger
 from network import check_tencent_game_common_status_code
 from qq_login import LoginResult, QQLogin
@@ -31,7 +33,7 @@ from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS
 from urls import get_act_url, search_act
 from urls_tomb import UrlsTomb
-from util import base64_str, json_compact, range_from_one, show_head_line, try_except, show_end_time, async_message_box
+from util import async_message_box, base64_str, json_compact, range_from_one, show_end_time, show_head_line, try_except
 
 
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数

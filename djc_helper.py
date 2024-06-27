@@ -20,11 +20,10 @@ import requests
 import json_parser
 from black_list import check_in_black_list
 from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperationConfig, config, load_config
-from const import appVersion, cached_dir, guanjia_skey_version, sVersionName, vscode_online_url
+from const import appVersion, cached_dir, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
     AmesvrCommonModRet,
-    AmesvrQueryFriendsInfo,
     AmesvrQueryRole,
     AmesvrUserBindInfo,
     BuyInfo,
@@ -35,7 +34,6 @@ from dao import (
     DnfChronicleMatchServerCommonResponse,
     DnfChronicleMatchServerRequestUserRequest,
     DnfChronicleMatchServerRequestUserResponse,
-    DnfCollectionInfo,
     DnfHelperChronicleBasicAwardInfo,
     DnfHelperChronicleBasicAwardList,
     DnfHelperChronicleBindInfo,
@@ -50,9 +48,6 @@ from dao import (
     DnfRoleInfoList,
     GameRoleInfo,
     GoodsInfo,
-    GuanjiaNewLotteryResult,
-    GuanjiaNewQueryLotteryInfo,
-    GuanjiaNewRequest,
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
     IdeActInfo,
@@ -80,7 +75,6 @@ from dao import (
     ShenJieGrowUpInfo,
     ShenJieGrowUpStagePack,
     ShenJieGrowUpTaskData,
-    SpringFuDaiInfo,
     TemporaryChangeBindRoleInfo,
     VoteEndWorkInfo,
     VoteEndWorkList,
@@ -114,7 +108,6 @@ from db import (
     DianzanDB,
     DnfHelperChronicleExchangeListDB,
     DnfHelperChronicleUserActivityTopInfoDB,
-    FireCrackersDB,
     WelfareDB,
 )
 from encrypt import make_dnf_helper_signature, make_dnf_helper_signature_data
@@ -143,7 +136,6 @@ from urls import (
     get_not_ams_act,
     get_not_ams_act_desc,
     not_know_end_time____,
-    search_act,
 )
 from usage_count import increase_counter
 from util import (
@@ -181,7 +173,6 @@ from util import (
     post_json_to_data,
     range_from_one,
     remove_suffix,
-    show_end_time,
     show_head_line,
     show_quick_edit_mode_tip,
     start_and_end_date_of_a_month,

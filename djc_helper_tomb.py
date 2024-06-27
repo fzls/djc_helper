@@ -3,15 +3,38 @@ from __future__ import annotations
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数
 from typing import Callable
 
+import requests
+
+from config import AccountConfig, CommonConfig
 from dao import BuyInfo
 from log import logger
+from network import check_tencent_game_common_status_code
+from qq_login import LoginResult
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
-from util import show_head_line, try_except
+from urls import Urls, get_act_url
+from util import range_from_one, show_head_line, try_except
 
 
 class DjcHelperTomb:
     def __init__(self, account_config, common_config, user_buy_info: BuyInfo | None = None):
+        self.cfg: AccountConfig = account_config
+        self.common_cfg: CommonConfig = common_config
+
+        # 初始化部分字段
+        self.lr: LoginResult | None = None
+
+        # 配置加载后，尝试读取本地缓存的skey
+        self.local_load_uin_skey()
+
+        # 初始化网络相关设置
+        self.init_network()
+
+        # 相关链接
+        self.urls = Urls()
+
+        self.user_buy_info = user_buy_info
+
         self.zzconfig = zzconfig()
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -81,3 +104,46 @@ class DjcHelperTomb:
     def send_card_by_name(self, card_name, to_qq):
         card_info_map = parse_card_group_info_map(self.zzconfig)
         return self.send_card(card_name, card_info_map[card_name].id, to_qq, print_res=True)
+
+    # note: 以下这部分都是仅用来占位的，方便搬过来的过时代码不提示错误
+
+    def local_load_uin_skey(self):
+        pass
+
+    def init_network(self):
+        pass
+
+    def show_not_ams_act_info(self, act_name: str):
+        pass
+
+    def disable_most_activities(self):
+        return False
+
+    def get_dnf_bind_role(self):
+        pass
+
+    def fetch_pskey(self):
+        pass
+
+
+    def get(
+        self,
+        ctx,
+        url,
+        pretty=False,
+        print_res=True,
+        is_jsonp=False,
+        is_normal_jsonp=False,
+        need_unquote=True,
+        extra_cookies="",
+        check_fn: Callable[[requests.Response], Exception | None] | None = check_tencent_game_common_status_code,
+        extra_headers: dict[str, str] | None = None,
+        use_this_cookies="",
+        prefix_to_remove="",
+        suffix_to_remove="",
+        **params,
+    ) -> dict:
+        return {}
+
+    def qq(self):
+        pass

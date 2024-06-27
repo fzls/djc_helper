@@ -20,6 +20,7 @@ act_name_to_url_bomb = {
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
+    "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
 }
 
 
@@ -30,6 +31,7 @@ class UrlsTomb:
         self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
+        self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

@@ -191,7 +191,6 @@ act_name_to_url = {
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
-    "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
 }
 
 
@@ -336,7 +335,6 @@ class Urls:
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
-        self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛

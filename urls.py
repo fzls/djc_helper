@@ -189,7 +189,6 @@ act_name_to_url = {
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
     "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
-    "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
 }
 
 
@@ -310,7 +309,6 @@ class Urls:
         self.iActivityId_xinyue_battle_ground = "366480"  # DNF地下城与勇士心悦特权专区
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
-        self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻

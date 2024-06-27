@@ -792,7 +792,6 @@ class DjcHelper:
             ("阿拉德勇士征集令", self.dnf_warriors_call),
             ("dnf漂流瓶", self.dnf_drift),
             ("暖冬好礼活动", self.warm_winter),
-            ("史诗之路来袭活动合集", self.dnf_1224),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -3452,54 +3451,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("wegame国庆活动【秋风送爽关怀常伴】"),
-            **extra_params,
-        )
-
-    # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
-    @try_except()
-    def dnf_1224(self):
-        show_head_line("史诗之路来袭活动合集")
-        self.show_amesvr_act_info(self.dnf_1224_op)
-
-        if not self.cfg.function_switches.get_dnf_1224 or self.disable_most_activities():
-            logger.warning("未启用领取史诗之路来袭活动合集功能，将跳过")
-            return
-
-        self.check_dnf_1224()
-
-        self.dnf_1224_op("勇士礼包", "730665")
-
-        self.dnf_1224_op("30分签到礼包", "730666")
-        check_days = self.get_dnf_1224_checkin_days()
-        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {check_days} 天")
-        self.dnf_1224_op("3日礼包", "730663")
-        self.dnf_1224_op("7日礼包", "730667")
-        self.dnf_1224_op("15日礼包", "730668")
-
-    def get_dnf_1224_checkin_days(self):
-        res = self.dnf_1224_op("查询签到信息", "730670", print_res=False)
-        return int(res["modRet"]["total"])
-
-    def check_dnf_1224(self):
-        self.check_bind_account(
-            "qq视频-史诗之路来袭活动合集",
-            get_act_url("史诗之路来袭活动合集"),
-            activity_op_func=self.dnf_1224_op,
-            query_bind_flowid="730660",
-            commit_bind_flowid="730659",
-        )
-
-    def dnf_1224_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_1224
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("史诗之路来袭活动合集"),
             **extra_params,
         )
 

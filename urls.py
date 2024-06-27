@@ -75,7 +75,6 @@ not_ams_activities = [
     #
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
-    newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
@@ -171,7 +170,6 @@ act_name_to_url = {
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
@@ -198,7 +196,6 @@ act_name_to_url = {
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
-    "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
 }
 
 
@@ -461,10 +458,6 @@ class Urls:
 
         # qq视频 - 爱玩
         self.qq_video_iwan = "https://act.iwan.qq.com/trpc.iwan.mission_system_server.MissionSystemSvr/dealSimpleMission?platformId=10&platformid=10&guid=&device=&acctype=qq&missionId={missionId}&gameId=48&sPlat=&sArea=&serverId={serverId}&sRoleId={sRoleId}"
-
-        # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
-        self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
-        self.guanjia_new = "https://{domain_name}/{api}"
 
         # 助手排行榜活动
         # 查询，额外参数：uin(qq)、userId/token

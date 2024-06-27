@@ -7,13 +7,15 @@ from urls import get_act_url, newNotAmsActInfo
 
 not_ams_activities_tomb = [
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
+    newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
 ]
-
 
 act_name_to_url_bomb = {
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
+    "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
+    "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
 }
 
 
@@ -33,3 +35,7 @@ class UrlsTomb:
         self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
         # 赠送卡片：参数：cardId，from_qq，to_qq, actName
         self.ark_lottery_send_card = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13333":{{"cardId":{cardId},"fromUin":{from_qq},"toUin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
+
+        # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
+        self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
+        self.guanjia_new = "https://{domain_name}/{api}"

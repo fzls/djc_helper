@@ -336,7 +336,7 @@ def _do_check_all_skey_and_pskey(
 
     if not check_skey_only:
         djcHelper.get_bind_role_list(print_warning=False)
-        djcHelper.fetch_guanjia_openid(print_warning=False)
+        # djcHelper.fetch_guanjia_openid(print_warning=False)
 
     return djcHelper
 

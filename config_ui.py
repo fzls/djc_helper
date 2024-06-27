@@ -2943,9 +2943,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("超级会员", "get_dnf_super_vip"),
             ("黄钻", "get_dnf_yellow_diamond"),
         ],
-        "安全管家pskey": [
-            ("管家蚊子腿", "get_guanjia"),
-        ],
     }
 
     # 已过期的活动，方便快速加回去
@@ -2984,6 +2981,9 @@ class FunctionSwitchesConfigUi(QWidget):
         ],
         "QQ空间pskey": [
             ("qq会员杯", "get_dnf_club_vip"),
+        ],
+        "安全管家pskey": [
+            ("管家蚊子腿", "get_guanjia"),
         ],
     }
 

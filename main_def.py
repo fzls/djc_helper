@@ -19,22 +19,14 @@ from config_cloud import config_cloud, try_update_config_cloud
 from const import downloads_dir
 from dao import BuyInfo, BuyRecord
 from db import DnfHelperChronicleUserActivityTopInfoDB, UserBuyInfoDB
-from djc_helper import (
-    DjcHelper,
-    get_prize_names,
-    is_new_version_ark_lottery,
-    notify_same_account_try_login_at_multiple_threads,
-    run_act,
-)
+from djc_helper import DjcHelper, get_prize_names, notify_same_account_try_login_at_multiple_threads, run_act
 from exceptions_def import ArkLotteryTargetQQSendByRequestReachMaxCount, SameAccountTryLoginAtMultipleThreadsException
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run
 from log import asciiReset, color, logger
 from notice import NoticeManager
 from pool import get_pool, get_pool_size, init_pool
 from qq_login import QQLogin
-from qzone_activity import QzoneActivity
 from server import get_pay_server_addr
-from setting import parse_card_group_info_map, zzconfig
 from show_usage import (
     global_usage_counter_name,
     my_active_monthly_pay_usage_counter_name,
@@ -400,14 +392,9 @@ def auto_send_cards(cfg: Config):
     # 赠送卡片
     for idx, target_qq in enumerate(target_qqs):
         if target_qq in qq_to_djcHelper:
-            left_times: int
-            extra_message = ""
-            if is_new_version_ark_lottery():
-                # 新版本里似乎没有查询接口，先随便写一个固定值
-                left_times = 4 * len(cfg.account_configs)
-                extra_message = "（这个数字是4*账号数，新版集卡查询不到实际数值）"
-            else:
-                left_times = qq_to_djcHelper[target_qq].ark_lottery_query_left_times(target_qq)
+            # 新版本里似乎没有查询接口，先随便写一个固定值
+            left_times = 4 * len(cfg.account_configs)
+            extra_message = "（这个数字是4*账号数，新版集卡查询不到实际数值）"
 
             name = qq_to_djcHelper[target_qq].cfg.name
             logger.warning(
@@ -441,13 +428,8 @@ def auto_send_cards(cfg: Config):
                 # if is_new_version_ark_lottery():
                 #     try_copy_cards(djcHelper)
 
-                if is_new_version_ark_lottery():
-                    djcHelper.dnf_ark_lottery_take_ark_lottery_awards()
-                    djcHelper.dnf_ark_lottery_try_lottery_using_cards()
-                else:
-                    qa = QzoneActivity(djcHelper, lr)
-                    qa.take_ark_lottery_awards(print_warning=False)
-                    qa.try_lottery_using_cards(print_warning=False)
+                djcHelper.dnf_ark_lottery_take_ark_lottery_awards()
+                djcHelper.dnf_ark_lottery_try_lottery_using_cards()
 
 
 def try_copy_cards(djcHelper: DjcHelper):
@@ -501,17 +483,8 @@ def query_account_ark_lottery_info(
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list(print_warning=False)
 
-    card_name_to_counts: Dict[str, int]
-    prize_counts: Dict[str, int]
-
-    if is_new_version_ark_lottery():
-        card_name_to_counts = djcHelper.dnf_ark_lottery_get_card_counts()
-        prize_counts = djcHelper.dnf_ark_lottery_get_prize_counts()
-    else:
-        qa = QzoneActivity(djcHelper, lr)
-
-        card_name_to_counts = qa.get_card_counts()
-        prize_counts = qa.get_prize_counts()
+    card_name_to_counts = djcHelper.dnf_ark_lottery_get_card_counts()
+    prize_counts = djcHelper.dnf_ark_lottery_get_prize_counts()
 
     logger.info(f"{idx:2d}/{total_account} 账号 {padLeftRight(account_config.name, 12)} 的数据拉取完毕")
 
@@ -563,25 +536,11 @@ def send_card(
                 continue
             # 如果某账户有这个卡，则赠送该当前玩家，并结束本回合赠卡
             if card_name_to_count[card_name] > 0:
-                send_ok: bool
-                index: str
+                send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(
+                    card_name, target_qq, target_djc_helper=qq_to_djcHelper[target_qq]
+                )
 
-                if is_new_version_ark_lottery():
-                    send_ok = qq_to_djcHelper[qq].dnf_ark_lottery_send_card(
-                        card_name, target_qq, target_djc_helper=qq_to_djcHelper[target_qq]
-                    )
-
-                    index = new_ark_lottery_parse_index_from_card_id(card_name)
-                else:
-                    card_info_map = parse_card_group_info_map(qq_to_djcHelper[target_qq].zzconfig)
-
-                    send_ok = (
-                        qq_to_djcHelper[qq]
-                        .send_card(card_name, card_info_map[card_name].id, target_qq)
-                        .get("ecode", -1)
-                        == 0
-                    )
-                    index = card_info_map[card_name].index
+                index = new_ark_lottery_parse_index_from_card_id(card_name)
 
                 card_name_to_count[card_name] -= 1
                 qq_to_card_name_to_counts[target_qq][card_name] += 1
@@ -725,9 +684,8 @@ def show_lottery_status(ctx, cfg: Config, need_show_tips=False):
         logger.info(tableify(row, colSizes))
     logger.info(tableify(summaryCols, colSizes))
 
-    if is_new_version_ark_lottery():
-        logger.info("")
-        logger.info("新版集卡不再可以查询剩余领奖次数，上面右侧四个值没有实际含义，望周知")
+    logger.info("")
+    logger.info("新版集卡不再可以查询剩余领奖次数，上面右侧四个值没有实际含义，望周知")
 
     # 打印提示
     if need_show_tips and len(accounts_that_should_enable_cost_card_to_lottery) > 0:
@@ -742,39 +700,18 @@ def make_ark_lottery_card_and_award_info():
     order_map = {}
     # 奖励名称列表
     prizeDisplayTitles = []
-    if is_new_version_ark_lottery():
-        for row in range_from_one(3):
-            for col in range_from_one(4):
-                index = f"{row}-{col}"
-                card_id = str(4 * (row - 1) + col)
 
-                order_map[index] = card_id
+    for row in range_from_one(3):
+        for col in range_from_one(4):
+            index = f"{row}-{col}"
+            card_id = str(4 * (row - 1) + col)
 
-        for title in get_prize_names():
-            order_map[title] = title
-            prizeDisplayTitles.append(title)
-    else:
-        lottery_zzconfig = zzconfig()
-        card_info_map = parse_card_group_info_map(lottery_zzconfig)
-        # 卡片编码 => 名称
-        for name, card_info in card_info_map.items():
-            order_map[card_info.index] = name
+            order_map[index] = card_id
 
-        # 奖励展示名称 => 实际名称
-        groups = [
-            lottery_zzconfig.prizeGroups.group1,
-            lottery_zzconfig.prizeGroups.group2,
-            lottery_zzconfig.prizeGroups.group3,
-            lottery_zzconfig.prizeGroups.group4,
-        ]
-        for group in groups:
-            displayTitle = group.title
-            if len(displayTitle) > 4 and "礼包" in displayTitle:
-                # 将 全民竞速礼包 这种名称替换为 全民竞速
-                displayTitle = displayTitle.replace("礼包", "")
+    for title in get_prize_names():
+        order_map[title] = title
+        prizeDisplayTitles.append(title)
 
-            order_map[displayTitle] = group.title
-            prizeDisplayTitles.append(displayTitle)
     return order_map, prizeDisplayTitles
 
 
@@ -797,17 +734,8 @@ def query_lottery_status(
     djcHelper.get_bind_role_list(print_warning=False)
 
     # 获取卡片和奖励数目，其中新版本卡片为 id=>count ，旧版本卡片为 name=>count
-    card_counts: Dict[str, int]
-    prize_counts: Dict[str, int]
-
-    if is_new_version_ark_lottery():
-        card_counts = djcHelper.dnf_ark_lottery_get_card_counts()
-        prize_counts = djcHelper.dnf_ark_lottery_get_prize_counts()
-    else:
-        qa = QzoneActivity(djcHelper, lr)
-
-        card_counts = qa.get_card_counts()
-        prize_counts = qa.get_prize_counts()
+    card_counts = djcHelper.dnf_ark_lottery_get_card_counts()
+    prize_counts = djcHelper.dnf_ark_lottery_get_prize_counts()
 
     # 构建本行数据
     cols = [idx, account_config.name]

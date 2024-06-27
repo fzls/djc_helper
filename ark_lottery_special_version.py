@@ -2,7 +2,7 @@ import datetime
 from multiprocessing import freeze_support
 
 from config import AccountConfig, CommonConfig, config, load_config
-from djc_helper import DjcHelper, is_new_version_ark_lottery
+from djc_helper import DjcHelper
 from log import color, logger
 from main_def import (
     _show_head_line,
@@ -99,10 +99,7 @@ def do_run(idx: int, account_config: AccountConfig, common_config: CommonConfig)
     djcHelper.check_skey_expired()
     djcHelper.get_bind_role_list()
 
-    if is_new_version_ark_lottery():
-        djcHelper.dnf_ark_lottery()
-    else:
-        djcHelper.ark_lottery()
+    djcHelper.dnf_ark_lottery()
 
     used_time = datetime.datetime.now() - start_time
     _show_head_line(f"处理第{idx}个账户({account_config.name}) 共耗时 {used_time}")

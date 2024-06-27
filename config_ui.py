@@ -68,7 +68,7 @@ from qt_wrapper import (
     show_message,
     str_to_list,
 )
-from setting import dnf_server_id_to_name, dnf_server_name_list, dnf_server_name_to_id, zzconfig
+from setting import dnf_server_id_to_name, dnf_server_name_list, dnf_server_name_to_id
 from update import get_update_info, try_manaual_update, update_fallback
 from version import now_version, ver_time
 
@@ -101,7 +101,7 @@ from PyQt5.QtWidgets import (
 
 from dao import CardSecret, DnfRoleInfo
 from data_struct import ConfigInterface, to_raw_type
-from djc_helper import DjcHelper, is_new_version_ark_lottery
+from djc_helper import DjcHelper
 from ga import GA_REPORT_TYPE_PAGE_VIEW
 from game_info import get_name_2_mobile_game_info_map
 from main_def import (
@@ -3243,10 +3243,7 @@ class ArkLotteryConfigUi(QWidget):
         )
 
     def get_ark_lottery_act_id(self) -> int:
-        if is_new_version_ark_lottery():
-            return Urls().pesudo_ark_lottery_act_id
-        else:
-            return zzconfig().actid
+        return Urls().pesudo_ark_lottery_act_id
 
 
 class VipMentorConfigUi(QWidget):

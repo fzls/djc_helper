@@ -2956,15 +2956,11 @@ class DjcHelper:
                 break
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
-    def is_new_version_ark_lottery(self) -> bool:
-        """是否是新版集卡活动"""
-        enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
-        return self.dnf_ark_lottery in enabled_payed_act_funcs
 
     def is_ark_lottery_enabled(self) -> bool:
         """当前生效的付费活动中是否包含集卡活动，用于判断主流程中是否需要进行自动赠送卡片以及展示集卡信息等流程"""
         enabled_payed_act_funcs = [func for name, func in self.payed_activities()]
-        return self.dnf_ark_lottery in enabled_payed_act_funcs or self.ark_lottery in enabled_payed_act_funcs
+        return self.dnf_ark_lottery in enabled_payed_act_funcs
 
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
@@ -3157,6 +3153,7 @@ class DjcHelper:
     def dnf_ark_lottery_send_card(
         self, card_id: str, target_qq: str, card_count: int = 1, target_djc_helper: DjcHelper | None = None
     ) -> bool:
+        """赠送指定数目的某个卡片给指定QQ"""
         url = self.urls.qzone_activity_new_send_card.format(g_tk=getACSRFTokenForAMS(self.lr.p_skey))
         # note: 这个packet id需要 抓手机包获取
         body = {
@@ -3285,6 +3282,7 @@ class DjcHelper:
 
     @try_except(return_val_on_except={})
     def dnf_ark_lottery_get_card_counts(self) -> dict[str, int]:
+        """获取卡片数目"""
         url = self.urls.qzone_activity_new_query_card.format(
             packetID=self.ark_lottery_packet_id_card,
             g_tk=getACSRFTokenForAMS(self.lr.p_skey),
@@ -3307,7 +3305,7 @@ class DjcHelper:
         return card_counts
 
     def dnf_ark_lottery_get_prize_counts(self) -> dict[str, int]:
-        # 新版本集卡无法查询奖励剩余兑换次数，因此直接写死，从而可以兼容旧版本代码
+        """新版本集卡无法查询奖励剩余兑换次数，因此直接写死，从而可以兼容旧版本代码"""
         return {
             "第一排": 1,
             "第二排": 1,
@@ -14532,10 +14530,6 @@ def notify_same_account_try_login_at_multiple_threads(account_name: str):
         + "\n",
         20,
     )
-
-
-def is_new_version_ark_lottery() -> bool:
-    return fake_djc_helper().is_new_version_ark_lottery()
 
 
 def is_ark_lottery_enabled() -> bool:

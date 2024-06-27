@@ -192,7 +192,6 @@ act_name_to_url = {
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
-    "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
 }
 
 
@@ -335,7 +334,6 @@ class Urls:
         self.iActivityId_dnf_wegame = "603490"  # WeGame活动
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
-        self.iActivityId_dnf_fuqian = "362403"  # DNF福签大作战
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动

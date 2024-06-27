@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import time
 from typing import Callable
@@ -12,6 +13,7 @@ from config import AccountConfig, CommonConfig
 from const import cached_dir, guanjia_skey_version
 from dao import (
     BuyInfo,
+    DnfCollectionInfo,
     GuanjiaNewLotteryResult,
     GuanjiaNewQueryLotteryInfo,
     GuanjiaNewRequest,
@@ -19,13 +21,14 @@ from dao import (
     parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
+from first_run import is_weekly_first_run
 from log import color, logger
 from network import check_tencent_game_common_status_code
 from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS
-from urls import get_act_url
+from urls import get_act_url, search_act
 from urls_tomb import UrlsTomb
 from util import base64_str, json_compact, range_from_one, show_head_line, try_except
 
@@ -67,7 +70,137 @@ class DjcHelperTomb:
             ("DNF强者之路", self.dnf_strong),
             ("会员关怀", self.vip_mentor),
             ("会员关怀", self.dnf_vip_mentor),
+            ("DNF福签大作战", self.dnf_fuqian),
         ]
+
+    # --------------------------------------------DNF福签大作战--------------------------------------------
+    @try_except()
+    def dnf_fuqian(self):
+        show_head_line("DNF福签大作战")
+        self.show_amesvr_act_info(self.dnf_fuqian_op)
+
+        if not self.cfg.function_switches.get_dnf_fuqian or self.disable_most_activities():
+            logger.warning("未启用领取DNF福签大作战功能，将跳过")
+            return
+
+        self.check_dnf_fuqian()
+
+        def query_info():
+            res = self.dnf_fuqian_op("查询资格", "742112", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            info = DnfCollectionInfo()
+            info.has_init = raw_info.sOutValue2 != "0"
+            info.send_total = int(raw_info.sOutValue3)
+            info.total_page = math.ceil(info.send_total / 6)
+            info.luckyCount = int(raw_info.sOutValue5)
+            info.scoreCount = int(raw_info.sOutValue6)
+            info.openLuckyCount = int(raw_info.sOutValue7)
+
+            return info
+
+        def take_invite_awards():
+            act_info = search_act(self.urls.iActivityId_dnf_fuqian)
+            is_last_day = False
+            if act_info is not None and act_info.is_last_day():
+                is_last_day = True
+
+            if not is_last_day and not is_weekly_first_run(
+                f"fuqian_take_invite_awards_{self.cfg.get_account_cache_key()}"
+            ):
+                logger.warning("本周已运行过领取邀请奖励，暂不继续领取~")
+                return
+
+            info = query_info()
+            for page in range(1, info.total_page + 1):
+                res = self.dnf_fuqian_op(
+                    f"查询第{page}/{info.total_page}页邀请成功的列表", "744443", sendPage=str(page)
+                )
+                data = res["modRet"]["jData"]
+                logger.info(data["iTotal"])
+                if data["iTotal"] > 0:
+                    for invite_info in data["jData"]:
+                        if invite_info["iGet"] == "0":
+                            uin = invite_info["iUin2"]
+                            iId = invite_info["iId"]
+                            self.dnf_fuqian_op(f"领取第{page}页积分奖励-{uin}", "743861", iId=iId)
+                else:
+                    logger.info("没有更多已邀请好友了，将跳过~")
+                    return
+
+        # 正式逻辑如下
+
+        info = query_info()
+        if not info.has_init:
+            self.dnf_fuqian_op("初次赠送一个福签积分", "742513")
+        self.dnf_fuqian_op("随机抽一个福签", "742491")
+
+        self.dnf_fuqian_op("幸运玩家礼包领取", "742315")
+
+        for sCode in [
+            "4f739a998cb44201484a8fa7d4e9eaed58e1576e312b70a2cbf17214e19a2ec0",
+            "c79fd5c303d0d9a8421a427badae87fd58e1576e312b70a2cbf17214e19a2ec0",
+            *self.common_cfg.scode_list_accept_give,
+        ]:
+            self.dnf_fuqian_op(
+                "接受福签赠送", "742846", sCode=sCode, sNickName=quote_plus(quote_plus(quote_plus("小号")))
+            )
+        for sCode in [
+            "f3256878f5744a90d9efe0ee6f4d3c3158e1576e312b70a2cbf17214e19a2ec0",
+            "f43f1d4d525f55ccd88ff03b60638e0058e1576e312b70a2cbf17214e19a2ec0",
+            *self.common_cfg.scode_list_accept_ask,
+        ]:
+            self.dnf_fuqian_op("接受福签索要", "742927", sCode=sCode)
+
+        if len(self.cfg.spring_fudai_receiver_qq_list) != 0:
+            share_pskey = self.fetch_share_p_skey("福签赠送")
+            for qq in self.cfg.spring_fudai_receiver_qq_list:
+                self.dnf_fuqian_op(f"福签赠送-{qq}", "742115", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
+                self.dnf_fuqian_op(f"福签索要-{qq}", "742824", fuin=str(qq), extra_cookies=f"p_skey={share_pskey}")
+        else:
+            logger.warning(color("bold_yellow") + "未配置新春福袋大作战邀请列表, 将跳过赠送福签")
+
+        take_invite_awards()
+
+        self.dnf_fuqian_op("福签累计奖励1", "742728")
+        self.dnf_fuqian_op("福签累计奖励2", "742732")
+        self.dnf_fuqian_op("福签累计奖励3", "742733")
+        self.dnf_fuqian_op("福签累计奖励4", "742734")
+        self.dnf_fuqian_op("福签累计奖励5", "742735")
+        self.dnf_fuqian_op("福签累计奖励6", "742736")
+        self.dnf_fuqian_op("福签累计奖励7", "742737")
+        self.dnf_fuqian_op("福签累计奖励20", "742738")
+
+        info = query_info()
+        logger.info(color("bold_cyan") + f"当前共有{info.scoreCount}个积分")
+        for idx in range(info.scoreCount):
+            self.dnf_fuqian_op(f"第{idx + 1}次积分夺宝并等待5秒", "742740")
+            time.sleep(5)
+
+        self.dnf_fuqian_op("分享奖励", "742742")
+
+    def check_dnf_fuqian(self):
+        self.check_bind_account(
+            "DNF福签大作战",
+            get_act_url("DNF福签大作战"),
+            activity_op_func=self.dnf_fuqian_op,
+            query_bind_flowid="742110",
+            commit_bind_flowid="742109",
+        )
+
+    def dnf_fuqian_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_fuqian
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF福签大作战"),
+            **extra_params,
+        )
 
     # --------------------------------------------会员关怀--------------------------------------------
     @try_except()
@@ -1012,7 +1145,6 @@ class DjcHelperTomb:
     ):
         return {}
 
-
     def payed_activities(self) -> list[tuple[str, Callable]]:
         return []
 
@@ -1023,3 +1155,6 @@ class DjcHelperTomb:
         self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str
     ) -> dict | None:
         return {}
+
+    def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 600) -> str:
+        return ""

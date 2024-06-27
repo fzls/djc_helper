@@ -65,7 +65,69 @@ class DjcHelperTomb:
             ("管家蚊子腿", self.guanjia_new),
             ("管家蚊子腿", self.guanjia_new_dup),
             ("DNF强者之路", self.dnf_strong),
+            ("会员关怀", self.vip_mentor),
+            ("会员关怀", self.dnf_vip_mentor),
         ]
+
+    # --------------------------------------------会员关怀--------------------------------------------
+    @try_except()
+    def vip_mentor(self):
+        show_head_line("会员关怀")
+        self.show_not_ams_act_info("会员关怀")
+
+        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
+            logger.warning("未启用领取会员关怀功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.fetch_pskey()
+        if self.lr is None:
+            return
+
+        qa = QzoneActivity(self, self.lr)
+        qa.vip_mentor()
+
+    # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
+    # note：对接流程与上方黄钻完全一致，参照其流程即可
+    @try_except()
+    def dnf_vip_mentor(self):
+        get_act_url("会员关怀")
+        show_head_line("QQ空间会员关怀")
+        self.show_not_ams_act_info("会员关怀")
+
+        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
+            logger.warning("未启用领取QQ空间会员关怀功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.fetch_pskey()
+        if self.lr is None:
+            return
+
+        # 礼包二
+        lucky_act_id = "67613_73c7557f"
+        self.qzone_act_op("关怀礼包 - 当前角色", lucky_act_id)
+        self.qzone_act_op(
+            "关怀礼包 - 尝试使用配置关怀角色",
+            lucky_act_id,
+            act_req_data=self.try_make_lucky_user_req_data(
+                "关怀", self.cfg.vip_mentor.guanhuai_dnf_server_id, self.cfg.vip_mentor.guanhuai_dnf_role_id
+            ),
+        )
+
+        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "67615_38806738")
+        for idx in range_from_one(10):
+            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "67616_c33730b6")
+            if res.get("Data", "") == "":
+                break
 
     # --------------------------------------------DNF强者之路--------------------------------------------
     @try_except()
@@ -953,3 +1015,11 @@ class DjcHelperTomb:
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
         return []
+
+    def qzone_act_op(self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True):
+        return {}
+
+    def try_make_lucky_user_req_data(
+        self, act_name: str, lucky_dnf_server_id: str, lucky_dnf_role_id: str
+    ) -> dict | None:
+        return {}

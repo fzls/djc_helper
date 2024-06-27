@@ -764,7 +764,6 @@ class DjcHelper:
             ("我的小屋", self.dnf_my_home),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("幸运勇士", self.dnf_lucky_user),
-            ("会员关怀", self.dnf_vip_mentor),
             ("KOL", self.dnf_kol),
             ("黄钻", self.dnf_yellow_diamond),
             ("心悦猫咪", self.xinyue_cat),
@@ -797,7 +796,6 @@ class DjcHelper:
             ("新春福袋大作战", self.spring_fudai),
             ("燃放爆竹活动", self.firecrackers),
             ("DNF福签大作战", self.dnf_fuqian),
-            ("会员关怀", self.vip_mentor),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2908,44 +2906,6 @@ class DjcHelper:
                 },
             )
         self.qzone_act_op("分享领取礼包", "66616_44f492ad")
-
-    # --------------------------------------------QQ空间 新版回归关怀--------------------------------------------
-    # note：对接流程与上方黄钻完全一致，参照其流程即可
-    @try_except()
-    def dnf_vip_mentor(self):
-        get_act_url("会员关怀")
-        show_head_line("QQ空间会员关怀")
-        self.show_not_ams_act_info("会员关怀")
-
-        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
-            logger.warning("未启用领取QQ空间会员关怀功能，将跳过")
-            return
-
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
-        self.fetch_pskey()
-        if self.lr is None:
-            return
-
-        # 礼包二
-        lucky_act_id = "67613_73c7557f"
-        self.qzone_act_op("关怀礼包 - 当前角色", lucky_act_id)
-        self.qzone_act_op(
-            "关怀礼包 - 尝试使用配置关怀角色",
-            lucky_act_id,
-            act_req_data=self.try_make_lucky_user_req_data(
-                "关怀", self.cfg.vip_mentor.guanhuai_dnf_server_id, self.cfg.vip_mentor.guanhuai_dnf_role_id
-            ),
-        )
-
-        self.qzone_act_op("每日登录游戏增加两次抽奖机会", "67615_38806738")
-        for idx in range_from_one(10):
-            res = self.qzone_act_op(f"尝试第{idx}次抽奖", "67616_c33730b6")
-            if res.get("Data", "") == "":
-                break
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
 
@@ -9626,28 +9586,6 @@ class DjcHelper:
         如 test 编码为 s$4$"test";
         """
         return f's${utf8len(s)}$"{s}";'
-
-    # --------------------------------------------会员关怀--------------------------------------------
-    @try_except()
-    def vip_mentor(self):
-        show_head_line("会员关怀")
-        self.show_not_ams_act_info("会员关怀")
-
-        if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
-            logger.warning("未启用领取会员关怀功能，将跳过")
-            return
-
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
-        self.fetch_pskey()
-        if self.lr is None:
-            return
-
-        qa = QzoneActivity(self, self.lr)
-        qa.vip_mentor()
 
     # --------------------------------------------DNF落地页活动--------------------------------------------
     @try_except()

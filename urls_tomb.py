@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from urls import get_act_url, newNotAmsActInfo
+from urls import get_act_url, newNotAmsActInfo, not_know_end_time____
 
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 urls.py 的行数
 
@@ -8,6 +8,7 @@ from urls import get_act_url, newNotAmsActInfo
 not_ams_activities_tomb = [
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
+    newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
 ]
 
 act_name_to_url_bomb = {
@@ -17,6 +18,7 @@ act_name_to_url_bomb = {
     "管家蚊子腿": "https://sdi.3g.qq.com/v/2022011118372511947",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
+    "会员关怀": "https://act.qzone.qq.com/v2/vip/tx/p/42034_cffe8db4",
 }
 
 

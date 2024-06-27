@@ -199,7 +199,6 @@ act_name_to_url = {
     "DNF福签大作战": "https://dnf.qq.com/cp/a20210325sjlbv3pc/index.html",
     "DNF强者之路": "https://dnf.qq.com/cp/a20210312Strong/index.html",
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
-    "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
 }
 
 
@@ -353,7 +352,6 @@ class Urls:
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_strong = "366330"  # DNF强者之路
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
-        self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动

@@ -11,8 +11,9 @@ not_ams_activities_tomb = [
 
 
 act_name_to_url_bomb = {
-    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
     "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
+    "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
+    "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
 }
 
 
@@ -20,6 +21,7 @@ class UrlsTomb:
     def __init__(self):
         # amesvr通用活动
         self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
+        self.iActivityId_dnf_13 = "381033"  # DNF十三周年庆双端站点
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

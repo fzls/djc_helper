@@ -1,15 +1,24 @@
+from __future__ import annotations
+
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数
+from typing import Callable
 
 from dao import BuyInfo
 from log import logger
 from qzone_activity import QzoneActivity
-from setting import zzconfig, parse_card_group_info_map
-from util import try_except, show_head_line
+from setting import parse_card_group_info_map, zzconfig
+from util import show_head_line, try_except
 
 
 class DjcHelperTomb:
     def __init__(self, account_config, common_config, user_buy_info: BuyInfo | None = None):
         self.zzconfig = zzconfig()
+
+    def expired_activities(self) -> list[tuple[str, Callable]]:
+        # re: 记得过期活动全部添加完后，一个个确认下确实过期了
+        return [
+            ("集卡_旧版", self.ark_lottery),
+        ]
 
 
     # --------------------------------------------QQ空间集卡--------------------------------------------

@@ -803,7 +803,6 @@ class DjcHelper:
             ("DNF强者之路", self.dnf_strong),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
-            ("集卡_旧版", self.ark_lottery),
             ("qq视频-AME活动", self.qq_video_amesvr),
             ("qq会员杯", self.dnf_club_vip),
         ]

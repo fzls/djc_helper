@@ -2703,10 +2703,10 @@ class DjcHelper:
         # pskey过期提示：{'code': -3000, 'subcode': -4001, 'message': '请登录', 'notice': 0, 'time': 1601004332, 'tips': 'EE8B-284'}
         # 由于活动过期的判定会优先于pskey判定，需要需要保证下面调用的是最新的活动~
 
-        def check_by_ark_lottery() -> bool:
-            al = QzoneActivity(self, lr)
-            res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
-            return res["code"] == -3000 and res["subcode"] == -4001
+        # def check_by_ark_lottery() -> bool:
+        #     al = QzoneActivity(self, lr)
+        #     res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
+        #     return res["code"] == -3000 and res["subcode"] == -4001
 
         def check_by_warriors_call() -> bool:
             qa = QzoneActivity(self, lr)
@@ -2739,7 +2739,7 @@ class DjcHelper:
             check_by_super_vip,
             check_by_yellow_diamond,
             check_by_warriors_call,
-            check_by_ark_lottery,
+            # check_by_ark_lottery,
         ]
 
         for check_func in check_p_skey_expired_func_list:

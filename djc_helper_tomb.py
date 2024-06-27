@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-# 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数
+import json
 from typing import Callable
+from urllib.parse import quote_plus
 
 import requests
 
@@ -12,10 +13,12 @@ from network import check_tencent_game_common_status_code
 from qq_login import LoginResult
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
+from sign import getACSRFTokenForAMS
 from urls import Urls, get_act_url
-from util import range_from_one, show_head_line, try_except
+from util import base64_str, json_compact, range_from_one, show_head_line, try_except
 
 
+# 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 djc_helper.py 的行数
 class DjcHelperTomb:
     def __init__(self, account_config, common_config, user_buy_info: BuyInfo | None = None):
         self.cfg: AccountConfig = account_config
@@ -40,9 +43,83 @@ class DjcHelperTomb:
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         return [
+            ("qq会员杯", self.dnf_club_vip),
             ("集卡_旧版", self.ark_lottery),
         ]
 
+    # -------------------------------------------- qq会员杯 --------------------------------------------
+    # note: 适配流程如下
+    #   0. 打开对应活动页面
+    #   1. 获取子活动id   搜索 tianxuan = ，找到各个活动的id
+    #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("qq会员杯")的值为新的网页链接，并把活动时间改为最新
+    #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
+    @try_except()
+    def dnf_club_vip(self):
+        get_act_url("qq会员杯")
+        show_head_line("qq会员杯")
+        self.show_not_ams_act_info("qq会员杯")
+
+        if not self.cfg.function_switches.get_dnf_club_vip or self.disable_most_activities():
+            logger.warning("未启用领取qq会员杯功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.lr = self.fetch_club_vip_p_skey("club.vip")
+        if self.lr is None:
+            return
+
+        # self.club_qzone_act_op("开通会员-openSvip", "11997_5450c859")
+        # self.club_qzone_act_op("领取开通奖励-receiveRewards", "12001_a24bdb71")
+        self.club_qzone_act_op("报名并领取奖励-signUp", "12002_262a3b1d")
+        # self.club_qzone_act_op("邀请好友-invitation", "12153_257cd052")
+        # self.club_qzone_act_op("接受邀请-receiveInvitation", "12168_73c057d6")
+        self.club_qzone_act_op("通关一次命运的抉择-helpClearanceOnce", "12154_0dcd2046")
+        self.club_qzone_act_op("20分钟内通关命运的抉择-helpClearanceLimitTime", "12155_b1bae685")
+        self.club_qzone_act_op("游戏在线30分钟-gameOnline", "12004_757ee8c2")
+        self.club_qzone_act_op("通关一次【命运的抉择】-clearanceOnce", "12379_37ef2682")
+        self.club_qzone_act_op("特权网吧登录-privilegeBar", "12006_deddc48a")
+        # self.club_qzone_act_op("抽奖次数?-luckyNum", "12042_187645f2")
+        for idx in range_from_one(2):
+            self.club_qzone_act_op(f"[{idx}/2] 抽奖-lucky", "12003_404fde87")
+
+    def club_qzone_act_op(
+        self, ctx, sub_act_id, act_req_data=None, extra_act_req_data: dict | None = None, print_res=True
+    ):
+        # 另一类qq空间系活动，需要特殊处理
+        # https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk=502405433&isomorphism-args=W3siU3ViQWN0SWQiOiIxMjAwNl9kZWRkYzQ4YSIsIkFjd .......
+
+        # 首先构造普通的请求body
+        body = {
+            "SubActId": sub_act_id,
+            "ActReqData": json_compact(self.get_qzone_act_req_data(act_req_data, extra_act_req_data)),
+            "ClientPlat": 2,
+        }
+
+        # 然后外面套一层列表
+        list_body = [body]
+
+        # 再序列化为json（不出现空格）
+        json_str = json.dumps(list_body, separators=(",", ":"))
+
+        # 之后转化为base64编码
+        b64_str = base64_str(json_str)
+
+        # 然后进行两次URL编码，作为 isomorphism-args 参数
+        isomorphism_args = quote_plus(quote_plus(b64_str))
+
+        extra_cookies = f"p_skey={self.lr.p_skey};"
+        self.get(
+            ctx,
+            self.urls.qzone_activity_club_vip,
+            g_tk=getACSRFTokenForAMS(self.lr.p_skey),
+            isomorphism_args=isomorphism_args,
+            extra_cookies=extra_cookies,
+            print_res=print_res,
+        )
 
     # --------------------------------------------QQ空间集卡--------------------------------------------
     @try_except()
@@ -125,7 +202,6 @@ class DjcHelperTomb:
     def fetch_pskey(self):
         pass
 
-
     def get(
         self,
         ctx,
@@ -146,4 +222,10 @@ class DjcHelperTomb:
         return {}
 
     def qq(self):
+        pass
+
+    def fetch_club_vip_p_skey(self, param):
+        pass
+
+    def get_qzone_act_req_data(self, act_req_data, extra_act_req_data):
         pass

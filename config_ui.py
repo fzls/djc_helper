@@ -2942,7 +2942,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("会员关怀", "get_vip_mentor"),
             ("超级会员", "get_dnf_super_vip"),
             ("黄钻", "get_dnf_yellow_diamond"),
-            ("qq会员杯", "get_dnf_club_vip"),
         ],
         "安全管家pskey": [
             ("管家蚊子腿", "get_guanjia"),
@@ -2982,7 +2981,10 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF集合站", "get_dnf_collection"),
             ("超级会员", "get_dnf_super_vip"),
             ("集卡", "get_ark_lottery"),
-        ]
+        ],
+        "QQ空间pskey": [
+            ("qq会员杯", "get_dnf_club_vip"),
+        ],
     }
 
     def __init__(self, form_layout: QFormLayout, cfg: FunctionSwitchesConfig, parent=None):

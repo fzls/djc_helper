@@ -80,7 +80,6 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
-    newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
@@ -202,7 +201,6 @@ act_name_to_url = {
     "管家蚊子腿-旧版": "https://guanjia.qq.com/act/cop/20210425dnf/pc/",
     "DNF十三周年庆活动": "https://dnf.qq.com/cp/a20210524fete/index.html",
     "qq视频-AME活动": "https://dnf.qq.com/cp/a20210816video/",
-    "qq会员杯": "https://club.vip.qq.com/qqvip/acts2021/dnf",
 }
 
 

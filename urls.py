@@ -456,17 +456,6 @@ class Urls:
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
         self.pesudo_ark_lottery_act_id = 10015
 
-        self.qzone_activity_club_vip = (
-            "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
-        )
-
-        # 抽卡相关
-        self.ark_lottery_page = get_act_url("集卡")
-        # 查询次数信息：参数：to_qq, actName
-        self.ark_lottery_query_left_times = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13320":{{"uin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
-        # 赠送卡片：参数：cardId，from_qq，to_qq, actName
-        self.ark_lottery_send_card = 'https://proxy.vac.qq.com/cgi-bin/srfentry.fcgi?data={{"13333":{{"cardId":{cardId},"fromUin":{from_qq},"toUin":{to_qq},"actName":"{actName}"}}}}&t={rand}&g_tk={g_tk}'
-
         # 阿拉德勇士征集令
         self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"
 

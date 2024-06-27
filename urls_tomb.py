@@ -16,4 +16,5 @@ act_name_to_url_bomb = {
 
 class UrlsTomb:
     def __init__(self):
-        pass
+        # amesvr通用活动
+        self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动

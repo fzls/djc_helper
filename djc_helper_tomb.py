@@ -7,14 +7,15 @@ from urllib.parse import quote_plus
 import requests
 
 from config import AccountConfig, CommonConfig
-from dao import BuyInfo
-from log import logger
+from dao import BuyInfo, RoleInfo, parse_amesvr_common_info
+from log import color, logger
 from network import check_tencent_game_common_status_code
 from qq_login import LoginResult
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS
-from urls import Urls, get_act_url
+from urls import get_act_url
+from urls_tomb import UrlsTomb
 from util import base64_str, json_compact, range_from_one, show_head_line, try_except
 
 
@@ -34,7 +35,7 @@ class DjcHelperTomb:
         self.init_network()
 
         # 相关链接
-        self.urls = Urls()
+        self.urls = UrlsTomb()
 
         self.user_buy_info = user_buy_info
 
@@ -45,7 +46,60 @@ class DjcHelperTomb:
         return [
             ("qq会员杯", self.dnf_club_vip),
             ("集卡_旧版", self.ark_lottery),
+            ("qq视频-AME活动", self.qq_video_amesvr),
         ]
+
+    # --------------------------------------------qq视频-AME活动--------------------------------------------
+    @try_except()
+    def qq_video_amesvr(self):
+        show_head_line("qq视频-AME活动")
+        self.show_amesvr_act_info(self.qq_video_amesvr_op)
+
+        if not self.cfg.function_switches.get_qq_video_amesvr or self.disable_most_activities():
+            logger.warning("未启用领取qq视频-AME活动活动合集功能，将跳过")
+            return
+
+        self.check_qq_video_amesvr()
+
+        def query_signin_days():
+            res = self.qq_video_amesvr_op("查询签到状态", "789433", print_res=False)
+            info = parse_amesvr_common_info(res)
+            return int(info.sOutValue1)
+
+        self.qq_video_amesvr_op("验证幸运用户", "789422")
+        self.qq_video_amesvr_op("幸运用户礼包", "789425")
+        self.qq_video_amesvr_op("勇士见面礼包", "789439")
+        self.qq_video_amesvr_op("分享领取", "789437")
+
+        self.qq_video_amesvr_op("在线30分钟礼包", "789429")
+        logger.warning(color("bold_yellow") + f"累计已签到{query_signin_days()}天")
+        self.qq_video_amesvr_op("签到3天礼包", "789430")
+        self.qq_video_amesvr_op("签到7天礼包", "789431")
+        self.qq_video_amesvr_op("签到15天礼包", "789432")
+
+    def check_qq_video_amesvr(self):
+        self.check_bind_account(
+            "qq视频-AME活动",
+            get_act_url("qq视频-AME活动"),
+            activity_op_func=self.qq_video_amesvr_op,
+            query_bind_flowid="789417",
+            commit_bind_flowid="789416",
+        )
+
+    def qq_video_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_qq_video_amesvr
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("qq视频-AME活动"),
+            **extra_params,
+        )
 
     # -------------------------------------------- qq会员杯 --------------------------------------------
     # note: 适配流程如下
@@ -229,3 +283,38 @@ class DjcHelperTomb:
 
     def get_qzone_act_req_data(self, act_req_data, extra_act_req_data):
         pass
+
+    def show_amesvr_act_info(self, activity_op_func):
+        pass
+
+    def check_bind_account(
+        self,
+        activity_name,
+        activity_url,
+        activity_op_func,
+        query_bind_flowid,
+        commit_bind_flowid,
+        try_auto_bind=True,
+        roleinfo: RoleInfo | None = None,
+        roleinfo_source="道聚城所绑定的角色",
+        act_can_change_bind=True,
+    ):
+        pass
+
+    def amesvr_request(
+        self,
+        ctx,
+        amesvr_host,
+        sServiceDepartment,
+        sServiceType,
+        iActivityId,
+        iFlowId,
+        print_res,
+        eas_url: str,
+        extra_cookies="",
+        show_info_only=False,
+        get_act_info_only=False,
+        append_raw_data="",
+        **data_extra_params,
+    ):
+        return {}

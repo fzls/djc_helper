@@ -337,7 +337,6 @@ class Urls:
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
-        self.iActivityId_qq_video_amesvr = "398546"  # qq视频-AME活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求

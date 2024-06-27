@@ -804,7 +804,6 @@ class DjcHelper:
             ("DNF强者之路", self.dnf_strong),
             ("管家蚊子腿", self.guanjia),
             ("DNF十三周年庆活动", self.dnf_13),
-            ("qq视频-AME活动", self.qq_video_amesvr),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -9435,58 +9434,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("暖冬好礼活动"),
-            **extra_params,
-        )
-
-    # --------------------------------------------qq视频-AME活动--------------------------------------------
-    @try_except()
-    def qq_video_amesvr(self):
-        show_head_line("qq视频-AME活动")
-        self.show_amesvr_act_info(self.qq_video_amesvr_op)
-
-        if not self.cfg.function_switches.get_qq_video_amesvr or self.disable_most_activities():
-            logger.warning("未启用领取qq视频-AME活动活动合集功能，将跳过")
-            return
-
-        self.check_qq_video_amesvr()
-
-        def query_signin_days():
-            res = self.qq_video_amesvr_op("查询签到状态", "789433", print_res=False)
-            info = parse_amesvr_common_info(res)
-            return int(info.sOutValue1)
-
-        self.qq_video_amesvr_op("验证幸运用户", "789422")
-        self.qq_video_amesvr_op("幸运用户礼包", "789425")
-        self.qq_video_amesvr_op("勇士见面礼包", "789439")
-        self.qq_video_amesvr_op("分享领取", "789437")
-
-        self.qq_video_amesvr_op("在线30分钟礼包", "789429")
-        logger.warning(color("bold_yellow") + f"累计已签到{query_signin_days()}天")
-        self.qq_video_amesvr_op("签到3天礼包", "789430")
-        self.qq_video_amesvr_op("签到7天礼包", "789431")
-        self.qq_video_amesvr_op("签到15天礼包", "789432")
-
-    def check_qq_video_amesvr(self):
-        self.check_bind_account(
-            "qq视频-AME活动",
-            get_act_url("qq视频-AME活动"),
-            activity_op_func=self.qq_video_amesvr_op,
-            query_bind_flowid="789417",
-            commit_bind_flowid="789416",
-        )
-
-    def qq_video_amesvr_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_qq_video_amesvr
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("qq视频-AME活动"),
             **extra_params,
         )
 

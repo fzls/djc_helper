@@ -70,6 +70,7 @@ act_name_to_url_bomb = {
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
+    "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
 }
 
 
@@ -112,6 +113,7 @@ class UrlsTomb:
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
+        self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

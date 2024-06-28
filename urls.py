@@ -141,7 +141,6 @@ act_name_to_url = {
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
-    "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
 }
 
 
@@ -279,7 +278,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
-        self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热

@@ -25,6 +25,7 @@ from dao import (
     AmesvrCommonModRet,
     AmesvrQueryRole,
     AmesvrUserBindInfo,
+    AmsActInfo,
     BuyInfo,
     ColgBattlePassInfo,
     ColgBattlePassQueryInfo,
@@ -710,7 +711,6 @@ class DjcHelper:
             ("DNF巴卡尔竞速", self.dnf_bakaer),
             ("和谐补偿活动", self.dnf_compensate),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
-            ("巴卡尔大作战", self.dnf_bakaer_fight),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -8292,97 +8292,6 @@ class DjcHelper:
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
-        )
-
-    # --------------------------------------------巴卡尔大作战--------------------------------------------
-    @try_except()
-    def dnf_bakaer_fight(self):
-        show_head_line("巴卡尔大作战")
-        self.show_amesvr_act_info(self.dnf_bakaer_fight_op)
-
-        if not self.cfg.function_switches.get_dnf_bakaer_fight or self.disable_most_activities():
-            logger.warning("未启用领取巴卡尔大作战功能，将跳过")
-            return
-
-        self.check_dnf_bakaer_fight()
-
-        boss_info_list = [
-            ("邪龙", 1),
-            ("狂龙", 3),
-            ("冰龙", 2),
-            # ("巴卡尔", 4),
-        ]
-        self.dnf_bakaer_fight_op("选取boss - 优先尝试巴卡尔", "917673", bossId="4")
-        # 然后打乱顺序，依次尝试选取各个boss
-        random.shuffle(boss_info_list)
-        for name, id in boss_info_list:
-            time.sleep(3)
-            self.dnf_bakaer_fight_op(f"选取boss - {name}", "917673", bossId=id)
-
-        # 个人任务
-        self.dnf_bakaer_fight_op("完成登录游戏任务击杀boss", "918026")
-        self.dnf_bakaer_fight_op("消耗疲劳值击杀boss", "918098")
-        self.dnf_bakaer_fight_op("每日通关推荐地下城", "918099")
-        self.dnf_bakaer_fight_op("在线30分钟", "918100")
-
-        # 组队任务
-        self.dnf_bakaer_fight_op("组队--分享任务", "918108")
-        self.dnf_bakaer_fight_op("组队通关-毁坏的寂静城", "918109")
-        self.dnf_bakaer_fight_op("组队通关-天界实验室", "918110")
-        self.dnf_bakaer_fight_op("组队通关-110级副本", "918111")
-
-        self.dnf_bakaer_fight_op("掉落邪龙", "918119")
-        self.dnf_bakaer_fight_op("掉落冰龙", "918120")
-        self.dnf_bakaer_fight_op("掉落狂龙", "918121")
-        self.dnf_bakaer_fight_op("掉落巴卡尔", "918122")
-
-        # 奖励提示自行领取
-        async_message_box(
-            (
-                "巴卡尔大作战活动请自行创建攻坚队，或者加入他人的攻坚队，来完成初始流程，否则活动不能正常操作\n"
-                "另外，该活动的兑换商店中的奖励请在活动末期自行兑换（小助手会完成领取任务奖励、攻坚成功奖励等操作）\n"
-            ),
-            "巴卡尔大作战活动提示",
-            show_once=True,
-            open_url=get_act_url("巴卡尔大作战"),
-        )
-        # self.dnf_bakaer_fight_op("兑换-第一阶段（加入或创建队伍）", "917672")
-        # self.dnf_bakaer_fight_op("兑换-第二阶段（打败任意小boss）", "918113")
-        # self.dnf_bakaer_fight_op("兑换-第三阶段（打败所有小boss/解锁大boss）", "918116")
-        # self.dnf_bakaer_fight_op("兑换-第四阶段（打败大boss）", "918117")
-
-        act_info = self.dnf_bakaer_fight_op("获取活动信息", "", get_act_info_only=True)
-        act_endtime = get_today(parse_time(act_info.dtEndTime))
-        logger.info(f"act_endtime={act_endtime}")
-
-        if get_today() == act_endtime:
-            async_message_box(
-                "当前已是巴卡尔大作战活动最后一天，请在稍后打开的活动页面中自行完成兑换操作",
-                "巴卡尔大作战兑换提醒-最后一天",
-                open_url=get_act_url("巴卡尔大作战"),
-            )
-
-    def check_dnf_bakaer_fight(self):
-        self.check_bind_account(
-            "巴卡尔大作战",
-            get_act_url("巴卡尔大作战"),
-            activity_op_func=self.dnf_bakaer_fight_op,
-            query_bind_flowid="916892",
-            commit_bind_flowid="916891",
-        )
-
-    def dnf_bakaer_fight_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_bakaer_fight
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("巴卡尔大作战"),
-            **extra_params,
         )
 
     # --------------------------------------------神界预热--------------------------------------------

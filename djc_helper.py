@@ -706,7 +706,6 @@ class DjcHelper:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
-            ("心悦app理财礼卡", self.xinyue_financing),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2352,13 +2351,15 @@ class DjcHelper:
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         }
 
-        old_gpoints = self.query_gpoints()
+        # old_gpoints = self.query_gpoints()
+        old_gpoints = -1
 
         for op in self.cfg.xinyue_app_operations:
             res = requests.post(url, bytes(op.encrypted_raw_http_body), headers=headers, timeout=10)  # type: ignore
             logger.info(f"心悦app操作：{op.name} 返回码={res.status_code}, 请求结果={res.content!r}")
 
-        new_gpoints = self.query_gpoints()
+        # new_gpoints = self.query_gpoints()
+        new_gpoints = -1
 
         logger.info(
             color("bold_yellow")
@@ -5045,180 +5046,6 @@ class DjcHelper:
             ams_checkparam=checkparam,
             checkparam=checkparam,
             siActivityId=siActivityId,
-            **extra_params,
-        )
-
-    # --------------------------------------------心悦app理财礼卡--------------------------------------------
-    @try_except()
-    def xinyue_financing(self):
-        show_head_line("心悦app理财礼卡")
-        self.show_amesvr_act_info(self.xinyue_financing_op)
-
-        if not self.cfg.function_switches.get_xinyue_financing:
-            logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
-            return
-
-        selectedCards = ["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]
-        logger.info(color("fg_bold_green") + f"当前设定的理财卡优先列表为: {selectedCards}")
-
-        type2name = {
-            "type1": "体验版周卡",
-            "type2": "升级版周卡",
-            "type3": "体验版月卡",
-            "type4": "升级版月卡",
-        }
-
-        # ------------- 封装函数 ----------------
-
-        def query_card_taken_map():
-            res = AmesvrCommonModRet().auto_update_config(
-                self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"]
-            )
-            statusList = res.sOutValue3.split("|")
-
-            cardTakenMap = {}
-            for i in range(1, 4 + 1):
-                name = type2name[f"type{i}"]
-                if int(statusList[i]) > 0:
-                    taken = True
-                else:
-                    taken = False
-
-                cardTakenMap[name] = taken
-
-            return cardTakenMap
-
-        def show_financing_info():
-            info_map = get_financing_info_map()
-
-            heads = ["理财卡名称", "当前状态", "累计收益", "剩余天数", "结束日期"]
-            colSizes = [10, 8, 8, 8, 10]
-            logger.info(color("bold_green") + tableify(heads, colSizes))
-            for name, info in info_map.items():
-                if name not in selectedCards:
-                    # 跳过未选择的卡
-                    continue
-
-                if info.buy:
-                    status = "已购买"
-                else:
-                    status = "未购买"
-
-                logger.info(
-                    color("fg_bold_cyan")
-                    + tableify([name, status, info.totalIncome, info.leftTime, info.endTime], colSizes)
-                )
-
-        def get_financing_info_map():
-            financingInfoMap: dict = json.loads(
-                self.xinyue_financing_op("查询各理财卡信息", "409714", print_res=False)["modRet"]["jData"]["arr"]
-            )
-            financingTimeInfoMap: dict = json.loads(
-                self.xinyue_financing_op("查询理财礼卡天数信息", "409396", print_res=False)["modRet"]["jData"]["arr"]
-            )
-
-            info_map = {}
-            for typ, financingInfo in financingInfoMap.items():
-                info = XinyueFinancingInfo()
-
-                info.name = type2name[typ]
-                if financingInfo["status"] == 0:
-                    info.buy = False
-                else:
-                    info.buy = True
-                info.totalIncome = financingInfo["totalIncome"]
-
-                if typ in financingTimeInfoMap["alltype"]:
-                    info.leftTime = financingTimeInfoMap["alltype"][typ]["leftime"]
-                if "opened" in financingTimeInfoMap and typ in financingTimeInfoMap["opened"]:
-                    info.endTime = financingTimeInfoMap["opened"][typ]["endtime"]
-
-                info_map[info.name] = info
-
-            return info_map
-
-        # ------------- 正式逻辑 ----------------
-        gPoints = self.query_gpoints()
-        startPoints = gPoints
-        logger.info(f"当前G分为{startPoints}")
-
-        # 活动规则
-        # 1、购买理财礼卡：每次购买理财礼卡成功后，当日至其周期结束，每天可以领取相应的收益G分，当日如不领取，则视为放弃
-        # 2、购买限制：每个帐号仅可同时拥有两种理财礼卡，到期后则可再次购买
-        # ps：推荐购买体验版月卡和升级版月卡
-        financingCardsToBuyAndMap = {
-            # 名称   购买价格   购买FlowId    领取FlowId
-            "体验版周卡": (20, "408990", "507439"),  # 5分/7天/35-20=15/2分收益每天
-            "升级版周卡": (80, "409517", "507441"),  # 20分/7天/140-80=60/8.6分收益每天
-            "体验版月卡": (300, "409534", "507443"),  # 25分/30天/750-300=450/15分收益每天
-            "升级版月卡": (600, "409537", "507444"),  # 60分/30天/1800-600=1200/40分收益每天
-        }
-
-        cardInfoMap = get_financing_info_map()
-        cardTakenMap = query_card_taken_map()
-        for cardName in selectedCards:
-            if cardName not in financingCardsToBuyAndMap:
-                logger.warning(f"没有找到名为【{cardName}】的理财卡，请确认是否配置错误")
-                continue
-
-            buyPrice, buyFlowId, takeFlowId = financingCardsToBuyAndMap[cardName]
-            cardInfo = cardInfoMap[cardName]
-            taken = cardTakenMap[cardName]
-            # 如果尚未购买（或过期），则购买
-            if not cardInfo.buy:
-                if gPoints >= buyPrice:
-                    self.xinyue_financing_op(f"购买{cardName}", buyFlowId)
-                    gPoints -= buyPrice
-                else:
-                    logger.warning(f"积分不够，将跳过购买~，购买{cardName}需要{buyPrice}G分，当前仅有{gPoints}G分")
-                    continue
-
-            # 此处以确保购买，尝试领取
-            if taken:
-                logger.warning(f"今日已经领取过{cardName}了，本次将跳过")
-            else:
-                self.xinyue_financing_op(f"领取{cardName}", takeFlowId)
-
-        newGPoints = self.query_gpoints()
-        delta = newGPoints - startPoints
-        logger.warning("")
-        logger.warning(
-            color("fg_bold_yellow")
-            + f"账号 {self.cfg.name} 本次心悦理财礼卡操作共获得 {delta} G分（ {startPoints} -> {newGPoints} ）"
-        )
-        logger.warning("")
-
-        show_financing_info()
-
-        logger.warning(
-            color("fg_bold_yellow")
-            + "这个是心悦的活动，不是小助手的剩余付费时长，具体查看方式请读一遍付费指引/付费指引.docx"
-        )
-
-    @try_except(return_val_on_except=0, show_exception_info=False)
-    def query_gpoints(self):
-        res = AmesvrCommonModRet().auto_update_config(
-            self.xinyue_financing_op("查询G分", "409361", print_res=False)["modRet"]
-        )
-        return int(res.sOutValue2)
-
-    def xinyue_financing_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_xinyue_financing
-
-        plat = 3  # app
-        extraStr = quote_plus('"mod1":"1","mod2":"0","mod3":"x27"')
-
-        return self.amesvr_request(
-            ctx,
-            "comm.ams.game.qq.com",
-            "xinyue",
-            "tgclub",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("心悦app理财礼卡"),
-            plat=plat,
-            extraStr=extraStr,
             **extra_params,
         )
 

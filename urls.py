@@ -135,7 +135,6 @@ act_name_to_url = {
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
-    "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
 }
 
 
@@ -256,7 +255,6 @@ class Urls:
         self.iActivityId_xinyue_battle_ground = "366480"  # DNF地下城与勇士心悦特权专区
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
-        self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动

@@ -850,7 +850,6 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         "心悦组队",
         "上周心悦",
         "自动组队",
-        "心悦G分",
         "编年史",
         "年史碎片",
         "搭档",
@@ -910,8 +909,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     elif xinyue_info.is_xinyue_or_special_member() and not account_config.enable_auto_match_xinyue_team:
         can_auto_match_xinyue_team = "未开启"
 
-    gpoints = djcHelper.query_gpoints()
-
     levelInfo, chronicle_points = djcHelper.query_dnf_helper_chronicle_info().get_level_info_and_points_to_show()
 
     partner_levelInfo = ""
@@ -954,7 +951,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         team_award_summary,
         last_week_xinyue_take_award_count,
         can_auto_match_xinyue_team,
-        gpoints,
         levelInfo,
         chronicle_points,
         partner_levelInfo,

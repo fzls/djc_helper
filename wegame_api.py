@@ -1,3 +1,4 @@
+#  type: ignore
 import json
 import os
 
@@ -92,9 +93,7 @@ class WegameApi:
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
         }
         res = requests.post(self.login_url, json=data, headers=headers, timeout=10)
-        tgp_id, tgp_ticket = int(res.cookies.get("tgp_id")), res.cookies.get(
-            "tgp_ticket"
-        )  # mypy: disable-error-code="arg-type"
+        tgp_id, tgp_ticket = int(res.cookies.get("tgp_id")), res.cookies.get("tgp_ticket")
         self.set_tgp_info(tgp_id, tgp_ticket)
 
         logger.info(tgp_id)

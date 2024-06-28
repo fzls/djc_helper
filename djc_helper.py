@@ -22,7 +22,6 @@ from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperat
 from const import appVersion, cached_dir, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
-    AmesvrCommonModRet,
     AmesvrQueryRole,
     AmesvrUserBindInfo,
     AmsActInfo,
@@ -67,7 +66,6 @@ from dao import (
     XinYueBattleGroundWpeBindRole,
     XinYueBattleGroundWpeGetBindRoleResult,
     XinYueBgwUserInfo,
-    XinyueFinancingInfo,
     XinYueInfo,
     XinYueMatchServerAddTeamRequest,
     XinYueMatchServerCommonResponse,
@@ -7741,7 +7739,7 @@ class DjcHelper:
     ) -> dict | AmsActInfo | None:
         if show_info_only:
             self.show_ams_act_info(iActivityId)
-            return
+            return None
         if get_act_info_only:
             return get_ams_act(iActivityId)
 

@@ -28,6 +28,7 @@ act_name_to_url_bomb = {
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
     "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
     "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
+    "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
 }
 
 
@@ -46,6 +47,7 @@ class UrlsTomb:
         self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
+        self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
@@ -64,3 +66,11 @@ class UrlsTomb:
 
         # 阿拉德勇士征集令
         self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"
+
+        # 助手排行榜活动
+        # 查询，额外参数：uin(qq)、userId/token
+        self.rank_user_info = "https://mwegame.qq.com/dnf/kolTopV2/ajax/getUserInfo?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014"
+        # 打榜，额外参数：uin(qq)、userId/token、id/score
+        self.rank_send_score = "https://mwegame.qq.com/dnf/kolTopV2/ajax/sendScore?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&id={id}&type=single1&score={score}"
+        # 领取黑钻，额外参数：uin(qq)、userId/token，gift_id[7020, 7021, 7022]
+        self.rank_receive_diamond = "https://mwegame.qq.com/ams/send/handle?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&gift_id={gift_id}"

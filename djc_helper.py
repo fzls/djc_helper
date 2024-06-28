@@ -777,7 +777,6 @@ class DjcHelper:
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
             ("微信签到", self.wx_checkin),
             ("10月女法师三觉", self.dnf_female_mage_awaken),
-            ("dnf助手排行榜", self.dnf_rank),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -4493,99 +4492,6 @@ class DjcHelper:
 
     def get_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str) -> str:
         return f"show_dnf_helper_info_guide_{self.cfg.get_account_cache_key()}_{show_message_box_once_key}"
-
-    # --------------------------------------------dnf助手排行榜活动--------------------------------------------
-    def dnf_rank(self):
-        show_head_line("dnf助手排行榜")
-
-        if not self.cfg.function_switches.get_dnf_rank or self.disable_most_activities():
-            logger.warning("未启用领取dnf助手排行榜活动合集功能，将跳过")
-            return
-
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
-        if self.cfg.dnf_helper_info.token == "":
-            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置"
-            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_rank")
-            return
-
-        # note: 获取鲜花（使用autojs去操作）
-        logger.warning("获取鲜花请使用auto.js等自动化工具来模拟打开助手去执行对应操作")
-
-        # 赠送鲜花
-        self.dnf_rank_send_score()
-
-        # 领取黑钻
-        if self.dnf_rank_get_user_info().canGift == 0:
-            logger.warning("12月5日开放黑钻奖励领取~")
-        else:
-            self.dnf_rank_receive_diamond("3天", "7020")
-            self.dnf_rank_receive_diamond("7天", "7021")
-            self.dnf_rank_receive_diamond("15天", "7022")
-            # 新的黑钻改为使用amesvr去发送，且阉割为只有一个奖励了
-            self.dnf_rank_receive_diamond_amesvr("7天黑钻")
-
-        # 结束时打印下最新状态
-        self.dnf_rank_get_user_info(print_res=True)
-
-    def dnf_rank_send_score(self):
-        id = 7  # 大硕
-        name = "疯奶丶大硕"
-        total_score = int(self.dnf_rank_get_user_info().score)
-        ctx = f"给{id}({name})打榜{total_score}鲜花"
-        if total_score <= 0:
-            logger.info(f"{ctx} 没有多余的鲜花，暂时不能进行打榜~")
-            return
-
-        return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
-
-    @try_except(return_val_on_except=RankUserInfo())
-    def dnf_rank_get_user_info(self, print_res=False):
-        res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
-
-        return RankUserInfo().auto_update_config(res["data"])
-
-    def dnf_rank_receive_diamond(self, gift_name, gift_id):
-        return self.dnf_rank_op(f"领取黑钻-{gift_name}", self.urls.rank_receive_diamond, gift_id=gift_id)
-
-    @try_except()
-    def dnf_rank_receive_diamond_amesvr(self, ctx, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_rank
-        iFlowId = "723192"
-
-        roleinfo = self.get_dnf_bind_role()
-        qq = self.qq()
-        dnf_helper_info = self.cfg.dnf_helper_info
-
-        return self.amesvr_request(
-            ctx,
-            "comm.ams.game.qq.com",
-            "group_k",
-            "bb",
-            iActivityId,
-            iFlowId,
-            True,
-            get_act_url("dnf助手排行榜"),
-            sArea=roleinfo.serviceID,
-            serverId=roleinfo.serviceID,
-            areaId=roleinfo.serviceID,
-            sRoleId=roleinfo.roleCode,
-            sRoleName=quote_plus(roleinfo.roleName),
-            uin=qq,
-            skey=self.cfg.account_info.skey,
-            nickName=quote_plus(dnf_helper_info.nickName),
-            userId=dnf_helper_info.userId,
-            token=quote_plus(dnf_helper_info.token),
-            **extra_params,
-        )
-
-    def dnf_rank_op(self, ctx, url, **params):
-        qq = self.qq()
-        info = self.cfg.dnf_helper_info
-        return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------dnf助手活动(后续活动都在这个基础上改)--------------------------------------------
     # note: 接入流程说明

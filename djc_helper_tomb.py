@@ -11,7 +11,7 @@ from urllib.parse import quote_plus
 
 import requests
 
-from config import AccountConfig, CommonConfig, load_config, config
+from config import AccountConfig, CommonConfig, config, load_config
 from const import cached_dir, guanjia_skey_version
 from dao import (
     AmesvrQueryFriendsInfo,
@@ -23,7 +23,7 @@ from dao import (
     RoleInfo,
     SailiyamWorkInfo,
     SpringFuDaiInfo,
-    parse_amesvr_common_info,
+    parse_amesvr_common_info, RankUserInfo,
 )
 from data_struct import to_raw_type
 from db import FireCrackersDB
@@ -95,7 +95,101 @@ class DjcHelperTomb:
             ("阿拉德勇士征集令", self.dnf_warriors_call),
             ("DNF进击吧赛利亚", self.xinyue_sailiyam),
             ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
+            ("dnf助手排行榜", self.dnf_rank),
         ]
+
+    # --------------------------------------------dnf助手排行榜活动--------------------------------------------
+    def dnf_rank(self):
+        show_head_line("dnf助手排行榜")
+
+        if not self.cfg.function_switches.get_dnf_rank or self.disable_most_activities():
+            logger.warning("未启用领取dnf助手排行榜活动合集功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手排行榜相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_rank")
+            return
+
+        # note: 获取鲜花（使用autojs去操作）
+        logger.warning("获取鲜花请使用auto.js等自动化工具来模拟打开助手去执行对应操作")
+
+        # 赠送鲜花
+        self.dnf_rank_send_score()
+
+        # 领取黑钻
+        if self.dnf_rank_get_user_info().canGift == 0:
+            logger.warning("12月5日开放黑钻奖励领取~")
+        else:
+            self.dnf_rank_receive_diamond("3天", "7020")
+            self.dnf_rank_receive_diamond("7天", "7021")
+            self.dnf_rank_receive_diamond("15天", "7022")
+            # 新的黑钻改为使用amesvr去发送，且阉割为只有一个奖励了
+            self.dnf_rank_receive_diamond_amesvr("7天黑钻")
+
+        # 结束时打印下最新状态
+        self.dnf_rank_get_user_info(print_res=True)
+
+    def dnf_rank_send_score(self):
+        id = 7  # 大硕
+        name = "疯奶丶大硕"
+        total_score = int(self.dnf_rank_get_user_info().score)
+        ctx = f"给{id}({name})打榜{total_score}鲜花"
+        if total_score <= 0:
+            logger.info(f"{ctx} 没有多余的鲜花，暂时不能进行打榜~")
+            return
+
+        return self.dnf_rank_op(ctx, self.urls.rank_send_score, id=id, score=total_score)
+
+    @try_except(return_val_on_except=RankUserInfo())
+    def dnf_rank_get_user_info(self, print_res=False):
+        res = self.dnf_rank_op("查询信息", self.urls.rank_user_info, print_res=print_res)
+
+        return RankUserInfo().auto_update_config(res["data"])
+
+    def dnf_rank_receive_diamond(self, gift_name, gift_id):
+        return self.dnf_rank_op(f"领取黑钻-{gift_name}", self.urls.rank_receive_diamond, gift_id=gift_id)
+
+    @try_except()
+    def dnf_rank_receive_diamond_amesvr(self, ctx, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_rank
+        iFlowId = "723192"
+
+        roleinfo = self.get_dnf_bind_role()
+        qq = self.qq()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        return self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+            iActivityId,
+            iFlowId,
+            True,
+            get_act_url("dnf助手排行榜"),
+            sArea=roleinfo.serviceID,
+            serverId=roleinfo.serviceID,
+            areaId=roleinfo.serviceID,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(roleinfo.roleName),
+            uin=qq,
+            skey=self.cfg.account_info.skey,
+            nickName=quote_plus(dnf_helper_info.nickName),
+            userId=dnf_helper_info.userId,
+            token=quote_plus(dnf_helper_info.token),
+            **extra_params,
+        )
+
+    def dnf_rank_op(self, ctx, url, **params):
+        qq = self.qq()
+        info = self.cfg.dnf_helper_info
+        return self.get(ctx, url, uin=qq, userId=info.userId, token=quote_plus(info.token), **params)
 
     # --------------------------------------------2020DNF嘉年华页面主页面签到--------------------------------------------
     def dnf_carnival(self):
@@ -2066,7 +2160,8 @@ class DjcHelperTomb:
     def fetch_share_p_skey(self, ctx: str, cache_max_seconds: int = 600) -> str:
         return ""
 
-
+    def show_dnf_helper_info_guide(self, extra_msg="", show_message_box_once_key="", always_show_message_box=False):
+        pass
 
 
 def watch_live():

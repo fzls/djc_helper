@@ -2760,7 +2760,7 @@ class DjcHelper:
                 )
 
     def enable_cost_all_cards_and_do_lottery(self):
-        if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.is_last_day():
+        if self.common_cfg.cost_all_cards_and_do_lottery_on_last_day and self.dnf_ark_lottery_is_last_day():
             logger.info("已是最后一天，且配置在最后一天将全部卡片抽掉，故而将开始消耗卡片抽奖~")
             return True
 
@@ -2768,7 +2768,7 @@ class DjcHelper:
             self.urls.pesudo_ark_lottery_act_id, False
         )
 
-    def is_last_day(self) -> bool:
+    def dnf_ark_lottery_is_last_day(self) -> bool:
         act_info = get_not_ams_act("集卡")
         day_fmt = "%Y-%m-%d"
         return format_time(parse_time(act_info.dtEndTime), day_fmt) == format_now(day_fmt)

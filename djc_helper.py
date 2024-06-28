@@ -753,7 +753,6 @@ class DjcHelper:
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
-            ("DNF集合站_ide", self.dnf_collection_ide),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -8804,54 +8803,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("DNF集合站"),
-            **extra_params,
-        )
-
-    # --------------------------------------------DNF集合站_ide--------------------------------------------
-    @try_except()
-    def dnf_collection_ide(self):
-        show_head_line("DNF集合站_ide")
-        self.show_not_ams_act_info("DNF集合站_ide")
-
-        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
-            logger.warning("未启用领取DNF集合站功能，将跳过")
-            return
-
-        self.check_dnf_collection_ide()
-
-        self.dnf_collection_ide_op("全民参与礼包", "145889")
-        self.dnf_collection_ide_op("幸运party礼包", "145832")
-
-        self.dnf_collection_ide_op("每日在线赢好礼", "145801")
-
-        for count in [3, 7, 15]:
-            self.dnf_collection_ide_op(f"累计签到 {count} 天", "146052", dayNum=count)
-
-    def check_dnf_collection_ide(self, **extra_params):
-        return self.ide_check_bind_account(
-            "DNF集合站_ide",
-            get_act_url("DNF集合站_ide"),
-            activity_op_func=self.dnf_collection_ide_op,
-            sAuthInfo="WDXW",
-            sActivityInfo="469853",
-        )
-
-    def dnf_collection_ide_op(
-        self,
-        ctx: str,
-        iFlowId: str,
-        print_res=True,
-        **extra_params,
-    ):
-        iActivityId = self.urls.ide_iActivityId_collection
-
-        return self.ide_request(
-            ctx,
-            "comm.ams.game.qq.com",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF集合站_ide"),
             **extra_params,
         )
 

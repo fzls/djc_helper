@@ -78,7 +78,6 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
-    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
@@ -154,7 +153,6 @@ act_name_to_url = {
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
-    "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
 }
 
 
@@ -317,7 +315,6 @@ class Urls:
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
-        self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "15_s0hJrQ"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛

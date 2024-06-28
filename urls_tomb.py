@@ -14,6 +14,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
+    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
 ]
 
 act_name_to_url_bomb = {
@@ -57,6 +58,7 @@ act_name_to_url_bomb = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
+    "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
 }
 
 
@@ -93,6 +95,10 @@ class UrlsTomb:
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
+
+
+        # ide通用活动
+        self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

@@ -24,6 +24,8 @@ from dao import (
     GuanjiaNewRequest,
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
+    LuckyUserInfo,
+    LuckyUserTaskConf,
     RankUserInfo,
     RoleInfo,
     SailiyamWorkInfo,
@@ -35,7 +37,7 @@ from dao import (
     XinyueCatInfoFromApp,
     XinyueCatMatchResult,
     XinyueCatUserInfo,
-    parse_amesvr_common_info, LuckyUserInfo, LuckyUserTaskConf,
+    parse_amesvr_common_info, IdeActInfo,
 )
 from data_struct import to_raw_type
 from db import DianzanDB, FireCrackersDB
@@ -138,7 +140,56 @@ class DjcHelperTomb:
             ("黄钻", self.dnf_yellow_diamond),
             ("KOL", self.dnf_kol),
             ("幸运勇士", self.dnf_lucky_user),
+            ("DNF集合站_ide", self.dnf_collection_ide),
         ]
+
+    # --------------------------------------------DNF集合站_ide--------------------------------------------
+    @try_except()
+    def dnf_collection_ide(self):
+        show_head_line("DNF集合站_ide")
+        self.show_not_ams_act_info("DNF集合站_ide")
+
+        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
+            logger.warning("未启用领取DNF集合站功能，将跳过")
+            return
+
+        self.check_dnf_collection_ide()
+
+        self.dnf_collection_ide_op("全民参与礼包", "145889")
+        self.dnf_collection_ide_op("幸运party礼包", "145832")
+
+        self.dnf_collection_ide_op("每日在线赢好礼", "145801")
+
+        for count in [3, 7, 15]:
+            self.dnf_collection_ide_op(f"累计签到 {count} 天", "146052", dayNum=count)
+
+    def check_dnf_collection_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF集合站_ide",
+            get_act_url("DNF集合站_ide"),
+            activity_op_func=self.dnf_collection_ide_op,
+            sAuthInfo="WDXW",
+            sActivityInfo="469853",
+        )
+
+    def dnf_collection_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_collection
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF集合站_ide"),
+            **extra_params,
+        )
 
     # --------------------------------------------幸运勇士--------------------------------------------
     @try_except()
@@ -4319,6 +4370,34 @@ class DjcHelperTomb:
 
     def get_dnf_roleinfo(self, roleinfo: RoleInfo | None = None):
         return AmesvrQueryRole()
+
+    def ide_check_bind_account(
+        self,
+        activity_name: str,
+        activity_url: str,
+        activity_op_func: Callable,
+        sAuthInfo: str,
+        sActivityInfo: str,
+        roleinfo: RoleInfo | None = None,
+        roleinfo_source="道聚城所绑定的角色",
+    ):
+        pass
+
+    def ide_request(
+        self,
+        ctx: str,
+        ide_host: str,
+        iActivityId: str,
+        iFlowId: str,
+        print_res: bool,
+        eas_url: str,
+        extra_cookies="",
+        show_info_only=False,
+        get_act_info_only=False,
+        sIdeToken="",
+        **data_extra_params,
+    ) -> dict | IdeActInfo | None:
+        return {}
 
 
 def watch_live():

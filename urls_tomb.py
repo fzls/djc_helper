@@ -10,6 +10,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
+    newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
 ]
 
 act_name_to_url_bomb = {
@@ -37,6 +38,7 @@ act_name_to_url_bomb = {
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
+    "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
 }
 
 
@@ -87,3 +89,6 @@ class UrlsTomb:
         self.rank_send_score = "https://mwegame.qq.com/dnf/kolTopV2/ajax/sendScore?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&id={id}&type=single1&score={score}"
         # 领取黑钻，额外参数：uin(qq)、userId/token，gift_id[7020, 7021, 7022]
         self.rank_receive_diamond = "https://mwegame.qq.com/ams/send/handle?uin={uin}&userId={userId}&token={token}&serverId=0&gameId=10014&gift_id={gift_id}"
+
+        # qq视频活动
+        self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}&is_prepublish={is_prepublish}"

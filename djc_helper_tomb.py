@@ -34,12 +34,12 @@ from db import FireCrackersDB
 from djc_helper import DjcHelper
 from first_run import is_first_run, is_weekly_first_run
 from log import color, logger
-from network import check_tencent_game_common_status_code
+from network import check_tencent_game_common_status_code, extract_qq_video_message
 from qq_login import LoginResult, QQLogin
 from qzone_activity import QzoneActivity
 from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS, getMillSecondsUnix
-from urls import get_act_url, search_act
+from urls import get_act_url, search_act, get_not_ams_act
 from urls_tomb import UrlsTomb
 from util import (
     async_message_box,
@@ -50,7 +50,7 @@ from util import (
     range_from_one,
     show_end_time,
     show_head_line,
-    try_except, use_by_myself,
+    try_except, use_by_myself, tableify, format_time, parse_time,
 )
 
 
@@ -108,7 +108,167 @@ class DjcHelperTomb:
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
             ("轻松之路", self.dnf_relax_road),
             ("WeGameDup", self.dnf_wegame_dup),
+            ("qq视频蚊子腿", self.qq_video),
         ]
+
+    # --------------------------------------------qq视频活动--------------------------------------------
+    # note: 接入新qq视频活动的流程如下
+    #   1. chrome打开devtools，激活手机模式，并在过滤栏中输入 option=100
+    #   2. 打开活动页面 get_act_url("qq视频蚊子腿")
+    #   3. 点击任意按钮，从query_string中获取最新的act_id (其实就是上面 magic-act/ 和 /index.html 中间这一串字符
+    qq_video_act_id = "yauhs87ql00t63xttwkas8papl"
+
+    #   undone: 如果某个请求的type和option参数不是默认值，也需要专门调整对应值
+    qq_video_default_type = "100160"
+    qq_video_default_option = "100"
+
+    #   note:4. 依次点击下面各个行为对应的按钮，从query_string中获取最新的module_id
+    qq_video_module_id_lucky_user = "xdz8y4sjta4kui1sagp5xzr3qe"  # 幸运勇士礼包
+    # qq_video_module_id_first_meet_gift = "zjyk7dlgj23jk7egsofqaj3hk9"  # 勇士见面礼-礼包
+    # qq_video_module_id_first_meet_token = "4c43cws9i4721uq01ghu02l3fl"  # 勇士见面礼-令牌
+    qq_video_module_id_lottery = "9fi2o28r621y1t78l8oyoefzr9"  # 每日抽奖1次(需在活动页面开通QQ视频会员)
+    qq_video_module_id_online_30_minutes = "93fas34ug2wo36oce0a9el97au"  # 在线30分钟
+    qq_video_module_id_online_3_days = "wwq8suj7d9qi7ee9gcy89r3d2e"  # 累积3天
+    qq_video_module_id_online_7_days = "jsk57d87y5ap3wto879g8jpslu"  # 累积7天
+    qq_video_module_id_online_15_days = "wtckr8zcrk6egcc9iq5lygq98l"  # 累积15天
+
+    qq_video_module_id_card_gift_list = [
+        # ID | 描述 | 兑换次数
+        ("e9goi51gh5tgww9kkhtcw2ft21", "使用 6 张卡兑换奖励", 1),
+        ("2gu4g11pj9freyx94ad7hyi3t9", "使用 4 张卡兑换奖励", 10),
+        ("dasw19eds0fjxaew64pxc2sgt9", "使用 2 张卡兑换奖励", 10),
+    ]
+
+    #   note:6. 以下的请求则是根据现有的代码中对应参数，刷新页面过滤出对应请求
+    qq_video_module_id_query_card_info = "h4y1k5ggeecx9whygr72eutfle"  # 查询卡片信息
+
+    qq_video_module_id_enter_page = "f2e07oo7faaidezzgo5cs25pce"  # 首次进入页面
+    qq_video_module_id_take_enter_page_card = "r9c9zkrg272f0ttsyp9groiy5u"  # 领取进入页面的卡片
+
+    @try_except()
+    def qq_video(self):
+        show_head_line("qq视频活动")
+        self.show_not_ams_act_info("qq视频蚊子腿")
+
+        if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
+            logger.warning("未启用领取qq视频活动功能，将跳过")
+            return
+
+        self.check_qq_video()
+
+        @try_except()
+        def query_card_info(ctx):
+            show_head_line(ctx, msg_color=color("bold_cyan"))
+
+            res = self.qq_video_op(
+                "查询卡片信息",
+                self.qq_video_module_id_query_card_info,
+                option="111",
+                type="71",
+                is_prepublish="0",
+                print_res=False,
+            )
+
+            heads = ["名称", "数目"]
+            colSizes = [20, 4]
+            logger.info(tableify(heads, colSizes))
+            for card in res["do_act"]["score_list"]:
+                cols = [card["score_name"], card["score_num"]]
+                logger.info(tableify(cols, colSizes))
+
+        # 正式逻辑
+        self.qq_video_op("首次进入页面", self.qq_video_module_id_enter_page, type="51", option="1", task="51")
+        self.qq_video_op("领取页面卡片", self.qq_video_module_id_take_enter_page_card, type="59", option="1")
+
+        self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user)
+        logger.info(
+            color("bold_cyan")
+            + "上面的这个幸运角色可以使用其他区服的回归角色进行领取，不过这样的话其实也只有黑钻可以被当前角色用到-。-所以有兴趣的就自己去页面上操作下吧，这里就不额外做了（懒。。。"
+        )
+
+        # self.qq_video_op("勇士见面礼-礼包", self.qq_video_module_id_first_meet_gift)
+        # self.qq_video_op("勇士见面礼-令牌", self.qq_video_module_id_first_meet_token)
+
+        self.qq_video_op("每日抽奖1次(需在活动页面开通QQ视频会员)", self.qq_video_module_id_lottery, type="100143")
+
+        self.qq_video_op("在线30分钟", self.qq_video_module_id_online_30_minutes)
+        self.qq_video_op("累积3天", self.qq_video_module_id_online_3_days)
+        self.qq_video_op("累积7天", self.qq_video_module_id_online_7_days, type="100143")
+        self.qq_video_op("累积10天", self.qq_video_module_id_online_15_days, type="100143")
+
+        logger.warning(
+            "如果【在线30分钟】提示你未在线30分钟，但你实际已在线超过30分钟，也切换过频道了，不妨试试退出游戏，有时候在退出游戏的时候才会刷新这个数据"
+        )
+
+        # 首先尝试按照优先级领取
+        for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
+            res = self.qq_video_op(f"{gift_name}（限 {exchange_count} 次）", module_id)
+            # -904 条件不满足
+            # -903 已经领了没有资格再领了
+            if res["ret"] == -904:
+                logger.info(f"尚未兑换 {gift_name}，先跳过其他礼包")
+                break
+
+        # 如果到了最后一天，就尝试领取所有可以领取的奖励
+        actInfo = get_not_ams_act("qq视频蚊子腿")
+        if format_time(parse_time(actInfo.dtEndTime), "%Y%m%d") == get_today():
+            logger.info("已到活动最后一天，尝试领取所有可以领取的奖励")
+            for module_id, gift_name, exchange_count in self.qq_video_module_id_card_gift_list:
+                for idx in range_from_one(exchange_count):
+                    res = self.qq_video_op(f"[{idx}/{exchange_count}] {gift_name}", module_id)
+                    if res["ret"] != 0:
+                        break
+
+        # 查询一遍集卡信息
+        query_card_info("最新卡片信息")
+
+    def check_qq_video(self):
+        while True:
+            res = self.qq_video_op("幸运勇士礼包", self.qq_video_module_id_lucky_user, print_res=True)
+            if res["ret"] == -904 and res["msg"] == "您当前还未绑定游戏帐号，请先绑定哦~":
+                self.guide_to_bind_account("qq视频蚊子腿", get_act_url("qq视频蚊子腿"), activity_op_func=None)
+                continue
+
+            return res
+
+    def qq_video_op(self, ctx, module_id, option="", type="", task="", is_prepublish="", print_res=True):
+        # 设置下默认值
+        option = option or self.qq_video_default_option
+        type = type or self.qq_video_default_type
+
+        res = self._qq_video_op(ctx, type, option, module_id, task, is_prepublish, print_res)
+
+        if (
+            "data" in res
+            and int(res["data"].get("sys_code", res["ret"])) == -1010
+            and extract_qq_video_message(res) == "系统错误"
+        ):
+            msg = "【需要修复这个】不知道为啥这个操作失败了，试试连上fiddler然后手动操作看看请求哪里对不上"
+            logger.warning(color("fg_bold_yellow") + msg)
+
+        return res
+
+    def _qq_video_op(self, ctx, type, option, module_id, task, is_prepublish, print_res=True):
+        extra_cookies = "; ".join(
+            [
+                "",
+                "appid=3000501",
+                "main_login=qq",
+                f"vuserid={self.get_vuserid()}",
+            ]
+        )
+        return self.get(
+            ctx,
+            self.urls.qq_video,
+            type=type,
+            option=option,
+            act_id=self.qq_video_act_id,
+            module_id=module_id,
+            task=task,
+            is_prepublish=is_prepublish,
+            print_res=print_res,
+            extra_cookies=extra_cookies,
+        )
 
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
@@ -2655,6 +2815,23 @@ class DjcHelperTomb:
         need_try_func: Callable[[RoleInfo], bool] | None = None,
     ):
         return
+
+    def guide_to_bind_account(
+        self,
+        activity_name,
+        activity_url,
+        activity_op_func=None,
+        query_bind_flowid="",
+        commit_bind_flowid="",
+        try_auto_bind=False,
+        bind_reason="未绑定角色",
+        roleinfo: RoleInfo | None = None,
+        roleinfo_source="道聚城所绑定的角色",
+    ):
+        pass
+
+    def get_vuserid(self) -> str:
+        return getattr(self, "vuserid", "")
 
 
 def watch_live():

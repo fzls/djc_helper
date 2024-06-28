@@ -137,7 +137,6 @@ act_name_to_url = {
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
-    "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
 }
 
 
@@ -264,7 +263,6 @@ class Urls:
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "603490"  # WeGame活动
-        self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup

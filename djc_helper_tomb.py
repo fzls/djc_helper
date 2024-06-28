@@ -82,7 +82,7 @@ from util import (
     try_except,
     uin2qq,
     use_by_myself,
-    wait_for,
+    wait_for, now_in_range,
 )
 
 
@@ -168,7 +168,129 @@ class DjcHelperTomb:
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
             ("和谐补偿活动", self.dnf_compensate),
+            ("DNF巴卡尔竞速", self.dnf_bakaer),
         ]
+
+    # --------------------------------------------DNF巴卡尔竞速--------------------------------------------
+    @try_except()
+    def dnf_bakaer(self):
+        show_head_line("DNF巴卡尔竞速")
+        self.show_amesvr_act_info(self.dnf_bakaer_op)
+
+        if not self.cfg.function_switches.get_dnf_bakaer or self.disable_most_activities():
+            logger.warning("未启用领取DNF巴卡尔竞速活动合集功能，将跳过")
+            return
+
+        self.check_dnf_bakaer()
+
+        def query_info() -> tuple[int, int]:
+            res = self.dnf_bakaer_op("查询信息", "928267", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            totat_lottery, current_lottery = raw_info.sOutValue3.split("|")
+
+            return int(totat_lottery), int(current_lottery)
+
+        async_message_box(
+            "请手动前往 巴卡尔竞速赛 活动页面进行报名~",
+            "巴卡尔竞赛报名",
+            open_url=get_act_url("DNF巴卡尔竞速"),
+            show_once=True,
+        )
+
+        today = get_today()
+        self.dnf_bakaer_op(f"7天签到 - {today}", "928281", today=today)
+
+        self.dnf_bakaer_op("见面礼", "928270")
+        self.dnf_bakaer_op("回流礼", "928446")
+        self.dnf_bakaer_op("心悦专属礼", "929712")
+
+        self.dnf_bakaer_op("绑定送竞猜票", "929213")
+
+        # 投票时间：3月3日0:00-3月17日23:59
+        if now_in_range("2023-03-03 00:00:00", "2023-03-10 00:00:00"):
+            async_message_box(
+                "当前处于巴卡尔竞速赛投票前半段时间，可手动前往活动页面选择你认为会是对应跨区冠军的主播或玩家。若未选择，将会在后半段投票时间随机投票",
+                "巴卡尔竞速赛投票提示",
+                open_url=get_act_url("DNF巴卡尔竞速"),
+                show_once=True,
+            )
+        elif now_in_range("2023-03-10 00:00:00", "2023-03-17 23:59:59"):
+            vote_id_name_list = [
+                # 斗鱼主播
+                (1, "银雪"),
+                (2, "亭宝"),
+                (3, "墨羽狼"),
+                (4, "素颜"),
+                (5, "泣雨"),
+                (6, "CEO"),
+                (7, "似雨幽离"),
+                (8, "丛雨"),
+                # 虎牙主播
+                (9, "狂人"),
+                (10, "小古子"),
+                (11, "小炜"),
+                (12, "云彩上的翅膀"),
+                (13, "东二梦想"),
+                (14, "猪猪侠神之手"),
+                (15, "仙哥哥"),
+                (16, "小勇"),
+                # 游戏家俱乐部
+                (17, "夜茶会"),
+                (18, "清幽茶语"),
+                (19, "今夕何年"),
+                (20, "黑色恋人"),
+                (21, "星梦"),
+                (22, "朝九晚五"),
+                (23, "天使赞歌"),
+                (24, "挚友"),
+            ]
+            id, name = random.choice(vote_id_name_list)
+            logger.info(f"当前到达投票后半段时间，将尝试自动随机投一个 {id} {name}")
+            self.dnf_bakaer_op("竞猜", "928617", anchor=id)
+
+        # 领取时间：3月20日10:00~3月22日23:59
+        if now_in_range("2023-03-20 00:00:00", "2023-03-22 23:59:59"):
+            self.dnf_bakaer_op("竞猜礼包", "928628")
+
+        self.dnf_bakaer_op("登录DNF客户端", "928277")
+        self.dnf_bakaer_op("登录心悦俱乐部App", "928559")
+        self.dnf_bakaer_op("DNF在线时长30分钟", "928563")
+        self.dnf_bakaer_op("分享活动页面", "928570")
+        self.dnf_bakaer_op("进入活动页面", "928606")
+
+        totat_lottery, current_lottery = query_info()
+        logger.info(f"当前有{current_lottery}张抽奖券, 累积获得 {totat_lottery}")
+        for idx in range(current_lottery):
+            self.dnf_bakaer_op(f"第{idx + 1}/{current_lottery}次抽奖", "928273")
+            if idx != current_lottery:
+                time.sleep(5)
+
+    def check_dnf_bakaer(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
+        self.check_bind_account(
+            "DNF巴卡尔竞速",
+            get_act_url("DNF巴卡尔竞速"),
+            activity_op_func=self.dnf_bakaer_op,
+            query_bind_flowid="928266",
+            commit_bind_flowid="928265",
+            roleinfo=roleinfo,
+            roleinfo_source=roleinfo_source,
+        )
+
+    def dnf_bakaer_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_bakaer
+
+        return self.amesvr_request(
+            ctx,
+            "act.game.qq.com",
+            "xinyue",
+            "tgclub",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF巴卡尔竞速"),
+            **extra_params,
+        )
 
     # --------------------------------------------和谐补偿活动--------------------------------------------
     @try_except()

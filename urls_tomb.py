@@ -74,6 +74,7 @@ act_name_to_url_bomb = {
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
+    "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
 }
 
 
@@ -118,6 +119,7 @@ class UrlsTomb:
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
+        self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

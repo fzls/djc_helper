@@ -73,7 +73,6 @@ not_ams_activities = [
     #
     # 已过期活动
     #
-    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
@@ -131,7 +130,6 @@ act_name_to_url = {
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
-    "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
 }
 
 
@@ -298,11 +296,6 @@ class Urls:
         # ide活动
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = "e_code=0&g_code=0" + "&" + generate_raw_data_template(self.ide_default_params_list)
-
-        # 每月黑钻等级礼包
-        self.heizuan_gift = (
-            "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
-        )
 
         # 信用星级礼包
         self.credit_gift = (

@@ -19,6 +19,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
 ]
 
 act_name_to_url_bomb = {
@@ -80,6 +81,7 @@ act_name_to_url_bomb = {
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
+    "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
 }
 
 
@@ -197,3 +199,8 @@ class UrlsTomb:
 
         # 超享玩
         self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"
+
+        # 每月黑钻等级礼包
+        self.heizuan_gift = (
+            "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
+        )

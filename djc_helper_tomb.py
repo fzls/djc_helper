@@ -177,7 +177,28 @@ class DjcHelperTomb:
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("DNF心悦", self.dnf_xinyue),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
+            ("黑钻礼包", self.get_heizuan_gift),
         ]
+
+    # --------------------------------------------黑钻--------------------------------------------
+    @try_except()
+    def get_heizuan_gift(self):
+        show_head_line("黑钻礼包")
+        self.show_not_ams_act_info("黑钻礼包")
+
+        if not self.cfg.function_switches.get_heizuan_gift or self.disable_most_activities():
+            show_act_not_enable_warning("每月黑钻等级礼包")
+            return
+
+        while True:
+            res = self.get("领取每月黑钻等级礼包", self.urls.heizuan_gift)
+            # note: 黑钻的活动页面不见了，现在没法手动绑定了，不再增加这个提示
+            # # 如果未绑定大区，提示前往绑定 "iRet": -50014, "sMsg": "抱歉，请先绑定大区后再试！"
+            # if res["iRet"] == -50014:
+            #     self.guide_to_bind_account("每月黑钻等级礼包", get_act_url("黑钻礼包"), activity_op_func=None)
+            #     continue
+
+            return res
 
     # --------------------------------------------DNF心悦--------------------------------------------
     @try_except()

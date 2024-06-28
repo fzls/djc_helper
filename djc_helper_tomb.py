@@ -103,7 +103,68 @@ class DjcHelperTomb:
             ("微信签到", self.wx_checkin),
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
             ("虎牙", self.huya),
+            ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
         ]
+
+    # --------------------------------------------命运的抉择挑战赛--------------------------------------------
+    @try_except()
+    def dnf_mingyun_jueze(self):
+        show_head_line("命运的抉择挑战赛功能")
+        self.show_amesvr_act_info(self.dnf_mingyun_jueze_op)
+
+        if not self.cfg.function_switches.get_dnf_mingyun_jueze or self.disable_most_activities():
+            logger.warning("未启用命运的抉择挑战赛功能，将跳过")
+            return
+
+        self.check_dnf_mingyun_jueze()
+
+        def query_ticket_count():
+            res = self.dnf_mingyun_jueze_op("查询数据", "796751", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue1)
+
+        self.dnf_mingyun_jueze_op("领取报名礼包", "796752")
+        self.dnf_mingyun_jueze_op("领取排行礼包", "796753")
+
+        self.dnf_mingyun_jueze_op("每日在线30分钟", "796755")
+        self.dnf_mingyun_jueze_op("每日通关", "796756")
+        self.dnf_mingyun_jueze_op("每日特权网吧登陆", "796757")
+
+        ticket = query_ticket_count()
+        logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
+        for idx in range_from_one(ticket):
+            self.dnf_mingyun_jueze_op(f"[{idx}/{ticket}]幸运夺宝", "796754")
+            if idx != ticket:
+                time.sleep(5)
+
+        self.dnf_mingyun_jueze_op("决赛普发礼包", "796767")
+        self.dnf_mingyun_jueze_op("决赛冠军礼包", "796768")
+        self.dnf_mingyun_jueze_op("决赛普发礼包", "796769")
+
+    def check_dnf_mingyun_jueze(self):
+        self.check_bind_account(
+            "命运的抉择挑战赛",
+            get_act_url("命运的抉择挑战赛"),
+            activity_op_func=self.dnf_mingyun_jueze_op,
+            query_bind_flowid="796750",
+            commit_bind_flowid="796749",
+        )
+
+    def dnf_mingyun_jueze_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_mingyun_jueze
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("命运的抉择挑战赛"),
+            **extra_params,
+        )
 
     # -------------------------------------------- 虎牙 --------------------------------------------
     @try_except()

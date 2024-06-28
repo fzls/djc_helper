@@ -177,7 +177,6 @@ act_name_to_url = {
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
-    "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
 }
 
 
@@ -325,7 +324,6 @@ class Urls:
         self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
-        self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂

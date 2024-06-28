@@ -1236,45 +1236,6 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
         djcHelper.xinyue_battle_ground_wpe_op("领取队伍3次运镖幸运加成", 131432)
 
 
-def try_xinyue_sailiyam_start_work(cfg):
-    if not has_any_account_in_normal_run(cfg):
-        return
-    _show_head_line("尝试派赛利亚出去打工")
-
-    for idx, account_config in enumerate(cfg.account_configs):
-        idx += 1
-        if not account_config.is_enabled():
-            # 未启用的账户的账户不走该流程
-            continue
-
-        logger.info("")
-        logger.warning(
-            color("fg_bold_green")
-            + f"------------开始处理第{idx}个账户({account_config.name})的赛利亚的打工和领工资~------------"
-        )
-
-        djcHelper = DjcHelper(account_config, cfg.common)
-        djcHelper.check_skey_expired()
-        djcHelper.get_bind_role_list()
-        if (
-            account_config.function_switches.get_xinyue_sailiyam
-            and not account_config.function_switches.disable_most_activities_v2
-        ):
-            # 先尝试领工资
-            djcHelper.show_xinyue_sailiyam_work_log()
-            djcHelper.xinyue_sailiyam_op("领取工资", "714229", iPackageId=djcHelper.get_xinyue_sailiyam_package_id())
-            djcHelper.xinyue_sailiyam_op("全勤奖", "715724")
-
-            # 然后派出去打工
-            djcHelper.xinyue_sailiyam_op("出去打工", "714255")
-
-            logger.info("等待一会，避免请求过快")
-            time.sleep(3)
-
-        logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_workinfo())
-        logger.info(color("fg_bold_cyan") + djcHelper.get_xinyue_sailiyam_status())
-
-
 def show_buy_info(user_buy_info: BuyInfo, cfg: Config, need_show_message_box=True):
     logger.info(color("bold_cyan") + user_buy_info.description())
 

@@ -216,9 +216,6 @@ def main():
     # 尝试领取心悦组队奖励
     try_take_xinyue_team_award(cfg, user_buy_info)
 
-    # # 尝试派赛利亚出去打工
-    # try_xinyue_sailiyam_start_work(cfg)
-
     enable_card_lottery = is_ark_lottery_enabled()
 
     if enable_card_lottery:

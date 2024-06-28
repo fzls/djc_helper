@@ -779,7 +779,6 @@ class DjcHelper:
             ("10月女法师三觉", self.dnf_female_mage_awaken),
             ("dnf助手排行榜", self.dnf_rank),
             ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
-            ("DNF进击吧赛利亚", self.xinyue_sailiyam),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2436,123 +2435,6 @@ class DjcHelper:
         logger.info(
             color("bold_yellow")
             + f"兑换前G分为{old_gpoints}， 兑换后G分为{new_gpoints}，差值为{old_gpoints - new_gpoints}，请自行前往心悦app确认是否兑换成功"
-        )
-
-    # DNF进击吧赛利亚
-    def xinyue_sailiyam(self):
-        show_head_line("DNF进击吧赛利亚")
-        self.show_amesvr_act_info(self.xinyue_sailiyam_op)
-
-        def sleep_to_avoid_ban():
-            logger.info("等待五秒，防止提示操作太快")
-            time.sleep(5)
-
-        for dzid in self.common_cfg.sailiyam_visit_target_qqs:
-            if dzid == self.qq():
-                continue
-            self.xinyue_sailiyam_op(f"拜访好友-{dzid}", "714307", dzid=dzid)
-            sleep_to_avoid_ban()
-
-        if not self.cfg.function_switches.get_xinyue_sailiyam or self.disable_most_activities():
-            logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
-            return
-
-        self.check_xinyue_sailiyam()
-        self.show_xinyue_sailiyam_kouling()
-        self.xinyue_sailiyam_op("清空工作天数", "715579")
-
-        sleep_to_avoid_ban()
-        self.xinyue_sailiyam_op("领取蛋糕", "714230")
-        self.xinyue_sailiyam_op("投喂蛋糕", "714251")
-
-        logger.info(
-            "ps：打工在运行结束的时候统一处理，这样可以确保处理好各个其他账号的拜访，从而有足够的心情值进行打工"
-        )
-
-    @try_except(return_val_on_except="")
-    def get_xinyue_sailiyam_package_id(self):
-        res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        return res["modRet"]["jData"]["roleinfor"]["iPackageId"]
-
-    @try_except(return_val_on_except="")
-    def get_xinyue_sailiyam_workinfo(self):
-        res = self.xinyue_sailiyam_op("打工显示", "715378", print_res=False)
-        workinfo = SailiyamWorkInfo().auto_update_config(res["modRet"]["jData"]["roleinfor"])
-
-        work_message = ""
-
-        if workinfo.status == 2:
-            nowtime = get_now_unix()
-            fromtimestamp = datetime.datetime.fromtimestamp
-            if workinfo.endTime > nowtime:
-                lefttime = int(workinfo.endTime - nowtime)
-                hour, minute, second = lefttime // 3600, lefttime % 3600 // 60, lefttime % 60
-                work_message += f"赛利亚打工倒计时：{hour:02d}:{minute:02d}:{second:02d}"
-            else:
-                work_message += "赛利亚已经完成今天的工作了"
-
-            work_message += f"。开始时间为{fromtimestamp(workinfo.startTime)}，结束时间为{fromtimestamp(workinfo.endTime)}，奖励最终领取时间为{fromtimestamp(workinfo.endLQtime)}"
-        else:
-            work_message += "赛利亚尚未出门工作"
-
-        return work_message
-
-    @try_except(return_val_on_except="")
-    def get_xinyue_sailiyam_status(self):
-        res = self.xinyue_sailiyam_op("查询状态", "714738", print_res=False)
-        modRet = parse_amesvr_common_info(res)
-        lingqudangao, touwei, _, baifang = modRet.sOutValue1.split("|")
-        dangao = modRet.sOutValue2
-        xinqingzhi = modRet.sOutValue3
-        qiandaodate = modRet.sOutValue4
-        return f"领取蛋糕：{lingqudangao == '1'}, 投喂蛋糕: {touwei == '1'}, 已拜访次数: {baifang}/5, 剩余蛋糕: {dangao}, 心情值: {xinqingzhi}/100, 已连续签到: {qiandaodate}次"
-
-    @try_except()
-    def show_xinyue_sailiyam_work_log(self):
-        res = self.xinyue_sailiyam_op("日志列表", "715201", print_res=False)
-        logContents = {
-            "2168440": "遇到需要紧急处理的工作，是时候证明真正的技术了，启动加班模式！工作时长加1小时；",
-            "2168439": "愉快的一天又开始了，是不是该来一杯咖啡？",
-            "2168442": "给流浪猫咪喂吃的导致工作迟到，奖励虽然下降 ，但是撸猫的心情依然美好；",
-            "2168441": "工作效率超高，能力超强，全能MVP，优秀的你，当然需要发奖金啦，奖励up；",
-        }
-        logs = res["modRet"]["jData"]["loglist"]["list"]
-        if len(logs) != 0:
-            logger.info("赛利亚打工日志如下")
-            for log in logs:
-                month, day, message = log[0][:2], log[0][2:], logContents[log[2]]
-                logger.info(f"{month}月{day}日：{message}")
-
-    def show_xinyue_sailiyam_kouling(self):
-        res = self.xinyue_sailiyam_op("输出项", "714618", print_res=False)
-        if "modRet" in res:
-            logger.info(f"分享口令为： {res['modRet']['sOutValue2']}")
-
-    def check_xinyue_sailiyam(self):
-        self.check_bind_account(
-            "DNF进击吧赛利亚",
-            get_act_url("DNF进击吧赛利亚"),
-            activity_op_func=self.xinyue_sailiyam_op,
-            query_bind_flowid="714234",
-            commit_bind_flowid="714233",
-        )
-
-    def xinyue_sailiyam_op(self, ctx, iFlowId, dzid="", iPackageId="", print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_xinyue_sailiyam
-
-        return self.amesvr_request(
-            ctx,
-            "act.game.qq.com",
-            "xinyue",
-            "tgclub",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF进击吧赛利亚"),
-            dzid=dzid,
-            page=1,
-            iPackageId=iPackageId,
-            **extra_params,
         )
 
     # --------------------------------------------黑钻--------------------------------------------

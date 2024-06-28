@@ -26,6 +26,7 @@ act_name_to_url_bomb = {
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
     "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
+    "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
 }
 
 
@@ -41,6 +42,7 @@ class UrlsTomb:
         self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
         self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
+        self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

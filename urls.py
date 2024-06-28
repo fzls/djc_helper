@@ -185,7 +185,6 @@ act_name_to_url = {
     "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
     "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
     "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
-    "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
 }
 
 
@@ -304,7 +303,6 @@ class Urls:
         # https://apps.game.qq.com/comm-htdocs/js/ams/v0.2R02/act/{actId}/act.desc.js
         self.iActivityId_djc_operations = "11117"  # 道聚城
         self.iActivityId_xinyue_battle_ground = "366480"  # DNF地下城与勇士心悦特权专区
-        self.iActivityId_xinyue_sailiyam = "339263"  # DNF进击吧赛利亚
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动

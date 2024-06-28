@@ -84,6 +84,7 @@ act_name_to_url_bomb = {
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
+    "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
 }
 
 
@@ -135,6 +136,7 @@ class UrlsTomb:
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
+        self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

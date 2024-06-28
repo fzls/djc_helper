@@ -688,7 +688,6 @@ class DjcHelper:
         return [
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
-            ("9163补偿", self.dnf_9163_apologize),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF年货铺", self.dnf_nianhuopu),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
@@ -7583,51 +7582,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("神界预热"),
-            **extra_params,
-        )
-
-    # --------------------------------------------9163补偿--------------------------------------------
-    @try_except()
-    def dnf_9163_apologize(self):
-        show_head_line("9163补偿")
-        self.show_amesvr_act_info(self.dnf_9163_apologize_op)
-
-        if not self.cfg.function_switches.get_dnf_9163_apologize or self.disable_most_activities():
-            show_act_not_enable_warning("9163补偿")
-            return
-
-        self.check_dnf_9163_apologize()
-
-        self.dnf_9163_apologize_op("领取9163礼包(2w代币券+2星辰百变部件)", "1014635", u_confirm=1)
-
-        async_message_box(
-            "3.30策划针对9163事件进行了说明，并提供了补偿礼盒，具体内容为20000欢乐代币券礼盒与及星辰百变部件礼盒（2个），小助手已帮你领取，可在绑定账号的邮箱查看",
-            "9163补偿",
-            show_once=True,
-            open_url="https://dnf.qq.com/webplat/info/news_version3/119/495/498/m21449/202403/950215.shtml",
-        )
-
-    def check_dnf_9163_apologize(self):
-        self.check_bind_account(
-            "9163补偿",
-            get_act_url("9163补偿"),
-            activity_op_func=self.dnf_9163_apologize_op,
-            query_bind_flowid="1014634",
-            commit_bind_flowid="1014633",
-        )
-
-    def dnf_9163_apologize_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_9163_apologize
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("9163补偿"),
             **extra_params,
         )
 

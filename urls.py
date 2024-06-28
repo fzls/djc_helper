@@ -114,7 +114,6 @@ act_name_to_url = {
     #
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
-    "9163补偿": "https://dnf.qq.com/cp/a20240330apologize/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
@@ -260,7 +259,6 @@ class Urls:
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
-        self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿
 
         # fmt: off
         # amesvr活动

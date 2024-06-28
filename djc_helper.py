@@ -766,7 +766,6 @@ class DjcHelper:
             ("新职业预约活动", self.dnf_reserve),
             ("WeGame活动_新版", self.wegame_new),
             ("DNF公会活动", self.dnf_gonghui),
-            ("关怀活动", self.dnf_guanhuai),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -3475,55 +3474,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("组队拜年"),
-            **extra_params,
-        )
-
-    # --------------------------------------------关怀活动--------------------------------------------
-    @try_except()
-    def dnf_guanhuai(self):
-        show_head_line("关怀活动")
-        self.show_amesvr_act_info(self.dnf_guanhuai_op)
-
-        if not self.cfg.function_switches.get_dnf_guanhuai or self.disable_most_activities():
-            logger.warning("未启用领取关怀活动功能，将跳过")
-            return
-
-        self.check_dnf_guanhuai()
-
-        def take_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
-            self.dnf_guanhuai_op("关怀礼包1领取", "813599")
-            self.dnf_guanhuai_op("关怀礼包2领取", "813601")
-            self.dnf_guanhuai_op("关怀礼包3领取", "813602")
-
-            return True
-
-        self.try_do_with_lucky_role_and_normal_role("领取关怀礼包", self.check_dnf_guanhuai, take_gifts)
-
-        self.dnf_guanhuai_op("领取每日抽奖次数", "813603")
-        for idx in range_from_one(2):
-            self.dnf_guanhuai_op(f"{idx}/2 关怀抽奖", "813605")
-
-    def check_dnf_guanhuai(self, **extra_params):
-        self.check_bind_account(
-            "关怀活动",
-            get_act_url("关怀活动"),
-            activity_op_func=self.dnf_guanhuai_op,
-            query_bind_flowid="813595",
-            commit_bind_flowid="813594",
-            **extra_params,
-        )
-
-    def dnf_guanhuai_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_guanhuai
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("关怀活动"),
             **extra_params,
         )
 

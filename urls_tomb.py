@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from urls import get_act_url, newNotAmsActInfo, not_know_end_time____
+from urls import get_act_url, newNotAmsActInfo, not_know_end_time____, not_know_start_time__
 
 # 将几乎可以确定不再会重新上线的活动代码挪到这里，从而减少 urls.py 的行数
 
@@ -13,6 +13,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
 ]
 
 act_name_to_url_bomb = {
@@ -55,6 +56,7 @@ act_name_to_url_bomb = {
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
+    "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
 }
 
 
@@ -139,3 +141,10 @@ class UrlsTomb:
         # 心悦app
         # 心悦猫咪api
         self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"
+
+        # 幸运勇士
+        self.lucky_user = (
+            "https://nloss.native.qq.com/{api}?iAreaId={iAreaId}&iRoleId={iRoleId}"
+            "&taskId={taskId}&point={point}"
+            "&randomSeed={randomSeed}"
+        )

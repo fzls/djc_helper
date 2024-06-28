@@ -754,7 +754,6 @@ class DjcHelper:
             ("超享玩", self.super_core),
             ("我的小屋", self.dnf_my_home),
             ("DNF集合站_ide", self.dnf_collection_ide),
-            ("幸运勇士", self.dnf_lucky_user),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -3255,70 +3254,6 @@ class DjcHelper:
             act_url,
             **extra_params,
             sChannel=sChannel,
-        )
-
-    # --------------------------------------------幸运勇士--------------------------------------------
-    @try_except()
-    def dnf_lucky_user(self):
-        show_head_line("幸运勇士")
-        self.show_not_ams_act_info("幸运勇士")
-
-        if not self.cfg.function_switches.get_dnf_lucky_user or self.disable_most_activities():
-            logger.warning("未启用领取幸运勇士功能，将跳过")
-            return
-
-        def query_info() -> LuckyUserInfo:
-            res = self.dnf_lucky_user_op("查询信息", "getActConf", print_res=False)
-
-            info = LuckyUserInfo().auto_update_config(res["jData"])
-
-            return info
-
-        def get_task_point(task: LuckyUserTaskConf) -> int:
-            # 协调结晶体往后放
-            for replace_with_point, not_want in [
-                (-2, "闪耀的协调结晶体"),
-                (-1, "王者契约"),
-            ]:
-                if not_want in task.iconName:
-                    return replace_with_point
-
-            return int(task.point)
-
-        roleinfo = self.get_dnf_bind_role()
-
-        # 绑定角色
-        self.dnf_lucky_user_op("绑定角色", "setRole", iAreaId=roleinfo.serviceID, iRoleId=roleinfo.roleCode)
-
-        # 签到
-        self.dnf_lucky_user_op("签到", "doSign")
-
-        # 领取任务奖励
-        info = query_info()
-        # 优先尝试积分多的
-        info.taskConf.sort(key=lambda conf: get_task_point(conf), reverse=True)
-        for task in info.taskConf:
-            time.sleep(5)
-            self.dnf_lucky_user_op(
-                f"领取任务奖励 {task.title} {task.iconName} {task.point}积分", "doTask", taskId=task.id
-            )
-
-        # 领取积分奖励
-        for point in info.pointConf:
-            time.sleep(5)
-            self.dnf_lucky_user_op(f"领取积分奖励 {point.sGroupName} {point.iconName}", "doPoint", point=point.point)
-
-        # 打印当前信息
-        info = query_info()
-        logger.info(color("bold_yello") + f"幸运勇士当前积分为 {info.point}, 已签到{info.totalSignNum}天")
-
-    def dnf_lucky_user_op(self, ctx: str, api: str, **params):
-        return self.get(
-            ctx,
-            self.urls.lucky_user,
-            api=api,
-            randomSeed=math.ceil(random.random() * 10000000),
-            **params,
         )
 
     # --------------------------------------------DNF漫画预约活动--------------------------------------------

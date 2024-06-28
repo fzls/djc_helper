@@ -756,7 +756,6 @@ class DjcHelper:
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("幸运勇士", self.dnf_lucky_user),
             ("KOL", self.dnf_kol),
-            ("黄钻", self.dnf_yellow_diamond),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2685,51 +2684,6 @@ class DjcHelper:
         #         },
         #     )
         # self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
-
-    # --------------------------------------------QQ空间黄钻--------------------------------------------
-    # note：对接流程与上方 超级会员 dnf_super_vip 完全一致，参照其流程即可
-    @try_except()
-    def dnf_yellow_diamond(self):
-        get_act_url("黄钻")
-        show_head_line("QQ空间黄钻")
-        self.show_not_ams_act_info("黄钻")
-
-        if not self.cfg.function_switches.get_dnf_yellow_diamond or self.disable_most_activities():
-            logger.warning("未启用领取QQ空间黄钻功能，将跳过")
-            return
-
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
-        self.fetch_pskey()
-        if self.lr is None:
-            return
-
-        lucky_act_id = "66613_2fd7e98b"
-        self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
-        self.qzone_act_op(
-            "幸运勇士礼包 - 集卡幸运角色",
-            lucky_act_id,
-            act_req_data=self.try_make_lucky_user_req_data(
-                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
-            ),
-        )
-        self.qzone_act_op("勇士见面礼", "66614_23246ef1")
-        if not self.cfg.function_switches.disable_share and is_first_run(
-            f"dnf_yellow_diamond_{get_act_url('黄钻')}_分享_{self.uin()}"
-        ):
-            self.qzone_act_op(
-                "分享给自己",
-                "66615_9132410d",
-                act_req_data={
-                    "receivers": [
-                        self.qq(),
-                    ]
-                },
-            )
-        self.qzone_act_op("分享领取礼包", "66616_44f492ad")
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
 

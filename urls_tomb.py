@@ -12,6 +12,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
+    newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
 ]
 
 act_name_to_url_bomb = {
@@ -52,6 +53,7 @@ act_name_to_url_bomb = {
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
+    "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
 }
 
 

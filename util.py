@@ -1861,6 +1861,10 @@ def get_first_exists_dict_value(kv: dict, *keys: str) -> Any:
     return None
 
 
+def show_act_not_enable_warning(act_name: str):
+    logger.warning(f"未启用领取 {act_name} 功能，将跳过")
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())

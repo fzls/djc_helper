@@ -85,6 +85,7 @@ from util import (
     uin2qq,
     use_by_myself,
     wait_for,
+    show_act_not_enable_warning,
 )
 
 
@@ -185,7 +186,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_xinyue_op)
 
         if not self.cfg.function_switches.get_dnf_xinyue or self.disable_most_activities():
-            logger.warning("未启用领取 DNF心悦 功能，将跳过")
+            show_act_not_enable_warning("DNF心悦")
             return
 
         self.check_dnf_xinyue()
@@ -285,7 +286,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_xinyue_dup_op)
 
         if not self.cfg.function_switches.get_dnf_xinyue or self.disable_most_activities():
-            logger.warning("未启用领取 DNF心悦Dup 功能，将跳过")
+            show_act_not_enable_warning("DNF心悦Dup")
             return
 
         self.check_dnf_xinyue_dup()
@@ -361,7 +362,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_anniversary_friend_op)
 
         if not self.cfg.function_switches.get_dnf_anniversary_friend or self.disable_most_activities():
-            logger.warning("未启用领取dnf周年拉好友功能，将跳过")
+            show_act_not_enable_warning("dnf周年拉好友")
             return
 
         self.check_dnf_anniversary_friend()
@@ -414,7 +415,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_financing_op)
 
         if not self.cfg.function_switches.get_xinyue_financing:
-            logger.warning("未启用领取心悦app理财礼卡活动合集功能，将跳过")
+            show_act_not_enable_warning("心悦app理财礼卡活动合集")
             return
 
         selectedCards = ["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]
@@ -588,7 +589,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.maoxian_start_op)
 
         if not self.cfg.function_switches.get_maoxian_start or self.disable_most_activities():
-            logger.warning("未启用领取冒险的起点功能，将跳过")
+            show_act_not_enable_warning("冒险的起点")
             return
 
         self.maoxian_start_op("1", "919254")
@@ -629,7 +630,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_bakaer_op)
 
         if not self.cfg.function_switches.get_dnf_bakaer or self.disable_most_activities():
-            logger.warning("未启用领取DNF巴卡尔竞速活动合集功能，将跳过")
+            show_act_not_enable_warning("DNF巴卡尔竞速活动合集")
             return
 
         self.check_dnf_bakaer()
@@ -749,7 +750,7 @@ class DjcHelperTomb:
         show_head_line("和谐补偿活动")
 
         if not self.cfg.function_switches.get_dnf_compensate or self.disable_most_activities():
-            logger.warning("未启用领取和谐补偿活动功能，将跳过")
+            show_act_not_enable_warning("和谐补偿活动")
             return
 
         self.show_amesvr_act_info(self.dnf_compensate_op)
@@ -799,7 +800,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("巴卡尔对战地图")
 
         if not self.cfg.function_switches.get_dnf_bakaer_map or self.disable_most_activities():
-            logger.warning("未启用领取 巴卡尔对战地图 功能，将跳过")
+            show_act_not_enable_warning("巴卡尔对战地图")
             return
 
         self.check_dnf_bakaer_map_ide()
@@ -842,7 +843,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_bakaer_fight_op)
 
         if not self.cfg.function_switches.get_dnf_bakaer_fight or self.disable_most_activities():
-            logger.warning("未启用领取巴卡尔大作战功能，将跳过")
+            show_act_not_enable_warning("巴卡尔大作战")
             return
 
         self.check_dnf_bakaer_fight()
@@ -934,7 +935,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("魔界人探险记")
 
         if not self.cfg.function_switches.get_mojieren or self.disable_most_activities():
-            logger.warning("未启用领取魔界人探险记活动功能，将跳过")
+            show_act_not_enable_warning("魔界人探险记活动")
             return
 
         # re: 根据本次检查绑定具体使用的活动体系决定使用哪个函数
@@ -1079,7 +1080,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_collection_op)
 
         if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
-            logger.warning("未启用领取DNF集合站功能，将跳过")
+            show_act_not_enable_warning("DNF集合站")
             return
 
         self.check_dnf_collection()
@@ -1134,7 +1135,7 @@ class DjcHelperTomb:
         show_head_line("dnf助手活动Dup")
 
         if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
-            logger.warning("未启用领取dnf助手活动功能，将跳过")
+            show_act_not_enable_warning("dnf助手活动")
             return
 
         # 检查是否已在道聚城绑定
@@ -1229,7 +1230,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_weekly_gift_op)
 
         if not self.cfg.function_switches.get_xinyue_weekly_gift:
-            logger.warning("未启用领取心悦app周礼包活动合集功能，将跳过")
+            show_act_not_enable_warning("心悦app周礼包活动合集")
             return
 
         def query_info():
@@ -1311,7 +1312,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_shanguang_op)
 
         if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
-            logger.warning("未启用领取DNF闪光杯活动合集功能，将跳过")
+            show_act_not_enable_warning("DNF闪光杯活动合集")
             return
 
         self.check_dnf_shanguang()
@@ -1438,7 +1439,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_maoxian_road_op)
 
         if not self.cfg.function_switches.get_dnf_maoxian_road or self.disable_most_activities():
-            logger.warning("未启用领取DNF冒险家之路功能，将跳过")
+            show_act_not_enable_warning("DNF冒险家之路")
             return
 
         self.check_dnf_maoxian_road()
@@ -1554,7 +1555,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("超享玩")
 
         if not self.cfg.function_switches.get_super_core or self.disable_most_activities():
-            logger.warning("未启用领取超享玩功能，将跳过")
+            show_act_not_enable_warning("超享玩")
             return
 
         lr = self.fetch_supercore_login_info("获取超享玩所需的access_token")
@@ -1678,7 +1679,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("我的小屋")
 
         if not self.cfg.function_switches.get_dnf_my_home or self.disable_most_activities():
-            logger.warning("未启用领取我的小屋活动功能，将跳过")
+            show_act_not_enable_warning("我的小屋活动")
             return
 
         self.check_dnf_my_home()
@@ -2077,7 +2078,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("DNF集合站_ide")
 
         if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
-            logger.warning("未启用领取DNF集合站功能，将跳过")
+            show_act_not_enable_warning("DNF集合站")
             return
 
         self.check_dnf_collection_ide()
@@ -2125,7 +2126,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("幸运勇士")
 
         if not self.cfg.function_switches.get_dnf_lucky_user or self.disable_most_activities():
-            logger.warning("未启用领取幸运勇士功能，将跳过")
+            show_act_not_enable_warning("幸运勇士")
             return
 
         def query_info() -> LuckyUserInfo:
@@ -2189,7 +2190,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_kol_op)
 
         if not self.cfg.function_switches.get_dnf_kol or self.disable_most_activities():
-            logger.warning("未启用领取KOL功能，将跳过")
+            show_act_not_enable_warning("KOL")
             return
 
         self.check_dnf_kol()
@@ -2261,7 +2262,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("黄钻")
 
         if not self.cfg.function_switches.get_dnf_yellow_diamond or self.disable_most_activities():
-            logger.warning("未启用领取QQ空间黄钻功能，将跳过")
+            show_act_not_enable_warning("QQ空间黄钻")
             return
 
         # 检查是否已在道聚城绑定
@@ -2310,7 +2311,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_cat_op)
 
         if not self.cfg.function_switches.get_xinyue_cat:
-            logger.warning("未启用领取心悦猫咪活动合集功能，将跳过")
+            show_act_not_enable_warning("心悦猫咪活动合集")
             return
 
         # --------------- 封装接口 ---------------
@@ -2485,7 +2486,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_interactive_op)
 
         if not self.cfg.function_switches.get_dnf_interactive or self.disable_most_activities():
-            logger.warning("未启用领取DNF互动站功能，将跳过")
+            show_act_not_enable_warning("DNF互动站")
             return
 
         self.check_dnf_interactive()
@@ -2536,7 +2537,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_dianzan_op)
 
         if not self.cfg.function_switches.get_dnf_dianzan or self.disable_most_activities():
-            logger.warning("未启用领取DNF共创投票活动功能，将跳过")
+            show_act_not_enable_warning("DNF共创投票活动")
             return
 
         self.check_dnf_dianzan()
@@ -2747,7 +2748,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_card_flip_op)
 
         if not self.cfg.function_switches.get_dnf_card_flip or self.disable_most_activities():
-            logger.warning("未启用领取翻牌活动功能，将跳过")
+            show_act_not_enable_warning("翻牌活动")
             return
 
         self.check_dnf_card_flip()
@@ -2862,7 +2863,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.hello_voice_op)
 
         if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
-            logger.warning("未启用hello语音（皮皮蟹）奖励兑换功能，将跳过")
+            show_act_not_enable_warning("hello语音（皮皮蟹）奖励兑换")
             return
 
         if self.cfg.hello_voice.hello_id == "":
@@ -2963,7 +2964,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.team_happy_new_year_op)
 
         if not self.cfg.function_switches.get_team_happy_new_year or self.disable_most_activities():
-            logger.warning("未启用领取组队拜年功能，将跳过")
+            show_act_not_enable_warning("组队拜年")
             return
 
         self.check_team_happy_new_year()
@@ -3063,7 +3064,7 @@ class DjcHelperTomb:
         show_head_line("新职业预约活动")
 
         if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
-            logger.warning("未启用领取新职业预约活动功能，将跳过")
+            show_act_not_enable_warning("新职业预约活动")
             return
 
         self.show_amesvr_act_info(self.dnf_reserve_op)
@@ -3126,7 +3127,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("WeGame活动_新版")
 
         if not self.cfg.function_switches.get_wegame_new or self.disable_most_activities():
-            logger.warning("未启用领取WeGame活动_新版功能，将跳过")
+            show_act_not_enable_warning("WeGame活动_新版")
             return
 
         if is_daily_first_run("WeGame活动_新版_提示手动领取"):
@@ -3178,7 +3179,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_gonghui_op)
 
         if not self.cfg.function_switches.get_dnf_gonghui or self.disable_most_activities():
-            logger.warning("未启用DNF公会活动功能，将跳过")
+            show_act_not_enable_warning("DNF公会活动")
             return
 
         self.check_dnf_gonghui()
@@ -3377,7 +3378,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_guanhuai_op)
 
         if not self.cfg.function_switches.get_dnf_guanhuai or self.disable_most_activities():
-            logger.warning("未启用领取关怀活动功能，将跳过")
+            show_act_not_enable_warning("关怀活动")
             return
 
         self.check_dnf_guanhuai()
@@ -3426,7 +3427,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_memory_op)
 
         if not self.cfg.function_switches.get_dnf_memory or self.disable_most_activities():
-            logger.warning("未启用领取DNF记忆功能，将跳过")
+            show_act_not_enable_warning("DNF记忆")
             return
 
         self.check_dnf_memory()
@@ -3464,7 +3465,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_vote_op)
 
         if not self.cfg.function_switches.get_dnf_vote or self.disable_most_activities():
-            logger.warning("未启用领取DNF名人堂功能，将跳过")
+            show_act_not_enable_warning("DNF名人堂")
             return
 
         def query_total_votes() -> int:
@@ -3594,7 +3595,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("qq视频蚊子腿")
 
         if not self.cfg.function_switches.get_qq_video or self.disable_most_activities():
-            logger.warning("未启用领取qq视频活动功能，将跳过")
+            show_act_not_enable_warning("qq视频活动")
             return
 
         self.check_qq_video()
@@ -3720,7 +3721,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_wegame_dup_op)
 
         if not self.cfg.function_switches.get_dnf_wegame or self.disable_most_activities():
-            logger.warning("未启用领取WeGame活动功能，将跳过")
+            show_act_not_enable_warning("WeGame活动")
             return
 
         self.check_dnf_wegame_dup()
@@ -3816,7 +3817,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_relax_road_op)
 
         if not self.cfg.function_switches.get_dnf_relax_road or self.disable_most_activities():
-            logger.warning("未启用领取轻松之路功能，将跳过")
+            show_act_not_enable_warning("轻松之路")
             return
 
         self.check_dnf_relax_road()
@@ -3857,7 +3858,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_mingyun_jueze_op)
 
         if not self.cfg.function_switches.get_dnf_mingyun_jueze or self.disable_most_activities():
-            logger.warning("未启用命运的抉择挑战赛功能，将跳过")
+            show_act_not_enable_warning("命运的抉择挑战赛")
             return
 
         self.check_dnf_mingyun_jueze()
@@ -3916,7 +3917,7 @@ class DjcHelperTomb:
         show_head_line("虎牙")
 
         if not self.cfg.function_switches.get_huya:
-            logger.warning("未启用虎牙功能，将跳过")
+            show_act_not_enable_warning("虎牙")
             return
 
         if self.cfg.huya_cookie == "":
@@ -4010,7 +4011,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.wegame_op)
 
         if not self.cfg.function_switches.get_wegame_guoqing or self.disable_most_activities():
-            logger.warning("未启用领取wegame国庆活动功能，将跳过")
+            show_act_not_enable_warning("wegame国庆活动")
             return
 
         self.check_wegame_guoqing()
@@ -4108,7 +4109,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_female_mage_awaken_op)
 
         if not self.cfg.function_switches.get_dnf_female_mage_awaken or self.disable_most_activities():
-            logger.warning("未启用领取10月女法师三觉活动合集功能，将跳过")
+            show_act_not_enable_warning("10月女法师三觉活动合集")
             return
 
         # 检查是否已在道聚城绑定
@@ -4186,7 +4187,7 @@ class DjcHelperTomb:
         show_head_line("dnf助手排行榜")
 
         if not self.cfg.function_switches.get_dnf_rank or self.disable_most_activities():
-            logger.warning("未启用领取dnf助手排行榜活动合集功能，将跳过")
+            show_act_not_enable_warning("dnf助手排行榜活动合集")
             return
 
         # 检查是否已在道聚城绑定
@@ -4280,7 +4281,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_carnival_op)
 
         if not self.cfg.function_switches.get_dnf_carnival or self.disable_most_activities():
-            logger.warning("未启用领取2020DNF嘉年华页面主页面签到活动合集功能，将跳过")
+            show_act_not_enable_warning("2020DNF嘉年华页面主页面签到活动合集")
             return
 
         self.check_dnf_carnival()
@@ -4323,7 +4324,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_carnival_live_op)
 
         if not self.cfg.function_switches.get_dnf_carnival_live or self.disable_most_activities():
-            logger.warning("未启用领取2020DNF嘉年华直播活动合集功能，将跳过")
+            show_act_not_enable_warning("2020DNF嘉年华直播活动合集")
             return
 
         self.check_dnf_carnival_live()
@@ -4405,7 +4406,7 @@ class DjcHelperTomb:
             sleep_to_avoid_ban()
 
         if not self.cfg.function_switches.get_xinyue_sailiyam or self.disable_most_activities():
-            logger.warning("未启用领取DNF进击吧赛利亚活动功能，将跳过")
+            show_act_not_enable_warning("DNF进击吧赛利亚活动")
             return
 
         self.check_xinyue_sailiyam()
@@ -4512,7 +4513,7 @@ class DjcHelperTomb:
         show_head_line("阿拉德勇士征集令")
 
         if not self.cfg.function_switches.get_dnf_warriors_call or self.disable_most_activities():
-            logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
+            show_act_not_enable_warning("阿拉德勇士征集令")
             return
 
         # 检查是否已在道聚城绑定
@@ -4534,7 +4535,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_drift_op)
 
         if not self.cfg.function_switches.get_dnf_drift or self.disable_most_activities():
-            logger.warning("未启用领取dnf漂流瓶活动功能，将跳过")
+            show_act_not_enable_warning("dnf漂流瓶活动")
             return
 
         self.check_dnf_drift()
@@ -4674,7 +4675,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.warm_winter_op)
 
         if not self.cfg.function_switches.get_warm_winter or self.disable_most_activities():
-            logger.warning("未启用领取暖冬好礼活动功能，将跳过")
+            show_act_not_enable_warning("暖冬好礼活动")
             return
 
         self.check_warm_winter()
@@ -4747,7 +4748,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_1224_op)
 
         if not self.cfg.function_switches.get_dnf_1224 or self.disable_most_activities():
-            logger.warning("未启用领取史诗之路来袭活动合集功能，将跳过")
+            show_act_not_enable_warning("史诗之路来袭活动合集")
             return
 
         self.check_dnf_1224()
@@ -4795,7 +4796,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.spring_fudai_op)
 
         if not self.cfg.function_switches.get_spring_fudai or self.disable_most_activities():
-            logger.warning("未启用领取新春福袋大作战功能，将跳过")
+            show_act_not_enable_warning("新春福袋大作战")
             return
 
         self.check_spring_fudai()
@@ -4977,7 +4978,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.firecrackers_op)
 
         if not self.cfg.function_switches.get_firecrackers or self.disable_most_activities():
-            logger.warning("未启用领取燃放爆竹活动功能，将跳过")
+            show_act_not_enable_warning("燃放爆竹活动")
             return
 
         self.check_firecrackers()
@@ -5164,7 +5165,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_fuqian_op)
 
         if not self.cfg.function_switches.get_dnf_fuqian or self.disable_most_activities():
-            logger.warning("未启用领取DNF福签大作战功能，将跳过")
+            show_act_not_enable_warning("DNF福签大作战")
             return
 
         self.check_dnf_fuqian()
@@ -5293,7 +5294,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("会员关怀")
 
         if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
-            logger.warning("未启用领取会员关怀功能，将跳过")
+            show_act_not_enable_warning("会员关怀")
             return
 
         # 检查是否已在道聚城绑定
@@ -5317,7 +5318,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("会员关怀")
 
         if not self.cfg.function_switches.get_vip_mentor or self.disable_most_activities():
-            logger.warning("未启用领取QQ空间会员关怀功能，将跳过")
+            show_act_not_enable_warning("QQ空间会员关怀")
             return
 
         # 检查是否已在道聚城绑定
@@ -5353,7 +5354,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_strong_op)
 
         if not self.cfg.function_switches.get_dnf_strong or self.disable_most_activities():
-            logger.warning("未启用DNF强者之路功能，将跳过")
+            show_act_not_enable_warning("DNF强者之路")
             return
 
         self.check_dnf_strong()
@@ -5431,7 +5432,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            show_act_not_enable_warning("管家蚊子腿活动合集")
             return
 
         lr = self.fetch_guanjia_openid()
@@ -5507,7 +5508,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            show_act_not_enable_warning("管家蚊子腿活动合集")
             return
 
         logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
@@ -5605,7 +5606,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            logger.warning("未启用领取管家蚊子腿活动合集功能，将跳过")
+            show_act_not_enable_warning("管家蚊子腿活动合集")
             return
 
         logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
@@ -5885,7 +5886,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_13_op)
 
         if not self.cfg.function_switches.get_dnf_13 or self.disable_most_activities():
-            logger.warning("未启用领取DNF十三周年庆活动功能，将跳过")
+            show_act_not_enable_warning("DNF十三周年庆活动")
             return
 
         self.check_dnf_13()
@@ -5944,7 +5945,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.qq_video_amesvr_op)
 
         if not self.cfg.function_switches.get_qq_video_amesvr or self.disable_most_activities():
-            logger.warning("未启用领取qq视频-AME活动活动合集功能，将跳过")
+            show_act_not_enable_warning("qq视频-AME活动活动合集")
             return
 
         self.check_qq_video_amesvr()
@@ -6002,7 +6003,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("qq会员杯")
 
         if not self.cfg.function_switches.get_dnf_club_vip or self.disable_most_activities():
-            logger.warning("未启用领取qq会员杯功能，将跳过")
+            show_act_not_enable_warning("qq会员杯")
             return
 
         # 检查是否已在道聚城绑定
@@ -6085,7 +6086,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("集卡")
 
         if not self.cfg.function_switches.get_ark_lottery:
-            logger.warning("未启用领取QQ空间集卡功能，将跳过")
+            show_act_not_enable_warning("QQ空间集卡")
             return
 
         self.fetch_pskey()

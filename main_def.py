@@ -74,6 +74,7 @@ from util import (
     range_from_one,
     remove_none_from_list,
     run_from_src,
+    show_act_not_enable_warning,
     show_head_line,
     show_quick_edit_mode_tip,
     sync_configs,
@@ -1182,7 +1183,7 @@ def try_take_dnf_helper_chronicle_task_awards_again_after_all_accounts_run_once(
         )
 
         if not account_config.function_switches.get_dnf_helper_chronicle:
-            logger.warning("未启用领取编年史功能，将跳过")
+            show_act_not_enable_warning("编年史")
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)
@@ -1212,7 +1213,7 @@ def try_take_xinyue_team_award(cfg: Config, user_buy_info: BuyInfo):
         )
 
         if not account_config.function_switches.get_xinyue:
-            logger.warning("未启用领取心悦特权专区功能，将跳过")
+            show_act_not_enable_warning("心悦特权专区")
             continue
 
         djcHelper = DjcHelper(account_config, cfg.common)

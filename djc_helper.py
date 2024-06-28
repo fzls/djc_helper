@@ -755,7 +755,6 @@ class DjcHelper:
             ("我的小屋", self.dnf_my_home),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("幸运勇士", self.dnf_lucky_user),
-            ("KOL", self.dnf_kol),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -9199,76 +9198,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("DNF卡妮娜的心愿摇奖机"),
-            **extra_params,
-        )
-
-    # --------------------------------------------KOL--------------------------------------------
-    @try_except()
-    def dnf_kol(self):
-        show_head_line("KOL")
-        self.show_amesvr_act_info(self.dnf_kol_op)
-
-        if not self.cfg.function_switches.get_dnf_kol or self.disable_most_activities():
-            logger.warning("未启用领取KOL功能，将跳过")
-            return
-
-        self.check_dnf_kol()
-
-        def query_energy() -> tuple[int, int]:
-            res = self.dnf_kol_op("查询信息", "862612", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-
-            total, left = raw_info.sOutValue1.split("|")
-            return int(total), int(left)
-
-        # 领取能量值
-        self.dnf_kol_op("账号为幸运回归玩家-回流（幸运）玩家主动领取", "863482")
-        self.dnf_kol_op("每日登录进入DNF游戏-每日登录", "859926")
-        self.dnf_kol_op("每日通关任意地下城3次", "860218")
-        self.dnf_kol_op("每日在线", "860216")
-        self.dnf_kol_op("每日完成游戏内任意一个任务", "860229")
-
-        for pilao in [50, 100]:
-            self.dnf_kol_op(f"每日消耗疲劳点-{pilao}点", "860221", countsInfo=pilao)
-
-        total_energy, left_energy = query_energy()
-        logger.info(f"当前累计获得 {total_energy}，剩余票数 {left_energy}")
-        for energy in [20, 40, 80, 140, 280, 400]:
-            if total_energy >= energy:
-                self.dnf_kol_op(f"累积能力值领取礼包 - {energy}", "860366", power=energy)
-                time.sleep(5)
-
-        # 邀请回归玩家
-        logger.warning("邀请幸运玩家的部分请自行玩家~")
-        # self.dnf_kol_op("累积邀请回归用户领取礼包", "861459", inviteNum=1)
-
-        # 能量收集站
-        logger.warning("没有大量邀请回归基本不可能领取到排行礼包，请自行完成~")
-        # self.dnf_kol_op("领取排行礼包", "863366")
-
-        # 投票
-        logger.warning("投票似乎没有奖励，同时为了避免影响原来的分布，请自行按照喜好投票给对应kol")
-
-    def check_dnf_kol(self):
-        self.check_bind_account(
-            "KOL",
-            get_act_url("KOL"),
-            activity_op_func=self.dnf_kol_op,
-            query_bind_flowid="859628",
-            commit_bind_flowid="859627",
-        )
-
-    def dnf_kol_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_kol
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("KOL"),
             **extra_params,
         )
 

@@ -54,6 +54,7 @@ act_name_to_url_bomb = {
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
+    "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
 }
 
 
@@ -89,6 +90,7 @@ class UrlsTomb:
         self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
+        self.iActivityId_dnf_kol = "472448"  # DNF KOL
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

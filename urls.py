@@ -157,7 +157,6 @@ act_name_to_url = {
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
-    "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
 }
 
 
@@ -296,7 +295,6 @@ class Urls:
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
-        self.iActivityId_dnf_kol = "472448"  # DNF KOL
         self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约

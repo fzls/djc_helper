@@ -154,7 +154,135 @@ class DjcHelperTomb:
             ("我的小屋", self.dnf_my_home),
             ("超享玩", self.super_core),
             ("DNF冒险家之路", self.dnf_maoxian_road),
+            ("DNF闪光杯", self.dnf_shanguang),
         ]
+
+    # --------------------------------------------DNF闪光杯第四期--------------------------------------------
+    @try_except()
+    def dnf_shanguang(self):
+        show_head_line("DNF闪光杯")
+        self.show_amesvr_act_info(self.dnf_shanguang_op)
+
+        if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
+            logger.warning("未启用领取DNF闪光杯活动合集功能，将跳过")
+            return
+
+        self.check_dnf_shanguang()
+
+        def check_in():
+            today = get_today()
+            # last_day = get_today(get_now() - datetime.timedelta(days=1))
+            # the_day_before_last_day = get_today(get_now() - datetime.timedelta(days=2))
+            self.dnf_shanguang_op(f"签到-{today}", "863326", weekDay=today)
+            # self.dnf_shanguang_op(f"补签-{last_day}", "863327", weekDay=last_day)
+            # wait_for("等待一会", 5)
+            # self.dnf_shanguang_op(f"补签-{the_day_before_last_day}", "863327", weekDay=the_day_before_last_day)
+
+        def query_luck_coin() -> int:
+            res = self.dnf_shanguang_op("查询积分", "903560", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue3)
+
+        # --------------------------------------------------------------------------------
+
+        # self.dnf_shanguang_op("报名礼", "724862")
+        # self.dnf_shanguang_op("报名礼包", "903566")
+        # self.dnf_shanguang_op("app专属礼", "903585")
+        async_message_box(
+            "请手动前往网页手动报名以及前往心悦app领取一次性礼包",
+            f"DNF闪光杯奖励提示_{get_act_url('DNF闪光杯')}",
+            show_once=True,
+        )
+
+        # # 签到
+        # check_in()
+
+        # 周赛奖励
+        # week_4 = get_today(get_this_thursday_of_dnf())
+        # week_4_to_flowid = {
+        #     "20220623": "864758",
+        #     "20220630": "864759",
+        #     "20220707": "864760",
+        # }
+        #
+        # if week_4 in week_4_to_flowid:
+        #     flow_id = week_4_to_flowid[week_4]
+        #     self.dnf_shanguang_op(f"领取本周的爆装奖励 - {week_4}", flow_id)
+        #     time.sleep(5)
+
+        # act_cycle_list = [
+        #     (1, "20221201", "904587"),
+        #     (2, "20221208", "906983"),
+        #     (3, "20221215", "906997"),
+        # ]
+        # for week_index, pass_date, settle_flow_id in act_cycle_list:
+        #     date = parse_time(pass_date, "%Y%m%d")
+        #     if get_now() < date:
+        #         logger.warning(f"尚未到 {pass_date}，跳过这部分")
+        #         continue
+        #
+        #     self.dnf_shanguang_op(f"{pass_date} 查询结算结果第 {week_index} 周", settle_flow_id)
+        #
+        #     for level in range_from_one(10):
+        #         res = self.dnf_shanguang_op(
+        #             f"{pass_date} 通关难度 {level} 奖励", "907026", **{"pass": level}, pass_date="20221201"
+        #         )
+        #         if int(res["ret"]) == -1:
+        #             break
+        #         time.sleep(3)
+
+        awards = [
+            # ("2022-11-30 23:59:59", "爆装奖励第1期", "907092"),
+            # ("2022-12-07 23:59:59", "爆装奖励第2期", "907095"),
+            # ("2022-12-14 23:59:59", "爆装奖励第3期", "907096"),
+            ("2022-11-30 23:59:59", "排行榜奖励第1期", "907160"),
+            ("2022-12-07 23:59:59", "排行榜奖励第2期", "907161"),
+            ("2022-12-14 23:59:59", "排行榜奖励第3期", "907162"),
+        ]
+        for endtime, name, flowid in awards:
+            if not now_after(endtime):
+                logger.info(f"{name} 尚未结算，在 {endtime} 之后才能领取，先跳过")
+                continue
+            self.dnf_shanguang_op(f"{name}", flowid)
+            time.sleep(5)
+
+        # 抽奖
+        # self.dnf_shanguang_op("每日登录游戏", "903657")
+        # self.dnf_shanguang_op("每日登录App", "903665")
+        coin = query_luck_coin()
+        lottery_count = coin // 10
+        logger.info(f"当前积分为 {coin}，可抽奖 {lottery_count} 次")
+        for idx in range_from_one(lottery_count):
+            res = self.dnf_shanguang_op(f"抽奖 - {idx}", "903590")
+            if int(res["ret"]) != 0:
+                break
+            time.sleep(5)
+
+    def check_dnf_shanguang(self):
+        self.check_bind_account(
+            "DNF闪光杯",
+            get_act_url("DNF闪光杯"),
+            activity_op_func=self.dnf_shanguang_op,
+            query_bind_flowid="884251",
+            commit_bind_flowid="884250",
+        )
+
+    def dnf_shanguang_op(self, ctx, iFlowId, weekDay="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_shanguang
+
+        return self.amesvr_request(
+            ctx,
+            "act.game.qq.com",
+            "xinyue",
+            "tgclub",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF闪光杯"),
+            weekDay=weekDay,
+            **extra_params,
+        )
 
     # --------------------------------------------DNF冒险家之路--------------------------------------------
     @try_except()

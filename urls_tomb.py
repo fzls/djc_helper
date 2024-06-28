@@ -42,6 +42,7 @@ act_name_to_url_bomb = {
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
+    "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
 }
 
 
@@ -69,6 +70,7 @@ class UrlsTomb:
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
+        self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

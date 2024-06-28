@@ -169,7 +169,6 @@ act_name_to_url = {
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
-    "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
 }
 
 
@@ -315,7 +314,6 @@ class Urls:
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
         self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
-        self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年

@@ -6,7 +6,7 @@ import math
 import os
 import random
 import time
-from typing import Callable
+from typing import Any, Callable
 from urllib.parse import quote_plus, unquote_plus
 
 import requests
@@ -24,8 +24,16 @@ from dao import (
     GuanjiaNewRequest,
     HuyaActTaskInfo,
     HuyaUserTaskInfo,
+    IdeActInfo,
     LuckyUserInfo,
     LuckyUserTaskConf,
+    MyHomeFarmInfo,
+    MyHomeFriendDetail,
+    MyHomeFriendList,
+    MyHomeGift,
+    MyHomeGiftList,
+    MyHomeInfo,
+    MyHomeValueGift,
     RankUserInfo,
     RoleInfo,
     SailiyamWorkInfo,
@@ -37,7 +45,7 @@ from dao import (
     XinyueCatInfoFromApp,
     XinyueCatMatchResult,
     XinyueCatUserInfo,
-    parse_amesvr_common_info, IdeActInfo, MyHomeGift, MyHomeGiftList, MyHomeFriendList, MyHomeFriendDetail, MyHomeValueGift, MyHomeFarmInfo, MyHomeInfo,
+    parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
 from db import DianzanDB, FireCrackersDB
@@ -67,6 +75,7 @@ from util import (
     show_head_line,
     tableify,
     try_except,
+    uin2qq,
     use_by_myself,
 )
 
@@ -143,7 +152,132 @@ class DjcHelperTomb:
             ("幸运勇士", self.dnf_lucky_user),
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("我的小屋", self.dnf_my_home),
+            ("超享玩", self.super_core),
         ]
+
+    # --------------------------------------------超享玩--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
+    @try_except()
+    def super_core(self):
+        show_head_line("超享玩")
+        self.show_not_ams_act_info("超享玩")
+
+        if not self.cfg.function_switches.get_super_core or self.disable_most_activities():
+            logger.warning("未启用领取超享玩功能，将跳过")
+            return
+
+        lr = self.fetch_supercore_login_info("获取超享玩所需的access_token")
+        self.super_core_set_openid_accesstoken(lr.common_openid, lr.common_access_token)
+
+        self.super_core_op("发送邀约", 40968)
+        self.super_core_op("领取邀请奖励", 40979)
+
+        self.super_core_op("解锁进阶战令", 40980)
+
+        return_user_flows = [
+            ("我要回归", 44198),
+            ("领取回归福利", 40973),
+            ("回归玩家解锁进阶战令", 40995),
+        ]
+        for name, flowid in return_user_flows:
+            self.super_core_op(name, flowid)
+            time.sleep(3)
+
+        self.super_core_op("每日签到（立即探索）", 40987)
+
+        sign_flows = {
+            "普通战令": [
+                (1, 40996),
+                (3, 41833),
+                (5, 41834),
+                (7, 41835),
+                (10, 41844),
+                (12, 41850),
+                (14, 41851),
+            ],
+            "进阶战令": [
+                (1, 40993),
+                (2, 41837),
+                (4, 41838),
+                (6, 41840),
+                (8, 41857),
+                (9, 41860),
+                (13, 41890),
+                (15, 41893),
+            ],
+        }
+        for bp_name, flow_configs in sign_flows.items():
+            for count, flowid in flow_configs:
+                res = self.super_core_op(f"尝试领取 {bp_name} 探索 {count} 次 奖励", flowid)
+                time.sleep(1)
+
+                if res["msg"] == "探索次数未满足":
+                    break
+
+        self.super_core_op("每充值100元获取一把冒险要是", 42322)
+        self.super_core_op("抽奖", 42468)
+
+    def super_core_set_openid_accesstoken(self, openid: str, access_token: str):
+        self.super_core_extra_headers = {
+            "t-account-type": "qc",
+            "t-mode": "true",
+            "t-appid": "101813972",
+            "t-openid": openid,
+            "t-access-token": access_token,
+        }
+
+    def super_core_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        roleinfo = self.get_dnf_bind_role()
+        qq = self.qq()
+
+        json_data = {
+            "biz_id": "supercore",
+            "act_id": 11055,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_str(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_str(roleinfo.roleName),
+                "device": "pc",
+            },
+            "data": '{"ceiba_plat_id":"android","user_attach":"{\\"nickName\\":\\"'
+                    + qq
+                    + '\\",\\"avatar\\":\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\"}","cExtData":{}}',
+        }
+
+        return self.post(
+            ctx,
+            self.urls.super_core_api,
+            json=json_data,
+            print_res=print_res,
+            flowId=flow_id,
+            extra_headers=self.super_core_extra_headers,
+        )
+
+    def fetch_supercore_login_info(self, ctx) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_supercore:
+            logger.warning(f"禁用了爱玩登录模式，将不会尝试更新爱玩 access_token: {ctx}")
+            return LoginResult()
+
+        def is_login_info_valid(lr: LoginResult) -> bool:
+            self.super_core_set_openid_accesstoken(lr.common_openid, lr.common_access_token)
+
+            # {"data": {}, "msg": "login status verification failed: access token check failed", "ret": 7001}
+            res = self.super_core_op(
+                "检测access token过期",
+                40968,
+                print_res=False,
+            )
+            return res["ret"] != 7001
+
+        return self.fetch_login_result(
+            ctx, QQLogin.login_mode_supercore, cache_max_seconds=-1, cache_validate_func=is_login_info_valid
+        )
 
     # --------------------------------------------我的小屋--------------------------------------------
     @try_except()
@@ -1280,7 +1414,7 @@ class DjcHelperTomb:
                 if status == 1:
                     continue
 
-                self.dnf_card_flip_op(f"翻牌 - 第 {idx+1} 张牌", "848911", iNum=idx + 1)
+                self.dnf_card_flip_op(f"翻牌 - 第 {idx + 1} 张牌", "848911", iNum=idx + 1)
 
                 times -= 1
                 if times <= 0:
@@ -4660,8 +4794,8 @@ class DjcHelperTomb:
     ) -> dict:
         return {}
 
-    def qq(self):
-        pass
+    def qq(self) -> str:
+        return uin2qq(self.uin())
 
     def fetch_club_vip_p_skey(self, param):
         pass
@@ -4800,6 +4934,16 @@ class DjcHelperTomb:
         **data_extra_params,
     ) -> dict | IdeActInfo | None:
         return {}
+
+    def fetch_login_result(
+        self,
+        ctx: str,
+        login_mode: str,
+        cache_max_seconds: int = 0,
+        cache_validate_func: Callable[[Any], bool] | None = None,
+        print_warning=True,
+    ) -> LoginResult:
+        return LoginResult()
 
 
 def watch_live():

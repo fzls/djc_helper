@@ -16,6 +16,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
+    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
 ]
 
 act_name_to_url_bomb = {
@@ -61,6 +62,7 @@ act_name_to_url_bomb = {
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
+    "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
 }
 
 
@@ -157,3 +159,6 @@ class UrlsTomb:
             "&taskId={taskId}&point={point}"
             "&randomSeed={randomSeed}"
         )
+
+        # 超享玩
+        self.super_core_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}"

@@ -73,7 +73,6 @@ not_ams_activities = [
     #
     # 已过期活动
     #
-    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
@@ -129,7 +128,6 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
-    "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
 }
 
 
@@ -296,14 +294,6 @@ class Urls:
         # ide活动
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = "e_code=0&g_code=0" + "&" + generate_raw_data_template(self.ide_default_params_list)
-
-        # 信用星级礼包
-        self.credit_gift = (
-            "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=13c48b"
-        )
-
-        # 腾讯游戏信用，需要手动额外传入参数：gift_group
-        self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"
 
         # --QQ空间相关活动--
         self.qzone_activity = "https://activity.qzone.qq.com/fcg-bin/{api}?g_tk={g_tk}&r={rand}"

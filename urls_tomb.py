@@ -20,6 +20,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "黑钻礼包"),
+    newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
 ]
 
 act_name_to_url_bomb = {
@@ -82,6 +83,7 @@ act_name_to_url_bomb = {
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
+    "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
 }
 
 
@@ -204,3 +206,10 @@ class UrlsTomb:
         self.heizuan_gift = (
             "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=44c24e"
         )
+
+        # 信用星级礼包
+        self.credit_gift = (
+            "https://dnf.game.qq.com/mtask/lottery/?r={rand}&serviceType=dnf&channelId=1&actIdList=13c48b"
+        )
+        # 腾讯游戏信用，需要手动额外传入参数：gift_group
+        self.credit_xinyue_gift = "https://gamecredit.qq.com/api/qq/proxy/credit_xinyue_gift?gift_group={gift_group}"

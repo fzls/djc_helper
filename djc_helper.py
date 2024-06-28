@@ -702,7 +702,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
             ("dnf助手活动", self.dnf_helper),
-            ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2363,24 +2362,7 @@ class DjcHelper:
             + f"兑换前G分为{old_gpoints}， 兑换后G分为{new_gpoints}，差值为{old_gpoints - new_gpoints}，请自行前往心悦app确认是否兑换成功"
         )
 
-    # --------------------------------------------信用礼包--------------------------------------------
-    @try_except()
-    def get_credit_xinyue_gift(self):
-        show_head_line("腾讯游戏信用相关礼包")
-        self.show_not_ams_act_info("腾讯游戏信用礼包")
-
-        if not self.cfg.function_switches.get_credit_xinyue_gift or self.disable_most_activities():
-            show_act_not_enable_warning("腾讯游戏信用相关礼包")
-            return
-
-        self.get("每月信用星级礼包", self.urls.credit_gift)
-        try:
-            self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
-            # 等待一会
-            time.sleep(self.common_cfg.retry.request_wait_time)
-            self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
-        except Exception as e:
-            logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
+    # --------------------------------------------pskey相关操作--------------------------------------------
 
     def fetch_pskey(self, force=False, window_index=1):
         self.lr = None

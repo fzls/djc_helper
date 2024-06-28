@@ -178,7 +178,27 @@ class DjcHelperTomb:
             ("DNF心悦", self.dnf_xinyue),
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("黑钻礼包", self.get_heizuan_gift),
+            ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
         ]
+
+    # --------------------------------------------信用礼包--------------------------------------------
+    @try_except()
+    def get_credit_xinyue_gift(self):
+        show_head_line("腾讯游戏信用相关礼包")
+        self.show_not_ams_act_info("腾讯游戏信用礼包")
+
+        if not self.cfg.function_switches.get_credit_xinyue_gift or self.disable_most_activities():
+            show_act_not_enable_warning("腾讯游戏信用相关礼包")
+            return
+
+        self.get("每月信用星级礼包", self.urls.credit_gift)
+        try:
+            self.get("腾讯游戏信用-高信用即享礼包", self.urls.credit_xinyue_gift, gift_group=1)
+            # 等待一会
+            time.sleep(self.common_cfg.retry.request_wait_time)
+            self.get("腾讯游戏信用-高信用&游戏家即享礼包", self.urls.credit_xinyue_gift, gift_group=2)
+        except Exception as e:
+            logger.exception("腾讯游戏信用这个经常挂掉<_<不过问题不大，反正每月只能领一次", exc_info=e)
 
     # --------------------------------------------黑钻--------------------------------------------
     @try_except()

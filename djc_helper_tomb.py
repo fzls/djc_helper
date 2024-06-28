@@ -110,7 +110,46 @@ class DjcHelperTomb:
             ("WeGameDup", self.dnf_wegame_dup),
             ("qq视频蚊子腿", self.qq_video),
             ("DNF名人堂", self.dnf_vote),
+            ("DNF记忆", self.dnf_memory),
         ]
+
+    # --------------------------------------------DNF记忆--------------------------------------------
+    @try_except()
+    def dnf_memory(self):
+        show_head_line("DNF记忆")
+        self.show_amesvr_act_info(self.dnf_memory_op)
+
+        if not self.cfg.function_switches.get_dnf_memory or self.disable_most_activities():
+            logger.warning("未启用领取DNF记忆功能，将跳过")
+            return
+
+        self.check_dnf_memory()
+
+        self.dnf_memory_op("查询数据", "821806")
+        self.dnf_memory_op("领取奖励", "821721")
+
+    def check_dnf_memory(self):
+        self.check_bind_account(
+            "DNF记忆",
+            get_act_url("DNF记忆"),
+            activity_op_func=self.dnf_memory_op,
+            query_bind_flowid="821683",
+            commit_bind_flowid="821682",
+        )
+
+    def dnf_memory_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_memory
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF记忆"),
+            **extra_params,
+        )
 
     # --------------------------------------------DNF名人堂--------------------------------------------
     @try_except()

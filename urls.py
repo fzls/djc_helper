@@ -171,7 +171,6 @@ act_name_to_url = {
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
-    "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
 }
 
 
@@ -320,7 +319,6 @@ class Urls:
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
-        self.iActivityId_dnf_memory = "431712"  # DNF记忆
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动

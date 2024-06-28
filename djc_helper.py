@@ -2628,7 +2628,13 @@ class DjcHelper:
         return self.local_saved_pskey_file.format(self.cfg.name)
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
-    # note：对接流程与下方黄钻完全一致，参照其流程即可
+    # note: 适配流程如下
+    #   0. 电脑chrome中设置Network conditions中的User agent为手机QQ的： Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440
+    #   1. 获取子活动id   chrome设置为手机qq UA后，登录活动页面 get_act_url("超级会员") ，然后在幸运勇士、勇士见面礼等按钮上右键Inspect，然后在Sources中搜索其vt-itemid(如xcubeItem_4)，
+    #       在结果中双击main.bundle.js结果，点击格式化后搜索【下面这行的关键词】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
+    #           default.methods.xcubeItem_4=
+    #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("超级会员")的值为新的网页链接，并把活动时间改为最新
+    #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
     @try_except()
     def dnf_super_vip(self):
         get_act_url("超级会员")
@@ -2681,12 +2687,7 @@ class DjcHelper:
         # self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
 
     # --------------------------------------------QQ空间黄钻--------------------------------------------
-    # note: 适配流程如下
-    #   0. 电脑chrome中设置Network conditions中的User agent为手机QQ的： Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; X900 Build/CBXCNOP5500912251S) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025489 Mobile Safari/533.1 V1_AND_SQ_6.0.0_300_YYB_D QQ/6.0.0.2605 NetType/WIFI WebP/0.3.0 Pixel/1440
-    #   1. 获取子活动id   chrome设置为手机qq UA后，登录活动页面 get_act_url("黄钻") ，然后在幸运勇士、勇士见面礼等按钮上右键Inspect，然后在Sources中搜索其vt-itemid(如xcubeItem_4)，
-    #       在结果中双击main.bundle.js结果，点击格式化后搜索【default.methods.xcubeItem_4=】(其他按钮的替换为对应值），其下方的subActId的值替换到下方代码处即可
-    #   2. 填写新链接和活动时间   在 urls.py 中，替换get_act_url("黄钻")的值为新的网页链接，并把活动时间改为最新
-    #   3. 重新启用代码 将调用处从 expired_activities 移到 payed_activities
+    # note：对接流程与上方 超级会员 dnf_super_vip 完全一致，参照其流程即可
     @try_except()
     def dnf_yellow_diamond(self):
         get_act_url("黄钻")
@@ -2739,7 +2740,7 @@ class DjcHelper:
 
     # note: 需要先在 https://act.qzone.qq.com/ 中选一个活动登陆后，再用浏览器抓包
 
-    # note: 以下几个页面右键点击对应按钮即可，与上方黄钻完全一致，参照其流程即可
+    # note: 以下几个页面右键点击对应按钮即可，与上方 超级会员 dnf_super_vip 完全一致，参照其流程即可
     ark_lottery_sub_act_id_login = "108898_92a8b20b"  # 增加抽卡次数-每日登陆游戏
     ark_lottery_sub_act_id_share = "108892_b1953027"  # 增加抽卡次数-每日活动分享
     ark_lottery_sub_act_id_lucky = "108893_487cfc0d"  # 增加抽卡次数-幸运勇士

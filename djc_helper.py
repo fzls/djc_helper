@@ -685,6 +685,7 @@ class DjcHelper:
     def expired_activities(self) -> list[tuple[str, Callable]]:
         # re: 记得过期活动全部添加完后，一个个确认下确实过期了
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
+        # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),

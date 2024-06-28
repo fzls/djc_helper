@@ -3364,6 +3364,7 @@ class DjcHelper:
             extra_cookies=extra_cookies,
         )
 
+    # --------------------------------------------dnf助手活动相关信息的操作--------------------------------------------
     def show_dnf_helper_info_guide(self, extra_msg="", show_message_box_once_key="", always_show_message_box=False):
         if extra_msg != "":
             logger.warning(color("fg_bold_green") + extra_msg)

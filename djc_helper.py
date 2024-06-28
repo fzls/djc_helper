@@ -748,7 +748,6 @@ class DjcHelper:
             ("魔界人探险记", self.mojieren),
             ("DNF集合站", self.dnf_collection),
             ("dnf助手活动Dup", self.dnf_helper_dup),
-            ("心悦app周礼包", self.xinyue_weekly_gift),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -5472,88 +5471,6 @@ class DjcHelper:
             print_res,
             get_act_url("心悦app理财礼卡"),
             plat=plat,
-            extraStr=extraStr,
-            **extra_params,
-        )
-
-    # --------------------------------------------心悦app周礼包--------------------------------------------
-    @try_except()
-    def xinyue_weekly_gift(self):
-        show_head_line("心悦app周礼包")
-        self.show_amesvr_act_info(self.xinyue_weekly_gift_op)
-
-        if not self.cfg.function_switches.get_xinyue_weekly_gift:
-            logger.warning("未启用领取心悦app周礼包活动合集功能，将跳过")
-            return
-
-        def query_info():
-            res = self.xinyue_weekly_gift_op("查询信息", "484520", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-
-            info = XinyueWeeklyGiftInfo()
-            info.qq = raw_info.sOutValue1
-            info.iLevel = int(raw_info.sOutValue2)
-            info.sLevel = raw_info.sOutValue3
-            info.tTicket = int(raw_info.sOutValue4) + int(raw_info.sOutValue5)
-            info.gift_got_list = raw_info.sOutValue6.split("|")
-
-            return info
-
-        def query_gpoints_info():
-            res = self.xinyue_weekly_gift_op("查询G分信息", "603392", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
-
-            info = XinyueWeeklyGPointsInfo()
-            info.nickname = unquote_plus(raw_info.sOutValue1)
-            info.gpoints = int(raw_info.sOutValue2)
-
-            return info
-
-        @try_except()
-        def take_all_gifts():
-            # note: 因为已经有一键领取的接口，暂不接入单个领取的接口
-            # self.xinyue_weekly_gift_op("领取单个周礼包", "508441", PackId="1")
-
-            self.xinyue_weekly_gift_op("一键领取周礼包", "508440")
-            logger.info(
-                "这个一键领取接口似乎有时候请求会提示仅限心悦用户参与，实际上任何级别都可以的，一周总有一次会成功的-。-"
-            )
-
-        old_gpoints_info = query_gpoints_info()
-
-        take_all_gifts()
-
-        info = query_info()
-        logger.info(f"当前剩余免G分抽奖券数目为{info.tTicket}")
-        for idx in range(info.tTicket):
-            self.xinyue_weekly_gift_op(f"第{idx + 1}/{info.tTicket}次免费抽奖并等待五秒", "603340")
-            if idx != info.tTicket - 1:
-                time.sleep(5)
-
-        new_gpoints_info = query_gpoints_info()
-
-        delta = new_gpoints_info.gpoints - old_gpoints_info.gpoints
-        logger.warning("")
-        logger.warning(
-            color("fg_bold_yellow")
-            + f"账号 {self.cfg.name} 本次心悦周礼包操作共免费抽奖{info.tTicket}次，共获得 {delta} G分（ {old_gpoints_info.gpoints} -> {new_gpoints_info.gpoints} ）"
-        )
-        logger.warning("")
-
-    def xinyue_weekly_gift_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_xinyue_weekly_gift
-
-        extraStr = quote_plus('"mod1":"1","mod2":"4","mod3":"x48"')
-
-        return self.amesvr_request(
-            ctx,
-            "act.game.qq.com",
-            "xinyue",
-            "tgclub",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("心悦app周礼包"),
             extraStr=extraStr,
             **extra_params,
         )

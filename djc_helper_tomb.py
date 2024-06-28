@@ -159,7 +159,101 @@ class DjcHelperTomb:
             ("DNF冒险家之路", self.dnf_maoxian_road),
             ("DNF闪光杯", self.dnf_shanguang),
             ("心悦app周礼包", self.xinyue_weekly_gift),
+            ("dnf助手活动Dup", self.dnf_helper_dup),
         ]
+
+    @try_except()
+    def dnf_helper_dup(self):
+        show_head_line("dnf助手活动Dup")
+
+        if not self.cfg.function_switches.get_dnf_helper or self.disable_most_activities():
+            logger.warning("未启用领取dnf助手活动功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.show_amesvr_act_info(self.dnf_helper_dup_op)
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行dnf助手相关活动，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动Dup')}"
+            )
+            return
+
+        # re: 有些助手活动可能需要绑定流程，有些不需要，看情况来决定下面这句话是否要注释
+        # self.check_dnf_helper_dup()
+
+        self.dnf_helper_dup_op("110级普通地下城数据", "919560")
+        self.dnf_helper_dup_op("查看贵族机要数据", "919562")
+        self.dnf_helper_dup_op("查看毁坏的寂静城数据", "919563")
+        self.dnf_helper_dup_op("查看机械七站神实验室数据", "919564")
+        self.dnf_helper_dup_op("查看伊斯大陆数据", "919565")
+        self.dnf_helper_dup_op("查看趣味数据", "919566")
+
+        self.dnf_helper_dup_op("分享-1", "921006")
+        self.dnf_helper_dup_op("分享-2", "919567")
+
+        async_message_box(
+            "有兴趣的话，可在助手打开稍后出现的网页，来查看2022年在DNF里的相关数据，比如捡了多少金币，使用了多少金绿柱石",
+            "年终总结",
+            show_once=True,
+            open_url=get_act_url("dnf助手活动Dup"),
+        )
+
+    def check_dnf_helper_dup(self):
+        self.check_bind_account(
+            "dnf助手活动Dup",
+            get_act_url("dnf助手活动Dup"),
+            activity_op_func=self.dnf_helper_dup_op,
+            query_bind_flowid="846972",
+            commit_bind_flowid="846971",
+        )
+
+    def dnf_helper_dup_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_helper_dup
+
+        roleinfo = self.get_dnf_bind_role()
+        qq = self.qq()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("dnf助手活动Dup"),
+            sArea=roleinfo.serviceID,
+            serverId=roleinfo.serviceID,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+            uin=qq,
+            skey=self.cfg.account_info.skey,
+            nickName=quote_plus(quote_plus(dnf_helper_info.nickName)),
+            userId=dnf_helper_info.userId,
+            token=quote_plus(quote_plus(dnf_helper_info.token)),
+            **extra_params,
+        )
+
+        # 1000017016: 登录态失效,请重新登录
+        if (
+            res is not None
+            and type(res) is dict
+            and res["flowRet"]["iRet"] == "700"
+            and "登录态失效" in res["flowRet"]["sMsg"]
+        ):
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_helper_expired_" + get_today())
+
+            raise RuntimeError("dnf助手token过期，请重试获取")
+
+        return res
 
     # --------------------------------------------心悦app周礼包--------------------------------------------
     @try_except()

@@ -145,7 +145,6 @@ act_name_to_url = {
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
-    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
 }
 
 
@@ -268,7 +267,6 @@ class Urls:
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
-        self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求

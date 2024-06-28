@@ -66,6 +66,7 @@ act_name_to_url_bomb = {
     "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
+    "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
 }
 
 
@@ -105,6 +106,7 @@ class UrlsTomb:
         self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
+        self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
 
 
         # ide通用活动

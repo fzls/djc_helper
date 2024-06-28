@@ -172,7 +172,6 @@ act_name_to_url = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
-    "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
 }
 
 
@@ -320,7 +319,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
-        self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_memory = "431712"  # DNF记忆
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛

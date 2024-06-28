@@ -39,6 +39,7 @@ act_name_to_url_bomb = {
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
+    "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
 }
 
 
@@ -63,6 +64,7 @@ class UrlsTomb:
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
+        self.iActivityId_dnf_vote = "428587"  # DNF名人堂
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

@@ -768,7 +768,6 @@ class DjcHelper:
             ("DNF公会活动", self.dnf_gonghui),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF记忆", self.dnf_memory),
-            ("DNF名人堂", self.dnf_vote),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -10277,103 +10276,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("KOL"),
-            **extra_params,
-        )
-
-    # --------------------------------------------DNF名人堂--------------------------------------------
-    @try_except()
-    def dnf_vote(self):
-        show_head_line("DNF名人堂")
-        self.show_amesvr_act_info(self.dnf_vote_op)
-
-        if not self.cfg.function_switches.get_dnf_vote or self.disable_most_activities():
-            logger.warning("未启用领取DNF名人堂功能，将跳过")
-            return
-
-        def query_total_votes() -> int:
-            raw_res = self.dnf_vote_op("查询总投票数和是否已经领取奖励", "819043", print_res=False)
-            info = parse_amesvr_common_info(raw_res)
-
-            return int(info.sOutValue1)
-
-        votes = [
-            (
-                "赛事名人堂投票",
-                "819048",
-                "iMatchId",
-                [
-                    ("吴琪", "7"),
-                    ("丁雪晴", "8"),
-                    ("堕落", "9"),
-                    ("狗二", "10"),
-                    ("庄健", "11"),
-                    ("夏法", "12"),
-                    ("啊嘟嘟", "13"),
-                    ("A酱", "14"),
-                ],
-            ),
-            (
-                "游戏名人堂投票",
-                "819049",
-                "iGameId",
-                [
-                    ("猪猪侠神之手", "7"),
-                    ("银樰不是银雪", "10"),
-                    ("晴子", "3"),
-                    ("一笑zy", "4"),
-                    ("小古子", "1"),
-                    ("仙哥哥", "2"),
-                    ("dnf冷寨主", "6"),
-                    ("杰哥哥", "8"),
-                ],
-            ),
-            (
-                "IP名人堂投票",
-                "819050",
-                "iIPId",
-                [
-                    ("猪猪侠神之手", "21"),
-                    ("快乐游戏酱", "22"),
-                    ("美少女希曼", "23"),
-                    ("骑乌龟的蜗牛z", "24"),
-                    ("聪明的翔老板", "1"),
-                    ("巴啦啦暴龙兽", "2"),
-                    ("Zimuoo梓陌", "3"),
-                    ("爱学习的学习", "4"),
-                ],
-            ),
-        ]
-
-        for vote_name, vote_flowid, vote_id_key, vote_target_info_list in votes:
-            for vote_target_name, vote_target_id in vote_target_info_list:
-                self.dnf_vote_op(f"{vote_name}-{vote_target_name}", vote_flowid, **{vote_id_key: vote_target_id})
-
-        vote_awards = [
-            (48, "819132", "黑钻3天"),
-            (96, "819165", "黑钻7天"),
-            (144, "819166", "黑钻15天"),
-        ]
-
-        total_votes = query_total_votes()
-        logger.info(color("bold_yellow") + f"当前累计投票数为 {total_votes}")
-
-        for require_count, flowid, award_name in vote_awards:
-            if total_votes >= require_count:
-                self.dnf_vote_op(f"投票总次数达到 {require_count} 次，尝试领取 {award_name}", flowid)
-            else:
-                logger.warning(f"当前投票数未达到 {require_count}, 将不尝试领取 {award_name}")
-
-    def dnf_vote_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_vote
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF名人堂"),
             **extra_params,
         )
 

@@ -162,7 +162,6 @@ act_name_to_url = {
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
-    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
 }
 
 
@@ -282,7 +281,6 @@ class Urls:
         self.iActivityId_djc_operations = "11117"  # 道聚城
         self.iActivityId_xinyue_battle_ground = "366480"  # DNF地下城与勇士心悦特权专区
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
-        self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
@@ -353,12 +351,6 @@ class Urls:
         # ide活动
         self.ide = "https://{ide_host}/ide/"
         self.ide_raw_data = "e_code=0&g_code=0" + "&" + generate_raw_data_template(self.ide_default_params_list)
-
-        # DNF共创投票
-        # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize
-        self.query_dianzan_contents = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery191015906433451135138_{millseconds}&serviceType=dnf&sAction=showList&sModel=Ugc&actId=2&iCategory1={iCategory1}&iCategory2={iCategory2}&order=0&page={page}&pagesize={pagesize}&_=1608559950347"
-        # 点赞，额外参数：iContentId
-        self.dianzan = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery19105114998760002998_{millseconds}&serviceType=dnf&actId=2&sModel=Zan&sAction=zanContent&iContentId={iContentId}&_={millseconds}"
 
         # 每月黑钻等级礼包
         self.heizuan_gift = (

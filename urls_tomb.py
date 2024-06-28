@@ -49,6 +49,7 @@ act_name_to_url_bomb = {
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
+    "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
 }
 
 
@@ -81,6 +82,7 @@ class UrlsTomb:
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
+        self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
@@ -119,3 +121,9 @@ class UrlsTomb:
         self.wegame_new_host = "https://act.wegame.com.cn"
         self.wegame_new_api = "/service/flow/v1/parse/{flow_id}?u={uuid4}&a=10004&ts={seconds}"
         self.wegame_new_appkey = "--todo--"
+
+        # DNF共创投票
+        # 查询作品列表，额外参数：iCategory1、iCategory2、page、pagesize
+        self.query_dianzan_contents = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery191015906433451135138_{millseconds}&serviceType=dnf&sAction=showList&sModel=Ugc&actId=2&iCategory1={iCategory1}&iCategory2={iCategory2}&order=0&page={page}&pagesize={pagesize}&_=1608559950347"
+        # 点赞，额外参数：iContentId
+        self.dianzan = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery19105114998760002998_{millseconds}&serviceType=dnf&actId=2&sModel=Zan&sAction=zanContent&iContentId={iContentId}&_={millseconds}"

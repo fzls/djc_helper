@@ -29,10 +29,10 @@ from dao import (
     SailiyamWorkInfo,
     SpringFuDaiInfo,
     TemporaryChangeBindRoleInfo,
-    parse_amesvr_common_info,
+    parse_amesvr_common_info, VoteEndWorkInfo, VoteEndWorkList,
 )
 from data_struct import to_raw_type
-from db import FireCrackersDB
+from db import FireCrackersDB, DianzanDB
 from djc_helper import DjcHelper
 from first_run import is_daily_first_run, is_first_run, is_weekly_first_run
 from log import color, logger
@@ -126,7 +126,219 @@ class DjcHelperTomb:
             ("组队拜年", self.team_happy_new_year),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("翻牌活动", self.dnf_card_flip),
+            ("DNF共创投票", self.dnf_dianzan),
         ]
+
+    # --------------------------------------------DNF共创投票--------------------------------------------
+    @try_except()
+    def dnf_dianzan(self):
+        show_head_line("DNF共创投票")
+        self.show_amesvr_act_info(self.dnf_dianzan_op)
+
+        if not self.cfg.function_switches.get_dnf_dianzan or self.disable_most_activities():
+            logger.warning("未启用领取DNF共创投票活动功能，将跳过")
+            return
+
+        self.check_dnf_dianzan()
+
+        def query_info() -> tuple[int, int, int]:
+            res = self.dnf_dianzan_op("查询信息", "860276", print_res=False)
+            info = parse_amesvr_common_info(res)
+
+            loginGame, playRaid, loginPage, drawTimes = info.sOutValue1.split("|")
+
+            voteTickets, totalGetTickets = info.sOutValue2.split("|")
+            voteTimes = int(totalGetTickets) - int(voteTickets)
+
+            return int(voteTickets), int(voteTimes), int(drawTimes)
+
+        def query_work_info_list() -> list[VoteEndWorkInfo]:
+            res = self.dnf_dianzan_op("查询投票列表", "860311", print_res=False)
+            info = VoteEndWorkList().auto_update_config(res["modRet"]["jData"])
+
+            work_info_list: list[VoteEndWorkInfo] = []
+            for workId, tickets in info.data.items():
+                work_info = VoteEndWorkInfo()
+                work_info.workId = workId
+                work_info.tickets = int(tickets)
+
+                work_info_list.append(work_info)
+
+            return work_info_list
+
+        self.dnf_dianzan_op("登陆游戏获取票数（988902）", "860275")
+        self.dnf_dianzan_op("通关副本（988956）", "860326")
+        self.dnf_dianzan_op("分享（988959）", "860331")
+
+        voteTickets, voteTimes, _ = query_info()
+        logger.info(f"已拥有投票次数：{voteTickets} 已完成投票次数：{voteTimes}")
+        if voteTickets > 0:
+            all_work_info = query_work_info_list()
+            work_info_list = random.sample(all_work_info, voteTickets)
+            logger.info(f"随机从 {len(all_work_info)} 个最终投票中选 {voteTickets} 个进行投票")
+
+            for work_info in work_info_list:
+                self.dnf_dianzan_op(
+                    f"投票 - {work_info.workId} (已有投票: {work_info.tickets})", "860300", workId=work_info.workId
+                )
+                time.sleep(5)
+
+        self.dnf_dianzan_op("投票3次领取（988964）", "860336")
+
+        _, voteTimes, drawTimes = query_info()
+        remaining_draw_times = voteTimes - drawTimes
+        logger.info(f"累计获得抽奖资格：{voteTimes}次，剩余抽奖次数：{remaining_draw_times}")
+        for idx in range_from_one(remaining_draw_times):
+            self.dnf_dianzan_op(f"{idx}/{remaining_draw_times} 转盘（988974）", "860346")
+            time.sleep(5)
+
+    def check_dnf_dianzan(self):
+        self.check_bind_account(
+            "DNF共创投票",
+            get_act_url("DNF共创投票"),
+            activity_op_func=self.dnf_dianzan_op,
+            query_bind_flowid="860273",
+            commit_bind_flowid="860272",
+        )
+
+    def dnf_dianzan_op(self, ctx, iFlowId, sContent="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_dianzan
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF共创投票"),
+            **extra_params,
+        )
+
+    def old_version_dianzan(self):
+        db = DianzanDB().load()
+        account_db = DianzanDB().with_context(self.cfg.get_account_cache_key()).load()
+
+        def query_dnf_dianzan():
+            res = self.dnf_dianzan_op("查询点赞信息", "725348", print_res=False)
+            info = parse_amesvr_common_info(res)
+
+            return int(info.sOutValue1), info.sOutValue2
+
+        # 投票
+        def today_dianzan():
+            today = get_today()
+
+            if today not in account_db.day_to_dianzan_count:
+                account_db.day_to_dianzan_count[today] = 0
+
+            dianzanSuccessCount = account_db.day_to_dianzan_count[today]
+            if dianzanSuccessCount >= 20:
+                logger.info("今日之前的运行中，已经完成20次点赞了，本次将不执行")
+                return
+
+            for contentId in get_dianzan_contents_with_cache():
+                # 不论投票是否成功，都标记为使用过的内容
+                account_db.used_content_ids.append(contentId)
+                if dianzan(dianzanSuccessCount + 1, contentId):
+                    dianzanSuccessCount += 1
+                    if dianzanSuccessCount >= 20:
+                        logger.info("今日已经累计点赞20个，将停止点赞")
+                        break
+
+            account_db.day_to_dianzan_count[today] = dianzanSuccessCount
+
+            account_db.save()
+
+        def get_dianzan_contents_with_cache():
+            usedContentIds = account_db.used_content_ids
+
+            def filter_used_contents(contentIds):
+                validContentIds = []
+                for contentId in contentIds:
+                    if contentId not in usedContentIds:
+                        validContentIds.append(contentId)
+
+                logger.info(validContentIds)
+
+                return validContentIds
+
+            contentIds = db.content_ids
+
+            validContentIds = filter_used_contents(contentIds)
+
+            if len(validContentIds) >= 20:
+                # 本地仍有不少于20个内容可供点赞，直接使用本地内容
+                return validContentIds
+
+            return filter_used_contents(get_dianzan_contents())
+
+        def get_dianzan_contents():
+            logger.info("本地无点赞目标，或缓存的点赞目标均已点赞过，需要重新拉取，请稍后~")
+            contentIds = []
+
+            for iCategory2 in range(1, 8 + 1):
+                newContentIds, total = getWorksData(iCategory2, 1)
+                contentIds.extend(newContentIds)
+
+                # 获取剩余页面
+                totalPage = math.ceil(total / 10)
+                for page in range(2, totalPage):
+                    newContentIds, _ = getWorksData(iCategory2, page)
+                    contentIds.extend(newContentIds)
+
+            logger.info(f"获取所有内容ID共计{len(contentIds)}个，将保存到本地，具体如下：{contentIds}")
+
+            def _update_db(var: DianzanDB):
+                var.content_ids = contentIds
+
+            db.update(_update_db)
+
+            return contentIds
+
+        def getWorksData(iCategory2, page):
+            ctx = f"查询点赞内容-{iCategory2}-{page}"
+            res = self.get(
+                ctx,
+                self.urls.query_dianzan_contents,
+                iCategory1=20,
+                iCategory2=iCategory2,
+                page=page,
+                pagesize=10,
+                is_jsonp=True,
+                is_normal_jsonp=True,
+            )
+            return [v["iContentId"] for v in res["jData"]["data"]], int(res["jData"]["total"])
+
+        def dianzan(idx, iContentId) -> bool:
+            res = self.get(
+                f"今日第{idx}次投票，目标为{iContentId}",
+                self.urls.dianzan,
+                iContentId=iContentId,
+                is_jsonp=True,
+                is_normal_jsonp=True,
+            )
+            return int(res["iRet"]) == 0
+
+        totalDianZanCount, _ = query_dnf_dianzan()
+        if totalDianZanCount < 200:
+            # 进行今天剩余的点赞操作
+            today_dianzan()
+        else:
+            logger.warning("累积投票已经超过200次，无需再投票")
+
+        # 查询点赞信息
+        totalDianZanCount, rewardTakenInfo = query_dnf_dianzan()
+        logger.warning(
+            color("fg_bold_yellow") + f"DNF共创投票活动当前已投票{totalDianZanCount}次，奖励领取状态为{rewardTakenInfo}"
+        )
+
+        # 领取点赞奖励
+        self.dnf_dianzan_op("累计 10票", "725276")
+        self.dnf_dianzan_op("累计 25票", "725340")
+        self.dnf_dianzan_op("累计100票", "725341")
+        self.dnf_dianzan_op("累计200票", "725342")
 
     # --------------------------------------------翻牌活动--------------------------------------------
     @try_except()

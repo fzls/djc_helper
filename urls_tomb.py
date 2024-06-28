@@ -18,6 +18,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
     newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
+    newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
 ]
 
 act_name_to_url_bomb = {
@@ -71,6 +72,7 @@ act_name_to_url_bomb = {
     "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
+    "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
 }
 
 
@@ -118,6 +120,7 @@ class UrlsTomb:
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
+        self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_mojieren = "523217"  # 魔界人探险记

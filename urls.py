@@ -78,7 +78,6 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
@@ -140,7 +139,6 @@ act_name_to_url = {
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
-    "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
 }
 
 
@@ -295,7 +293,6 @@ class Urls:
         #
         # note: 在活动页面 网络请求 过滤 ide/page/ 即可定位到活动id
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
-        self.ide_iActivityId_dnf_bakaer_map = "38_hhO2FX"  # 巴卡尔对战地图
         self.ide_iActivityId_dnf_anniversary = "15_s0hJrQ"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
         self.ide_iActivityId_dnf_luodiye = "61_TpRquT"  # DNF落地页

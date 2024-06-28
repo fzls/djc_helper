@@ -136,7 +136,6 @@ act_name_to_url = {
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
     "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
-    "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
 }
 
 
@@ -269,7 +268,6 @@ class Urls:
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
-        self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛

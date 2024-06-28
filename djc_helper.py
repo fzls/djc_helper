@@ -707,7 +707,6 @@ class DjcHelper:
             ("DNF心悦Dup", self.dnf_xinyue_dup),
             ("dnf周年拉好友", self.dnf_anniversary_friend),
             ("心悦app理财礼卡", self.xinyue_financing),
-            ("冒险的起点", self.maoxian_start),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -7276,47 +7275,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("dnf周年拉好友"),
-            **extra_params,
-        )
-
-    # --------------------------------------------冒险的起点--------------------------------------------
-    @try_except()
-    def maoxian_start(self):
-        show_head_line("冒险的起点")
-        self.show_amesvr_act_info(self.maoxian_start_op)
-
-        if not self.cfg.function_switches.get_maoxian_start or self.disable_most_activities():
-            logger.warning("未启用领取冒险的起点功能，将跳过")
-            return
-
-        self.maoxian_start_op("1", "919254")
-        self.maoxian_start_op("2", "919256")
-        self.maoxian_start_op("3", "919257")
-        self.maoxian_start_op("4", "919258")
-        self.maoxian_start_op("5", "919259")
-        self.maoxian_start_op("6", "919260")
-        self.maoxian_start_op("7", "919261")
-
-    def check_maoxian(self):
-        self.check_bind_account(
-            "冒险的起点",
-            get_act_url("冒险的起点"),
-            activity_op_func=self.maoxian_start_op,
-            query_bind_flowid="919251",
-            commit_bind_flowid="919250",
-        )
-
-    def maoxian_start_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_maoxian_start
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("冒险的起点"),
             **extra_params,
         )
 

@@ -186,7 +186,6 @@ act_name_to_url = {
     "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
     "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
     "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
-    "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
 }
 
 
@@ -433,9 +432,6 @@ class Urls:
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
         self.pesudo_ark_lottery_act_id = 10015
-
-        # 阿拉德勇士征集令
-        self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"
 
         # qq视频活动
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}&is_prepublish={is_prepublish}"

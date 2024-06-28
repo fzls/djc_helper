@@ -780,7 +780,6 @@ class DjcHelper:
             ("dnf助手排行榜", self.dnf_rank),
             ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
             ("DNF进击吧赛利亚", self.xinyue_sailiyam),
-            ("阿拉德勇士征集令", self.dnf_warriors_call),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -2691,17 +2690,17 @@ class DjcHelper:
         #     res = al.do_ark_lottery("fcg_qzact_present", "增加抽卡次数-每日登陆页面", 25970, print_res=False)
         #     return res["code"] == -3000 and res["subcode"] == -4001
 
-        def check_by_warriors_call() -> bool:
-            qa = QzoneActivity(self, lr)
-            qa.fetch_dnf_warriors_call_data()
-            res = qa.do_dnf_warriors_call(
-                "fcg_receive_reward",
-                "测试pskey是否过期",
-                qa.zz().actbossRule.buyVipPrize,
-                gameid=qa.zz().gameid,
-                print_res=False,
-            )
-            return res["code"] == -3000 and res["subcode"] == -4001
+        # def check_by_warriors_call() -> bool:
+        #     qa = QzoneActivity(self, lr)
+        #     qa.fetch_dnf_warriors_call_data()
+        #     res = qa.do_dnf_warriors_call(
+        #         "fcg_receive_reward",
+        #         "测试pskey是否过期",
+        #         qa.zz().actbossRule.buyVipPrize,
+        #         gameid=qa.zz().gameid,
+        #         print_res=False,
+        #     )
+        #     return res["code"] == -3000 and res["subcode"] == -4001
 
         # QQ空间新版活动
         # pskey过期提示：分享领取礼包	{"code": -3000, "message": "未登录"}
@@ -2721,7 +2720,7 @@ class DjcHelper:
         check_p_skey_expired_func_list = [
             check_by_super_vip,
             check_by_yellow_diamond,
-            check_by_warriors_call,
+            # check_by_warriors_call,
             # check_by_ark_lottery,
         ]
 
@@ -2767,27 +2766,6 @@ class DjcHelper:
 
     def get_local_saved_pskey_file(self):
         return self.local_saved_pskey_file.format(self.cfg.name)
-
-    # --------------------------------------------阿拉德勇士征集令--------------------------------------------
-    @try_except()
-    def dnf_warriors_call(self):
-        show_head_line("阿拉德勇士征集令")
-
-        if not self.cfg.function_switches.get_dnf_warriors_call or self.disable_most_activities():
-            logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
-            return
-
-        # 检查是否已在道聚城绑定
-        if self.get_dnf_bind_role() is None:
-            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
-            return
-
-        self.fetch_pskey()
-        if self.lr is None:
-            return
-
-        qa = QzoneActivity(self, self.lr)
-        qa.dnf_warriors_call()
 
     # --------------------------------------------QQ空间超级会员--------------------------------------------
     # note：对接流程与下方黄钻完全一致，参照其流程即可

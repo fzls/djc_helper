@@ -80,7 +80,29 @@ class DjcHelperTomb:
             ("史诗之路来袭活动合集", self.dnf_1224),
             ("暖冬好礼活动", self.warm_winter),
             ("dnf漂流瓶", self.dnf_drift),
+            ("阿拉德勇士征集令", self.dnf_warriors_call),
         ]
+
+    # --------------------------------------------阿拉德勇士征集令--------------------------------------------
+    @try_except()
+    def dnf_warriors_call(self):
+        show_head_line("阿拉德勇士征集令")
+
+        if not self.cfg.function_switches.get_dnf_warriors_call or self.disable_most_activities():
+            logger.warning("未启用领取阿拉德勇士征集令功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        self.fetch_pskey()
+        if self.lr is None:
+            return
+
+        qa = QzoneActivity(self, self.lr)
+        qa.dnf_warriors_call()
 
     # --------------------------------------------dnf漂流瓶--------------------------------------------
     @try_except()

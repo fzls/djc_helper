@@ -25,6 +25,7 @@ act_name_to_url_bomb = {
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
     "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
     "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
+    "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
 }
 
 
@@ -55,3 +56,6 @@ class UrlsTomb:
         # 电脑管家，额外参数：api/giftId/area_id/charac_no/charac_name
         self.guanjia = "https://act.guanjia.qq.com/bin/act/{api}.php?giftId={giftId}&area_id={area_id}&charac_no={charac_no}&charac_name={charac_name}&callback=jQueryCallback&isopenid=1&_={millseconds}"
         self.guanjia_new = "https://{domain_name}/{api}"
+
+        # 阿拉德勇士征集令
+        self.dnf_warriors_call_page = "https://act.qzone.qq.com/vip/2020/dnf1126"

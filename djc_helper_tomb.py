@@ -100,7 +100,101 @@ class DjcHelperTomb:
             ("dnf助手排行榜", self.dnf_rank),
             ("10月女法师三觉", self.dnf_female_mage_awaken),
             ("微信签到", self.wx_checkin),
+            ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
         ]
+
+    # --------------------------------------------wegame国庆活动【秋风送爽关怀常伴】--------------------------------------------
+    def wegame_guoqing(self):
+        show_head_line("wegame国庆活动【秋风送爽关怀常伴】")
+        self.show_amesvr_act_info(self.wegame_op)
+
+        if not self.cfg.function_switches.get_wegame_guoqing or self.disable_most_activities():
+            logger.warning("未启用领取wegame国庆活动功能，将跳过")
+            return
+
+        self.check_wegame_guoqing()
+
+        # 一次性奖励
+        self.wegame_op("金秋有礼抽奖", "703512")
+
+        # 阿拉德智慧星-答题
+        self.wegame_op("答题左上", "703514")
+        self.wegame_op("答题左下", "703515")
+        self.wegame_op("答题右上", "703516")
+        self.wegame_op("答题右下", "703517")
+
+        # 阿拉德智慧星-兑换奖励
+        star_count, _ = self.get_wegame_star_count_lottery_times()
+        logger.info(color("fg_bold_cyan") + f"即将进行兑换道具，当前剩余智慧星为{star_count}")
+        self.wegame_exchange_items()
+
+        # 签到抽大奖
+        self.wegame_op("抽奖资格-每日签到（在WeGame启动DNF）", "703519")
+        self.wegame_op("抽奖资格-30分钟签到（游戏在线30分钟）", "703527")
+        _, lottery_times = self.get_wegame_star_count_lottery_times()
+        logger.info(color("fg_bold_cyan") + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}")
+        for _i in range(lottery_times):
+            res = self.wegame_op("抽奖", "703957")
+            if res.get("ret", "0") == "600":
+                # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
+                break
+
+        # 在线得好礼
+        self.wegame_op("累计在线30分钟签到", "703529")
+        check_days = self.get_wegame_checkin_days()
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {check_days} 天")
+        self.wegame_op("签到3天礼包", "703530")
+        self.wegame_op("签到5天礼包", "703531")
+        self.wegame_op("签到7天礼包", "703532")
+        self.wegame_op("签到10天礼包", "703533")
+        self.wegame_op("签到15天礼包", "703534")
+
+    def get_wegame_star_count_lottery_times(self):
+        res = self.wegame_op("查询剩余抽奖次数", "703542", print_res=False)
+        # "sOutValue1": "239:16:4|240:8:1",
+        val = res["modRet"]["sOutValue1"]
+        star_count, lottery_times = (int(jifen.split(":")[-1]) for jifen in val.split("|"))
+        return star_count, lottery_times
+
+    def get_wegame_checkin_days(self):
+        res = self.wegame_op("查询签到信息", "703539")
+        return res["modRet"]["total"]
+
+    def wegame_exchange_items(self):
+        for ei in self.cfg.wegame_guoqing_exchange_items:
+            for i in range(ei.count):
+                # 700-幸运星数目不足，600-已经达到最大兑换次数
+                res = self.wegame_op(f"兑换 {ei.sGoodsName}", ei.iFlowId)
+                if res["ret"] == "700":
+                    # 默认先兑换完前面的所有道具的最大上限，才会尝试兑换后面的道具
+                    logger.warning(
+                        f"兑换第{i + 1}个【{ei.sGoodsName}】的时候幸运星剩余数量不足，将停止兑换流程，从而确保排在前面的兑换道具达到最大兑换次数后才尝试后面的道具"
+                    )
+                    return
+
+    def check_wegame_guoqing(self):
+        self.check_bind_account(
+            "wegame国庆",
+            get_act_url("wegame国庆活动【秋风送爽关怀常伴】"),
+            activity_op_func=self.wegame_op,
+            query_bind_flowid="703509",
+            commit_bind_flowid="703508",
+        )
+
+    def wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_wegame_guoqing
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("wegame国庆活动【秋风送爽关怀常伴】"),
+            **extra_params,
+        )
 
     # --------------------------------------------微信签到--------------------------------------------
     def wx_checkin(self):

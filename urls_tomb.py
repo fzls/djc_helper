@@ -31,6 +31,7 @@ act_name_to_url_bomb = {
     "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
     "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
     "微信签到": "微信DNF公众号",
+    "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
 }
 
 
@@ -51,6 +52,7 @@ class UrlsTomb:
         self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
+        self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

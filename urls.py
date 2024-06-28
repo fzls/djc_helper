@@ -138,7 +138,6 @@ act_name_to_url = {
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
-    "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
 }
 
 
@@ -276,7 +275,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
-        self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
         self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿

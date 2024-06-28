@@ -17,6 +17,7 @@ from dao import (
     AmesvrCommonModRet,
     AmesvrQueryFriendsInfo,
     AmesvrQueryRole,
+    AmsActInfo,
     BuyInfo,
     DnfCollectionInfo,
     GuanjiaNewLotteryResult,
@@ -48,7 +49,7 @@ from dao import (
     XinyueCatUserInfo,
     XinyueWeeklyGiftInfo,
     XinyueWeeklyGPointsInfo,
-    parse_amesvr_common_info, AmsActInfo,
+    parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
 from db import DianzanDB, FireCrackersDB
@@ -166,7 +167,57 @@ class DjcHelperTomb:
             ("魔界人探险记", self.mojieren),
             ("巴卡尔大作战", self.dnf_bakaer_fight),
             ("巴卡尔对战地图", self.dnf_bakaer_map_ide),
+            ("和谐补偿活动", self.dnf_compensate),
         ]
+
+    # --------------------------------------------和谐补偿活动--------------------------------------------
+    @try_except()
+    def dnf_compensate(self):
+        show_head_line("和谐补偿活动")
+
+        if not self.cfg.function_switches.get_dnf_compensate or self.disable_most_activities():
+            logger.warning("未启用领取和谐补偿活动功能，将跳过")
+            return
+
+        self.show_amesvr_act_info(self.dnf_compensate_op)
+
+        begin_time = "2023-02-23 10:00:00"
+        if now_after(begin_time):
+            res = self.dnf_compensate_op("初始化", "929083", print_res=False)
+            info = parse_amesvr_common_info(res)
+
+            if info.sOutValue1 != "1":
+                self.dnf_compensate_op("补偿奖励", "929042")
+            else:
+                logger.warning("已经领取过了，不再尝试")
+        else:
+            logger.warning(f"尚未到补偿领取时间 {begin_time}")
+
+    def dnf_compensate_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_compensate
+
+        roleinfo = self.get_dnf_bind_role()
+        checkInfo = self.get_dnf_roleinfo()
+
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("和谐补偿活动"),
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+            sArea=roleinfo.serviceID,
+            sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+            ams_md5str=checkInfo.md5str,
+            ams_checkparam=checkparam,
+            **extra_params,
+        )
 
     # --------------------------------------------巴卡尔对战地图--------------------------------------------
     @try_except()

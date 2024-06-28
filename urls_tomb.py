@@ -73,6 +73,7 @@ act_name_to_url_bomb = {
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
+    "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
 }
 
 
@@ -116,6 +117,7 @@ class UrlsTomb:
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
+        self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

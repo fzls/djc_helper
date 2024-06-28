@@ -176,7 +176,6 @@ act_name_to_url = {
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
-    "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
 }
 
 
@@ -325,7 +324,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
-        self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
         self.iActivityId_dnf_vote = "428587"  # DNF名人堂
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_memory = "431712"  # DNF记忆

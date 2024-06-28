@@ -104,7 +104,49 @@ class DjcHelperTomb:
             ("wegame国庆活动【秋风送爽关怀常伴】", self.wegame_guoqing),
             ("虎牙", self.huya),
             ("命运的抉择挑战赛", self.dnf_mingyun_jueze),
+            ("轻松之路", self.dnf_relax_road),
         ]
+
+    # --------------------------------------------轻松之路--------------------------------------------
+    @try_except()
+    def dnf_relax_road(self):
+        show_head_line("轻松之路")
+        self.show_amesvr_act_info(self.dnf_relax_road_op)
+
+        if not self.cfg.function_switches.get_dnf_relax_road or self.disable_most_activities():
+            logger.warning("未启用领取轻松之路功能，将跳过")
+            return
+
+        self.check_dnf_relax_road()
+
+        self.dnf_relax_road_op("登录送抽奖1次", "799120")
+        for xiaohao in self.common_cfg.majieluo.xiaohao_qq_list:
+            self.dnf_relax_road_op(f"分享给 {xiaohao} 送抽奖1次", "799121", iInviter=xiaohao)
+        for _i in range(2):
+            self.dnf_relax_road_op("抽奖", "798858")
+
+    def check_dnf_relax_road(self):
+        self.check_bind_account(
+            "轻松之路",
+            get_act_url("轻松之路"),
+            activity_op_func=self.dnf_relax_road_op,
+            query_bind_flowid="799024",
+            commit_bind_flowid="799023",
+        )
+
+    def dnf_relax_road_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_relax_road
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("轻松之路"),
+            **extra_params,
+        )
 
     # --------------------------------------------命运的抉择挑战赛--------------------------------------------
     @try_except()

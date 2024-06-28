@@ -78,7 +78,6 @@ not_ams_activities = [
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
-    newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
@@ -179,7 +178,6 @@ act_name_to_url = {
     "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
-    "虎牙": "https://www.huya.com/367967",
 }
 
 

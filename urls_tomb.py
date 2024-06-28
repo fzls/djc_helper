@@ -9,6 +9,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2021-09-19 00:00:00", "2021-10-05 23:59:59", "qq会员杯"),
     newNotAmsActInfo("2022-01-20 00:00:00", "2022-02-28 23:59:59", "管家蚊子腿"),
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
+    newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
 ]
 
 act_name_to_url_bomb = {
@@ -32,6 +33,7 @@ act_name_to_url_bomb = {
     "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
     "微信签到": "微信DNF公众号",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
+    "虎牙": "https://www.huya.com/367967",
 }
 
 

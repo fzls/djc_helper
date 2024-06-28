@@ -107,6 +107,7 @@ act_name_to_url = {
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
+    "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     #
     # 已过期活动
@@ -118,7 +119,6 @@ act_name_to_url = {
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
-    "colg其他活动": "https://bbs.colg.cn/colg_activity_new-aggregation_activity.html?aid=16",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",

@@ -160,7 +160,6 @@ act_name_to_url = {
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
-    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
 }
 
 
@@ -283,7 +282,6 @@ class Urls:
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
-        self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
@@ -413,10 +411,6 @@ class Urls:
             "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign&operation=qiandao&formhash={formhash}&format=empty"
         )
         self.dnf_bbs_home = "https://dnf.gamebbs.qq.com/home.php?mod=spacecp&ac=credit"
-
-        # 心悦app
-        # 心悦猫咪api
-        self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"
 
         # colg-战令
         self.colg_url = "https://bbs.colg.cn/forum-171-1.html"

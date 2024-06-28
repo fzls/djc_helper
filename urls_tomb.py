@@ -51,6 +51,7 @@ act_name_to_url_bomb = {
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
+    "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
 }
 
 
@@ -85,6 +86,7 @@ class UrlsTomb:
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
+        self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"
@@ -129,3 +131,7 @@ class UrlsTomb:
         self.query_dianzan_contents = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery191015906433451135138_{millseconds}&serviceType=dnf&sAction=showList&sModel=Ugc&actId=2&iCategory1={iCategory1}&iCategory2={iCategory2}&order=0&page={page}&pagesize={pagesize}&_=1608559950347"
         # 点赞，额外参数：iContentId
         self.dianzan = "https://apps.game.qq.com/cms/index.php?r={rand}&callback=jQuery19105114998760002998_{millseconds}&serviceType=dnf&actId=2&sModel=Zan&sAction=zanContent&iContentId={iContentId}&_={millseconds}"
+
+        # 心悦app
+        # 心悦猫咪api
+        self.xinyue_cat_api = "https://apps.xinyue.qq.com/maomi/pet_api_info/{api}?skin_id={skin_id}&decoration_id={decoration_id}&uin={uin}&adLevel={adLevel}&adPower={adPower}"

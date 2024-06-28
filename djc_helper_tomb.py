@@ -124,7 +124,110 @@ class DjcHelperTomb:
             ("WeGame活动_新版", self.wegame_new),
             ("新职业预约活动", self.dnf_reserve),
             ("组队拜年", self.team_happy_new_year),
+            ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
         ]
+
+    # --------------------------------------------hello语音（皮皮蟹）奖励兑换--------------------------------------------
+    @try_except()
+    def hello_voice(self):
+        # （从hello语音app中兑换奖励页点开网页）
+        show_head_line("hello语音（皮皮蟹）奖励兑换功能（仅兑换，不包含获取奖励的逻辑）")
+        self.show_amesvr_act_info(self.hello_voice_op)
+
+        if not self.cfg.function_switches.get_hello_voice or self.disable_most_activities():
+            logger.warning("未启用hello语音（皮皮蟹）奖励兑换功能，将跳过")
+            return
+
+        if self.cfg.hello_voice.hello_id == "":
+            logger.warning("未配置hello_id，若需要该功能，请前往配置文件查看说明并添加该配置")
+            return
+
+        self.check_hello_voice()
+
+        def query_coin():
+            res = self.hello_voice_op("hello贝查询", "828451", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            return int(raw_info.sOutValue1)
+
+        def query_ticket():
+            res = self.hello_voice_op("兑换券查询", "828450", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            ticket = sum(int(x) for x in raw_info.sOutValue1.split(","))
+
+            return ticket
+
+        # ------ 专属福利区 ------
+        # Hello见面礼
+        self.hello_voice_op("hello见面礼包", "828466")
+        # hello专属周礼包
+        self.hello_voice_op("hello专属周礼包", "828467")
+        # hello专属月礼包
+        self.hello_voice_op("hello专属月礼包", "828468")
+        # hello专属特权礼包
+        self.hello_voice_op("兑换券月限礼包_专属特权礼包-1", "828470", "1917676")
+
+        # ------ Hello贝兑换区 ------
+        # Hello贝兑换
+        logger.info(color("bold_green") + "下面Hello贝可兑换的内容已写死，如需调整，请自行修改源码")
+        # self.hello_voice_op("神秘契约礼盒(1天)(150Hello贝)(日限1)", "828469", "1917677")
+        # self.hello_voice_op("宠物饲料礼袋(10个)(150Hello贝)(日限1)", "828469", "1917678")
+        # self.hello_voice_op("裂缝注视者通行证(150Hello贝)(日限1)", "828469", "1917679")
+        # self.hello_voice_op("本职业符文神秘礼盒(高级~稀有)(600Hello贝)(周限1)", "828471", "1917680")
+        # self.hello_voice_op("黑钻3天(550Hello贝)(周限1)", "828471", "1917681")
+        # self.hello_voice_op("抗疲劳秘药(5点)(300Hello贝)(周限1)", "828471", "1917682")
+        # self.hello_voice_op("升级券(550Hello贝)(月限1)", "828472", "1917684")
+        self.hello_voice_op("灿烂的徽章神秘礼盒(2000Hello贝)(月限1)", "828472", "1917683")
+
+        # 活动奖励兑换
+        logger.info(color("bold_green") + "开始尝试兑换 活动奖励的各个兑换券")
+        self.hello_voice_op("时间引导石*20", "828475", "1917685")
+        self.hello_voice_op("黑钻3天", "828474", "1917686")
+        self.hello_voice_op("复活币礼盒 (1个)", "828475", "1917687")
+        self.hello_voice_op("装备品级调整箱礼盒 (1个)", "828540", "1917688")
+        self.hello_voice_op("高级材料礼盒", "828475", "1917689")
+        self.hello_voice_op("升级券(Lv50~99)", "828475", "1917690")
+        self.hello_voice_op("华丽的徽章神秘礼盒", "828475", "1917691")
+        self.hello_voice_op("神器护石神秘礼盒", "828475", "1917692")
+        self.hello_voice_op("高级装扮兑换券礼盒(无期限)", "828470", "1917693")
+        self.hello_voice_op("hello语音专属光环", "828473", "1917694")
+        self.hello_voice_op("hello语音专属称号", "828473", "1917695")
+        self.hello_voice_op("hello语音专属宠物", "828473", "1917696")
+
+        # 打印最新信息
+        logger.info(color("bold_yellow") + f"Hello贝：{query_coin()}    兑换券：{query_ticket()}")
+
+        logger.info(
+            color("bold_cyan")
+            + "小助手只进行hello语音（皮皮蟹）的奖励领取流程，具体活动任务的完成请手动完成或者使用autojs脚本来实现自动化嗷"
+        )
+
+    def check_hello_voice(self):
+        self.check_bind_account(
+            "hello语音（皮皮蟹）奖励兑换",
+            get_act_url("hello语音网页礼包兑换"),
+            activity_op_func=self.hello_voice_op,
+            query_bind_flowid="828456",
+            commit_bind_flowid="828455",
+        )
+
+    def hello_voice_op(self, ctx, iFlowId, prize="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_hello_voice
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            "http://dnf.qq.com/cp/a20210312hello/",
+            hello_id=self.cfg.hello_voice.hello_id,
+            prize=prize,
+            **extra_params,
+        )
 
     # --------------------------------------------组队拜年--------------------------------------------
     @try_except()

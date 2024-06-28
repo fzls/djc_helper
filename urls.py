@@ -164,7 +164,6 @@ act_name_to_url = {
     "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
-    "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
 }
 
 
@@ -299,7 +298,6 @@ class Urls:
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
-        self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup

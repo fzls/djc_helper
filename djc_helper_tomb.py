@@ -37,7 +37,7 @@ from dao import (
     XinyueCatInfoFromApp,
     XinyueCatMatchResult,
     XinyueCatUserInfo,
-    parse_amesvr_common_info, IdeActInfo,
+    parse_amesvr_common_info, IdeActInfo, MyHomeGift, MyHomeGiftList, MyHomeFriendList, MyHomeFriendDetail, MyHomeValueGift, MyHomeFarmInfo, MyHomeInfo,
 )
 from data_struct import to_raw_type
 from db import DianzanDB, FireCrackersDB
@@ -51,6 +51,7 @@ from setting import parse_card_group_info_map, zzconfig
 from sign import getACSRFTokenForAMS, getMillSecondsUnix
 from urls import get_act_url, get_not_ams_act, search_act
 from urls_tomb import UrlsTomb
+from usage_count import increase_counter
 from util import (
     async_message_box,
     base64_str,
@@ -141,7 +142,408 @@ class DjcHelperTomb:
             ("KOL", self.dnf_kol),
             ("幸运勇士", self.dnf_lucky_user),
             ("DNF集合站_ide", self.dnf_collection_ide),
+            ("我的小屋", self.dnf_my_home),
         ]
+
+    # --------------------------------------------我的小屋--------------------------------------------
+    @try_except()
+    def dnf_my_home(self, run_notify_only: bool = False):
+        # note: 对接新版活动时，记得前往 urls.py 调整活动时间
+        show_head_line("我的小屋")
+        self.show_not_ams_act_info("我的小屋")
+
+        if not self.cfg.function_switches.get_dnf_my_home or self.disable_most_activities():
+            logger.warning("未启用领取我的小屋活动功能，将跳过")
+            return
+
+        self.check_dnf_my_home()
+
+        def query_gifts() -> list[MyHomeGift]:
+            raw_res = self.dnf_my_home_op("获取本身小屋宝箱道具", "145628", print_res=False)
+            gifts = MyHomeGiftList().auto_update_config(raw_res)
+
+            return gifts.jData
+
+        def query_friend_list(iPage: int) -> MyHomeFriendList:
+            raw_res = self.dnf_my_home_op("好友小屋列表", "145827", iPage=iPage, print_res=False)
+
+            return MyHomeFriendList().auto_update_config(raw_res["jData"])
+
+        def query_friend_gift_info(sUin: str) -> list[MyHomeGift]:
+            raw_res = self.dnf_my_home_op("好友小屋道具信息", "145664", sUin=sUin, print_res=False)
+            if raw_res["ret"] != 0:
+                return []
+
+            gifts = MyHomeGiftList().auto_update_config(raw_res)
+
+            return gifts.jData
+
+        def get_friend_detail_list(query_farm_info=True) -> list[MyHomeFriendDetail]:
+            friend_detail_list: list[MyHomeFriendDetail] = []
+
+            logger.info("开始查询各个好友的具体信息，方便后续使用")
+            # share_p_skey = self.fetch_share_p_skey("我的小屋查询好友", cache_max_seconds=600)
+            for friend_page in range_from_one(1000):
+                friend_list = query_friend_list(friend_page)
+                logger.info(f"开始查看 第 {friend_page}/{friend_list.total} 页的好友的宝箱信息~")
+                for friend_info in friend_list.list:
+                    detail = MyHomeFriendDetail()
+                    detail.page = friend_page
+                    detail.info = friend_info
+                    detail.gifts = query_friend_gift_info(friend_info.sUin)
+                    if query_farm_info:
+                        detail.farm_dict = query_friend_farm_dict(friend_info.description(), friend_info.sUin)
+
+                    friend_detail_list.append(detail)
+
+                    time.sleep(0.1)
+
+                if friend_page >= int(friend_list.total):
+                    # 已是最后一页
+                    break
+
+            logger.info(f"总计获取到 {len(friend_detail_list)} 个好友的小屋信息")
+
+            return friend_detail_list
+
+        @try_except()
+        def steal_friend_rice(points: int, friend_detail_list: list[MyHomeFriendDetail]):
+            logger.info(
+                "去好友的菜地里看看是否可以偷水稻，目前仅偷下列两种\n1. 小号\n2. 没有开满8个田地的，确保不会影响到正常参与的好友"
+            )
+
+            myhome_steal_xiaohao_qq_list = self.cfg.myhome_steal_xiaohao_qq_list
+
+            water_reach_max = False
+            steal_reach_max = False
+
+            for detail in friend_detail_list:
+                for index, farm_info in detail.farm_dict.items():
+                    if not farm_info.is_mature():
+                        # 未成熟，尝试浇水，方便多偷一次
+                        # 规则：6）单账号每日最多可采摘好友水稻3+1次（其中3次每日自动获得，剩下1次通过当日给好友水稻浇水获得），次数与账号绑定；
+                        if points >= 10 and not water_reach_max:
+                            res = self.dnf_my_home_op(
+                                f"尝试帮 好友({detail.info.description()}) 浇水，从而增加一次偷水稻的机会",
+                                "145467",
+                                sRice=farm_info.sFarmland,
+                            )
+                            if res["ret"] == 10003:
+                                water_reach_max = True
+                    else:
+                        # 仅尝试偷自己的小号或者未开满八块地的好友
+                        if detail.get_qq() not in myhome_steal_xiaohao_qq_list or len(detail.farm_dict) < 8:
+                            continue
+
+                        # 已成熟，如果还能被偷，就尝试偷一下
+                        if int(farm_info.iNum) >= 6 and not steal_reach_max:
+                            res = self.dnf_my_home_op(
+                                f"尝试偷 好友({detail.info.description()}) 的水稻",
+                                "145489",
+                                fieldId=index,
+                                sRice=farm_info.sFarmland,
+                            )
+                            if res["ret"] == 10003:
+                                steal_reach_max = True
+
+        def notify_valuable_gifts(current_points: int, valuable_gifts: list[MyHomeValueGift]):
+            if len(valuable_gifts) == 0:
+                return
+
+            # 按照折扣排序
+            def sort_by_discount(value_gift: MyHomeValueGift) -> int:
+                return int(value_gift.gift.discount)
+
+            valuable_gifts.sort(key=sort_by_discount)
+
+            gift_desc_list = []
+            for g in valuable_gifts:
+                gift_desc_list.append(
+                    " " * 4
+                    + f"第 {g.page} 页 {g.owner} 的宝箱: {g.gift.sPropName} {g.gift.price_after_discount()}({g.gift.format_discount()})"
+                )
+            gift_descs = "\n".join(gift_desc_list)
+
+            async_message_box(
+                (
+                    f"{self.cfg.name} 当前拥有积分为 {current_points}，足够兑换下列稀有道具了~\n"
+                    f"{gift_descs}\n"
+                    "\n"
+                    f"如果需要兑换，请使用手机打开稍后的网页，自行兑换~"
+                ),
+                "我的小屋兑换提示",
+                open_url=get_act_url("我的小屋"),
+            )
+
+        def try_add_valuable_gift(
+            current_points: int,
+            valuable_gifts: list[MyHomeValueGift],
+            gift: MyHomeGift,
+            owner: str,
+            page: int,
+            s_uin: str,
+        ):
+            # 提示以下情况的奖励
+            # 1. 稀有奖励
+            # 2. 额外配置想要的的奖励
+            want = gift.is_valuable_gift() or gift.is_extra_wanted(self.cfg.myhome_extra_wanted_gift_name_list)
+            if not want:
+                return
+
+            if int(gift.iUsedNum) >= int(gift.iTimes):
+                # 已超过兑换次数
+                return
+
+            # 打印下有稀有奖励的好友的信息，方便分享给别人
+            logger.info(
+                f"第 {page} 页 可分享小屋 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()})({gift.iUsedNum}/{gift.iTimes}) {owner} {s_uin}"
+            )
+
+            if gift.is_valuable_gift():
+                # 增加上报下稀有小屋信息，活动快结束了，还没兑换的可能不会换了，改为新建一个帖子分享出去
+                increase_counter(
+                    ga_category=f"小屋分享-v6-{gift.sPropName}",
+                    name=f"{gift.format_discount()} {gift.price_after_discount()} {s_uin} ({gift.iUsedNum}/{gift.iTimes}) {owner} ",
+                )
+
+            if current_points < gift.price_after_discount():
+                # 积分不够
+                logger.warning(
+                    f"{self.cfg.name} {owner} 的宝箱中有 {gift.sPropName}({gift.price_after_discount()}, {gift.format_discount()}), 但当前积分只有 {current_points}，不够兑换-。-"
+                )
+                return
+
+            valuable_gifts.append(MyHomeValueGift(page, owner, gift))
+
+        @try_except()
+        def notify_exchange_valuable_gift(current_points: int, friend_detail_list: list[MyHomeFriendDetail]):
+            # 需要提醒的稀有奖励列表
+            valuable_gifts: list[MyHomeValueGift] = []
+
+            # 先看看自己的稀有奖励
+            logger.info("今日的宝箱如下:")
+            my_gifts = query_gifts()
+            for gift in my_gifts:
+                logger.info(f"{gift.sPropName}\t{gift.iPoints} 积分")
+
+                try_add_valuable_gift(current_points, valuable_gifts, gift, "自己", 0, "")
+
+            # 然后看看好友的稀有奖励
+            logger.info("开始看看好友的小屋里是否有可以兑换的好东西")
+            for detail in friend_detail_list:
+                for gift in detail.gifts:
+                    try_add_valuable_gift(
+                        current_points,
+                        valuable_gifts,
+                        gift,
+                        f"{detail.info.sNick}({detail.info.iUin})",
+                        detail.page,
+                        detail.info.sUin,
+                    )
+
+            # 提醒兑换奖励
+            notify_valuable_gifts(current_points, valuable_gifts)
+
+        def query_farm_dict() -> dict[str, MyHomeFarmInfo]:
+            res = self.dnf_my_home_op("农田初始化(查询信息）", "145364", print_res=False)
+
+            return parse_farm_dict(res)
+
+        def query_friend_farm_dict(friend: str, suin: str) -> dict[str, MyHomeFarmInfo]:
+            res = self.dnf_my_home_op(f"查询好友 {friend} 的农田", "149975", sUin=suin, print_res=False)
+
+            return parse_farm_dict(res)
+
+        def parse_farm_dict(raw_res: dict) -> dict[str, MyHomeFarmInfo]:
+            data = raw_res["jData"]["list"]
+
+            # 在低于8个田时，返回的是dict，满了的时候是list，所以这里需要特殊处理下
+            farm_list: dict[str, MyHomeFarmInfo] = {}
+            if type(data) is dict:
+                for index, value in data.items():
+                    farm_list[str(index)] = MyHomeFarmInfo().auto_update_config(value)
+            else:
+                for index, value in enumerate(data):
+                    farm_list[str(index)] = MyHomeFarmInfo().auto_update_config(value)
+
+            return farm_list
+
+        # 初始化
+        info = self.my_home_query_info()
+        if int(info.isUser) != 1:
+            self.dnf_my_home_op("开通农场", "145251")
+
+        if run_notify_only:
+            # 供特别版本使用的特殊流程
+            logger.info(color("bold_yellow") + "当前为小屋特别版本，将仅运行提示兑换部分")
+
+            # 预先查询好友信息，方便后续使用
+            friend_detail_list = get_friend_detail_list(query_farm_info=False)
+
+            # 统计最新信息
+            rice_count = self.my_home_query_rice()
+            logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
+
+            # 提示兑换道具
+            notify_exchange_valuable_gift(rice_count, friend_detail_list)
+            return
+
+        # 每日任务
+        tasks = [
+            ("每日登录礼包", "145178"),
+            ("分享礼包", "145236"),
+            ("在线时长礼包", "145232"),
+            ("通关推荐地下城", "145237"),
+            ("疲劳消耗礼包", "145245"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_my_home_op(name, flowid)
+            time.sleep(5)
+
+        points = self.my_home_query_integral()
+        logger.info(color("bold_yellow") + f"当前积分为 {points}")
+
+        # 种田
+        # 解锁
+        farm_dict = query_farm_dict()
+        for iFarmland in range(0, 7 + 1):
+            id = str(iFarmland)
+            if id not in farm_dict:
+                self.dnf_my_home_op(f"尝试解锁农田 - {iFarmland}", "145278", iFarmland=iFarmland)
+
+        # 尝试浇水和收割
+        farm_dict = query_farm_dict()
+        MAX_FARM_FIELD_COUNT = 8
+
+        for iFarmland in range(0, 7 + 1):
+            id = str(iFarmland)
+            if id not in farm_dict:
+                continue
+            fData = farm_dict[id]
+
+            logger.info(f"第 {iFarmland} 块田地成熟时间为 {fData.mature_time()} （是否已成熟: {fData.is_mature()}）")
+
+            if not fData.is_mature():
+                # 如果所有田地都已经解锁，此时积分只能用来浇水了
+                if len(farm_dict) >= MAX_FARM_FIELD_COUNT and points >= 100:
+                    # 保留一定的积分用于给他人浇水，可以多偷一次
+                    logger.info(f"尝试给第 {iFarmland} 个田里的水稻浇水")
+                    self.dnf_my_home_op(f"尝试给第 {iFarmland} 个田里的水稻浇水", "145398", sRice=fData.sFarmland)
+            else:
+                self.dnf_my_home_op(
+                    f"尝试采摘第 {iFarmland} 个田里的水稻", "145472", fieldId=iFarmland, sRice=fData.sFarmland
+                )
+
+        # 邀请好友可以获取刷新次数，这里就不弄了
+        # self.dnf_my_home_op("邀请好友开通农场", "145781")
+        # self.dnf_my_home_op("接受好友邀请", "145784")
+        # self.dnf_my_home_op("待邀请好友列表", "145695")
+        # self.dnf_my_home_op("好友已开通农场列表", "145827")
+
+        # 预先查询好友信息，方便后续使用
+        friend_detail_list = get_friend_detail_list()
+
+        # 去偷菜
+        points = self.my_home_query_integral()
+        steal_friend_rice(points, friend_detail_list)
+
+        # 统计最新信息
+        rice_count = self.my_home_query_rice()
+        logger.info(color("bold_yellow") + f"当前稻谷数为 {rice_count}")
+
+        # 提示兑换道具
+        notify_exchange_valuable_gift(rice_count, friend_detail_list)
+
+        act_endtime = parse_time(get_not_ams_act("我的小屋").dtEndTime)
+        lastday = get_today(act_endtime)
+        if is_weekly_first_run("我的小屋每周兑换提醒") or get_today() == lastday:
+            async_message_box(
+                "我的小屋活动的兑换选项较多，所以请自行前往网页（手机打开）按需兑换（可以看看自己或者好友的小屋的宝箱，选择需要的东西进行兑换",
+                "我的小屋兑换提醒-每周一次或最后一天",
+                open_url=get_act_url("我的小屋"),
+            )
+        # self.dnf_my_home_op("兑换商城道具", "145644")
+        # self.dnf_my_home_op("兑换好友商城道具", "145665")
+
+        # 本期不是好友不能添加，所以这个没多大意义了-。-没必要发帖了
+        # if use_by_myself():
+        #     # re: 最后五天的时候提醒自己建个帖子，开始共享尚未兑换的稀有道具，方便大家都换到自己想要的
+        #     #  往上搜索： 小屋分享- 可找到新的谷歌分析的关键词
+        #     now = get_now()
+        #     if act_endtime - datetime.timedelta(days=5) <= now <= act_endtime:
+        #         async_message_box(
+        #             (
+        #                 "活动最后五天了，像之前一样：\n"
+        #                 "1. 发个帖子，介绍进入他人小屋的办法（在 进入小屋 的按钮上右键得到新的代码）\n"
+        #                 "2. 发个公告，提前更新文档时间，让大家自行取用\n"
+        #                 "2. 这几天每晚10点更新上次那个在线文档，共享上报的稀有道具\n"
+        #             ),
+        #             "（仅自己可见）参照之前例子，我的小屋发个共享帖子和公告",
+        #             open_url="https://bbs.colg.cn/thread-8521654-1-1.html",
+        #             show_once_daily=True,
+        #         )
+
+        # 抽天3
+        res = self.dnf_my_home_op("幸运大奖抽奖", "146374")
+        packge_id = int(res["jData"]["iPackageId"] or -1)
+        if packge_id == 3486107:
+            info = self.my_home_query_info()
+            async_message_box(
+                f"{self.cfg.name} 抽到了 天3套装礼盒 的兑换资格，可用2000稻谷进行兑换，当前拥有 {info.iRice} 个",
+                "抽到大奖了",
+            )
+        self.dnf_my_home_op("兑换幸运大奖", "146392")
+
+        # 增加数据统计，看看有没有人抽到
+        increase_counter(
+            ga_category="小屋抽天3套装结果",
+            name=str(packge_id),
+        )
+
+    def my_home_query_info(self) -> MyHomeInfo:
+        raw_res = self.dnf_my_home_op("个人信息", "145985", print_res=False)
+
+        return MyHomeInfo().auto_update_config(raw_res["jData"])
+
+    @try_except(return_val_on_except=0, show_exception_info=False)
+    def my_home_query_integral(self) -> int:
+        info = self.my_home_query_info()
+
+        return int(info.iTask)
+
+    @try_except(return_val_on_except=0, show_exception_info=False)
+    def my_home_query_rice(self) -> int:
+        info = self.my_home_query_info()
+
+        return int(info.iRice)
+
+    def check_dnf_my_home(self, **extra_params):
+        return self.ide_check_bind_account(
+            "我的小屋",
+            get_act_url("我的小屋"),
+            activity_op_func=self.dnf_my_home_op,
+            sAuthInfo="WDXW",
+            sActivityInfo="469853",
+        )
+
+    def dnf_my_home_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_my_home
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("我的小屋"),
+            **extra_params,
+        )
 
     # --------------------------------------------DNF集合站_ide--------------------------------------------
     @try_except()

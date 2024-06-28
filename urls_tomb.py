@@ -15,6 +15,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
+    newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
 ]
 
 act_name_to_url_bomb = {
@@ -59,6 +60,7 @@ act_name_to_url_bomb = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "幸运勇士": "https://dnf.qq.com/cp/a20191114wastage/index.html",
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
+    "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
 }
 
 
@@ -99,6 +101,7 @@ class UrlsTomb:
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
+        self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

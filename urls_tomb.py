@@ -23,6 +23,7 @@ act_name_to_url_bomb = {
     "燃放爆竹活动": "https://dnf.qq.com/cp/a20210118rfbz/index.html",
     "新春福袋大作战": "https://dnf.qq.com/cp/a20210108luckym/index.html",
     "史诗之路来袭活动合集": "https://dnf.qq.com/lbact/a20201224aggregate/index.html",
+    "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
 }
 
 
@@ -36,6 +37,7 @@ class UrlsTomb:
         self.iActivityId_firecrackers = "355187"  # 燃放爆竹活动
         self.iActivityId_spring_fudai = "354771"  # 新春福袋大作战
         self.iActivityId_dnf_1224 = "353266"  # DNF-1224渠道活动合集
+        self.iActivityId_warm_winter = "347445"  # 暖冬有礼
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

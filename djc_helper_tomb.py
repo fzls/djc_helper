@@ -77,7 +77,81 @@ class DjcHelperTomb:
             ("燃放爆竹活动", self.firecrackers),
             ("新春福袋大作战", self.spring_fudai),
             ("史诗之路来袭活动合集", self.dnf_1224),
+            ("暖冬好礼活动", self.warm_winter),
         ]
+
+    # --------------------------------------------暖冬好礼活动--------------------------------------------
+    @try_except()
+    def warm_winter(self):
+        show_head_line("暖冬好礼活动")
+        self.show_amesvr_act_info(self.warm_winter_op)
+
+        if not self.cfg.function_switches.get_warm_winter or self.disable_most_activities():
+            logger.warning("未启用领取暖冬好礼活动功能，将跳过")
+            return
+
+        self.check_warm_winter()
+
+        def get_lottery_times():
+            res = self.warm_winter_op("查询剩余抽奖次数", "728476", print_res=False)
+            # "sOutValue1": "279:2:1",
+            val = res["modRet"]["sOutValue1"]
+            jfId, total, remaining = (int(v) for v in val.split(":"))
+            return total, remaining
+
+        def get_checkin_days():
+            res = self.warm_winter_op("查询签到信息", "723178")
+            return int(res["modRet"]["total"])
+
+        # 01 勇士齐聚阿拉德
+        self.warm_winter_op("四个礼盒随机抽取", "723167")
+
+        # 02 累计签到领豪礼
+        self.warm_winter_op("签到礼包", "723165")
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {get_checkin_days()} 天")
+        self.warm_winter_op("签到3天礼包", "723170")
+        self.warm_winter_op("签到5天礼包", "723171")
+        self.warm_winter_op("签到7天礼包", "723172")
+        self.warm_winter_op("签到10天礼包", "723173")
+        self.warm_winter_op("签到15天礼包", "723174")
+
+        # 03 累计签到抽大奖
+        self.warm_winter_op("1.在WeGame启动DNF", "723175")
+        self.warm_winter_op("2.游戏在线30分钟", "723176")
+        total_lottery_times, lottery_times = get_lottery_times()
+        logger.info(
+            color("fg_bold_cyan")
+            + f"即将进行抽奖，当前剩余抽奖资格为{lottery_times}，累计获取{total_lottery_times}次抽奖机会"
+        )
+        for _i in range(lottery_times):
+            res = self.warm_winter_op("每日抽奖", "723177")
+            if res.get("ret", "0") == "600":
+                # {"ret": "600", "msg": "非常抱歉，您的资格已经用尽！", "flowRet": {"iRet": "600", "sLogSerialNum": "AMS-DNF-1031000622-s0IQqN-331515-703957", "iAlertSerial": "0", "sMsg": "非常抱歉！您的资格已用尽！"}, "failedRet": {"762140": {"iRuleId": "762140", "jRuleFailedInfo": {"iFailedRet": 600}}}}
+                break
+
+    def check_warm_winter(self):
+        self.check_bind_account(
+            "暖冬好礼",
+            get_act_url("暖冬好礼活动"),
+            activity_op_func=self.warm_winter_op,
+            query_bind_flowid="723162",
+            commit_bind_flowid="723161",
+        )
+
+    def warm_winter_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_warm_winter
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("暖冬好礼活动"),
+            **extra_params,
+        )
 
     # --------------------------------------------史诗之路来袭活动合集--------------------------------------------
     @try_except()

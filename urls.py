@@ -188,7 +188,6 @@ act_name_to_url = {
     "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
     "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
-    "暖冬好礼活动": "https://dnf.qq.com/lbact/a20200911lbz3dns/index.html",
 }
 
 
@@ -323,7 +322,6 @@ class Urls:
         self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
-        self.iActivityId_warm_winter = "347445"  # 暖冬有礼
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求

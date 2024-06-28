@@ -173,7 +173,61 @@ class DjcHelperTomb:
             ("DNF巴卡尔竞速", self.dnf_bakaer),
             ("冒险的起点", self.maoxian_start),
             ("心悦app理财礼卡", self.xinyue_financing),
+            ("dnf周年拉好友", self.dnf_anniversary_friend),
         ]
+
+    # --------------------------------------------dnf周年拉好友--------------------------------------------
+    @try_except()
+    def dnf_anniversary_friend(self):
+        show_head_line("dnf周年拉好友")
+        self.show_amesvr_act_info(self.dnf_anniversary_friend_op)
+
+        if not self.cfg.function_switches.get_dnf_anniversary_friend or self.disable_most_activities():
+            logger.warning("未启用领取dnf周年拉好友功能，将跳过")
+            return
+
+        self.check_dnf_anniversary_friend()
+
+        self.dnf_anniversary_friend_op("分享领黑钻", "951475")
+
+        self.dnf_anniversary_friend_op("开启新旅程-领取同行奖励（主态）", "952931")
+
+        self.dnf_anniversary_friend_op("抽取光环", "952651")
+
+        self.dnf_anniversary_friend_op("每日任务-通关任意难度【110级地下城】1次", "951752")
+        self.dnf_anniversary_friend_op("每日任务-通关任意难度【110级地下城】3次", "952159")
+        self.dnf_anniversary_friend_op("每周任务-累计地下城获得【Lv105史诗装备】5件", "952160")
+
+        max_try_count = 4
+        for idx in range_from_one(max_try_count):
+            res = self.dnf_anniversary_friend_op(f"[{idx}/{max_try_count}] 抽奖", "952537")
+            if res["ret"] != "0":
+                break
+
+        self.dnf_anniversary_friend_op("随机点亮勇士印记", "952041")
+
+    def check_dnf_anniversary_friend(self):
+        self.check_bind_account(
+            "dnf周年拉好友",
+            get_act_url("dnf周年拉好友"),
+            activity_op_func=self.dnf_anniversary_friend_op,
+            query_bind_flowid="951473",
+            commit_bind_flowid="951472",
+        )
+
+    def dnf_anniversary_friend_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_anniversary_friend
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("dnf周年拉好友"),
+            **extra_params,
+        )
 
     # --------------------------------------------心悦app理财礼卡--------------------------------------------
     @try_except()

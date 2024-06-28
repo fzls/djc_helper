@@ -77,6 +77,7 @@ act_name_to_url_bomb = {
     "DNF巴卡尔竞速": "https://xinyue.qq.com/act/a20230220dnf/index.html",
     "冒险的起点": "https://dnf.qq.com/lbact/a20221228lb00nmo/indexm.html",
     "心悦app理财礼卡": "https://xinyue.qq.com/act/app/xyjf/a20171031lclk/index1.shtml",
+    "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
 }
 
 
@@ -124,6 +125,7 @@ class UrlsTomb:
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_maoxian_start = "525776"  # 冒险的起点
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
+        self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

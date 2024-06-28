@@ -134,7 +134,6 @@ act_name_to_url = {
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
     "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
     "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
-    "dnf周年拉好友": "https://dnf.qq.com/cp/a20230615emotion/indexm.html",
 }
 
 
@@ -264,7 +263,6 @@ class Urls:
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
-        self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约

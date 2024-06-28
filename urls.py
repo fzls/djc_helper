@@ -79,7 +79,6 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-01-05 00:00:00", "2023-02-22 23:59:59", "巴卡尔对战地图"),
-    newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
@@ -143,7 +142,6 @@ act_name_to_url = {
     "和谐补偿活动": "https://dnf.qq.com/cp/a20230223being/",
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
-    "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
 }
 
 
@@ -315,9 +313,6 @@ class Urls:
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划
         self.ide_iActivityId_majieluo = "16_S86Tjb"  # DNF马杰洛的规划
-
-        self.iActivityId_mojieren = "523217"  # 魔界人探险记
-        self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记
 
         # ide活动
         self.ide = "https://{ide_host}/ide/"

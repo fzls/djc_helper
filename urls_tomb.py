@@ -17,6 +17,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "DNF集合站_ide"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-19 23:59:59", "超享玩"),
+    newNotAmsActInfo("2023-01-12 00:00:00", "2023-02-10 23:59:59", "魔界人探险记"),
 ]
 
 act_name_to_url_bomb = {
@@ -68,6 +69,7 @@ act_name_to_url_bomb = {
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
+    "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
 }
 
 
@@ -115,6 +117,10 @@ class UrlsTomb:
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋
+
+        # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
+        self.iActivityId_mojieren = "523217"  # 魔界人探险记
+        self.ide_iActivityId_mojieren = "69_vGQxc7"  # 魔界人探险记
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

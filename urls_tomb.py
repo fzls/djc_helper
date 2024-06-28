@@ -11,6 +11,7 @@ not_ams_activities_tomb = [
     newNotAmsActInfo("2021-07-04 00:00:00", not_know_end_time____, "会员关怀"),
     newNotAmsActInfo("2021-09-11 00:00:00", "2021-10-13 23:59:59", "虎牙"),
     newNotAmsActInfo("2021-10-18 00:00:00", "2021-11-18 23:59:59", "qq视频蚊子腿"),
+    newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
 ]
 
 act_name_to_url_bomb = {
@@ -43,6 +44,7 @@ act_name_to_url_bomb = {
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "关怀活动": "https://dnf.qq.com/lbact/a20211118care/index.html",
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
+    "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
 }
 
 
@@ -100,3 +102,12 @@ class UrlsTomb:
 
         # qq视频活动
         self.qq_video = "https://activity.video.qq.com/fcgi-bin/asyn_activity?act_id={act_id}&module_id={module_id}&type={type}&option={option}&ptag=dnf&otype=xjson&_ts={millseconds}&task={task}&is_prepublish={is_prepublish}"
+
+        # WeGame新版活动，需要填写 flow_id
+        # md5签名内容
+        #   /service/flow/v1/parse/Wand-20211206100115-Fde55ab61e52f?u=7636ee76-dc95-42e2-ac8c-af7f07982dfd&a=10004&ts=1639583575&appkey=wegame!#act$2020
+        # 计算md5签名之后
+        #   /service/flow/v1/parse/Wand-20211206100115-Fde55ab61e52f?u=7636ee76-dc95-42e2-ac8c-af7f07982dfd&a=10004&ts=1639583575&s=7f2eeec828830f249a7694d09833c50d
+        self.wegame_new_host = "https://act.wegame.com.cn"
+        self.wegame_new_api = "/service/flow/v1/parse/{flow_id}?u={uuid4}&a=10004&ts={seconds}"
+        self.wegame_new_appkey = "--todo--"

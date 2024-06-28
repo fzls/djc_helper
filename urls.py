@@ -77,7 +77,6 @@ not_ams_activities = [
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "腾讯游戏信用礼包"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2022-11-24 00:00:00", "2022-12-23 23:59:59", "黄钻"),
-    newNotAmsActInfo("2021-12-13 00:00:00", "2021-12-31 23:59:59", "WeGame活动_新版"),
     newNotAmsActInfo(not_know_start_time__, not_know_end_time____, "幸运勇士"),
     newNotAmsActInfo("2022-09-22 00:00:00", "2022-10-21 23:59:59", "我的小屋"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
@@ -168,7 +167,6 @@ act_name_to_url = {
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
-    "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
 }
 
 
@@ -463,14 +461,6 @@ class Urls:
         self.xiaojiangyou_init_page = "https://xyapi.game.qq.com/xiaoyue/service/init?_={millseconds}&callback=jQuery171004811813596127945_{millseconds}&_={millseconds}"
         self.xiaojiangyou_ask_question = "https://xyapi.game.qq.com/xiaoyue/service/ask?_={millseconds}&question={question}&question_id={question_id}&robot_type={robot_type}&option_type=0&filter={question}&rec_more=&certificate={certificate}&callback=jQuery171004811813596127945_{millseconds}&_={millseconds}"
         self.xiaojiangyou_get_packge = "https://xyapi.game.qq.com/xiaoyue/helper/package/get?_={millseconds}&token={token}&ams_id={ams_id}&package_group_id={package_group_id}&tool_id={tool_id}&certificate={certificate}&callback=jQuery171039455388263754454_{millseconds}&_={millseconds}"
-
-        # WeGame新版活动，需要填写 flow_id
-        # md5签名内容
-        #   /service/flow/v1/parse/Wand-20211206100115-Fde55ab61e52f?u=7636ee76-dc95-42e2-ac8c-af7f07982dfd&a=10004&ts=1639583575&appkey=wegame!#act$2020
-        # 计算md5签名之后
-        #   /service/flow/v1/parse/Wand-20211206100115-Fde55ab61e52f?u=7636ee76-dc95-42e2-ac8c-af7f07982dfd&a=10004&ts=1639583575&s=7f2eeec828830f249a7694d09833c50d
-        self.wegame_new_host = "https://act.wegame.com.cn"
-        self.wegame_new_api = "/service/flow/v1/parse/{flow_id}?u={uuid4}&a=10004&ts={seconds}"
 
         # 幸运勇士
         self.lucky_user = (

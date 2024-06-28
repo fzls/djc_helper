@@ -33,7 +33,7 @@ from dao import (
 from data_struct import to_raw_type
 from db import FireCrackersDB
 from djc_helper import DjcHelper
-from first_run import is_first_run, is_weekly_first_run
+from first_run import is_first_run, is_weekly_first_run, is_daily_first_run
 from log import color, logger
 from network import check_tencent_game_common_status_code, extract_qq_video_message
 from qq_login import LoginResult, QQLogin
@@ -55,7 +55,7 @@ from util import (
     show_head_line,
     tableify,
     try_except,
-    use_by_myself,
+    use_by_myself, md5,
 )
 
 
@@ -118,7 +118,60 @@ class DjcHelperTomb:
             ("DNF记忆", self.dnf_memory),
             ("关怀活动", self.dnf_guanhuai),
             ("DNF公会活动", self.dnf_gonghui),
+            ("WeGame活动_新版", self.wegame_new),
         ]
+
+    # --------------------------------------------WeGame活动_新版--------------------------------------------
+    @try_except()
+    def wegame_new(self):
+        show_head_line("WeGame活动_新版")
+        self.show_not_ams_act_info("WeGame活动_新版")
+
+        if not self.cfg.function_switches.get_wegame_new or self.disable_most_activities():
+            logger.warning("未启用领取WeGame活动_新版功能，将跳过")
+            return
+
+        if is_daily_first_run("WeGame活动_新版_提示手动领取"):
+            async_message_box(
+                "新的wegame活动无法自动完成，请每天手动点一点-。- 或者放弃\n"
+                + "（此消息每天弹出一次，不想看到的话请把该活动关闭 - WeGame活动_新版）\n",
+                "请手动领取",
+                open_url="https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
+            )
+
+        # self.wegame_new_op_post("测试POST", "Wand-20211206100115-Fde55ab61e52f", json={"url_param": "", "checkLogin": True, "needLogin": False})
+        # self.wegame_new_op("测试GET", "Wand-20211208111014-F6568800dd5fb")
+        # self.wegame_new_op("测试GET", "Wand-20211208111042-F17b841c3d68e")
+
+    def wegame_new_op(self, ctx: str, flow_id: str, print_res=True, **extra_params):
+        api_path = self.format(self.urls.wegame_new_api, flow_id=flow_id)
+        sign_content = f"{api_path}&appkey={self.urls.wegame_new_appkey}"
+        sign = md5(sign_content)
+
+        signed_url = f"{self.urls.wegame_new_host}{api_path}&s={sign}"
+        # note: 有两个参数无法获取，太麻烦了，先不弄了，wand_safecode_str 和 wand_safecode_ticket
+        return self.get(
+            ctx,
+            signed_url,
+            print_res=print_res,
+            flow_id=flow_id,
+            extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey}; ",
+        )
+
+    def wegame_new_op_post(self, ctx: str, flow_id: str, json=None, print_res=True, **extra_params):
+        api_path = self.format(self.urls.wegame_new_api, flow_id=flow_id)
+        sign_content = f"{api_path}&appkey={self.urls.wegame_new_appkey}"
+        sign = md5(sign_content)
+
+        signed_url = f"{self.urls.wegame_new_host}{api_path}&s={sign}"
+        return self.post(
+            ctx,
+            signed_url,
+            json=json,
+            print_res=print_res,
+            flow_id=flow_id,
+            extra_cookies=f"p_uin={self.uin()}; p_skey={self.lr.p_skey};",
+        )
 
     # --------------------------------------------DNF公会活动--------------------------------------------
     @try_except()
@@ -3237,6 +3290,12 @@ class DjcHelperTomb:
         self, base_force_name="", role_name=""
     ) -> list[TemporaryChangeBindRoleInfo]:
         return []
+
+    def format(self, url, **params):
+        return ""
+
+    def uin(self) -> str:
+        return self.cfg.account_info.uin
 
 def watch_live():
     # 读取配置信息

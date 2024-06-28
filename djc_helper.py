@@ -5990,11 +5990,6 @@ class DjcHelper:
     def dnf_luodiye_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_luodiye
 
-        # roleinfo = self.get_dnf_bind_role()
-        # checkInfo = self.get_dnf_roleinfo()
-        #
-        # checkparam = quote_plus(quote_plus(checkInfo.checkparam))
-
         return self.amesvr_request(
             ctx,
             "x6m5.ams.game.qq.com",
@@ -6004,9 +5999,6 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("DNF落地页活动"),
-            # sArea=roleinfo.serviceID, sPartition=roleinfo.serviceID, sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
-            # sRoleId=roleinfo.roleCode, sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-            # md5str=checkInfo.md5str, ams_checkparam=checkparam, checkparam=checkparam,
             **extra_params,
             extra_cookies=f"p_skey={p_skey}",
         )

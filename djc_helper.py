@@ -778,7 +778,6 @@ class DjcHelper:
             ("微信签到", self.wx_checkin),
             ("10月女法师三觉", self.dnf_female_mage_awaken),
             ("dnf助手排行榜", self.dnf_rank),
-            ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
         ]
 
     # --------------------------------------------道聚城--------------------------------------------
@@ -6608,121 +6607,6 @@ class DjcHelper:
             res = draw_lottery(f"[{idx}/3] 抽奖", 5, 2499)
             if res.get("status") != 200:
                 break
-
-    # --------------------------------------------2020DNF嘉年华页面主页面签到--------------------------------------------
-    def dnf_carnival(self):
-        show_head_line("2020DNF嘉年华页面主页面签到")
-        self.show_amesvr_act_info(self.dnf_carnival_op)
-
-        if not self.cfg.function_switches.get_dnf_carnival or self.disable_most_activities():
-            logger.warning("未启用领取2020DNF嘉年华页面主页面签到活动合集功能，将跳过")
-            return
-
-        self.check_dnf_carnival()
-
-        self.dnf_carnival_op("12.11-12.14 阶段一签到", "721945")
-        self.dnf_carnival_op("12.15-12.18 阶段二签到", "722198")
-        self.dnf_carnival_op("12.19-12.26 阶段三与全勤", "722199")
-
-    def check_dnf_carnival(self):
-        self.check_bind_account(
-            "2020DNF嘉年华页面主页面签到",
-            get_act_url("2020DNF嘉年华页面主页面签到"),
-            activity_op_func=self.dnf_carnival_op,
-            query_bind_flowid="722055",
-            commit_bind_flowid="722054",
-        )
-
-    def dnf_carnival_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_carnival
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("2020DNF嘉年华页面主页面签到"),
-            **extra_params,
-        )
-
-    # --------------------------------------------2020DNF嘉年华直播--------------------------------------------
-    def dnf_carnival_live(self):
-        if not self.common_cfg.test_mode:
-            # 仅限测试模式运行
-            return
-
-        show_head_line("2020DNF嘉年华直播")
-        self.show_amesvr_act_info(self.dnf_carnival_live_op)
-
-        if not self.cfg.function_switches.get_dnf_carnival_live or self.disable_most_activities():
-            logger.warning("未启用领取2020DNF嘉年华直播活动合集功能，将跳过")
-            return
-
-        self.check_dnf_carnival_live()
-
-        def query_watch_time():
-            res = self.dnf_carnival_live_op("查询观看时间", "722482", print_res=False)
-            info = parse_amesvr_common_info(res)
-            return int(info.sOutValue3)
-
-        def watch_remaining_time():
-            self.dnf_carnival_live_op("记录完成一分钟观看", "722476")
-
-            current_watch_time = query_watch_time()
-            remaining_time = 15 * 8 - current_watch_time
-            logger.info(f"账号 {self.cfg.name} 当前已观看{current_watch_time}分钟，仍需观看{remaining_time}分钟")
-
-        def query_used_lottery_times():
-            res = self.dnf_carnival_live_op("查询获奖次数", "725567", print_res=False)
-            info = parse_amesvr_common_info(res)
-            return int(info.sOutValue1)
-
-        def lottery_remaining_times():
-            total_lottery_times = query_watch_time() // 15
-            used_lottery_times = query_used_lottery_times()
-            remaining_lottery_times = total_lottery_times - used_lottery_times
-            logger.info(
-                f"账号 {self.cfg.name} 抽奖次数信息：总计={total_lottery_times} 已使用={used_lottery_times} 剩余={remaining_lottery_times}"
-            )
-            if remaining_lottery_times == 0:
-                logger.warning("没有剩余次数，将不进行抽奖")
-                return
-
-            for i in range(remaining_lottery_times):
-                res = self.dnf_carnival_live_op(f"{i + 1}. 抽奖", "722473")
-                if res["ret"] != "0":
-                    logger.warning(f"出错了，停止抽奖，剩余抽奖次数为{remaining_lottery_times - i}")
-                    break
-
-        watch_remaining_time()
-        lottery_remaining_times()
-
-    def check_dnf_carnival_live(self):
-        self.check_bind_account(
-            "2020DNF嘉年华直播",
-            get_act_url("2020DNF嘉年华页面主页面签到"),
-            activity_op_func=self.dnf_carnival_live_op,
-            query_bind_flowid="722472",
-            commit_bind_flowid="722471",
-        )
-
-    def dnf_carnival_live_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_carnival_live
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("2020DNF嘉年华页面主页面签到"),
-            **extra_params,
-        )
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
     @try_except()
@@ -12850,40 +12734,6 @@ def fake_djc_helper() -> DjcHelper:
         account_config.on_config_update({})
 
     return DjcHelper(account_config, cfg.common)
-
-
-def watch_live():
-    # 读取配置信息
-    load_config("config.toml", "config.toml.local")
-    cfg = config()
-
-    RunAll = True
-    indexes = [1]
-    if RunAll:
-        indexes = [i + 1 for i in range(len(cfg.account_configs))]
-
-    totalTime = 2 * 60 + 5  # 为了保险起见，多执行5分钟
-    logger.info(f"totalTime={totalTime}")
-
-    for t in range(totalTime):
-        timeStart = datetime.datetime.now()
-        logger.info(color("bold_yellow") + f"开始执行第{t + 1}分钟的流程")
-        for idx in indexes:  # 从1开始，第i个
-            account_config = cfg.account_configs[idx - 1]
-            if not account_config.is_enabled() or account_config.cannot_bind_dnf_v2:
-                logger.warning("账号被禁用或无法绑定DNF，将跳过")
-                continue
-
-            djcHelper = DjcHelper(account_config, cfg.common)
-            djcHelper.check_skey_expired()
-
-            djcHelper.dnf_carnival_live()
-
-        totalUsed = (datetime.datetime.now() - timeStart).total_seconds()
-        if totalUsed < 60:
-            waitTime = 60.1 - totalUsed
-            logger.info(color("bold_cyan") + f"本轮累积用时{totalUsed}秒，将休息{waitTime}秒")
-            time.sleep(waitTime)
 
 
 if __name__ == "__main__":

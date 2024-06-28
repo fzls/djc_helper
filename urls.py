@@ -184,7 +184,6 @@ act_name_to_url = {
     "微信签到": "微信DNF公众号",
     "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
     "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
-    "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
 }
 
 
@@ -307,8 +306,6 @@ class Urls:
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
         self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_rank = "347456"  # DNF-2020年KOL榜单建设送黑钻
-        self.iActivityId_dnf_carnival = "346329"  # DNF嘉年华页面主页面签到-pc
-        self.iActivityId_dnf_carnival_live = "346830"  # DNF嘉年华直播页面-PC
         self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利

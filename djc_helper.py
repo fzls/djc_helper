@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime
 import functools
 import json
-import math
 import os
 import random
 import re
@@ -48,45 +47,25 @@ from dao import (
     DnfRoleInfoList,
     GameRoleInfo,
     GoodsInfo,
-    HuyaActTaskInfo,
-    HuyaUserTaskInfo,
     IdeActInfo,
-    LuckyUserInfo,
-    LuckyUserTaskConf,
     MaJieLuoInfo,
     MobileGameGiftInfo,
-    MoJieRenInfo,
-    MyHomeFarmInfo,
-    MyHomeFriendDetail,
-    MyHomeFriendList,
-    MyHomeGift,
-    MyHomeGiftList,
-    MyHomeInfo,
-    MyHomeValueGift,
     NewArkLotteryAgreeRequestCardResult,
     NewArkLotteryCardCountInfo,
     NewArkLotteryLotteryCountInfo,
     NewArkLotteryRequestCardResult,
     NewArkLotterySendCardResult,
-    RankUserInfo,
     RoleInfo,
-    SailiyamWorkInfo,
     ShenJieGrowUpCurStageData,
     ShenJieGrowUpInfo,
     ShenJieGrowUpStagePack,
     ShenJieGrowUpTaskData,
     TemporaryChangeBindRoleInfo,
-    VoteEndWorkInfo,
-    VoteEndWorkList,
     XiaojiangyouInfo,
     XiaojiangyouPackageInfo,
     XinYueBattleGroundWpeBindRole,
     XinYueBattleGroundWpeGetBindRoleResult,
     XinYueBgwUserInfo,
-    XinyueCatInfo,
-    XinyueCatInfoFromApp,
-    XinyueCatMatchResult,
-    XinyueCatUserInfo,
     XinyueFinancingInfo,
     XinYueInfo,
     XinYueMatchServerAddTeamRequest,
@@ -97,19 +76,10 @@ from dao import (
     XinYueSummaryTeamInfo,
     XinYueTeamAwardInfo,
     XinYueTeamGroupInfo,
-    XinyueWeeklyGiftInfo,
-    XinyueWeeklyGPointsInfo,
     parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
-from db import (
-    CacheDB,
-    CacheInfo,
-    DianzanDB,
-    DnfHelperChronicleExchangeListDB,
-    DnfHelperChronicleUserActivityTopInfoDB,
-    WelfareDB,
-)
+from db import CacheDB, CacheInfo, DnfHelperChronicleExchangeListDB, DnfHelperChronicleUserActivityTopInfoDB, WelfareDB
 from encrypt import make_dnf_helper_signature, make_dnf_helper_signature_data
 from exceptions_def import (
     ArkLotteryTargetQQSendByRequestReachMaxCount,
@@ -120,9 +90,8 @@ from exceptions_def import (
 from first_run import is_daily_first_run, is_first_run, is_monthly_first_run, is_weekly_first_run, reset_first_run
 from game_info import get_game_info, get_game_info_by_bizcode
 from log import color, logger
-from network import Network, check_tencent_game_common_status_code, extract_qq_video_message, jsonp_callback_flag
+from network import Network, check_tencent_game_common_status_code, jsonp_callback_flag
 from qq_login import LoginResult, QQLogin
-from qzone_activity import QzoneActivity
 from server import get_match_server_api
 from setting import dnf_server_id_to_area_info, dnf_server_id_to_name
 from sign import getACSRFTokenForAMS, getMillSecondsUnix
@@ -153,21 +122,18 @@ from util import (
     get_meaningful_call_point_for_log,
     get_month,
     get_now,
-    get_now_unix,
     get_this_thursday_of_dnf,
     get_this_week_monday_datetime,
     get_today,
     get_week,
     is_act_expired,
     json_compact,
-    md5,
     message_box,
     now_after,
     now_before,
     now_in_range,
     padLeftRight,
     parse_time,
-    parse_url_param,
     pause,
     pause_and_exit,
     post_json_to_data,

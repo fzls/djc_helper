@@ -113,7 +113,6 @@ class UrlsTomb:
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
 
-
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站
         self.ide_iActivityId_dnf_my_home = "83_WFf5TE"  # 我的小屋

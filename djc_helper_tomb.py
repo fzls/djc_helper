@@ -27,6 +27,7 @@ from dao import (
     IdeActInfo,
     LuckyUserInfo,
     LuckyUserTaskConf,
+    MoJieRenInfo,
     MyHomeFarmInfo,
     MyHomeFriendDetail,
     MyHomeFriendList,
@@ -47,7 +48,7 @@ from dao import (
     XinyueCatUserInfo,
     XinyueWeeklyGiftInfo,
     XinyueWeeklyGPointsInfo,
-    parse_amesvr_common_info, MoJieRenInfo,
+    parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
 from db import DianzanDB, FireCrackersDB
@@ -79,7 +80,8 @@ from util import (
     tableify,
     try_except,
     uin2qq,
-    use_by_myself, wait_for,
+    use_by_myself,
+    wait_for,
 )
 
 
@@ -875,8 +877,8 @@ class DjcHelperTomb:
                 "device": "pc",
             },
             "data": '{"ceiba_plat_id":"android","user_attach":"{\\"nickName\\":\\"'
-                    + qq
-                    + '\\",\\"avatar\\":\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\"}","cExtData":{}}',
+            + qq
+            + '\\",\\"avatar\\":\\"http://thirdqq.qlogo.cn/g?b=oidb&k=NYXdjtYL9USNU6UZ6QAiapw&s=40&t=1556477786\\"}","cExtData":{}}',
         }
 
         return self.post(

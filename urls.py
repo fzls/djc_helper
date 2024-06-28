@@ -187,7 +187,6 @@ act_name_to_url = {
     "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
     "DNF进击吧赛利亚": "https://xinyue.qq.com/act/a20201023sailiya/index.html",
     "阿拉德勇士征集令": "https://act.qzone.qq.com/vip/2020/dnf1126",
-    "dnf漂流瓶": "https://dnf.qq.com/cp/a20201211driftm/index.html",
 }
 
 
@@ -319,7 +318,6 @@ class Urls:
         self.iActivityId_xinyue_financing = "126962"  # 心悦app理财礼卡
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_xinyue_weekly_gift = "155525"  # 心悦app周礼包
-        self.iActivityId_dnf_drift = "348890"  # dnf漂流瓶
         self.iActivityId_dnf_helper = "581863"  # DNF助手活动
         self.iActivityId_dnf_helper_dup = "526183"  # dnf助手活动Dup
         self.iActivityId_dnf_bbs_v1 = "431448"  # DNF论坛积分兑换活动

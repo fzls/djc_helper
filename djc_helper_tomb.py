@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import random
 import time
 from typing import Callable
 from urllib.parse import quote_plus
@@ -78,7 +79,148 @@ class DjcHelperTomb:
             ("新春福袋大作战", self.spring_fudai),
             ("史诗之路来袭活动合集", self.dnf_1224),
             ("暖冬好礼活动", self.warm_winter),
+            ("dnf漂流瓶", self.dnf_drift),
         ]
+
+    # --------------------------------------------dnf漂流瓶--------------------------------------------
+    @try_except()
+    def dnf_drift(self):
+        show_head_line("dnf漂流瓶")
+        self.show_amesvr_act_info(self.dnf_drift_op)
+
+        if not self.cfg.function_switches.get_dnf_drift or self.disable_most_activities():
+            logger.warning("未启用领取dnf漂流瓶活动功能，将跳过")
+            return
+
+        self.check_dnf_drift()
+
+        def send_friend_invitation(typStr, flowid, dayLimit):
+            send_count = 0
+            for sendQQ in self.cfg.drift_send_qq_list:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+                res = self.dnf_drift_op(f"发送{typStr}好友邀请-{sendQQ}赠送2积分", flowid, sendQQ=sendQQ, moduleId="2")
+
+                send_count += 1
+                if int(res["ret"]) != 0 or send_count >= dayLimit:
+                    logger.warning(f"已达到本日邀请上限({dayLimit})，将停止邀请")
+                    return
+
+        def take_friend_awards(typStr, type, moduleId, take_points_flowid):
+            page = 1
+            while True:
+                logger.info("等待2秒，避免请求过快")
+                time.sleep(2)
+
+                queryRes = self.dnf_drift_op(f"拉取接受的{typStr}好友列表", "725358", page=str(page), type=type)
+                if int(queryRes["ret"]) != 0 or queryRes["modRet"]["jData"]["iTotal"] == 0:
+                    logger.warning("没有更多接收邀请的好友了，停止领取积分")
+                    return
+
+                for friend_info in queryRes["modRet"]["jData"]["jData"]:
+                    takeRes = self.dnf_drift_op(
+                        f"邀请人领取{typStr}邀请{friend_info['iUin']}的积分",
+                        take_points_flowid,
+                        acceptId=friend_info["id"],
+                        moduleId=moduleId,
+                    )
+                    if int(takeRes["ret"]) != 0:
+                        logger.warning("似乎已达到今日上限，停止领取")
+                        return
+                    if takeRes["modRet"]["iRet"] != 0:
+                        logger.warning("出错了，停止领取，具体原因请看上一行的sMsg")
+                        return
+
+                page += 5
+
+        # 01 这一切都是命运的选择
+        # 礼包海
+        self.dnf_drift_op("捞一个", "725715")
+        # 丢礼包，日限8次
+        send_friend_invitation("普通", "725819", 8)
+        take_friend_awards("普通", "1", "4", "726267")
+
+        # 02 承认吧，这是友情的羁绊
+        # 那些年错过的他，日限5次
+        send_friend_invitation("流失", "726069", 5)
+        take_friend_awards("流失", "2", "6", "726269")
+        # 礼包领取站
+        self.dnf_drift_op("流失用户领取礼包", "727230")
+
+        # 03 来吧，吾之宝藏
+        # 积分夺宝
+        totalPoints, remainingPoints = self.query_dnf_drift_points()
+        remainingLotteryTimes = remainingPoints // 4
+        logger.info(
+            color("bold_yellow")
+            + f"当前积分为{remainingPoints}，总计可进行{remainingLotteryTimes}次抽奖。历史累计获取积分数为{totalPoints}"
+        )
+        for i in range(remainingLotteryTimes):
+            self.dnf_drift_op(f"开始夺宝 - 第{i + 1}次", "726379")
+
+        # 04 在线好礼站
+        self.dnf_drift_op("在线30min", "725675", moduleId="2")
+        self.dnf_drift_op("累计3天礼包", "725699", moduleId="0", giftId="1437440")
+        self.dnf_drift_op("累计7天礼包", "725699", moduleId="0", giftId="1437441")
+        self.dnf_drift_op("累计15天礼包", "725699", moduleId="0", giftId="1437442")
+
+        # 分享
+        self.dnf_drift_op("分享领取礼包", "726345")
+
+    def query_dnf_drift_points(self):
+        res = self.dnf_drift_op("查询基础信息", "726353", print_res=False)
+        info = parse_amesvr_common_info(res)
+        total, remaining = int(info.sOutValue2), int(info.sOutValue2) - int(info.sOutValue1) * 4
+        return total, remaining
+
+    def check_dnf_drift(self):
+        typ = random.choice([1, 2])
+        activity_url = f"{get_act_url('dnf漂流瓶')}?sId=0252c9b811d66dc1f0c9c6284b378e40&type={typ}"
+
+        self.check_bind_account(
+            "dnf漂流瓶",
+            activity_url,
+            activity_op_func=self.dnf_drift_op,
+            query_bind_flowid="725357",
+            commit_bind_flowid="725356",
+        )
+
+        if is_first_run("check_dnf_drift"):
+            msg = "求帮忙做一下邀请任务0-0  只用在点击确定按钮后弹出的活动页面中点【确认接受邀请】就行啦（这条消息只会出现一次）"
+            async_message_box(msg, "帮忙接受一下邀请0-0", open_url=activity_url)
+
+    def dnf_drift_op(
+        self,
+        ctx,
+        iFlowId,
+        page="",
+        type="",
+        moduleId="",
+        giftId="",
+        acceptId="",
+        sendQQ="",
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.iActivityId_dnf_drift
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("dnf漂流瓶"),
+            page=page,
+            type=type,
+            moduleId=moduleId,
+            giftId=giftId,
+            acceptId=acceptId,
+            sendQQ=sendQQ,
+            **extra_params,
+        )
 
     # --------------------------------------------暖冬好礼活动--------------------------------------------
     @try_except()

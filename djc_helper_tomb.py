@@ -16,6 +16,7 @@ from const import cached_dir, guanjia_skey_version
 from dao import (
     AmesvrCommonModRet,
     AmesvrQueryFriendsInfo,
+    AmesvrQueryRole,
     BuyInfo,
     DnfCollectionInfo,
     GuanjiaNewLotteryResult,
@@ -33,7 +34,7 @@ from dao import (
 from data_struct import to_raw_type
 from db import FireCrackersDB
 from djc_helper import DjcHelper
-from first_run import is_first_run, is_weekly_first_run, is_daily_first_run
+from first_run import is_daily_first_run, is_first_run, is_weekly_first_run
 from log import color, logger
 from network import check_tencent_game_common_status_code, extract_qq_video_message
 from qq_login import LoginResult, QQLogin
@@ -49,13 +50,15 @@ from util import (
     get_now_unix,
     get_today,
     json_compact,
+    md5,
+    now_after,
     parse_time,
     range_from_one,
     show_end_time,
     show_head_line,
     tableify,
     try_except,
-    use_by_myself, md5,
+    use_by_myself,
 )
 
 
@@ -119,7 +122,70 @@ class DjcHelperTomb:
             ("关怀活动", self.dnf_guanhuai),
             ("DNF公会活动", self.dnf_gonghui),
             ("WeGame活动_新版", self.wegame_new),
+            ("新职业预约活动", self.dnf_reserve),
         ]
+
+    # --------------------------------------------新职业预约活动--------------------------------------------
+    @try_except()
+    def dnf_reserve(self):
+        show_head_line("新职业预约活动")
+
+        if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
+            logger.warning("未启用领取新职业预约活动功能，将跳过")
+            return
+
+        self.show_amesvr_act_info(self.dnf_reserve_op)
+
+        self.check_dnf_reserve()
+
+        act_url = get_act_url("新职业预约活动")
+        async_message_box(
+            "合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~",
+            f"手动预约_{act_url}",
+            open_url=act_url,
+            show_once=True,
+        )
+
+        if now_after("2021-12-30 12:00:00"):
+            self.dnf_reserve_op("领取预约限定装扮", "820562")
+
+    def check_dnf_reserve(self):
+        self.check_bind_account(
+            "新职业预约活动",
+            get_act_url("新职业预约活动"),
+            activity_op_func=self.dnf_reserve_op,
+            query_bind_flowid="820923",
+            commit_bind_flowid="820922",
+        )
+
+    def dnf_reserve_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_reserve
+
+        roleinfo = self.get_dnf_bind_role()
+        checkInfo = self.get_dnf_roleinfo()
+
+        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("新职业预约活动"),
+            sArea=roleinfo.serviceID,
+            sPartition=roleinfo.serviceID,
+            sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
+            md5str=checkInfo.md5str,
+            ams_checkparam=checkparam,
+            checkparam=checkparam,
+            **extra_params,
+            extra_cookies=f"p_skey={p_skey}",
+        )
 
     # --------------------------------------------WeGame活动_新版--------------------------------------------
     @try_except()
@@ -3296,6 +3362,10 @@ class DjcHelperTomb:
 
     def uin(self) -> str:
         return self.cfg.account_info.uin
+
+    def get_dnf_roleinfo(self, roleinfo: RoleInfo | None = None):
+        return AmesvrQueryRole()
+
 
 def watch_live():
     # 读取配置信息

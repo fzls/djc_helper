@@ -166,7 +166,6 @@ act_name_to_url = {
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
-    "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
 }
 
 
@@ -307,7 +306,6 @@ class Urls:
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
-        self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
         self.iActivityId_maoxian_start = "525776"  # 冒险的起点

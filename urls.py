@@ -132,8 +132,6 @@ act_name_to_url = {
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
     "腾讯游戏信用礼包": "https://gamecredit.qq.com/static/web/index.html#/gift-pack",
     "黑钻礼包": "https://dnf.qq.com/act/blackDiamond/gift.shtml",
-    "DNF心悦": "https://act.xinyue.qq.com/act/a20230718combat/index.html",
-    "DNF心悦Dup": "https://xinyue.qq.com/act/a20230606dnf/index.html",
 }
 
 
@@ -260,8 +258,6 @@ class Urls:
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "603490"  # WeGame活动
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
-        self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
-        self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
         self.iActivityId_dnf_comic = "386057"  # DNF&腾讯动漫周年庆合作活动
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给

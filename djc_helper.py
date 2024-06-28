@@ -3466,31 +3466,6 @@ class DjcHelper:
             commit_bind_flowid="929704",
         )
 
-    # def dnf_helper_format_url(self, api: str) -> str:
-    #     dnf_helper_info = self.cfg.dnf_helper_info
-    #     roleinfo = self.get_dnf_bind_role()
-    #
-    #     url = self.format(
-    #         self.urls.dnf_helper,
-    #         api=api,
-    #         roleId=roleinfo.roleCode,
-    #         uniqueRoleId=dnf_helper_info.uniqueRoleId,
-    #         serverName=quote_plus(roleinfo.serviceName),
-    #         toUin=self.qq(),
-    #         userId=dnf_helper_info.userId,
-    #         serverId=roleinfo.serviceID,
-    #         token=dnf_helper_info.token,
-    #         areaId=roleinfo.areaID,
-    #         areaName=quote_plus(roleinfo.areaName),
-    #         roleJob="",
-    #         nickname=quote_plus(dnf_helper_info.nickName),
-    #         roleName=quote_plus(roleinfo.roleName),
-    #         uin=self.qq(),
-    #         roleLevel="100",
-    #     )
-    #
-    #     return url
-
     def dnf_helper_op(self, ctx, iFlowId, print_res=True, **extra_params):
         iActivityId = self.urls.iActivityId_dnf_helper
 

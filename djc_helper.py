@@ -8630,7 +8630,7 @@ class DjcHelper:
         get_act_info_only=False,
         append_raw_data="",
         **data_extra_params,
-    ):
+    ) -> dict | AmsActInfo | None:
         if show_info_only:
             self.show_ams_act_info(iActivityId)
             return

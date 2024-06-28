@@ -5466,7 +5466,7 @@ class DjcHelperTomb:
         get_act_info_only=False,
         append_raw_data="",
         **data_extra_params,
-    ):
+    ) -> dict | AmsActInfo | None:
         return {}
 
     def payed_activities(self) -> list[tuple[str, Callable]]:

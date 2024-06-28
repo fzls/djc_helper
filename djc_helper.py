@@ -3268,7 +3268,7 @@ class DjcHelper:
 
     def check_dnf_comic(self):
         self.check_bind_account(
-            "qq视频-DNF漫画预约活动",
+            "DNF漫画预约活动",
             get_act_url("DNF漫画预约活动"),
             activity_op_func=self.dnf_comic_op,
             query_bind_flowid="774762",

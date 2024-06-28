@@ -2834,7 +2834,7 @@ class DjcHelperTomb:
 
     def check_dnf_card_flip(self):
         self.check_bind_account(
-            "qq视频-翻牌活动",
+            "翻牌活动",
             get_act_url("翻牌活动"),
             activity_op_func=self.dnf_card_flip_op,
             query_bind_flowid="848910",
@@ -4768,7 +4768,7 @@ class DjcHelperTomb:
 
     def check_dnf_1224(self):
         self.check_bind_account(
-            "qq视频-史诗之路来袭活动合集",
+            "史诗之路来袭活动合集",
             get_act_url("史诗之路来袭活动合集"),
             activity_op_func=self.dnf_1224_op,
             query_bind_flowid="730660",
@@ -5917,7 +5917,7 @@ class DjcHelperTomb:
 
     def check_dnf_13(self):
         self.check_bind_account(
-            "qq视频-DNF十三周年庆活动",
+            "DNF十三周年庆活动",
             get_act_url("DNF十三周年庆活动"),
             activity_op_func=self.dnf_13_op,
             query_bind_flowid="768385",

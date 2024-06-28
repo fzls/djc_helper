@@ -30,6 +30,7 @@ act_name_to_url_bomb = {
     "2020DNF嘉年华页面主页面签到": "https://dnf.qq.com/cp/a20201203carnival/index.html",
     "dnf助手排行榜": "https://mwegame.qq.com/dnf/rankv2/index.html",
     "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
+    "微信签到": "微信DNF公众号",
 }
 
 

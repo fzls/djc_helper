@@ -20,10 +20,11 @@ from dao import (
     GuanjiaNewLotteryResult,
     GuanjiaNewQueryLotteryInfo,
     GuanjiaNewRequest,
+    RankUserInfo,
     RoleInfo,
     SailiyamWorkInfo,
     SpringFuDaiInfo,
-    parse_amesvr_common_info, RankUserInfo,
+    parse_amesvr_common_info,
 )
 from data_struct import to_raw_type
 from db import FireCrackersDB
@@ -41,11 +42,12 @@ from util import (
     async_message_box,
     base64_str,
     get_now_unix,
+    get_today,
     json_compact,
     range_from_one,
     show_end_time,
     show_head_line,
-    try_except, get_today,
+    try_except,
 )
 
 
@@ -97,7 +99,13 @@ class DjcHelperTomb:
             ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
             ("dnf助手排行榜", self.dnf_rank),
             ("10月女法师三觉", self.dnf_female_mage_awaken),
+            ("微信签到", self.wx_checkin),
         ]
+
+    # --------------------------------------------微信签到--------------------------------------------
+    def wx_checkin(self):
+        # 目前通过autojs实现
+        return
 
     # --------------------------------------------10月女法师三觉活动--------------------------------------------
     def dnf_female_mage_awaken(self):

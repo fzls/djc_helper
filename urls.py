@@ -181,7 +181,6 @@ act_name_to_url = {
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "虎牙": "https://www.huya.com/367967",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
-    "微信签到": "微信DNF公众号",
 }
 
 

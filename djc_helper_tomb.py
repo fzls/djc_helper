@@ -78,6 +78,7 @@ from util import (
     parse_time,
     parse_url_param,
     range_from_one,
+    show_act_not_enable_warning,
     show_end_time,
     show_head_line,
     tableify,
@@ -85,7 +86,6 @@ from util import (
     uin2qq,
     use_by_myself,
     wait_for,
-    show_act_not_enable_warning,
 )
 
 
@@ -415,7 +415,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_financing_op)
 
         if not self.cfg.function_switches.get_xinyue_financing:
-            show_act_not_enable_warning("心悦app理财礼卡活动合集")
+            show_act_not_enable_warning("心悦app理财礼卡")
             return
 
         selectedCards = ["升级版月卡", "体验版月卡", "升级版周卡", "体验版周卡"]
@@ -630,7 +630,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_bakaer_op)
 
         if not self.cfg.function_switches.get_dnf_bakaer or self.disable_most_activities():
-            show_act_not_enable_warning("DNF巴卡尔竞速活动合集")
+            show_act_not_enable_warning("DNF巴卡尔竞速")
             return
 
         self.check_dnf_bakaer()
@@ -1230,7 +1230,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_weekly_gift_op)
 
         if not self.cfg.function_switches.get_xinyue_weekly_gift:
-            show_act_not_enable_warning("心悦app周礼包活动合集")
+            show_act_not_enable_warning("心悦app周礼包")
             return
 
         def query_info():
@@ -1312,7 +1312,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_shanguang_op)
 
         if not self.cfg.function_switches.get_dnf_shanguang or self.disable_most_activities():
-            show_act_not_enable_warning("DNF闪光杯活动合集")
+            show_act_not_enable_warning("DNF闪光杯")
             return
 
         self.check_dnf_shanguang()
@@ -2311,7 +2311,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.xinyue_cat_op)
 
         if not self.cfg.function_switches.get_xinyue_cat:
-            show_act_not_enable_warning("心悦猫咪活动合集")
+            show_act_not_enable_warning("心悦猫咪")
             return
 
         # --------------- 封装接口 ---------------
@@ -4109,7 +4109,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_female_mage_awaken_op)
 
         if not self.cfg.function_switches.get_dnf_female_mage_awaken or self.disable_most_activities():
-            show_act_not_enable_warning("10月女法师三觉活动合集")
+            show_act_not_enable_warning("10月女法师三觉")
             return
 
         # 检查是否已在道聚城绑定
@@ -4187,7 +4187,7 @@ class DjcHelperTomb:
         show_head_line("dnf助手排行榜")
 
         if not self.cfg.function_switches.get_dnf_rank or self.disable_most_activities():
-            show_act_not_enable_warning("dnf助手排行榜活动合集")
+            show_act_not_enable_warning("dnf助手排行榜")
             return
 
         # 检查是否已在道聚城绑定
@@ -4281,7 +4281,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_carnival_op)
 
         if not self.cfg.function_switches.get_dnf_carnival or self.disable_most_activities():
-            show_act_not_enable_warning("2020DNF嘉年华页面主页面签到活动合集")
+            show_act_not_enable_warning("2020DNF嘉年华页面主页面签到")
             return
 
         self.check_dnf_carnival()
@@ -4324,7 +4324,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.dnf_carnival_live_op)
 
         if not self.cfg.function_switches.get_dnf_carnival_live or self.disable_most_activities():
-            show_act_not_enable_warning("2020DNF嘉年华直播活动合集")
+            show_act_not_enable_warning("2020DNF嘉年华直播")
             return
 
         self.check_dnf_carnival_live()
@@ -5432,7 +5432,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            show_act_not_enable_warning("管家蚊子腿活动合集")
+            show_act_not_enable_warning("管家蚊子腿")
             return
 
         lr = self.fetch_guanjia_openid()
@@ -5508,7 +5508,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            show_act_not_enable_warning("管家蚊子腿活动合集")
+            show_act_not_enable_warning("管家蚊子腿")
             return
 
         logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
@@ -5606,7 +5606,7 @@ class DjcHelperTomb:
         self.show_not_ams_act_info("管家蚊子腿")
 
         if not self.cfg.function_switches.get_guanjia or self.disable_most_activities():
-            show_act_not_enable_warning("管家蚊子腿活动合集")
+            show_act_not_enable_warning("管家蚊子腿")
             return
 
         logger.warning("管家的活动只负责领取奖励，具体任务条件，如登录管家、签到等请自行完成")
@@ -5945,7 +5945,7 @@ class DjcHelperTomb:
         self.show_amesvr_act_info(self.qq_video_amesvr_op)
 
         if not self.cfg.function_switches.get_qq_video_amesvr or self.disable_most_activities():
-            show_act_not_enable_warning("qq视频-AME活动活动合集")
+            show_act_not_enable_warning("qq视频-AME活动")
             return
 
         self.check_qq_video_amesvr()

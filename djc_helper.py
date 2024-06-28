@@ -5213,7 +5213,7 @@ class DjcHelper:
         self.show_amesvr_act_info(self.dnf_bbs_op)
 
         if not self.cfg.function_switches.get_dnf_bbs_signin or self.disable_most_activities():
-            show_act_not_enable_warning("dnf官方论坛签到活动合集")
+            show_act_not_enable_warning("dnf官方论坛签到")
             return
 
         if self.cfg.dnf_bbs_cookie == "":
@@ -7639,7 +7639,7 @@ class DjcHelper:
         self.show_amesvr_act_info(self.dnf_shenjie_yure_op)
 
         if not self.cfg.function_switches.get_dnf_shenjie_yure or self.disable_most_activities():
-            show_act_not_enable_warning("神界预热活动合集")
+            show_act_not_enable_warning("神界预热")
             return
 
         self.check_dnf_shenjie_yure()
@@ -7687,7 +7687,7 @@ class DjcHelper:
         self.show_amesvr_act_info(self.dnf_9163_apologize_op)
 
         if not self.cfg.function_switches.get_dnf_9163_apologize or self.disable_most_activities():
-            show_act_not_enable_warning("9163补偿活动合集")
+            show_act_not_enable_warning("9163补偿")
             return
 
         self.check_dnf_9163_apologize()

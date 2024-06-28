@@ -148,7 +148,6 @@ act_name_to_url = {
     "dnf助手活动Dup": "https://mwegame.qq.com/act/dnf/a20221220summary/index.html",
     "心悦app周礼包": "https://xinyue.qq.com/act/a20180906gifts/index.html",
     "DNF闪光杯": "https://xinyue.qq.com/act/a20221114xyFlashAct/index.html",
-    "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
 }
 
 
@@ -291,7 +290,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
-        self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动

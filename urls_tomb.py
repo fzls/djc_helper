@@ -63,6 +63,7 @@ act_name_to_url_bomb = {
     "DNF集合站_ide": "https://dnf.qq.com/cp/jinqiu0922jiheye/index.html",
     "我的小屋": "https://dnf.qq.com/act/a20220910farm/index.html?pt=1",
     "超享玩": "https://act.supercore.qq.com/supercore/act/ac2cb66d798da4d71bd33c7a2ec1a7efb/index.html",
+    "DNF冒险家之路": "https://dnf.qq.com/cp/a20220921luck/index.html?sChannel=wegame&wg_ad_from=communitycoverNew",
 }
 
 
@@ -99,6 +100,7 @@ class UrlsTomb:
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_xinyue_cat = "141920"  # 心悦猫咪
         self.iActivityId_dnf_kol = "472448"  # DNF KOL
+        self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
 
 
         # ide通用活动

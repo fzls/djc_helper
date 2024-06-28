@@ -76,7 +76,7 @@ from util import (
     tableify,
     try_except,
     uin2qq,
-    use_by_myself,
+    use_by_myself, parse_url_param,
 )
 
 
@@ -153,7 +153,123 @@ class DjcHelperTomb:
             ("DNF集合站_ide", self.dnf_collection_ide),
             ("我的小屋", self.dnf_my_home),
             ("超享玩", self.super_core),
+            ("DNF冒险家之路", self.dnf_maoxian_road),
         ]
+
+    # --------------------------------------------DNF冒险家之路--------------------------------------------
+    @try_except()
+    def dnf_maoxian_road(self):
+        show_head_line("DNF冒险家之路")
+        self.show_amesvr_act_info(self.dnf_maoxian_road_op)
+
+        if not self.cfg.function_switches.get_dnf_maoxian_road or self.disable_most_activities():
+            logger.warning("未启用领取DNF冒险家之路功能，将跳过")
+            return
+
+        self.check_dnf_maoxian_road()
+
+        def query_info() -> tuple[bool, int]:
+            res = self.dnf_maoxian_road_op("查询信息", "891421", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            is_lucky_user = raw_info.sOutValue1 != "0"
+
+            temp = raw_info.sOutValue8.split("|")
+            ticket = int(temp[0] or 0)
+
+            return is_lucky_user, ticket
+
+        self.dnf_maoxian_road_op("非冒险家一天验证一次", "892232")
+        self.dnf_maoxian_road_op("幸运冒险家礼包", "890939")
+
+        is_lucky_user, _ = query_info()
+        if not is_lucky_user:
+            logger.warning("未抽取到幸运资格，将跳过后续流程")
+            return
+
+        # 完成任务
+        tasks = [
+            # 每日任务
+            ("核心用户完成每日任务4 - 通关任意高级地下城1次 - 3图章", "890898"),
+            ("核心用户完成每日任务3 - 消耗疲劳值30点 - 2图章", "890897"),
+            ("核心用户完成每日任务2 - 通关任意推荐地下城3次 - 2图章", "890888"),
+            ("核心用户完成每日任务1 - 游戏在线15分钟 - 1图章", "890887"),
+            ("次核心用户完成每日任务4 - 通关任意推荐地下城5次 - 3图章", "890919"),
+            ("次核心用户完成每日任务3 - 消耗疲劳值10点 - 2图章", "890918"),
+            ("次核心用户完成每日任务2 - 累计在线15分钟 - 2图章", "890907"),
+            ("次核心用户完成每日任务1 - 登录游戏 - 1图章", "890906"),
+            ("外围用户完成每日任务4 - 消耗疲劳值15点 - 3图章", "890936"),
+            ("外围用户完成每日任务3 - 通过任意推荐地下城1次 - 2图章", "890935"),
+            ("外围用户完成每日任务2 - 累计在线10分钟 - 2图章", "890923"),
+            ("外围用户完成每日任务1 - 登录游戏 - 1图章", "890920"),
+            # 累计任务
+            ("核心累计进行属性成长/传送/转移10次", "891112"),
+            ("核心累计通关任意难度高级地下城3次", "891113"),
+            ("核心累计在地下城中获取Lv105史诗装备10件", "891272"),
+            ("核心累计通关任意难度高级地下城3天", "891276"),
+            ("次核心累计进行属性成长/传送/转移8", "891278"),
+            ("次核心累计通关任意难度高级地下城2天", "891279"),
+            ("次核心累计通关任意难度110级地下城20次", "891281"),
+            ("次核心累计通关任意难度110及地下城3天", "891282"),
+            ("外围累计进行属性成长/传送/转移5", "891283"),
+            ("外围累计在地下城中获取Lv105史诗装备5", "891284"),
+            ("外围累计通关任意难度110级地下城15", "891285"),
+            ("外围累计通关任意难度地下城3天", "891287"),
+        ]
+        for task_name, flowid in tasks:
+            self.dnf_maoxian_road_op(task_name, flowid)
+
+        _, ticket = query_info()
+        logger.info(color("bold_green") + f"{self.cfg.name} 冒险家之路 当前图章={ticket}")
+
+        awards = [
+            ("兑换5—装备提升礼盒—3图章（限2次）", "891293", 5),
+            ("兑换1—灿烂的徽章神秘礼盒—25图章（限1次）", "891293", 1),
+            ("兑换2—+7装备增幅券—15图章（限1次）", "891293", 2),
+            ("兑换6—装备品级调整箱礼盒—3图章（限3次）", "891293", 6),
+            # ("兑换3—华丽的徽章神秘礼盒—15图章（限2次）", "891293", 3),
+            # ("兑换4—王者契约（1天）—10图章（限2次）", "891293", 4),
+            ("兑换1—一次性材质转换器—3图章", "891388", 1),
+            # ("兑换2—一次性继承装置—2图章", "891388", 2),
+            # ("兑换3—黑钻会员1天—2图章", "891388", 3),
+            # ("兑换4—复活币礼盒（1个）—1图章", "891388", 4),
+            # ("兑换5—宠物饲料礼袋（10个）—1图章", "891388", 5),
+            # ("兑换6—闪亮的雷米援助礼盒—1图章", "891388", 6),
+        ]
+        for award_name, flowid, exchangeId in awards:
+            res = self.dnf_maoxian_road_op(award_name, flowid, exchangeId=exchangeId)
+            code = int(res["ret"])
+            if code == 700:
+                logger.info("当前积分不足以兑换该奖励，将跳过尝试后续优先级更低的奖励")
+                break
+
+    def check_dnf_maoxian_road(self):
+        self.check_bind_account(
+            "DNF冒险家之路",
+            get_act_url("DNF冒险家之路"),
+            activity_op_func=self.dnf_maoxian_road_op,
+            query_bind_flowid="890886",
+            commit_bind_flowid="890885",
+        )
+
+    def dnf_maoxian_road_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_maoxian_road
+
+        act_url = get_act_url("DNF冒险家之路")
+        sChannel = parse_url_param(act_url, "sChannel")
+
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            act_url,
+            **extra_params,
+            sChannel=sChannel,
+        )
 
     # --------------------------------------------超享玩--------------------------------------------
     # re: 搜 wpe类活动的接入办法为

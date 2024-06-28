@@ -125,7 +125,122 @@ class DjcHelperTomb:
             ("新职业预约活动", self.dnf_reserve),
             ("组队拜年", self.team_happy_new_year),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
+            ("翻牌活动", self.dnf_card_flip),
         ]
+
+    # --------------------------------------------翻牌活动--------------------------------------------
+    @try_except()
+    def dnf_card_flip(self):
+        show_head_line("翻牌活动")
+        self.show_amesvr_act_info(self.dnf_card_flip_op)
+
+        if not self.cfg.function_switches.get_dnf_card_flip or self.disable_most_activities():
+            logger.warning("未启用领取翻牌活动功能，将跳过")
+            return
+
+        self.check_dnf_card_flip()
+
+        def query_info() -> tuple[int, int, int, int]:
+            res = self.dnf_card_flip_op("查询信息", "849400", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            integral = int(raw_info.sOutValue1)
+            times = int(raw_info.sOutValue2)
+            sign = int(raw_info.sOutValue3)
+
+            invited_points = int(raw_info.sOutValue5)
+
+            return integral, times, sign, invited_points
+
+        def query_integral() -> int:
+            return query_info()[0]
+
+        def query_times() -> int:
+            return query_info()[1]
+
+        def query_signin_days() -> int:
+            return query_info()[2]
+
+        def query_card_status() -> list[int]:
+            res = self.dnf_card_flip_op("卡片翻转状态", "849048", print_res=False)
+            raw_res = parse_amesvr_common_info(res)
+
+            status_list = [int(status) for status in raw_res.sOutValue1.split(",")]
+
+            return status_list
+
+        self.dnf_card_flip_op("每日登录游戏", "849439")
+        self.dnf_card_flip_op("每日分享", "849443")
+
+        logger.warning("邀请好友相关内容请自行完成")
+        # self.dnf_card_flip_op("允许授权", "849495")
+        # self.dnf_card_flip_op("取消授权", "849500")
+        # self.dnf_card_flip_op("获取好友列表数据", "849501")
+        # self.dnf_card_flip_op("发送好友消息", "849524")
+        # self.dnf_card_flip_op("获取邀请积分", "849543")
+
+        integral = query_integral()
+        can_change_times = integral // 2
+        logger.info(f"当前拥有积分 {integral}， 可兑换翻牌次数 {can_change_times}")
+        for idx in range_from_one(can_change_times):
+            self.dnf_card_flip_op(f"{idx}/{can_change_times} 积分兑换次数", "849407")
+
+        status_list = query_card_status()
+        times = query_times()
+        logger.info(f"当前翻牌次数为 {times}")
+        if times > 0:
+            for idx, status in enumerate(status_list):
+                if status == 1:
+                    continue
+
+                self.dnf_card_flip_op(f"翻牌 - 第 {idx+1} 张牌", "848911", iNum=idx + 1)
+
+                times -= 1
+                if times <= 0:
+                    break
+
+        status_list = query_card_status()
+        logger.info(f"最新翻牌状况为 {status_list}")
+
+        self.dnf_card_flip_op("第1行奖励", "849071")
+        self.dnf_card_flip_op("第2行奖励", "849170")
+        self.dnf_card_flip_op("第3行奖励", "849251")
+        self.dnf_card_flip_op("第4行奖励", "849270")
+        self.dnf_card_flip_op("第一列奖励", "849284")
+        self.dnf_card_flip_op("第二列奖励", "849285")
+        self.dnf_card_flip_op("第三列奖励", "849288")
+        self.dnf_card_flip_op("第四列奖励", "849289")
+        self.dnf_card_flip_op("终极大奖", "849301")
+
+        self.dnf_card_flip_op("每日签到", "849353")
+        logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+        self.dnf_card_flip_op("累计签到3天", "849381")
+        self.dnf_card_flip_op("累计签到7天", "849384")
+        self.dnf_card_flip_op("累计签到10天", "849385")
+        self.dnf_card_flip_op("累计签到15天", "849386")
+
+    def check_dnf_card_flip(self):
+        self.check_bind_account(
+            "qq视频-翻牌活动",
+            get_act_url("翻牌活动"),
+            activity_op_func=self.dnf_card_flip_op,
+            query_bind_flowid="848910",
+            commit_bind_flowid="848909",
+        )
+
+    def dnf_card_flip_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_card_flip
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("翻牌活动"),
+            **extra_params,
+        )
 
     # --------------------------------------------hello语音（皮皮蟹）奖励兑换--------------------------------------------
     @try_except()

@@ -48,6 +48,7 @@ act_name_to_url_bomb = {
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
     "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
+    "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
 }
 
 
@@ -79,6 +80,7 @@ class UrlsTomb:
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
         self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
+        self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

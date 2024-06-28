@@ -127,7 +127,59 @@ class DjcHelperTomb:
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("翻牌活动", self.dnf_card_flip),
             ("DNF共创投票", self.dnf_dianzan),
+            ("DNF互动站", self.dnf_interactive),
         ]
+
+    # --------------------------------------------DNF互动站--------------------------------------------
+    @try_except()
+    def dnf_interactive(self):
+        show_head_line("DNF互动站")
+        self.show_amesvr_act_info(self.dnf_interactive_op)
+
+        if not self.cfg.function_switches.get_dnf_interactive or self.disable_most_activities():
+            logger.warning("未启用领取DNF互动站功能，将跳过")
+            return
+
+        self.check_dnf_interactive()
+
+        if now_after("2022-06-15 20:00:00"):
+            self.dnf_interactive_op("TVC（988529）", "859942")
+            self.dnf_interactive_op("生日会（988566）", "859976")
+            self.dnf_interactive_op("希曼畅玩（988567）", "859977")
+            self.dnf_interactive_op("社区（988570）", "859980")
+            self.dnf_interactive_op("DNF_IP（988571）", "859982")
+
+        self.dnf_interactive_op("周年庆大礼包（988169）", "859603")
+
+        async_message_box(
+            "DNF互动站分享奖励请自行领取，可领一个装备提升礼盒-。-",
+            "22.6互动站-分享",
+            open_url=get_act_url("DNF互动站"),
+            show_once=True,
+        )
+
+    def check_dnf_interactive(self):
+        self.check_bind_account(
+            "DNF互动站",
+            get_act_url("DNF互动站"),
+            activity_op_func=self.dnf_interactive_op,
+            query_bind_flowid="858981",
+            commit_bind_flowid="858980",
+        )
+
+    def dnf_interactive_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_interactive
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF互动站"),
+            **extra_params,
+        )
 
     # --------------------------------------------DNF共创投票--------------------------------------------
     @try_except()

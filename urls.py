@@ -161,7 +161,6 @@ act_name_to_url = {
     "KOL": "https://dnf.qq.com/cp/a20220526kol/index.html",
     "黄钻": "https://act.qzone.qq.com/v2/vip/tx/p/41784_f68ffe5f",
     "心悦猫咪": "https://xinyue.qq.com/act/a20180912tgclubcat/index.html",  # userAgent: tgclub/5.7.11.85(Xiaomi MIX 2;android 9;Scale/440;android;865737030437124)
-    "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
 }
 
 
@@ -306,7 +305,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
-        self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路
         self.iActivityId_dnf_bakaer_fight = "523361"  # 巴卡尔大作战
         self.iActivityId_dnf_compensate = "535922"  # DNF游戏调整补偿

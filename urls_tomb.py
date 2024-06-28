@@ -50,6 +50,7 @@ act_name_to_url_bomb = {
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
+    "DNF互动站": "https://dnf.qq.com/cp/a20220609fete/index.html",
 }
 
 
@@ -83,6 +84,7 @@ class UrlsTomb:
         self.iActivityId_hello_voice = "438826"  # hello语音（皮皮蟹）奖励兑换
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
+        self.iActivityId_dnf_interactive = "469840"  # DNF互动站
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

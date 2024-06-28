@@ -123,7 +123,109 @@ class DjcHelperTomb:
             ("DNF公会活动", self.dnf_gonghui),
             ("WeGame活动_新版", self.wegame_new),
             ("新职业预约活动", self.dnf_reserve),
+            ("组队拜年", self.team_happy_new_year),
         ]
+
+    # --------------------------------------------组队拜年--------------------------------------------
+    @try_except()
+    def team_happy_new_year(self):
+        show_head_line("组队拜年")
+        self.show_amesvr_act_info(self.team_happy_new_year_op)
+
+        if not self.cfg.function_switches.get_team_happy_new_year or self.disable_most_activities():
+            logger.warning("未启用领取组队拜年功能，将跳过")
+            return
+
+        self.check_team_happy_new_year()
+
+        def query_fuqi() -> tuple[int, int]:
+            res = self.team_happy_new_year_op("查询信息", "828372", print_res=False)
+            raw_info = parse_amesvr_common_info(res)
+
+            personal_fuqi = int(raw_info.sOutValue2)
+            team_fuqi = int(raw_info.sOutValue3)
+
+            return personal_fuqi, team_fuqi
+
+        async_message_box(
+            "组队拜年活动请自行手动完成组队和邀请回归玩家部分",
+            "22组队拜年",
+            show_once=True,
+        )
+        self.team_happy_new_year_op("角色相关信息", "828051")
+        # self.team_happy_new_year_op("允许授权", "828055")
+        # self.team_happy_new_year_op("取消授权", "828056")
+        #
+        # self.team_happy_new_year_op("好友列表", "828513")
+        # self.team_happy_new_year_op("创建队伍", "828098")
+        # self.team_happy_new_year_op("加入队伍", "828147")
+        # self.team_happy_new_year_op("加入幸运回归队伍", "828160")
+        self.team_happy_new_year_op("拜年队伍信息", "828178")
+        self.team_happy_new_year_op("幸运队伍信息", "828181")
+        # self.team_happy_new_year_op("邀请幸运队伍", "828319")
+
+        self.team_happy_new_year_op("吉运求签", "827985")
+        self.team_happy_new_year_op("吉运福袋", "827995")
+
+        self.team_happy_new_year_op("每日分享", "828009")
+        self.team_happy_new_year_op("每日在线30分钟", "828010")
+        self.team_happy_new_year_op("每日通关10次地下城", "828013")
+        self.team_happy_new_year_op("每日消耗80疲劳", "828019")
+        self.team_happy_new_year_op("每日消耗156疲劳", "828020")
+
+        self.team_happy_new_year_op("发送队伍福气", "832768")
+
+        personal_fuqi, team_fuqi = query_fuqi()
+        logger.info(color("bold_cyan") + f"当前个人福气为{personal_fuqi}, 队伍福气为 {team_fuqi}")
+
+        remaining_lottery_count = personal_fuqi // 3
+        logger.info(f"可进行 {remaining_lottery_count} 次开红包")
+        for idx in range_from_one(remaining_lottery_count):
+            self.team_happy_new_year_op(f"{idx}/{remaining_lottery_count} 福气红包", "827988")
+
+        team_fuqi_awards = [
+            ("828000", 20),
+            ("828004", 40),
+            ("828005", 60),
+            ("828006", 100),
+            ("828007", 200),
+            ("828008", 300),
+        ]
+        for flowid, require_count in team_fuqi_awards:
+            if team_fuqi >= require_count:
+                self.team_happy_new_year_op(f"聚宝盆 {require_count} 福气", flowid)
+            else:
+                logger.warning(f"当前队伍福气低于 {require_count}，将跳过尝试该奖励")
+
+        self.team_happy_new_year_op("铁蛋（1位）", "828021")
+        self.team_happy_new_year_op("铜蛋（2位）", "828022")
+        self.team_happy_new_year_op("银蛋（3位）", "828024")
+        self.team_happy_new_year_op("金蛋（4位）", "828025")
+        self.team_happy_new_year_op("彩蛋（5位）", "828026")
+        self.team_happy_new_year_op("喜蛋（6位）", "828027")
+
+    def check_team_happy_new_year(self):
+        self.check_bind_account(
+            "组队拜年",
+            get_act_url("组队拜年"),
+            activity_op_func=self.team_happy_new_year_op,
+            query_bind_flowid="827994",
+            commit_bind_flowid="827993",
+        )
+
+    def team_happy_new_year_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_team_happy_new_year
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("组队拜年"),
+            **extra_params,
+        )
 
     # --------------------------------------------新职业预约活动--------------------------------------------
     @try_except()

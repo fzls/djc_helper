@@ -46,6 +46,7 @@ act_name_to_url_bomb = {
     "DNF公会活动": "https://dnf.qq.com/cp/a20211028GH/index.html",
     "WeGame活动_新版": "https://act.wegame.com.cn/wand/danji/a20211201DNFCarnival/",
     "新职业预约活动": "https://dnf.qq.com/cp/a20211130reserve/index.html",
+    "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
 }
 
 
@@ -75,6 +76,7 @@ class UrlsTomb:
         self.iActivityId_dnf_guanhuai = "421327"  # 关怀活动
         self.iActivityId_dnf_gonghui = "421277"  # DNF公会活动
         self.iActivityId_dnf_reserve = "430779"  # 新职业预约活动
+        self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

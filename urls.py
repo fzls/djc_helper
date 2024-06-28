@@ -165,7 +165,6 @@ act_name_to_url = {
     "DNF共创投票": "https://dnf.qq.com/cp/a20210914design/list-end.html",
     "翻牌活动": "https://dnf.qq.com/cp/a20220420cardflip/index.html",
     "hello语音（皮皮蟹）网页礼包兑换": "https://dnf.qq.com/cp/a20210806dnf/",
-    "组队拜年": "https://dnf.qq.com/cp/a20211221BN/index.html",
 }
 
 
@@ -312,7 +311,6 @@ class Urls:
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
-        self.iActivityId_team_happy_new_year = "438251"  # 组队拜年
         self.iActivityId_dnf_card_flip = "458381"  # 翻牌活动
         self.iActivityId_dnf_interactive = "469840"  # DNF互动站
         self.iActivityId_dnf_maoxian_road = "500495"  # DNF冒险家之路

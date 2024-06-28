@@ -45,7 +45,7 @@ from util import (
     range_from_one,
     show_end_time,
     show_head_line,
-    try_except,
+    try_except, get_today,
 )
 
 
@@ -96,7 +96,87 @@ class DjcHelperTomb:
             ("DNF进击吧赛利亚", self.xinyue_sailiyam),
             ("2020DNF嘉年华页面主页面签到", self.dnf_carnival),
             ("dnf助手排行榜", self.dnf_rank),
+            ("10月女法师三觉", self.dnf_female_mage_awaken),
         ]
+
+    # --------------------------------------------10月女法师三觉活动--------------------------------------------
+    def dnf_female_mage_awaken(self):
+        show_head_line("10月女法师三觉")
+        self.show_amesvr_act_info(self.dnf_female_mage_awaken_op)
+
+        if not self.cfg.function_switches.get_dnf_female_mage_awaken or self.disable_most_activities():
+            logger.warning("未启用领取10月女法师三觉活动合集功能，将跳过")
+            return
+
+        # 检查是否已在道聚城绑定
+        if self.get_dnf_bind_role() is None:
+            logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = (
+                f"账号 {self.cfg.name} 未配置dnf助手相关信息，无法进行10月女法师三觉相关活动，请按照下列流程进行配置"
+            )
+            self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key="dnf_female_mage_awaken")
+            return
+
+        self.dnf_female_mage_awaken_op("时间的引导石 * 10", "712951")
+        self.dnf_female_mage_awaken_op("魂灭结晶礼盒 (200个)", "712970")
+        self.dnf_female_mage_awaken_op("神秘契约礼盒 (1天)", "712971")
+        self.dnf_female_mage_awaken_op("抗疲劳秘药 (10点)", "712972")
+        self.dnf_female_mage_awaken_op("装备品级调整箱礼盒 (1个)", "712973")
+        self.dnf_female_mage_awaken_op("复活币礼盒 (1个)", "712974")
+        self.dnf_female_mage_awaken_op("神秘的符文原石", "712975")
+        self.dnf_female_mage_awaken_op("成长胶囊 (50百分比) (Lv50~99)", "712977")
+        self.dnf_female_mage_awaken_op("黑钻(3天)", "712978")
+        self.dnf_female_mage_awaken_op("本职业稀有护石神秘礼盒", "712981")
+
+        self.dnf_female_mage_awaken_op("每周签到3/5/7次时获得娃娃机抽奖次数", "713370")
+        self.dnf_female_mage_awaken_op("娃娃机抽奖", "712623")
+
+        self.dnf_female_mage_awaken_op("回归礼包", "710474")
+
+    def dnf_female_mage_awaken_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_female_mage_awaken
+
+        roleinfo = self.get_dnf_bind_role()
+        qq = self.qq()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        res = self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+            iActivityId,
+            iFlowId,
+            print_res,
+            "http://mwegame.qq.com/act/dnf/mageawaken/index1/",
+            sArea=roleinfo.serviceID,
+            serverId=roleinfo.serviceID,
+            sRoleId=roleinfo.roleCode,
+            sRoleName=quote_plus(roleinfo.roleName),
+            uin=qq,
+            skey=self.cfg.account_info.skey,
+            nickName=quote_plus(dnf_helper_info.nickName),
+            userId=dnf_helper_info.userId,
+            token=quote_plus(dnf_helper_info.token),
+            **extra_params,
+        )
+
+        # 1000017016: 登录态失效,请重新登录
+        if (
+            res is not None
+            and type(res) is dict
+            and res["flowRet"]["iRet"] == "700"
+            and "登录态失效" in res["flowRet"]["sMsg"]
+        ):
+            extra_msg = "dnf助手的登录态已过期，目前需要手动更新，具体操作流程如下"
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key="dnf_female_mage_awaken_expired_" + get_today()
+            )
+
+        return res
 
     # --------------------------------------------dnf助手排行榜活动--------------------------------------------
     def dnf_rank(self):

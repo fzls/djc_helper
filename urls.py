@@ -182,7 +182,6 @@ act_name_to_url = {
     "虎牙": "https://www.huya.com/367967",
     "wegame国庆活动【秋风送爽关怀常伴】": "https://dnf.qq.com/lbact/a20200922wegame/index.html",
     "微信签到": "微信DNF公众号",
-    "10月女法师三觉": "https://mwegame.qq.com/act/dnf/Mageawaken/index?subGameId=10014&gameId=10014&gameId=1006",
 }
 
 
@@ -303,7 +302,6 @@ class Urls:
         self.iActivityId_xinyue_battle_ground = "366480"  # DNF地下城与勇士心悦特权专区
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_shanguang = "494507"  # DNF闪光杯
-        self.iActivityId_dnf_female_mage_awaken = "336524"  # 10月女法师三觉活动
         self.iActivityId_dnf_dianzan = "472877"  # DNF2020共创投票领礼包需求
         self.iActivityId_dnf_welfare = "215651"  # DNF福利中心兑换
         self.iActivityId_dnf_welfare_login_gifts = "441426"  # DNF福利中心-登陆游戏领福利

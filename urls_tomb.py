@@ -36,6 +36,7 @@ act_name_to_url_bomb = {
     "虎牙": "https://www.huya.com/367967",
     "命运的抉择挑战赛": "https://dnf.qq.com/cp/a20210826fate/index.html",
     "轻松之路": "https://dnf.qq.com/cp/a20210914qszlm/index.html",
+    "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
 }
 
 
@@ -59,6 +60,7 @@ class UrlsTomb:
         self.iActivityId_wegame_guoqing = "331515"  # wegame国庆活动【秋风送爽关怀常伴】
         self.iActivityId_dnf_mingyun_jueze = "405654"  # 命运的抉择挑战赛
         self.iActivityId_dnf_relax_road = "407354"  # 轻松之路
+        self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
 
         self.qzone_activity_club_vip = (
             "https://club.vip.qq.com/qqvip/api/tianxuan/access/execAct?g_tk={g_tk}&isomorphism-args={isomorphism_args}"

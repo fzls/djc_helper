@@ -175,7 +175,6 @@ act_name_to_url = {
     "DNF记忆": "https://dnf.qq.com/cp/a20211203dnfmem/index.html",
     "DNF名人堂": "https://dnf.qq.com/cp/hof20211123/index.html",
     "qq视频蚊子腿": "https://m.film.qq.com/magic-act/yauhs87ql00t63xttwkas8papl/index_index.html",
-    "WeGameDup": "https://dnf.qq.com/lbact/a20211014wg/index.html",
 }
 
 
@@ -307,7 +306,6 @@ class Urls:
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "603490"  # WeGame活动
-        self.iActivityId_dnf_wegame_dup = "415808"  # WeGame活动
         self.iActivityId_dnf_collection = "522722"  # DNF集合站
         self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速

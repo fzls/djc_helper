@@ -7405,29 +7405,6 @@ class DjcHelper:
 
         self.dnf_game_ide_op("查询我的竞猜和投票", "233282")
 
-    def check_dnf_game(self):
-        self.check_bind_account(
-            "DNF娱乐赛",
-            get_act_url("DNF娱乐赛"),
-            activity_op_func=self.dnf_game_op,
-            query_bind_flowid="906057",
-            commit_bind_flowid="906056",
-        )
-
-    def dnf_game_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_game
-        return self.amesvr_request(
-            ctx,
-            "comm.ams.game.qq.com",
-            "group_k",
-            "bb",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF娱乐赛"),
-            **extra_params,
-        )
-
     def check_dnf_game_ide(self, **extra_params):
         return self.ide_check_bind_account(
             "DNF娱乐赛",

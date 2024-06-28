@@ -258,7 +258,6 @@ class Urls:
         self.iActivityId_dnf_anniversary = "474801"  # DNF周年庆登录活动
         self.iActivityId_maoxian = "548876"  # 勇士的冒险补给
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
-        self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
         self.iActivityId_dnf_9163_apologize = "619079"  # 9163补偿

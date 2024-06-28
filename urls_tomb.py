@@ -134,6 +134,7 @@ class UrlsTomb:
         self.iActivityId_dnf_anniversary_friend = "558623"  # dnf周年拉好友
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦
         self.iActivityId_dnf_xinyue_dup = "560401"  # DNF心悦Dup
+        self.iActivityId_dnf_game = "514615"  # DNF娱乐赛
 
         # ide通用活动
         self.ide_iActivityId_collection = "57_vA2NDv"  # 集合站

@@ -181,6 +181,30 @@ class DjcHelperTomb:
             ("腾讯游戏信用礼包", self.get_credit_xinyue_gift),
         ]
 
+    # --------------------------------------------DNF娱乐赛--------------------------------------------
+    def check_dnf_game(self):
+        self.check_bind_account(
+            "DNF娱乐赛",
+            get_act_url("DNF娱乐赛"),
+            activity_op_func=self.dnf_game_op,
+            query_bind_flowid="906057",
+            commit_bind_flowid="906056",
+        )
+
+    def dnf_game_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_game
+        return self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_k",
+            "bb",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF娱乐赛"),
+            **extra_params,
+        )
+
     # --------------------------------------------信用礼包--------------------------------------------
     @try_except()
     def get_credit_xinyue_gift(self):

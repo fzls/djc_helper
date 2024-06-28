@@ -160,7 +160,65 @@ class DjcHelperTomb:
             ("DNF闪光杯", self.dnf_shanguang),
             ("心悦app周礼包", self.xinyue_weekly_gift),
             ("dnf助手活动Dup", self.dnf_helper_dup),
+            ("DNF集合站", self.dnf_collection),
         ]
+
+    # --------------------------------------------DNF集合站--------------------------------------------
+    @try_except()
+    def dnf_collection(self):
+        show_head_line("DNF集合站")
+        self.show_amesvr_act_info(self.dnf_collection_op)
+
+        if not self.cfg.function_switches.get_dnf_collection or self.disable_most_activities():
+            logger.warning("未启用领取DNF集合站功能，将跳过")
+            return
+
+        self.check_dnf_collection()
+
+        def query_signin_days() -> int:
+            res = self.dnf_collection_op("查询签到天数-condOutput", "916408", print_res=False)
+            return self.parse_condOutput(res, "a684eceee76fc522773286a895bc8436")
+
+        def take_return_user_gifts(take_lottery_count_role_info: RoleInfo) -> bool:
+            self.dnf_collection_op("回归礼包", "916402")
+            time.sleep(5)
+
+            return True
+
+        self.try_do_with_lucky_role_and_normal_role("领取回归礼包", self.check_dnf_collection, take_return_user_gifts)
+
+        self.dnf_collection_op("全民礼包", "916403")
+
+        self.dnf_collection_op("每日在线礼包", "916404")
+        # logger.info(color("fg_bold_cyan") + f"当前已累积签到 {query_signin_days()} 天")
+
+        self.dnf_collection_op("签到3天礼包", "916405")
+        self.dnf_collection_op("签到7天礼包", "916406")
+        self.dnf_collection_op("签到15天礼包", "916407")
+
+    def check_dnf_collection(self, **extra_params):
+        self.check_bind_account(
+            "DNF集合站",
+            get_act_url("DNF集合站"),
+            activity_op_func=self.dnf_collection_op,
+            query_bind_flowid="916401",
+            commit_bind_flowid="916400",
+            **extra_params,
+        )
+
+    def dnf_collection_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_collection
+        return self.amesvr_request(
+            ctx,
+            "x6m5.ams.game.qq.com",
+            "group_3",
+            "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF集合站"),
+            **extra_params,
+        )
 
     @try_except()
     def dnf_helper_dup(self):
@@ -5368,6 +5426,9 @@ class DjcHelperTomb:
         print_warning=True,
     ) -> LoginResult:
         return LoginResult()
+
+    def parse_condOutput(self, res: dict, cond_id: str) -> int:
+        return 0
 
 
 def watch_live():

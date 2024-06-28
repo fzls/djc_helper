@@ -144,7 +144,6 @@ act_name_to_url = {
     "巴卡尔对战地图": "https://dnf.qq.com/cp/a20230105bakal/page1.html",
     "巴卡尔大作战": "https://dnf.qq.com/cp/a20230112herd/index.html?pt=1",
     "魔界人探险记": "https://dnf.qq.com/cp/a20230112sjpk/index.html",
-    "DNF集合站": "https://dnf.qq.com/cp/xc20230112jhy/index.html",
 }
 
 
@@ -271,8 +270,6 @@ class Urls:
         self.iActivityId_dnf_bbs_v2 = "397645"  # DNF论坛积分兑换活动
         self.iActivityId_dnf_luodiye = "593802"  # DNF落地页活动需求
         self.iActivityId_dnf_wegame = "603490"  # WeGame活动
-        self.iActivityId_dnf_collection = "522722"  # DNF集合站
-        self.iActivityId_dnf_collection_dup = "423011"  # DNF集合站
         self.iActivityId_dnf_bakaer = "535429"  # DNF巴卡尔竞速
         self.iActivityId_dnf_pk = "463319"  # DNF格斗大赛
         self.iActivityId_dnf_xinyue = "569923"  # DNF心悦

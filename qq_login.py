@@ -87,7 +87,6 @@ class LoginResult(ConfigInterface):
         common_openid="",
         common_access_token="",
     ):
-        super().__init__()
         # 使用炎炎夏日活动界面得到
         self.uin = uin
         self.skey = skey

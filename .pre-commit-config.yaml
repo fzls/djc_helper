@@ -7,7 +7,7 @@ exclude: |
       # others
       ^(.cached|.db|.mypy_cache|.pytest_cache|.venv|.venv_dev|.tox|logs|releases)/|
       # source code files
-      ^(reversi.py|qt_collapsible_box.py|utils/notices.txt)$
+      ^(qt_collapsible_box.py|utils/notices.txt)$
 repos:
   # note: use following cmd to update repo rev to latest version
   #     export http_proxy=socks5://127.0.0.1:10808 https_proxy=socks5://127.0.0.1:10808

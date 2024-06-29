@@ -166,8 +166,9 @@ def test():
 def test_compress_directory():
     """比如用来对比不同版本bz的压缩效果"""
     dir_src = os.getcwd()
-    compress_dir_with_bandizip("D:/_coding/python/djc_helper/test/compress/DNF蚊子腿小助手_v21.6.5_by风之凌殇", "", dir_src)
-
+    compress_dir_with_bandizip(
+        "D:/_coding/python/djc_helper/test/compress/DNF蚊子腿小助手_v21.6.5_by风之凌殇", "", dir_src
+    )
 
 
 if __name__ == "__main__":

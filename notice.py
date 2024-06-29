@@ -81,6 +81,11 @@ class NoticeManager:
     archived_notices_file_name = "notice_archived.txt"
 
     def __init__(self, load_from_remote=True, download_only_if_not_exists=False):
+        """
+
+        :param load_from_remote: 是否从远程加载配置文件，目前仅在本地添加公告时，该值会为False
+        :param download_only_if_not_exists: 是否仅在文件不存在时下载。在本体运行时，该值为False，而通过配置工具调用时，则取True
+        """
         self.notices: List[Notice] = []
 
         self.file_name = self.current_notices_file_name

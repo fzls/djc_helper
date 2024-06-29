@@ -1,4 +1,6 @@
 # 构建发布压缩包
+from __future__ import annotations
+
 import os
 import shutil
 
@@ -8,7 +10,7 @@ from util import human_readable_size, make_sure_dir_exists, show_head_line
 from version import now_version
 
 
-def package(dir_src, dir_all_release, release_dir_name, release_7z_name, dir_github_action_artifact):
+def package(dir_src: str, dir_all_release: str, release_dir_name: str, release_7z_name: str, dir_github_action_artifact: str):
     old_cwd = os.getcwd()
 
     show_head_line(f"开始打包 {release_dir_name} 所需内容", color("bold_yellow"))

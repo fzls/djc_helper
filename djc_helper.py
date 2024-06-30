@@ -1545,7 +1545,6 @@ class DjcHelper:
                     # if res["ret"] != "0" or res["modRet"]["iRet"] != 0:
                     #     logger.warning(f"{ctx} 出错了，停止尝试剩余次数")
                     #     return
-                    pass
 
                 logger.debug(f"心悦操作 {op.sFlowName} ok，等待{wait_time}s，避免请求过快报错")
                 time.sleep(wait_time)
@@ -2654,7 +2653,6 @@ class DjcHelper:
                 "集卡时间重叠",
                 show_once_daily=True,
             )
-            pass
 
         # 增加次数
         self.dnf_ark_lottery_add_ark_lottery_times()

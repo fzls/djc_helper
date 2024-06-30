@@ -3726,8 +3726,6 @@ def show_notices():
             disabled_seconds=5,
         )
 
-    pass
-
 
 def main():
     import config as config_module

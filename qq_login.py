@@ -425,7 +425,6 @@ class QQLogin:
                 return
             except Exception:
                 logger.info("走到这里说明系统自带的chrome不可用")
-                pass
         else:
             logger.info("当前配置为强制使用便携版chrome")
 

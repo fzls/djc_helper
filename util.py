@@ -1889,4 +1889,3 @@ if __name__ == "__main__":
     # message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
 
     demo_remove_chrome()
-    pass

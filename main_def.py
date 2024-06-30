@@ -1983,7 +1983,6 @@ def try_notify_new_pay_info(
             new_buy_dlc = True
             if show_message_box:
                 async_message_box("新购买的自动更新dlc已到账，请按 付费指引 中的使用说明进行使用~", "到账提醒")
-            pass
 
         # 检查是否有新的按月付费
         # 判定条件

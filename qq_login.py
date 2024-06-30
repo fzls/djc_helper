@@ -203,8 +203,9 @@ class QQLogin:
         self.time_start_login = datetime.datetime.now()
 
         self.screen_width, self.screen_height = get_screen_size()
-        col_size, row_size = round(self.screen_width / self.default_window_width), round(
-            self.screen_height / self.default_window_height
+        col_size, row_size = (
+            round(self.screen_width / self.default_window_width),
+            round(self.screen_height / self.default_window_height),
         )
         self.window_position_x = self.default_window_width * ((window_index - 1) % col_size)
         self.window_position_y = self.default_window_height * (((window_index - 1) // col_size) % row_size)

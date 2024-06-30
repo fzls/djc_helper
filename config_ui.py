@@ -3179,7 +3179,8 @@ class XinYueAppOperationConfigUi(QWidget):
 
     def from_config(self, form_layout: QFormLayout, cfg: XinYueAppOperationConfig):
         self.lineedit_encrypted_raw_http_body = create_lineedit(
-            bytes_arr_to_hex_str(cfg.encrypted_raw_http_body), "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00"  # type: ignore
+            bytes_arr_to_hex_str(cfg.encrypted_raw_http_body),  # type: ignore
+            "抓包获取的加密http请求体，形如 0x58, 0x59, 0x01, 0x00, 0x00",
         )
         add_row(form_layout, f"{cfg.name}", self.lineedit_encrypted_raw_http_body)
 

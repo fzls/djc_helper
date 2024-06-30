@@ -4196,7 +4196,7 @@ class DjcHelper:
             return listOfBasicList
 
         def get_not_taken_awards(
-            listOfBasicList: list[tuple[bool, list[DnfHelperChronicleBasicAwardInfo]]]
+            listOfBasicList: list[tuple[bool, list[DnfHelperChronicleBasicAwardInfo]]],
         ) -> list[tuple[bool, DnfHelperChronicleBasicAwardInfo]]:
             not_taken_award_list = []
 

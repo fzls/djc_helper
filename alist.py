@@ -74,7 +74,7 @@ class LoginResponse(ConfigInterface):
 class ListRequest(ConfigInterface):
     def __init__(self):
         self.path = ""
-        self.passwrod = ""
+        self.password = ""
         self.refresh = False
         self.page = 1
         self.per_page = 0
@@ -108,7 +108,7 @@ class Content(ConfigInterface):
 class DownloadRequest(ConfigInterface):
     def __init__(self):
         self.path = ""
-        self.passwrod = ""
+        self.password = ""
 
 
 class DownloadResponse(ConfigInterface):
@@ -258,7 +258,7 @@ def get_download_info(remote_file_path: str) -> DownloadResponse:
 
     req = DownloadRequest()
     req.path = remote_file_path
-    req.passwrod = ""
+    req.password = ""
 
     raw_res = alist_session.post(fn_API_DOWNLOAD(), json=to_raw_type(req))
 
@@ -297,7 +297,7 @@ def get_file_list(
 ) -> ListResponse:
     req = ListRequest()
     req.path = remote_dir_path
-    req.passwrod = password
+    req.password = password
     req.page = page
     req.per_page = per_page
     req.refresh = refresh

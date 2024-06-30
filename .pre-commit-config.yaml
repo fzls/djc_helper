@@ -22,11 +22,11 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
-  - repo: https://github.com/psf/black
+  - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.4.2
     hooks:
       - id: black
-        args: [ --safe, --quiet, --line-length=120 ]
+        args: [ --safe, --quiet, --line-length=120, --target-version=py38 ]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:

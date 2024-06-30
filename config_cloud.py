@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import os
 from datetime import datetime, timedelta
 from os import path
-from typing import List
 
 import toml
 
@@ -67,7 +68,7 @@ class ConfigCloud(ConfigInterface):
         self.loaded = False
 
         # 新增的服务器IP列表
-        self.server_ip_list: List[str] = []
+        self.server_ip_list: list[str] = []
 
         # 是否启用卡密界面
         self.enable_card_secret = True
@@ -80,7 +81,7 @@ class ConfigCloud(ConfigInterface):
         self.enable_alipay_redpacket = False
 
         # 新增的黑名单
-        self.black_list: List[BlackListConfig] = []
+        self.black_list: list[BlackListConfig] = []
 
         # dlc全量更新是否优先启用alist
         self.dlc_prefer_alist = False
@@ -103,7 +104,7 @@ class ConfigCloud(ConfigInterface):
         self.pay_by_month_purchase_url = "https://www.kami.vip/purchasing?link=pay-by-month"
 
         # 维护中的支付方式
-        self.maintaining_payment_name_list: List[str] = [
+        self.maintaining_payment_name_list: list[str] = [
             # "支付宝",
             # "微信支付",
             "QQ钱包",

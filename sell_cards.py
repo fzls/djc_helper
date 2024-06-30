@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import argparse
 import json
-from typing import Dict, List
 
 from config import config, load_config
 from djc_helper import DjcHelper
@@ -11,7 +12,7 @@ from util import show_head_line
 CARD_PLACEHOLDER = "XXXXXXXXXXX"
 
 
-def sell_card(targetQQ: str, cards_to_send: List[str]) -> str:
+def sell_card(targetQQ: str, cards_to_send: list[str]) -> str:
     cards_to_send = [name for name in cards_to_send if name != CARD_PLACEHOLDER]
 
     # 读取配置信息
@@ -93,7 +94,7 @@ def query_card_info():
         djcHelper.get_bind_role_list()
 
         # 获取卡片和奖励数目，其中新版本卡片为 id=>count ，旧版本卡片为 name=>count
-        card_counts: Dict[str, int]
+        card_counts: dict[str, int]
 
         card_counts = djcHelper.dnf_ark_lottery_get_card_counts()
 
@@ -120,7 +121,7 @@ def query_card_info():
 def run_local():
     # re: 先填QQ undone: 然后填写卡片
     targetQQ = "1054073896"
-    cards_to_send: List[str]
+    cards_to_send: list[str]
 
     # 新版集卡中名称为 1/2/3/4/.../10/11/12
     cards_to_send = [

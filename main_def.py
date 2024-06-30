@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import json
 import os
@@ -9,7 +11,7 @@ import sys
 import threading
 import time
 from multiprocessing import cpu_count, freeze_support
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable
 
 import requests
 
@@ -262,7 +264,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
         check_all_skey_and_pskey_silently_sync(cfg)
     else:
         # 串行登录
-        qq2index: Dict[str, int] = {}
+        qq2index: dict[str, int] = {}
 
         for _idx, account_config in enumerate(cfg.account_configs):
             idx = _idx + 1
@@ -305,7 +307,7 @@ def check_all_skey_and_pskey(cfg: Config, check_skey_only=False):
 
 def do_check_all_skey_and_pskey(
     idx: int, window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool
-) -> Optional[DjcHelper]:
+) -> DjcHelper | None:
     while True:
         try:
             wait_a_while(idx)
@@ -326,7 +328,7 @@ def check_all_skey_and_pskey_silently_sync(cfg: Config):
 
 def _do_check_all_skey_and_pskey(
     window_index: int, account_config: AccountConfig, common_config: CommonConfig, check_skey_only: bool
-) -> Optional[DjcHelper]:
+) -> DjcHelper | None:
     if not account_config.is_enabled():
         # 未启用的账户的账户不走该流程
         return None
@@ -462,7 +464,7 @@ def try_copy_cards(djcHelper: DjcHelper):
         card_name_to_counts[card_name] += 1
 
 
-def get_owned_card_infos_sort_by_count(card_name_to_counts: Dict[str, int]) -> List[Tuple[str, int]]:
+def get_owned_card_infos_sort_by_count(card_name_to_counts: dict[str, int]) -> list[tuple[str, int]]:
     owned_card_infos = []
     for card_name, card_count in card_name_to_counts.items():
         if card_count == 0:
@@ -475,7 +477,7 @@ def get_owned_card_infos_sort_by_count(card_name_to_counts: Dict[str, int]) -> L
 
 def query_account_ark_lottery_info(
     idx: int, total_account: int, account_config: AccountConfig, common_config: CommonConfig
-) -> Optional[Tuple[Dict[str, int], Dict[str, int], DjcHelper]]:
+) -> tuple[dict[str, int], dict[str, int], DjcHelper] | None:
     djcHelper = DjcHelper(account_config, common_config)
     lr = djcHelper.fetch_pskey()
     if lr is None:
@@ -494,10 +496,10 @@ def query_account_ark_lottery_info(
 
 def send_card(
     target_qq: str,
-    qq_to_card_name_to_counts: Dict[str, Dict[str, int]],
-    qq_to_prize_counts: Dict[str, Dict[str, int]],
-    qq_to_djcHelper: Dict[str, DjcHelper],
-    target_qqs: List[str],
+    qq_to_card_name_to_counts: dict[str, dict[str, int]],
+    qq_to_prize_counts: dict[str, dict[str, int]],
+    qq_to_djcHelper: dict[str, DjcHelper],
+    target_qqs: list[str],
 ) -> bool:
     """
     返回 是否有其他账号有可以赠送的卡片
@@ -520,7 +522,7 @@ def send_card(
     else:
         logger.debug("所有奖励都已兑换，将赠送目标QQ其他QQ最富余的卡片")
         # 统计其余账号的各卡牌总数
-        merged_card_name_to_count: Dict[str, int] = {}
+        merged_card_name_to_count: dict[str, int] = {}
         for _qq, card_name_to_count in qq_to_card_name_to_counts.items():
             for card_name, card_count in card_name_to_count.items():
                 merged_card_name_to_count[card_name] = merged_card_name_to_count.get(card_name, 0) + card_count
@@ -720,10 +722,10 @@ def query_lottery_status(
     idx: int,
     account_config: AccountConfig,
     common_config: CommonConfig,
-    card_indexes: List[str],
-    prize_indexes: List[str],
-    order_map: Dict[str, str],
-) -> Optional[List]:
+    card_indexes: list[str],
+    prize_indexes: list[str],
+    order_map: dict[str, str],
+) -> list | None:
     if not account_config.ark_lottery.show_status:
         return None
 
@@ -1128,7 +1130,7 @@ def try_report_pay_info(cfg: Config, user_buy_info: BuyInfo):
             increase_counter(ga_category="game_qq_count", name=len(user_buy_info.game_qqs))
 
 
-def get_activity_funcs_to_run(cfg: Config, user_buy_info: BuyInfo) -> List[Tuple[str, Callable]]:
+def get_activity_funcs_to_run(cfg: Config, user_buy_info: BuyInfo) -> list[tuple[str, Callable]]:
     return DjcHelper(cfg.account_configs[0], cfg.common).get_activity_funcs_to_run(user_buy_info)
 
 
@@ -1663,14 +1665,14 @@ def try_auto_update(cfg: Config, ignore_permission=False):
         logger.error("自动更新出错了，报错信息如下", exc_info=e)
 
 
-def has_buy_auto_updater_dlc(qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> bool:
+def has_buy_auto_updater_dlc(qq_accounts: list[str], max_retry_count=3, retry_wait_time=5, show_log=False) -> bool:
     has_buy, _ = has_buy_auto_updater_dlc_and_query_ok(qq_accounts, max_retry_count, retry_wait_time, show_log)
     return has_buy
 
 
 def has_buy_auto_updater_dlc_and_query_ok(
-    qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False
-) -> Tuple[bool, bool]:
+    qq_accounts: list[str], max_retry_count=3, retry_wait_time=5, show_log=False
+) -> tuple[bool, bool]:
     """
     查询是否购买过dlc，返回 [是否有资格，查询是否成功]
     """
@@ -1734,7 +1736,7 @@ def has_buy_auto_updater_dlc_and_query_ok(
 
 
 def get_user_buy_info(
-    qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False, show_dlc_info=True
+    qq_accounts: list[str], max_retry_count=3, retry_wait_time=5, show_log=False, show_dlc_info=True
 ) -> BuyInfo:
     logger.info(
         f"如果卡在这里不能动，请先看看网盘里是否有新版本~ 如果新版本仍无法解决，可加群反馈~ 链接：{config().common.netdisk_link}"
@@ -1759,7 +1761,7 @@ def get_user_buy_info(
     return user_buy_info
 
 
-def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool]:
+def get_user_buy_info_from_server(qq_accounts: list[str]) -> tuple[BuyInfo, bool]:
     buyInfo = BuyInfo()
     ok = False
 
@@ -1793,8 +1795,8 @@ def get_user_buy_info_from_server(qq_accounts: List[str]) -> Tuple[BuyInfo, bool
 
 
 def get_user_buy_info_from_netdisk(
-    qq_accounts: List[str], max_retry_count=3, retry_wait_time=5, show_log=False
-) -> Tuple[BuyInfo, bool]:
+    qq_accounts: list[str], max_retry_count=3, retry_wait_time=5, show_log=False
+) -> tuple[BuyInfo, bool]:
     default_user_buy_info = BuyInfo()
     for try_idx in range(max_retry_count):
         try:
@@ -1824,9 +1826,9 @@ def get_user_buy_info_from_netdisk(
                     # 如果网盘没有这个文件，就跳过
                     continue
 
-                buy_users: Dict[str, BuyInfo] = {}
+                buy_users: dict[str, BuyInfo] = {}
 
-                def update_if_longer(qq: str, info: BuyInfo, buy_users: Dict[str, BuyInfo]):
+                def update_if_longer(qq: str, info: BuyInfo, buy_users: dict[str, BuyInfo]):
                     if qq not in buy_users:
                         buy_users[qq] = info
                     else:
@@ -1962,11 +1964,11 @@ def add_extra_times_for_dlc(user_buy_info: BuyInfo, show_dlc_info: bool):
 
 
 def try_notify_new_pay_info(
-    qq_accounts: List[str], latest_user_buy_info: BuyInfo, show_message_box=True
-) -> Tuple[bool, bool, List[BuyRecord]]:
+    qq_accounts: list[str], latest_user_buy_info: BuyInfo, show_message_box=True
+) -> tuple[bool, bool, list[BuyRecord]]:
     new_buy_dlc = False
     new_buy_monthly_pay = False
-    new_buy_monthly_pay_records: List[BuyRecord] = []
+    new_buy_monthly_pay_records: list[BuyRecord] = []
 
     # 获取上次保存的付费信息，对比是否产生了新的付费
     # note: 这里的key改成最新查询到的购买记录的主QQ

@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import json
 import os
-from typing import List, Optional
 
 import requests
 
@@ -400,7 +401,7 @@ class Urls:
         self.dnf_comic_update_api = "https://game.gtimg.cn/images/amside/ide_timer/249678_comicDetail.js"
 
     def show_current_valid_act_infos(self):
-        acts: List[ActCommonInfo] = []
+        acts: list[ActCommonInfo] = []
 
         # others
         for not_ams_act in not_ams_activities:
@@ -475,7 +476,7 @@ class Urls:
 
 
 @try_except()
-def search_act(actId) -> Optional[AmsActInfo]:
+def search_act(actId) -> AmsActInfo | None:
     actId = str(actId)
     act_desc_js = get_act_desc_js(actId)
     if act_desc_js == "":
@@ -540,7 +541,7 @@ def download_act_desc_js(actId: str) -> str:
 
 
 @try_except()
-def search_ide_act(actId: str) -> Optional[IdeActInfo]:
+def search_ide_act(actId: str) -> IdeActInfo | None:
     actId = str(actId)
     act_desc_json = get_ide_act_desc_json(actId)
     if act_desc_json == "":
@@ -597,7 +598,7 @@ def get_ams_act_desc(actId: str) -> str:
     return format_act(act.iActivityId, act.sActivityName, act.dtBeginTime, act.dtEndTime)
 
 
-def get_ams_act(actId: str) -> Optional[AmsActInfo]:
+def get_ams_act(actId: str) -> AmsActInfo | None:
     act = search_act(actId)
     return act
 
@@ -611,7 +612,7 @@ def get_ide_act_desc(actId: str) -> str:
     return format_act(actId, action.sName, action.sUpDate, action.sDownDate)
 
 
-def get_ide_act(actId: str) -> Optional[IdeActInfo]:
+def get_ide_act(actId: str) -> IdeActInfo | None:
     act = search_ide_act(actId)
     return act
 
@@ -624,7 +625,7 @@ def get_not_ams_act_desc(act_name: str) -> str:
     return format_act(act.iActivityId, act.sActivityName, act.dtBeginTime, act.dtEndTime)
 
 
-def get_not_ams_act(act_name: str) -> Optional[AmsActInfo]:
+def get_not_ams_act(act_name: str) -> AmsActInfo | None:
     for act in not_ams_activities:
         if act.sActivityName == act_name:
             return act

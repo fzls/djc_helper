@@ -1,4 +1,6 @@
-from typing import Any, Dict, List, Tuple, Type
+from __future__ import annotations
+
+from typing import Any
 
 from dao import BuyInfo, DnfHelperChronicleExchangeList, DnfHelperChronicleUserActivityTopInfo
 from db_def import ConfigInterface, DBInterface
@@ -26,24 +28,24 @@ class WelfareDB(DBInterface):
     def __init__(self):
         super().__init__()
 
-        self.share_code_list: List[str] = []
-        self.exchanged_dict: Dict[str, bool] = {}
+        self.share_code_list: list[str] = []
+        self.exchanged_dict: dict[str, bool] = {}
 
 
 class DianzanDB(DBInterface):
     def __init__(self):
         super().__init__()
 
-        self.day_to_dianzan_count: Dict[str, int] = {}
-        self.used_content_ids: List[str] = []
-        self.content_ids: List[str] = []
+        self.day_to_dianzan_count: dict[str, int] = {}
+        self.used_content_ids: list[str] = []
+        self.content_ids: list[str] = []
 
 
 class CaptchaDB(DBInterface):
     def __init__(self):
         super().__init__()
 
-        self.offset_to_history_succes_count: Dict[str, int] = {}
+        self.offset_to_history_succes_count: dict[str, int] = {}
 
     def increse_success_count(self, offset: int):
         success_key = str(offset)  # 因为json只支持str作为key，所以需要强转一下，使用时再转回int
@@ -58,16 +60,16 @@ class LoginRetryDB(DBInterface):
         super().__init__()
 
         self.recommended_first_retry_timeout: float = 0.0
-        self.history_success_timeouts: List[float] = []
+        self.history_success_timeouts: list[float] = []
 
 
 class CacheDB(DBInterface):
     def __init__(self):
         super().__init__()
 
-        self.cache: Dict[str, CacheInfo] = {}
+        self.cache: dict[str, CacheInfo] = {}
 
-    def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [("cache", CacheInfo)]
 
 
@@ -82,7 +84,7 @@ class FireCrackersDB(DBInterface):
     def __init__(self):
         super().__init__()
 
-        self.friend_qqs: List[str] = []
+        self.friend_qqs: list[str] = []
 
 
 class UserBuyInfoDB(DBInterface):
@@ -97,9 +99,9 @@ class DnfHelperChronicleUserActivityTopInfoDB(DBInterface):
         super().__init__()
 
         self.account_name = ""
-        self.year_month_to_user_info: Dict[str, DnfHelperChronicleUserActivityTopInfo] = {}
+        self.year_month_to_user_info: dict[str, DnfHelperChronicleUserActivityTopInfo] = {}
 
-    def dict_fields_to_fill(self) -> List[Tuple[str, Type[ConfigInterface]]]:
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [("year_month_to_user_info", DnfHelperChronicleUserActivityTopInfo)]
 
     def get_last_month_user_info(self) -> DnfHelperChronicleUserActivityTopInfo:

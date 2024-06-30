@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from config import ConfigInterface
 
@@ -41,7 +41,7 @@ class ArkLotteryCardGroups(ConfigInterface):
 class ArkLotteryCardGroup(ConfigInterface):
     def __init__(self):
         self.title = "全民竞速"
-        self.cardList: List[ArkLotteryCard] = []
+        self.cardList: list[ArkLotteryCard] = []
 
     def fields_to_fill(self):
         return [
@@ -106,7 +106,7 @@ class DnfAreaServerListConfig(ConfigInterface):
     def __init__(self):
         self.t = "广东"
         self.v = "21"
-        self.opt_data_array: List[DnfServerConfig] = []
+        self.opt_data_array: list[DnfServerConfig] = []
 
     def fields_to_fill(self):
         return [

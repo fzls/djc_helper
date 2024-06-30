@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from config import ArkLotteryAwardConfig
 from setting_def import ArkLotteryZzConfig, DnfAreaServerListConfig, DnfServerConfig
@@ -47,8 +47,8 @@ def parse_prize_list(cfg: ArkLotteryZzConfig):
     return prize_list
 
 
-def dnf_area_server_list_config() -> List[DnfAreaServerListConfig]:
-    area_servers: List[DnfAreaServerListConfig] = []
+def dnf_area_server_list_config() -> list[DnfAreaServerListConfig]:
+    area_servers: list[DnfAreaServerListConfig] = []
     for area_server_setting in dnf_server_list.setting:
         area_servers.append(DnfAreaServerListConfig().auto_update_config(area_server_setting))
 
@@ -58,7 +58,7 @@ def dnf_area_server_list_config() -> List[DnfAreaServerListConfig]:
 def dnf_server_list_config():
     area_servers = dnf_area_server_list_config()
 
-    servers: List[DnfServerConfig] = []
+    servers: list[DnfServerConfig] = []
     for area_server in area_servers:
         servers.extend(area_server.opt_data_array)
 

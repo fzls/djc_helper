@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 from multiprocessing import Pool
 from multiprocessing.pool import Pool as TPool
-from typing import Optional
 
 from log import color, logger
 
-pool: Optional[TPool] = None
+pool: TPool | None = None
 
 
 def init_pool(pool_size):
@@ -37,7 +38,7 @@ def get_pool_size() -> int:
     return pool._processes
 
 
-def get_pool() -> Optional[TPool]:
+def get_pool() -> TPool | None:
     return pool
 
 

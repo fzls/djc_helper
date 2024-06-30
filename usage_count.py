@@ -72,7 +72,7 @@ def increase_counter_sync_google_analytics(name: str, ga_type: str, ga_category:
         # ga.track_page(name, ga_misc_params)
         ga4.track_event("page_view", name)
     else:
-        logger.error(f"unknow ga_type={ga_type}")
+        logger.error(f"unknown ga_type={ga_type}")
 
 
 time_periods = ["all", get_today()]

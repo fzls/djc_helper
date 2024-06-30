@@ -73,3 +73,16 @@ repos:
           - types-toml
           #         - types-selenium
           - types-psutil
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        additional_dependencies:
+        - tomli
+        args:
+#          - --write-changes
+          - --ignore-words-list=millseconds,te,aci,checkIn
+          - --skip="*.csv,*.json"
+          - --quiet-level=2
+        exclude_types: [csv, json, html]
+        exclude: ^utils/reference_data/

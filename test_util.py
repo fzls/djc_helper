@@ -660,3 +660,17 @@ def test_get_first_exists_dict_value():
     kv[new_k] = old_k
     assert get_first_exists_dict_value(kv, old_k) is None
     assert get_first_exists_dict_value(kv, new_k) == old_k
+
+
+def test_define_table_using_zip():
+    heads = ["head1", "head2", "head3"]
+    colSizes = [1, 2, 3]
+
+    heads_new, colSizes_new = zip(
+        ("head1", 1),
+        ("head2", 2),
+        ("head3", 3),
+    )
+
+    assert heads == list(heads_new)
+    assert colSizes == list(colSizes_new)

@@ -562,8 +562,13 @@ class DjcHelperTomb:
         def show_financing_info():
             info_map = get_financing_info_map()
 
-            heads = ["理财卡名称", "当前状态", "累计收益", "剩余天数", "结束日期"]
-            colSizes = [10, 8, 8, 8, 10]
+            heads, colSizes = zip(
+                ("理财卡名称", 10),
+                ("当前状态", 8),
+                ("累计收益", 8),
+                ("剩余天数", 8),
+                ("结束日期", 10),
+            )
             logger.info(color("bold_green") + tableify(heads, colSizes))
             for name, info in info_map.items():
                 if name not in selectedCards:
@@ -3724,8 +3729,10 @@ class DjcHelperTomb:
                 print_res=False,
             )
 
-            heads = ["名称", "数目"]
-            colSizes = [20, 4]
+            heads, colSizes = zip(
+                ("名称", 20),
+                ("数目", 4),
+            )
             logger.info(tableify(heads, colSizes))
             for card in res["do_act"]["score_list"]:
                 cols = [card["score_name"], card["score_num"]]

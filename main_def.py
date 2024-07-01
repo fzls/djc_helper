@@ -164,8 +164,11 @@ def check_djc_role_binding():
             )
 
             logger.info(color("bold_cyan") + "相关账号如下:")
-            heads = ["序号", "账号名", "QQ"]
-            colSizes = [4, 12, 10]
+            heads, colSizes = zip(
+                ("序号", 4),
+                ("账号名", 12),
+                ("QQ", 10),
+            )
             logger.info(color("bold_cyan") + tableify(heads, colSizes))
             for idx, info in enumerate(not_binded_accounts):
                 name, qq = info
@@ -843,43 +846,24 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
             rows.append(get_account_status(idx, account_config, cfg.common, user_buy_info))
 
     # 打印结果
-    heads = [
-        "序号",
-        "账号名",
-        "聚豆余额",
-        "心悦类型",
-        "成就点",
-        "勇士币",
-        "心悦组队",
-        "上周心悦",
-        "自动组队",
-        "编年史",
-        "年史碎片",
-        "搭档",
-        "上月",
-        "自动匹配",
-        "论坛代币券",
-        "漫画星星",
-    ]
-    colSizes = [
-        4,
-        12,
-        8,
-        10,
-        6,
-        6,
-        16,
-        8,
-        8,
-        8,
-        14,
-        8,
-        14,
-        4,
-        8,
-        10,
-        8,
-    ]
+    heads, colSizes = zip(
+        ("序号", 4),
+        ("账号名", 12),
+        ("聚豆余额", 8),
+        ("心悦类型", 10),
+        ("成就点", 6),
+        ("勇士币", 6),
+        ("心悦组队", 16),
+        ("上周心悦", 8),
+        ("自动组队", 8),
+        ("编年史", 14),
+        ("年史碎片", 8),
+        ("搭档", 14),
+        ("上月", 4),
+        ("自动匹配", 8),
+        ("论坛代币券", 10),
+        ("漫画星星", 8),
+    )
 
     logger.info(tableify(heads, colSizes))
     for row in rows:

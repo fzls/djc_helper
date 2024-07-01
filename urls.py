@@ -448,8 +448,14 @@ class Urls:
 
         acts.sort(key=lambda act: act.dtEndTime)
 
-        heads = ["序号", "活动名称", "活动ID", "开始时间", "结束时间", "剩余时间"]
-        colSizes = [4, 44, 10, 20, 20, 14]
+        heads, colSizes = zip(
+            ("序号", 4),
+            ("活动名称", 44),
+            ("活动ID", 10),
+            ("开始时间", 20),
+            ("结束时间", 20),
+            ("剩余时间", 14),
+        )
 
         table = ""
         table += "\n" + tableify(heads, colSizes)

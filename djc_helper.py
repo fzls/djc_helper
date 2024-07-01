@@ -576,8 +576,13 @@ class DjcHelper:
             if len(activities) != 0:
                 activities_summary += f"\n目前的{categray}活动如下："
 
-                heads = ["序号", "活动名称", "结束于", "剩余天数", "活动链接为"]
-                colSizes = [4, 24, 12, 8, 50]
+                heads, colSizes = zip(
+                    ("序号", 4),
+                    ("活动名称", 24),
+                    ("结束于", 12),
+                    ("剩余天数", 8),
+                    ("活动链接为", 50),
+                )
 
                 activities_summary += "\n" + color("bold_green") + tableify(heads, colSizes)
                 for idx, name_and_func in enumerate(activities):
@@ -4273,8 +4278,13 @@ class DjcHelper:
                 exchangeGiftMap[gift.sLbcode] = gift
 
             logger.info(color("bold_green") + "本期可兑换道具如下:")
-            heads = ["名称", "兑换id", "所需等级", "领取次数", "消耗年史碎片"]
-            colSizes = [40, 8, 8, 8, 12]
+            heads, colSizes = zip(
+                ("名称", 40),
+                ("兑换id", 8),
+                ("所需等级", 8),
+                ("领取次数", 8),
+                ("消耗年史碎片", 12),
+            )
             logger.info(color("bold_green") + tableify(heads, colSizes))
             for gift in exchangeList.gifts:
                 row = [gift.sName, gift.sLbcode, gift.iLevel, gift.iNum, gift.iCard]

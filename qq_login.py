@@ -1772,6 +1772,7 @@ class QQLogin:
             f"{self.name} 先尝试使用act活动页面 {self.driver.current_url}，用于获取该域名下的openid和access_token，用于心悦相关操作"
         )
         openid, access_token = self._wait_for_cookies("openid", "access_token")
+        logger.info(f"此时获取到的openid={openid}，access_token={access_token}")
         self.add_cookie("xinyue_openid", openid)
         self.add_cookie("xinyue_access_token", access_token)
 
@@ -1784,8 +1785,13 @@ class QQLogin:
         time.sleep(1)
 
         openid, access_token = self._wait_for_cookies("openid", "access_token")
+        logger.info(f"此时获取到的openid={openid}，access_token={access_token}")
         self.add_cookie("xinyue_openid", openid)
         self.add_cookie("xinyue_access_token", access_token)
+
+        if openid is None or access_token is None:
+            # 如果因为某种原因登录失败了，比如等待时间太短就关闭登录页面了，这里判定为登录失败
+            raise Exception("获取心悦鉴权信息失败")
 
     def wait_for_IED_LOG_INFO2_QC(self):
         (userinfo,) = self._wait_for_cookies("uInfo101478239")

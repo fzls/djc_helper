@@ -1461,6 +1461,10 @@ def show_tips(cfg: Config):
         "24.6 wegame下载活动": (
             "wegame的dnf启动按钮左侧有个下载活动按钮，点开可以领取三个一次性的小奖励，有兴趣的朋友可以自行参与"
         ),
+        "24.7 雾神机制小游戏": (
+            "与雾神团本同步出了个机制网页小游戏，可以用于了解团本机制。看完并答题可以领取黑钻等奖励，建议要打雾神团本的朋友们都参与一下~\n"
+            "https://tools.bbs.colg.cn/wushen/index.html\n"
+        ),
     }
 
     logger.info(

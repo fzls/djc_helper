@@ -683,6 +683,7 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("colg其他活动", self.colg_other_act),
             ("DNF格斗大赛", self.dnf_pk),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -697,7 +698,6 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("拯救赛利亚", self.dnf_save_sailiyam),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF马杰洛的规划", self.majieluo),
             ("神界预热", self.dnf_shenjie_yure),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
@@ -6749,40 +6749,25 @@ class DjcHelper:
             show_act_not_enable_warning("WeGame活动")
             return
 
-        self.check_dnf_wegame()
+        self.check_dnf_wegame_ide()
 
-        # jifen_flowid = "864315"
+        self.dnf_wegame_ide_op("启动礼包", "302359")
+        self.dnf_wegame_ide_op("幸运礼包", "302363")
 
-        def query_counts() -> tuple[int, int]:
-            res = self.dnf_wegame_op("查询各种数据", "916703", print_res=False)
-            info = parse_amesvr_common_info(res)
+        # self.dnf_wegame_ide_op("好友列表", "302415")
+        # self.dnf_wegame_ide_op("发送ark消息", "302616")
+        # self.dnf_wegame_ide_op("接受邀请", "302631")
+        # self.dnf_wegame_ide_op("分享礼包", "303772")
+        # self.dnf_wegame_ide_op("抽奖", "302670")
 
-            key_count, lottery_count = info.sOutValue5.split("|")
-            return int(key_count), int(lottery_count)
+        self.dnf_wegame_ide_op("普通攻击", "302849")
+        self.dnf_wegame_ide_op("暴击", "302998")
+        self.dnf_wegame_ide_op("觉醒攻击", "303027")
 
-        def query_open_box_times():
-            return -1, query_counts()[0]
+        self.dnf_wegame_ide_op("每日攻击礼包", "302996")
 
-            # res = self.dnf_wegame_op("查询开盒子次数-jifenOutput", jifen_flowid, print_res=False)
-            # return self.parse_jifenOutput(res, "469")
-
-        def query_daily_lottery_times():
-            return -1, query_counts()[1]
-
-            # res = self.dnf_wegame_op("查询每日抽奖次数-jifenOutput", jifen_flowid, print_res=False)
-            # return self.parse_jifenOutput(res, "470")
-
-        # self.dnf_wegame_op("预约", "998406")
-        self.dnf_wegame_op("预约后玩家是否点击过收取礼包按钮", "999238")
-
-        # self.dnf_wegame_op("接受邀请（二期）", "998612")
-        # self.dnf_wegame_op("我的邀请列表（二期）", "998708")
-        self.dnf_wegame_op("抽奖（二期）", "998719")
-
-        self.dnf_wegame_op("给巴卡尔造成伤害（二期）", "998712")
-        self.dnf_wegame_op("巴卡尔宝藏（二期）", "998726")
-
-        self.dnf_wegame_op("预约期礼包兑换（二期）", "998716")
+        for progress in [10, 30, 50, 70, 100]:
+            self.dnf_wegame_ide_op(f"进度 {progress}% 奖励", "303047", index=progress)
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
@@ -6802,6 +6787,34 @@ class DjcHelper:
             "x6m5.ams.game.qq.com",
             "group_3",
             "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("WeGame活动"),
+            **extra_params,
+        )
+
+    def check_dnf_wegame_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "WeGame活动",
+            get_act_url("WeGame活动"),
+            activity_op_func=self.dnf_wegame_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_wegame_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_wegame
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
             print_res,
@@ -8506,6 +8519,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pk()
+        djcHelper.dnf_wegame()
 
     pause()

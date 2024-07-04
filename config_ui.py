@@ -2936,6 +2936,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("勇士的冒险补给", "get_maoxian"),
             ("colg其他活动", "get_colg_other_act"),
             ("DNF格斗大赛", "get_dnf_pk"),
+            ("WeGame活动", "get_dnf_wegame"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2953,7 +2954,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("dnf助手活动wpe", "get_dnf_helper_wpe"),
             ("拯救赛利亚", "get_dnf_save_sailiyam"),
-            ("WeGame活动", "get_dnf_wegame"),
             ("DNF马杰洛的规划", "get_majieluo"),
             ("神界预热", "get_dnf_shenjie_yure"),
             ("qq视频蚊子腿-爱玩", "get_qq_video"),

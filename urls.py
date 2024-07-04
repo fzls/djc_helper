@@ -71,6 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
+    newNotAmsActInfo("2024-07-04 11:00:00", "2024-07-24 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
@@ -110,6 +111,7 @@ act_name_to_url = {
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/a20240704wegame/index.html",
     #
     # 已过期活动
     #
@@ -120,7 +122,6 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
-    "WeGame活动": "https://dnf.qq.com/cp/SJ20231221wg/index_other.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
@@ -284,6 +285,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v2 = "22_ylD5VE"  # DNF神界成长之路二期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "0_zsJIaU"  # DNF卡妮娜的心愿摇奖机
+        self.ide_iActivityId_dnf_wegame = "85_FhnJSy"  # WeGame活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

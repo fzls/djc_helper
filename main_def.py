@@ -854,7 +854,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         ("成就点", 6),
         ("勇士币", 6),
         ("心悦组队", 16),
-        ("上周心悦", 8),
+        ("前两周心悦", 10),
         ("自动组队", 8),
         ("编年史", 14),
         ("年史碎片", 8),
@@ -886,7 +886,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     if teaminfo.is_team_full():
         team_award_summary = djcHelper.query_xinyue_team_this_week_award_summary()
 
-    last_week_xinyue_take_award_count = djcHelper.query_last_week_xinyue_team_take_award_count()
+    last_two_week_xinyue_take_award_count = djcHelper.query_last_two_week_xinyue_team_take_award_count()
     can_auto_match_xinyue_team = ""
     if djcHelper.can_auto_match_xinyue_team(user_buy_info, print_waring=False):
         if teaminfo.is_team_full():
@@ -936,7 +936,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.score,
         xinyue_info.ysb,
         team_award_summary,
-        last_week_xinyue_take_award_count,
+        last_two_week_xinyue_take_award_count,
         can_auto_match_xinyue_team,
         levelInfo,
         chronicle_points,

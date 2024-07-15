@@ -1706,20 +1706,21 @@ class DjcHelper:
                 )
             return False
 
-        # 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
-        # note: 由于心悦战场于2023.12.21改版，因此先在改版后的3周内，不检查领取次数的条件，之后强制要求这个
-        take_award_count = self.query_last_week_xinyue_team_take_award_count()
-        if take_award_count < 3:
+        # 前两周心悦战场荣耀镖局完成运镖任务并领取奖励 6 次
+        take_award_count = self.query_last_two_week_xinyue_team_take_award_count()
+        if take_award_count < 6:
             if print_waring:
                 async_message_box(
                     (
-                        f"{self.cfg.name} 上周领取奖励次数为 {take_award_count}，少于需求的三次，将不会尝试自动匹配心悦队伍\n"
+                        f"{self.cfg.name} 前两周心悦战场荣耀镖局完成运镖任务并领取奖励次数为 {take_award_count}，少于需求的 6 次，将不会尝试自动匹配心悦队伍\n"
                         "\n"
-                        "本周请自行前往心悦特权专区加入队伍并完成三次任务的条件（当日完成条件后小助手会自动帮你领取），下周即可重新自动匹配\n"
+                        "本周请自行前往心悦特权专区加入队伍并完成三次任务的条件（当日完成条件后小助手会自动帮你领取），直至连续两周满勤，之后的一周即可重新自动匹配\n"
+                        "\n"
+                        "PS: 这样主要是为了确保进入匹配队伍的朋友们都是长期全勤的，匹配到一起后基本都能领到每周的组队奖励\n"
                         "\n"
                         "若无需心悦自动匹配功能，可前往当前账号的配置tab，取消勾选 心悦组队/自动匹配 即可\n"
                     ),
-                    "心悦战场上周未完成三次任务（每周弹一次）",
+                    "心悦战场前两周未完成 6 次任务（每周弹一次）",
                     show_once_weekly=True,
                     open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
                 )
@@ -1727,11 +1728,11 @@ class DjcHelper:
 
         return True
 
-    def query_last_week_xinyue_team_take_award_count(self) -> int:
-        last_week_awards = self.query_last_week_xinyue_team_awards()
+    def query_last_two_week_xinyue_team_take_award_count(self) -> int:
+        last_two_week_awards = self.query_last_two_week_xinyue_team_awards()
 
         take_count = 0
-        for award in last_week_awards:
+        for award in last_two_week_awards:
             # 判断是否是运镖令奖励
             # 初级运镖令奖励   4748214
             # 中级运镖令奖励   4748279
@@ -1741,33 +1742,39 @@ class DjcHelper:
 
         return take_count
 
-    def query_last_week_xinyue_team_awards(self) -> list[XinYueTeamAwardInfo]:
-        # 假设过去两周每天兑换40个道具（比如装备提升礼盒），每页为10个
+    def query_last_two_week_xinyue_team_awards(self) -> list[XinYueTeamAwardInfo]:
+        # 检查过去两周的记录
+        check_weeks = 2
+
+        # 假设过去每周每天兑换40个道具（比如装备提升礼盒），每页为10个
         page_size = 10
-        two_week_max_page = 40 * 7 * 2 // page_size
+        # 这里最多考虑比所需周数多一周的情况下的最大页数
+        max_page = 40 * 7 * (check_weeks + 1) // page_size
 
-        last_monday = get_last_week_monday_datetime()
-        this_monday = get_this_week_monday_datetime()
+        # 检查的最晚时间
+        time_end = get_this_week_monday_datetime()
+        # 检查的最早时间
+        time_start = time_end - datetime.timedelta(days=7 * check_weeks)
 
-        last_week_awards = []
-        for page in range_from_one(two_week_max_page):
+        check_weeks_awards = []
+        for page in range_from_one(max_page):
             awards = self.query_xinyue_team_awards(page, page_size)
             if len(awards) == 0:
                 break
 
             for award in awards:
                 take_at = parse_time(award.gift_time)
-                if take_at >= this_monday:
+                if take_at >= time_end:
                     # 跳过本周的
                     continue
-                elif take_at >= last_monday:
-                    # 上周的结果
-                    last_week_awards.append(award)
+                elif take_at >= time_start:
+                    # 在指定周数范围内的奖励
+                    check_weeks_awards.append(award)
                 else:
-                    # 从这开始是上周之前的，不必再额外处理，可以直接返回了
-                    return last_week_awards
+                    # 从这开始是指定周数之前的，不必再额外处理，可以直接返回了
+                    return check_weeks_awards
 
-        return last_week_awards
+        return check_weeks_awards
 
     @try_except(return_val_on_except=[])
     def query_xinyue_team_awards(self, iPageNow: int, iPageSize: int) -> list[XinYueTeamAwardInfo]:

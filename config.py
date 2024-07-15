@@ -973,7 +973,7 @@ class AccountConfig(ConfigInterface):
         #   1. 在按月付费期间
         #   2. 开启了本开关
         #   3. 当前QQ是特邀会员或者心悦会员
-        #   4. 上周心悦战场派遣赛利亚打工并成功领取工资 3 次
+        #   4. 前两周心悦战场荣耀镖局完成运镖任务并领取奖励 6 次
         self.enable_auto_match_xinyue_team = False
 
         # 腾讯系网页登录通用账号凭据与token

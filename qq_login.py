@@ -1864,8 +1864,6 @@ class QQLogin:
             WebDriverWait(self.driver, self.cfg.login.open_url_wait_time).until(
                 expected_conditions.visibility_of_element_located((By.ID, iframe_id))
             )
-            tcaptcha_iframe = self.driver.find_element(By.ID, iframe_id)
-            self.driver.switch_to.frame(tcaptcha_iframe)
 
             logger.info(
                 color("bold_green")
@@ -1876,9 +1874,20 @@ class QQLogin:
                 color("bold_yellow")
                 + "新版滑动验证码限制最大滑动次数为3次，之前的暴力尝试策略不再可用，请先手动操作。待日后有空时，会改用图像识别的方式来进行处理"
             )
+
+            logger.info(
+                f"{self.name} 等待手动处理验证码中，最大等待时长为{self.cfg.login.login_finished_timeout}"
+            )
+            WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
+                expected_conditions.invisibility_of_element_located((By.ID, iframe_id))
+            )
+
             if self.cfg.run_in_headless_mode and self.login_slow_retry_index == 1:
                 raise RequireVerifyMessageButInHeadlessMode("新版滑动验证码")
             return
+
+            tcaptcha_iframe = self.driver.find_element(By.ID, iframe_id)
+            self.driver.switch_to.frame(tcaptcha_iframe)
 
             # 新版中，三个组件的位置随机的，需要根据其样式去判断是哪个
             selectors = [

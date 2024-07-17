@@ -1708,17 +1708,20 @@ class QQLogin:
         if max_retry_count == 1:
             retry_timeouts = [max_retry_wait_time]
         elif max_retry_count > 1:
-            # 默认重试时间为按时长等分递增
+            # 默认重试时间为[t/2, t]按时长等分递增
+            half_time = max_retry_wait_time / 2
             retry_timeouts = list(
-                idx / max_retry_count * max_retry_wait_time for idx in range_from_one(max_retry_count)
+                half_time + idx / max_retry_count * half_time for idx in range_from_one(max_retry_count)
             )
             if login_retry_data.recommended_first_retry_timeout != 0:
-                # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间，后续重试次数则等分递增
-                retry_timeouts = [login_retry_data.recommended_first_retry_timeout]
+                # 如果有历史成功数据，则以推荐首次重试时间为第一次重试的时间（且至少不少于一半时间），后续重试次数则在[t/2, t]等分递增
+                first_wait_time = max(login_retry_data.recommended_first_retry_timeout, half_time)
+                retry_timeouts = [first_wait_time]
+
                 remaining_retry_count = max_retry_count - 1
                 retry_timeouts.extend(
                     list(
-                        idx / remaining_retry_count * max_retry_wait_time
+                        half_time + idx / remaining_retry_count * half_time
                         for idx in range_from_one(remaining_retry_count)
                     )
                 )

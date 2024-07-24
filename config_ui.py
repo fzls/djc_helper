@@ -2923,30 +2923,28 @@ class FunctionSwitchesConfigUi(QWidget):
             ("心悦app", "get_xinyue_app"),
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
-            ("DNF周年庆登录活动", "get_dnf_anniversary"),
-            ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
             ("colg每日签到", "get_colg_signin"),
             ("勇士的冒险补给", "get_maoxian"),
             ("colg其他活动", "get_colg_other_act"),
-            ("DNF格斗大赛", "get_dnf_pk"),
             ("WeGame活动", "get_dnf_wegame"),
         ],
         "QQ空间pskey": [
-            ("集卡", "get_ark_lottery"),
-            ("超级会员", "get_dnf_super_vip"),
         ],
     }
 
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("DNF格斗大赛", "get_dnf_pk"),
+            ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
+            ("DNF周年庆登录活动", "get_dnf_anniversary"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNFxSNK", "get_dnf_snk"),
             ("9163补偿", "get_dnf_9163_apologize"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
@@ -2978,6 +2976,8 @@ class FunctionSwitchesConfigUi(QWidget):
             ("集卡", "get_ark_lottery"),
         ],
         "QQ空间pskey": [
+            ("集卡", "get_ark_lottery"),
+            ("超级会员", "get_dnf_super_vip"),
             ("qq会员杯", "get_dnf_club_vip"),
             ("会员关怀", "get_vip_mentor"),
             ("黄钻", "get_dnf_yellow_diamond"),

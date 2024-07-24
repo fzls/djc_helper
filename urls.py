@@ -60,21 +60,21 @@ not_ams_activities = [
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
-    newNotAmsActInfo("2024-02-01 12:00:00", "2024-06-30 23:59:59", "DNF神界成长之路"),
-    newNotAmsActInfo("2024-04-18 00:00:00", "2024-07-31 23:59:59", "DNF神界成长之路二期"),
-    newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "超级会员"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "集卡"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-10 23:59:59", "DNF卡妮娜的心愿摇奖机"),
+    newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
+    newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2024-07-04 11:00:00", "2024-07-24 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-10 23:59:59", "DNF卡妮娜的心愿摇奖机"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "集卡"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "超级会员"),
+    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
+    newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
@@ -93,7 +93,6 @@ act_name_to_url = {
     "心悦app": "https://xinyue.qq.com/beta/#/download",
     "dnf论坛签到": "https://dnf.gamebbs.qq.com/plugin.php?id=k_misign:sign",
     "小酱油周礼包和生日礼包": "游戏内右下角点击 小酱油 图标",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 短期付费活动
     #
@@ -102,19 +101,20 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
-    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50148_928bd0e0",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50140_591877ab",
-    "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20240704wegame/index.html",
     #
     # 已过期活动
     #
+    "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
+    "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50140_591877ab",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50148_928bd0e0",
+    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",

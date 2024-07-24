@@ -661,7 +661,6 @@ class DjcHelper:
             ("心悦app", self.xinyue_app_operations),
             ("dnf论坛签到", self.dnf_bbs),
             ("小酱油周礼包和生日礼包", self.xiaojiangyou),
-            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def payed_activities(self) -> list[tuple[str, Callable]]:
@@ -674,15 +673,9 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("超级会员", self.dnf_super_vip),
-            ("集卡", self.dnf_ark_lottery),
-            ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("colg每日签到", self.colg_signin),
             ("勇士的冒险补给", self.maoxian),
             ("colg其他活动", self.colg_other_act),
-            ("DNF格斗大赛", self.dnf_pk),
             ("WeGame活动", self.dnf_wegame),
         ]
 
@@ -691,6 +684,13 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("DNF格斗大赛", self.dnf_pk),
+            ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
+            ("集卡", self.dnf_ark_lottery),
+            ("超级会员", self.dnf_super_vip),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
             ("超核勇士wpe", self.dnf_chaohe_wpe),

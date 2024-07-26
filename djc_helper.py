@@ -116,7 +116,6 @@ from util import (
     format_now,
     format_time,
     get_first_exists_dict_value,
-    get_last_week_monday_datetime,
     get_logger_func,
     get_meaningful_call_point_for_log,
     get_month,

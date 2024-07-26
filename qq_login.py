@@ -1875,9 +1875,7 @@ class QQLogin:
                 + "新版滑动验证码限制最大滑动次数为3次，之前的暴力尝试策略不再可用，请先手动操作。待日后有空时，会改用图像识别的方式来进行处理"
             )
 
-            logger.info(
-                f"{self.name} 等待手动处理验证码中，最大等待时长为{self.cfg.login.login_finished_timeout}"
-            )
+            logger.info(f"{self.name} 等待手动处理验证码中，最大等待时长为{self.cfg.login.login_finished_timeout}")
             WebDriverWait(self.driver, self.cfg.login.login_finished_timeout).until(
                 expected_conditions.invisibility_of_element_located((By.ID, iframe_id))
             )

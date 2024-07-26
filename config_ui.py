@@ -2290,7 +2290,9 @@ class AccountConfigUi(QWidget):
             form_layout,
             "需要满足这些条件",
             QLabel(
-                "1. 在付费生效期间\n" "2. 当前QQ是特邀会员或者心悦会员\n" "3. 前两周心悦战场荣耀镖局完成运镖任务并领取奖励 6 次\n"
+                "1. 在付费生效期间\n"
+                "2. 当前QQ是特邀会员或者心悦会员\n"
+                "3. 前两周心悦战场荣耀镖局完成运镖任务并领取奖励 6 次\n"
             ),
         )
 
@@ -2933,8 +2935,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("WeGame活动", "get_dnf_wegame"),
         ],
-        "QQ空间pskey": [
-        ],
+        "QQ空间pskey": [],
     }
 
     # 已过期的活动，方便快速加回去

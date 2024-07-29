@@ -1770,14 +1770,17 @@ class QQLogin:
         self.add_cookie("apps_p_skey", p_skey)
 
     def fetch_xinyue_openid_access_token(self):
+        key_openid = "xinyue_openid"
+        key_access_token = "xinyue_access_token"
+
         # 先尝试使用活动页面的cookie
         logger.info(
             f"{self.name} 先尝试使用act活动页面 {self.driver.current_url}，用于获取该域名下的openid和access_token，用于心悦相关操作"
         )
-        openid, access_token = self._wait_for_cookies("openid", "access_token")
-        logger.info(f"此时获取到的openid={openid}，access_token={access_token}")
-        self.add_cookie("xinyue_openid", openid)
-        self.add_cookie("xinyue_access_token", access_token)
+        act_openid, act_access_token = self._wait_for_cookies("openid", "access_token")
+        logger.info(f"此时获取到的openid={act_openid}，access_token={act_access_token}")
+        self.add_cookie(key_openid, act_openid)
+        self.add_cookie(key_access_token, act_access_token)
 
         # 然后跳转到心悦域名，若该页面也能获取到相关cookie，则优先使用该cookie
         logger.info(
@@ -1787,13 +1790,19 @@ class QQLogin:
         self.driver.get("https://xinyue.qq.com/")
         time.sleep(1)
 
-        openid, access_token = self._wait_for_cookies("openid", "access_token")
-        logger.info(f"此时获取到的openid={openid}，access_token={access_token}")
-        self.add_cookie("xinyue_openid", openid)
-        self.add_cookie("xinyue_access_token", access_token)
+        xinyue_openid, xinyue_access_token = self._wait_for_cookies("openid", "access_token")
+        logger.info(f"此时获取到的openid={xinyue_openid}，access_token={xinyue_access_token}")
+        self.add_cookie(key_openid, xinyue_openid)
+        self.add_cookie(key_access_token, xinyue_access_token)
 
-        if openid is None or access_token is None:
+        # 检查下两种渠道是否有任意一个获得了登录信息
+        openid = self.get_cookie(key_openid)
+        access_token = self.get_cookie(key_access_token)
+        if openid == "" or access_token == "":
             # 如果因为某种原因登录失败了，比如等待时间太短就关闭登录页面了，这里判定为登录失败
+            logger.error(
+                f"{self.name} 两种方式均未能获得心悦的鉴权信息"
+            )
             raise Exception("获取心悦鉴权信息失败")
 
     def wait_for_IED_LOG_INFO2_QC(self):

@@ -1800,9 +1800,7 @@ class QQLogin:
         access_token = self.get_cookie(key_access_token)
         if openid == "" or access_token == "":
             # 如果因为某种原因登录失败了，比如等待时间太短就关闭登录页面了，这里判定为登录失败
-            logger.error(
-                f"{self.name} 两种方式均未能获得心悦的鉴权信息"
-            )
+            logger.error(f"{self.name} 两种方式均未能获得心悦的鉴权信息")
             raise Exception("获取心悦鉴权信息失败")
 
     def wait_for_IED_LOG_INFO2_QC(self):

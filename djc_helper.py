@@ -5741,11 +5741,7 @@ class DjcHelper:
             )
             logger.info(color("bold_green") + f"每日盲盒，结果={res.json()}")
         else:
-            async_message_box(
-                "（移除前每天弹窗）确认下这个签到抽奖活动是否还能继续抽奖，如果还可以，把这里改为继续运行，发个新版本，否则干掉这个分支的弹窗",
-                "（仅自己可见）colg签到抽奖活动",
-                open_url="https://bbs.colg.cn/forum-171-1.html",
-            )
+            pass
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()

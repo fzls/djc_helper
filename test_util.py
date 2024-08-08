@@ -27,6 +27,7 @@ from util import (
     YiB,
     ZiB,
     append_if_not_in,
+    base64_decode,
     base64_str,
     bytes_arr_to_hex_str,
     check_some_exception,
@@ -536,6 +537,12 @@ def test_base64_str():
     assert base64_str("test") == "dGVzdA=="
     assert base64_str("测试") == "5rWL6K+V"
     assert base64_str("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
+
+
+def test_base64_decode():
+    assert base64_decode("dGVzdA==") == "test"
+    assert base64_decode("5rWL6K+V") == "测试"
+    assert base64_decode("JiYmPTEya2pzYWJkc2E=") == "&&&=12kjsabdsa"
 
 
 def test_post_json_to_data():

@@ -2136,8 +2136,13 @@ class DjcHelper:
         if not hasattr(self, "dnf_xinyue_wpe_bind_role"):
             # 查询心悦的绑定信息
             bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
+
+            b_need_bind = False
             if bind_role is None:
                 # 若未绑定，则尝试使用道聚城的绑定角色进行绑定
+                b_need_bind = True
+
+            if b_need_bind:
                 ok = self.xinyue_battle_ground_wpe_bind_role()
                 logger.info(f"心悦战场未绑定角色，将使用道聚城的绑定角色，绑定角色结果={ok}")
 

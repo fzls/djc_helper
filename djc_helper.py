@@ -108,6 +108,7 @@ from urls import (
 from usage_count import increase_counter
 from util import (
     async_message_box,
+    base64_decode,
     base64_encode,
     double_quote,
     double_unquote,
@@ -2135,22 +2136,31 @@ class DjcHelper:
         # 运行期间仅尝试获取一次
         if not hasattr(self, "dnf_xinyue_wpe_bind_role"):
             # 查询心悦的绑定信息
-            bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
+            xy_bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
 
-            b_need_bind = False
-            if bind_role is None:
+            need_bind = False
+            bind_reason = ""
+            if xy_bind_role is None:
                 # 若未绑定，则尝试使用道聚城的绑定角色进行绑定
-                b_need_bind = True
+                need_bind = True
+                bind_reason = "未绑定角色"
+            elif self.common_cfg.force_sync_bind_with_djc:
+                # 若设定了强制同步绑定信息，则尝试同步为道聚城的角色进行绑定
+                djc_roleinfo = self.get_dnf_bind_role()
 
-            if b_need_bind:
+                if int(djc_roleinfo.serviceID) != xy_bind_role.partition_id or djc_roleinfo.roleCode != xy_bind_role.role_id:
+                    need_bind = True
+                    bind_reason = f"绑定角色({base64_decode(xy_bind_role.role_name)}-{base64_decode(xy_bind_role.partition_name)}) 与 道聚城绑定角色({djc_roleinfo.roleName}-{djc_roleinfo.serviceName}) 不同，且开启了强制同步绑定角色功能"
+
+            if need_bind:
                 ok = self.xinyue_battle_ground_wpe_bind_role()
-                logger.info(f"心悦战场未绑定角色，将使用道聚城的绑定角色，绑定角色结果={ok}")
+                logger.info(f"心悦战场 {bind_reason}，将使用道聚城的绑定角色，绑定角色结果={ok}")
 
                 # 绑定完后再次尝试查询
-                bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
+                xy_bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
 
             # 将查询结果保存到内存中，方便后续使用
-            self.dnf_xinyue_wpe_bind_role = bind_role
+            self.dnf_xinyue_wpe_bind_role = xy_bind_role
 
         return self.dnf_xinyue_wpe_bind_role
 
@@ -8526,6 +8536,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.xinyue_battle_ground()
 
     pause()

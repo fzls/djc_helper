@@ -1726,7 +1726,7 @@ def utf8len(s: str) -> int:
     return len(s.encode("utf-8"))
 
 
-def base64_str(text: str) -> str:
+def base64_encode(text: str) -> str:
     return base64.standard_b64encode(text.encode()).decode()
 
 

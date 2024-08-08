@@ -67,7 +67,7 @@ from urls_tomb import UrlsTomb
 from usage_count import increase_counter
 from util import (
     async_message_box,
-    base64_str,
+    base64_encode,
     format_time,
     get_now_unix,
     get_today,
@@ -1748,9 +1748,9 @@ class DjcHelperTomb:
                 "area_id": int(roleinfo.serviceID),
                 "plat_id": 2,
                 "partition_id": int(roleinfo.serviceID),
-                "partition_name": base64_str(roleinfo.serviceName),
+                "partition_name": base64_encode(roleinfo.serviceName),
                 "role_id": roleinfo.roleCode,
-                "role_name": base64_str(roleinfo.roleName),
+                "role_name": base64_encode(roleinfo.roleName),
                 "device": "pc",
             },
             "data": '{"ceiba_plat_id":"android","user_attach":"{\\"nickName\\":\\"'
@@ -6167,7 +6167,7 @@ class DjcHelperTomb:
         json_str = json.dumps(list_body, separators=(",", ":"))
 
         # 之后转化为base64编码
-        b64_str = base64_str(json_str)
+        b64_str = base64_encode(json_str)
 
         # 然后进行两次URL编码，作为 isomorphism-args 参数
         isomorphism_args = quote_plus(quote_plus(b64_str))

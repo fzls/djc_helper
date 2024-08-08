@@ -28,7 +28,7 @@ from util import (
     ZiB,
     append_if_not_in,
     base64_decode,
-    base64_str,
+    base64_encode,
     bytes_arr_to_hex_str,
     check_some_exception,
     endswith_any,
@@ -533,10 +533,10 @@ def test_utf8len():
     assert utf8len("test测试") == 10
 
 
-def test_base64_str():
-    assert base64_str("test") == "dGVzdA=="
-    assert base64_str("测试") == "5rWL6K+V"
-    assert base64_str("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
+def test_base64_encode():
+    assert base64_encode("test") == "dGVzdA=="
+    assert base64_encode("测试") == "5rWL6K+V"
+    assert base64_encode("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
 
 
 def test_base64_decode():

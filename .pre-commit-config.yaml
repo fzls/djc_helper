@@ -62,13 +62,6 @@ repos:
       - id: mypy
         args: [ ]
         additional_dependencies:
-          - iniconfig>=1.1.0
-          - py>=1.8.2
-          - attrs>=19.2.0
-          - packaging
-          - tomli
-          - types-atomicwrites
-          - types-pkg_resources
           - types-requests
           - types-toml
           #         - types-selenium

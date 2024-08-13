@@ -673,6 +673,7 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
+            ("DNF神界成长之路三期", self.dnf_shenjie_grow_up_v3),
             ("colg其他活动", self.colg_other_act),
         ]
 
@@ -6692,6 +6693,192 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF神界成长之路三期--------------------------------------------
+    @try_except()
+    def dnf_shenjie_grow_up_v3(self):
+        show_head_line("DNF神界成长之路三期")
+        self.show_not_ams_act_info("DNF神界成长之路三期")
+
+        if not self.cfg.function_switches.get_dnf_shenjie_grow_up or self.disable_most_activities():
+            show_act_not_enable_warning("DNF神界成长之路三期")
+            return
+
+        # 这个活动让用户自己去选择绑定的角色，因为关系到角色绑定的奖励领取到哪个角色上
+        # self.check_dnf_shenjie_grow_up_v3()
+
+        def query_has_bind_role() -> bool:
+            bind_config = self.dnf_shenjie_grow_up_v3_op(
+                "查询活动信息 - DNF神界成长之路三期", "", get_act_info_only=True
+            ).get_bind_config()
+
+            query_bind_res = self.dnf_shenjie_grow_up_v3_op("查询绑定", bind_config.query_map_id, print_res=False)
+
+            has_bind = query_bind_res["jData"]["bindarea"] is not None
+
+            return has_bind
+
+        def query_info() -> ShenJieGrowUpInfo:
+            res = self.dnf_shenjie_grow_up_v3_op("初始化用户及查询", "310772", print_res=False)
+
+            info = ShenJieGrowUpInfo()
+            info.auto_update_config(res["jData"]["userData"])
+
+            return info
+
+        @try_except()
+        def take_task_rewards(curStageData: ShenJieGrowUpCurStageData, taskData: dict[str, ShenJieGrowUpTaskData]):
+            task_index_to_name = {
+                "1": "通关神界高级地下城1次 (不限种类)",
+                "2": "通关推荐地下城20次",
+                "3": "装备属性成长达成大成功",
+                "4": "每周在线4小时",
+            }
+            # if int(curStageData.stage) >= 2:
+            #     # 阶段2以后，后面俩任务条件有所变化
+            #     task_index_to_name["3"] = "通关异面边界1次"
+            #     task_index_to_name["4"] = "通关幽暗岛1次"
+
+            not_finished_task_desc_list = []
+
+            for task_index, task_info in taskData.items():
+                task_name = task_index_to_name[task_index]
+
+                if int(task_info.giftStatus) == 1:
+                    logger.info(f"已领取任务 {task_name} 奖励")
+                else:
+                    if task_info.needNum > task_info.doneNum:
+                        logger.info(f"未完成任务 {task_name}，当前进度为 {task_info.doneNum}/{task_info.needNum}")
+                        not_finished_task_desc_list.append(
+                            f"    {task_index} {task_name} {task_info.doneNum}/{task_info.needNum}"
+                        )
+                    else:
+                        logger.info(f"已完成任务 {task_name}，尝试领取奖励")
+
+                        self.dnf_shenjie_grow_up_v3_op(
+                            f"领取任务奖励 - {task_name}",
+                            "310812",
+                            u_stage=curStageData.stage,
+                            u_task_index=task_index,
+                        )
+
+            # 提示当前未完成的任务
+            # 周期的前半段，也就是正常可以完成对应任务内容的456三天不弹窗提示进度，之后几天，若仍有任务未完成，则每天尝试提示一次
+            now = get_now()
+            do_not_show_message_box = now.isoweekday() in [4, 5, 6] or len(not_finished_task_desc_list) == 0
+
+            cycle_start_thursday = get_this_thursday_of_dnf()
+            day_index_in_cycle = (now - cycle_start_thursday).days + 1
+
+            role_name = double_unquote(curStageData.sRoleName)
+            server_name = dnf_server_id_to_name(curStageData.iAreaId)
+
+            total_task = len(taskData)
+            done_task = total_task - len(not_finished_task_desc_list)
+
+            tips = ""
+            tips = tips + f"当前账号：{self.cfg.name} {self.qq()}\n"
+            tips = tips + f"绑定角色：{server_name} {role_name}\n"
+
+            if len(not_finished_task_desc_list) > 0:
+                tips = (
+                    tips
+                    + f"当前为本周期第 {day_index_in_cycle} 天，神界成长之路（巅峰史诗成长路线）绑定的角色尚未完成以下的任务，请在下个周四零点之前完成~\n"
+                )
+                tips = tips + "\n"
+                tips = tips + "\n".join(not_finished_task_desc_list)
+            else:
+                tips = tips + f"当前为本周期第 {day_index_in_cycle} 天，本周任务均已完成\n"
+
+            title = f"{self.cfg.name} {role_name} 成长之路 3 进度提示 当前阶段{curStageData.stage}/8 本周期已完成任务 {done_task}/{total_task}"
+
+            show_head_line("大百变活动进度", msg_color=color("bold_yellow"))
+            async_message_box(
+                tips,
+                title,
+                show_once_daily=True,
+                do_not_show_message_box=do_not_show_message_box,
+                color_name="bold_yellow",
+            )
+
+            # 自己使用时，若尚未完成，则每次运行都弹提示，更加直观
+            if use_by_myself() and len(not_finished_task_desc_list) > 0:
+                async_message_box(
+                    tips,
+                    title,
+                )
+
+        @try_except()
+        def take_stage_rewards(curStageData: ShenJieGrowUpCurStageData, allStagePack: list[ShenJieGrowUpStagePack]):
+            for stage_pack in allStagePack:
+                if stage_pack.packStatus == 1:
+                    logger.info(f"阶段{stage_pack.stage} 奖励已领取")
+                else:
+                    logger.info(f"阶段{stage_pack.stage} 奖励未领取, 尝试领取")
+                    self.dnf_shenjie_grow_up_v3_op(
+                        f"领取 阶段{stage_pack.stage} 奖励", "310779", u_stage_index=stage_pack.stage
+                    )
+
+        has_bind_role = query_has_bind_role()
+        logger.info(f"DNF神界成长之路三期是否已绑定角色: {has_bind_role}")
+
+        if not has_bind_role:
+            async_message_box(
+                (
+                    f"当前账号 {self.cfg.name} {self.qq()} 尚未在大百变活动（巅峰史诗成长路线）中绑定角色\n"
+                    "\n"
+                    "请打开游戏，进入你想要绑定的角色，点击游戏右下角对应的按钮完成绑定流程\n"
+                ),
+                "大百变活动 第三期 未绑定",
+                show_once_weekly=True,
+            )
+            return
+
+        info = query_info()
+        curStageData = info.curStageData
+        taskData = info.taskData
+        allStagePack = info.allStagePack
+
+        role_name = double_unquote(curStageData.sRoleName)
+        server_name = dnf_server_id_to_name(curStageData.iAreaId)
+
+        logger.info(f"角色昵称: {role_name}")
+        logger.info(f"绑定大区: {server_name}")
+        logger.info(f"当前任务阶段: {curStageData.stage}/8")
+
+        # self.dnf_shenjie_grow_up_v3_op("领取大百变", "263051")
+
+        take_task_rewards(curStageData, taskData)
+
+        take_stage_rewards(curStageData, allStagePack)
+
+    def check_dnf_shenjie_grow_up_v3(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF神界成长之路三期",
+            get_act_url("DNF神界成长之路三期"),
+            activity_op_func=self.dnf_shenjie_grow_up_v3_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_shenjie_grow_up_v3_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_shenjie_grow_up_v3
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF神界成长之路三期"),
+            **extra_params,
+        )
+
     # --------------------------------------------绑定手机活动--------------------------------------------
     @try_except()
     def dnf_bind_phone(self):
@@ -8536,6 +8723,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.dnf_shenjie_grow_up_v3()
 
     pause()

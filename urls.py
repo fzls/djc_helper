@@ -62,6 +62,7 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
+    newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     #
     # 已过期活动
@@ -100,7 +101,8 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
-    "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/index.html",
+    "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
+    "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
@@ -283,6 +285,7 @@ class Urls:
         self.ide_iActivityId_dnf_nianhuopu = "47_aiKrck"  # DNF年货铺
         self.ide_iActivityId_dnf_shenjie_grow_up = "34_DA6bLu"  # DNF神界成长之路
         self.ide_iActivityId_dnf_shenjie_grow_up_v2 = "22_ylD5VE"  # DNF神界成长之路二期
+        self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "0_zsJIaU"  # DNF卡妮娜的心愿摇奖机
         self.ide_iActivityId_dnf_wegame = "85_FhnJSy"  # WeGame活动

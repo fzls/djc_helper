@@ -2149,7 +2149,10 @@ class DjcHelper:
                 # 若设定了强制同步绑定信息，则尝试同步为道聚城的角色进行绑定
                 djc_roleinfo = self.get_dnf_bind_role()
 
-                if int(djc_roleinfo.serviceID) != xy_bind_role.partition_id or djc_roleinfo.roleCode != xy_bind_role.role_id:
+                if (
+                    int(djc_roleinfo.serviceID) != xy_bind_role.partition_id
+                    or djc_roleinfo.roleCode != xy_bind_role.role_id
+                ):
                     need_bind = True
                     bind_reason = f"绑定角色({base64_decode(xy_bind_role.role_name)}-{base64_decode(xy_bind_role.partition_name)}) 与 道聚城绑定角色({djc_roleinfo.roleName}-{djc_roleinfo.serviceName}) 不同，且开启了强制同步绑定角色功能"
 

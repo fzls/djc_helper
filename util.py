@@ -187,6 +187,7 @@ def ensure_cmd_window_buffer_size_for_windows(cfg):
 
 
 def is_running_under_windows_terminal_in_win11() -> bool:
+    logger.debug(f"检测终端 system={platform.system()} release={platform.release()} version={platform.version()}")
     is_win11 = platform.system() == "Windows" and platform.release() == "10" and platform.version() >= "10.0.22000"
     if not is_win11:
         return False

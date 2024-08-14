@@ -368,5 +368,15 @@
     "open_url": "",
     "expire_at": "2024-06-21 01:56:33",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "24.8 打开时白屏",
+    "message": "新版本后，部分朋友反馈，打开小助手时会白屏，并多出一个【Default IME(未响应)】的窗口。\n通过在部分反馈的朋友电脑上进行排查，定位到是因为配置工具中的【公共配置/窗口大小调整/是否最大化窗口】这个选项导致的。\n如果你的系统上运行小助手时也会出现这个问题，可以取消该选项后再试试~\n\n具体详情可参考点击确认后弹出的在线文档\n",
+    "send_at": "2024-08-14 22:40:03",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DZGZLbXh3ZEFXV2Jn",
+    "expire_at": "2024-08-21 22:40:03",
+    "show_only_before_version": ""
   }
 ]

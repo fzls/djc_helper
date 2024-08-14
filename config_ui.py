@@ -444,7 +444,11 @@ class ConfigUi(QFrame):
         else:
             os.startfile(sys.argv[0])
 
-        kill_process(os.getpid())
+        # 目前打包版本这里代码里关闭进程，会报 XX模块 无法找到的错误，如 unicodedata jaraco.text pyexpat，这里让用户自己关闭
+        # kill_process(os.getpid())
+        self.setWindowTitle("！！！这是之前打开的实例，记得点击右上角的X关掉我！！！")
+        show_message("提示", "新的配置工具实例将启动,点击确认后之前打开的实例将最小化，请手动将关闭掉~")
+        self.showMinimized()
 
     def save(self, checked=False, show_message_box=True):
         cfg = self.to_config()

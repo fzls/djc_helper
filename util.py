@@ -1735,6 +1735,14 @@ def base64_decode(text: str) -> str:
     return base64.standard_b64decode(text.encode()).decode()
 
 
+def urlsafe_base64_encode(text: str) -> str:
+    return base64.urlsafe_b64encode(text.encode()).decode()
+
+
+def urlsafe_base64_decode(text: str) -> str:
+    return base64.urlsafe_b64decode(text.encode()).decode()
+
+
 def json_compact(val) -> str:
     return json.dumps(val, separators=(",", ":"))
 

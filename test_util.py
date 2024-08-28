@@ -86,6 +86,8 @@ from util import (
     truncate,
     try_except,
     uin2qq,
+    urlsafe_base64_decode,
+    urlsafe_base64_encode,
     use_by_myself,
     utf8len,
     will_act_expired_in,
@@ -537,12 +539,32 @@ def test_base64_encode():
     assert base64_encode("test") == "dGVzdA=="
     assert base64_encode("测试") == "5rWL6K+V"
     assert base64_encode("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
+    assert base64_encode("广西一区") == "5bm/6KW/5LiA5Yy6"
+    assert base64_encode("游戏领域大神") == "5ri45oiP6aKG5Z+f5aSn56We"
 
 
 def test_base64_decode():
     assert base64_decode("dGVzdA==") == "test"
     assert base64_decode("5rWL6K+V") == "测试"
     assert base64_decode("JiYmPTEya2pzYWJkc2E=") == "&&&=12kjsabdsa"
+    assert base64_decode("5bm/6KW/5LiA5Yy6") == "广西一区"
+    assert base64_decode("5ri45oiP6aKG5Z+f5aSn56We") == "游戏领域大神"
+
+
+def test_urlsafe_base64_encode():
+    assert urlsafe_base64_encode("test") == "dGVzdA=="
+    assert urlsafe_base64_encode("测试") == "5rWL6K-V"
+    assert urlsafe_base64_encode("&&&=12kjsabdsa") == "JiYmPTEya2pzYWJkc2E="
+    assert urlsafe_base64_encode("广西一区") == "5bm_6KW_5LiA5Yy6"
+    assert urlsafe_base64_encode("游戏领域大神") == "5ri45oiP6aKG5Z-f5aSn56We"
+
+
+def test_urlsafe_base64_decode():
+    assert urlsafe_base64_decode("dGVzdA==") == "test"
+    assert urlsafe_base64_decode("5rWL6K+V") == "测试"
+    assert urlsafe_base64_decode("JiYmPTEya2pzYWJkc2E=") == "&&&=12kjsabdsa"
+    assert urlsafe_base64_decode("5bm_6KW_5LiA5Yy6") == "广西一区"
+    assert urlsafe_base64_decode("5ri45oiP6aKG5Z-f5aSn56We") == "游戏领域大神"
 
 
 def test_post_json_to_data():

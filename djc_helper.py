@@ -146,6 +146,8 @@ from util import (
     triple_quote,
     try_except,
     uin2qq,
+    urlsafe_base64_decode,
+    urlsafe_base64_encode,
     use_by_myself,
     utf8len,
     wait_for,
@@ -2154,7 +2156,7 @@ class DjcHelper:
                     or djc_roleinfo.roleCode != xy_bind_role.role_id
                 ):
                     need_bind = True
-                    bind_reason = f"绑定角色({base64_decode(xy_bind_role.role_name)}-{base64_decode(xy_bind_role.partition_name)}) 与 道聚城绑定角色({djc_roleinfo.roleName}-{djc_roleinfo.serviceName}) 不同，且开启了强制同步绑定角色功能"
+                    bind_reason = f"绑定角色({urlsafe_base64_decode(xy_bind_role.role_name)}-{base64_decode(xy_bind_role.partition_name)}) 与 道聚城绑定角色({djc_roleinfo.roleName}-{djc_roleinfo.serviceName}) 不同，且开启了强制同步绑定角色功能"
 
             if need_bind:
                 ok = self.xinyue_battle_ground_wpe_bind_role()
@@ -2208,7 +2210,8 @@ class DjcHelper:
                 "partition_id": int(roleinfo.serviceID),
                 "partition_name": base64_encode(roleinfo.serviceName),
                 "role_id": roleinfo.roleCode,
-                "role_name": base64_encode(roleinfo.roleName),
+                # 网页上这里的角色名特殊处理了下，会将 + 和 / 替换成 - 和 _ ，确保用在url中也能安全，跟其保持一致
+                "role_name": urlsafe_base64_encode(roleinfo.roleName),
                 "device": "pc",
             },
         }
@@ -8726,6 +8729,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shenjie_grow_up_v3()
+        djcHelper.xinyue_battle_ground()
 
     pause()

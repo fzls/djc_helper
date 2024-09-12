@@ -2938,7 +2938,9 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("colg每日签到", "get_colg_signin"),
         ],
-        "QQ空间pskey": [],
+        "QQ空间pskey": [
+            ("集卡", "get_ark_lottery"),
+        ],
     }
 
     # 已过期的活动，方便快速加回去
@@ -2979,7 +2981,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("魔界人探险记", "get_mojieren"),
             ("DNF集合站", "get_dnf_collection"),
             ("超级会员", "get_dnf_super_vip"),
-            ("集卡", "get_ark_lottery"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

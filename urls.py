@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "集卡"),
     #
     # 已过期活动
     #
@@ -72,7 +73,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-10 23:59:59", "DNF卡妮娜的心愿摇奖机"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "集卡"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-12 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
@@ -105,6 +105,7 @@ act_name_to_url = {
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     #
     # 已过期活动
     #
@@ -112,7 +113,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
-    "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50140_591877ab",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50148_928bd0e0",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
@@ -316,7 +316,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10015
+        self.pesudo_ark_lottery_act_id = 10016
 
         # qq视频 - 爱玩
         self.qq_video_iwan = "https://act.iwan.qq.com/trpc.iwan.mission_system_server.MissionSystemSvr/dealSimpleMission?platformId=10&platformid=10&guid=&device=&acctype=qq&missionId={missionId}&gameId=48&sPlat=&sArea=&serverId={serverId}&sRoleId={sRoleId}"

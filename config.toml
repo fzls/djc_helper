@@ -891,6 +891,8 @@ need_take_awards = false
 10014 = false
 # 2024.06.13 冲云破雾 一路横扫
 10015 = false
+# 2024.09.12 DNFx不良人联动 金秋集卡
+10016 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

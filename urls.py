@@ -67,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "集卡"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "超级会员"),
+    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
@@ -75,7 +76,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-10 23:59:59", "DNF卡妮娜的心愿摇奖机"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
-    newNotAmsActInfo("2024-06-13 09:55:00", "2024-07-12 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
@@ -107,6 +107,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50997_88a8aab7",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
     #
     # 已过期活动
     #
@@ -115,7 +116,6 @@ act_name_to_url = {
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240613wish/indexm.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
-    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20240613index/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
@@ -223,7 +223,7 @@ class Urls:
         self.ide_default_params_list = [
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
-            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source",
+            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -278,7 +278,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "15_s0hJrQ"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "61_TpRquT"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "62_jr3nPf"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚

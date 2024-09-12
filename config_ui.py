@@ -2940,6 +2940,7 @@ class FunctionSwitchesConfigUi(QWidget):
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
+            ("超级会员", "get_dnf_super_vip"),
         ],
     }
 
@@ -2983,8 +2984,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("超级会员", "get_dnf_super_vip"),
         ],
         "QQ空间pskey": [
-            ("集卡", "get_ark_lottery"),
-            ("超级会员", "get_dnf_super_vip"),
             ("qq会员杯", "get_dnf_club_vip"),
             ("会员关怀", "get_vip_mentor"),
             ("黄钻", "get_dnf_yellow_diamond"),

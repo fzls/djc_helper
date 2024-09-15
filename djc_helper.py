@@ -2303,6 +2303,8 @@ class DjcHelper:
         return self.post(
             ctx,
             self.urls.dnf_xinyue_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,

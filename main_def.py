@@ -1449,21 +1449,13 @@ def show_tips(cfg: Config):
         "24.1 漫画兑换": (
             "小助手现已支持漫画活动的兑换功能，各位可打开配置工具【账号配置/漫画】，配置需要兑换的道具（如黑钻）\n"
         ),
-        "24.2 动画活动": (
-            "新出了个 《破界少女》 的动画，观看15分钟可以领取三个蚊子腿，每集观看20分钟可以抽奖一次，有兴趣的朋友请自行参与\n"
-            "https://film.video.qq.com/magic-act/0i2g5zpoaeo4k5aogoh3guwlcl/index_6fe12.html?ovscroll=0&page=6fe12&__no_magic_qrcode=1\n"
-        ),
-        "24.6 斗鱼虎牙": (
-            "斗鱼虎牙活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/DNF16th?rid=9940062\n"
-            "虎牙：https://www.huya.com/131415\n"
-        ),
-        "24.6 wegame下载活动": (
-            "wegame的dnf启动按钮左侧有个下载活动按钮，点开可以领取三个一次性的小奖励，有兴趣的朋友可以自行参与"
-        ),
         "24.7 雾神机制小游戏": (
             "与雾神团本同步出了个机制网页小游戏，可以用于了解团本机制。看完并答题可以领取黑钻等奖励，建议要打雾神团本的朋友们都参与一下~\n"
             "https://tools.bbs.colg.cn/wushen/index.html\n"
+        ),
+        "24.9 心悦带团活动": (
+            "心悦有个带团活动，需要在活动页面报名成为团长，并加入DNF俱乐部，然后团内有至少3名同俱乐部的玩家。达到指定次数可以领取一些奖励，有兴趣的朋友请自行打开下面的活动链接参与\n"
+            "https://act.xinyue.qq.com/tgclub/act/ab5c85283e1fb4598bbc51e1431b9f0ed/index.html\n"
         ),
     }
 

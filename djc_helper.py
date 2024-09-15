@@ -682,6 +682,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("喂养删除补偿", self.weiyang_compensate),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -699,7 +700,6 @@ class DjcHelper:
             ("DNFxSNK", self.dnf_snk),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF年货铺", self.dnf_nianhuopu),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("拯救赛利亚", self.dnf_save_sailiyam),
             ("DNF马杰洛的规划", self.majieluo),
@@ -7669,29 +7669,87 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
+        def query_lottery_ticket() -> int:
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 226531)
+            data = json.loads(res["data"])
+
+            remain = data["totalLeft"]
+
+            return remain
+
+        # 组队
         async_message_box(
             (
-                "心悦活动页面可参与拼团活动，如果准备购买年套，可以在心悦这个页面拼团充值，领取额外的一些蚊子腿。\n"
-                "每累计充值200元，可以在活动页面开一次盲盒\n"
-                "同时，也能参与到游戏内的累积充值活动\n"
+                "心悦活动页面可组队完成积分任务，领取抽奖券。\n"
                 "\n"
-                "有兴趣的朋友可以点确认后在弹出的活动页面中参与\n"
+                "有兴趣的朋友可以点确认后在弹出的活动页面中【金秋组队有礼】部分中与他人进行组队\n"
             ),
-            "心悦拼团",
+            "24.9 心悦组队",
             open_url=get_act_url("DNF心悦wpe"),
             show_once=True,
         )
 
-        self.dnf_xinyue_wpe_op("心悦VIP4-5礼包", 151021)
-        self.dnf_xinyue_wpe_op("心悦VIP2-3礼包", 151020)
-        self.dnf_xinyue_wpe_op("心悦VIP1礼包", 151009)
-        self.dnf_xinyue_wpe_op("特邀会员礼包", 151007)
+        self.dnf_xinyue_wpe_op("任务1 每日登录DNF", 223010)
+        # self.dnf_xinyue_wpe_op("任务2 每日分享活动", XXXXXX)
+        self.dnf_xinyue_wpe_op("任务3 每日消耗疲劳100点", 223045)
 
-        self.dnf_xinyue_wpe_op("每日签到", 151024)
-        self.dnf_xinyue_wpe_op("签到 3 天", 151025)
-        self.dnf_xinyue_wpe_op("签到 5 天", 151026)
-        self.dnf_xinyue_wpe_op("签到 6 天", 151027)
-        self.dnf_xinyue_wpe_op("签到 12 天", 151028)
+        self.dnf_xinyue_wpe_op("积分6", 223046)
+        self.dnf_xinyue_wpe_op("积分25", 223047)
+        self.dnf_xinyue_wpe_op("积分55", 223048)
+        self.dnf_xinyue_wpe_op("积分100", 223049)
+
+        lottery_count = query_lottery_ticket()
+        logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
+        for idx in range_from_one(lottery_count):
+            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 223050, extra_data={"pNum": 1})
+
+        # 每日任务
+        self.dnf_xinyue_wpe_op("当日充值DNF点券达到10元", 223219)
+        self.dnf_xinyue_wpe_op("通关缥缈殿书库2次", 223218)
+        self.dnf_xinyue_wpe_op("在线时长>=30分钟", 223214)
+
+        # 签到
+        self.dnf_xinyue_wpe_op("每日签到（祈愿）", 223227)
+
+        self.dnf_xinyue_wpe_op("累计签到1天", 223267)
+        self.dnf_xinyue_wpe_op("累积签到3天", 223324)
+        self.dnf_xinyue_wpe_op("点击激活阶段一", 223328)
+        self.dnf_xinyue_wpe_op("累积签到5天", 224479)
+        self.dnf_xinyue_wpe_op("累积签到7天", 223325)
+        self.dnf_xinyue_wpe_op("点击激活阶段二", 223331)
+        self.dnf_xinyue_wpe_op("通关觉醒之森", 223326)
+        self.dnf_xinyue_wpe_op("点击激活阶段三", 223332)
+
+        self.dnf_xinyue_wpe_op("阶段一奖励", 223340)
+        self.dnf_xinyue_wpe_op("阶段二奖励", 223341)
+        self.dnf_xinyue_wpe_op("阶段三奖励", 223342)
+
+        # 等级礼
+        self.dnf_xinyue_wpe_op("心悦VIP4-5礼包", 223346)
+        self.dnf_xinyue_wpe_op("心悦VIP2-3礼包", 223345)
+        self.dnf_xinyue_wpe_op("心悦VIP1礼包", 223344)
+        self.dnf_xinyue_wpe_op("特邀会员礼包", 223343)
+
+        # -------------- 水晶之路 幸运勇士
+        # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
+        def craystal_op(ctx: str, flow_id: int):
+            return self.dnf_xinyue_wpe_op(f"水晶之路 - {ctx}", flow_id, replace_act_id="19474")
+
+        # 水晶探索
+        craystal_op("每日在线30分钟", 222946)
+        craystal_op("每日消耗50疲劳", 223001)
+        craystal_op("每周通关苏醒之森1次", 223002)
+        craystal_op("每周通关缥缈殿书库", 223003)
+
+        # 水晶进阶
+        craystal_op("通关雾神团本", 223051)
+        craystal_op("通关苏醒之森", 223087)
+        craystal_op("累积签到7天", 223091)
+
+        # 水晶奖池
+        craystal_op("高级装扮兑换券", 223526)
+        craystal_op("灿烂的徽章神秘礼盒", 223529)
+        craystal_op("纯净的增幅书", 223231)
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -7724,18 +7782,21 @@ class DjcHelper:
             "t-access-token": access_token,
         }
 
-    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, **extra_params):
+    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, replace_act_id: str | None = None, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "16382"
+        act_id = "19479"
+        if replace_act_id is not None:
+            act_id = replace_act_id
+
         roleinfo = self.get_dnf_bind_role()
 
         if extra_data is None:
             extra_data = {}
 
         json_data = {
-            "biz_id": "tgclub",
+            "biz_id": "commercial",
             "act_id": act_id,
             "flow_id": flow_id,
             "role": {
@@ -7763,6 +7824,8 @@ class DjcHelper:
         return self.post(
             ctx,
             self.urls.dnf_xinyue_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
@@ -8772,6 +8835,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.weiyang_compensate()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

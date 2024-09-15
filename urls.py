@@ -69,6 +69,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
+    newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-11 23:59:59", "DNF心悦wpe"),
     #
     # 已过期活动
     #
@@ -79,7 +80,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-04 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
-    newNotAmsActInfo("2024-01-11 10:00:00", "2024-02-20 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
@@ -110,6 +110,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50997_88a8aab7",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240903dnfjq/index.html", # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
     #
     # 已过期活动
     #
@@ -123,7 +124,6 @@ act_name_to_url = {
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240105dnf/index.html",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",
     "DNF马杰洛的规划": "https://dnf.qq.com/cp/a20231221card/index.html",
@@ -392,7 +392,7 @@ class Urls:
         #
         # note: 如果手机抓包没法获取到活动链接，但是可以抓包的情况下，可以完成抓包设置后，依次点击对应按钮，然后在抓包结果中搜索 actid ，最下面的请求的参数中的 flowid 就是我们需要的参数
 
-        self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex"
+        self.dnf_xinyue_wpe_api = "https://agw.xinyue.qq.com/amp2.WPESrv/WPEIndex?flowId={flowId}&actId={actId}"
         self.dnf_xinyue_wpe_get_bind_role_api = "https://agw.xinyue.qq.com/amp2.RoleSrv/GetBindRole"
         self.dnf_xinyue_wpe_bind_role_api = "https://agw.xinyue.qq.com/amp2.RoleSrv/BindRole"
 

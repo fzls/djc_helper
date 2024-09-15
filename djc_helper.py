@@ -2613,6 +2613,17 @@ class DjcHelper:
         self.qzone_act_op("累计签到7天", "116132_ec305918")
         self.qzone_act_op("累计签到14天", "116133_5ffc64db")
 
+        # https://act.qzone.qq.com/v2/vip/tx/p/50913_5b2be9ff?enteranceId=dnfzs&traceTint=tianxuan_copy
+        lucky_act_id = "115521_56f0e7f5"
+        self.qzone_act_op("QQ会员 幸运勇士 - 当前角色", lucky_act_id)
+        self.qzone_act_op(
+            "QQ会员 幸运勇士 - 集卡幸运角色",
+            lucky_act_id,
+            act_req_data=self.try_make_lucky_user_req_data(
+                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
+            ),
+        )
+
         # if not self.cfg.function_switches.disable_share and is_first_run(
         #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         # ):
@@ -8855,6 +8866,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_kanina()
+        djcHelper.dnf_super_vip()
 
     pause()

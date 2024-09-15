@@ -684,6 +684,7 @@ class DjcHelper:
             ("喂养删除补偿", self.weiyang_compensate),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
+            ("回流攻坚队", self.dnf_socialize),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7952,6 +7953,87 @@ f"""
             **extra_params,
         )
 
+    # --------------------------------------------回流攻坚队--------------------------------------------
+    @try_except()
+    def dnf_socialize(self):
+        show_head_line("回流攻坚队")
+        self.show_not_ams_act_info("回流攻坚队")
+
+        if not self.cfg.function_switches.get_dnf_socialize or self.disable_most_activities():
+            show_act_not_enable_warning("回流攻坚队")
+            return
+
+        self.check_dnf_socialize()
+
+        def query_sInviteCode() -> string:
+            res = self.dnf_socialize_op("初始化", "323905")
+            return res["jData"]["sInviteCode"]
+
+        sInviteCode = query_sInviteCode()
+        async_message_box(
+            (
+                "回流攻坚队活动加入攻坚队后可以更快积攒进队，可以加入他人队伍，或者邀请他人加入你的队伍\n"
+                f"你的队列邀请链接为：https://dnf.qq.com/cp/a2024socialize/indexm.html?pt=1&sCode={sInviteCode}&sName=\n"
+                "(点击确认后将打开该页面)"
+            ),
+            "24.9 回流攻坚队__",
+            open_url=f"https://dnf.qq.com/cp/a2024socialize/indexm.html?pt=1&sCode={sInviteCode}&sName=",
+            show_once=True,
+        )
+
+        self.dnf_socialize_op("任务-每日登录游戏", "324911")
+        self.dnf_socialize_op("任务-每日在线30分钟", "324912")
+        self.dnf_socialize_op("任务-每日疲劳消耗50点", "324914")
+        self.dnf_socialize_op("任务-每日通关缥缈殿书库", "324915")
+
+        stage_gift_list = [
+            (1, "100攻坚值"),
+            (2, "300攻坚值"),
+            (3, "500攻坚值"),
+            (4, "800攻坚值"),
+            (5, "1000攻坚值"),
+        ]
+        for giftId, stage_name in stage_gift_list:
+            self.dnf_socialize_op(f"攻坚值累计奖励领取 - {stage_name}", "325419", giftId=giftId)
+
+        exchange_gift_list = [
+            # (1, 5, "扭曲的次元晶体"),
+            (2, 10, "梦境原石"),
+            (3, 30, "灿烂的徽章神秘礼盒"),
+            (4, 50, "纯净增幅书"),
+            (5, 100, "星之残像礼盒"),
+        ]
+        for giftId, require_points, gift_name in exchange_gift_list:
+            self.dnf_socialize_op(f"个人积分兑换奖励领取 - {gift_name} - {require_points}积分", "325420", giftId=giftId)
+
+    def check_dnf_socialize(self, **extra_params):
+        return self.ide_check_bind_account(
+            "回流攻坚队",
+            get_act_url("回流攻坚队"),
+            activity_op_func=self.dnf_socialize_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_socialize_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_socialize
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("回流攻坚队"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -8866,6 +8948,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_socialize()
 
     pause()

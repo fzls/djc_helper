@@ -71,6 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-11 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-09 23:59:59", "DNF卡妮娜的心愿摇奖机"),
+    newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
     #
     # 已过期活动
     #
@@ -112,6 +113,7 @@ act_name_to_url = {
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240903dnfjq/index.html", # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240912wish/indexm.html?pt=1",
+    "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
     #
     # 已过期活动
     #
@@ -225,7 +227,7 @@ class Urls:
         self.ide_default_params_list = [
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
-            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex",
+            "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -292,6 +294,7 @@ class Urls:
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
         self.ide_iActivityId_dnf_wegame = "85_FhnJSy"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
+        self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

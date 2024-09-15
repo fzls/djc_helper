@@ -2941,6 +2941,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
+            ("回流攻坚队", "get_dnf_socialize"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

@@ -683,6 +683,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("喂养删除补偿", self.weiyang_compensate),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -693,7 +694,6 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("勇士的冒险补给", self.maoxian),
             ("DNF格斗大赛", self.dnf_pk),
-            ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
@@ -7451,47 +7451,67 @@ class DjcHelper:
 
         self.check_dnf_kanina()
 
-        self.dnf_kanina_op("见面礼(15天黑钻)", "296547")
+        self.dnf_kanina_op("见面礼(15天黑钻)", "322887")
 
-        self.dnf_kanina_op("更新访问", "297056")
-        self.dnf_kanina_op("跑马灯", "297036", print_res=False)
+        self.dnf_kanina_op("更新访问", "324614")
+        self.dnf_kanina_op("跑马灯", "324613", print_res=False)
 
-        # self.dnf_kanina_op("每日分享", "294436")
+        # self.dnf_kanina_op("每日分享", "324267")
+        #
+        # self.dnf_kanina_op("好友列表（阶段一）", "324271")
+        # self.dnf_kanina_op("发送ark（阶段一）", "324282")
+        # self.dnf_kanina_op("接受邀请（阶段一）", "324285")
+        # self.dnf_kanina_op("开出奖励", "324296")
+        #
+        # self.dnf_kanina_op("任务列表", "324327")
+        # self.dnf_kanina_op("完成任务", "324335")
+        # self.dnf_kanina_op("好友列表（阶段二）", "324486")
+        # self.dnf_kanina_op("发送ark（阶段二）", "324492")
+        # self.dnf_kanina_op("接受邀请（阶段二）", "324506")
+        # self.dnf_kanina_op("领取奖励", "324528")
 
-        # self.dnf_kanina_op("好友列表（阶段一）", "294510")
-        # self.dnf_kanina_op("发送ark消息（阶段一）", "295009")
-        # self.dnf_kanina_op("接受邀请（阶段一）", "295010")
-        # self.dnf_kanina_op("开奖（阶段一）", "295012")
-
-        # self.dnf_kanina_op("刷新任务", "295166")
-        # self.dnf_kanina_op("完成心愿任务", "296093")
-        # self.dnf_kanina_op("领取奖励", "296375")
-        # self.dnf_kanina_op("好友列表（阶段二）", "296501")
-        # self.dnf_kanina_op("发送ark消息（阶段二）", "296505")
-        # self.dnf_kanina_op("接受邀请（阶段二）", "296507")
-
-        # self.dnf_kanina_op("打开彩蛋", "296684")
-        for take_cash_success_people_count in [5000, 10000, 30000]:
+        # self.dnf_kanina_op("打开彩蛋", "324549")
+        for idx in [0, 1, 2]:
             self.dnf_kanina_op(
-                f"全服提现达标奖励 - {take_cash_success_people_count}人", "296906", index=take_cash_success_people_count
+                f"全服提现达标奖励 - {idx}", "324545", index=idx
             )
             time.sleep(5)
-        # self.dnf_kanina_op("新职业角色任务", "296966")
 
-        # self.dnf_kanina_op("好友获奖数据", "297048")
-        # self.dnf_kanina_op("新增好友", "297141")
-        # self.dnf_kanina_op("刷新轮次", "297443")
-        # self.dnf_kanina_op("随机刷新S级别道具", "297969")
+        # self.dnf_kanina_op("好友获奖记录", "324550")
+        # self.dnf_kanina_op("刷新S级道具", "324559")
+        # self.dnf_kanina_op("刷新轮次", "324608")
+        # self.dnf_kanina_op("新增好友", "324612")
+        # self.dnf_kanina_op("题目列表", "325275")
+        # self.dnf_kanina_op("回答题目", "325311")
 
         async_message_box(
             (
-                "卡妮娜摇奖机活动小助手仅领取见面礼（15天黑钻部分），后续部分实际上是拼多多砍一刀玩法，如有兴趣，请自行参与\n"
-                "\n"
-                "大致规则就是分为两阶段\n"
-                "一阶段：抽取10次，确定奖池。而抽奖次数则需要每天分享（每天1次）和邀请他人来获得（每天2次，单个QQ最多帮一次）\n"
-                "二阶段：变成抽任务，通过完成抽到的任务来获得进度值，从而兑换奖池里的东西。而这个抽任务似乎也需要拉人头？\n"
+f"""
+卡妮娜摇奖机活动小助手仅领取见面礼（15天黑钻部分），后续部分实际上是拼多多砍一刀玩法，如有兴趣，请按下面说明自行参与
+
+如果你有4个回归小号（比如那种每年领周年庆代币券的号），那么你可以按下面的流程领取到50元或66QB
+0. 一阶段（拉回归号）
+    1. 大号登录活动页面 {get_act_url("DNF卡妮娜的心愿摇奖机")}，进来可以抽一次，同时可以获得3次抽奖励内容的机会
+    2. 左下角答题可以获得两次，分享可以获得3次，剩下4次需要通过小号完成
+    2. 点击右下角的扫码助力，点复制链接，获得一阶段的链接，发给自己的小号
+    3. 使用4个小号分别点进去这个链接，一直进行到摇一次奖励的步骤，每次大号会获得1次添加奖池机会
+    4. 前面几步凑满10次后，一直按下面的抽奖池，把奖池弄满
+1. 二阶段（拉登录游戏过的回归号）
+    1. 大号再次打开这个活动页面，疯狂点中间的按钮，刷新心愿名单，直到【邀请4位回归】和【邀请2位回归】都在列表里了
+    点右下角的扫码助力，点复制链接，获得二阶段的链接，发给自己的小号
+    2. 使用4个小号分别执行下面操作
+        1. 登录游戏，选一个角色进入赛利亚房间，再随便选个其他频道跳过去，从而被认定为回流玩家
+        2. 打开二阶段的链接，点击宝箱，选择【接受邀请】
+    3. 执行完上述操作后，大号在页面里领取这两个心愿的奖励，得到6个进度值，然后点【50元或66QB】的那个格子，领取奖励
+
+    PS: 不确定先把条件达成，再随机出这个任务，是否也能领取。所以最稳妥是先把这俩任务都碎出来，再操作。实在弄不出来，可以试试先弄完条件，然后一个个随出来，看看是否也可以领
+
+ 每个奖励都是达到对应列的指定进度值就可以领了，所以其他奖励如果你也想要，也可以随对应任务然后去完成
+
+
+"""
             ),
-            "卡妮娜心愿摇奖机活动",
+            "24.9 卡妮娜心愿摇奖机活动",
             show_once=True,
             open_url=get_act_url("DNF卡妮娜的心愿摇奖机"),
         )
@@ -8835,6 +8855,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_kanina()
 
     pause()

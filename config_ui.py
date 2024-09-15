@@ -2938,6 +2938,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("喂养删除补偿", "get_weiyang_compensate"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

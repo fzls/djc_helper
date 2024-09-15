@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "集卡"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
     #
     # 已过期活动
     #
@@ -108,6 +109,7 @@ act_name_to_url = {
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50997_88a8aab7",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
+    "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     #
     # 已过期活动
     #
@@ -289,6 +291,7 @@ class Urls:
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "0_zsJIaU"  # DNF卡妮娜的心愿摇奖机
         self.ide_iActivityId_dnf_wegame = "85_FhnJSy"  # WeGame活动
+        self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

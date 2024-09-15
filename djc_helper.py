@@ -681,6 +681,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("喂养删除补偿", self.weiyang_compensate),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7815,6 +7816,48 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------喂养删除补偿--------------------------------------------
+    @try_except()
+    def weiyang_compensate(self):
+        show_head_line("喂养删除补偿")
+        self.show_not_ams_act_info("喂养删除补偿")
+
+        if not self.cfg.function_switches.get_weiyang_compensate or self.disable_most_activities():
+            show_act_not_enable_warning("喂养删除补偿")
+            return
+
+        self.check_weiyang_compensate()
+
+        self.weiyang_compensate_op("领取补偿", "323733")
+
+    def check_weiyang_compensate(self, **extra_params):
+        return self.ide_check_bind_account(
+            "喂养删除补偿",
+            get_act_url("喂养删除补偿"),
+            activity_op_func=self.weiyang_compensate_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def weiyang_compensate_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_weiyang_compensate
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("喂养删除补偿"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -8729,6 +8772,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.weiyang_compensate()
 
     pause()

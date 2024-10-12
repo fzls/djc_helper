@@ -2934,13 +2934,10 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF漫画预约活动", "get_dnf_comic"),
-            ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
             ("colg其他活动", "get_colg_other_act"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("喂养删除补偿", "get_weiyang_compensate"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
-            ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
             ("回流攻坚队", "get_dnf_socialize"),
         ],
         "QQ空间pskey": [
@@ -2952,6 +2949,9 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("DNF神界成长之路", "get_dnf_shenjie_grow_up"),
+            ("DNF卡妮娜的心愿摇奖机", "get_dnf_kanina"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
             ("WeGame活动", "get_dnf_wegame"),
             ("勇士的冒险补给", "get_maoxian"),
             ("DNF格斗大赛", "get_dnf_pk"),

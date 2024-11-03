@@ -825,13 +825,15 @@ def show_following_regular_activity_expected_info():
     logger.info("")
     _show_head_line("未来一年常规活动周期的预估信息")
 
+    lines = []
+
     heads, colSizes = zip(
         ("序号", 4),
         ("常规活动周期", 12),
         ("预估开始时间", 12),
         ("距今天数", 12),
     )
-    logger.info(color("bold_green") + tableify(heads, colSizes))
+    lines.append(color("bold_green") + tableify(heads, colSizes))
 
     now = get_now()
 
@@ -844,13 +846,13 @@ def show_following_regular_activity_expected_info():
         expected_days = (act_time - now).days
         f"{expected_days}天后"
 
-        logger.info(
-            tableify(
+        lines.append(tableify(
                 [idx + 1, act_name, act_time_str, expected_days],
                 colSizes,
                 need_truncate=False,
-            )
-        )
+            ))
+
+    logger.info("\n" + "\n".join(lines))
 
     if is_first_run("常规活动周期预估信息"):
         async_message_box(

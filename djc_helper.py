@@ -6091,7 +6091,9 @@ class DjcHelper:
         logger.info(f"累计登录天数为 {iLoginTotal}")
         for gift_index, require_login_days in login_gifts_list:
             if iLoginTotal >= require_login_days:
-                self.dnf_luodiye_ide_op(f"[{gift_index}] 累计登录{require_login_days}天礼包", "323147", iIndex=gift_index)
+                self.dnf_luodiye_ide_op(
+                    f"[{gift_index}] 累计登录{require_login_days}天礼包", "323147", iIndex=gift_index
+                )
             else:
                 logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
 
@@ -7486,9 +7488,7 @@ class DjcHelper:
 
         # self.dnf_kanina_op("打开彩蛋", "324549")
         for idx in [0, 1, 2]:
-            self.dnf_kanina_op(
-                f"全服提现达标奖励 - {idx}", "324545", index=idx
-            )
+            self.dnf_kanina_op(f"全服提现达标奖励 - {idx}", "324545", index=idx)
             time.sleep(5)
 
         # self.dnf_kanina_op("好友获奖记录", "324550")
@@ -7500,7 +7500,7 @@ class DjcHelper:
 
         async_message_box(
             (
-f"""
+                f"""
 卡妮娜摇奖机活动小助手仅领取见面礼（15天黑钻部分），后续部分实际上是拼多多砍一刀玩法，如有兴趣，请按下面说明自行参与
 
 如果你有4个回归小号（比如那种每年领周年庆代币券的号），那么你可以按下面的流程领取到50元或66QB
@@ -7816,7 +7816,15 @@ f"""
             "t-access-token": access_token,
         }
 
-    def dnf_xinyue_wpe_op(self, ctx: str, flow_id: int, print_res=True, extra_data: dict | None = None, replace_act_id: str | None = None, **extra_params):
+    def dnf_xinyue_wpe_op(
+        self,
+        ctx: str,
+        flow_id: int,
+        print_res=True,
+        extra_data: dict | None = None,
+        replace_act_id: str | None = None,
+        **extra_params,
+    ):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 

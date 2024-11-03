@@ -1086,8 +1086,9 @@ class AccountConfig(ConfigInterface):
         deprecated_xinyue_flow_id_list = [
             213535,  # (213535, "装扮属性调整箱（神器）*1-（每周1次）-600勇士币"),
         ]
-        self.xinyue_operations_v2 = [item for item in self.xinyue_operations_v2 if item.iFlowId not in deprecated_xinyue_flow_id_list]
-
+        self.xinyue_operations_v2 = [
+            item for item in self.xinyue_operations_v2 if item.iFlowId not in deprecated_xinyue_flow_id_list
+        ]
 
     def check_role_id(self, ctx, role_id) -> bool:
         if len(role_id) != 0 and not role_id.isdigit():

@@ -18,10 +18,11 @@ from util import (
     async_message_box,
     bypass_proxy,
     get_next_regular_activity_desc,
+    get_time_since_last_update,
     is_run_in_github_action,
     is_windows,
     try_except,
-    use_proxy, get_time_since_last_update,
+    use_proxy,
 )
 from version import now_version, ver_time
 

@@ -842,16 +842,21 @@ def show_following_regular_activity_expected_info():
         act_time_str = format_time(act_time, "%Y-%m-%d")
 
         expected_days = (act_time - now).days
-        expected_days_str = f"{expected_days}天后"
+        f"{expected_days}天后"
 
-        logger.info(tableify(
-            [idx + 1, act_name, act_time_str, expected_days],
-            colSizes,
-            need_truncate=False,
-        ))
+        logger.info(
+            tableify(
+                [idx + 1, act_name, act_time_str, expected_days],
+                colSizes,
+                need_truncate=False,
+            )
+        )
 
     if is_first_run("常规活动周期预估信息"):
-        async_message_box("在运行结束的活动链接与小提示中间新增了一个常规活动周期预估信息，可以查看未来一年内的一些常规活动周期的预估时间点，方便大家知晓大概什么时候会有新活动", "常规活动周期预估")
+        async_message_box(
+            "在运行结束的活动链接与小提示中间新增了一个常规活动周期预估信息，可以查看未来一年内的一些常规活动周期的预估时间点，方便大家知晓大概什么时候会有新活动",
+            "常规活动周期预估",
+        )
 
 
 @try_except()

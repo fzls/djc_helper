@@ -114,7 +114,7 @@ act_name_to_url = {
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240912wish/indexm.html?pt=1",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240903dnfjq/index.html", # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240903dnfjq/index.html",  # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/50997_88a8aab7",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "WeGame活动": "https://dnf.qq.com/cp/a20240704wegame/index.html",

@@ -124,7 +124,6 @@ from util import (
     get_random_face,
     hex_str_to_bytes_arr,
     is_valid_qq,
-    kill_process,
     open_with_default_app,
     parse_scode,
     parse_url_param,

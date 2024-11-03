@@ -710,19 +710,24 @@ def test_get_next_expect_date_of_activity():
     now = parse_time("2024-06-01 12:34:56")
 
     # 今年该活动尚未开始，应返回明年的
-    assert get_next_expect_date_of_activity([
-        datetime.datetime(2020, 9, 24),
-        datetime.datetime(2021, 9, 14),
-        datetime.datetime(2022, 9, 22),
-        datetime.datetime(2023, 9, 24),
-        # datetime.datetime(2024, 9, 12),
-    ], now) == datetime.datetime(2024, 9, 20)
+    assert get_next_expect_date_of_activity(
+        [
+            datetime.datetime(2020, 9, 24),
+            datetime.datetime(2021, 9, 14),
+            datetime.datetime(2022, 9, 22),
+            datetime.datetime(2023, 9, 24),
+            # datetime.datetime(2024, 9, 12),
+        ],
+        now,
+    ) == datetime.datetime(2024, 9, 20)
 
     # 今年该活动已开始，计算出应为明年
-    assert get_next_expect_date_of_activity([
-        datetime.datetime(2021, 1, 18),
-        datetime.datetime(2022, 1, 19),
-        datetime.datetime(2023, 1, 13),
-        datetime.datetime(2024, 1, 11),
-    ], now) == datetime.datetime(2025, 1, 15)
-
+    assert get_next_expect_date_of_activity(
+        [
+            datetime.datetime(2021, 1, 18),
+            datetime.datetime(2022, 1, 19),
+            datetime.datetime(2023, 1, 13),
+            datetime.datetime(2024, 1, 11),
+        ],
+        now,
+    ) == datetime.datetime(2025, 1, 15)

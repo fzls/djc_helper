@@ -476,7 +476,12 @@ def show_quick_edit_mode_tip():
 
 
 def change_title(
-    dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False, may_have_buy_dlc=True, show_next_regular_activity_info=False
+    dlc_info="",
+    monthly_pay_info="",
+    multiprocessing_pool_size=0,
+    enable_super_fast_mode=False,
+    may_have_buy_dlc=True,
+    show_next_regular_activity_info=False,
 ):
     if dlc_info == "" and exists_auto_updater_dlc() and may_have_buy_dlc:
         dlc_info = " 自动更新豪华升级版"
@@ -490,7 +495,7 @@ def change_title(
     set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
 
     if show_next_regular_activity_info:
-        now = get_now()
+        get_now()
         time_since_last_update = get_time_since_last_update()
         if time_since_last_update.days >= 14:
             # 距离当前版本发布一定时间后，在标题栏增加显示下次常规活动的预估时间信息
@@ -863,7 +868,9 @@ def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None
     return now - datetime.datetime.strptime(t, time_fmt)
 
 
-def get_next_expect_date_of_activity(past_act_date_list: list[datetime.datetime], now: datetime.datetime | None = None) -> datetime.datetime:
+def get_next_expect_date_of_activity(
+    past_act_date_list: list[datetime.datetime], now: datetime.datetime | None = None
+) -> datetime.datetime:
     """根据过去几年的活动的日期的平均值，推算下一次预估的日期（若今年已过，则取下一年）"""
     now = now or get_now()
 
@@ -874,13 +881,16 @@ def get_next_expect_date_of_activity(past_act_date_list: list[datetime.datetime]
         # 如果现在已经超过今年预估的这个日期，则取下一年
         year = now.year + 1
 
-    expect_next_act_time = now.replace(year=year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=avg_day_in_year - 1)
+    expect_next_act_time = now.replace(
+        year=year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+    ) + datetime.timedelta(days=avg_day_in_year - 1)
 
     return expect_next_act_time
 
 
 def get_act_name_and_next_expect_time_list():
     # re: 上次维护时间 2024.11.3
+    # fmt: off
     act_name_and_next_expect_time_list = [
         ("春节", get_next_expect_date_of_activity([
             datetime.datetime(2021, 1, 18),
@@ -914,6 +924,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2023, 11, 11),
         ])),
     ]
+    # fmt: on
 
     # 按预估时间升序排序
     act_name_and_next_expect_time_list.sort(key=lambda name_and_time: name_and_time[1])

@@ -847,7 +847,7 @@ def show_following_regular_activity_expected_info():
         f"{expected_days}天后"
 
         lines.append(
-            tableify(
+            color("bold_yellow") + tableify(
                 [idx + 1, act_name, act_time_str, expected_days],
                 colSizes,
                 need_truncate=False,

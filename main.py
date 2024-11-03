@@ -126,7 +126,7 @@ def main():
     # 启动时检查是否需要同步本机数据目录备份的旧版本配置
     try_load_old_version_configs_from_user_data_dir()
 
-    change_title()
+    change_title(show_next_regular_activity_info=True)
 
     print_update_message_on_first_run_new_version()
 
@@ -165,7 +165,7 @@ def main():
     pool_size = cfg.get_pool_size()
     init_pool(pool_size)
 
-    change_title(multiprocessing_pool_size=pool_size, enable_super_fast_mode=cfg.common.enable_super_fast_mode)
+    change_title(multiprocessing_pool_size=pool_size, enable_super_fast_mode=cfg.common.enable_super_fast_mode, show_next_regular_activity_info=True)
 
     show_multiprocessing_info(cfg)
 

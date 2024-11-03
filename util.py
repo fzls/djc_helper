@@ -476,7 +476,7 @@ def show_quick_edit_mode_tip():
 
 
 def change_title(
-    dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False, may_have_buy_dlc=True
+    dlc_info="", monthly_pay_info="", multiprocessing_pool_size=0, enable_super_fast_mode=False, may_have_buy_dlc=True, show_next_regular_activity_info=False
 ):
     if dlc_info == "" and exists_auto_updater_dlc() and may_have_buy_dlc:
         dlc_info = " 自动更新豪华升级版"
@@ -488,6 +488,16 @@ def change_title(
             pool_info = "超级" + pool_info
 
     set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
+
+    if show_next_regular_activity_info:
+        now = get_now()
+        time_since_last_update = now - datetime.datetime.strptime(ver_time, "%Y.%m.%d")
+        if time_since_last_update.days >= 14:
+            # 距离当前版本发布一定时间后，在标题栏增加显示下次常规活动的预估时间信息
+            next_act_desc = get_next_regular_activity_desc()
+
+            set_title_cmd = set_title_cmd + " " + next_act_desc
+
     if is_windows():
         os.system(set_title_cmd)
     else:
@@ -921,6 +931,19 @@ def get_next_regular_activity_name_and_expected_datetime() -> tuple[str, datetim
     next_act_name, next_act_time = act_name_and_next_expect_time_list[0]
 
     return next_act_name, next_act_time
+
+
+def get_next_regular_activity_desc() -> str:
+    """
+    获取下个活动的预估信息，示例如下
+        春节 2024.2.1(68天后)
+    """
+    next_act_name, next_act_datetime = get_next_regular_activity_name_and_expected_datetime()
+
+    next_act_datetime_str = format_time(next_act_datetime, "%Y.%m.%d")
+    next_act_days = (next_act_datetime - get_now()).days
+
+    return f"{next_act_name} {next_act_datetime_str}({next_act_days}天后)"
 
 
 def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):

@@ -864,9 +864,57 @@ def get_next_expect_date_of_activity(past_act_date_list: list[datetime.datetime]
         # 如果现在已经超过今年预估的这个日期，则取下一年
         year = now.year + 1
 
-    expect_next_act_time = now.replace(year=year, month=1, day=1) + datetime.timedelta(days=avg_day_in_year - 1)
+    expect_next_act_time = now.replace(year=year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=avg_day_in_year - 1)
 
     return expect_next_act_time
+
+
+def get_next_regular_activity_name_and_expected_datetime() -> tuple[str, datetime.datetime]:
+    """获取下个常规活动的名字与预估日期"""
+
+    # 常规活动周期每年的开始时间统计及下次预估时间
+    # re: 上次维护时间 2024.11.3
+    act_name_and_expect_time_in_year_list = [
+        ("春节", get_next_expect_date_of_activity([
+            datetime.datetime(2021, 1, 18),
+            datetime.datetime(2022, 1, 19),
+            datetime.datetime(2023, 1, 13),
+            datetime.datetime(2024, 1, 11),
+        ])),
+        ("五一", get_next_expect_date_of_activity([
+            datetime.datetime(2021, 4, 22),
+            datetime.datetime(2022, 4, 21),
+            datetime.datetime(2023, 4, 20),
+            datetime.datetime(2024, 4, 18),
+        ])),
+        ("周年庆", get_next_expect_date_of_activity([
+            datetime.datetime(2021, 6, 11),
+            datetime.datetime(2022, 6, 13),
+            datetime.datetime(2023, 6, 15),
+            datetime.datetime(2024, 6, 13),
+        ])),
+        ("国庆", get_next_expect_date_of_activity([
+            datetime.datetime(2020, 9, 24),
+            datetime.datetime(2021, 9, 14),
+            datetime.datetime(2022, 9, 22),
+            datetime.datetime(2023, 9, 24),
+            datetime.datetime(2024, 9, 12),
+        ])),
+        ("嘉年华", get_next_expect_date_of_activity([
+            datetime.datetime(2020, 12, 12),
+            datetime.datetime(2021, 12, 11),
+            datetime.datetime(2022, 11, 20),
+            datetime.datetime(2023, 11, 11),
+        ])),
+    ]
+
+    # 按预估时间升序排序
+    act_name_and_expect_time_in_year_list.sort(key=lambda name_and_time: name_and_time[1])
+
+    # 第一个就是下次的活动
+    next_act_name, next_act_time = act_name_and_expect_time_in_year_list[0]
+
+    return next_act_name, next_act_time
 
 
 def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
@@ -1917,4 +1965,6 @@ if __name__ == "__main__":
 
     # message_box("测试弹窗内容", "测试标题", use_qt_messagebox=True)
 
-    demo_remove_chrome()
+    # demo_remove_chrome()
+
+    print(f"下次常规活动的预估时间：{get_next_regular_activity_name_and_expected_datetime()}")

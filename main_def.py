@@ -60,7 +60,10 @@ from util import (
     format_now,
     format_time,
     get_appdata_dir,
+    get_next_regular_activity_desc,
+    get_next_regular_activity_name_and_expected_datetime,
     get_now,
+    get_time_since_last_update,
     is_run_in_github_action,
     is_windows,
     make_sure_dir_exists,
@@ -1474,9 +1477,6 @@ def show_tips(cfg: Config):
         msg = tip.replace("\n", "\n\n") + "\n"
         message_box(msg, f"一些小提示_{title}", show_once=True, follow_flag_file=False, use_qt_messagebox=True)
 
-    # 尝试给自己展示一些提示
-    show_tips_for_myself()
-
     if cfg.common.disable_cmd_quick_edit:
         show_quick_edit_mode_tip()
 
@@ -1485,11 +1485,24 @@ def show_tips_for_myself():
     if not use_by_myself():
         return
 
+    _show_head_line("仅自己可见的一些小提示")
+
     # if is_weekly_first_run("微信支付维护提示"):
     #     show_tip_for_myself("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
 
     # if is_weekly_first_run("交易乐维护提示"):
     #     show_tip_for_myself("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
+
+    # 若当前版本发布已经超过14天，且距离下次常规活动的预估时间低于7天，则每天尝试提示一下，看看是否已经出了这个活动，准备接入
+    time_since_last_update = get_time_since_last_update()
+    if time_since_last_update.days >= 14:
+        now = get_now()
+
+        _, next_act_datetime = get_next_regular_activity_name_and_expected_datetime()
+        next_act_desc = get_next_regular_activity_desc()
+
+        if (next_act_datetime - now).days <= 7 and is_daily_first_run("常规活动接入"):
+            show_tip_for_myself(f"看看常规活动周期 {next_act_desc} 是否出了，是否可以开始接入了", "常规活动接入")
 
 
 def show_tip_for_myself(msg: str, title: str):

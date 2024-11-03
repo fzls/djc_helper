@@ -39,6 +39,7 @@ from main_def import (
     show_notices,
     show_pay_info,
     show_recommend_reward_tips,
+    show_tips_for_myself,
     try_auto_update,
     try_auto_update_ignore_permission_on_special_case,
     try_join_xinyue_team,
@@ -246,6 +247,9 @@ def main():
     try_save_configs_to_user_data_dir()
 
     increase_counter(name="run/end", ga_type=ga.GA_REPORT_TYPE_PAGE_VIEW)
+
+    # 尝试给自己展示一些提示
+    show_tips_for_myself()
 
     show_head_line("运行完毕")
 

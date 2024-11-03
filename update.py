@@ -21,7 +21,7 @@ from util import (
     is_run_in_github_action,
     is_windows,
     try_except,
-    use_proxy,
+    use_proxy, get_time_since_last_update,
 )
 from version import now_version, ver_time
 
@@ -156,7 +156,7 @@ def get_latest_version_from_github(common_config: CommonConfig) -> str:
 
 @try_except()
 def notify_manual_check_update_on_release_too_long(config: CommonConfig):
-    time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
+    time_since_last_update = get_time_since_last_update()
     max_update_duration_days = 45
     if time_since_last_update.days >= max_update_duration_days:
         next_act_desc = get_next_regular_activity_desc()

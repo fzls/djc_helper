@@ -491,7 +491,7 @@ def change_title(
 
     if show_next_regular_activity_info:
         now = get_now()
-        time_since_last_update = now - datetime.datetime.strptime(ver_time, "%Y.%m.%d")
+        time_since_last_update = get_time_since_last_update()
         if time_since_last_update.days >= 14:
             # 距离当前版本发布一定时间后，在标题栏增加显示下次常规活动的预估时间信息
             next_act_desc = get_next_regular_activity_desc()
@@ -1971,6 +1971,12 @@ def show_act_not_enable_warning(act_name: str):
     logger.warning(f"未启用领取 {act_name} 功能，将跳过")
 
 
+def get_time_since_last_update() -> datetime.timedelta:
+    now = get_now()
+    time_since_last_update = now - datetime.datetime.strptime(ver_time, "%Y.%m.%d")
+    return time_since_last_update
+
+
 if __name__ == "__main__":
     # print(get_now_unix())
     # print(get_this_week_monday())
@@ -1996,4 +2002,6 @@ if __name__ == "__main__":
 
     # demo_remove_chrome()
 
-    print(f"下次常规活动的预估时间：{get_next_regular_activity_name_and_expected_datetime()}")
+    # print(f"下次常规活动的预估时间：{get_next_regular_activity_name_and_expected_datetime()}")
+
+    print(f"距离上次更新的时间：{get_time_since_last_update()}")

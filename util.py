@@ -495,13 +495,10 @@ def change_title(
     set_title_cmd = f"title DNF蚊子腿小助手 {dlc_info} {monthly_pay_info} {pool_info} v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
 
     if show_next_regular_activity_info:
-        get_now()
         time_since_last_update = get_time_since_last_update()
         if time_since_last_update.days >= 14:
             # 距离当前版本发布一定时间后，在标题栏增加显示下次常规活动的预估时间信息
-            next_act_desc = get_next_regular_activity_desc()
-
-            set_title_cmd = set_title_cmd + " " + next_act_desc
+            set_title_cmd = set_title_cmd + " 下个常规活动周期可能是 " + get_next_regular_activity_desc()
 
     if is_windows():
         os.system(set_title_cmd)

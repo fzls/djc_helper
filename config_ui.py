@@ -121,7 +121,9 @@ from util import (
     cache_name_download,
     cache_name_user_buy_info,
     clear_login_status,
+    get_next_regular_activity_desc,
     get_random_face,
+    get_time_since_last_update,
     hex_str_to_bytes_arr,
     is_valid_qq,
     open_with_default_app,
@@ -388,7 +390,13 @@ class ConfigUi(QFrame):
         super().__init__(parent)
 
         self.resize(1080, 780)
+
         title = f"DNF蚊子腿小助手 简易配置工具 v{now_version} {ver_time} by风之凌殇 {get_random_face()}"
+
+        time_since_last_update = get_time_since_last_update()
+        if time_since_last_update.days >= 14:
+            title = title + " 下个常规活动周期可能是 " + get_next_regular_activity_desc()
+
         self.setWindowTitle(title)
 
         self.setStyleSheet("font-family: Microsoft YaHei")

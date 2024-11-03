@@ -59,6 +59,7 @@ from util import (
     exists_flag_file,
     format_now,
     format_time,
+    get_act_name_and_next_expect_time_list,
     get_appdata_dir,
     get_next_regular_activity_desc,
     get_next_regular_activity_name_and_expected_datetime,
@@ -796,6 +797,8 @@ def count_with_color(card_count, show_color, show_width=3):
 def show_extra_infos(cfg: Config):
     show_activity_info(cfg)
 
+    show_following_regular_activity_expected_info()
+
     show_tips(cfg)
 
 
@@ -816,6 +819,39 @@ def show_activity_info(cfg: Config):
 
     user_buy_info = get_user_buy_info(cfg.get_qq_accounts(), show_dlc_info=False)
     show_activities_summary(cfg, user_buy_info)
+
+
+def show_following_regular_activity_expected_info():
+    logger.info("")
+    _show_head_line("未来一年常规活动周期的预估信息")
+
+    heads, colSizes = zip(
+        ("序号", 4),
+        ("常规活动周期", 12),
+        ("预估开始时间", 12),
+        ("距今天数", 12),
+    )
+    logger.info(color("bold_green") + tableify(heads, colSizes))
+
+    now = get_now()
+
+    next_year_act_list = get_act_name_and_next_expect_time_list()
+    for idx, name_and_time in enumerate(next_year_act_list):
+        act_name, act_time = name_and_time
+
+        act_time_str = format_time(act_time, "%Y-%m-%d")
+
+        expected_days = (act_time - now).days
+        expected_days_str = f"{expected_days}天后"
+
+        logger.info(tableify(
+            [idx + 1, act_name, act_time_str, expected_days],
+            colSizes,
+            need_truncate=False,
+        ))
+
+    if is_first_run("常规活动周期预估信息"):
+        async_message_box("在运行结束的活动链接与小提示中间新增了一个常规活动周期预估信息，可以查看未来一年内的一些常规活动周期的预估时间点，方便大家知晓大概什么时候会有新活动", "常规活动周期预估")
 
 
 @try_except()
@@ -2347,6 +2383,7 @@ if __name__ == "__main__":
 
     # demo_show_tips()
     # demo_try_auto_update_ignore_permission_on_special_case()
+    # show_following_regular_activity_expected_info()
 
     # demo_main()
     demo_pay_info()

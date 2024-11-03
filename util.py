@@ -880,6 +880,7 @@ def get_next_expect_date_of_activity(past_act_date_list: list[datetime.datetime]
 
 
 def get_act_name_and_next_expect_time_list():
+    # re: 上次维护时间 2024.11.3
     act_name_and_next_expect_time_list = [
         ("春节", get_next_expect_date_of_activity([
             datetime.datetime(2021, 1, 18),
@@ -914,6 +915,9 @@ def get_act_name_and_next_expect_time_list():
         ])),
     ]
 
+    # 按预估时间升序排序
+    act_name_and_next_expect_time_list.sort(key=lambda name_and_time: name_and_time[1])
+
     return act_name_and_next_expect_time_list
 
 
@@ -921,11 +925,7 @@ def get_next_regular_activity_name_and_expected_datetime() -> tuple[str, datetim
     """获取下个常规活动的名字与预估日期"""
 
     # 常规活动周期每年的开始时间统计及下次预估时间
-    # re: 上次维护时间 2024.11.3
     act_name_and_next_expect_time_list = get_act_name_and_next_expect_time_list()
-
-    # 按预估时间升序排序
-    act_name_and_next_expect_time_list.sort(key=lambda name_and_time: name_and_time[1])
 
     # 第一个就是下次的活动
     next_act_name, next_act_time = act_name_and_next_expect_time_list[0]

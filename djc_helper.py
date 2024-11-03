@@ -674,10 +674,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("DNF漫画预约活动", self.dnf_comic),
             ("colg其他活动", self.colg_other_act),
-            ("colg每日签到", self.colg_signin),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("喂养删除补偿", self.weiyang_compensate),
-            ("回流攻坚队", self.dnf_socialize),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -685,6 +682,9 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("回流攻坚队", self.dnf_socialize),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNF神界成长之路三期", self.dnf_shenjie_grow_up_v3),

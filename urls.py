@@ -61,13 +61,13 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
-    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
-    newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
+    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
@@ -103,13 +103,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
-    "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
     #
     # 已过期活动
     #
+    "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",

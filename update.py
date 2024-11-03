@@ -14,7 +14,15 @@ from download import download_github_raw_content
 from first_run import is_weekly_first_run
 from log import color, logger
 from upload_lanzouyun import Uploader
-from util import async_message_box, bypass_proxy, is_run_in_github_action, is_windows, try_except, use_proxy
+from util import (
+    async_message_box,
+    bypass_proxy,
+    get_next_regular_activity_desc,
+    is_run_in_github_action,
+    is_windows,
+    try_except,
+    use_proxy,
+)
 from version import now_version, ver_time
 
 if is_windows():
@@ -151,9 +159,12 @@ def notify_manual_check_update_on_release_too_long(config: CommonConfig):
     time_since_last_update = datetime.now() - datetime.strptime(ver_time, "%Y.%m.%d")
     max_update_duration_days = 45
     if time_since_last_update.days >= max_update_duration_days:
+        next_act_desc = get_next_regular_activity_desc()
+
         msg = (
             f"当前版本更新于{ver_time}，距今已有{time_since_last_update}。\n"
             "可能原因如下:\n"
+            f"    没有新活动：可能最近没有新活动，根据以往经验，下次常规的活动可能是 {next_act_desc}\n"
             f"    购买了DLC：可能是dlc出了bug，后续版本可能已经修复\n"
             f"    未购买DLC：可能是因网络问题而未能检查更新\n"
             "\n"

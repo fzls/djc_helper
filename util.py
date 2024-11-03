@@ -853,6 +853,22 @@ def get_past_time(t, time_fmt="%Y-%m-%d %H:%M:%S", now: datetime.datetime | None
     return now - datetime.datetime.strptime(t, time_fmt)
 
 
+def get_next_expect_date_of_activity(past_act_date_list: list[datetime.datetime], now: datetime.datetime | None = None) -> datetime.datetime:
+    """根据过去几年的活动的日期的平均值，推算下一次预估的日期（若今年已过，则取下一年）"""
+    now = now or get_now()
+
+    avg_day_in_year = math.floor(sum(dt.timetuple().tm_yday for dt in past_act_date_list) / len(past_act_date_list))
+
+    year = now.year
+    if now.timetuple().tm_yday > avg_day_in_year:
+        # 如果现在已经超过今年预估的这个日期，则取下一年
+        year = now.year + 1
+
+    expect_next_act_time = now.replace(year=year, month=1, day=1) + datetime.timedelta(days=avg_day_in_year - 1)
+
+    return expect_next_act_time
+
+
 def show_end_time(end_time, time_fmt="%Y-%m-%d %H:%M:%S"):
     # end_time = "2021-02-23 00:00:00"
     remaining_time = get_remaining_time(end_time, time_fmt)

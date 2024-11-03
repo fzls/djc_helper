@@ -7975,7 +7975,7 @@ class DjcHelper:
 
         self.check_dnf_socialize()
 
-        def query_sInviteCode() -> string:
+        def query_sInviteCode() -> str:
             res = self.dnf_socialize_op("初始化", "323905")
             return res["jData"]["sInviteCode"]
 

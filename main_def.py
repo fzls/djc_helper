@@ -846,11 +846,13 @@ def show_following_regular_activity_expected_info():
         expected_days = (act_time - now).days
         f"{expected_days}天后"
 
-        lines.append(tableify(
+        lines.append(
+            tableify(
                 [idx + 1, act_name, act_time_str, expected_days],
                 colSizes,
                 need_truncate=False,
-            ))
+            )
+        )
 
     logger.info("\n" + "\n".join(lines))
 

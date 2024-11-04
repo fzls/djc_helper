@@ -847,7 +847,8 @@ def show_following_regular_activity_expected_info():
         f"{expected_days}天后"
 
         lines.append(
-            color("bold_yellow") + tableify(
+            color("bold_yellow")
+            + tableify(
                 [idx + 1, act_name, act_time_str, expected_days],
                 colSizes,
                 need_truncate=False,
@@ -1538,7 +1539,9 @@ def show_tips_for_myself():
         _, next_act_datetime = get_next_regular_activity_name_and_expected_datetime()
 
         if (next_act_datetime - now).days <= 7 and is_daily_first_run("常规活动接入"):
-            show_tip_for_myself(f"看看常规活动周期 {get_next_regular_activity_desc()} 是否出了，是否可以开始接入了", "常规活动接入")
+            show_tip_for_myself(
+                f"看看常规活动周期 {get_next_regular_activity_desc()} 是否出了，是否可以开始接入了", "常规活动接入"
+            )
 
 
 def show_tip_for_myself(msg: str, title: str):

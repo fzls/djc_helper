@@ -192,7 +192,7 @@ def download_latest_github_release(
     )
 
     # 一些注释掉的已失效的，仅留着备忘
-    memo_invalid_mirror_list = [
+    _ = memo_invalid_mirror_list = [  # noqa: F841
         # 588.1KiB/s
         f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
         # 12.1B/s
@@ -341,35 +341,35 @@ def download_github_raw_content(
     )
 
     # 一些注释掉的已失效的，仅留着备忘
-    memo_invalid_mirror_list = [
-            # timeout
-            f"https://raw.kkgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # ConnectionResetError
-            f"https://jsd.proxy.aks.moe/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 421
-            f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # ConnectTimeoutError
-            f"https://mirror.ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # NameResolutionError
-            f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # ConnectTimeoutError
-            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # ConnectionResetError
-            f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # NameResolutionError
-            f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 13.7KiB/s
-            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 502
-            f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # ConnectionResetError
-            f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 531.7B/s
-            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # NameResolutionError
-            f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # ConnectTimeoutError
-            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+    _ = memo_invalid_mirror_list = [  # noqa: F841
+        # timeout
+        f"https://raw.kkgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # ConnectionResetError
+        f"https://jsd.proxy.aks.moe/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        # 421
+        f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # ConnectTimeoutError
+        f"https://mirror.ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # NameResolutionError
+        f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # ConnectTimeoutError
+        f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        # ConnectionResetError
+        f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        # NameResolutionError
+        f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 13.7KiB/s
+        f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+        # 502
+        f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # ConnectionResetError
+        f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # 531.7B/s
+        f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # NameResolutionError
+        f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # ConnectTimeoutError
+        f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
     ]
 
     if TEST_SPEED_MODE:

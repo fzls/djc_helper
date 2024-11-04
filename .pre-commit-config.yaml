@@ -74,7 +74,7 @@ repos:
         - tomli
         args:
 #          - --write-changes
-          - --ignore-words-list=millseconds,te,aci,checkIn
+          - --ignore-words-list=millseconds,te,aci,checkIn,aks
           - --skip="*.csv,*.json"
           - --quiet-level=2
         exclude_types: [csv, json, html]

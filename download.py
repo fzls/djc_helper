@@ -162,24 +162,12 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 8.4MiB/s
-            f"https://gh.con.sh/https://github.com/{release_file_path}",
-            # 8.2MiB/s
-            f"https://dl.ghpig.top/https://github.com/{release_file_path}",
-            # 3.4MiB/s
-            f"https://download.yzuu.cf/{release_file_path}",
-            # 2.5MiB/s
-            f"https://download.fastgit.org/{release_file_path}",
-            # 2.4MiB/s
-            f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-            # 2.2MiB/s
+            # 7.5MiB/s
+            f"https://slink.ltd/https://github.com/{release_file_path}",
+            # 3.0MiB/s
+            f"https://dgithub.xyz/{release_file_path}",
+            # 1.5MiB/s
             f"https://cors.isteed.cc/github.com/{release_file_path}",
-            # 2.1MiB/s
-            f"https://download.njuu.cf/{release_file_path}",
-            # 2.1MiB/s
-            f"https://download.nuaa.cf/{release_file_path}",
-            # 926.3KiB/s
-            f"https://ghps.cc/https://github.com/{release_file_path}",
         ],
     )
 
@@ -187,16 +175,10 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 375.0KiB/s
-            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
-            # 87.6KiB/s
-            f"https://download.fgit.cf/{release_file_path}",
-            # 27.0KiB/s
-            f"https://ghproxy.net/https://github.com/{release_file_path}",
-            # 有时会 100mb.test
-            f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
-            # 有时会 100mb.test
-            f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # 148.0KiB/s
+            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
+            # 289.3KiB/s
+            f"https://www.ghproxy.cc/https://github.com/{release_file_path}",
         ],
     )
 
@@ -204,30 +186,58 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 5.5KiB/s
-            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
-            # ConnectionResetError
-            f"https://ghproxy.com/https://github.com/{release_file_path}",
-            # timeout
+            # 292.3KiB/s
             f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
-            # timeout
-            f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
-            # 181.5B/s
-            f"https://github.com/{release_file_path}",
-            # timeout
-            f"https://kgithub.com/{release_file_path}",
-            # 429
-            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-            # 404
-            f"https://js.xxooo.ml/https://github.com/{release_file_path}",
-            # 404
-            f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-            # 1.3KiB/s
-            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-            # 404
-            f"https://download.fastgit.ixmu.net/{release_file_path}",
         ],
     )
+
+    # 一些注释掉的已失效的，仅留着备忘
+    memo_invalid_mirror_list = [
+        # 588.1KiB/s
+        f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+        # 12.1B/s
+        f"https://gh.con.sh/https://github.com/{release_file_path}",
+        # 2.8KiB/s
+        f"https://dl.ghpig.top/https://github.com/{release_file_path}",
+        # 1.3KiB/s
+        f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
+        # 441.9B/s
+        f"https://js.xxooo.ml/https://github.com/{release_file_path}",
+        # 1.0KiB/s
+        f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+        # 502
+        f"https://download.yzuu.cf/{release_file_path}",
+        # NameResolutionError
+        f"https://download.fastgit.org/{release_file_path}",
+        # 429
+        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+        # NameResolutionError
+        f"https://download.njuu.cf/{release_file_path}",
+        # 502
+        f"https://download.nuaa.cf/{release_file_path}",
+        # 403
+        f"https://ghps.cc/https://github.com/{release_file_path}",
+        # 403
+        f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
+        # NameResolutionError
+        f"https://download.fgit.cf/{release_file_path}",
+        # 502
+        f"https://ghproxy.net/https://github.com/{release_file_path}",
+        # 502
+        f"https://gh-proxy.com/https://github.com/{release_file_path}",
+        # ConnectionResetError
+        f"https://ghproxy.com/https://github.com/{release_file_path}",
+        # NameResolutionError
+        f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
+        # ConnectTimeoutError
+        f"https://github.com/{release_file_path}",
+        # ConnectTimeoutError
+        f"https://kgithub.com/{release_file_path}",
+        # NameResolutionError
+        f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
+        # NameResolutionError
+        f"https://download.fastgit.ixmu.net/{release_file_path}",
+    ]
 
     if TEST_SPEED_MODE:
         logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")

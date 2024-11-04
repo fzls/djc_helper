@@ -296,14 +296,14 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 521.4KiB/s
-            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 556.3KiB/s
-            f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 233.7KiB/s
-            f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 203.6KiB/s
-            f"https://mirror.ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 154.8KiB/s
+            f"https://raw.incept.pw/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 307.8KiB/s
+            f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 153.2KiB/s
+            f"https://jsdelivr.pai233.top/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 157.8KiB/s
+            f"https://ghp.ci/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -311,20 +311,12 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 194.3KiB/s
-            f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 163.3KiB/s
-            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 96.1KiB/s
-            f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 71.1KiB/s
-            f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 16.5KiB/s
-            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 3.7KiB/s
+            # 244.5KiB/s | 421
+            f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 206.0KiB/s | ConnectTimeoutError
+            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 158.3KiB/s | ConnectTimeoutError
             f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 有时会 100mb.test
-            f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -332,23 +324,8 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # timeout
+            # timeout | 21.4KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
-        ],
-    )
-
-    # 再加入可能已失效的镜像
-    extend_urls(
-        urls,
-        [
-            # aborted
-            f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 404
-            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 404
-            f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 404
-            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -356,12 +333,44 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 112.0KiB/s
+            # 54.3KiB/s
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 163.8KiB/s
+            # 703.9KiB/s
             f"https://jsd.cdn.zzko.cn/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
+
+    # 一些注释掉的已失效的，仅留着备忘
+    memo_invalid_mirror_list = [
+            # timeout
+            f"https://raw.kkgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # ConnectionResetError
+            f"https://jsd.proxy.aks.moe/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 421
+            f"https://raw.githubusercontents.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # ConnectTimeoutError
+            f"https://mirror.ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # NameResolutionError
+            f"https://raw.fastgit.org/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # ConnectTimeoutError
+            f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # ConnectionResetError
+            f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # NameResolutionError
+            f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 13.7KiB/s
+            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 502
+            f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # ConnectionResetError
+            f"https://ghproxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 531.7B/s
+            f"https://raw.iqiq.io/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # NameResolutionError
+            f"https://raw.fastgit.ixmu.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # ConnectTimeoutError
+            f"https://raw.kgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+    ]
 
     if TEST_SPEED_MODE:
         logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")

@@ -396,6 +396,8 @@ def download_github_raw_content(
 
 
 def log_mirror_status(current_index: int, total_count: int, mirror: str):
+    if TEST_SPEED_MODE:
+        logger.info("\n")
     logger.info(
         f"{current_index + 1}/{total_count}: 尝试镜像： {mirror}"
         + color("bold_yellow")

@@ -1314,14 +1314,14 @@ class ConfigUi(QFrame):
     def create_others_tab(self, cfg: Config):
         top_layout = QVBoxLayout()
 
-        btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
+        # btn_support = create_pushbutton("作者很胖胖，我要给他买罐肥宅快乐水！", "DodgerBlue", "有钱就是任性.jpeg")
         btn_open_autojs = create_pushbutton("查看autojs版", "SpringGreen")
 
-        btn_support.clicked.connect(self.support)
+        # btn_support.clicked.connect(self.support)
         btn_open_autojs.clicked.connect(self.open_autojs)
 
         layout = QHBoxLayout()
-        layout.addWidget(btn_support)
+        # layout.addWidget(btn_support)
         layout.addWidget(btn_open_autojs)
         top_layout.addLayout(layout)
 

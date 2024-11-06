@@ -1441,7 +1441,7 @@ class ConfigUi(QFrame):
 
     def create_mo_jie_ren_tab(self, cfg: Config):
         self.mo_jie_ren = MoJieRenTab()
-        self.tabs.addTab(self.mo_jie_ren, "跳一跳小工具")
+        # self.tabs.addTab(self.mo_jie_ren, "跳一跳小工具")
 
     def create_account_tabs(self, cfg: Config):
         self.accounts: list[AccountConfigUi] = []

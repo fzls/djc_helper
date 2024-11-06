@@ -3732,14 +3732,16 @@ def report_click_event(event: str):
 
 
 def show_notices():
-    if is_first_run("新增微信支付"):
-        show_message(
-            "新增微信支付",
-            (
-                "这几天新接入了银联微信通道，配置工具的购买界面可以使用微信支付了，各位习惯使用微信支付的朋友下次购买的时候可以试试看~"
-            ),
-            disabled_seconds=5,
-        )
+    # if is_first_run("新增微信支付"):
+    #     show_message(
+    #         "新增微信支付",
+    #         (
+    #             "这几天新接入了银联微信通道，配置工具的购买界面可以使用微信支付了，各位习惯使用微信支付的朋友下次购买的时候可以试试看~"
+    #         ),
+    #         disabled_seconds=5,
+    #     )
+
+    pass
 
 
 def main():

@@ -43,6 +43,7 @@ from db import DnfHelperChronicleExchangeListDB
 from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from notice import Notice, NoticeManager
+from qq_login import QQLogin
 from qt_wrapper import (
     DNFRoleIdValidator,
     MyComboBox,
@@ -259,6 +260,8 @@ class GetBuyInfoThread(QThread):
         if not has_any_account_in_normal_run(self.cfg):
             return
         _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
+
+        QQLogin(self.cfg.common).check_and_download_chrome_ahead()
 
         for _idx, account_config in enumerate(self.cfg.account_configs):
             idx = _idx + 1
@@ -1946,6 +1949,8 @@ class MajieluoConfigUi(QFrame):
 
         account_config = cfg.account_configs[account_index - 1]
 
+        QQLogin(cfg.common).check_and_download_chrome_ahead()
+
         djcHelper = DjcHelper(account_config, cfg.common)
 
         djcHelper.fetch_pskey()
@@ -1994,6 +1999,8 @@ class MajieluoConfigUi(QFrame):
 
         messages: list[str] = []
 
+        QQLogin(cfg.common).check_and_download_chrome_ahead()
+
         for order_index, account_index in enumerate(indexes):  # 从1开始，第i个
             account_config = cfg.account_configs[account_index - 1]
 
@@ -2028,6 +2035,8 @@ class MajieluoConfigUi(QFrame):
         account_index = int(self.lineedit_dahao_index.text())
 
         account_config = cfg.account_configs[account_index - 1]
+
+        QQLogin(cfg.common).check_and_download_chrome_ahead()
 
         djcHelper = DjcHelper(account_config, cfg.common)
 
@@ -3394,6 +3403,8 @@ class RoleSelector(QWidget):
 
         if len(self.get_roles()) == 0:
             logger.info("需要查询角色信息")
+
+            QQLogin(self.common_cfg).check_and_download_chrome_ahead()
 
             djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
             djcHelper.check_skey_expired()

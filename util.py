@@ -886,7 +886,17 @@ def get_next_expect_date_of_activity(
 
 
 def get_act_name_and_next_expect_time_list():
-    # re: 上次维护时间 2024.11.3
+    if use_by_myself():
+        last_maintain_time = parse_time("2024-11-03 00:00:00")
+        now = get_now()
+        since_last_maintain = now - last_maintain_time
+        if since_last_maintain.days >= 365:
+            async_message_box(
+                f"常规活动时间表上次的维护时间是 {last_maintain_time}，距今已有 {since_last_maintain}，超过一年了，需要补充下上次维护之后的常规活动的日期了（参考CHANGELOG中的记录）",
+                "（仅自己可见）该维护常规活动时间表了",
+                show_once_weekly=True,
+            )
+
     # fmt: off
     act_name_and_next_expect_time_list = [
         ("春节", get_next_expect_date_of_activity([

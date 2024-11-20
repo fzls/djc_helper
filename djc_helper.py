@@ -3417,7 +3417,7 @@ class DjcHelper:
             [
                 extra_msg,
                 "",
-                f"账号 {self.cfg.name} 助手token已过期或者未填写，请打开【使用教程/使用文档.docx】，查看其中的【获取助手token】章节的说明",
+                f"账号 {self.cfg.name} 助手token已过期或者未填写，请查看点击确认后自动弹出的在线文档，获取具体设置流程",
             ]
         )
 
@@ -3427,7 +3427,7 @@ class DjcHelper:
             show_message_box_once_key != ""
             and is_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
         ):
-            async_message_box(tips, "助手信息获取指引", print_log=False)
+            async_message_box(tips, "助手信息获取指引", print_log=False, open_url="https://docs.qq.com/doc/DYmN0UldUbmxITkFj")
 
     def reset_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str):
         reset_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))

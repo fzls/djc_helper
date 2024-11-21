@@ -241,7 +241,7 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
 
     # 尝试提取更新信息
     update_message_list_match_groupdict_matches = re.search(
-        r"(?<=更新公告</h1>)\s*<ol.+?>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE
+        r"(?<=更新公告</h1>)(\s|\S)+?<ol.+?>(?P<update_message_list>(\s|\S)+?)</ol>", changelog_html_text, re.MULTILINE
     )
     if update_message_list_match_groupdict_matches is not None:
         update_message_list_match_groupdict = update_message_list_match_groupdict_matches.groupdict()

@@ -64,6 +64,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-21 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
+    newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "集卡"),
     #
     # 已过期活动
     #
@@ -74,7 +75,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-09 23:59:59", "DNF卡妮娜的心愿摇奖机"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-11 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-11 23:59:59", "集卡"),
     newNotAmsActInfo("2024-07-04 11:00:00", "2024-07-24 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
@@ -322,7 +322,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10016
+        self.pesudo_ark_lottery_act_id = 10017
 
         # qq视频 - 爱玩
         self.qq_video_iwan = "https://act.iwan.qq.com/trpc.iwan.mission_system_server.MissionSystemSvr/dealSimpleMission?platformId=10&platformid=10&guid=&device=&acctype=qq&missionId={missionId}&gameId=48&sPlat=&sArea=&serverId={serverId}&sRoleId={sRoleId}"

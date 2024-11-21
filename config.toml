@@ -893,6 +893,8 @@ need_take_awards = false
 10015 = false
 # 2024.09.12 DNFx不良人联动 金秋集卡
 10016 = false
+# 2024.11.21 史诗之路 集卡赢好礼
+10017 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

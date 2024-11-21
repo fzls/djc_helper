@@ -62,11 +62,11 @@ not_ams_activities = [
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-12-31 23:59:59", "喂养删除补偿"),
+    newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-21 23:59:59", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
-    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
@@ -104,11 +104,11 @@ act_name_to_url = {
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/act/a20241121index/",
     #
     # 已过期活动
     #
     "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20240912index/index.html",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
@@ -282,7 +282,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "15_s0hJrQ"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "62_jr3nPf"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "54_YcTeoZ"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚

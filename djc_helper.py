@@ -675,6 +675,7 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("colg其他活动", self.colg_other_act),
             ("喂养删除补偿", self.weiyang_compensate),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -683,7 +684,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("回流攻坚队", self.dnf_socialize),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
@@ -6062,21 +6062,21 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "323006", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "343548", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
             iLottery = int(raw_info["iLottery"])
 
             # 累计登录天数
-            iLoginTotal = int(raw_info["iCumulative"])
+            iLoginTotal = int(raw_info["iLoginTotal"])
 
             return iLottery, iLoginTotal
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("见面礼", "323090")
+        self.dnf_luodiye_ide_op("周年礼包", "343643")
 
-        self.dnf_luodiye_ide_op("每日登录", "323145")
+        self.dnf_luodiye_ide_op("每日登录礼包", "343648")
 
         login_gifts_list = [
             (1, 3),
@@ -6092,16 +6092,16 @@ class DjcHelper:
         for gift_index, require_login_days in login_gifts_list:
             if iLoginTotal >= require_login_days:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累计登录{require_login_days}天礼包", "323147", iIndex=gift_index
+                    f"[{gift_index}] 累计登录礼包 {require_login_days}天", "343652", iIndex=gift_index
                 )
             else:
                 logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
 
         tasks = [
-            ("每日任务一", "323318"),
-            ("每日任务二", "323319"),
-            ("每周任务一", "323320"),
-            ("每周任务二", "323321"),
+            ("每日任务一", "343653"),
+            ("每日任务二", "343654"),
+            ("每周任务一", "343655"),
+            ("每周任务二", "343656"),
         ]
         for name, flowid in tasks:
             self.dnf_luodiye_ide_op(name, flowid)
@@ -6121,7 +6121,7 @@ class DjcHelper:
         iLottery, _ = query_info()
         logger.info(f"当前抽奖次数为 {iLottery}")
         for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 抽奖", "323323")
+            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "343662")
             _ = res
             # if res["ret"] == 10001:
             #     break
@@ -6129,7 +6129,7 @@ class DjcHelper:
 
         async_message_box(
             "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
-            "24.9 落地页拉回归活动",
+            "24.11 落地页拉回归活动",
             show_once=True,
             open_url=get_act_url("DNF落地页活动_ide"),
         )
@@ -8958,6 +8958,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_shenjie_grow_up_v3()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

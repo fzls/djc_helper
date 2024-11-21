@@ -2616,30 +2616,32 @@ class DjcHelper:
         # self.qzone_act_op("累计签到7天", "116132_ec305918")
         # self.qzone_act_op("累计签到14天", "116133_5ffc64db")
 
-        # # https://act.qzone.qq.com/v2/vip/tx/p/50913_5b2be9ff?enteranceId=dnfzs&traceTint=tianxuan_copy
-        # lucky_act_id = "115521_56f0e7f5"
-        # self.qzone_act_op("QQ会员 幸运勇士 - 当前角色", lucky_act_id)
-        # self.qzone_act_op(
-        #     "QQ会员 幸运勇士 - 集卡幸运角色",
-        #     lucky_act_id,
-        #     act_req_data=self.try_make_lucky_user_req_data(
-        #         "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
-        #     ),
-        # )
+        # https://act.qzone.qq.com/v2/vip/tx/p/51488_4bb4f04b?traceTint=tianxuan_copy
+        lucky_act_id = "119256_e72df5a1"
+        self.qzone_act_op("QQ会员 幸运勇士 - 当前角色", lucky_act_id)
+        self.qzone_act_op(
+            "QQ会员 幸运勇士 - 集卡幸运角色",
+            lucky_act_id,
+            act_req_data=self.try_make_lucky_user_req_data(
+                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
+            ),
+        )
 
-        # if not self.cfg.function_switches.disable_share and is_first_run(
-        #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
-        # ):
-        #     self.qzone_act_op(
-        #         "分享给自己",
-        #         "73043_c6fd6bf4",
-        #         act_req_data={
-        #             "receivers": [
-        #                 self.qq(),
-        #             ]
-        #         },
-        #     )
-        # self.qzone_act_op("分享领取礼包", "73044_fb4771e1")
+        if not self.cfg.function_switches.disable_share and is_first_run(
+            f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
+        ):
+            self.qzone_act_op(
+                "分享给自己",
+                "119257_dd20e826",
+                act_req_data={
+                    "receivers": [
+                        self.qq(),
+                    ]
+                },
+            )
+
+        self.qzone_act_op("专属红包礼", "119258_dbd6d1c0")
+        self.qzone_act_op("分享领取礼包", "119306_94a1c801")
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
 
@@ -8958,6 +8960,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_super_vip()
 
     pause()

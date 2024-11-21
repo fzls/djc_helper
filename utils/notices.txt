@@ -408,5 +408,15 @@
     "open_url": "",
     "expire_at": "2024-11-14 20:33:56",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "24.11 集卡活动",
+    "message": "集卡的查询信息、赠送、索取卡片接口好像有点调整，不过不影响抽卡部分，大家先用着，我这两天尽快适配新的接口~\n",
+    "send_at": "2024-11-21 21:32:19",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2024-11-28 21:32:19",
+    "show_only_before_version": ""
   }
 ]

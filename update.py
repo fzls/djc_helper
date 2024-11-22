@@ -253,8 +253,12 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
             )
     else:
         async_message_box(
-            "走到这里说明提取更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0",
-            "检查更新出错了",
+            (
+                "走到这里说明提取更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0\n"
+                "\n"
+                "（只是影响查看更新内容，不影响小助手的正常使用~）"
+            ),
+            "提取更新内容出错了",
             show_once_daily=True,
         )
 
@@ -310,6 +314,15 @@ def get_update_info_by_download_raw_file() -> UpdateInfo:
         async_message_box(
             "走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0",
             "检查更新出错了",
+            show_once_daily=True,
+        )
+        async_message_box(
+            (
+                "走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，请到群里@我反馈，多谢0-0\n"
+                "\n"
+                "（只是影响查看更新内容，不影响小助手的正常使用~）"
+            ),
+            "提取更新内容出错了",
             show_once_daily=True,
         )
 

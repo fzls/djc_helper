@@ -2974,9 +2974,8 @@ class DjcHelper:
             packetID=self.ark_lottery_packet_id_card,
             g_tk=getACSRFTokenForAMS(self.lr.p_skey),
         )
-        body: dict = {}
 
-        res = self._qzone_act_op("查询卡片", url, body, print_res=False)
+        res = self._qzone_act_get_op("查询卡片", url, print_res=False)
 
         card_counts = {}
         # 初始化，确保每个卡片都有值

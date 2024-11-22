@@ -1498,6 +1498,10 @@ def show_tips(cfg: Config):
             "嘉年华的预约活动需要分享给好友才能领取奖励，有兴趣的朋友请自行在页面上分享后领取\n"
             "https://dnf.qq.com/cp/a20241122live/\n"
         ),
+        "24.11 加官方Q群活动": (
+            "加入官方QQ群，可以领取一个蚊子腿，有兴趣的可以查看下方的网页\n"
+            "https://dnf.qq.com/cp/a20241015dnf_114152/\n"
+        ),
     }
 
     logger.info(

@@ -106,6 +106,7 @@ act_name_to_url = {
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20241121index/",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
@@ -121,7 +122,6 @@ act_name_to_url = {
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",

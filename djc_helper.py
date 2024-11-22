@@ -678,6 +678,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -696,7 +697,6 @@ class DjcHelper:
             ("勇士的冒险补给", self.maoxian),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
@@ -4782,10 +4782,10 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "万物有灵守护不息",
-            "DNF16周年生日快乐",
-            "冲云破雾一路横扫",
-            "6月13日登录领好礼",
+            "2024嘉年华",
+            "FATE/ZERO动画联动返场",
+            "13强化券在线送",
+            "重力之泉版本来袭",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -8959,6 +8959,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_welfare()
 
     pause()

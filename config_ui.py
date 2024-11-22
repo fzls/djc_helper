@@ -2952,6 +2952,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -2971,7 +2972,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("勇士的冒险补给", "get_maoxian"),
             ("DNF格斗大赛", "get_dnf_pk"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNFxSNK", "get_dnf_snk"),
             ("9163补偿", "get_dnf_9163_apologize"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),

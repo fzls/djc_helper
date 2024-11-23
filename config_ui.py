@@ -40,7 +40,6 @@ from config import (
 )
 from config_cloud import config_cloud
 from db import DnfHelperChronicleExchangeListDB
-from first_run import is_first_run
 from log import color, fileHandler, logger, new_file_handler
 from notice import Notice, NoticeManager
 from qq_login import QQLogin

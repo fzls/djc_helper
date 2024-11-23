@@ -3429,7 +3429,9 @@ class DjcHelper:
             show_message_box_once_key != ""
             and is_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
         ):
-            async_message_box(tips, "助手信息获取指引", print_log=False, open_url="https://docs.qq.com/doc/DYmN0UldUbmxITkFj")
+            async_message_box(
+                tips, "助手信息获取指引", print_log=False, open_url="https://docs.qq.com/doc/DYmN0UldUbmxITkFj"
+            )
 
     def reset_show_dnf_helper_info_guide_key(self, show_message_box_once_key: str):
         reset_first_run(self.get_show_dnf_helper_info_guide_key(show_message_box_once_key))
@@ -7938,7 +7940,7 @@ class DjcHelper:
         self.dnf_star_and_wish_op("见面礼", "340356")
         self.dnf_star_and_wish_op("幸运勇士礼包", "340360")
 
-        self.dnf_star_and_wish_op("许愿道具", "340366", iIndex = 0)
+        self.dnf_star_and_wish_op("许愿道具", "340366", iIndex=0)
 
         self.dnf_star_and_wish_op("登录游戏奖励", "340569")
         self.dnf_star_and_wish_op("副本通关奖励", "340571")

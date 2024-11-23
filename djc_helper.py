@@ -679,6 +679,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("集卡", self.dnf_ark_lottery),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("嘉年华星与心愿", self.dnf_star_and_wish),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7922,6 +7923,56 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------嘉年华星与心愿--------------------------------------------
+    @try_except()
+    def dnf_star_and_wish(self):
+        show_head_line("嘉年华星与心愿")
+        self.show_not_ams_act_info("嘉年华星与心愿")
+
+        if not self.cfg.function_switches.get_dnf_star_and_wish or self.disable_most_activities():
+            show_act_not_enable_warning("嘉年华星与心愿")
+            return
+
+        self.check_dnf_star_and_wish()
+
+        self.dnf_star_and_wish_op("见面礼", "340356")
+        self.dnf_star_and_wish_op("幸运勇士礼包", "340360")
+
+        self.dnf_star_and_wish_op("许愿道具", "340366", iIndex = 0)
+
+        self.dnf_star_and_wish_op("登录游戏奖励", "340569")
+        self.dnf_star_and_wish_op("副本通关奖励", "340571")
+        # self.dnf_star_and_wish_op("助力好友", "340596")
+
+        async_message_box(
+            "复原星图部分需要自己在网页上玩小游戏，跟DNF里那个基本差不多，有兴趣的可以自己完成",
+            "星与心愿 复原星团",
+            open_url=get_act_url("嘉年华星与心愿"),
+            show_once=True,
+        )
+
+    def check_dnf_star_and_wish(self):
+        return self.ide_check_bind_account(
+            "嘉年华星与心愿",
+            get_act_url("嘉年华星与心愿"),
+            activity_op_func=self.dnf_star_and_wish_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_star_and_wish_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.ide_iActivityId_dnf_star_and_wish
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("嘉年华星与心愿"),
+            **extra_params,
+        )
+
     # --------------------------------------------喂养删除补偿--------------------------------------------
     @try_except()
     def weiyang_compensate(self):
@@ -8959,6 +9010,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_star_and_wish()
 
     pause()

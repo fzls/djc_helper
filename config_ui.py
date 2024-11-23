@@ -2953,6 +2953,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("嘉年华星与心愿", "get_dnf_star_and_wish"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

@@ -3826,7 +3826,6 @@ class DjcHelper:
             "userId": dnf_helper_info.userId,
             "sPartition": partition,
             "sRoleId": roleid,
-            "print_res": False,
             "uin": self.qq(),
             "toUin": self.qq(),
             "token": dnf_helper_info.token,
@@ -3870,7 +3869,7 @@ class DjcHelper:
 
             return query_data
 
-        def dzhu_get(ctx: str, api: str, **extra_params) -> dict:
+        def dzhu_get(ctx: str, api: str, print_res=False, **extra_params) -> dict:
             data = {
                 **common_params,
                 **extra_params,
@@ -3888,10 +3887,11 @@ class DjcHelper:
                     **data,
                     **actual_query_data,
                 },
+                print_res=print_res,
             )
             return res
 
-        def dzhu_post(ctx: str, api: str, **extra_params) -> dict:
+        def dzhu_post(ctx: str, api: str, print_res=False, **extra_params) -> dict:
             data = {
                 **common_params,
                 **extra_params,
@@ -3904,6 +3904,7 @@ class DjcHelper:
                 self.urls.dnf_helper_chronicle_yoyo,
                 api=api,
                 data=post_json_to_data(data),
+                print_res=print_res,
             )
             return res
 

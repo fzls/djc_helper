@@ -3831,6 +3831,9 @@ class DjcHelper:
             "toUin": self.qq(),
             "token": dnf_helper_info.token,
             "uniqueRoleId": dnf_helper_info.uniqueRoleId,
+            "gameId": 1006,
+            "game_code": "dnf",
+            "cGameId": 1006,
         }
 
         hmac_sha1_secret = "nKJH89hh@8yoHJ98y&IOhIUt9hbOh98ht"
@@ -3890,7 +3893,7 @@ class DjcHelper:
 
             return query_data
 
-        def wang_get(ctx: str, api: str, **extra_params) -> dict:
+        def dzhu_get(ctx: str, api: str, **extra_params) -> dict:
             data = {
                 **common_params,
                 **extra_params,
@@ -3911,23 +3914,7 @@ class DjcHelper:
             )
             return res
 
-        def wegame_post(ctx: str, api: str, **extra_params) -> dict:
-            data = {
-                **common_params,
-                **extra_params,
-            }
-            api_path = get_api_path(self.urls.dnf_helper_chronicle_mwegame, api=api, **data)
-            append_signature_to_data(data, "POST", api_path)
-
-            res = self.post(
-                ctx,
-                self.urls.dnf_helper_chronicle_mwegame,
-                api=api,
-                **data,
-            )
-            return res
-
-        def yoyo_post(ctx: str, api: str, **extra_params) -> dict:
+        def dzhu_post(ctx: str, api: str, **extra_params) -> dict:
             data = {
                 **common_params,
                 **extra_params,
@@ -4033,7 +4020,7 @@ class DjcHelper:
 
         # ------ 绑定搭档 ------
         def bind_user_partner(ctx: str, partner_user_id: str, isBind="1"):
-            res = wegame_post(
+            res = dzhu_post(
                 ctx,
                 "bindUserPartner",
                 pUserId=partner_user_id,
@@ -4055,10 +4042,9 @@ class DjcHelper:
                     )
 
         def query_bind_qq_info() -> DnfHelperChronicleBindInfo:
-            raw_res = yoyo_post(
+            raw_res = dzhu_post(
                 "查询助手与QQ绑定信息",
                 "getcheatguardbinding",
-                gameId=10014,
             )
 
             return DnfHelperChronicleBindInfo().auto_update_config(raw_res.get("data", {}))
@@ -4066,10 +4052,9 @@ class DjcHelper:
         @try_except(return_val_on_except=False)
         def bind_qq() -> bool:
             current_qq = self.qq()
-            raw_res = yoyo_post(
+            raw_res = dzhu_post(
                 f"{self.cfg.name} 将编年史与当前QQ({current_qq})绑定",
                 "bindcheatguard",
-                gameId=10014,
                 bindUin=current_qq,
             )
 
@@ -4078,23 +4063,23 @@ class DjcHelper:
 
         # ------ 查询各种信息 ------
         def exchange_list() -> DnfHelperChronicleExchangeList:
-            res = wang_get("可兑换道具列表", "list/exchange")
+            res = dzhu_get("可兑换道具列表", "list/exchange")
             return DnfHelperChronicleExchangeList().auto_update_config(res)
 
         def basic_award_list() -> DnfHelperChronicleBasicAwardList:
-            res = wang_get("基础奖励与搭档奖励", "list/basic")
+            res = dzhu_get("基础奖励与搭档奖励", "list/basic")
             return DnfHelperChronicleBasicAwardList().auto_update_config(res)
 
         def lottery_list() -> DnfHelperChronicleLotteryList:
-            res = wang_get("碎片抽奖奖励", "lottery/receive")
+            res = dzhu_get("碎片抽奖奖励", "lottery/receive")
             return DnfHelperChronicleLotteryList().auto_update_config(res)
 
         def getUserActivityTopInfo() -> DnfHelperChronicleUserActivityTopInfo:
-            res = wegame_post("活动基础状态信息", "getUserActivityTopInfo")
+            res = dzhu_post("活动基础状态信息", "getUserActivityTopInfo")
             return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
         def _getUserTaskList() -> dict:
-            result = wegame_post("任务信息", "getUserTaskList")
+            result = dzhu_post("任务信息", "getUserTaskList")
             return result
 
         def getUserTaskList() -> DnfHelperChronicleUserTaskList:
@@ -4102,7 +4087,7 @@ class DjcHelper:
             return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
         def sign_gifts_list() -> DnfHelperChronicleSignList:
-            res = wang_get("连续签到奖励列表", "list/sign")
+            res = dzhu_get("连续签到奖励列表", "list/sign")
             return DnfHelperChronicleSignList().auto_update_config(res)
 
         # ------ 领取各种奖励 ------
@@ -4180,7 +4165,7 @@ class DjcHelper:
                 logger.info(f"{actionName}已经领取过了")
 
         def doActionIncrExp(actionName, actionId, exp):
-            res = yoyo_post("领取任务经验", "doactionincrexp", gameId=1006, actionId=actionId)
+            res = dzhu_post("领取任务经验", "doactionincrexp", actionId=actionId)
 
             data = res.get("data", 0)
             if data != 0:
@@ -4215,7 +4200,7 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def take_continuous_signin_gift_op(giftInfo: DnfHelperChronicleSignGiftInfo):
-            res = wang_get(
+            res = dzhu_get(
                 f"领取 {giftInfo.sDays} 签到奖励",
                 "send/sign",
                 amsid="",
@@ -4272,7 +4257,7 @@ class DjcHelper:
             else:
                 mold = 2  # 队友
                 side = "队友"
-            res = wang_get(
+            res = dzhu_get(
                 "领取基础奖励",
                 "send/basic",
                 isLock=awardInfo.isLock,
@@ -4379,7 +4364,7 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False, extra_msg=extra_msg)
         def exchange_award_op(ctx: str, giftInfo: DnfHelperChronicleExchangeGiftInfo):
-            res = wang_get(
+            res = dzhu_get(
                 "兑换奖励",
                 "send/exchange",
                 exNum=1,
@@ -4405,7 +4390,7 @@ class DjcHelper:
 
         def op_lottery(idx: int, totalLotteryTimes: int):
             ctx = f"[{idx}/{totalLotteryTimes}]"
-            res = wang_get(
+            res = dzhu_get(
                 f"{ctx} 抽奖",
                 "send/lottery",
                 amsid="lottery_0007",

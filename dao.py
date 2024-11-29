@@ -727,6 +727,8 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
         self.currentExp = 0
         self.levelExp = 5
         self.giftImage = "https://mcdn.gtimg.com/bbcdn/dnf/Scorereward/sLbPic2/icons/202011262233235fbfbcb30af65.png"
+        self.isClose = False
+        self.signCardNum = "3"
 
     def get_level_info_and_points_to_show(self) -> tuple[str, int]:
         levelInfo = f"LV{self.level}({self.currentExp}/{self.levelExp})"

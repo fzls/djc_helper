@@ -3855,21 +3855,13 @@ class DjcHelper:
                     "accessToken": access_token,
                 }
 
-        def get_url_query_data(url_template: str, **params) -> dict[str, str]:
-            full_url = self.format(url_template, **params)
-            query_string = urlparse(full_url).query
-
-            query_data = dict(parse_qsl(query_string, keep_blank_values=True))
-
-            return query_data
-
         def dzhu_get(ctx: str, api: str, print_res=False, **extra_params) -> dict:
             data = {
                 **common_params,
                 **extra_params,
             }
             api_path = self.get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
-            actual_query_data = get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
+            actual_query_data = self.get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
 
             self.append_signature_to_data(actual_query_data, "GET", api_path)
 
@@ -4492,6 +4484,14 @@ class DjcHelper:
         api_path = urlparse(full_url).path
 
         return api_path
+
+    def get_url_query_data(self, url_template: str, **params) -> dict[str, str]:
+        full_url = self.format(url_template, **params)
+        query_string = urlparse(full_url).query
+
+        query_data = dict(parse_qsl(query_string, keep_blank_values=True))
+
+        return query_data
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:

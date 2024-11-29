@@ -4508,39 +4508,12 @@ class DjcHelper:
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
-        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
-        dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.get_dnf_bind_role()
-        partition = roleinfo.serviceID
-        roleid = roleinfo.roleCode
-
-        if userId == "":
-            userId = dnf_helper_info.userId
-
-        common_params = {
-            "userId": userId,
-            "sPartition": partition,
-            "sRoleId": roleid,
-            "print_res": False,
-        }
-        res = self.post("活动基础状态信息", url_mwegame, "", api="getUserActivityTopInfo", **common_params)
+        res = self.dzhu_post("活动基础状态信息", "getUserActivityTopInfo", common_params=self.get_common_params())
         return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserTaskList())
     def query_dnf_helper_chronicle_user_task_list(self) -> DnfHelperChronicleUserTaskList:
-        url_mwegame = self.urls.dnf_helper_chronicle_mwegame
-        dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.get_dnf_bind_role()
-        partition = roleinfo.serviceID
-        roleid = roleinfo.roleCode
-
-        common_params = {
-            "userId": dnf_helper_info.userId,
-            "sPartition": partition,
-            "sRoleId": roleid,
-            "print_res": False,
-        }
-        res = self.post("任务信息", url_mwegame, "", api="getUserTaskList", **common_params)  # type: ignore
+        res = self.dzhu_post("任务信息", "getUserTaskList", common_params=self.get_common_params())
         return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
     @try_except(return_val_on_except=False)

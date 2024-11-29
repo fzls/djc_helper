@@ -3856,43 +3856,10 @@ class DjcHelper:
                 }
 
         def dzhu_get(ctx: str, api: str, print_res=False, **extra_params) -> dict:
-            data = {
-                **common_params,
-                **extra_params,
-            }
-            api_path = self.get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
-            actual_query_data = self.get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
-
-            self.append_signature_to_data(actual_query_data, "GET", api_path)
-
-            res = self.get(
-                ctx,
-                self.urls.dnf_helper_chronicle_wang_xinyue,
-                api=api,
-                **{
-                    **data,
-                    **actual_query_data,
-                },
-                print_res=print_res,
-            )
-            return res
+            return self.dzhu_get(ctx, api, print_res, common_params, **extra_params)
 
         def dzhu_post(ctx: str, api: str, print_res=False, **extra_params) -> dict:
-            data = {
-                **common_params,
-                **extra_params,
-            }
-            api_path = self.get_api_path(self.urls.dnf_helper_chronicle_yoyo, api=api)
-            self.append_signature_to_data(data, "POST", api_path)
-
-            res = self.post(
-                ctx,
-                self.urls.dnf_helper_chronicle_yoyo,
-                api=api,
-                data=post_json_to_data(data),
-                print_res=print_res,
-            )
-            return res
+            return self.dzhu_post(ctx, api, print_res, common_params, **extra_params)
 
         # ------ 自动绑定 ------
         @try_except(return_val_on_except=None)
@@ -4492,6 +4459,46 @@ class DjcHelper:
         query_data = dict(parse_qsl(query_string, keep_blank_values=True))
 
         return query_data
+
+
+    def dzhu_get(self, ctx: str, api: str, print_res=False, common_params: dict = None, **extra_params) -> dict:
+        data = {
+            **common_params,
+            **extra_params,
+        }
+        api_path = self.get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
+        actual_query_data = self.get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
+
+        self.append_signature_to_data(actual_query_data, "GET", api_path)
+
+        res = self.get(
+            ctx,
+            self.urls.dnf_helper_chronicle_wang_xinyue,
+            api=api,
+            **{
+                **data,
+                **actual_query_data,
+            },
+            print_res=print_res,
+        )
+        return res
+
+    def dzhu_post(self, ctx: str, api: str, print_res=False, common_params: dict = None, **extra_params) -> dict:
+        data = {
+            **common_params,
+            **extra_params,
+        }
+        api_path = self.get_api_path(self.urls.dnf_helper_chronicle_yoyo, api=api)
+        self.append_signature_to_data(data, "POST", api_path)
+
+        res = self.post(
+            ctx,
+            self.urls.dnf_helper_chronicle_yoyo,
+            api=api,
+            data=post_json_to_data(data),
+            print_res=print_res,
+        )
+        return res
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:

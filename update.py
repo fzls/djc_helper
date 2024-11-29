@@ -253,12 +253,12 @@ def _get_update_info(changelog_page: str, readme_page: str) -> UpdateInfo:
                 f"{idx + 1}. {message}" for idx, message in enumerate(update_messages)
             )
     else:
-        update_info.update_message = "更新内容解析失败，不影响正常使用。如有兴趣，可查看最新版本 相关信息/CHANGELOG.MD 中最上面的内容"
+        update_info.update_message = (
+            "更新内容解析失败，不影响正常使用。如有兴趣，可查看最新版本 相关信息/CHANGELOG.MD 中最上面的内容"
+        )
         if use_by_myself():
             async_message_box(
-                (
-                    "走到这里说明提取更新信息的正则表达式不符合最新的网页了，去瞅瞅看是否需要调整正则表达式\n"
-                ),
+                ("走到这里说明提取更新信息的正则表达式不符合最新的网页了，去瞅瞅看是否需要调整正则表达式\n"),
                 f"(仅自己可见)提取更新内容出错了 {now_version} {ver_time}",
                 show_once_daily=True,
             )
@@ -312,12 +312,12 @@ def get_update_info_by_download_raw_file() -> UpdateInfo:
     if update_message_matches is not None:
         update_info.update_message = update_message_matches.groupdict()["update_message"]
     else:
-        update_info.update_message = "更新内容解析失败，不影响正常使用。如有兴趣，可查看最新版本 相关信息/CHANGELOG.MD 中最上面的内容"
+        update_info.update_message = (
+            "更新内容解析失败，不影响正常使用。如有兴趣，可查看最新版本 相关信息/CHANGELOG.MD 中最上面的内容"
+        )
         if use_by_myself():
             async_message_box(
-                (
-                    "走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，去瞅瞅看是否需要调整正则表达式\n"
-                ),
+                ("走到这里说明从raw文件解析更新信息的正则表达式不符合最新的网页了，去瞅瞅看是否需要调整正则表达式\n"),
                 f"(仅自己可见)提取更新内容出错了 {now_version} {ver_time}",
                 show_once_daily=True,
             )

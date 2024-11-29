@@ -758,7 +758,8 @@ class DnfHelperChronicleUserTaskList(ConfigInterface):
 
     def get_partner_info(self, dnf_helper_info) -> str:
         from config import DnfHelperInfoConfig
-        dnf_helper_info: DnfHelperInfoConfig
+
+        dnf_helper_info: DnfHelperInfoConfig  # type: ignore
 
         partner_name = ""
         if dnf_helper_info.pNickName != "":

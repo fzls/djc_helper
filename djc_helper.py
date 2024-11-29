@@ -3842,10 +3842,10 @@ class DjcHelper:
                 }
 
         def dzhu_get(ctx: str, api: str, print_res=False, **extra_params) -> dict:
-            return self.dzhu_get(ctx, api, print_res, common_params, **extra_params)
+            return self.dzhu_get(ctx, api, common_params, print_res, **extra_params)
 
         def dzhu_post(ctx: str, api: str, print_res=False, **extra_params) -> dict:
-            return self.dzhu_post(ctx, api, print_res, common_params, **extra_params)
+            return self.dzhu_post(ctx, api, common_params, print_res, **extra_params)
 
         # ------ 自动绑定 ------
         @try_except(return_val_on_except=None)
@@ -4391,8 +4391,7 @@ class DjcHelper:
             partner_name = taskInfo.get_partner_info(dnf_helper_info)
 
             logger.warning(
-                color("fg_bold_cyan")
-                + f"你的搭档是 {partner_name}，因接口调整，暂时无法查询到对方的等级信息~"
+                color("fg_bold_cyan") + f"你的搭档是 {partner_name}，因接口调整，暂时无法查询到对方的等级信息~"
             )
 
         # 更新本月的进度信息
@@ -4431,7 +4430,6 @@ class DjcHelper:
         data["sig"] = signature
         return
 
-
     def get_api_path(self, url_template: str, **params) -> str:
         full_url = self.format(url_template, **params)
         api_path = urlparse(full_url).path
@@ -4467,7 +4465,7 @@ class DjcHelper:
 
         return common_params
 
-    def dzhu_get(self, ctx: str, api: str, print_res=False, common_params: dict = None, **extra_params) -> dict:
+    def dzhu_get(self, ctx: str, api: str, common_params: dict, print_res=False, **extra_params) -> dict:
         data = {
             **common_params,
             **extra_params,
@@ -4489,7 +4487,7 @@ class DjcHelper:
         )
         return res
 
-    def dzhu_post(self, ctx: str, api: str, print_res=False, common_params: dict = None, **extra_params) -> dict:
+    def dzhu_post(self, ctx: str, api: str, common_params: dict, print_res=False, **extra_params) -> dict:
         data = {
             **common_params,
             **extra_params,
@@ -4508,12 +4506,12 @@ class DjcHelper:
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self) -> DnfHelperChronicleUserActivityTopInfo:
-        res = self.dzhu_post("活动基础状态信息", "getUserActivityTopInfo", common_params=self.get_common_params())
+        res = self.dzhu_post("活动基础状态信息", "getUserActivityTopInfo", self.get_common_params())
         return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserTaskList())
     def query_dnf_helper_chronicle_user_task_list(self) -> DnfHelperChronicleUserTaskList:
-        res = self.dzhu_post("任务信息", "getUserTaskList", common_params=self.get_common_params())
+        res = self.dzhu_post("任务信息", "getUserTaskList", self.get_common_params())
         return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
 
     @try_except(return_val_on_except=False)

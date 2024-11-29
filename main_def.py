@@ -952,7 +952,6 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
     if user_task_info.hasPartner:
         partner_Info = user_task_info.get_partner_info(account_config.dnf_helper_info)
 
-
     user_info_db = (
         DnfHelperChronicleUserActivityTopInfoDB().with_context(djcHelper.get_dnf_helper_chronicle_db_key()).load()
     )

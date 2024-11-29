@@ -746,10 +746,27 @@ class DnfHelperChronicleUserActivityTopInfo(ConfigInterface):
 class DnfHelperChronicleUserTaskList(ConfigInterface):
     def __init__(self):
         self.pUserId = ""
-        self.mIcon = "http://q.qlogo.cn/qqapp/1104466820/0E82A1DBAE746043CF3AEF95EC39FC2B/100"
-        self.pIcon = ""
+        self.pEncodeUserId = "ab1a9a478692"
+        self.pNickname = "风之凌殇（私聊这个号）"
+        self.mNickname = "风之凌殇"
+        self.mIcon = "http://q.qlogo.cn/qqapp/1104466820/8F5DF4AB0D1CBAC3281E8549D6334034/100"
+        self.pIcon = "https://q.qlogo.cn/qqapp/1105742785/FF795385EA973689A70CAD79514374D3/100"
         self.hasPartner = False
+        self.hasRedDot = False
+        self.isTip = False
         self.taskList: list[DnfHelperChronicleUserTaskInfo] = []
+
+    def get_partner_info(self, dnf_helper_info) -> str:
+        from config import DnfHelperInfoConfig
+        dnf_helper_info: DnfHelperInfoConfig
+
+        partner_name = ""
+        if dnf_helper_info.pNickName != "":
+            partner_name += f"{dnf_helper_info.pNickName}-本地匹配"
+        elif dnf_helper_info.enable_auto_match_dnf_chronicle:
+            partner_name += f"{self.pNickname}-自动匹配"
+
+        return partner_name
 
     def fields_to_fill(self):
         return [

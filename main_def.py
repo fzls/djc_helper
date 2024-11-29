@@ -947,12 +947,11 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     levelInfo, chronicle_points = djcHelper.query_dnf_helper_chronicle_info().get_level_info_and_points_to_show()
 
-    partner_levelInfo = ""
+    partner_Info = ""
     user_task_info = djcHelper.query_dnf_helper_chronicle_user_task_list()
     if user_task_info.hasPartner:
-        partner_levelInfo, _ = djcHelper.query_dnf_helper_chronicle_info(
-            user_task_info.pUserId
-        ).get_level_info_and_points_to_show()
+        partner_Info = user_task_info.get_partner_info(account_config.dnf_helper_info)
+
 
     user_info_db = (
         DnfHelperChronicleUserActivityTopInfoDB().with_context(djcHelper.get_dnf_helper_chronicle_db_key()).load()
@@ -989,7 +988,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         can_auto_match_xinyue_team,
         levelInfo,
         chronicle_points,
-        partner_levelInfo,
+        partner_Info,
         last_month_level,
         can_auto_match_dnf_helper_chronicle,
         # majieluo_stone, majieluo_invite_count,

@@ -4388,12 +4388,12 @@ class DjcHelper:
         # 队友
         taskInfo = getUserTaskList()
         if taskInfo.hasPartner:
-            partner_name = "你的搭档"
-            if dnf_helper_info.pNickName != "":
-                partner_name += f"({dnf_helper_info.pNickName})"
-            elif dnf_helper_info.enable_auto_match_dnf_chronicle:
-                partner_name += "(自动匹配)"
-            show_user_info(partner_name, self.query_dnf_helper_chronicle_info(taskInfo.pUserId))
+            partner_name = taskInfo.get_partner_info(dnf_helper_info)
+
+            logger.warning(
+                color("fg_bold_cyan")
+                + f"你的搭档是 {partner_name}，因接口调整，暂时无法查询到对方的等级信息~"
+            )
 
         # 更新本月的进度信息
         # 编年史的自动组队的时候，可以根据保存的上个月的这个信息去决定是否有资格参与自动组队 @2021-11-01 10:40:51
@@ -4507,7 +4507,7 @@ class DjcHelper:
         return res
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
-    def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
+    def query_dnf_helper_chronicle_info(self) -> DnfHelperChronicleUserActivityTopInfo:
         res = self.dzhu_post("活动基础状态信息", "getUserActivityTopInfo", common_params=self.get_common_params())
         return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 

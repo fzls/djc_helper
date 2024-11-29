@@ -3818,22 +3818,8 @@ class DjcHelper:
 
         # 为了不与其他函数名称冲突，且让函数名称短一些，将专用的流程函数写到函数内部，一些底层的挪到外面，方便其他地方查询，比如概览处
         dnf_helper_info = self.cfg.dnf_helper_info
-        roleinfo = self.get_dnf_bind_role()
-        partition = roleinfo.serviceID
-        roleid = roleinfo.roleCode
 
-        common_params = {
-            "userId": dnf_helper_info.userId,
-            "sPartition": partition,
-            "sRoleId": roleid,
-            "uin": self.qq(),
-            "toUin": self.qq(),
-            "token": dnf_helper_info.token,
-            "uniqueRoleId": dnf_helper_info.uniqueRoleId,
-            "gameId": 1006,
-            "game_code": "dnf",
-            "cGameId": 1006,
-        }
+        common_params = self.get_common_params()
 
         # ------ 封装通用接口 ------
 
@@ -4460,6 +4446,26 @@ class DjcHelper:
 
         return query_data
 
+    def get_common_params(self) -> dict:
+        dnf_helper_info = self.cfg.dnf_helper_info
+        roleinfo = self.get_dnf_bind_role()
+        partition = roleinfo.serviceID
+        roleid = roleinfo.roleCode
+
+        common_params = {
+            "userId": dnf_helper_info.userId,
+            "sPartition": partition,
+            "sRoleId": roleid,
+            "uin": self.qq(),
+            "toUin": self.qq(),
+            "token": dnf_helper_info.token,
+            "uniqueRoleId": dnf_helper_info.uniqueRoleId,
+            "gameId": 1006,
+            "game_code": "dnf",
+            "cGameId": 1006,
+        }
+
+        return common_params
 
     def dzhu_get(self, ctx: str, api: str, print_res=False, common_params: dict = None, **extra_params) -> dict:
         data = {

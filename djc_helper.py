@@ -3836,27 +3836,7 @@ class DjcHelper:
             "cGameId": 1006,
         }
 
-        hmac_sha1_secret = "nKJH89hh@8yoHJ98y&IOhIUt9hbOh98ht"
-
         # ------ 封装通用接口 ------
-        def append_signature_to_data(
-            data: dict[str, Any],
-            http_method: str,
-            api_path: str,
-        ):
-            # 补充参数
-            data["tghappid"] = "1000045"
-            data["cRand"] = get_millsecond_timestamps()
-
-            # 构建用于签名的请求字符串
-            post_data = make_dnf_helper_signature_data(data)
-
-            # 计算签名
-            signature = make_dnf_helper_signature(http_method, api_path, post_data, hmac_sha1_secret)
-
-            # 添加签名
-            data["sig"] = signature
-            return
 
         def try_fetch_xinyue_openid_access_token():
             nonlocal common_params
@@ -3875,9 +3855,6 @@ class DjcHelper:
                     "appOpenid": openid,
                     "accessToken": access_token,
                 }
-
-        def get_millsecond_timestamps() -> int:
-            return int(datetime.datetime.now().timestamp() * 1000)
 
         def get_api_path(url_template: str, **params) -> str:
             full_url = self.format(url_template, **params)
@@ -3901,7 +3878,7 @@ class DjcHelper:
             api_path = get_api_path(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
             actual_query_data = get_url_query_data(self.urls.dnf_helper_chronicle_wang_xinyue, api=api, **data)
 
-            append_signature_to_data(actual_query_data, "GET", api_path)
+            self.append_signature_to_data(actual_query_data, "GET", api_path)
 
             res = self.get(
                 ctx,
@@ -3920,7 +3897,7 @@ class DjcHelper:
                 **extra_params,
             }
             api_path = get_api_path(self.urls.dnf_helper_chronicle_yoyo, api=api)
-            append_signature_to_data(data, "POST", api_path)
+            self.append_signature_to_data(data, "POST", api_path)
 
             res = self.post(
                 ctx,
@@ -4489,6 +4466,30 @@ class DjcHelper:
 
         # 上报下编年史等级，看看等级分布，方便日后添加自动组队的时候，确认下用30级作为门槛能符合条件的人数与比例
         increase_counter(ga_category="chronicle_level", name=userInfo.level)
+
+    def get_millsecond_timestamps(self) -> int:
+        return int(datetime.datetime.now().timestamp() * 1000)
+
+    def append_signature_to_data(
+        self,
+        data: dict[str, Any],
+        http_method: str,
+        api_path: str,
+    ):
+        # 补充参数
+        data["tghappid"] = "1000045"
+        data["cRand"] = self.get_millsecond_timestamps()
+
+        # 构建用于签名的请求字符串
+        post_data = make_dnf_helper_signature_data(data)
+
+        # 计算签名
+        hmac_sha1_secret = "nKJH89hh@8yoHJ98y&IOhIUt9hbOh98ht"
+        signature = make_dnf_helper_signature(http_method, api_path, post_data, hmac_sha1_secret)
+
+        # 添加签名
+        data["sig"] = signature
+        return
 
     @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserActivityTopInfo())
     def query_dnf_helper_chronicle_info(self, userId="") -> DnfHelperChronicleUserActivityTopInfo:
@@ -8997,6 +8998,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_star_and_wish()
+        djcHelper.dnf_helper_chronicle()
 
     pause()

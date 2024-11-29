@@ -126,8 +126,10 @@ def release():
         # 先复制一份要上传的文件到本地临时目录，方便出错时可以手动上传
         backup_filepath = os.path.join(dir_upload_files, os.path.basename(local_filepath))
         shutil.copy2(local_filepath, backup_filepath)
-        logger.warning(f"复制到{backup_filepath}，方便出错时手动上传")
+        logger.warning(f"预先复制到{backup_filepath}，方便出错时手动上传")
 
+
+    for local_filepath, history_file_prefix in reversed(upload_list):
         total_try_count = 3
         for try_index in range_from_one(total_try_count):
             try:

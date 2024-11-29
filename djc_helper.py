@@ -3816,7 +3816,7 @@ class DjcHelper:
             logger.warning("未在道聚城绑定dnf角色信息，将跳过本活动，请移除配置或前往绑定")
             return
 
-        # 为了不与其他函数名称冲突，且让函数名称短一些，写到函数内部~
+        # 为了不与其他函数名称冲突，且让函数名称短一些，将专用的流程函数写到函数内部，一些底层的挪到外面，方便其他地方查询，比如概览处
         dnf_helper_info = self.cfg.dnf_helper_info
         roleinfo = self.get_dnf_bind_role()
         partition = roleinfo.serviceID

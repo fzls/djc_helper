@@ -418,5 +418,15 @@
     "open_url": "",
     "expire_at": "2024-11-28 21:32:19",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "24.12 外出旅游",
+    "message": "因公司团建，12.2-12.12我将去欧洲旅游，期间无法处理群消息和私聊。若有任何问题，请直接私聊我的小号，我将在回国后第一时间一一处理~\n",
+    "send_at": "2024-12-01 16:18:27",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2024-12-08 16:18:27",
+    "show_only_before_version": ""
   }
 ]

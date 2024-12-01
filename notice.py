@@ -201,8 +201,8 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "24.11 集卡活动"
-    message = """集卡的查询信息、赠送、索取卡片接口好像有点调整，不过不影响抽卡部分，大家先用着，我这两天尽快适配新的接口~
+    title = "24.12 外出旅游"
+    message = """因公司团建，12.2-12.12我将去欧洲旅游，期间无法处理群消息和私聊。若有任何问题，请直接私聊我的小号，我将在回国后第一时间一一处理~
 """
     open_url = ""
     show_only_before_version = ""

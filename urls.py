@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "集卡"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
+    newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     #
     # 已过期活动
     #
@@ -109,6 +110,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
+    "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     #
     # 已过期活动
     #
@@ -134,7 +136,6 @@ act_name_to_url = {
     "神界预热": "https://dnf.qq.com/cp/a20231207gift/index.html",
     "qq视频蚊子腿-爱玩": "https://ovact.iwan.qq.com/magic-act/WHJL0iOwifXqDKtGNrOsd3jTDJ/index_page1.html",
     "DNF落地页活动": "https://dnf.qq.com/cp/a20231116index/index.html",
-    "DNF预约": "https://dnf.qq.com/cp/a20231110invite/indexm2.html?pt=1",
     "DNF娱乐赛": "https://dnf.qq.com/act/a20231106match/index.html",
     "dnf助手活动": "https://mwegame.qq.com/helper/dnf/laoban/index.html",
 }
@@ -298,6 +299,7 @@ class Urls:
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
+        self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

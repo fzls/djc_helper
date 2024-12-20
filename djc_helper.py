@@ -680,6 +680,7 @@ class DjcHelper:
             ("集卡", self.dnf_ark_lottery),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("嘉年华星与心愿", self.dnf_star_and_wish),
+            ("DNF预约", self.dnf_reservation),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -708,7 +709,6 @@ class DjcHelper:
             ("神界预热", self.dnf_shenjie_yure),
             ("qq视频蚊子腿-爱玩", self.qq_video_iwan),
             ("DNF落地页活动", self.dnf_luodiye),
-            ("DNF预约", self.dnf_reservation),
             ("DNF娱乐赛", self.dnf_game),
             ("dnf助手活动", self.dnf_helper),
         ]
@@ -7538,42 +7538,36 @@ class DjcHelper:
     @try_except()
     def dnf_reservation(self):
         show_head_line("DNF预约")
-        self.show_amesvr_act_info(self.dnf_reservation_op)
+        self.show_not_ams_act_info("DNF预约")
 
         if not self.cfg.function_switches.get_dnf_reservation or self.disable_most_activities():
             show_act_not_enable_warning("DNF预约")
             return
 
-        self.check_dnf_reservation()
+        self.check_dnf_reservation_ide()
 
-        def query_info() -> tuple[int, int]:
-            res = self.dnf_reservation_op("查询信息", "985029", print_res=False)
-            raw_info = res["modRet"]["jData"]
-
-            iFragments = int(raw_info["iFragments"])
-            iTeamNum = int(raw_info["iTeamNum"])
-
-            return iFragments, iTeamNum
-
-        iFragments, iTeamNum = query_info()
-
-        self.dnf_reservation_op("见面礼", "985043")
-        for idx in range_from_one(4):
-            if idx <= iFragments:
-                logger.info(f"碎片-{idx} 已获取，跳过")
-                continue
-
-            self.dnf_reservation_op(f"获取碎片-{idx}", "986607", iNum=idx)
-        self.dnf_reservation_op("灯塔礼包", "985293")
-        self.dnf_reservation_op("组队奖励", "985108")
-
-        if iTeamNum < 3:
+        if now_in_range("2024-12-19 11:00:00", "2025-01-15 23:59:59"):
             async_message_box(
-                "嘉年华组成3人小队后可以在16号后领取到彩虹内裤装扮，有兴趣的小伙伴可以在稍后弹出的云表单中加入他人的队伍，若均已满，可在后面加上自己的队伍",
-                "嘉年华组队",
-                show_once=True,
-                open_url="https://docs.qq.com/sheet/DYlJoSFFBblpWV3JI",
+                (
+                    "2024.12.19 - 2025.1.15 期间可在点确认后打开的活动页面进行预约，在1.16之后就可以领取二次觉醒装扮套装等奖励。这个预约需要自己在活动页面验证手机来完成，请自己在网页中操作下~\n"
+                    "\n"
+                    "为了避免有人忘记预约，本提示每周会弹一次，如已预约，可直接无视"
+                ),
+                "重力之泉版本预约活动 - 预约阶段",
+                open_url=get_act_url("DNF预约"),
+                show_once_weekly=True,
             )
+
+        if now_in_range("2025-01-16 10:00:00", "2025-03-13 23:59:59"):
+            self.dnf_reservation_ide_op("领取奖励", "355314")
+
+            if use_by_myself():
+                async_message_box(
+                    "确认下重力之泉版本的预约奖励是否自动领取成功",
+                    "（仅自己可见）重力之泉版本预约活动 - 领奖阶段",
+                    open_url=get_act_url("DNF预约"),
+                    show_once_weekly=True,
+                )
 
     def check_dnf_reservation(self):
         self.check_bind_account(
@@ -7591,6 +7585,34 @@ class DjcHelper:
             "x6m5.ams.game.qq.com",
             "group_3",
             "dnf",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF预约"),
+            **extra_params,
+        )
+
+    def check_dnf_reservation_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF预约",
+            get_act_url("DNF预约"),
+            activity_op_func=self.dnf_reservation_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_reservation_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_reservation
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
             iActivityId,
             iFlowId,
             print_res,
@@ -8984,6 +9006,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_chronicle()
+        djcHelper.dnf_reservation()
 
     pause()

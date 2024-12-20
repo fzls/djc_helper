@@ -13,7 +13,5 @@ def print_current_version_for_changelog():
     print(f"# v{now_version} {ver_time}")
 
 
-# UNDONE: 可以使用 changelog_number.py 脚本来自动格式化更新日志中的序号
-
 if __name__ == "__main__":
     print_current_version_for_changelog()

@@ -122,12 +122,11 @@ def release():
         logger.info(f"\t\t{local_filepath}")
 
     # 逆序遍历，确保同一个网盘目录中，列在前面的最后才上传，从而在网盘显示时显示在最前方
-    for local_filepath, history_file_prefix in reversed(upload_list):
+    for local_filepath, _history_file_prefix in reversed(upload_list):
         # 先复制一份要上传的文件到本地临时目录，方便出错时可以手动上传
         backup_filepath = os.path.join(dir_upload_files, os.path.basename(local_filepath))
         shutil.copy2(local_filepath, backup_filepath)
         logger.warning(f"预先复制到{backup_filepath}，方便出错时手动上传")
-
 
     for local_filepath, history_file_prefix in reversed(upload_list):
         total_try_count = 3

@@ -251,7 +251,7 @@ DNF蚊子腿小助手10群 791343073 <br>
 请查看【使用教程/使用文档.docx】
 
 # 支持一下
-[![支持一下](https://s3.ax1x.com/2020/12/16/r1yWZT.png)](https://imgchr.com/i/r1yWZT)
+https://docs.qq.com/doc/DYnRISFNOdW12VGZG
 
 # 历史 Star 数
 <p align="center">

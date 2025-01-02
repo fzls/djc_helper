@@ -109,7 +109,7 @@ def main():
     logger.warning(f"开始运行DNF蚊子腿小助手 {special_version_name}，ver={now_version} {ver_time}，powered by {author}")
     logger.warning(
         color("fg_bold_cyan")
-        + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，可以帮忙宣传一下或打开付费指引/支持一下.png，扫码打赏哦~"
+        + "如果觉得我的小工具对你有所帮助，想要支持一下我的话，请帮忙在你的小团体群或公会群宣传一下，谢谢~"
     )
 
     # 读取配置信息

@@ -591,11 +591,11 @@ class ConfigUi(QFrame):
         webbrowser.open("https://github.com/fzls/autojs")
         report_click_event("open_autojs")
 
-    def support(self, checked=False):
-        show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
-        self.popen(os.path.realpath("付费指引/支持一下.png"))
-
-        report_click_event("support")
+    # def support(self, checked=False):
+    #     show_message(get_random_face(), "纳尼，真的要打钱吗？还有这种好事，搓手手0-0")
+    #     self.popen(os.path.realpath("付费指引/支持一下.png"))
+    #
+    #     report_click_event("support")
 
     def show_notice(self):
         if hasattr(self, "notice"):

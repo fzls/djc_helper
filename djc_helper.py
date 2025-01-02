@@ -675,11 +675,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("colg其他活动", self.colg_other_act),
             ("喂养删除补偿", self.weiyang_compensate),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("超级会员", self.dnf_super_vip),
-            ("集卡", self.dnf_ark_lottery),
-            ("DNF福利中心兑换", self.dnf_welfare),
-            ("嘉年华星与心愿", self.dnf_star_and_wish),
             ("DNF预约", self.dnf_reservation),
         ]
 
@@ -688,6 +683,11 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("嘉年华星与心愿", self.dnf_star_and_wish),
+            ("DNF福利中心兑换", self.dnf_welfare),
+            ("集卡", self.dnf_ark_lottery),
+            ("超级会员", self.dnf_super_vip),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流攻坚队", self.dnf_socialize),
             ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),

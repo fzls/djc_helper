@@ -1426,6 +1426,19 @@ class CommonConfig(ConfigInterface):
         # 上报统计时，为确保固定，替换为shuffle前最新的域名
         self.netdisk_link_for_report = LanZouCloud().get_latest_url_before_shuffle(self.netdisk_link)
 
+        # 心悦固定队添加一些默认配置
+        xinyue_fixed_team_default_count = 5
+        xinyue_fixed_team_current_count = len(self.fixed_teams)
+        for idx in range(xinyue_fixed_team_default_count):
+            if idx < xinyue_fixed_team_current_count:
+                continue
+
+            # 补齐默认配置
+            team_config = FixedTeamConfig()
+            team_config.id = str(idx + 1)
+
+            self.fixed_teams.append(team_config)
+
 
 class Config(ConfigInterface):
     def __init__(self):

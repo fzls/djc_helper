@@ -1386,6 +1386,8 @@ class CommonConfig(ConfigInterface):
         self.retry = RetryConfig()
         # 心悦相关配置
         self.xinyue = XinYueConfig()
+        # 心悦固定队默认配置数目
+        self.xinyue_fixed_team_default_team_count = 5
         # 固定队相关配置。用于本地两个号来组成一个固定队伍，完成心悦任务。
         self.fixed_teams: list[FixedTeamConfig] = []
         # 赛利亚活动拜访目标QQ列表
@@ -1427,9 +1429,8 @@ class CommonConfig(ConfigInterface):
         self.netdisk_link_for_report = LanZouCloud().get_latest_url_before_shuffle(self.netdisk_link)
 
         # 心悦固定队添加一些默认配置
-        xinyue_fixed_team_default_count = 5
         xinyue_fixed_team_current_count = len(self.fixed_teams)
-        for idx in range(xinyue_fixed_team_default_count):
+        for idx in range(self.xinyue_fixed_team_default_team_count):
             if idx < xinyue_fixed_team_current_count:
                 continue
 

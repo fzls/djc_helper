@@ -289,6 +289,61 @@ class GetBuyInfoThread(QThread):
         self.signal_results.emit("", dlc_info, monthly_pay_info)
 
 
+CheckSkeyMark = "__处理完成__"
+
+class CheckSkeyThread(QThread):
+    signal_results = pyqtSignal(str)
+
+    def __init__(self, parent, acount_config_list: list[AccountConfig], common_cfg: CommonConfig):
+        super().__init__(parent)
+
+        self.acount_config_list = acount_config_list
+        self.common_cfg = common_cfg
+
+        self.time_start = datetime.now()
+
+    def __del__(self):
+        self.exiting = True
+
+    def run(self) -> None:
+        self.update_progress("开始尝试更新各个账号的skey")
+        self.check_all_skey_and_pskey()
+
+        self.mark_finish()
+
+    def check_all_skey_and_pskey(self):
+        _show_head_line("启动时检查各账号skey/pskey/openid是否过期")
+
+        self.update_progress("检查chrome环境是否已准备好")
+        QQLogin(self.common_cfg).check_and_download_chrome_ahead()
+
+        for _idx, account_config in enumerate(self.acount_config_list):
+            idx = _idx + 1
+            if not account_config.is_enabled():
+                # 未启用的账户的账户不走该流程
+                continue
+
+            logger.warning(
+                color("fg_bold_yellow") + f"------------检查第{idx}个账户({account_config.name})------------"
+            )
+            self.update_progress(
+                f"正在处理第{idx}/{len(self.acount_config_list)}个账户({account_config.name})，请耐心等候..."
+            )
+
+            djcHelper = DjcHelper(account_config, self.common_cfg)
+            djcHelper.fetch_pskey()
+            djcHelper.check_skey_expired()
+
+            self.update_progress(f"完成处理第{idx}个账户({account_config.name})")
+
+    def update_progress(self, progress_message):
+        ut = datetime.now() - self.time_start
+        self.signal_results.emit(f"{progress_message}(目前共耗时{ut.total_seconds():.1f}秒)")
+
+    def mark_finish(self):
+        self.signal_results.emit(CheckSkeyMark)
+
+
 class NoticeUi(QFrame):
     def __init__(self, parent=None):
         super().__init__()
@@ -3401,6 +3456,8 @@ class RoleSelector(QWidget):
 
         self.server_id_to_roles: dict[str, list[DnfRoleInfo]] = {}
 
+        self.is_checking_skey = False
+
         self.combobox_role_name = create_combobox(
             self.combobox_role_name_placeholder, [self.combobox_role_name_placeholder]
         )
@@ -3415,10 +3472,24 @@ class RoleSelector(QWidget):
             show_message("出错了", f"请先选择{self.ctx}服务器")
             return
 
-        if len(self.get_roles()) == 0:
+        if len(self.get_roles()) == 0 and not self.is_checking_skey:
+            self.is_checking_skey = True
             logger.info("需要查询角色信息")
 
-            QQLogin(self.common_cfg).check_and_download_chrome_ahead()
+            logger.info("拉起查询线程，进行检查")
+            worker = CheckSkeyThread(self, [self.account_cfg], self.common_cfg)
+            worker.signal_results.connect(self.on_check_skey_progress)
+            worker.start()
+
+    def on_check_skey_progress(self, progress_message: str):
+        logger.info(progress_message)
+
+        if progress_message != CheckSkeyMark:
+            # 更新进度
+            self.update_progress(progress_message)
+        else:
+            # 已更新完成
+            server_id = self.get_server_id()
 
             djcHelper = DjcHelper(self.account_cfg, self.common_cfg)
             djcHelper.check_skey_expired()
@@ -3426,6 +3497,9 @@ class RoleSelector(QWidget):
             self.server_id_to_roles[server_id] = djcHelper.query_dnf_rolelist(server_id)
 
             self.update_role_names()
+
+            show_message("获取完毕", f"角色信息已查询完毕，请点击选项框进行选择")
+            self.is_checking_skey = False
 
     def on_role_name_select(self, index: int):
         roles = self.get_roles()
@@ -3448,6 +3522,10 @@ class RoleSelector(QWidget):
             self.combobox_role_name.addItems([role.rolename for role in roles])
         else:
             self.combobox_role_name.addItems([self.combobox_role_name_placeholder])
+
+    def update_progress(self, progress_message: str):
+        self.combobox_role_name.clear()
+        self.combobox_role_name.addItems([progress_message])
 
     def get_server_id(self) -> str:
         return dnf_server_name_to_id(self.combobox_server_name.currentText())

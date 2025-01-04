@@ -33,7 +33,6 @@ def package(
         "config.example.toml",
         "DNF蚊子腿小助手.exe",
         "DNF蚊子腿小助手配置工具.exe",
-        "DNF蚊子腿小助手配置文件.bat",
         "DNF蚊子腿小助手交流群群二维码.png",
         # 复制完后要移动或重命名到其他路径的文件
         "CHANGELOG.MD",

@@ -296,14 +296,12 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 154.8KiB/s
-            f"https://raw.incept.pw/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 307.8KiB/s
             f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 153.2KiB/s
             f"https://jsdelivr.pai233.top/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             # 157.8KiB/s
-            f"https://ghp.ci/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            f"https://ghgo.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 

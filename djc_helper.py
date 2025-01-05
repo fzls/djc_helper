@@ -676,6 +676,7 @@ class DjcHelper:
             ("colg其他活动", self.colg_other_act),
             ("喂养删除补偿", self.weiyang_compensate),
             ("DNF预约", self.dnf_reservation),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -684,7 +685,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("嘉年华星与心愿", self.dnf_star_and_wish),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("集卡", self.dnf_ark_lottery),
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
@@ -4757,10 +4757,8 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "2024嘉年华",
-            "FATE/ZERO动画联动返场",
-            "13强化券在线送",
-            "重力之泉版本来袭",
+            "重力之泉1月16日上线",
+            "1月16日开启115全新等级",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -9006,6 +9004,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reservation()
+        djcHelper.dnf_welfare()
 
     pause()

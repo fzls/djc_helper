@@ -107,11 +107,11 @@ act_name_to_url = {
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20241121index/",

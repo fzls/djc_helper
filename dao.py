@@ -2442,6 +2442,80 @@ class XinYueBattleGroundWpeBindRole(ConfigInterface):
         self.device = "pc"
 
 
+class SoulStoneResponse(ConfigInterface):
+    def __init__(self):
+        self.result = 0
+        self.returnCode = 0
+        self.returnMsg = ""
+        self.data = SoulStoneInfo()
+
+
+class SoulStoneInfo(ConfigInterface):
+    def __init__(self):
+        self.emulatorPropTitle = "暗淡的灵魂石"
+        self.currLevel = 3
+        self.highestLevel = 3
+        self.nextSuccRate = "50%"
+        self.remainUpgradeCount = 3
+        self.upgradedCount = 3
+        self.upgradeLevelPickupStatus: list[int] = []
+        self.upgradeCountPickupStatus: list[int] = []
+        self.rankingPickupStatus = 0
+        self.pointExchangeRemainTimes = 4
+        self.taskCmptIds = [
+            1,
+            2
+        ]
+        self.taskAwardPickupIds = [
+            1,
+            2
+        ]
+        self.upgradePropAwardConfig: list[SoulStoneUpgradeLevelAward] = []
+        self.upgradeCountAwardConfig: list[SoulStoneUpgradeCountAward] = []
+        # self.flows: dict[str, AmsActFlowInfo] = {}  # flowid => info
+        self.taskConfig: dict[str, SoulStoneTask] = {} # taskid => task
+        self.pointExchangeConfig = {
+            "exchangeRate": 2,
+            "dailyLimit": 4
+        }
+        self.userInfo = {}
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("upgradePropAwardConfig", SoulStoneUpgradeLevelAward),
+            ("upgradeCountAwardConfig", SoulStoneUpgradeCountAward),
+        ]
+
+    def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [("taskConfig", SoulStoneTask)]
+
+
+class SoulStoneUpgradeLevelAward(ConfigInterface):
+    def __init__(self):
+        self.propId = 1
+        self.propName = "灵魂武器袖珍罐"
+        self.pic = "https://cdn.dzhu.qq.com/icon/20241217101855202.png"
+        self.level = 10
+        self.amsId = "IEGAMS-689863-657792-3647374"
+        self.num = 1
+
+
+class SoulStoneUpgradeCountAward(ConfigInterface):
+    def __init__(self):
+        self.propId = 1
+        self.propName = "复活币礼盒 (1个)"
+        self.pic = "https://cdn.dzhu.qq.com/button/20241217102304912.png"
+        self.count = 5
+        self.amsId = "IEGAMS-689863-657792-3647405"
+        self.num = 5
+
+
+class SoulStoneTask(ConfigInterface):
+    def __init__(self):
+        self.title = "每日参与活动"
+        self.upgradeTimes = 1
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

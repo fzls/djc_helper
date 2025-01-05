@@ -60,6 +60,8 @@ from dao import (
     ShenJieGrowUpInfo,
     ShenJieGrowUpStagePack,
     ShenJieGrowUpTaskData,
+    SoulStoneInfo,
+    SoulStoneResponse,
     TemporaryChangeBindRoleInfo,
     XiaojiangyouInfo,
     XiaojiangyouPackageInfo,
@@ -677,6 +679,7 @@ class DjcHelper:
             ("喂养删除补偿", self.weiyang_compensate),
             ("DNF预约", self.dnf_reservation),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("灵魂石的洗礼", self.soul_stone),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8090,6 +8093,118 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------灵魂石的洗礼--------------------------------------------
+    @try_except()
+    def soul_stone(self):
+        show_head_line("灵魂石的洗礼")
+        self.show_not_ams_act_info("灵魂石的洗礼")
+
+        if not self.cfg.function_switches.get_soul_stone or self.disable_most_activities():
+            show_act_not_enable_warning("灵魂石的洗礼")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行 灵魂石的洗礼，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('灵魂石的洗礼')}"
+            )
+            return
+
+        def query_info() -> SoulStoneInfo:
+            raw_res = self.soul_stone_op("获取当前状态", "init", print_res=False, route="activity", nickname=quote_plus(self.cfg.name), avatar=quote_plus(f"https://q.qlogo.cn/g?b=qq&nk={self.qq()}&s=100"))
+            res = SoulStoneResponse().auto_update_config(raw_res)
+
+            return res.data
+
+        info = query_info()
+
+        # 完成任务并领取增幅次数
+        for task_id, task_info in info.taskConfig.items():
+            # 完成任务
+            self.soul_stone_op(f"完成任务-{task_info.title}", "doTask", taskId=task_id)
+
+            # 领取奖励
+            self.soul_stone_op(f"领取任务奖励-{task_info.title}-{task_info.upgradeTimes}次增幅次数", "pickupTaskAward", taskId=task_id)
+
+        info = query_info()
+        logger.info(f"当前剩余增幅次数为 {info.remainUpgradeCount}")
+        for idx in range_from_one(info.remainUpgradeCount):
+            # 增幅
+            self.soul_stone_op(f"第{idx}/{info.remainUpgradeCount}次增幅", "upgrade")
+
+        info = query_info()
+
+        # 领取增幅等级奖励
+        logger.info(f"当前灵魂石增幅等级为{info.currLevel}级({info.emulatorPropTitle})")
+        for idx, award in enumerate(info.upgradePropAwardConfig, start=1):
+            if info.currLevel < award.level:
+                logger.warning(f"等级不够，跳过领取增幅+{award.level} {award.propName}")
+                continue
+
+            if idx in info.upgradeLevelPickupStatus:
+                logger.warning(f"已领取，跳过领取增幅+{award.level} {award.propName}")
+                continue
+
+            self.soul_stone_op(f"领取增幅+{award.level} {award.propName}", "pickupGift", type="1", propId=award.propId)
+
+        # 领取增幅次数奖励
+        logger.info(f"当前灵魂石增幅次数为{info.upgradedCount}")
+
+        for idx, award in enumerate(info.upgradeCountAwardConfig, start=1):
+            if info.upgradedCount < award.count:
+                logger.warning(f"次数不够，跳过领取增幅 {award.count}次 {award.propName}")
+                continue
+
+            if idx in info.upgradeCountPickupStatus:
+                logger.warning(f"已领取，跳过领取增幅 {award.count}次 {award.propName}")
+                continue
+
+            self.soul_stone_op(f"领取增幅 {award.count}次 {award.propName}", "pickupGift", type="2", propId=award.propId)
+
+        if now_after("2025-01-16 00:00:00"):
+            if info.rankingPickupStatus == 0:
+                self.soul_stone_op("尝试领取排名奖励", "pickupGift", type="3")
+            else:
+                logger.warning("排名奖励已领取，跳过")
+
+    def soul_stone_op(self, ctx: str, action: str, print_res=True, **extra_params):
+        if action != "init":
+            # 该类型每个请求之间间隔一定时长
+            time.sleep(1)
+
+        roleinfo = self.get_dnf_bind_role()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        data = {
+            "action": action,
+
+            **extra_params,
+
+            "roleId": roleinfo.roleCode,
+            "userId": dnf_helper_info.userId,
+            "token": dnf_helper_info.token,
+            "cGameId": "1006",
+        }
+
+        res = self.post(
+            ctx,
+            self.urls.soul_stone_api,
+            data=post_json_to_data(data),
+            print_res=print_res,
+        )
+
+        if dnf_helper_info.token != "":
+            # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
+            show_message_box_once_key = "灵魂石的洗礼_token过期2_" + get_week()
+            if res.get("returnCode", 0) == -30003:
+                extra_msg = "dnf助手的登录态已过期，导致 灵魂石的洗礼 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
+                raise Exception("token过期，跳过后续尝试")
+            else:
+                self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
+
+        return res
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9004,6 +9119,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.soul_stone()
 
     pause()

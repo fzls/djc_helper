@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
+    newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
     #
     # 已过期活动
     #
@@ -108,6 +109,7 @@ act_name_to_url = {
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
+    "灵魂石的洗礼": "https://dzhu.qq.com/fe/dnf/skill-enhanced/",
     #
     # 已过期活动
     #
@@ -415,6 +417,9 @@ class Urls:
 
         # 漫画更新数据
         self.dnf_comic_update_api = "https://game.gtimg.cn/images/amside/ide_timer/249678_comicDetail.js"
+
+        # 灵魂石的洗礼
+        self.soul_stone_api = "https://dzhu.qq.com/zangyi/activity/emulator"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

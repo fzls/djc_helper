@@ -3021,6 +3021,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("灵魂石的洗礼", "get_soul_stone"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

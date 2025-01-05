@@ -2462,22 +2462,13 @@ class SoulStoneInfo(ConfigInterface):
         self.upgradeCountPickupStatus: list[int] = []
         self.rankingPickupStatus = 0
         self.pointExchangeRemainTimes = 4
-        self.taskCmptIds = [
-            1,
-            2
-        ]
-        self.taskAwardPickupIds = [
-            1,
-            2
-        ]
+        self.taskCmptIds = [1, 2]
+        self.taskAwardPickupIds = [1, 2]
         self.upgradePropAwardConfig: list[SoulStoneUpgradeLevelAward] = []
         self.upgradeCountAwardConfig: list[SoulStoneUpgradeCountAward] = []
         # self.flows: dict[str, AmsActFlowInfo] = {}  # flowid => info
-        self.taskConfig: dict[str, SoulStoneTask] = {} # taskid => task
-        self.pointExchangeConfig = {
-            "exchangeRate": 2,
-            "dailyLimit": 4
-        }
+        self.taskConfig: dict[str, SoulStoneTask] = {}  # taskid => task
+        self.pointExchangeConfig = {"exchangeRate": 2, "dailyLimit": 4}
         self.userInfo = {}
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:

@@ -125,12 +125,14 @@ def check_some_exception(e: Exception, show_last_process_result=True) -> str:
             if text != unicode_decoded_text:
                 text = unicode_decoded_text
 
+            # fmt: off
             msg += format_msg(
                 (
                     f"最近一次收到的请求结果为：status_code={lr.status_code} reason={lr.reason}\n"
                     f"{text}\n"
                 ), "bold_cyan"
             )
+            # fmt: on
 
     return msg
 

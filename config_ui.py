@@ -291,6 +291,7 @@ class GetBuyInfoThread(QThread):
 
 CheckSkeyMark = "__处理完成__"
 
+
 class CheckSkeyThread(QThread):
     signal_results = pyqtSignal(str)
 
@@ -1669,20 +1670,16 @@ class CommonConfigUi(QFrame):
         self.lineedit_xinyue_send_card_target_qq.setValidator(QQValidator())
         add_row(
             form_layout,
-            (
-                "心悦集卡赠送卡片目标QQ\n"
-                "(这个QQ将接收来自其他QQ赠送的卡片)"
-            ),
+            ("心悦集卡赠送卡片目标QQ\n" "(这个QQ将接收来自其他QQ赠送的卡片)"),
             self.lineedit_xinyue_send_card_target_qq,
         )
 
-        self.spinbox_xinyue_fixed_team_default_team_count = create_spin_box(cfg.xinyue_fixed_team_default_team_count, minimum=1)
+        self.spinbox_xinyue_fixed_team_default_team_count = create_spin_box(
+            cfg.xinyue_fixed_team_default_team_count, minimum=1
+        )
         add_row(
             form_layout,
-            (
-                "心悦战场固定队默认配置数目\n"
-                "（修改后下次启动，会尝试扩张到设定的数目）"
-            ),
+            ("心悦战场固定队默认配置数目\n" "（修改后下次启动，会尝试扩张到设定的数目）"),
             self.spinbox_xinyue_fixed_team_default_team_count,
         )
 
@@ -3499,7 +3496,7 @@ class RoleSelector(QWidget):
 
             self.update_role_names()
 
-            show_message("获取完毕", f"角色信息已查询完毕，请点击选项框进行选择")
+            show_message("获取完毕", "角色信息已查询完毕，请点击选项框进行选择")
             self.is_checking_skey = False
 
     def on_role_name_select(self, index: int):

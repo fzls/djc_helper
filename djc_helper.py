@@ -8111,7 +8111,14 @@ class DjcHelper:
             return
 
         def query_info() -> SoulStoneInfo:
-            raw_res = self.soul_stone_op("获取当前状态", "init", print_res=False, route="activity", nickname=quote_plus(self.cfg.name), avatar=quote_plus(f"https://q.qlogo.cn/g?b=qq&nk={self.qq()}&s=100"))
+            raw_res = self.soul_stone_op(
+                "获取当前状态",
+                "init",
+                print_res=False,
+                route="activity",
+                nickname=quote_plus(self.cfg.name),
+                avatar=quote_plus(f"https://q.qlogo.cn/g?b=qq&nk={self.qq()}&s=100"),
+            )
             res = SoulStoneResponse().auto_update_config(raw_res)
 
             return res.data
@@ -8124,7 +8131,9 @@ class DjcHelper:
             self.soul_stone_op(f"完成任务-{task_info.title}", "doTask", taskId=task_id)
 
             # 领取奖励
-            self.soul_stone_op(f"领取任务奖励-{task_info.title}-{task_info.upgradeTimes}次增幅次数", "pickupTaskAward", taskId=task_id)
+            self.soul_stone_op(
+                f"领取任务奖励-{task_info.title}-{task_info.upgradeTimes}次增幅次数", "pickupTaskAward", taskId=task_id
+            )
 
         info = query_info()
         logger.info(f"当前剩余增幅次数为 {info.remainUpgradeCount}")
@@ -8159,7 +8168,9 @@ class DjcHelper:
                 logger.warning(f"已领取，跳过领取增幅 {award.count}次 {award.propName}")
                 continue
 
-            self.soul_stone_op(f"领取增幅 {award.count}次 {award.propName}", "pickupGift", type="2", propId=award.propId)
+            self.soul_stone_op(
+                f"领取增幅 {award.count}次 {award.propName}", "pickupGift", type="2", propId=award.propId
+            )
 
         if now_after("2025-01-16 00:00:00"):
             if info.rankingPickupStatus == 0:
@@ -8175,6 +8186,7 @@ class DjcHelper:
         roleinfo = self.get_dnf_bind_role()
         dnf_helper_info = self.cfg.dnf_helper_info
 
+        # fmt: off
         data = {
             "action": action,
 
@@ -8185,6 +8197,7 @@ class DjcHelper:
             "token": dnf_helper_info.token,
             "cGameId": "1006",
         }
+        # fmt: on
 
         res = self.post(
             ctx,
@@ -8197,7 +8210,9 @@ class DjcHelper:
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
             show_message_box_once_key = "灵魂石的洗礼_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
-                extra_msg = "dnf助手的登录态已过期，导致 灵魂石的洗礼 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                extra_msg = (
+                    "dnf助手的登录态已过期，导致 灵魂石的洗礼 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
             else:

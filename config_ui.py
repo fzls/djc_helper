@@ -354,12 +354,11 @@ class NoticeUi(QFrame):
         self.resize(540, 390)
 
         self.load_notices()
+        self.init_data()
 
         self.init_ui()
 
     def load_notices(self):
-        self.current_notice_index = 0
-
         # 当前的公告
         self.notice_manager = NoticeManager(download_only_if_not_exists=True)
 
@@ -370,9 +369,20 @@ class NoticeUi(QFrame):
         # 按照实际降序排列，先展示最近的
         self.notice_manager.notices.sort(key=lambda notice: notice.send_at, reverse=True)
 
+    def init_data(self):
+        self.current_notice_index = 0
+        self.notices = self.all_notices
+
     @property
-    def notices(self) -> list[Notice]:
+    def all_notices(self) -> list[Notice]:
         return self.notice_manager.notices
+
+    def get_first_notice_title(self) -> str:
+        first_title = ""
+        if len(self.notices) > 0:
+            first_title = self.notices[0].title
+
+        return first_title
 
     def init_ui(self):
         top_layout = QVBoxLayout()
@@ -393,30 +403,61 @@ class NoticeUi(QFrame):
 
         btn_previous = create_pushbutton("上一个")
 
-        combobox_notice_title = create_combobox(
-            self.notices[0].title,
+        self.combobox_notice_title = create_combobox(
+            self.get_first_notice_title(),
             [notice.title for notice in self.notices],
         )
 
         btn_next = create_pushbutton("下一个")
 
         btn_previous.clicked.connect(self.show_previous_notice)
-        combobox_notice_title.currentTextChanged.connect(self.on_select_notice_title)
+        self.combobox_notice_title.currentTextChanged.connect(self.on_select_notice_title)
         btn_next.clicked.connect(self.show_next_notice)
 
         layout.addWidget(btn_previous)
-        layout.addWidget(combobox_notice_title)
+        layout.addWidget(self.combobox_notice_title)
         layout.addWidget(btn_next)
+
+        top_layout.addLayout(layout)
+
+        layout = QHBoxLayout()
+
+        self.lineedit_filter = create_lineedit(
+            "",
+            "在此输入关键词，即可过滤出标题或内容中包含该关键词的公告",
+        )
+        self.lineedit_filter.textEdited.connect(self.filter_notice)
+
+        layout.addWidget(self.lineedit_filter)
 
         top_layout.addLayout(layout)
 
         self.setLayout(top_layout)
 
+    def filter_notice(self, keyword):
+        self.current_notice_index = 0
+        self.notices = [
+            notice for notice in self.all_notices
+            if keyword in notice.title or keyword in notice.message
+        ]
+
+        self.combobox_notice_title.clear()
+
+        self.combobox_notice_title.addItems([notice.title for notice in self.notices])
+        self.combobox_notice_title.setCurrentText(self.get_first_notice_title())
+
+        self.update_current_notice()
+
     def update_current_notice(self):
         notice_count = len(self.notices)
 
         idx = self.current_notice_index
-        current_notice = self.notices[idx]
+        if notice_count > 0:
+            current_notice = self.notices[idx]
+        else:
+            current_notice = Notice()
+            current_notice.title = "没有找到包含指定关键词的公告"
+            current_notice.message = "没有找到包含指定关键词的公告"
 
         message = current_notice.message
         if current_notice.open_url != "" and current_notice.open_url not in message:
@@ -427,12 +468,16 @@ class NoticeUi(QFrame):
         self.label_content.setText(message)
 
     def show_previous_notice(self, checked=False):
-        self.current_notice_index = (self.current_notice_index + len(self.notices) - 1) % len(self.notices)
-        self.update_current_notice()
+        if len(self.notices) > 0:
+            self.current_notice_index = (self.current_notice_index + len(self.notices) - 1) % len(self.notices)
+
+        self.combobox_notice_title.setCurrentIndex(self.current_notice_index)
 
     def show_next_notice(self, checked=False):
-        self.current_notice_index = (self.current_notice_index + 1) % len(self.notices)
-        self.update_current_notice()
+        if len(self.notices) > 0:
+            self.current_notice_index = (self.current_notice_index + 1) % len(self.notices)
+
+        self.combobox_notice_title.setCurrentIndex(self.current_notice_index)
 
     def on_select_notice_title(self, title: str):
         for idx, notice in enumerate(self.notices):

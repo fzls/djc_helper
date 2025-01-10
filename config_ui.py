@@ -354,8 +354,8 @@ class NoticeUi(QFrame):
         self.resize(540, 390)
 
         self.load_notices()
-        self.init_data(self.all_notices)
 
+        self.init_data(self.all_notices)
         self.init_ui()
 
     def load_notices(self):
@@ -393,8 +393,6 @@ class NoticeUi(QFrame):
         self.label_content = QTextEdit("默认内容")
         self.label_content.setReadOnly(True)
 
-        self.update_current_notice()
-
         top_layout.addWidget(self.label_title, alignment=Qt.AlignHCenter)
         top_layout.addWidget(self.label_time, alignment=Qt.AlignHCenter)
         top_layout.addWidget(self.label_content)
@@ -403,15 +401,12 @@ class NoticeUi(QFrame):
 
         btn_previous = create_pushbutton("上一个")
 
-        self.combobox_notice_title = create_combobox(
-            self.get_first_notice_title(),
-            [notice.title for notice in self.notices],
-        )
+        self.combobox_notice_title = create_combobox("默认标题")
 
         btn_next = create_pushbutton("下一个")
 
         btn_previous.clicked.connect(self.show_previous_notice)
-        self.combobox_notice_title.currentTextChanged.connect(self.on_select_notice_title)
+        self.combobox_notice_title.currentIndexChanged.connect(self.on_select_notice_index)
         btn_next.clicked.connect(self.show_next_notice)
 
         layout.addWidget(btn_previous)
@@ -434,13 +429,9 @@ class NoticeUi(QFrame):
 
         self.setLayout(top_layout)
 
-    def filter_notice(self, keyword):
-        filtered_notices = [
-            notice for notice in self.all_notices
-            if keyword in notice.title or keyword in notice.message
-        ]
-        self.init_data(filtered_notices)
+        self.update_info()
 
+    def update_info(self):
         self.combobox_notice_title.clear()
 
         self.combobox_notice_title.addItems([notice.title for notice in self.notices])
@@ -448,16 +439,27 @@ class NoticeUi(QFrame):
 
         self.update_current_notice()
 
+    def filter_notice(self, keyword):
+        filtered_notices = [
+            notice for notice in self.all_notices
+            if keyword in notice.title or keyword in notice.message
+        ]
+        self.init_data(filtered_notices)
+
+        self.update_info()
+
     def update_current_notice(self):
         notice_count = len(self.notices)
 
         idx = self.current_notice_index
-        if notice_count > 0:
+        if 0 <= idx < notice_count:
             current_notice = self.notices[idx]
         else:
-            current_notice = Notice()
-            current_notice.title = "没有找到包含指定关键词的公告"
-            current_notice.message = "没有找到包含指定关键词的公告"
+            default_notice = Notice()
+            default_notice.title = "没有找到包含指定关键词的公告"
+            default_notice.message = default_notice.title
+
+            current_notice = default_notice
 
         message = current_notice.message
         if current_notice.open_url != "" and current_notice.open_url not in message:
@@ -479,11 +481,8 @@ class NoticeUi(QFrame):
 
         self.combobox_notice_title.setCurrentIndex(self.current_notice_index)
 
-    def on_select_notice_title(self, title: str):
-        for idx, notice in enumerate(self.notices):
-            if notice.title == title:
-                self.current_notice_index = idx
-                break
+    def on_select_notice_index(self, index: int):
+        self.current_notice_index = index
 
         self.update_current_notice()
 

@@ -354,7 +354,7 @@ class NoticeUi(QFrame):
         self.resize(540, 390)
 
         self.load_notices()
-        self.init_data()
+        self.init_data(self.all_notices)
 
         self.init_ui()
 
@@ -369,9 +369,9 @@ class NoticeUi(QFrame):
         # 按照实际降序排列，先展示最近的
         self.notice_manager.notices.sort(key=lambda notice: notice.send_at, reverse=True)
 
-    def init_data(self):
+    def init_data(self, notices: list[Notice]):
         self.current_notice_index = 0
-        self.notices = self.all_notices
+        self.notices = notices
 
     @property
     def all_notices(self) -> list[Notice]:
@@ -435,11 +435,11 @@ class NoticeUi(QFrame):
         self.setLayout(top_layout)
 
     def filter_notice(self, keyword):
-        self.current_notice_index = 0
-        self.notices = [
+        filtered_notices = [
             notice for notice in self.all_notices
             if keyword in notice.title or keyword in notice.message
         ]
+        self.init_data(filtered_notices)
 
         self.combobox_notice_title.clear()
 

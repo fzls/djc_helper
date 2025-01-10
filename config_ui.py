@@ -442,8 +442,7 @@ class NoticeUi(QFrame):
 
     def filter_notice(self, keyword):
         filtered_notices = [
-            notice for notice in self.all_notices
-            if keyword in notice.title or keyword in notice.message
+            notice for notice in self.all_notices if keyword in notice.title or keyword in notice.message
         ]
         self.init_data(filtered_notices)
 

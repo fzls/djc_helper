@@ -402,6 +402,7 @@ class NoticeUi(QFrame):
         btn_previous = create_pushbutton("上一个")
 
         self.combobox_notice_title = create_combobox("默认标题")
+        self.combobox_notice_title.setFocusPolicy(Qt.FocusPolicy.WheelFocus)
 
         btn_next = create_pushbutton("下一个")
 

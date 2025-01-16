@@ -1496,6 +1496,10 @@ def show_tips(cfg: Config):
             "在浏览器中打开下面的二维码链接，微信扫码后分享活动页面（可以发给文件传输助手），可以领取7天黑钻和10点疲劳药，有兴趣的朋友请自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode1.png\n"
         ),
+        "25.1 微信游戏圈每日活动": (
+            "在浏览器中打开下面的二维码链接，微信扫码后往下拉完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作\n"
+            "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode2.png\n"
+        ),
     }
 
     logger.info(

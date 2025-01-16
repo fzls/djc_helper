@@ -684,6 +684,7 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -699,7 +700,6 @@ class DjcHelper:
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNF神界成长之路三期", self.dnf_shenjie_grow_up_v3),
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
-            ("WeGame活动", self.dnf_wegame),
             ("勇士的冒险补给", self.maoxian),
             ("DNF格斗大赛", self.dnf_pk),
             ("DNF周年庆登录活动", self.dnf_anniversary),
@@ -6970,23 +6970,55 @@ class DjcHelper:
 
         self.check_dnf_wegame_ide()
 
-        self.dnf_wegame_ide_op("启动礼包", "302359")
-        self.dnf_wegame_ide_op("幸运礼包", "302363")
+        def query_fuqi() -> int:
+            res = self.dnf_wegame_ide_op("初始化", "357347", print_res=False)
+            raw_info = res["jData"]
 
-        # self.dnf_wegame_ide_op("好友列表", "302415")
-        # self.dnf_wegame_ide_op("发送ark消息", "302616")
-        # self.dnf_wegame_ide_op("接受邀请", "302631")
-        # self.dnf_wegame_ide_op("分享礼包", "303772")
-        # self.dnf_wegame_ide_op("抽奖", "302670")
+            # 抽奖次数
+            fuqi = int(raw_info["blessNum"])
 
-        self.dnf_wegame_ide_op("普通攻击", "302849")
-        self.dnf_wegame_ide_op("暴击", "302998")
-        self.dnf_wegame_ide_op("觉醒攻击", "303027")
+            return fuqi
 
-        self.dnf_wegame_ide_op("每日攻击礼包", "302996")
+        self.dnf_wegame_ide_op("抽取锦鲤礼包", "357386")
 
-        for progress in [10, 30, 50, 70, 100]:
-            self.dnf_wegame_ide_op(f"进度 {progress}% 奖励", "303047", index=progress)
+        self.dnf_wegame_ide_op("锦鲤验证", "357423")
+        self.dnf_wegame_ide_op("锁定领取锦鲤奖励", "357420")
+        self.dnf_wegame_ide_op("双倍领取锦鲤奖励", "357422")
+
+        async_message_box(
+            "wegame有个锦鲤福利活动，需要邀请好友来完成，有兴趣的请自行完成~",
+            "25.1 wegame邀请好友活动",
+            show_once=True,
+            open_url=get_act_url("WeGame活动"),
+        )
+        # self.dnf_wegame_ide_op("发送ark提醒消息", "358428")
+        # self.dnf_wegame_ide_op("重抽资格记录分享", "357419")
+        # self.dnf_wegame_ide_op("锦鲤红包", "357424")
+        # self.dnf_wegame_ide_op("领取锦鲤红包", "357425")
+        # self.dnf_wegame_ide_op("好友列表", "357426")
+        # self.dnf_wegame_ide_op("新增好友", "357427")
+
+        self.dnf_wegame_ide_op("每日登录游戏", "357434")
+        self.dnf_wegame_ide_op("每日通关深渊：终末崇拜者", "357435")
+        self.dnf_wegame_ide_op("每日领取锦鲤红包", "357436")
+
+        fuqi = query_fuqi()
+        logger.info(f"当前的福气值为 {fuqi}")
+
+        fuqi_rewards = [
+            (1, 88, "福满阿拉德", "灿烂的徽章神秘礼盒×1"),
+            (2, 66, "鸿运当头", "+7 装备增幅券×1"),
+            (3, 46, "蛇来运转", "铭刻之念礼盒×1"),
+            (4, 22, "处处闪光", "抗疲劳秘药 (5点)×1"),
+            (5, 8, "小有福气", "黑钻7天×1"),
+        ]
+        for iCode, require_fuqi, name, reward in fuqi_rewards:
+            if fuqi < require_fuqi:
+                logger.warning(f"勇士聚福礼包 - {name} - {reward}需要福气 {require_fuqi}，当前只有 {fuqi}，将跳过")
+                continue
+
+            self.dnf_wegame_ide_op(f"领取勇士聚福礼包 - {name} - {reward}", "357432", iCode=iCode)
+            time.sleep(1)
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
@@ -9145,6 +9177,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_wegame()
 
     pause()

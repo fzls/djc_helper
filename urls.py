@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
+    newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-16 23:59:59", "回流引导秘籍"),
     #
     # 已过期活动
     #
@@ -110,6 +111,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "灵魂石的洗礼": "https://dzhu.qq.com/fe/dnf/skill-enhanced/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "回流引导秘籍": "https://dnf.qq.com/cp/a20250109growup/index.html",
     #
     # 已过期活动
     #
@@ -302,6 +304,7 @@ class Urls:
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
         self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
+        self.ide_iActivityId_dnf_recall_guide = "13_BGI6eI"  # 回流引导秘籍
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

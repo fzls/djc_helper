@@ -681,6 +681,7 @@ class DjcHelper:
             ("灵魂石的洗礼", self.soul_stone),
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
+            ("回流引导秘籍", self.dnf_recall_guide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8211,6 +8212,48 @@ class DjcHelper:
 
         return res
 
+    # --------------------------------------------回流引导秘籍--------------------------------------------
+    @try_except()
+    def dnf_recall_guide(self):
+        show_head_line("回流引导秘籍")
+        self.show_not_ams_act_info("回流引导秘籍")
+
+        if not self.cfg.function_switches.get_dnf_recall_guide or self.disable_most_activities():
+            show_act_not_enable_warning("回流引导秘籍")
+            return
+
+        self.check_dnf_recall_guide()
+
+        self.dnf_recall_guide_op("领取奖励", "365793")
+
+    def check_dnf_recall_guide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "回流引导秘籍",
+            get_act_url("回流引导秘籍"),
+            activity_op_func=self.dnf_recall_guide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_recall_guide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_recall_guide
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("回流引导秘籍"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9125,6 +9168,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_ark_lottery()
+        djcHelper.dnf_recall_guide()
 
     pause()

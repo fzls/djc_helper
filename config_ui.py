@@ -3063,6 +3063,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("灵魂石的洗礼", "get_soul_stone"),
             ("colg每日签到", "get_colg_signin"),
+            ("回流引导秘籍", "get_dnf_recall_guide"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

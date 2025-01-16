@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
+    newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     #
     # 已过期活动
     #
@@ -72,7 +73,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-21 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
-    newNotAmsActInfo("2024-09-12 00:00:00", "2024-10-31 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
@@ -109,6 +109,7 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "灵魂石的洗礼": "https://dzhu.qq.com/fe/dnf/skill-enhanced/",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -118,7 +119,6 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20241121index/",
     "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",

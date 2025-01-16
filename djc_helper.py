@@ -679,6 +679,7 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("灵魂石的洗礼", self.soul_stone),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -692,7 +693,6 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流攻坚队", self.dnf_socialize),
-            ("colg每日签到", self.colg_signin),
             ("DNF神界成长之路", self.dnf_shenjie_grow_up),
             ("DNF神界成长之路二期", self.dnf_shenjie_grow_up_v2),
             ("DNF神界成长之路三期", self.dnf_shenjie_grow_up_v3),
@@ -9133,6 +9133,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.colg_signin()
 
     pause()

@@ -296,12 +296,8 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 307.8KiB/s
-            f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 153.2KiB/s
             f"https://jsdelivr.pai233.top/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 157.8KiB/s
-            f"https://ghgo.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -324,6 +320,10 @@ def download_github_raw_content(
         [
             # timeout | 21.4KiB/s
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
+            # 502
+            f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # timeout
+            f"https://ghgo.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 

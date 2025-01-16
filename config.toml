@@ -895,6 +895,8 @@ need_take_awards = false
 10016 = false
 # 2024.11.21 史诗之路 集卡赢好礼
 10017 = false
+# 2025.1.16 重力之泉集卡活动
+10018 = false
 
 # 会员关怀相关配置
 [account_configs.vip_mentor]

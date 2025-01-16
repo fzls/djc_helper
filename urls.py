@@ -64,12 +64,12 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
-    newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "集卡"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-21 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
@@ -329,7 +329,7 @@ class Urls:
             "https://club.vip.qq.com/qqvip/api/trpc/xcard/RequestItems?token={token}&t={rand}&g_tk={g_tk}"
         )
         # 本地假设的集卡活动id，每次新版的集卡更新时，就增加一下这个（如果继续出旧版的那种集卡活动，则不需要修改这个）
-        self.pesudo_ark_lottery_act_id = 10017
+        self.pesudo_ark_lottery_act_id = 10018
 
         # qq视频 - 爱玩
         self.qq_video_iwan = "https://act.iwan.qq.com/trpc.iwan.mission_system_server.MissionSystemSvr/dealSimpleMission?platformId=10&platformid=10&guid=&device=&acctype=qq&missionId={missionId}&gameId=48&sPlat=&sArea=&serverId={serverId}&sRoleId={sRoleId}"

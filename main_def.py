@@ -1500,6 +1500,10 @@ def show_tips(cfg: Config):
             "在浏览器中打开下面的二维码链接，微信扫码后往下拉完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode2.png\n"
         ),
+        "25.1 邀请好友组队活动": (
+            "有个跟QQ好友绑定组队，然后完成游戏内的相关条件，并在游戏右下角的锁链按钮（做我的伙伴吧）点开具体游戏内的领奖界面来完成任务和领奖，有兴趣的朋友请自行操作\n"
+            "https://dnf.qq.com/cp/a20250116sociali/pc.html\n"
+        ),
     }
 
     logger.info(

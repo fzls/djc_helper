@@ -3059,7 +3059,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("colg其他活动", "get_colg_other_act"),
-            ("喂养删除补偿", "get_weiyang_compensate"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("灵魂石的洗礼", "get_soul_stone"),
@@ -3073,6 +3072,7 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("喂养删除补偿", "get_weiyang_compensate"),
             ("嘉年华星与心愿", "get_dnf_star_and_wish"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("回流攻坚队", "get_dnf_socialize"),

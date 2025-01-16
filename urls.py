@@ -61,12 +61,12 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2023-12-21 00:00:00", not_know_end_time____, "DNF漫画预约活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "集卡"),
     newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
@@ -106,13 +106,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
-    "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "灵魂石的洗礼": "https://dzhu.qq.com/fe/dnf/skill-enhanced/",
     #
     # 已过期活动
     #
+    "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",

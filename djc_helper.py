@@ -4760,8 +4760,7 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "重力之泉1月16日上线",
-            "1月16日开启115全新等级",
+            "上wegame畅玩dnf享好礼",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -9134,6 +9133,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.soul_stone()
+        djcHelper.dnf_welfare()
 
     pause()

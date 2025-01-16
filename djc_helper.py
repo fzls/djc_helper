@@ -7561,14 +7561,6 @@ class DjcHelper:
         if now_in_range("2025-01-16 10:00:00", "2025-03-13 23:59:59"):
             self.dnf_reservation_ide_op("领取奖励", "355314")
 
-            if use_by_myself():
-                async_message_box(
-                    "确认下重力之泉版本的预约奖励是否自动领取成功",
-                    "（仅自己可见）重力之泉版本预约活动 - 领奖阶段",
-                    open_url=get_act_url("DNF预约"),
-                    show_once_weekly=True,
-                )
-
     def check_dnf_reservation(self):
         self.check_bind_account(
             "DNF预约",
@@ -9133,6 +9125,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_reservation()
 
     pause()

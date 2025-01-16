@@ -67,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-16 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-16 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "DNF心悦wpe"),
     #
     # 已过期活动
     #
@@ -78,7 +79,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-09 23:59:59", "DNF卡妮娜的心愿摇奖机"),
-    newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-11 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2024-07-04 11:00:00", "2024-07-24 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
     newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
@@ -113,6 +113,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250109growup/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250116index/index.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250106dnf/index.html",
     #
     # 已过期活动
     #
@@ -125,7 +126,6 @@ act_name_to_url = {
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240912wish/indexm.html?pt=1",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20240903dnfjq/index.html",  # https://act.xinyue.qq.com/act/a20240903dnfCrystal/index.html
     "WeGame活动": "https://dnf.qq.com/cp/a20240704wegame/index.html",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
     "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",

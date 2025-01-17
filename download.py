@@ -162,12 +162,24 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 7.5MiB/s
-            f"https://slink.ltd/https://github.com/{release_file_path}",
-            # 3.0MiB/s
-            f"https://dgithub.xyz/{release_file_path}",
-            # 1.5MiB/s
+            # 12.4MiB/s
+            f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
+            # 11.3MiB/s
+            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
+            # 9.3MiB/s
             f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # 8.8MiB/s
+            f"https://github.boki.moe/https://github.com/{release_file_path}",
+            # 8.7MiB/s
+            f"https://slink.ltd/https://github.com/{release_file_path}",
+            # 8.0MiB/s
+            f"https://ghproxy.cc/https://github.com/{release_file_path}",
+            # 7.0MiB/s
+            f"https://download.ixnic.net/{release_file_path}",
+            # 4.9MiB/s
+            f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # 3.8MiB/s
+            f"https://dgithub.xyz/{release_file_path}",
         ],
     )
 
@@ -175,10 +187,6 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 148.0KiB/s
-            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
-            # 289.3KiB/s
-            f"https://www.ghproxy.cc/https://github.com/{release_file_path}",
         ],
     )
 
@@ -186,8 +194,10 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 292.3KiB/s
+            # 227.0KiB/s
             f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
+            # 2.1MiB/s
+            f"https://kkgithub.com/{release_file_path}",
         ],
     )
 
@@ -223,8 +233,6 @@ def download_latest_github_release(
         f"https://download.fgit.cf/{release_file_path}",
         # 502
         f"https://ghproxy.net/https://github.com/{release_file_path}",
-        # 502
-        f"https://gh-proxy.com/https://github.com/{release_file_path}",
         # ConnectionResetError
         f"https://ghproxy.com/https://github.com/{release_file_path}",
         # NameResolutionError
@@ -296,8 +304,12 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 153.2KiB/s
-            f"https://jsdelivr.pai233.top/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 430.8KiB/s
+            f"https://wget.la/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 306.9KiB/s
+            f"https://raw.ixnic.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 235.0KiB/s
+            f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -305,12 +317,12 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 244.5KiB/s | 421
+            # 3.3KiB/s
+            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 412.0KiB/s | 421
             f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 206.0KiB/s | ConnectTimeoutError
+            # 374.4KiB/s | ConnectTimeoutError
             f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 158.3KiB/s | ConnectTimeoutError
-            f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -322,8 +334,6 @@ def download_github_raw_content(
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
             # 502
             f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # timeout
-            f"https://ghgo.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -335,13 +345,17 @@ def download_github_raw_content(
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             # 703.9KiB/s
             f"https://jsd.cdn.zzko.cn/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # 165.2KiB/s
+            f"https://jsdelivr.pai233.top/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
 
     # 一些注释掉的已失效的，仅留着备忘
     _ = memo_invalid_mirror_list = [  # noqa: F841
-        # timeout
+        # 无法连接
         f"https://raw.kkgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+        # timeout
+        f"https://ghgo.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         # ConnectionResetError
         f"https://jsd.proxy.aks.moe/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         # 421
@@ -356,8 +370,6 @@ def download_github_raw_content(
         f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         # NameResolutionError
         f"https://raw.fgit.cf/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-        # 13.7KiB/s
-        f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         # 502
         f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         # ConnectionResetError
@@ -422,4 +434,4 @@ def extract_mirror_site(mirror_download_url: str, *words_to_remove: str) -> str:
 
 if __name__ == "__main__":
     # download_latest_github_release()
-    download_github_raw_content("djc_helper.py")
+    download_github_raw_content("CHANGELOG.MD")

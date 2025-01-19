@@ -69,6 +69,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-16 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-13 21:59:59", "超核勇士wpe"),
     #
     # 已过期活动
     #
@@ -89,7 +90,6 @@ not_ams_activities = [
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-11-30 23:59:59", "DNF娱乐赛"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-25 23:59:59", "拯救赛利亚"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-02-29 23:59:59", "DNF年货铺"),
-    newNotAmsActInfo("2024-02-05 12:00:00", "2024-03-31 23:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-05-17 23:59:59", "DNFxSNK"),
 ]
 
@@ -115,6 +115,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250116index/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250106dnf/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
+    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a348786145906443687dbe8e74cbe4bbb/index.html",
     #
     # 已过期活动
     #
@@ -132,7 +133,6 @@ act_name_to_url = {
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20240613celebration/",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
-    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a9eba0142961a4a64a52e369e002a66e8/index.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
     "dnf助手活动wpe": "https://mwegame.qq.com/act/dnf/a20231213zhaohui/index.html",
     "拯救赛利亚": "https://dnf.qq.com/cp/a20231221save/indexm.html",

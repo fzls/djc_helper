@@ -670,7 +670,8 @@ class DjcHelper:
     def payed_activities(self) -> list[tuple[str, Callable]]:
         # re: 更新新的活动时记得更新urls.py的 not_ams_activities
         # ? NOTE: 同时顺带更新 配置工具功能开关列表 act_category_to_act_desc_switch_list
-        # undone: 常用过滤词 -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all
+        # undone: 常用过滤词
+        #     -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all  -rumt-zh.com
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
@@ -685,6 +686,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
+            ("超核勇士wpe", self.dnf_chaohe_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -705,7 +707,6 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
-            ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF年货铺", self.dnf_nianhuopu),
             ("dnf助手活动wpe", self.dnf_helper_wpe),
             ("拯救赛利亚", self.dnf_save_sailiyam),
@@ -3676,80 +3677,135 @@ class DjcHelper:
 
         def query_is_chaohe() -> bool:
             # {"data": {}, "ret": 7001, "msg": "login status verification failed: 参数无效，检查请求参数"}
-            # {"ret": 0, "msg": "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。", "data": "{\"msg\":\"抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。\",\"ret\":40006}", "serialId": "ceiba-supercore-16726-157132-1709393654494-8ea5639454"}
-            res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 157132)
+            # {
+            #     "ret": 0,
+            #     "msg": "仅限添加了闪闪的超核玩家创建队伍，请联系微信联系闪闪进行身份验证。",
+            #     "data": "{\"msg\":\"仅限添加了闪闪的超核玩家创建队伍，请联系微信联系闪闪进行身份验证。\",\"ret\":40006}",
+            #     "serialId": "ceiba-supercore-21366-273385-1737267074082-wfVUV5xWt2"
+            # }
+            res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 273385)
 
             is_chaohe = not (
-                (res["ret"] == 0 and res["msg"] == "抱歉，仅限已添加管家闪闪的DNF超核玩家才可参与活动哦。")  # 不是超核
+                (res["ret"] == 0 and "仅限添加" in res["msg"])  # 不是超核
                 or (
                     res["ret"] == 7001 and res["msg"] == "login status verification failed: 参数无效，检查请求参数"
                 )  # 登录参数有误
             )
             return is_chaohe
 
-        is_chaohe = query_is_chaohe()
-        if not is_chaohe:
-            logger.warning(color("bold_yellow") + "当前账号不是超核玩家，将跳过超核勇士wpe活动")
-            return
+        def query_has_team() -> bool:
+            # {
+            #     "ret": 0,
+            #     "msg": "success",
+            #     "data": "{\"data\":{},\"leader\":0,\"msg\":\"success\",\"ret\":0,\"status\":0,\"team_id\":0}",
+            #     "serialId": "ceiba-supercore-21366-273459-1737268866424-7BkoFhp7lt"
+            # }
+            res = self.dnf_chaohe_wpe_op("查询队伍信息", 273459, print_res=False)
+            data = json.loads(res["data"])
 
-        # 成长系列任务
-        self.dnf_chaohe_wpe_op("1、活动期间累积登录游戏3天（超能积分+50） ", 157132)
-        self.dnf_chaohe_wpe_op("2、活动期间累积登录游戏6天（超能积分+50）", 157133)
-        self.dnf_chaohe_wpe_op("3、活动期间累积登录游戏12天（超能积分+100）", 157134)
-        self.dnf_chaohe_wpe_op("4、活动期间累积登录游戏18天（超能积分+200）", 157135)
-        self.dnf_chaohe_wpe_op("5、活动期间累积登录游戏24天（超能积分+400）", 157136)
-        self.dnf_chaohe_wpe_op("6、活动期间强化或增幅成功装备≥3次（超能积分+100）", 157137)
-        self.dnf_chaohe_wpe_op("7、活动期间强化或增幅成功装备≥6次（超能积分+200）", 157138)
-        self.dnf_chaohe_wpe_op("8、活动期间强化或增幅成功装备≥9次（超能积分+300）", 157139)
-        self.dnf_chaohe_wpe_op("9、激战均衡仲裁者系列任务当月通关100次（超能积分+300）", 157140)
-        self.dnf_chaohe_wpe_op("10、激战均衡仲裁者系列任务当月通关200次（超能积分+600）", 157141)
-        self.dnf_chaohe_wpe_op("11、挑战幽暗岛系列任务当月通关4次（超能积分+1000）", 157142)
-        self.dnf_chaohe_wpe_op("12、盖波加系列任务当月通关4次（超能积分+500）", 157143)
-        self.dnf_chaohe_wpe_op("13、巴卡尔系列任务当月通关4次（超能积分+800）", 157144)
+            team_id = data["team_id"]
 
-        # 挑战系列任务
-        self.dnf_chaohe_wpe_op("1、活动期间账号内1个角色达到5.3万名望（超能积分+600）", 157145)
-        self.dnf_chaohe_wpe_op("2、活动期间账号内2个角色达到5.3万名望（超能积分+600）", 157146)
-        self.dnf_chaohe_wpe_op("3、活动期间账号内3个角色达到5.3万名望（超能积分+600）", 157147)
-        self.dnf_chaohe_wpe_op("4、活动期间帐号充值点券数量≥100000（超能积分+500）", 157148)
-        self.dnf_chaohe_wpe_op("5、活动期间帐号充值点券数量≥200000（超能积分+500）", 157149)
-        self.dnf_chaohe_wpe_op("6、活动期间帐号充值点券数量≥300000（超能积分+500）", 157150)
-        self.dnf_chaohe_wpe_op("7、活动期间帐号充值点券数量≥400000（超能积分+500）", 157151)
-        self.dnf_chaohe_wpe_op("8、活动期间帐号充值点券数量≥500000（超能积分+500）", 157152)
-        self.dnf_chaohe_wpe_op("9、活动期间帐号充值点券数量≥1000000（超能积分+1000）", 157153)
-        self.dnf_chaohe_wpe_op("10、活动期间帐号充值点券数量≥2000000（超能积分+2000）", 157154)
+            return team_id != 0
 
-        # 超能成长礼
-        remain_point, total_point = query_count("查询 当前已获得超能积分", 157131)
-        logger.info(f"超能积分 目前剩余：{remain_point}，累计获得 {total_point}")
+        # is_chaohe = query_is_chaohe()
+        # if not is_chaohe:
+        #     logger.warning(color("bold_yellow") + "当前账号不是超核玩家，将跳过超核勇士wpe活动")
+        #     return
 
-        self.dnf_chaohe_wpe_op("雏鹰勇士 1500积分", 158781)
-        self.dnf_chaohe_wpe_op("潜能勇士 3000积分", 158788)
-        self.dnf_chaohe_wpe_op("飞升勇士 4500积分", 158789)
-        self.dnf_chaohe_wpe_op("领航勇士 6000积分", 158790)
-        self.dnf_chaohe_wpe_op("缔造勇士 7500积分", 158791)
-        self.dnf_chaohe_wpe_op("光辉勇士 9000积分", 158792)
-        self.dnf_chaohe_wpe_op("圣光勇士 10500积分", 158793)
-        self.dnf_chaohe_wpe_op("神迹勇士 12000积分", 158794)
-        self.dnf_chaohe_wpe_op("传奇勇士 13500积分", 158795)
+        if not query_has_team():
+            is_chaohe = query_is_chaohe()
 
-        # 超能幸运礼
-        remain_lottery_times, total_lottery_times = query_count("查询 当前已获得抽奖次数", 158867)
-        logger.info(f"抽奖次数 目前剩余：{remain_lottery_times}，累计获得 {total_lottery_times}")
-        for idx in range_from_one(remain_lottery_times):
-            self.dnf_chaohe_wpe_op(f"[{idx}/{remain_lottery_times}] 开启礼盒", 158877)
-            time.sleep(3)
-
-        # 超能聚宝阁
-        remain_exchange_point, total_exchange_point = query_count("查询 当前已获得兑换积分", 158876)
-        logger.info(f"兑换积分 目前剩余：{remain_exchange_point}，累计获得 {total_exchange_point}")
-        if remain_exchange_point > 0:
             async_message_box(
-                f"当前拥有兑换积分 {remain_exchange_point}，可点击确认前往活动页面兑换 +11增幅券（6000积分）、梦想白金（6000积分）等道具",
-                "超核勇士活动兑换道具",
+                (
+                    f"当前没有组队，将跳过尝试领取超核玩家相关奖励(当前账号是否是超核玩家: {is_chaohe})\n"
+                    "\n"
+                    "超核勇士活动可组队完成。超核玩家（充了很多钱）可以作为队长创建队伍，其他人可以加入队伍。\n"
+                    "最终队伍成员深渊掉落史诗和太初达到积分后，队伍内成员可以领取相应奖励，其中队长可以在积分达到80时领取一个很酷炫的光环\n"
+                    "有兴趣的朋友可以自行在稍后打开的活动页面中去完成组队这一步，剩余的领取奖励流程小助手将会自动操作\n"
+                    "\n"
+                    "顺带超核大佬队伍有空位的话，求捎上我哈哈，每天满勤-。-（有意可以QQ联系下我哈哈）\n"
+                ),
+                "超核勇士组队",
                 show_once_weekly=True,
                 open_url=get_act_url("超核勇士wpe"),
             )
+            return
+
+        # 领取掉落装备次数积分
+        type_name_count_reward_list = [
+            ("史诗装备", [
+                (1, 273675),
+                (2, 274086),
+                (3, 274087),
+                (4, 274088),
+                (5, 274089),
+                (6, 274090),
+                (7, 274091),
+                (8, 274092),
+                (9, 274093),
+                (10, 274094),
+                (11, 274095),
+                (12, 274096),
+                (13, 274097),
+                (14, 274098),
+                (15, 274099),
+                (16, 274100),
+            ]),
+            ("太初装备", [
+                (1, 274135),
+                (2, 274136),
+                (3, 274137),
+                (4, 274138),
+                (5, 274139),
+                (6, 274140),
+            ]),
+        ]
+        for type_name, count_reward_list in type_name_count_reward_list:
+            for count, flowid in count_reward_list:
+                self.dnf_chaohe_wpe_op(f"尝试领取 {type_name} 累计{count}件 的积分", flowid)
+
+        # 领取积分阶段奖励
+        # remain_point, total_point = query_count("查询 当前已获得闪光值", xx)
+        # logger.info(f"闪光值 目前累计获得 {total_point}")
+
+        point_reward_list = [
+            (5, 274164),
+            (15, 274215),
+            (25, 274245),
+            (40, 274246),
+            (80, 274247),
+        ]
+        for require_point, flowid in point_reward_list:
+            # if total_point < require_point:
+            #     logger.warning(f"当前积分为 {total_point}，尚未达到 {require_point}，跳过该阶段奖励")
+            #     continue
+
+            self.dnf_chaohe_wpe_op(f"尝试领取积分达到 {require_point} 的奖励", flowid)
+
+        self.dnf_chaohe_wpe_op("超核玩家创建队伍奖励", 274416)
+        self.dnf_chaohe_wpe_op("超核玩家达到80积分光环奖励", 274442)
+
+        # 超能幸运礼
+        # remain_lottery_times, total_lottery_times = query_count("查询 当前已获得抽奖次数", xx)
+        # logger.info(f"抽奖次数 目前剩余：{remain_lottery_times}，累计获得 {total_lottery_times}")
+        remain_lottery_times = 8
+        for idx in range_from_one(remain_lottery_times):
+            res = self.dnf_chaohe_wpe_op(f"[{idx}/{remain_lottery_times}] 开启礼盒", 274450)
+            data = json.loads(res["data"])
+            if data["ret"] in [40006]:
+                # {\"msg\":\"此队伍尚未成团\",\"ret\":40006}
+                break
+
+        # # 超能聚宝阁
+        # remain_exchange_point, total_exchange_point = query_count("查询 当前已获得兑换积分", xx)
+        # logger.info(f"兑换积分 目前剩余：{remain_exchange_point}，累计获得 {total_exchange_point}")
+        # if remain_exchange_point > 0:
+        #     async_message_box(
+        #         f"当前拥有兑换积分 {remain_exchange_point}，可点击确认前往活动页面兑换 +11增幅券（6000积分）、梦想白金（6000积分）等道具",
+        #         "超核勇士活动兑换道具",
+        #         show_once_weekly=True,
+        #         open_url=get_act_url("超核勇士wpe"),
+        #     )
 
     def dnf_chaohe_wpe_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
@@ -3757,7 +3813,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 16726
+        act_id = 21366
 
         json_data = {
             "biz_id": "supercore",
@@ -9177,6 +9233,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_chaohe_wpe()
 
     pause()

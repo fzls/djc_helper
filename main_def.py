@@ -1504,6 +1504,11 @@ def show_tips(cfg: Config):
             "有个跟QQ好友绑定组队，然后完成游戏内的相关条件，并在游戏右下角的锁链按钮（做我的伙伴吧）点开具体游戏内的领奖界面来完成任务和领奖，有兴趣的朋友请自行操作\n"
             "https://dnf.qq.com/cp/a20250116sociali/pc.html\n"
         ),
+        "25.1 斗鱼虎牙": (
+            "斗鱼虎牙活动请自行参与，活动链接如下:\n"
+            "斗鱼：https://www.douyu.com/topic/ZLZQ?rid=5324055\n"
+            "虎牙：https://zt.huya.com/81f6b835/pc/index.html\n"
+        ),
     }
 
     logger.info(

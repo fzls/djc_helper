@@ -178,8 +178,7 @@ def download_latest_github_release(
     # 最后加入几个慢的镜像和源站
     extend_urls(
         urls,
-        [
-        ],
+        [],
     )
 
     # 再保底放入一些可能失效的镜像

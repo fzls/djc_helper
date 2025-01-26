@@ -70,12 +70,12 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-13 21:59:59", "超核勇士wpe"),
+    newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-14 21:59:59", "超级会员"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
-    newNotAmsActInfo("2024-11-21 00:00:00", "2024-12-20 23:59:59", "超级会员"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
     newNotAmsActInfo("2024-02-01 12:00:00", "2024-11-29 23:59:59", "DNF神界成长之路"),
     newNotAmsActInfo("2024-04-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路二期"),
@@ -116,13 +116,13 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250106dnf/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a348786145906443687dbe8e74cbe4bbb/index.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/52345_51c57d92",
     #
     # 已过期活动
     #
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/51652_675ff09a",
     "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
     "DNF神界成长之路": "https://dnf.qq.com/cp/a2024user/page1.html",
     "DNF神界成长之路二期": "https://dnf.qq.com/cp/a2024user/page2.html",

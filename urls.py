@@ -71,6 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-13 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-14 21:59:59", "超级会员"),
+    newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
     #
     # 已过期活动
     #
@@ -117,6 +118,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a348786145906443687dbe8e74cbe4bbb/index.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/52345_51c57d92",
+    "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
     #
     # 已过期活动
     #
@@ -235,6 +237,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
+            "sDay",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -305,6 +308,7 @@ class Urls:
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
         self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
         self.ide_iActivityId_dnf_recall_guide = "13_BGI6eI"  # 回流引导秘籍
+        self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

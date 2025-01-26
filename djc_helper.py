@@ -688,6 +688,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("超级会员", self.dnf_super_vip),
+            ("新春充电计划", self.new_year_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8319,6 +8320,65 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------新春充电计划--------------------------------------------
+    @try_except()
+    def new_year_signin(self):
+        show_head_line("新春充电计划")
+        self.show_not_ams_act_info("新春充电计划")
+
+        if not self.cfg.function_switches.get_new_year_signin or self.disable_most_activities():
+            show_act_not_enable_warning("新春充电计划")
+            return
+
+        self.check_new_year_signin()
+
+        sign_date = format_now("%Y-%m-%d")
+        self.new_year_signin_op("签到", "368114", sDay=sign_date)
+        self.new_year_signin_op("每日奖励", "368115")
+
+        if now_after("2025-02-05 00:00:00"):
+            # 2月5日~2月12日，消耗疲劳可完成蓄电池补签
+            for idx in range_from_one(10):
+                res = self.new_year_signin_op(f"{idx}/10 补签", "368117")
+                if res.get("iRet", -1) != 0:
+                    break
+
+                time.sleep(3)
+
+            # “充电完成后，2月5日~2月12日期间登录游戏即可在该页面领取已累积奖励”
+            self.new_year_signin_op("签到累计奖励", "368116")
+        else:
+            logger.info("尚未到2.5，不尝试进行补签和领取累计奖励")
+
+
+    def check_new_year_signin(self, **extra_params):
+        return self.ide_check_bind_account(
+            "新春充电计划",
+            get_act_url("新春充电计划"),
+            activity_op_func=self.new_year_signin_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def new_year_signin_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_new_year_signin
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("新春充电计划"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9233,6 +9293,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.new_year_signin()
 
     pause()

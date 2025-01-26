@@ -3068,6 +3068,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("WeGame活动", "get_dnf_wegame"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
+            ("新春充电计划", "get_new_year_signin"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

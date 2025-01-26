@@ -162,10 +162,6 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 12.4MiB/s
-            f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
-            # 11.3MiB/s
-            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
             # 9.3MiB/s
             f"https://cors.isteed.cc/github.com/{release_file_path}",
             # 8.8MiB/s
@@ -174,12 +170,8 @@ def download_latest_github_release(
             f"https://slink.ltd/https://github.com/{release_file_path}",
             # 8.0MiB/s
             f"https://ghproxy.cc/https://github.com/{release_file_path}",
-            # 7.0MiB/s
-            f"https://download.ixnic.net/{release_file_path}",
             # 4.9MiB/s
             f"https://gh-proxy.com/https://github.com/{release_file_path}",
-            # 3.8MiB/s
-            f"https://dgithub.xyz/{release_file_path}",
         ],
     )
 
@@ -194,10 +186,18 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 227.0KiB/s
+            # timeout
             f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
             # 2.1MiB/s
             f"https://kkgithub.com/{release_file_path}",
+            # 521
+            f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
+            # 9.7MiB/s
+            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
+            # timeout
+            f"https://download.ixnic.net/{release_file_path}",
+            # timeout
+            f"https://dgithub.xyz/{release_file_path}",
         ],
     )
 
@@ -306,10 +306,12 @@ def download_github_raw_content(
         [
             # 430.8KiB/s
             f"https://wget.la/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 306.9KiB/s
-            f"https://raw.ixnic.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 235.0KiB/s
             f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 92.4KiB/s
+            f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 108.0KiB/s
+            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -319,10 +321,6 @@ def download_github_raw_content(
         [
             # 3.3KiB/s
             f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 412.0KiB/s | 421
-            f"https://raw.gitmirror.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 374.4KiB/s | ConnectTimeoutError
-            f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 
@@ -334,6 +332,8 @@ def download_github_raw_content(
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
             # 502
             f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # timeout
+            f"https://raw.ixnic.net/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
         ],
     )
 

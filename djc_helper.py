@@ -679,7 +679,6 @@ class DjcHelper:
             ("colg其他活动", self.colg_other_act),
             ("DNF预约", self.dnf_reservation),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("灵魂石的洗礼", self.soul_stone),
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
             ("回流引导秘籍", self.dnf_recall_guide),
@@ -696,6 +695,7 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("灵魂石的洗礼", self.soul_stone),
             ("喂养删除补偿", self.weiyang_compensate),
             ("嘉年华星与心愿", self.dnf_star_and_wish),
             ("回流攻坚队", self.dnf_socialize),

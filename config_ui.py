@@ -3061,7 +3061,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
-            ("灵魂石的洗礼", "get_soul_stone"),
             ("colg每日签到", "get_colg_signin"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("DNF落地页活动", "get_dnf_luodiye"),
@@ -3079,6 +3078,7 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("灵魂石的洗礼", "get_soul_stone"),
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("嘉年华星与心愿", "get_dnf_star_and_wish"),
             ("回流攻坚队", "get_dnf_socialize"),

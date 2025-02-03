@@ -576,8 +576,14 @@ def truncate(msg, expect_width) -> str:
     return "".join(truncated)
 
 
-def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=False):
-    msg = str(msg)
+def padLeftRight(target_msg, target_size, pad_char=" ", mode="middle", need_truncate=False):
+    msg = str(target_msg)
+    # re: 如果本列想要指定单独的颜色，可以在传入消息的时候不直接传字符串，而是传入一个三元素的列表或tuple，分别是消息内容、消息颜色，本行的颜色，这样可以实现本内容使用单独颜色，并在后面恢复原来的颜色
+    msg_color = None
+    line_color = None
+    if type(target_msg) is list or type(target_msg) is tuple:
+        msg, msg_color, line_color = target_msg
+
     if need_truncate:
         msg = truncate(msg, target_size)
     msg_len = printed_width(msg)
@@ -586,6 +592,9 @@ def padLeftRight(msg, target_size, pad_char=" ", mode="middle", need_truncate=Fa
         total = target_size - msg_len
         pad_left_len = total // 2
         pad_right_len = total - pad_left_len
+
+    if msg_color is not None and line_color is not None:
+        msg = msg_color + msg + asciiReset + line_color
 
     if mode == "middle":
         return pad_char * pad_left_len + msg + pad_char * pad_right_len

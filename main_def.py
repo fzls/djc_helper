@@ -864,6 +864,9 @@ def show_following_regular_activity_expected_info():
         )
 
 
+account_status_line_color = color("fg_bold_green")
+
+
 @try_except()
 # show_accounts_status 展示个人概览
 def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
@@ -916,7 +919,7 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
 
     logger.info(tableify(heads, colSizes))
     for row in rows:
-        logger.info(color("fg_bold_green") + tableify(row, colSizes, need_truncate=True))
+        logger.info(account_status_line_color + tableify(row, colSizes, need_truncate=True))
 
     # # 展示本周闪光杯爆装
     # DjcHelper(cfg.account_configs[0], cfg.common).dnf_shanguang_show_equipments()
@@ -954,9 +957,9 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     if token_expired:
         if account_config.dnf_helper_info.token != "":
-            levelInfo = "token已过期"
+            levelInfo = ("token已过期", color("bold_cyan"), account_status_line_color)
         else:
-            levelInfo = "token未配置"
+            levelInfo = ("token未配置", color("bold_yellow"), account_status_line_color)
 
     user_info_db = (
         DnfHelperChronicleUserActivityTopInfoDB().with_context(djcHelper.get_dnf_helper_chronicle_db_key()).load()

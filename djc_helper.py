@@ -4576,10 +4576,15 @@ class DjcHelper:
         res = self.dzhu_post("活动基础状态信息", "getUserActivityTopInfo", self.get_common_params())
         return DnfHelperChronicleUserActivityTopInfo().auto_update_config(res.get("data", {}))
 
-    @try_except(show_exception_info=False, return_val_on_except=DnfHelperChronicleUserTaskList())
-    def query_dnf_helper_chronicle_user_task_list(self) -> DnfHelperChronicleUserTaskList:
+    @try_except(show_exception_info=False, return_val_on_except=(DnfHelperChronicleUserTaskList(), True))
+    def query_dnf_helper_chronicle_user_task_list(self) -> tuple[DnfHelperChronicleUserTaskList, bool]:
         res = self.dzhu_post("任务信息", "getUserTaskList", self.get_common_params())
-        return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
+
+        user_task_info = DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
+        # {'result': 0, 'returnCode': -30003, 'returnMsg': '登录态失效，请重新登录'}
+        token_expired = res.get("returnCode", 0) == -30003
+
+        return user_task_info, token_expired
 
     @try_except(return_val_on_except=False)
     def check_dnf_helper_chronicle_auto_match(self, user_buy_info: BuyInfo, print_waring=True) -> bool:

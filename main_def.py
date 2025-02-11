@@ -905,7 +905,8 @@ def sas(cfg: Config, ctx: str, user_buy_info: BuyInfo):
         ("心悦类型", 10),
         ("成就点", 6),
         ("勇士币", 6),
-        ("心悦组队", 16),
+        ("运镖队友", 12),
+        ("运镖组队奖励", 16),
         ("前两周心悦", 10),
         ("自动组队", 8),
         ("编年史", 14),
@@ -934,8 +935,10 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
 
     xinyue_info = djcHelper.query_xinyue_info("查询心悦成就点概览", print_res=False)
     teaminfo = djcHelper.query_xinyue_teaminfo()
+    teammate_qq = ""
     team_award_summary = "无队伍"
     if teaminfo.is_team_full():
+        teammate_qq = teaminfo.get_teammate_qq(djcHelper.qq())
         team_award_summary = djcHelper.query_xinyue_team_this_week_award_summary()
 
     last_two_week_xinyue_take_award_count = djcHelper.query_last_two_week_xinyue_team_take_award_count()
@@ -947,6 +950,8 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
             can_auto_match_xinyue_team = "等待匹配"
     elif xinyue_info.is_xinyue_or_special_member() and not account_config.enable_auto_match_xinyue_team:
         can_auto_match_xinyue_team = "未开启"
+    else:
+        can_auto_match_xinyue_team = "无资格"
 
     levelInfo, chronicle_points = djcHelper.query_dnf_helper_chronicle_info().get_level_info_and_points_to_show()
 
@@ -991,6 +996,7 @@ def get_account_status(idx: int, account_config: AccountConfig, common_config: C
         xinyue_info.xytype_str,
         xinyue_info.score,
         xinyue_info.ysb,
+        teammate_qq,
         team_award_summary,
         last_two_week_xinyue_take_award_count,
         can_auto_match_xinyue_team,

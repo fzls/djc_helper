@@ -370,6 +370,13 @@ class XinYueMyTeamInfo(ConfigInterface):
     def is_team_full(self) -> bool:
         return self.num == 2
 
+    def get_teammate_qq(self, my_qq: str) -> str:
+        for qq in self.teamAllOpenId.split(","):
+            if qq != my_qq:
+                return qq
+
+        return ""
+
 
 class XinYueTeamMember(ConfigInterface):
     def __init__(self):

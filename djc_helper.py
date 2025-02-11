@@ -678,7 +678,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("colg其他活动", self.colg_other_act),
             ("DNF预约", self.dnf_reservation),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
             ("回流引导秘籍", self.dnf_recall_guide),
@@ -688,6 +687,7 @@ class DjcHelper:
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("超级会员", self.dnf_super_vip),
             ("新春充电计划", self.new_year_signin),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -4830,6 +4830,8 @@ class DjcHelper:
 
         sContents = [
             "上wegame畅玩dnf享好礼",
+            "美神维纳斯降临",
+            "2月13日挑战全新军团本",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -9321,6 +9323,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.new_year_signin()
+        djcHelper.dnf_welfare()
 
     pause()

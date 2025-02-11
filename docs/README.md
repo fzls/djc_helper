@@ -208,16 +208,7 @@ https://space.bilibili.com/1851177
 # 交流群
 telegram群组       https://t.me/djc_helper <br>
 telegram频道       https://t.me/djc_helper_notice <br>
-DNF蚊子腿小助手     553925117 <br>
-DNF蚊子腿小助手二群 966403777 <br>
-DNF蚊子腿小助手三群 1041823293 <br>
-DNF蚊子腿小助手四群 743671885 <br>
-DNF蚊子腿小助手五群 545316504 <br>
-DNF蚊子腿小助手六群 444193814 <br>
-DNF蚊子腿小助手七群 389786092 <br>
-DNF蚊子腿小助手八群 552940664 <br>
-DNF蚊子腿小助手九群 517463079 <br>
-DNF蚊子腿小助手10群 791343073 <br>
+DNF蚊子腿小助手     https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv <br>
 
 # 『重要』与个人隐私有关的skey相关说明
 1. skey是腾讯系应用的通用鉴权票据，个中风险，请Google搜索《腾讯skey》后自行评估

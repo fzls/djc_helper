@@ -772,17 +772,8 @@ class ConfigUi(QFrame):
         report_click_event("clear_login_status")
 
     def join_group(self, checked=False):
-        # note: 如果群 791343073 满了，到 https://qun.qq.com/join.html 获取新群的加群链接 @2021-02-13 01:41:03
-        webbrowser.open("https://qm.qq.com/cgi-bin/qm/qr?k=w-U4SsRhWKGHtiMprzqa6plhbvCSALA2&jump_from=webapi")
-        for suffix in [
-            "png",
-            "jpg",
-        ]:
-            img_name = f"DNF蚊子腿小助手交流群群二维码.{suffix}"
-            if not os.path.isfile(img_name):
-                continue
-
-            self.popen(img_name)
+        # note: 如果群满了，到 https://qun.qq.com/join.html 获取新群的加群链接，并更新到在线文档中 @2021-02-13 01:41:03
+        open_with_default_app("DNF蚊子腿小助手QQ群.url")
 
         report_click_event("join_group")
 

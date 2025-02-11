@@ -1848,7 +1848,7 @@ class QQLogin:
         except RequireVerifyMessageButInHeadlessMode:
             raise
         except Exception as e:
-            msg = f"ver {now_version} {ver_time} {self.name} 自动处理验证失败了，出现未捕获的异常，请加群{get_config().common.qq_group}反馈或自行解决。请手动进行处理验证码"
+            msg = f"ver {now_version} {ver_time} {self.name} 自动处理验证失败了，出现未捕获的异常，请打开 DNF蚊子腿小助手QQ群.url 在线文档加群反馈或自行解决。请手动进行处理验证码"
             logger.exception(color("fg_bold_red") + msg, exc_info=e)
             logger.warning(color("fg_bold_cyan") + "如果稳定报错，不妨打开网盘，看看是否有新版本修复了这个问题~")
             logger.warning(color("fg_bold_cyan") + f"链接：{get_config().common.netdisk_link}")

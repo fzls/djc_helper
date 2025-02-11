@@ -435,7 +435,7 @@ def show_unexpected_exception_message(e: Exception):
     except Exception:
         pass
     msg = (
-        f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请加群{cfg.common.qq_group}反馈或自行解决。"
+        f"ver {now_version} (发布于{ver_time}，距今已有{time_since_release.days}天啦) 运行过程中出现未捕获的异常，请打开 DNF蚊子腿小助手QQ群.url 在线文档加群反馈或自行解决。"
         + check_some_exception(e)
     )
     logger.exception(color("fg_bold_yellow") + msg, exc_info=e)

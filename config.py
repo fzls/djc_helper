@@ -1345,8 +1345,6 @@ class CommonConfig(ConfigInterface):
         # 网盘地址
         self.netdisk_link = "https://docs.qq.com/doc/DYmlqWGNPYWRDcG95"
         self.netdisk_link_for_report = self.netdisk_link
-        # QQ群
-        self.qq_group = 791343073
         # 是否启用自动更新功能
         self.auto_update_on_start = True
         # 是否仅允许单个运行实例
@@ -1815,7 +1813,6 @@ if __name__ == "__main__":
 
     cfg = config()
     print(cfg.common.netdisk_link)
-    print(cfg.common.qq_group)
 
     # cfg.common.auto_update_on_start = True
     # save_config(cfg)

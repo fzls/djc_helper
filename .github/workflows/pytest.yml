@@ -81,7 +81,7 @@ jobs:
       - name: Upload Codecov artifact
         uses: actions/upload-artifact@v4
         with:
-          name: "coverage.xml"
+          name: coverage-${{ matrix.runs-on }}.xml
           path: ./coverage.xml
 
       - name: Test for Coveralls

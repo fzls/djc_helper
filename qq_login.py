@@ -416,7 +416,7 @@ class QQLogin:
             try:
                 logger.info(
                     color("bold_green")
-                    + "检查系统自带的chrome是否可用，如果一直卡在这里，请试试打开【配置工具/公共配置/登录/强制使用便携版chrome】开关后，再次运行~。如果安装了【360浏览器/qq浏览器】，可以先试试把chrome修改为默认浏览器，或者卸载掉他们，然后重启电脑后再运行小助手试试。"
+                    + "检查系统自带的chrome是否可用，如果一直卡在这里，请试试打开【配置工具/公共配置/登录/强制使用便携版chrome】开关后，再次运行~。如果安装了【360浏览器/qq浏览器】，可以先试试把chrome修改为默认浏览器，或者卸载掉他们，或者试试关闭防火墙，然后重启电脑后再运行小助手试试。"
                 )
                 # note: 调用chrome_driver创建新session时，chrome_driver会尝试添加en-us的键盘布局-。-这个目前没法修，因为必须依赖这个
                 self.driver = webdriver.Chrome(

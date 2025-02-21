@@ -679,7 +679,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("colg每日签到", self.colg_signin),
             ("集卡", self.dnf_ark_lottery),
-            ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
@@ -687,6 +686,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("新春充电计划", self.new_year_signin),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("回流引导秘籍", self.dnf_recall_guide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8321,7 +8321,7 @@ class DjcHelper:
 
         self.check_dnf_recall_guide()
 
-        self.dnf_recall_guide_op("领取奖励", "365793")
+        self.dnf_recall_guide_op("领取奖励", "369895")
 
     def check_dnf_recall_guide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -9323,6 +9323,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_other_act()
+        djcHelper.dnf_recall_guide()
 
     pause()

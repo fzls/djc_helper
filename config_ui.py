@@ -3052,12 +3052,12 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF预约", "get_dnf_reservation"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("colg每日签到", "get_colg_signin"),
-            ("回流引导秘籍", "get_dnf_recall_guide"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("WeGame活动", "get_dnf_wegame"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("新春充电计划", "get_new_year_signin"),
+            ("回流引导秘籍", "get_dnf_recall_guide"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

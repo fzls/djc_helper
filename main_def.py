@@ -1507,23 +1507,6 @@ def show_tips(cfg: Config):
         "24.1 漫画兑换": (
             "小助手现已支持漫画活动的兑换功能，各位可打开配置工具【账号配置/漫画】，配置需要兑换的道具（如黑钻）\n"
         ),
-        "25.1 微信游戏圈分享": (
-            "在浏览器中打开下面的二维码链接，微信扫码后分享活动页面（可以发给文件传输助手），可以领取7天黑钻和10点疲劳药，有兴趣的朋友请自行操作\n"
-            "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode1.png\n"
-        ),
-        "25.1 微信游戏圈每日活动": (
-            "在浏览器中打开下面的二维码链接，微信扫码后往下拉完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作\n"
-            "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode2.png\n"
-        ),
-        "25.1 邀请好友组队活动": (
-            "有个跟QQ好友绑定组队，然后完成游戏内的相关条件，并在游戏右下角的锁链按钮（做我的伙伴吧）点开具体游戏内的领奖界面来完成任务和领奖，有兴趣的朋友请自行操作\n"
-            "https://dnf.qq.com/cp/a20250116sociali/pc.html\n"
-        ),
-        "25.1 斗鱼虎牙": (
-            "斗鱼虎牙活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/ZLZQ?rid=5324055\n"
-            "虎牙：https://zt.huya.com/81f6b835/pc/index.html\n"
-        ),
     }
 
     logger.info(

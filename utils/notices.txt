@@ -438,5 +438,15 @@
     "open_url": "",
     "expire_at": "2025-02-06 21:10:51",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "获取绑定角色报错",
+    "message": "因查询角色的接口参数有调整，目前通过配置工具来设置绑定角色的话，获取时会报错，具体解决办法请看打开的在线文档\n",
+    "send_at": "2025-02-28 17:42:50",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYkpFdWJrSExuR1h1",
+    "expire_at": "2025-03-07 17:42:50",
+    "show_only_before_version": ""
   }
 ]

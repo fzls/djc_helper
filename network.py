@@ -411,14 +411,15 @@ def jsonp2json(jsonpStr, is_normal_jsonp=True, need_unquote=True) -> dict:
     jsonRes = {}
     for kv in jsonpStr.split(","):
         try:
-            k, v = kv.strip().split(":")
+            k, v = kv.strip().split(":", 1)
             if v[0] == "'":
                 v = v[1:-1]  # 去除前后的''
             if need_unquote:
                 jsonRes[k] = unquote_plus(v)
             else:
                 jsonRes[k] = v
-        except Exception:
+        except Exception as e:
+            _ = e
             pass
 
     return jsonRes

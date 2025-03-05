@@ -62,6 +62,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-02-16 00:00:00", "2025-04-10 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "dnf助手活动zangyi"),
     #
     # 已过期活动
     #
@@ -74,7 +75,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-16 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2024-12-31 00:00:00", "2025-01-16 23:59:59", "灵魂石的洗礼"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
@@ -110,6 +110,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250207growup/index.html",
+    "dnf助手活动zangyi": "https://dzhu.qq.com/fe/dnf/energy_tree/",
     #
     # 已过期活动
     #
@@ -122,7 +123,6 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250116index/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
-    "灵魂石的洗礼": "https://dzhu.qq.com/fe/dnf/skill-enhanced/",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
     "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
@@ -425,8 +425,8 @@ class Urls:
         # 漫画更新数据
         self.dnf_comic_update_api = "https://game.gtimg.cn/images/amside/ide_timer/249678_comicDetail.js"
 
-        # 灵魂石的洗礼
-        self.soul_stone_api = "https://dzhu.qq.com/zangyi/activity/emulator"
+        # dnf助手活动zangyi
+        self.dnf_helper_zangyi_api = "https://dzhu.qq.com/zangyi/activity/activity"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

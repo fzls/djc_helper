@@ -2449,69 +2449,112 @@ class XinYueBattleGroundWpeBindRole(ConfigInterface):
         self.device = "pc"
 
 
-class SoulStoneResponse(ConfigInterface):
+class DnfHelperZangyiResponse(ConfigInterface):
     def __init__(self):
         self.result = 0
         self.returnCode = 0
         self.returnMsg = ""
-        self.data = SoulStoneInfo()
+        self.data = DnfHelperZangyiInfo()
 
 
-class SoulStoneInfo(ConfigInterface):
+class DnfHelperZangyiInfo(ConfigInterface):
     def __init__(self):
-        self.emulatorPropTitle = "暗淡的灵魂石"
-        self.currLevel = 3
-        self.highestLevel = 3
-        self.nextSuccRate = "50%"
-        self.remainUpgradeCount = 3
-        self.upgradedCount = 3
-        self.upgradeLevelPickupStatus: list[int] = []
-        self.upgradeCountPickupStatus: list[int] = []
-        self.rankingPickupStatus = 0
-        self.pointExchangeRemainTimes = 4
-        self.taskCmptIds = [1, 2]
-        self.taskAwardPickupIds = [1, 2]
-        self.upgradePropAwardConfig: list[SoulStoneUpgradeLevelAward] = []
-        self.upgradeCountAwardConfig: list[SoulStoneUpgradeCountAward] = []
-        # self.flows: dict[str, AmsActFlowInfo] = {}  # flowid => info
-        self.taskConfig: dict[str, SoulStoneTask] = {}  # taskid => task
-        self.pointExchangeConfig = {"exchangeRate": 2, "dailyLimit": 4}
-        self.userInfo = {}
+        self.inviteCode = "f6c8a12bf6c54457a0c3a14c084cf64b"
+        self.seedId = 0
+        self.remainPower = 0
+        self.totalPower = 0
+        self.unitPower = 10
+        self.remainGrowupCount = 0
+        self.growupedCount = 0
+
+        self.activityInfo = DnfHelperZangyiActivityInfo()
+        self.taskList: list[DnfHelperZangyiTaskListInfo] = []
+        self.userInfo = DnfHelperZangyiUserInfo()
+        self.seedList: list[DnfHelperZangyiSeedListInfo] = []
+        self.growupInfo = DnfHelperZangyiGrowUpInfo()
+        self.nextGrowupInfo = DnfHelperZangyiNextGrowUpInfo()
+        self.growupRewardConfig: list[DnfHelperZangyiGrowUpRewardConfigInfo] = []
+        self.growupCountRewardConfig: list[DnfHelperZangyiGrowUpCountRewardConfigInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
-            ("upgradePropAwardConfig", SoulStoneUpgradeLevelAward),
-            ("upgradeCountAwardConfig", SoulStoneUpgradeCountAward),
+            ("taskList", DnfHelperZangyiTaskListInfo),
+            ("seedList", DnfHelperZangyiSeedListInfo),
+            ("growupRewardConfig", DnfHelperZangyiGrowUpRewardConfigInfo),
+            ("growupCountRewardConfig", DnfHelperZangyiGrowUpCountRewardConfigInfo),
         ]
 
     def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
-        return [("taskConfig", SoulStoneTask)]
+        return [
+        ]
 
 
-class SoulStoneUpgradeLevelAward(ConfigInterface):
+class DnfHelperZangyiActivityInfo(ConfigInterface):
     def __init__(self):
-        self.propId = 1
-        self.propName = "灵魂武器袖珍罐"
-        self.pic = "https://cdn.dzhu.qq.com/icon/20241217101855202.png"
-        self.level = 10
-        self.amsId = "IEGAMS-689863-657792-3647374"
-        self.num = 1
+        self.activityId =  1
+        self.activityName =  "能量之牙成长记"
+        self.activityStartTime =  "2025-02-28 00:00:00"
+        self.activityEndTime =  "2025-03-26 23:59:59"
 
 
-class SoulStoneUpgradeCountAward(ConfigInterface):
+class DnfHelperZangyiTaskListInfo(ConfigInterface):
+    def __init__(self):
+        self.id = 1
+        self.title = "浏览助手内任意一篇资讯或动态"
+        self.type = 1
+        self.reward = 15
+        self.completeStatus = 0
+        self.pickupStatus = 0
+
+
+class DnfHelperZangyiUserInfo(ConfigInterface):
+    def __init__(self):
+        self.nickname = "风之凌殇"
+        self.avatar = "https://q.qlogo.cn/g?b=qq &amp;nk=1054073896 &amp;s=100"
+
+
+class DnfHelperZangyiSeedListInfo(ConfigInterface):
+    def __init__(self):
+        self.id = 1
+        self.name = "奇迹之芽"
+        self.pic = "https://cdn.dzhu.qq.com/button/20250220141621222.PNG"
+
+
+class DnfHelperZangyiGrowUpInfo(ConfigInterface):
+    def __init__(self):
+        self.currLevel = "1"
+        self.currLevelTitle = "稀有"
+        self.remainSeconds = 27921
+        self.status = "0"
+        self.maxLevel = "1"
+
+
+class DnfHelperZangyiNextGrowUpInfo(ConfigInterface):
+    def __init__(self):
+        self.nextLevel = "1"
+        self.nextLevelTitle = "稀有"
+        self.status = 1
+
+
+class DnfHelperZangyiGrowUpRewardConfigInfo(ConfigInterface):
     def __init__(self):
         self.propId = 1
         self.propName = "复活币礼盒 (1个)"
-        self.pic = "https://cdn.dzhu.qq.com/button/20241217102304912.png"
-        self.count = 5
-        self.amsId = "IEGAMS-689863-657792-3647405"
-        self.num = 5
+        self.pic = "https://cdn.dzhu.qq.com/button/20250217111800512.png"
+        self.propNum = 1
+        self.level = 1
+        self.levelTitle = "稀有"
+        self.levelRate = "49.999%"
 
 
-class SoulStoneTask(ConfigInterface):
+class DnfHelperZangyiGrowUpCountRewardConfigInfo(ConfigInterface):
     def __init__(self):
-        self.title = "每日参与活动"
-        self.upgradeTimes = 1
+        self.propId = 1
+        self.propName = "王者契约礼包 (1天)"
+        self.pic = "https://cdn.dzhu.qq.com/button/20250217111907529.png"
+        self.growupCount = 1
+        self.propNum = 3
+        self.rewardStatus = 0
 
 
 if __name__ == "__main__":

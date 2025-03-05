@@ -3052,6 +3052,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("colg每日签到", "get_colg_signin"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
+            ("dnf助手活动zangyi", "get_dnf_helper_zangyi"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3069,7 +3070,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg其他活动", "get_colg_other_act"),
-            ("灵魂石的洗礼", "get_soul_stone"),
             ("喂养删除补偿", "get_weiyang_compensate"),
             ("嘉年华星与心愿", "get_dnf_star_and_wish"),
             ("回流攻坚队", "get_dnf_socialize"),

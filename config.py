@@ -898,8 +898,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_socialize = True
         # 是否领取 星与心愿 活动
         self.get_dnf_star_and_wish = True
-        # 是否领取 灵魂石的洗礼 活动
-        self.get_soul_stone = True
+        # 是否领取 dnf助手活动zangyi 活动
+        self.get_dnf_helper_zangyi = True
         # 是否领取 回流引导秘籍 活动
         self.get_dnf_recall_guide = True
         # 是否领取 新春充电计划 活动

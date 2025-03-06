@@ -2557,6 +2557,23 @@ class DnfHelperEnergyTreeGrowUpCountRewardConfigInfo(ConfigInterface):
         self.rewardStatus = 0
 
 
+class DnfHelperLuckyLotteryResponse(ConfigInterface):
+    def __init__(self):
+        self.result = 0
+        self.returnCode = 0
+        self.returnMsg = ""
+        self.data = DnfHelperLuckyLotteryInfo()
+
+
+class DnfHelperLuckyLotteryInfo(ConfigInterface):
+    def __init__(self):
+        self.dayShareStatus = 1
+        self.dayLotteryStatus = 4
+        self.weekLotteryStatus = 0
+        self.weekDrawLotsCount = 1
+        self.content = {}
+
+
 if __name__ == "__main__":
     from util import format_time, parse_time
 

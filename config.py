@@ -904,6 +904,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_recall_guide = True
         # 是否领取 新春充电计划 活动
         self.get_new_year_signin = True
+        # 是否领取 魔界人每日幸运签 活动
+        self.get_dnf_helper_lucky_lottery = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

@@ -62,7 +62,7 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-02-16 00:00:00", "2025-04-10 23:59:59", "回流引导秘籍"),
-    newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "dnf助手活动zangyi"),
+    newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     #
     # 已过期活动
     #
@@ -110,7 +110,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250207growup/index.html",
-    "dnf助手活动zangyi": "https://dzhu.qq.com/fe/dnf/energy_tree/",
+    "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     #
     # 已过期活动
     #
@@ -425,8 +425,8 @@ class Urls:
         # 漫画更新数据
         self.dnf_comic_update_api = "https://game.gtimg.cn/images/amside/ide_timer/249678_comicDetail.js"
 
-        # dnf助手活动zangyi
-        self.dnf_helper_zangyi_api = "https://dzhu.qq.com/zangyi/activity/activity"
+        # 助手能量之芽
+        self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

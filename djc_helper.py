@@ -43,8 +43,8 @@ from dao import (
     DnfHelperChronicleSignList,
     DnfHelperChronicleUserActivityTopInfo,
     DnfHelperChronicleUserTaskList,
-    DnfHelperZangyiInfo,
-    DnfHelperZangyiResponse,
+    DnfHelperEnergyTreeInfo,
+    DnfHelperEnergyTreeResponse,
     DnfRoleInfo,
     DnfRoleInfoList,
     GameRoleInfo,
@@ -683,7 +683,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("dnf助手活动zangyi", self.dnf_helper_zangyi),
+            ("助手能量之芽", self.dnf_helper_energy_tree),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8195,26 +8195,25 @@ class DjcHelper:
             **extra_params,
         )
 
-    # --------------------------------------------dnf助手活动zangyi--------------------------------------------
-    # re: 能量之芽成长记
+    # --------------------------------------------助手能量之芽--------------------------------------------
     @try_except()
-    def dnf_helper_zangyi(self):
-        show_head_line("dnf助手活动zangyi")
-        self.show_not_ams_act_info("dnf助手活动zangyi")
+    def dnf_helper_energy_tree(self):
+        show_head_line("助手能量之芽")
+        self.show_not_ams_act_info("助手能量之芽")
 
-        if not self.cfg.function_switches.get_dnf_helper_zangyi or self.disable_most_activities():
-            show_act_not_enable_warning("dnf助手活动zangyi")
+        if not self.cfg.function_switches.get_dnf_helper_energy_tree or self.disable_most_activities():
+            show_act_not_enable_warning("助手能量之芽")
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            extra_msg = "未配置dnf助手相关信息，无法进行 dnf助手活动zangyi，请按照下列流程进行配置"
+            extra_msg = "未配置dnf助手相关信息，无法进行 助手能量之芽，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(
-                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('dnf助手活动zangyi')}"
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手能量之芽')}"
             )
             return
 
-        def query_info() -> DnfHelperZangyiInfo:
-            raw_res = self.dnf_helper_zangyi_op(
+        def query_info() -> DnfHelperEnergyTreeInfo:
+            raw_res = self.dnf_helper_energy_tree_op(
                 "获取当前状态",
                 "init",
                 print_res=False,
@@ -8222,7 +8221,7 @@ class DjcHelper:
                 nickname=quote_plus(self.cfg.name),
                 avatar=quote_plus(f"https://q.qlogo.cn/g?b=qq&nk={self.qq()}&s=100"),
             )
-            res = DnfHelperZangyiResponse().auto_update_config(raw_res)
+            res = DnfHelperEnergyTreeResponse().auto_update_config(raw_res)
 
             return res.data
 
@@ -8230,7 +8229,7 @@ class DjcHelper:
 
         # 领取任务奖励
         for task_info in info.taskList:
-            self.dnf_helper_zangyi_op(
+            self.dnf_helper_energy_tree_op(
                 f"领取任务奖励-{task_info.title}-{task_info.reward}能量值", "pickupTaskReward", taskId=task_info.id
             )
 
@@ -8238,7 +8237,7 @@ class DjcHelper:
         logger.info(f"当前能量值为 {info.remainPower}/{info.totalPower}，剩余注入能量次数为 {info.remainGrowupCount}")
         for idx in range_from_one(info.remainGrowupCount):
             # 选择一个能量之芽并注入能量
-            res = self.dnf_helper_zangyi_op(f"第{idx}/{info.remainGrowupCount}次增幅", "growup", seedId=2)
+            res = self.dnf_helper_energy_tree_op(f"第{idx}/{info.remainGrowupCount}次增幅", "growup", seedId=2)
             if res["returnCode"] == 30000:
                 logger.warning("出错了，停止后续尝试")
                 break
@@ -8252,7 +8251,7 @@ class DjcHelper:
             #     logger.warning(f"当前不可领取，跳过领取种植完成奖励+{award.levelTitle} {award.propName}")
             #     continue
 
-            self.dnf_helper_zangyi_op(f"领取种植完成奖励+{award.levelTitle} {award.propName}", "pickupGift", type="1", propId=award.propId)
+            self.dnf_helper_energy_tree_op(f"领取种植完成奖励+{award.levelTitle} {award.propName}", "pickupGift", type="1", propId=award.propId)
 
         # 领取增幅次数奖励
         logger.info(f"当前种植次数为{info.growupedCount}")
@@ -8262,11 +8261,11 @@ class DjcHelper:
                 logger.warning(f"次数不够，跳过领取种植 {award.growupCount}次 {award.propName}")
                 continue
 
-            self.dnf_helper_zangyi_op(
+            self.dnf_helper_energy_tree_op(
                 f"领取种植 {award.growupCount}次 {award.propName}", "pickupGift", type="2", propId=award.propId
             )
 
-    def dnf_helper_zangyi_op(self, ctx: str, action: str, print_res=True, **extra_params):
+    def dnf_helper_energy_tree_op(self, ctx: str, action: str, print_res=True, **extra_params):
         if action != "init":
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
@@ -8295,17 +8294,17 @@ class DjcHelper:
 
         res = self.post(
             ctx,
-            self.urls.dnf_helper_zangyi_api,
+            self.urls.dnf_helper_energy_tree_api,
             data=post_json_to_data(data),
             print_res=print_res,
         )
 
         if dnf_helper_info.token != "":
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
-            show_message_box_once_key = "dnf助手活动zangyi_token过期2_" + get_week()
+            show_message_box_once_key = "助手能量之芽_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
                 extra_msg = (
-                    "dnf助手的登录态已过期，导致 dnf助手活动zangyi 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                    "dnf助手的登录态已过期，导致 助手能量之芽 相关操作无法执行，目前需要手动更新，具体操作流程如下"
                 )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
@@ -9331,6 +9330,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_zangyi()
+        djcHelper.dnf_helper_energy_tree()
 
     pause()

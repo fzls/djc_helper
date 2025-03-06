@@ -2449,15 +2449,15 @@ class XinYueBattleGroundWpeBindRole(ConfigInterface):
         self.device = "pc"
 
 
-class DnfHelperZangyiResponse(ConfigInterface):
+class DnfHelperEnergyTreeResponse(ConfigInterface):
     def __init__(self):
         self.result = 0
         self.returnCode = 0
         self.returnMsg = ""
-        self.data = DnfHelperZangyiInfo()
+        self.data = DnfHelperEnergyTreeInfo()
 
 
-class DnfHelperZangyiInfo(ConfigInterface):
+class DnfHelperEnergyTreeInfo(ConfigInterface):
     def __init__(self):
         self.inviteCode = "f6c8a12bf6c54457a0c3a14c084cf64b"
         self.seedId = 0
@@ -2467,21 +2467,21 @@ class DnfHelperZangyiInfo(ConfigInterface):
         self.remainGrowupCount = 0
         self.growupedCount = 0
 
-        self.activityInfo = DnfHelperZangyiActivityInfo()
-        self.taskList: list[DnfHelperZangyiTaskListInfo] = []
-        self.userInfo = DnfHelperZangyiUserInfo()
-        self.seedList: list[DnfHelperZangyiSeedListInfo] = []
-        self.growupInfo = DnfHelperZangyiGrowUpInfo()
-        self.nextGrowupInfo = DnfHelperZangyiNextGrowUpInfo()
-        self.growupRewardConfig: list[DnfHelperZangyiGrowUpRewardConfigInfo] = []
-        self.growupCountRewardConfig: list[DnfHelperZangyiGrowUpCountRewardConfigInfo] = []
+        self.activityInfo = DnfHelperEnergyTreeActivityInfo()
+        self.taskList: list[DnfHelperEnergyTreeTaskListInfo] = []
+        self.userInfo = DnfHelperEnergyTreeUserInfo()
+        self.seedList: list[DnfHelperEnergyTreeSeedListInfo] = []
+        self.growupInfo = DnfHelperEnergyTreeGrowUpInfo()
+        self.nextGrowupInfo = DnfHelperEnergyTreeNextGrowUpInfo()
+        self.growupRewardConfig: list[DnfHelperEnergyTreeGrowUpRewardConfigInfo] = []
+        self.growupCountRewardConfig: list[DnfHelperEnergyTreeGrowUpCountRewardConfigInfo] = []
 
     def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
         return [
-            ("taskList", DnfHelperZangyiTaskListInfo),
-            ("seedList", DnfHelperZangyiSeedListInfo),
-            ("growupRewardConfig", DnfHelperZangyiGrowUpRewardConfigInfo),
-            ("growupCountRewardConfig", DnfHelperZangyiGrowUpCountRewardConfigInfo),
+            ("taskList", DnfHelperEnergyTreeTaskListInfo),
+            ("seedList", DnfHelperEnergyTreeSeedListInfo),
+            ("growupRewardConfig", DnfHelperEnergyTreeGrowUpRewardConfigInfo),
+            ("growupCountRewardConfig", DnfHelperEnergyTreeGrowUpCountRewardConfigInfo),
         ]
 
     def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
@@ -2489,7 +2489,7 @@ class DnfHelperZangyiInfo(ConfigInterface):
         ]
 
 
-class DnfHelperZangyiActivityInfo(ConfigInterface):
+class DnfHelperEnergyTreeActivityInfo(ConfigInterface):
     def __init__(self):
         self.activityId =  1
         self.activityName =  "能量之牙成长记"
@@ -2497,7 +2497,7 @@ class DnfHelperZangyiActivityInfo(ConfigInterface):
         self.activityEndTime =  "2025-03-26 23:59:59"
 
 
-class DnfHelperZangyiTaskListInfo(ConfigInterface):
+class DnfHelperEnergyTreeTaskListInfo(ConfigInterface):
     def __init__(self):
         self.id = 1
         self.title = "浏览助手内任意一篇资讯或动态"
@@ -2507,20 +2507,20 @@ class DnfHelperZangyiTaskListInfo(ConfigInterface):
         self.pickupStatus = 0
 
 
-class DnfHelperZangyiUserInfo(ConfigInterface):
+class DnfHelperEnergyTreeUserInfo(ConfigInterface):
     def __init__(self):
         self.nickname = "风之凌殇"
         self.avatar = "https://q.qlogo.cn/g?b=qq &amp;nk=1054073896 &amp;s=100"
 
 
-class DnfHelperZangyiSeedListInfo(ConfigInterface):
+class DnfHelperEnergyTreeSeedListInfo(ConfigInterface):
     def __init__(self):
         self.id = 1
         self.name = "奇迹之芽"
         self.pic = "https://cdn.dzhu.qq.com/button/20250220141621222.PNG"
 
 
-class DnfHelperZangyiGrowUpInfo(ConfigInterface):
+class DnfHelperEnergyTreeGrowUpInfo(ConfigInterface):
     def __init__(self):
         self.currLevel = "1"
         self.currLevelTitle = "稀有"
@@ -2529,14 +2529,14 @@ class DnfHelperZangyiGrowUpInfo(ConfigInterface):
         self.maxLevel = "1"
 
 
-class DnfHelperZangyiNextGrowUpInfo(ConfigInterface):
+class DnfHelperEnergyTreeNextGrowUpInfo(ConfigInterface):
     def __init__(self):
         self.nextLevel = "1"
         self.nextLevelTitle = "稀有"
         self.status = 1
 
 
-class DnfHelperZangyiGrowUpRewardConfigInfo(ConfigInterface):
+class DnfHelperEnergyTreeGrowUpRewardConfigInfo(ConfigInterface):
     def __init__(self):
         self.propId = 1
         self.propName = "复活币礼盒 (1个)"
@@ -2547,7 +2547,7 @@ class DnfHelperZangyiGrowUpRewardConfigInfo(ConfigInterface):
         self.levelRate = "49.999%"
 
 
-class DnfHelperZangyiGrowUpCountRewardConfigInfo(ConfigInterface):
+class DnfHelperEnergyTreeGrowUpCountRewardConfigInfo(ConfigInterface):
     def __init__(self):
         self.propId = 1
         self.propName = "王者契约礼包 (1天)"

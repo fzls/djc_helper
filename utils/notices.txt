@@ -448,5 +448,15 @@
     "open_url": "https://docs.qq.com/doc/DYkpFdWJrSExuR1h1",
     "expire_at": "2025-03-07 17:42:50",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "微信游戏圈每日签到",
+    "message": "微信/发现/游戏，搜索 DNF端游，进入 地下城与勇士圈 圈子，点击 每日抽 tab，进入活动页面\n往下拉，完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作\n",
+    "send_at": "2025-03-12 23:01:50",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2025-03-19 23:01:50",
+    "show_only_before_version": ""
   }
 ]

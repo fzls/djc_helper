@@ -201,10 +201,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "获取绑定角色报错"
-    message = """因查询角色的接口参数有调整，目前通过配置工具来设置绑定角色的话，获取时会报错，具体解决办法请看打开的在线文档
+    title = "微信游戏圈每日签到"
+    message = """微信/发现/游戏，搜索 DNF端游，进入 地下城与勇士圈 圈子，点击 每日抽 tab，进入活动页面
+往下拉，完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作
 """
-    open_url = "https://docs.qq.com/doc/DYkpFdWJrSExuR1h1"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

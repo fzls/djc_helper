@@ -2485,16 +2485,15 @@ class DnfHelperEnergyTreeInfo(ConfigInterface):
         ]
 
     def dict_fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
-        return [
-        ]
+        return []
 
 
 class DnfHelperEnergyTreeActivityInfo(ConfigInterface):
     def __init__(self):
-        self.activityId =  1
-        self.activityName =  "能量之牙成长记"
-        self.activityStartTime =  "2025-02-28 00:00:00"
-        self.activityEndTime =  "2025-03-26 23:59:59"
+        self.activityId = 1
+        self.activityName = "能量之牙成长记"
+        self.activityStartTime = "2025-02-28 00:00:00"
+        self.activityEndTime = "2025-03-26 23:59:59"
 
 
 class DnfHelperEnergyTreeTaskListInfo(ConfigInterface):

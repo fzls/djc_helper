@@ -8254,12 +8254,14 @@ class DjcHelper:
             #     logger.warning(f"当前不可领取，跳过领取种植完成奖励+{award.levelTitle} {award.propName}")
             #     continue
 
-            self.dnf_helper_energy_tree_op(f"领取种植完成奖励+{award.levelTitle} {award.propName}", "pickupGift", type="1", propId=award.propId)
+            self.dnf_helper_energy_tree_op(
+                f"领取种植完成奖励+{award.levelTitle} {award.propName}", "pickupGift", type="1", propId=award.propId
+            )
 
         # 领取增幅次数奖励
         logger.info(f"当前种植次数为{info.growupedCount}")
 
-        for idx, award in enumerate(info.growupCountRewardConfig, start=1):
+        for _idx, award in enumerate(info.growupCountRewardConfig, start=1):
             if int(info.growupedCount) < int(award.growupCount):
                 logger.warning(f"次数不够，跳过领取种植 {award.growupCount}次 {award.propName}")
                 continue
@@ -8356,8 +8358,6 @@ class DjcHelper:
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
 
-        activityId = 1
-
         roleinfo = self.get_dnf_bind_role()
         dnf_helper_info = self.cfg.dnf_helper_info
 
@@ -8392,9 +8392,7 @@ class DjcHelper:
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
             show_message_box_once_key = "助手魔界人每日幸运签_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
-                extra_msg = (
-                    "dnf助手的登录态已过期，导致 助手魔界人每日幸运签 相关操作无法执行，目前需要手动更新，具体操作流程如下"
-                )
+                extra_msg = "dnf助手的登录态已过期，导致 助手魔界人每日幸运签 相关操作无法执行，目前需要手动更新，具体操作流程如下"
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
             else:

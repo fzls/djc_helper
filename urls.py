@@ -60,13 +60,13 @@ not_ams_activities = [
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
-    newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-02-16 00:00:00", "2025-04-10 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-06-30 23:59:59", "助手魔界人每日幸运签"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2025-01-16 00:00:00", "2025-03-05 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
     newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
     newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-14 21:59:59", "超级会员"),
@@ -109,13 +109,13 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250207growup/index.html",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     #
     # 已过期活动
     #
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/52345_51c57d92",

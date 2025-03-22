@@ -201,11 +201,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "微信游戏圈每日签到"
-    message = """微信/发现/游戏，搜索 DNF端游，进入 地下城与勇士圈 圈子，点击 每日抽 tab，进入活动页面
-往下拉，完成下面的每日任务，就可以获得抽奖次数，在上面进行抽奖，有兴趣的朋友请自行操作
+    title = "colg的俩新活动"
+    message = """colg新出了个新人签到和答题王活动，可以累计领取20天雷钻加一些其他蚊子腿。前者需要注册colg的新账号，后者需要手动答个题，都很简单。
+有兴趣的朋友可以按点确定后弹出的文档自从操作下，大概几分钟就能搞定
 """
-    open_url = ""
+    open_url = "https://docs.qq.com/doc/DYkxQTnVjVXNVUkVp"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

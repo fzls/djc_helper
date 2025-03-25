@@ -1710,7 +1710,7 @@ def has_buy_auto_updater_dlc_and_query_ok(
     """
     查询是否购买过dlc，返回 [是否有资格，查询是否成功]
     """
-    logger.debug("尝试由服务器代理查询购买DLC信息，请稍候片刻~")
+    logger.debug(f"尝试由服务器代理查询购买DLC信息，请稍候片刻~ qq_accounts={qq_accounts}")
     user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
     if query_ok:
         return user_buy_info.infer_has_buy_dlc(), True
@@ -1780,7 +1780,7 @@ def get_user_buy_info(
         # 没有传入QQ号的话，直接返回默认值
         return BuyInfo()
 
-    logger.debug("尝试由服务器代理查询付费信息，请稍候片刻~")
+    logger.debug(f"尝试由服务器代理查询付费信息，请稍候片刻~ qq_accounts={qq_accounts}")
     user_buy_info, query_ok = get_user_buy_info_from_server(qq_accounts)
 
     if not query_ok:
@@ -1805,6 +1805,8 @@ def get_user_buy_info_from_server(qq_accounts: list[str]) -> tuple[BuyInfo, bool
             def fetch_query_info_from_server() -> str:
                 server_addr = get_pay_server_addr()
                 raw_res = requests.post(f"{server_addr}/query_buy_info", json=qq_accounts, timeout=20)
+
+                logger.debug(f"get_user_buy_info_from_server server_addr={server_addr} qq_accounts={qq_accounts}")
 
                 if raw_res.status_code == 200:
                     return raw_res.text

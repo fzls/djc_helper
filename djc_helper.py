@@ -681,10 +681,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("DNF预约", self.dnf_reservation),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("助手能量之芽", self.dnf_helper_energy_tree),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
         ]
 
@@ -693,6 +690,9 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("助手能量之芽", self.dnf_helper_energy_tree),
+            ("DNF福利中心兑换", self.dnf_welfare),
+            ("DNF预约", self.dnf_reservation),
             ("colg每日签到", self.colg_signin),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),

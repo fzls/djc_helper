@@ -3048,10 +3048,7 @@ class FunctionSwitchesConfigUi(QWidget):
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
-            ("DNF预约", "get_dnf_reservation"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
-            ("助手能量之芽", "get_dnf_helper_energy_tree"),
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
         ],
         "QQ空间pskey": [
@@ -3063,6 +3060,9 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("助手能量之芽", "get_dnf_helper_energy_tree"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("DNF预约", "get_dnf_reservation"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("新春充电计划", "get_new_year_signin"),

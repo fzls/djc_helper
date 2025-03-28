@@ -1441,6 +1441,16 @@ class DjcHelper:
 
         self.prepare_wpe_act_openid_accesstoken("心悦战场wpe")
 
+        # 确认下是否在维护中
+        def _check_in_matainence():
+            res = self.xinyue_battle_ground_wpe_op("(检测是否在维护)尝试领取可领的返利勇士币", 131143)
+
+            # {"ret": 0, "msg": "正在维护，详情请查看官网公告", "data": "{\"msg\":\"正在维护，详情请查看官网公告\",\"ret\":40006}", "serialId": ...}
+            if "正在维护" in res.get("msg", ""):
+                raise Exception("心悦战场正在维护中")
+
+        _check_in_matainence()
+
         # 查询成就点信息
         old_info = self.query_xinyue_info("6.1 操作前查询成就点信息")
 

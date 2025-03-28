@@ -1523,7 +1523,10 @@ class DjcHelper:
         info = self.query_xinyue_info("查询抽奖次数", print_res=False)
         logger.info(color("bold_yellow") + f"当前剩余抽奖次数为 {info.ticket}")
         for idx in range(info.ticket):
-            self.xinyue_battle_ground_wpe_op(f"第{idx + 1}次抽奖券抽奖", 131324)
+            res = self.xinyue_battle_ground_wpe_op(f"第{idx + 1}次抽奖券抽奖", 131324)
+            # 请先组队再来参与，40006
+            if "请先组队" in res.get("msg", ""):
+                break
             time.sleep(3)
 
         # 再次查询成就点信息，展示本次操作得到的数目

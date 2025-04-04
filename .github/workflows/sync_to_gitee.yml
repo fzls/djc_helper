@@ -13,7 +13,7 @@ jobs:
       gitee_user: ${{ secrets.GITEE_USER }}
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
 

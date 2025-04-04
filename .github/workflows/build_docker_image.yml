@@ -35,20 +35,20 @@ jobs:
           timezoneWindows: "China Standard Time"
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to GHCR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       #      - name: Login to TencentCloud
-      #        uses: docker/login-action@v2
+      #        uses: docker/login-action@v3
       #        with:
       #          registry: ccr.ccs.tencentyun.com
       #          username: ${{ secrets.TENCENT_CLOUD_DOCKERHUB_USERNAME }}

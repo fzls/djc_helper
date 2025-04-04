@@ -51,7 +51,7 @@ jobs:
           python _gen_changelog_for_github_release.py
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref_name }}

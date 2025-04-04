@@ -39,7 +39,7 @@ jobs:
 
       - name: Chrome And Driver Cache On Ubuntu
         id: chrome-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             google-chrome*.deb

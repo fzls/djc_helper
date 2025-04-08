@@ -199,7 +199,8 @@ class DjcHelper:
         #   已过期:
         #     {"ret": "101", "msg": "非常抱歉，请先登录！", "flowRet": ...}
         # re:
-        #   活动本身结束，无法判断skey是否过期
+        #   活动本身结束或维护中，无法判断skey是否过期
+        #     {'ret': '300', 'msg': '抱歉，系统升级维护中', "flowRet": ...}
         #     {"ret": "301", "msg": "非常抱歉，该活动已经结束！", "flowRet": ...}
         #     {'iRet': 302, 'ret': 302, 'sAmsSerial': 'AMS-DNF-0303222833-z9dpS5-603984-248455', 'sMsg': '抱歉，当前活动已结束！'}
         # res = self.xinyue_battle_ground_op("判断skey是否过期", "767160", print_res=False)

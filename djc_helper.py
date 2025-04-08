@@ -211,7 +211,7 @@ class DjcHelper:
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")
 
-            if str(res.get("ret", "")) in ["301", "302"] or "结束" in msg:
+            if str(res.get("ret", "")) in ["300", "301", "302"] or "结束" in msg:
                 async_message_box(
                     "用于判断skey是否过期的活动本身已经结束，需要看下是否需要换个新活动来判断",
                     "(仅自己可见)skey活动结束",

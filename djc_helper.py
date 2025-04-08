@@ -2503,8 +2503,10 @@ class DjcHelper:
                 vuserid=cached_pskey["vuserid"],
             )
 
-        if lr.skey != "" and lr.vuserid != "":
+        if lr.skey != "":
             self.memory_save_uin_skey(lr.uin, lr.skey)
+
+        if lr.vuserid != "":
             self.set_vuserid(lr.vuserid)
 
         self.lr = lr

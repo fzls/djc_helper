@@ -11,7 +11,7 @@ jobs:
       dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
       dst_token: ${{ secrets.GITEE_TOKEN }}
       gitee_user: ${{ secrets.GITEE_USER }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:

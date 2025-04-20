@@ -684,6 +684,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -694,7 +695,6 @@ class DjcHelper:
             ("助手能量之芽", self.dnf_helper_energy_tree),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF预约", self.dnf_reservation),
-            ("colg每日签到", self.colg_signin),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
             ("超级会员", self.dnf_super_vip),

@@ -3051,6 +3051,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("回流引导秘籍", "get_dnf_recall_guide"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3061,7 +3062,6 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
-            ("回流引导秘籍", "get_dnf_recall_guide"),
             ("助手能量之芽", "get_dnf_helper_energy_tree"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNF预约", "get_dnf_reservation"),

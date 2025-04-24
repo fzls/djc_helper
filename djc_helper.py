@@ -686,6 +686,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("回流引导秘籍", self.dnf_recall_guide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -693,7 +694,6 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
-            ("回流引导秘籍", self.dnf_recall_guide),
             ("助手能量之芽", self.dnf_helper_energy_tree),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF预约", self.dnf_reservation),
@@ -8435,7 +8435,14 @@ class DjcHelper:
 
         self.check_dnf_recall_guide()
 
-        self.dnf_recall_guide_op("领取奖励", "369895")
+        self.dnf_recall_guide_op("领取奖励", "390893")
+
+        async_message_box(
+            "回归引导秘籍 活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可（与落地页的不一样）",
+            "25.4 回归引导秘籍 阅读页面活动",
+            show_once=True,
+            open_url=get_act_url("回流引导秘籍"),
+        )
 
     def check_dnf_recall_guide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -9440,6 +9447,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_recall_guide()
 
     pause()

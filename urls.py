@@ -63,10 +63,10 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-17 00:00:00", "2025-06-04 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-06-30 21:59:59", "超级会员"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "回流引导秘籍"),
     #
     # 已过期活动
     #
-    newNotAmsActInfo("2025-02-16 00:00:00", "2025-04-10 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
@@ -111,10 +111,10 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/52849_a7c793b8",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250424index/",
+    "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     #
     # 已过期活动
     #
-    "回流引导秘籍": "https://dnf.qq.com/cp/a20250207growup/index.html",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
@@ -309,7 +309,7 @@ class Urls:
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
         self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
-        self.ide_iActivityId_dnf_recall_guide = "71_mG5yJm"  # 回流引导秘籍
+        self.ide_iActivityId_dnf_recall_guide = "3_Xpqprw"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理

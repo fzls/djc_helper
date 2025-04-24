@@ -1509,6 +1509,10 @@ def show_tips(cfg: Config):
             "打开下面的网页，用微信扫描二维码，加入游戏圈并分享，就可以领取10点疲劳药。下面有些额外的任务，完成后就可以抽奖，有需要的朋友可以自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250424index/icon/code1.png\n"
         ),
+        "微信游戏圈签到活动": (
+            "打开下面的网页，用微信扫描二维码，每天可以签到领奖一次，有需要的朋友可以自行操作\n"
+            "https://game.gtimg.cn/images/dnf/act/a20250424index/icon/code2.png\n"
+        ),
     }
 
     logger.info(

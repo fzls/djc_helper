@@ -684,6 +684,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("colg每日签到", self.colg_signin),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -697,7 +698,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
-            ("超级会员", self.dnf_super_vip),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
@@ -2637,7 +2637,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "126514_3f676ea9"
+        lucky_act_id = "129976_1c8f6f0b"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2647,7 +2647,7 @@ class DjcHelper:
             ),
         )
 
-        self.qzone_act_op("勇士见面礼", "126515_17fb776b")
+        self.qzone_act_op("勇士见面礼", "129977_67b59c71")
 
         # self.qzone_act_op("签到", "116134_6d26254f")
         # self.qzone_act_op("累计签到1天", "116130_5fa5d050")
@@ -9433,6 +9433,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_super_vip()
 
     pause()

@@ -1513,6 +1513,10 @@ def show_tips(cfg: Config):
             "打开下面的网页，用微信扫描二维码，每天可以签到领奖一次，有需要的朋友可以自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250424index/icon/code2.png\n"
         ),
+        "QQ网吧活动": (
+            "如果你平常在QQ网吧中玩DNF，可以自行参与下下面这个活动\n"
+            "https://dnf.qq.com/cp/a2025privilege/index.html\n"
+        ),
     }
 
     logger.info(

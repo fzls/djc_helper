@@ -687,6 +687,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
+            ("共赴西装节", self.dnf_suit),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8472,6 +8473,58 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------共赴西装节--------------------------------------------
+    @try_except()
+    def dnf_suit(self):
+        show_head_line("共赴西装节")
+        self.show_not_ams_act_info("共赴西装节")
+
+        if not self.cfg.function_switches.get_dnf_suit or self.disable_most_activities():
+            show_act_not_enable_warning("共赴西装节")
+            return
+
+        self.check_dnf_suit()
+
+        self.dnf_suit_op("见面礼", "389066")
+
+        self.dnf_suit_op("每日任务-消耗30点疲劳", "388846")
+        self.dnf_suit_op("每周任务-完成一次征讨地下城", "388968")
+
+        # self.dnf_suit_op("幸运星用户奖励", "389067")
+        # self.dnf_suit_op("好友列表", "389097")
+        # self.dnf_suit_op("发送ark消息", "389341")
+        # self.dnf_suit_op("领取幸运奖池奖励", "389385")
+        self.dnf_suit_op("兑换奖励-7天黑钻", "389518", iIndex=6, iNum=1)
+        self.dnf_suit_op("兑换奖励-+10增幅券", "389518", iIndex=0, iNum=1)
+
+    def check_dnf_suit(self, **extra_params):
+        return self.ide_check_bind_account(
+            "共赴西装节",
+            get_act_url("共赴西装节"),
+            activity_op_func=self.dnf_suit_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_suit_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_suit
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("共赴西装节"),
+            **extra_params,
+        )
+
     # --------------------------------------------新春充电计划--------------------------------------------
     @try_except()
     def new_year_signin(self):
@@ -9447,6 +9500,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_suit()
 
     pause()

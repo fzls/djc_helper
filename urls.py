@@ -64,6 +64,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-06-30 21:59:59", "超级会员"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     #
     # 已过期活动
     #
@@ -112,6 +113,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/52849_a7c793b8",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250424index/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
+    "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     #
     # 已过期活动
     #
@@ -239,7 +241,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay",
+            "sDay", "iNum",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -311,6 +313,7 @@ class Urls:
         self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
         self.ide_iActivityId_dnf_recall_guide = "3_Xpqprw"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
+        self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

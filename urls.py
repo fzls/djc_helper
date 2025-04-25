@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
+    newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     #
     # 已过期活动
     #
@@ -72,7 +73,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
     newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
-    newNotAmsActInfo("2025-01-16 12:00:00", "2025-02-13 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
@@ -114,6 +114,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250424index/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
+    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     #
     # 已过期活动
     #
@@ -122,7 +123,6 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
-    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a348786145906443687dbe8e74cbe4bbb/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250106dnf/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",

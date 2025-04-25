@@ -688,6 +688,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("共赴西装节", self.dnf_suit),
+            ("超核勇士wpe", self.dnf_chaohe_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -700,7 +701,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
-            ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("集卡", self.dnf_ark_lottery),
@@ -3717,7 +3717,7 @@ class DjcHelper:
             #     "data": "{\"msg\":\"仅限添加了闪闪的超核玩家创建队伍，请联系微信联系闪闪进行身份验证。\",\"ret\":40006}",
             #     "serialId": "ceiba-supercore-21366-273385-1737267074082-wfVUV5xWt2"
             # }
-            res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 273385)
+            res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 306080)
 
             is_chaohe = not (
                 (res["ret"] == 0 and "仅限添加" in res["msg"])  # 不是超核
@@ -3734,7 +3734,7 @@ class DjcHelper:
             #     "data": "{\"data\":{},\"leader\":0,\"msg\":\"success\",\"ret\":0,\"status\":0,\"team_id\":0}",
             #     "serialId": "ceiba-supercore-21366-273459-1737268866424-7BkoFhp7lt"
             # }
-            res = self.dnf_chaohe_wpe_op("查询队伍信息", 273459, print_res=False)
+            res = self.dnf_chaohe_wpe_op("查询队伍信息", 306084, print_res=False)
             data = json.loads(res["data"])
 
             team_id = data["team_id"]
@@ -3754,66 +3754,65 @@ class DjcHelper:
                     f"当前没有组队，将跳过尝试领取超核玩家相关奖励(当前账号是否是超核玩家: {is_chaohe})\n"
                     "\n"
                     "超核勇士活动可组队完成。超核玩家（充了很多钱）可以作为队长创建队伍，其他人可以加入队伍。\n"
-                    "最终队伍成员深渊掉落史诗和太初达到积分后，队伍内成员可以领取相应奖励，其中队长可以在积分达到80时领取一个很酷炫的光环\n"
+                    "最终队伍成员通关人造神团本领取积分，达到指定积分后，队伍内成员可以领取相应奖励，其中队长可以在积分达到100时领取一个很酷炫的光环\n"
                     "有兴趣的朋友可以自行在稍后打开的活动页面中去完成组队这一步，剩余的领取奖励流程小助手将会自动操作\n"
-                    "\n"
-                    "顺带超核大佬队伍有空位的话，求捎上我哈哈，每天满勤-。-（有意可以QQ联系下我哈哈）\n"
                 ),
-                "超核勇士组队",
+                "超核勇士组队-v2",
                 show_once_weekly=True,
                 open_url=get_act_url("超核勇士wpe"),
             )
             return
 
         # 领取掉落装备次数积分
-        type_name_count_reward_list = [
-            (
-                "史诗装备",
-                [
-                    (1, 273675),
-                    (2, 274086),
-                    (3, 274087),
-                    (4, 274088),
-                    (5, 274089),
-                    (6, 274090),
-                    (7, 274091),
-                    (8, 274092),
-                    (9, 274093),
-                    (10, 274094),
-                    (11, 274095),
-                    (12, 274096),
-                    (13, 274097),
-                    (14, 274098),
-                    (15, 274099),
-                    (16, 274100),
-                ],
-            ),
-            (
-                "太初装备",
-                [
-                    (1, 274135),
-                    (2, 274136),
-                    (3, 274137),
-                    (4, 274138),
-                    (5, 274139),
-                    (6, 274140),
-                ],
-            ),
-        ]
-        for type_name, count_reward_list in type_name_count_reward_list:
-            for count, flowid in count_reward_list:
-                self.dnf_chaohe_wpe_op(f"尝试领取 {type_name} 累计{count}件 的积分", flowid)
+        # type_name_count_reward_list = [
+        #     (
+        #         "史诗装备",
+        #         [
+        #             (1, 273675),
+        #             (2, 274086),
+        #             (3, 274087),
+        #             (4, 274088),
+        #             (5, 274089),
+        #             (6, 274090),
+        #             (7, 274091),
+        #             (8, 274092),
+        #             (9, 274093),
+        #             (10, 274094),
+        #             (11, 274095),
+        #             (12, 274096),
+        #             (13, 274097),
+        #             (14, 274098),
+        #             (15, 274099),
+        #             (16, 274100),
+        #         ],
+        #     ),
+        #     (
+        #         "太初装备",
+        #         [
+        #             (1, 274135),
+        #             (2, 274136),
+        #             (3, 274137),
+        #             (4, 274138),
+        #             (5, 274139),
+        #             (6, 274140),
+        #         ],
+        #     ),
+        # ]
+        # for type_name, count_reward_list in type_name_count_reward_list:
+        #     for count, flowid in count_reward_list:
+        #         self.dnf_chaohe_wpe_op(f"尝试领取 {type_name} 累计{count}件 的积分", flowid)
+        self.dnf_chaohe_wpe_op(f"尝试领取通关团本的积分", 306087)
 
         # 领取积分阶段奖励
         # remain_point, total_point = query_count("查询 当前已获得闪光值", xx)
         # logger.info(f"闪光值 目前累计获得 {total_point}")
 
         point_reward_list = [
-            (5, 274164),
-            (15, 274215),
-            (25, 274245),
-            (40, 274246),
-            (80, 274247),
+            (30, 306111),
+            (60, 306729),
+            (90, 306730),
+            (120, 306734),
+            (150, 306735),
         ]
         for require_point, flowid in point_reward_list:
             # if total_point < require_point:
@@ -3822,15 +3821,15 @@ class DjcHelper:
 
             self.dnf_chaohe_wpe_op(f"尝试领取积分达到 {require_point} 的奖励", flowid)
 
-        self.dnf_chaohe_wpe_op("超核玩家创建队伍奖励", 274416)
-        self.dnf_chaohe_wpe_op("超核玩家达到80积分光环奖励", 274442)
+        self.dnf_chaohe_wpe_op("超核玩家创建队伍奖励", 306116)
+        self.dnf_chaohe_wpe_op("超核玩家达到100积分光环奖励", 306751)
 
         # 超能幸运礼
         # remain_lottery_times, total_lottery_times = query_count("查询 当前已获得抽奖次数", xx)
         # logger.info(f"抽奖次数 目前剩余：{remain_lottery_times}，累计获得 {total_lottery_times}")
         remain_lottery_times = 8
         for idx in range_from_one(remain_lottery_times):
-            res = self.dnf_chaohe_wpe_op(f"[{idx}/{remain_lottery_times}] 开启礼盒", 274450)
+            res = self.dnf_chaohe_wpe_op(f"[{idx}/{remain_lottery_times}] 开启礼盒", 306118)
             data = json.loads(res["data"])
             if data["ret"] in [40006]:
                 # {\"msg\":\"此队伍尚未成团\",\"ret\":40006}
@@ -3853,7 +3852,7 @@ class DjcHelper:
 
         roleinfo = self.get_dnf_bind_role()
 
-        act_id = 21366
+        act_id = 22834
 
         json_data = {
             "biz_id": "supercore",
@@ -9500,6 +9499,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_suit()
+        djcHelper.dnf_chaohe_wpe()
 
     pause()

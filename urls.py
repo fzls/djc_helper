@@ -115,11 +115,11 @@ act_name_to_url = {
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",

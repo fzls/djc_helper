@@ -3054,6 +3054,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("共赴西装节", "get_dnf_suit"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3065,7 +3066,6 @@ class FunctionSwitchesConfigUi(QWidget):
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
             ("助手能量之芽", "get_dnf_helper_energy_tree"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF漫画预约活动", "get_dnf_comic"),
             ("新春充电计划", "get_new_year_signin"),

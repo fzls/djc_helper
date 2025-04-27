@@ -1517,6 +1517,10 @@ def show_tips(cfg: Config):
             "如果你平常在QQ网吧中玩DNF，可以自行参与下下面这个活动\n"
             "https://dnf.qq.com/cp/a2025privilege/index.html\n"
         ),
+        "25.4 斗鱼": (
+            "斗鱼活动请自行参与，活动链接如下:\n"
+            "斗鱼：https://www.douyu.com/topic/DNFGFRZS?rid=5012053&dyshid=c220ad5-e19c51452fa2da8af4ad818600051601#bc3\n"
+        ),
     }
 
     logger.info(

@@ -690,6 +690,7 @@ class DjcHelper:
             ("共赴西装节", self.dnf_suit),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
             ("WeGame活动", self.dnf_wegame),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("集卡", self.dnf_ark_lottery),
             ("colg其他活动", self.colg_other_act),
             ("喂养删除补偿", self.weiyang_compensate),
@@ -7850,7 +7850,7 @@ class DjcHelper:
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         def query_lottery_ticket() -> int:
-            res = self.dnf_xinyue_wpe_op("查询抽奖券", 269143)
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 304313)
             data = json.loads(res["data"])
 
             remain = data["remain"]
@@ -7865,51 +7865,110 @@ class DjcHelper:
 
             return total
 
-        self.dnf_xinyue_wpe_op("祝福礼包", 269021)
+        self.dnf_xinyue_wpe_op("抽取幸运冒险家徽章", 302926)
+        self.dnf_xinyue_wpe_op("幸运冒险礼", 302938)
+        self.dnf_xinyue_wpe_op("全民礼包", 302946)
+        self.dnf_xinyue_wpe_op("今日充值金额达到6元", 302947)
 
-        self.dnf_xinyue_wpe_op("每日开启福袋", 269022)
+        # 统一签到按钮
+        self.dnf_xinyue_wpe_op("签到", 306428)
 
-        # 269122 查询当前已开到格子数
-        # 269020 查询已领取的格子列表
-        current_total_step = query_16_rewards_activated_step()
-        lottery_mask = [
-            269038,
-            269040,
-            269041,
-            269042,
-            269043,
-            269044,
-            269045,
-            269046,
-            269047,
-            269048,
-            269049,
-            269050,
-            269051,
-            269052,
-            269053,
-            269054,
-            271269,
+        map_list = [
+            (
+                "地图3", 304295, "2025-05-01 00:00:00",
+                [
+                    ("登录游戏7次", 303390),
+                    ("在线100分钟", 303391),
+                    ("组队参与推荐地下城10次", 303392),
+                ],
+                [
+                    ("消耗156疲劳值 灿烂徽章神秘礼盒", 304296, 304299),
+                    ("通关人造神团本3次 疲劳药5点", 304297, 304300),
+                    ("邀请好友助力5次 黑钻7天", 304298, 304301),
+                ],
+            ),
+            (
+                "地图2", 304172, "2025-04-24 00:00:00",
+                [
+                    ("登录游戏3次", 303352),
+                    ("在线60分钟", 303353),
+                    ("组队参与推荐地下城5次", 303354),
+                ],
+                [
+                    ("通关维纳斯1次 装备提升礼盒1个", 304193, 304197),
+                    ("消耗100疲劳值 黑钻3天", 304192, 304196),
+                    ("邀请好友助力3次 疲劳药5点", 304195, 304198),
+                ],
+            ),
+            (
+                "地图1", 302967, "2025-04-24 00:00:00",
+                [
+                    ("登录游戏1次", 302953),
+                    ("在线30分钟", 302963),
+                    ("组队参与推荐地下城3次", 302965),
+                ],
+                [
+                    ("通关深渊2次 装备品级调整箱1个", 303782, 306136),
+                    ("消耗50疲劳值 王者契约1天", 303654, 306135),
+                    ("邀请好友助力2次 疲劳药1点", 303783, 306137),
+                ],
+            ),
         ]
-        logger.info(f"当前已开到格子数为 {current_total_step}")
-        for step in range(current_total_step):
-            flow_id = lottery_mask[step]
-            self.dnf_xinyue_wpe_op(f"尝试领取格子 - {step} - {flow_id}", flow_id)
+
+        for map_name, exploration_flowid, start_time_str, take_task_reward_list, choose_task_list in map_list:
+            if now_before(start_time_str):
+                logger.warning(f"当前未到{start_time_str}，无法领取{map_name}的任务，将跳过")
+                continue
+
+            for task_name, flowid in take_task_reward_list:
+                self.dnf_xinyue_wpe_op(f"{map_name} 领取任务 {task_name}", flowid)
+
+            for idx in range_from_one(10):
+                res = self.dnf_xinyue_wpe_op(f"{map_name} 探索-{idx}", exploration_flowid)
+                if res["msg"] == "行动力不足":
+                    break
+
+            for name, choosen_task_flowid, get_reward_flowid in choose_task_list:
+                self.dnf_xinyue_wpe_op(f"{map_name} 选择任务 {name}", choosen_task_flowid)
+                self.dnf_xinyue_wpe_op(f"{map_name} 领取任务奖励 {name}", get_reward_flowid)
+
+
+        self.dnf_xinyue_wpe_op("破解秘钥 1 次", 303438)
+        self.dnf_xinyue_wpe_op("破解秘钥 2 次", 304309)
+        self.dnf_xinyue_wpe_op("破解秘钥 3 次", 304310)
+
+        #
+        # # 269122 查询当前已开到格子数
+        # # 269020 查询已领取的格子列表
+        # current_total_step = query_16_rewards_activated_step()
+        # lottery_mask = [
+        #     269038,
+        #     269040,
+        #     269041,
+        #     269042,
+        #     269043,
+        #     269044,
+        #     269045,
+        #     269046,
+        #     269047,
+        #     269048,
+        #     269049,
+        #     269050,
+        #     269051,
+        #     269052,
+        #     269053,
+        #     269054,
+        #     271269,
+        # ]
+        # logger.info(f"当前已开到格子数为 {current_total_step}")
+        # for step in range(current_total_step):
+        #     flow_id = lottery_mask[step]
+        #     self.dnf_xinyue_wpe_op(f"尝试领取格子 - {step} - {flow_id}", flow_id)
 
         lottery_count = query_lottery_ticket()
         logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
         for idx in range_from_one(lottery_count):
-            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 269055, extra_data={"pNum": 1})
-
-        self.dnf_xinyue_wpe_op("抽取幸运冒险家徽章", 269037)
-        self.dnf_xinyue_wpe_op("幸运冒险礼", 269056)
-        self.dnf_xinyue_wpe_op("今日充值金额达到6元", 269058)
-        self.dnf_xinyue_wpe_op("今日消耗30疲劳值", 269057)
-
-        self.dnf_xinyue_wpe_op("心悦VIP4-5礼包", 269062)
-        self.dnf_xinyue_wpe_op("心悦VIP2-3礼包", 269061)
-        self.dnf_xinyue_wpe_op("心悦VIP1礼包", 269060)
-        self.dnf_xinyue_wpe_op("游戏家用户", 269059)
+            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 304311)
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -7954,7 +8013,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "21258"
+        act_id = "22684"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -9485,6 +9544,8 @@ if __name__ == "__main__":
         account_config.disable_in_run_env_list = []
         account_config.function_switches.disable_login_mode_xinyue = False
 
+        # cfg.common.run_in_headless_mode = False
+
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}({account_config.qq()})]", color("fg_bold_yellow"))
 
         if not account_config.is_enabled():
@@ -9498,6 +9559,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

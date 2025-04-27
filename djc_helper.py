@@ -9329,7 +9329,7 @@ class DjcHelper:
         self.dnf_xinyue_wpe_set_openid_accesstoken(openid, access_token)
 
         # {'data': {}, 'msg': 'login status verification failed: access token check failed', 'ret': 7001}
-        res = self.dnf_xinyue_wpe_op("查询抽奖次数", 80507, print_res=False)
+        res = self.dnf_xinyue_wpe_op("查询抽奖次数", 80507, replace_act_id="13042", print_res=False)
         return res["ret"] != 7001
 
     def fetch_djc_login_info(self, ctx, print_warning=True) -> LoginResult:
@@ -9544,7 +9544,7 @@ if __name__ == "__main__":
         account_config.disable_in_run_env_list = []
         account_config.function_switches.disable_login_mode_xinyue = False
 
-        # cfg.common.run_in_headless_mode = False
+        cfg.common.run_in_headless_mode = False
 
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}({account_config.qq()})]", color("fg_bold_yellow"))
 
@@ -9559,6 +9559,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.xinyue_battle_ground()
 
     pause()

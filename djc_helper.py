@@ -3763,45 +3763,7 @@ class DjcHelper:
             )
             return
 
-        # 领取掉落装备次数积分
-        # type_name_count_reward_list = [
-        #     (
-        #         "史诗装备",
-        #         [
-        #             (1, 273675),
-        #             (2, 274086),
-        #             (3, 274087),
-        #             (4, 274088),
-        #             (5, 274089),
-        #             (6, 274090),
-        #             (7, 274091),
-        #             (8, 274092),
-        #             (9, 274093),
-        #             (10, 274094),
-        #             (11, 274095),
-        #             (12, 274096),
-        #             (13, 274097),
-        #             (14, 274098),
-        #             (15, 274099),
-        #             (16, 274100),
-        #         ],
-        #     ),
-        #     (
-        #         "太初装备",
-        #         [
-        #             (1, 274135),
-        #             (2, 274136),
-        #             (3, 274137),
-        #             (4, 274138),
-        #             (5, 274139),
-        #             (6, 274140),
-        #         ],
-        #     ),
-        # ]
-        # for type_name, count_reward_list in type_name_count_reward_list:
-        #     for count, flowid in count_reward_list:
-        #         self.dnf_chaohe_wpe_op(f"尝试领取 {type_name} 累计{count}件 的积分", flowid)
-        self.dnf_chaohe_wpe_op(f"尝试领取通关团本的积分", 306087)
+        self.dnf_chaohe_wpe_op("尝试领取通关团本的积分", 306087)
 
         # 领取积分阶段奖励
         # remain_point, total_point = query_count("查询 当前已获得闪光值", xx)
@@ -5846,7 +5808,7 @@ class DjcHelper:
 
         # res = session.post(self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10)
         res = session.get(self.urls.colg_other_act_url, timeout=10)
-        logger.info(color("bold_green") + f"访问页面获取抽奖机会")
+        logger.info(color("bold_green") + "访问页面获取抽奖机会")
 
         if now_in_range("2025-04-29 00:00:00", "2025-05-19 23:59:59"):
             res = session.post(
@@ -7875,7 +7837,9 @@ class DjcHelper:
 
         map_list = [
             (
-                "地图3", 304295, "2025-05-01 00:00:00",
+                "地图3",
+                304295,
+                "2025-05-01 00:00:00",
                 [
                     ("登录游戏7次", 303390),
                     ("在线100分钟", 303391),
@@ -7888,7 +7852,9 @@ class DjcHelper:
                 ],
             ),
             (
-                "地图2", 304172, "2025-04-24 00:00:00",
+                "地图2",
+                304172,
+                "2025-04-24 00:00:00",
                 [
                     ("登录游戏3次", 303352),
                     ("在线60分钟", 303353),
@@ -7901,7 +7867,9 @@ class DjcHelper:
                 ],
             ),
             (
-                "地图1", 302967, "2025-04-24 00:00:00",
+                "地图1",
+                302967,
+                "2025-04-24 00:00:00",
                 [
                     ("登录游戏1次", 302953),
                     ("在线30分钟", 302963),
@@ -7931,7 +7899,6 @@ class DjcHelper:
             for name, choosen_task_flowid, get_reward_flowid in choose_task_list:
                 self.dnf_xinyue_wpe_op(f"{map_name} 选择任务 {name}", choosen_task_flowid)
                 self.dnf_xinyue_wpe_op(f"{map_name} 领取任务奖励 {name}", get_reward_flowid)
-
 
         self.dnf_xinyue_wpe_op("破解秘钥 1 次", 303438)
         self.dnf_xinyue_wpe_op("破解秘钥 2 次", 304309)

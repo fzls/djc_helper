@@ -691,6 +691,7 @@ class DjcHelper:
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("colg其他活动", self.colg_other_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -704,7 +705,6 @@ class DjcHelper:
             ("新春充电计划", self.new_year_signin),
             ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
-            ("colg其他活动", self.colg_other_act),
             ("喂养删除补偿", self.weiyang_compensate),
             ("嘉年华星与心愿", self.dnf_star_and_wish),
             ("回流攻坚队", self.dnf_socialize),
@@ -5844,17 +5844,17 @@ class DjcHelper:
         #         logger.warning("累积天数不足，跳过尝试后续")
         #         break
 
-        res = session.post(self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10)
-        logger.info(color("bold_green") + f"福利签到，结果={res.json()}")
+        # res = session.post(self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10)
+        res = session.get(self.urls.colg_other_act_url, timeout=10)
+        logger.info(color("bold_green") + f"访问页面获取抽奖机会")
 
-        # 5、本期限时抽奖开放时间为2024.6.13-7.31
-        if now_in_range("2024-06-13 00:00:00", "2024-07-31 23:59:59"):
+        if now_in_range("2025-04-29 00:00:00", "2025-05-19 23:59:59"):
             res = session.post(
                 self.urls.colg_other_act_lottery,
                 data=f"type={self.urls.colg_other_act_type}&aid={self.urls.colg_other_act_id}",
                 timeout=10,
             )
-            logger.info(color("bold_green") + f"每日盲盒，结果={res.json()}")
+            logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
         else:
             pass
 
@@ -9559,6 +9559,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.colg_other_act()
 
     pause()

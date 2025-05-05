@@ -67,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
     #
     # 已过期活动
     #
@@ -76,7 +77,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
-    newNotAmsActInfo("2024-06-13 00:00:00", "2025-01-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-13 23:59:59", "回流攻坚队"),
@@ -117,6 +117,7 @@ act_name_to_url = {
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250424dnf/index_h5.html",
+    "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
     #
     # 已过期活动
     #
@@ -126,7 +127,6 @@ act_name_to_url = {
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
     "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
-    "colg其他活动": "https://bbs.colg.cn/forum-171-1.html",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
     "回流攻坚队": "https://dnf.qq.com/cp/a2024socialize/index_g.html",
@@ -382,10 +382,10 @@ class Urls:
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
         # ------- colg其他活动 --------
-        self.colg_other_act_type = 3
-        self.colg_other_act_id = 1
+        self.colg_other_act_type = 2
+        self.colg_other_act_id = 26
         # 活动页面
-        self.colg_other_act_url = "https://bbs.colg.cn/colg_check_in_activity-check_in.html/checkIn"
+        self.colg_other_act_url = "https://hub.bbs.colg.cn/activity/artificialgod/index.html"
         # # 累计登录领奖
         # self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
         # 每日抽奖

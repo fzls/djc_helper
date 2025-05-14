@@ -201,11 +201,16 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "colg的俩新活动"
-    message = """colg新出了个新人签到和答题王活动，可以累计领取20天雷钻加一些其他蚊子腿。前者需要注册colg的新账号，后者需要手动答个题，都很简单。
-有兴趣的朋友可以按点确定后弹出的文档自从操作下，大概几分钟就能搞定
+    title = "抖音活动"
+    message = """抖音有个小活动可以领取16天黑钻和一些疲劳药之类的东西，有兴趣的朋友可以参照下面的步骤自行参与
+
+1. 抖音搜索：地下城与勇士端游
+2. 点开官方账号，点击【专区】标签（在作品/推荐标签的右边）
+3. 往下拉，点击下面的福利礼包
+4. 点开任意一个，点击绑定角色，跳转到手机QQ完成绑定角色操作
+5. 挨个把每个都点一下领取就好了
 """
-    open_url = "https://docs.qq.com/doc/DYkxQTnVjVXNVUkVp"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

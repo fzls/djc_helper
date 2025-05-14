@@ -468,5 +468,15 @@
     "open_url": "https://docs.qq.com/doc/DYkxQTnVjVXNVUkVp",
     "expire_at": "2025-04-05 18:57:32",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "抖音活动",
+    "message": "抖音有个小活动可以领取16天黑钻和一些疲劳药之类的东西，有兴趣的朋友可以参照下面的步骤自行参与\n\n1. 抖音搜索：地下城与勇士端游\n2. 点开官方账号，点击【专区】标签（在作品/推荐标签的右边）\n3. 往下拉，点击下面的福利礼包\n4. 点开任意一个，点击绑定角色，跳转到手机QQ完成绑定角色操作\n5. 挨个把每个都点一下领取就好了\n",
+    "send_at": "2025-05-14 09:59:13",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2025-06-04 09:59:13",
+    "show_only_before_version": ""
   }
 ]

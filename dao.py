@@ -1547,12 +1547,12 @@ class ColgBattlePassInfo(ConfigInterface):
             ("rewards", ColgBattlePassRewardInfo),
         ]
 
-    def untaken_rewards(self) -> list[str]:
+    def untaken_rewards(self) -> list[ColgBattlePassRewardInfo]:
         untaken_rewards = []
 
         for reward in self.rewards:
             if reward.is_finish and not reward.is_get:
-                untaken_rewards.append(reward.reward_name)
+                untaken_rewards.append(reward)
 
         return untaken_rewards
 
@@ -1574,6 +1574,35 @@ class ColgBattlePassTaskInfo(ConfigInterface):
         self.exchange_credits = 0
         self.sort_id = 1
         self.is_highlight = "0"
+
+
+class ColgBattlePassMallProductList(ConfigInterface):
+    def __init__(self):
+        # 兑换币
+        self.cm_token_num = 0
+        # 奖励列表
+        self.list: list[ColgBattlePassMallProductInfo] = []
+
+    def fields_to_fill(self) -> list[tuple[str, type[ConfigInterface]]]:
+        return [
+            ("list", ColgBattlePassMallProductInfo),
+        ]
+
+
+class ColgBattlePassMallProductInfo(ConfigInterface):
+    def __init__(self):
+        self.colg_reward_id = "100134"
+        self.title = "黑钻30天"
+        self.img = "https://img-cos.colg.cn/uploads/images/202504/202504101755307172.png/ori_png"
+        self.cm_token_num = "12"
+        self.exchange_limit = "1"
+        self.colg_aid = 1
+        self.colg_gift_id = 0
+        self.colg_ts = 0
+        self.colg_nonce_str = ""
+        self.colg_sign = ""
+        self.status = 0
+        self.aid = 1
 
 
 class ColgBattlePassRewardInfo(ConfigInterface):

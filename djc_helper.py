@@ -27,6 +27,7 @@ from dao import (
     AmsActInfo,
     BuyInfo,
     ColgBattlePassInfo,
+    ColgBattlePassMallProductList,
     ColgBattlePassQueryInfo,
     ComicDataList,
     DnfChronicleMatchServerAddUserRequest,
@@ -5642,6 +5643,13 @@ class DjcHelper:
 
             return info
 
+        def query_mall_product_list() -> ColgBattlePassMallProductList:
+            res = session.get(self.urls.colg_mall_product_list_url, timeout=10)
+            raw_info = res.json()
+
+            product_list = ColgBattlePassMallProductList().auto_update_config(raw_info["data"])
+            return product_list
+
         info = query_info()
 
         for task in info.tasks:
@@ -5673,36 +5681,21 @@ class DjcHelper:
                 color("bold_green") + f"领取 {task.task_name} 的 积分奖励({task.task_reward})， 结果={res.json()}"
             )
 
+        # 尝试领取等级奖励
         info = query_info()
         untaken_awards = info.untaken_rewards()
-        msg = f"账号 {self.cfg.name} Colg活跃值已经达到 【{info.lv_score}】 了咯"
-        if len(untaken_awards) > 0:
-            msg += f"，目前有以下奖励可以领取，记得去Colg领取哦\n{untaken_awards}"
-        else:
-            msg += "，目前暂无未领取的奖励"
-        logger.info(color("bold_green") + msg)
-
-        if len(untaken_awards) > 0:
-            need_show_message_box = False
-            title = ""
-
-            # 如果有剩余奖励
-            act_config = get_not_ams_act("colg每日签到")
-            if act_config is not None and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
-                # 活动即将过期时，则每天提示一次
-                need_show_message_box = is_daily_first_run(f"colg_{info.activity_id}2_领取奖励_活动即将结束时_每日提醒")
-                title = f"活动快过期了，记得领取奖励（过期时间为 {act_config.dtEndTime}）"
-            else:
-                # 否则，每周提示一次
-                need_show_message_box = is_weekly_first_run(f"colg_{info.activity_id}2_领取奖励_每周提醒")
-                title = "可以领奖励啦"
-
-            if need_show_message_box:
-                async_message_box(msg, title, open_url="https://bbs.colg.cn/forum-171-1.html", print_log=False)
+        logger.info(f"账号 {self.cfg.name} Colg活跃值已经达到 【{info.lv_score}】 了")
+        for award in untaken_awards:
+            res = session.get(
+                self.urls.colg_take_sign_in_get_reward.format(aid=info.activity_id, reward_id=award.lv), timeout=10
+            )
+            logger.info(
+                color("bold_green") + f"领取 活跃值 {award.reward_count} 的 奖励({award.reward_name})， 结果={res.json()}"
+            )
 
         async_message_box(
             (
-                "除签到外的任务条件，以及各个奖励的领取，请自己前往colg进行嗷\n"
+                "除签到外的任务条件，请自己前往colg进行嗷\n"
                 "\n"
                 "此外colg社区活跃任务右侧有个【前往商城】，请自行完成相关活动后点进去自行兑换奖品"
             ),
@@ -5713,20 +5706,33 @@ class DjcHelper:
         conversion_status_message = f"账号 {self.cfg.name} Colg 当前兑换币数量为 {info.conversion}"
         logger.info(conversion_status_message)
 
-        # 当兑换币足够时，提示兑换限量兑换的奖励
-        limit_award_name = "黑钻30天"
-        limit_award_require_conversion = 12
-        # limit_award_count = 7500
-        if info.conversion >= limit_award_require_conversion:
+        # 当兑换币足够时，尝试兑换限量兑换的奖励。其余奖励等最后几天弹窗自行领取
+        product_list = query_mall_product_list()
+        for product in product_list.list:
+            if "黑钻" in product.title or int(product.cm_token_num) >= 12:
+                logger.info(f"{product.title} 是限量奖励，尝试进行兑换")
+
+                if product.status == 1 and info.conversion >= int(product.cm_token_num):
+                    signin_res = session.post(self.urls.colg_mall_get_reward_url, data=f"colg_reward_id={product.colg_reward_id}", timeout=10)
+                    logger.info(f"尝试领取 {product.title}，结果为 {signin_res.json()}")
+
+                    # 刷新下信息
+                    info = query_info()
+                else:
+                    logger.warning(f"{product.title} 已经兑换过或者兑换币不够，跳过")
+
+        # 如果有剩余奖励
+        act_config = get_not_ams_act("colg每日签到")
+        if info.conversion > 0 and act_config is not None and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
+            # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
+
             async_message_box(
                 (
-                    f"{conversion_status_message}\n"
-                    f"已足够兑换 {limit_award_name}(需{limit_award_require_conversion}兑换币)\n"
-                    # f"该奖励限量{limit_award_count}个，"
-                    f"请及时前往兑换。如果已经没有了，可以兑换其他奖励\n"
+                    f"colg活动最后几天了，仍有{info.conversion}个兑换币未使用，请自行前往使用\n"
                 ),
-                f"colg社区活跃任务-{info.activity_id}-兑换限量奖励提示",
+                f"colg社区活跃任务-{info.activity_id}-兑换商城奖励提示",
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
+                show_once_daily=True,
             )
 
     # --------------------------------------------colg其他活动--------------------------------------------
@@ -9651,6 +9657,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_spring_travel()
+        djcHelper.colg_signin()
 
     pause()

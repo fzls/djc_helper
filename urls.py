@@ -69,6 +69,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
+    newNotAmsActInfo("2025-05-22 00:00:00", "2025-06-11 23:59:59", "助手春日出游打卡"),
     #
     # 已过期活动
     #
@@ -120,6 +121,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250424dnf/index_h5.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
+    "助手春日出游打卡": "https://dzhu.qq.com/fe/dnf/activity_template/?share=1&gameId=10014&subGameId=10014&activityId=10010",
     #
     # 已过期活动
     #
@@ -437,6 +439,8 @@ class Urls:
         self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
         # 助手魔界人每日幸运签
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
+        # 助手春日出游打卡
+        self.dnf_helper_spring_travel_api = "https://dzhu.qq.com/zangyi/activity/act"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

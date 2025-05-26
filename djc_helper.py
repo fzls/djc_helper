@@ -693,6 +693,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("colg其他活动", self.colg_other_act),
             ("新职业预约活动", self.dnf_reserve),
+            ("助手春日出游打卡", self.dnf_helper_spring_travel),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8449,6 +8450,75 @@ class DjcHelper:
 
         return res
 
+    # --------------------------------------------助手春日出游打卡--------------------------------------------
+    @try_except()
+    def dnf_helper_spring_travel(self):
+        show_head_line("助手春日出游打卡")
+        self.show_not_ams_act_info("助手春日出游打卡")
+
+        if not self.cfg.function_switches.get_dnf_helper_spring_travel or self.disable_most_activities():
+            show_act_not_enable_warning("助手春日出游打卡")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行 助手春日出游打卡，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手春日出游打卡')}"
+            )
+            return
+
+        self.dnf_helper_spring_travel_op("每日签到", "activitytpl/checkin/checkIn", date=get_now().strftime("%Y-%m-%d"), reCheckIn=0)
+
+        logger.warning("助手内的任务以及抽奖需要自行完成")
+
+    def dnf_helper_spring_travel_op(self, ctx: str, action: str, print_res=True, **extra_params):
+        if action != "init":
+            # 该类型每个请求之间间隔一定时长
+            time.sleep(1)
+
+        roleinfo = self.get_dnf_bind_role()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        # fmt: off
+        data = {
+            "r": quote_plus(action),
+            "activityId": "10010",
+
+            **extra_params,
+
+            "source": "dz",
+            "from": "tpl",
+            "cCurrentGameId": "10014",
+
+            "uin": self.qq(),
+            "serverId": roleinfo.serviceID,
+            "areaId": roleinfo.areaID,
+            "originalRoleId": roleinfo.roleCode,
+            "userId": dnf_helper_info.userId,
+            "token": dnf_helper_info.token,
+            "cGameId": "1006",
+        }
+        # fmt: on
+
+        res = self.post(
+            ctx,
+            self.urls.dnf_helper_spring_travel_api,
+            data=post_json_to_data(data),
+            print_res=print_res,
+        )
+
+        if dnf_helper_info.token != "":
+            # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
+            show_message_box_once_key = "助手春日出游打卡_token过期2_" + get_week()
+            if res.get("returnCode", 0) == -30003:
+                extra_msg = "dnf助手的登录态已过期，导致 助手春日出游打卡 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
+                raise Exception("token过期，跳过后续尝试")
+            else:
+                self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
+
+        return res
+
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
     def dnf_recall_guide(self):
@@ -9581,6 +9651,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reserve()
+        djcHelper.dnf_helper_spring_travel()
 
     pause()

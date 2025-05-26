@@ -3057,6 +3057,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("colg其他活动", "get_colg_other_act"),
+            ("新职业预约活动", "get_dnf_reserve"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

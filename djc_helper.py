@@ -692,6 +692,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("colg其他活动", self.colg_other_act),
+            ("新职业预约活动", self.dnf_reserve),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8607,6 +8608,60 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------新职业预约活动--------------------------------------------
+    @try_except()
+    def dnf_reserve(self):
+        show_head_line("新职业预约活动")
+        self.show_not_ams_act_info("新职业预约活动")
+
+        if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
+            show_act_not_enable_warning("新职业预约活动")
+            return
+
+        self.check_dnf_reserve()
+
+        act_url = get_act_url("新职业预约活动")
+        async_message_box(
+            "新职业的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~",
+            f"手动预约_{act_url}",
+            open_url=act_url,
+            show_once=True,
+        )
+
+        take_time = "2025-06-12 11:00:00"
+        if now_after(take_time):
+            self.dnf_reserve_op("领取预约限定装扮", "402612")
+        else:
+            logger.warning(f"尚未到领取时间({take_time})，不尝试进行预约限定装扮的领取")
+
+    def check_dnf_reserve(self, **extra_params):
+        return self.ide_check_bind_account(
+            "新职业预约活动",
+            get_act_url("新职业预约活动"),
+            activity_op_func=self.dnf_reserve_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_reserve_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_reserve
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("新职业预约活动"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9526,6 +9581,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_other_act()
+        djcHelper.dnf_reserve()
 
     pause()

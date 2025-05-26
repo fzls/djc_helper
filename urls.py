@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
+    newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     #
     # 已过期活动
     #
@@ -118,6 +119,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250424dnf/index_h5.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
+    "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     #
     # 已过期活动
     #
@@ -314,6 +316,7 @@ class Urls:
         self.ide_iActivityId_dnf_recall_guide = "3_Xpqprw"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
         self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节
+        self.ide_iActivityId_dnf_reserve = "76_rZP67G"  # 新职业预约活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

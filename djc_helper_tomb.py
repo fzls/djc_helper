@@ -149,7 +149,6 @@ class DjcHelperTomb:
             ("关怀活动", self.dnf_guanhuai),
             ("DNF公会活动", self.dnf_gonghui),
             ("WeGame活动_新版", self.wegame_new),
-            ("新职业预约活动", self.dnf_reserve),
             ("组队拜年", self.team_happy_new_year),
             ("hello语音（皮皮蟹）网页礼包兑换", self.hello_voice),
             ("翻牌活动", self.dnf_card_flip),
@@ -3172,68 +3171,6 @@ class DjcHelperTomb:
             print_res,
             get_act_url("组队拜年"),
             **extra_params,
-        )
-
-    # --------------------------------------------新职业预约活动--------------------------------------------
-    @try_except()
-    def dnf_reserve(self):
-        show_head_line("新职业预约活动")
-
-        if not self.cfg.function_switches.get_dnf_reserve or self.disable_most_activities():
-            show_act_not_enable_warning("新职业预约活动")
-            return
-
-        self.show_amesvr_act_info(self.dnf_reserve_op)
-
-        self.check_dnf_reserve()
-
-        act_url = get_act_url("新职业预约活动")
-        async_message_box(
-            "合金战士的预约礼包需要手动在网页上输入手机号和验证码来进行预约，请手动在稍后弹出的网页上进行~",
-            f"手动预约_{act_url}",
-            open_url=act_url,
-            show_once=True,
-        )
-
-        if now_after("2021-12-30 12:00:00"):
-            self.dnf_reserve_op("领取预约限定装扮", "820562")
-
-    def check_dnf_reserve(self):
-        self.check_bind_account(
-            "新职业预约活动",
-            get_act_url("新职业预约活动"),
-            activity_op_func=self.dnf_reserve_op,
-            query_bind_flowid="820923",
-            commit_bind_flowid="820922",
-        )
-
-    def dnf_reserve_op(self, ctx, iFlowId, p_skey="", print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_reserve
-
-        roleinfo = self.get_dnf_bind_role()
-        checkInfo = self.get_dnf_roleinfo()
-
-        checkparam = quote_plus(quote_plus(checkInfo.checkparam))
-
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("新职业预约活动"),
-            sArea=roleinfo.serviceID,
-            sPartition=roleinfo.serviceID,
-            sAreaName=quote_plus(quote_plus(roleinfo.serviceName)),
-            sRoleId=roleinfo.roleCode,
-            sRoleName=quote_plus(quote_plus(roleinfo.roleName)),
-            md5str=checkInfo.md5str,
-            ams_checkparam=checkparam,
-            checkparam=checkparam,
-            **extra_params,
-            extra_cookies=f"p_skey={p_skey}",
         )
 
     # --------------------------------------------WeGame活动_新版--------------------------------------------

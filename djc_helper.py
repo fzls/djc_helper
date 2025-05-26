@@ -7010,8 +7010,15 @@ class DjcHelper:
         if not isSettlement:
             self.dnf_bind_phone_op("发放兑换积分", "970838")
 
-        if exchangeTickets > 2:
-            self.dnf_bind_phone_op("兑换-增肥器-4", "970763", selectNo="4")
+        if exchangeTickets >= 2:
+            self.dnf_bind_phone_op("兑换-增肥器", "970763", selectNo="3")
+
+        if use_by_myself():
+            async_message_box(
+                "每月一次检查绑定手机活动百宝库的奖励顺序是否有变化",
+                "（自己可见）每月一次检查绑定手机活动百宝库的奖励顺序是否有变化",
+                show_once_monthly=True,
+            )
 
     def check_dnf_bind_phone(self):
         self.check_bind_account(

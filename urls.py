@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-06-11 23:59:59", "助手春日出游打卡"),
+    newNotAmsActInfo("2025-05-23 11:30:00", "2025-07-03 21:59:59", "超核勇士wpe_dup"),
     #
     # 已过期活动
     #
@@ -116,6 +117,7 @@ act_name_to_url = {
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手春日出游打卡": "https://dzhu.qq.com/fe/dnf/activity_template/?share=1&gameId=10014&subGameId=10014&activityId=10010",
+    "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
     #
     # 已过期活动
     #

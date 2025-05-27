@@ -886,6 +886,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_shenjie_grow_up = True
         # 是否领取 超核勇士wpe 活动
         self.get_dnf_chaohe_wpe = True
+        # 是否领取 超核勇士wpe_dup 活动
+        self.get_dnf_helper_wpe_dup = True
         # 是否领取 9163补偿 活动
         self.get_dnf_9163_apologize = True
         # 是否领取 DNFxSNK 活动

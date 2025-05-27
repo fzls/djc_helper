@@ -689,6 +689,7 @@ class DjcHelper:
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("新职业预约活动", self.dnf_reserve),
             ("助手春日出游打卡", self.dnf_helper_spring_travel),
+            ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -3840,6 +3841,130 @@ class DjcHelper:
                     "gid": "1",
                     "c_bind_club_id": "",
                     "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_chaohe_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
+
+    # --------------------------------------------超核勇士wpe_dup--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
+    @try_except()
+    def dnf_helper_wpe_dup(self):
+        show_head_line("超核勇士wpe_dup")
+        self.show_not_ams_act_info("超核勇士wpe_dup")
+
+        if not self.cfg.function_switches.get_dnf_helper_wpe_dup or self.disable_most_activities():
+            show_act_not_enable_warning("超核勇士wpe_dup")
+            return
+
+        self.prepare_wpe_act_openid_accesstoken("超核勇士wpe_dup")
+
+        def query_is_chaohe() -> bool:
+            # {"data": {}, "ret": 7001, "msg": "login status verification failed: 参数无效，检查请求参数"}
+            # {
+            #     "ret": 0,
+            #     "msg": "请微信联系闪闪进行身份验证",
+            #     "data": "{\"msg\":\"请微信联系闪闪进行身份验证\",\"ret\":40006}",
+            #     "serialId": "ceiba-supercore-23290-316013-1748363426288-kjLgw1HjEZ"
+            # }
+            res = self.dnf_helper_wpe_dup_op("尝试请求，判断是否是超核玩家", 316222)
+
+            is_chaohe = not (
+                (res["ret"] == 0 and "进行身份验证" in res["msg"])  # 不是超核
+                or (
+                    res["ret"] == 7001 and res["msg"] == "login status verification failed: 参数无效，检查请求参数"
+                )  # 登录参数有误
+            )
+            return is_chaohe
+
+        is_chaohe = query_is_chaohe()
+        if not is_chaohe:
+            logger.warning("当前账号不是超核玩家，将跳过本活动")
+            return
+
+        self.dnf_helper_wpe_dup_op("每日任务-每日消耗疲劳100点", 316222)
+        self.dnf_helper_wpe_dup_op("每日任务-每日消耗疲劳50点", 316214)
+        self.dnf_helper_wpe_dup_op("每日任务-每日登录游戏", 315993)
+
+        self.dnf_helper_wpe_dup_op("每月任务-通关 人造神 任务一次", 316225)
+        self.dnf_helper_wpe_dup_op("每月任务-通关 幽冥之女神殿 任务一次", 315998)
+
+
+        async_message_box(
+            (
+                "如果你是超核玩家（充了很多钱），可以在微信跟超核管家 闪闪聊天中发送以下关键词，就可以额外领取本活动的20粽子用来抽奖啥的\n"
+                "情有独粽\n"
+                "端午快乐\n"
+                "端午安康\n"
+            ),
+            "闪闪彩蛋任务_v1",
+            show_once=True,
+            open_url=get_act_url("超核勇士wpe_dup"),
+        )
+        self.dnf_helper_wpe_dup_op("闪闪彩蛋任务", 316013)
+
+
+        self.dnf_helper_wpe_dup_op("累计粽子值奖励-180积分", 316247)
+        self.dnf_helper_wpe_dup_op("累计粽子值奖励-220积分", 316525)
+        self.dnf_helper_wpe_dup_op("累计粽子值奖励-260积分", 316526)
+
+
+        logger.warning("尝试兑换抽奖次数并自动抽奖")
+        for idx in range_from_one(4):
+            res = self.dnf_helper_wpe_dup_op(f"兑换抽奖次数-{idx}", 316017)
+            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"] or "不足" in res["msg"]:
+                break
+            time.sleep(5)
+
+        for idx in range_from_one(4):
+            # note: 对应搜索 lotteryFlowID
+            res = self.dnf_helper_wpe_dup_op(f"立即抽奖-{idx}", 316000)
+            if "消耗殆尽" in res["msg"] or "已用完" in res["msg"] or "不足" in res["msg"]:
+                break
+            time.sleep(5)
+
+    def dnf_helper_wpe_dup_op(self, ctx: str, flow_id: int, print_res=True, **extra_params):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        roleinfo = self.get_dnf_bind_role()
+
+        act_id = 23290
+
+        json_data = {
+            "biz_id": "supercore",
+            "act_id": act_id,
+            "gid": "1",
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_encode(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_encode(roleinfo.roleName),
+                "device": "pc",
+                "flag": 0,
+            },
+            "data": json.dumps(
+                {
+                    "ceiba_plat_id": "ios",
+                    "gid": "1",
+                    "c_bind_club_id": "",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "c_frontend_context": json.dumps({"via": "", "via_source": ""}),
                     "cExtData": {},
                 }
             ),
@@ -9664,6 +9789,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_helper_wpe_dup()
 
     pause()

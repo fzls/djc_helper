@@ -3053,6 +3053,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("新职业预约活动", "get_dnf_reserve"),
             ("助手春日出游打卡", "get_dnf_helper_spring_travel"),
+            ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

@@ -3899,7 +3899,6 @@ class DjcHelper:
         self.dnf_helper_wpe_dup_op("每月任务-通关 人造神 任务一次", 316225)
         self.dnf_helper_wpe_dup_op("每月任务-通关 幽冥之女神殿 任务一次", 315998)
 
-
         async_message_box(
             (
                 "如果你是超核玩家（充了很多钱），可以在微信跟超核管家 闪闪聊天中发送以下关键词，就可以额外领取本活动的20粽子用来抽奖啥的\n"
@@ -3913,11 +3912,9 @@ class DjcHelper:
         )
         self.dnf_helper_wpe_dup_op("闪闪彩蛋任务", 316013)
 
-
         self.dnf_helper_wpe_dup_op("累计粽子值奖励-180积分", 316247)
         self.dnf_helper_wpe_dup_op("累计粽子值奖励-220积分", 316525)
         self.dnf_helper_wpe_dup_op("累计粽子值奖励-260积分", 316526)
-
 
         logger.warning("尝试兑换抽奖次数并自动抽奖")
         for idx in range_from_one(4):
@@ -5815,7 +5812,8 @@ class DjcHelper:
                 self.urls.colg_take_sign_in_get_reward.format(aid=info.activity_id, reward_id=award.lv), timeout=10
             )
             logger.info(
-                color("bold_green") + f"领取 活跃值 {award.reward_count} 的 奖励({award.reward_name})， 结果={res.json()}"
+                color("bold_green")
+                + f"领取 活跃值 {award.reward_count} 的 奖励({award.reward_name})， 结果={res.json()}"
             )
 
         async_message_box(
@@ -5838,7 +5836,9 @@ class DjcHelper:
                 logger.info(f"{product.title} 是限量奖励，尝试进行兑换")
 
                 if product.status == 1 and info.conversion >= int(product.cm_token_num):
-                    signin_res = session.post(self.urls.colg_mall_get_reward_url, data=f"colg_reward_id={product.colg_reward_id}", timeout=10)
+                    signin_res = session.post(
+                        self.urls.colg_mall_get_reward_url, data=f"colg_reward_id={product.colg_reward_id}", timeout=10
+                    )
                     logger.info(f"尝试领取 {product.title}，结果为 {signin_res.json()}")
 
                     # 刷新下信息
@@ -5848,13 +5848,15 @@ class DjcHelper:
 
         # 如果有剩余奖励
         act_config = get_not_ams_act("colg每日签到")
-        if info.conversion > 0 and act_config is not None and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
+        if (
+            info.conversion > 0
+            and act_config is not None
+            and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5))
+        ):
             # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
 
             async_message_box(
-                (
-                    f"colg活动最后几天了，仍有{info.conversion}个兑换币未使用，请自行前往使用\n"
-                ),
+                (f"colg活动最后几天了，仍有{info.conversion}个兑换币未使用，请自行前往使用\n"),
                 f"colg社区活跃任务-{info.activity_id}-兑换商城奖励提示",
                 open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
                 show_once_daily=True,
@@ -8605,7 +8607,9 @@ class DjcHelper:
             )
             return
 
-        self.dnf_helper_spring_travel_op("每日签到", "activitytpl/checkin/checkIn", date=get_now().strftime("%Y-%m-%d"), reCheckIn=0)
+        self.dnf_helper_spring_travel_op(
+            "每日签到", "activitytpl/checkin/checkIn", date=get_now().strftime("%Y-%m-%d"), reCheckIn=0
+        )
 
         logger.warning("助手内的任务以及抽奖需要自行完成")
 
@@ -8649,7 +8653,9 @@ class DjcHelper:
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
             show_message_box_once_key = "助手春日出游打卡_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
-                extra_msg = "dnf助手的登录态已过期，导致 助手春日出游打卡 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                extra_msg = (
+                    "dnf助手的登录态已过期，导致 助手春日出游打卡 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
             else:

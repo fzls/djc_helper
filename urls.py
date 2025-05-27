@@ -388,9 +388,7 @@ class Urls:
         self.colg_take_sign_in_credits = (
             "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getUserCredit&aid={aid}&task_id={task_id}"
         )
-        self.colg_take_sign_in_get_reward = (
-            "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getReward&reward_id={reward_id}&aid={aid}&from_id=1"
-        )
+        self.colg_take_sign_in_get_reward = "https://bbs.colg.cn/plugin.php?id=colg_pass_activity&act=getReward&reward_id={reward_id}&aid={aid}&from_id=1"
         self.colg_mall_product_list_url = "https://bbs.colg.cn/colg_cmall-colg_cmall.html/getCMallProductList"
         self.colg_mall_get_reward_url = "https://bbs.colg.cn/colg_cmall-colg_cmall.html/getCMallRewardV1"
         # ------- colg其他活动 --------

@@ -1886,7 +1886,7 @@ class DjcHelper:
         mine_summary = _query_member_task_list_summary(mine_tasks)
         teammate_summary = _query_member_task_list_summary(teammate_flow_ids)
 
-        return f"{mine_summary}|{teammate_summary}"
+        return f"{mine_summary}(自己)|{teammate_summary}"
 
     @try_except(return_val_on_except="")
     def query_xinyue_my_team_id(self) -> str:

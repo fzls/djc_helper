@@ -690,6 +690,7 @@ class DjcHelper:
             ("新职业预约活动", self.dnf_reserve),
             ("助手春日出游打卡", self.dnf_helper_spring_travel),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
+            ("DNF福利中心兑换", self.dnf_welfare),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -699,7 +700,6 @@ class DjcHelper:
         return [
             ("colg其他活动", self.colg_other_act),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("DNF福利中心兑换", self.dnf_welfare),
             ("共赴西装节", self.dnf_suit),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
@@ -4880,18 +4880,20 @@ class DjcHelper:
     @try_except()
     def dnf_welfare(self):
         show_head_line("DNF福利中心兑换")
-        self.show_amesvr_act_info(self.dnf_welfare_op)
+        # self.show_amesvr_act_info(self.dnf_welfare_op)
+        self.show_not_ams_act_info("DNF福利中心兑换")
 
         if not self.cfg.function_switches.get_dnf_welfare or self.disable_most_activities():
             show_act_not_enable_warning("DNF福利中心兑换活动")
             return
 
-        self.check_dnf_welfare()
+        # self.check_dnf_welfare()
+        self.check_dnf_welfare_ide()
 
         # note: 这里面的奖励都需要先登陆过游戏才可以领取
 
         # note: 新版本一定要记得刷新这个版本号~（不刷似乎也行- -）
-        welfare_version = "v8"
+        welfare_version = "v10"
         db = WelfareDB().with_context(welfare_version).load()
         account_db = WelfareDB().with_context(f"{welfare_version}/{self.cfg.get_account_cache_key()}").load()
 
@@ -4904,21 +4906,21 @@ class DjcHelper:
             reg = "^[0-9]+-[0-9A-Za-z]{18}$"
             if re.fullmatch(reg, sContent) is not None:
                 siActivityId, sContent = sContent.split("-")
-                res = self.dnf_welfare_op(
-                    f"兑换分享口令-{siActivityId}-{sContent}",
-                    "649260",
-                    siActivityId=siActivityId,
-                    sContent=quote_plus(quote_plus(quote_plus(sContent))),
-                )
+                # res = self.dnf_welfare_ide_op(
+                #     f"兑换分享口令-{siActivityId}-{sContent}",
+                #     "649260",
+                #     siActivityId=siActivityId,
+                #     sCode=quote_plus(sContent),
+                # )
             else:
-                res = self.dnf_welfare_op(
-                    f"兑换口令-{sContent}", "558229", sContent=quote_plus(quote_plus(quote_plus(sContent)))
+                res = self.dnf_welfare_ide_op(
+                    f"兑换口令-{sContent}", "402568", sCode=quote_plus(sContent)
                 )
 
             # 每次请求间隔一秒
             time.sleep(3)
 
-            if int(res["ret"]) != 0 or int(res["modRet"]["iRet"]) != 0:
+            if int(res["ret"]) != 0 or int(res["jData"]["iRet"]) != 0:
                 return
 
             # 本地标记已经兑换过
@@ -4939,17 +4941,17 @@ class DjcHelper:
             except Exception:
                 pass
 
-        @try_except(return_val_on_except="19", show_exception_info=False)
-        def query_siActivityId():
-            res = self.dnf_welfare_op("查询我的分享码状态", "649261", print_res=False)
-            return res["modRet"]["jData"]["siActivityId"]
+        # @try_except(return_val_on_except="19", show_exception_info=False)
+        # def query_siActivityId():
+        #     res = self.dnf_welfare_op("查询我的分享码状态", "649261", print_res=False)
+        #     return res["modRet"]["jData"]["siActivityId"]
 
         # 正式逻辑
         shareCodeList = db.share_code_list
 
         sContents = [
-            "爽刷深渊天天闪光",
-            "人造神攻坚战一起来打团",
+            "全职业技能进化",
+            "17周年上线领神器天空",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -4990,6 +4992,34 @@ class DjcHelper:
             get_act_url("DNF福利中心兑换"),
             siActivityId=siActivityId,
             sContent=sContent,
+            **extra_params,
+        )
+
+    def check_dnf_welfare_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF福利中心兑换",
+            get_act_url("DNF福利中心兑换"),
+            activity_op_func=self.dnf_welfare_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_welfare_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_welfare
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF福利中心兑换"),
             **extra_params,
         )
 
@@ -9795,6 +9825,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_wpe_dup()
+        djcHelper.dnf_welfare()
 
     pause()

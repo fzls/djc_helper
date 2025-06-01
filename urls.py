@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-06-11 23:59:59", "助手春日出游打卡"),
     newNotAmsActInfo("2025-05-23 11:30:00", "2025-07-03 21:59:59", "超核勇士wpe_dup"),
+    newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
     #
     # 已过期活动
     #
@@ -118,12 +119,12 @@ act_name_to_url = {
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手春日出游打卡": "https://dzhu.qq.com/fe/dnf/activity_template/?share=1&gameId=10014&subGameId=10014&activityId=10010",
     "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     #
     # 已过期活动
     #
     "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250424dnf/index_h5.html",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     "DNF落地页活动_ide": "https://dnf.qq.com/act/a20250424index/",
@@ -321,6 +322,7 @@ class Urls:
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
         self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节
         self.ide_iActivityId_dnf_reserve = "76_rZP67G"  # 新职业预约活动
+        self.ide_iActivityId_dnf_welfare = "99_fdC9AL"  # DNF福利中心兑换
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

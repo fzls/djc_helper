@@ -3054,6 +3054,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("新职业预约活动", "get_dnf_reserve"),
             ("助手春日出游打卡", "get_dnf_helper_spring_travel"),
             ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
+            ("DNF福利中心兑换", "get_dnf_welfare"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3066,7 +3067,6 @@ class FunctionSwitchesConfigUi(QWidget):
         "普通skey": [
             ("colg其他活动", "get_colg_other_act"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
-            ("DNF福利中心兑换", "get_dnf_welfare"),
             ("共赴西装节", "get_dnf_suit"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("DNF落地页活动", "get_dnf_luodiye"),

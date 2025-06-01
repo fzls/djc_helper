@@ -1513,13 +1513,9 @@ def show_tips(cfg: Config):
             "打开下面的网页，用微信扫描二维码，每天可以签到领奖一次，有需要的朋友可以自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250424index/icon/code2.png\n"
         ),
-        "QQ网吧活动": (
-            "如果你平常在QQ网吧中玩DNF，可以自行参与下下面这个活动\n"
-            "https://dnf.qq.com/cp/a2025privilege/index.html\n"
-        ),
-        "25.4 斗鱼": (
-            "斗鱼活动请自行参与，活动链接如下:\n"
-            "斗鱼：https://www.douyu.com/topic/DNFGFRZS?rid=5012053&dyshid=c220ad5-e19c51452fa2da8af4ad818600051601#bc3\n"
+        "抖音周年庆活动": (
+            "地下城抖音官方账号又出了个新活动，关注账号以及每天看直播可以领取一些蚊子腿，有兴趣的朋友请自行按下面的流程去参与\n"
+            "抖音中搜索 地下城与勇士端游，点进账号后点击专区，在精选活动页面找到周年庆的活动进行参与即可\n"
         ),
     }
 

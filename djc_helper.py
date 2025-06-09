@@ -4952,6 +4952,9 @@ class DjcHelper:
         sContents = [
             "全职业技能进化",
             "17周年上线领神器天空",
+            "渝勇士一起出发",
+            "一起给世界点颜色看看",
+            "DNF17周年生日快乐",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]

@@ -855,6 +855,12 @@ def show_following_regular_activity_expected_info():
             )
         )
 
+        if use_by_myself() and idx == 0 and expected_days <= 7:
+            async_message_box(
+                f"常规活动周期 {act_name} 预计在 {expected_days} 天后( {act_time_str} )开始，可以瞅瞅看有没有新的蚊子腿可以添加了",
+                "（仅自己可见）看看常规活动周期",
+            )
+
     logger.info("\n" + "\n".join(lines))
 
     if is_first_run("常规活动周期预估信息"):

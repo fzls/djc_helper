@@ -684,13 +684,13 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
-            ("超级会员", self.dnf_super_vip),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("新职业预约活动", self.dnf_reserve),
             ("助手春日出游打卡", self.dnf_helper_spring_travel),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("colg每日签到", self.colg_signin),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -2660,17 +2660,19 @@ class DjcHelper:
         # self.qzone_act_op("累计签到7天", "116132_ec305918")
         # self.qzone_act_op("累计签到14天", "116133_5ffc64db")
 
-        # # https://act.qzone.qq.com/v2/vip/tx/p/51488_4bb4f04b?traceTint=tianxuan_copy
-        # lucky_act_id = "119256_e72df5a1"
-        # self.qzone_act_op("QQ会员 幸运勇士 - 当前角色", lucky_act_id)
-        # self.qzone_act_op(
-        #     "QQ会员 幸运勇士 - 集卡幸运角色",
-        #     lucky_act_id,
-        #     act_req_data=self.try_make_lucky_user_req_data(
-        #         "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
-        #     ),
-        # )
-        #
+        # note: 有时候会有同时有效的两个会员活动
+        # https://act.qzone.qq.com/v2/vip/tx/p/53130_a5314717?traceTint=tianxuan_copy
+        lucky_act_id = "132654_f7ea6f90"
+        self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
+        self.qzone_act_op(
+            "幸运勇士礼包 - 集卡幸运角色",
+            lucky_act_id,
+            act_req_data=self.try_make_lucky_user_req_data(
+                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
+            ),
+        )
+
+        self.qzone_act_op("勇士见面礼", "132655_c1912220")
         # if not self.cfg.function_switches.disable_share and is_first_run(
         #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
         # ):
@@ -9829,6 +9831,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_super_vip()
 
     pause()

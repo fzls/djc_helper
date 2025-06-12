@@ -691,6 +691,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -718,7 +719,6 @@ class DjcHelper:
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("勇士的冒险补给", self.maoxian),
             ("DNF格斗大赛", self.dnf_pk),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
             ("DNF年货铺", self.dnf_nianhuopu),
@@ -7467,8 +7467,8 @@ class DjcHelper:
     def dnf_anniversary(self):
         show_head_line("DNF周年庆登录活动")
 
-        if now_in_range("2024-06-15 06:00:00", "2024-06-17 05:59:59") and is_daily_first_run(
-            "2024_DNF周年庆登录活动_提示登录"
+        if now_in_range("2025-06-14 06:00:00", "2025-06-16 05:59:59") and is_daily_first_run(
+            "2025_DNF周年庆登录活动_提示登录"
         ):
             async_message_box(
                 (
@@ -7490,21 +7490,24 @@ class DjcHelper:
         self.show_not_ams_act_info("DNF周年庆登录活动")
         self.check_dnf_anniversary_ide()
 
-        self.dnf_anniversary_ide_op("【H5】更新后首次登录", "294601")
-        self.dnf_anniversary_ide_op("【H5】周末登录礼包", "294618")
+        self.dnf_anniversary_ide_op("【H5】更新后首次登录", "402445")
+        self.dnf_anniversary_ide_op("【H5】周末登录礼包", "402448")
+
+        if now_after("2025-06-16 06:00:00"):
+            self.dnf_anniversary_ide_op("领取补签", "406629")
 
         gifts = [
-            ("第一弹", "294661", "2024-06-20 16:00:00"),
-            ("第二弹", "294662", "2024-06-21 00:00:00"),
-            ("第三弹", "294663", "2024-06-22 00:00:00"),
-            ("第四弹", "294664", "2024-06-23 00:00:00"),
-            ("终极大礼", "294665", "2024-06-23 00:00:00"),
+            ("第一弹", "402449", "2025-06-21 16:00:00"),
+            ("第二弹", "402450", "2025-06-22 00:00:00"),
+            ("第三弹", "402451", "2025-06-28 00:00:00"),
+            ("第四弹", "402452", "2025-06-29 00:00:00"),
+            ("终极礼", "402453", "2025-06-29 00:00:00"),
         ]
 
         now = get_now()
         for name, flowid, can_take_time in gifts:
             if now >= parse_time(can_take_time):
-                self.dnf_anniversary_ide_op(f"领取{name}周年庆礼包", flowid)
+                self.dnf_anniversary_ide_op(f"领取 {name} 周年庆礼包", flowid)
             else:
                 logger.warning(f"当前未到{can_take_time}，无法领取{name}")
 
@@ -9831,6 +9834,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_anniversary()
 
     pause()

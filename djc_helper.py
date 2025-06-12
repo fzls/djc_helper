@@ -692,6 +692,7 @@ class DjcHelper:
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -703,7 +704,6 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("共赴西装节", self.dnf_suit),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手能量之芽", self.dnf_helper_energy_tree),
             ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
@@ -6273,34 +6273,37 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "388979", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "405384", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
-            iLottery = int(raw_info["iLottery"]["ticket"])
+            iLottery = int(raw_info["iLottery"])
 
             # 累计登录天数
-            iLoginTotal = int(raw_info["iCumulative"])
+            iLoginTotal = int(raw_info["iSign"])
 
             return iLottery, iLoginTotal
 
         def try_daily_signin():
             # self.dnf_luodiye_ide_op("获取补签次数", "358778")
 
-            first_day_date = parse_time("2025-04-24 00:00:00")
+            first_day_date = parse_time("2025-06-12 00:00:00")
             now = get_now()
-            for row in range(4):
-                for col in range(8):
-                    iIndex = row * 8 + col
+            row_count = 5
+            col_count = 7
+
+            for row in range(row_count):
+                for col in range(col_count):
+                    iIndex = row * col_count + col
                     sign_day_date = first_day_date + datetime.timedelta(days=iIndex)
                     if now < sign_day_date:
                         logger.warning(f"目前是{now}，还未到{sign_day_date}，将跳过尝试该天及后续天数的签到")
                         return
 
-                    self.dnf_luodiye_ide_op(f"每日签到 - {sign_day_date}", "389210", iIndex=iIndex)
+                    self.dnf_luodiye_ide_op(f"每日签到 - {sign_day_date}", "407035", iIndex=iIndex)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("备战礼包", "389177")
+        self.dnf_luodiye_ide_op("庆典礼包", "406871")
 
         try_daily_signin()
 
@@ -6317,16 +6320,16 @@ class DjcHelper:
         for gift_index, require_login_days in login_gifts_list:
             if iLoginTotal >= require_login_days:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "389211", iIndex=gift_index
+                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "407103", iIndex=gift_index
                 )
             else:
                 logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
 
         tasks = [
-            ("每日任务1", "389214"),
-            ("每日任务2", "389215"),
-            ("每周任务1", "389216"),
-            ("每周任务2", "389217"),
+            ("每日任务1", "407104"),
+            ("每日任务2", "407107"),
+            ("每周任务1", "407108"),
+            ("每周任务2", "407109"),
         ]
         for name, flowid in tasks:
             self.dnf_luodiye_ide_op(name, flowid)
@@ -6346,23 +6349,23 @@ class DjcHelper:
         iLottery, _ = query_info()
         logger.info(f"当前抽奖次数为 {iLottery}")
         for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "389218")
+            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "407110")
             _ = res
             # if res["ret"] == 10001:
             #     break
             time.sleep(5)
 
-        async_message_box(
-            "落地页活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可",
-            "25.4 落地页阅读页面活动",
-            show_once=True,
-            open_url=get_act_url("DNF落地页活动_ide"),
-        )
+        # async_message_box(
+        #     "落地页活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可",
+        #     "25.4 落地页阅读页面活动",
+        #     show_once=True,
+        #     open_url=get_act_url("DNF落地页活动_ide"),
+        # )
 
         # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
         async_message_box(
-            "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，就可以获取一次抽奖机会",
-            "25.4 落地页拉回归活动",
+            "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励",
+            "25.6 落地页拉回归活动",
             show_once=True,
             open_url=get_act_url("DNF落地页活动_ide"),
         )
@@ -9834,6 +9837,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

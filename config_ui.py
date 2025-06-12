@@ -3049,12 +3049,12 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
-            ("colg每日签到", "get_colg_signin"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("新职业预约活动", "get_dnf_reserve"),
             ("助手春日出游打卡", "get_dnf_helper_spring_travel"),
             ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
+            ("colg每日签到", "get_colg_signin"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

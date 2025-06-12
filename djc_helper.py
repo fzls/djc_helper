@@ -684,13 +684,13 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
-            ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("新职业预约活动", self.dnf_reserve),
             ("助手春日出游打卡", self.dnf_helper_spring_travel),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5848,6 +5848,7 @@ class DjcHelper:
                 color("bold_green")
                 + f"领取 活跃值 {award.reward_count} 的 奖励({award.reward_name})， 结果={res.json()}"
             )
+            time.sleep(5)
 
         async_message_box(
             (
@@ -9828,6 +9829,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.colg_signin()
 
     pause()

@@ -1518,6 +1518,10 @@ def show_tips(cfg: Config):
             "打开下面的网页，用微信扫描二维码，在上方向右滑选中【周年签到】标签，每天可以签到领奖一次，并可以点击签到左侧的订阅提醒按钮，公众号每天提醒签到，有需要的朋友可以自行操作\n"
             "https://game.gtimg.cn/images/dnf/act/a20250424index/icon/code2.png\n"
         ),
+        "25.6 colg新人见面礼": (
+            "如果你之前未注册过COLG，或者最近刚注册过COLG（在6月之后注册），那么你可以打开下面这个页面，在三天内分别可以领到3+3+7天的黑钻\n"
+            "活动链接： https://hub.bbs.colg.cn/activity/welcome/gift2025/index.html?from_dnf_collection\n"
+        ),
     }
 
     logger.info(

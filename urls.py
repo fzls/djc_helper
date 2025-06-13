@@ -69,6 +69,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-07-11 21:59:59", "超级会员"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
@@ -80,7 +81,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
     newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
-    newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2025-01-16 23:59:59", "喂养删除补偿"),
     newNotAmsActInfo("2024-11-23 10:00:00", "2024-12-08 23:59:59", "嘉年华星与心愿"),
@@ -123,6 +123,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53130_a5314717",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250612index/",
+    "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
     #
     # 已过期活动
     #
@@ -134,7 +135,6 @@ act_name_to_url = {
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
-    "WeGame活动": "https://dnf.qq.com/cp/a20250109lucky/index.html",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
     "喂养删除补偿": "https://dnf.qq.com/cp/a20240912being/",
     "嘉年华星与心愿": "https://dnf.qq.com/cp/a20241030wish/index.html",
@@ -314,7 +314,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
-        self.ide_iActivityId_dnf_wegame = "37_yc5BkJ"  # WeGame活动
+        self.ide_iActivityId_dnf_wegame = "5_BkxPRF"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿

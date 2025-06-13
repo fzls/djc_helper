@@ -693,6 +693,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -708,7 +709,6 @@ class DjcHelper:
             ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
-            ("WeGame活动", self.dnf_wegame),
             ("集卡", self.dnf_ark_lottery),
             ("喂养删除补偿", self.weiyang_compensate),
             ("嘉年华星与心愿", self.dnf_star_and_wish),
@@ -7221,55 +7221,45 @@ class DjcHelper:
 
         self.check_dnf_wegame_ide()
 
-        def query_fuqi() -> int:
-            res = self.dnf_wegame_ide_op("初始化", "357347", print_res=False)
+        def query_info() -> tuple[int, int]:
+            res = self.dnf_wegame_ide_op("初始化", "405210", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
-            fuqi = int(raw_info["blessNum"])
+            lottery_count = int(raw_info["syGiftAvailable"])
 
-            return fuqi
+            # 剩余色彩
+            color_count = int(raw_info["colorUsedInfo"]["ticket"])
 
-        self.dnf_wegame_ide_op("抽取锦鲤礼包", "357386")
+            return lottery_count, color_count
 
-        self.dnf_wegame_ide_op("锦鲤验证", "357423")
-        self.dnf_wegame_ide_op("锁定领取锦鲤奖励", "357420")
-        self.dnf_wegame_ide_op("双倍领取锦鲤奖励", "357422")
+        self.dnf_wegame_ide_op("领取全民礼包", "403941")
+        self.dnf_wegame_ide_op("领取幸运礼包", "403948")
 
-        async_message_box(
-            "wegame有个锦鲤福利活动，需要邀请好友来完成，有兴趣的请自行完成~",
-            "25.1 wegame邀请好友活动",
-            show_once=True,
-            open_url=get_act_url("WeGame活动"),
-        )
-        # self.dnf_wegame_ide_op("发送ark提醒消息", "358428")
-        # self.dnf_wegame_ide_op("重抽资格记录分享", "357419")
-        # self.dnf_wegame_ide_op("锦鲤红包", "357424")
-        # self.dnf_wegame_ide_op("领取锦鲤红包", "357425")
-        # self.dnf_wegame_ide_op("好友列表", "357426")
-        # self.dnf_wegame_ide_op("新增好友", "357427")
+        self.dnf_wegame_ide_op("增加深渊礼盒抽奖次数", "404441")
+        self.dnf_wegame_ide_op("登录领取深渊抽奖次数", "404483")
 
-        self.dnf_wegame_ide_op("每日登录游戏", "357434")
-        self.dnf_wegame_ide_op("每日通关深渊：终末崇拜者", "357435")
-        self.dnf_wegame_ide_op("每日领取锦鲤红包", "357436")
+        lottery_count, _ = query_info()
+        logger.info(f"当前的抽奖次数为 {lottery_count}")
+        for idx in range_from_one(lottery_count):
+            self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}次深渊礼盒抽奖", "404116")
+            time.sleep(3)
 
-        fuqi = query_fuqi()
-        logger.info(f"当前的福气值为 {fuqi}")
+        for idx in range_from_one(3):
+            self.dnf_wegame_ide_op(f"添彩任务 - {idx}", "404788", index=idx)
+            time.sleep(3)
 
-        fuqi_rewards = [
-            (1, 88, "福满阿拉德", "灿烂的徽章神秘礼盒×1"),
-            (2, 66, "鸿运当头", "+7 装备增幅券×1"),
-            (3, 46, "蛇来运转", "铭刻之念礼盒×1"),
-            (4, 22, "处处闪光", "抗疲劳秘药 (5点)×1"),
-            (5, 8, "小有福气", "黑钻7天×1"),
-        ]
-        for iCode, require_fuqi, name, reward in fuqi_rewards:
-            if fuqi < require_fuqi:
-                logger.warning(f"勇士聚福礼包 - {name} - {reward}需要福气 {require_fuqi}，当前只有 {fuqi}，将跳过")
-                continue
+        self.dnf_wegame_ide_op("每周添彩任务", "407895")
 
-            self.dnf_wegame_ide_op(f"领取勇士聚福礼包 - {name} - {reward}", "357432", iCode=iCode)
-            time.sleep(1)
+        _, color_count = query_info()
+        logger.info(f"当前的色彩数目为 {color_count}")
+        for idx in range_from_one(color_count):
+            self.dnf_wegame_ide_op(f"{idx}/{color_count} 填充色彩", "404864")
+            time.sleep(3)
+
+        for zero_based_idx in range(5):
+            self.dnf_wegame_ide_op(f"领取色彩礼包 - {zero_based_idx}", "404969", index=zero_based_idx)
+            time.sleep(3)
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
@@ -9837,6 +9827,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_wegame()
 
     pause()

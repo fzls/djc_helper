@@ -684,7 +684,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
-            ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("新职业预约活动", self.dnf_reserve),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("DNF福利中心兑换", self.dnf_welfare),
@@ -703,6 +702,7 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("colg其他活动", self.colg_other_act),
             ("共赴西装节", self.dnf_suit),
             ("回流引导秘籍", self.dnf_recall_guide),
@@ -9843,6 +9843,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_chaohe_wpe()
 
     pause()

@@ -7990,7 +7990,7 @@ class DjcHelper:
             res = self.dnf_xinyue_wpe_op("查询抽奖券", 320649)
             data = json.loads(res["data"])
 
-            remain = data["limit"]
+            remain = data.get("limit", 0)
 
             return remain
 
@@ -9843,6 +9843,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_netbar()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

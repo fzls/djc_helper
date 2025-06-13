@@ -70,11 +70,11 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
-    newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-23 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
@@ -124,11 +124,11 @@ act_name_to_url = {
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250612index/",
     "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
     #
     # 已过期活动
     #
     "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250424dnf/index_h5.html",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",

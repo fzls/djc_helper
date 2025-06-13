@@ -694,6 +694,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("colg其他活动", self.colg_other_act),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("共赴西装节", self.dnf_suit),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("助手能量之芽", self.dnf_helper_energy_tree),
@@ -7986,10 +7986,10 @@ class DjcHelper:
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         def query_lottery_ticket() -> int:
-            res = self.dnf_xinyue_wpe_op("查询抽奖券", 304313)
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 320649)
             data = json.loads(res["data"])
 
-            remain = data["remain"]
+            remain = data["limit"]
 
             return remain
 
@@ -8001,115 +8001,23 @@ class DjcHelper:
 
             return total
 
-        self.dnf_xinyue_wpe_op("抽取幸运冒险家徽章", 302926)
-        self.dnf_xinyue_wpe_op("幸运冒险礼", 302938)
-        self.dnf_xinyue_wpe_op("全民礼包", 302946)
-        self.dnf_xinyue_wpe_op("今日充值金额达到6元", 302947)
+        self.dnf_xinyue_wpe_op("周年庆盛典礼", 320635)
+        self.dnf_xinyue_wpe_op("周年庆盛典充值礼", 320648)
 
-        # 统一签到按钮
-        self.dnf_xinyue_wpe_op("签到", 306428)
+        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 320893)
+        self.dnf_xinyue_wpe_op("幸运勇士礼", 320891)
 
-        map_list = [
-            (
-                "地图3",
-                304295,
-                "2025-05-01 00:00:00",
-                [
-                    ("登录游戏7次", 303390),
-                    ("在线100分钟", 303391),
-                    ("组队参与推荐地下城10次", 303392),
-                ],
-                [
-                    ("消耗156疲劳值 灿烂徽章神秘礼盒", 304296, 304299),
-                    ("通关人造神团本3次 疲劳药5点", 304297, 304300),
-                    ("邀请好友助力5次 黑钻7天", 304298, 304301),
-                ],
-            ),
-            (
-                "地图2",
-                304172,
-                "2025-04-24 00:00:00",
-                [
-                    ("登录游戏3次", 303352),
-                    ("在线60分钟", 303353),
-                    ("组队参与推荐地下城5次", 303354),
-                ],
-                [
-                    ("通关维纳斯1次 装备提升礼盒1个", 304193, 304197),
-                    ("消耗100疲劳值 黑钻3天", 304192, 304196),
-                    ("邀请好友助力3次 疲劳药5点", 304195, 304198),
-                ],
-            ),
-            (
-                "地图1",
-                302967,
-                "2025-04-24 00:00:00",
-                [
-                    ("登录游戏1次", 302953),
-                    ("在线30分钟", 302963),
-                    ("组队参与推荐地下城3次", 302965),
-                ],
-                [
-                    ("通关深渊2次 装备品级调整箱1个", 303782, 306136),
-                    ("消耗50疲劳值 王者契约1天", 303654, 306135),
-                    ("邀请好友助力2次 疲劳药1点", 303783, 306137),
-                ],
-            ),
-        ]
-
-        for map_name, exploration_flowid, start_time_str, take_task_reward_list, choose_task_list in map_list:
-            if now_before(start_time_str):
-                logger.warning(f"当前未到{start_time_str}，无法领取{map_name}的任务，将跳过")
-                continue
-
-            for task_name, flowid in take_task_reward_list:
-                self.dnf_xinyue_wpe_op(f"{map_name} 领取任务 {task_name}", flowid)
-
-            for idx in range_from_one(10):
-                res = self.dnf_xinyue_wpe_op(f"{map_name} 探索-{idx}", exploration_flowid)
-                if res["msg"] == "行动力不足":
-                    break
-
-            for name, choosen_task_flowid, get_reward_flowid in choose_task_list:
-                self.dnf_xinyue_wpe_op(f"{map_name} 选择任务 {name}", choosen_task_flowid)
-                self.dnf_xinyue_wpe_op(f"{map_name} 领取任务奖励 {name}", get_reward_flowid)
-
-        self.dnf_xinyue_wpe_op("破解秘钥 1 次", 303438)
-        self.dnf_xinyue_wpe_op("破解秘钥 2 次", 304309)
-        self.dnf_xinyue_wpe_op("破解秘钥 3 次", 304310)
-
-        #
-        # # 269122 查询当前已开到格子数
-        # # 269020 查询已领取的格子列表
-        # current_total_step = query_16_rewards_activated_step()
-        # lottery_mask = [
-        #     269038,
-        #     269040,
-        #     269041,
-        #     269042,
-        #     269043,
-        #     269044,
-        #     269045,
-        #     269046,
-        #     269047,
-        #     269048,
-        #     269049,
-        #     269050,
-        #     269051,
-        #     269052,
-        #     269053,
-        #     269054,
-        #     271269,
-        # ]
-        # logger.info(f"当前已开到格子数为 {current_total_step}")
-        # for step in range(current_total_step):
-        #     flow_id = lottery_mask[step]
-        #     self.dnf_xinyue_wpe_op(f"尝试领取格子 - {step} - {flow_id}", flow_id)
+        self.dnf_xinyue_wpe_op("每日任务-登录", 320895)
+        self.dnf_xinyue_wpe_op("每充值50元", 320897)
+        self.dnf_xinyue_wpe_op("每日任务-在线30分钟", 320898)
+        self.dnf_xinyue_wpe_op("每日任务-累计消耗156疲劳", 320899)
+        self.dnf_xinyue_wpe_op("每日任务-邀请3位好友", 320977)
+        self.dnf_xinyue_wpe_op("每日任务-通关深渊2次", 320978)
 
         lottery_count = query_lottery_ticket()
         logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
         for idx in range_from_one(lottery_count):
-            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 304311)
+            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 320650)
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -8154,7 +8062,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "22684"
+        act_id = "23519"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -9827,6 +9735,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

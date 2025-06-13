@@ -695,6 +695,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("助手限定活动", self.dnf_helper_limit_act),
+            ("周年庆网吧集结", self.dnf_netbar),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8843,6 +8844,86 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------周年庆网吧集结--------------------------------------------
+    @try_except()
+    def dnf_netbar(self):
+        show_head_line("周年庆网吧集结")
+        self.show_not_ams_act_info("周年庆网吧集结")
+
+        if not self.cfg.function_switches.get_dnf_netbar or self.disable_most_activities():
+            show_act_not_enable_warning("周年庆网吧集结")
+            return
+
+        self.check_dnf_netbar()
+
+        logger.warning("网吧活动仅在QQ网吧中玩DNF达成对应条件时才能进行")
+
+        self.dnf_netbar_op("网吧特权登录领奖", "403991")
+
+        # 1-3
+        for hour in range_from_one(3):
+            res = self.dnf_netbar_op(f"每日活跃领奖-活跃{hour}小时", "403992", hour=hour)
+            time.sleep(1)
+            if res["sMsg"] == "活跃时长不足！":
+                break
+        # 1-5
+        for week in range_from_one(5):
+            res = self.dnf_netbar_op(f"每周活跃领奖-第{week}周在线1小时", "403993", week=week)
+            time.sleep(1)
+            if res["sMsg"] == "活跃时长不足！":
+                break
+
+        # 1-3
+        for taskId in range_from_one(3):
+            self.dnf_netbar_op(f"完成任务获取积分——组队 任务{taskId}", "404003", taskId=taskId)
+            time.sleep(1)
+
+        async_message_box(
+            "若你平时在QQ网吧玩DNF，则可以参与该活动，对于获得的积分，小助手仅尝试自动兑换红10券，其余的奖励兑换以及使用积分抽奖自行操作",
+            "网吧活动兑换奖励",
+            show_once=True,
+            open_url=get_act_url("周年庆网吧集结"),
+        )
+        self.dnf_netbar_op("积分兑换领奖", "403997", points=20)
+        # self.dnf_netbar_op("积分抽奖", "404297")
+
+        # 1-2
+        for gift_type in range_from_one(2):
+            self.dnf_netbar_op(f"单刷DNF闪光领奖 - {gift_type}", "403994", type=gift_type)
+            time.sleep(1)
+        # 1-2
+        for gift_type in range_from_one(2):
+            self.dnf_netbar_op(f"组队刷闪光领奖 - {gift_type}", "404299", type=gift_type)
+            time.sleep(1)
+
+    def check_dnf_netbar(self, **extra_params):
+        return self.ide_check_bind_account(
+            "周年庆网吧集结",
+            get_act_url("周年庆网吧集结"),
+            activity_op_func=self.dnf_netbar_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_netbar_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_netbar
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("周年庆网吧集结"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9762,6 +9843,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.dnf_netbar()
 
     pause()

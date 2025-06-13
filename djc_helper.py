@@ -686,7 +686,6 @@ class DjcHelper:
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("新职业预约活动", self.dnf_reserve),
-            ("助手春日出游打卡", self.dnf_helper_spring_travel),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("colg每日签到", self.colg_signin),
@@ -695,6 +694,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("助手限定活动", self.dnf_helper_limit_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8530,30 +8530,57 @@ class DjcHelper:
 
         return res
 
-    # --------------------------------------------助手春日出游打卡--------------------------------------------
+    # --------------------------------------------助手限定活动--------------------------------------------
     @try_except()
-    def dnf_helper_spring_travel(self):
-        show_head_line("助手春日出游打卡")
-        self.show_not_ams_act_info("助手春日出游打卡")
+    def dnf_helper_limit_act(self):
+        show_head_line("助手限定活动")
+        self.show_not_ams_act_info("助手限定活动")
 
-        if not self.cfg.function_switches.get_dnf_helper_spring_travel or self.disable_most_activities():
-            show_act_not_enable_warning("助手春日出游打卡")
+        if not self.cfg.function_switches.get_dnf_helper_limit_act or self.disable_most_activities():
+            show_act_not_enable_warning("助手限定活动")
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            extra_msg = "未配置dnf助手相关信息，无法进行 助手春日出游打卡，请按照下列流程进行配置"
+            extra_msg = "未配置dnf助手相关信息，无法进行 助手限定活动，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(
-                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手春日出游打卡')}"
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手限定活动')}"
             )
             return
 
-        self.dnf_helper_spring_travel_op(
-            "每日签到", "activitytpl/checkin/checkIn", date=get_now().strftime("%Y-%m-%d"), reCheckIn=0
-        )
+        def query_info() -> tuple[int, int, int]:
+            raw_res = self.dnf_helper_limit_act_op("查询信息", "npcTogether/getUserInfo", print_res=False)
+            res = raw_res["data"]
 
-        logger.warning("助手内的任务以及抽奖需要自行完成")
+            totalDrawTimes = int(res["totalDrawTimes"])
+            remainDrawTimes = int(res["remainDrawTimes"])
+            sweet_level = int(res["sweetInfo"]["sweetLevel"])
 
-    def dnf_helper_spring_travel_op(self, ctx: str, action: str, print_res=True, **extra_params):
+            return totalDrawTimes, remainDrawTimes, sweet_level
+
+
+        self.dnf_helper_limit_act_op("选择同游角色", "npcTogether/selectNpc", npcId=1)
+
+        for idx in [2, 3, 4]:
+            self.dnf_helper_limit_act_op(f"完成任务 - {idx}", "npcTogether/taskComplete", taskId=idx)
+            self.dnf_helper_limit_act_op(f"领取任务奖励 - {idx}", "npcTogether/pickUpGift", taskId=idx)
+
+        totalDrawTimes, remainDrawTimes, sweet_level = query_info()
+        logger.info(f"当前总抽奖次数 {totalDrawTimes}，剩余抽奖次数 {remainDrawTimes}")
+        for idx in range_from_one(remainDrawTimes):
+            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 领取礼物", "npcTogether/draw", npcName=quote_plus("奇美拉"))
+
+        logger.info(f"当前甜蜜度等级 {sweet_level}")
+        for index, gift_id in enumerate([101, 102, 103, 104, 105]):
+            required_level = index + 1
+
+            if sweet_level >= required_level:
+                self.dnf_helper_limit_act_op(f"领取任务奖励 - {gift_id}", "npcTogether/pickUpGift", taskId=gift_id)
+            else:
+                logger.warning(f"当前甜蜜度等级 {sweet_level}，无法领取任务奖励 - {gift_id}，需要达到 {required_level} 级")
+
+        logger.warning("助手内的任务需要自行完成")
+
+    def dnf_helper_limit_act_op(self, ctx: str, action: str, print_res=True, **extra_params):
         if action != "init":
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
@@ -8564,12 +8591,12 @@ class DjcHelper:
         # fmt: off
         data = {
             "r": quote_plus(action),
-            "activityId": "10010",
+            "activityId": "1008",
 
             **extra_params,
 
             "source": "dz",
-            "from": "tpl",
+            # "from": "tpl",
             "cCurrentGameId": "10014",
 
             "uin": self.qq(),
@@ -8584,17 +8611,17 @@ class DjcHelper:
 
         res = self.post(
             ctx,
-            self.urls.dnf_helper_spring_travel_api,
+            self.urls.dnf_helper_limit_act_api,
             data=post_json_to_data(data),
             print_res=print_res,
         )
 
         if dnf_helper_info.token != "":
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
-            show_message_box_once_key = "助手春日出游打卡_token过期2_" + get_week()
+            show_message_box_once_key = "助手限定活动_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
                 extra_msg = (
-                    "dnf助手的登录态已过期，导致 助手春日出游打卡 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                    "dnf助手的登录态已过期，导致 助手限定活动 相关操作无法执行，目前需要手动更新，具体操作流程如下"
                 )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
@@ -9735,6 +9762,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_helper_limit_act()
 
     pause()

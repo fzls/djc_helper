@@ -3051,7 +3051,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("新职业预约活动", "get_dnf_reserve"),
-            ("助手春日出游打卡", "get_dnf_helper_spring_travel"),
             ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("colg每日签到", "get_colg_signin"),
@@ -3059,6 +3058,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("WeGame活动", "get_dnf_wegame"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
+            ("助手限定活动", "get_dnf_helper_limit_act"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

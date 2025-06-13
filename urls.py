@@ -62,7 +62,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-06-30 23:59:59", "助手魔界人每日幸运签"),
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
-    newNotAmsActInfo("2025-05-22 00:00:00", "2025-06-11 23:59:59", "助手春日出游打卡"),
     newNotAmsActInfo("2025-05-23 11:30:00", "2025-07-03 21:59:59", "超核勇士wpe_dup"),
     newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-30 23:59:59", "colg每日签到"),
@@ -71,6 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "助手限定活动"),
     #
     # 已过期活动
     #
@@ -115,7 +115,6 @@ act_name_to_url = {
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
-    "助手春日出游打卡": "https://dzhu.qq.com/fe/dnf/activity_template/?share=1&gameId=10014&subGameId=10014&activityId=10010",
     "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
@@ -125,6 +124,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250612index/",
     "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/anniversary/?share=1&activityId=1008&gameId=10014&subGameId=10014",
     #
     # 已过期活动
     #
@@ -447,8 +447,8 @@ class Urls:
         self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
         # 助手魔界人每日幸运签
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
-        # 助手春日出游打卡
-        self.dnf_helper_spring_travel_api = "https://dzhu.qq.com/zangyi/activity/act"
+        # 助手限定活动
+        self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

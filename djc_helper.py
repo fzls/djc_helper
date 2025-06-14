@@ -696,6 +696,7 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("周年庆网吧集结", self.dnf_netbar),
             ("start云游戏", self.dnf_cloud_game),
+            ("回流引导秘籍", self.dnf_recall_guide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -706,7 +707,6 @@ class DjcHelper:
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("colg其他活动", self.colg_other_act),
             ("共赴西装节", self.dnf_suit),
-            ("回流引导秘籍", self.dnf_recall_guide),
             ("助手能量之芽", self.dnf_helper_energy_tree),
             ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
@@ -8714,7 +8714,7 @@ class DjcHelper:
 
         self.check_dnf_recall_guide()
 
-        self.dnf_recall_guide_op("领取奖励", "390893")
+        self.dnf_recall_guide_op("领取奖励", "408566")
 
         async_message_box(
             "回归引导秘籍 活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可（与落地页的不一样）",
@@ -9914,6 +9914,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_cloud_game()
+        djcHelper.dnf_recall_guide()
 
     pause()

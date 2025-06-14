@@ -71,13 +71,13 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
+    newNotAmsActInfo("2025-06-07 11:00:00", "2025-07-31 23:59:59", "回流引导秘籍"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
-    newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
@@ -127,13 +127,13 @@ act_name_to_url = {
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/anniversary/?share=1&activityId=1008&gameId=10014&subGameId=10014",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
+    "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
     #
     # 已过期活动
     #
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
-    "回流引导秘籍": "https://dnf.qq.com/cp/a20250423growup/",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
@@ -323,7 +323,7 @@ class Urls:
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
         self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
-        self.ide_iActivityId_dnf_recall_guide = "3_Xpqprw"  # 回流引导秘籍
+        self.ide_iActivityId_dnf_recall_guide = "26_iNpZy8"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
         self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节
         self.ide_iActivityId_dnf_reserve = "76_rZP67G"  # 新职业预约活动

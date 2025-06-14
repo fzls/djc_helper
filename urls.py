@@ -126,6 +126,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/anniversary/?share=1&activityId=1008&gameId=10014&subGameId=10014",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
+    "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     #
     # 已过期活动
     #
@@ -291,6 +292,7 @@ class Urls:
         self.iActivityId_dnf_reservation = "590510"  # DNF预约
         self.iActivityId_dnf_bind_phone = "420695"  # 绑定手机活动
         self.iActivityId_dnf_shenjie_yure = "602887"  # 神界预热
+        self.iActivityId_dnf_cloud_game = "735481"  # start云游戏
 
         # fmt: off
         # amesvr活动

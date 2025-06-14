@@ -695,6 +695,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("周年庆网吧集结", self.dnf_netbar),
+            ("start云游戏", self.dnf_cloud_game),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8156,6 +8157,76 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------start云游戏--------------------------------------------
+    @try_except()
+    def dnf_cloud_game(self):
+        show_head_line("start云游戏")
+        self.show_amesvr_act_info(self.dnf_cloud_game_op)
+
+        if not self.cfg.function_switches.get_dnf_cloud_game or self.disable_most_activities():
+            show_act_not_enable_warning("start云游戏")
+            return
+
+        self.check_dnf_cloud_game()
+
+        def query_info() -> tuple[int, int]:
+            res = self.dnf_cloud_game_op("查询抽奖券", "1131647", print_res=False)
+
+            ticket = int(res["modRet"]["ticket"])
+            total =  int(res["modRet"]["total"])
+
+            return ticket, total
+
+        self.dnf_cloud_game_op("[周年庆畅玩礼包]领奖（不刷新资格）", "1132723")
+        self.dnf_cloud_game_op("[回归勇士时长加油]领奖（不刷新资格）", "1132724")
+        self.dnf_cloud_game_op("[活跃勇士时长加油]领奖（不刷新资格）", "1132725")
+        self.dnf_cloud_game_op("[回归玩家福利1]领奖（不刷新资格）", "1132728")
+        self.dnf_cloud_game_op("[回归玩家福利2]领奖（不刷新资格）", "1132729")
+        self.dnf_cloud_game_op("[回归玩家福利3]领奖（不刷新资格）", "1132751")
+
+        self.dnf_cloud_game_op("[云游戏玩10分钟]领抽奖券（每天刷新资格）", "1132756")
+        self.dnf_cloud_game_op("[电脑客户端玩10分钟]领抽奖券（每天刷新资格）", "1132757")
+        self.dnf_cloud_game_op("[云游戏会员每天]领抽奖券（每天刷新资格）", "1132759")
+        self.dnf_cloud_game_op("[分享该活动每天]领抽奖券（每天刷新资格）", "1132760")
+
+        ticket, total = query_info()
+        logger.info(f"当前剩余抽奖券数量为 {ticket}，总抽奖次数为 {total}")
+        # for idx in range_from_one(ticket):
+        #     self.dnf_cloud_game_op(f"{idx}/{ticket} 抽奖", "1131644")
+        #     time.sleep(3)
+
+        if ticket > 0:
+            async_message_box(
+                f"（每周最多弹一次）云游戏活动目前抽奖券数目为 {ticket}，目前小助手暂时无法代为抽奖，请自行在点确定弹出的活动页面最下方中将抽奖次数都用掉\n",
+                "云游戏抽奖",
+                show_once_weekly=True,
+                open_url=get_act_url("start云游戏"),
+            )
+
+    def check_dnf_cloud_game(self):
+        self.check_bind_account(
+            "start云游戏",
+            get_act_url("start云游戏"),
+            activity_op_func=self.dnf_cloud_game_op,
+            query_bind_flowid="1131659",
+            commit_bind_flowid="1131658",
+        )
+
+    def dnf_cloud_game_op(self, ctx, iFlowId, print_res=True, **extra_params):
+        iActivityId = self.urls.iActivityId_dnf_cloud_game
+
+        return self.amesvr_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            "group_l",
+            "start",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("start云游戏"),
+            **extra_params,
+        )
+
     # --------------------------------------------嘉年华星与心愿--------------------------------------------
     @try_except()
     def dnf_star_and_wish(self):
@@ -9843,6 +9914,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_chaohe_wpe()
+        djcHelper.dnf_cloud_game()
 
     pause()

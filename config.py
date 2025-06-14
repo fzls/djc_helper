@@ -914,6 +914,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_helper_limit_act = True
         # 是否领取 周年庆网吧集结 活动
         self.get_dnf_netbar = True
+        # 是否领取 start云游戏 活动
+        self.get_dnf_cloud_game = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

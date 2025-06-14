@@ -3059,6 +3059,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
             ("周年庆网吧集结", "get_dnf_netbar"),
+            ("start云游戏", "get_dnf_cloud_game"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

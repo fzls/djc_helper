@@ -697,6 +697,7 @@ class DjcHelper:
             ("周年庆网吧集结", self.dnf_netbar),
             ("start云游戏", self.dnf_cloud_game),
             ("回流引导秘籍", self.dnf_recall_guide),
+            ("幸运色卡", self.dnf_color),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8995,6 +8996,48 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------幸运色卡--------------------------------------------
+    @try_except()
+    def dnf_color(self):
+        show_head_line("幸运色卡")
+        self.show_not_ams_act_info("幸运色卡")
+
+        if not self.cfg.function_switches.get_dnf_color or self.disable_most_activities():
+            show_act_not_enable_warning("幸运色卡")
+            return
+
+        self.check_dnf_color()
+
+        self.dnf_color_op("领取奖励", "402838")
+
+    def check_dnf_color(self, **extra_params):
+        return self.ide_check_bind_account(
+            "幸运色卡",
+            get_act_url("幸运色卡"),
+            activity_op_func=self.dnf_color_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_color_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_color
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("幸运色卡"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -9914,6 +9957,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_color()
 
     pause()

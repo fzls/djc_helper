@@ -3061,6 +3061,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("周年庆网吧集结", "get_dnf_netbar"),
             ("start云游戏", "get_dnf_cloud_game"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
+            ("幸运色卡", "get_dnf_color"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

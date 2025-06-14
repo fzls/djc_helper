@@ -72,6 +72,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-06-07 11:00:00", "2025-07-31 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
     #
     # 已过期活动
     #
@@ -128,6 +129,7 @@ act_name_to_url = {
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
+    "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",
     #
     # 已过期活动
     #
@@ -329,6 +331,7 @@ class Urls:
         self.ide_iActivityId_dnf_reserve = "76_rZP67G"  # 新职业预约活动
         self.ide_iActivityId_dnf_welfare = "99_fdC9AL"  # DNF福利中心兑换
         self.ide_iActivityId_dnf_netbar = "11_RWbofn"  # 周年庆网吧集结
+        self.ide_iActivityId_dnf_color = "16_kfJ3xD"  # 幸运色卡
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

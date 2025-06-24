@@ -73,11 +73,11 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-06-07 11:00:00", "2025-07-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
+    newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 21:59:59", "超核勇士wpe"),
-    newNotAmsActInfo("2025-04-29 00:00:00", "2025-05-19 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
@@ -130,11 +130,11 @@ act_name_to_url = {
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
     "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",
+    "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     #
     # 已过期活动
     #
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
-    "colg其他活动": "https://hub.bbs.colg.cn/activity/artificialgod/index.html",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
@@ -404,11 +404,13 @@ class Urls:
         self.colg_mall_get_reward_url = "https://bbs.colg.cn/colg_cmall-colg_cmall.html/getCMallRewardV1"
         # ------- colg其他活动 --------
         self.colg_other_act_type = 2
-        self.colg_other_act_id = 26
+        self.colg_other_act_id = 28
         # 活动页面
-        self.colg_other_act_url = "https://hub.bbs.colg.cn/activity/artificialgod/index.html"
-        # # 累计登录领奖
-        # self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
+        self.colg_other_act_url = "https://hub.bbs.colg.cn/activity/professional_team/index.html"
+        # api链接
+        self.colg_other_act_api = "https://bbs.colg.cn/colg_activity_new-career_village.html/{api}?aid=28"
+        # 累计登录领奖
+        self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
         # 每日抽奖
         self.colg_other_act_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
 

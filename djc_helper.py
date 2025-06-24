@@ -698,6 +698,7 @@ class DjcHelper:
             ("start云游戏", self.dnf_cloud_game),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("幸运色卡", self.dnf_color),
+            ("colg其他活动", self.colg_other_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -706,7 +707,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("超核勇士wpe", self.dnf_chaohe_wpe),
-            ("colg其他活动", self.colg_other_act),
             ("共赴西装节", self.dnf_suit),
             ("助手能量之芽", self.dnf_helper_energy_tree),
             ("DNF预约", self.dnf_reservation),
@@ -5904,7 +5904,7 @@ class DjcHelper:
     # --------------------------------------------colg其他活动--------------------------------------------
     @try_except()
     def colg_other_act(self):
-        # 首页右上角 签到福利 https://bbs.colg.cn/forum-171-1.html
+        # https://hub.bbs.colg.cn/activity/professional_team/index.html
         show_head_line("colg其他活动")
         self.show_not_ams_act_info("colg其他活动")
 
@@ -5933,33 +5933,99 @@ class DjcHelper:
         session = requests.session()
         session.headers = headers  # type: ignore
 
-        # session.get(self.urls.colg_other_act_url, timeout=10)
-        #
+        def _get(ctx: str, url: str, print_res=True):
+            res = session.get(url, timeout=10)
+            if print_res:
+                logger.info(f"{ctx}，结果={res.json()}")
+            else:
+                logger.info(ctx)
+
+            time.sleep(1)
+
+        def _post(ctx: str, url: str, data: str, print_res=True):
+            res = session.post(
+                url,
+                data=data,
+                timeout=10,
+            )
+            res_json = res.json()
+            logger.info(color("bold_green") + f"{ctx}，结果={res_json}")
+
+            time.sleep(1)
+
+        def query_info() -> dict:
+            raw_res = session.get(self.urls.colg_other_act_api.format(api="getInitInfo"), timeout=10)
+            res = raw_res.json()
+
+            return res["data"]
+
+        def visit_page(ctx: str, url: str):
+            _get(ctx, url, print_res=False)
+
+        def get_reward(name: str, reward_bag_id: str):
+            _post(f"领取奖励-{name}", self.urls.colg_other_act_get_reward, f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}")
+
+        def complete_task_and_get_score(name: str, task_id: str, task_page: str):
+            visit_page(f"{name}-访问活动页面", task_page)
+            _post(f"{name}-领取奖励", self.urls.colg_other_act_api.format(api="completeTask"), f"aid={self.urls.colg_other_act_id}&task_id={task_id}")
+            _post(f"{name}-领取积分", self.urls.colg_other_act_api.format(api="getScore"), f"aid={self.urls.colg_other_act_id}&task_id={task_id}")
+
+        @try_except(return_val_on_except=0)
+        def query_team_member_count() -> int:
+            info = query_info()
+            return len(info["activity_team_info"]["list"])
+
+        @try_except(return_val_on_except=False)
+        def has_joined_rank_team() -> bool:
+            info = query_info()
+            return len(info["rank_team_info"]["list"]) == 3
+
+
+        team_member_count = query_team_member_count()
+        if team_member_count < 3:
+            async_message_box(
+                "colg的活跃组队活动当前尚未完成组队，可前往活动页面与他人组队后参与",
+                "colg名望组队活动-活跃组队",
+                open_url=self.urls.colg_other_act_url,
+                show_once_weekly=True,
+            )
+
+        if team_member_count > 0:
+            if team_member_count >= 3:
+                get_reward("组队见面礼", "96")
+
+            complete_task_and_get_score("每日任务-浏览职业大厅", "3", "https://bbs.colg.cn/forum-488-1.html")
+
+            complete_task_and_get_score("每周任务(访问3次)-浏览全职业VP方案", "4", "https://bbs.colg.cn/page_collect/335.html")
+            get_reward("每周浏览三次奖励", "94")
+
+            info = query_info()
+
+            for reward in info["person_reward"]:
+                if int(info["user_score"]) >= int(reward["days"]):
+                    get_reward(f"领取个人活跃奖励 - 累计{reward['days']}天", reward["reward_bag_id"])
+
+            for reward in info["team_reward"]:
+                if int(info["team_score"]) >= int(reward["days"]):
+                    get_reward(f"领取组队活跃奖励 - 累计{reward['days']}天", reward["reward_bag_id"])
+
+        if not has_joined_rank_team():
+            async_message_box(
+                "colg的名望冲榜组队活动当前尚未完成组队，可前往活动页面与他人组队后参与（在页面下方的第二个组队区域，进阶玩法）",
+                "colg名望组队活动-名望组队",
+                open_url=self.urls.colg_other_act_url,
+                show_once_weekly=True,
+            )
+
         # reward_list = [
         #     {
-        #         "reward_bag_id": "60",
-        #         "title": "累计签到3天",
+        #         "reward_bag_id": "96",
+        #         "title": "组队见面礼",
         #     },
-        #     {
-        #         "reward_bag_id": "61",
-        #         "title": "累计签到7天",
-        #     },
-        #     {
-        #         "reward_bag_id": "62",
-        #         "title": "累计签到10天",
-        #     },
-        #     {
-        #         "reward_bag_id": "63",
-        #         "title": "累计签到15天",
-        #     },
-        #     {
-        #         "reward_bag_id": "64",
-        #         "title": "累计签到21天",
-        #     },
-        #     {
-        #         "reward_bag_id": "65",
-        #         "title": "累计签到28天",
-        #     },
+        #     # {
+        #     #     "reward_bag_id": "YYYYYY",
+        #     #     "title": "XXXXXX",
+        #     # },
         # ]
         # for reward in reward_list:
         #     reward_bag_id = reward["reward_bag_id"]
@@ -5980,19 +6046,19 @@ class DjcHelper:
         #         logger.warning("累积天数不足，跳过尝试后续")
         #         break
 
-        # res = session.post(self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10)
-        res = session.get(self.urls.colg_other_act_url, timeout=10)
-        logger.info(color("bold_green") + "访问页面获取抽奖机会")
-
-        if now_in_range("2025-04-29 00:00:00", "2025-05-19 23:59:59"):
-            res = session.post(
-                self.urls.colg_other_act_lottery,
-                data=f"type={self.urls.colg_other_act_type}&aid={self.urls.colg_other_act_id}",
-                timeout=10,
-            )
-            logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
-        else:
-            pass
+        # # res = session.post(self.urls.colg_other_act_url, data=f"aid={self.urls.colg_other_act_id}", timeout=10)
+        # res = session.get(self.urls.colg_other_act_url, timeout=10)
+        # logger.info(color("bold_green") + "访问页面获取抽奖机会")
+        #
+        # if now_in_range("2025-04-29 00:00:00", "2025-05-19 23:59:59"):
+        #     res = session.post(
+        #         self.urls.colg_other_act_lottery,
+        #         data=f"type={self.urls.colg_other_act_type}&aid={self.urls.colg_other_act_id}",
+        #         timeout=10,
+        #     )
+        #     logger.info(color("bold_green") + f"每日抽奖，结果={res.json()}")
+        # else:
+        #     pass
 
     # --------------------------------------------小酱油周礼包和生日礼包--------------------------------------------
     @try_except()
@@ -9957,6 +10023,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_color()
+        djcHelper.colg_other_act()
 
     pause()

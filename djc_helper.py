@@ -5960,6 +5960,8 @@ class DjcHelper:
             raw_res = session.get(self.urls.colg_other_act_api.format(api="getInitInfo"), timeout=10)
             res = raw_res.json()
 
+            logger.debug(f"colg query_info，结果={res}")
+
             return res["data"]
 
         def visit_page(ctx: str, url: str):

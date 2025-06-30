@@ -208,8 +208,8 @@ class DjcHelper:
         # res = self.dnf_welfare_op("判断skey是否过期", "649261", print_res=False)
         # res = self.dnf_comic_ide_op("判断skey是否过期", "248455", print_res=False)
 
-        res = self.dnf_bind_phone_op("判断skey是否过期", "971619", print_res=False)
-        # res = self.dnf_cloud_game_op("判断skey是否过期", "1131647", print_res=False)
+        # res = self.dnf_bind_phone_op("判断skey是否过期", "971619", print_res=False)
+        res = self.dnf_cloud_game_op("判断skey是否过期", "1131647", print_res=False)
 
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")

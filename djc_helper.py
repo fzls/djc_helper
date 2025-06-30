@@ -701,6 +701,7 @@ class DjcHelper:
             ("幸运色卡", self.dnf_color),
             ("colg其他活动", self.colg_other_act),
             ("挑战世界记录", self.dnf_challenge_world_record),
+            ("vp挑战赛", self.vp_challenge),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9155,6 +9156,80 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------vp挑战赛--------------------------------------------
+    @try_except()
+    def vp_challenge(self):
+        show_head_line("vp挑战赛")
+        self.show_not_ams_act_info("vp挑战赛")
+
+        if not self.cfg.function_switches.get_vp_challenge or self.disable_most_activities():
+            show_act_not_enable_warning("vp挑战赛")
+            return
+
+        self.check_vp_challenge()
+
+        def query_info() -> tuple[int, int]:
+            res = self.vp_challenge_op("初始化", "407797", print_res=False)
+            raw_info = res["jData"]["jHolds"]
+
+            # 抽奖次数
+            lottery_count = int(raw_info["daily_lottery"]["iLeftNum"])
+            total_count = int(raw_info["daily_lottery"]["iTotalNum"])
+
+            return lottery_count, total_count
+
+        self.vp_challenge_op("勇士见面礼", "408426")
+
+        self.vp_challenge_op("每日登录任务", "408427")
+        self.vp_challenge_op("每日在线任务", "408428")
+        self.vp_challenge_op("每日通关任务", "408429")
+
+        lottery_count, total_count = query_info()
+        logger.info(f"当前抽奖次数 {lottery_count}，累计获得 {total_count}")
+        for idx in range_from_one(lottery_count):
+            self.vp_challenge_op(f"[{idx}/{lottery_count}] 每日抽奖", "409670")
+            time.sleep(3)
+
+        self.vp_challenge_op("周年庆深渊试炼", "408432")
+        self.vp_challenge_op("周年庆征讨试炼", "408433")
+
+        # self.vp_challenge_op("我要参赛", "408434")
+
+        async_message_box(
+            "有个官方的挑战赛活动，单人通过征讨地下城：蔚蓝号（全图），按照比赛规则的要求去完成，并上传通关视频或直播完成，若最终排行靠前，可以领取对应的Q币或现金奖励，有兴趣的朋友可以点确定后查看活动页面",
+            "vp挑战赛活动",
+            open_url=get_act_url("vp挑战赛"),
+            show_once=True,
+        )
+
+    def check_vp_challenge(self, **extra_params):
+        return self.ide_check_bind_account(
+            "vp挑战赛",
+            get_act_url("vp挑战赛"),
+            activity_op_func=self.vp_challenge_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def vp_challenge_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_vp_challenge
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("vp挑战赛"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10074,6 +10149,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_challenge_world_record()
+        djcHelper.vp_challenge()
 
     pause()

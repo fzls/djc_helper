@@ -3064,6 +3064,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("幸运色卡", "get_dnf_color"),
             ("colg其他活动", "get_colg_other_act"),
             ("挑战世界记录", "get_dnf_challenge_world_record"),
+            ("vp挑战赛", "get_vp_challenge"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

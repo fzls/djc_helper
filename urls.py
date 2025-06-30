@@ -75,6 +75,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
+    newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
     #
     # 已过期活动
     #
@@ -133,6 +134,7 @@ act_name_to_url = {
     "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
+    "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     #
     # 已过期活动
     #
@@ -335,6 +337,7 @@ class Urls:
         self.ide_iActivityId_dnf_netbar = "11_RWbofn"  # 周年庆网吧集结
         self.ide_iActivityId_dnf_color = "16_kfJ3xD"  # 幸运色卡
         self.ide_iActivityId_dnf_challenge_world_record = "70_gzIaCC"  # 挑战世界记录
+        self.ide_iActivityId_vp_challenge = "65_6beKBQ"  # vp挑战赛
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

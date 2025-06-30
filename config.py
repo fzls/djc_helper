@@ -920,6 +920,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_color = True
         # 是否领取 挑战世界记录 活动
         self.get_dnf_challenge_world_record = True
+        # 是否领取 vp挑战赛 活动
+        self.get_vp_challenge = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

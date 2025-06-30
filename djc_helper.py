@@ -700,6 +700,7 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("幸运色卡", self.dnf_color),
             ("colg其他活动", self.colg_other_act),
+            ("挑战世界记录", self.dnf_challenge_world_record),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9112,6 +9113,48 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------挑战世界记录--------------------------------------------
+    @try_except()
+    def dnf_challenge_world_record(self):
+        show_head_line("挑战世界记录")
+        self.show_not_ams_act_info("挑战世界记录")
+
+        if not self.cfg.function_switches.get_dnf_challenge_world_record or self.disable_most_activities():
+            show_act_not_enable_warning("挑战世界记录")
+            return
+
+        self.check_dnf_challenge_world_record()
+
+        self.dnf_challenge_world_record_op("领取奖励", "415149")
+
+    def check_dnf_challenge_world_record(self, **extra_params):
+        return self.ide_check_bind_account(
+            "挑战世界记录",
+            get_act_url("挑战世界记录"),
+            activity_op_func=self.dnf_challenge_world_record_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_challenge_world_record_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_challenge_world_record
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("挑战世界记录"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10031,6 +10074,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_cloud_game()
+        djcHelper.dnf_challenge_world_record()
 
     pause()

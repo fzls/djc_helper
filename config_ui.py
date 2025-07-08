@@ -3049,7 +3049,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
             ("新职业预约活动", "get_dnf_reserve"),
-            ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
@@ -3060,7 +3059,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("周年庆网吧集结", "get_dnf_netbar"),
             ("start云游戏", "get_dnf_cloud_game"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
-            ("幸运色卡", "get_dnf_color"),
             ("colg其他活动", "get_colg_other_act"),
             ("挑战世界记录", "get_dnf_challenge_world_record"),
             ("vp挑战赛", "get_vp_challenge"),
@@ -3075,6 +3073,8 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("幸运色卡", "get_dnf_color"),
+            ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("共赴西装节", "get_dnf_suit"),
             ("助手能量之芽", "get_dnf_helper_energy_tree"),

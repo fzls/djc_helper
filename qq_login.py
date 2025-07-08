@@ -1755,11 +1755,14 @@ class QQLogin:
             return max(self.cfg.login.login_timeout, 600)
 
     def fetch_qq_video_vuserid(self):
-        logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
-        self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
+        # 已经很久没有qq视频的蚊子腿了，不再尝试获取 vuserid
+        pass
 
-        (vuserid,) = self._wait_for_cookies("vuserid")
-        self.add_cookie("vuserid", vuserid)
+        # logger.info(f"{self.name} 转到qq视频界面，从而可以获取vuserid，用于腾讯视频的蚊子腿")
+        # self.driver.get("https://m.film.qq.com/magic-act/110254/index.html")
+        #
+        # (vuserid,) = self._wait_for_cookies("vuserid")
+        # self.add_cookie("vuserid", vuserid)
 
     def fetch_apps_p_skey(self):
         logger.info(f"{self.name} 跳转到apps.game.qq.com，用于获取该域名下的p_skey，用于部分分享功能")

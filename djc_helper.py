@@ -8313,11 +8313,18 @@ class DjcHelper:
             act_config = get_ams_act(self.urls.iActivityId_dnf_cloud_game)
             is_final_week = will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7))
 
+            end_time = parse_time(act_config.dtEndTime)
+            remaining_time = end_time - get_now()
+
             show_once_weekly = not is_final_week
             show_once_daily = is_final_week
 
             async_message_box(
-                f"云游戏活动目前抽奖券数目为 {ticket}，目前小助手暂时无法代为抽奖，请自行在点确定弹出的活动页面最下方中将抽奖次数都用掉\n",
+                (
+                    f"云游戏活动目前抽奖券数目为 {ticket}，目前小助手暂时无法代为抽奖，请自行在点确定弹出的活动页面最下方中将抽奖次数都用掉\n"
+                    "\n"
+                    f"截止日期为: {act_config.dtEndTime}，剩余 {remaining_time}\n"
+                ),
                 "云游戏抽奖",
                 show_once_weekly=show_once_weekly,
                 show_once_daily=show_once_daily,

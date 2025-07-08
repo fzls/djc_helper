@@ -76,6 +76,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
+    newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
     #
     # 已过期活动
     #
@@ -115,7 +116,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
@@ -135,6 +135,7 @@ act_name_to_url = {
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
+    "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     #
     # 已过期活动
     #
@@ -338,6 +339,7 @@ class Urls:
         self.ide_iActivityId_dnf_color = "16_kfJ3xD"  # 幸运色卡
         self.ide_iActivityId_dnf_challenge_world_record = "70_gzIaCC"  # 挑战世界记录
         self.ide_iActivityId_vp_challenge = "65_6beKBQ"  # vp挑战赛
+        self.ide_iActivityId_dnf_bind_phone = "3_Rsi2sk"  # 绑定手机活动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

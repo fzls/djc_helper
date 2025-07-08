@@ -3047,7 +3047,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
-            ("绑定手机活动", "get_dnf_bind_phone"),
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),
             ("新职业预约活动", "get_dnf_reserve"),
             ("超核勇士wpe_dup", "get_dnf_helper_wpe_dup"),
@@ -3065,6 +3064,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("挑战世界记录", "get_dnf_challenge_world_record"),
             ("vp挑战赛", "get_vp_challenge"),
+            ("绑定手机活动", "get_dnf_bind_phone"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

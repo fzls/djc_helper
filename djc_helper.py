@@ -683,7 +683,6 @@ class DjcHelper:
         #     -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all  -rumt-zh.com -login/analysis
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("绑定手机活动", self.dnf_bind_phone),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("新职业预约活动", self.dnf_reserve),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
@@ -702,6 +701,7 @@ class DjcHelper:
             ("colg其他活动", self.colg_other_act),
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("vp挑战赛", self.vp_challenge),
+            ("绑定手机活动", self.dnf_bind_phone),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7216,42 +7216,54 @@ class DjcHelper:
     @try_except()
     def dnf_bind_phone(self):
         show_head_line("绑定手机活动")
-        self.show_amesvr_act_info(self.dnf_bind_phone_op)
+        # self.show_amesvr_act_info(self.dnf_bind_phone_op)
+        self.show_not_ams_act_info("绑定手机活动")
 
         if not self.cfg.function_switches.get_dnf_bind_phone or self.disable_most_activities():
             show_act_not_enable_warning("绑定手机活动")
             return
 
-        self.check_dnf_bind_phone()
+        # self.check_dnf_bind_phone()
+        self.check_dnf_bind_phone_ide()
 
-        def query_info():
-            res = self.dnf_bind_phone_op("查询信息", "971619", print_res=False)
-            raw_info = parse_amesvr_common_info(res)
+        def query_info() -> tuple[bool, bool, int, bool]:
+            res = self.dnf_bind_phone_ide_op("查询信息", "414203", print_res=False)
+            raw_info = res["jData"]
 
-            isGetBindGift = int(raw_info.sOutValue1) == 1
-            bindPhone = raw_info.sOutValue2
-            exchangeTickets = int(raw_info.sOutValue3)
-            isSettlement = int(raw_info.sOutValue4) == 1
+            isGetBindGift = int(raw_info["isGetReward"]) == 1
+            bindPhone = int(raw_info["bindFlag"]) == 0
+            exchangeTickets = int(raw_info["iIntegral"])
+            isSettlement = int(raw_info["isMonthDo"]) == 1
 
             return isGetBindGift, bindPhone, exchangeTickets, isSettlement
 
         isGetBindGift, bindPhone, exchangeTickets, isSettlement = query_info()
-        if bindPhone == "0":
+        if not bindPhone:
             async_message_box(
                 "当前账号尚未绑定手机，可前往活动页面绑定手机，绑定后可以领取666代币券，同时每月可以领取积分来兑换其他蚊子腿",
                 f"绑定手机-{self.cfg.name}",
                 open_url=get_act_url("绑定手机活动"),
                 show_once_monthly=True,
             )
+        else:
+            logger.info("已绑定手机")
 
         if not isGetBindGift:
-            self.dnf_bind_phone_op("领取豪礼（新）", "970721")
+            self.dnf_bind_phone_ide_op("首次绑定奖励", "415395")
+        else:
+            logger.info("已领取首次绑定奖励")
 
         if not isSettlement:
-            self.dnf_bind_phone_op("发放兑换积分", "970838")
+            self.dnf_bind_phone_ide_op("发送积分", "415262")
+        else:
+            logger.info("已领取本月积分")
 
+        logger.info(f"代币券数量为 {exchangeTickets}")
         if exchangeTickets >= 2:
-            self.dnf_bind_phone_op("兑换-增肥器", "970763", selectNo="3")
+            # 0-5
+            self.dnf_bind_phone_ide_op("兑换-增肥器", "415424", iIndex="2")
+        else:
+            logger.info(f"代币券不足以兑换增肥器，跳过")
 
         if use_by_myself():
             async_message_box(
@@ -7283,11 +7295,39 @@ class DjcHelper:
             **extra_params,
         )
 
+    def check_dnf_bind_phone_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "绑定手机活动",
+            get_act_url("绑定手机活动"),
+            activity_op_func=self.dnf_bind_phone_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_bind_phone_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_bind_phone
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("绑定手机活动"),
+            **extra_params,
+        )
+
     # --------------------------------------------WeGame活动--------------------------------------------
     @try_except()
     def dnf_wegame(self):
         show_head_line("WeGame活动")
-        self.show_amesvr_act_info(self.dnf_wegame_op)
+        self.show_not_ams_act_info("WeGame活动")
 
         if not self.cfg.function_switches.get_dnf_wegame or self.disable_most_activities():
             show_act_not_enable_warning("WeGame活动")
@@ -10151,6 +10191,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.vp_challenge()
+        djcHelper.dnf_bind_phone()
 
     pause()

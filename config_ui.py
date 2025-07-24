@@ -773,6 +773,8 @@ class ConfigUi(QFrame):
 
     def join_group(self, checked=False):
         # note: 如果群满了，到 https://qun.qq.com/join.html 获取新群的加群链接，并更新到在线文档中 @2021-02-13 01:41:03
+        # 点我直接加群
+        # https://qm.qq.com/cgi-bin/qm/qr?k=***************&jump_from=webapi
         open_with_default_app("DNF蚊子腿小助手QQ群.url")
 
         report_click_event("join_group")

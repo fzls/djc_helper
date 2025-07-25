@@ -8748,7 +8748,7 @@ class DjcHelper:
             return
 
         def query_info() -> tuple[int, int, int]:
-            raw_res = self.dnf_helper_limit_act_op("查询信息", "npcTogether/getUserInfo", print_res=False)
+            raw_res = self.dnf_helper_limit_act_op("查询信息", "getUserInfo", print_res=False)
             res = raw_res["data"]
 
             totalDrawTimes = int(res["totalDrawTimes"])
@@ -8758,30 +8758,40 @@ class DjcHelper:
             return totalDrawTimes, remainDrawTimes, sweet_level
 
 
-        self.dnf_helper_limit_act_op("选择同游角色", "npcTogether/selectNpc", npcId=1)
+        self.dnf_helper_limit_act_op("选择同游角色", "selectNpc", npcId=1)
 
         for idx in [2, 3, 4]:
-            self.dnf_helper_limit_act_op(f"完成任务 - {idx}", "npcTogether/taskComplete", taskId=idx)
-            self.dnf_helper_limit_act_op(f"领取任务奖励 - {idx}", "npcTogether/pickUpGift", taskId=idx)
+            self.dnf_helper_limit_act_op(f"完成任务 - {idx}", "taskComplete", taskId=idx)
+            self.dnf_helper_limit_act_op(f"领取任务奖励 - {idx}", "pickUpGift", taskId=idx)
 
         totalDrawTimes, remainDrawTimes, sweet_level = query_info()
         logger.info(f"当前总抽奖次数 {totalDrawTimes}，剩余抽奖次数 {remainDrawTimes}")
         for idx in range_from_one(remainDrawTimes):
-            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 领取礼物", "npcTogether/draw", npcName=quote_plus("奇美拉"))
+            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 领取礼物", "draw", npcName=quote_plus("奇美拉"))
 
         logger.info(f"当前甜蜜度等级 {sweet_level}")
         for index, gift_id in enumerate([101, 102, 103, 104, 105]):
             required_level = index + 1
 
             if sweet_level >= required_level:
-                self.dnf_helper_limit_act_op(f"领取任务奖励 - {gift_id}", "npcTogether/pickUpGift", taskId=gift_id)
+                self.dnf_helper_limit_act_op(f"领取任务奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
             else:
                 logger.warning(f"当前甜蜜度等级 {sweet_level}，无法领取任务奖励 - {gift_id}，需要达到 {required_level} 级")
 
         logger.warning("助手内的任务需要自行完成")
 
-    def dnf_helper_limit_act_op(self, ctx: str, action: str, print_res=True, **extra_params):
-        if action != "init":
+    def dnf_helper_limit_act_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
+        # re: 每次新活动需要更新下面这俩参数
+        # 活动id，对应参数 activityId
+        activityId = "1012"
+        # 活动的action前缀，对应参数 r 的前半部分
+        activity_action_prefix = "npcTogether"
+
+        action = action_name
+        if action_name != "init":
+            # 加上统一的前缀
+            action = f"{activity_action_prefix}/{action_name}"
+
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
 
@@ -8791,7 +8801,7 @@ class DjcHelper:
         # fmt: off
         data = {
             "r": quote_plus(action),
-            "activityId": "1008",
+            "activityId": activityId,
 
             **extra_params,
 

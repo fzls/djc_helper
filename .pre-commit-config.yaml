@@ -52,7 +52,7 @@ repos:
     rev: 7.1.0
     hooks:
       - id: flake8
-        language_version: python3.8
+        language_version: python3.9
         additional_dependencies:
           - flake8-typing-imports==1.14.0
           - flake8-bugbear == 23.1.17

@@ -694,7 +694,6 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("助手限定活动", self.dnf_helper_limit_act),
             ("周年庆网吧集结", self.dnf_netbar),
             ("start云游戏", self.dnf_cloud_game),
             ("回流引导秘籍", self.dnf_recall_guide),
@@ -702,6 +701,7 @@ class DjcHelper:
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("vp挑战赛", self.vp_challenge),
             ("绑定手机活动", self.dnf_bind_phone),
+            ("助手限定活动", self.dnf_helper_limit_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8731,6 +8731,16 @@ class DjcHelper:
         return res
 
     # --------------------------------------------助手限定活动--------------------------------------------
+    # re: 接入步骤
+    #   1. 手机连接adb，参照获取token的流程来监听链接日志，然后打开活动页面，获取活动链接
+    #   2. 在chrome的device模式中打开页面，获取新活动的 活动id 和 action前缀
+    #   3. 在chrome的 Sources tab中 找到下面两个文件，将 utf8 encode的字符串解码后放入 test.js 文件中
+    #       top/dzhu.qq.com/fe/dnf/summer-act/umi.xxxxxx.js
+    #       top/dzhu.qq.com/fe/dnf/summer-act/p__home.xxxxxx.async.js
+    #   4. 然后搜索 action前缀/ 或者页面上按钮附近的文案来找到各个接口的位置
+    #       https://www.huatools.com/unicode-chinese/
+    #   5. 最后参照页面慢慢接入
+    #       从 getUserInfo 中去获取对应任务和奖励的ID
     @try_except()
     def dnf_helper_limit_act(self):
         show_head_line("助手限定活动")
@@ -8747,45 +8757,58 @@ class DjcHelper:
             )
             return
 
-        def query_info() -> tuple[int, int, int]:
+        def query_info() -> tuple[int]:
             raw_res = self.dnf_helper_limit_act_op("查询信息", "getUserInfo", print_res=False)
             res = raw_res["data"]
 
-            totalDrawTimes = int(res["totalDrawTimes"])
-            remainDrawTimes = int(res["remainDrawTimes"])
-            sweet_level = int(res["sweetInfo"]["sweetLevel"])
+            remainKnockIceTimes = int(res["remainKnockIceTimes"])
 
-            return totalDrawTimes, remainDrawTimes, sweet_level
+            return remainKnockIceTimes
 
 
-        self.dnf_helper_limit_act_op("选择同游角色", "selectNpc", npcId=1)
 
-        for idx in [2, 3, 4]:
-            self.dnf_helper_limit_act_op(f"完成任务 - {idx}", "taskComplete", taskId=idx)
+        for idx in [201, 202, 203]:
+            # 201 需要在助手内完成
+            if idx != 201:
+                self.dnf_helper_limit_act_op(f"完成任务 - {idx}", "taskComplete", taskId=idx)
+
             self.dnf_helper_limit_act_op(f"领取任务奖励 - {idx}", "pickUpGift", taskId=idx)
 
-        totalDrawTimes, remainDrawTimes, sweet_level = query_info()
-        logger.info(f"当前总抽奖次数 {totalDrawTimes}，剩余抽奖次数 {remainDrawTimes}")
+        remainKnockIceTimes = query_info()
+        # 2个锤子可以敲一次
+        remainDrawTimes = remainKnockIceTimes // 2
+
+        logger.info(f"当前剩余锤子 {remainKnockIceTimes}，可敲 {remainDrawTimes} 次")
         for idx in range_from_one(remainDrawTimes):
-            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 领取礼物", "draw", npcName=quote_plus("奇美拉"))
+            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 敲冰块", "draw")
 
-        logger.info(f"当前甜蜜度等级 {sweet_level}")
-        for index, gift_id in enumerate([101, 102, 103, 104, 105]):
-            required_level = index + 1
+        # logger.info(f"当前甜蜜度等级 {sweet_level}")
+        for index, gift_id in enumerate([101, 102]):
+            # required_level = index + 1
+            #
+            # if sweet_level >= required_level:
+            #     self.dnf_helper_limit_act_op(f"领取任务奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
+            # else:
+            #     logger.warning(f"当前甜蜜度等级 {sweet_level}，无法领取任务奖励 - {gift_id}，需要达到 {required_level} 级")
 
-            if sweet_level >= required_level:
-                self.dnf_helper_limit_act_op(f"领取任务奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
-            else:
-                logger.warning(f"当前甜蜜度等级 {sweet_level}，无法领取任务奖励 - {gift_id}，需要达到 {required_level} 级")
+            self.dnf_helper_limit_act_op(f"领取敲完一面冰块的奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
 
-        logger.warning("助手内的任务需要自行完成")
+        async_message_box(
+            (
+                "助手的限定活动（魔界人的夏日愿望）接近满勤的话可以领取30天黑钻，其中除了每日任务中的第一个任务需要在助手中自行完成，其他的小助手都可以自动完成并领取锤子。\n"
+                "\n"
+                "如果想要领到这个活动的30天黑钻，可自行每天去 dnf助手-资讯-活动-魔界人的夏日愿望 中把第一个每日任务的条件给完成"
+            ),
+            f"助手限定活动提示_{get_act_url('助手限定活动')}",
+            show_once=True,
+        )
 
     def dnf_helper_limit_act_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
         activityId = "1012"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "npcTogether"
+        activity_action_prefix = "demon"
 
         action = action_name
         if action_name != "init":
@@ -10210,6 +10233,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_color()
+        djcHelper.dnf_helper_limit_act()
 
     pause()

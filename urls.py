@@ -68,13 +68,13 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-13 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-06-07 11:00:00", "2025-07-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
+    newNotAmsActInfo("2025-07-24 00:00:00", "2025-08-20 23:59:59", "助手限定活动"),
     #
     # 已过期活动
     #
@@ -126,7 +126,6 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250612index/",
     "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
-    "助手限定活动": "https://dzhu.qq.com/fe/dnf/anniversary/?share=1&activityId=1008&gameId=10014&subGameId=10014",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
@@ -134,6 +133,7 @@ act_name_to_url = {
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/summer-act/",
     #
     # 已过期活动
     #

@@ -4923,9 +4923,7 @@ class DjcHelper:
                 #     sCode=quote_plus(sContent),
                 # )
             else:
-                res = self.dnf_welfare_ide_op(
-                    f"兑换口令-{sContent}", "402568", sCode=quote_plus(sContent)
-                )
+                res = self.dnf_welfare_ide_op(f"兑换口令-{sContent}", "402568", sCode=quote_plus(sContent))
 
             # 每次请求间隔一秒
             time.sleep(3)
@@ -5970,12 +5968,24 @@ class DjcHelper:
             _get(ctx, url, print_res=False)
 
         def get_reward(name: str, reward_bag_id: str):
-            _post(f"领取奖励-{name}", self.urls.colg_other_act_get_reward, f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}")
+            _post(
+                f"领取奖励-{name}",
+                self.urls.colg_other_act_get_reward,
+                f"aid={self.urls.colg_other_act_id}&reward_bag_id={reward_bag_id}",
+            )
 
         def complete_task_and_get_score(name: str, task_id: str, task_page: str):
             visit_page(f"{name}-访问活动页面", task_page)
-            _post(f"{name}-领取奖励", self.urls.colg_other_act_api.format(api="completeTask"), f"aid={self.urls.colg_other_act_id}&task_id={task_id}")
-            _post(f"{name}-领取积分", self.urls.colg_other_act_api.format(api="getScore"), f"aid={self.urls.colg_other_act_id}&task_id={task_id}")
+            _post(
+                f"{name}-领取奖励",
+                self.urls.colg_other_act_api.format(api="completeTask"),
+                f"aid={self.urls.colg_other_act_id}&task_id={task_id}",
+            )
+            _post(
+                f"{name}-领取积分",
+                self.urls.colg_other_act_api.format(api="getScore"),
+                f"aid={self.urls.colg_other_act_id}&task_id={task_id}",
+            )
 
         @try_except(return_val_on_except=0)
         def query_team_member_count() -> int:
@@ -5986,7 +5996,6 @@ class DjcHelper:
         def has_joined_rank_team() -> bool:
             info = query_info()
             return len(info["rank_team_info"]["list"]) == 3
-
 
         team_member_count = query_team_member_count()
         if team_member_count < 3:
@@ -6003,7 +6012,9 @@ class DjcHelper:
 
             complete_task_and_get_score("每日任务-浏览职业大厅", "3", "https://bbs.colg.cn/forum-488-1.html")
 
-            complete_task_and_get_score("每周任务(访问3次)-浏览全职业VP方案", "4", "https://bbs.colg.cn/page_collect/335.html")
+            complete_task_and_get_score(
+                "每周任务(访问3次)-浏览全职业VP方案", "4", "https://bbs.colg.cn/page_collect/335.html"
+            )
             get_reward("每周浏览三次奖励", "94")
 
             info = query_info()
@@ -7265,7 +7276,7 @@ class DjcHelper:
             # 0-5
             self.dnf_bind_phone_ide_op("兑换-增肥器", "415424", iIndex="2")
         else:
-            logger.info(f"代币券不足以兑换增肥器，跳过")
+            logger.info("代币券不足以兑换增肥器，跳过")
 
         if use_by_myself():
             async_message_box(
@@ -8287,7 +8298,7 @@ class DjcHelper:
             res = self.dnf_cloud_game_op("查询抽奖券", "1131647", print_res=False)
 
             ticket = int(res["modRet"]["ticket"])
-            total =  int(res["modRet"]["total"])
+            total = int(res["modRet"]["total"])
 
             return ticket, total
 
@@ -8757,15 +8768,13 @@ class DjcHelper:
             )
             return
 
-        def query_info() -> tuple[int]:
+        def query_info() -> int:
             raw_res = self.dnf_helper_limit_act_op("查询信息", "getUserInfo", print_res=False)
             res = raw_res["data"]
 
             remainKnockIceTimes = int(res["remainKnockIceTimes"])
 
             return remainKnockIceTimes
-
-
 
         for idx in [201, 202, 203]:
             # 201 需要在助手内完成
@@ -8784,6 +8793,7 @@ class DjcHelper:
 
         # logger.info(f"当前甜蜜度等级 {sweet_level}")
         for index, gift_id in enumerate([101, 102]):
+            _ = index
             # required_level = index + 1
             #
             # if sweet_level >= required_level:

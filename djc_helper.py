@@ -685,20 +685,10 @@ class DjcHelper:
         #     -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all  -rumt-zh.com -login/analysis
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
-            ("新职业预约活动", self.dnf_reserve),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("colg每日签到", self.colg_signin),
-            ("超级会员", self.dnf_super_vip),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("WeGame活动", self.dnf_wegame),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("周年庆网吧集结", self.dnf_netbar),
-            ("start云游戏", self.dnf_cloud_game),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("colg其他活动", self.colg_other_act),
-            ("挑战世界记录", self.dnf_challenge_world_record),
             ("vp挑战赛", self.vp_challenge),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手限定活动", self.dnf_helper_limit_act),
@@ -709,6 +699,16 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("挑战世界记录", self.dnf_challenge_world_record),
+            ("start云游戏", self.dnf_cloud_game),
+            ("周年庆网吧集结", self.dnf_netbar),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("WeGame活动", self.dnf_wegame),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("超级会员", self.dnf_super_vip),
+            ("新职业预约活动", self.dnf_reserve),
+            ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("幸运色卡", self.dnf_color),
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
@@ -10233,6 +10233,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.dnf_challenge_world_record()
 
     pause()

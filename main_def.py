@@ -1509,6 +1509,11 @@ def show_tips(cfg: Config):
         "25.8 抖音": (
             "抖音搜索 地下城与勇士，在官方号主页点击 游戏详情，点开福利可以每日签到领奖，请自行参与\n"
         ),
+        "25.8 云游戏": (
+            "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
+            "https://my.start.qq.com/act/my_activity_v2/?group_id=1&act_id=174&ts=2025080111#/index"
+        ),
+
     }
 
     logger.info(

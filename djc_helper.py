@@ -686,10 +686,6 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("colg每日签到", self.colg_signin),
-            ("回流引导秘籍", self.dnf_recall_guide),
-            ("colg其他活动", self.colg_other_act),
-            ("vp挑战赛", self.vp_challenge),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
@@ -700,6 +696,10 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("vp挑战赛", self.vp_challenge),
+            ("colg其他活动", self.colg_other_act),
+            ("回流引导秘籍", self.dnf_recall_guide),
+            ("colg每日签到", self.colg_signin),
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("start云游戏", self.dnf_cloud_game),
             ("周年庆网吧集结", self.dnf_netbar),
@@ -10244,6 +10244,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.vp_challenge()
 
     pause()

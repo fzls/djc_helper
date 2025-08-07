@@ -1513,7 +1513,10 @@ def show_tips(cfg: Config):
             "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
             "https://my.start.qq.com/act/my_activity_v2/?group_id=1&act_id=174&ts=2025080111#/index"
         ),
-
+        "25.8 微信游戏圈": (
+            "微信游戏圈有个每日抽奖和累计签到活动，可在微信游戏圈打开DNF，切换到最右侧两个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
+            "https://game.gtimg.cn/images/dnf/cp/a20250807index/ewm-box1.png"
+        ),
     }
 
     logger.info(

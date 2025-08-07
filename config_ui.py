@@ -3057,6 +3057,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("vp挑战赛", "get_vp_challenge"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3071,7 +3072,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("start云游戏", "get_dnf_cloud_game"),
             ("周年庆网吧集结", "get_dnf_netbar"),
             ("WeGame活动", "get_dnf_wegame"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
             ("新职业预约活动", "get_dnf_reserve"),
             ("助手魔界人每日幸运签", "get_dnf_helper_lucky_lottery"),

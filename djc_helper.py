@@ -692,6 +692,7 @@ class DjcHelper:
             ("vp挑战赛", self.vp_challenge),
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手限定活动", self.dnf_helper_limit_act),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -704,7 +705,6 @@ class DjcHelper:
             ("周年庆网吧集结", self.dnf_netbar),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("超级会员", self.dnf_super_vip),
             ("新职业预约活动", self.dnf_reserve),
@@ -6360,7 +6360,7 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "405384", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "428957", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
@@ -6390,9 +6390,10 @@ class DjcHelper:
                     self.dnf_luodiye_ide_op(f"每日签到 - {sign_day_date}", "407035", iIndex=iIndex)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("庆典礼包", "406871")
+        self.dnf_luodiye_ide_op("盛夏礼包", "428976")
 
-        try_daily_signin()
+        # try_daily_signin()
+        self.dnf_luodiye_ide_op("每日签到", "428995")
 
         login_gifts_list = [
             (0, 3),
@@ -6407,16 +6408,16 @@ class DjcHelper:
         for gift_index, require_login_days in login_gifts_list:
             if iLoginTotal >= require_login_days:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "407103", iIndex=gift_index
+                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "428997", iIndex=gift_index
                 )
             else:
                 logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
 
         tasks = [
-            ("每日任务1", "407104"),
-            ("每日任务2", "407107"),
-            ("每周任务1", "407108"),
-            ("每周任务2", "407109"),
+            ("每日任务一", "428999"),
+            ("每日任务二", "428998"),
+            ("每周任务一", "429001"),
+            ("每周任务二", "429003"),
         ]
         for name, flowid in tasks:
             self.dnf_luodiye_ide_op(name, flowid)
@@ -6436,7 +6437,7 @@ class DjcHelper:
         iLottery, _ = query_info()
         logger.info(f"当前抽奖次数为 {iLottery}")
         for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "407110")
+            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "429010")
             _ = res
             # if res["ret"] == 10001:
             #     break
@@ -6449,13 +6450,13 @@ class DjcHelper:
         #     open_url=get_act_url("DNF落地页活动_ide"),
         # )
 
-        # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
-        async_message_box(
-            "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励",
-            "25.6 落地页拉回归活动",
-            show_once=True,
-            open_url=get_act_url("DNF落地页活动_ide"),
-        )
+        # # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+        # async_message_box(
+        #     "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励",
+        #     "25.6 落地页拉回归活动",
+        #     show_once=True,
+        #     open_url=get_act_url("DNF落地页活动_ide"),
+        # )
 
     def check_dnf_luodiye_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -10243,6 +10244,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_challenge_world_record()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

@@ -1539,13 +1539,16 @@ def show_tips_for_myself():
     if not use_by_myself():
         return
 
-    _show_head_line("仅自己可见的一些小提示")
+    tips_to_show: list[tuple[str, str]] = []
+
+    def _add_tip(msg: str, title: str):
+        tips_to_show.append((msg, title))
 
     # if is_weekly_first_run("微信支付维护提示"):
-    #     show_tip_for_myself("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
+    #     _add_tip("看看微信支付的渠道维护结束了没。如果结束了，就把配置工具中微信支付按钮的点击特殊处理干掉", "支付维护")
 
     # if is_weekly_first_run("交易乐维护提示"):
-    #     show_tip_for_myself("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
+    #     _add_tip("看看交易乐是否已经修复，如果已经正常运行，则将配置工具中默认启用卡密的处理移除（搜：默认启用卡密）", "交易乐维护提示")
 
     # 若当前版本发布已经超过14天，且距离下次常规活动的预估时间低于7天，则每天尝试提示一下，看看是否已经出了这个活动，准备接入
     time_since_last_update = get_time_since_last_update()
@@ -1555,9 +1558,15 @@ def show_tips_for_myself():
         _, next_act_datetime = get_next_regular_activity_name_and_expected_datetime()
 
         if (next_act_datetime - now).days <= 7 and is_daily_first_run("常规活动接入"):
-            show_tip_for_myself(
+            _add_tip(
                 f"看看常规活动周期 {get_next_regular_activity_desc()} 是否出了，是否可以开始接入了", "常规活动接入"
             )
+
+    if len(tips_to_show) > 0:
+        _show_head_line("仅自己可见的一些小提示")
+
+        for msg, title in tips_to_show:
+            show_tip_for_myself(msg, title)
 
 
 def show_tip_for_myself(msg: str, title: str):

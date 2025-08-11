@@ -200,7 +200,10 @@ def full_update(args, uploader, latest_version: str) -> bool:
     def download_by_github() -> str:
         logger.warning("尝试通过github下载")
         filepath = download_latest_github_release(
-            tmp_dir, connect_timeout=5, extra_progress_callback=check_keyboard_interrupt_on_download
+            tmp_dir,
+            connect_timeout=5,
+            extra_progress_callback=check_keyboard_interrupt_on_download,
+            version=latest_version,
         )
         report_dlc_usage("full_update_from_github")
 
@@ -377,6 +380,8 @@ def test():
     uploader = Uploader()
 
     args.version = "18.1.11"
+    # # re: 可以测试上一个版本试试
+    # args.version = "22.7.0"
 
     # 进行实际的检查是否需要更新操作
     latest_version = get_latest_version(uploader)

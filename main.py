@@ -69,6 +69,7 @@ from util import (
     remove_old_version_portable_chrome_files,
     show_head_line,
     show_unexpected_exception_message,
+    use_by_myself,
 )
 from version import author, now_version, ver_time
 
@@ -227,21 +228,21 @@ def main():
         auto_send_cards(cfg)
 
     show_extra_infos(cfg)
+
+    # 运行结束展示下多进程信息
+    show_multiprocessing_info(cfg)
+
+    show_pay_info(cfg)
+    show_recommend_reward_tips(user_buy_info)
+
     sas(cfg, "运行完毕展示账号概览", user_buy_info)
 
     if enable_card_lottery:
         show_lottery_status("卡片赠送完毕后展示各账号抽卡卡片以及各礼包剩余可领取信息", cfg, need_show_tips=True)
 
-    show_pay_info(cfg)
-
-    show_recommend_reward_tips(user_buy_info)
-
     # 显示小助手的使用概览
-    if cfg.common._show_usage:
+    if cfg.common._show_usage and use_by_myself():
         show_usage()
-
-    # 运行结束展示下多进程信息
-    show_multiprocessing_info(cfg)
 
     # 检查是否有更新，用于提示未购买自动更新的朋友去手动更新~
     if cfg.common.check_update_on_end:
@@ -304,7 +305,7 @@ def main_wrapper():
 def async_call_close_pool_after_some_time():
     def _close():
         wait_time = 10 * 60
-        logger.info(f"{wait_time} 秒后将自动关闭进程池，方便有足够时间查看进程池中触发的弹窗信息")
+        logger.debug(f"{wait_time} 秒后将自动关闭进程池，方便有足够时间查看进程池中触发的弹窗信息")
         time.sleep(wait_time)
         close_pool()
 

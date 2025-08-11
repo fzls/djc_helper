@@ -1092,7 +1092,7 @@ def remove_old_version_portable_chrome_files(current_chrome_version: int):
 
 
 @try_except()
-def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB):
+def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_size: int = 512 * MiB, print_res=True):
     if keep_logs_size > max_logs_size:
         keep_logs_size = max_logs_size // 2
 
@@ -1102,14 +1102,14 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
 
     hrs = human_readable_size
 
-    logger.info(color("bold_green") + f"尝试清理日志目录({dir_name})，避免日志目录越来越大~")
+    get_logger_func(print_res, logger.info)(color("bold_green") + f"尝试清理日志目录({dir_name})，避免日志目录越来越大~")
 
     logs_size = get_directory_size(dir_name)
     if logs_size <= max_logs_size:
-        logger.info(f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理")
+        get_logger_func(print_res, logger.info)(f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理")
         return
 
-    logger.info(
+    get_logger_func(print_res, logger.info)(
         f"当前日志目录大小为{hrs(logs_size)}，超出设定最大值为{hrs(max_logs_size)}，将按照时间顺序移除部分日志，直至不高于设定清理后剩余大小{hrs(keep_logs_size)}"
     )
 
@@ -1140,12 +1140,12 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
 
         remove_file(log_file)
         relative_filepath = os.path.relpath(str(log_file), dir_name)
-        logger.info(
+        get_logger_func(print_res, logger.info)(
             f"移除第{remove_log_count}个日志:{relative_filepath} 大小：{hrs(stat.st_size)}，剩余日志大小为{hrs(remaining_logs_size)}"
         )
 
         if remaining_logs_size <= keep_logs_size:
-            logger.info(
+            get_logger_func(print_res, logger.info)(
                 color("bold_green")
                 + f"当前剩余日志大小为{hrs(remaining_logs_size)}，将停止日志清理流程~ 本次累计清理{remove_log_count}个日志文件，总大小为{hrs(remove_log_size)}"
             )
@@ -1162,7 +1162,7 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
 
         remove_directory(str(dir))
         relative_filepath = os.path.relpath(str(dir), dir_name)
-        logger.info(f"顺带移除空目录: {relative_filepath}")
+        get_logger_func(print_res, logger.info)(f"顺带移除空目录: {relative_filepath}")
 
 
 def get_file_or_directory_size(target_path: str) -> int:

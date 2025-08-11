@@ -198,13 +198,15 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
+            # _
         ],
     )
 
     # 一些注释掉的已失效的，仅留着备忘
     # note: 每次更新的时候，若可用节点不多了的时候，临时挪到上面的不可达的组里面，看看是否有恢复的
-    memo_invalid_mirror_list = [  # noqa: F841
-    ]
+    memo_invalid_mirror_list: list[str] = [
+        # _
+    ]  # noqa: F841
     extend_urls(
         memo_invalid_mirror_list,
         [
@@ -365,6 +367,7 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
+            # _
         ],
     )
 
@@ -372,13 +375,15 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
+            # _
         ],
     )
 
     # 一些注释掉的已失效的，仅留着备忘
     # note: 每次更新的时候，若可用节点不多了的时候，临时挪到上面的不可达的组里面，看看是否有恢复的
-    memo_invalid_mirror_list = [  # noqa: F841
-    ]
+    memo_invalid_mirror_list: list[str] = [
+        # _
+    ]  # noqa: F841
     extend_urls(
         memo_invalid_mirror_list,
         [

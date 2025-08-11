@@ -2131,10 +2131,7 @@ def try_save_configs_to_user_data_dir():
     cwd = os.getcwd()
     appdata_dir = get_appdata_save_dir()
 
-    logger.info(
-        color("bold_yellow")
-        + f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir} (含历史备份)"
-    )
+    logger.info(color("bold_yellow") + f"运行完毕，将尝试同步当前目录的配置文件到 {appdata_dir} (含历史备份)")
     sync_configs(cwd, appdata_dir)
 
     # 为了方便排查问题，在备份目录写入备份信息
@@ -2168,7 +2165,9 @@ def save_multiple_version_config():
     source = os.path.join(cwd, config_file)
     destination = os.path.join(current_backup_dir, config_file)
 
-    logger.debug(f"单独保存多个版本的 {config_file} 到 {config_backup_dir}，可在该目录中找到之前版本的配置文件，方便在意外修改配置且已经同步到备份目录时仍能找回配置")
+    logger.debug(
+        f"单独保存多个版本的 {config_file} 到 {config_backup_dir}，可在该目录中找到之前版本的配置文件，方便在意外修改配置且已经同步到备份目录时仍能找回配置"
+    )
     make_sure_dir_exists(current_backup_dir)
 
     # 备份配置文件

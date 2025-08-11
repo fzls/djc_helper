@@ -1102,11 +1102,15 @@ def clean_dir_to_size(dir_name: str, max_logs_size: int = 1024 * MiB, keep_logs_
 
     hrs = human_readable_size
 
-    get_logger_func(print_res, logger.info)(color("bold_green") + f"尝试清理日志目录({dir_name})，避免日志目录越来越大~")
+    get_logger_func(print_res, logger.info)(
+        color("bold_green") + f"尝试清理日志目录({dir_name})，避免日志目录越来越大~"
+    )
 
     logs_size = get_directory_size(dir_name)
     if logs_size <= max_logs_size:
-        get_logger_func(print_res, logger.info)(f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理")
+        get_logger_func(print_res, logger.info)(
+            f"当前日志目录大小为{hrs(logs_size)}，未超出设定最大值为{hrs(max_logs_size)}，无需清理"
+        )
         return
 
     get_logger_func(print_res, logger.info)(

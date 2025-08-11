@@ -158,93 +158,113 @@ def download_latest_github_release(
 
     urls: list[str] = []
 
-    # 先加入比较快的几个镜像
+    # 可用性较高的镜像
     extend_urls(
         urls,
         [
-            # 9.3MiB/s
-            f"https://cors.isteed.cc/github.com/{release_file_path}",
-            # 8.8MiB/s
+            # 887.3KiB/s
+            f"https://ghfast.top/https://github.com/{release_file_path}",
+            # 419.5KiB/s
+            f"https://git.yylx.win/https://github.com/{release_file_path}",
+            # 1.8MiB/s
+            f"https://ghp.keleyaa.com/https://github.com/{release_file_path}",
+            # 157.6KiB/s
+            f"https://gh.xx9527.cn/https://github.com/{release_file_path}",
+            # # 10054
+            # f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # 360.4KiB/s
             f"https://github.boki.moe/https://github.com/{release_file_path}",
-            # 8.7MiB/s
-            f"https://slink.ltd/https://github.com/{release_file_path}",
-            # 8.0MiB/s
-            f"https://ghproxy.cc/https://github.com/{release_file_path}",
-            # 4.9MiB/s
+            # 228.2KiB/s
             f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # 127.8KiB/s
+            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
+            # 37.2KiB/s
+            f"https://kkgithub.com/{release_file_path}",
+            # 559.2KiB/s
+            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
         ],
     )
 
-    # 最后加入几个慢的镜像和源站
+    # 原始地址
     extend_urls(
         urls,
-        [],
+        [
+            # timeout
+            f"https://github.com/{release_file_path}",
+        ],
     )
 
     # 再保底放入一些可能失效的镜像
     extend_urls(
         urls,
         [
-            # timeout
-            f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
-            # 2.1MiB/s
-            f"https://kkgithub.com/{release_file_path}",
-            # 521
-            f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
-            # 9.7MiB/s
-            f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
-            # timeout
-            f"https://download.ixnic.net/{release_file_path}",
-            # timeout
-            f"https://dgithub.xyz/{release_file_path}",
         ],
     )
 
     # 一些注释掉的已失效的，仅留着备忘
-    _ = memo_invalid_mirror_list = [  # noqa: F841
-        # 588.1KiB/s
-        f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
-        # 12.1B/s
-        f"https://gh.con.sh/https://github.com/{release_file_path}",
-        # 2.8KiB/s
-        f"https://dl.ghpig.top/https://github.com/{release_file_path}",
-        # 1.3KiB/s
-        f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
-        # 441.9B/s
-        f"https://js.xxooo.ml/https://github.com/{release_file_path}",
-        # 1.0KiB/s
-        f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
-        # 502
-        f"https://download.yzuu.cf/{release_file_path}",
-        # NameResolutionError
-        f"https://download.fastgit.org/{release_file_path}",
-        # 429
-        f"https://gh.ddlc.top/https://github.com/{release_file_path}",
-        # NameResolutionError
-        f"https://download.njuu.cf/{release_file_path}",
-        # 502
-        f"https://download.nuaa.cf/{release_file_path}",
-        # 403
-        f"https://ghps.cc/https://github.com/{release_file_path}",
-        # 403
-        f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
-        # NameResolutionError
-        f"https://download.fgit.cf/{release_file_path}",
-        # 502
-        f"https://ghproxy.net/https://github.com/{release_file_path}",
-        # ConnectionResetError
-        f"https://ghproxy.com/https://github.com/{release_file_path}",
-        # NameResolutionError
-        f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
-        # ConnectTimeoutError
-        f"https://github.com/{release_file_path}",
-        # ConnectTimeoutError
-        f"https://kgithub.com/{release_file_path}",
-        # NameResolutionError
-        f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
-        # NameResolutionError
-        f"https://download.fastgit.ixmu.net/{release_file_path}",
+    # note: 每次更新的时候，若可用节点不多了的时候，临时挪到上面的不可达的组里面，看看是否有恢复的
+    memo_invalid_mirror_list = [  # noqa: F841
     ]
+    extend_urls(
+        memo_invalid_mirror_list,
+        [
+            # 11001
+            f"https://slink.ltd/https://github.com/{release_file_path}",
+            # 403
+            f"https://ghproxy.cc/https://github.com/{release_file_path}",
+            # 11001
+            f"https://wget.la/https://github.com/{release_file_path}",
+            # 502
+            f"https://github.ednovas.xyz/https://github.com/{release_file_path}",
+            # handshake
+            f"https://gh.api.99988866.xyz/https://github.com/{release_file_path}",
+            # 无效
+            f"https://gh.con.sh/https://github.com/{release_file_path}",
+            # 无效
+            f"https://dl.ghpig.top/https://github.com/{release_file_path}",
+            # 无效
+            f"https://dl-slb.ghpig.top/https://github.com/{release_file_path}",
+            # 11001
+            f"https://js.xxooo.ml/https://github.com/{release_file_path}",
+            # 无效
+            f"https://gh.gh2233.ml/https://github.com/{release_file_path}",
+            # 502
+            f"https://download.yzuu.cf/{release_file_path}",
+            # 11001
+            f"https://download.fastgit.org/{release_file_path}",
+            # 429
+            f"https://gh.ddlc.top/https://github.com/{release_file_path}",
+            # 11001
+            f"https://download.njuu.cf/{release_file_path}",
+            # timeout
+            f"https://download.nuaa.cf/{release_file_path}",
+            # 无效
+            f"https://ghps.cc/https://github.com/{release_file_path}",
+            # 11001
+            f"https://download.fgit.cf/{release_file_path}",
+            # 502
+            f"https://ghproxy.net/https://github.com/{release_file_path}",
+            # timeout
+            f"https://ghproxy.com/https://github.com/{release_file_path}",
+            # 11001
+            f"https://proxy.zyun.vip/https://github.com/{release_file_path}",
+            # timeout
+            f"https://kgithub.com/{release_file_path}",
+            # 11001
+            f"https://ghdl.feizhuqwq.cf/https://github.com/{release_file_path}",
+            # 11001
+            f"https://download.fastgit.ixmu.net/{release_file_path}",
+            # 无效
+            f"https://mirror.ghproxy.com/https://github.com/{release_file_path}",
+            # timeout
+            f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
+            # 11001
+            f"https://download.ixnic.net/{release_file_path}",
+            # 无效
+            f"https://dgithub.xyz/{release_file_path}",
+        ],
+    )
+    _ = memo_invalid_mirror_list
 
     if TEST_SPEED_MODE:
         logger.info(color("bold_cyan") + "当前全部镜像如下:\n" + "\n".join(urls) + "\n")
@@ -445,5 +465,18 @@ def extract_mirror_site(mirror_download_url: str, *words_to_remove: str) -> str:
 
 
 if __name__ == "__main__":
-    # download_latest_github_release()
+    from config import CommonConfig
+    from update import get_latest_version_from_github
+
+    def get_latest_version() -> str:
+        # 尝试从github获取版本信息
+        cfg = CommonConfig()
+        return get_latest_version_from_github(cfg)
+
+    latest_version = get_latest_version()
+
+    # re: 要测试的话，把这个开关设为 True
+    TEST_SPEED_MODE = False
+
+    # download_latest_github_release(version=latest_version)
     download_github_raw_content("CHANGELOG.MD")

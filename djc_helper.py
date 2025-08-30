@@ -689,6 +689,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("井盖杯挑战赛", self.jinggai_game),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8874,6 +8875,110 @@ class DjcHelper:
 
         return res
 
+    # --------------------------------------------井盖杯挑战赛--------------------------------------------
+    @try_except()
+    def jinggai_game(self):
+        show_head_line("井盖杯挑战赛")
+        self.show_not_ams_act_info("井盖杯挑战赛")
+
+        if not self.cfg.function_switches.get_jinggai_game or self.disable_most_activities():
+            show_act_not_enable_warning("井盖杯挑战赛")
+            return
+
+        def _set_openid_info(lr: LoginResult):
+            self._jinggai_openid_info = {
+                "accType": "qc",
+                "appid": "101491592",
+                "openid": lr.common_openid,
+                "access_token": lr.common_access_token,
+            }
+
+        def _is_login_info_valid(lr: LoginResult) -> bool:
+            _set_openid_info(lr)
+
+            res = self.jinggai_game_op("检查登录信息是否有效", "myVoteInfo", print_res=False)
+
+            # {'result': 1, 'returnCode': -30003, 'returnMsg': '无效的accessToken'}
+            return res["returnCode"] != -30003
+
+        def bind_role():
+            roleinfo = self.get_dnf_bind_role()
+            role_params = {
+                "areaId": roleinfo.serviceID,
+                "areaName": quote_plus(roleinfo.serviceName),
+                "serverId": roleinfo.serviceID,
+                "roleId": roleinfo.roleCode,
+                "roleName": quote_plus(roleinfo.roleName),
+            }
+            self.jinggai_game_op("绑定角色", "bindRoleArea", **role_params)
+
+        # note: 如果不能直接用心悦的登录态，这里只能在qq_login 那边新弄一个登录模式来获取
+        lr = self.fetch_login_result("获取井盖杯挑战赛所需参数", QQLogin.login_mode_jinggai, cache_max_seconds=-1, cache_validate_func=_is_login_info_valid)
+        _set_openid_info(lr)
+
+        bind_role()
+
+        self.jinggai_game_op("签到", "checkin")
+
+        task_list = self.jinggai_game_op("查询任务列表", "taskList", print_res=False)
+        for task in task_list["data"]:
+            title = task["title"]
+            self.jinggai_game_op(f"任务 {title}，完成任务", "taskComplete", taskId=task["id"])
+            self.jinggai_game_op(f"任务 {title}，领取奖励", "taskRewardPickup", taskId=task["id"])
+
+        # 助力
+        vote_info = self.jinggai_game_op("查询助力信息", "myVoteInfo", print_res=False)
+        total, remain = int(vote_info["data"]["voteTotal"]), int(vote_info["data"]["voteRemain"])
+        logger.info(f"当前助力总次数 {total}，剩余助力次数 {remain}")
+        self.jinggai_game_op(f"助力战队 1 - {remain}", "vote", teamId=1, voteNum=remain)
+
+        vote_reward_list = self.jinggai_game_op("查询助力奖励列表", "voteRewardConfig", print_res=False)
+        for vote_reward in vote_reward_list["data"]:
+            voteNum = vote_reward["voteNum"]
+            self.jinggai_game_op(f"助力次数 {voteNum}，领取奖励", "voteRewardPickup", id=vote_reward["id"])
+
+    def jinggai_game_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
+        # re: 每次新活动需要更新下面这俩参数
+        # 活动id，对应参数 activityId
+        activityId = "1018"
+        # 活动的action前缀，对应参数 r 的前半部分
+        activity_action_prefix = "competition"
+
+        action = action_name
+        if action_name != "init":
+            # 加上统一的前缀
+            action = f"{activity_action_prefix}/{action_name}"
+
+            # 该类型每个请求之间间隔一定时长
+            time.sleep(1)
+
+        roleinfo = self.get_dnf_bind_role()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        # fmt: off
+        data = {
+            "r": quote_plus(action),
+            "activityId": activityId,
+
+            **extra_params,
+
+            "source": "qq",
+            # "from": "tpl",
+            "cCurrentGameId": "10014",
+
+            **self._jinggai_openid_info,
+        }
+        # fmt: on
+
+        res = self.post(
+            ctx,
+            self.format(self.urls.jinggai_game_api, api=action_name),
+            data=post_json_to_data(data),
+            print_res=print_res,
+        )
+
+        return res
+
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
     def dnf_recall_guide(self):
@@ -10244,6 +10349,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.vp_challenge()
+        djcHelper.jinggai_game()
 
     pause()

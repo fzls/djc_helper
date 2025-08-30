@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-07-24 00:00:00", "2025-08-20 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-08-07 10:00:00", "2025-09-11 10:00:00", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
     #
     # 已过期活动
     #
@@ -120,6 +121,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/summer-act/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250807index/",
+    "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
     #
     # 已过期活动
     #
@@ -466,6 +468,9 @@ class Urls:
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
         # 助手限定活动
         self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
+
+        # 井盖杯挑战赛
+        self.jinggai_game_api = "https://dzhu.qq.com/zangyi/share/act?a={api}"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

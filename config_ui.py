@@ -3054,6 +3054,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("井盖杯挑战赛", "get_jinggai_game"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

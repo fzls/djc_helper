@@ -64,6 +64,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-07-24 00:00:00", "2025-08-20 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-08-07 10:00:00", "2025-09-11 10:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
+    newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
     #
     # 已过期活动
     #
@@ -122,6 +123,7 @@ act_name_to_url = {
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/summer-act/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250807index/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
+    "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
     #
     # 已过期活动
     #
@@ -260,7 +262,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay", "iNum", "hour", "week", "points", "taskId",
+            "sDay", "iNum", "hour", "week", "points", "taskId", "workId",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -341,6 +343,7 @@ class Urls:
         self.ide_iActivityId_dnf_challenge_world_record = "70_gzIaCC"  # 挑战世界记录
         self.ide_iActivityId_vp_challenge = "65_6beKBQ"  # vp挑战赛
         self.ide_iActivityId_dnf_bind_phone = "3_Rsi2sk"  # 绑定手机活动
+        self.ide_iActivityId_dnf_help_child = "9_TW3yAu"  # DNF久久公益节
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

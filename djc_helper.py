@@ -690,6 +690,7 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("井盖杯挑战赛", self.jinggai_game),
+            ("DNF久久公益节", self.dnf_help_child),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8885,22 +8886,6 @@ class DjcHelper:
             show_act_not_enable_warning("井盖杯挑战赛")
             return
 
-        def _set_openid_info(lr: LoginResult):
-            self._jinggai_openid_info = {
-                "accType": "qc",
-                "appid": "101491592",
-                "openid": lr.common_openid,
-                "access_token": lr.common_access_token,
-            }
-
-        def _is_login_info_valid(lr: LoginResult) -> bool:
-            _set_openid_info(lr)
-
-            res = self.jinggai_game_op("检查登录信息是否有效", "myVoteInfo", print_res=False)
-
-            # {'result': 1, 'returnCode': -30003, 'returnMsg': '无效的accessToken'}
-            return res["returnCode"] != -30003
-
         def bind_role():
             roleinfo = self.get_dnf_bind_role()
             role_params = {
@@ -8912,9 +8897,8 @@ class DjcHelper:
             }
             self.jinggai_game_op("绑定角色", "bindRoleArea", **role_params)
 
-        # note: 如果不能直接用心悦的登录态，这里只能在qq_login 那边新弄一个登录模式来获取
-        lr = self.fetch_login_result("获取井盖杯挑战赛所需参数", QQLogin.login_mode_jinggai, cache_max_seconds=-1, cache_validate_func=_is_login_info_valid)
-        _set_openid_info(lr)
+        lr = self.prepare_jinggai_openid_info()
+        self.set_jinggai_openid_info(lr)
 
         bind_role()
 
@@ -8930,12 +8914,34 @@ class DjcHelper:
         vote_info = self.jinggai_game_op("查询助力信息", "myVoteInfo", print_res=False)
         total, remain = int(vote_info["data"]["voteTotal"]), int(vote_info["data"]["voteRemain"])
         logger.info(f"当前助力总次数 {total}，剩余助力次数 {remain}")
-        self.jinggai_game_op(f"助力战队 1 - {remain}", "vote", teamId=1, voteNum=remain)
+        if remain > 0:
+            self.jinggai_game_op(f"助力战队 1 - {remain}", "vote", teamId=1, voteNum=remain)
 
         vote_reward_list = self.jinggai_game_op("查询助力奖励列表", "voteRewardConfig", print_res=False)
         for vote_reward in vote_reward_list["data"]:
             voteNum = vote_reward["voteNum"]
             self.jinggai_game_op(f"助力次数 {voteNum}，领取奖励", "voteRewardPickup", id=vote_reward["id"])
+
+    def prepare_jinggai_openid_info(self) -> LoginResult:
+        def _is_login_info_valid(lr: LoginResult) -> bool:
+            self.set_jinggai_openid_info(lr)
+
+            res = self.jinggai_game_op("检查登录信息是否有效", "myVoteInfo", print_res=False)
+
+            # {'result': 1, 'returnCode': -30003, 'returnMsg': '无效的accessToken'}
+            return res["returnCode"] != -30003
+
+        # note: 如果不能直接用心悦的登录态，这里只能在qq_login 那边新弄一个登录模式来获取
+        lr = self.fetch_login_result("获取井盖杯挑战赛所需参数", QQLogin.login_mode_jinggai, cache_max_seconds=-1, cache_validate_func=_is_login_info_valid)
+        return lr
+
+    def set_jinggai_openid_info(self, lr: LoginResult):
+        self._jinggai_openid_info = {
+            "accType": "qc",
+            "appid": "101491592",
+            "openid": lr.common_openid,
+            "access_token": lr.common_access_token,
+        }
 
     def jinggai_game_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
@@ -8978,6 +8984,71 @@ class DjcHelper:
         )
 
         return res
+
+    # --------------------------------------------DNF久久公益节--------------------------------------------
+    @try_except()
+    def dnf_help_child(self):
+        show_head_line("DNF久久公益节")
+        self.show_not_ams_act_info("DNF久久公益节")
+
+        if not self.cfg.function_switches.get_dnf_help_child or self.disable_most_activities():
+            show_act_not_enable_warning("DNF久久公益节")
+            return
+
+        self.check_dnf_help_child()
+
+        lr = self.prepare_jinggai_openid_info()
+        appid = "101491592"
+        openid = lr.common_openid
+        access_token = lr.common_access_token
+
+        extra_cookies = "; ".join(
+            [
+                "acctype=qc",
+                f"appid={appid}",
+                f"openid={openid}",
+                f"access_token={access_token}",
+            ]
+        )
+
+        self.dnf_help_child_op("点亮全部画作", "433462", workId=0)
+
+        self.dnf_help_child_op("助力爱心值", "430232", extra_cookies=extra_cookies)
+
+        async_message_box(
+            "DNF久久公益节活动页面（需手机打开）可自行选择捐赠1元给公益机构来帮助乡村孩子，可获得3个土罐+20点疲劳+20个雷米~",
+            f"久久公益节",
+            open_url=get_act_url("DNF久久公益节"),
+            show_once=True,
+        )
+
+    def check_dnf_help_child(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF久久公益节",
+            get_act_url("DNF久久公益节"),
+            activity_op_func=self.dnf_help_child_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_help_child_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_help_child
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF久久公益节"),
+            **extra_params,
+        )
 
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
@@ -10349,6 +10420,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.jinggai_game()
+        djcHelper.dnf_help_child()
 
     pause()

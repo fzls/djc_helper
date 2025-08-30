@@ -1515,6 +1515,13 @@ def show_tips(cfg: Config):
             "微信游戏圈有个每日抽奖和累计签到活动，可在微信游戏圈打开DNF，切换到最右侧两个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/a20250807index/ewm-box1.png"
         ),
+        "25.8 colg答题活动": (
+            "colg新出了个答题活动，在不同时间全答对可以领取下方三档奖励\n"
+            "基本就是点击左边的去首页按钮，然后搜索题目中的关键词就能找到答案，比如说【常用工具处第2个图标是什么？】就搜索【常用工具】，就能快速在首页定位到相关模块，确认答案，基本一轮就能在4分钟中完成，领完奖励\n"
+            "有兴趣的朋友请自行参与~\n"
+            "\n"
+            "https://hub.bbs.colg.cn/activity/tour-guide/index.html"
+        ),
     }
 
     logger.info(

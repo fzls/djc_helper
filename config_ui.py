@@ -3052,7 +3052,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF福利中心兑换", "get_dnf_welfare"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("绑定手机活动", "get_dnf_bind_phone"),
-            ("助手限定活动", "get_dnf_helper_limit_act"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("井盖杯挑战赛", "get_jinggai_game"),
             ("DNF久久公益节", "get_dnf_help_child"),
@@ -3066,6 +3065,7 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("助手限定活动", "get_dnf_helper_limit_act"),
             ("vp挑战赛", "get_vp_challenge"),
             ("colg其他活动", "get_colg_other_act"),
             ("回流引导秘籍", "get_dnf_recall_guide"),

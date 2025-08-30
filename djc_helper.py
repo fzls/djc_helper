@@ -8932,7 +8932,12 @@ class DjcHelper:
             return res["returnCode"] != -30003
 
         # note: 如果不能直接用心悦的登录态，这里只能在qq_login 那边新弄一个登录模式来获取
-        lr = self.fetch_login_result("获取井盖杯挑战赛所需参数", QQLogin.login_mode_jinggai, cache_max_seconds=-1, cache_validate_func=_is_login_info_valid)
+        lr = self.fetch_login_result(
+            "获取井盖杯挑战赛所需参数",
+            QQLogin.login_mode_jinggai,
+            cache_max_seconds=-1,
+            cache_validate_func=_is_login_info_valid,
+        )
         return lr
 
     def set_jinggai_openid_info(self, lr: LoginResult):
@@ -8957,9 +8962,6 @@ class DjcHelper:
 
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
-
-        roleinfo = self.get_dnf_bind_role()
-        dnf_helper_info = self.cfg.dnf_helper_info
 
         # fmt: off
         data = {
@@ -9017,7 +9019,7 @@ class DjcHelper:
 
         async_message_box(
             "DNF久久公益节活动页面（需手机打开）可自行选择捐赠1元给公益机构来帮助乡村孩子，可获得3个土罐+20点疲劳+20个雷米~",
-            f"久久公益节",
+            "久久公益节",
             open_url=get_act_url("DNF久久公益节"),
             show_once=True,
         )

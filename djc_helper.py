@@ -4960,11 +4960,8 @@ class DjcHelper:
         shareCodeList = db.share_code_list
 
         sContents = [
-            "全职业技能进化",
-            "17周年上线领神器天空",
-            "渝勇士一起出发",
-            "一起给世界点颜色看看",
-            "DNF17周年生日快乐",
+            "9月11日挑战雾岚黄昏战",
+            "9月11日全新深渊来袭",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]
@@ -10422,6 +10419,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.dnf_welfare()
 
     pause()

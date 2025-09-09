@@ -1522,6 +1522,12 @@ def show_tips(cfg: Config):
             "\n"
             "https://hub.bbs.colg.cn/activity/tour-guide/index.html"
         ),
+        "25.9 雾岚黄昏战团本引导": (
+            "完成新团本答题活动可以获得30天黑钻，有兴趣的朋友可以按下面的流程自行操作\n"
+            "打开下面这个活动页面，登录并绑定角色，看视频答完题后，就可以领取到\n"
+            "对新团本机制感兴趣可以仔细看看。懒得看的话，无脑选没选过得，总有一个是对的，边玩手机边弄就好啦\n"
+            "https://dnf.qq.com/cp/a20250911drill/index.html"
+        ),
     }
 
     logger.info(

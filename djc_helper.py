@@ -692,6 +692,7 @@ class DjcHelper:
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -707,7 +708,6 @@ class DjcHelper:
             ("start云游戏", self.dnf_cloud_game),
             ("周年庆网吧集结", self.dnf_netbar),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("新职业预约活动", self.dnf_reserve),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
@@ -7359,45 +7359,43 @@ class DjcHelper:
 
         self.check_dnf_wegame_ide()
 
-        def query_info() -> tuple[int, int]:
-            res = self.dnf_wegame_ide_op("初始化", "405210", print_res=False)
+        def query_info() -> int:
+            res = self.dnf_wegame_ide_op("初始化", "439850", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
-            lottery_count = int(raw_info["syGiftAvailable"])
+            lottery_count = int(raw_info["jBox"])
 
-            # 剩余色彩
-            color_count = int(raw_info["colorUsedInfo"]["ticket"])
+            return lottery_count
 
-            return lottery_count, color_count
+        self.dnf_wegame_ide_op("秋枫限定礼包", "439970")
+        self.dnf_wegame_ide_op("全民参与礼包", "439969")
 
-        self.dnf_wegame_ide_op("领取全民礼包", "403941")
-        self.dnf_wegame_ide_op("领取幸运礼包", "403948")
+        self.dnf_wegame_ide_op("每周副本宝箱", "441242")
 
-        self.dnf_wegame_ide_op("增加深渊礼盒抽奖次数", "404441")
-        self.dnf_wegame_ide_op("登录领取深渊抽奖次数", "404483")
-
-        lottery_count, _ = query_info()
+        lottery_count = query_info()
         logger.info(f"当前的抽奖次数为 {lottery_count}")
         for idx in range_from_one(lottery_count):
-            self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}次深渊礼盒抽奖", "404116")
+            self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}开启宝箱", "441025")
             time.sleep(3)
 
-        for idx in range_from_one(3):
-            self.dnf_wegame_ide_op(f"添彩任务 - {idx}", "404788", index=idx)
-            time.sleep(3)
+        self.dnf_wegame_ide_op("每日任务一", "439985")
+        self.dnf_wegame_ide_op("每日任务二", "439987")
+        self.dnf_wegame_ide_op("每日任务三", "439986")
+        self.dnf_wegame_ide_op("每周任务一", "441180")
 
-        self.dnf_wegame_ide_op("每周添彩任务", "407895")
+        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取灿烂徽章-48积分", "439990", iPackageIndex=11)
 
-        _, color_count = query_info()
-        logger.info(f"当前的色彩数目为 {color_count}")
-        for idx in range_from_one(color_count):
-            self.dnf_wegame_ide_op(f"{idx}/{color_count} 填充色彩", "404864")
-            time.sleep(3)
 
-        for zero_based_idx in range(5):
-            self.dnf_wegame_ide_op(f"领取色彩礼包 - {zero_based_idx}", "404969", index=zero_based_idx)
-            time.sleep(3)
+        act_config = get_not_ams_act("WeGame活动")
+        if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
+            async_message_box(
+                "wegame活动即将结束，请在点击确认后弹出的活动页面中自行在最下方兑换剩余的积分（小助手只会尝试帮你领取灿烂自选）",
+                "WeGame活动积分兑换提示-25.9",
+                show_once_daily=True,
+                open_url=get_act_url("WeGame活动"),
+            )
+
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(
@@ -10430,6 +10428,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_wegame()
 
     pause()

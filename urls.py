@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
     newNotAmsActInfo("2025-09-11 10:00:00", "2025-10-15 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
@@ -76,7 +77,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-07-30 23:59:59", "助手魔界人每日幸运签"),
@@ -124,6 +124,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/a20250911wegame/index.html",
     #
     # 已过期活动
     #
@@ -136,7 +137,6 @@ act_name_to_url = {
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
-    "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
@@ -262,7 +262,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay", "iNum", "hour", "week", "points", "taskId", "workId",
+            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -328,7 +328,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
-        self.ide_iActivityId_dnf_wegame = "5_BkxPRF"  # WeGame活动
+        self.ide_iActivityId_dnf_wegame = "26_NqF1p7"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿

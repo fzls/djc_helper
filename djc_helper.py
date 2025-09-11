@@ -6460,13 +6460,13 @@ class DjcHelper:
         #     open_url=get_act_url("DNF落地页活动_ide"),
         # )
 
-        # # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
-        # async_message_box(
-        #     "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励",
-        #     "25.6 落地页拉回归活动",
-        #     show_once=True,
-        #     open_url=get_act_url("DNF落地页活动_ide"),
-        # )
+        # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
+        async_message_box(
+            "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励（道具或者现金红包）。有兴趣的朋友请自行完成",
+            "25.9 落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动_ide"),
+        )
 
     def check_dnf_luodiye_ide(self, **extra_params):
         return self.ide_check_bind_account(

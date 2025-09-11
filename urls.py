@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 21:59:59", "超级会员"),
     #
     # 已过期活动
     #
@@ -77,7 +78,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
-    newNotAmsActInfo("2025-04-24 00:00:00", "2025-07-11 21:59:59", "超级会员"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-07-30 23:59:59", "助手魔界人每日幸运签"),
     newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
@@ -122,6 +122,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     #
     # 已过期活动
     #
@@ -137,7 +138,6 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250612wegame/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
-    "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53130_a5314717",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",

@@ -689,6 +689,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
             ("colg每日签到", self.colg_signin),
+            ("超级会员", self.dnf_super_vip),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -708,7 +709,6 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("DNF周年庆登录活动", self.dnf_anniversary),
-            ("超级会员", self.dnf_super_vip),
             ("新职业预约活动", self.dnf_reserve),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("幸运色卡", self.dnf_color),
@@ -2652,7 +2652,7 @@ class DjcHelper:
         if self.lr is None:
             return
 
-        lucky_act_id = "129976_1c8f6f0b"
+        lucky_act_id = "134840_53df1a85"
         self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
         self.qzone_act_op(
             "幸运勇士礼包 - 集卡幸运角色",
@@ -2662,7 +2662,7 @@ class DjcHelper:
             ),
         )
 
-        self.qzone_act_op("勇士见面礼", "129977_67b59c71")
+        self.qzone_act_op("勇士见面礼", "134841_acddf313")
 
         # self.qzone_act_op("签到", "116134_6d26254f")
         # self.qzone_act_op("累计签到1天", "116130_5fa5d050")
@@ -2670,34 +2670,34 @@ class DjcHelper:
         # self.qzone_act_op("累计签到7天", "116132_ec305918")
         # self.qzone_act_op("累计签到14天", "116133_5ffc64db")
 
-        # note: 有时候会有同时有效的两个会员活动
-        # https://act.qzone.qq.com/v2/vip/tx/p/53130_a5314717?traceTint=tianxuan_copy
-        lucky_act_id = "132654_f7ea6f90"
-        self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
-        self.qzone_act_op(
-            "幸运勇士礼包 - 集卡幸运角色",
-            lucky_act_id,
-            act_req_data=self.try_make_lucky_user_req_data(
-                "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
-            ),
-        )
-
-        self.qzone_act_op("勇士见面礼", "132655_c1912220")
-        # if not self.cfg.function_switches.disable_share and is_first_run(
-        #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
-        # ):
-        #     self.qzone_act_op(
-        #         "分享给自己",
-        #         "119257_dd20e826",
-        #         act_req_data={
-        #             "receivers": [
-        #                 self.qq(),
-        #             ]
-        #         },
-        #     )
+        # # note: 有时候会有同时有效的两个会员活动
+        # # https://act.qzone.qq.com/v2/vip/tx/p/53130_a5314717?traceTint=tianxuan_copy
+        # lucky_act_id = "132654_f7ea6f90"
+        # self.qzone_act_op("幸运勇士礼包 - 当前角色", lucky_act_id)
+        # self.qzone_act_op(
+        #     "幸运勇士礼包 - 集卡幸运角色",
+        #     lucky_act_id,
+        #     act_req_data=self.try_make_lucky_user_req_data(
+        #         "集卡", self.cfg.ark_lottery.lucky_dnf_server_id, self.cfg.ark_lottery.lucky_dnf_role_id
+        #     ),
+        # )
         #
-        # self.qzone_act_op("专属红包礼", "119258_dbd6d1c0")
-        # self.qzone_act_op("分享领取礼包", "119306_94a1c801")
+        # self.qzone_act_op("勇士见面礼", "132655_c1912220")
+        # # if not self.cfg.function_switches.disable_share and is_first_run(
+        # #     f"dnf_super_vip_{get_act_url('超级会员')}_分享_{self.uin()}"
+        # # ):
+        # #     self.qzone_act_op(
+        # #         "分享给自己",
+        # #         "119257_dd20e826",
+        # #         act_req_data={
+        # #             "receivers": [
+        # #                 self.qq(),
+        # #             ]
+        # #         },
+        # #     )
+        # #
+        # # self.qzone_act_op("专属红包礼", "119258_dbd6d1c0")
+        # # self.qzone_act_op("分享领取礼包", "119306_94a1c801")
 
     # --------------------------------------------QQ空间 新版 集卡--------------------------------------------
 
@@ -10419,6 +10419,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_super_vip()
 
     pause()

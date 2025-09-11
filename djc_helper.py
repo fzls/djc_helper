@@ -690,6 +690,7 @@ class DjcHelper:
             ("井盖杯挑战赛", self.jinggai_game),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -698,7 +699,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("DNF久久公益节", self.dnf_help_child),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("vp挑战赛", self.vp_challenge),
             ("colg其他活动", self.colg_other_act),
@@ -6359,7 +6359,7 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "428957", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "441315", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
@@ -6373,26 +6373,37 @@ class DjcHelper:
         def try_daily_signin():
             # self.dnf_luodiye_ide_op("获取补签次数", "358778")
 
-            first_day_date = parse_time("2025-06-12 00:00:00")
+            first_day_date = parse_time("2025-09-11 00:00:00")
             now = get_now()
             row_count = 5
             col_count = 7
 
+            # 先尝试签到今天的
+            today_index = (now - first_day_date).days
+            if today_index < row_count * col_count:
+                self.dnf_luodiye_ide_op(f"今日签到 - {now}", "441321", iIndex=today_index)
+                time.sleep(2)
+
+            # 然后尝试把之前的都签到一遍
             for row in range(row_count):
                 for col in range(col_count):
                     iIndex = row * col_count + col
                     sign_day_date = first_day_date + datetime.timedelta(days=iIndex)
+                    if iIndex == today_index:
+                        # 今日之前已经处理过了，跳过这个
+                        continue
                     if now < sign_day_date:
                         logger.warning(f"目前是{now}，还未到{sign_day_date}，将跳过尝试该天及后续天数的签到")
                         return
 
-                    self.dnf_luodiye_ide_op(f"每日签到 - {sign_day_date}", "407035", iIndex=iIndex)
+                    self.dnf_luodiye_ide_op(f"尝试之前每日签到 - {sign_day_date}", "441321", iIndex=iIndex)
+                    time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("盛夏礼包", "428976")
+        self.dnf_luodiye_ide_op("庆典礼包", "441320")
 
-        # try_daily_signin()
-        self.dnf_luodiye_ide_op("每日签到", "428995")
+        try_daily_signin()
+        # self.dnf_luodiye_ide_op("每日签到", "441321")
 
         login_gifts_list = [
             (0, 3),
@@ -6407,16 +6418,16 @@ class DjcHelper:
         for gift_index, require_login_days in login_gifts_list:
             if iLoginTotal >= require_login_days:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "428997", iIndex=gift_index
+                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "441323", iIndex=gift_index
                 )
             else:
                 logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
 
         tasks = [
-            ("每日任务一", "428999"),
-            ("每日任务二", "428998"),
-            ("每周任务一", "429001"),
-            ("每周任务二", "429003"),
+            ("每日任务一", "441324"),
+            ("每日任务二", "441325"),
+            ("每周任务一", "441326"),
+            ("每周任务二", "441327"),
         ]
         for name, flowid in tasks:
             self.dnf_luodiye_ide_op(name, flowid)
@@ -6436,7 +6447,7 @@ class DjcHelper:
         iLottery, _ = query_info()
         logger.info(f"当前抽奖次数为 {iLottery}")
         for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "429010")
+            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "441328")
             _ = res
             # if res["ret"] == 10001:
             #     break
@@ -10419,6 +10430,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_super_vip()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

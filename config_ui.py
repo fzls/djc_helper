@@ -3050,13 +3050,13 @@ class FunctionSwitchesConfigUi(QWidget):
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("井盖杯挑战赛", "get_jinggai_game"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("WeGame活动", "get_dnf_wegame"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

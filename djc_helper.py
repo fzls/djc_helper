@@ -693,6 +693,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -707,7 +708,6 @@ class DjcHelper:
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("start云游戏", self.dnf_cloud_game),
             ("周年庆网吧集结", self.dnf_netbar),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("新职业预约活动", self.dnf_reserve),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
@@ -8122,7 +8122,7 @@ class DjcHelper:
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         def query_lottery_ticket() -> int:
-            res = self.dnf_xinyue_wpe_op("查询抽奖券", 320649)
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 355934)
             data = json.loads(res["data"])
 
             remain = data.get("limit", 0)
@@ -8137,23 +8137,23 @@ class DjcHelper:
 
             return total
 
-        self.dnf_xinyue_wpe_op("周年庆盛典礼", 320635)
-        self.dnf_xinyue_wpe_op("周年庆盛典充值礼", 320648)
+        self.dnf_xinyue_wpe_op("全民登录礼", 354897)
+        self.dnf_xinyue_wpe_op("全民充值礼", 354898)
 
-        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 320893)
-        self.dnf_xinyue_wpe_op("幸运勇士礼", 320891)
+        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 354906)
+        self.dnf_xinyue_wpe_op("幸运勇士礼", 354904)
 
-        self.dnf_xinyue_wpe_op("每日任务-登录", 320895)
-        self.dnf_xinyue_wpe_op("每充值50元", 320897)
-        self.dnf_xinyue_wpe_op("每日任务-在线30分钟", 320898)
-        self.dnf_xinyue_wpe_op("每日任务-累计消耗156疲劳", 320899)
-        self.dnf_xinyue_wpe_op("每日任务-邀请3位好友", 320977)
-        self.dnf_xinyue_wpe_op("每日任务-通关深渊2次", 320978)
+        self.dnf_xinyue_wpe_op("每日任务-登录", 354910)
+        self.dnf_xinyue_wpe_op("每充值50元", 354909)
+        self.dnf_xinyue_wpe_op("每日任务-累计消耗156疲劳", 354911)
+        self.dnf_xinyue_wpe_op("每日任务-邀请3位好友", 354914)
+        self.dnf_xinyue_wpe_op("每周任务-通关新深渊2次", 354915)
+        self.dnf_xinyue_wpe_op("每周任务-通关新团本1次", 355217)
 
         lottery_count = query_lottery_ticket()
         logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
         for idx in range_from_one(lottery_count):
-            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 320650)
+            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 355180)
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -8198,7 +8198,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "23519"
+        act_id = "24955"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -10428,6 +10428,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

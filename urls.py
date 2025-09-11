@@ -67,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-09-11 10:00:00", "2025-10-15 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "DNF心悦wpe"),
     #
     # 已过期活动
     #
@@ -76,7 +77,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
-    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-07-30 23:59:59", "助手魔界人每日幸运签"),
@@ -125,6 +125,7 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250911wegame/index.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a70a7128c440744799af86c0482b7de48/index.html?via=dnfzs&actVersion=405249",
     #
     # 已过期活动
     #
@@ -136,7 +137,6 @@ act_name_to_url = {
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20250606dnfyear/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",

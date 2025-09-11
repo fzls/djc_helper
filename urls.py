@@ -62,6 +62,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
     #
     # 已过期活动
     #
@@ -71,7 +72,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-07 11:00:00", "2025-07-31 23:59:59", "回流引导秘籍"),
-    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-30 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-11 23:59:59", "DNF心悦wpe"),
@@ -121,6 +121,7 @@ act_name_to_url = {
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     #
     # 已过期活动
     #
@@ -130,7 +131,6 @@ act_name_to_url = {
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",

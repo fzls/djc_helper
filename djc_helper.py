@@ -688,6 +688,7 @@ class DjcHelper:
             ("DNF福利中心兑换", self.dnf_welfare),
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
             ("vp挑战赛", self.vp_challenge),
             ("colg其他活动", self.colg_other_act),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("colg每日签到", self.colg_signin),
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("start云游戏", self.dnf_cloud_game),
             ("周年庆网吧集结", self.dnf_netbar),
@@ -5873,7 +5873,7 @@ class DjcHelper:
         # 当兑换币足够时，尝试兑换限量兑换的奖励。其余奖励等最后几天弹窗自行领取
         product_list = query_mall_product_list()
         for product in product_list.list:
-            if "黑钻" in product.title or int(product.cm_token_num) >= 12:
+            if "黑钻" in product.title or int(product.cm_token_num) >= 22:
                 logger.info(f"{product.title} 是限量奖励，尝试进行兑换")
 
                 if product.status == 1 and info.conversion >= int(product.cm_token_num):
@@ -10419,6 +10419,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_help_child()
+        djcHelper.colg_signin()
 
     pause()

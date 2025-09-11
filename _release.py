@@ -102,9 +102,6 @@ def release():
 
     realpath = os.path.realpath
 
-    # 先清理掉旧版本的增量更新文件
-    remove_file_startswith_prefix("/", "DNF蚊子腿小助手_增量更新文件_")
-
     shutil.rmtree(dir_upload_files, ignore_errors=True)
     os.mkdir(dir_upload_files)
 
@@ -127,6 +124,9 @@ def release():
         backup_filepath = os.path.join(dir_upload_files, os.path.basename(local_filepath))
         shutil.copy2(local_filepath, backup_filepath)
         logger.warning(f"预先复制到{backup_filepath}，方便出错时手动上传")
+
+    # 先清理掉旧版本的增量更新文件
+    remove_file_startswith_prefix("/", "DNF蚊子腿小助手_增量更新文件_")
 
     for local_filepath, history_file_prefix in reversed(upload_list):
         total_try_count = 3

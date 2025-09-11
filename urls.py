@@ -61,12 +61,12 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
-    newNotAmsActInfo("2025-08-07 10:00:00", "2025-09-11 10:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
-    newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
+    newNotAmsActInfo("2025-08-07 10:00:00", "2025-09-11 10:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-07-24 00:00:00", "2025-08-20 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
@@ -120,12 +120,12 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250807index/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
-    "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
     #
     # 已过期活动
     #
+    "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/a20250807index/",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/summer-act/",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",

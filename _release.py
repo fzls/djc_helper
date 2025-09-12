@@ -20,10 +20,12 @@ from util import (
     pause_and_exit,
     range_from_one,
     show_head_line,
+    try_except,
 )
 from version import now_version
 
 
+@try_except()
 def release():
     # ---------------准备工作
     prompt = f"如需直接使用默认版本号：{now_version} 请直接按回车\n或手动输入版本号后按回车："

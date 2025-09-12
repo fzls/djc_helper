@@ -7386,7 +7386,6 @@ class DjcHelper:
 
         self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取灿烂徽章-48积分", "439990", iPackageIndex=11)
 
-
         act_config = get_not_ams_act("WeGame活动")
         if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
             async_message_box(
@@ -7395,7 +7394,6 @@ class DjcHelper:
                 show_once_daily=True,
                 open_url=get_act_url("WeGame活动"),
             )
-
 
     def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
         self.check_bind_account(

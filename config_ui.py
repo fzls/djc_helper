@@ -1092,6 +1092,10 @@ class ConfigUi(QFrame):
         webbrowser.open(cfg.pay_by_month_purchase_url)
         increase_counter(ga_category="open_pay_webpage", name="pay_buy_month")
 
+    # 付款完毕后快速点那个按钮的区域，会再次触发支付逻辑，弹出奇怪的“无效的QQ：”提示，这里特判下这种情况，从而在支付时遇到这种情况不弹提示直接返回
+    def maybe_quick_click_after_pay(self, qq: str, game_qqs: list[str], recommender_qq) -> bool:
+        return getattr(self, "has_click_pay_btn", False) and (qq == "" and len(game_qqs) == 0 and recommender_qq == "")
+
     def pay_by_card_and_secret(self, checked=False):
         card = self.lineedit_card.text().strip()
         secret = self.lineedit_secret.text().strip()
@@ -1103,7 +1107,8 @@ class ConfigUi(QFrame):
 
         msg = self.check_pay_params(card, secret, qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
-            show_message("出错了", msg)
+            if not self.maybe_quick_click_after_pay(qq, game_qqs, recommender_qq):
+                show_message("出错了", msg)
             return
 
         ret = show_confirm_message_box(
@@ -1125,6 +1130,8 @@ class ConfigUi(QFrame):
 
         if not self.check_pay_server():
             return
+
+        self.has_click_pay_btn = True
 
         try:
             self.do_pay_request(card, secret, qq, game_qqs, recommender_qq)
@@ -1229,7 +1236,8 @@ class ConfigUi(QFrame):
 
         msg = self.check_qqs(qq, game_qqs, recommender_qq)
         if msg != CHECK_RESULT_OK:
-            show_message("出错了", msg)
+            if not self.maybe_quick_click_after_pay(qq, game_qqs, recommender_qq):
+                show_message("出错了", msg)
             return
 
         ret = show_confirm_message_box(
@@ -1258,6 +1266,8 @@ class ConfigUi(QFrame):
 
         if not self.check_pay_server():
             return
+
+        self.has_click_pay_btn = True
 
         try:
             self.do_pay_directly_request(item_name, pay_type, qq, game_qqs, recommender_qq)

@@ -1760,10 +1760,17 @@ class CommonConfigUi(QFrame):
         self.checkbox_enable_super_fast_mode = create_checkbox(cfg.enable_super_fast_mode)
         add_row(form_layout, "是否启用超快速模式（并行活动）", self.checkbox_enable_super_fast_mode)
 
-        self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-1)
+        self.spinbox_multiprocessing_pool_size = create_spin_box(cfg.multiprocessing_pool_size, minimum=-3)
         add_row(
             form_layout,
-            "进程池大小(0=cpu核心数,-1=当前账号数(普通)/4*cpu(超快速),其他=进程数)",
+            (
+                "进程池大小"
+                "\n       0 = cpu核心数"
+                "\n      -1 = cpu核心数的1/2"
+                "\n      -2 = cpu核心数的1/4"
+                "\n      -3 = 普通模式：当前账号数； 超快速模式：4*cpu核心数"
+                "\n正整数 = 进程数"
+            ),
             self.spinbox_multiprocessing_pool_size,
         )
 

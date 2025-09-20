@@ -1340,7 +1340,12 @@ class CommonConfig(ConfigInterface):
         self.enable_multiprocessing = True
         # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。
         self.enable_super_fast_mode = True
-        # 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
+        # 进程池大小
+        #     0 = cpu核心数
+        #    -1 = cpu核心数的1/2
+        #    -2 = cpu核心数的1/4
+        #    -3 = 普通模式：当前账号数； 超快速模式：4*cpu核心数
+        # 正整数 = 进程数
         self.multiprocessing_pool_size = -1
         # 是否启用多进程登录功能，如果分不清哪个号在登录，请关闭该选项
         self.enable_multiprocessing_login = True
@@ -1575,12 +1580,20 @@ class Config(ConfigInterface):
 
         final_pool_size = 0
 
+        # 进程池大小
+        #     0 = cpu核心数
+        #    -1 = cpu核心数的1/2
+        #    -2 = cpu核心数的1/4
+        #    -3 = 普通模式：当前账号数； 超快速模式：4*cpu核心数
+        # 正整数 = 进程数
         pool_size = self.common.multiprocessing_pool_size
         if pool_size == 0:
-            # 若为0，则默认为当前cpu核心数
             final_pool_size = cpu_count()
         elif pool_size == -1:
-            # 若为-1，则在未开启超快速模式时为当前账号数，开启时为4*当前cpu核心数
+            final_pool_size = max(cpu_count() // 2, 1)
+        elif pool_size == -2:
+            final_pool_size = max(cpu_count() // 4, 1)
+        elif pool_size == -3:
             if self.common.enable_super_fast_mode:
                 final_pool_size = 4 * cpu_count()
             else:

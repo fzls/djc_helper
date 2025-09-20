@@ -22,7 +22,12 @@ enable_min_console = false
 enable_multiprocessing = true
 # 是否启用超快速模式，若开启，则将并行运行所有账号的所有活动。仅在多进程功能启用或仅单个账号时生效。
 enable_super_fast_mode = true
-# 进程池大小，若为0，则默认为当前cpu核心数，若为-1，则默认为当前账号数
+# 进程池大小
+#     0 = cpu核心数
+#    -1 = cpu核心数的1/2
+#    -2 = cpu核心数的1/4
+#    -3 = 普通模式：当前账号数； 超快速模式：4*cpu核心数
+# 正整数 = 进程数
 multiprocessing_pool_size = -1
 # 是否启用多进程登录功能，如果分不清哪个号在登录，请关闭该选项
 enable_multiprocessing_login = true

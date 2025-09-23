@@ -687,7 +687,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("井盖杯挑战赛", self.jinggai_game),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
@@ -701,6 +700,7 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("井盖杯挑战赛", self.jinggai_game),
             ("DNF久久公益节", self.dnf_help_child),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("vp挑战赛", self.vp_challenge),
@@ -10426,6 +10426,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.jinggai_game()
 
     pause()

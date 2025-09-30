@@ -478,5 +478,15 @@
     "open_url": "",
     "expire_at": "2025-06-04 09:59:13",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "出远门通知",
+    "message": "国庆准备出远门自驾游，七八天后才回来，期间应该没空看QQ，如果有任何事，请在群里问其他群友，或者私聊我的小号QQ，等我回家后会一个个回复的~\n",
+    "send_at": "2025-09-30 19:12:57",
+    "show_type": "once",
+    "open_url": "",
+    "expire_at": "2025-10-07 19:12:57",
+    "show_only_before_version": ""
   }
 ]

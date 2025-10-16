@@ -1538,6 +1538,10 @@ def show_tips(cfg: Config):
             "云游戏又有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
             "https://my.start.qq.com/act/my_activity_v2/?group_id=4&act_id=184&ts=2025091100#/index"
         ),
+        "25.10 猪猪侠合影": (
+            "有个猪猪侠合影活动，需要其他人发出合影的邀请链接，然后你点进去，定制自己的合影后，再重新点进去与对方合影，就可以点击右上角的领奖按钮领取奖励，并在下方抽奖。有兴趣的朋友请自行参与\n"
+            "https://dnf.qq.com/cp/a202510GGbond/index.html"
+        ),
     }
 
     logger.info(

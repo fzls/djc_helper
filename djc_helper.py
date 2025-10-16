@@ -209,9 +209,10 @@ class DjcHelper:
         # res = self.dnf_comic_ide_op("判断skey是否过期", "248455", print_res=False)
         # res = self.dnf_bind_phone_op("判断skey是否过期", "971619", print_res=False)
         # res = self.dnf_cloud_game_op("判断skey是否过期", "1131647", print_res=False)
+        # res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", print_res=False)
 
-        # 预计结束时间: 2025-09-28 23:59:59
-        res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", print_res=False)
+        # 预计结束时间: 2025-11-26
+        res = self.dnf_luodiye_ide_op("判断skey是否过期", "455059", print_res=False)
 
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")

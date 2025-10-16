@@ -63,10 +63,10 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-09-28 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
-    newNotAmsActInfo("2025-09-11 10:00:00", "2025-10-15 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2025-10-16 09:00:00", "2025-11-26 17:59:59", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
@@ -122,9 +122,9 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20250911wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a70a7128c440744799af86c0482b7de48/index.html?via=dnfzs&actVersion=405249",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     #
     # 已过期活动
     #
@@ -318,7 +318,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "86_e5rV7O"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "21_vPNby3"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "33_5vtikg"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚

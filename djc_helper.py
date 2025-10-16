@@ -689,10 +689,10 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6400,73 +6400,75 @@ class DjcHelper:
                     time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("庆典礼包", "441320")
+        self.dnf_luodiye_ide_op("见面礼", "455077")
 
-        try_daily_signin()
-        # self.dnf_luodiye_ide_op("每日签到", "441321")
-
-        login_gifts_list = [
-            (0, 3),
-            (1, 7),
-            (2, 10),
-            (3, 14),
-            (4, 21),
-            (5, 28),
-        ]
-        _, iLoginTotal = query_info()
-        logger.info(f"累计登录天数为 {iLoginTotal}")
-        for gift_index, require_login_days in login_gifts_list:
-            if iLoginTotal >= require_login_days:
-                self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "441323", iIndex=gift_index
-                )
-            else:
-                logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
-
-        tasks = [
-            ("每日任务一", "441324"),
-            ("每日任务二", "441325"),
-            ("每周任务一", "441326"),
-            ("每周任务二", "441327"),
-        ]
-        for name, flowid in tasks:
-            self.dnf_luodiye_ide_op(name, flowid)
-            time.sleep(5)
-
-        # iTicket, iLottery = query_info()
+        # self.dnf_luodiye_ide_op("庆典礼包", "441320")
+        #
+        # try_daily_signin()
+        # # self.dnf_luodiye_ide_op("每日签到", "441321")
+        #
+        # login_gifts_list = [
+        #     (0, 3),
+        #     (1, 7),
+        #     (2, 10),
+        #     (3, 14),
+        #     (4, 21),
+        #     (5, 28),
+        # ]
+        # _, iLoginTotal = query_info()
+        # logger.info(f"累计登录天数为 {iLoginTotal}")
+        # for gift_index, require_login_days in login_gifts_list:
+        #     if iLoginTotal >= require_login_days:
+        #         self.dnf_luodiye_ide_op(
+        #             f"[{gift_index}] 累积签到奖励 {require_login_days}天", "441323", iIndex=gift_index
+        #         )
+        #     else:
+        #         logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
+        #
+        # tasks = [
+        #     ("每日任务一", "441324"),
+        #     ("每日任务二", "441325"),
+        #     ("每周任务一", "441326"),
+        #     ("每周任务二", "441327"),
+        # ]
+        # for name, flowid in tasks:
+        #     self.dnf_luodiye_ide_op(name, flowid)
+        #     time.sleep(5)
+        #
+        # # iTicket, iLottery = query_info()
+        # # async_message_box(
+        # #     (
+        # #         f"当前好友积分为{iTicket}，请自行前往点击确认弹出的网页中进行兑换奖品\n"
+        # #         "其中完成任务后还有需要进行分享完成的普通积分礼包和豪华积分礼包，如有兴趣，请自行完成\n"
+        # #     ),
+        # #     f"官网新春签到活动_每周提示_{self.cfg.name}",
+        # #     open_url=get_act_url("DNF落地页活动_ide"),
+        # #     show_once_weekly=True,
+        # # )
+        #
+        # iLottery, _ = query_info()
+        # logger.info(f"当前抽奖次数为 {iLottery}")
+        # for idx in range_from_one(iLottery):
+        #     res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "441328")
+        #     _ = res
+        #     # if res["ret"] == 10001:
+        #     #     break
+        #     time.sleep(5)
+        #
+        # # async_message_box(
+        # #     "落地页活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可",
+        # #     "25.4 落地页阅读页面活动",
+        # #     show_once=True,
+        # #     open_url=get_act_url("DNF落地页活动_ide"),
+        # # )
+        #
+        # # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
         # async_message_box(
-        #     (
-        #         f"当前好友积分为{iTicket}，请自行前往点击确认弹出的网页中进行兑换奖品\n"
-        #         "其中完成任务后还有需要进行分享完成的普通积分礼包和豪华积分礼包，如有兴趣，请自行完成\n"
-        #     ),
-        #     f"官网新春签到活动_每周提示_{self.cfg.name}",
-        #     open_url=get_act_url("DNF落地页活动_ide"),
-        #     show_once_weekly=True,
-        # )
-
-        iLottery, _ = query_info()
-        logger.info(f"当前抽奖次数为 {iLottery}")
-        for idx in range_from_one(iLottery):
-            res = self.dnf_luodiye_ide_op(f"{idx}/{iLottery} 任务抽奖礼包", "441328")
-            _ = res
-            # if res["ret"] == 10001:
-            #     break
-            time.sleep(5)
-
-        # async_message_box(
-        #     "落地页活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可",
-        #     "25.4 落地页阅读页面活动",
+        #     "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励（道具或者现金红包）。有兴趣的朋友请自行完成",
+        #     "25.9 落地页拉回归活动",
         #     show_once=True,
         #     open_url=get_act_url("DNF落地页活动_ide"),
         # )
-
-        # "落地页活动页面有个拉回归的活动，拉四个可以换一个红10增幅券，有兴趣的请自行完成~(每天只能拉一个，至少需要分四天）",
-        async_message_box(
-            "落地页活动页面有个拉回归好友的活动，邀请后对应QQ打开活动页面接受邀请，然后登录游戏，在活动页面组件队伍后可以领取奖励（道具或者现金红包）。有兴趣的朋友请自行完成",
-            "25.9 落地页拉回归活动",
-            show_once=True,
-            open_url=get_act_url("DNF落地页活动_ide"),
-        )
 
     def check_dnf_luodiye_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -10426,6 +10428,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.jinggai_game()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

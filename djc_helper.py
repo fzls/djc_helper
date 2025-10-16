@@ -10385,6 +10385,8 @@ if __name__ == "__main__":
     # 测试时仍然启用被标记为安全模式的账号，方便测试
     cfg.common.enable_in_safe_mode_accounts = True
 
+    cfg.common.run_in_headless_mode = False
+
     for idx in indexes:  # 从1开始，第i个
         account_config = cfg.account_configs[idx - 1]
 
@@ -10410,8 +10412,6 @@ if __name__ == "__main__":
         # 为了方便测试，特殊设置一些配置，确保正常执行
         account_config.disable_in_run_env_list = []
         account_config.function_switches.disable_login_mode_xinyue = False
-
-        cfg.common.run_in_headless_mode = False
 
         show_head_line(f"开始处理第{idx}个账户[{account_config.name}({account_config.qq()})]", color("fg_bold_yellow"))
 

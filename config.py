@@ -926,6 +926,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_jinggai_game = True
         # 是否领取 DNF久久公益节 活动
         self.get_dnf_help_child = True
+        # 是否领取 猪猪侠联动 活动
+        self.get_dnf_ggbond = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

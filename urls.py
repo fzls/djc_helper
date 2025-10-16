@@ -67,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-10-16 09:00:00", "2025-11-26 17:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     #
     # 已过期活动
     #
@@ -125,6 +126,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20250911wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a70a7128c440744799af86c0482b7de48/index.html?via=dnfzs&actVersion=405249",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
+    "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     #
     # 已过期活动
     #
@@ -344,6 +346,7 @@ class Urls:
         self.ide_iActivityId_vp_challenge = "65_6beKBQ"  # vp挑战赛
         self.ide_iActivityId_dnf_bind_phone = "3_Rsi2sk"  # 绑定手机活动
         self.ide_iActivityId_dnf_help_child = "9_TW3yAu"  # DNF久久公益节
+        self.ide_iActivityId_dnf_ggbond = "97_WKPy5y"  # 猪猪侠联动
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

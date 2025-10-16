@@ -693,6 +693,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("猪猪侠联动", self.dnf_ggbond),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9107,6 +9108,48 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------猪猪侠联动--------------------------------------------
+    @try_except()
+    def dnf_ggbond(self):
+        show_head_line("猪猪侠联动")
+        self.show_not_ams_act_info("猪猪侠联动")
+
+        if not self.cfg.function_switches.get_dnf_ggbond or self.disable_most_activities():
+            show_act_not_enable_warning("猪猪侠联动")
+            return
+
+        self.check_dnf_ggbond()
+
+        self.dnf_ggbond_op("领取奖励", "454616")
+
+    def check_dnf_ggbond(self, **extra_params):
+        return self.ide_check_bind_account(
+            "猪猪侠联动",
+            get_act_url("猪猪侠联动"),
+            activity_op_func=self.dnf_ggbond_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_ggbond_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_ggbond
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("猪猪侠联动"),
+            **extra_params,
+        )
+
     # --------------------------------------------共赴西装节--------------------------------------------
     @try_except()
     def dnf_suit(self):
@@ -10428,6 +10471,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_ggbond()
 
     pause()

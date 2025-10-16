@@ -1532,8 +1532,7 @@ def show_tips(cfg: Config):
             "https://game.gtimg.cn/images/dnf/cp/celebration/fc-pic1.jpg"
         ),
         "25.10 网吧活动": (
-            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
-            "https://act1.hdnf.qq.com/a20251016netbar/hl_index.html"
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n" "https://act1.hdnf.qq.com/a20251016netbar/hl_index.html"
         ),
     }
 

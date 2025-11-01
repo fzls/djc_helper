@@ -59,9 +59,6 @@ not_ams_activities = [
     # 短期付费活动
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
-    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
-    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-10-16 09:00:00", "2025-11-26 17:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-10-16 10:00:00", "2025-11-14 23:59:59", "WeGame活动"),
@@ -69,6 +66,9 @@ not_ams_activities = [
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-10-16 23:59:59", "绑定手机活动"),
@@ -119,8 +119,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251016wegame/index.html",
@@ -128,6 +126,9 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
+    "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a70a7128c440744799af86c0482b7de48/index.html?via=dnfzs&actVersion=405249",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
@@ -135,7 +136,6 @@ act_name_to_url = {
     "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
-    "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",

@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-10-16 09:00:00", "2025-11-26 17:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-10-16 10:00:00", "2025-11-14 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
     #
     # 已过期活动
     #
@@ -73,7 +74,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-10-16 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
     newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
-    newNotAmsActInfo("2025-07-24 00:00:00", "2025-08-20 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
@@ -124,6 +124,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251016wegame/index.html",
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
     #
     # 已过期活动
     #
@@ -132,7 +133,6 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
     "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
-    "助手限定活动": "https://dzhu.qq.com/fe/dnf/summer-act/",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",

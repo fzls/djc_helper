@@ -3072,6 +3072,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("猪猪侠联动", "get_dnf_ggbond"),
             ("WeGame活动", "get_dnf_wegame"),
+            ("助手限定活动", "get_dnf_helper_limit_act"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3086,7 +3087,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("井盖杯挑战赛", "get_jinggai_game"),
             ("DNF久久公益节", "get_dnf_help_child"),
-            ("助手限定活动", "get_dnf_helper_limit_act"),
             ("vp挑战赛", "get_vp_challenge"),
             ("colg其他活动", "get_colg_other_act"),
             ("挑战世界记录", "get_dnf_challenge_world_record"),

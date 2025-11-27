@@ -7405,31 +7405,6 @@ class DjcHelper:
                 open_url=get_act_url("WeGame活动"),
             )
 
-    def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
-        self.check_bind_account(
-            "WeGame活动",
-            get_act_url("WeGame活动"),
-            activity_op_func=self.dnf_wegame_op,
-            query_bind_flowid="998404",
-            commit_bind_flowid="998403",
-            roleinfo=roleinfo,
-            roleinfo_source=roleinfo_source,
-        )
-
-    def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_wegame
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("WeGame活动"),
-            **extra_params,
-        )
-
     def check_dnf_wegame_ide(self, **extra_params):
         return self.ide_check_bind_account(
             "WeGame活动",
@@ -7457,6 +7432,31 @@ class DjcHelper:
             get_act_url("WeGame活动"),
             **extra_params,
         )
+
+    # def check_dnf_wegame(self, roleinfo=None, roleinfo_source="道聚城所绑定的角色"):
+    #     self.check_bind_account(
+    #         "WeGame活动",
+    #         get_act_url("WeGame活动"),
+    #         activity_op_func=self.dnf_wegame_op,
+    #         query_bind_flowid="998404",
+    #         commit_bind_flowid="998403",
+    #         roleinfo=roleinfo,
+    #         roleinfo_source=roleinfo_source,
+    #     )
+    #
+    # def dnf_wegame_op(self, ctx, iFlowId, print_res=True, **extra_params):
+    #     iActivityId = self.urls.iActivityId_dnf_wegame
+    #     return self.amesvr_request(
+    #         ctx,
+    #         "x6m5.ams.game.qq.com",
+    #         "group_3",
+    #         "dnf",
+    #         iActivityId,
+    #         iFlowId,
+    #         print_res,
+    #         get_act_url("WeGame活动"),
+    #         **extra_params,
+    #     )
 
     # --------------------------------------------勇士的冒险补给--------------------------------------------
     # re: 先抓包获取链接，然后搜 wpe类活动的接入办法为

@@ -3071,6 +3071,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("发布会特别赠礼", "get_dnf_press_conference_gift"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("WeGame活动", "get_dnf_wegame"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3084,7 +3085,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("colg每日签到", "get_colg_signin"),
             ("DNF福利中心兑换", "get_dnf_welfare"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("井盖杯挑战赛", "get_jinggai_game"),
             ("DNF久久公益节", "get_dnf_help_child"),

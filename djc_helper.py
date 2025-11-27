@@ -691,6 +691,7 @@ class DjcHelper:
             ("发布会特别赠礼", self.dnf_press_conference_gift),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("colg每日签到", self.colg_signin),
             ("DNF福利中心兑换", self.dnf_welfare),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("超级会员", self.dnf_super_vip),
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
@@ -8139,10 +8139,10 @@ class DjcHelper:
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         def query_lottery_ticket() -> int:
-            res = self.dnf_xinyue_wpe_op("查询抽奖券", 355934)
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 381681)
             data = json.loads(res["data"])
 
-            remain = data.get("limit", 0)
+            remain = data.get("balance", 0)
 
             return remain
 
@@ -8154,23 +8154,47 @@ class DjcHelper:
 
             return total
 
-        self.dnf_xinyue_wpe_op("全民登录礼", 354897)
-        self.dnf_xinyue_wpe_op("全民充值礼", 354898)
+        self.dnf_xinyue_wpe_op("报名礼盒", 381255)
 
-        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 354906)
-        self.dnf_xinyue_wpe_op("幸运勇士礼", 354904)
+        self.dnf_xinyue_wpe_op("每日任务-登录DNF", 381262)
+        # self.dnf_xinyue_wpe_op("每日任务-登录心悦俱乐部app", XXXXXX)
 
-        self.dnf_xinyue_wpe_op("每日任务-登录", 354910)
-        self.dnf_xinyue_wpe_op("每充值50元", 354909)
-        self.dnf_xinyue_wpe_op("每日任务-累计消耗156疲劳", 354911)
-        self.dnf_xinyue_wpe_op("每日任务-邀请3位好友", 354914)
-        self.dnf_xinyue_wpe_op("每周任务-通关新深渊2次", 354915)
-        self.dnf_xinyue_wpe_op("每周任务-通关新团本1次", 355217)
+        map_gift = {
+            "梦境之白云溪谷": 381260,
+            "梦境之索利达里斯": 381539,
+            "沉月湖": 381541,
+            "蔚蓝号": 381542,
+            "幽冥之女神殿": 381543,
+            "美神维纳斯": 381545,
+            "纳波尔团本": 381547,
+        }
+        for map_name, flow_id in map_gift.items():
+            self.dnf_xinyue_wpe_op(f"通关 - {map_name}", flow_id)
 
-        lottery_count = query_lottery_ticket()
-        logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
-        for idx in range_from_one(lottery_count):
-            self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", 355180)
+        # 需要在心悦app完成
+        # self.dnf_xinyue_wpe_op("完成副本次数抽QB", XXXXXX)
+
+        self.dnf_xinyue_wpe_op("掉落4件史诗装备", 381629)
+        self.dnf_xinyue_wpe_op("掉落8件史诗装备", 381631)
+        self.dnf_xinyue_wpe_op("掉落12件史诗装备", 381632)
+
+        if now_after("2025-12-20 08:00:00"):
+            self.dnf_xinyue_wpe_op("领取积分奖励", 381680)
+
+        # 需要在心悦app完成
+        # lottery_count = query_lottery_ticket()
+        # logger.info(f"当前剩余抽奖券数量为 {lottery_count}")
+        # for idx in range_from_one(lottery_count):
+        #     self.dnf_xinyue_wpe_op(f"{idx}/{lottery_count} 抽奖", XXXXXX)
+
+        act_config = get_not_ams_act("DNF心悦wpe")
+        if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
+            async_message_box(
+                "心悦闪光杯活动即将结束，请在点击确认后弹出的活动页面中自行进行  01中的QB抽奖  04中的闪光杯抽奖（应该会提示需要在心悦app中抽奖）",
+                "心悦闪光杯 自行操作部分提示-25.27",
+                show_once_daily=True,
+                open_url=get_act_url("DNF心悦wpe"),
+            )
 
     def prepare_wpe_act_openid_accesstoken(self, ctx: str, replace_if_exists: bool = True, print_res=True):
         """获取心悦的相关登录态，并设置到类的实例变量中，供实际请求中使用"""
@@ -8215,7 +8239,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "24955"
+        act_id = "25972"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -10952,6 +10976,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

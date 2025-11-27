@@ -64,13 +64,13 @@ not_ams_activities = [
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-10 23:59:59", "发布会特别赠礼"),
     newNotAmsActInfo("2025-11-27 09:00:00", "2026-01-07 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "DNF心悦wpe"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
-    newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-10 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2025-10-16 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
@@ -125,13 +125,13 @@ act_name_to_url = {
     "发布会特别赠礼": "https://dnf.qq.com/cp/a20251127gift/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251127wegame/index.html",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20251119DNFPC/index.html",
     #
     # 已过期活动
     #
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a70a7128c440744799af86c0482b7de48/index.html?via=dnfzs&actVersion=405249",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",

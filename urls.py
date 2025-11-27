@@ -59,8 +59,6 @@ not_ams_activities = [
     # 短期付费活动
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
-    newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-10 23:59:59", "发布会特别赠礼"),
     newNotAmsActInfo("2025-11-27 09:00:00", "2026-01-07 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "WeGame活动"),
@@ -68,6 +66,8 @@ not_ams_activities = [
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
+    newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-31 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-29 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2025-05-20 00:00:00", "2025-10-31 23:59:59", "DNF福利中心兑换"),
@@ -120,8 +120,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
-    "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
     "发布会特别赠礼": "https://dnf.qq.com/cp/a20251127gift/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251127wegame/index.html",
@@ -129,6 +127,8 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
+    "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20250612guide/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "DNF福利中心兑换": "https://dnf.qq.com/cp/a20190312welfare/index.htm",

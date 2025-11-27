@@ -690,6 +690,7 @@ class DjcHelper:
             ("猪猪侠联动", self.dnf_ggbond),
             ("WeGame活动", self.dnf_wegame),
             ("助手限定活动", self.dnf_helper_limit_act),
+            ("发布会特别赠礼", self.dnf_press_conference_gift),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9976,6 +9977,48 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------发布会特别赠礼--------------------------------------------
+    @try_except()
+    def dnf_press_conference_gift(self):
+        show_head_line("发布会特别赠礼")
+        self.show_not_ams_act_info("发布会特别赠礼")
+
+        if not self.cfg.function_switches.get_dnf_press_conference_gift or self.disable_most_activities():
+            show_act_not_enable_warning("发布会特别赠礼")
+            return
+
+        self.check_dnf_press_conference_gift()
+
+        self.dnf_press_conference_gift_op("抽奖领取", "471062")
+
+    def check_dnf_press_conference_gift(self, **extra_params):
+        return self.ide_check_bind_account(
+            "发布会特别赠礼",
+            get_act_url("发布会特别赠礼"),
+            activity_op_func=self.dnf_press_conference_gift_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_press_conference_gift_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_press_conference_gift
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("发布会特别赠礼"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10895,6 +10938,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_press_conference_gift()
 
     pause()

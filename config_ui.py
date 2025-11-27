@@ -3070,6 +3070,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("猪猪侠联动", "get_dnf_ggbond"),
             ("WeGame活动", "get_dnf_wegame"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
+            ("发布会特别赠礼", "get_dnf_press_conference_gift"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

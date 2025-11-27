@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-10-16 10:00:00", "2025-11-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
+    newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-10 23:59:59", "发布会特别赠礼"),
     #
     # 已过期活动
     #
@@ -123,6 +124,7 @@ act_name_to_url = {
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251016wegame/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
+    "发布会特别赠礼": "https://dnf.qq.com/cp/a20251127gift/",
     #
     # 已过期活动
     #
@@ -347,6 +349,7 @@ class Urls:
         self.ide_iActivityId_dnf_bind_phone = "3_Rsi2sk"  # 绑定手机活动
         self.ide_iActivityId_dnf_help_child = "9_TW3yAu"  # DNF久久公益节
         self.ide_iActivityId_dnf_ggbond = "97_WKPy5y"  # 猪猪侠联动
+        self.ide_iActivityId_dnf_press_conference_gift = "0_oesYIu"  # 发布会特别赠礼
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

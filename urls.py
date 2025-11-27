@@ -59,11 +59,11 @@ not_ams_activities = [
     # 短期付费活动
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2025-10-16 09:00:00", "2025-11-26 17:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-10-16 10:00:00", "2025-11-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-10 23:59:59", "发布会特别赠礼"),
+    newNotAmsActInfo("2025-11-27 09:00:00", "2026-01-07 23:59:59", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
@@ -120,11 +120,11 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251016wegame/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
     "发布会特别赠礼": "https://dnf.qq.com/cp/a20251127gift/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     #
     # 已过期活动
     #
@@ -322,7 +322,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "86_e5rV7O"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "33_5vtikg"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "91_rhgSII"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚

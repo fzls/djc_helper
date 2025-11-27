@@ -211,8 +211,8 @@ class DjcHelper:
         # res = self.dnf_cloud_game_op("判断skey是否过期", "1131647", print_res=False)
         # res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", print_res=False)
 
-        # 预计结束时间: 2025-11-26
-        res = self.dnf_luodiye_ide_op("判断skey是否过期", "455059", print_res=False)
+        # 预计结束时间: 2026-1-7
+        res = self.dnf_luodiye_ide_op("判断skey是否过期", "467692", print_res=False)
 
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")
@@ -686,11 +686,11 @@ class DjcHelper:
         #     -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all  -rumt-zh.com -login/analysis
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("猪猪侠联动", self.dnf_ggbond),
             ("WeGame活动", self.dnf_wegame),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("发布会特别赠礼", self.dnf_press_conference_gift),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6362,11 +6362,12 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "441315", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "467692", print_res=False)
             raw_info = res["jData"]
 
-            # 抽奖次数
-            iLottery = int(raw_info["iLottery"])
+            # # 抽奖次数
+            # iLottery = int(raw_info["iLottery"])
+            iLottery = 0
 
             # 累计登录天数
             iLoginTotal = int(raw_info["iSign"])
@@ -6403,31 +6404,35 @@ class DjcHelper:
                     time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("见面礼", "455077")
+        self.dnf_luodiye_ide_op("见面礼", "467768")
+
+        self.dnf_luodiye_ide_op("每日任务", "467774")
+        self.dnf_luodiye_ide_op("每周任务", "467777")
 
         # self.dnf_luodiye_ide_op("庆典礼包", "441320")
         #
         # try_daily_signin()
         # # self.dnf_luodiye_ide_op("每日签到", "441321")
-        #
-        # login_gifts_list = [
-        #     (0, 3),
-        #     (1, 7),
-        #     (2, 10),
-        #     (3, 14),
-        #     (4, 21),
-        #     (5, 28),
-        # ]
-        # _, iLoginTotal = query_info()
-        # logger.info(f"累计登录天数为 {iLoginTotal}")
-        # for gift_index, require_login_days in login_gifts_list:
-        #     if iLoginTotal >= require_login_days:
-        #         self.dnf_luodiye_ide_op(
-        #             f"[{gift_index}] 累积签到奖励 {require_login_days}天", "441323", iIndex=gift_index
-        #         )
-        #     else:
-        #         logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
-        #
+
+        login_gifts_list = [
+            (0, 3),
+            (1, 7),
+            (2, 10),
+            (3, 14),
+            (4, 21),
+            (5, 25),
+        ]
+        _, iLoginTotal = query_info()
+        logger.info(f"累计登录天数为 {iLoginTotal}")
+        for gift_index, require_login_days in login_gifts_list:
+            if iLoginTotal >= require_login_days:
+                self.dnf_luodiye_ide_op(
+                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "467781", iIndex=gift_index
+                )
+                time.sleep(3)
+            else:
+                logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
+
         # tasks = [
         #     ("每日任务一", "441324"),
         #     ("每日任务二", "441325"),
@@ -10938,6 +10943,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_press_conference_gift()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

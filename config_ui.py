@@ -3066,11 +3066,11 @@ class FunctionSwitchesConfigUi(QWidget):
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("猪猪侠联动", "get_dnf_ggbond"),
             ("WeGame活动", "get_dnf_wegame"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
             ("发布会特别赠礼", "get_dnf_press_conference_gift"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

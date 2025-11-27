@@ -1531,8 +1531,8 @@ def show_tips(cfg: Config):
             "微信游戏圈有几个活动，可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/fc-pic1.jpg"
         ),
-        "25.10 网吧活动": (
-            "有个在网吧内登录可以完成的网页活动，请自行参与\n" "https://act1.hdnf.qq.com/a20251016netbar/hl_index.html"
+        "25.11 网吧活动": (
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n" "https://act1.hdnf.qq.com/a20251127netbarwarrior/hl_index.html"
         ),
     }
 

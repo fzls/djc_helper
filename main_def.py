@@ -1530,6 +1530,9 @@ def show_tips(cfg: Config):
             "微信游戏圈有几个活动（签到和每日抽奖），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode2.png"
         ),
+        "25.11 助手冬日惊喜补给": (
+            "dnf助手有个新活动，冬日惊喜不急，因为需要每日在app中浏览一篇资讯才能签到并领取奖励，因此请自行完成~"
+        ),
     }
 
     logger.info(

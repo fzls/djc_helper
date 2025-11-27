@@ -60,10 +60,10 @@ not_ams_activities = [
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
-    newNotAmsActInfo("2025-10-16 10:00:00", "2025-11-14 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-10 23:59:59", "发布会特别赠礼"),
     newNotAmsActInfo("2025-11-27 09:00:00", "2026-01-07 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
@@ -121,10 +121,10 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
-    "WeGame活动": "https://dnf.qq.com/cp/a20251016wegame/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
     "发布会特别赠礼": "https://dnf.qq.com/cp/a20251127gift/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
+    "WeGame活动": "https://dnf.qq.com/cp/a20251127wegame/index.html",
     #
     # 已过期活动
     #
@@ -332,7 +332,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
-        self.ide_iActivityId_dnf_wegame = "53_lFmu2f"  # WeGame活动
+        self.ide_iActivityId_dnf_wegame = "63_lPsCOM"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿

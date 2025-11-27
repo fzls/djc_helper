@@ -687,10 +687,10 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("猪猪侠联动", self.dnf_ggbond),
-            ("WeGame活动", self.dnf_wegame),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("发布会特别赠礼", self.dnf_press_conference_gift),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7370,7 +7370,7 @@ class DjcHelper:
         self.check_dnf_wegame_ide()
 
         def query_info() -> int:
-            res = self.dnf_wegame_ide_op("初始化", "454097", print_res=False)
+            res = self.dnf_wegame_ide_op("初始化", "468648", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
@@ -7378,23 +7378,32 @@ class DjcHelper:
 
             return lottery_count
 
-        self.dnf_wegame_ide_op("全民参与礼包", "454101")
-        self.dnf_wegame_ide_op("秋枫限定礼包", "454102")
+        self.dnf_wegame_ide_op("全民参与礼包", "468652")
+        # self.dnf_wegame_ide_op("秋枫限定礼包", "454102")
+        self.dnf_wegame_ide_op("每日登录游戏抽奖", "468653")
 
-        self.dnf_wegame_ide_op("每周副本宝箱", "454115")
+        self.dnf_wegame_ide_op("幸运勇士验证", "468794")
+        self.dnf_wegame_ide_op("幸运勇士领奖励", "468793")
 
-        lottery_count = query_info()
-        logger.info(f"当前的抽奖次数为 {lottery_count}")
-        for idx in range_from_one(lottery_count):
-            self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}开启宝箱", "454113")
-            time.sleep(3)
+        # self.dnf_wegame_ide_op("每周副本宝箱", "454115")
+        #
+        # lottery_count = query_info()
+        # logger.info(f"当前的抽奖次数为 {lottery_count}")
+        # for idx in range_from_one(lottery_count):
+        #     self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}开启宝箱", "454113")
+        #     time.sleep(3)
 
-        self.dnf_wegame_ide_op("每日任务一", "454105")
-        self.dnf_wegame_ide_op("每日任务二", "454107")
-        self.dnf_wegame_ide_op("每日任务三", "454106")
-        self.dnf_wegame_ide_op("每周任务一", "454114")
+        self.dnf_wegame_ide_op("每日任务一", "468656")
+        self.dnf_wegame_ide_op("每日任务二", "468658")
+        self.dnf_wegame_ide_op("每日任务三", "468657")
+        self.dnf_wegame_ide_op("每日任务四-分享", "468659")
+        self.dnf_wegame_ide_op("每日任务四-领取", "469226")
+        self.dnf_wegame_ide_op("每日任务五", "468664")
+        self.dnf_wegame_ide_op("每周任务一", "468665")
+        self.dnf_wegame_ide_op("每周任务二", "468666")
 
-        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 纯净的黄金增幅书-48积分", "454109", iPackageIndex=11)
+        # self.dnf_wegame_ide_op("积分抽奖礼包", "468861")
+        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 原初职业白金徽章礼盒-48积分", "468660", iPackageIndex=1)
 
         act_config = get_not_ams_act("WeGame活动")
         if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
@@ -10943,6 +10952,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_wegame()
 
     pause()

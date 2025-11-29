@@ -1518,7 +1518,7 @@ def show_tips(cfg: Config):
             "https://game.gtimg.cn/images/dnf/act/a20250116index/pc/activity/qrcode2.png"
         ),
         "25.11 助手冬日惊喜补给": (
-            "dnf助手有个新活动，冬日惊喜不急，因为需要每日在app中浏览一篇资讯才能签到并领取奖励，因此请自行完成~"
+            "dnf助手有个新活动，冬日惊喜补给，因为需要每日在app中浏览一篇资讯才能签到并领取奖励，因此请自行完成~"
         ),
     }
 

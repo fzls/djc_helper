@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-11-27 09:00:00", "2026-01-07 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2025-11-27 00:00:00", "2025-12-26 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2025-11-22 00:00:00", "2026-01-29 23:59:59", "狄瑞吉预热"),
     #
     # 已过期活动
     #
@@ -124,6 +125,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "WeGame活动": "https://dnf.qq.com/cp/a20251127wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20251119DNFPC/index.html",
+    "狄瑞吉预热": "https://dnf.qq.com/cp/a20251122diregiepreview/",
     #
     # 已过期活动
     #
@@ -266,7 +268,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex",
+            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -350,6 +352,7 @@ class Urls:
         self.ide_iActivityId_dnf_help_child = "9_TW3yAu"  # DNF久久公益节
         self.ide_iActivityId_dnf_ggbond = "97_WKPy5y"  # 猪猪侠联动
         self.ide_iActivityId_dnf_press_conference_gift = "0_oesYIu"  # 发布会特别赠礼
+        self.ide_iActivityId_dnf_diruiji_yure = "51_tb5w4Q"  # 狄瑞吉预热
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

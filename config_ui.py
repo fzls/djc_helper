@@ -3064,6 +3064,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("心悦app", "get_xinyue_app"),
             ("dnf论坛签到", "get_dnf_bbs_signin"),
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
+            ("狄瑞吉预热", "get_dnf_diruiji_yure"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("发布会特别赠礼", "get_dnf_press_conference_gift"),

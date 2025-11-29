@@ -930,6 +930,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_ggbond = True
         # 是否领取 发布会特别赠礼 活动
         self.get_dnf_press_conference_gift = True
+        # 是否领取 狄瑞吉预热 活动
+        self.get_dnf_diruiji_yure = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

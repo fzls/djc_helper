@@ -690,6 +690,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("狄瑞吉预热", self.dnf_diruiji_yure),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10057,6 +10058,74 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------狄瑞吉预热--------------------------------------------
+    @try_except()
+    def dnf_diruiji_yure(self):
+        show_head_line("狄瑞吉预热")
+        self.show_not_ams_act_info("狄瑞吉预热")
+
+        if not self.cfg.function_switches.get_dnf_diruiji_yure or self.disable_most_activities():
+            show_act_not_enable_warning("狄瑞吉预热")
+            return
+
+        self.check_dnf_diruiji_yure()
+
+        # self.dnf_diruiji_yure_op("邀请礼包", "465208")
+        self.dnf_diruiji_yure_op("阵营加入", "465209", camp=1, inviteCode="")
+        if now_after("2025-11-22 00:00:00"):
+            self.dnf_diruiji_yure_op("记录首次分享", "471193")
+            self.dnf_diruiji_yure_op("1阶段礼包", "465210")
+        if now_after("2025-11-27 00:00:00"):
+            self.dnf_diruiji_yure_op("记录查询角色故事点赞", "471195", npcIndex=1)
+            self.dnf_diruiji_yure_op("2阶段礼包", "465211")
+        if now_after("2025-12-11 00:00:00"):
+            self.dnf_diruiji_yure_op("记录观看视频30秒", "471697")
+            self.dnf_diruiji_yure_op("3阶段礼包", "465212")
+        if now_after("2025-12-25 00:00:00"):
+            self.dnf_diruiji_yure_op("记录查看金牌团长活动", "471197")
+            self.dnf_diruiji_yure_op("4阶段礼包", "465213")
+        if now_after("2026-01-08 00:00:00"):
+            self.dnf_diruiji_yure_op("5阶段礼包", "465214")
+            self.dnf_diruiji_yure_op("终极大奖", "465215")
+
+        # self.dnf_diruiji_yure_op("好友列表", "465216")
+        # self.dnf_diruiji_yure_op("发送ark消息", "465217")
+        # self.dnf_diruiji_yure_op("新增好友", "465218")
+        # self.dnf_diruiji_yure_op("阵营人数", "465877")
+        # self.dnf_diruiji_yure_op("记录首次分享", "471193")
+        # self.dnf_diruiji_yure_op("记录查询角色故事点赞", "471195")
+        # self.dnf_diruiji_yure_op("记录查看金牌团长活动", "471197")
+        # self.dnf_diruiji_yure_op("邀请成功好友", "471459")
+        # self.dnf_diruiji_yure_op("记录观看视频30秒", "471697")
+
+    def check_dnf_diruiji_yure(self, **extra_params):
+        return self.ide_check_bind_account(
+            "狄瑞吉预热",
+            get_act_url("狄瑞吉预热"),
+            activity_op_func=self.dnf_diruiji_yure_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_diruiji_yure_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_diruiji_yure
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("狄瑞吉预热"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10976,6 +11045,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.dnf_diruiji_yure()
 
     pause()

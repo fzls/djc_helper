@@ -4965,8 +4965,8 @@ class DjcHelper:
 
         sContents = [
             "看嘉年华逛展直播领好礼",
-            # "TODO：还有个第二弹：等具体口令",
             "看dnfu嘉年华特别舞台直播领好礼",
+            "F1天王赛看巅峰对决领好礼",
         ]
         random.shuffle(sContents)
         sContents = [*shareCodeList, *sContents]

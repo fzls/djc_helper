@@ -1509,10 +1509,6 @@ def show_tips(cfg: Config):
         "25.11 网吧活动": (
             "有个在网吧内登录可以完成的网页活动，请自行参与\n" "https://act1.hdnf.qq.com/a20251127netbarwarrior/hl_index.html"
         ),
-        "25.11 云游戏": (
-            "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
-            "https://my.start.qq.com/act/my_activity_v2/?group_id=1&act_id=174&ts=2025080111#/index"
-        ),
         "25.11 助手冬日惊喜补给": (
             "dnf助手有个新活动，冬日惊喜补给，因为需要每日在app中浏览一篇资讯才能签到并领取奖励，因此请自行完成~"
         ),
@@ -1535,6 +1531,10 @@ def show_tips(cfg: Config):
         "26.1 微信游戏圈": (
             "微信游戏圈有几个活动（签到和每日抽奖），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic1.png"
+        ),
+        "26.1 云游戏": (
+            "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
+            "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index"
         ),
     }
 

@@ -1532,6 +1532,10 @@ def show_tips(cfg: Config):
             "有个年度总结活动，手机QQ扫码参与后滑动到最后的页面可以领取一次奖励，分享还能再领一次，请自行参与\n"
             "https://dnf.qq.com/cp/a20251209yearbook/index.html\n"
         ),
+        "26.1 决战狄瑞吉": (
+            "有个决战狄瑞吉活动，手机QQ扫码一路往下点，以及点分享活动按钮，可以获得多次抽奖次数，请自行参与\n"
+            "https://hdnf.qq.com/a20251216diruiji/index_pc.html\n"
+        ),
     }
 
     logger.info(

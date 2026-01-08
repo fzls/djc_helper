@@ -6417,7 +6417,7 @@ class DjcHelper:
 
         iLotteryCount, _, _ = query_info()
         for idx in range_from_one(iLotteryCount):
-            self.dnf_luodiye_ide_op("每日抽奖", "485992")
+            self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 每日抽奖", "485992")
             time.sleep(3)
 
         # self.dnf_luodiye_ide_op("庆典礼包", "441320")

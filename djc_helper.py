@@ -211,8 +211,8 @@ class DjcHelper:
         # res = self.dnf_cloud_game_op("判断skey是否过期", "1131647", print_res=False)
         # res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", print_res=False)
 
-        # 预计结束时间: 2026-1-7
-        res = self.dnf_luodiye_ide_op("判断skey是否过期", "467692", print_res=False)
+        # 预计结束时间: 2026-3-5
+        res = self.dnf_luodiye_ide_op("判断skey是否过期", "485983", print_res=False)
 
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")
@@ -687,11 +687,11 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("发布会特别赠礼", self.dnf_press_conference_gift),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("狄瑞吉预热", self.dnf_diruiji_yure),
             ("DNF福利中心兑换", self.dnf_welfare),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6363,18 +6363,24 @@ class DjcHelper:
 
         self.check_dnf_luodiye_ide()
 
-        def query_info() -> tuple[int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "467692", print_res=False)
+        def query_info() -> tuple[int, int, int]:
+            res = self.dnf_luodiye_ide_op("初始化", "485983", print_res=False)
             raw_info = res["jData"]
 
-            # # 抽奖次数
-            # iLottery = int(raw_info["iLottery"])
-            iLottery = 0
+            # 抽奖次数
+            iLottery = int(raw_info["jLotteryTicket"])
+            # iLottery = 0
 
-            # 累计登录天数
-            iLoginTotal = int(raw_info["iSign"])
+            # # 累计登录天数
+            # iLoginTotal = int(raw_info["iSign"])
+            iLoginTotal = 0
 
-            return iLottery, iLoginTotal
+            # 总共获得抽奖次数
+            jLotteryTotal = int(raw_info["jLotteryTotal"])
+
+            jFinishedLotteryCount = jLotteryTotal - iLottery
+
+            return iLottery, iLoginTotal, jFinishedLotteryCount
 
         def try_daily_signin():
             # self.dnf_luodiye_ide_op("获取补签次数", "358778")
@@ -6406,10 +6412,12 @@ class DjcHelper:
                     time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("见面礼", "467768")
+        self.dnf_luodiye_ide_op("见面礼", "485989")
 
-        self.dnf_luodiye_ide_op("每日任务", "467774")
-        self.dnf_luodiye_ide_op("每周任务", "467777")
+        iLotteryCount, _, _ = query_info()
+        for idx in range_from_one(iLotteryCount):
+            self.dnf_luodiye_ide_op("每日抽奖", "485992")
+            time.sleep(3)
 
         # self.dnf_luodiye_ide_op("庆典礼包", "441320")
         #
@@ -6417,23 +6425,24 @@ class DjcHelper:
         # # self.dnf_luodiye_ide_op("每日签到", "441321")
 
         login_gifts_list = [
-            (0, 3),
-            (1, 7),
+            (1, 5),
             (2, 10),
-            (3, 14),
-            (4, 21),
+            (3, 15),
+            (4, 20),
             (5, 25),
+            (6, 30),
+            (7, 35),
         ]
-        _, iLoginTotal = query_info()
-        logger.info(f"累计登录天数为 {iLoginTotal}")
-        for gift_index, require_login_days in login_gifts_list:
-            if iLoginTotal >= require_login_days:
+        _, _, jFinishedLotteryCount = query_info()
+        logger.info(f"累计抽奖次数为 {jFinishedLotteryCount}")
+        for gift_index, require_lottery_count in login_gifts_list:
+            if jFinishedLotteryCount >= require_lottery_count:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积签到奖励 {require_login_days}天", "467781", iIndex=gift_index
+                    f"[{gift_index}] 累积抽奖次数奖励 {require_lottery_count}次", "485995", index=gift_index
                 )
                 time.sleep(3)
             else:
-                logger.warning(f"[{gift_index}] 当前累计登录未达到{require_login_days}天，将不尝试领取该累计奖励")
+                logger.warning(f"[{gift_index}] 当前累计抽奖次数未达到{require_lottery_count}，将不尝试领取该累计奖励")
 
         # tasks = [
         #     ("每日任务一", "441324"),
@@ -11046,6 +11055,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_welfare()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

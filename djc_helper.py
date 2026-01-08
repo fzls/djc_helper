@@ -687,12 +687,12 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("发布会特别赠礼", self.dnf_press_conference_gift),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("狄瑞吉预热", self.dnf_diruiji_yure),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -7381,7 +7381,7 @@ class DjcHelper:
         self.check_dnf_wegame_ide()
 
         def query_info() -> int:
-            res = self.dnf_wegame_ide_op("初始化", "468648", print_res=False)
+            res = self.dnf_wegame_ide_op("初始化", "484392", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
@@ -7389,12 +7389,13 @@ class DjcHelper:
 
             return lottery_count
 
-        self.dnf_wegame_ide_op("全民参与礼包", "468652")
-        # self.dnf_wegame_ide_op("秋枫限定礼包", "454102")
-        self.dnf_wegame_ide_op("每日登录游戏抽奖", "468653")
+        self.dnf_wegame_ide_op("全民参与礼包", "484393")
 
-        self.dnf_wegame_ide_op("幸运勇士验证", "468794")
-        self.dnf_wegame_ide_op("幸运勇士领奖励", "468793")
+        self.dnf_wegame_ide_op("每日登录游戏抽奖", "484394")
+
+        self.dnf_wegame_ide_op("幸运勇士验证", "484395")
+        self.dnf_wegame_ide_op("幸运勇士领奖励", "484396")
+        self.dnf_wegame_ide_op("领取幸运勇士分享奖励", "484397")
 
         # self.dnf_wegame_ide_op("每周副本宝箱", "454115")
         #
@@ -7404,23 +7405,32 @@ class DjcHelper:
         #     self.dnf_wegame_ide_op(f"第{idx}/{lottery_count}开启宝箱", "454113")
         #     time.sleep(3)
 
-        self.dnf_wegame_ide_op("每日任务一", "468656")
-        self.dnf_wegame_ide_op("每日任务二", "468658")
-        self.dnf_wegame_ide_op("每日任务三", "468657")
-        self.dnf_wegame_ide_op("每日任务四-分享", "468659")
-        self.dnf_wegame_ide_op("每日任务四-领取", "469226")
-        self.dnf_wegame_ide_op("每日任务五", "468664")
-        self.dnf_wegame_ide_op("每周任务一", "468665")
-        self.dnf_wegame_ide_op("每周任务二", "468666")
+        # self.dnf_wegame_ide_op("好友列表", "484398")
+        # self.dnf_wegame_ide_op("确认邀请并发送ark消息", "484399")
+        # self.dnf_wegame_ide_op("新增好友", "484400")
+        # self.dnf_wegame_ide_op("接受助力", "484401")
+        # self.dnf_wegame_ide_op("领取累计邀请幸运勇士奖励", "484402")
+        async_message_box(
+            "WeGame 活动页面有个拉回归好友的活动，邀请2/4/6/8个回归好友可以领对应奖励，请自行完成",
+            "26.1 WeGame 拉回归活动",
+            show_once=True,
+            open_url=get_act_url("WeGame活动"),
+        )
+
+        self.dnf_wegame_ide_op("每日-登录游戏1次", "484405")
+        self.dnf_wegame_ide_op("每日-通关4次深渊", "484406")
+        self.dnf_wegame_ide_op("每周-通关1次雾岚黄昏战", "484412")
+        self.dnf_wegame_ide_op("每周-通关1次狄瑞吉攻坚战", "485198")
+        self.dnf_wegame_ide_op("每周-累计游戏登录5天", "484411")
 
         # self.dnf_wegame_ide_op("积分抽奖礼包", "468861")
-        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 原初职业白金徽章礼盒-48积分", "468660", iPackageIndex=1)
+        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 红10券-100积分", "484404", iPackageIndex=0)
 
         act_config = get_not_ams_act("WeGame活动")
         if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
             async_message_box(
-                "wegame活动即将结束，请在点击确认后弹出的活动页面中自行在最下方兑换剩余的积分（小助手只会尝试帮你领取 纯净的黄金增幅书）",
-                "WeGame活动积分兑换提示-25.10",
+                "wegame活动即将结束，请在点击确认后弹出的活动页面中自行在最下方兑换剩余的积分（小助手只会尝试帮你领取 红10券）",
+                "WeGame活动积分兑换提示-26.1",
                 show_once_daily=True,
                 open_url=get_act_url("WeGame活动"),
             )
@@ -11055,6 +11065,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_wegame()
 
     pause()

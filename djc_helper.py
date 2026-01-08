@@ -692,6 +692,7 @@ class DjcHelper:
             ("狄瑞吉预热", self.dnf_diruiji_yure),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("猪猪侠联动", self.dnf_ggbond),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("colg每日签到", self.colg_signin),
             ("超级会员", self.dnf_super_vip),
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
@@ -5904,7 +5904,7 @@ class DjcHelper:
             async_message_box(
                 (f"colg活动最后几天了，仍有{info.conversion}个兑换币未使用，请自行前往使用\n"),
                 f"colg社区活跃任务-{info.activity_id}-兑换商城奖励提示",
-                open_url="https://bbs.colg.cn/colg_cmall-colg_cmall.html",
+                open_url="https://hub.bbs.colg.cn/activity/seasonpass/202601/mall.html",
                 show_once_daily=True,
             )
 
@@ -11055,6 +11055,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.colg_signin()
 
     pause()

@@ -1506,9 +1506,6 @@ def show_tips(cfg: Config):
             "也就是说，小助手不会帮你*完成*上述任务的条件，只会在你完成条件的前提下，替你去领取任务奖励\n"
             "此外，如果想要自动领取等级奖励，请把配置工具中助手相关的所有配置项都填上\n"
         ),
-        "25.11 网吧活动": (
-            "有个在网吧内登录可以完成的网页活动，请自行参与\n" "https://act1.hdnf.qq.com/a20251127netbarwarrior/hl_index.html"
-        ),
         "25.11 助手冬日惊喜补给": (
             "dnf助手有个新活动，冬日惊喜补给，因为需要每日在app中浏览一篇资讯才能签到并领取奖励，因此请自行完成~"
         ),
@@ -1534,7 +1531,11 @@ def show_tips(cfg: Config):
         ),
         "26.1 云游戏": (
             "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
-            "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index"
+            "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index\n"
+        ),
+        "26.1 网吧": (
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
+            "https://act1.hdnf.qq.com/a20260108vipnetbar/pcbanner.html\n"
         ),
     }
 

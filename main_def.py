@@ -1528,6 +1528,10 @@ def show_tips(cfg: Config):
             "有个团长活动，报名后通关一次狄瑞吉活动，就会发放一些奖励到对应角色，请自行参与\n"
             "https://dnf.qq.com/cp/a20260108captain/\n"
         ),
+        "26.1 年度总结": (
+            "有个年度总结活动，手机QQ扫码参与后滑动到最后的页面可以领取一次奖励，分享还能再领一次，请自行参与\n"
+            "https://dnf.qq.com/cp/a20251209yearbook/index.html\n"
+        ),
     }
 
     logger.info(

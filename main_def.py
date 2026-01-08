@@ -1534,6 +1534,10 @@ def show_tips(cfg: Config):
             "有个看dnf综艺的活动，需要把网页打开后，登录并绑定角色，然后依次观看右侧的1-3期各25分钟，不能放在后台，但是可以放到其他屏幕或者挂着玩手机，等观看时长达到5/15/25分钟可以领取对应奖励，三个综艺总计9个奖励，有一些黑钻，请自行参与\n"
             "https://dnf.qq.com/cp/a20260101diregiefriends/index.html\n"
         ),
+        "26.1 狄瑞吉教学": (
+            "完成狄瑞吉的教学，可以领取30天黑钻和假猪套称号，请自行参与\n"
+            "https://dnf.qq.com/cp/a20260108drill/index.html\n"
+        ),
     }
 
     logger.info(

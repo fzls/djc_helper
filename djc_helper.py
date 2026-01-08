@@ -693,6 +693,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8305,6 +8306,97 @@ class DjcHelper:
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
         )
 
+    # --------------------------------------------DNF心悦wpe_dup--------------------------------------------
+    # re: 搜 wpe类活动的接入办法为
+    @try_except()
+    def dnf_xinyue_wpe_dup(self):
+        show_head_line("DNF心悦wpe_dup")
+        self.show_not_ams_act_info("DNF心悦wpe_dup")
+
+        if not self.cfg.function_switches.get_dnf_xinyue_dup or self.disable_most_activities():
+            show_act_not_enable_warning("DNF心悦wpe_dup")
+            return
+
+        self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe_dup")
+
+        self.dnf_xinyue_wpe_dup_op("领取50-5优惠券", 401729)
+        self.dnf_xinyue_wpe_dup_op("领取100-10优惠券", 401746)
+        self.dnf_xinyue_wpe_dup_op("抽奖", 401725)
+
+        self.dnf_xinyue_wpe_dup_op("每日签到", 401339)
+        sign_in_gifts = [
+            (1, 401373),
+            (3, 401500),
+            (7, 401502),
+            (15, 401503),
+            (28, 401504),
+        ]
+        for day, flowid in sign_in_gifts:
+            self.dnf_xinyue_wpe_dup_op(f"领取累计签到 {day} 天奖励", flowid)
+
+        self.dnf_xinyue_wpe_dup_op("领取心悦等级礼 v4-5", 401717)
+        self.dnf_xinyue_wpe_dup_op("领取心悦等级礼 v2-3", 401716)
+        self.dnf_xinyue_wpe_dup_op("领取心悦等级礼 v1", 401715)
+        self.dnf_xinyue_wpe_dup_op("领取心悦等级礼 特邀会员", 401506)
+
+    def dnf_xinyue_wpe_dup_op(
+        self,
+        ctx: str,
+        flow_id: int,
+        print_res=True,
+        extra_data: dict | None = None,
+        replace_act_id: str | None = None,
+        **extra_params,
+    ):
+        # 该类型每个请求之间需要间隔一定时长，否则会请求失败
+        time.sleep(3)
+
+        act_id = "26597"
+        if replace_act_id is not None:
+            act_id = replace_act_id
+
+        roleinfo = self.get_dnf_bind_role()
+
+        if extra_data is None:
+            extra_data = {}
+
+        json_data = {
+            "biz_id": "commercial",
+            "act_id": act_id,
+            "flow_id": flow_id,
+            "role": {
+                "game_open_id": self.qq(),
+                "game_app_id": "",
+                "area_id": int(roleinfo.serviceID),
+                "plat_id": 2,
+                "partition_id": int(roleinfo.serviceID),
+                "partition_name": base64_encode(roleinfo.serviceName),
+                "role_id": roleinfo.roleCode,
+                "role_name": base64_encode(roleinfo.roleName),
+                "device": "pc",
+                "flag": 0,
+            },
+            "data": json.dumps(
+                {
+                    "num": 1,
+                    "ceiba_plat_id": "ios",
+                    "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
+                    "cExtData": {},
+                    **extra_data,
+                }
+            ),
+        }
+
+        return self.post(
+            ctx,
+            self.urls.dnf_xinyue_wpe_api,
+            flowId=flow_id,
+            actId=act_id,
+            json=json_data,
+            print_res=print_res,
+            extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
+
     # --------------------------------------------神界预热--------------------------------------------
     @try_except()
     def dnf_shenjie_yure(self):
@@ -11065,6 +11157,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe_dup()
 
     pause()

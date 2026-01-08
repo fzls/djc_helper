@@ -808,6 +808,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_pk = True
         # 是否领取 心悦 活动
         self.get_dnf_xinyue = True
+        # 是否领取 心悦dup 活动
+        self.get_dnf_xinyue_dup = True
         # 是否领取 DNF强者之路 活动
         self.get_dnf_strong = True
         # 是否领取 DNF漫画 活动

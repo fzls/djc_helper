@@ -1524,6 +1524,10 @@ def show_tips(cfg: Config):
             "有个线上嘉年华活动，在页面上登录后，按照下面领取奖励页面的提示，去找到对应NPC完成小游戏，以及找建筑区点赞拍照，然后绑定dnf端游的角色信息来抽奖或领奖，请自行参与\n"
             "https://dzhu.qq.com/fe/dnf/vr-festival-2025/?share=1&subGameId=10014&gameId=1006#\n"
         ),
+        "26.1 金牌团长": (
+            "有个团长活动，报名后通关一次狄瑞吉活动，就会发放一些奖励到对应角色，请自行参与\n"
+            "https://dnf.qq.com/cp/a20260108captain/\n"
+        ),
     }
 
     logger.info(

@@ -692,6 +692,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("回流引导秘籍", self.dnf_recall_guide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -703,7 +704,6 @@ class DjcHelper:
             ("发布会特别赠礼", self.dnf_press_conference_gift),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("猪猪侠联动", self.dnf_ggbond),
-            ("回流引导秘籍", self.dnf_recall_guide),
             ("超级会员", self.dnf_super_vip),
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
@@ -9631,11 +9631,11 @@ class DjcHelper:
 
         self.check_dnf_recall_guide()
 
-        self.dnf_recall_guide_op("领取奖励", "441407")
+        self.dnf_recall_guide_op("领取奖励", "490494")
 
         async_message_box(
-            "回归引导秘籍 活动页面右侧有个领200深渊门票的按钮，需要打开网页登陆后，挂30秒后点领取即可（与落地页的不一样）",
-            "25.4 回归引导秘籍 阅读页面活动",
+            "如果你是回归玩家，可以看看官方给回归玩家准备的这个指引页面，可能可以更快上手新版本~",
+            "26.1 回归引导秘籍",
             show_once=True,
             open_url=get_act_url("回流引导秘籍"),
         )
@@ -11141,6 +11141,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_recall_guide()
 
     pause()

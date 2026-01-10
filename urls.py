@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-07 23:59:59", "DNF心悦wpe_dup"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-04 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-04-23 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     #
     # 已过期活动
     #
@@ -74,7 +75,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-10-23 00:00:00", "2025-11-19 23:59:59", "助手限定活动"),
     newNotAmsActInfo("2025-10-16 08:00:00", "2025-11-26 23:59:59", "猪猪侠联动"),
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
-    newNotAmsActInfo("2025-06-20 00:00:00", "2025-10-16 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2025-08-29 00:00:00", "2025-09-17 23:59:59", "井盖杯挑战赛"),
     newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
@@ -128,6 +128,7 @@ act_name_to_url = {
     "DNF心悦wpe_dup": "https://act.xinyue.qq.com/act/a20251226myxl/index.html?via=upother_61007",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20251225DNFPC/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
+    "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     #
     # 已过期活动
     #
@@ -137,7 +138,6 @@ act_name_to_url = {
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/gg_bond_activity",
     "猪猪侠联动": "https://dnf.qq.com/cp/a20251016ggbond/",
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
-    "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20250911cover/",
     "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",

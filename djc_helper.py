@@ -694,6 +694,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("绑定手机活动", self.dnf_bind_phone),
+            ("井盖杯挑战赛", self.jinggai_game),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -706,7 +707,6 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("猪猪侠联动", self.dnf_ggbond),
             ("超级会员", self.dnf_super_vip),
-            ("井盖杯挑战赛", self.jinggai_game),
             ("DNF久久公益节", self.dnf_help_child),
             ("vp挑战赛", self.vp_challenge),
             ("colg其他活动", self.colg_other_act),
@@ -9445,6 +9445,25 @@ class DjcHelper:
         return res
 
     # --------------------------------------------井盖杯挑战赛--------------------------------------------
+    # re: 接入方法
+    #   1. F12 查看任意一个请求，获取 活动id 和前缀，填到 jinggai_game_op 中
+    #   2. 搜索 前缀/ 来找到各个请求， 如 competition/
+    #   3.1 如果附加参数已经在下面，则按照规则添加对应参数即可
+    #   3.2 如果长下面这样，需要中转一层
+    #       function Ab(e) {
+    #     return Tt("/share/act?a=vote", {
+    #         ...xt,
+    #         ...e,
+    #         r: "competition/vote"
+    #     })
+    #   }
+    #   .
+    #       搜索上面的Ab( 来找到实际的调用处，获取参数信息
+    #                   const ee = {
+    #                 teamId: o.value,
+    #                 voteNum: $
+    #             }
+    #               , d = await Ab(ee);
     @try_except()
     def jinggai_game(self):
         show_head_line("井盖杯挑战赛")
@@ -9471,6 +9490,10 @@ class DjcHelper:
         bind_role()
 
         self.jinggai_game_op("签到", "checkin")
+
+        self.jinggai_game_op("竞猜队伍 1 获胜", "guess", teamId=1)
+        self.jinggai_game_op("领取竞猜奖励", "guessRewardPickup", type=1)
+        self.jinggai_game_op("领取竞猜获胜奖励", "guessRewardPickup", type=2)
 
         task_list = self.jinggai_game_op("查询任务列表", "taskList", print_res=False)
         for task in task_list["data"]:
@@ -9519,7 +9542,7 @@ class DjcHelper:
     def jinggai_game_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "1018"
+        activityId = "1035"
         # 活动的action前缀，对应参数 r 的前半部分
         activity_action_prefix = "competition"
 
@@ -11142,6 +11165,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_bind_phone()
+        djcHelper.jinggai_game()
 
     pause()

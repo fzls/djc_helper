@@ -9513,6 +9513,14 @@ class DjcHelper:
             voteNum = vote_reward["voteNum"]
             self.jinggai_game_op(f"助力次数 {voteNum}，领取奖励", "voteRewardPickup", id=vote_reward["id"])
 
+        if use_by_myself():
+            if now_after("2026-01-23 00:00:00"):
+                async_message_box(
+                    "（仅自己可见）井盖杯还有个 称号兑换 的奖励，1.23才开放，到时候把这个加上，再发一个版本",
+                    "井盖杯剩余活动",
+                    open_url=get_act_url("井盖杯挑战赛"),
+                )
+
     def prepare_jinggai_openid_info(self) -> LoginResult:
         def _is_login_info_valid(lr: LoginResult) -> bool:
             self.set_jinggai_openid_info(lr)

@@ -335,32 +335,34 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 281.9KiB/s
+            # 285.5KiB/s
+            f"https://wget.la/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 824.9KiB/s
+            f"https://hk.gh-proxy.org/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 92.9KiB/s
+            f"https://hub.glowp.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 520.7KiB/s
+            f"https://cdn.gh-proxy.org/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # 191.1KiB/s
             f"https://hk.gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 159.7KiB/s
+            # 118.1KiB/s
             f"https://ghproxy.net/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 150.2KiB/s
+            # 85.4KiB/s
             f"https://g.blfrp.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 131.0KiB/s
-            f"https://hub.gitmirror.com/https://raw.githubusercontent.com/{owner}/{repo_name}/refs/heads/{branch_name}/{filepath_in_repo}",
-            # 139.3KiB/s
+            # 144.7KiB/s
             # 最新地址可见：https://ghproxy.link/
             f"https://ghfast.top/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 74.6KiB/s
-            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 67.4KiB/s
+            # 196.8KiB/s
             f"https://gh.catmak.name/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 378.4KiB/s
+            # 429.0KiB/s
             f"https://raw.kkgithub.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 148.6KiB/s
+            # 184.9KiB/s
             f"https://gh-proxy.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 50.7KiB/s
+            # 207.9KiB/s
             f"https://cdn.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # ok
-            f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 235.9KiB/s
+            # 86.9KiB/s
             f"https://gcore.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
-            # 470.8KiB/s
+            # 683.9KiB/s
             f"https://cdn.jsdmirror.com/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -369,7 +371,7 @@ def download_github_raw_content(
     extend_urls(
         urls,
         [
-            # 70.6KiB/s
+            # timed
             f"https://github.com/{owner}/{repo_name}/raw/{branch_name}/{filepath_in_repo}",
         ],
     )
@@ -397,12 +399,16 @@ def download_github_raw_content(
     extend_urls(
         memo_invalid_mirror_list,
         [
+            # failed
+            f"https://github.3x25.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
+            # failed
+            f"https://hub.gitmirror.com/https://raw.githubusercontent.com/{owner}/{repo_name}/refs/heads/{branch_name}/{filepath_in_repo}",
+            # timeout
+            f"https://fastly.jsdelivr.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
+            # aborted
+            f"https://jsdelivr.b-cdn.net/gh/{owner}/{repo_name}@{branch_name}/{filepath_in_repo}",
             # timeout
             f"https://github.moeyy.xyz/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # 11001
-            f"https://wget.la/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
-            # timeout
-            f"https://github.3x25.com/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 11001
             f"https://gitdl.cn/https://raw.githubusercontent.com/{owner}/{repo_name}/{branch_name}/{filepath_in_repo}",
             # 11001

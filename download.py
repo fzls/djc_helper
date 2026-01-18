@@ -162,25 +162,27 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # 887.3KiB/s
-            f"https://ghfast.top/https://github.com/{release_file_path}",
-            # 419.5KiB/s
-            f"https://git.yylx.win/https://github.com/{release_file_path}",
+            # 3.4MiB/s
+            f"https://xget.xi-xu.me/gh/{release_file_path}",
+            # 11.4MiB/s
+            f"https://gh-proxy.net/https://github.com/{release_file_path}",
+            # 1.1MiB/s
+            f"https://github.tbedu.top/https://github.com/{release_file_path}",
+            # 4.3MiB/s
+            f"https://ghproxy.it/https://github.com/{release_file_path}",
             # 1.8MiB/s
+            f"https://cdn.crashmc.com/https://github.com/{release_file_path}",
+            # 316.7KiB/s
+            f"https://ghfast.top/https://github.com/{release_file_path}",
+            # 7.4MiB/s
+            f"https://git.yylx.win/https://github.com/{release_file_path}",
+            # 1.4MiB/s
             f"https://ghp.keleyaa.com/https://github.com/{release_file_path}",
-            # 157.6KiB/s
-            f"https://gh.xx9527.cn/https://github.com/{release_file_path}",
-            # # 10054
-            # f"https://cors.isteed.cc/github.com/{release_file_path}",
-            # 360.4KiB/s
+            # 3.9MiB/s
             f"https://github.boki.moe/https://github.com/{release_file_path}",
-            # 228.2KiB/s
-            f"https://gh-proxy.com/https://github.com/{release_file_path}",
-            # 127.8KiB/s
-            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
-            # 37.2KiB/s
+            # 6.1MiB/s
             f"https://kkgithub.com/{release_file_path}",
-            # 559.2KiB/s
+            # 3.3MiB/s
             f"https://gh.h233.eu.org/https://github.com/{release_file_path}",
         ],
     )
@@ -189,7 +191,7 @@ def download_latest_github_release(
     extend_urls(
         urls,
         [
-            # timeout
+            # 121.5KiB/s
             f"https://github.com/{release_file_path}",
         ],
     )
@@ -210,6 +212,16 @@ def download_latest_github_release(
     extend_urls(
         memo_invalid_mirror_list,
         [
+            # timeout
+            f"https://dgithub.xyz/{release_file_path}",
+            # failed
+            f"https://gh.xx9527.cn/https://github.com/{release_file_path}",
+            # 10054
+            f"https://cors.isteed.cc/github.com/{release_file_path}",
+            # timed
+            f"https://gh-proxy.com/https://github.com/{release_file_path}",
+            # failed
+            f"https://hub.gitmirror.com/https://github.com/{release_file_path}",
             # 11001
             f"https://slink.ltd/https://github.com/{release_file_path}",
             # 403
@@ -262,8 +274,6 @@ def download_latest_github_release(
             f"https://github.moeyy.xyz/https://github.com/{release_file_path}",
             # 11001
             f"https://download.ixnic.net/{release_file_path}",
-            # 无效
-            f"https://dgithub.xyz/{release_file_path}",
         ],
     )
     _ = memo_invalid_mirror_list

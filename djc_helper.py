@@ -2224,6 +2224,11 @@ class DjcHelper:
                 # 绑定完后再次尝试查询
                 xy_bind_role = self.xinyue_battle_ground_wpe_query_bind_role()
 
+            if xy_bind_role is None:
+                # 如果还是无法获取绑定角色，就直接使用道聚城的角色信息。只是此时若网页显示绑定的角色与道聚城的绑定角色不同，可能无法正常完成任务
+                xy_bind_role = XinYueBattleGroundWpeBindRole().auto_update_config(self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo())
+                logger.warning(f"心悦战场绑定角色后仍无法获取角色信息，将使用道聚城的绑定角色: {xy_bind_role}")
+
             # 将查询结果保存到内存中，方便后续使用
             self.dnf_xinyue_wpe_bind_role = xy_bind_role
 
@@ -2255,24 +2260,11 @@ class DjcHelper:
     def xinyue_battle_ground_wpe_bind_role(self) -> bool:
         """绑定心悦战场为道聚城的绑定角色"""
         # 使用道聚城的绑定信息去绑定心悦战场
-        roleinfo = self.get_dnf_bind_role()
-
         json_data = {
             "game_code": "dnf",
             "device": "pc",
             "scene": "tgclub_act_15488",
-            "role": {
-                "game_open_id": self.qq(),
-                "game_app_id": "",
-                "area_id": int(roleinfo.serviceID),
-                "plat_id": 2,
-                "partition_id": int(roleinfo.serviceID),
-                "partition_name": base64_encode(roleinfo.serviceName),
-                "role_id": roleinfo.roleCode,
-                # 网页上这里的角色名特殊处理了下，会将 + 和 / 替换成 - 和 _ ，确保用在url中也能安全，跟其保持一致
-                "role_name": urlsafe_base64_encode(roleinfo.roleName),
-                "device": "pc",
-            },
+            "role": self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo(),
         }
 
         raw_res = self.post(
@@ -2285,6 +2277,24 @@ class DjcHelper:
         )
 
         return raw_res["ret"] == 0
+
+    def get_xinyue_bind_roleinfo_dict_with_djc_roleinfo(self) -> dict:
+        roleinfo = self.get_dnf_bind_role()
+
+        xinyue_roleinfo_dict = {
+            "game_open_id": self.qq(),
+            "game_app_id": "",
+            "area_id": int(roleinfo.serviceID),
+            "plat_id": 2,
+            "partition_id": int(roleinfo.serviceID),
+            "partition_name": base64_encode(roleinfo.serviceName),
+            "role_id": roleinfo.roleCode,
+            # 网页上这里的角色名特殊处理了下，会将 + 和 / 替换成 - 和 _ ，确保用在url中也能安全，跟其保持一致
+            "role_name": urlsafe_base64_encode(roleinfo.roleName),
+            "device": "pc",
+        }
+
+        return xinyue_roleinfo_dict
 
     # re: 搜 wpe类活动的接入办法为
     def xinyue_battle_ground_wpe_op(
@@ -11173,6 +11183,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.jinggai_game()
+        djcHelper.xinyue_battle_ground()
 
     pause()

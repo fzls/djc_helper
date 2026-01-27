@@ -2227,7 +2227,7 @@ class DjcHelper:
             if xy_bind_role is None:
                 # 如果还是无法获取绑定角色，就直接使用道聚城的角色信息。只是此时若网页显示绑定的角色与道聚城的绑定角色不同，可能无法正常完成任务
                 xy_bind_role = XinYueBattleGroundWpeBindRole().auto_update_config(self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo())
-                logger.warning(f"心悦战场绑定角色后仍无法获取角色信息，将使用道聚城的绑定角色: {xy_bind_role}")
+                logger.warning(f"心悦战场绑定角色后仍无法获取角色信息，将使用道聚城的绑定角色，需自行确保道聚城绑定角色与心悦战场网页中手动绑定的角色一致，否则可能每周运镖任务无法正常完成: {xy_bind_role}")
 
             # 将查询结果保存到内存中，方便后续使用
             self.dnf_xinyue_wpe_bind_role = xy_bind_role

@@ -2289,8 +2289,7 @@ class DjcHelper:
             "partition_id": int(roleinfo.serviceID),
             "partition_name": base64_encode(roleinfo.serviceName),
             "role_id": roleinfo.roleCode,
-            # 网页上这里的角色名特殊处理了下，会将 + 和 / 替换成 - 和 _ ，确保用在url中也能安全，跟其保持一致
-            "role_name": urlsafe_base64_encode(roleinfo.roleName),
+            "role_name": base64_encode(roleinfo.roleName),
             "device": "pc",
         }
 

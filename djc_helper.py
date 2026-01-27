@@ -2236,7 +2236,7 @@ class DjcHelper:
 
     def xinyue_battle_ground_wpe_query_bind_role(self) -> XinYueBattleGroundWpeBindRole | None:
         """查询心悦战场的绑定信息"""
-        json_data = {"game_code": "dnf", "device": "pc", "scene": "tgclub_act_15488"}
+        json_data = {"game_code": "dnf", "device": "pc", "scene": "ceiba"}
 
         raw_res = self.post(
             "查询心悦绑定信息",
@@ -2263,7 +2263,7 @@ class DjcHelper:
         json_data = {
             "game_code": "dnf",
             "device": "pc",
-            "scene": "tgclub_act_15488",
+            "scene": "ceiba",
             "role": self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo(),
         }
 
@@ -2291,6 +2291,7 @@ class DjcHelper:
             "role_id": roleinfo.roleCode,
             "role_name": base64_encode(roleinfo.roleName),
             "device": "pc",
+            "flag": 0,
         }
 
         return xinyue_roleinfo_dict

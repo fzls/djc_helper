@@ -6383,8 +6383,7 @@ class DjcHelper:
             # iLottery = 0
 
             # # 累计登录天数
-            # iLoginTotal = int(raw_info["iSign"])
-            iLoginTotal = 0
+            iLoginTotal = int(raw_info["jSignNum"])
 
             # 总共获得抽奖次数
             jLotteryTotal = int(raw_info["jLotteryTotal"])
@@ -6454,6 +6453,25 @@ class DjcHelper:
                 time.sleep(3)
             else:
                 logger.warning(f"[{gift_index}] 当前累计抽奖次数未达到{require_lottery_count}，将不尝试领取该累计奖励")
+
+        self.dnf_luodiye_ide_op("每日签到", "502151")
+        _, iLoginTotal, _ = query_info()
+        logger.info(f"累计签到天数为 {iLoginTotal}")
+        for idx, signin_day in enumerate([1,3,7,11,14]):
+            if iLoginTotal < signin_day:
+                logger.warning(f"尚未签到 {signin_day} 天，跳过当前奖励")
+                continue
+
+            self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "502152", index=idx+1)
+            time.sleep(3)
+
+        # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
+        async_message_box(
+            "落地页活动页面有个拉回归好友的活动，点击左侧红包雨标签，邀请符合条件的好友后可以抽红包，有兴趣的请自行参与",
+            "26.2 落地页拉回归活动",
+            show_once=True,
+            open_url=get_act_url("DNF落地页活动_ide"),
+        )
 
         # tasks = [
         #     ("每日任务一", "441324"),
@@ -11183,6 +11201,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.xinyue_battle_ground()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

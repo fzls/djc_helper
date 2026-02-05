@@ -690,11 +690,11 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("绑定手机活动", self.dnf_bind_phone),
             ("井盖杯挑战赛", self.jinggai_game),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8199,30 +8199,30 @@ class DjcHelper:
         self.prepare_wpe_act_openid_accesstoken("DNF心悦wpe")
 
         def query_lottery_ticket() -> int:
-            res = self.dnf_xinyue_wpe_op("查询抽奖券", 402116, print_res=False)
+            res = self.dnf_xinyue_wpe_op("查询抽奖券", 415975, print_res=False)
             data = json.loads(res["data"])
 
             remain = data.get("limit", 0)
 
             return remain
 
-        self.dnf_xinyue_wpe_op("全民登录礼", 402100)
-        self.dnf_xinyue_wpe_op("全民充值礼", 402101)
+        self.dnf_xinyue_wpe_op("全民登录礼", 415960)
+        self.dnf_xinyue_wpe_op("全民充值礼", 415961)
 
-        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 402104)
-        self.dnf_xinyue_wpe_op("领取幸运勇士礼", 402102)
+        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 415963)
+        self.dnf_xinyue_wpe_op("领取幸运勇士礼", 415962)
 
-        self.dnf_xinyue_wpe_op("今日登录《地下城与勇士：创新世纪》", 402105)
-        self.dnf_xinyue_wpe_op("每充值50元", 402106)
-        self.dnf_xinyue_wpe_op("今日在线时长30分钟", 402107)
-        self.dnf_xinyue_wpe_op("今日游戏累计消耗156疲劳", 402108)
-        self.dnf_xinyue_wpe_op("今日邀请3位好友助力", 402111)
-        self.dnf_xinyue_wpe_op("每周通关狄瑞吉团本（团本每周六6点更新，礼盒奖励请及时领取）", 402115)
+        self.dnf_xinyue_wpe_op("今日登录《地下城与勇士：创新世纪》", 415965)
+        self.dnf_xinyue_wpe_op("每充值50元", 415966)
+        self.dnf_xinyue_wpe_op("今日在线时长30分钟", 415967)
+        self.dnf_xinyue_wpe_op("今日游戏累计消耗156疲劳", 415968)
+        self.dnf_xinyue_wpe_op("今日邀请3位好友助力", 415971)
+        self.dnf_xinyue_wpe_op("每周通关狄瑞吉团本（团本每周六6点更新，礼盒奖励请及时领取）", 415974)
 
         box_count = query_lottery_ticket()
         logger.info(f"当前拥有 {box_count} 个宝箱")
         for idx in range_from_one(box_count):
-            self.dnf_xinyue_wpe_op(f"{idx}/{box_count} 打开礼盒", 402114)
+            self.dnf_xinyue_wpe_op(f"{idx}/{box_count} 打开礼盒", 415973)
             time.sleep(3)
 
         # 需要在心悦app完成
@@ -8283,7 +8283,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "26634"
+        act_id = "27184"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -11210,6 +11210,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

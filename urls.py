@@ -62,12 +62,12 @@ not_ams_activities = [
     newNotAmsActInfo("2025-11-22 00:00:00", "2026-01-29 23:59:59", "狄瑞吉预热"),
     newNotAmsActInfo("2026-01-08 09:00:00", "2026-03-05 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-25 23:59:59", "colg每日签到"),
-    newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-04 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-07 23:59:59", "DNF心悦wpe_dup"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-04 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-04-23 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-01-28 23:59:59", "井盖杯挑战赛"),
+    newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "WeGame活动"),
     #
     # 已过期活动
     #
@@ -124,12 +124,12 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "狄瑞吉预热": "https://dnf.qq.com/cp/a20251122diregiepreview/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
-    "WeGame活动": "https://dnf.qq.com/cp/a20260108wegame/index.html",
     "DNF心悦wpe_dup": "https://act.xinyue.qq.com/act/a20251226myxl/index.html?via=upother_61007",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20251225DNFPC/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "井盖杯挑战赛": "https://dnf.qq.com/cp/a20260108covers2/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/a20260205wegame/index.html",
     #
     # 已过期活动
     #
@@ -336,7 +336,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
-        self.ide_iActivityId_dnf_wegame = "98_hdpMRF"  # WeGame活动
+        self.ide_iActivityId_dnf_wegame = "7_x2CWlz"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿

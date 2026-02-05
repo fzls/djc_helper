@@ -1538,6 +1538,10 @@ def show_tips(cfg: Config):
             "完成狄瑞吉的教学，可以领取30天黑钻和假猪套称号，请自行参与\n"
             "https://dnf.qq.com/cp/a20260108drill/index.html\n"
         ),
+        "26.2 微信游戏圈": (
+            "微信游戏圈又有几个新春活动（签到有礼与新春送福利），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
+            "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic3.png"
+        ),
     }
 
     logger.info(

@@ -201,10 +201,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "出远门通知"
-    message = """国庆准备出远门自驾游，七八天后才回来，期间应该没空看QQ，如果有任何事，请在群里问其他群友，或者私聊我的小号QQ，等我回家后会一个个回复的~
+    title = "10群封禁通知"
+    message = """因部分群友讨论涉政话题，10群刚刚被系统封禁了，原10群的相关群友可以在通知关闭后弹出的QQ群列表中选择11群或者其他已有群加入。
+
+另外，请各位朋友切勿在交流群内讨论此类敏感话题，万分感谢配合！
 """
-    open_url = ""
+    open_url = "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

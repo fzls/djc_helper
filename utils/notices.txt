@@ -488,5 +488,15 @@
     "open_url": "",
     "expire_at": "2025-10-07 19:12:57",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "10群通知",
+    "message": "因部分群友讨论涉政话题，10群刚刚被系统封禁了，原10群的相关群友可以在通知关闭后弹出的QQ群列表中选择11群或者其他已有群加入。\n\n另外，请各位朋友切勿在交流群内讨论此类敏感话题，万分感谢配合！\n",
+    "send_at": "2026-02-09 15:57:25",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv",
+    "expire_at": "2026-03-12 15:57:25",
+    "show_only_before_version": ""
   }
 ]

@@ -693,6 +693,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("助手限定活动", self.dnf_helper_limit_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -704,7 +705,6 @@ class DjcHelper:
             ("狄瑞吉预热", self.dnf_diruiji_yure),
             ("DNF福利中心兑换", self.dnf_welfare),
             ("发布会特别赠礼", self.dnf_press_conference_gift),
-            ("助手限定活动", self.dnf_helper_limit_act),
             ("猪猪侠联动", self.dnf_ggbond),
             ("超级会员", self.dnf_super_vip),
             ("DNF久久公益节", self.dnf_help_child),
@@ -8937,6 +8937,8 @@ class DjcHelper:
     #       https://www.huatools.com/unicode-chinese/
     #   5. 最后参照页面慢慢接入
     #       从 getUserInfo 中去获取对应任务和奖励的ID
+    #   6. 搜索 payload: { 可以找到各个参数设置的地方
+    #   7. 如果有 activitytpl/checkin/pickupTotalReward 和 /checkinPickupTotalReward 两种长起来类似的调用处，前者才是真正的action，不过可以通过后者来观察具体参数是什么
     @try_except()
     def dnf_helper_limit_act(self):
         show_head_line("助手限定活动")
@@ -8964,452 +8966,127 @@ class DjcHelper:
 
             return remainDrawTimes, fame, level, experience
 
-        taskMap = {
-            "27": {
-                "id": 27,
-                "title": "浏览助手内一篇资讯/动态",
-                "type": "dz_view",
-                "keys": "view_info_or_moment",
-                "refreshCycle": "day",
-                "conditionVal": "1",
-                "extra": {"pointGroup": "", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "5",
-                        "name": "",
-                        "pic": "",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "growth",
-                    }
-                ],
-            },
-            "28": {
-                "id": 28,
-                "title": "今日登陆游戏",
-                "type": "login_game",
-                "keys": "login_game",
-                "refreshCycle": "day",
-                "conditionVal": "1",
-                "extra": {"topicIds": ""},
-                "cmptedConditionVal": 1,
-                "realComptedConditionVal": 1,
-                "status": 2,
-                "rewardList": [
-                    {
-                        "type": "5",
-                        "name": "",
-                        "pic": "",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "growth",
-                    }
-                ],
-            },
-            "29": {
-                "id": 29,
-                "title": "消耗100点疲劳值",
-                "type": "fatigue_used",
-                "keys": "fatigue_used",
-                "refreshCycle": "day",
-                "conditionVal": "100",
-                "extra": {"topicIds": ""},
-                "cmptedConditionVal": 100,
-                "realComptedConditionVal": 194,
-                "status": 1,
-                "rewardList": [
-                    {
-                        "type": "5",
-                        "name": "",
-                        "pic": "",
-                        "num": "2",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "growth",
-                    }
-                ],
-            },
-            "30": {
-                "id": 30,
-                "title": "分享活动",
-                "type": "click_jump",
-                "keys": "click_jump",
-                "refreshCycle": "week",
-                "conditionVal": "1",
-                "extra": {"pointGroup": "", "url": "require", "type": "url", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "5",
-                        "name": "",
-                        "pic": "",
-                        "num": "2",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "growth",
-                    }
-                ],
-            },
-        }
-        for task_id, task_info in taskMap.items():
-            # 浏览助手内一篇资讯/动态 需要在助手内完成
-            if task_id not in ["27"]:
+        def query_lottery_count() -> int:
+            raw_res = self.dnf_helper_limit_act_op("查询抽奖次数", "lottery/config", print_res=False)
+            res = raw_res["data"]
+
+            remainDrawTimes = int(res["remainDrawTimes"])
+
+            return remainDrawTimes
+
+        def query_task_info() -> list[dict]:
+            raw_res = self.dnf_helper_limit_act_op("查询任务列表", "task/config", print_res=False)
+            res = raw_res["data"]
+
+            return res["taskConfig"]
+
+        def query_checkin_list() -> tuple[list[dict], list[dict]]:
+            raw_res = self.dnf_helper_limit_act_op("查询签到列表", "checkin/config", print_res=False)
+            res = raw_res["data"]
+
+            return res["dailyCheckIns"], res["totalCheckIns"]
+
+        def query_checkin_data() -> tuple[int, int]:
+            raw_res = self.dnf_helper_limit_act_op("查询签到信息", "checkin/data", print_res=False)
+            res = raw_res["data"]
+
+            return res["total_days"], res["recheckin_count"]
+
+        taskConfig = query_task_info()
+        for task_info in taskConfig:
+            task_id = task_info["id"]
+            status = task_info["status"]
+
+            if status == 2:
+                logger.warning(f"{task_info['title']} 奖励已领取，跳过")
+                continue
+
+            if status == 0:
                 self.dnf_helper_limit_act_op(
-                    f"{task_info['title']} 完成任务 - {task_id}", "taskComplete", taskId=task_id
+                    f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id
                 )
                 time.sleep(3)
 
-            self.dnf_helper_limit_act_op(f"{task_info['title']} 领取任务奖励 - {task_id}", "pickUpGift", taskId=task_id)
+            self.dnf_helper_limit_act_op(f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id)
             time.sleep(3)
 
-        remainDrawTimes, _, _, _ = query_info()
-        logger.info(f"当前剩余入场券 {remainDrawTimes} 次")
+        date_today = format_now("%Y-%m-%d")
+        today = parse_time(date_today, "%Y-%m-%d")
+
+        total_days, recheckin_count = query_checkin_data()
+        logger.info(f"当前已签到天数 {total_days}，可补签天数 {recheckin_count}")
+
+        dailyCheckIns, totalCheckIns = query_checkin_list()
+
+        for check_info in dailyCheckIns:
+            date = check_info["date"]
+            status = check_info["status"]
+
+            if date == date_today and status == 0:
+                self.dnf_helper_limit_act_op(f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0)
+                time.sleep(3)
+
+        for check_info in dailyCheckIns:
+            date = check_info["date"]
+            status = check_info["status"]
+
+            if recheckin_count <= 0:
+                logger.warning("已无补签次数，跳过补签")
+                break
+
+            if parse_time(date, "%Y-%m-%d") > today:
+                logger.warning(f"尚未到 {date}，跳过后续日期")
+                break
+
+            if status == 1:
+                logger.warning(f"{date} 已签到，跳过")
+                continue
+
+            if status == 2:
+                res = self.dnf_helper_limit_act_op(f"补签 {date}", "checkin/checkIn", date=date, reCheckIn=1)
+                # {"result": 1, "returnCode": 2000, "returnMsg": "补签次数不足"}
+                if res["returnCode"] == 2000:
+                    break
+
+                recheckin_count -= 1
+                time.sleep(3)
+
+        dailyCheckIns, totalCheckIns = query_checkin_list()
+        for reward_info in totalCheckIns:
+            day = reward_info["value"]
+            status = reward_info["status"]
+
+            if status == 0:
+                logger.warning(f"累计登录 {day} 天尚未达成，跳过尝试后续天数")
+                break
+            elif status == 1:
+                self.dnf_helper_limit_act_op(f"尝试领取累计登录 {day} 天奖励", "checkin/pickupTotalReward", value=day)
+                time.sleep(3)
+            elif status == 2:
+                logger.warning(f"累计登录 {day} 天已领取，跳过")
+                continue
+
+        remainDrawTimes = query_lottery_count()
+        logger.info(f"当前剩余抽奖 {remainDrawTimes} 次")
         for idx in range_from_one(remainDrawTimes):
-            _, fame, level, _ = query_info()
-
-            draw_type = "alade"
-            if level >= 55 and fame >= 10000:
-                draw_type = "tianjie"
-            if level >= 86 and fame >= 30000:
-                draw_type = "mojie"
-            if level >= 110 and fame >= 50000:
-                draw_type = "shenjie"
-
-            logger.info(f"最新等级 {level}, 名望 {fame}, 抽奖类型 {draw_type}")
-
-            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 冒险", "draw", type=draw_type)
+            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 福利抽奖", "lottery/draw")
             time.sleep(3)
 
-        _, fame, level, experience = query_info()
-        logger.info(f"最新等级 {level}, 名望 {fame}, 经验 {experience}")
-
-        taskMap: dict[str, dict[str, Any]] = {
-            "31": {
-                "id": 31,
-                "title": "Lv20",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "56",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "闪亮的雷米援助礼盒",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151056827.png",
-                        "num": "5",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "32": {
-                "id": 32,
-                "title": "Lv30",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "101",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "装备品级调整箱礼盒",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151116238.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "33": {
-                "id": 33,
-                "title": "Lv60",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "296",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "灵魂武器袖珍罐",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151126322.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "34": {
-                "id": 34,
-                "title": "Lv85",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "596",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "深渊：终末崇拜者入场券",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251022150303450.png",
-                        "num": "2",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "35": {
-                "id": 35,
-                "title": "Lv100",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "886",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "抗疲劳秘药 (1点)",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151153911.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "36": {
-                "id": 36,
-                "title": "Lv115",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "1231",
-                "extra": {"pointGroup": "experience", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "+7 装备增幅券",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151201752.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "37": {
-                "id": 37,
-                "title": "名望值：1000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "1000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "神秘契约礼包 (1天)",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151219930.png",
-                        "num": "2",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "38": {
-                "id": 38,
-                "title": "名望值：5000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "5000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "王者契约礼包 (1天)",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151228638.png",
-                        "num": "3",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "39": {
-                "id": 39,
-                "title": "名望值：10000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "10000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "复活币礼盒 (1个)",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151246860.png",
-                        "num": "3",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "40": {
-                "id": 40,
-                "title": "名望值：30000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "30000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "深渊：终末崇拜者入场券",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251022150303450.png",
-                        "num": "3",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "41": {
-                "id": 41,
-                "title": "名望值：40000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "40000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "林纳斯的神奇模具礼盒",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151304155.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-            "42": {
-                "id": 42,
-                "title": "名望值：50000",
-                "type": "point",
-                "keys": "point_until",
-                "refreshCycle": "90d",
-                "conditionVal": "50000",
-                "extra": {"pointGroup": "fame", "topicIds": ""},
-                "cmptedConditionVal": 0,
-                "realComptedConditionVal": 0,
-                "status": 0,
-                "rewardList": [
-                    {
-                        "type": "0",
-                        "name": "纯净的黄金增幅书",
-                        "pic": "https://cdn.dzhu.qq.com/button/20251013151312882.png",
-                        "num": "1",
-                        "itemId": "",
-                        "expireType": "0",
-                        "expire": "",
-                        "rewardId": "",
-                        "group": "",
-                    }
-                ],
-            },
-        }
-        for gift_id, task_info in taskMap.items():
-            if task_info["extra"]["pointGroup"] == "experience" and experience < int(task_info["conditionVal"]):
-                logger.warning(f"{task_info['title']} 经验不够，跳过领取任务奖励 - {gift_id}")
-                continue
-            if task_info["extra"]["pointGroup"] == "fame" and fame < int(task_info["conditionVal"]):
-                logger.warning(f"{task_info['title']} 名望不够，跳过领取任务奖励 - {gift_id}")
-                continue
-
-            self.dnf_helper_limit_act_op(f"{task_info['title']} 领取奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
-            time.sleep(3)
+        # _, fame, level, experience = query_info()
+        # logger.info(f"最新等级 {level}, 名望 {fame}, 经验 {experience}")
+        #
+        # taskMap: dict[str, dict[str, Any]] = {
+        # }
+        # for gift_id, task_info in taskMap.items():
+        #     if task_info["extra"]["pointGroup"] == "experience" and experience < int(task_info["conditionVal"]):
+        #         logger.warning(f"{task_info['title']} 经验不够，跳过领取任务奖励 - {gift_id}")
+        #         continue
+        #     if task_info["extra"]["pointGroup"] == "fame" and fame < int(task_info["conditionVal"]):
+        #         logger.warning(f"{task_info['title']} 名望不够，跳过领取任务奖励 - {gift_id}")
+        #         continue
+        #
+        #     self.dnf_helper_limit_act_op(f"{task_info['title']} 领取奖励 - {gift_id}", "pickUpGift", taskId=gift_id)
+        #     time.sleep(3)
 
         # async_message_box(
         #     (
@@ -9424,9 +9101,9 @@ class DjcHelper:
     def dnf_helper_limit_act_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "1025"
+        activityId = "10032"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "ggbond"
+        activity_action_prefix = "activitytpl"
 
         action = action_name
         if action_name != "init":
@@ -11210,6 +10887,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.jinggai_game()
+        djcHelper.dnf_helper_limit_act()
 
     pause()

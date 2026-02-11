@@ -201,12 +201,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "10群封禁通知"
-    message = """因部分群友讨论涉政话题，10群刚刚被系统封禁了，原10群的相关群友可以在通知关闭后弹出的QQ群列表中选择11群或者其他已有群加入。
-
-另外，请各位朋友切勿在交流群内讨论此类敏感话题，万分感谢配合！
+    title = "次元对决预约"
+    message = """刚发现个次元对决预约活动，尝试加到小助手里，但是没搞定。有需要的朋友请在点确认后弹出的活动页面中按照下面的步骤操作
+1. 登录并绑定角色
+2. 点击右侧的【预约次元对决有礼】，即可领取1点疲劳、3天黑钻和一个增幅盒子
 """
-    open_url = "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv"
+    open_url = "https://hdnf.qq.com/a20260121testrecruit/index.html?channelType=9"
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

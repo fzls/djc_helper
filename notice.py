@@ -206,7 +206,7 @@ def main():
 1. 登录并绑定角色
 2. 点击右侧的【预约次元对决有礼】，即可领取1点疲劳、3天黑钻和一个增幅盒子
 """
-    open_url = "https://hdnf.qq.com/a20260121testrecruit/index.html?channelType=9"
+    open_url = ""
     show_only_before_version = ""
     valid_duration = timedelta(days=7)
 

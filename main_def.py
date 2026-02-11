@@ -1542,6 +1542,12 @@ def show_tips(cfg: Config):
             "微信游戏圈又有几个新春活动（签到有礼与新春送福利），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab来打开，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic3.png"
         ),
+        "26.2 次元对决预约": (
+            "刚发现个次元对决预约活动，尝试加到小助手里，但是没搞定。有需要的朋友请在点确认后弹出的活动页面中按照下面的步骤操作\n"
+            "1. 登录并绑定角色\n"
+            "2. 点击右侧的【预约次元对决有礼】，即可领取1点疲劳、3天黑钻和一个增幅盒子\n"
+            "https://hdnf.qq.com/a20260121testrecruit/index.html"
+        ),
     }
 
     logger.info(

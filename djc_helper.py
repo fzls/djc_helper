@@ -688,7 +688,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
-            ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("绑定手机活动", self.dnf_bind_phone),
             ("WeGame活动", self.dnf_wegame),
@@ -701,6 +700,7 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("井盖杯挑战赛", self.jinggai_game),
             ("狄瑞吉预热", self.dnf_diruiji_yure),
             ("DNF福利中心兑换", self.dnf_welfare),

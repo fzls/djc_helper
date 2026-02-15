@@ -66,6 +66,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-01-20 00:00:00", "2026-02-23 23:59:59", "助手限定活动"),
+    newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "超核勇士wpe"),
     #
     # 已过期活动
     #
@@ -86,7 +87,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-07-30 23:59:59", "助手魔界人每日幸运签"),
     newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
     newNotAmsActInfo("2025-05-23 11:30:00", "2025-07-03 23:59:59", "超核勇士wpe_dup"),
-    newNotAmsActInfo("2025-04-24 15:00:00", "2025-06-09 23:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
     newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
@@ -128,6 +128,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20260205wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260201dnf/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/activity_template",
+    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/aae8a0ef9237a42eb927a98a9c61d5b8f/index.html",
     #
     # 已过期活动
     #
@@ -150,7 +151,6 @@ act_name_to_url = {
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",
     "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
-    "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/a311c68ee22864aebac61a94f2612ac54/index.html?actVersion=353918",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
     "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",

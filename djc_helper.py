@@ -152,7 +152,6 @@ from util import (
     try_except,
     uin2qq,
     urlsafe_base64_decode,
-    urlsafe_base64_encode,
     use_by_myself,
     utf8len,
     wait_for,
@@ -2226,8 +2225,12 @@ class DjcHelper:
 
             if xy_bind_role is None:
                 # 如果还是无法获取绑定角色，就直接使用道聚城的角色信息。只是此时若网页显示绑定的角色与道聚城的绑定角色不同，可能无法正常完成任务
-                xy_bind_role = XinYueBattleGroundWpeBindRole().auto_update_config(self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo())
-                logger.warning(f"心悦战场绑定角色后仍无法获取角色信息，将使用道聚城的绑定角色，需自行确保道聚城绑定角色与心悦战场网页中手动绑定的角色一致，否则可能每周运镖任务无法正常完成: {xy_bind_role}")
+                xy_bind_role = XinYueBattleGroundWpeBindRole().auto_update_config(
+                    self.get_xinyue_bind_roleinfo_dict_with_djc_roleinfo()
+                )
+                logger.warning(
+                    f"心悦战场绑定角色后仍无法获取角色信息，将使用道聚城的绑定角色，需自行确保道聚城绑定角色与心悦战场网页中手动绑定的角色一致，否则可能每周运镖任务无法正常完成: {xy_bind_role}"
+                )
 
             # 将查询结果保存到内存中，方便后续使用
             self.dnf_xinyue_wpe_bind_role = xy_bind_role
@@ -3748,10 +3751,7 @@ class DjcHelper:
             res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 418550)
 
             is_chaohe = not (
-                (res["ret"] == 0 and "40006" in res["data"])  # 不是超核
-                or (
-                    res["ret"] == 7001
-                )  # 登录参数有误
+                (res["ret"] == 0 and "40006" in res["data"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
             )
             return is_chaohe
 
@@ -3819,7 +3819,6 @@ class DjcHelper:
             task_list.append(
                 (419941, "(单次)彩蛋任务-闪闪聊天关键词"),
             )
-
 
         for flowid, name in task_list:
             self.dnf_chaohe_wpe_op(f"尝试完成任务 {name}", flowid)
@@ -3952,10 +3951,7 @@ class DjcHelper:
             res = self.dnf_helper_wpe_dup_op("尝试请求，判断是否是超核玩家", 316222)
 
             is_chaohe = not (
-                (res["ret"] == 0 and "40006" in res["data"])  # 不是超核
-                or (
-                    res["ret"] == 7001
-                )  # 登录参数有误
+                (res["ret"] == 0 and "40006" in res["data"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
             )
             return is_chaohe
 
@@ -6502,12 +6498,12 @@ class DjcHelper:
         self.dnf_luodiye_ide_op("每日签到", "502151")
         _, iLoginTotal, _ = query_info()
         logger.info(f"累计签到天数为 {iLoginTotal}")
-        for idx, signin_day in enumerate([1,3,7,11,14]):
+        for idx, signin_day in enumerate([1, 3, 7, 11, 14]):
             if iLoginTotal < signin_day:
                 logger.warning(f"尚未签到 {signin_day} 天，跳过当前奖励")
                 continue
 
-            self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "502152", index=idx+1)
+            self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "502152", index=idx + 1)
             time.sleep(3)
 
         # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
@@ -9047,12 +9043,12 @@ class DjcHelper:
                 continue
 
             if status == 0:
-                self.dnf_helper_limit_act_op(
-                    f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id
-                )
+                self.dnf_helper_limit_act_op(f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id)
                 time.sleep(3)
 
-            self.dnf_helper_limit_act_op(f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id)
+            self.dnf_helper_limit_act_op(
+                f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id
+            )
             time.sleep(3)
 
         date_today = format_now("%Y-%m-%d")
@@ -9068,7 +9064,9 @@ class DjcHelper:
             status = check_info["status"]
 
             if date == date_today and status == 0:
-                self.dnf_helper_limit_act_op(f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0)
+                self.dnf_helper_limit_act_op(
+                    f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0
+                )
                 time.sleep(3)
 
         for check_info in dailyCheckIns:

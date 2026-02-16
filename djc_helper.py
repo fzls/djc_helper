@@ -211,7 +211,8 @@ class DjcHelper:
         # res = self.dnf_luodiye_ide_op("判断skey是否过期", "485983", print_res=False)
 
         # 预计结束时间: 2029-3-31
-        res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", print_res=False)
+        # re: 为了避免这里为了获取iFlowId对应的sIdeToken时，尝试查询活动信息失败而导致流程中断，这里预先填好sIdeToken，减少出错几率
+        res = self.dnf_bind_phone_ide_op("判断skey是否过期", "414203", sIdeToken="HL2qNl", print_res=False)
 
         if use_by_myself():
             msg = str(get_first_exists_dict_value(res, "msg", "sMsg") or "")

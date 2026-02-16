@@ -10220,7 +10220,16 @@ class DjcHelper:
 
         # 当外部没有显式传入sIdeToken的时候，尝试通过活动id和flowid去查出该信息
         if sIdeToken == "" and iFlowId != "":
-            act_info = get_ide_act(iActivityId)
+            act_info = None
+            max_try_count = 3
+            for idx in range_from_one(max_try_count):
+                act_info = get_ide_act(iActivityId)
+                if act_info is not None:
+                    break
+
+                logger.warning(f"[{idx}/{max_try_count}] {ctx} 获取活动 {iActivityId} 信息失败，将等待一会后重试")
+                time.sleep(3)
+
             sIdeToken = act_info.flows[iFlowId].sIdeToken
 
         eas_url = self.preprocess_eas_url(eas_url)

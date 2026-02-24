@@ -3749,10 +3749,12 @@ class DjcHelper:
             #     "data": "{\"msg\":\"请微信联系闪闪进行身份验证\",\"ret\":40006}",
             #     "serialId": "ceiba-supercore-27264-418550-1771145001596-lmOfzk9rm3"
             # }
+            # note: 注意，这里不能单独用 ret 是否是 40006来判断，因为已经领取过也会是这个错误码，就像下面这样，所以还是得用msg的关键词匹配
+            # {"ret": 0, "msg": "很抱歉，勇士你已领取过奖励啦！", "data": "{\"msg\":\"很抱歉，勇士你已领取过奖励啦！\",\"ret\":40006}", "serialId": "ceiba-supercore-27264-418550-1771914125760-271e229923"}
             res = self.dnf_chaohe_wpe_op("尝试请求，判断是否是超核玩家", 418550)
 
             is_chaohe = not (
-                (res["ret"] == 0 and "40006" in res["data"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
+                (res["ret"] == 0 and "身份验证" in res["msg"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
             )
             return is_chaohe
 
@@ -3949,10 +3951,12 @@ class DjcHelper:
             #     "data": "{\"msg\":\"请微信联系闪闪进行身份验证\",\"ret\":40006}",
             #     "serialId": "ceiba-supercore-23290-316013-1748363426288-kjLgw1HjEZ"
             # }
+            # note: 注意，这里不能单独用 ret 是否是 40006来判断，因为已经领取过也会是这个错误码，就像下面这样，所以还是得用msg的关键词匹配
+            # {"ret": 0, "msg": "很抱歉，勇士你已领取过奖励啦！", "data": "{\"msg\":\"很抱歉，勇士你已领取过奖励啦！\",\"ret\":40006}", "serialId": "ceiba-supercore-27264-418550-1771914125760-271e229923"}
             res = self.dnf_helper_wpe_dup_op("尝试请求，判断是否是超核玩家", 316222)
 
             is_chaohe = not (
-                (res["ret"] == 0 and "40006" in res["data"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
+                (res["ret"] == 0 and "身份验证" in res["msg"]) or (res["ret"] == 7001)  # 不是超核  # 登录参数有误
             )
             return is_chaohe
 

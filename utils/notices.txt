@@ -498,5 +498,15 @@
     "open_url": "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv",
     "expire_at": "2026-03-12 15:57:25",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "10群恢复3000人",
+    "message": "刚斥巨资续了10群的3000人资格一年，之前被误封不小心点了退出群聊的10群的小伙伴们可以加回去了\n",
+    "send_at": "2026-02-26 10:04:52",
+    "show_type": "once",
+    "open_url": "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv",
+    "expire_at": "2026-03-12 10:04:52",
+    "show_only_before_version": ""
   }
 ]

@@ -201,14 +201,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "次元对决预约"
-    message = """刚发现个次元对决预约活动，尝试加到小助手里，但是没搞定。有需要的朋友请在点确认后弹出的活动页面中按照下面的步骤操作
-1. 登录并绑定角色
-2. 点击右侧的【预约次元对决有礼】，即可领取1点疲劳、3天黑钻和一个增幅盒子
+    title = "10群恢复3000人"
+    message = """刚斥巨资续了10群的3000人资格一年，之前被误封不小心点了退出群聊的10群的小伙伴们可以加回去了
 """
-    open_url = ""
+    open_url = "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv"
     show_only_before_version = ""
-    valid_duration = timedelta(days=7)
+    valid_duration = timedelta(days=14)
 
     if title != "":
         nm.add_notice(

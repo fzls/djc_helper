@@ -1526,10 +1526,6 @@ def show_tips(cfg: Config):
             "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
             "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index\n"
         ),
-        "26.1 网吧": (
-            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
-            "https://act1.hdnf.qq.com/a20260108vipnetbar/pcbanner.html\n"
-        ),
         "26.1 微综艺": (
             "有个看dnf综艺的活动，需要把网页打开后，登录并绑定角色，然后依次观看右侧的1-3期各25分钟，不能放在后台，但是可以放到其他屏幕或者挂着玩手机，等观看时长达到5/15/25分钟可以领取对应奖励，三个综艺总计9个奖励，有一些黑钻，请自行参与\n"
             "https://dnf.qq.com/cp/a20260101diregiefriends/index.html\n"
@@ -1549,6 +1545,10 @@ def show_tips(cfg: Config):
             "\n"
             "要速通领奖励，直接随便选一个，就会把所有错误答案都给出解析，然后再选择没列出的那个正确答案就可以了（部分关卡不列出，则直接ABCD按顺序快速点过去）\n"
             "https://dnf.qq.com/cp/a20260108drill/\n"
+        ),
+        "26.3 网吧": (
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
+            "https://act1.hdnf.qq.com/a20260108vipnetbar/hl_index.html\n"
         ),
     }
 

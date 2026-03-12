@@ -686,7 +686,6 @@ class DjcHelper:
         #     -aegis -beacon -log?sCloudApiName -.png -.jpg -.gif -.js -.css  -.ico -data:image -.mp4 -pingfore.qq.com -.mp3 -.wav -logs.game.qq.com -fx_fe_report -trace.qq.com -.woff2 -.TTF -.otf -snowflake.qq.com -vd6.l.qq.com -doGPMReport -wuji/object -thumbplayer -get_video_mark_all  -rumt-zh.com -login/analysis
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("绑定手机活动", self.dnf_bind_phone),
@@ -694,6 +693,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6421,7 +6421,7 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "485983", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "512149", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
@@ -6468,66 +6468,71 @@ class DjcHelper:
                     time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("见面礼", "485989")
+        self.dnf_luodiye_ide_op("见面礼包", "512775")
 
-        iLotteryCount, _, _ = query_info()
-        for idx in range_from_one(iLotteryCount):
-            self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 每日抽奖", "485992")
-            time.sleep(3)
+        # iLotteryCount, _, _ = query_info()
+        # for idx in range_from_one(iLotteryCount):
+        #     self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 每日抽奖", "485992")
+        #     time.sleep(3)
 
         # self.dnf_luodiye_ide_op("庆典礼包", "441320")
         #
         # try_daily_signin()
         # # self.dnf_luodiye_ide_op("每日签到", "441321")
 
-        login_gifts_list = [
-            (1, 5),
-            (2, 10),
-            (3, 15),
-            (4, 20),
-            (5, 25),
-            (6, 30),
-            (7, 35),
-        ]
-        _, _, jFinishedLotteryCount = query_info()
-        logger.info(f"累计抽奖次数为 {jFinishedLotteryCount}")
-        for gift_index, require_lottery_count in login_gifts_list:
-            if jFinishedLotteryCount >= require_lottery_count:
-                self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积抽奖次数奖励 {require_lottery_count}次", "485995", index=gift_index
-                )
-                time.sleep(3)
-            else:
-                logger.warning(f"[{gift_index}] 当前累计抽奖次数未达到{require_lottery_count}，将不尝试领取该累计奖励")
-
-        self.dnf_luodiye_ide_op("每日签到", "502151")
-        _, iLoginTotal, _ = query_info()
-        logger.info(f"累计签到天数为 {iLoginTotal}")
-        for idx, signin_day in enumerate([1, 3, 7, 11, 14]):
-            if iLoginTotal < signin_day:
-                logger.warning(f"尚未签到 {signin_day} 天，跳过当前奖励")
-                continue
-
-            self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "502152", index=idx + 1)
-            time.sleep(3)
-
-        # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
-        async_message_box(
-            "落地页活动页面有个拉回归好友的活动，点击左侧红包雨标签，邀请符合条件的好友后可以抽红包，有兴趣的请自行参与",
-            "26.2 落地页拉回归活动",
-            show_once=True,
-            open_url=get_act_url("DNF落地页活动_ide"),
-        )
-
-        # tasks = [
-        #     ("每日任务一", "441324"),
-        #     ("每日任务二", "441325"),
-        #     ("每周任务一", "441326"),
-        #     ("每周任务二", "441327"),
+        # login_gifts_list = [
+        #     (1, 5),
+        #     (2, 10),
+        #     (3, 15),
+        #     (4, 20),
+        #     (5, 25),
+        #     (6, 30),
+        #     (7, 35),
         # ]
-        # for name, flowid in tasks:
-        #     self.dnf_luodiye_ide_op(name, flowid)
-        #     time.sleep(5)
+        # _, _, jFinishedLotteryCount = query_info()
+        # logger.info(f"累计抽奖次数为 {jFinishedLotteryCount}")
+        # for gift_index, require_lottery_count in login_gifts_list:
+        #     if jFinishedLotteryCount >= require_lottery_count:
+        #         self.dnf_luodiye_ide_op(
+        #             f"[{gift_index}] 累积抽奖次数奖励 {require_lottery_count}次", "485995", index=gift_index
+        #         )
+        #         time.sleep(3)
+        #     else:
+        #         logger.warning(f"[{gift_index}] 当前累计抽奖次数未达到{require_lottery_count}，将不尝试领取该累计奖励")
+        #
+        # self.dnf_luodiye_ide_op("每日签到", "502151")
+        # _, iLoginTotal, _ = query_info()
+        # logger.info(f"累计签到天数为 {iLoginTotal}")
+        # for idx, signin_day in enumerate([1, 3, 7, 11, 14]):
+        #     if iLoginTotal < signin_day:
+        #         logger.warning(f"尚未签到 {signin_day} 天，跳过当前奖励")
+        #         continue
+        #
+        #     self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "502152", index=idx + 1)
+        #     time.sleep(3)
+        #
+        # # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
+        # async_message_box(
+        #     "落地页活动页面有个拉回归好友的活动，点击左侧红包雨标签，邀请符合条件的好友后可以抽红包，有兴趣的请自行参与",
+        #     "26.2 落地页拉回归活动",
+        #     show_once=True,
+        #     open_url=get_act_url("DNF落地页活动_ide"),
+        # )
+
+        tasks = [
+            ("每日通关深渊任务", "513017"),
+            ("累计通关美神奖励", "513079"),
+            ("累计通关纳波尔奖励", "513082"),
+            ("累计通关狄瑞吉奖励", "513111"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_luodiye_ide_op(name, flowid)
+            time.sleep(5)
+
+        self.dnf_luodiye_ide_op("积分兑换礼包 - 增幅券", "513155", index=1)
+        time.sleep(5)
+        self.dnf_luodiye_ide_op("积分兑换礼包 - 装备提升礼盒", "513155", index=2)
+
         #
         # # iTicket, iLottery = query_info()
         # # async_message_box(
@@ -10944,6 +10949,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_chaohe_wpe()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

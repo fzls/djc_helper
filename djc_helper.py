@@ -691,9 +691,9 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("助手限定活动", self.dnf_helper_limit_act),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("助手限定活动", self.dnf_helper_limit_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -8984,8 +8984,10 @@ class DjcHelper:
     #   3. 在chrome的 Sources tab中 找到下面两个文件，将 utf8 encode的字符串解码后放入 test.js 文件中
     #       top/dzhu.qq.com/fe/dnf/summer-act/umi.xxxxxx.js
     #       top/dzhu.qq.com/fe/dnf/summer-act/p__home.xxxxxx.async.js
-    #   4. 然后搜索 action前缀/ 或者页面上按钮附近的文案来找到各个接口的位置
+    #   .
     #       https://www.huatools.com/unicode-chinese/
+    #   .
+    #   4. 然后搜索 action前缀/ 或者页面上按钮附近的文案来找到各个接口的位置， 或者直接点按钮看请求数据
     #   5. 最后参照页面慢慢接入
     #       从 getUserInfo 中去获取对应任务和奖励的ID
     #   6. 搜索 payload: { 可以找到各个参数设置的地方
@@ -9043,87 +9045,194 @@ class DjcHelper:
 
             return res["total_days"], res["recheckin_count"]
 
-        taskConfig = query_task_info()
-        for task_info in taskConfig:
-            task_id = task_info["id"]
-            status = task_info["status"]
+        all_channels = [
+            3061,
+            7061,
+            11061,
+            14061,
+            16061,
+            20061,
+            3062,
+            7062,
+            11062,
+            14062,
+            16062,
+            20062,
+            3063,
+            7063,
+            11063,
+            14063,
+            16063,
+            20063,
+            3064,
+            7064,
+            11064,
+            14064,
+            16064,
+            20064,
+            3065,
+            7065,
+            11065,
+            14065,
+            16065,
+            20065,
+            21061,
+            29061,
+            30061,
+            36061,
+            41061,
+            44061,
+            21062,
+            29062,
+            30062,
+            36062,
+            41062,
+            44062,
+            21063,
+            29063,
+            30063,
+            36063,
+            41063,
+            44063,
+            21064,
+            29064,
+            30064,
+            36064,
+            41064,
+            44064,
+            21065,
+            29065,
+            30065,
+            36065,
+            41065,
+            44065,
+            53061,
+            55061,
+            58061,
+            62061,
+            53062,
+            55062,
+            58062,
+            62062,
+            53063,
+            55063,
+            58063,
+            62063,
+            53064,
+            55064,
+            58064,
+            62064,
+            53065,
+            55065,
+            58065,
+            62065
+        ]
 
-            if status == 2:
-                logger.warning(f"{task_info['title']} 奖励已领取，跳过")
-                continue
+        # 20260312060000
+        today = get_today()
+        statisticsTimeId = f"{today}060000"
+        # 3061,7061,11061,14061
+        optionIds = ",".join(str(channel) for channel in random.sample(all_channels, 4))
 
-            if status == 0:
-                self.dnf_helper_limit_act_op(f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id)
-                time.sleep(3)
+        # 20260312060000
+        yesterday = get_today(get_now() - datetime.timedelta(days=1))
+        yesterDayStatisticsTimeId = f"{yesterday}060000"
 
-            self.dnf_helper_limit_act_op(
-                f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id
-            )
-            time.sleep(3)
+        self.dnf_helper_limit_act_op("立即报名", "joinActivity")
 
-        date_today = format_now("%Y-%m-%d")
-        today = parse_time(date_today, "%Y-%m-%d")
+        self.dnf_helper_limit_act_op(f"今日竞猜 {statisticsTimeId} {optionIds}", "guessV2", statisticsTimeId=statisticsTimeId, optionIds=optionIds)
 
-        total_days, recheckin_count = query_checkin_data()
-        logger.info(f"当前已签到天数 {total_days}，可补签天数 {recheckin_count}")
+        self.dnf_helper_limit_act_op(f"领取昨日竞猜奖励 {yesterDayStatisticsTimeId}", "pickupGuessReward", statisticsTimeId=yesterDayStatisticsTimeId)
 
-        dailyCheckIns, totalCheckIns = query_checkin_list()
+        self.dnf_helper_limit_act_op("查询积分信息", "pointInfo")
 
-        for check_info in dailyCheckIns:
-            date = check_info["date"]
-            status = check_info["status"]
+        self.dnf_helper_limit_act_op("兑换奖励 - 远古的黄金增幅书", "pickupPointReward", id=2008)
+        self.dnf_helper_limit_act_op("兑换奖励 - 红10券", "pickupPointReward", id=2007)
+        self.dnf_helper_limit_act_op("兑换奖励 - 黑钻30天", "pickupPointReward", id=2006)
 
-            if date == date_today and status == 0:
-                self.dnf_helper_limit_act_op(
-                    f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0
-                )
-                time.sleep(3)
+        # re: 有个神秘商店兑换，先不管了
 
-        for check_info in dailyCheckIns:
-            date = check_info["date"]
-            status = check_info["status"]
-
-            if recheckin_count <= 0:
-                logger.warning("已无补签次数，跳过补签")
-                break
-
-            if parse_time(date, "%Y-%m-%d") > today:
-                logger.warning(f"尚未到 {date}，跳过后续日期")
-                break
-
-            if status == 1:
-                logger.warning(f"{date} 已签到，跳过")
-                continue
-
-            if status == 2:
-                res = self.dnf_helper_limit_act_op(f"补签 {date}", "checkin/checkIn", date=date, reCheckIn=1)
-                # {"result": 1, "returnCode": 2000, "returnMsg": "补签次数不足"}
-                if res["returnCode"] == 2000:
-                    break
-
-                recheckin_count -= 1
-                time.sleep(3)
-
-        dailyCheckIns, totalCheckIns = query_checkin_list()
-        for reward_info in totalCheckIns:
-            day = reward_info["value"]
-            status = reward_info["status"]
-
-            if status == 0:
-                logger.warning(f"累计登录 {day} 天尚未达成，跳过尝试后续天数")
-                break
-            elif status == 1:
-                self.dnf_helper_limit_act_op(f"尝试领取累计登录 {day} 天奖励", "checkin/pickupTotalReward", value=day)
-                time.sleep(3)
-            elif status == 2:
-                logger.warning(f"累计登录 {day} 天已领取，跳过")
-                continue
-
-        remainDrawTimes = query_lottery_count()
-        logger.info(f"当前剩余抽奖 {remainDrawTimes} 次")
-        for idx in range_from_one(remainDrawTimes):
-            self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 福利抽奖", "lottery/draw")
-            time.sleep(3)
+        # taskConfig = query_task_info()
+        # for task_info in taskConfig:
+        #     task_id = task_info["id"]
+        #     status = task_info["status"]
+        #
+        #     if status == 2:
+        #         logger.warning(f"{task_info['title']} 奖励已领取，跳过")
+        #         continue
+        #
+        #     if status == 0:
+        #         self.dnf_helper_limit_act_op(f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id)
+        #         time.sleep(3)
+        #
+        #     self.dnf_helper_limit_act_op(
+        #         f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id
+        #     )
+        #     time.sleep(3)
+        #
+        # date_today = format_now("%Y-%m-%d")
+        # today = parse_time(date_today, "%Y-%m-%d")
+        #
+        # total_days, recheckin_count = query_checkin_data()
+        # logger.info(f"当前已签到天数 {total_days}，可补签天数 {recheckin_count}")
+        #
+        # dailyCheckIns, totalCheckIns = query_checkin_list()
+        #
+        # for check_info in dailyCheckIns:
+        #     date = check_info["date"]
+        #     status = check_info["status"]
+        #
+        #     if date == date_today and status == 0:
+        #         self.dnf_helper_limit_act_op(
+        #             f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0
+        #         )
+        #         time.sleep(3)
+        #
+        # for check_info in dailyCheckIns:
+        #     date = check_info["date"]
+        #     status = check_info["status"]
+        #
+        #     if recheckin_count <= 0:
+        #         logger.warning("已无补签次数，跳过补签")
+        #         break
+        #
+        #     if parse_time(date, "%Y-%m-%d") > today:
+        #         logger.warning(f"尚未到 {date}，跳过后续日期")
+        #         break
+        #
+        #     if status == 1:
+        #         logger.warning(f"{date} 已签到，跳过")
+        #         continue
+        #
+        #     if status == 2:
+        #         res = self.dnf_helper_limit_act_op(f"补签 {date}", "checkin/checkIn", date=date, reCheckIn=1)
+        #         # {"result": 1, "returnCode": 2000, "returnMsg": "补签次数不足"}
+        #         if res["returnCode"] == 2000:
+        #             break
+        #
+        #         recheckin_count -= 1
+        #         time.sleep(3)
+        #
+        # dailyCheckIns, totalCheckIns = query_checkin_list()
+        # for reward_info in totalCheckIns:
+        #     day = reward_info["value"]
+        #     status = reward_info["status"]
+        #
+        #     if status == 0:
+        #         logger.warning(f"累计登录 {day} 天尚未达成，跳过尝试后续天数")
+        #         break
+        #     elif status == 1:
+        #         self.dnf_helper_limit_act_op(f"尝试领取累计登录 {day} 天奖励", "checkin/pickupTotalReward", value=day)
+        #         time.sleep(3)
+        #     elif status == 2:
+        #         logger.warning(f"累计登录 {day} 天已领取，跳过")
+        #         continue
+        #
+        # remainDrawTimes = query_lottery_count()
+        # logger.info(f"当前剩余抽奖 {remainDrawTimes} 次")
+        # for idx in range_from_one(remainDrawTimes):
+        #     self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 福利抽奖", "lottery/draw")
+        #     time.sleep(3)
 
         # _, fame, level, experience = query_info()
         # logger.info(f"最新等级 {level}, 名望 {fame}, 经验 {experience}")
@@ -9154,9 +9263,9 @@ class DjcHelper:
     def dnf_helper_limit_act_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "10032"
+        activityId = "1041"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "activitytpl"
+        activity_action_prefix = "raidRankGuess"
 
         action = action_name
         if action_name != "init":
@@ -9187,6 +9296,8 @@ class DjcHelper:
             "userId": dnf_helper_info.userId,
             "token": dnf_helper_info.token,
             "cGameId": "1006",
+            "cClientVersionCode": "2103080309",
+            "getNavUaStr": "GameHelper GameHelper_1006/2103080309",
         }
         # fmt: on
 
@@ -10949,6 +11060,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_helper_limit_act()
 
     pause()

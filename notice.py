@@ -201,12 +201,12 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "10群恢复3000人"
-    message = """刚斥巨资续了10群的3000人资格一年，之前被误封不小心点了退出群聊的10群的小伙伴们可以加回去了
+    title = "千海天预约活动"
+    message = """有个新版本预约活动，需要在23号前在网页上用手机验证码来预约，这步请大家在弹出来的网页里自己操作下。后面23号开始领取的预约礼包小助手到时候会尝试自动领取~
 """
-    open_url = "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv"
+    open_url = "https://dnf.qq.com/cp/a20260326subscribe/"
     show_only_before_version = ""
-    valid_duration = timedelta(days=14)
+    valid_duration = timedelta(days=7)
 
     if title != "":
         nm.add_notice(

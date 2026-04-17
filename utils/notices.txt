@@ -508,5 +508,15 @@
     "open_url": "https://docs.qq.com/doc/DYlFkaHdjTEp0dUZv",
     "expire_at": "2026-03-12 10:04:52",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "千海天预约活动",
+    "message": "有个新版本预约活动，需要在23号前在网页上用手机验证码来预约，这步请大家在弹出来的网页里自己操作下。后面23号开始领取的预约礼包小助手到时候会尝试自动领取~\n",
+    "send_at": "2026-04-17 20:06:09",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20260326subscribe/",
+    "expire_at": "2026-04-24 20:06:09",
+    "show_only_before_version": ""
   }
 ]

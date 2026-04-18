@@ -6530,9 +6530,9 @@ class DjcHelper:
             self.dnf_luodiye_ide_op(name, flowid)
             time.sleep(5)
 
-        self.dnf_luodiye_ide_op("积分兑换礼包 - 增幅券", "513155", index=1)
-        time.sleep(5)
-        self.dnf_luodiye_ide_op("积分兑换礼包 - 装备提升礼盒", "513155", index=2)
+        for index in range_from_one(6):
+            self.dnf_luodiye_ide_op(f"积分兑换礼包 - {index}", "513155", index=index)
+            time.sleep(5)
 
         #
         # # iTicket, iLottery = query_info()
@@ -11120,6 +11120,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

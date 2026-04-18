@@ -3071,6 +3071,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
             ("DNF预约", "get_dnf_reservation"),
+            ("DNF闪光杯", "get_dnf_flash_cap"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

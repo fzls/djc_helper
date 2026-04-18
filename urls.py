@@ -64,6 +64,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
+    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
     #
     # 已过期活动
     #
@@ -127,6 +128,7 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/wulan-act_v2/dz_share/dz_1ez7qye1mjyb/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
+    "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
     #
     # 已过期活动
     #
@@ -485,6 +487,9 @@ class Urls:
 
         # 井盖杯挑战赛
         self.jinggai_game_api = "https://dzhu.qq.com/zangyi/share/act?a={api}"
+
+        # 闪光杯
+        self.flash_cap_api = "https://dnf-api.qq.com/dnf-activities/a20260416sparkling/api/{api}"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

@@ -691,6 +691,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF预约", self.dnf_reservation),
+            ("DNF闪光杯", self.dnf_flash_cap),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9512,6 +9513,55 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------DNF闪光杯--------------------------------------------
+    @try_except()
+    def dnf_flash_cap(self):
+        show_head_line("DNF闪光杯")
+        self.show_not_ams_act_info("DNF闪光杯")
+
+        if not self.cfg.function_switches.get_dnf_flash_cap or self.disable_most_activities():
+            show_act_not_enable_warning("DNF闪光杯")
+            return
+
+        extra_headers = None
+
+        def dnf_flash_cap_op(ctx: str, api: str, **extra_params):
+            time.sleep(3)
+
+            return self.post(ctx, self.format(self.urls.flash_cap_api, api=api), data=post_json_to_data(extra_params), extra_headers=extra_headers)
+
+        # 登录，获取token
+        lr = self.prepare_jinggai_openid_info()
+        appid = "101491592"
+        openid = lr.common_openid
+        access_token = lr.common_access_token
+
+        res = dnf_flash_cap_op("登录", "login", appid=appid, openid=openid, access_token=access_token, acctype="qc", adtag="")
+        token = res["data"]["token"]
+
+        extra_headers = {
+            "x-auth-token": token,
+        }
+
+        # 绑定角色
+        bind_role = self.get_dnf_bind_role()
+        dnf_flash_cap_op("绑定角色", "role/bind", area=bind_role.serviceID, roleId=bind_role.roleCode)
+
+        # 报名
+        dnf_flash_cap_op("报名", "signup/do")
+
+        # 领取奖励
+        dnf_flash_cap_op("领取奖励", "signup/gift/claim")
+
+        if use_by_myself():
+            if now_after("2026-04-23 00:00:00"):
+                async_message_box(
+                    "加下闪光杯活动下面的内容",
+                    "(仅自己可见)闪光杯后续活动内容提示",
+                    show_once_daily=True,
+                    open_url="https://dnf.qq.com/cp/a20260416flashCap/",
+                )
+
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
     def dnf_recall_guide(self):
@@ -11043,6 +11093,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_reservation()
+        djcHelper.dnf_flash_cap()
 
     pause()

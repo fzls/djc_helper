@@ -63,6 +63,7 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "助手限定活动"),
+    newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
     #
     # 已过期活动
     #
@@ -89,7 +90,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-05-23 11:30:00", "2025-07-03 23:59:59", "超核勇士wpe_dup"),
     newNotAmsActInfo("2025-04-24 00:00:00", "2025-05-21 23:59:59", "共赴西装节"),
     newNotAmsActInfo("2025-02-28 00:00:00", "2025-03-26 23:59:59", "助手能量之芽"),
-    newNotAmsActInfo("2024-12-19 11:00:00", "2025-03-13 23:59:59", "DNF预约"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2025-02-28 23:59:59", "DNF漫画预约活动"),
     newNotAmsActInfo("2025-01-26 10:00:00", "2025-02-12 23:59:59", "新春充电计划"),
     newNotAmsActInfo("2025-01-16 00:00:00", "2025-02-14 23:59:59", "集卡"),
@@ -126,6 +126,7 @@ act_name_to_url = {
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/wulan-act_v2/dz_share/dz_1ez7qye1mjyb/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
+    "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
     #
     # 已过期活动
     #
@@ -153,7 +154,6 @@ act_name_to_url = {
     "超核勇士wpe_dup": "https://act.supercore.qq.com/supercore/act/affea2f1e0525457aae20043f8eafd4ee/index.html?actVersion=364206",
     "共赴西装节": "https://dnf.qq.com/cp/a20250424welcome/index.html?pt=1",
     "助手能量之芽": "https://dzhu.qq.com/fe/dnf/energy_tree/?share=1&gameId=10014&activityId=1",
-    "DNF预约": "https://dnf.qq.com/cp/a20241219prepare/index.html",
     "DNF漫画预约活动": "https://dnf.qq.com/cp/a20231211comic/index.html",
     "新春充电计划": "https://dnf.qq.com/cp/a20250126battery/",
     "集卡": "https://act.qzone.qq.com/v2/vip/tx/p/50965_510d3610",
@@ -340,7 +340,7 @@ class Urls:
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
-        self.ide_iActivityId_dnf_reservation = "45_eTCfMl"  # DNF预约
+        self.ide_iActivityId_dnf_reservation = "18_qnvibu"  # DNF预约
         self.ide_iActivityId_dnf_recall_guide = "81_pfN7I9"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
         self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节

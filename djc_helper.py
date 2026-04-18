@@ -690,6 +690,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手限定活动", self.dnf_helper_limit_act),
+            ("DNF预约", self.dnf_reservation),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -721,7 +722,6 @@ class DjcHelper:
             ("超核勇士wpe_dup", self.dnf_helper_wpe_dup),
             ("共赴西装节", self.dnf_suit),
             ("助手能量之芽", self.dnf_helper_energy_tree),
-            ("DNF预约", self.dnf_reservation),
             ("DNF漫画预约活动", self.dnf_comic),
             ("新春充电计划", self.new_year_signin),
             ("集卡", self.dnf_ark_lottery),
@@ -8102,43 +8102,26 @@ class DjcHelper:
 
         self.check_dnf_reservation_ide()
 
-        if now_in_range("2024-12-19 11:00:00", "2025-01-15 23:59:59"):
+        if now_in_range("2026-03-26 11:00:00", "2026-04-22 23:59:59"):
             async_message_box(
                 (
-                    "2024.12.19 - 2025.1.15 期间可在点确认后打开的活动页面进行预约，在1.16之后就可以领取二次觉醒装扮套装等奖励。这个预约需要自己在活动页面验证手机来完成，请自己在网页中操作下~\n"
-                    "\n"
-                    "为了避免有人忘记预约，本提示每周会弹一次，如已预约，可直接无视"
+                    "有个新版本预约活动，需要在新版本更新前在网页上用手机验证码来预约，这步请大家在弹出来的网页里自己操作下。后面新版本开始领取的预约礼包小助手到时候会尝试自动领取~"
                 ),
-                "重力之泉版本预约活动 - 预约阶段",
+                "千海天 版本预约活动 - 预约阶段",
                 open_url=get_act_url("DNF预约"),
-                show_once_weekly=True,
+                show_once=True,
             )
 
-        if now_in_range("2025-01-16 10:00:00", "2025-03-13 23:59:59"):
-            self.dnf_reservation_ide_op("领取奖励", "355314")
+        if now_in_range("2026-04-23 11:00:00", "2026-05-27 23:59:59"):
+            self.dnf_reservation_ide_op("领取预约礼包", "517442")
 
-    def check_dnf_reservation(self):
-        self.check_bind_account(
-            "DNF预约",
-            get_act_url("DNF预约"),
-            activity_op_func=self.dnf_reservation_op,
-            query_bind_flowid="985027",
-            commit_bind_flowid="985026",
-        )
-
-    def dnf_reservation_op(self, ctx, iFlowId, print_res=True, **extra_params):
-        iActivityId = self.urls.iActivityId_dnf_reservation
-        return self.amesvr_request(
-            ctx,
-            "x6m5.ams.game.qq.com",
-            "group_3",
-            "dnf",
-            iActivityId,
-            iFlowId,
-            print_res,
-            get_act_url("DNF预约"),
-            **extra_params,
-        )
+            if use_by_myself():
+                async_message_box(
+                    "确认下千海天预约活动的预约礼包正常领取了",
+                    "（仅自己可见）千海天 版本预约活动 - 个人提示",
+                    open_url=get_act_url("DNF预约"),
+                    show_once_weekly=True,
+                )
 
     def check_dnf_reservation_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -11060,6 +11043,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.dnf_reservation()
 
     pause()

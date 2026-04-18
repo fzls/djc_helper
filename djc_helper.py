@@ -692,6 +692,7 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF预约", self.dnf_reservation),
             ("DNF闪光杯", self.dnf_flash_cap),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
         return [
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("WeGame活动", self.dnf_wegame),
             ("colg每日签到", self.colg_signin),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("井盖杯挑战赛", self.jinggai_game),
@@ -7474,33 +7474,60 @@ class DjcHelper:
 
             return red_packet_count, lottery_count
 
-        self.dnf_wegame_ide_op("全民礼包", "502959")
+        self.dnf_wegame_ide_op("报名", "528722")
 
-        self.dnf_wegame_ide_op("记录首次分享", "504422")
+        if use_by_myself():
+            if now_after("2026-04-23 00:00:00"):
+                async_message_box(
+                    "把wegame活动的剩余部分加上",
+                    "(仅自己可见)wegame补齐",
+                    show_once_daily=True,
+                    open_url=get_act_url("WeGame活动"),
+                )
 
-        self.dnf_wegame_ide_op("新春红包-首次登录任务", "502963")
-        self.dnf_wegame_ide_op("新春红包-首次在线30分钟任务", "502964")
-        self.dnf_wegame_ide_op("新春红包-首次分享任务", "502965")
+        # self.dnf_wegame_ide_op("抽取礼包助力基金", "528842")
 
-        red_packet_count, lottery_count = query_info()
-        logger.info(f"当前的抽红包次数为 {red_packet_count}")
-        for idx in range_from_one(red_packet_count):
-            self.dnf_wegame_ide_op(f"第{idx}/{red_packet_count}开启新春红包", "502966")
-            time.sleep(3)
+        # self.dnf_wegame_ide_op("全民好礼", "529342")
+        # self.dnf_wegame_ide_op("回归好礼", "529343")
+        # self.dnf_wegame_ide_op("每日抽好礼", "529344")
+        # self.dnf_wegame_ide_op("0-3套", "529346")
+        # self.dnf_wegame_ide_op("4-8套", "529374")
+        # self.dnf_wegame_ide_op("9-11套", "529443")
+        # self.dnf_wegame_ide_op("全部点亮领取", "529445")
+        # self.dnf_wegame_ide_op("全部点亮抽奖", "529453")
+        #
+        # self.dnf_wegame_ide_op("初始化", "529456")
+        # self.dnf_wegame_ide_op("接受赠送", "530366")
+        # self.dnf_wegame_ide_op("接受索要", "530539")
+        # self.dnf_wegame_ide_op("接受交换", "530637")
 
-        self.dnf_wegame_ide_op("累计通关深渊奖励", "503538")
-        self.dnf_wegame_ide_op("累计通关美神奖励", "503542")
-        self.dnf_wegame_ide_op("累计通关纳波尔奖励", "503543")
-        self.dnf_wegame_ide_op("累计通关狄瑞吉奖励", "503544")
-
-        self.dnf_wegame_ide_op("每日通关深渊任务", "503545")
-        self.dnf_wegame_ide_op("每日在线任务", "503546")
-
-        red_packet_count, lottery_count = query_info()
-        logger.info(f"当前的转盘抽奖次数为 {red_packet_count}")
-        for idx in range_from_one(red_packet_count):
-            self.dnf_wegame_ide_op(f"第{idx}/{red_packet_count}转盘抽奖", "503548")
-            time.sleep(3)
+        # self.dnf_wegame_ide_op("全民礼包", "502959")
+        #
+        # self.dnf_wegame_ide_op("记录首次分享", "504422")
+        #
+        # self.dnf_wegame_ide_op("新春红包-首次登录任务", "502963")
+        # self.dnf_wegame_ide_op("新春红包-首次在线30分钟任务", "502964")
+        # self.dnf_wegame_ide_op("新春红包-首次分享任务", "502965")
+        #
+        # red_packet_count, lottery_count = query_info()
+        # logger.info(f"当前的抽红包次数为 {red_packet_count}")
+        # for idx in range_from_one(red_packet_count):
+        #     self.dnf_wegame_ide_op(f"第{idx}/{red_packet_count}开启新春红包", "502966")
+        #     time.sleep(3)
+        #
+        # self.dnf_wegame_ide_op("累计通关深渊奖励", "503538")
+        # self.dnf_wegame_ide_op("累计通关美神奖励", "503542")
+        # self.dnf_wegame_ide_op("累计通关纳波尔奖励", "503543")
+        # self.dnf_wegame_ide_op("累计通关狄瑞吉奖励", "503544")
+        #
+        # self.dnf_wegame_ide_op("每日通关深渊任务", "503545")
+        # self.dnf_wegame_ide_op("每日在线任务", "503546")
+        #
+        # red_packet_count, lottery_count = query_info()
+        # logger.info(f"当前的转盘抽奖次数为 {red_packet_count}")
+        # for idx in range_from_one(red_packet_count):
+        #     self.dnf_wegame_ide_op(f"第{idx}/{red_packet_count}转盘抽奖", "503548")
+        #     time.sleep(3)
 
         # self.dnf_wegame_ide_op("好友列表", "484398")
         # self.dnf_wegame_ide_op("确认邀请并发送ark消息", "484399")
@@ -11093,6 +11120,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_flash_cap()
+        djcHelper.dnf_wegame()
 
     pause()

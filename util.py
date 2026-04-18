@@ -690,15 +690,15 @@ def get_this_thursday_of_dnf(now: datetime.datetime | None = None) -> datetime.d
     return dnf_thursday.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def now_before(t="2020-01-01 00:00:00"):
+def now_before(t="2026-01-01 00:00:00"):
     return get_now() < parse_time(t)
 
 
-def now_after(t="2020-01-01 00:00:00"):
+def now_after(t="2026-01-01 00:00:00"):
     return get_now() >= parse_time(t)
 
 
-def now_in_range(left="2020-01-01 00:00:00", right="2030-01-01 00:00:00"):
+def now_in_range(left="2026-01-01 00:00:00", right="2030-01-01 00:00:00"):
     return now_after(left) and now_before(right)
 
 

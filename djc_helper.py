@@ -1902,6 +1902,16 @@ class DjcHelper:
         mine_summary = _query_member_task_list_summary(mine_tasks)
         teammate_summary = _query_member_task_list_summary(teammate_flow_ids)
 
+        # 若当前已经是本周后三天，且自己的三个任务尚未全部完成，则每天尝试提示一次
+        now = get_now()
+        if now.isoweekday() in [5, 6, 7] and len(mine_tasks) < 3:
+            async_message_box(
+                f"本周 {self.cfg.name} 的心悦荣耀镖局的三个任务尚未全部完成，当前已完成 {len(mine_summary)}个({mine_summary})。请记得达成对应条件后运行小助手，否则下周将无法自动匹配队伍",
+                f"{self.cfg.name} 心悦任务提示",
+                show_once_daily=True,
+                print_log=False,
+            )
+
         return f"{mine_summary}(自己)|{teammate_summary}"
 
     @try_except(return_val_on_except="")

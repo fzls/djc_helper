@@ -1783,7 +1783,7 @@ class DjcHelper:
                         "\n"
                         "若无需心悦自动匹配功能，可前往当前账号的配置tab，取消勾选 心悦组队/自动匹配 即可\n"
                     ),
-                    "心悦战场前两周未完成 6 次任务（每周弹一次）",
+                    f"{self.cfg.name} 心悦战场前两周未完成 6 次任务（每周弹一次）",
                     show_once_weekly=True,
                     open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
                 )

@@ -1908,6 +1908,7 @@ class DjcHelper:
             async_message_box(
                 f"本周 {self.cfg.name} 的心悦荣耀镖局的三个任务尚未全部完成，当前已完成 {len(mine_summary)}个({mine_summary})。请记得达成对应条件后运行小助手，否则下周将无法自动匹配队伍",
                 f"{self.cfg.name} 心悦任务提示",
+                open_url=get_act_url("DNF地下城与勇士心悦特权专区"),
                 show_once_daily=True,
                 print_log=False,
             )

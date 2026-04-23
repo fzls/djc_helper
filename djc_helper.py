@@ -5849,6 +5849,7 @@ class DjcHelper:
 
         def query_task_info() -> ColgBattlePassQueryInfo:
             res = session.get(self.urls.colg_task_info_url, timeout=10)
+            time.sleep(3)
             raw_info = res.json()
 
             task_info = ColgBattlePassQueryInfo().auto_update_config(raw_info["data"])
@@ -5856,6 +5857,7 @@ class DjcHelper:
 
         def query_info() -> ColgBattlePassInfo:
             res = session.get(self.urls.colg_url, timeout=10)
+            time.sleep(3)
             html = res.text
 
             activity_id = extract_between(html, "var activity_id = '", "';", str)
@@ -5881,6 +5883,7 @@ class DjcHelper:
 
         def query_mall_product_list() -> ColgBattlePassMallProductList:
             res = session.get(self.urls.colg_mall_product_list_url, timeout=10)
+            time.sleep(3)
             raw_info = res.json()
 
             product_list = ColgBattlePassMallProductList().auto_update_config(raw_info["data"])
@@ -5898,6 +5901,7 @@ class DjcHelper:
                     # 如果是签到任务，额外签到
                     signin_res = session.post(self.urls.colg_sign_in_url, data=f"task_id={task.id}", timeout=10)
                     logger.info(color("bold_green") + f"colg每日签到 {signin_res.json()}")
+                    time.sleep(3)
                     task.is_finish = True
                 else:
                     # 如果任务未完成，则跳过
@@ -5916,6 +5920,7 @@ class DjcHelper:
             logger.info(
                 color("bold_green") + f"领取 {task.task_name} 的 积分奖励({task.task_reward})， 结果={res.json()}"
             )
+            time.sleep(3)
 
         # 尝试领取等级奖励
         info = query_info()
@@ -5955,6 +5960,7 @@ class DjcHelper:
                         self.urls.colg_mall_get_reward_url, data=f"colg_reward_id={product.colg_reward_id}", timeout=10
                     )
                     logger.info(f"尝试领取 {product.title}，结果为 {signin_res.json()}")
+                    time.sleep(3)
 
                     # 刷新下信息
                     info = query_info()
@@ -11131,6 +11137,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act()
+        djcHelper.colg_signin()
 
     pause()

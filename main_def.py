@@ -1520,9 +1520,9 @@ def show_tips(cfg: Config):
             "有个在网吧内登录可以完成的网页活动，请自行参与\n"
             "https://act1.hdnf.qq.com/a20260108vipnetbar/hl_index.html\n"
         ),
-        "26.3 微信游戏圈": (
-            "微信游戏圈有几个活动（签到），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab打开后下滑一下再切换到最右边的tab，请自行参与\n"
-            "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic1.png"
+        "26.4 微信游戏圈": (
+            "微信游戏圈有几个活动（签到），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab打开后下滑一下再切换到[签到有礼和每日抽奖]，请自行参与\n"
+            "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic1.jpg"
         ),
     }
 

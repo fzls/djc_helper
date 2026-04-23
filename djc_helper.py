@@ -693,6 +693,7 @@ class DjcHelper:
             ("DNF闪光杯", self.dnf_flash_cap),
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("colg每日签到", self.colg_signin),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
         return [
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("colg每日签到", self.colg_signin),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("井盖杯挑战赛", self.jinggai_game),
             ("狄瑞吉预热", self.dnf_diruiji_yure),
@@ -11137,6 +11137,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.colg_signin()
 
     pause()

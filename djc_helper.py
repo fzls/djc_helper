@@ -9425,7 +9425,7 @@ class DjcHelper:
         lr = self.fetch_login_result(
             "获取井盖杯挑战赛所需参数",
             QQLogin.login_mode_jinggai,
-            cache_max_seconds=-1,
+            cache_max_seconds=600,
             cache_validate_func=_is_login_info_valid,
         )
         return lr
@@ -9554,6 +9554,7 @@ class DjcHelper:
 
         extra_headers = None
 
+        @try_except()
         def dnf_flash_cap_op(ctx: str, api: str, **extra_params):
             time.sleep(3)
 
@@ -9572,24 +9573,32 @@ class DjcHelper:
             "x-auth-token": token,
         }
 
-        # 绑定角色
         bind_role = self.get_dnf_bind_role()
         dnf_flash_cap_op("绑定角色", "role/bind", area=bind_role.serviceID, roleId=bind_role.roleCode)
 
-        # 报名
         dnf_flash_cap_op("报名", "signup/do")
-
-        # 领取奖励
         dnf_flash_cap_op("领取奖励", "signup/gift/claim")
 
-        if use_by_myself():
-            if now_after("2026-04-23 00:00:00"):
-                async_message_box(
-                    "加下闪光杯活动下面的内容",
-                    "(仅自己可见)闪光杯后续活动内容提示",
-                    show_once_daily=True,
-                    open_url="https://dnf.qq.com/cp/a20260416flashCap/",
-                )
+        dnf_flash_cap_op("签到", "checkin/do")
+        dnf_flash_cap_op("领取奖励", "checkin/gift/claim")
+
+        # 统一都选择 1 溯源之自然誓约
+        dnf_flash_cap_op("加入誓约流派", "pledge/join", pledgeId=1)
+        dnf_flash_cap_op("领取每周奖励", "pledge/weekly/claim")
+        if now_after("2026-05-14 00:00:00"):
+            dnf_flash_cap_op("领取流派排名奖励", "pledge/ranking/claim")
+
+        if now_after("2026-05-14 00:00:00"):
+            dnf_flash_cap_op("闪光跨区-领取个人积分排名奖励", "pledge/points/claim")
+
+        async_message_box(
+            "闪光杯活动有个组队活动，可在稍后打开的活动页面往下拉，找到【闪光成团】，然后创建队伍，或者在小助手群里加入其他人的队伍。然后正常刷深渊即可，小助手会尝试领取下面的奖励",
+            "26.4 闪光杯组队",
+            open_url=get_act_url("DNF闪光杯"),
+            show_once=True,
+        )
+        for stage in range_from_one(4):
+            dnf_flash_cap_op(f"领取阶段 {stage} 奖励", "team/reward/claim", stage=stage)
 
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
@@ -11122,6 +11131,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_flash_cap()
 
     pause()

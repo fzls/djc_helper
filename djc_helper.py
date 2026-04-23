@@ -8160,14 +8160,6 @@ class DjcHelper:
         if now_in_range("2026-04-23 11:00:00", "2026-05-27 23:59:59"):
             self.dnf_reservation_ide_op("领取预约礼包", "517442")
 
-            if use_by_myself():
-                async_message_box(
-                    "确认下千海天预约活动的预约礼包正常领取了",
-                    "（仅自己可见）千海天 版本预约活动 - 个人提示",
-                    open_url=get_act_url("DNF预约"),
-                    show_once_weekly=True,
-                )
-
     def check_dnf_reservation_ide(self, **extra_params):
         return self.ide_check_bind_account(
             "DNF预约",

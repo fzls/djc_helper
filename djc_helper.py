@@ -7491,28 +7491,21 @@ class DjcHelper:
 
             return red_packet_count, lottery_count
 
-        self.dnf_wegame_ide_op("报名", "528722")
-
-        if use_by_myself():
-            if now_after("2026-04-23 00:00:00"):
-                async_message_box(
-                    "把wegame活动的剩余部分加上",
-                    "(仅自己可见)wegame补齐",
-                    show_once_daily=True,
-                    open_url=get_act_url("WeGame活动"),
-                )
+        # self.dnf_wegame_ide_op("报名", "528722")
 
         # self.dnf_wegame_ide_op("抽取礼包助力基金", "528842")
 
-        # self.dnf_wegame_ide_op("全民好礼", "529342")
-        # self.dnf_wegame_ide_op("回归好礼", "529343")
-        # self.dnf_wegame_ide_op("每日抽好礼", "529344")
-        # self.dnf_wegame_ide_op("0-3套", "529346")
-        # self.dnf_wegame_ide_op("4-8套", "529374")
-        # self.dnf_wegame_ide_op("9-11套", "529443")
-        # self.dnf_wegame_ide_op("全部点亮领取", "529445")
-        # self.dnf_wegame_ide_op("全部点亮抽奖", "529453")
-        #
+        self.dnf_wegame_ide_op("全民好礼", "529342")
+        self.dnf_wegame_ide_op("回归好礼", "529343")
+
+        self.dnf_wegame_ide_op("每日抽好礼", "529344")
+
+        self.dnf_wegame_ide_op("0-3套", "529346")
+        self.dnf_wegame_ide_op("4-8套", "529374")
+        self.dnf_wegame_ide_op("9-11套", "529443")
+        self.dnf_wegame_ide_op("全部点亮领取", "529445")
+        self.dnf_wegame_ide_op("全部点亮抽奖", "529453")
+
         # self.dnf_wegame_ide_op("初始化", "529456")
         # self.dnf_wegame_ide_op("接受赠送", "530366")
         # self.dnf_wegame_ide_op("接受索要", "530539")
@@ -11129,6 +11122,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_wegame()
 
     pause()

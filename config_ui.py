@@ -3073,6 +3073,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("WeGame活动", "get_dnf_wegame"),
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg每日签到", "get_colg_signin"),
+            ("助手限定活动", "get_dnf_helper_limit_act"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3083,7 +3084,6 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
-            ("助手限定活动", "get_dnf_helper_limit_act"),
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF心悦wpe_dup", "get_dnf_xinyue_dup"),

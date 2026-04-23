@@ -693,6 +693,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("colg每日签到", self.colg_signin),
+            ("助手限定活动", self.dnf_helper_limit_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -700,7 +701,6 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
-            ("助手限定活动", self.dnf_helper_limit_act),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
@@ -9003,6 +9003,7 @@ class DjcHelper:
     #   3. 在chrome的 Sources tab中 找到下面两个文件，将 utf8 encode的字符串解码后放入 test.js 文件中
     #       top/dzhu.qq.com/fe/dnf/summer-act/umi.xxxxxx.js
     #       top/dzhu.qq.com/fe/dnf/summer-act/p__home.xxxxxx.async.js
+    #       这几个 p_xxx.js都可以加进去
     #   .
     #       https://www.huatools.com/unicode-chinese/
     #   .
@@ -9011,6 +9012,25 @@ class DjcHelper:
     #       从 getUserInfo 中去获取对应任务和奖励的ID
     #   6. 搜索 payload: { 可以找到各个参数设置的地方
     #   7. 如果有 activitytpl/checkin/pickupTotalReward 和 /checkinPickupTotalReward 两种长起来类似的调用处，前者才是真正的action，不过可以通过后者来观察具体参数是什么
+    #   8. 一个查找参数的示例
+    #       搜索前缀 luckySignV2/ 找到累计奖励的接口
+    #       其被混淆在 C = function() { 这个函数里，搜索得到调用者 n.d(t, "i", (function() {
+    #       这里的 "i" 是被封装的代号，搜索 ["i"]
+    #       在匹配到的中一个个观察，发现这个最像
+    #           Object(u["i"])({
+    #               rewardId: r.id
+    #           });
+    #       所以得到这里的参数名称是 rewardId
+    #       这个又被封装在 claimCumReward: Object 函数中，ide文字搜索 claimCumReward
+    #       找到
+    #           type: "".concat(A["b"], "/claimCumReward"),
+    #           payload: {
+    #               id: e.id
+    #           }
+    #       定位到这一步后，也可以直接在chrome中这里下断点，然后点击后再console里把判断条件的参数修改，让他强制走实际流程，来看最终参数是什么
+    #       继续往上找，发现最终参数是通过遍历 v.cumRewardList 来获取的
+    #       回到 getUserInfo 找到 cumRewardList 就能发现我们的参数是 1045_1 这种
+    #       到此所需要的信息就基本都有了
     @try_except()
     def dnf_helper_limit_act(self):
         show_head_line("助手限定活动")
@@ -9064,110 +9084,49 @@ class DjcHelper:
 
             return res["total_days"], res["recheckin_count"]
 
-        all_channels = [
-            3061,
-            7061,
-            11061,
-            14061,
-            16061,
-            20061,
-            3062,
-            7062,
-            11062,
-            14062,
-            16062,
-            20062,
-            3063,
-            7063,
-            11063,
-            14063,
-            16063,
-            20063,
-            3064,
-            7064,
-            11064,
-            14064,
-            16064,
-            20064,
-            3065,
-            7065,
-            11065,
-            14065,
-            16065,
-            20065,
-            21061,
-            29061,
-            30061,
-            36061,
-            41061,
-            44061,
-            21062,
-            29062,
-            30062,
-            36062,
-            41062,
-            44062,
-            21063,
-            29063,
-            30063,
-            36063,
-            41063,
-            44063,
-            21064,
-            29064,
-            30064,
-            36064,
-            41064,
-            44064,
-            21065,
-            29065,
-            30065,
-            36065,
-            41065,
-            44065,
-            53061,
-            55061,
-            58061,
-            62061,
-            53062,
-            55062,
-            58062,
-            62062,
-            53063,
-            55063,
-            58063,
-            62063,
-            53064,
-            55064,
-            58064,
-            62064,
-            53065,
-            55065,
-            58065,
-            62065
+        self.dnf_helper_limit_act_op("每日抽签", "doSign")
+        self.dnf_helper_limit_act_op("每日抽奖", "draw")
+
+        rewards_count = [
+            3,
+            5,
+            10,
+            15,
+            20,
+            25,
+            40,
+            60,
         ]
+        for idx, count in enumerate(rewards_count):
+            index = idx + 1
+            id = f"1045_{index}"
+            self.dnf_helper_limit_act_op(f"领取累计奖励-{count}-{id}", "pickUpCumReward", rewardId=id)
 
-        # 20260312060000
-        today = get_today()
-        statisticsTimeId = f"{today}060000"
-        # 3061,7061,11061,14061
-        optionIds = ",".join(str(channel) for channel in random.sample(all_channels, 4))
-
-        # 20260312060000
-        yesterday = get_today(get_now() - datetime.timedelta(days=1))
-        yesterDayStatisticsTimeId = f"{yesterday}060000"
-
-        self.dnf_helper_limit_act_op("立即报名", "joinActivity")
-
-        self.dnf_helper_limit_act_op(f"今日竞猜 {statisticsTimeId} {optionIds}", "guessV2", statisticsTimeId=statisticsTimeId, optionIds=optionIds)
-
-        self.dnf_helper_limit_act_op(f"领取昨日竞猜奖励 {yesterDayStatisticsTimeId}", "pickupGuessReward", statisticsTimeId=yesterDayStatisticsTimeId)
-
-        self.dnf_helper_limit_act_op("查询积分信息", "pointInfo")
-
-        self.dnf_helper_limit_act_op("兑换奖励 - 远古的黄金增幅书", "pickupPointReward", id=2008)
-        self.dnf_helper_limit_act_op("兑换奖励 - 红10券", "pickupPointReward", id=2007)
-        self.dnf_helper_limit_act_op("兑换奖励 - 黑钻30天", "pickupPointReward", id=2006)
+        # all_channels = [
+        #     3061,
+        # ]
+        #
+        # # 20260312060000
+        # today = get_today()
+        # statisticsTimeId = f"{today}060000"
+        # # 3061,7061,11061,14061
+        # optionIds = ",".join(str(channel) for channel in random.sample(all_channels, 4))
+        #
+        # # 20260312060000
+        # yesterday = get_today(get_now() - datetime.timedelta(days=1))
+        # yesterDayStatisticsTimeId = f"{yesterday}060000"
+        #
+        # self.dnf_helper_limit_act_op("立即报名", "joinActivity")
+        #
+        # self.dnf_helper_limit_act_op(f"今日竞猜 {statisticsTimeId} {optionIds}", "guessV2", statisticsTimeId=statisticsTimeId, optionIds=optionIds)
+        #
+        # self.dnf_helper_limit_act_op(f"领取昨日竞猜奖励 {yesterDayStatisticsTimeId}", "pickupGuessReward", statisticsTimeId=yesterDayStatisticsTimeId)
+        #
+        # self.dnf_helper_limit_act_op("查询积分信息", "pointInfo")
+        #
+        # self.dnf_helper_limit_act_op("兑换奖励 - 远古的黄金增幅书", "pickupPointReward", id=2008)
+        # self.dnf_helper_limit_act_op("兑换奖励 - 红10券", "pickupPointReward", id=2007)
+        # self.dnf_helper_limit_act_op("兑换奖励 - 黑钻30天", "pickupPointReward", id=2006)
 
         # re: 有个神秘商店兑换，先不管了
 
@@ -9282,9 +9241,9 @@ class DjcHelper:
     def dnf_helper_limit_act_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "1041"
+        activityId = "1045"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "raidRankGuess"
+        activity_action_prefix = "luckySignV2"
 
         action = action_name
         if action_name != "init":
@@ -11137,6 +11096,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_signin()
+        djcHelper.dnf_helper_limit_act()
 
     pause()

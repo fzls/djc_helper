@@ -66,10 +66,10 @@ not_ams_activities = [
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-27 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-13 23:59:59", "colg每日签到"),
+    newNotAmsActInfo("2026-04-23 00:00:00", "2026-07-09 18:00:00", "助手限定活动"),
     #
     # 已过期活动
     #
-    newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-07 23:59:59", "DNF心悦wpe_dup"),
@@ -130,10 +130,10 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20260416wegame/index.html",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/lucky_lottery/v2/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     #
     # 已过期活动
     #
-    "助手限定活动": "https://dzhu.qq.com/fe/dnf/wulan-act_v2/dz_share/dz_1ez7qye1mjyb/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/aae8a0ef9237a42eb927a98a9c61d5b8f/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260201dnf/index.html",
     "DNF心悦wpe_dup": "https://act.xinyue.qq.com/act/a20251226myxl/index.html?via=upother_61007",

@@ -61,7 +61,6 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-04-23 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
-    newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "WeGame活动"),
@@ -70,6 +69,7 @@ not_ams_activities = [
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2026-03-12 00:00:00", "2026-04-22 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-07 23:59:59", "DNF心悦wpe_dup"),
@@ -125,7 +125,6 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "助手限定活动": "https://dzhu.qq.com/fe/dnf/wulan-act_v2/dz_share/dz_1ez7qye1mjyb/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
     "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
     "WeGame活动": "https://dnf.qq.com/cp/a20260416wegame/index.html",
@@ -134,6 +133,7 @@ act_name_to_url = {
     #
     # 已过期活动
     #
+    "助手限定活动": "https://dzhu.qq.com/fe/dnf/wulan-act_v2/dz_share/dz_1ez7qye1mjyb/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/aae8a0ef9237a42eb927a98a9c61d5b8f/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260201dnf/index.html",
     "DNF心悦wpe_dup": "https://act.xinyue.qq.com/act/a20251226myxl/index.html?via=upother_61007",

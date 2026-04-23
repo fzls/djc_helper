@@ -1510,12 +1510,6 @@ def show_tips(cfg: Config):
             "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
             "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index\n"
         ),
-        "26.3 狄瑞吉困难教学": (
-            "完成狄瑞吉困难的教学，可以领取30天黑钻和小关卡的奖励，请自行参与\n"
-            "\n"
-            "要速通领奖励，直接随便选一个，就会把所有错误答案都给出解析，然后再选择没列出的那个正确答案就可以了（部分关卡不列出，则直接ABCD按顺序快速点过去）\n"
-            "https://dnf.qq.com/cp/a20260108drill/\n"
-        ),
         "26.4 微信游戏圈": (
             "微信游戏圈有几个活动（签到），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab打开后下滑一下再切换到[签到有礼和每日抽奖]，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic1.jpg"

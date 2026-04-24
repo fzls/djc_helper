@@ -9025,7 +9025,7 @@ class DjcHelper:
     #       所以得到这里的参数名称是 rewardId
     #       这个又被封装在 claimCumReward: Object 函数中，ide文字搜索 claimCumReward
     #       找到
-    #           type: "".concat(A["b"], "/claimCumReward"),
+    #           ype: "".concat(A["b"], "/claimCumReward"),
     #           payload: {
     #               id: e.id
     #           }
@@ -9525,7 +9525,12 @@ class DjcHelper:
         def dnf_flash_cap_op(ctx: str, api: str, **extra_params):
             time.sleep(3)
 
-            return self.post(ctx, self.format(self.urls.flash_cap_api, api=api), data=post_json_to_data(extra_params), extra_headers=extra_headers)
+            return self.post(
+                ctx,
+                self.format(self.urls.flash_cap_api, api=api),
+                data=post_json_to_data(extra_params),
+                extra_headers=extra_headers,
+            )
 
         # 登录，获取token
         lr = self.prepare_jinggai_openid_info()
@@ -9533,7 +9538,9 @@ class DjcHelper:
         openid = lr.common_openid
         access_token = lr.common_access_token
 
-        res = dnf_flash_cap_op("登录", "login", appid=appid, openid=openid, access_token=access_token, acctype="qc", adtag="")
+        res = dnf_flash_cap_op(
+            "登录", "login", appid=appid, openid=openid, access_token=access_token, acctype="qc", adtag=""
+        )
         token = res["data"]["token"]
 
         extra_headers = {

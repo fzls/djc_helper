@@ -3074,6 +3074,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF落地页活动", "get_dnf_luodiye"),
             ("colg每日签到", "get_colg_signin"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),
@@ -3085,7 +3086,6 @@ class FunctionSwitchesConfigUi(QWidget):
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
             ("超核勇士wpe", "get_dnf_chaohe_wpe"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
             ("DNF心悦wpe_dup", "get_dnf_xinyue_dup"),
             ("井盖杯挑战赛", "get_jinggai_game"),
             ("狄瑞吉预热", "get_dnf_diruiji_yure"),

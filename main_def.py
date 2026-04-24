@@ -1514,10 +1514,6 @@ def show_tips(cfg: Config):
             "微信游戏圈有几个活动（签到），可在微信游戏圈打开DNF，切换到最右侧的几个tab，或者微信扫描下面这个tab打开后下滑一下再切换到[签到有礼和每日抽奖]，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc/act-fc-pic1.jpg"
         ),
-        "26.4 心悦app": (
-            "有个需要在心悦app中完成的网页活动，请自行参与\n"
-            "https://act.xinyue.qq.com/tgclub/act/a41dc194922674aeeb5d726cebcf54560/index.html?closeTgclubTopBar=1\n"
-        ),
         "26.4 网吧": (
             "有个在网吧内登录可以完成的网页活动，请自行参与\n"
             "https://act1.hdnf.qq.com/a20260423netbar/pcbanner.html\n"

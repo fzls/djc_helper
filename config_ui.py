@@ -3066,7 +3066,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("小酱油周礼包和生日礼包", "get_xiaojiangyou"),
             # 收费活动
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
-            ("回流引导秘籍", "get_dnf_recall_guide"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("DNF预约", "get_dnf_reservation"),
             ("DNF闪光杯", "get_dnf_flash_cap"),
@@ -3075,6 +3074,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg每日签到", "get_colg_signin"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
             ("DNF心悦wpe", "get_dnf_xinyue"),
+            ("回流引导秘籍", "get_dnf_recall_guide"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

@@ -59,7 +59,6 @@ not_ams_activities = [
     # 短期付费活动
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
-    newNotAmsActInfo("2026-01-08 00:00:00", "2026-04-23 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
@@ -68,6 +67,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-13 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-07-09 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-05-21 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2026-04-23 00:00:00", "2026-06-10 23:59:59", "回流引导秘籍"),
     #
     # 已过期活动
     #
@@ -123,7 +123,6 @@ act_name_to_url = {
     # 短期付费活动
     #
     "DNF助手编年史": "dnf助手左侧栏",
-    "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
     "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
@@ -132,6 +131,7 @@ act_name_to_url = {
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/lucky_lottery/v2/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a37e48e9736374ad2994ba50736568335/index.html",
+    "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     #
     # 已过期活动
     #
@@ -343,7 +343,7 @@ class Urls:
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿
         self.ide_iActivityId_dnf_reservation = "18_qnvibu"  # DNF预约
-        self.ide_iActivityId_dnf_recall_guide = "81_pfN7I9"  # 回流引导秘籍
+        self.ide_iActivityId_dnf_recall_guide = "78_LpF4I2"  # 回流引导秘籍
         self.ide_iActivityId_new_year_signin = "12_BfzMwV"  # 新春充电计划
         self.ide_iActivityId_dnf_suit = "14_UrsfVG"  # 共赴西装节
         self.ide_iActivityId_dnf_reserve = "76_rZP67G"  # 新职业预约活动

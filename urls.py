@@ -274,7 +274,9 @@ class Urls:
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
             "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId",
         ]
-        # 其他默认填充的空参数
+        # 其他链接需要默认填充的空参数
+        # re: 这个不是公共参数的意思，这里额外是补充的空值参数，比如非ame和ide的其他活动链接中需要的参数
+        #  上面则是对应ame和ide中的可能参数列表，它俩可以包含一样的，并不是说在包含一样的参数时候需要提取下来
         self.other_default_empty_params_list = [
             "iActionId", "iGoodsId", "sBizCode", "partition", "iZoneId", "platid", "sZoneDesc", "sGetterDream", "isLock", "amsid", "iLbSel1", "mold", "exNum", "iCard", "actionId",
             "adLevel", "adPower", "pUserId", "isBind", "toUin", "appid", "appOpenid", "accessToken", "iRoleId", "randomSeed", "taskId", "point", "cRand", "tghappid", "sig",

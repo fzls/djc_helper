@@ -695,6 +695,7 @@ class DjcHelper:
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("回流引导秘籍", self.dnf_recall_guide),
+            ("DNF格斗大赛", self.dnf_pk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -734,7 +735,6 @@ class DjcHelper:
             ("DNF神界成长之路三期", self.dnf_shenjie_grow_up_v3),
             ("DNF卡妮娜的心愿摇奖机", self.dnf_kanina),
             ("勇士的冒险补给", self.maoxian),
-            ("DNF格斗大赛", self.dnf_pk),
             ("DNF落地页活动_ide_dup", self.dnf_luodiye_ide_dup),
             ("DNFxSNK", self.dnf_snk),
             ("DNF年货铺", self.dnf_nianhuopu),
@@ -4820,6 +4820,7 @@ class DjcHelper:
         return f"编年史进度-{self.qq()}"
 
     # --------------------------------------------DNF格斗大赛--------------------------------------------
+    # 可能是 wpe 或者 ide
     # re: 搜 wpe类活动的接入办法为
     @try_except()
     def dnf_pk(self):
@@ -4831,68 +4832,95 @@ class DjcHelper:
             return
 
         # self.check_dnf_pk()
+        self.check_dnf_pk_ide()
 
-        self.prepare_wpe_act_openid_accesstoken("DNF格斗大赛")
+        # self.prepare_wpe_act_openid_accesstoken("DNF格斗大赛")
+        #
+        # def query_ticket_count() -> int:
+        #     res = self.dnf_pk_wpe_op("查询抽奖次数", 196037, print_res=False)
+        #     raw_info = json.loads(res["data"])
+        #
+        #     # "{\"ret\":0,\"limit\":0}"
+        #     return raw_info["limit"]
+        #
+        # self.dnf_pk_wpe_op("见面礼", 195914)
 
-        def query_ticket_count() -> int:
-            res = self.dnf_pk_wpe_op("查询抽奖次数", 196037, print_res=False)
-            raw_info = json.loads(res["data"])
+        if now_in_range("2026-05-18 00:00:00", "2026-06-07 23:59:59"):
+            bind_role = self.get_dnf_bind_role()
+            role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(bind_role.serviceID, bind_role.roleCode)
 
-            # "{\"ret\":0,\"limit\":0}"
-            return raw_info["limit"]
+            role_name = bind_role.roleName
+            force_name = role_extra_info.get_force_name().replace("（男）", "").replace("（女）", "")
 
-        self.dnf_pk_wpe_op("见面礼", 195914)
-        self.dnf_pk_wpe_op("幸运勇士礼包", 195916)
-        self.dnf_pk_wpe_op("总决赛预约礼", 195917)
+            self.dnf_pk_ide_op(f"立即报名【周期】-{role_name}-{force_name}", "539962", iRegisterUin=self.qq(), iArea=quote("6"), iRoleId=quote(role_name), iJob=quote(force_name))
+            # self.dnf_pk_ide_op("报名信息【周期】", "539963")
+            self.dnf_pk_ide_op("报名礼包", "539966")
 
-        signin_flowid_list = [
-            195923,
-            195926,
-            195928,
-            195930,
-            195932,
-            195934,
-            195936,
+        tasks = [
+            ("登录游戏【每日任务】", "539968"),
+            ("累积在线【每日任务】", "539969"),
+            ("消耗疲劳【每日任务】", "539971"),
+            ("完成1次决斗场【每日任务】", "539984"),
+            ("完成5次决斗场【每日任务】", "539985"),
+
+            ("通关深渊【每周任务】", "539986"),
+            ("通关攻坚战【每周任务】", "540012"),
+            ("通关军团地下城【每周任务】", "540013"),
+            ("决斗场获胜5场【每周任务】", "540014"),
+            ("决斗场获胜10场【每周任务】", "540016"),
         ]
-        for idx, flowid in enumerate(signin_flowid_list):
-            res = self.dnf_pk_wpe_op(f"签到第 {idx+1} 天", flowid)
-            if "今日已签到" in res["msg"]:
-                logger.info(color("bold_yellow") + "今日已签到，将跳过尝试后续天数签到")
-                break
+        for name, flowid in tasks:
+            self.dnf_pk_ide_op(name, flowid)
+            time.sleep(1)
 
-            time.sleep(3)
+        # self.dnf_pk_ide_op("比赛预测【周期】", "540058")
+        # self.dnf_pk_ide_op("预测奖励【周期】", "540059")
 
-        async_message_box(
-            (
-                "格斗大赛的部分奖励需要报名后才能领取，请有兴趣的朋友打开点确认后弹出的页面，在最上方登录后报名即可\n"
-                "\n"
-                "包括报名礼、雾隐之地通关奖励（每周一次）、雾隐之地困难模式单次奖励（按概率从三档中抽取奖励，最高是格斗大赛装扮和转职光环）"
-            ),
-            f"格斗大赛报名 - {self.cfg.name}",
-            show_once=True,
-            open_url=get_act_url("DNF格斗大赛"),
+        # 奖励兑换时间：2026年5月25日-2026年6月28日
+        if now_in_range("2026-05-25 00:00:00", "2026-06-28 23:59:59"):
+            self.dnf_pk_ide_op("积分兑换-红10增幅券", "540062", rewardId="12")
+
+            act_config = get_not_ams_act("DNF格斗大赛")
+            if (
+                act_config is not None
+                and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5))
+            ):
+                # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
+                async_message_box(
+                    "DNF格斗大赛小助手仅会尝试领取红10增幅券，活动还有几天即将结束，如果还有积分剩余，请自行前往【积分兑换及奖励展示】页面使用\n",
+                    f"DNF格斗大赛奖励兑换提示_{self.cfg.name}",
+                    open_url=get_act_url("DNF格斗大赛"),
+                    show_once_daily=True,
+                )
+
+
+    def check_dnf_pk_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF格斗大赛",
+            get_act_url("DNF格斗大赛"),
+            activity_op_func=self.dnf_pk_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
         )
 
-        # PVE
-        self.dnf_pk_wpe_op("PVE 报名礼", 195918)
-        self.dnf_pk_wpe_op("雾隐之地通关", 196041)
-        self.dnf_pk_wpe_op("雾隐之地困难模式通关", 196042)
+    def dnf_pk_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_pk
 
-        # PVP
-        self.dnf_pk_wpe_op("PVP 报名礼", 195919)
-
-        # 抽奖
-        self.dnf_pk_wpe_op("每日登录游戏", 195950)
-        self.dnf_pk_wpe_op("每日消耗50疲劳值", 196035)
-        self.dnf_pk_wpe_op("每日在线30分钟", 196036)
-
-        ticket = query_ticket_count()
-        logger.info(color("bold_cyan") + f"当前剩余抽奖券数目为：{ticket}")
-        for idx in range_from_one(ticket):
-            # 搜：callJsToStart 或者点一下试试
-            self.dnf_pk_wpe_op(f"[{idx}/{ticket}] 幸运夺宝", 195949)
-            if idx != ticket:
-                time.sleep(5)
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF格斗大赛"),
+            **extra_params,
+        )
 
     def check_dnf_pk(self):
         self.check_bind_account(
@@ -11108,6 +11136,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_pk()
 
     pause()

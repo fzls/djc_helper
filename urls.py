@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-07-09 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-05-21 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-06-10 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2026-05-18 00:00:00", "2026-06-28 23:59:59", "DNF格斗大赛"),
     #
     # 已过期活动
     #
@@ -102,7 +103,6 @@ not_ams_activities = [
     newNotAmsActInfo("2024-07-18 00:00:00", "2024-12-31 23:59:59", "DNF神界成长之路三期"),
     newNotAmsActInfo("2024-09-12 12:00:00", "2024-10-09 23:59:59", "DNF卡妮娜的心愿摇奖机"),
     newNotAmsActInfo("2024-06-13 00:00:00", "2024-07-25 23:59:59", "勇士的冒险补给"),
-    newNotAmsActInfo("2024-06-20 00:00:00", "2024-07-10 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2023-11-16 00:00:00", "2023-12-19 23:59:59", "qq视频蚊子腿-爱玩"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-01-24 23:59:59", "DNF马杰洛的规划"),
     newNotAmsActInfo("2023-12-21 00:00:00", "2024-02-11 23:59:59", "dnf助手活动wpe"),
@@ -132,6 +132,7 @@ act_name_to_url = {
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/lucky_lottery/v2/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a37e48e9736374ad2994ba50736568335/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
+    "DNF格斗大赛": "https://dnf.qq.com/cp/a20260520events/index.html",
     #
     # 已过期活动
     #
@@ -167,7 +168,6 @@ act_name_to_url = {
     "DNF神界成长之路三期": "https://dnf.qq.com/cp/a2024user/index.html",
     "DNF卡妮娜的心愿摇奖机": "https://dnf.qq.com/cp/a20240912wish/indexm.html?pt=1",
     "勇士的冒险补给": "https://act.xinyue.qq.com/bb/act/a4a4b8cefdc8645299a546567fc1c68ad/index.html",
-    "DNF格斗大赛": "https://act.xinyue.qq.com/act/a20240613dnfcombat/index.html",
     "DNF落地页活动_ide_dup": "https://dnf.qq.com/act/a20240418index/index.html",
     "DNFxSNK": "https://dnf.qq.com/cp/a20240418snklink/indexm.html",
     "DNF年货铺": "https://dnf.qq.com/cp/a20240201newyear/",
@@ -272,7 +272,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex",
+            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId",
         ]
         # 其他默认填充的空参数
         self.other_default_empty_params_list = [
@@ -357,6 +357,7 @@ class Urls:
         self.ide_iActivityId_dnf_ggbond = "97_WKPy5y"  # 猪猪侠联动
         self.ide_iActivityId_dnf_press_conference_gift = "0_oesYIu"  # 发布会特别赠礼
         self.ide_iActivityId_dnf_diruiji_yure = "51_tb5w4Q"  # 狄瑞吉预热
+        self.ide_iActivityId_dnf_pk = "92_cBckHZ"  # DNF格斗大赛
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

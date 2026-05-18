@@ -691,7 +691,6 @@ class DjcHelper:
             ("DNF闪光杯", self.dnf_flash_cap),
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("colg每日签到", self.colg_signin),
             ("助手限定活动", self.dnf_helper_limit_act),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("回流引导秘籍", self.dnf_recall_guide),
@@ -703,6 +702,7 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("colg每日签到", self.colg_signin),
             ("超核勇士wpe", self.dnf_chaohe_wpe),
             ("DNF心悦wpe_dup", self.dnf_xinyue_wpe_dup),
             ("井盖杯挑战赛", self.jinggai_game),

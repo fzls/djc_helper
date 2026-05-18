@@ -12,7 +12,7 @@ from dao import ConfigInterface, to_raw_type
 from download import DOWNLOAD_CONNECT_TIMEOUT, download_file, progress_callback_func_type
 from log import color, logger
 from server import get_alist_server_addr
-from util import KiB, get_now, human_readable_size, reset_cache, with_cache
+from util import KiB, get_now, human_readable_size, reset_cache, try_except, with_cache
 
 fn_SERVER_ADDR = get_alist_server_addr
 
@@ -226,6 +226,7 @@ def upload(local_file_path: str, remote_file_path: str = "", old_version_name_pr
     get_file_list(remote_dir, refresh=True)
 
 
+@try_except()
 def remove_file_startswith_prefix(remote_dir: str, name_prefix: str, except_filename_list: list[str] | None = None):
     logger.info(f"将移除网盘目录 {remote_dir} 中 前缀为 {name_prefix} 的文件")
     dir_file_list_info = get_file_list(remote_dir, refresh=True)

@@ -255,7 +255,7 @@ class Urls:
 
         # 一些参数列表
         # 默认填充的空参数
-        # ame的参数列表
+        # undone: ame的参数列表，ame有新参数必须填到这里
         self.amesvr_default_params_list = [
             "iActivityId", "g_tk", "iFlowId", "package_id", "lqlevel", "teamid", "weekDay", "eas_url", "sServiceDepartment", "sServiceType", "sArea", "sRoleId", "uin", "userId", "token", "sRoleName",
             "serverId", "areaId", "skey", "nickName", "date", "dzid", "page", "iPackageId", "plat", "extraStr", "sContent", "sPartition", "sAreaName", "md5str", "ams_md5str", "ams_checkparam",
@@ -267,7 +267,7 @@ class Urls:
             "isSort", "jobName", "title", "actSign", "iNum", "prefer", "card", "answer1", "answer2", "answer3", "countsInfo", "power", "crossTime", "getLv105", "use_fatigue", "exchangeId", "sChannel",
             "pass", "pass_date", "bossId", "today", "anchor", "sNum", "week", "position", "packages", "selectNo", "targetQQ", "u_confirm",
         ]
-        # ide的参数列表
+        # undone: ide的参数列表，ide有新参数必须填到这里
         self.ide_default_params_list = [
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",

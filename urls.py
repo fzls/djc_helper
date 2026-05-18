@@ -296,6 +296,7 @@ class Urls:
 
         # amesvr通用活动
         # 其对应活动描述文件一般可通过下列链接获取，其中{actId}替换为活动ID，{last_three}替换为活动ID最后三位
+        # https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/gmi_act.desc.js
         # https://dnf.qq.com/comm-htdocs/js/ams/actDesc/{last_three}/{actId}/act.desc.js
         # https://apps.game.qq.com/comm-htdocs/js/ams/v0.2R02/act/{actId}/act.desc.js
         self.iActivityId_djc_operations = "11117"  # 道聚城

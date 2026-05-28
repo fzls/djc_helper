@@ -518,5 +518,15 @@
     "open_url": "https://dnf.qq.com/cp/a20260326subscribe/",
     "expire_at": "2026-04-24 20:06:09",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "末世录军团教学",
+    "message": "完成 末世录军团 的教学，可以领取30天黑钻和小关卡的奖励，请自行参与\n\n要速通领奖励，直接选第一个，答错点重答回重新轮流调整顺序，继续选第一个就行，似乎每次第一个选项都不重复，最多四次就能答对（推荐这样速通领完奖励继续看看教学视频~）\n",
+    "send_at": "2026-05-28 19:22:42",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/a20260528mslgl/",
+    "expire_at": "2026-06-11 19:22:42",
+    "show_only_before_version": ""
   }
 ]

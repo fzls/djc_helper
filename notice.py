@@ -201,12 +201,14 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "千海天预约活动"
-    message = """有个新版本预约活动，需要在23号前在网页上用手机验证码来预约，这步请大家在弹出来的网页里自己操作下。后面23号开始领取的预约礼包小助手到时候会尝试自动领取~
+    title = "末世录军团教学"
+    message = """完成 末世录军团 的教学，可以领取30天黑钻和小关卡的奖励，请自行参与
+
+要速通领奖励，直接选第一个，答错点重答回重新轮流调整顺序，继续选第一个就行，似乎每次第一个选项都不重复，最多四次就能答对（推荐这样速通领完奖励继续看看教学视频~）
 """
-    open_url = "https://dnf.qq.com/cp/a20260326subscribe/"
+    open_url = "https://dnf.qq.com/cp/a20260528mslgl/"
     show_only_before_version = ""
-    valid_duration = timedelta(days=7)
+    valid_duration = timedelta(days=14)
 
     if title != "":
         nm.add_notice(

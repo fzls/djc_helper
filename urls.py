@@ -60,18 +60,18 @@ not_ams_activities = [
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
-    newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
-    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
-    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "WeGame活动"),
-    newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-27 23:59:59", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-07-09 18:00:00", "助手限定活动"),
-    newNotAmsActInfo("2026-04-23 00:00:00", "2026-05-21 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-06-10 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-05-18 00:00:00", "2026-06-28 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2026-05-28 09:00:00", "2026-06-30 23:59:59", "像素拼图"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2026-04-23 00:00:00", "2026-05-21 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-27 23:59:59", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
+    newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
     newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-13 23:59:59", "colg每日签到"),
     newNotAmsActInfo("2026-02-05 00:00:00", "2026-03-04 23:59:59", "超核勇士wpe"),
     newNotAmsActInfo("2026-01-08 00:00:00", "2026-02-07 23:59:59", "DNF心悦wpe_dup"),
@@ -125,18 +125,18 @@ act_name_to_url = {
     #
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
-    "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
-    "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
-    "WeGame活动": "https://dnf.qq.com/cp/a20260416wegame/index.html",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/lucky_lottery/v2/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a37e48e9736374ad2994ba50736568335/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20260520events/index.html",
     "像素拼图": "https://dnf.qq.com/cp/a20260320PixMap/",
     #
     # 已过期活动
     #
+    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a37e48e9736374ad2994ba50736568335/index.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
+    "WeGame活动": "https://dnf.qq.com/cp/a20260416wegame/index.html",
+    "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
+    "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
     "超核勇士wpe": "https://act.supercore.qq.com/supercore/act/aae8a0ef9237a42eb927a98a9c61d5b8f/index.html",
     "DNF心悦wpe_dup": "https://act.xinyue.qq.com/act/a20251226myxl/index.html?via=upother_61007",

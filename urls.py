@@ -68,6 +68,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-05-21 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-06-10 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-05-18 00:00:00", "2026-06-28 23:59:59", "DNF格斗大赛"),
+    newNotAmsActInfo("2026-05-28 09:00:00", "2026-06-30 23:59:59", "像素拼图"),
     #
     # 已过期活动
     #
@@ -132,6 +133,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a37e48e9736374ad2994ba50736568335/index.html",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20260520events/index.html",
+    "像素拼图": "https://dnf.qq.com/cp/a20260320PixMap/",
     #
     # 已过期活动
     #
@@ -272,7 +274,7 @@ class Urls:
             "iChartId", "iSubChartId", "sIdeToken", "sRoleId", "sRoleName", "sArea", "sMd5str", "sCheckparam", "roleJob", "sAreaName", "sAuthInfo", "sActivityInfo", "openid", "sCode", "startPos",
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
-            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId",
+            "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId", "indexKey",
         ]
         # 其他链接需要默认填充的空参数
         # re: 这个不是公共参数的意思，这里额外是补充的空值参数，比如非ame和ide的其他活动链接中需要的参数
@@ -361,6 +363,7 @@ class Urls:
         self.ide_iActivityId_dnf_press_conference_gift = "0_oesYIu"  # 发布会特别赠礼
         self.ide_iActivityId_dnf_diruiji_yure = "51_tb5w4Q"  # 狄瑞吉预热
         self.ide_iActivityId_dnf_pk = "92_cBckHZ"  # DNF格斗大赛
+        self.ide_iActivityId_dnf_pixel_puzzle = "84_VYg0dT"  # 像素拼图
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

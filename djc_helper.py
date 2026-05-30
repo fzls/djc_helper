@@ -695,6 +695,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF格斗大赛", self.dnf_pk),
+            ("像素拼图", self.dnf_pixel_puzzle),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10208,6 +10209,153 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------像素拼图--------------------------------------------
+    @try_except()
+    def dnf_pixel_puzzle(self):
+        show_head_line("像素拼图")
+        self.show_not_ams_act_info("像素拼图")
+
+        if not self.cfg.function_switches.get_dnf_pixel_puzzle or self.disable_most_activities():
+            show_act_not_enable_warning("像素拼图")
+            return
+
+        self.check_dnf_pixel_puzzle()
+
+        def get_unlock_pixel_data() -> dict:
+            # 1. 基础配置
+            canvas_width = 976
+            canvas_height = 1816
+            total_pixels = canvas_width * canvas_height
+
+            stage_range = {
+                "stage1": {"start": 0, "end": 886207},
+                "stage2": {"start": 886208, "end": 1772415},
+            }
+
+            unlock_pixel_data = {"stage1": [], "stage2": []}
+
+            # 2. 生成时间戳参数 (格式: YYYYMMDDHHmm)
+            time_str = datetime.datetime.now().strftime("%Y%m%d%H%M")
+            bin_url = f"https://img.dnf.qq.com/pixel.bin?t={time_str}"
+
+            # 3. 发送网络请求获取二进制数据
+            try:
+                response = requests.get(bin_url, timeout=10)
+                if response.status_code != 200:
+                    print(f"加载像素数据失败，状态码：{response.status_code}")
+                    return unlock_pixel_data
+                binary_data = response.content
+            except Exception as e:
+                print(f"网络请求发生错误: {e}")
+                return unlock_pixel_data
+
+            # 4. 解析二进制数据并分类
+            # 每一个字节包含 8 个像素，从高位(左)到低位(右)依次对应
+            s1_start, s1_end = stage_range["stage1"]["start"], stage_range["stage1"]["end"]
+            s2_start, s2_end = stage_range["stage2"]["start"], stage_range["stage2"]["end"]
+
+            # 遍历所有可能的像素索引
+            for i in range(total_pixels):
+                byte_index = i // 8
+
+                # 防止后端返回的二进制数据长度不足导致越界
+                if byte_index >= len(binary_data):
+                    break
+
+                # 对应 JS 的: 7 - (i % 8)
+                bit_in_byte = 7 - (i % 8)
+
+                # 取出对应的 bit 位
+                bit = (binary_data[byte_index] >> bit_in_byte) & 1
+
+                # 只记录未点亮（值为 0）的像素下标
+                if bit == 0:
+                    if s1_start <= i <= s1_end:
+                        unlock_pixel_data["stage1"].append(i)
+                    elif s2_start <= i <= s2_end:
+                        unlock_pixel_data["stage2"].append(i)
+
+            return unlock_pixel_data
+
+        def get_random_unlock_pixel():
+            unlock_pixel_data = get_unlock_pixel_data()
+
+            stage_key = "stage1"
+            if now_after("2026-06-04 00:00:00"):
+                stage_key = "stage2"
+
+            stage_unlock_pixel_index_list = unlock_pixel_data[stage_key]
+
+            index = random.choice(stage_unlock_pixel_index_list)
+
+            logger.info(f"当前阶段为 {stage_key}，仍有 {len(stage_unlock_pixel_index_list)} 个像素未被点亮，随机选择一个像素 {index} 进行点亮")
+
+            return index
+
+        def query_info() -> str:
+            res = self.dnf_pixel_puzzle_op("初始化", "513407", print_res=False)
+            raw_info = res["jData"]
+
+            # 抽奖次数
+            indexKey = raw_info["indexKey"]
+
+            return indexKey
+
+        self.dnf_pixel_puzzle_op("阶段开启期间登录游戏", "536906")
+        self.dnf_pixel_puzzle_op("阶段开启期间累计在线时长30min", "536907")
+        self.dnf_pixel_puzzle_op("阶段开启期间，单日通关推荐地下城3次", "536908")
+        self.dnf_pixel_puzzle_op("完成以上所有任务", "513900")
+
+        light_up_stage = "点亮阶段一"
+        light_up_flowid = "513408"
+        if now_after("2026-06-04 00:00:00"):
+            light_up_stage = "点亮阶段二"
+            light_up_flowid = "514167"
+
+        # 奖励领取期 6.11
+        if now_before("2026-06-11 00:00:00"):
+            indexKey = query_info()
+            if indexKey == "":
+                index = get_random_unlock_pixel()
+                self.dnf_pixel_puzzle_op(f"{light_up_stage} 随机选择像素点 {index}", light_up_flowid, indexKey=index)
+            else:
+                logger.info(f"已点亮过像素点 {indexKey}")
+
+        if now_after("2026-06-11 12:00:00"):
+            self.dnf_pixel_puzzle_op("限定称号“勇士一起拼”（6月11号领取）", "537324")
+            self.dnf_pixel_puzzle_op("全服点亮成功终极大奖", "513410")
+
+            # # 6月11日前未参与点亮活动 可以领取这个，直接跳过
+            # self.dnf_pixel_puzzle_op("为共创周年马赛克画揭幕", "541779")
+
+    def check_dnf_pixel_puzzle(self, **extra_params):
+        return self.ide_check_bind_account(
+            "像素拼图",
+            get_act_url("像素拼图"),
+            activity_op_func=self.dnf_pixel_puzzle_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_pixel_puzzle_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_pixel_puzzle
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("像素拼图"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -11136,6 +11284,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pk()
+        djcHelper.dnf_pixel_puzzle()
 
     pause()

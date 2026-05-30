@@ -938,6 +938,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_flash_cap = True
         # 是否领取 像素拼图 活动
         self.get_dnf_pixel_puzzle = True
+        # 是否领取 周年特别节目 活动
+        self.get_dnf_anniversary_special_act = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

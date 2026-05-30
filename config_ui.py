@@ -3071,6 +3071,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("DNF格斗大赛", "get_dnf_pk"),
             ("像素拼图", "get_dnf_pixel_puzzle"),
+            ("周年特别节目", "get_dnf_anniversary_special_act"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

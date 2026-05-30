@@ -691,6 +691,7 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF格斗大赛", self.dnf_pk),
             ("像素拼图", self.dnf_pixel_puzzle),
+            ("周年特别节目", self.dnf_anniversary_special_act),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -10356,6 +10357,84 @@ class DjcHelper:
             **extra_params,
         )
 
+    # --------------------------------------------周年特别节目--------------------------------------------
+    @try_except()
+    def dnf_anniversary_special_act(self):
+        show_head_line("周年特别节目")
+        self.show_not_ams_act_info("周年特别节目")
+
+        if not self.cfg.function_switches.get_dnf_anniversary_special_act or self.disable_most_activities():
+            show_act_not_enable_warning("周年特别节目")
+            return
+
+        self.check_dnf_anniversary_special_act()
+
+        async_message_box(
+            "周年庆的新职业预约需要填手机号和验证码，请在稍后弹出的活动页面点击左侧tab最上方的【首页-职业预约】，然后点击【立即预约新职业】，输入手机号和验证码来完成预约流程",
+            "26.5 新职业预约",
+            open_url=get_act_url("周年特别节目"),
+            show_once=True,
+        )
+        # self.dnf_anniversary_special_act_op("发送绑定短信", "541239")
+        # self.dnf_anniversary_special_act_op("校验绑定验证码", "541244")
+        # self.dnf_anniversary_special_act_op("发送解绑短信", "541359")
+        # self.dnf_anniversary_special_act_op("校验解绑验证码", "541360")
+
+        if now_after("2026-06-11 00:00:00"):
+            self.dnf_anniversary_special_act_op("预约奖励", "546685")
+
+        # cardId - 卡牌ID 0-17（对应data-id属性）
+        unlockDates = [
+            '20260530', '20260530', '20260530', '20260530', '20260530',
+            '20260531', '20260601', '20260601', '20260602', '20260603',
+            '20260604', '20260605', '20260606', '20260607', '20260608',
+            '20260609', '20260610', '20260611'
+        ]
+        now = get_now()
+        for card_id in range(17+1):
+            unlock_date = parse_time(unlockDates[card_id], "%Y%m%d")
+            if now < unlock_date:
+                logger.warning(f"职业{card_id} 在 {unlock_date} 解锁，先跳过")
+                continue
+
+            self.dnf_anniversary_special_act_op(f"卡牌解锁奖励 - {card_id}", "541830", cardIndex=card_id)
+
+        if now_after("2026-06-11 00:00:00"):
+            self.dnf_anniversary_special_act_op("终极奖励-点击完卡牌", "551436")
+
+        self.dnf_anniversary_special_act_op("合影奖励", "541857")
+
+        if now_after("2026-06-11 00:00:00"):
+            self.dnf_anniversary_special_act_op("成人礼", "542094")
+
+    def check_dnf_anniversary_special_act(self, **extra_params):
+        return self.ide_check_bind_account(
+            "周年特别节目",
+            get_act_url("周年特别节目"),
+            activity_op_func=self.dnf_anniversary_special_act_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_anniversary_special_act_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_anniversary_special_act
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("周年特别节目"),
+            **extra_params,
+        )
+
     # --------------------------------------------辅助函数--------------------------------------------
     def get(
         self,
@@ -10509,6 +10588,7 @@ class DjcHelper:
         append_raw_data="",
         **data_extra_params,
     ) -> dict | AmsActInfo | None:
+        # re: 添加参数直接搜这个 amesvr_default_params_list
         if show_info_only:
             self.show_ams_act_info(iActivityId)
             return None
@@ -10557,6 +10637,8 @@ class DjcHelper:
         sIdeToken="",
         **data_extra_params,
     ) -> dict | IdeActInfo | None:
+        # re: 添加参数直接搜这个 ide_default_params_list
+
         if show_info_only:
             self.show_ide_act_info(iActivityId)
             return None
@@ -11284,6 +11366,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pixel_puzzle()
+        djcHelper.dnf_anniversary_special_act()
 
     pause()

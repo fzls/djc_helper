@@ -693,6 +693,7 @@ class DjcHelper:
             ("像素拼图", self.dnf_pixel_puzzle),
             ("周年特别节目", self.dnf_anniversary_special_act),
             ("DNF周年庆登录活动", self.dnf_anniversary),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF闪光杯", self.dnf_flash_cap),
             ("DNF预约", self.dnf_reservation),
@@ -6474,18 +6474,18 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "528999", print_res=False)
+            res = self.dnf_luodiye_ide_op("初始化", "554669", print_res=False)
             raw_info = res["jData"]
 
             # 抽奖次数
-            # iLottery = int(raw_info["jLotteryTicket"])
-            iLottery = 0
+            iLottery = int(raw_info["iLottery"])
+            # iLottery = 0
 
             # # 累计登录天数
-            iLoginTotal = int(raw_info["jCheckInDay"])
+            iLoginTotal = int(raw_info["iCheckIn"])
 
             # 总共获得抽奖次数
-            # jLotteryTotal = int(raw_info["jLotteryTotal"])
+            # jLotteryTotal = int(raw_info["iLottery"])
             jLotteryTotal = 0
 
             jFinishedLotteryCount = jLotteryTotal - iLottery
@@ -6522,12 +6522,6 @@ class DjcHelper:
                     time.sleep(2)
 
         # ------------ 实际流程 --------------
-        self.dnf_luodiye_ide_op("见面礼包", "529002")
-
-        # iLotteryCount, _, _ = query_info()
-        # for idx in range_from_one(iLotteryCount):
-        #     self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 每日抽奖", "485992")
-        #     time.sleep(3)
 
         # self.dnf_luodiye_ide_op("庆典礼包", "441320")
         #
@@ -6554,29 +6548,43 @@ class DjcHelper:
         #     else:
         #         logger.warning(f"[{gift_index}] 当前累计抽奖次数未达到{require_lottery_count}，将不尝试领取该累计奖励")
 
-        self.dnf_luodiye_ide_op("活跃挑战打卡", "529004")
+        self.dnf_luodiye_ide_op("见面礼包", "554872")
 
-        self.dnf_luodiye_ide_op("补打卡-浏览一篇DNF助手资讯", "529500")
-        self.dnf_luodiye_ide_op("补打卡-记录关注DNF官方微信号", "529504")
-        self.dnf_luodiye_ide_op("补打卡-领取关注DNF官方微信号", "529505")
+        self.dnf_luodiye_ide_op("活跃挑战打卡", "554876")
+
+        self.dnf_luodiye_ide_op("补打卡-浏览一篇DNF助手资讯", "554918")
+        self.dnf_luodiye_ide_op("补打卡-记录关注DNF官方微信号", "554919")
+        self.dnf_luodiye_ide_op("补打卡-领取关注DNF官方微信号", "554928")
 
         _, iLoginTotal, _ = query_info()
-        logger.info(f"累计签到天数为 {iLoginTotal}")
-        for idx, signin_day in enumerate([3, 7, 10, 14, 21, 28]):
+        logger.info(f"打卡后游戏登录天数为 {iLoginTotal}")
+        for idx, signin_day in enumerate([3, 7, 10, 14, 21, 25]):
             if iLoginTotal < signin_day:
-                logger.warning(f"尚未签到 {signin_day} 天，跳过当前奖励")
+                logger.warning(f"打卡后尚未登录 {signin_day} 天，跳过当前奖励")
                 continue
 
-            self.dnf_luodiye_ide_op(f"累计 {signin_day} 天签到奖励", "531802", index=idx + 1)
+            self.dnf_luodiye_ide_op(f"打卡后累计登录 {signin_day} 天奖励", "554945", index=idx + 1)
             time.sleep(3)
 
         # # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
         async_message_box(
-            "落地页活动页面有个拉回归好友的活动，点击左侧红包升级挑战tab，邀请符合条件的好友后可以获得升级礼包，将红包按概率升级后可以领取，有兴趣的请自行参与",
-            "26.4 落地页拉回归活动",
+            "落地页活动页面有个拉回归好友的活动，点击左侧18周年庆生礼tab，邀请符合条件的好友后可以获得抽奖次数，抽奖有几率获得11增幅券、Q币等奖励，有兴趣的请自行参与",
+            "26.6 落地页拉回归活动",
             show_once=True,
             open_url=get_act_url("DNF落地页活动_ide"),
         )
+
+        self.dnf_luodiye_ide_op("感恩回馈好礼", "555324")
+
+        self.dnf_luodiye_ide_op("创建破浪者角色", "555328")
+        self.dnf_luodiye_ide_op("创建女蓝拳", "555347")
+        self.dnf_luodiye_ide_op("通关末世录军团本", "555736")
+
+        iLotteryCount, _, _ = query_info()
+        logger.info(f"剩余抽奖次数 {iLotteryCount}")
+        for idx in range_from_one(iLotteryCount):
+            self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 抽奖", "555852")
+            time.sleep(3)
 
         # tasks = [
         #     ("每日通关深渊任务", "513017"),
@@ -11394,6 +11402,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

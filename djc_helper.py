@@ -4880,20 +4880,25 @@ class DjcHelper:
 
         # 奖励兑换时间：2026年5月25日-2026年6月28日
         if now_in_range("2026-05-25 00:00:00", "2026-06-28 23:59:59"):
-            self.dnf_pk_ide_op("积分兑换-红10增幅券", "540062", rewardId="12")
+            self.dnf_pk_ide_op("积分兑换-红10增幅券（1200积分）", "540062", rewardId="12")
 
             act_config = get_not_ams_act("DNF格斗大赛")
-            if (
-                act_config is not None
-                and will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5))
-            ):
-                # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
-                async_message_box(
-                    "DNF格斗大赛小助手仅会尝试领取红10增幅券，活动还有几天即将结束，如果还有积分剩余，请自行前往【积分兑换及奖励展示】页面使用\n",
-                    f"DNF格斗大赛奖励兑换提示_{self.cfg.name}",
-                    open_url=get_act_url("DNF格斗大赛"),
-                    show_once_daily=True,
-                )
+            if act_config is not None:
+                if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
+                    # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
+                    async_message_box(
+                        "DNF格斗大赛小助手仅会尝试领取红10增幅券（1200积分），活动还有几天即将结束，如果还有积分剩余，请自行前往【积分兑换及奖励展示】页面使用（最后一天将额外尝试兑换为黑钻15天（400积分））\n",
+                        f"DNF格斗大赛奖励兑换提示_{self.cfg.name}",
+                        open_url=get_act_url("DNF格斗大赛"),
+                        show_once_daily=True,
+                    )
+
+                if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=1)):
+                    # 活动最后一天的话，额外尝试兑换黑钻15天
+                    logger.warning(f"格斗大赛兑换奖励最后一天了，将剩余积分全部尝试兑换为黑钻15天")
+                    for idx in range_from_one(4):
+                        self.dnf_pk_ide_op(f"{idx}/4 积分兑换-黑钻15天（400积分）", "540062", rewardId="9")
+                        time.sleep(3)
 
 
     def check_dnf_pk_ide(self, **extra_params):
@@ -11374,6 +11379,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pixel_puzzle()
+        djcHelper.dnf_pk()
 
     pause()

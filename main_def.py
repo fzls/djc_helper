@@ -1518,6 +1518,10 @@ def show_tips(cfg: Config):
             "微信游戏圈有个签到活动，微信扫描下面这个网页中的二维码，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic2.png"
         ),
+        "26.6 网吧": (
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
+            "https://act1.hdnf.qq.com/a20260611netbar/pcbanner.html\n"
+        ),
     }
 
     logger.info(

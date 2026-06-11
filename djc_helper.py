@@ -10403,6 +10403,7 @@ class DjcHelper:
                 continue
 
             self.dnf_anniversary_special_act_op(f"卡牌解锁奖励 - {card_id}", "541830", cardIndex=card_id)
+            time.sleep(3)
 
         if now_after("2026-06-11 00:00:00"):
             self.dnf_anniversary_special_act_op("终极奖励-点击完卡牌", "551436")
@@ -10410,7 +10411,8 @@ class DjcHelper:
         self.dnf_anniversary_special_act_op("合影奖励", "541857")
 
         if now_after("2026-06-11 00:00:00"):
-            self.dnf_anniversary_special_act_op("成人礼", "542094")
+            self.dnf_anniversary_special_act_op("成人礼 一", "542094")
+            self.dnf_anniversary_special_act_op("成人礼 二", "558386")
 
     def check_dnf_anniversary_special_act(self, **extra_params):
         return self.ide_check_bind_account(

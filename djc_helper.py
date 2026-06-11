@@ -692,6 +692,7 @@ class DjcHelper:
             ("DNF格斗大赛", self.dnf_pk),
             ("像素拼图", self.dnf_pixel_puzzle),
             ("周年特别节目", self.dnf_anniversary_special_act),
+            ("DNF周年庆登录活动", self.dnf_anniversary),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -719,7 +720,6 @@ class DjcHelper:
             ("挑战世界记录", self.dnf_challenge_world_record),
             ("start云游戏", self.dnf_cloud_game),
             ("周年庆网吧集结", self.dnf_netbar),
-            ("DNF周年庆登录活动", self.dnf_anniversary),
             ("新职业预约活动", self.dnf_reserve),
             ("助手魔界人每日幸运签", self.dnf_helper_lucky_lottery),
             ("幸运色卡", self.dnf_color),
@@ -7803,19 +7803,6 @@ class DjcHelper:
     def dnf_anniversary(self):
         show_head_line("DNF周年庆登录活动")
 
-        if now_in_range("2025-06-14 06:00:00", "2025-06-16 05:59:59") and is_daily_first_run(
-            "2025_DNF周年庆登录活动_提示登录"
-        ):
-            async_message_box(
-                (
-                    "周年庆是否所有需要领奖励的号都已经登录了？如果没有的话，记得去一个个登录哦~\n"
-                    # "\n"
-                    # "此外在6.17到6.19期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
-                ),
-                "周年庆登录",
-                open_url=get_act_url("DNF周年庆登录活动"),
-            )
-
         if not self.cfg.function_switches.get_dnf_anniversary or self.disable_most_activities():
             show_act_not_enable_warning("DNF周年庆登录活动")
             return
@@ -7823,27 +7810,55 @@ class DjcHelper:
         # self.show_amesvr_act_info(self.dnf_anniversary_op)
         # self.check_dnf_anniversary()
 
-        self.show_not_ams_act_info("DNF周年庆登录活动")
-        self.check_dnf_anniversary_ide()
+        # self.show_not_ams_act_info("DNF周年庆登录活动")
+        # self.check_dnf_anniversary_ide()
 
-        self.dnf_anniversary_ide_op("【H5】更新后首次登录", "402445")
-        self.dnf_anniversary_ide_op("【H5】周末登录礼包", "402448")
+        if now_in_range("2026-06-13 06:00:00", "2026-06-15 05:59:59") and is_daily_first_run(
+            "2026_DNF周年庆登录活动_提示登录"
+        ):
+            async_message_box(
+                (
+                    "周年庆是否所有需要领奖励的号都已经登录并在游戏右下角点击周年庆图标（18样式），在里面点击领取左下角的周末特别福利？如果没有的话，记得去一个个操作哦~\n"
+                    # "\n"
+                    # "此外在6.17到6.19期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
+                ),
+                "周年庆登录预约",
+                # open_url=get_act_url("DNF周年庆登录活动"),
+            )
 
-        if now_after("2025-06-16 06:00:00"):
-            self.dnf_anniversary_ide_op("领取补签", "406629")
+        if now_after("2026-06-15 06:00:00"):
+            async_message_box(
+                (
+                    "如果6.13-6.15的周末忘记在游戏里预约周年庆礼包领取资格了，也可以刷50次深渊后，在游戏右下角点击周年庆图标，选择左下角的周年庆特别任务来补领资格\n"
+                    # "\n"
+                    # "此外在6.17到6.19期间，登录即可领一套透明天空<_<在游戏中的【从100开始的全新冒险】活动中点击领取\n"
+                ),
+                "周年庆登录补资格",
+            )
+
+        # self.dnf_anniversary_ide_op("【H5】更新后首次登录", "402445")
+        # self.dnf_anniversary_ide_op("【H5】周末登录礼包", "402448")
+        #
+        # if now_after("2026-06-16 06:00:00"):
+        #     self.dnf_anniversary_ide_op("领取补签", "406629")
 
         gifts = [
-            ("第一弹", "402449", "2025-06-21 16:00:00"),
-            ("第二弹", "402450", "2025-06-22 00:00:00"),
-            ("第三弹", "402451", "2025-06-28 00:00:00"),
-            ("第四弹", "402452", "2025-06-29 00:00:00"),
-            ("终极礼", "402453", "2025-06-29 00:00:00"),
+            ("第一弹", "402449", "2026-06-20 06:00:00"),
+            ("第二弹", "402450", "2026-06-21 06:00:00"),
+            ("第三弹", "402451", "2026-06-27 06:00:00"),
+            ("第四弹", "402452", "2026-06-28 06:00:00"),
+            ("终极礼", "402453", "2026-06-28 06:00:00"),
         ]
 
         now = get_now()
         for name, flowid, can_take_time in gifts:
             if now >= parse_time(can_take_time):
-                self.dnf_anniversary_ide_op(f"领取 {name} 周年庆礼包", flowid)
+                # self.dnf_anniversary_ide_op(f"领取 {name} 周年庆礼包", flowid)
+                async_message_box(
+                    f"可以领取周年庆 {name} 奖励了，在游戏右下角点击周年庆图标，选择右侧的对应奖励领取即可",
+                    f"周年庆提醒领取 {name} 奖励",
+                    show_once=True,
+                )
             else:
                 logger.warning(f"当前未到{can_take_time}，无法领取{name}")
 
@@ -11379,6 +11394,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pk()
+        djcHelper.dnf_anniversary()
 
     pause()

@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-05-18 00:00:00", "2026-06-28 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2026-05-28 09:00:00", "2026-06-30 23:59:59", "像素拼图"),
     newNotAmsActInfo("2026-05-30 00:00:00", "2026-07-08 23:59:59", "周年特别节目"),
+    newNotAmsActInfo("2026-06-11 00:00:00", "2026-07-09 23:59:59", "DNF周年庆登录活动"),
     #
     # 已过期活动
     #
@@ -87,7 +88,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
-    newNotAmsActInfo("2025-06-12 00:00:00", "2025-07-10 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
     newNotAmsActInfo("2025-03-03 00:00:00", "2025-07-30 23:59:59", "助手魔界人每日幸运签"),
     newNotAmsActInfo("2025-05-12 19:10:00", "2025-06-30 23:59:59", "幸运色卡"),
@@ -131,6 +131,7 @@ act_name_to_url = {
     "DNF格斗大赛": "https://dnf.qq.com/cp/a20260520events/index.html",
     "像素拼图": "https://dnf.qq.com/cp/a20260320PixMap/",
     "周年特别节目": "https://dnf.qq.com/cp/a20260530eighteen/",
+    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20260611gift/",
     #
     # 已过期活动
     #
@@ -154,7 +155,6 @@ act_name_to_url = {
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
-    "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20250612gift/",
     "新职业预约活动": "https://dnf.qq.com/cp/a20250517brand/index.html",
     "助手魔界人每日幸运签": "https://dzhu.qq.com/fe/dnf/lucky_lottery/?share=1&gameId=10014&activityId=1001",
     "幸运色卡": "https://dnf.qq.com/cp/a20250611dnf/",

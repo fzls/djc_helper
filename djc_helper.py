@@ -687,7 +687,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("助手限定活动", self.dnf_helper_limit_act),
+            ("助手限定活动", self.dnf_helper_limit_act), # 助手魔界人每日幸运签
             ("DNF格斗大赛", self.dnf_pk),
             ("像素拼图", self.dnf_pixel_puzzle),
             ("周年特别节目", self.dnf_anniversary_special_act),

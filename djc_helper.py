@@ -10302,10 +10302,11 @@ class DjcHelper:
 
             return indexKey
 
-        self.dnf_pixel_puzzle_op("阶段开启期间登录游戏", "536906")
-        self.dnf_pixel_puzzle_op("阶段开启期间累计在线时长30min", "536907")
-        self.dnf_pixel_puzzle_op("阶段开启期间，单日通关推荐地下城3次", "536908")
-        self.dnf_pixel_puzzle_op("完成以上所有任务", "513900")
+        if now_before("2026-06-11 00:00:00"):
+            self.dnf_pixel_puzzle_op("阶段开启期间登录游戏", "536906")
+            self.dnf_pixel_puzzle_op("阶段开启期间累计在线时长30min", "536907")
+            self.dnf_pixel_puzzle_op("阶段开启期间，单日通关推荐地下城3次", "536908")
+            self.dnf_pixel_puzzle_op("完成以上所有任务", "513900")
 
         light_up_stage = "点亮阶段一"
         light_up_flowid = "513408"
@@ -11373,6 +11374,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_anniversary_special_act()
+        djcHelper.dnf_pixel_puzzle()
 
     pause()

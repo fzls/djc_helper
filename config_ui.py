@@ -3068,12 +3068,12 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("助手限定活动", "get_dnf_helper_limit_act"),
-            ("回流引导秘籍", "get_dnf_recall_guide"),
             ("DNF格斗大赛", "get_dnf_pk"),
             ("像素拼图", "get_dnf_pixel_puzzle"),
             ("周年特别节目", "get_dnf_anniversary_special_act"),
             ("DNF周年庆登录活动", "get_dnf_anniversary"),
             ("DNF落地页活动", "get_dnf_luodiye"),
+            ("回流引导秘籍", "get_dnf_recall_guide"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

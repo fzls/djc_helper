@@ -694,6 +694,7 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("DNF闪光杯", self.dnf_flash_cap),
             ("DNF预约", self.dnf_reservation),
@@ -8334,20 +8334,30 @@ class DjcHelper:
 
             return remain
 
-        self.dnf_xinyue_wpe_op("报名礼包", 443269)
+        self.dnf_xinyue_wpe_op("周年庆狂欢礼", 458285)
 
-        self.dnf_xinyue_wpe_op("每日登录dnf客户端", 443272)
 
-        self.dnf_xinyue_wpe_op("每周通关沉月湖", 443278)
-        self.dnf_xinyue_wpe_op("每周通关蔚蓝号", 443279)
-        self.dnf_xinyue_wpe_op("每周通关幽冥之女神殿", 443280)
-        self.dnf_xinyue_wpe_op("每周通关星座灵龟大书库", 443281)
-        self.dnf_xinyue_wpe_op("每周通关叛教者城堡", 443271)
-        self.dnf_xinyue_wpe_op("每周通关悖论迷宫", 443277)
+        self.dnf_xinyue_wpe_op("今日登录游戏", 458288)
+        self.dnf_xinyue_wpe_op("今日在线30分钟", 458752)
+        self.dnf_xinyue_wpe_op("今日邀请3位回归玩家", 458899)
+        self.dnf_xinyue_wpe_op("每充值50元", 458737)
+        self.dnf_xinyue_wpe_op("今日消耗156疲劳", 458764)
+        # self.dnf_xinyue_wpe_op("添加心悦福利小助手", YYYYYY)
 
-        self.dnf_xinyue_wpe_op("更新我的刷图积分", 443295)
-        if now_after("2026-05-15 08:00:00"):
-            self.dnf_xinyue_wpe_op("领取积分奖励", 443291)
+        for idx in range_from_one(3):
+            self.dnf_xinyue_wpe_op(f"{idx}/3 幸运币抽奖", 458286)
+            time.sleep(3)
+
+
+        self.dnf_xinyue_wpe_op("破浪者竞速-报名", 458964)
+        self.dnf_xinyue_wpe_op("破浪者竞速-更新积分", 458301)
+        if now_in_range("2026-07-09 08:00:00", "2026-07-15 23:59:59"):
+            self.dnf_xinyue_wpe_op("破浪者竞速-领取奖励", 458297)
+
+        self.dnf_xinyue_wpe_op("女蓝拳竞速-报名", 459298)
+        self.dnf_xinyue_wpe_op("女蓝拳竞速-更新积分", 459300)
+        if now_in_range("2026-07-09 08:00:00", "2026-07-15 23:59:59"):
+            self.dnf_xinyue_wpe_op("女蓝拳竞速-领取奖励", 459301)
 
         # box_count = query_lottery_ticket()
         # logger.info(f"当前拥有 {box_count} 个宝箱")
@@ -8413,7 +8423,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "28148"
+        act_id = "28658"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -8439,6 +8449,7 @@ class DjcHelper:
             },
             "data": json.dumps(
                 {
+                    "gid": 1,
                     "num": 1,
                     "ceiba_plat_id": "ios",
                     "user_attach": json.dumps({"nickName": quote(roleinfo.roleName)}),
@@ -11402,6 +11413,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_recall_guide()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

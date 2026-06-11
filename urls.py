@@ -68,7 +68,8 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-09-09 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-06-11 10:00:00", "2026-07-15 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 18:00:00", "WeGame活动"),
+    newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     #
     # 已过期活动
     #
@@ -85,7 +86,6 @@ not_ams_activities = [
     newNotAmsActInfo("2025-09-11 00:00:00", "2025-10-15 23:59:59", "超级会员"),
     newNotAmsActInfo("2025-08-28 00:00:00", "2025-09-10 23:59:59", "DNF久久公益节"),
     newNotAmsActInfo("2025-06-20 10:10:00", "2025-07-31 23:59:59", "vp挑战赛"),
-    newNotAmsActInfo("2025-06-24 10:00:00", "2025-07-31 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2025-06-26 19:10:00", "2025-07-10 23:59:59", "挑战世界记录"),
     newNotAmsActInfo("2025-06-12 10:00:00", "2025-07-16 23:59:59", "周年庆网吧集结"),
     newNotAmsActInfo("2025-05-22 00:00:00", "2025-07-09 23:59:59", "新职业预约活动"),
@@ -135,6 +135,7 @@ act_name_to_url = {
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260601dnf/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20260611wegame/index.html",
+    "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     #
     # 已过期活动
     #
@@ -151,7 +152,6 @@ act_name_to_url = {
     "超级会员": "https://act.qzone.qq.com/v2/vip/tx/p/53711_67604c88?traceTint=tianxuan_copy",
     "DNF久久公益节": "https://dnf.qq.com/cp/a2025073199gongyi/index.html",
     "vp挑战赛": "https://dnf.qq.com/cp/a20250530tzs/index.html",
-    "colg其他活动": "https://hub.bbs.colg.cn/activity/professional_team/index.html",
     "挑战世界记录": "https://dnf.qq.com/cp/a20250617record/index.html",
     "start云游戏": "https://my.start.qq.com/act/my_activity/?group_id=1&act_id=158#/index",
     "周年庆网吧集结": "https://dnf.qq.com/cp/a20250525netbar/",
@@ -439,15 +439,17 @@ class Urls:
         self.colg_mall_get_reward_url = "https://bbs.colg.cn/colg_cmall-colg_cmall.html/getCMallRewardV1"
         # ------- colg其他活动 --------
         self.colg_other_act_type = 2
-        self.colg_other_act_id = 28
+        self.colg_other_act_id = 3
         # 活动页面
-        self.colg_other_act_url = "https://hub.bbs.colg.cn/activity/professional_team/index.html"
+        self.colg_other_act_url = "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html"
         # api链接
         self.colg_other_act_api = "https://bbs.colg.cn/colg_activity_new-career_village.html/{api}?aid=28"
         # 累计登录领奖
         self.colg_other_act_get_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getReward"
-        # 每日抽奖
-        self.colg_other_act_lottery = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/lottery"
+        # 兑换奖励
+        self.colg_other_act_exchange_reward = "https://bbs.colg.cn/colg_activity_new-colg_activity_new.html/getRewardV2"
+        # 每日抽奖 RuleDialog-DV99ZAoP.js
+        self.colg_other_act_lottery = "https://bbs.colg.cn/colg_check_in_activity-check_in.html/checkIn"
 
         # 小酱油
         self.xiaojiangyou_get_role_id = (

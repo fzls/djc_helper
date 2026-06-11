@@ -695,6 +695,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -702,7 +703,6 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
-            ("WeGame活动", self.dnf_wegame),
             ("DNF闪光杯", self.dnf_flash_cap),
             ("DNF预约", self.dnf_reservation),
             ("colg每日签到", self.colg_signin),
@@ -7544,16 +7544,27 @@ class DjcHelper:
 
         # self.dnf_wegame_ide_op("抽取礼包助力基金", "528842")
 
-        self.dnf_wegame_ide_op("全民好礼", "529342")
-        self.dnf_wegame_ide_op("回归好礼", "529343")
+        self.dnf_wegame_ide_op("全民礼包", "556084")
+        self.dnf_wegame_ide_op("回流礼包", "556085")
 
-        self.dnf_wegame_ide_op("每日抽好礼", "529344")
+        self.dnf_wegame_ide_op("每日通关深渊抽奖", "556442")
 
-        self.dnf_wegame_ide_op("0-3套", "529346")
-        self.dnf_wegame_ide_op("4-8套", "529374")
-        self.dnf_wegame_ide_op("9-11套", "529443")
-        self.dnf_wegame_ide_op("全部点亮领取", "529445")
-        self.dnf_wegame_ide_op("全部点亮抽奖", "529453")
+        self.dnf_wegame_ide_op("获取积分-每日通关深渊", "556443")
+        self.dnf_wegame_ide_op("获取积分-每周末世录团本", "556448")
+        self.dnf_wegame_ide_op("获取积分-创建新职业【破浪者】", "556449")
+        self.dnf_wegame_ide_op("获取积分-创建新职业【蓝拳使者女】", "556450")
+
+        # self.dnf_wegame_ide_op("积分抽奖礼包", "556451")
+        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 红10券-43积分", "556497", index=1)
+
+        act_config = get_not_ams_act("WeGame活动")
+        if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
+            async_message_box(
+                "wegame活动即将结束，请在点击确认后弹出的活动页面中自行在最下方兑换剩余的积分（小助手只会尝试帮你领取 红10券）",
+                "WeGame活动积分兑换提示-26.6",
+                show_once_daily=True,
+                open_url=get_act_url("WeGame活动"),
+            )
 
         # self.dnf_wegame_ide_op("初始化", "529456")
         # self.dnf_wegame_ide_op("接受赠送", "530366")
@@ -7599,18 +7610,6 @@ class DjcHelper:
         #     show_once=True,
         #     open_url=get_act_url("WeGame活动"),
         # )
-
-        # # self.dnf_wegame_ide_op("积分抽奖礼包", "468861")
-        # self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 红10券-100积分", "484404", iPackageIndex=0)
-        #
-        # act_config = get_not_ams_act("WeGame活动")
-        # if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=7)):
-        #     async_message_box(
-        #         "wegame活动即将结束，请在点击确认后弹出的活动页面中自行在最下方兑换剩余的积分（小助手只会尝试帮你领取 红10券）",
-        #         "WeGame活动积分兑换提示-26.1",
-        #         show_once_daily=True,
-        #         open_url=get_act_url("WeGame活动"),
-        #     )
 
     def check_dnf_wegame_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -11413,6 +11412,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_wegame()
 
     pause()

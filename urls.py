@@ -68,10 +68,10 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-09-09 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-06-11 10:00:00", "2026-07-15 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 18:00:00", "WeGame活动"),
     #
     # 已过期活动
     #
-    newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
     newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
     newNotAmsActInfo("2026-04-23 09:00:00", "2026-05-13 23:59:59", "colg每日签到"),
@@ -134,10 +134,10 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260601dnf/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/a20260611wegame/index.html",
     #
     # 已过期活动
     #
-    "WeGame活动": "https://dnf.qq.com/cp/a20260416wegame/index.html",
     "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
     "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
     "colg每日签到": "https://bbs.colg.cn/forum-171-1.html",
@@ -345,7 +345,7 @@ class Urls:
         self.ide_iActivityId_dnf_shenjie_grow_up_v3 = "97_JFFynS"  # DNF神界成长之路三期
         self.ide_iActivityId_dnf_snk = "43_L5dwVl"  # DNFxSNK
         self.ide_iActivityId_dnf_kanina = "89_On7Z0H"  # DNF卡妮娜的心愿摇奖机
-        self.ide_iActivityId_dnf_wegame = "55_CJfoF0"  # WeGame活动
+        self.ide_iActivityId_dnf_wegame = "90_sgRvNP"  # WeGame活动
         self.ide_iActivityId_weiyang_compensate = "4_ttG6gw"  # 喂养删除补偿
         self.ide_iActivityId_dnf_socialize = "25_KHIbP0"  # 回流攻坚队
         self.ide_iActivityId_dnf_star_and_wish = "71_ptNFnW"  # 嘉年华星与心愿

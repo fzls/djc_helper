@@ -71,6 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
+    newNotAmsActInfo("2026-06-11 09:30:00", "2026-06-24 23:59:59", "助手海滩派对"),
     #
     # 已过期活动
     #
@@ -138,6 +139,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20260611wegame/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
+    "助手海滩派对": "https://dzhu.qq.com/fe/dnf/celebration-anniversary/?",
     #
     # 已过期活动
     #
@@ -496,7 +498,9 @@ class Urls:
         self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
         # 助手魔界人每日幸运签
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
-        # 助手限定活动
+        # 助手海滩派对
+        self.dnf_helper_beach_party_api = "https://dzhu.qq.com/zangyi/activity/act"
+        # 助手限定活动（只有一个的时候都加这里，同时有多个的时候，参考上面复刻）
         self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
 
         # 井盖杯挑战赛

@@ -9421,7 +9421,7 @@ class DjcHelper:
             }
             self.jinggai_game_op("绑定角色", "bindRoleArea", **role_params)
 
-        lr = self.prepare_jinggai_openid_info()
+        lr = self.prepare_jinggai_openid_info("井盖杯挑战赛")
         self.set_jinggai_openid_info(lr)
 
         bind_role()
@@ -9458,7 +9458,11 @@ class DjcHelper:
                     open_url=get_act_url("井盖杯挑战赛"),
                 )
 
-    def prepare_jinggai_openid_info(self) -> LoginResult:
+    def prepare_jinggai_openid_info(self, ctx: str) -> LoginResult:
+        if self.cfg.function_switches.disable_login_mode_jinggai:
+            logger.warning(f"禁用了井盖杯登录模式，将不会尝试更新井盖杯 access_token: {ctx}")
+            return LoginResult()
+
         def _is_login_info_valid(lr: LoginResult) -> bool:
             self.set_jinggai_openid_info(lr)
 
@@ -9469,7 +9473,7 @@ class DjcHelper:
 
         # note: 如果不能直接用心悦的登录态，这里只能在qq_login 那边新弄一个登录模式来获取
         lr = self.fetch_login_result(
-            "获取井盖杯挑战赛所需参数",
+            f"获取井盖杯挑战赛所需参数 - {ctx}",
             QQLogin.login_mode_jinggai,
             cache_max_seconds=600,
             cache_validate_func=_is_login_info_valid,
@@ -9535,7 +9539,7 @@ class DjcHelper:
 
         self.check_dnf_help_child()
 
-        lr = self.prepare_jinggai_openid_info()
+        lr = self.prepare_jinggai_openid_info("久久公益节")
         appid = "101491592"
         openid = lr.common_openid
         access_token = lr.common_access_token
@@ -9612,7 +9616,7 @@ class DjcHelper:
             )
 
         # 登录，获取token
-        lr = self.prepare_jinggai_openid_info()
+        lr = self.prepare_jinggai_openid_info("闪光杯")
         appid = "101491592"
         openid = lr.common_openid
         access_token = lr.common_access_token

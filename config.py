@@ -942,6 +942,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_pixel_puzzle = True
         # 是否领取 周年特别节目 活动
         self.get_dnf_anniversary_special_act = True
+        # 是否领取 kol勇士召回 活动
+        self.get_dnf_kol_recall = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能

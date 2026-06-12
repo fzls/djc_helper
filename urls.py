@@ -70,6 +70,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 10:00:00", "2026-07-15 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
+    newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
     #
     # 已过期活动
     #
@@ -136,6 +137,7 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260601dnf/index.html",
     "WeGame活动": "https://dnf.qq.com/cp/a20260611wegame/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
+    "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
     #
     # 已过期活动
     #
@@ -502,6 +504,9 @@ class Urls:
 
         # 闪光杯
         self.flash_cap_api = "https://dnf-api.qq.com/dnf-activities/a20260416sparkling/api/{api}"
+
+        # kol勇士召回
+        self.dnf_kol_recall_api = "https://dnf-api.qq.com/dnf-activities/a202606jdb_server/api/{api}"
 
     def show_current_valid_act_infos(self):
         acts: list[ActCommonInfo] = []

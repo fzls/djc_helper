@@ -697,6 +697,7 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("colg其他活动", self.colg_other_act),
+            ("kol勇士召回", self.dnf_kol_recall),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9657,6 +9658,49 @@ class DjcHelper:
         for stage in range_from_one(4):
             dnf_flash_cap_op(f"领取阶段 {stage} 奖励", "team/reward/claim", stage=stage)
 
+    # --------------------------------------------kol勇士召回--------------------------------------------
+    @try_except()
+    def dnf_kol_recall(self):
+        show_head_line("kol勇士召回")
+        self.show_not_ams_act_info("kol勇士召回")
+
+        if not self.cfg.function_switches.get_dnf_kol_recall or self.disable_most_activities():
+            show_act_not_enable_warning("kol勇士召回")
+            return
+
+        extra_headers = None
+
+        @try_except()
+        def dnf_kol_recall_op(ctx: str, api: str, **extra_params):
+            time.sleep(3)
+
+            return self.post(
+                ctx,
+                self.format(self.urls.dnf_kol_recall_api, api=api),
+                data=post_json_to_data(extra_params),
+                extra_headers=extra_headers,
+            )
+
+        # 登录，获取token
+        lr = self.prepare_jinggai_openid_info("kol勇士召回")
+        appid = "101491592"
+        openid = lr.common_openid
+        access_token = lr.common_access_token
+
+        res = dnf_kol_recall_op(
+            "登录", "login", appid=appid, openid=openid, access_token=access_token, acctype="qc", adtag=""
+        )
+        token = res["data"]["token"]
+
+        extra_headers = {
+            "x-auth-token": token,
+        }
+
+        bind_role = self.get_dnf_bind_role()
+        dnf_kol_recall_op("绑定角色", "role/bind", area=bind_role.serviceID, roleId=bind_role.roleCode)
+
+        dnf_kol_recall_op("领取绑定【陈小陌】奖励", "gift/claimGift", invitationCode="dnf104")
+
     # --------------------------------------------回流引导秘籍--------------------------------------------
     @try_except()
     def dnf_recall_guide(self):
@@ -11427,6 +11471,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.colg_other_act()
+        djcHelper.dnf_kol_recall()
 
     pause()

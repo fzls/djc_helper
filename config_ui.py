@@ -3077,6 +3077,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("DNF心悦wpe", "get_dnf_xinyue"),
             ("WeGame活动", "get_dnf_wegame"),
             ("colg其他活动", "get_colg_other_act"),
+            ("kol勇士召回", "get_dnf_kol_recall"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

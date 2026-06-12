@@ -687,7 +687,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("助手限定活动", self.dnf_helper_limit_act), # 助手魔界人每日幸运签
+            ("助手限定活动", self.dnf_helper_limit_act),  # 助手魔界人每日幸运签
             ("DNF格斗大赛", self.dnf_pk),
             ("像素拼图", self.dnf_pixel_puzzle),
             ("周年特别节目", self.dnf_anniversary_special_act),
@@ -4856,7 +4856,14 @@ class DjcHelper:
             role_name = bind_role.roleName
             force_name = role_extra_info.get_force_name().replace("（男）", "").replace("（女）", "")
 
-            self.dnf_pk_ide_op(f"立即报名【周期】-{role_name}-{force_name}", "539962", iRegisterUin=self.qq(), iArea=quote("6"), iRoleId=quote(role_name), iJob=quote(force_name))
+            self.dnf_pk_ide_op(
+                f"立即报名【周期】-{role_name}-{force_name}",
+                "539962",
+                iRegisterUin=self.qq(),
+                iArea=quote("6"),
+                iRoleId=quote(role_name),
+                iJob=quote(force_name),
+            )
             # self.dnf_pk_ide_op("报名信息【周期】", "539963")
             self.dnf_pk_ide_op("报名礼包", "539966")
 
@@ -4866,7 +4873,6 @@ class DjcHelper:
             ("消耗疲劳【每日任务】", "539971"),
             ("完成1次决斗场【每日任务】", "539984"),
             ("完成5次决斗场【每日任务】", "539985"),
-
             ("通关深渊【每周任务】", "539986"),
             ("通关攻坚战【每周任务】", "540012"),
             ("通关军团地下城【每周任务】", "540013"),
@@ -4897,11 +4903,10 @@ class DjcHelper:
 
                 if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=1)):
                     # 活动最后一天的话，额外尝试兑换黑钻15天
-                    logger.warning(f"格斗大赛兑换奖励最后一天了，将剩余积分全部尝试兑换为黑钻15天")
+                    logger.warning("格斗大赛兑换奖励最后一天了，将剩余积分全部尝试兑换为黑钻15天")
                     for idx in range_from_one(4):
                         self.dnf_pk_ide_op(f"{idx}/4 积分兑换-黑钻15天（400积分）", "540062", rewardId="9")
                         time.sleep(3)
-
 
     def check_dnf_pk_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -6199,7 +6204,7 @@ class DjcHelper:
 
             res = session.post(
                 self.urls.colg_other_act_exchange_reward,
-                data=f"aid=37&reward_bag_id=178",
+                data="aid=37&reward_bag_id=178",
                 timeout=10,
             )
             logger.info(color("bold_green") + f"尝试兑换黑钻15天，结果={res.text}")
@@ -7872,6 +7877,7 @@ class DjcHelper:
 
         now = get_now()
         for name, flowid, can_take_time in gifts:
+            _ = flowid
             if now >= parse_time(can_take_time):
                 # self.dnf_anniversary_ide_op(f"领取 {name} 周年庆礼包", flowid)
                 async_message_box(
@@ -8348,7 +8354,6 @@ class DjcHelper:
 
         self.dnf_xinyue_wpe_op("周年庆狂欢礼", 458285)
 
-
         self.dnf_xinyue_wpe_op("今日登录游戏", 458288)
         self.dnf_xinyue_wpe_op("今日在线30分钟", 458752)
         self.dnf_xinyue_wpe_op("今日邀请3位回归玩家", 458899)
@@ -8359,7 +8364,6 @@ class DjcHelper:
         for idx in range_from_one(3):
             self.dnf_xinyue_wpe_op(f"{idx}/3 幸运币抽奖", 458286)
             time.sleep(3)
-
 
         self.dnf_xinyue_wpe_op("破浪者竞速-报名", 458964)
         self.dnf_xinyue_wpe_op("破浪者竞速-更新积分", 458301)
@@ -9403,7 +9407,9 @@ class DjcHelper:
         self.dnf_helper_beach_party_op("每日签到", "annualBar/pickUpTaskGift", taskId="1047_t_1")
         self.dnf_helper_beach_party_op("每日抽奖", "annualBar/draw", module="barDrink")
 
-        self.dnf_helper_beach_party_op("累计10次签到且今日通关18次地下城", "annualBar/pickUpTaskGift", taskId="1047_t_2")
+        self.dnf_helper_beach_party_op(
+            "累计10次签到且今日通关18次地下城", "annualBar/pickUpTaskGift", taskId="1047_t_2"
+        )
 
         self.dnf_helper_beach_party_op("领奖：累计领取18万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_1")
         self.dnf_helper_beach_party_op("领奖：累计领取180万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_3")
@@ -9448,7 +9454,9 @@ class DjcHelper:
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
             show_message_box_once_key = "助手海滩派对_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
-                extra_msg = "dnf助手的登录态已过期，导致 助手海滩派对 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                extra_msg = (
+                    "dnf助手的登录态已过期，导致 助手海滩派对 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
             else:
@@ -10404,7 +10412,7 @@ class DjcHelper:
                 "stage2": {"start": 886208, "end": 1772415},
             }
 
-            unlock_pixel_data = {"stage1": [], "stage2": []}
+            unlock_pixel_data: dict[str, list] = {"stage1": [], "stage2": []}
 
             # 2. 生成时间戳参数 (格式: YYYYMMDDHHmm)
             time_str = datetime.datetime.now().strftime("%Y%m%d%H%M")
@@ -10460,7 +10468,9 @@ class DjcHelper:
 
             index = random.choice(stage_unlock_pixel_index_list)
 
-            logger.info(f"当前阶段为 {stage_key}，仍有 {len(stage_unlock_pixel_index_list)} 个像素未被点亮，随机选择一个像素 {index} 进行点亮")
+            logger.info(
+                f"当前阶段为 {stage_key}，仍有 {len(stage_unlock_pixel_index_list)} 个像素未被点亮，随机选择一个像素 {index} 进行点亮"
+            )
 
             return index
 
@@ -10562,13 +10572,27 @@ class DjcHelper:
 
         # cardId - 卡牌ID 0-17（对应data-id属性）
         unlockDates = [
-            '20260530', '20260530', '20260530', '20260530', '20260530',
-            '20260531', '20260601', '20260601', '20260602', '20260603',
-            '20260604', '20260605', '20260606', '20260607', '20260608',
-            '20260609', '20260610', '20260611'
+            "20260530",
+            "20260530",
+            "20260530",
+            "20260530",
+            "20260530",
+            "20260531",
+            "20260601",
+            "20260601",
+            "20260602",
+            "20260603",
+            "20260604",
+            "20260605",
+            "20260606",
+            "20260607",
+            "20260608",
+            "20260609",
+            "20260610",
+            "20260611",
         ]
         now = get_now()
-        for card_id in range(17+1):
+        for card_id in range(17 + 1):
             unlock_date = parse_time(unlockDates[card_id], "%Y%m%d")
             if now < unlock_date:
                 logger.warning(f"职业{card_id} 在 {unlock_date} 解锁，先跳过")

@@ -3235,7 +3235,11 @@ class FunctionSwitchesConfigUi(QWidget):
         )
 
         self.checkbox_disable_login_mode_jinggai = create_checkbox(cfg.disable_login_mode_jinggai)
-        add_row(form_layout, make_title("井盖杯", "井盖杯、闪光杯、公益节、kol勇士召回等"), self.checkbox_disable_login_mode_jinggai)
+        add_row(
+            form_layout,
+            make_title("井盖杯", "井盖杯、闪光杯、公益节、kol勇士召回等"),
+            self.checkbox_disable_login_mode_jinggai,
+        )
 
         # ----------------------------------------------------------
         # 不同登录类型的活动开关

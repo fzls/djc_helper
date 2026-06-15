@@ -528,5 +528,15 @@
     "open_url": "https://dnf.qq.com/cp/a20260528mslgl/",
     "expire_at": "2026-06-11 19:22:42",
     "show_only_before_version": ""
+  },
+  {
+    "sender": "风之凌殇",
+    "title": "26.6 落地页打卡",
+    "message": "这次的落地页打卡活动好像还是有问题，可能需要大家自己去活动页面左侧【打卡活跃挑战】tab点一下打卡按钮，完成打卡后按之后游戏登陆过的天数自动计数，不用额外操作了。\n上次这个活动有些人手动点了好像也不行，这次感觉可能也是-。-\n",
+    "send_at": "2026-06-15 10:27:50",
+    "show_type": "once",
+    "open_url": "https://dnf.qq.com/cp/celebration/",
+    "expire_at": "2026-06-29 10:27:50",
+    "show_only_before_version": ""
   }
 ]

@@ -201,12 +201,11 @@ def main():
     nm = NoticeManager(load_from_remote=False)
 
     # note: 在这里添加公告
-    title = "末世录军团教学"
-    message = """完成 末世录军团 的教学，可以领取30天黑钻和小关卡的奖励，请自行参与
-
-要速通领奖励，直接选第一个，答错点重答回重新轮流调整顺序，继续选第一个就行，似乎每次第一个选项都不重复，最多四次就能答对（推荐这样速通领完奖励继续看看教学视频~）
+    title = "26.6 落地页打卡"
+    message = """这次的落地页打卡活动好像还是有问题，可能需要大家自己去活动页面左侧【打卡活跃挑战】tab点一下打卡按钮，完成打卡后按之后游戏登陆过的天数自动计数，不用额外操作了。
+上次这个活动有些人手动点了好像也不行，这次感觉可能也是-。-
 """
-    open_url = "https://dnf.qq.com/cp/a20260528mslgl/"
+    open_url = "https://dnf.qq.com/cp/celebration/"
     show_only_before_version = ""
     valid_duration = timedelta(days=14)
 

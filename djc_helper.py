@@ -6581,7 +6581,8 @@ class DjcHelper:
                 logger.warning(f"打卡后尚未登录 {signin_day} 天，跳过当前奖励")
                 continue
 
-            self.dnf_luodiye_ide_op(f"打卡后累计登录 {signin_day} 天奖励", "554945", index=idx + 1)
+            # 6档，index: 0~5
+            self.dnf_luodiye_ide_op(f"打卡后累计登录 {signin_day} 天奖励", "554945", index=idx)
             time.sleep(3)
 
         # # self.dnf_luodiye_ide_op("红包中奖信息", "501908")
@@ -11569,6 +11570,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_beach_party()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

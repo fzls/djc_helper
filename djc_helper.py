@@ -6584,6 +6584,7 @@ class DjcHelper:
                 continue
 
             # 6档，index: 0~5
+            # re: 后续还是这个的话，记得确认到底是从0开始还是1，都有过
             self.dnf_luodiye_ide_op(f"打卡后累计登录 {signin_day} 天奖励", "554945", index=idx)
             time.sleep(3)
 

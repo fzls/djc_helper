@@ -6568,6 +6568,8 @@ class DjcHelper:
 
         self.dnf_luodiye_ide_op("见面礼包", "554872")
 
+        # 打卡前等一会，确保不会因频率过快被拦截？
+        time.sleep(5)
         self.dnf_luodiye_ide_op("活跃挑战打卡", "554876")
 
         self.dnf_luodiye_ide_op("补打卡-浏览一篇DNF助手资讯", "554918")

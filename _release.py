@@ -17,16 +17,25 @@ from util import (
     change_console_window_mode_async,
     count_down,
     make_sure_dir_exists,
+    message_box,
     pause_and_exit,
     range_from_one,
     show_head_line,
     try_except,
+    use_by_myself,
 )
 from version import now_version
 
 
 @try_except()
 def release():
+    # 在本地（非github action）触发编译时，弹个提示框，确保先运行一遍本体确认没问题后，再回来点确认走后续发布流程
+    if use_by_myself():
+        message_box(
+            "别忘了先运行过一遍小助手，没有报错再回来点确认，走后续发布流程",
+            "发布前提示",
+        )
+
     # ---------------准备工作
     prompt = f"如需直接使用默认版本号：{now_version} 请直接按回车\n或手动输入版本号后按回车："
     version = input(prompt) or now_version

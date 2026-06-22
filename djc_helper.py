@@ -687,7 +687,7 @@ class DjcHelper:
         return [
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
-            ("助手限定活动", self.dnf_helper_limit_act),  # 助手魔界人每日幸运签
+            ("助手限定活动", self.dnf_helper_limit_act),  # 魔界人每日幸运签
             ("DNF格斗大赛", self.dnf_pk),
             ("像素拼图", self.dnf_pixel_puzzle),
             ("周年特别节目", self.dnf_anniversary_special_act),
@@ -698,7 +698,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("colg其他活动", self.colg_other_act),
             ("kol勇士召回", self.dnf_kol_recall),
-            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 助手海滩派对
+            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 海滩派对
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
         ]
 
@@ -9489,6 +9489,7 @@ class DjcHelper:
         return res
 
     # --------------------------------------------助手限定活动_2--------------------------------------------
+    # re: 接入方式参考 dnf_helper_limit_act
     @try_except()
     def dnf_helper_limit_act_2(self):
         show_head_line("助手限定活动_2")
@@ -9505,19 +9506,29 @@ class DjcHelper:
             )
             return
 
-        self.dnf_helper_limit_act_2_op("每日签到", "annualBar/pickUpTaskGift", taskId="1047_t_1")
-        self.dnf_helper_limit_act_2_op("每日抽奖", "annualBar/draw", module="barDrink")
+        self.dnf_helper_limit_act_2_op("每日签到", "pickUpTaskGift", taskId="1047_t_1")
+        self.dnf_helper_limit_act_2_op("每日抽奖", "draw", module="barDrink")
 
         self.dnf_helper_limit_act_2_op(
-            "累计10次签到且今日通关18次地下城", "annualBar/pickUpTaskGift", taskId="1047_t_2"
+            "累计10次签到且今日通关18次地下城", "pickUpTaskGift", taskId="1047_t_2"
         )
 
-        self.dnf_helper_limit_act_2_op("领奖：累计领取18万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_1")
-        self.dnf_helper_limit_act_2_op("领奖：累计领取180万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_3")
-        self.dnf_helper_limit_act_2_op("领奖：累计领取800万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_4")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取18万份", "pickUpGlobalMilestone", rewardId="1047_m_1")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取180万份", "pickUpGlobalMilestone", rewardId="1047_m_3")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取800万份", "pickUpGlobalMilestone", rewardId="1047_m_4")
 
-    def dnf_helper_limit_act_2_op(self, ctx: str, action: str, print_res=True, **extra_params):
-        if action != "init":
+    def dnf_helper_limit_act_2_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
+        # re: 每次新活动需要更新下面这俩参数
+        # 活动id，对应参数 activityId
+        activityId = "1047"
+        # 活动的action前缀，对应参数 r 的前半部分
+        activity_action_prefix = "annualBar"
+
+        action = action_name
+        if action_name != "init":
+            # 加上统一的前缀
+            action = f"{activity_action_prefix}/{action_name}"
+
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
 
@@ -9526,12 +9537,13 @@ class DjcHelper:
 
         # fmt: off
         data = {
-            "r": action,
-            "activityId": "1047",
+            "r": quote_plus(action),
+            "activityId": activityId,
 
             **extra_params,
 
             "source": "dz",
+            # "from": "tpl",
             "cCurrentGameId": "10014",
 
             "uin": self.qq(),
@@ -9541,6 +9553,8 @@ class DjcHelper:
             "userId": dnf_helper_info.userId,
             "token": dnf_helper_info.token,
             "cGameId": "1006",
+            "cClientVersionCode": "2103080309",
+            "getNavUaStr": quote_plus("GameHelper GameHelper_1006/2103080309"),
         }
         # fmt: on
 

@@ -71,7 +71,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-03 09:30:00", "2026-07-08 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
-    newNotAmsActInfo("2026-06-11 09:30:00", "2026-06-24 23:59:59", "助手海滩派对"),
+    newNotAmsActInfo("2026-06-11 09:30:00", "2026-06-24 23:59:59", "助手限定活动_2"),
     newNotAmsActInfo("2026-06-18 10:00:00", "2026-07-09 23:59:59", "井盖杯强者之路"),
     #
     # 已过期活动
@@ -140,7 +140,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20260611wegame/index.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
-    "助手海滩派对": "https://dzhu.qq.com/fe/dnf/celebration-anniversary/?",
+    "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/celebration-anniversary/?",
     "井盖杯强者之路": "https://dnf.qq.com/cp/a20260611stronger/index.html",
     #
     # 已过期活动
@@ -501,10 +501,10 @@ class Urls:
         self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
         # 助手魔界人每日幸运签
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
-        # 助手海滩派对
-        self.dnf_helper_beach_party_api = "https://dzhu.qq.com/zangyi/activity/act"
-        # 助手限定活动（只有一个的时候都加这里，同时有多个的时候，参考上面复刻）
+        # 助手限定活动（re: 只有一个的时候用这个）
         self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
+        # 助手限定活动_2（re: 同时出了第二个用这个）
+        self.dnf_helper_limit_act_2_api = "https://dzhu.qq.com/zangyi/activity/act"
 
         # 井盖杯挑战赛
         self.jinggai_game_api = "https://dzhu.qq.com/zangyi/share/act?a={api}"

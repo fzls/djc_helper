@@ -698,7 +698,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("colg其他活动", self.colg_other_act),
             ("kol勇士召回", self.dnf_kol_recall),
-            ("助手海滩派对", self.dnf_helper_beach_party),
+            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 助手海滩派对
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
         ]
 
@@ -9488,35 +9488,35 @@ class DjcHelper:
 
         return res
 
-    # --------------------------------------------助手海滩派对--------------------------------------------
+    # --------------------------------------------助手限定活动_2--------------------------------------------
     @try_except()
-    def dnf_helper_beach_party(self):
-        show_head_line("助手海滩派对")
-        self.show_not_ams_act_info("助手海滩派对")
+    def dnf_helper_limit_act_2(self):
+        show_head_line("助手限定活动_2")
+        self.show_not_ams_act_info("助手限定活动_2")
 
-        if not self.cfg.function_switches.get_dnf_helper_beach_party or self.disable_most_activities():
-            show_act_not_enable_warning("助手海滩派对")
+        if not self.cfg.function_switches.get_dnf_helper_limit_act_2 or self.disable_most_activities():
+            show_act_not_enable_warning("助手限定活动_2")
             return
 
         if self.cfg.dnf_helper_info.token == "":
-            extra_msg = "未配置dnf助手相关信息，无法进行 助手海滩派对，请按照下列流程进行配置"
+            extra_msg = "未配置dnf助手相关信息，无法进行 助手限定活动_2，请按照下列流程进行配置"
             self.show_dnf_helper_info_guide(
-                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手海滩派对')}"
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手限定活动_2')}"
             )
             return
 
-        self.dnf_helper_beach_party_op("每日签到", "annualBar/pickUpTaskGift", taskId="1047_t_1")
-        self.dnf_helper_beach_party_op("每日抽奖", "annualBar/draw", module="barDrink")
+        self.dnf_helper_limit_act_2_op("每日签到", "annualBar/pickUpTaskGift", taskId="1047_t_1")
+        self.dnf_helper_limit_act_2_op("每日抽奖", "annualBar/draw", module="barDrink")
 
-        self.dnf_helper_beach_party_op(
+        self.dnf_helper_limit_act_2_op(
             "累计10次签到且今日通关18次地下城", "annualBar/pickUpTaskGift", taskId="1047_t_2"
         )
 
-        self.dnf_helper_beach_party_op("领奖：累计领取18万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_1")
-        self.dnf_helper_beach_party_op("领奖：累计领取180万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_3")
-        self.dnf_helper_beach_party_op("领奖：累计领取800万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_4")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取18万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_1")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取180万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_3")
+        self.dnf_helper_limit_act_2_op("领奖：累计领取800万份", "annualBar/pickUpGlobalMilestone", rewardId="1047_m_4")
 
-    def dnf_helper_beach_party_op(self, ctx: str, action: str, print_res=True, **extra_params):
+    def dnf_helper_limit_act_2_op(self, ctx: str, action: str, print_res=True, **extra_params):
         if action != "init":
             # 该类型每个请求之间间隔一定时长
             time.sleep(1)
@@ -9546,17 +9546,17 @@ class DjcHelper:
 
         res = self.post(
             ctx,
-            self.urls.dnf_helper_beach_party_api,
+            self.urls.dnf_helper_limit_act_2_api,
             data=post_json_to_data(data),
             print_res=print_res,
         )
 
         if dnf_helper_info.token != "":
             # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
-            show_message_box_once_key = "助手海滩派对_token过期2_" + get_week()
+            show_message_box_once_key = "助手限定活动_2_token过期2_" + get_week()
             if res.get("returnCode", 0) == -30003:
                 extra_msg = (
-                    "dnf助手的登录态已过期，导致 助手海滩派对 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                    "dnf助手的登录态已过期，导致 助手限定活动_2 相关操作无法执行，目前需要手动更新，具体操作流程如下"
                 )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
@@ -11670,6 +11670,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_jinggai_stronger()
+        djcHelper.dnf_helper_limit_act_2()
 
     pause()

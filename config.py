@@ -944,8 +944,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_anniversary_special_act = True
         # 是否领取 kol勇士召回 活动
         self.get_dnf_kol_recall = True
-        # 是否领取 助手海滩派对 活动
-        self.get_dnf_helper_beach_party = True
+        # 是否领取 助手限定活动_2 活动
+        self.get_dnf_helper_limit_act_2 = True
         # 是否领取 井盖杯强者之路 活动
         self.get_dnf_jinggai_stronger = True
 

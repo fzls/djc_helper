@@ -501,6 +501,20 @@ class Urls:
         self.dnf_helper_energy_tree_api = "https://dzhu.qq.com/zangyi/activity/activity"
         # 助手魔界人每日幸运签
         self.dnf_helper_lucky_lottery_api = "https://dzhu.qq.com/zangyi/activity/act"
+        # undone: 助手系列可能同时出多个，如果是下面这个通用链接，就轮询使用
+        #   对于过期的活动，可以把之前的逻辑注释掉
+        #   在接新的时候，可以先看看之前注释掉的是否跟本次的内容一致，则搬过来
+        #   过去已有的活动前缀如下，如果本次的跟之前的一样，可以git看看之前的是咋弄的，是否逻辑一样可以搬过来
+        #       activitytpl     夏日破浪补给站
+        #       annualBar       海滩派对
+        #       luckySignV2     魔界人每日幸运签
+        #       raidRankGuess   狄瑞吉欧气排行榜
+        #       activitytpl     狄瑞吉攻坚补给站
+        #       ggbond          猪猪侠勇闯阿拉德
+        #       demon           魔界人的夏日愿望
+        #       npcTogether     助手与TA一起庆周年
+        #       activitytpl     助手春日出游打卡
+        #       pumpkin         魔界人每日幸运签
         # 助手限定活动（re: 只有一个的时候用这个）
         self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
         # 助手限定活动_2（re: 同时出了第二个用这个）

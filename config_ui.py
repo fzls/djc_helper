@@ -3080,6 +3080,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("kol勇士召回", "get_dnf_kol_recall"),
             ("助手限定活动_2", "get_dnf_helper_limit_act_2"),
             ("井盖杯强者之路", "get_dnf_jinggai_stronger"),
+            ("助手限定活动_3", "get_dnf_helper_limit_act_3"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

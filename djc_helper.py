@@ -700,6 +700,7 @@ class DjcHelper:
             ("kol勇士召回", self.dnf_kol_recall),
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 海滩派对
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
+            ("助手限定活动_3", self.dnf_helper_limit_act_3), # 夏日破浪补给站
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -9246,32 +9247,6 @@ class DjcHelper:
 
             return remainDrawTimes, fame, level, experience
 
-        def query_lottery_count() -> int:
-            raw_res = self.dnf_helper_limit_act_op("查询抽奖次数", "lottery/config", print_res=False)
-            res = raw_res["data"]
-
-            remainDrawTimes = int(res["remainDrawTimes"])
-
-            return remainDrawTimes
-
-        def query_task_info() -> list[dict]:
-            raw_res = self.dnf_helper_limit_act_op("查询任务列表", "task/config", print_res=False)
-            res = raw_res["data"]
-
-            return res["taskConfig"]
-
-        def query_checkin_list() -> tuple[list[dict], list[dict]]:
-            raw_res = self.dnf_helper_limit_act_op("查询签到列表", "checkin/config", print_res=False)
-            res = raw_res["data"]
-
-            return res["dailyCheckIns"], res["totalCheckIns"]
-
-        def query_checkin_data() -> tuple[int, int]:
-            raw_res = self.dnf_helper_limit_act_op("查询签到信息", "checkin/data", print_res=False)
-            res = raw_res["data"]
-
-            return res["total_days"], res["recheckin_count"]
-
         self.dnf_helper_limit_act_op("每日抽签", "doSign")
         self.dnf_helper_limit_act_op("每日抽奖", "draw")
 
@@ -9317,88 +9292,6 @@ class DjcHelper:
         # self.dnf_helper_limit_act_op("兑换奖励 - 黑钻30天", "pickupPointReward", id=2006)
 
         # re: 有个神秘商店兑换，先不管了
-
-        # taskConfig = query_task_info()
-        # for task_info in taskConfig:
-        #     task_id = task_info["id"]
-        #     status = task_info["status"]
-        #
-        #     if status == 2:
-        #         logger.warning(f"{task_info['title']} 奖励已领取，跳过")
-        #         continue
-        #
-        #     if status == 0:
-        #         self.dnf_helper_limit_act_op(f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id)
-        #         time.sleep(3)
-        #
-        #     self.dnf_helper_limit_act_op(
-        #         f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id
-        #     )
-        #     time.sleep(3)
-        #
-        # date_today = format_now("%Y-%m-%d")
-        # today = parse_time(date_today, "%Y-%m-%d")
-        #
-        # total_days, recheckin_count = query_checkin_data()
-        # logger.info(f"当前已签到天数 {total_days}，可补签天数 {recheckin_count}")
-        #
-        # dailyCheckIns, totalCheckIns = query_checkin_list()
-        #
-        # for check_info in dailyCheckIns:
-        #     date = check_info["date"]
-        #     status = check_info["status"]
-        #
-        #     if date == date_today and status == 0:
-        #         self.dnf_helper_limit_act_op(
-        #             f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0
-        #         )
-        #         time.sleep(3)
-        #
-        # for check_info in dailyCheckIns:
-        #     date = check_info["date"]
-        #     status = check_info["status"]
-        #
-        #     if recheckin_count <= 0:
-        #         logger.warning("已无补签次数，跳过补签")
-        #         break
-        #
-        #     if parse_time(date, "%Y-%m-%d") > today:
-        #         logger.warning(f"尚未到 {date}，跳过后续日期")
-        #         break
-        #
-        #     if status == 1:
-        #         logger.warning(f"{date} 已签到，跳过")
-        #         continue
-        #
-        #     if status == 2:
-        #         res = self.dnf_helper_limit_act_op(f"补签 {date}", "checkin/checkIn", date=date, reCheckIn=1)
-        #         # {"result": 1, "returnCode": 2000, "returnMsg": "补签次数不足"}
-        #         if res["returnCode"] == 2000:
-        #             break
-        #
-        #         recheckin_count -= 1
-        #         time.sleep(3)
-        #
-        # dailyCheckIns, totalCheckIns = query_checkin_list()
-        # for reward_info in totalCheckIns:
-        #     day = reward_info["value"]
-        #     status = reward_info["status"]
-        #
-        #     if status == 0:
-        #         logger.warning(f"累计登录 {day} 天尚未达成，跳过尝试后续天数")
-        #         break
-        #     elif status == 1:
-        #         self.dnf_helper_limit_act_op(f"尝试领取累计登录 {day} 天奖励", "checkin/pickupTotalReward", value=day)
-        #         time.sleep(3)
-        #     elif status == 2:
-        #         logger.warning(f"累计登录 {day} 天已领取，跳过")
-        #         continue
-        #
-        # remainDrawTimes = query_lottery_count()
-        # logger.info(f"当前剩余抽奖 {remainDrawTimes} 次")
-        # for idx in range_from_one(remainDrawTimes):
-        #     self.dnf_helper_limit_act_op(f"{idx}/{remainDrawTimes} 福利抽奖", "lottery/draw")
-        #     time.sleep(3)
 
         # _, fame, level, experience = query_info()
         # logger.info(f"最新等级 {level}, 名望 {fame}, 经验 {experience}")
@@ -9554,7 +9447,7 @@ class DjcHelper:
             "token": dnf_helper_info.token,
             "cGameId": "1006",
             "cClientVersionCode": "2103080309",
-            "getNavUaStr": quote_plus("GameHelper GameHelper_1006/2103080309"),
+            "getNavUaStr": "GameHelper GameHelper_1006/2103080309",
         }
         # fmt: on
 
@@ -9571,6 +9464,196 @@ class DjcHelper:
             if res.get("returnCode", 0) == -30003:
                 extra_msg = (
                     "dnf助手的登录态已过期，导致 助手限定活动_2 相关操作无法执行，目前需要手动更新，具体操作流程如下"
+                )
+                self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
+                raise Exception("token过期，跳过后续尝试")
+            else:
+                self.reset_show_dnf_helper_info_guide_key(show_message_box_once_key)
+
+        return res
+
+    # --------------------------------------------助手限定活动_3--------------------------------------------
+    # re: 接入方式参考 dnf_helper_limit_act
+    @try_except()
+    def dnf_helper_limit_act_3(self):
+        show_head_line("助手限定活动_3")
+        self.show_not_ams_act_info("助手限定活动_3")
+
+        if not self.cfg.function_switches.get_dnf_helper_limit_act_3 or self.disable_most_activities():
+            show_act_not_enable_warning("助手限定活动_3")
+            return
+
+        if self.cfg.dnf_helper_info.token == "":
+            extra_msg = "未配置dnf助手相关信息，无法进行 助手限定活动_3，请按照下列流程进行配置"
+            self.show_dnf_helper_info_guide(
+                extra_msg, show_message_box_once_key=f"dnf_helper_{get_act_url('助手限定活动_3')}"
+            )
+            return
+
+        def query_lottery_count() -> int:
+            raw_res = self.dnf_helper_limit_act_3_op("查询抽奖次数", "lottery/config", print_res=False)
+            res = raw_res["data"]
+
+            remainDrawTimes = int(res["remainDrawTimes"])
+
+            return remainDrawTimes
+
+        def query_task_info() -> list[dict]:
+            raw_res = self.dnf_helper_limit_act_3_op("查询任务列表", "task/config", print_res=False)
+            res = raw_res["data"]
+
+            return res["taskConfig"]
+
+        def query_checkin_list() -> tuple[list[dict], list[dict]]:
+            raw_res = self.dnf_helper_limit_act_3_op("查询签到列表", "checkin/config", print_res=False)
+            res = raw_res["data"]
+
+            return res["dailyCheckIns"], res["totalCheckIns"]
+
+        def query_checkin_data() -> tuple[int, int]:
+            raw_res = self.dnf_helper_limit_act_3_op("查询签到信息", "checkin/data", print_res=False)
+            res = raw_res["data"]
+
+            return res["total_days"], res["recheckin_count"]
+
+        taskConfig = query_task_info()
+        for task_info in taskConfig:
+            task_id = task_info["id"]
+            status = task_info["status"]
+
+            if status == 2:
+                logger.warning(f"{task_info['title']} 奖励已领取，跳过")
+                continue
+
+            if status == 0:
+                self.dnf_helper_limit_act_3_op(f"{task_info['title']} 完成任务 - {task_id}", "task/done", taskId=task_id)
+                time.sleep(3)
+
+            self.dnf_helper_limit_act_3_op(
+                f"{task_info['title']} 领取任务奖励 - {task_id}", "task/pickupReward", taskId=task_id
+            )
+            time.sleep(3)
+
+        date_today = format_now("%Y-%m-%d")
+        today = parse_time(date_today, "%Y-%m-%d")
+
+        total_days, recheckin_count = query_checkin_data()
+        logger.info(f"当前已签到天数 {total_days}，可补签天数 {recheckin_count}")
+
+        dailyCheckIns, totalCheckIns = query_checkin_list()
+
+        for check_info in dailyCheckIns:
+            date = check_info["date"]
+            status = check_info["status"]
+
+            if date == date_today and status == 0:
+                self.dnf_helper_limit_act_3_op(
+                    f"今日签到 - {date_today}", "checkin/checkIn", date=date_today, reCheckIn=0
+                )
+                time.sleep(3)
+
+        for check_info in dailyCheckIns:
+            date = check_info["date"]
+            status = check_info["status"]
+
+            if recheckin_count <= 0:
+                logger.warning("已无补签次数，跳过补签")
+                break
+
+            if parse_time(date, "%Y-%m-%d") > today:
+                logger.warning(f"尚未到 {date}，跳过后续日期")
+                break
+
+            if status == 1:
+                logger.warning(f"{date} 已签到，跳过")
+                continue
+
+            if status == 2:
+                res = self.dnf_helper_limit_act_3_op(f"补签 {date}", "checkin/checkIn", date=date, reCheckIn=1)
+                # {"result": 1, "returnCode": 2000, "returnMsg": "补签次数不足"}
+                if res["returnCode"] == 2000:
+                    break
+
+                recheckin_count -= 1
+                time.sleep(3)
+
+        dailyCheckIns, totalCheckIns = query_checkin_list()
+        for reward_info in totalCheckIns:
+            day = reward_info["value"]
+            status = reward_info["status"]
+
+            if status == 0:
+                logger.warning(f"累计登录 {day} 天尚未达成，跳过尝试后续天数")
+                break
+            elif status == 1:
+                self.dnf_helper_limit_act_3_op(f"尝试领取累计登录 {day} 天奖励", "checkin/pickupTotalReward", value=day)
+                time.sleep(3)
+            elif status == 2:
+                logger.warning(f"累计登录 {day} 天已领取，跳过")
+                continue
+
+        remainDrawTimes = query_lottery_count()
+        logger.info(f"当前剩余抽奖 {remainDrawTimes} 次")
+        for idx in range_from_one(remainDrawTimes):
+            self.dnf_helper_limit_act_3_op(f"{idx}/{remainDrawTimes} 福利抽奖", "lottery/draw")
+            time.sleep(3)
+
+    def dnf_helper_limit_act_3_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
+        # re: 每次新活动需要更新下面这俩参数
+        # 活动id，对应参数 activityId
+        activityId = "10049"
+        # 活动的action前缀，对应参数 r 的前半部分
+        activity_action_prefix = "activitytpl"
+
+        action = action_name
+        if action_name != "init":
+            # 加上统一的前缀
+            action = f"{activity_action_prefix}/{action_name}"
+
+            # 该类型每个请求之间间隔一定时长
+            time.sleep(1)
+
+        roleinfo = self.get_dnf_bind_role()
+        dnf_helper_info = self.cfg.dnf_helper_info
+
+        # fmt: off
+        data = {
+            "r": quote_plus(action),
+            "activityId": activityId,
+
+            **extra_params,
+
+            "source": "dz",
+            "from": "tpl",
+            "cCurrentGameId": "10014",
+
+            "uin": self.qq(),
+            "serverId": roleinfo.serviceID,
+            "areaId": roleinfo.areaID,
+            "originalRoleId": roleinfo.roleCode,
+            "userId": dnf_helper_info.userId,
+            "token": dnf_helper_info.token,
+            "cGameId": "1006",
+            "cClientVersionCode": "2103080309",
+            "getNavUaStr": "GameHelper GameHelper_1006/2103080309",
+            # nickname
+            # avatar
+        }
+        # fmt: on
+
+        res = self.post(
+            ctx,
+            self.urls.dnf_helper_limit_act_3_api,
+            data=post_json_to_data(data),
+            print_res=print_res,
+        )
+
+        if dnf_helper_info.token != "":
+            # {'result': -30003, 'returnCode': -30003, 'returnMsg': 'auth verification failed'}
+            show_message_box_once_key = "助手限定活动_3_token过期2_" + get_week()
+            if res.get("returnCode", 0) == -30003:
+                extra_msg = (
+                    "dnf助手的登录态已过期，导致 助手限定活动_3 相关操作无法执行，目前需要手动更新，具体操作流程如下"
                 )
                 self.show_dnf_helper_info_guide(extra_msg, show_message_box_once_key=show_message_box_once_key)
                 raise Exception("token过期，跳过后续尝试")
@@ -11684,6 +11767,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act_2()
+        djcHelper.dnf_helper_limit_act_3()
 
     pause()

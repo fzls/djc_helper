@@ -3079,6 +3079,7 @@ class FunctionSwitchesConfigUi(QWidget):
             ("colg其他活动", "get_colg_other_act"),
             ("kol勇士召回", "get_dnf_kol_recall"),
             ("助手海滩派对", "get_dnf_helper_beach_party"),
+            ("井盖杯强者之路", "get_dnf_jinggai_stronger"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

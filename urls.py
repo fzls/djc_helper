@@ -72,6 +72,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-06-24 23:59:59", "助手海滩派对"),
+    newNotAmsActInfo("2026-06-18 10:00:00", "2026-07-09 23:59:59", "井盖杯强者之路"),
     #
     # 已过期活动
     #
@@ -140,6 +141,7 @@ act_name_to_url = {
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
     "助手海滩派对": "https://dzhu.qq.com/fe/dnf/celebration-anniversary/?",
+    "井盖杯强者之路": "https://dnf.qq.com/cp/a20260611stronger/index.html",
     #
     # 已过期活动
     #
@@ -371,6 +373,7 @@ class Urls:
         self.ide_iActivityId_dnf_pk = "92_cBckHZ"  # DNF格斗大赛
         self.ide_iActivityId_dnf_pixel_puzzle = "84_VYg0dT"  # 像素拼图
         self.ide_iActivityId_dnf_anniversary_special_act = "78_gxyKAL"  # 像素拼图
+        self.ide_iActivityId_dnf_jinggai_stronger = "44_PdhINv"  # 井盖杯强者之路
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

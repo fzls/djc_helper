@@ -946,6 +946,8 @@ class FunctionSwitchesConfig(ConfigInterface):
         self.get_dnf_kol_recall = True
         # 是否领取 助手海滩派对 活动
         self.get_dnf_helper_beach_party = True
+        # 是否领取 井盖杯强者之路 活动
+        self.get_dnf_jinggai_stronger = True
 
         # ------------ QQ空间pskey（需要登录 QQ空间 获取） ------------
         # 是否启用 集卡 功能
@@ -1035,6 +1037,7 @@ class AccountConfig(ConfigInterface):
         # 角色绑定相关配置，若不配置，则默认使用道聚城绑定的角色
         self.bind_role = BindRoleConfig()
         # 各功能开关
+        # re: 往上翻一页距离左右，AccountConfig上面就是最后面的活动开关的位置
         self.function_switches = FunctionSwitchesConfig()
         # 完成《礼包达人》任务所需的手游的名称信息
         self.mobile_game_role_info = MobileGameRoleInfoConfig()

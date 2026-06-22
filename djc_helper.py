@@ -699,6 +699,7 @@ class DjcHelper:
             ("colg其他活动", self.colg_other_act),
             ("kol勇士召回", self.dnf_kol_recall),
             ("助手海滩派对", self.dnf_helper_beach_party),
+            ("井盖杯强者之路", self.dnf_jinggai_stronger),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5001,6 +5002,101 @@ class DjcHelper:
             json=json_data,
             print_res=print_res,
             extra_headers=self.dnf_xinyue_wpe_extra_headers,
+        )
+
+    # --------------------------------------------井盖杯强者之路--------------------------------------------
+    @try_except()
+    def dnf_jinggai_stronger(self):
+        show_head_line("井盖杯强者之路")
+        self.show_not_ams_act_info("井盖杯强者之路")
+
+        if not self.cfg.function_switches.get_dnf_jinggai_stronger or self.disable_most_activities():
+            show_act_not_enable_warning("井盖杯强者之路")
+            return
+
+        self.check_dnf_jinggai_stronger_ide()
+
+        self.dnf_jinggai_stronger_ide_op("见面礼", "554322")
+
+        # 2026年6月18日至2026年7月2日 05:59:59 参与强者之路可以参与排行榜排名活动，2026年7月2日可领取奖励！
+        # 2026年7月2日-2026年7月9日榜单锁定后，用户可前往赛事页面领取对应的游戏礼包，活动结束后未领取的奖励视为放弃奖励
+        if now_in_range("2026-07-02 06:00:00", "2026-07-09 23:59:59"):
+            self.dnf_jinggai_stronger_ide_op("全跨区奖励", "557136")
+            self.dnf_jinggai_stronger_ide_op("单跨区奖励", "557137")
+
+        tasks = [
+            ("登录游戏【每日任务】", "555306"),
+            ("累积在线【每日任务】", "555308"),
+            ("消耗疲劳【每日任务】", "555309"),
+            ("完成1次强者之路【每日任务】", "555310"),
+            ("完成3次强者之路【每日任务】", "555311"),
+
+            ("通关深渊【每周任务】", "555312"),
+            ("通关深渊30次【每周任务】", "555313"),
+            ("强者之路获胜1场【每周任务】", "555315"),
+            ("强者之路获胜2场【每周任务】", "555316"),
+            ("强者之路获胜3场【每周任务】", "555317"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_jinggai_stronger_ide_op(name, flowid)
+            time.sleep(3)
+
+
+        # 知道有活动的时候已经6.22了，已经不能助威了，比赛结束了
+        # self.dnf_jinggai_stronger_ide_op("比赛助威", "557455")
+        # self.dnf_jinggai_stronger_ide_op("助威奖励", "557586")
+        # self.dnf_jinggai_stronger_ide_op("预测积分兑换", "561740")
+
+        # - 积分任务活动时间：2026年6月18日-2026年7月2日
+        # - 积分兑换时间：2026年6月18日-2026年7月9日
+        if now_in_range("2026-06-18 00:00:00", "2026-07-09 23:59:59"):
+            flowid_exchange_reward = "557138"
+            self.dnf_jinggai_stronger_ide_op("积分兑换-红10增幅券（600积分）", flowid_exchange_reward, rewardId="12")
+
+            act_config = get_not_ams_act("井盖杯强者之路")
+            if act_config is not None:
+                if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
+                    # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
+                    async_message_box(
+                        "井盖杯强者之路小助手仅会尝试领取红10增幅券（600积分），活动还有几天即将结束，如果还有积分剩余，请自行前往【积分获取与兑换】页面使用（最后一天将额外尝试兑换为黑钻15天（100积分））\n",
+                        f"26.6 井盖杯强者之路奖励兑换提示_{self.cfg.name}",
+                        open_url=get_act_url("井盖杯强者之路"),
+                        show_once_daily=True,
+                    )
+
+                if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=1)):
+                    # 活动最后一天的话，额外尝试兑换黑钻15天
+                    logger.warning("井盖杯强者之路兑换奖励最后一天了，将剩余积分全部尝试兑换为黑钻15天")
+                    for idx in range_from_one(4):
+                        self.dnf_jinggai_stronger_ide_op(f"{idx}/4 积分兑换-黑钻15天（400积分）", flowid_exchange_reward, rewardId="9")
+                        time.sleep(3)
+
+    def check_dnf_jinggai_stronger_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "井盖杯强者之路",
+            get_act_url("井盖杯强者之路"),
+            activity_op_func=self.dnf_jinggai_stronger_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_jinggai_stronger_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_jinggai_stronger
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("井盖杯强者之路"),
+            **extra_params,
         )
 
     # --------------------------------------------DNF福利中心兑换--------------------------------------------
@@ -11574,6 +11670,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_jinggai_stronger()
 
     pause()

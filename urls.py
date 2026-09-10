@@ -60,7 +60,7 @@ not_ams_activities = [
     #
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
-    newNotAmsActInfo("2026-06-11 00:00:00", "2026-09-09 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2026-06-11 00:00:00", "2026-11-26 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-14 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),

@@ -1530,6 +1530,10 @@ def show_tips(cfg: Config):
             "有个在网吧内登录可以完成的网页活动，请自行参与\n"
             "https://act1.hdnf.qq.com/a20260827netbar/index.html\n"
         ),
+        "26.9 金牌团长": (
+            "有个团长活动，报名后作为团长通关一次米歇尔团本，就会发放一些奖励到对应角色，请自行参与\n"
+            "https://dnf.qq.com/cp/a20260910goldmedal/\n"
+        ),
     }
 
     logger.info(

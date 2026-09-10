@@ -690,6 +690,7 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -699,7 +700,6 @@ class DjcHelper:
         return [
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 逐浪夏日签到
             ("夏日礼包", self.dnf_summer_gift_act),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 海滩派对
             ("kol勇士召回", self.dnf_kol_recall),
@@ -8458,28 +8458,23 @@ class DjcHelper:
 
             return remain
 
-        self.dnf_xinyue_wpe_op("周年庆狂欢礼", 458285)
+        self.dnf_xinyue_wpe_op("全民福利礼包", 505087)
+        # self.dnf_xinyue_wpe_op("心悦福利小助手专属礼包", 505088)
 
-        self.dnf_xinyue_wpe_op("今日登录游戏", 458288)
-        self.dnf_xinyue_wpe_op("今日在线30分钟", 458752)
-        self.dnf_xinyue_wpe_op("今日邀请3位回归玩家", 458899)
-        self.dnf_xinyue_wpe_op("每充值50元", 458737)
-        self.dnf_xinyue_wpe_op("今日消耗156疲劳", 458764)
-        # self.dnf_xinyue_wpe_op("添加心悦福利小助手", YYYYYY)
+        self.dnf_xinyue_wpe_op("今日登录游戏", 505092)
+        # self.dnf_xinyue_wpe_op("添加心悦福利小助手", 505844)
+        self.dnf_xinyue_wpe_op("今日在线30分钟", 505094)
+        self.dnf_xinyue_wpe_op("今日消耗156疲劳", 505095)
+        # self.dnf_xinyue_wpe_op("今日邀请3位玩家", 505098)
+        self.dnf_xinyue_wpe_op("每充值50元", 505093)
 
         for idx in range_from_one(3):
-            self.dnf_xinyue_wpe_op(f"{idx}/3 幸运币抽奖", 458286)
+            self.dnf_xinyue_wpe_op(f"{idx}/3 心悦专属大礼盒 抽奖", 505100)
             time.sleep(3)
 
-        self.dnf_xinyue_wpe_op("破浪者竞速-报名", 458964)
-        self.dnf_xinyue_wpe_op("破浪者竞速-更新积分", 458301)
-        if now_in_range("2026-07-09 08:00:00", "2026-07-15 23:59:59"):
-            self.dnf_xinyue_wpe_op("破浪者竞速-领取奖励", 458297)
 
-        self.dnf_xinyue_wpe_op("女蓝拳竞速-报名", 459298)
-        self.dnf_xinyue_wpe_op("女蓝拳竞速-更新积分", 459300)
-        if now_in_range("2026-07-09 08:00:00", "2026-07-15 23:59:59"):
-            self.dnf_xinyue_wpe_op("女蓝拳竞速-领取奖励", 459301)
+        self.dnf_xinyue_wpe_op("抽取幸运勇士徽章", 505096)
+        self.dnf_xinyue_wpe_op("领取幸运勇士礼", 505089)
 
         # box_count = query_lottery_ticket()
         # logger.info(f"当前拥有 {box_count} 个宝箱")
@@ -8545,7 +8540,7 @@ class DjcHelper:
         # 该类型每个请求之间需要间隔一定时长，否则会请求失败
         time.sleep(3)
 
-        act_id = "28658"
+        act_id = "30352"
         if replace_act_id is not None:
             act_id = replace_act_id
 
@@ -11850,6 +11845,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_wegame()
+        djcHelper.dnf_xinyue_wpe()
 
     pause()

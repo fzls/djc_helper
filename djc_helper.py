@@ -689,6 +689,7 @@ class DjcHelper:
             ("绑定手机活动", self.dnf_bind_phone),
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("WeGame活动", self.dnf_wegame),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -703,7 +704,6 @@ class DjcHelper:
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 海滩派对
             ("kol勇士召回", self.dnf_kol_recall),
             ("colg其他活动", self.colg_other_act),
-            ("WeGame活动", self.dnf_wegame),
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("周年特别节目", self.dnf_anniversary_special_act),
             ("像素拼图", self.dnf_pixel_puzzle),
@@ -7665,18 +7665,16 @@ class DjcHelper:
 
         # self.dnf_wegame_ide_op("抽取礼包助力基金", "528842")
 
-        self.dnf_wegame_ide_op("全民礼包", "556084")
-        self.dnf_wegame_ide_op("回流礼包", "556085")
+        self.dnf_wegame_ide_op("见面礼包", "612122")
 
-        self.dnf_wegame_ide_op("每日通关深渊抽奖", "556442")
+        self.dnf_wegame_ide_op("幸运抽奖", "612123")
 
-        self.dnf_wegame_ide_op("获取积分-每日通关深渊", "556443")
-        self.dnf_wegame_ide_op("获取积分-每周末世录团本", "556448")
-        self.dnf_wegame_ide_op("获取积分-创建新职业【破浪者】", "556449")
-        self.dnf_wegame_ide_op("获取积分-创建新职业【蓝拳使者女】", "556450")
+        self.dnf_wegame_ide_op("获取积分-每日通关深渊", "612124")
+        self.dnf_wegame_ide_op("获取积分-每周通关末世录", "612127")
+        self.dnf_wegame_ide_op("获取积分-每周通关米歇尔", "612129")
 
         # self.dnf_wegame_ide_op("积分抽奖礼包", "556451")
-        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 红10券-43积分", "556497", index=1)
+        self.dnf_wegame_ide_op("积分兑换礼包 - 尝试领取 红10券-30积分", "612153", index=6)
 
         act_config = get_not_ams_act("WeGame活动")
         if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
@@ -7686,7 +7684,7 @@ class DjcHelper:
                     "\n"
                     f"结束日期为 {act_config.dtEndTime}"
                 ),
-                "WeGame活动积分兑换提示-26.6",
+                "WeGame活动积分兑换提示-26.9",
                 show_once_daily=True,
                 open_url=get_act_url("WeGame活动"),
             )
@@ -11852,6 +11850,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_wegame()
 
     pause()

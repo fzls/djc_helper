@@ -1511,14 +1511,6 @@ def show_tips(cfg: Config):
         #     "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
         #     "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index\n"
         # ),
-        # "26.6 微信游戏圈抽奖": (
-        #     "微信游戏圈有个抽奖活动，微信扫描下面这个网页中的二维码，请自行参与\n"
-        #     "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic1.png"
-        # ),
-        # "26.6 微信游戏圈签到": (
-        #     "微信游戏圈有个签到活动，微信扫描下面这个网页中的二维码，请自行参与\n"
-        #     "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic2.png"
-        # ),
         # "26.6 网吧": (
         #     "有个在网吧内登录可以完成的网页活动，请自行参与\n"
         #     "https://act1.hdnf.qq.com/a20260611netbar/pcbanner.html\n"
@@ -1529,6 +1521,14 @@ def show_tips(cfg: Config):
         "心悦维护": (
             "由于最近一两周心悦一直在维护，导致所有人这段时间都没法全勤完成每周的三次运镖任务，导致无法满足小助手在线匹配的前置条件（前两周全勤领取了6次运镖奖励）\n"
             "所以接下来两周请各位记得自行去小助手群、colg招募区等地方，与其他人手动组队下，度过这两周的缓冲期~等全勤两周后续就能自动匹配了\n"
+        ),
+        "26.9 微信游戏圈抽奖": (
+            "微信游戏圈有个抽奖活动，微信扫描下面这个网页中的二维码，请自行参与\n"
+            "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic1.png"
+        ),
+        "26.9 微信游戏圈签到": (
+            "微信游戏圈有个签到活动，微信扫描下面这个网页中的二维码，请自行参与\n"
+            "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic2.png"
         ),
     }
 

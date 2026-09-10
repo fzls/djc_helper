@@ -1511,10 +1511,6 @@ def show_tips(cfg: Config):
         #     "云游戏有个云游戏会员活动，可以领取一些蚊子腿，请自行参与\n"
         #     "https://my.start.qq.com/act/my_activity_v2/?ADTAG=dnfviphd2&group_id=1&act_id=174&ts=2025080111#/index\n"
         # ),
-        # "26.6 网吧": (
-        #     "有个在网吧内登录可以完成的网页活动，请自行参与\n"
-        #     "https://act1.hdnf.qq.com/a20260611netbar/pcbanner.html\n"
-        # ),
         # "26.6 抖音": (
         #     "抖音搜索dnf，找到dnf端游官方账号，点进用户主页点最右边的【专区】tab，在精选活动中选择第二个限定福利免费领活动，在里面可以领取一个队伍边框，以及下面可快速完成的前五个任务来获得五次抽奖机会，可领取黑钻疲劳药等奖励，请自行参与\n"
         # ),
@@ -1529,6 +1525,10 @@ def show_tips(cfg: Config):
         "26.9 微信游戏圈签到": (
             "微信游戏圈有个签到活动，微信扫描下面这个网页中的二维码，请自行参与\n"
             "https://game.gtimg.cn/images/dnf/cp/celebration/pc2/act-fc-pic2.png"
+        ),
+        "26.9 网吧": (
+            "有个在网吧内登录可以完成的网页活动，请自行参与\n"
+            "https://act1.hdnf.qq.com/a20260827netbar/index.html\n"
         ),
     }
 

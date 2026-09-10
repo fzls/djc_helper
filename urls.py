@@ -61,11 +61,11 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-09-09 23:59:59", "回流引导秘籍"),
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-14 18:00:00", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2026-07-27 00:00:00", "2026-08-16 23:59:59", "助手限定活动_3"),
-    newNotAmsActInfo("2026-07-23 10:00:00", "2026-08-26 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-07-08 00:00:00", "2026-08-19 23:59:59", "夏日礼包"),
     newNotAmsActInfo("2026-06-11 10:00:00", "2026-07-15 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-06-18 10:00:00", "2026-07-09 23:59:59", "井盖杯强者之路"),
@@ -132,11 +132,11 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     #
     # 已过期活动
     #
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "夏日礼包": "https://dnf.qq.com/cp/a20260709gift/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/act/a20260601dnf/index.html",
     "井盖杯强者之路": "https://dnf.qq.com/cp/a20260611stronger/index.html",
@@ -346,7 +346,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "86_e5rV7O"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "31_zCvPp1"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "11_sZhCfS"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚

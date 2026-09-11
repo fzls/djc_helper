@@ -64,13 +64,13 @@ not_ams_activities = [
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-14 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-09 23:59:59", "助手限定活动_2"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2026-07-27 00:00:00", "2026-08-16 23:59:59", "助手限定活动_3"),
     newNotAmsActInfo("2026-07-08 00:00:00", "2026-08-19 23:59:59", "夏日礼包"),
     newNotAmsActInfo("2026-06-18 10:00:00", "2026-07-09 23:59:59", "井盖杯强者之路"),
-    newNotAmsActInfo("2026-06-11 09:30:00", "2026-06-24 23:59:59", "助手限定活动_2"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-07-09 23:59:59", "DNF周年庆登录活动"),
@@ -135,13 +135,13 @@ act_name_to_url = {
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "WeGame活动": "https://dnf.qq.com/cp/a20260909wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a9b4e7c93b0e1494a9b342054c44cb869/index.html",
+    "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/group-leader-act?",
     #
     # 已过期活动
     #
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
     "夏日礼包": "https://dnf.qq.com/cp/a20260709gift/index.html",
     "井盖杯强者之路": "https://dnf.qq.com/cp/a20260611stronger/index.html",
-    "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/celebration-anniversary/?",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20260611gift/",
@@ -524,7 +524,7 @@ class Urls:
         # 助手限定活动（re: 只有一个的时候用这个）
         self.dnf_helper_limit_act_api = "https://dzhu.qq.com/zangyi/activity/act"
         # 助手限定活动_2（re: 同时出了第二个用这个）
-        self.dnf_helper_limit_act_2_api = "https://dzhu.qq.com/zangyi/activity/act"
+        self.dnf_helper_limit_act_2_api = "https://dzhu.qq.com/zangyi/activity/act?r={r}"
         # 助手限定活动_3（re: 若是同时出了第三个，则用这个）
         self.dnf_helper_limit_act_3_api = "https://dzhu.qq.com/zangyi/activity/act"
 

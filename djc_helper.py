@@ -691,6 +691,7 @@ class DjcHelper:
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 米歇尔攻坚补给站
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 逐浪夏日签到
             ("夏日礼包", self.dnf_summer_gift_act),
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
-            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 海滩派对
             ("kol勇士召回", self.dnf_kol_recall),
             ("colg其他活动", self.colg_other_act),
             ("DNF周年庆登录活动", self.dnf_anniversary),
@@ -9196,6 +9196,8 @@ class DjcHelper:
     #       https://www.huatools.com/unicode-chinese/
     #   .
     #   4. 然后搜索 action前缀/ 或者页面上按钮附近的文案来找到各个接口的位置， 或者直接点按钮看请求数据
+    #       可以搜索前缀 action前缀/ 找到对应位置，然后找到所在的闭包（类似 ee = function () {）
+    #       搜索这个函数的调用处，如果是在类似这样一个闭包里（pickupTotalCheckIn: function () {） 那说明就分别找到接口名称，与传入参数的地方了
     #   5. 最后参照页面慢慢接入
     #       从 getUserInfo 中去获取对应任务和奖励的ID
     #   6. 搜索 payload: { 可以找到各个参数设置的地方
@@ -9398,23 +9400,29 @@ class DjcHelper:
             )
             return
 
-        self.dnf_helper_limit_act_2_op("每日签到", "pickUpTaskGift", taskId="1047_t_1")
-        self.dnf_helper_limit_act_2_op("每日抽奖", "draw", module="barDrink")
+        self.dnf_helper_limit_act_2_op("点赞一条动态", "pickUpTaskReward", taskId="1054_1")
+        for day in [
+            3,
+            5,
+            8,
+            10,
+            15,
+            21,
+        ]:
+            self.dnf_helper_limit_act_2_op(f"累计签到{day}次", "pickupTotalCheckInReward", taskId=f"1054_cum_{day}")
 
-        self.dnf_helper_limit_act_2_op(
-            "累计10次签到且今日通关18次地下城", "pickUpTaskGift", taskId="1047_t_2"
-        )
+        self.dnf_helper_limit_act_2_op("每周通关米歇尔团本（普通/困难）", "pickUpTaskReward", taskId="1054_2")
 
-        self.dnf_helper_limit_act_2_op("领奖：累计领取18万份", "pickUpGlobalMilestone", rewardId="1047_m_1")
-        self.dnf_helper_limit_act_2_op("领奖：累计领取180万份", "pickUpGlobalMilestone", rewardId="1047_m_3")
-        self.dnf_helper_limit_act_2_op("领奖：累计领取800万份", "pickUpGlobalMilestone", rewardId="1047_m_4")
+        self.dnf_helper_limit_act_2_op("团长报名", "apply")
+        if now_after("2026-10-09 00:00:00"):
+            self.dnf_helper_limit_act_2_op("领取排名奖励", "pickupFinalReward")
 
     def dnf_helper_limit_act_2_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "1047"
+        activityId = "1054"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "annualBar"
+        activity_action_prefix = "mixieer"
 
         action = action_name
         if action_name != "init":
@@ -9444,6 +9452,7 @@ class DjcHelper:
             "originalRoleId": roleinfo.roleCode,
             "userId": dnf_helper_info.userId,
             "token": dnf_helper_info.token,
+            "roleId": dnf_helper_info.uniqueRoleId,
             "cGameId": "1006",
             "cClientVersionCode": "2103080309",
             "getNavUaStr": "GameHelper GameHelper_1006/2103080309",
@@ -9453,6 +9462,7 @@ class DjcHelper:
         res = self.post(
             ctx,
             self.urls.dnf_helper_limit_act_2_api,
+            r=quote_plus(action),
             data=post_json_to_data(data),
             print_res=print_res,
         )
@@ -11845,6 +11855,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_xinyue_wpe()
+        djcHelper.dnf_helper_limit_act_2()
 
     pause()

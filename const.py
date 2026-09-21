@@ -5,6 +5,16 @@ appVersion = 149
 sVersionName = "v4.7.3.0"
 guanjia_skey_version = 2
 
+# dnf助手app的客户端标识。带上这两个参数, 编年史接口会切到"app视图", 与不带时的"H5视图"相比:
+#   1. getUserTaskList 返回的周任务不同(app视图是【周】查看地区排行榜, H5视图是【周】浏览话题详细页)
+#   2. 两个视图的 doactionincrexp 互不认对方的 actionId, 跨视图领取会返回 -70007 非法任务
+# 这俩周任务各自独立给经验, 所以两个视图都要跑一遍才能全拿到。
+# ps: getNavUaStr 的值里含一个空格, 签名必须用 encode_uri_component(%20) 而非 quote_plus(+), 否则 -90002
+dnf_helper_app_view_params = {
+    "cClientVersionCode": "2104130006",
+    "getNavUaStr": "t GameHelper_1006/4.13.0.6.2104130006",
+}
+
 tmp_path = "/tmp/"
 
 

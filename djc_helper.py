@@ -19,7 +19,7 @@ import requests
 import json_parser
 from black_list import check_in_black_list
 from config import AccountConfig, CommonConfig, ExchangeItemConfig, XinYueOperationConfig, config, load_config
-from const import appVersion, cached_dir, sVersionName, vscode_online_url
+from const import appVersion, cached_dir, dnf_helper_app_view_params, sVersionName, vscode_online_url
 from dao import (
     XIN_YUE_MIN_LEVEL,
     AmesvrQueryRole,
@@ -4285,6 +4285,79 @@ class DjcHelper:
             res = dzhu_get("连续签到奖励列表", "list/sign")
             return DnfHelperChronicleSignList().auto_update_config(res)
 
+        # ------ 做任务 ------
+
+        # 实测上报对这些任务无效：actionreport 照样返回 result:0 的"假成功"，但 mStatus 纹丝不动。
+        # 跳过它们，免得每天发一堆没用的请求。
+        #   001-DNF助手签到                     未完成时本来就能直接领（见 takeTaskAward_op 的注释），无需上报
+        #   005-登录游戏 / 009-通关推荐地下城3次    由游戏侧判定，助手这边报了不算
+        #   043-浏览1篇内容 / 045-进入圈子详细页    每日浏览类。2026-09-15 实测：连报3次、换app视图、
+        #                                      改用002/003/004等邻近actionId，全都点不亮；真机做这两个
+        #                                      任务时发的什么请求没抓到过，机制不明
+        # 目前确认只有【周】任务（047/008/049）能靠上报完成。
+        report_ineffective_action_ids = {"001", "005", "009", "043", "045"}
+
+        @try_except(show_last_process_result=False)
+        def do_tasks():
+            if not dnf_helper_info.auto_do_tasks:
+                return
+
+            # H5视图：只上报，奖励由后面的 takeTaskAwards 统一领取
+            h5_action_ids = set()
+            for task in getUserTaskList().taskList:
+                h5_action_ids.add(task.mActionId)
+                if task.mStatus == 0 and task.mActionId not in report_ineffective_action_ids:
+                    do_task_op(task.name, task.mActionId)
+
+            # app视图：这边的周任务和H5视图不是同一个，两者各自独立给经验，所以都得做。
+            # 而 takeTaskAwards 跑在H5视图下，领不到这边独有的任务（会返回-70007非法任务），因此在这里顺手领掉
+            for task in app_view_task_list().taskList:
+                if task.mActionId in h5_action_ids:
+                    continue
+
+                if task.mStatus == 0 and task.mActionId not in report_ineffective_action_ids:
+                    do_task_op(task.name, task.mActionId, dnf_helper_app_view_params)
+
+                if task.mStatus in [0, 2]:
+                    # 0-未完成（上报后可能已变为已完成），2-已完成未领取
+                    take_app_view_task_award(task.name, task.mActionId)
+                else:
+                    logger.info(f"[{task.name}-app视图]已经领取过了")
+
+        def app_view_task_list() -> DnfHelperChronicleUserTaskList:
+            res = dzhu_post("任务信息(app视图)", "getUserTaskList", **dnf_helper_app_view_params)
+            return DnfHelperChronicleUserTaskList().auto_update_config(res.get("data", {}))
+
+        @try_except(show_last_process_result=False)
+        def do_task_op(taskName, actionId, extra_params: dict | None = None):
+            time.sleep(1)
+            res = dzhu_post(
+                f"上报任务行为-{taskName}",
+                "actionreport",
+                actionId=actionId,
+                **(extra_params or {}),
+            )
+
+            if res.get("result", -1) == 0 and res.get("returnCode", -1) == 0:
+                logger.info(f"上报[{taskName}]-{actionId}成功")
+            else:
+                logger.warning(f"上报[{taskName}]-{actionId}失败，回包为{res}")
+
+        @try_except(show_last_process_result=False)
+        def take_app_view_task_award(taskName, actionId):
+            time.sleep(1)
+            res = dzhu_post(
+                f"领取任务经验(app视图)-{taskName}",
+                "doactionincrexp",
+                actionId=actionId,
+                **dnf_helper_app_view_params,
+            )
+
+            if res.get("data", 0) != 0:
+                logger.info(f"领取[{taskName}-app视图]-{actionId}成功，当前总经验为{res.get('data')}")
+            else:
+                logger.warning(f"[{taskName}-app视图]尚未完成，无法领取哦~")
+
         # ------ 领取各种奖励 ------
         extra_msg = color("bold_green") + "很可能是编年史尚未正式开始，导致无法领取游戏内奖励~"
 
@@ -4619,6 +4692,9 @@ class DjcHelper:
             async_message_box(msg, "编年史任务提示")
         else:
             logger.warning(color("bold_cyan") + msg)
+
+        # 先上报行为，把能自动做的任务做掉，这样下面领取经验时就能一并领了
+        do_tasks()
 
         # 领取任务奖励的经验
         takeTaskAwards()

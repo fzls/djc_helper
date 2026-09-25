@@ -2,7 +2,7 @@
 # note: 日后有需求可以改写成 基于pip-compile-multi 来管理依赖，可以在手动维护各个环境的直接依赖的基础上，同时自动生成对应环境的所有间接依赖的固定版本列表，确保可重现
 -r requirements_z_base.txt
 
-PyQt5==5.15.9
+PyQt5==5.15.11
 PyQt5-stubs==5.15.6.0
 # note: 这个版本就固定在 305 了，因为 306 打包的版本，在部分人的电脑上会报 dll load failed while importing win32api 而无法打开
 pywin32==305

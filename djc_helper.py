@@ -4299,7 +4299,7 @@ class DjcHelper:
 
         @try_except(show_last_process_result=False)
         def do_tasks():
-            if not dnf_helper_info.auto_do_tasks:
+            if not dnf_helper_info.auto_do_tasks_v1:
                 return
 
             # H5视图：只上报，奖励由后面的 takeTaskAwards 统一领取

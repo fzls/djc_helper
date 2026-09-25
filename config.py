@@ -628,6 +628,9 @@ class DnfHelperInfoConfig(ConfigInterface):
         # 不尝试获取编年史新鉴权参数
         self.disable_fetch_access_token = False
 
+        # dnf助手编年史是否自动做任务，即上报各个未完成任务对应的行为，使其变为已完成，从而可以领取任务经验
+        self.auto_do_tasks = False
+
     def fields_to_fill(self):
         return [
             ("chronicle_exchange_items", DnfHelperChronicleExchangeItemConfig),

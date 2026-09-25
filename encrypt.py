@@ -4,7 +4,17 @@ import base64
 import hashlib
 import hmac
 from typing import Any
-from urllib.parse import quote_plus
+from urllib.parse import quote, quote_plus
+
+
+def encode_uri_component(raw: str) -> str:
+    """等价于 js 的 encodeURIComponent（编年史签名用的就是它，见助手H5的 umi.js）
+
+    与 quote_plus 的关键差别是空格：encodeURIComponent 编码为 %20，而 quote_plus 编码为 +。
+    以前所有参数都不含空格，所以用 quote_plus 也一直是对的；直到需要传含空格的 getNavUaStr。
+    """
+    # quote 默认已经会把 ! * ' ( ) 编码掉，只有 ~ 需要额外处理
+    return quote(raw, safe="").replace("~", "%7E")
 
 
 def make_dnf_helper_signature(
@@ -13,7 +23,7 @@ def make_dnf_helper_signature(
     post_data: str,
     secret: str,
 ) -> str:
-    data = "&".join([http_method, quote_plus(api_path), quote_plus(post_data)])
+    data = "&".join([http_method, encode_uri_component(api_path), encode_uri_component(post_data)])
 
     hash_bytes = hmac.new(secret.encode(), data.encode(), hashlib.sha1).digest()
 

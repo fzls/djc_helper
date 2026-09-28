@@ -1,7 +1,7 @@
 requests==2.31.0
 requests-toolbelt==1.0.0
 chardet==5.2.0
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
 pycryptodome==3.18.0
 toml==0.10.2
 selenium==4.10.0

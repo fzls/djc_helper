@@ -692,6 +692,7 @@ class DjcHelper:
             ("WeGame活动", self.dnf_wegame),
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 米歇尔攻坚补给站
+            ("DNF格斗大赛", self.dnf_pk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -707,7 +708,6 @@ class DjcHelper:
             ("DNF周年庆登录活动", self.dnf_anniversary),
             ("周年特别节目", self.dnf_anniversary_special_act),
             ("像素拼图", self.dnf_pixel_puzzle),
-            ("DNF格斗大赛", self.dnf_pk),
             ("助手限定活动", self.dnf_helper_limit_act),  # 魔界人每日幸运签
             ("DNF闪光杯", self.dnf_flash_cap),
             ("DNF预约", self.dnf_reservation),
@@ -4928,7 +4928,7 @@ class DjcHelper:
         #
         # self.dnf_pk_wpe_op("见面礼", 195914)
 
-        if now_in_range("2026-05-18 00:00:00", "2026-06-07 23:59:59"):
+        if now_in_range("2026-09-28 00:00:00", "2026-10-18 23:59:59"):
             bind_role = self.get_dnf_bind_role()
             role_extra_info = self.query_dnf_role_info_by_serverid_and_roleid(bind_role.serviceID, bind_role.roleCode)
 
@@ -4937,26 +4937,26 @@ class DjcHelper:
 
             self.dnf_pk_ide_op(
                 f"立即报名【周期】-{role_name}-{force_name}",
-                "539962",
+                "618002",
                 iRegisterUin=self.qq(),
                 iArea=quote("6"),
                 iRoleId=quote(role_name),
                 iJob=quote(force_name),
             )
-            # self.dnf_pk_ide_op("报名信息【周期】", "539963")
-            self.dnf_pk_ide_op("报名礼包", "539966")
+            # self.dnf_pk_ide_op("报名信息【周期】", "618003")
+            self.dnf_pk_ide_op("报名礼包", "618005")
 
         tasks = [
-            ("登录游戏【每日任务】", "539968"),
-            ("累积在线【每日任务】", "539969"),
-            ("消耗疲劳【每日任务】", "539971"),
-            ("完成1次决斗场【每日任务】", "539984"),
-            ("完成5次决斗场【每日任务】", "539985"),
-            ("通关深渊【每周任务】", "539986"),
-            ("通关攻坚战【每周任务】", "540012"),
-            ("通关军团地下城【每周任务】", "540013"),
-            ("决斗场获胜5场【每周任务】", "540014"),
-            ("决斗场获胜10场【每周任务】", "540016"),
+            ("登录游戏【每日任务】", "620630"),
+            ("累积在线【每日任务】", "620631"),
+            ("消耗疲劳【每日任务】", "620632"),
+            ("完成1次决斗场【每日任务】", "620633"),
+            ("完成5次决斗场【每日任务】", "620634"),
+            ("通关深渊【每周任务】", "620725"),
+            ("通关攻坚战【每周任务】", "620742"),
+            ("通关军团地下城【每周任务】", "620743"),
+            ("决斗场获胜5场【每周任务】", "620744"),
+            ("决斗场获胜10场【每周任务】", "620745"),
         ]
         for name, flowid in tasks:
             self.dnf_pk_ide_op(name, flowid)
@@ -4965,16 +4965,17 @@ class DjcHelper:
         # self.dnf_pk_ide_op("比赛预测【周期】", "540058")
         # self.dnf_pk_ide_op("预测奖励【周期】", "540059")
 
-        # 奖励兑换时间：2026年5月25日-2026年6月28日
-        if now_in_range("2026-05-25 00:00:00", "2026-06-28 23:59:59"):
-            self.dnf_pk_ide_op("积分兑换-红10增幅券（1200积分）", "540062", rewardId="12")
+        if now_in_range("2026-09-28 00:00:00", "2026-11-01 23:59:59"):
+            exchange_flow_id = "620747"
+
+            self.dnf_pk_ide_op("积分兑换-+12 装备强化券（1200积分）", exchange_flow_id, rewardId="12")
 
             act_config = get_not_ams_act("DNF格斗大赛")
             if act_config is not None:
                 if will_act_expired_in(act_config.dtEndTime, datetime.timedelta(days=5)):
                     # 活动即将过期时，若仍有未兑换的奖励，则尝试提示下
                     async_message_box(
-                        "DNF格斗大赛小助手仅会尝试领取红10增幅券（1200积分），活动还有几天即将结束，如果还有积分剩余，请自行前往【积分兑换及奖励展示】页面使用（最后一天将额外尝试兑换为黑钻15天（400积分））\n",
+                        "DNF格斗大赛小助手仅会尝试领取+12 装备强化券（1200积分），活动还有几天即将结束，如果还有积分剩余，请自行前往【积分兑换及奖励展示】页面使用（最后一天将额外尝试兑换为黑钻15天（400积分））\n",
                         f"DNF格斗大赛奖励兑换提示_{self.cfg.name}",
                         open_url=get_act_url("DNF格斗大赛"),
                         show_once_daily=True,
@@ -4984,8 +4985,17 @@ class DjcHelper:
                     # 活动最后一天的话，额外尝试兑换黑钻15天
                     logger.warning("格斗大赛兑换奖励最后一天了，将剩余积分全部尝试兑换为黑钻15天")
                     for idx in range_from_one(4):
-                        self.dnf_pk_ide_op(f"{idx}/4 积分兑换-黑钻15天（400积分）", "540062", rewardId="9")
+                        self.dnf_pk_ide_op(f"{idx}/4 积分兑换-黑钻15天（400积分）", exchange_flow_id, rewardId="9")
                         time.sleep(3)
+
+        if now_in_range("2026-09-28 00:00:00", "2026-11-01 23:59:59"):
+            for lv in range_from_one(15):
+                self.dnf_pk_ide_op(f"决斗场段位 {lv} 奖励", "620764", rewardId=f"{lv}")
+
+                time.sleep(3)
+
+        if now_in_range("2026-10-25 00:00:00", "2026-11-01 23:59:59"):
+            self.dnf_pk_ide_op("决斗场排名奖励", "620766")
 
     def check_dnf_pk_ide(self, **extra_params):
         return self.ide_check_bind_account(
@@ -11931,6 +11941,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act_2()
+        djcHelper.dnf_pk()
 
     pause()

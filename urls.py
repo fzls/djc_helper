@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "WeGame活动"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-09 23:59:59", "助手限定活动_2"),
+    newNotAmsActInfo("2026-09-28 10:00:00", "2026-11-01 23:59:59", "DNF格斗大赛"),
     #
     # 已过期活动
     #
@@ -76,7 +77,6 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-07-09 23:59:59", "DNF周年庆登录活动"),
     newNotAmsActInfo("2026-05-30 00:00:00", "2026-07-08 23:59:59", "周年特别节目"),
     newNotAmsActInfo("2026-05-28 09:00:00", "2026-06-30 23:59:59", "像素拼图"),
-    newNotAmsActInfo("2026-05-18 00:00:00", "2026-06-28 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2026-04-23 00:00:00", "2026-07-09 18:00:00", "助手限定活动"),
     newNotAmsActInfo("2026-04-16 00:00:00", "2026-05-20 23:59:59", "DNF闪光杯"),
     newNotAmsActInfo("2026-03-26 11:00:00", "2026-05-27 23:59:59", "DNF预约"),
@@ -136,6 +136,7 @@ act_name_to_url = {
     "WeGame活动": "https://dnf.qq.com/cp/a20260909wegame/index.html",
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a9b4e7c93b0e1494a9b342054c44cb869/index.html",
     "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/group-leader-act?",
+    "DNF格斗大赛": "https://dnf.qq.com/cp/a202609pvp/index.html",
     #
     # 已过期活动
     #
@@ -147,7 +148,6 @@ act_name_to_url = {
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20260611gift/",
     "周年特别节目": "https://dnf.qq.com/cp/a20260530eighteen/",
     "像素拼图": "https://dnf.qq.com/cp/a20260320PixMap/",
-    "DNF格斗大赛": "https://dnf.qq.com/cp/a20260520events/index.html",
     "助手限定活动": "https://dzhu.qq.com/fe/dnf/lucky_lottery/v2/?share=1&cCurrentGameId=&subGameId=10014&activityId=1041&gameId=1006",
     "DNF闪光杯": "https://dnf.qq.com/cp/a20260416flashCap/",
     "DNF预约": "https://dnf.qq.com/cp/a20260326subscribe/",
@@ -375,7 +375,7 @@ class Urls:
         self.ide_iActivityId_dnf_ggbond = "97_WKPy5y"  # 猪猪侠联动
         self.ide_iActivityId_dnf_press_conference_gift = "0_oesYIu"  # 发布会特别赠礼
         self.ide_iActivityId_dnf_diruiji_yure = "51_tb5w4Q"  # 狄瑞吉预热
-        self.ide_iActivityId_dnf_pk = "92_cBckHZ"  # DNF格斗大赛
+        self.ide_iActivityId_dnf_pk = "85_W1BfI2"  # DNF格斗大赛
         self.ide_iActivityId_dnf_pixel_puzzle = "84_VYg0dT"  # 像素拼图
         self.ide_iActivityId_dnf_anniversary_special_act = "78_gxyKAL"  # 像素拼图
         self.ide_iActivityId_dnf_jinggai_stronger = "44_PdhINv"  # 井盖杯强者之路

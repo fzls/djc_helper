@@ -66,12 +66,12 @@ not_ams_activities = [
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),
     newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-09 23:59:59", "助手限定活动_2"),
     newNotAmsActInfo("2026-09-28 10:00:00", "2026-11-01 23:59:59", "DNF格斗大赛"),
+    newNotAmsActInfo("2026-10-15 09:00:00", "2026-11-15 23:59:59", "井盖杯强者之路"),
     #
     # 已过期活动
     #
     newNotAmsActInfo("2026-07-27 00:00:00", "2026-08-16 23:59:59", "助手限定活动_3"),
     newNotAmsActInfo("2026-07-08 00:00:00", "2026-08-19 23:59:59", "夏日礼包"),
-    newNotAmsActInfo("2026-06-18 10:00:00", "2026-07-09 23:59:59", "井盖杯强者之路"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "colg其他活动"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-07-09 23:59:59", "DNF周年庆登录活动"),
@@ -137,12 +137,12 @@ act_name_to_url = {
     "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a9b4e7c93b0e1494a9b342054c44cb869/index.html",
     "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/group-leader-act?",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a202609pvp/index.html",
+    "井盖杯强者之路": "https://dnf.qq.com/cp/a20261015covers3/index.html",
     #
     # 已过期活动
     #
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
     "夏日礼包": "https://dnf.qq.com/cp/a20260709gift/index.html",
-    "井盖杯强者之路": "https://dnf.qq.com/cp/a20260611stronger/index.html",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",
     "colg其他活动": "https://hub.bbs.colg.cn/activity/summer_celebration/2026/index.html",
     "DNF周年庆登录活动": "https://dnf.qq.com/cp/a20260611gift/",
@@ -287,7 +287,7 @@ class Urls:
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
             "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId", "indexKey", "cardIndex",
-            "sPass",
+            "sPass", "rewardIndex",
         ]
         # 其他链接需要默认填充的空参数
         # re: 这个不是公共参数的意思，这里额外是补充的空值参数，比如非ame和ide的其他活动链接中需要的参数
@@ -378,7 +378,7 @@ class Urls:
         self.ide_iActivityId_dnf_pk = "85_W1BfI2"  # DNF格斗大赛
         self.ide_iActivityId_dnf_pixel_puzzle = "84_VYg0dT"  # 像素拼图
         self.ide_iActivityId_dnf_anniversary_special_act = "78_gxyKAL"  # 像素拼图
-        self.ide_iActivityId_dnf_jinggai_stronger = "44_PdhINv"  # 井盖杯强者之路
+        self.ide_iActivityId_dnf_jinggai_stronger = "27_TkwEUX"  # 井盖杯强者之路
         self.ide_iActivityId_dnf_summer_gift_act = "44_bXKoaI"  # 夏日礼包
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理

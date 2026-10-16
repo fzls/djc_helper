@@ -61,15 +61,15 @@ not_ams_activities = [
     newNotAmsActInfo(month_start_day______, month_end_day________, "DNF助手编年史"),
     newNotAmsActInfo("2025-06-20 00:00:00", "2029-03-31 23:59:59", "绑定手机活动"),
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-11-26 23:59:59", "回流引导秘籍"),
-    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-14 18:00:00", "DNF落地页活动_ide"),
-    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "WeGame活动"),
-    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),
-    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-09 23:59:59", "助手限定活动_2"),
     newNotAmsActInfo("2026-09-28 10:00:00", "2026-11-01 23:59:59", "DNF格斗大赛"),
     newNotAmsActInfo("2026-10-15 09:00:00", "2026-11-15 23:59:59", "井盖杯强者之路"),
     #
     # 已过期活动
     #
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-09 23:59:59", "助手限定活动_2"),
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "DNF心悦wpe"),
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-15 23:59:59", "WeGame活动"),
+    newNotAmsActInfo("2026-09-10 10:00:00", "2026-10-14 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-07-27 00:00:00", "2026-08-16 23:59:59", "助手限定活动_3"),
     newNotAmsActInfo("2026-07-08 00:00:00", "2026-08-19 23:59:59", "夏日礼包"),
     newNotAmsActInfo("2026-06-11 09:30:00", "2026-07-08 23:59:59", "kol勇士召回"),
@@ -132,15 +132,15 @@ act_name_to_url = {
     "DNF助手编年史": "dnf助手左侧栏",
     "绑定手机活动": "https://dnf.qq.com/cp/a20230817info/",
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
-    "WeGame活动": "https://dnf.qq.com/cp/a20260909wegame/index.html",
-    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a9b4e7c93b0e1494a9b342054c44cb869/index.html",
-    "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/group-leader-act?",
     "DNF格斗大赛": "https://dnf.qq.com/cp/a202609pvp/index.html",
     "井盖杯强者之路": "https://dnf.qq.com/cp/a20261015covers3/index.html",
     #
     # 已过期活动
     #
+    "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/group-leader-act?",
+    "DNF心悦wpe": "https://act.xinyue.qq.com/tgclub/act/a9b4e7c93b0e1494a9b342054c44cb869/index.html",
+    "WeGame活动": "https://dnf.qq.com/cp/a20260909wegame/index.html",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/",
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
     "夏日礼包": "https://dnf.qq.com/cp/a20260709gift/index.html",
     "kol勇士召回": "https://dnf.qq.com/cp/a20260611token/page.html",

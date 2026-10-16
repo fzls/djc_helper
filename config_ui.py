@@ -3068,10 +3068,6 @@ class FunctionSwitchesConfigUi(QWidget):
             ("dnf助手编年史（需配置助手userId和token和uniqueRoleId）", "get_dnf_helper_chronicle"),
             ("绑定手机活动", "get_dnf_bind_phone"),
             ("回流引导秘籍", "get_dnf_recall_guide"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
-            ("WeGame活动", "get_dnf_wegame"),
-            ("DNF心悦wpe", "get_dnf_xinyue"),
-            ("助手限定活动_2", "get_dnf_helper_limit_act_2"),
             ("DNF格斗大赛", "get_dnf_pk"),
             ("井盖杯强者之路", "get_dnf_jinggai_stronger"),
         ],
@@ -3084,6 +3080,10 @@ class FunctionSwitchesConfigUi(QWidget):
     # 已过期的活动，方便快速加回去
     expired_act_category_to_act_desc_switch_list = {
         "普通skey": [
+            ("助手限定活动_2", "get_dnf_helper_limit_act_2"),
+            ("DNF心悦wpe", "get_dnf_xinyue"),
+            ("WeGame活动", "get_dnf_wegame"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
             ("助手限定活动_3", "get_dnf_helper_limit_act_3"),
             ("夏日礼包", "get_dnf_summer_gift_act"),
             ("kol勇士召回", "get_dnf_kol_recall"),

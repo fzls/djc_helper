@@ -688,10 +688,6 @@ class DjcHelper:
             ("DNF助手编年史", self.dnf_helper_chronicle),
             ("绑定手机活动", self.dnf_bind_phone),
             ("回流引导秘籍", self.dnf_recall_guide),
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("WeGame活动", self.dnf_wegame),
-            ("DNF心悦wpe", self.dnf_xinyue_wpe),
-            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 米歇尔攻坚补给站
             ("DNF格斗大赛", self.dnf_pk),
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
         ]
@@ -701,6 +697,10 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
+            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 米歇尔攻坚补给站
+            ("DNF心悦wpe", self.dnf_xinyue_wpe),
+            ("WeGame活动", self.dnf_wegame),
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 逐浪夏日签到
             ("夏日礼包", self.dnf_summer_gift_act),
             ("kol勇士召回", self.dnf_kol_recall),
@@ -11938,6 +11938,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_jinggai_stronger()
+        djcHelper.dnf_helper_limit_act_2()
 
     pause()

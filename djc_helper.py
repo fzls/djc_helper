@@ -690,6 +690,7 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("DNF格斗大赛", self.dnf_pk),
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
+            ("助手限定活动_3", self.dnf_helper_limit_act_3), # 米歇尔的审判
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -701,7 +702,6 @@ class DjcHelper:
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
-            ("助手限定活动_3", self.dnf_helper_limit_act_3), # 逐浪夏日签到
             ("夏日礼包", self.dnf_summer_gift_act),
             ("kol勇士召回", self.dnf_kol_recall),
             ("colg其他活动", self.colg_other_act),
@@ -9283,7 +9283,9 @@ class DjcHelper:
     #       搜索这个函数的调用处，如果是在类似这样一个闭包里（pickupTotalCheckIn: function () {） 那说明就分别找到接口名称，与传入参数的地方了
     #   5. 最后参照页面慢慢接入
     #       从 getUserInfo 中去获取对应任务和奖励的ID
-    #   6. 搜索 payload: { 可以找到各个参数设置的地方
+    #   6. 搜索可以找到各个参数设置的地方
+    #       payload: {
+    #       type: "".concat
     #   7. 如果有 activitytpl/checkin/pickupTotalReward 和 /checkinPickupTotalReward 两种长起来类似的调用处，前者才是真正的action，不过可以通过后者来观察具体参数是什么
     #   8. 一个查找参数的示例
     #       搜索前缀 luckySignV2/ 找到累计奖励的接口
@@ -9713,7 +9715,7 @@ class DjcHelper:
     def dnf_helper_limit_act_3_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "10057"
+        activityId = "10085"
         # 活动的action前缀，对应参数 r 的前半部分
         activity_action_prefix = "activitytpl"
 
@@ -11938,6 +11940,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_helper_limit_act_2()
+        djcHelper.dnf_helper_limit_act_3()
 
     pause()

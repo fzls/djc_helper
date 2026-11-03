@@ -922,6 +922,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2023, 1, 13),
             datetime.datetime(2024, 1, 11),
             datetime.datetime(2025, 1, 16),
+            datetime.datetime(2026, 1, 8),
         ])),
         ("五一", get_next_expect_date_of_activity([
             datetime.datetime(2021, 4, 22),
@@ -929,6 +930,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2023, 4, 20),
             datetime.datetime(2024, 4, 18),
             datetime.datetime(2025, 4, 24),
+            datetime.datetime(2026, 5, 23),
         ])),
         ("周年庆", get_next_expect_date_of_activity([
             datetime.datetime(2021, 6, 11),
@@ -936,6 +938,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2023, 6, 15),
             datetime.datetime(2024, 6, 13),
             datetime.datetime(2025, 6, 12),
+            datetime.datetime(2026, 6, 11),
         ])),
         ("国庆", get_next_expect_date_of_activity([
             datetime.datetime(2020, 9, 24),
@@ -944,6 +947,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2023, 9, 24),
             datetime.datetime(2024, 9, 12),
             datetime.datetime(2025, 9, 11),
+            datetime.datetime(2026, 9, 10),
         ])),
         ("嘉年华", get_next_expect_date_of_activity([
             datetime.datetime(2020, 12, 12),
@@ -951,6 +955,7 @@ def get_act_name_and_next_expect_time_list():
             datetime.datetime(2022, 11, 20),
             datetime.datetime(2023, 11, 11),
             datetime.datetime(2024, 11, 21),
+            datetime.datetime(2025, 12, 6),
         ])),
     ]
     # fmt: on

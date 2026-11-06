@@ -692,6 +692,7 @@ class DjcHelper:
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 米歇尔的审判
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 土罐的幸运金币
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -699,7 +700,6 @@ class DjcHelper:
         # hack: 已经过期非常久且很久未再出的的活动相关信息已挪到 djc_helper_tomb.py ，需要时可前往查看
         # undone: 当这个列表下方过期很久的活动变得很多的时候，就再将部分挪到上面这个墓地中
         return [
-            ("助手限定活动_2", self.dnf_helper_limit_act_2), # 米歇尔攻坚补给站
             ("DNF心悦wpe", self.dnf_xinyue_wpe),
             ("WeGame活动", self.dnf_wegame),
             ("夏日礼包", self.dnf_summer_gift_act),
@@ -9485,29 +9485,82 @@ class DjcHelper:
             )
             return
 
-        self.dnf_helper_limit_act_2_op("点赞一条动态", "pickUpTaskReward", taskId="1054_1")
-        for day in [
-            3,
-            5,
-            8,
-            10,
-            15,
-            21,
-        ]:
-            self.dnf_helper_limit_act_2_op(f"累计签到{day}次", "pickupTotalCheckInReward", taskId=f"1054_cum_{day}")
+        def query_info() -> tuple[int, int, int]:
+            raw_res = self.dnf_helper_limit_act_2_op("查询信息", "getInfo", print_res=False)
+            res = raw_res["data"]
 
-        self.dnf_helper_limit_act_2_op("每周通关米歇尔团本（普通/困难）", "pickUpTaskReward", taskId="1054_2")
+            remainDrawTimes = int(res["remainTimes"])
+            challengeTimes = int(res["challengeTimes"])
+            point = int(res["point"])
 
-        self.dnf_helper_limit_act_2_op("团长报名", "apply")
-        if now_after("2026-10-09 00:00:00"):
-            self.dnf_helper_limit_act_2_op("领取排名奖励", "pickupFinalReward")
+            return remainDrawTimes, challengeTimes, point
+
+        # self.dnf_helper_limit_act_2_op("点赞一条动态", "pickUpTaskReward", taskId="1054_1")
+        # for day in [
+        #     3,
+        #     5,
+        #     8,
+        #     10,
+        #     15,
+        #     21,
+        # ]:
+        #     self.dnf_helper_limit_act_2_op(f"累计签到{day}次", "pickupTotalCheckInReward", taskId=f"1054_cum_{day}")
+        #
+        # self.dnf_helper_limit_act_2_op("每周通关米歇尔团本（普通/困难）", "pickUpTaskReward", taskId="1054_2")
+        #
+        # self.dnf_helper_limit_act_2_op("团长报名", "apply")
+        # if now_after("2026-10-09 00:00:00"):
+        #     self.dnf_helper_limit_act_2_op("领取排名奖励", "pickupFinalReward")
+
+        task_list = [
+            ("今日登录游戏", "luckybox_times_login", True),
+            ("点赞一条动态", "luckybox_times_like", False),
+            ("分享到QQ/微信", "luckybox_times_share", True),
+        ]
+        for name, task_id, need_complete in task_list:
+            if need_complete:
+                self.dnf_helper_limit_act_2_op(f"{name}（完成任务）", "taskComplete", taskId=task_id)
+            self.dnf_helper_limit_act_2_op(f"{name}（领取奖励）", "pickUpTaskReward", taskId=task_id)
+
+        remainDrawTimes, _, _ = query_info()
+        logger.info(f"当前剩余快速抽奖次数为 {remainDrawTimes}")
+        for idx in range_from_one(remainDrawTimes):
+            self.dnf_helper_limit_act_2_op(f"{idx}/{remainDrawTimes} 快速抽奖", "lottery")
+
+        challenge_count_reward = [
+            (10, "luckybox_cum_10"),
+            (25, "luckybox_cum_25"),
+            (70, "luckybox_cum_70"),
+            (130, "luckybox_cum_130"),
+        ]
+        _, challengeTimes, _ = query_info()
+        logger.info(f"当前累计挑战次数为 {challengeTimes}")
+        for need_times, reward_id in challenge_count_reward:
+            if challengeTimes < need_times:
+                logger.warning(f"{reward_id} 挑战次数少于 {need_times} 跳过")
+                continue
+            self.dnf_helper_limit_act_2_op(f"挑战次数奖励 - {need_times}-{reward_id}", "pickUpCumReward", rewardId=reward_id)
+
+        exchange_list = [
+            (100000, "50QB", "luckybox_ex_100000_qb50"),
+            (100000, "+10增幅券", "luckybox_ex_100000_amp10"),
+            (50000, "30天黑钻", "luckybox_ex_50000_diamond30"),
+            (50000, "5QB", "luckybox_ex_50000_qb5"),
+        ]
+        _, _, point = query_info()
+        logger.info(f"当前幸运金币为 {point}")
+        for need_point, name, exchange_id in exchange_list:
+            if point < need_point:
+                logger.warning(f"当前积分低于 {name} 所需 {need_point}，跳过兑换")
+                continue
+            self.dnf_helper_limit_act_2_op(f"兑换奖励 - {name}", "exchange", rewardId=exchange_id)
 
     def dnf_helper_limit_act_2_op(self, ctx: str, action_name: str, print_res=True, **extra_params):
         # re: 每次新活动需要更新下面这俩参数
         # 活动id，对应参数 activityId
-        activityId = "1054"
+        activityId = "1059"
         # 活动的action前缀，对应参数 r 的前半部分
-        activity_action_prefix = "mixieer"
+        activity_action_prefix = "luckyBox"
 
         action = action_name
         if action_name != "init":
@@ -11940,6 +11993,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_helper_limit_act_2()
 
     pause()

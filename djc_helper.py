@@ -692,6 +692,7 @@ class DjcHelper:
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 米歇尔的审判
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 土罐的幸运金币
             ("DNF落地页活动_ide", self.dnf_luodiye_ide),
+            ("DNF井盖杯决斗场", self.dnf_jinggai_pk),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -5185,6 +5186,101 @@ class DjcHelper:
             iFlowId,
             print_res,
             get_act_url("井盖杯强者之路"),
+            **extra_params,
+        )
+
+    # --------------------------------------------DNF井盖杯决斗场--------------------------------------------
+    @try_except()
+    def dnf_jinggai_pk(self):
+        show_head_line("DNF井盖杯决斗场")
+        self.show_not_ams_act_info("DNF井盖杯决斗场")
+
+        if not self.cfg.function_switches.get_dnf_jinggai_pk or self.disable_most_activities():
+            show_act_not_enable_warning("DNF井盖杯决斗场")
+            return
+
+        self.check_dnf_jinggai_pk_ide()
+
+        rewards = [
+            (1, "2026-11-26 00:00:00", "2026-11-29 23:59:59"),
+            (2, "2026-11-30 00:00:00", "2026-12-06 23:59:59"),
+            (3, "2026-12-07 00:00:00", "2026-12-13 23:59:59"),
+            (4, "2026-12-14 00:00:00", "2026-12-20 23:59:59"),
+        ]
+        for rewardId, start_time, end_time in rewards:
+            if not now_in_range(start_time, end_time):
+                logger.warning(f"见面礼-{rewardId} 不在开放时间内({start_time} - {end_time})，跳过")
+                continue
+
+            self.dnf_jinggai_pk_ide_op(f"见面礼-{rewardId}", "641383", rewardId=rewardId)
+            time.sleep(3)
+
+        # 排名奖励需在 2026年12月20日 榜单锁定后开放，敬请期待！
+        if now_after("2026-12-20 00:00:00"):
+            self.dnf_jinggai_pk_ide_op("【二期】排名奖励", "641385")
+
+        tasks = [
+            ("登录游戏【每日任务】", "641388"),
+            ("累积在线【每日任务】", "641389"),
+            ("消耗疲劳【每日任务】", "641390"),
+            ("参与1次公平决斗场/斗神决斗场【每日任务】", "641391"),
+            ("完成10次公平决斗场【每周任务】", "641400"),
+            ("完成10次斗神决斗场【每周任务】", "641404"),
+            ("公平决斗场获胜5次【每周重复任务】", "641407"),
+            ("斗神决斗场获胜5次【每周重复任务】", "641445"),
+        ]
+        for name, flowid in tasks:
+            self.dnf_jinggai_pk_ide_op(name, flowid)
+            time.sleep(3)
+
+        for index in range_from_one(30):
+            name, flowid = "单人奖励", "641815"
+            if 11 <= index <= 20:
+                name, flowid = "【组队】双人奖励", "645858"
+            elif 21 <= index <= 30:
+                name, flowid = "【组队】三人奖励", "645861"
+
+            res = self.dnf_jinggai_pk_ide_op(f"{name} - lv {index}", flowid, rewardId=index)
+            # "ret": 8001, "iRet": 8001, "sMsg": "抱歉，未满足领取条件！"
+            # "ret": 10001, "iRet": 10001, "sMsg": "抱歉，您尚未加入过小队！"
+            if res["ret"] in [8001, 10001]:
+                logger.warning("跳过后续奖励")
+                break
+            time.sleep(3)
+
+        async_message_box(
+            "井盖杯决斗场挑战赛组队三人可以领取更多奖励，请自行完成组队",
+            "26.11 井盖杯挑战赛组队",
+            open_url=get_act_url("DNF井盖杯决斗场"),
+            show_once_daily=True,
+        )
+
+
+    def check_dnf_jinggai_pk_ide(self, **extra_params):
+        return self.ide_check_bind_account(
+            "DNF井盖杯决斗场",
+            get_act_url("DNF井盖杯决斗场"),
+            activity_op_func=self.dnf_jinggai_pk_ide_op,
+            sAuthInfo="",
+            sActivityInfo="",
+        )
+
+    def dnf_jinggai_pk_ide_op(
+        self,
+        ctx: str,
+        iFlowId: str,
+        print_res=True,
+        **extra_params,
+    ):
+        iActivityId = self.urls.ide_iActivityId_dnf_jinggai_pk
+
+        return self.ide_request(
+            ctx,
+            "comm.ams.game.qq.com",
+            iActivityId,
+            iFlowId,
+            print_res,
+            get_act_url("DNF井盖杯决斗场"),
             **extra_params,
         )
 
@@ -11994,6 +12090,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_luodiye_ide()
+        djcHelper.dnf_jinggai_pk()
 
     pause()

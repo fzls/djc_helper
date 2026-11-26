@@ -65,6 +65,7 @@ not_ams_activities = [
     newNotAmsActInfo("2026-10-19 00:00:00", "2026-11-08 23:59:59", "助手限定活动_3"),
     newNotAmsActInfo("2026-11-03 10:00:00", "2026-12-06 23:59:59", "助手限定活动_2"),
     newNotAmsActInfo("2026-11-26 10:00:00", "2027-01-06 18:00:00", "DNF落地页活动_ide"),
+    newNotAmsActInfo("2026-11-26 10:00:00", "2026-12-27 23:59:59", "DNF井盖杯决斗场"),
     #
     # 已过期活动
     #
@@ -136,6 +137,7 @@ act_name_to_url = {
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
     "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/lucky-coin-nov/",
     "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
+    "DNF井盖杯决斗场": "https://dnf.qq.com/cp/a20261126covers/",
     #
     # 已过期活动
     #
@@ -380,6 +382,7 @@ class Urls:
         self.ide_iActivityId_dnf_anniversary_special_act = "78_gxyKAL"  # 像素拼图
         self.ide_iActivityId_dnf_jinggai_stronger = "27_TkwEUX"  # 井盖杯强者之路
         self.ide_iActivityId_dnf_summer_gift_act = "44_bXKoaI"  # 夏日礼包
+        self.ide_iActivityId_dnf_jinggai_pk = "17_N2NtZ9"  # DNF井盖杯决斗场
 
         # re: 部分情况下，可能会同时关联ame和ide活动，这里放到一起管理
         self.iActivityId_majieluo = "603648"  # DNF马杰洛的规划

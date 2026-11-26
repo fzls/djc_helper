@@ -690,8 +690,8 @@ class DjcHelper:
             ("回流引导秘籍", self.dnf_recall_guide),
             ("井盖杯强者之路", self.dnf_jinggai_stronger),
             ("助手限定活动_3", self.dnf_helper_limit_act_3), # 米歇尔的审判
-            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
             ("助手限定活动_2", self.dnf_helper_limit_act_2), # 土罐的幸运金币
+            ("DNF落地页活动_ide", self.dnf_luodiye_ide),
         ]
 
     def expired_activities(self) -> list[tuple[str, Callable]]:
@@ -6677,11 +6677,11 @@ class DjcHelper:
         self.check_dnf_luodiye_ide()
 
         def query_info() -> tuple[int, int, int]:
-            res = self.dnf_luodiye_ide_op("初始化", "626849", print_res=False)
-            raw_info = res["jData"]
+            res = self.dnf_luodiye_ide_op("初始化", "646565", print_res=False)
+            raw_info = res["jData"]["result"]
 
             # 抽奖次数
-            iLottery = int(raw_info["iLottery"])
+            iLottery = int(raw_info["iLotteryChance"])
             # iLottery = 0
 
             # # 累计登录天数
@@ -6689,7 +6689,7 @@ class DjcHelper:
             iLoginTotal = 0
 
             # 总共获得抽奖次数
-            jLotteryTotal = int(raw_info["iLotteryNum"])
+            jLotteryTotal = int(raw_info["iTotalLottery"])
             # jLotteryTotal = 0
 
             # jFinishedLotteryCount = jLotteryTotal - iLottery
@@ -6733,15 +6733,16 @@ class DjcHelper:
         # try_daily_signin()
         # # self.dnf_luodiye_ide_op("每日签到", "441321")
 
-        self.dnf_luodiye_ide_op("见面礼包", "626853")
+        self.dnf_luodiye_ide_op("见面礼领取-Act/claimGreeting", "646566")
 
         # 打卡前等一会，确保不会因频率过快被拦截？
         time.sleep(5)
-        self.dnf_luodiye_ide_op("通关深渊最终调律者", "626855")
+        self.dnf_luodiye_ide_op("每日活跃好礼领取-Act/claimDailyAbyss", "646567")
 
-        self.dnf_luodiye_ide_op("补打卡-记录跳转", "626859")
-        self.dnf_luodiye_ide_op("补打卡--浏览DNF助手文章", "626858")
-        self.dnf_luodiye_ide_op("补打卡-浏览指定页面", "626860")
+        self.dnf_luodiye_ide_op("记录浏览指定页面-Act/recordPageVisit", "647482")
+        # re:  @2026-11-26 08:07:10 By Chen Ji
+        self.dnf_luodiye_ide_op("补签-浏览DNF助手文章-Act/claimRecovery", "646569", sTaskKey="recovery1")
+        self.dnf_luodiye_ide_op("补签-浏览指定页面-Act/claimRecovery", "646570", sTaskKey="recovery2")
 
         # _, iLoginTotal, _ = query_info()
         # logger.info(f"打卡后游戏登录天数为 {iLoginTotal}")
@@ -6766,7 +6767,7 @@ class DjcHelper:
         iLotteryCount, _, _ = query_info()
         logger.info(f"剩余抽奖次数 {iLotteryCount}")
         for idx in range_from_one(iLotteryCount):
-            self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 抽奖", "626856")
+            self.dnf_luodiye_ide_op(f"{idx}/{iLotteryCount} 抽奖", "646568")
             time.sleep(3)
 
         login_gifts_list = [
@@ -6784,7 +6785,7 @@ class DjcHelper:
         for gift_index, require_lottery_count in login_gifts_list:
             if jFinishedLotteryCount >= require_lottery_count:
                 self.dnf_luodiye_ide_op(
-                    f"[{gift_index}] 累积抽奖次数奖励 {require_lottery_count}次", "626857", index=gift_index
+                    f"[{gift_index}] 累积抽奖次数奖励 {require_lottery_count}次", "646571", index=gift_index
                 )
                 time.sleep(3)
             else:
@@ -11993,6 +11994,6 @@ if __name__ == "__main__":
         djcHelper.get_bind_role_list()
 
         # djcHelper.dnf_kol()
-        djcHelper.dnf_pk()
+        djcHelper.dnf_luodiye_ide()
 
     pause()

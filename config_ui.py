@@ -3070,8 +3070,8 @@ class FunctionSwitchesConfigUi(QWidget):
             ("回流引导秘籍", "get_dnf_recall_guide"),
             ("井盖杯强者之路", "get_dnf_jinggai_stronger"),
             ("助手限定活动_3", "get_dnf_helper_limit_act_3"),
-            ("DNF落地页活动", "get_dnf_luodiye"),
             ("助手限定活动_2", "get_dnf_helper_limit_act_2"),
+            ("DNF落地页活动", "get_dnf_luodiye"),
         ],
         "QQ空间pskey": [
             ("集卡", "get_ark_lottery"),

@@ -63,8 +63,8 @@ not_ams_activities = [
     newNotAmsActInfo("2026-06-11 00:00:00", "2026-11-26 23:59:59", "回流引导秘籍"),
     newNotAmsActInfo("2026-10-15 09:00:00", "2026-11-15 23:59:59", "井盖杯强者之路"),
     newNotAmsActInfo("2026-10-19 00:00:00", "2026-11-08 23:59:59", "助手限定活动_3"),
-    newNotAmsActInfo("2026-10-22 10:00:00", "2026-11-25 18:00:00", "DNF落地页活动_ide"),
     newNotAmsActInfo("2026-11-03 10:00:00", "2026-12-06 23:59:59", "助手限定活动_2"),
+    newNotAmsActInfo("2026-11-26 10:00:00", "2027-01-06 18:00:00", "DNF落地页活动_ide"),
     #
     # 已过期活动
     #
@@ -134,8 +134,8 @@ act_name_to_url = {
     "回流引导秘籍": "https://dnf.qq.com/cp/a20260107guide/",
     "井盖杯强者之路": "https://dnf.qq.com/cp/a20261015covers3/index.html",
     "助手限定活动_3": "https://dzhu.qq.com/fe/dnf/activity_template/",
-    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
     "助手限定活动_2": "https://dzhu.qq.com/fe/dnf/lucky-coin-nov/",
+    "DNF落地页活动_ide": "https://dnf.qq.com/cp/celebration/index.html",
     #
     # 已过期活动
     #
@@ -287,7 +287,7 @@ class Urls:
             "eas_url", "eas_refer", "iType", "iPage", "type", "sUin", "dayNum", "iFarmland", "fieldId", "sRice", "packageId", "targetId", "myId", "id", "iCardId", "iAreaId", "sRole", "drinksId",
             "gameId", "score", "loginDays", "iSuccess", "iGameId", "sAnswer", "index", "u_stage", "u_task_index", "u_stage_index", "num", "sPartition", "sPlatId", "source", "iIndex", "giftId", "iCode",
             "sDay", "iNum", "hour", "week", "points", "taskId", "workId", "iPackageIndex", "camp", "inviteCode", "npcIndex", "iRegisterUin", "iRoleId", "iArea", "iJob", "rewardId", "indexKey", "cardIndex",
-            "sPass", "rewardIndex",
+            "sPass", "rewardIndex", "sTaskKey",
         ]
         # 其他链接需要默认填充的空参数
         # re: 这个不是公共参数的意思，这里额外是补充的空值参数，比如非ame和ide的其他活动链接中需要的参数
@@ -346,7 +346,7 @@ class Urls:
         self.ide_iActivityId_dnf_social_relation_permission = "14_uK7KKe"  # DNF关系链接-用户授权接口
         self.ide_iActivityId_dnf_anniversary = "86_e5rV7O"  # DNF周年庆登录活动
         self.ide_iActivityId_dnf_game = "64_Yetu1m"  # dnf娱乐赛
-        self.ide_iActivityId_dnf_luodiye = "19_4w6dsz"  # DNF落地页
+        self.ide_iActivityId_dnf_luodiye = "59_25Jkod"  # DNF落地页
         self.ide_iActivityId_dnf_luodiye_dup = "16_FDvprx"  # DNF落地页dup
         self.ide_iActivityId_dnf_comic = "64_p5cLkZ"  # DNF漫画预约活动
         self.ide_iActivityId_dnf_save_sailiyam = "35_w7UB7L"  # 拯救赛利亚
